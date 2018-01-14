@@ -132,7 +132,6 @@ export default class AppLeftNav extends Component {
 
     if (path == '/logout/') {
       this.props.logout();
-      this.props.pushWindowPath( '/home' );
     } else {
       // Request to navigate to
       this.props.pushWindowPath(path);
