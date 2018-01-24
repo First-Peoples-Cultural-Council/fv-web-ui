@@ -146,7 +146,7 @@ export default class PageDialectLearnAlphabet extends PageDialectLearnBase {
             </PromiseWrapper>;
     }
 
-    return <PromiseWrapper renderOnError={true} computeEntities={computeEntities}>
+    return <PromiseWrapper computeEntities={computeEntities}>
 
               <Header
                 portal={{compute: computePortal, update: updatePortal}}
