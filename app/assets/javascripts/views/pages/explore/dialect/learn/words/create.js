@@ -174,7 +174,8 @@ export default class PageDialectWordsCreate extends Component {
         if (selectn("fields.fv:definitions.item.fields.language.attrs", FVWordOptions) && selectn('response.properties.fvdialect:dominant_language', computeDialect2)) {
             FVWordOptions['fields']['fv:definitions']['item']['fields']['language']['attrs']['defaultValue'] = selectn('response.properties.fvdialect:dominant_language', computeDialect2);
         }
-
+        console.debug(selectn("FVWord", fields));
+        console.debug(FVWordOptions);
         return <PromiseWrapper renderOnError={true} computeEntities={computeEntities}>
 
             <h1>{intl.trans('views.pages.explore.dialect.learn.words.add_new_word_to_x', 'Add New Word to ' + selectn('response.title', computeDialect2), 'words', [selectn('response.title', computeDialect2)])}</h1>

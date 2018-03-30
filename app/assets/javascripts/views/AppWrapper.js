@@ -401,11 +401,11 @@ export default class AppWrapper extends Component {
                         default: 'Note',
                         case: 'first'
                     })}:</strong> {this.intl.translate({
-                        key: 'your_a_member_of_more_than_one_dialect',
+                        key: 'models.your_a_member_of_more_than_one_dialect',
                         default: 'You\'re a member of more than one dialect',
                         case: 'first'
                     })}. <a href="/profile">{this.intl.translate({
-                        key: 'configure_or_select_primary_dialect',
+                        key: 'models.configure_or_select_primary_dialect',
                         default: 'Please configure a primary dialect or select a default starting page',
                         case: 'first'
                     })}.</a></span>;

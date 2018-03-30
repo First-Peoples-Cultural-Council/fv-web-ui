@@ -21,6 +21,7 @@ import SelectField from 'material-ui/lib/SelectField';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 
 import IntlService from 'views/services/intl';
+
 const intl = IntlService.instance;
 
 @provide
@@ -85,7 +86,8 @@ export default class DirectoryList extends Component {
                                      onChange={this._handleChange}
                                      floatingLabelText={intl.trans('select_x', 'Select ' + this.props.label, 'first', [this.props.label]) + ':'}>
                             {entries.map((entry) =>
-                                <MenuItem key={entry.value} value={entry.value} primaryText={entry.text}/>
+                                <MenuItem key={entry.value} value={entry.value}
+                                          primaryText={intl.searchAndReplace(entry.text)}/>
                             )}
                         </SelectField>
 
@@ -93,7 +95,8 @@ export default class DirectoryList extends Component {
 
                         <select value={this.props.value} onChange={this._handleStandardSelectChange}>
                             {entries.map((entry) =>
-                                <option key={entry.value} value={entry.value}>{entry.text}</option>
+                                <option key={entry.value}
+                                        value={entry.value}>{intl.searchAndReplace(entry.text)}</option>
                             )}
                         </select>
                 }

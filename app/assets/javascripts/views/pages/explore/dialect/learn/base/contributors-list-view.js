@@ -89,7 +89,7 @@ export default class ListView extends DataListView {
                 },
                 {
                     name: 'dc:description',
-                    title: intl.trans('short_proflile', 'Short Profile', 'words'),
+                    title: intl.trans('short_profile', 'Short Profile', 'words'),
                     render: function (v, data, cellProps) {
                         return selectn('properties.dc:description', data);
                     }

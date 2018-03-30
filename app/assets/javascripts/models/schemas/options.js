@@ -108,12 +108,12 @@ const RelatedMediaLayout = function (locals) {
 
                                     case 'move-up':
                                         icon = 'arrow_back';
-                                        label = intl.trans('move_left', 'Move left (appears first)', 'first');
+                                        label = intl.trans('models.move_left', 'Move left (appears first)', 'first');
                                         break;
 
                                     case 'move-down':
                                         icon = 'arrow_forward';
-                                        label = intl.trans('move_right', 'Move right', 'first');
+                                        label = intl.trans('models.move_right', 'Move right', 'first');
                                         break;
                                 }
 

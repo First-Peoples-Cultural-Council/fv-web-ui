@@ -90,19 +90,17 @@ export default class DirectoryList extends Component {
 
                         <SelectField maxHeight={300} autoWidth={true} value={this.props.value}
                                      onChange={this._handleChange}
-                                     floatingLabelText={intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}>
+                                     floatingLabelText={intl.trans('select', 'Select', 'first') + ' - ' + intl.searchAndReplace(this.props.label) + ':'}>
                             {entries.map((entry) =>
                                 <MenuItem key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}
-                                          primaryText={selectn('dc:title', entry)}/>
+                                          primaryText={intl.searchAndReplace(selectn('dc:title', entry))}/>
                             )}
                         </SelectField>
-
                         :
-
                         <select value={this.props.value} onChange={this._handleStandardSelectChange}>
                             {entries.map((entry) =>
                                 <option key={selectn('ecm:uuid', entry)}
-                                        value={selectn('ecm:uuid', entry)}>{selectn('dc:title', entry)}</option>
+                                        value={selectn('ecm:uuid', entry)}>{intl.searchAndReplace(selectn('dc:title', entry))}</option>
                             )}
                         </select>
                 }

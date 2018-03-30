@@ -83,6 +83,9 @@ export default class Header extends Component {
 
         const isSection = routeParams.area === 'sections';
 
+        var response = portal.compute.response;
+        response.properties = intl.translateObject(response.properties || {});
+
         return <div className="row" style={portalBackgroundStyles}>
 
             <div style={{position: 'absolute', bottom: '80px', right: 0, width: '442px'}}>
@@ -97,7 +100,7 @@ export default class Header extends Component {
                                 <EditableComponentHelper className="fv-portal-greeting" isSection={isSection}
                                                          computeEntity={portal.compute} updateEntity={portal.update}
                                                          property="fv-portal:greeting"
-                                                         entity={selectn('response', portal.compute)}/>
+                                                         entity={response}/>
                             </AuthorizationFilter>
 
                             {(selectn('response.contextParameters.portal.fv-portal:featured_audio', portal.compute)) ?

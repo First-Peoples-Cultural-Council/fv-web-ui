@@ -213,7 +213,6 @@ export class EditableComponentHelper extends Component {
         if (this.props.isSection) {
             return <div>{RenderRegular(selectn(this.props.sectionProperty || 'properties.' + this.props.property, this.props.entity), this.props.showPreview, this.props.previewType, 'div')}</div>;
         }
-
         return <EditableComponent {...this.props} />;
     }
 }

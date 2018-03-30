@@ -248,7 +248,7 @@ export default class ExploreDialect extends Component {
                     });
             }
         }
-
+        
         return <PromiseWrapper computeEntities={computeEntities}>
 
             {(() => {

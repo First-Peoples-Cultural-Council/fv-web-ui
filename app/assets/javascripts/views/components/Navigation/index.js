@@ -608,8 +608,9 @@ export default class Navigation extends Component {
                     {/*Locale selection*/}
                     <SelectField
                         value={this.intl.locale}
-                        style={{width: '50px'}}
+                        style={{width: '50px', color: 'white'}}
                         onChange={this._handleChangeLocale}
+                        labelStyle={{color: 'white'}}
                     >
                         <MenuItem value="en" primaryText="En"/>
                         <MenuItem value="fr" primaryText="Fr"/>

@@ -87,7 +87,7 @@ export default class DialogCreateForm extends React.Component {
             case "FVContributor":
                 createForm =
                     <PageDialectContributorsCreate embedded={true} onDocumentCreated={this._onDocumentCreated}/>;
-                createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.create_new_contributor', 'Create New Contributor', 'words');
+                createNewButtonLabel = intl.trans('views.components.dialog_create_form.create_new_contributor', 'Create New Contributor', 'words');
 
                 if (this.props.value) {
                     createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.edit_contributor', 'Edit Contributor', 'words');
@@ -101,10 +101,10 @@ export default class DialogCreateForm extends React.Component {
 
             case "FVLink":
                 createForm = <PageDialectLinksCreate embedded={true} onDocumentCreated={this._onDocumentCreated}/>;
-                createNewButtonLabel = (this.props.value || this.props.expandedValue) ? intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words') : intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words');
+                createNewButtonLabel = (this.props.value || this.props.expandedValue) ? intl.trans('views.components.dialog_create_form.edit_link', 'Edit Link', 'words') : intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words');
 
                 if (this.props.value) {
-                    createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words');
+                    createNewButtonLabel = intl.trans('views.components.dialog_create_form.edit_link', 'Edit Link', 'words');
                     createForm = <PageDialectLinksEdit dialect={this.props.context} routeParams={{
                         dialect_path: this.props.context.path,
                         theme: 'explore'
