@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+var PropTypes = require('prop-types');
 var PubSub = require('pubsub-js');
 
 var _ = require('underscore');
@@ -33,7 +34,7 @@ var AnswerMQ = require('./AnswerMQ');
 
 var loadingComponent = <div className={classNames('alert', 'alert-info', 'text-center')} role="alert">Loading...</div>;
 
-class MultiQuiz extends React.Component {
+class MultiQuiz extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -232,12 +233,12 @@ class MultiQuiz extends React.Component {
 }
 
 MultiQuiz.contextTypes = {
-  muiTheme: React.PropTypes.object,
-  router: React.PropTypes.func
+  muiTheme: PropTypes.object,
+  router: PropTypes.func
 };
 
 MultiQuiz.childContextTypes = {
-  muiTheme: React.PropTypes.object
+  muiTheme: PropTypes.object
 };
 
 

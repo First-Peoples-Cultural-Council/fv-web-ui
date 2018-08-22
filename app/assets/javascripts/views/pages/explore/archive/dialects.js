@@ -59,7 +59,7 @@ export default class ExploreDialects extends Component {
     };
 
     /*static contextTypes = {
-        muiTheme: React.PropTypes.object.isRequired
+        muiTheme: PropTypes.object.isRequired
     };*/
 
     constructor(props, context) {

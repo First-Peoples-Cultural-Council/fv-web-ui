@@ -18,7 +18,7 @@ var React = require('react');
 var Quiz = require('./Games/Quiz');
 var MultiQuiz = require('./Games/MultiQuiz');
 
-class GameWrapperView extends React.Component {
+class GameWrapperView extends React.PureComponent {
 
   constructor(props) {
     super(props);

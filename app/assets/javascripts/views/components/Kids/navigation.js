@@ -66,14 +66,14 @@ export default class Navigation extends Component {
     };
 
     /*static childContextTypes = {
-      client: React.PropTypes.object,
-      muiTheme: React.PropTypes.object,
-      siteProps: React.PropTypes.object
+      client: PropTypes.object,
+      muiTheme: PropTypes.object,
+      siteProps: PropTypes.object
     };
 
     static contextTypes = {
-        muiTheme: React.PropTypes.object.isRequired,
-        siteProps: React.PropTypes.object.isRequired
+        muiTheme: PropTypes.object.isRequired,
+        siteProps: PropTypes.object.isRequired
     };
 
     getChildContext() {

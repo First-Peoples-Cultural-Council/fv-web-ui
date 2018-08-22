@@ -91,7 +91,7 @@ class SharedResourceGridTile extends Component {
 }
 
 @provide
-export default class SelectMediaComponent extends React.Component {
+export default class SelectMediaComponent extends React.PureComponent {
 
     static propTypes = {
         onComplete: PropTypes.func.isRequired,

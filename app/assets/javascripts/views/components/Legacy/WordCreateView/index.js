@@ -1,3 +1,4 @@
+var PropTypes = require('prop-types');
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -24,7 +25,7 @@ var Word = require('models/Word');
 
 var DirectoryOperations = require('../../../operations/DirectoryOperations');
 
-class CreateForm extends React.Component {
+class CreateForm extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -121,7 +122,7 @@ class CreateForm extends React.Component {
   }
 }
 
-class WordCreateView extends React.Component {
+class WordCreateView extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -141,7 +142,7 @@ class WordCreateView extends React.Component {
 }
 
 WordCreateView.contextTypes = {
-  router: React.PropTypes.func
+  router: PropTypes.func
 };
 
 module.exports = WordCreateView;

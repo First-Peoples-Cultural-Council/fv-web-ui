@@ -123,7 +123,7 @@ export default class AppWrapper extends Component {
     };
 
     static childContextTypes = {
-        muiTheme: React.PropTypes.object
+        muiTheme: PropTypes.object
     };
 
     // react-redux-provide will pass context such as providers (Note: this is only needed for debugging the store atm)

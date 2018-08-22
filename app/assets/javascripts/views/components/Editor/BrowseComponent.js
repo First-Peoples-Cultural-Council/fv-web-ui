@@ -91,7 +91,7 @@ class SharedResourceGridTile extends Component {
 }
 
 @provide
-export default class BrowseComponent extends React.Component {
+export default class BrowseComponent extends React.PureComponent {
 
     static propTypes = {
         onComplete: PropTypes.func.isRequired,

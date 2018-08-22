@@ -16,13 +16,14 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 var Mui = require('material-ui');
+var PropTypes = require('prop-types');
 var PubSub = require('pubsub-js');
 var {RaisedButton} = Mui;
 
 // https://github.com/facebook/react/issues/3451#issuecomment-83000311
 var ThemeManager = new Mui.Styles.ThemeManager();
 
-class Answer extends React.Component {
+class Answer extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -59,7 +60,7 @@ class Answer extends React.Component {
 }
 
 Answer.childContextTypes = {
-  muiTheme: React.PropTypes.object
+  muiTheme: PropTypes.object
 };
 
 module.exports = Answer;

@@ -17,6 +17,7 @@ var React = require('react');
 var classNames = require('classnames');
 var Mui = require('material-ui');
 var _ = require('underscore');
+var PropTypes = require('prop-types');
 var PubSub = require('pubsub-js');
 var {RaisedButton} = Mui;
 
@@ -27,7 +28,7 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 // https://github.com/facebook/react/issues/3451#issuecomment-83000311
 var ThemeManager = new Mui.Styles.ThemeManager();
 
-class AnswerMQ extends React.Component {
+class AnswerMQ extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -113,7 +114,7 @@ class AnswerMQ extends React.Component {
 }
 
 AnswerMQ.childContextTypes = {
-  muiTheme: React.PropTypes.object
+  muiTheme: PropTypes.object
 };
 
 module.exports = AnswerMQ;

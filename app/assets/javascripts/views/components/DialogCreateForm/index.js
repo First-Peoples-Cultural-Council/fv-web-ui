@@ -16,7 +16,7 @@ import IntlService from "views/services/intl";
 
 const intl = IntlService.instance;
 
-export default class DialogCreateForm extends React.Component {
+export default class DialogCreateForm extends React.PureComponent {
     constructor(props) {
         super(props);
 

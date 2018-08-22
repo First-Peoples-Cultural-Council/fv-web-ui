@@ -16,7 +16,7 @@ limitations under the License.
 import React from 'react';
 import _ from 'underscore';
 
-export default class Play extends React.Component {
+export default class Play extends React.PureComponent {
 
   constructor(props, context) {
 

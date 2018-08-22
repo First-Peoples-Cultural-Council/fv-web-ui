@@ -2,7 +2,7 @@ import React from 'react';
 import Snackbar from 'material-ui/lib/snackbar';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-export default class StatusBar extends React.Component {
+export default class StatusBar extends React.PureComponent {
 
     constructor(props) {
         super(props);

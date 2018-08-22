@@ -32,7 +32,7 @@ const DEFAULT_PAGE = 0;
 const DEFAULT_PAGE_SIZE = 10;
 
 @provide
-export default class PageDialectReports extends React.Component {
+export default class PageDialectReports extends React.PureComponent {
 
   static propTypes = {
 	  pushWindowPath: PropTypes.func.isRequired,	  

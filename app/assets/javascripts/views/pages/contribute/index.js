@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React from 'react';
 
-export default class Contribute extends React.Component {
+export default class Contribute extends React.PureComponent {
 
   render() {
 

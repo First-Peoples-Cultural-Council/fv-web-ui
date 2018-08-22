@@ -41,7 +41,7 @@ import IntlService from 'views/services/intl';
 
 const intl = IntlService.instance;
 @provide
-export default class Gallery extends React.Component {
+export default class Gallery extends React.PureComponent {
 
     static propTypes = {
         splitWindowPath: PropTypes.array.isRequired,

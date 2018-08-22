@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React from 'react';
 
-export default class GetStarted extends React.Component {
+export default class GetStarted extends React.PureComponent {
 
     render() {
 
