@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import selectn from 'selectn';
 import DataGrid from 'react-datagrid';
@@ -44,7 +46,7 @@ function debounce(a, b, c) {
         var f = this, g = arguments;
         return clearTimeout(d), d = setTimeout(h, b), c && !d && (e = a.apply(f, g)), e
     }
-};
+}
 
 export default class DocumentListView extends Component {
 

@@ -1,3 +1,16 @@
+var React = require('react');
+var t = require('tcomb-form');
+var Form = t.form.Form;
+
+var classNames = require('classnames');
+
+// Models
+import Word from 'models/Word';
+import Words from 'models/Words';
+
+// Operations
+import DocumentOperations from 'operations/DocumentOperations';
+
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -13,22 +26,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var t = require('tcomb-form');
-var Form = t.form.Form;
+import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
-
-// Models
-import Word from 'models/Word';
-import Words from 'models/Words';
-
-// Operations
-import DocumentOperations from 'operations/DocumentOperations';
 import IntlService from 'views/services/intl';
 
 const intl = IntlService.instance;
-class EditForm extends React.Component {
+class EditForm extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -123,7 +126,7 @@ class EditForm extends React.Component {
   }
 }
 
-class WordEditView extends React.Component {
+class WordEditView extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -160,7 +163,7 @@ class WordEditView extends React.Component {
 }
 
 WordEditView.contextTypes = {
-  router: React.PropTypes.func
+  router: PropTypes.func
 };
 
 module.exports = WordEditView;

@@ -44,7 +44,7 @@ import IntlService from "views/services/intl";
 const intl = IntlService.instance;
 
 @provide
-export default class Tasks extends React.Component {
+export default class Tasks extends React.PureComponent {
 
     static propTypes = {
         fetchUserTasks: PropTypes.func.isRequired,

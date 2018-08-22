@@ -64,7 +64,7 @@ export default class PageHome extends Component {
     };
 
     /*static contextTypes = {
-        muiTheme: React.PropTypes.object.isRequired
+        muiTheme: PropTypes.object.isRequired
     };*/
 
     intl = IntlService.instance;

@@ -24,7 +24,7 @@ import LeftNav from 'material-ui/lib/left-nav';
 import AppBar from 'material-ui/lib/app-bar';
 import IntlService from "views/services/intl";
 
-export default class Footer extends React.Component {
+export default class Footer extends React.PureComponent {
     intl = IntlService.instance;
 
     constructor(props, context) {

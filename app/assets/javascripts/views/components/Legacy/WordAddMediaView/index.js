@@ -1,3 +1,4 @@
+var PropTypes = require('prop-types');
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -30,7 +31,7 @@ var {
 
 var Word = require('models/Word');
 
-class MediaUploader extends React.Component {
+class MediaUploader extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -178,7 +179,7 @@ class MediaUploader extends React.Component {
     }
 }
 
-class WordAddMediaView extends React.Component {
+class WordAddMediaView extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -203,7 +204,7 @@ class WordAddMediaView extends React.Component {
 }
 
 WordAddMediaView.contextTypes = {
-  router: React.PropTypes.func
+  router: PropTypes.func
 };
 
 module.exports = WordAddMediaView;

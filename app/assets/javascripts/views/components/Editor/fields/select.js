@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import t from 'tcomb-form';
 
 import DirectoryList from 'views/components/Editor/DirectoryList';

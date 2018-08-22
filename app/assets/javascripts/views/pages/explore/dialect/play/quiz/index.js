@@ -43,7 +43,7 @@ const containerStyle = {
     margin: 'auto'
 }
 
-class Answer extends React.Component {
+class Answer extends React.PureComponent {
 
     constructor(props) {
         super(props);
