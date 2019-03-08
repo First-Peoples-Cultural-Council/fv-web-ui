@@ -1,0 +1,20 @@
+<component name="ca.firstvoices.filters.contrib">
+	
+	<extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
+	
+	<!-- Note: this is necessary to show the approval option! -->
+	
+	  <filter id="view">
+	    <rule grant="true">
+	      <facet>Folderish</facet>
+	      <facet>Publishable</facet>
+	      <condition>#{document.isProxy() and publishActions.isPending()}</condition>
+	    </rule>
+		<rule grant="true">
+		  <condition>#{!document.hasFacet("Folderish")}</condition>
+		</rule>
+	  </filter>
+	
+	</extension>
+  
+</component>

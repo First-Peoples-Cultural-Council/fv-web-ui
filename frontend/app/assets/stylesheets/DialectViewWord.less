@@ -1,0 +1,150 @@
+.DialectViewWord {
+  padding: 30px 15px;
+}
+.DialectViewWordTitleAudio {
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+}
+.DialectViewWordTitle {
+  font-weight: 500;
+  font-size: 3rem;
+  color: #000;
+  line-height: 1.5;
+  flex-grow: 1;
+  margin: 0;
+  // padding-bottom: 15px;
+  // border-bottom: 2px solid #b40000;
+}
+// .DialectViewWordTitle + .DialectViewWordAudio {
+//   margin-top: 15px;
+// }
+.DialectViewWordAudio{
+  display: inline;
+}
+.DialectViewWordAudio audio {
+  vertical-align: middle;
+  max-width: 300px;
+  margin-left: 25px;
+}
+.DialectViewWordGroup {
+  display: flex;
+}
+.DialectViewWordContentPrimary {
+  flex-grow: 1;
+  margin: 0 20px;
+}
+.DialectViewWordContentItem {
+  margin: 0 0 30px;
+  background: #efefef;
+  border: 1px dashed #e6e6e6;
+  border-width: 1px 0 1px 0;
+  padding: 5px;
+}
+.DialectViewWordContentItemGroup {
+  padding-left: 10px;
+}
+.DialectViewWordContentItemTitle {
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: #585858;
+  line-height: 1.2;
+  margin: 5px 0 15px 5px;
+}
+.DialectViewWordDefinition {
+}
+.DialectViewWordDefinitionEntry {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+.DialectViewWordDefinitionLanguage {
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: #585858;
+  line-height: 1.2;
+  font-style: italic;
+  margin: 0 10px 0 0;
+  text-transform: capitalize;
+}
+.DialectViewWordDefinitionSet {
+  display: flex;
+  align-items: center;
+}
+.DialectViewWordPhrase {
+  .DialectViewRelatedPhrasesPhrase{
+    padding: 0 14px;
+    color: black;
+  }
+
+  .DialectViewRelatedPhrasesDefinition{
+    padding: 0 14px;
+    border-left: 1px #cecece dotted;
+  }
+}
+.DialectViewWordCulturalNote {
+  .DialectViewWordContentItemGroup div{
+    border-left: 4px solid #dedede;
+    padding-left: 10px;
+    margin: 5px 0;
+  }
+}
+.DialectViewWordLiteralTranslation {
+}
+
+.DialectViewWordContentSecondary .DialectViewWordContentItemTitle {
+  font-size: 1.6rem;
+}
+.DialectViewWordLiteralTranslationEntry {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+.DialectViewWordLiteralTranslationLanguage {
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: #585858;
+  line-height: 1.2;
+  font-style: italic;
+  margin: 0 10px 0 0;
+  text-transform: capitalize;
+}
+.DialectViewWordLiteralTranslationSet {
+  display: flex;
+  align-items: center;
+}
+.DialectViewWordContentSecondary {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  width: 25%;
+}
+.DialectViewWordPhoto {
+}
+// .DialectViewWordPronounciation {
+//   display: flex;
+// }
+// .DialectViewWordPronounciation .DialectViewWordContentItemTitle {
+//   margin: 0 10px 0 0;
+// }
+.DialectViewWordVideo {
+}
+.DialectViewWordCategory {
+}
+.DialectViewWordPartOfSpeech {
+}
+.DialectViewWordAdditionalInformation {
+}
+
+@media (max-width: @small-screen) {
+  .DialectViewWordGroup {
+    flex-direction: column;
+  }
+  .DialectViewWordContentPrimary {
+    width: 100%;
+    padding-right: 0;
+    margin: 0;
+  }
+  .DialectViewWordContentSecondary {
+    width: 100%;
+  }
+}

@@ -1,0 +1,90 @@
+.CardView {
+  margin-bottom: 20px;
+}
+.CardViewCard {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+
+  background-color: #ffffff;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 1;
+}
+.CardViewCardActions {
+  padding: 8px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.CardViewCopy {
+  flex-shrink: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.CardViewTitles {
+  padding: 16px;
+}
+.CardViewTitle {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.87);
+  display: block;
+  line-height: 36px;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  line-height: 1.25;
+  cursor: pointer;
+}
+.CardViewSubtitle {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+.CardViewMedia {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #f3efe8;
+}
+.CardViewMediaContainer {
+  height: 150px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.CardViewPopover {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0;
+  background-color: #fff;
+  height: auto;
+  border: 1px solid #777777;
+  border-radius: 0 0 10px 10px;
+}
+.CardViewPopoverClose {
+  position: absolute;
+  right: 0;
+  z-index: 1000;
+}
+.CardViewCardText {
+  padding: 4px;
+}
+.test {
+  vertical-align: -5px;
+  float: right;
+}

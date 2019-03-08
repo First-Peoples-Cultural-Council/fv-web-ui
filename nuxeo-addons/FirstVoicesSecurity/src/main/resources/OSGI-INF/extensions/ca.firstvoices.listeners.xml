@@ -1,0 +1,16 @@
+<component name="ca.firstvoices.listeners.contrib">
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+
+    <listener name="restrictfvdialectpublishing" async="false" postCommit="true"
+      class="ca.firstvoices.listeners.RestrictFVDialectPublishing" priority="50">
+      <event>workflowTaskStart</event>
+    </listener>
+    <listener name="fvdocumentvalidationeventlistener" enabled="false" async="false" postCommit="true"
+      class="ca.firstvoices.listeners.FVDocumentValidationEventListener" priority="100">
+      <event>aboutToCreate</event>
+      <event>beforeDocumentModification</event>      
+    </listener>
+  </extension>
+
+</component>

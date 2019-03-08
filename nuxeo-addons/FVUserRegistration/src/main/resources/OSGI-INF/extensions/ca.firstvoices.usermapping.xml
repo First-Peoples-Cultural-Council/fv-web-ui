@@ -1,0 +1,100 @@
+<component name="ca.firstvoices.security.usermapper.contrib">
+<!--
+  	<require>org.nuxeo.usermapper.service.UserMapperComponent</require>
+  	-->
+  	<require>org.nuxeo.ecm.directory.sql.SQLDirectoryFactory</require>
+
+  	<implementation class="org.nuxeo.ecm.directory.sql.SQLDirectoryDescriptor" />
+  
+  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+    point="directories">
+    <directory name="sqlUserDirectory">
+      	<schema>user</schema>
+      	<dataSource>jdbc/nxsqldirectory</dataSource>
+		<table>users</table>
+	    <idField>username</idField>
+	    <passwordField>password</passwordField>
+	      <passwordHashAlgorithm>SSHA</passwordHashAlgorithm>
+	      
+	      <fieldMapping name="contributors">contributors</fieldMapping>
+	      <fieldMapping name="comments">comments</fieldMapping>
+		  <fieldMapping name="preferences">preferences</fieldMapping>
+		  <fieldMapping name="yearBornRange">yearBornRange</fieldMapping>
+		  <fieldMapping name="role">role</fieldMapping>
+		  <fieldMapping name="ip">ip</fieldMapping>
+		  <fieldMapping name="ua">ua</fieldMapping>
+		  <fieldMapping name="referer">referer</fieldMapping>
+		  <fieldMapping name="created">created</fieldMapping>
+
+		<autoincrementIdField>false</autoincrementIdField>
+	      <computeMultiTenantId>false</computeMultiTenantId>
+	      <createTablePolicy>on_missing_columns</createTablePolicy>
+	      <querySizeLimit>50</querySizeLimit>
+	      <references>
+	        <inverseReference field="groups" directory="sqlGroupDirectory"
+	          dualReferenceField="members" />
+	      </references>
+	    </directory>
+	    <directory name="sqlGroupDirectory">
+	      <schema>group</schema>
+	      <dataSource>jdbc/nxsqldirectory</dataSource>
+	
+	<table>groups</table>
+	      <idField>groupname</idField>
+	      <createTablePolicy>on_missing_columns</createTablePolicy>
+	      <autoincrementIdField>false</autoincrementIdField>
+	      <references>
+	        <tableReference field="members" directory="multiUserDirectory"
+	          table="user2group" sourceColumn="groupId" targetColumn="userId" schema="user2group"
+	          dataFile="user2group.csv" />
+	        <tableReference field="subGroups" directory="sqlGroupDirectory"
+	          table="group2group" sourceColumn="parentGroupId"
+	          targetColumn="childGroupId" schema="group2group" />
+	        <inverseReference field="parentGroups" directory="sqlGroupDirectory"
+	          dualReferenceField="subGroups" />
+	      </references>
+	    </directory>
+	  </extension>
+
+	<extension target="org.nuxeo.ecm.platform.usermanager.UserService" point="userManager">
+		<userManager>
+			<users>
+				<directory>sqlUserDirectory</directory>
+				<!-- This is currently defined in Studio; but move here soon. -->
+				<!--<anonymousUser id="Guest">-->
+					<!--<property name="firstName">Guest</property>-->
+					<!--<property name="lastName">User</property>-->
+				<!--</anonymousUser>-->
+			</users>
+			<groups>
+				<directory>sqlGroupDirectory</directory>
+			</groups>
+		</userManager>
+	</extension>
+
+	<extension target="org.nuxeo.usermapper.service.UserMapperComponent" point="mapper">
+	
+	  <mapper name="fv" type="js">
+	    <mapperScript>
+            searchAttributes.put("username", userObject.username);
+	        userAttributes.put("username", userObject.username);
+	        userAttributes.put("email", userObject.email);
+	        userAttributes.put("firstName", userObject.firstName);
+	        userAttributes.put("lastName", userObject.lastName);
+	        userAttributes.put("comments", userObject.comments);
+			userAttributes.put("preferences", userObject.preferences);
+			userAttributes.put("yearBornRange", userObject.comments);
+			userAttributes.put("role", userObject.comments);
+			userAttributes.put("ip", userObject.comments);
+			userAttributes.put("ua", userObject.comments);
+			userAttributes.put("referer", userObject.comments);
+			userAttributes.put("created", userObject.comments);
+	        userAttributes.put("contributors", userObject.contributors);
+			userAttributes.put("preferences", userObject.preferences);
+			userAttributes.put("ageGroup", userObject.ageGroup);
+	    </mapperScript>
+	  </mapper>
+	
+	</extension>
+	
+</component>

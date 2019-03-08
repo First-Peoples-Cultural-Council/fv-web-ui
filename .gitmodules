@@ -1,4 +1,0 @@
-[submodule "app/games"]
-	path = app/assets/games
-	url = https://charliebodman@github.com/First-Peoples-Cultural-Council/fv-games.git
-	ignore = dirty

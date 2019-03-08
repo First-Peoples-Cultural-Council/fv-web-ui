@@ -9,3 +9,10 @@ app/assets/stylesheets/generated
 .happypack
 .vscode
 .idea
+target
+target/
+/target
+.classpath
+.settings
+.factorypath
+nashorn_code_cache

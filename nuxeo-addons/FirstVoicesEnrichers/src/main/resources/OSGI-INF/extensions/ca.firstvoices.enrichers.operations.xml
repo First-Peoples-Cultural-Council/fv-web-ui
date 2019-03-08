@@ -1,0 +1,10 @@
+<component name="ca.firstvoices.enrichers.operations.contrib">
+
+	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >
+		<operation class="ca.firstvoices.nuxeo.operations.DocumentEnrichedQuery" />
+	</extension>
+
+	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >
+		<operation class="ca.firstvoices.nuxeo.operations.ListDialects" replace="true"/>
+	</extension>
+</component>

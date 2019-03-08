@@ -1,0 +1,1001 @@
+// Main Stylesheet
+//
+// Global styles
+// Define all of your global styles within this file
+//
+// Styleguide 1.
+
+// Box sizing partial styles:
+// Apply a natural box layout model to all elements
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+// Variables
+@primary-color: #b40000;
+@primary-header-color: #666666;
+@mobile-xs-width: 480px;
+@small-screen: 650px;
+@font-family: Arial, sans-serif;
+@font-family-aboriginal-sans: "Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium,
+  Code2001;
+
+body {
+  font-family: @font-family;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+// FONTS
+
+// OskiDakelh
+
+@font-face {
+  font-family: "OskiDakelhWeb";
+  src: url("/assets/fonts/oskidakelh/oskidakelh1.ttf");
+}
+
+@font-face {
+  font-family: "OskiDakelhWeb";
+  src: url("/assets/fonts/oskidakelh/oskidakelhbold1.ttf");
+  font-weight: bold;
+}
+
+.OskiDakelh {
+  font-family: "OskiDakelh", @font-family-aboriginal-sans;
+}
+.OskiDakelhWeb {
+  font-family: "OskiDakelh", "OskiDakelhWeb", @font-family-aboriginal-sans;
+}
+
+// Noto Sans Canadian Aboriginal
+
+@font-face {
+  font-family: "NotoSansCanadianAboriginal";
+  src: url("/assets/fonts/noto/NotoSansCanadianAboriginal-Regular.ttf");
+}
+
+.NotoSansCanadianAboriginal {
+  font-family: "NotoSansCanadianAboriginal";
+}
+
+// FONTS
+
+.fontAboriginalSans {
+  font-family: @font-family-aboriginal-sans;
+}
+
+/*.container-fluid{
+  padding:0;
+}*/
+
+.app-wrapper {
+  background-color: #fff;
+  /*border:1px solid rgb(224, 224, 224);*/
+
+  .main {
+    margin: 10px 25px;
+    min-height: 70vh;
+
+    @media (max-width: @mobile-xs-width) {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+
+  .footer {
+    .row {
+      margin: 0;
+    }
+  }
+}
+
+.outage-notice {
+  position: fixed;
+  width: 700px;
+  background: #ffe14f;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+  border-radius: 5px 0 0 0;
+  border: 1px solid #dac73f;
+  border-bottom: 0;
+}
+
+// Injects all bower_component files automatically
+// bower:less
+// endbower
+
+// Injects all import files automatically (ex. _mypartial)
+// [injector]
+// [endinjector]
+
+.yeogurt-info {
+  text-align: center;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.version {
+  font-size: 14px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.logo {
+  margin-top: 15px;
+}
+
+.links a {
+  color: white;
+  margin-right: 5px;
+  margin-top: 20px;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: #ed7c6c;
+  display: inline-block;
+  zoom: 1;
+  line-height: normal;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-align: center;
+  cursor: pointer;
+  font-size: 100%;
+  padding: 0.5em 1em;
+  text-decoration: none;
+}
+
+// Styling on warning for users on IE7 or below
+.browsehappy {
+  text-align: center;
+  margin: 0;
+  background: #fff8e2;
+  color: #000;
+  padding: 0.5em 0;
+}
+
+.display {
+  // font-family: Arial, sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 34px;
+}
+
+h1 {
+  // font-family: Arial, sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  color: @primary-header-color;
+  line-height: 24px;
+}
+
+h2 {
+  // font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 21px;
+  color: @primary-header-color;
+  line-height: 24px;
+}
+
+h3 {
+  // font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  color: @primary-header-color;
+}
+
+h4 {
+  // font-family: Arial, sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  color: @primary-header-color;
+}
+
+h6 {
+  // font-family: Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: @primary-header-color;
+}
+
+a {
+  color: @primary-header-color;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: @primary-color;
+}
+
+// Components
+
+// Editable component
+
+form.editableComponentForm {
+  fieldset {
+    margin-right: 5px;
+    display: inline;
+
+    div.form-group {
+      margin: 0;
+    }
+
+    label {
+      display: none;
+    }
+
+    input {
+      padding: 2px 4px;
+      height: inherit;
+    }
+
+    select {
+      width: 100%;
+    }
+  }
+
+  .fieldset-fv-portal\:related_links,
+  .fieldset-fvdialect\:keyboards {
+    width: 100%;
+  }
+
+  button {
+    padding: 0px 4px;
+    margin-left: 2px;
+  }
+}
+
+// Temp fix until upgrading Material-UI (where style is controlled)
+.card-header-custom {
+  svg {
+    fill: #ffffff !important;
+  }
+}
+
+.media-panel {
+  .image-gallery-thumbnail {
+    width: 90px;
+    height: 60px;
+
+    > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .image-gallery-thumbnails {
+    padding: 10px;
+  }
+}
+
+.media-panel-FVPicture {
+  .image-gallery-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.fv-portal-about {
+  form.editableComponentForm {
+    fieldset {
+      width: 100%;
+    }
+
+    button {
+      padding: 6px 12px;
+      margin: 10px 0;
+    }
+  }
+}
+
+// Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter
+.search-results {
+  a {
+    text-decoration: none;
+    border-bottom: 1px solid;
+    padding-bottom: 1px;
+  }
+}
+
+.toolbar {
+  padding: 0 !important;
+}
+
+.footer {
+  width: 100%;
+  min-height: 147px;
+  background-color: #6492a8;
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-image: url("/assets/images/footer-background.png");
+  border: 0;
+  padding-top: 15px;
+  margin-top: 30px;
+  color: #ffffff;
+
+  a {
+    color: #ffffff;
+  }
+}
+
+// Navigation
+.nav_link {
+  font-size: 14px;
+  color: #fff;
+
+  &:visited {
+    color: #fff;
+  }
+}
+
+// Media list
+.media-list {
+  a {
+    color: #fff;
+
+    &:visited {
+      color: #e4e4e4;
+    }
+  }
+}
+
+// Data table
+.data-table {
+  width: 100%;
+
+  tr:first-child {
+    background: -webkit-linear-gradient(top, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%);
+    background: linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%);
+    border-bottom: 1px solid #a8a8a8;
+  }
+
+  tr > th {
+    font-weight: 700;
+  }
+
+  td,
+  th {
+    padding: 0 15px;
+    height: 50px;
+  }
+
+  td:nth-child(-n + 2) {
+    max-width: 300px;
+  }
+}
+
+/**
+* Home
+*/
+.home-intro-block {
+  width: 35%;
+  position: absolute;
+  bottom: 12%;
+  right: 0;
+  color: #ffffff;
+  //padding: 0 15px 15px 25px;
+  //text-shadow: #000 2px 0 15px;
+  //background: rgba(0,0,0,0.5);
+  //border-radius: 4px;
+
+  > h1 {
+    padding: 20px;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  > div.home-intro-p-cont {
+    background: rgba(0, 0, 0, 0.5);
+    text-shadow: #000 2px 0 15px;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 0 0 10px 0;
+  }
+}
+
+/**
+* Introduction page
+*/
+body.introduction {
+  background-color: @primary-color;
+
+  .app-wrapper {
+    margin-top: 120px;
+    background-color: transparent;
+    border: 0;
+
+    .supporters {
+      margin-top: 120px;
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+    }
+  }
+}
+
+/**
+* Play page
+*/
+.play-cont {
+  .row {
+    .well {
+      h3 {
+        margin-top: 0;
+      }
+      select option {
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+.quiz-container,
+.multiquiz-container {
+  margin-top: "15px";
+
+  .imgCont {
+    overflow: hidden;
+    .image {
+      max-width: 100%;
+    }
+  }
+
+  .imgContAnswer {
+    width: 100%;
+    overflow: hidden;
+    .image {
+      max-width: 100%;
+      margin: 0;
+      border: 3px solid black;
+    }
+  }
+
+  .selectedImgContAnswer {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+
+    .image {
+      border: 3px solid #45e4d3;
+    }
+  }
+
+  .row-answers > div {
+    margin: 10px 0;
+  }
+
+  .row-navigation {
+    margin: 10px 0;
+
+    @media screen and (max-width: @mobile-xs-width) {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+
+/**
+* Browse langauges page
+*/
+.languages-cont {
+  .row {
+    .well {
+      h3 {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+audio,
+video {
+  width: 100%;
+}
+
+/**
+* Browse grid componenet
+*/
+.react-datagrid {
+  .label-spaced {
+    margin-right: 5px;
+    background-color: #303030;
+    font-size: 100%;
+    font-weight: normal;
+  }
+  .innerRowTable {
+    border: 1px solid #c3c3c3;
+
+    td,
+    th {
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+  }
+}
+
+/**
+* Detail Word View
+*/
+.image {
+  /*width:100%;*/
+  height: auto;
+  margin: 10px 0;
+  max-width: 500px;
+  text-align: center;
+}
+
+.grid-view-first-words {
+  > div:hover {
+    > img {
+      filter: none !important;
+    }
+  }
+
+  > div {
+    filter: "grayscale(100%) opacity(80%)";
+  }
+}
+
+/**
+* Edit View
+*/
+.form-horizontal {
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  fieldset > .btn {
+    float: right;
+    margin-right: 12px;
+    background-color: #ebf4b6;
+  }
+}
+
+/**
+* Category grid tile
+*/
+.category-grid-tile {
+  text-align: center;
+
+  img {
+    width: inherit !important;
+  }
+
+  > div {
+    text-align: left;
+  }
+}
+
+/**
+* Contribute
+*/
+.contribute-cont {
+  .row {
+    .well {
+      h3 {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+/**
+* Dialect page
+*/
+.dialect-info-banner {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px 0;
+  right: 0;
+  font-size: 18px;
+
+  .dib-body-row {
+    div {
+      display: inline-block;
+      font-weight: 200 !important;
+    }
+
+    > strong {
+      font-weight: 400 !important;
+    }
+  }
+}
+
+.dialect-greeting-container {
+  width: 100%;
+  font-size: 20px;
+}
+
+.dialect-navigation {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px 35px;
+
+  a {
+    color: #f7f7f7;
+    font-size: 1.85rem;
+    text-decoration: none;
+    background-color:#292929;
+    padding: 5px 30px 5px 35px;
+    border: 1px solid #909090;
+    border-radius: 5px;
+    margin: 10px 15px 0 0;
+
+    &:hover{
+      background-color: rgba(0,0,0,0.8);
+    }
+  }
+}
+
+.dialect-body-container {
+  padding: 0 25px;
+}
+
+.flex-container {
+  margin: auto;
+  max-width: 1200px;
+
+  .responsive-image {
+    max-width: 100%;
+  }
+
+  .cell {
+    margin: 1rem;
+    position: relative;
+    img {
+      display: block;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+    .cell {
+      width: calc(48% - 2rem);
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .cell {
+      width: calc(33.3333% - 2rem);
+    }
+  }
+}
+
+/**
+* Pagination
+*/
+.pagination {
+  margin: 0;
+
+  .pagination-page {
+    height: 43px;
+    font-size: 20px;
+    width: 45px;
+    text-align: center;
+    padding: 6px 0 !important;
+  }
+}
+
+/**
+* Themes
+*/
+.page-default-theme {
+  //margin-top: 25px;
+  min-height: 68vh;
+}
+
+.page-kids-theme {
+  margin-top: 0;
+
+  .row:first-child {
+    padding: 25px 0 0 0;
+  }
+}
+
+.footer-kids-theme {
+  margin-top: 0;
+}
+
+.workspace-switcher {
+  > li {
+    margin-left: 10px;
+    border-radius: 0;
+
+    > a {
+      border-radius: 4px 4px 0 0;
+      color: #000;
+
+      &:hover,
+      &:focus {
+        background-color: #dcdcdc;
+        cursor: pointer;
+      }
+    }
+  }
+
+  > li.active {
+    border-bottom: 4px solid #a7a7a7;
+
+    > a {
+      color: #000;
+      background-color: transparent;
+      padding-bottom: 5px;
+
+      &:hover,
+      &:focus {
+        background-color: #dcdcdc;
+        color: #000;
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  margin: 0;
+  background-color: transparent;
+  padding-left: 20px;
+  text-transform: capitalize;
+
+  a {
+    color: #353b40;
+    text-decoration: none;
+  }
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+
+  > li.active {
+    color: #000;
+  }
+  > li + li:before {
+    content: "/\00a0";
+    padding: 0 0 0 5px;
+    color: #ccc;
+  }
+}
+
+@media (max-width: @small-screen) {
+  .breadcrumb{
+    display:none;
+  }
+}
+
+.admin-guide-step {
+  width: 300px;
+}
+
+.map-component {
+  path {
+    stroke-width: 1px;
+    stroke: #9d8a72;
+    fill: #000;
+    opacity: 0.7;
+    cursor: pointer;
+  }
+
+  path:hover,
+  path.highlighted {
+    fill: #d23c2f;
+  }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 550px;
+}
+
+div.tooltip2 {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  font-weight: bold;
+  padding: 4px 8px;
+  display: none;
+}
+/*
+
+// Remove audio download button workaround
+// See http://stackoverflow.com/questions/39602852/disable-download-button-for-google-chrome/40975859#40975859
+audio::-webkit-media-controls {
+    overflow: hidden !important
+}
+audio::-webkit-media-controls-enclosure {
+    width: calc(100% + 12px);
+    margin-left: auto;
+}
+*/
+
+/**
+* Responsive design fixes
+*/
+.search-bar-mobile {
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 99999;
+  position: fixed;
+  border: 1px #e8e8e8 solid;
+  padding: 20px 0 10px 0;
+  text-align: center;
+
+  span {
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+    padding-right: 20px;
+  }
+}
+
+@media screen and (max-width: @mobile-xs-width) {
+  // Common
+
+  h1 {
+    font-size: 1.4em;
+  }
+
+  // Navigation
+
+  .search-bar-seperator,
+  .locale-seperator {
+    margin-right: 0 !important;
+  }
+
+  // Kids Theme
+
+  .kids-home {
+    background-size: 46%, 39%;
+  }
+
+  // Default Theme
+  .page-default-theme {
+    min-height: auto;
+  }
+
+  // Home
+  .home-intro-block {
+    width: 100%;
+    position: relative;
+    bottom: initial;
+    right: initial;
+    padding-top: 15px;
+    margin-top: 35px;
+  }
+
+  // Dialect Page(s)
+
+  .dialect-info-banner {
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    background: transparent;
+
+    .dib-header {
+      top: 5px;
+      right: 5px;
+    }
+
+    .dib-body {
+      background: #ffffff;
+      margin-top: 35px;
+      padding: 20px 10px;
+      border: 1px solid #ababab;
+      border-radius: 5px;
+      position: relative;
+    }
+  }
+
+  .dialect-greeting-container {
+    width: 100%;
+    padding: 20px 10px;
+    line-height: 140%;
+    border-radius: 0;
+    position: relative;
+    bottom: 0;
+    background-color: transparent;
+    max-width: 100%;
+  }
+
+  .dialect-navigation {
+    // position: relative;
+    height: inherit !important;
+
+    a {
+      display: block;
+    }
+
+    > div {
+      float: none !important;
+
+      > button {
+        float: none !important;
+      }
+    }
+  }
+
+  .dialect-body-container {
+    padding: 0;
+  }
+
+  .row-create-wrapper {
+    margin-bottom: 20px;
+  }
+
+  // Components -> Page Toolbar
+
+  .page-toolbar {
+    height: inherit !important;
+    width: 100% !important;
+    padding: 5px !important;
+    min-height: 56px;
+
+    > div:not(first-child) {
+      float: none !important;
+
+      > div {
+        float: none !important;
+        width: 90% !important;
+        margin: 15px auto !important;
+        display: block !important;
+      }
+    }
+  }
+
+  // Components -> react-datagrid
+  .react-datagrid {
+    .react-datagrid-pagination-toolbar {
+      > div {
+        min-width: 100% !important;
+      }
+    }
+
+    .z-row .z-cell .z-content {
+      white-space: initial !important;
+    }
+  }
+}
+
+@import "AlphabetGridTile";
+@import "Button";
+@import "CardView";
+@import "Dialect";
+@import "DictionaryList";
+@import "Introduction";
+@import "kids";
+@import "Navigation";
+@import "SearchDialect";
+@import "DialectFilterList";
+@import "AlphabetListView";
+@import "DictionaryList";
+@import "DialectViewWord";
+@import "SearchResultTile";
+@import "Flashcard";
+
+@media print {
+  // Note: Flashcard print styles are in Flashcard.less
+  @import "Print";
+}
+
+.panel-category {
+  .panel-body {
+    padding: 0;
+  }
+}

@@ -1,0 +1,18 @@
+<component name="ca.firstvoices.uregistration.listeners.contrib">
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener enabled="true" name="fvregistrationtimeoutlistener" async="true" postCommit="false"
+              class="ca.firstvoices.listeners.FVRegistrationTimeOutListener" priority="100">
+      <event>checkRegistrationTimeout</event>
+    </listener>
+    <listener enabled="true" name="fvregistrationcompletionlistener" async="true" postCommit="true"
+              class="ca.firstvoices.listeners.FVRegistrationCompletionListener" priority="240">
+      <event>invitationValidated</event>
+      <event>newUserApprovedBySystem</event>
+      <event>newUserApprovedByLanguageAdministrator</event>
+      <event>documentRemoved</event>
+    </listener>
+
+  </extension>
+
+</component>

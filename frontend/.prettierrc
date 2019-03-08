@@ -1,0 +1,15 @@
+{
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "eslintIntegration": true,
+  "htmlWhitespaceSensitivity": "css",
+  "ignorePath": ".eslintignore",
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false,
+  "printWidth": 120,
+  "singleQuote": false,
+  "semi": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "useTabs": false
+}

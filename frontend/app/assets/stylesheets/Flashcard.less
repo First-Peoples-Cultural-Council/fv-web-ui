@@ -1,0 +1,102 @@
+.Flashcard {
+  display: flex;
+  height: 25vh;
+  border-left: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+  color: #000;
+}
+.FlashcardListIntroduction {
+  margin: 0 0 20px 0;
+}
+.Flashcard.PrintPageBreak {
+  border-top: 1px solid #e8e8e8;
+}
+.Flashcard0 {
+  border-top: 1px solid #e8e8e8;
+}
+.FlashcardData {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.FlashcardTitle {
+  text-align: center;
+}
+.FlashcardTitle a,
+.FlashcardTitle a:visited {
+  font-size: 18pt;
+  line-height: 20pt;
+  text-decoration: none;
+  color: #000;
+  padding: 0 0.1in;
+}
+.FlashcardList .Flashcard:first-of-type {
+  border: 1px solid red !important;
+}
+.FlashcardList a[href]:after {
+  content: none !important;
+}
+.FlashcardDefinitions {
+  border-left: 1px dotted #e8e8e8;
+  display: flex;
+  flex-direction: column;
+}
+
+.FlashcardDefinitionsMeta,
+.FlashcardDefinition {
+  width: 100%;
+}
+.FlashcardDefinitionsMeta {
+  display: flex;
+  justify-content: center;
+  padding: 0.1in;
+}
+.FlashcardDefinitionsDialect {
+  font-size: 8pt;
+  line-height: 10pt;
+  color: #666;
+  font-weight: 100;
+}
+.FlashcardDefinitionsUrl {
+  font-size: 6pt;
+  line-height: 8pt;
+  color: #757575;
+  font-weight: 100;
+}
+.FlashcardDefinition {
+  text-align: center;
+  margin: auto;
+  font-size: 16pt;
+  line-height: 18pt;
+  padding: 0 0.1in;
+}
+.FlashcardModeToggle {
+  // float: right;
+}
+@media print {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .FlashcardList {
+    width: 7.5in;
+  }
+  body.PrintFlashcards {
+    @page {
+      margin: 0.5in;
+    }
+    #pageNavigation,
+    #pageFooter,
+    .breadcrumbContainer,
+    .DialectPageTitle {
+      display: none !important;
+    }
+  }
+  .Flashcard {
+    height: 2.5in;
+    min-width: 50%;
+  }
+}

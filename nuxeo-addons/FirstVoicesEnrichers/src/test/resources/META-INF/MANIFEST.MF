@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesNuxeo.Test
+Bundle-Name: FirstVoicesNuxeo.test
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ManifestVersion: 2
+Bundle-Vendor: Nuxeo

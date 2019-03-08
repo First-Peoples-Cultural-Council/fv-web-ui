@@ -1,0 +1,57 @@
+<component name="ca.firstvoices.permissions.contrib">
+
+	<require>org.nuxeo.ecm.core.security.defaultPermissions</require>
+	<require>org.nuxeo.ecm.platform.publishing.permissions.contrib</require>
+
+	<extension target="org.nuxeo.ecm.core.security.SecurityService" point="permissionsVisibility">
+	
+		<visibility type="FVDialect">
+		  <item show="true" order="60" denyPermission="Write">Record</item>
+		  <item show="true" order="150">CanAskForPublishing</item>
+		  <item show="true" order="160">Approve</item>
+		</visibility>
+		
+		<visibility type="FVLanguage">
+		  <item show="true" order="150">CanAskForPublishing</item>
+		</visibility>
+		
+		<visibility type="FVLanguageFamily">
+		  <item show="true" order="150">CanAskForPublishing</item>
+		</visibility>
+	
+	</extension>
+
+	<extension target="org.nuxeo.ecm.core.security.SecurityService" point="permissions">
+
+	    <permission name="Record">
+	    	<include>CanAskForPublishing</include>
+	    </permission>
+	    
+	    <permission name="Approve">
+	    	<include>Record</include>
+	    	<include>ReadWrite</include>
+	    </permission>
+
+	</extension>
+	
+	<extension point="filters" target="org.nuxeo.ecm.platform.actions.ActionService">
+	
+		<filter id="create" append="true">
+		  <rule grant="true">
+		    <permission>Record</permission>
+		    <facet>Folderish</facet>
+		    <type>FVDictionary</type>
+		    <type>FVCategories</type>
+		    <type>FVContributors</type>
+		    <type>FVPhraseBooks</type>
+		    <type>FVResources</type>
+		    <type>FVBooks</type>
+		    <condition>
+		      #{typeManager.getAllowedSubTypes(document.getType(), document).size() > 0}
+		    </condition>
+		  </rule>
+		</filter>
+	
+	</extension>
+
+</component>
