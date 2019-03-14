@@ -50,7 +50,7 @@ mvn clean install
 To install the mp on your Nuxeo:
 
 ```
-nuxeoctl mp-install FirstVoices-marketplace/target/FirstVoices-marketplace-package-1.0.23-SNAPSHOT.zip
+nuxeoctl mp-install FirstVoices-marketplace/target/FirstVoices-marketplace-package-1.1.0-SNAPSHOT.zip
 ```
 
 *Method 2*
