@@ -5,7 +5,7 @@
 nuxeo.template.includes=common
 
 # org.nuxeo.ecm.instance.description=Nuxeo ECM customized with FirstVoices Package
-fv.contextPath=app
+##fv.contextPath=app
 
 ## on production servers should be left empty like this:
-## fv.contextPath=
+fv.contextPath=

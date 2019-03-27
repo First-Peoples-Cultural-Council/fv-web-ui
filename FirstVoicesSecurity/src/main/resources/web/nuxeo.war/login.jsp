@@ -243,7 +243,7 @@ if (selectedLanguage != null) { %>
         <% if (selectedLanguage != null) { %>
         <input type="hidden" name="language" id="language" value="<%= selectedLanguage %>" />
         <% } %>
-        <input type="hidden" name="requestedUrl" id="requestedUrl" value="${fn:escapeXml(param.requestedUrl == "app/index.html"?"app":param.requestedUrl)}" />
+        <input type="hidden" name="requestedUrl" id="requestedUrl" value="${fn:escapeXml(param.requestedUrl == "/index.html"?"/":param.requestedUrl)}" />
         <input type="hidden" name="forceAnonymousLogin" id="true" />
         <input type="hidden" name="form_submitted_marker" id="form_submitted_marker" />
         <input class="login_button" type="submit" name="Submit"
@@ -264,8 +264,8 @@ if (selectedLanguage != null) { %>
         <%}%>
       </form>
      <div style="text-align: center;padding: 20px 0 0 25px;margin-top: 20px;border-top:1px solid gray;">
-        <a href="<%=NUXEO_URL%>app/register?requestedUrl=app/register" class="buttonLink">New to FirstVoices? Register here!</a>
-        <a href="<%=NUXEO_URL%>app/forgotpassword?requestedUrl=app/forgotpassword" class="buttonLink">Forgot your password?</a>
+        <a href="/register?requestedUrl=/register" class="buttonLink">New to FirstVoices? Register here!</a>
+        <a href="/forgotpassword?requestedUrl=/forgotpassword" class="buttonLink">Forgot your password?</a>
       </div>
     </div>
 </div>

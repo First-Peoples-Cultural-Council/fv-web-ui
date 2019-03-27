@@ -2,7 +2,7 @@
   "title": "FirstVoices",
   "domain": "FV",
   "apiURL": "https://api.firstvoices.com/v1/",
-  "contextPath": "/nuxeo/app",
+  "contextPath": "",
   "testData": {
     "sectionOrWorkspaces": "/FV/Workspaces/Data/",
     "languageFamilyPath": "MyTestLanguage",
