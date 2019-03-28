@@ -136,7 +136,7 @@ export default class DirectoryOperations {
         language: "NXQL",
       },
       StringHelpers.queryStringToObject(
-        `?query=SELECT * FROM ${type} WHERE ${where} AND ecm:isTrashed = 0 ${_queryAppend}`,
+        `?query=SELECT ecm:uuid FROM ${type} WHERE ${where} AND ecm:isTrashed = 0 ${_queryAppend}`,
         true
       )
     )

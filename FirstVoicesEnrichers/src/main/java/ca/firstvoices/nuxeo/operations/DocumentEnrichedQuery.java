@@ -4,28 +4,27 @@
  */
 package ca.firstvoices.nuxeo.operations;
 
-
-import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
-import org.nuxeo.ecm.automation.core.util.Properties;
-import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.IterableQueryResult;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.query.sql.NXQL;
-import org.nuxeo.ecm.platform.query.api.PageProviderService;
+import org.nuxeo.elasticsearch.api.ElasticSearchService;
+import org.nuxeo.elasticsearch.api.EsIterableQueryResultImpl;
+import org.nuxeo.elasticsearch.query.NxQueryBuilder;
+import org.nuxeo.runtime.api.Framework;
 
-import java.util.HashMap;
-import java.util.Map;
+import ca.firstvoices.nuxeo.utils.EnricherUtils;
 
-@Operation(id = DocumentEnrichedQuery.ID, category = Constants.CAT_FETCH, label = "Enriched Query",
-        description = "Returns a query that is transformed, for example - includes a lookup for sub-categories in addition to parent category")
+@Operation(id = DocumentEnrichedQuery.ID, category = Constants.CAT_FETCH, label = "Enriched Query", description = "Returns a query that is transformed, for example - includes a lookup for sub-categories in addition to parent category")
 public class DocumentEnrichedQuery {
 
     public static final String ID = "Document.EnrichedQuery";
@@ -42,59 +41,43 @@ public class DocumentEnrichedQuery {
     @Context
     protected AutomationService automationService;
 
-    @Param(name = "enrichment", required = false, description = "Enrichment to perform on query", widget = Constants.W_OPTION, values = {CATEGORY_CHILDREN_ENRICHMENT})
+    @Param(name = "enrichment", required = false, description = "Enrichment to perform on query", widget = Constants.W_OPTION, values = {
+            CATEGORY_CHILDREN_ENRICHMENT })
     protected String enrichment = "";
 
     @Param(name = "query", required = true, description = "The query to " + "perform.")
     protected String query;
 
-    @Param(name = "language", required = false, description = "The query " + "language.", widget = Constants.W_OPTION, values = { NXQL.NXQL })
+    @Param(name = "language", required = false, description = "The query "
+            + "language.", widget = Constants.W_OPTION, values = { NXQL.NXQL })
     protected String language = NXQL.NXQL;
 
-    @Param(name = "currentPageIndex", required = false, description = "Target listing page.")
-    protected Integer currentPageIndex;
+    protected static final int LIMIT = 1000;
 
-    @Param(name = "pageSize", required = false, description = "Entries number" + " per page.")
-    protected Integer pageSize;
-
-    @Param(name = "queryParams", required = false, description = "Ordered " + "query parameters.")
-    protected StringList queryParams;
-
-    @Param(name = "sortBy", required = false, description = "Sort by " + "properties (separated by comma)")
-    protected String sortBy;
-
-    @Param(name = "sortOrder", required = false, description = "Sort order, " + "ASC or DESC", widget = Constants.W_OPTION, values = {
-            ASC, DESC })
-    protected String sortOrder;
-
-    @Param(name = PageProviderService.NAMED_PARAMETERS, required = false, description = "Named parameters to pass to the page provider to "
-            + "fill in query variables.")
-    protected Properties namedParameters;
-
-    @SuppressWarnings("unchecked")
     @OperationMethod
     public DocumentModelList run() throws OperationException {
 
         switch (enrichment) {
-            case CATEGORY_CHILDREN_ENRICHMENT:
-                query = EnricherUtils.expandCategoriesToChildren(session, query);
+        case CATEGORY_CHILDREN_ENRICHMENT:
+            query = EnricherUtils.expandCategoriesToChildren(session, query);
             break;
         }
 
-        OperationContext ctx = new OperationContext(session);
-        Map<String, Object> params = new HashMap<>();
+        DocumentModelList docs = new DocumentModelListImpl();
 
-        params.put("query", query);
-        params.put("language", language);
-        params.put("currentPageIndex", currentPageIndex);
-        params.put("pageSize", pageSize);
-        params.put("strParameters", queryParams);
-        params.put("sortBy", sortBy);
-        params.put("sortOrder", sortOrder);
-        params.put("namedParameters", namedParameters);
+        ElasticSearchService ess = Framework.getService(ElasticSearchService.class);
+        if (ess == null) {
+            return docs;
+        }
 
-        DocumentModelList dml = (DocumentModelList) automationService.run(ctx, "Repository.Query", params);
+        NxQueryBuilder nxEsDocs = new NxQueryBuilder(session).nxql(query).limit(LIMIT).onlyElasticsearchResponse();
 
-        return dml;
+        try (IterableQueryResult iqr = new EsIterableQueryResultImpl(ess, ess.scroll(nxEsDocs, LIMIT))) {
+            iqr.forEach(res -> {
+                String docRef = res.get(NXQL.ECM_UUID).toString();
+                docs.add(session.getDocument(new IdRef(docRef)));
+            });
+        }
+        return docs;
     }
 }
