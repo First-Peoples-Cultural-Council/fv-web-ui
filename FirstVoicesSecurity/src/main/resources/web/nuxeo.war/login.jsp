@@ -72,6 +72,7 @@ String NUXEO_URL = VirtualHostHelper.getBaseURL(request);
 boolean displayMobileBanner = !"false".equals(request.getParameter("displayMobileBanner"));
 
 String urlWithContext =  fvContext.equals("") ? "" : ( NUXEO_URL + fvContext);
+
 %>
 
 <html>
