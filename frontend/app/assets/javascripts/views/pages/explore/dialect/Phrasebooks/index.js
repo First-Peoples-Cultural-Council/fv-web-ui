@@ -35,7 +35,7 @@ import PhrasebookDelete from 'views/components/Confirmation'
 import PhrasebooksSelected from 'views/pages/explore/dialect/Contributors/ContributorsSelected'
 import Checkbox from 'views/components/Form/Common/Checkbox'
 
-import { STATE_UNAVAILABLE } from 'common/Constants'
+import { STATE_LOADING } from 'common/Constants'
 
 import '!style-loader!css-loader!./styles.css'
 
@@ -94,7 +94,7 @@ export class Phrasebooks extends Component {
     filter: new Map(),
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     copy: {
       actions: {
         th: '',

@@ -17,7 +17,7 @@ const copy = {
     btnDeny: 'No, do not delete the phrase book',
     btnConfirm: 'Yes, delete the phrase book',
     success: {
-      createAnother: 'Create a new phrase book',
+      linkCreateAnother: 'Create a new phrase book',
       detailView: 'Detail page',
       browseView: 'Browse all phrase books',
       editView: 'Edit',
@@ -38,7 +38,7 @@ const copy = {
     name: 'Phrase Book name *',
     requiredNotice: 'All fields with an asterisk are required',
     success: {
-      createAnother: 'Create a new phrase book',
+      linkCreateAnother: 'Create a new phrase book',
       noName: '(No name)',
       thanks: 'Thanks for updating a phrase book. Your contributions help make the site better!',
       title: 'We updated the phrase book',

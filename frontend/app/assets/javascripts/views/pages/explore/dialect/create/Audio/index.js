@@ -24,7 +24,7 @@ import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/Fo
 import validator, { toParse } from './validation'
 import copy from './internationalization'
 import StringHelpers from 'common/StringHelpers'
-import { STATE_UNAVAILABLE, STATE_DEFAULT, STATE_ERROR, STATE_SUCCESS } from 'common/Constants'
+import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR, STATE_SUCCESS } from 'common/Constants'
 const { number, string } = PropTypes
 
 export class CreateAudio extends React.Component {
@@ -41,7 +41,7 @@ export class CreateAudio extends React.Component {
     groupName: 'Form__group',
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
   }
   // NOTE: Using callback refs since on old React
   // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
@@ -70,8 +70,8 @@ export class CreateAudio extends React.Component {
   render() {
     let content = null
     switch (this.state.componentState) {
-      case STATE_UNAVAILABLE: {
-        content = this._stateGetUnavailable()
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
         break
       }
 
@@ -93,9 +93,9 @@ export class CreateAudio extends React.Component {
     return content
   }
 
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <div className={className}>_stateGetUnavailable</div>
+    return <div className={className}>_stateGetLoading</div>
   }
 
   _stateGetDefault = () => {
@@ -284,7 +284,7 @@ export class CreateAudio extends React.Component {
     // const pathOrId = `${DIALECT_PATH}/Resources/${createItemName}.${timestamp}`
     // this.setState({ pathOrId })
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
       toParse,

@@ -9,37 +9,34 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Re
 
 describe('Recorder', () => {
   it('Create', () => {
+    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+    cy.queryByText(copy.errorBoundary.title).should('exist')
+
     // Login
     cy.login()
 
     cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
-    cy.queryByText(copy.default.title).should('exist')
+    cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
-    cy.getByText(copy.default.submit).click()
+    cy.getByText(copy.create.submit).click()
 
     // Error should be displayed
     cy.getByLabelText(copy.validation.name)
 
     // Fill in required field
-    cy.getByLabelText(copy.default.name).type('[CY] Contributor Name')
+    cy.getByLabelText(`${copy.create.name} *`).type('[CY] Recorder Name')
 
     // Resubmit
-    cy.getByText(copy.default.submit).click()
+    cy.getByText(copy.create.submit).click()
 
     // Should see success
-    cy.getByText(copy.default.success.title).should('exist')
+    cy.getByText(copy.create.success.title).should('exist')
 
-    // Create another
-    cy.getByText(copy.default.success.createAnother).click()
-
-    // Confirm
-    cy.queryByText(copy.default.title).should('exist')
-
-    // Submit w/no data
-    cy.getByText(copy.default.submit).click()
-
-    // Error should be displayed
-    cy.getByLabelText(copy.validation.name)
+    // Visit Edit
+    cy.getByText(copy.create.success.linkEdit).click()
+    cy.getByText(copy.edit.btnInitiate).click()
+    cy.getByText(copy.edit.btnConfirm).click()
+    cy.getByText(copy.edit.successDelete.title).should('exist')
   })
 })

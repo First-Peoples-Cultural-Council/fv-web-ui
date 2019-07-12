@@ -14,7 +14,9 @@ const copy = {
     title: 'Create a new recorder',
     profilePhoto: 'Recorder photo',
     success: {
-      createAnother: 'Want to create another recorder?',
+      linkCreateAnother: 'Want to create another recorder?',
+      linkProfile: 'Profile',
+      linkEdit: 'Edit',
       noName: '(No name)',
       thanks: 'Thanks for creating a recorder. Your contributions help make the site better!',
       title: 'We created a new recorder',
@@ -36,7 +38,7 @@ const copy = {
     profilePhoto: 'Recorder photo',
     profilePhotoExists: 'Replace current recorder photo',
     success: {
-      createAnother: 'Made a mistake? Edit the recorder again',
+      linkCreateAnother: 'Made a mistake? Edit the recorder again',
       noName: '(No name)',
       thanks: 'Thanks for updating a recorder. Your contributions help make the site better!',
       title: 'We updated the recorder',

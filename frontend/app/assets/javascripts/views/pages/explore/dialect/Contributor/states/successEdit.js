@@ -36,7 +36,7 @@ export class ContributorStateSuccessEdit extends React.Component {
             handleClick()
           }}
         >
-          {copy.edit.success.createAnother}
+          {copy.edit.success.linkCreateAnother}
         </a>
       </div>
     )

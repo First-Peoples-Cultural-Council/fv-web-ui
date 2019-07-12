@@ -27,7 +27,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
-import { STATE_UNAVAILABLE } from 'common/Constants'
+import { STATE_LOADING } from 'common/Constants'
 import ContributorDelete from 'views/components/Confirmation'
 
 import ContributorsSelected from './ContributorsSelected'
@@ -93,7 +93,7 @@ export class Contributors extends Component {
     pushWindowPath: () => {},
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     copy: {
       actions: {
         th: '',

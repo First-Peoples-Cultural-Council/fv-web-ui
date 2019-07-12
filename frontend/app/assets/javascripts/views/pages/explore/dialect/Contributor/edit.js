@@ -1,7 +1,7 @@
 import React from 'react'
 import { PropTypes } from 'react'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
+import StateLoading from './states/loading'
 import StateSuccessEdit from './states/successEdit'
 import StateSuccessDelete from './states/successDelete'
 import StateEdit from './states/create'
@@ -27,7 +27,7 @@ import { getFormData, handleSubmit } from 'common/FormHelpers'
 import { Document } from 'nuxeo'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -93,7 +93,7 @@ export class EditContributor extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -144,8 +144,8 @@ export class EditContributor extends React.Component {
         break
       }
       default:
-        // STATE_UNAVAILABLE === loading
-        content = this._stateGetUnavailable()
+        // STATE_LOADING === loading
+        content = this._stateGetLoading()
     }
     return content
   }
@@ -178,9 +178,9 @@ export class EditContributor extends React.Component {
       })
     }
   }
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />

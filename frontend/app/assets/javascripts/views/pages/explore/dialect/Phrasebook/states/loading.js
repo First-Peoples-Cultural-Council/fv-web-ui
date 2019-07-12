@@ -1,7 +1,7 @@
 import React from 'react'
 import { PropTypes } from 'react'
 const { string, object } = PropTypes
-export class ContributorStateUnavailable extends React.Component {
+export class PhrasebookStateLoading extends React.Component {
   static propTypes = {
     className: string,
     copy: object,
@@ -12,8 +12,8 @@ export class ContributorStateUnavailable extends React.Component {
   }
   render() {
     const { className, copy } = this.props
-    return <div className={`${className} Contributor Contributor--unavailable`}>{copy.loading}</div>
+    return <div className={`${className} Phrasebook Phrasebook--unavailable`}>{copy.loading}</div>
   }
 }
 
-export default ContributorStateUnavailable
+export default PhrasebookStateLoading

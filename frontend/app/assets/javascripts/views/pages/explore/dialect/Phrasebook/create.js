@@ -1,7 +1,7 @@
 import React from 'react'
 import { PropTypes } from 'react'
 // import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
+import StateLoading from './states/loading'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
 import StateErrorBoundary from './states/errorBoundary'
@@ -19,7 +19,7 @@ import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -78,7 +78,7 @@ export class Phrasebook extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -143,8 +143,8 @@ export class Phrasebook extends React.Component {
   render() {
     let content = null
     switch (this.state.componentState) {
-      case STATE_UNAVAILABLE: {
-        content = this._stateGetUnavailable()
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
         break
       }
 
@@ -171,9 +171,9 @@ export class Phrasebook extends React.Component {
     return content
   }
 
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />

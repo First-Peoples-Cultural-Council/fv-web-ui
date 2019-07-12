@@ -1,7 +1,7 @@
 import React from 'react'
 import { PropTypes } from 'react'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
+import StateLoading from './states/loading'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
 import StateErrorBoundary from './states/errorBoundary'
@@ -16,7 +16,7 @@ import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -44,6 +44,8 @@ export class Contributor extends React.Component {
     DEFAULT_SORT_COL: string,
     DEFAULT_SORT_TYPE: string,
     validator: object,
+    generateUrlDetail: func,
+    generateUrlEdit: func,
     // REDUX: reducers/state
     computeContributor: object.isRequired,
     computeCreateContributor: object,
@@ -73,7 +75,7 @@ export class Contributor extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -137,8 +139,8 @@ export class Contributor extends React.Component {
   render() {
     let content = null
     switch (this.state.componentState) {
-      case STATE_UNAVAILABLE: {
-        content = this._stateGetUnavailable()
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
         break
       }
 
@@ -165,9 +167,9 @@ export class Contributor extends React.Component {
     return content
   }
 
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />
@@ -200,12 +202,14 @@ export class Contributor extends React.Component {
     return this._stateGetCreate()
   }
   _stateGetSuccess = () => {
-    const { className } = this.props
+    const { className, generateUrlDetail, generateUrlEdit } = this.props
     const { formData, itemUid } = this.state
     return (
       <StateSuccessDefault
         className={className}
         copy={this.state.copy}
+        generateUrlDetail={generateUrlDetail}
+        generateUrlEdit={generateUrlEdit}
         formData={formData}
         itemUid={itemUid}
         handleClick={() => {

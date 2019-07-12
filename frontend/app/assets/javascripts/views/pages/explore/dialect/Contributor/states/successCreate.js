@@ -1,17 +1,23 @@
 import React from 'react'
 import { PropTypes } from 'react'
-
+import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
+// REDUX: actions/dispatch/func
+import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 const { string, object, func } = PropTypes
 export class ContributorStateSuccessCreate extends React.Component {
   static propTypes = {
     className: string,
     copy: object,
+    generateUrlDetail: func,
+    generateUrlEdit: func,
     formData: object,
     itemUid: string,
     handleClick: func,
+    // REDUX: reducers/state
+    routeParams: object.isRequired,
   }
   static defaultProps = {
     className: 'FormRecorder',
@@ -20,13 +26,17 @@ export class ContributorStateSuccessCreate extends React.Component {
     },
   }
   render() {
-    const { className, copy, /*formData, */ handleClick, routeParams, itemUid } = this.props
+    const { className, copy, generateUrlDetail, generateUrlEdit, handleClick, routeParams, itemUid } = this.props
     const { theme, dialect_path } = routeParams
     // const name = formData['dc:title']
     // const description = formData['dc:description']
     // const photo = formData['fvcontributor:profile_picture'] ? formData['fvcontributor:profile_picture'][0] : {}
-    const contributorDetailUrl = `/${theme}${dialect_path}/contributor/${itemUid}`
-    const contributorEditUrl = `/${theme}${dialect_path}/edit/contributor/${itemUid}`
+    const contributorDetailUrl = generateUrlDetail
+      ? generateUrlDetail(itemUid)
+      : `/${theme}${dialect_path}/contributor/${itemUid}`
+    const contributorEditUrl = generateUrlEdit
+      ? generateUrlEdit(itemUid)
+      : `/${theme}${dialect_path}/edit/contributor/${itemUid}`
     return (
       <div className={`${className} Contributor Contributor--successCreate`}>
         <h1>{copy.create.success.title}</h1>
@@ -42,7 +52,7 @@ export class ContributorStateSuccessCreate extends React.Component {
               handleClick()
             }}
           >
-            {copy.create.success.createAnother}
+            {copy.create.success.linkCreateAnother}
           </a>
         </p>
         {/* REVIEW ------------- */}
@@ -64,13 +74,29 @@ export class ContributorStateSuccessCreate extends React.Component {
 
         {/* DETAIL ------------- */}
         <p>
-          <a href={contributorDetailUrl}>Profile</a>
+          <a
+            href={contributorDetailUrl}
+            onClick={(e) => {
+              e.preventDefault()
+              NavigationHelpers.navigate(contributorDetailUrl, this.props.pushWindowPath, false)
+            }}
+          >
+            {copy.create.success.linkProfile}
+          </a>
         </p>
 
         {/* EDIT ------------- */}
         {/* <h2>Made a mistake? Need to change something?</h2> */}
         <p>
-          <a href={contributorEditUrl}>Edit</a>
+          <a
+            href={contributorEditUrl}
+            onClick={(e) => {
+              e.preventDefault()
+              NavigationHelpers.navigate(contributorEditUrl, this.props.pushWindowPath, false)
+            }}
+          >
+            {copy.create.success.linkEdit}
+          </a>
         </p>
 
         {/* <dl>
@@ -95,7 +121,12 @@ const mapStateToProps = (state /*, ownProps*/) => {
   }
 }
 
+// REDUX: actions/dispatch/func
+const mapDispatchToProps = {
+  pushWindowPath,
+}
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(ContributorStateSuccessCreate)
