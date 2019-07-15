@@ -77,29 +77,6 @@ export class PageDialectWordEdit extends Component {
     this.fetchData(this.props)
   }
 
-  // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    let currentWord
-    let nextWord
-
-    if (this._getWordPath() !== null) {
-      currentWord = ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath())
-      nextWord = ProviderHelpers.getEntry(nextProps.computeWord, this._getWordPath())
-    }
-
-    // 'Redirect' on success
-    if (
-      selectn('wasUpdated', currentWord) != selectn('wasUpdated', nextWord) &&
-      selectn('wasUpdated', nextWord) === true
-    ) {
-      NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextWord), 'words'),
-        nextProps.replaceWindowPath,
-        true
-      )
-    }
-  }
-
   shouldComponentUpdate(newProps /*, newState*/) {
     const previousWord = this.props.computeWord
     const nextWord = newProps.computeWord
@@ -124,7 +101,7 @@ export class PageDialectWordEdit extends Component {
     }
   }
 
-  componentDidUpdate(/*prevProps, prevState*/) {
+  componentDidUpdate(prevProps) {
     const word = selectn('response', ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath()))
     const title = selectn('properties.dc:title', word)
     const uid = selectn('uid', word)
@@ -132,6 +109,27 @@ export class PageDialectWordEdit extends Component {
     if (title && selectn('pageTitleParams.word', this.props.properties) !== title) {
       this.props.changeTitleParams({ word: title })
       this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.word' })
+    }
+
+    // NOTE: Code below was originally from `componentWillReceiveProps()` with some edits to match componentDidUpdate args:
+    let prevWord
+    let currentWord
+
+    if (this._getWordPath() !== null) {
+      prevWord = ProviderHelpers.getEntry(prevProps.computeWord, this._getWordPath())
+      currentWord = ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath())
+    }
+
+    // 'Redirect' on success
+    if (
+      selectn('wasUpdated', prevWord) != selectn('wasUpdated', currentWord) &&
+      selectn('wasUpdated', currentWord) === true
+    ) {
+      NavigationHelpers.navigate(
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentWord), 'words'),
+        this.props.replaceWindowPath,
+        true
+      )
     }
   }
 
