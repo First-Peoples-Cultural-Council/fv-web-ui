@@ -65,10 +65,6 @@ export class ExploreDialectEdit extends Component {
   state = {
     componentState: STATE_LOADING,
   }
-  initialStateCopy = {
-    errorBoundary: {},
-    loading: '',
-  }
   // Fetch data on initial render
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "ExploreDialectEditInternationalization" */ './internationalization').then(
