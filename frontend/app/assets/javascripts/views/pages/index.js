@@ -79,7 +79,7 @@ import PageDialectBookEntryEdit from './explore/dialect/learn/songs-stories/entr
 import PageDialectAlphabetCharacterEdit from './explore/dialect/learn/alphabet/edit'
 
 // CREATE
-import { default as PageDialectWordsCreate } from './explore/dialect/learn/words/create'
+import { default as PageDialectWordsCreate } from './explore/dialect/learn/words/Create'
 import { default as CreateV2 } from './explore/dialect/create/Word'
 import { default as CreateAudio } from './explore/dialect/create/Audio'
 import { default as PageDialectPhrasesCreate } from './explore/dialect/learn/phrases/create'

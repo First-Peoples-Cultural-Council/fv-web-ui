@@ -32,6 +32,11 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
+import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
+import StateLoading from './states/loading'
+import StateErrorBoundary from './states/errorBoundary'
+import '!style-loader!css-loader!./WordsCreate.css'
+
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
@@ -43,7 +48,7 @@ const intl = IntlService.instance
  */
 
 const { array, func, object, string } = PropTypes
-export class PageDialectWordsCreate extends Component {
+export class WordsCreate extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     // REDUX: reducers/state
@@ -57,68 +62,108 @@ export class PageDialectWordsCreate extends Component {
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      formValue: null,
-      wordPath: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+  state = {
+    componentState: STATE_LOADING,
+    formValue: null,
+    wordPath: null,
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
+  async componentDidMount() {
+    const copy = await import(/* webpackChunkName: "WordsCreateInternationalization" */ './internationalization').then(
+      (_module) => {
+        return _module.default
+      }
+    )
+    this.fetchData({ copy })
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     let currentWord
     let nextWord
 
     if (this.state.wordPath === null) {
-      currentWord = ProviderHelpers.getEntry(this.props.computeWord, this.state.wordPath)
-      nextWord = ProviderHelpers.getEntry(nextProps.computeWord, this.state.wordPath)
+      currentWord = ProviderHelpers.getEntry(prevProps.computeWord, this.state.wordPath)
+      nextWord = ProviderHelpers.getEntry(this.props.computeWord, this.state.wordPath)
     }
 
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+    if (this.props.windowPath !== prevProps.windowPath) {
+      this.fetchData()
     }
 
     // 'Redirect' on success
     if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextWord), 'words'),
-        nextProps.replaceWindowPath,
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextWord), 'words'),
+        this.props.replaceWindowPath,
         true
       )
     }
   }
 
-  shouldComponentUpdate(newProps /*, newState*/) {
-    switch (true) {
-      case newProps.windowPath != this.props.windowPath:
-        return true
+  // shouldComponentUpdate(newProps /*, newState*/) {
+  //   switch (true) {
+  //     case newProps.windowPath != this.props.windowPath:
+  //       return true
 
-      case newProps.computeDialect2 != this.props.computeDialect2:
-        return true
+  //     case newProps.computeDialect2 != this.props.computeDialect2:
+  //       return true
 
-      case newProps.computeWord != this.props.computeWord:
-        return true
-      default:
-        return false
-    }
+  //     case newProps.computeWord != this.props.computeWord:
+  //       return true
+  //     default:
+  //       return false
+  //   }
+  // }
+
+  render() {
+    const content = this._getContent()
+    return content
   }
 
-  _onRequestSaveForm(e) {
+  fetchData = async (addToState = {}) => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_ERROR_BOUNDARY,
+        errorMessage: _computeDialect2.message,
+        ...addToState,
+      })
+      return
+    }
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+      ...addToState,
+    })
+  }
+
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
+        break
+      }
+
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      case STATE_ERROR_BOUNDARY: {
+        content = this._stateGetErrorBoundary()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+
+  _onRequestSaveForm = (e) => {
     // Prevent default behaviour
     e.preventDefault()
 
@@ -163,8 +208,7 @@ export class PageDialectWordsCreate extends Component {
       window.scrollTo(0, 0)
     }
   }
-
-  render() {
+  _stateGetDefault = () => {
     const FVWordOptions = Object.assign({}, selectn('FVWord', options))
 
     const computeEntities = Immutable.fromJS([
@@ -194,34 +238,43 @@ export class PageDialectWordsCreate extends Component {
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.learn.words.add_new_word_to_x',
-            'Add New Word to ' + selectn('response.title', _computeDialect2),
-            null,
-            [selectn('response.title', _computeDialect2)]
-          )}
-        </h1>
-        <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
-              <t.form.Form
-                ref="form_word_create" // TODO: DEPRECATED
-                type={t.struct(selectn('FVWord', fields))}
-                context={selectn('response', _computeDialect2)}
-                value={this.state.formValue}
-                options={FVWordOptions}
-              />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
-                </button>
-              </div>
-            </form>
+        <div className="WordsCreate">
+          <h1 className="WordsCreate__heading">
+            {intl.trans(
+              'views.pages.explore.dialect.learn.words.add_new_word_to_x',
+              'Add New Word to ' + selectn('response.title', _computeDialect2),
+              null,
+              [selectn('response.title', _computeDialect2)]
+            )}
+          </h1>
+          <div className="row" style={{ marginTop: '15px' }}>
+            <div className={classNames('col-xs-8', 'col-md-10')}>
+              <form onSubmit={this._onRequestSaveForm}>
+                <t.form.Form
+                  ref="form_word_create" // TODO: DEPRECATED
+                  type={t.struct(selectn('FVWord', fields))}
+                  context={selectn('response', _computeDialect2)}
+                  value={this.state.formValue}
+                  options={FVWordOptions}
+                />
+                <div className="form-group">
+                  <button type="submit" className="btn btn-primary">
+                    {intl.trans('save', 'Save', 'first')}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </PromiseWrapper>
     )
+  }
+  _stateGetErrorBoundary = () => {
+    const { copy, errorMessage } = this.state
+    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
+  }
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
@@ -252,4 +305,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageDialectWordsCreate)
+)(WordsCreate)
