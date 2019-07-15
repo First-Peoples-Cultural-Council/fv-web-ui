@@ -70,14 +70,6 @@ export class PageDialectWordEdit extends Component {
     this.state = {
       formValue: null,
     }
-
-    // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(this.props.routeParams.dialect_path)
-    newProps.fetchWord(this._getWordPath())
   }
 
   // Fetch data on initial render
@@ -130,34 +122,6 @@ export class PageDialectWordEdit extends Component {
       default:
         return false
     }
-  }
-
-  _getWordPath(props = null) {
-    const _props = props === null ? this.props : props
-
-    if (StringHelpers.isUUID(_props.routeParams.word)) {
-      return _props.routeParams.word
-    }
-    return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.word)
-  }
-
-  _handleSave(word, formValue) {
-    const newDocument = new Document(word.response, {
-      repository: word.response._repository,
-      nuxeo: word.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateWord(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
-  }
-
-  _handleCancel() {
-    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
 
   componentDidUpdate(/*prevProps, prevState*/) {
@@ -227,6 +191,39 @@ export class PageDialectWordEdit extends Component {
         />
       </div>
     )
+  }
+
+  fetchData = (newProps) => {
+    newProps.fetchDialect2(this.props.routeParams.dialect_path)
+    newProps.fetchWord(this._getWordPath())
+  }
+
+  _getWordPath = (props = null) => {
+    const _props = props === null ? this.props : props
+
+    if (StringHelpers.isUUID(_props.routeParams.word)) {
+      return _props.routeParams.word
+    }
+    return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.word)
+  }
+
+  _handleSave = (word, formValue) => {
+    const newDocument = new Document(word.response, {
+      repository: word.response._repository,
+      nuxeo: word.response._nuxeo,
+    })
+
+    // Set new value property on document
+    newDocument.set(formValue)
+
+    // Save document
+    this.props.updateWord(newDocument, null, null)
+
+    this.setState({ formValue: formValue })
+  }
+
+  _handleCancel = () => {
+    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
 }
 
