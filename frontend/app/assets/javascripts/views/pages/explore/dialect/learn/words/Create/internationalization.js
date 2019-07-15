@@ -1,6 +1,6 @@
 const copy = {
   errorBoundary: {
-    explanation: "Sorry about this, but we can't edit the dialect at this moment.",
+    explanation: "Sorry about this, but we can't create the word at this moment.",
     optimism: 'The issue should be fixed shortly.',
     title: 'We encountered a problem',
   },
