@@ -349,7 +349,7 @@ export default {
   switchWorkspaceSectionKeys,
   toJSKeepId,
   regex: {
-    NUMBER: '([0-9]+)\??$',
+    NUMBER: '^([0-9]+)\??$',
     QUERY_PARAMS: /\?(.*)/,
     ANYTHING_BUT_SLASH: '([^/]*)\??$', // eslint-disable-line
     ANY_LANGUAGE_CODE: '(en|fr)',
