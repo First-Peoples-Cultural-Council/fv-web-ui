@@ -32,6 +32,11 @@ import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import IntlService from 'views/services/intl'
 
+import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
+import StateLoading from './states/loading'
+import StateErrorBoundary from './states/errorBoundary'
+import '!style-loader!css-loader!./WordsEdit.css'
+
 const intl = IntlService.instance
 // Models
 import { Document } from 'nuxeo'
@@ -45,7 +50,7 @@ import withForm from 'views/hoc/view/with-form'
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object } = PropTypes
-export class PageDialectWordEdit extends Component {
+export class WordsEdit extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     word: object,
@@ -64,42 +69,45 @@ export class PageDialectWordEdit extends Component {
     updateWord: func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      formValue: null,
-    }
+  state = {
+    formValue: null,
+    componentState: STATE_LOADING,
+    copy: {},
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
+  async componentDidMount() {
+    const copy = await import(/* webpackChunkName: "WordsEditInternationalization" */ './internationalization').then(
+      (_module) => {
+        return _module.default
+      }
+    )
+    this.fetchData({ copy })
   }
 
-  shouldComponentUpdate(newProps /*, newState*/) {
-    const previousWord = this.props.computeWord
-    const nextWord = newProps.computeWord
+  // shouldComponentUpdate(newProps /*, newState*/) {
+  //   const previousWord = this.props.computeWord
+  //   const nextWord = newProps.computeWord
 
-    const previousDialect = this.props.computeDialect2
-    const nextDialect = newProps.computeDialect2
+  //   const previousDialect = this.props.computeDialect2
+  //   const nextDialect = newProps.computeDialect2
 
-    switch (true) {
-      case newProps.routeParams.word != this.props.routeParams.word:
-        return true
+  //   switch (true) {
+  //     case newProps.routeParams.word != this.props.routeParams.word:
+  //       return true
 
-      case newProps.routeParams.dialect_path !== this.props.routeParams.dialect_path:
-        return true
+  //     case newProps.routeParams.dialect_path !== this.props.routeParams.dialect_path:
+  //       return true
 
-      case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
-        return true
+  //     case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
+  //       return true
 
-      case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        return true
-      default:
-        return false
-    }
-  }
+  //     case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+  //       return true
+  //     default:
+  //       return false
+  //   }
+  // }
 
   componentDidUpdate(prevProps) {
     const word = selectn('response', ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath()))
@@ -134,6 +142,91 @@ export class PageDialectWordEdit extends Component {
   }
 
   render() {
+    const content = this._getContent()
+    return content
+  }
+
+  fetchData = async (addToState = {}) => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_ERROR_BOUNDARY,
+        errorMessage: _computeDialect2.message,
+        ...addToState,
+      })
+      return
+    }
+    await this.props.fetchWord(this._getWordPath())
+    const _computeWord = ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath())
+
+    if (_computeWord.isError) {
+      this.setState({
+        componentState: STATE_ERROR_BOUNDARY,
+        errorMessage: _computeWord.message,
+        ...addToState,
+      })
+      return
+    }
+
+    // All good...
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+      ...addToState,
+    })
+  }
+
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
+        break
+      }
+
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      case STATE_ERROR_BOUNDARY: {
+        content = this._stateGetErrorBoundary()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+  _getWordPath = (props = null) => {
+    const _props = props === null ? this.props : props
+
+    if (StringHelpers.isUUID(_props.routeParams.word)) {
+      return _props.routeParams.word
+    }
+    return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.word)
+  }
+
+  _handleSave = (word, formValue) => {
+    const newDocument = new Document(word.response, {
+      repository: word.response._repository,
+      nuxeo: word.response._nuxeo,
+    })
+
+    // Set new value property on document
+    newDocument.set(formValue)
+
+    // Save document
+    this.props.updateWord(newDocument, null, null)
+
+    this.setState({ formValue: formValue })
+  }
+
+  _handleCancel = () => {
+    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+  }
+  _stateGetDefault = () => {
     let context
 
     const computeEntities = Immutable.fromJS([
@@ -164,8 +257,8 @@ export class PageDialectWordEdit extends Component {
     }
 
     return (
-      <div>
-        <h1>
+      <div className="WordsEdit WordsEdit--default">
+        <h1 className="WordsEdit__heading">
           {intl.trans(
             'edit_x_word',
             'Edit ' + selectn('response.properties.dc:title', computeWord) + ' word',
@@ -190,38 +283,12 @@ export class PageDialectWordEdit extends Component {
       </div>
     )
   }
-
-  fetchData = (newProps) => {
-    newProps.fetchDialect2(this.props.routeParams.dialect_path)
-    newProps.fetchWord(this._getWordPath())
+  _stateGetErrorBoundary = () => {
+    const { copy, errorMessage } = this.state
+    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
   }
-
-  _getWordPath = (props = null) => {
-    const _props = props === null ? this.props : props
-
-    if (StringHelpers.isUUID(_props.routeParams.word)) {
-      return _props.routeParams.word
-    }
-    return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.word)
-  }
-
-  _handleSave = (word, formValue) => {
-    const newDocument = new Document(word.response, {
-      repository: word.response._repository,
-      nuxeo: word.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateWord(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
-  }
-
-  _handleCancel = () => {
-    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
@@ -256,4 +323,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageDialectWordEdit)
+)(WordsEdit)
