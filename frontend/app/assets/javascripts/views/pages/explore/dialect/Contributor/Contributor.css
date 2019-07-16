@@ -71,8 +71,6 @@
   font-size: 1.8rem;
   margin: 0 0 1rem 0;
 }
-.Contributor__photoGroup {
-}
 .Contributor__photo {
   width: 100%;
   height: auto;
@@ -82,20 +80,8 @@
 }
 
 /* MODIFIER */
-.Contributor--create {
-}
 .Contributor--detail {
   margin-right: -15px;
   margin-left: -15px;
   max-width: 100%;
-}
-.Contributor--errorBoundary {
-}
-.Contributor--successCreate {
-}
-.Contributor--successDelete {
-}
-.Contributor--successEdit {
-}
-.Contributor--loading {
 }
