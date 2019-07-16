@@ -5,10 +5,7 @@ import copy from './internationalization'
 
 const validForm = yup.object().shape({
   'dc:title': yup.string().required(copy.validation.title),
-  'fv-word:part_of_speech': yup
-    .string()
-    .label('Part of speech')
-    .required(),
+  'fv-word:part_of_speech': yup.string(),
   'fv-word:pronunciation': yup.string(),
   'fv-word:available_in_games': yup.string(),
   'fv:available_in_childrens_archive': yup.string(),

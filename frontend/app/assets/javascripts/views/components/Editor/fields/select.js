@@ -22,6 +22,7 @@ function renderInput(locals) {
         value={locals.value || locals.attrs.defaultValue}
         onChange={onChange}
         fancy={locals.attrs.fancy}
+        placeholder={locals.attrs.placeholder}
         dir={locals.attrs.directory}
         dataTestId={locals.attrs.name}
       />

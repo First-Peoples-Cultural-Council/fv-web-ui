@@ -298,9 +298,11 @@ const options = {
       'fv-word:part_of_speech': {
         label: intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first'),
         factory: SelectFactory,
+        nullOption: { value: '', text: 'Choose the part of speech:' },
         attrs: {
           directory: 'parts_of_speech',
           fancy: false,
+          placeholder: true,
         },
       },
       'fv-word:pronunciation': {

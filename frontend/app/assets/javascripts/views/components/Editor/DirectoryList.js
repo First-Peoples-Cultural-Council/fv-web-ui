@@ -42,10 +42,12 @@ export class DirectoryList extends Component {
     computeDirectory: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchDirectory: func.isRequired,
+    placeholder: bool,
   }
 
   static defaultProps = {
     fancy: true,
+    placeholder: false,
   }
 
   constructor(props) {
@@ -96,6 +98,7 @@ export class DirectoryList extends Component {
           </SelectField>
         ) : (
           <select onChange={this._handleStandardSelectChange} data-testid={dataTestId}>
+            {this.props.placeholder ? <option value>Please select:</option> : ''}
             {/* Note: Had a conflict and `value={this.props.value}` was the incoming change */}
             {/* <select value={this.props.value} onChange={this._handleStandardSelectChange} data-testid={dataTestId}> */}
             {entries.map((entry) => (

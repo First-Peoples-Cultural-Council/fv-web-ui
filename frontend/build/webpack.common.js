@@ -192,7 +192,7 @@ module.exports = env => ({
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules\/(?!@fpcc)/,
+        exclude: /node_modules\/(?!@fpcc|nuxeo)/,
         options: {
           cacheDirectory: true,
           presets: ['@babel/preset-env', '@babel/preset-react'],
