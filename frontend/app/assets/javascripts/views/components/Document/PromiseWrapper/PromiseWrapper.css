@@ -1,0 +1,25 @@
+/* BLOCK */
+.PromiseWrapper {
+  margin-bottom: 7rem;
+}
+
+/* ELEMENT */
+.PromiseWrapper__errorMessageCode {
+  width: 400px;
+  border: 1px #e0e0e0 solid;
+}
+.PromiseWrapper__heading {
+  font-size: 3rem;
+}
+.PromiseWrapper__spinner {
+  vertical-align: middle;
+}
+.PromiseWrapper__spinnerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.PromiseWrapper__spinnerMessage {
+  padding: 3rem;
+}
