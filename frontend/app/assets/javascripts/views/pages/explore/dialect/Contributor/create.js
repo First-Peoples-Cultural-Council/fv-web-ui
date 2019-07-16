@@ -1,10 +1,13 @@
 import React from 'react'
 import { PropTypes } from 'react'
+import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from './states/loading'
-import StateSuccessDefault from './states/successCreate'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import StateSuccessCreate from './states/successCreate'
 import StateCreate from './states/create'
-import StateErrorBoundary from './states/errorBoundary'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -47,6 +50,8 @@ export class Contributor extends React.Component {
     generateUrlDetail: func,
     generateUrlEdit: func,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeContributor: object.isRequired,
     computeCreateContributor: object,
     computeDialect: object.isRequired,
@@ -59,7 +64,7 @@ export class Contributor extends React.Component {
     pushWindowPath: func.isRequired,
   }
   static defaultProps = {
-    className: 'FormContributor',
+    className: '',
     groupName: '',
     breadcrumb: null,
     DEFAULT_PAGE,
@@ -101,15 +106,6 @@ export class Contributor extends React.Component {
 
     // Get data for computeDialect
     await this.props.fetchDialect('/' + this.DIALECT_PATH)
-    if (this.props.computeDialect.isError && this.props.computeDialect.error) {
-      // Flip to ready state...
-      this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
-        copy,
-        errorMessage: this.props.computeDialect.error,
-      })
-      return
-    }
 
     let currentAppliedFilter = '' // eslint-disable-line
     // if (filter.has('currentAppliedFilter')) {
@@ -177,24 +173,37 @@ export class Contributor extends React.Component {
   _stateGetCreate = () => {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy } = this.state
-    //   isFetching || isSuccess
-    // const isInProgress = false
-    // // const isFetching = selectn('isFetching', computeCreate)
-    // const isFetching = false
-    // const formStatus = isFetching ? <div className="alert alert-info">{'Uploading... Please be patient...'}</div> : null
     return (
-      <StateCreate
-        className={className}
-        copy={this.state.copy}
-        groupName={groupName}
-        breadcrumb={breadcrumb}
-        errors={errors}
-        isBusy={isBusy}
-        onRequestSaveForm={() => {
-          this._onRequestSaveForm()
-        }}
-        setFormRef={this.setFormRef}
-      />
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={
+          <StateErrorBoundary copy={this.state.copy} errorMessage={this.props.computeDialect.error} />
+        }
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: this.props.routeParams.dialect_path,
+              entity: this.props.computeDialect,
+            },
+          ])}
+        >
+          <StateCreate
+            className={className}
+            copy={this.state.copy}
+            groupName={groupName}
+            breadcrumb={breadcrumb}
+            errors={errors}
+            isBusy={isBusy}
+            onRequestSaveForm={() => {
+              this._onRequestSaveForm()
+            }}
+            setFormRef={this.setFormRef}
+          />
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetError = () => {
@@ -205,7 +214,7 @@ export class Contributor extends React.Component {
     const { className, generateUrlDetail, generateUrlEdit } = this.props
     const { formData, itemUid } = this.state
     return (
-      <StateSuccessDefault
+      <StateSuccessCreate
         className={className}
         copy={this.state.copy}
         generateUrlDetail={generateUrlDetail}
@@ -301,17 +310,20 @@ export class Contributor extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvContributor, windowPath } = state
+  const { fvDialect, fvContributor, navigation, nuxeo, windowPath } = state
 
   const { computeContributor, computeCreateContributor } = fvContributor
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
-
+  const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
     computeContributor,
     computeCreateContributor,
     computeDialect,
     computeDialect2,
+    computeLogin,
+    routeParams: route.routeParams,
     splitWindowPath,
   }
 }

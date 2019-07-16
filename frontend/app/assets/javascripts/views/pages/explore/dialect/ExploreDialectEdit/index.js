@@ -27,10 +27,11 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import StateLoading from './states/loading'
-import StateErrorBoundary from './states/errorBoundary'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 
 // Models
 import { Document } from 'nuxeo'
@@ -53,6 +54,7 @@ export class ExploreDialectEdit extends Component {
   static propTypes = {
     // REDUX: reducers/state
     routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeDialect2: object.isRequired,
     computePortal: object.isRequired,
     splitWindowPath: array.isRequired,
@@ -82,26 +84,6 @@ export class ExploreDialectEdit extends Component {
     }
   }
 
-  shouldComponentUpdate(newProps) {
-    const portalPath = `${this.props.routeParams.dialect_path}/Portal`
-
-    switch (true) {
-      case newProps.routeParams.dialect_path !== this.props.routeParams.dialect_path:
-        return true
-
-      case ProviderHelpers.getEntry(newProps.computePortal, portalPath) !=
-        ProviderHelpers.getEntry(this.props.computePortal, portalPath):
-        return true
-
-      case ProviderHelpers.getEntry(newProps.computeDialect2, this.props.routeParams.dialect_path) !=
-        ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path):
-        return true
-
-      default:
-        return false
-    }
-  }
-
   render() {
     const content = this._getContent()
     return content
@@ -113,7 +95,7 @@ export class ExploreDialectEdit extends Component {
 
     if (_computeDialect2.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: _computeDialect2.message,
         ...addToState,
       })
@@ -127,7 +109,7 @@ export class ExploreDialectEdit extends Component {
     )
     if (_computePortal.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: _computePortal.message,
         ...addToState,
       })
@@ -205,30 +187,50 @@ export class ExploreDialectEdit extends Component {
       })
     }
     return (
-      <div className="ExploreDialectEdit">
-        <h1 className="ExploreDialectEdit__heading">
-          {intl.trans(
-            'views.pages.explore.dialect.edit_x_community_portal',
-            'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal',
-            null,
-            [selectn('response.title', computeDialect2)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: this.props.routeParams.dialect_path,
+              entity: this.props.fetchDialect2,
+            },
+            {
+              id: `${this.props.routeParams.dialect_path}/Portal`,
+              entity: this.props.fetchPortal,
+            },
+          ])}
+        >
+          <div className="ExploreDialectEdit">
+            <h1 className="ExploreDialectEdit__heading">
+              {intl.trans(
+                'views.pages.explore.dialect.edit_x_community_portal',
+                'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal',
+                null,
+                [selectn('response.title', computeDialect2)]
+              )}
+            </h1>
 
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={initialValues}
-          itemId={portalPath}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={this.props.replaceWindowPath}
-          type="FVPortal"
-          routeParams={this.props.routeParams}
-        />
-      </div>
+            <EditViewWithForm
+              computeEntities={computeEntities}
+              initialValues={initialValues}
+              itemId={portalPath}
+              fields={fields}
+              options={options}
+              saveMethod={this._handleSave}
+              cancelMethod={this._handleCancel}
+              currentPath={this.props.splitWindowPath}
+              navigationMethod={this.props.replaceWindowPath}
+              type="FVPortal"
+              routeParams={this.props.routeParams}
+            />
+          </div>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -242,16 +244,18 @@ export class ExploreDialectEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPortal, navigation, windowPath } = state
+  const { fvDialect, fvPortal, navigation, nuxeo, windowPath } = state
 
   const { computeDialect2 } = fvDialect
   const { computePortal } = fvPortal
   const { route } = navigation
   const { splitWindowPath } = windowPath
+  const { computeLogin } = nuxeo
 
   return {
     computeDialect2,
     computePortal,
+    computeLogin,
     routeParams: route.routeParams,
     splitWindowPath,
   }

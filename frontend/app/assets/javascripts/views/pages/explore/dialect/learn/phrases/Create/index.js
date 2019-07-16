@@ -16,130 +16,139 @@ limitations under the License.
 import React, { Component, PropTypes } from 'react'
 import Immutable from 'immutable'
 import classNames from 'classnames'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createGallery } from 'providers/redux/reducers/fvGallery'
+import { createPhrase } from 'providers/redux/reducers/fvPhrase'
 import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
-import NavigationHelpers from 'common/NavigationHelpers'
-// Views
-// import RaisedButton from 'material-ui/lib/raised-button'
-import Paper from 'material-ui/lib/paper'
-// import CircularProgress from 'material-ui/lib/circular-progress'
-// import Snackbar from 'material-ui/lib/snackbar'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
+import NavigationHelpers from 'common/NavigationHelpers'
 
+// Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import IntlService from 'views/services/intl'
+
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import '!style-loader!css-loader!./PhrasesCreate.css'
+
 const intl = IntlService.instance
 /**
- * Create book entry
+ * Create phrase entry
  */
-const { array, func, object, string } = PropTypes
-export class PageDialectGalleryCreate extends Component {
+
+const { bool, array, func, object, string } = PropTypes
+export class PhrasesCreate extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
+    embedded: bool,
+    onDocumentCreated: func,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
     computeLogin: object.isRequired,
     computeDialect2: object.isRequired,
-    computeGallery: object.isRequired,
-    windowPath: string.isRequired,
+    computePhrase: object.isRequired,
     splitWindowPath: array.isRequired,
+    windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    createGallery: func.isRequired,
+    createPhrase: func.isRequired,
     fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
+
+  static defaultProps = {
+    embedded: false,
+  }
   state = {
     formValue: null,
-    galleryPath: null,
+    dialectPath: null,
+    phrasePath: null,
     componentState: STATE_LOADING,
+    ErrorBoundary: null,
+    copy: {},
   }
 
-  // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData()
+  async componentDidMount() {
+    const copy = await import(/* webpackChunkName: "PhrasesCreateInternationalization" */ './internationalization').then(
+      (_module) => {
+        return _module.default
+      }
+    )
+    // const ErrorBoundary = await import(/* webpackChunkName: "ErrorBoundary" */ 'views/components/ErrorBoundary').then(
+    //   (_module) => {
+    //     return _module.default
+    //   }
+    // )
+    this.fetchData({ copy })
   }
 
-  // Refetch data on URL change
   componentDidUpdate(prevProps) {
-    let currentGallery
-    let nextGallery
+    let currentPhrase
+    let nextPhrase
 
-    if (this.state.galleryPath != null) {
-      currentGallery = ProviderHelpers.getEntry(prevProps.computeGallery, this.state.galleryPath)
-      nextGallery = ProviderHelpers.getEntry(this.props.computeGallery, this.state.galleryPath)
+    if (this.state.phrasePath !== null) {
+      currentPhrase = ProviderHelpers.getEntry(prevProps.computePhrase, this.state.phrasePath)
+      nextPhrase = ProviderHelpers.getEntry(this.props.computePhrase, this.state.phrasePath)
+    }
+
+    if (prevProps.onDocumentCreated && this.state.phrasePath && selectn('success', nextPhrase)) {
+      prevProps.onDocumentCreated(ProviderHelpers.getEntry(this.props.computePhrase, this.state.phrasePath).response)
+    }
+
+    if (this.props.windowPath !== prevProps.windowPath) {
+      this.fetchData(this.props)
     }
 
     // 'Redirect' on success
     if (
-      selectn('success', currentGallery) != selectn('success', nextGallery) &&
-      selectn('success', nextGallery) === true
+      !prevProps.embedded &&
+      selectn('success', currentPhrase) != selectn('success', nextPhrase) &&
+      selectn('success', nextPhrase) === true
     ) {
-      this.props.replaceWindowPath(
-        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.theme}${selectn(
-          'response.path',
-          nextGallery
-        ).replace('Portal', 'gallery')}`
+      NavigationHelpers.navigate(
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextPhrase), 'phrases'),
+        this.props.replaceWindowPath,
+        true
       )
-    } else if (this.props.windowPath !== prevProps.windowPath) {
-      this.fetchData()
     }
   }
-
-  // shouldComponentUpdate(newProps) {
-  //   switch (true) {
-  //     case newProps.windowPath != this.props.windowPath:
-  //       return true
-
-  //     case newProps.computeDialect2 != this.props.computeDialect2:
-  //       return true
-
-  //     case newProps.computeGallery != this.props.computeGallery:
-  //       return true
-  //     default: // Note: do nothing
-  //   }
-
-  //   return false
-  // }
 
   render() {
     const content = this._getContent()
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
-    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     if (_computeDialect2.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
         errorMessage: _computeDialect2.message,
+        ...addToState,
       })
       return
     }
 
     this.setState({
       componentState: STATE_DEFAULT,
-      errorMessage: undefined,
+      ...addToState,
     })
   }
+
   _getContent = () => {
     let content = null
     switch (this.state.componentState) {
@@ -157,14 +166,14 @@ export class PageDialectGalleryCreate extends Component {
     e.preventDefault()
 
     // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_gallery_create.getValue()
+    const formValue = this.refs.form_phrase_create.getValue()
 
     //let properties = '';
     const properties = {}
 
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
-        if (formValue[key] && formValue[key] != '') {
+        if (formValue[key] && formValue[key] !== '') {
           //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
           properties[key] = formValue[key]
         }
@@ -178,11 +187,11 @@ export class PageDialectGalleryCreate extends Component {
     // Passed validation
     if (formValue) {
       const now = Date.now()
-      this.props.createGallery(
-        `${this.props.routeParams.dialect_path}/Portal`,
+      this.props.createPhrase(
+        this.props.routeParams.dialect_path + '/Dictionary',
         {
-          type: 'FVGallery',
-          name: formValue['dc:title'],
+          type: 'FVPhrase',
+          name: now.toString(),
           properties: properties,
         },
         null,
@@ -190,30 +199,40 @@ export class PageDialectGalleryCreate extends Component {
       )
 
       this.setState({
-        galleryPath: this.props.routeParams.dialect_path + '/Portal/' + formValue['dc:title'] + '.' + now,
+        phrasePath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_Gallery_create"].validate().firstError();
-      window.scrollTo(0, 0)
+      //let firstError = this.refs["form_word_create"].validate().firstError();
+      if (!this.props.embedded) window.scrollTo(0, 0)
     }
   }
   _stateGetDefault = () => {
-    const FVGalleryOptions = Object.assign({}, selectn('FVGallery', options))
+    const FVPhraseOptions = Object.assign({}, selectn('FVPhrase', options))
+
+    // const computePhrase = ProviderHelpers.getEntry(this.props.computePhrase, this.state.phrasePath)
+    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    // Set default value on form
+    if (
+      selectn('fields.fv:definitions.item.fields.language.attrs', FVPhraseOptions) &&
+      selectn('response.properties.fvdialect:dominant_language', computeDialect2)
+    ) {
+      FVPhraseOptions.fields['fv:definitions'].item.fields.language.attrs.defaultValue = selectn(
+        'response.properties.fvdialect:dominant_language',
+        computeDialect2
+      )
+    }
 
     const computeEntities = Immutable.fromJS([
-      {
-        id: this.state.galleryPath,
-        entity: this.props.computeGallery,
-      },
+      // {
+      //   id: this.state.phrasePath,
+      //   entity: this.props.computePhrase,
+      // },
       {
         id: this.props.routeParams.dialect_path,
         entity: this.props.computeDialect2,
       },
     ])
-
-    // const computeGallery = ProviderHelpers.getEntry(this.props.computeGallery, this.state.galleryPath)
-    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-
     return (
       <AuthenticationFilter
         login={this.props.computeLogin}
@@ -221,25 +240,22 @@ export class PageDialectGalleryCreate extends Component {
         routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
-        <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.gallery.add_new_gallery_to_x',
-              'Add New Gallery to ' + selectn('response.title', computeDialect2),
-              null,
-              [selectn('response.title', computeDialect2)]
-            )}
+        <PromiseWrapper computeEntities={computeEntities}>
+          <h1 className="PhrasesCreate__heading">
+            {intl.trans('', 'Add New Phrase to ' + selectn('response.title', computeDialect2), null, [
+              selectn('response.title', computeDialect2),
+            ])}
           </h1>
 
           <div className="row" style={{ marginTop: '15px' }}>
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_gallery_create" // TODO: DEPRECATED
-                  type={t.struct(selectn('FVGallery', fields))}
+                  ref="form_phrase_create" // TODO: DEPRECATED
+                  type={t.struct(selectn('FVPhrase', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}
-                  options={FVGalleryOptions}
+                  options={FVPhraseOptions}
                 />
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
@@ -248,40 +264,29 @@ export class PageDialectGalleryCreate extends Component {
                 </div>
               </form>
             </div>
-
-            <div className={classNames('col-xs-4', 'col-md-2')}>
-              <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
-                <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-              </Paper>
-            </div>
           </div>
         </PromiseWrapper>
       </AuthenticationFilter>
     )
   }
-  _stateGetErrorBoundary = () => {
-    const { copy, errorMessage } = this.state
-    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
-  }
   _stateGetLoading = () => {
-    return <StateLoading copy={this.state.copy} />
+    return <StateLoading />
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvGallery, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
 
-  const { computeGallery } = fvGallery
+  const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { route } = navigation
   const { computeLogin } = nuxeo
-
   return {
-    computeDialect2,
-    computeGallery,
     computeLogin,
+    computeDialect2,
+    computePhrase,
     routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
@@ -290,7 +295,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  createGallery,
+  createPhrase,
   fetchDialect,
   fetchDialect2,
   pushWindowPath,
@@ -300,4 +305,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageDialectGalleryCreate)
+)(PhrasesCreate)

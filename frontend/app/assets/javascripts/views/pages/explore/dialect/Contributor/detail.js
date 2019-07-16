@@ -11,9 +11,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import StateLoading from './states/loading'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import StateDetail from './states/detail'
-import StateErrorBoundary from './states/errorBoundary'
 
 import '!style-loader!css-loader!./Contributor.css'
 

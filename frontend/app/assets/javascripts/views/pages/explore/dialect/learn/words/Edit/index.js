@@ -29,12 +29,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import IntlService from 'views/services/intl'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from './states/loading'
-import StateErrorBoundary from './states/errorBoundary'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import '!style-loader!css-loader!./WordsEdit.css'
 
 const intl = IntlService.instance
@@ -52,13 +53,14 @@ const EditViewWithForm = withForm(PromiseWrapper, true)
 const { array, func, object } = PropTypes
 export class WordsEdit extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     word: object,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeWord: object.isRequired,
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     // REDUX: actions/dispatch/func
     changeTitleParams: func.isRequired,
     fetchDialect2: func.isRequired,
@@ -152,7 +154,7 @@ export class WordsEdit extends Component {
 
     if (_computeDialect2.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: _computeDialect2.message,
         ...addToState,
       })
@@ -163,7 +165,7 @@ export class WordsEdit extends Component {
 
     if (_computeWord.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: _computeWord.message,
         ...addToState,
       })
@@ -187,7 +189,7 @@ export class WordsEdit extends Component {
       }
 
       case STATE_DEFAULT: {
-        content = this._stateGetDefault()
+        content = this._stateGetEdit()
         break
       }
       case STATE_ERROR_BOUNDARY: {
@@ -226,7 +228,7 @@ export class WordsEdit extends Component {
   _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
-  _stateGetDefault = () => {
+  _stateGetEdit = () => {
     let context
 
     const computeEntities = Immutable.fromJS([
@@ -257,30 +259,50 @@ export class WordsEdit extends Component {
     }
 
     return (
-      <div className="WordsEdit WordsEdit--default">
-        <h1 className="WordsEdit__heading">
-          {intl.trans(
-            'edit_x_word',
-            'Edit ' + selectn('response.properties.dc:title', computeWord) + ' word',
-            'first',
-            [selectn('response.properties.dc:title', computeWord)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: this.props.routeParams.dialect_path,
+              entity: this.props.fetchDialect2,
+            },
+            {
+              id: `${this.props.routeParams.dialect_path}/Portal`,
+              entity: this.props.fetchPortal,
+            },
+          ])}
+        >
+          <div className="WordsEdit WordsEdit--default">
+            <h1 className="WordsEdit__heading">
+              {intl.trans(
+                'edit_x_word',
+                'Edit ' + selectn('response.properties.dc:title', computeWord) + ' word',
+                'first',
+                [selectn('response.properties.dc:title', computeWord)]
+              )}
+            </h1>
 
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={context}
-          itemId={this._getWordPath()}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={this.props.replaceWindowPath}
-          type="FVWord"
-          routeParams={this.props.routeParams}
-        />
-      </div>
+            <EditViewWithForm
+              computeEntities={computeEntities}
+              initialValues={context}
+              itemId={this._getWordPath()}
+              fields={fields}
+              options={options}
+              saveMethod={this._handleSave}
+              cancelMethod={this._handleCancel}
+              currentPath={this.props.splitWindowPath}
+              navigationMethod={this.props.replaceWindowPath}
+              type="FVWord"
+              routeParams={this.props.routeParams}
+            />
+          </div>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -294,14 +316,15 @@ export class WordsEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, windowPath } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
 
   const { computeWord } = fvWord
   const { computeDialect2 } = fvDialect
   const { properties } = navigation
   const { splitWindowPath } = windowPath
-
+  const { computeLogin } = nuxeo
   return {
+    computeLogin,
     computeDialect2,
     computeWord,
     properties,

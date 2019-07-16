@@ -31,7 +31,11 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
 // Models
 import { Document } from 'nuxeo'
@@ -51,9 +55,10 @@ const { array, func, object } = PropTypes
 
 export class PageDialectGalleryEdit extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     gallery: object,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeGallery: object.isRequired,
     computeDialect2: object.isRequired,
     properties: object.isRequired,
@@ -67,74 +72,107 @@ export class PageDialectGalleryEdit extends Component {
     replaceWindowPath: func.isRequired,
     updateGallery: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      gallery: null,
-      formValue: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(this.props.routeParams.dialect_path)
-    newProps.fetchGallery(this._getGalleryPath())
+  state = {
+    gallery: null,
+    formValue: null,
+    componentState: STATE_LOADING,
   }
 
   // Fetch data on initial render
   componentDidMount() {
-    this.fetchData(this.props)
+    this.fetchData()
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    let previousGallery
     let currentGallery
-    let nextGallery
 
     if (this._getGalleryPath() !== null) {
+      previousGallery = ProviderHelpers.getEntry(prevProps.computeGallery, this._getGalleryPath())
       currentGallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
-      nextGallery = ProviderHelpers.getEntry(nextProps.computeGallery, this._getGalleryPath())
     }
 
-    // 'Redirect' on success
     if (
-      selectn('wasUpdated', currentGallery) != selectn('wasUpdated', nextGallery) &&
-      selectn('wasUpdated', nextGallery) === true
+      selectn('wasUpdated', previousGallery) != selectn('wasUpdated', currentGallery) &&
+      selectn('wasUpdated', currentGallery) === true
     ) {
+      // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextGallery), 'gallery'),
-        nextProps.replaceWindowPath,
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentGallery), 'gallery'),
+        this.props.replaceWindowPath,
         true
       )
+    } else {
+      const gallery = selectn('response', ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath()))
+      const title = selectn('properties.dc:title', gallery)
+      const uid = selectn('uid', gallery)
+
+      if (title && selectn('pageTitleParams.galleryName', this.props.properties) != title) {
+        this.props.changeTitleParams({ galleryName: title })
+        this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.galleryName' })
+      }
     }
   }
 
-  shouldComponentUpdate(newProps /*, newState*/) {
-    switch (true) {
-      case newProps.routeParams.gallery != this.props.routeParams.gallery:
-        return true
+  // shouldComponentUpdate(newProps /*, newState*/) {
+  //   switch (true) {
+  //     case newProps.routeParams.gallery != this.props.routeParams.gallery:
+  //       return true
 
-      case newProps.routeParams.dialect_path != this.props.routeParams.dialect_path:
-        return true
+  //     case newProps.routeParams.dialect_path != this.props.routeParams.dialect_path:
+  //       return true
 
-      case ProviderHelpers.getEntry(newProps.computeGallery, this._getGalleryPath()) !=
-        ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath()):
-        return true
+  //     case ProviderHelpers.getEntry(newProps.computeGallery, this._getGalleryPath()) !=
+  //       ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath()):
+  //       return true
 
-      case ProviderHelpers.getEntry(newProps.computeDialect2, this.props.routeParams.dialect_path) !=
-        ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path):
-        return true
+  //     case ProviderHelpers.getEntry(newProps.computeDialect2, this.props.routeParams.dialect_path) !=
+  //       ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path):
+  //       return true
 
+  //     default:
+  //       return false
+  //   }
+  // }
+
+  render() {
+    const content = this._getContent()
+    return content
+  }
+
+  fetchData = async () => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    await this.props.fetchGallery(this._getGalleryPath())
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+      })
+      return
+    }
+
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+    })
+  }
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
       default:
-        return false
+        content = this._stateGetLoading()
     }
+    return content
   }
 
-  _getGalleryPath(props = null) {
+  _getGalleryPath = (props = null) => {
     const _props = props === null ? this.props : props
 
     if (StringHelpers.isUUID(_props.routeParams.gallery)) {
@@ -143,7 +181,7 @@ export class PageDialectGalleryEdit extends Component {
     return _props.routeParams.dialect_path + '/Portal/' + StringHelpers.clean(_props.routeParams.gallery)
   }
 
-  _handleSave(phrase, formValue) {
+  _handleSave = (phrase, formValue) => {
     const newDocument = new Document(phrase.response, {
       repository: phrase.response._repository,
       nuxeo: phrase.response._nuxeo,
@@ -158,11 +196,11 @@ export class PageDialectGalleryEdit extends Component {
     this.setState({ formValue: formValue })
   }
 
-  _handleCancel() {
+  _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
 
-  _onRequestSaveForm(e) {
+  _onRequestSaveForm = (e) => {
     // Prevent default behaviour
     e.preventDefault()
     // TODO: this.refs DEPRECATED
@@ -191,20 +229,20 @@ export class PageDialectGalleryEdit extends Component {
       window.scrollTo(0, 0)
     }
   }
-
-  componentDidUpdate(/*prevProps, prevState*/) {
-    const gallery = selectn('response', ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath()))
-    const title = selectn('properties.dc:title', gallery)
-    const uid = selectn('uid', gallery)
-
-    if (title && selectn('pageTitleParams.galleryName', this.props.properties) != title) {
-      this.props.changeTitleParams({ galleryName: title })
-      this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.galleryName' })
-    }
-  }
-
-  render() {
+  _stateGetDefault = () => {
     let context
+
+    const _computeGallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    // Additional context
+    if (selectn('response', _computeDialect2) && selectn('response', _computeGallery)) {
+      context = Object.assign(selectn('response', _computeDialect2), {
+        otherContext: {
+          parentId: selectn('response.uid', _computeGallery),
+        },
+      })
+    }
 
     const computeEntities = Immutable.fromJS([
       {
@@ -217,43 +255,40 @@ export class PageDialectGalleryEdit extends Component {
       },
     ])
 
-    const computeGallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
-    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-
-    // Additional context
-    if (selectn('response', computeDialect2) && selectn('response', computeGallery)) {
-      context = Object.assign(selectn('response', computeDialect2), {
-        otherContext: {
-          parentId: selectn('response.uid', computeGallery),
-        },
-      })
-    }
-
     return (
-      <div>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.gallery.edit_x_gallery',
-            'Edit ' + selectn('response.properties.dc:title', computeGallery) + ' Gallery',
-            'first',
-            [selectn('response.properties.dc:title', computeGallery)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper computeEntities={computeEntities}>
+          <div>
+            <h1>
+              {intl.trans(
+                'views.pages.explore.dialect.gallery.edit_x_gallery',
+                'Edit ' + selectn('response.properties.dc:title', _computeGallery) + ' Gallery',
+                'first',
+                [selectn('response.properties.dc:title', _computeGallery)]
+              )}
+            </h1>
 
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={context}
-          itemId={this._getGalleryPath()}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={this.props.replaceWindowPath}
-          type="FVGallery"
-          routeParams={this.props.routeParams}
-        />
-      </div>
+            <EditViewWithForm
+              computeEntities={computeEntities}
+              initialValues={context}
+              itemId={this._getGalleryPath()}
+              fields={fields}
+              options={options}
+              saveMethod={this._handleSave}
+              cancelMethod={this._handleCancel}
+              currentPath={this.props.splitWindowPath}
+              navigationMethod={this.props.replaceWindowPath}
+              type="FVGallery"
+              routeParams={this.props.routeParams}
+            />
+          </div>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
     /*
     return (
@@ -261,9 +296,9 @@ export class PageDialectGalleryEdit extends Component {
         <h1>
           {intl.trans(
             'views.pages.explore.dialect.gallery.edit_x_gallery',
-            'Edit ' + selectn('response.properties.dc:title', computeGallery) + ' Gallery',
+            'Edit ' + selectn('response.properties.dc:title', _computeGallery) + ' Gallery',
             'words',
-            [selectn('response.properties.dc:title', computeGallery)]
+            [selectn('response.properties.dc:title', _computeGallery)]
           )}
         </h1>
 
@@ -273,8 +308,8 @@ export class PageDialectGalleryEdit extends Component {
               <t.form.Form
                 ref="form_gallery"
                 type={t.struct(selectn('FVGallery', fields))}
-                context={selectn('response', computeDialect2)}
-                value={this.state.formValue || selectn('response.properties', computeGallery)}
+                context={selectn('response', _computeDialect2)}
+                value={this.state.formValue || selectn('response.properties', _computeGallery)}
                 options={selectn('FVGallery', options)}
               />
               <div className="form-group">
@@ -295,20 +330,30 @@ export class PageDialectGalleryEdit extends Component {
     )
     */
   }
+  _stateGetErrorBoundary = () => {
+    const { copy, errorMessage } = this.state
+    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
+  }
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvGallery, navigation, windowPath } = state
+  const { fvDialect, fvGallery, navigation, nuxeo, windowPath } = state
 
   const { computeGallery } = fvGallery
   const { computeDialect2 } = fvDialect
-  const { properties } = navigation
+  const { route, properties } = navigation
   const { splitWindowPath } = windowPath
+  const { computeLogin } = nuxeo
 
   return {
     computeDialect2,
     computeGallery,
+    computeLogin,
+    routeParams: route.routeParams,
     properties,
     splitWindowPath,
   }

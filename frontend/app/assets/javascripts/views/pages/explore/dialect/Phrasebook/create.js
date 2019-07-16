@@ -1,10 +1,10 @@
 import React from 'react'
 import { PropTypes } from 'react'
 // import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from './states/loading'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
-import StateErrorBoundary from './states/errorBoundary'
 
 // Immutable
 import Immutable, { Map } from 'immutable' // eslint-disable-line
@@ -17,6 +17,9 @@ import { createCategory, fetchCategories } from 'providers/redux/reducers/fvCate
 import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 
 import { getFormData, handleSubmit } from 'common/FormHelpers'
+
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import {
   STATE_LOADING,
@@ -50,6 +53,7 @@ export class Phrasebook extends React.Component {
     validator: object,
     // REDUX: reducers/state
     routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeCategories: object.isRequired,
     computeCreateCategory: object,
     computeCategory: object,
@@ -106,7 +110,7 @@ export class Phrasebook extends React.Component {
     await this.props.fetchDialect('/' + this.props.routeParams.dialect_path)
     if (this.props.computeDialect.isError && this.props.computeDialect.error) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         copy,
         errorMessage: this.props.computeDialect.error,
       })
@@ -181,24 +185,35 @@ export class Phrasebook extends React.Component {
   _stateGetCreate = () => {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy } = this.state
-    //   isFetching || isSuccess
-    // const isInProgress = false
-    // // const isFetching = selectn('isFetching', computeCreate)
-    // const isFetching = false
-    // const formStatus = isFetching ? <div className="alert alert-info">{'Uploading... Please be patient...'}</div> : null
     return (
-      <StateCreate
-        className={className}
-        copy={this.state.copy}
-        groupName={groupName}
-        breadcrumb={breadcrumb}
-        errors={errors}
-        isBusy={isBusy}
-        onRequestSaveForm={() => {
-          this._onRequestSaveForm()
-        }}
-        setFormRef={this.setFormRef}
-      />
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: `/${this.props.routeParams.dialect_path}`,
+              entity: this.props.fetchDialect,
+            },
+          ])}
+        >
+          <StateCreate
+            className={className}
+            copy={this.state.copy}
+            groupName={groupName}
+            breadcrumb={breadcrumb}
+            errors={errors}
+            isBusy={isBusy}
+            onRequestSaveForm={() => {
+              this._onRequestSaveForm()
+            }}
+            setFormRef={this.setFormRef}
+          />
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetError = () => {
@@ -299,12 +314,14 @@ export class Phrasebook extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, windowPath, navigation } = state
+  const { fvCategory, fvDialect, windowPath, navigation, nuxeo } = state
   const { computeCategories, computeCreateCategory, computeCategory } = fvCategory
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
+    computeLogin,
     computeCategories,
     computeCreateCategory,
     computeCategory,

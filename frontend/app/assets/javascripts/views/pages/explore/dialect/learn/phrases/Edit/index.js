@@ -29,6 +29,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // Models
@@ -41,19 +42,25 @@ import options from 'models/schemas/options'
 import withForm from 'views/hoc/view/with-form'
 import IntlService from 'views/services/intl'
 
+import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import '!style-loader!css-loader!./PhrasesEdit.css'
+
 const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object } = PropTypes
-export class PageDialectPhraseEdit extends Component {
+export class PhrasesEdit extends Component {
   static propTypes = {
     phrase: object,
-    routeParams: object.isRequired,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computePhrase: object.isRequired,
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     // REDUX: actions/dispatch/func
     changeTitleParams: func.isRequired,
     fetchDialect2: func.isRequired,
@@ -63,77 +70,113 @@ export class PageDialectPhraseEdit extends Component {
     replaceWindowPath: func.isRequired,
     updatePhrase: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      formValue: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(this.props.routeParams.dialect_path)
-    newProps.fetchPhrase(this._getPhrasePath())
+  state = {
+    formValue: null,
+    componentState: STATE_LOADING,
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
+  async componentDidMount() {
+    const copy = await import(/* webpackChunkName: "PhrasesEditInternationalization" */ './internationalization').then(
+      (_module) => {
+        return _module.default
+      }
+    )
+    this.fetchData({ copy })
   }
 
-  // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    const phrase = selectn('response', ProviderHelpers.getEntry(this.props.computePhrase, this._getPhrasePath()))
+    const title = selectn('properties.dc:title', phrase)
+    const uid = selectn('uid', phrase)
+
+    if (title && selectn('pageTitleParams.phrase', this.props.properties) != title) {
+      this.props.changeTitleParams({ phrase: title })
+      this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.phrase' })
+    }
+
+    // NOTE: Code below was originally from `componentWillReceiveProps()` with some edits to match componentDidUpdate args:
+    let previousPhrase
     let currentPhrase
-    let nextPhrase
 
     if (this._getPhrasePath() !== null) {
+      previousPhrase = ProviderHelpers.getEntry(prevProps.computePhrase, this._getPhrasePath())
       currentPhrase = ProviderHelpers.getEntry(this.props.computePhrase, this._getPhrasePath())
-      nextPhrase = ProviderHelpers.getEntry(nextProps.computePhrase, this._getPhrasePath())
     }
 
     // 'Redirect' on success
     if (
-      selectn('wasUpdated', currentPhrase) != selectn('wasUpdated', nextPhrase) &&
-      selectn('wasUpdated', nextPhrase) === true
+      selectn('wasUpdated', previousPhrase) != selectn('wasUpdated', currentPhrase) &&
+      selectn('wasUpdated', currentPhrase) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextPhrase), 'phrases'),
-        nextProps.replaceWindowPath,
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentPhrase), 'phrases'),
+        this.props.replaceWindowPath,
         true
       )
     }
   }
 
-  shouldComponentUpdate(newProps /*, newState*/) {
-    const previousPhrase = this.props.computePhrase
-    const nextPhrase = newProps.computePhrase
-
-    const previousDialect = this.props.computeDialect2
-    const nextDialect = newProps.computeDialect2
-
-    // TODO: `switch (true)`?
-    switch (true) {
-      case newProps.routeParams.phrase != this.props.routeParams.phrase:
-        return true
-
-      case newProps.routeParams.dialect_path != this.props.routeParams.dialect_path:
-        return true
-
-      case typeof nextPhrase.equals === 'function' && nextPhrase.equals(previousPhrase) === false:
-        return true
-
-      case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        return true
-      default:
-        return false
-    }
+  render() {
+    const content = this._getContent()
+    return content
   }
 
-  _getPhrasePath(props = null) {
+  fetchData = async (addToState = {}) => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+        ...addToState,
+      })
+      return
+    }
+
+    await this.props.fetchPhrase(this._getPhrasePath())
+    const _computePhrase = ProviderHelpers.getEntry(this.props.computePhrase, this._getPhrasePath())
+    if (_computePhrase.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+        ...addToState,
+      })
+      return
+    }
+
+    // All good
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+      ...addToState,
+    })
+  }
+
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
+        break
+      }
+
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      case STATE_ERROR_BOUNDARY: {
+        content = this._stateGetErrorBoundary()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+
+  _getPhrasePath = (props = null) => {
     const _props = props === null ? this.props : props
 
     if (StringHelpers.isUUID(_props.routeParams.phrase)) {
@@ -142,7 +185,7 @@ export class PageDialectPhraseEdit extends Component {
     return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.phrase)
   }
 
-  _handleSave(phrase, formValue) {
+  _handleSave = (phrase, formValue) => {
     const newDocument = new Document(phrase.response, {
       repository: phrase.response._repository,
       nuxeo: phrase.response._nuxeo,
@@ -157,22 +200,10 @@ export class PageDialectPhraseEdit extends Component {
     this.setState({ formValue: formValue })
   }
 
-  _handleCancel() {
+  _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
-
-  componentDidUpdate(/*prevProps, prevState*/) {
-    const phrase = selectn('response', ProviderHelpers.getEntry(this.props.computePhrase, this._getPhrasePath()))
-    const title = selectn('properties.dc:title', phrase)
-    const uid = selectn('uid', phrase)
-
-    if (title && selectn('pageTitleParams.phrase', this.props.properties) != title) {
-      this.props.changeTitleParams({ phrase: title })
-      this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.phrase' })
-    }
-  }
-
-  render() {
+  _stateGetDefault = () => {
     let context
 
     const computeEntities = Immutable.fromJS([
@@ -203,45 +234,62 @@ export class PageDialectPhraseEdit extends Component {
     }
 
     return (
-      <div>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.phrases.edit_x_phrase',
-            'Edit ' + selectn('response.properties.dc:title', computePhrase) + ' phrase',
-            'first',
-            [selectn('response.properties.dc:title', computePhrase)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <div>
+          <h1>
+            {intl.trans(
+              'views.pages.explore.dialect.phrases.edit_x_phrase',
+              'Edit ' + selectn('response.properties.dc:title', computePhrase) + ' phrase',
+              'first',
+              [selectn('response.properties.dc:title', computePhrase)]
+            )}
+          </h1>
 
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={context}
-          itemId={this._getPhrasePath()}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={this.props.replaceWindowPath}
-          type="FVPhrase"
-          routeParams={this.props.routeParams}
-        />
-      </div>
+          <EditViewWithForm
+            computeEntities={computeEntities}
+            initialValues={context}
+            itemId={this._getPhrasePath()}
+            fields={fields}
+            options={options}
+            saveMethod={this._handleSave}
+            cancelMethod={this._handleCancel}
+            currentPath={this.props.splitWindowPath}
+            navigationMethod={this.props.replaceWindowPath}
+            type="FVPhrase"
+            routeParams={this.props.routeParams}
+          />
+        </div>
+      </AuthenticationFilter>
     )
+  }
+  _stateGetErrorBoundary = () => {
+    const { copy, errorMessage } = this.state
+    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
+  }
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
 
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
-  const { properties } = navigation
+  const { properties, route } = navigation
+  const { computeLogin } = nuxeo
   return {
     computeDialect2,
     computePhrase,
+    computeLogin,
+    routeParams: route.routeParams,
     properties,
     splitWindowPath,
   }
@@ -261,4 +309,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageDialectPhraseEdit)
+)(PhrasesEdit)

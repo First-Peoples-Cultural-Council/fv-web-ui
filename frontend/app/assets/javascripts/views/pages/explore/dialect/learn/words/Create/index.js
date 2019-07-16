@@ -21,7 +21,7 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createWord } from 'providers/redux/reducers/fvWord'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
@@ -30,11 +30,12 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from './states/loading'
-import StateErrorBoundary from './states/errorBoundary'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import '!style-loader!css-loader!./WordsCreate.css'
 
 // Views
@@ -50,14 +51,16 @@ const intl = IntlService.instance
 const { array, func, object, string } = PropTypes
 export class WordsCreate extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeDialect2: object.isRequired,
     computeWord: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     createWord: func.isRequired,
+    fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
@@ -123,12 +126,13 @@ export class WordsCreate extends Component {
   }
 
   fetchData = async (addToState = {}) => {
+    await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     if (_computeDialect2.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: _computeDialect2.message,
         ...addToState,
       })
@@ -237,36 +241,43 @@ export class WordsCreate extends Component {
     }
 
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="WordsCreate">
-          <h1 className="WordsCreate__heading">
-            {intl.trans(
-              'views.pages.explore.dialect.learn.words.add_new_word_to_x',
-              'Add New Word to ' + selectn('response.title', _computeDialect2),
-              null,
-              [selectn('response.title', _computeDialect2)]
-            )}
-          </h1>
-          <div className="row" style={{ marginTop: '15px' }}>
-            <div className={classNames('col-xs-8', 'col-md-10')}>
-              <form onSubmit={this._onRequestSaveForm}>
-                <t.form.Form
-                  ref="form_word_create" // TODO: DEPRECATED
-                  type={t.struct(selectn('FVWord', fields))}
-                  context={selectn('response', _computeDialect2)}
-                  value={this.state.formValue}
-                  options={FVWordOptions}
-                />
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary">
-                    {intl.trans('save', 'Save', 'first')}
-                  </button>
-                </div>
-              </form>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <div className="WordsCreate">
+            <h1 className="WordsCreate__heading">
+              {intl.trans(
+                'views.pages.explore.dialect.learn.words.add_new_word_to_x',
+                'Add New Word to ' + selectn('response.title', _computeDialect2),
+                null,
+                [selectn('response.title', _computeDialect2)]
+              )}
+            </h1>
+            <div className="row" style={{ marginTop: '15px' }}>
+              <div className={classNames('col-xs-8', 'col-md-10')}>
+                <form onSubmit={this._onRequestSaveForm}>
+                  <t.form.Form
+                    ref="form_word_create" // TODO: DEPRECATED
+                    type={t.struct(selectn('FVWord', fields))}
+                    context={selectn('response', _computeDialect2)}
+                    value={this.state.formValue}
+                    options={FVWordOptions}
+                  />
+                  <div className="form-group">
+                    <button type="submit" className="btn btn-primary">
+                      {intl.trans('save', 'Save', 'first')}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </PromiseWrapper>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -280,15 +291,18 @@ export class WordsCreate extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, windowPath } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
 
   const { computeWord } = fvWord
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
-
+  const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
+    computeLogin,
     computeDialect2,
     computeWord,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -297,6 +311,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   createWord,
+  fetchDialect,
   fetchDialect2,
   pushWindowPath,
   replaceWindowPath,
