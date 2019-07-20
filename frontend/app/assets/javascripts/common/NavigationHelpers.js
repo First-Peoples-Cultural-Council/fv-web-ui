@@ -250,3 +250,24 @@ export const getSearchObject = () => {
     search
   )
 }
+
+// Analyzes splitWindowPath (array)
+// Determines if it has pagination values eg: ['learn', 'words', '10', '1'] // .../learn/words/10/1
+// Returns array if pagination found: [pageSize, page] or undefined if not
+export const hasPagination = (arr = []) => {
+  let _arr = undefined
+  const arrLength = arr.length
+  if (arrLength >= 2) {
+    // See if the last 2 items in the splitWindowPath array are pagination urls
+    const pageSize = arr[arrLength - 2]
+    const page = arr[arrLength - 1]
+    // Test for pagination url segments
+    const onlyNumber = /^([\d]+)$/
+    const hasPaginationUrl = pageSize.match(onlyNumber) && page.match(onlyNumber)
+    if (hasPaginationUrl) {
+      _arr = [pageSize, page]
+    }
+  }
+
+  return _arr
+}
