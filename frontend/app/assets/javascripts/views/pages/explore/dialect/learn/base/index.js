@@ -14,8 +14,7 @@ import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import Immutable, { Set } from 'immutable' // eslint-disable-line
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
-
+import NavigationHelpers, { hasPagination } from 'common/NavigationHelpers'
 /**
  * Learn Base Page
  * TODO: Convert to composition vs. inheritance https://facebook.github.io/react/docs/composition-vs-inheritance.html
@@ -253,15 +252,20 @@ export default class PageDialectLearnBase extends Component {
   }
 
   _resetURLPagination(pageSize = null) {
-    const newPageSize = pageSize || selectn('pageSize', this.props.routeParams)
+    const urlPage = 1
+    const urlPageSize = pageSize || this.props.routeParams.pageSize || 10
 
-    // If URL pagination exists, reset
-    if (newPageSize) {
+    const hasPaginationUrl = hasPagination(this.props.splitWindowPath)
+    if (hasPaginationUrl) {
+      // Replace them
       NavigationHelpers.navigateForwardReplaceMultiple(
         this.props.splitWindowPath,
-        [newPageSize.toString(), 1],
+        [urlPageSize, urlPage],
         this.props.pushWindowPath
       )
+    } else {
+      // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
+      NavigationHelpers.navigateForward(this.props.splitWindowPath, [urlPageSize, urlPage], this.props.pushWindowPath)
     }
   }
 }
