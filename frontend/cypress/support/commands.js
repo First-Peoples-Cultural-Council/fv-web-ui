@@ -10,7 +10,18 @@ import 'cypress-testing-library/add-commands'
 // ***********************************************
 //
 //
-// -- This is a parent command --
+// -- This is a child command --
+// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+//
+//
+// -- This is a dual command --
+// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
+//
+//
+// -- This is will overwrite an existing command --
+// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// Login
 Cypress.Commands.add('login', () => {
   // NB: Cypress drops the `CYPRESS__` prefix when using:
   expect(Cypress.env('ADMIN_USERNAME')).not.to.be.undefined
@@ -34,18 +45,104 @@ Cypress.Commands.add('login', () => {
   })
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
+
+// AlphabetListView
 //
+// obj = {
+//   letter: undefined, // Letter to click
+//   confirmData: true, // Verify data exists after click (& after pagination if also set)
+//   shouldPaginate: false, // Filtering should result in pagination, click next arrow
+//   clearFilter: true // clear the filtering at end of test
+// }
 //
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+// eg:
+// cy.AlphabetListView({
+//   letter: 'k̓',
+//   confirmData: true,
+//   shouldPaginate: true,
+//   clearFilter: true,
+// })
+Cypress.Commands.add('AlphabetListView', (obj) => {
+  const _obj = Object.assign(
+    {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
+    obj
+  )
+  cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
+  cy.log('--- AlphabetListView: Filter by letter  ---')
+  // Filter by letter
+  cy.getByText(_obj.letter).click()
+
+  if (_obj.confirmData) {
+    cy.log('--- AlphabetListView: Confirm data  ---')
+    // Confirm data
+    cy.getByTestId('DictionaryList__row').should('exist')
+  }
+
+  if (_obj.shouldPaginate) {
+    cy.log('--- AlphabetListView: Navigate to next page  ---')
+    // Navigate to next page
+    cy.getByTestId('pagination__next').click()
+
+    if (_obj.confirmData) {
+      cy.log('--- AlphabetListView: Confirm data  ---')
+      // Confirm data
+      cy.getByTestId('DictionaryList__row').should('exist')
+    }
+  }
+  if (_obj.clearFilter) {
+    cy.log('--- AlphabetListView: Clear filter ---')
+    cy.queryByText(/stop browsing alphabetically/i).click()
+  }
+})
+
+// AlphabetListView
 //
+// obj = {
+//   letter: undefined, // Letter to click
+//   confirmData: true, // Verify data exists after click (& after pagination if also set)
+//   shouldPaginate: false, // Filtering should result in pagination, click next arrow
+//   clearFilter: true // clear the filtering at end of test
+// }
 //
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+// eg:
+// cy.AlphabetListView({
+//   letter: 'k̓',
+//   confirmData: true,
+//   shouldPaginate: true,
+//   clearFilter: true,
+// })
+Cypress.Commands.add('AlphabetListView', (obj) => {
+  const _obj = Object.assign(
+    {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
+    obj
+  )
+  cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
+  cy.log('--- AlphabetListView: Filter by letter  ---')
+  // Filter by letter
+  cy.getByText(_obj.letter).click()
+
+  if (_obj.confirmData) {
+    cy.log('--- AlphabetListView: Confirm data  ---')
+    // Confirm data
+    cy.getByTestId('DictionaryList__row').should('exist')
+  }
+
+  if (_obj.shouldPaginate) {
+    cy.log('--- AlphabetListView: Navigate to next page  ---')
+    // Navigate to next page
+    cy.getByTestId('pagination__next').click()
+
+    if (_obj.confirmData) {
+      cy.log('--- AlphabetListView: Confirm data  ---')
+      // Confirm data
+      cy.getByTestId('DictionaryList__row').should('exist')
+    }
+  }
+  if (_obj.clearFilter) {
+    cy.log('--- AlphabetListView: Clear filter ---')
+    cy.queryByText(/stop browsing alphabetically/i).click()
+  }
+})
 
 // Create contributor
 Cypress.Commands.add('createContributor', () => {

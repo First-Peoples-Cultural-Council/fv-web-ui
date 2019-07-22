@@ -4,18 +4,13 @@ describe('AlphabetListView', () => {
     cy.log('NOTE: Test is run with `npm run startPreprod`')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
 
-    // Select letter with enough results for pagination
-    const clicked = 'k̓'
-    cy.getByText(clicked).click()
-
-    // confirm has data
-    cy.getByTestId('DictionaryList__row').should('exist')
-
-    // navigate to next page
-    cy.getByTestId('pagination__next').click()
-
-    // confirm has data
-    cy.getByTestId('DictionaryList__row').should('exist')
+    const letter = 'k̓'
+    cy.AlphabetListView({
+      letter,
+      confirmData: true,
+      shouldPaginate: true,
+      clearFilter: true,
+    })
   })
 
   it('Default state: no message, no selected, no stop browsing button', () => {
@@ -34,12 +29,12 @@ describe('AlphabetListView', () => {
     })
 
     // Now select a letter
-    const clicked = 'x̄°'
-    cy.getByText(clicked).click()
+    const letter = 'x̄°'
+    cy.getByText(letter).click()
 
     // Is it highlighted?
     cy.getByTestId('AlphabetListView').within(() => {
-      cy.getByText(clicked)
+      cy.getByText(letter)
         .should('have.css', 'color')
         .and('not.eq', unselectedColor)
     })
