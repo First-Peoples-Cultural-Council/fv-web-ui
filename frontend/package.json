@@ -7,7 +7,7 @@
   "scripts": {
     "build": "gulp build:production",
     "build:production": "npm run production; npm run production:legacy",
-    "cy:copy": "npx copyfiles ./app/assets/javascripts/**/__cypress__/*.js cypress/integration/__cypress__ -f",
+    "cy:copy": "npx copyfiles -e ./app/assets/javascripts/**/__cypress__/common/*.js ./app/assets/javascripts/**/__cypress__/*.js cypress/integration/__cypress__ -f",
     "cy:open": "npm run cy:copy && cypress open",
     "cy:run": "npm run cy:copy && cypress run",
     "development": "webpack --color --progress --mode development --config build/webpack.development.js",
