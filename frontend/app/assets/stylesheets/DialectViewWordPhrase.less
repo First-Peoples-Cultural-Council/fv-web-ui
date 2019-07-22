@@ -1,12 +1,12 @@
-.DialectViewWord {
+.DialectViewWordPhrase {
   padding: 30px 15px;
 }
-.DialectViewWordTitleAudio {
+.DialectViewWordPhraseTitleAudio {
   margin: 0 0 10px;
   display: flex;
   flex-direction: column;
 }
-.DialectViewWordTitle {
+.DialectViewWordPhraseTitle {
   font-weight: 500;
   font-size: 3rem;
   color: #000;
@@ -16,50 +16,50 @@
   // padding-bottom: 15px;
   // border-bottom: 2px solid #b40000;
 }
-// .DialectViewWordTitle + .DialectViewWordAudio {
+// .DialectViewWordPhraseTitle + .DialectViewWordPhraseAudio {
 //   margin-top: 15px;
 // }
-.DialectViewWordAudio{
+.DialectViewWordPhraseAudio{
   display: inline;
 }
-.DialectViewWordAudio audio {
+.DialectViewWordPhraseAudio audio {
   vertical-align: middle;
   max-width: 300px;
   margin-left: 25px;
   margin-bottom: 10px;
 }
-.DialectViewWordGroup {
+.DialectViewWordPhraseGroup {
   display: flex;
 }
-.DialectViewWordContentPrimary {
+.DialectViewWordPhraseContentPrimary {
   flex-grow: 1;
   margin: 0 20px;
 }
-.DialectViewWordContentItem {
+.DialectViewWordPhraseContentItem {
   margin: 0 0 30px;
   background: #efefef;
   border: 1px dashed #e6e6e6;
   border-width: 1px 0 1px 0;
   padding: 5px;
 }
-.DialectViewWordContentItemGroup {
+.DialectViewWordPhraseContentItemGroup {
   padding-left: 10px;
 }
-.DialectViewWordContentItemTitle {
+.DialectViewWordPhraseContentItemTitle {
   font-weight: 900;
   font-size: 1.8rem;
   color: #585858;
   line-height: 1.2;
   margin: 5px 0 15px 5px;
 }
-.DialectViewWordDefinition {
+.DialectViewWordPhraseDefinition {
 }
-.DialectViewWordDefinitionEntry {
+.DialectViewWordPhraseDefinitionEntry {
   margin: 0;
   font-size: 1.8rem;
   line-height: 1.2;
 }
-.DialectViewWordDefinitionLanguage {
+.DialectViewWordPhraseDefinitionLanguage {
   font-weight: 500;
   font-size: 1.4rem;
   color: #585858;
@@ -68,11 +68,11 @@
   margin: 0 10px 0 0;
   text-transform: capitalize;
 }
-.DialectViewWordDefinitionSet {
+.DialectViewWordPhraseDefinitionSet {
   display: flex;
   align-items: center;
 }
-.DialectViewWordPhrase {
+.DialectViewWordPhrasePhrase {
   .DialectViewRelatedPhrasesPhrase{
     padding: 0 14px;
     color: black;
@@ -83,25 +83,25 @@
     border-left: 1px #cecece dotted;
   }
 }
-.DialectViewWordCulturalNote {
-  .DialectViewWordContentItemGroup div{
+.DialectViewWordPhraseCulturalNote {
+  .DialectViewWordPhraseContentItemGroup div{
     border-left: 4px solid #dedede;
     padding-left: 10px;
     margin: 5px 0;
   }
 }
-.DialectViewWordLiteralTranslation {
+.DialectViewWordPhraseLiteralTranslation {
 }
 
-.DialectViewWordContentSecondary .DialectViewWordContentItemTitle {
+.DialectViewWordPhraseContentSecondary .DialectViewWordPhraseContentItemTitle {
   font-size: 1.6rem;
 }
-.DialectViewWordLiteralTranslationEntry {
+.DialectViewWordPhraseLiteralTranslationEntry {
   margin: 0;
   font-size: 1.8rem;
   line-height: 1.2;
 }
-.DialectViewWordLiteralTranslationLanguage {
+.DialectViewWordPhraseLiteralTranslationLanguage {
   font-weight: 500;
   font-size: 1.4rem;
   color: #585858;
@@ -110,58 +110,58 @@
   margin: 0 10px 0 0;
   text-transform: capitalize;
 }
-.DialectViewWordLiteralTranslationSet {
+.DialectViewWordPhraseLiteralTranslationSet {
   display: flex;
   align-items: center;
 }
-.DialectViewWordContentSecondary {
+.DialectViewWordPhraseContentSecondary {
   font-size: 1.6rem;
   line-height: 1.2;
   width: 25%;
 }
-.DialectViewWordPhoto {
+.DialectViewWordPhrasePhoto {
 }
-// .DialectViewWordPronounciation {
+// .DialectViewWordPhrasePronounciation {
 //   display: flex;
 // }
-// .DialectViewWordPronounciation .DialectViewWordContentItemTitle {
+// .DialectViewWordPhrasePronounciation .DialectViewWordPhraseContentItemTitle {
 //   margin: 0 10px 0 0;
 // }
-.DialectViewWordVideo {
+.DialectViewWordPhraseVideo {
 }
-.DialectViewWordCategory {
+.DialectViewWordPhraseCategory {
 }
-.DialectViewWordPartOfSpeech {
+.DialectViewWordPhrasePartOfSpeech {
 }
-.DialectViewWordAcknowledgement{
+.DialectViewWordPhraseAcknowledgement{
   font-size: 0.8em;
   line-height: 1.4em;
   background: transparent;
   border: 1px solid #d2d2d2;
   margin-top: 15px;
 
-  > .DialectViewWordContentItemTitle{
+  > .DialectViewWordPhraseContentItemTitle{
     font-size: 1.2em;
     margin: 5px 0 8px 10px;
   }
 }
-.DialectViewWordAdditionalInformation {
+.DialectViewWordPhraseAdditionalInformation {
 }
 
 @media (max-width: @small-screen) {
-  .DialectViewWordGroup {
+  .DialectViewWordPhraseGroup {
     flex-direction: column;
   }
-  .DialectViewWordContentPrimary {
+  .DialectViewWordPhraseContentPrimary {
     width: 100%;
     padding-right: 0;
     margin: 0;
   }
-  .DialectViewWordContentSecondary {
+  .DialectViewWordPhraseContentSecondary {
     width: 100%;
   }
 
-  .DialectViewWordAudio audio {
+  .DialectViewWordPhraseAudio audio {
     max-width: 265px;
     margin-left: 0;
   }

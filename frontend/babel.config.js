@@ -11,7 +11,6 @@ module.exports = function babelConfig(api) {
         modules: isInTest ? 'commonjs' : false,
         targets: {
           node: 'current',
-          ie: '11',
         },
       },
     ],

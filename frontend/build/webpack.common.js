@@ -21,7 +21,8 @@ const sourceGamesDirectory = path.resolve(sourceAssetsDirectory, 'games')
 
 // Output Directories
 const outputAssetsDirectory = 'assets'
-const outputDirectory = path.resolve(frontEndRootDirectory, 'public')
+const outputDirectory = path.resolve(frontEndRootDirectory, 'public', 'evergreen')
+const outputDirectoryLegacy = path.resolve(frontEndRootDirectory, 'public', 'legacy')
 const outputScriptsDirectory = path.join(outputAssetsDirectory, 'javascripts')
 const outputFontsDirectory = path.join(outputAssetsDirectory, 'fonts')
 const outputImagesDirectory = path.join(outputAssetsDirectory, 'images')
@@ -148,7 +149,7 @@ module.exports = env => ({
   output: {
     filename: path.join(outputScriptsDirectory, '[name].[hash].js'),
     chunkFilename: path.join(outputScriptsDirectory, '[name].[hash].js'),
-    path: outputDirectory,
+    path: env && env.legacy ? outputDirectoryLegacy : outputDirectory,
     publicPath: '',
   },
 
@@ -156,7 +157,7 @@ module.exports = env => ({
    * Plugins
    */
   plugins: [
-    new CleanWebpackPlugin([outputDirectory], { root: rootDirectory }),
+    new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: rootDirectory }),
     new HtmlWebpackPlugin({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
       templateParameters: {
@@ -171,7 +172,7 @@ module.exports = env => ({
       { from: sourceFontsDirectory, to: outputFontsDirectory },
       { from: sourceImagesDirectory, to: outputImagesDirectory },
       { from: sourceLibrariesDirectory, to: outputLibrariesDirectory },
-      { from: sourceFaviconsDirectory, to: outputDirectory },
+      { from: sourceFaviconsDirectory, to: env && env.legacy ? outputDirectoryLegacy : outputDirectory },
       { from: sourceGamesDirectory, to: outputGamesDirectory },
     ]),
     new webpack.DefinePlugin({
@@ -192,7 +193,7 @@ module.exports = env => ({
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules\/(?!@fpcc|nuxeo)/,
+        exclude: env && env.legacy ? /node_modules\/(?!@fpcc|nuxeo)/ : /node_modules\/(?!@fpcc)/,
         options: {
           cacheDirectory: true,
           presets: ['@babel/preset-env', '@babel/preset-react'],

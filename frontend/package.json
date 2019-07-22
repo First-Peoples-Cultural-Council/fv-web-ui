@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "gulp build:production",
+    "build:production": "npm run production; npm run production:legacy",
     "cy:copy": "npx copyfiles ./app/assets/javascripts/**/__cypress__/*.js cypress/integration/__cypress__ -f",
     "cy:trashCopy": "npx trash cypress/integration/__cypress__/* !cypress/integration/__cypress__/__README__.js",
     "cy:open": "npm run cy:trashCopy; npm run cy:copy && cypress open",
@@ -15,6 +16,7 @@
     "lint-staged:prettier": "npx prettier --config .prettierrc --write",
     "lint-staged:test": "jest --bail --findRelatedTests",
     "production": "webpack --color --progress --mode production --config build/webpack.production.js",
+    "production:legacy": "webpack --color --progress --mode production --env.legacy --config build/webpack.production.js",
     "start": "webpack-dev-server --color --progress --mode development --config build/webpack.development.js",
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/\"",
@@ -51,6 +53,14 @@
       "pre-commit": "lint-staged"
     }
   },
+  "browserslist": {
+    "evergreen": [
+      "defaults"
+    ],
+    "legacy": [
+      "ie 11"
+    ]
+  },
   "engines": {
     "node": ">=8.10"
   },
@@ -64,6 +74,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "~6.26.0",
     "bootstrap": "^3.3.7",
+    "browserslist-useragent": "^3.0.0",
     "chart.js": "~1.0.2",
     "classnames": "~2.1.3",
     "debounce": "^1.2.0",
