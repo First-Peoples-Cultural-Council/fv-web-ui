@@ -22,13 +22,13 @@ import 'cypress-testing-library/add-commands'
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 // Login
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('login', (url) => {
   // NB: Cypress drops the `CYPRESS__` prefix when using:
   expect(Cypress.env('ADMIN_USERNAME')).not.to.be.undefined
   expect(Cypress.env('ADMIN_PASSWORD')).not.to.be.undefined
-  const login = 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup'
+  const login = url || 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup'
   // Login
-  cy.log('--- LOGGING IN ---')
+  cy.log(`--- LOGGING IN (${login}) ---`)
   cy.request({
     method: 'POST',
     url: login,
