@@ -1,6 +1,25 @@
 import 'cypress-testing-library/add-commands'
 describe('AlphabetListView', () => {
+  it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
+    cy.log('NOTE: Test is run with `npm run startPreprod`')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
+
+    // Select letter with enough results for pagination
+    const clicked = 'k̓'
+    cy.getByText(clicked).click()
+
+    // confirm has data
+    cy.getByTestId('DictionaryList__row').should('exist')
+
+    // navigate to next page
+    cy.getByTestId('pagination__next').click()
+
+    // confirm has data
+    cy.getByTestId('DictionaryList__row').should('exist')
+  })
+
   it('Default state: no message, no selected, no stop browsing button', () => {
+    cy.log('NOTE: Test is run with `npm run startPreprod`')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
     const unselectedColor = 'rgb(60, 52, 52)'
     // No message, button, or selected letters
@@ -43,7 +62,9 @@ describe('AlphabetListView', () => {
       })
     })
   })
+
   it('Direct link: displays message, selected letter, & stop browsing buton', () => {
+    cy.log('NOTE: Test is run with `npm run startPreprod`')
     cy.visit(
       'http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words/alphabet/k%CC%93%C2%B0'
     )
