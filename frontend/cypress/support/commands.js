@@ -70,7 +70,9 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
   cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
   cy.log('--- AlphabetListView: Filter by letter  ---')
   // Filter by letter
-  cy.getByText(_obj.letter).click()
+  cy.getByTestId('AlphabetListView').within(() => {
+    cy.getByText(_obj.letter).click()
+  })
 
   if (_obj.confirmData) {
     cy.log('--- AlphabetListView: Confirm data  ---')
@@ -95,52 +97,54 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
   }
 })
 
-// AlphabetListView
+// DialectFilterList
 //
 // obj = {
-//   letter: undefined, // Letter to click
+//   category: undefined, // Category to click
 //   confirmData: true, // Verify data exists after click (& after pagination if also set)
 //   shouldPaginate: false, // Filtering should result in pagination, click next arrow
 //   clearFilter: true // clear the filtering at end of test
 // }
 //
 // eg:
-// cy.AlphabetListView({
-//   letter: 'k̓',
+// cy.DialectFilterList({
+//   category: 'Animals',
 //   confirmData: true,
 //   shouldPaginate: true,
 //   clearFilter: true,
 // })
-Cypress.Commands.add('AlphabetListView', (obj) => {
+Cypress.Commands.add('DialectFilterList', (obj) => {
   const _obj = Object.assign(
-    {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
+    {category: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
     obj
   )
-  cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
-  cy.log('--- AlphabetListView: Filter by letter  ---')
-  // Filter by letter
-  cy.getByText(_obj.letter).click()
+  cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
+  cy.log('--- DialectFilterList: Filter by category  ---')
+  // Filter by category
+  cy.getByTestId('DialectFilterList').within(() => {
+    cy.getByText(_obj.category).click()
+  })
 
   if (_obj.confirmData) {
-    cy.log('--- AlphabetListView: Confirm data  ---')
+    cy.log('--- DialectFilterList: Confirm data  ---')
     // Confirm data
     cy.getByTestId('DictionaryList__row').should('exist')
   }
 
   if (_obj.shouldPaginate) {
-    cy.log('--- AlphabetListView: Navigate to next page  ---')
+    cy.log('--- DialectFilterList: Navigate to next page  ---')
     // Navigate to next page
     cy.getByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
-      cy.log('--- AlphabetListView: Confirm data  ---')
+      cy.log('--- DialectFilterList: Confirm data  ---')
       // Confirm data
       cy.getByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
-    cy.log('--- AlphabetListView: Clear filter ---')
-    cy.queryByText(/stop browsing alphabetically/i).click()
+    cy.log('--- DialectFilterList: Clear filter ---')
+    cy.queryByText(/stop browsing by category/i).click()
   }
 })
 
