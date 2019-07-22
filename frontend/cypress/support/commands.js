@@ -148,6 +148,155 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   }
 })
 
+// FlashcardList
+//
+// obj = {
+//   confirmData: true, // Verify data exists after click (& after pagination if also set)
+//   shouldPaginate: false, // Filtering should result in pagination, click next arrow
+//   clearFilter: true // clear the filtering at end of test
+// }
+//
+// eg:
+// cy.FlashcardList({
+//   confirmData: true,
+//   shouldPaginate: true,
+//   clearFilter: true,
+// })
+Cypress.Commands.add('FlashcardList', (obj) => {
+  const _obj = Object.assign(
+    {confirmData: true, shouldPaginate: false, clearFilter: true},
+    obj
+  )
+  cy.log('--- Running cypress/support/commands.js > FlashcardList ---')
+
+  cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
+  cy.getByTestId('DictionaryList__row')
+
+  cy.log('--- FlashcardList: Enter flashcard mode  ---')
+  cy.queryByText(/flashcards/i).click()
+
+  if (_obj.confirmData) {
+    cy.log('--- FlashcardList: Confirm flashcard  ---')
+    cy.getByTestId('Flashcard').should('exist')
+  }
+
+  if (_obj.shouldPaginate) {
+    cy.log('--- FlashcardList: Paginate  ---')
+    cy.getByTestId('pagination__next').click()
+
+    if (_obj.confirmData) {
+      cy.log('--- FlashcardList: Confirm flashcard  ---')
+      cy.getByTestId('Flashcard').should('exist')
+    }
+  }
+  if (_obj.clearFilter) {
+    cy.log('--- FlashcardList: Leave flashcard mode  ---')
+    cy.queryByText(/stop viewing flashcards/i).click()
+
+    cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
+    cy.getByTestId('DictionaryList__row').should('exist')
+  }
+})
+
+/*
+browseSearch({
+  search
+  word
+  definitions
+  literalTranslations
+  partsOfSpeech
+})
+
+*/
+// browseSearch
+//
+// eg:
+// cy.browseSearch({
+//   term: '',
+//   searchWord: true,
+//   searchDefinitions: true,
+//   searchLiteralTranslations: false,
+//   searchPartsOfSpeech: 'Noun',
+//   confirmData: true,
+//   shouldPaginate: false,
+//   clearFilter: true,
+// })
+Cypress.Commands.add('browseSearch', (obj) => {
+  const _obj = Object.assign(
+    {
+      btnSearch: 'search words',
+      searchWord: true,
+      searchDefinitions: true,
+      searchLiteralTranslations: false,
+      searchPartsOfSpeech: undefined,
+      confirmData: true,
+      confirmNoData: false,
+      searchingText: 'Showing words that contain the search',
+      shouldPaginate: false,
+      clearFilter: true,
+    },
+    obj
+  )
+
+  const searchingByWordText = 'Word'
+  const searchingByDefinitionsText = 'Definitions'
+  const searchingByLiteralTranslationsText = 'Literal translations'
+  const searchingByPartsOfSpeech = 'Parts of speech'
+  cy.log('--- Running cypress/support/commands.js > browseSearch ---')
+
+  cy.log('--- browseSearch: Searching  ---')
+  cy.getByTestId('SearchDialectFormPrimaryInput').clear()
+  if (_obj.term) {
+    cy.getByTestId('SearchDialectFormPrimaryInput').type(_obj.term)
+  }
+
+  // set all search options:
+  cy.getByTestId('SearchDialect').within(() => {
+    _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
+    _obj.searchDefinitions ? cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
+    _obj.searchLiteralTranslations ? cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
+    if (_obj.searchPartsOfSpeech) {
+      cy.getByLabelText(new RegExp(searchingByPartsOfSpeech, 'i')).select(_obj.searchPartsOfSpeech)
+    }
+  })
+
+  // Search
+  cy.queryByText(new RegExp(_obj.btnSearch, 'i')).click()
+
+  cy.log('--- browseSearch: Confirm in search mode  ---')
+  cy.queryByText(new RegExp(_obj.searchingText, 'i')).should('exist')
+
+  if (_obj.confirmData) {
+    cy.log('--- browseSearch: Confirm data  ---')
+    cy.getByTestId('DictionaryList__row').should('exist')
+  }
+  if (_obj.confirmNoData) {
+    cy.log('--- browseSearch: Confirm no data  ---')
+    cy.queryByText(/No results found/i).should('exist')
+  }
+
+  if (_obj.shouldPaginate) {
+    cy.log('--- browseSearch: Paginate  ---')
+    cy.getByTestId('pagination__next').click()
+
+    if (_obj.confirmData) {
+      cy.log('--- browseSearch: Confirm data  ---')
+      cy.getByTestId('DictionaryList__row').should('exist')
+    }
+    if (_obj.confirmNoData) {
+      cy.log('--- browseSearch: Confirm no data  ---')
+      cy.queryByText(/No results found/i).should('exist')
+    }
+  }
+  if (_obj.clearFilter) {
+    cy.log('--- browseSearch: Reset search  ---')
+    cy.queryByText(/reset search/i).click()
+
+    cy.log('--- browseSearch: Confirm not in search mode (only when after clicking reset search)  ---')
+    cy.queryByText(/Showing all words in the/i).should('exist')
+  }
+})
+
 // Create contributor
 Cypress.Commands.add('createContributor', () => {
   cy.log('--- Running createContributor ---')
