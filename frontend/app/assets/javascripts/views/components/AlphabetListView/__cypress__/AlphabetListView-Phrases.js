@@ -1,25 +1,15 @@
 import 'cypress-testing-library/add-commands'
-describe('AlphabetListView', () => {
+describe('AlphabetListView - Phrases', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
-    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases')
 
-    const letter = 'k̓'
-    cy.AlphabetListView({
-      letter,
-      confirmData: true,
-      shouldPaginate: true,
-      clearFilter: true,
-    })
-  })
-
-  it('Default state: no message, no selected, no stop browsing button', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
-    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
+    const letter = 'b'
     const unselectedColor = 'rgb(60, 52, 52)'
+
     // No message, button, or selected letters
     cy.log('No message, button, or selected letters')
-    cy.queryByText(/showing words that start with the letter/i).should('not.exist')
+    cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
     cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
     cy.getByTestId('AlphabetListView').within(() => {
       cy.get('a').each(($el) => {
@@ -29,10 +19,12 @@ describe('AlphabetListView', () => {
       })
     })
 
-    // Now select a letter
-    cy.log('Now select a letter')
-    const letter = 'x̄°'
-    cy.getByText(letter).click()
+    cy.AlphabetListView({
+      letter,
+      confirmData: true,
+      shouldPaginate: true,
+      clearFilter: false,
+    })
 
     // Is it highlighted?
     cy.log('Is it highlighted?')
@@ -44,7 +36,7 @@ describe('AlphabetListView', () => {
 
     // Is the message and clear button displayed?
     cy.log('Is the message and clear button displayed?')
-    cy.queryByText(/showing words that start with the letter/i).should('exist')
+    cy.queryByText(/showing phrases that start with the letter/i).should('exist')
     cy.queryByText(/stop browsing alphabetically/i).should('exist')
 
     // Reset
@@ -53,7 +45,7 @@ describe('AlphabetListView', () => {
 
     // Ensure all is back to normal...
     cy.log('Ensure all is back to normal...')
-    cy.queryByText(/showing words that start with the letter/i).should('not.exist')
+    cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
     cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
     cy.getByTestId('AlphabetListView').within(() => {
       cy.get('a').each(($el) => {
@@ -62,23 +54,23 @@ describe('AlphabetListView', () => {
           .and('eq', unselectedColor)
       })
     })
+    cy.log('Test complete')
   })
 
-  it('Direct link: displays message, selected letter, & stop browsing buton', () => {
+  it('Direct link', () => {
     cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
 
     cy.log('Direct visit a url with a letter selected')
-    cy.visit(
-      'http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words/alphabet/k%CC%93%C2%B0'
-    )
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases/alphabet/b')
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
-    cy.getByText(/showing words that start with the letter/i).should('exist')
+    cy.getByText(/showing phrases that start with the letter/i).should('exist')
     cy.getByTestId('AlphabetListView').within(() => {
-      cy.getByText('k̓°')
+      cy.getByText('b')
         .should('have.css', 'color')
         .and('eq', 'rgb(130, 0, 0)')
     })
     cy.getByText(/stop browsing alphabetically/i).should('exist')
+    cy.log('Test complete')
   })
 })

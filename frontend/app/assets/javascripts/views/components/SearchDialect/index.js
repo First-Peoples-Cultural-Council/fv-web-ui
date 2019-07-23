@@ -250,7 +250,7 @@ export class SearchDialect extends Component {
     let searchByTitleText = ''
     if (isSearchingPhrases) {
       searchByTitleText = 'Phrase'
-      searchButtonText = 'Search'
+      searchButtonText = 'Search Phrases'
     } else {
       searchByTitleText = 'Word'
       searchButtonText = intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')

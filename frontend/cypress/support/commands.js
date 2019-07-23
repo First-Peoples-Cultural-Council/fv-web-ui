@@ -22,26 +22,27 @@ import 'cypress-testing-library/add-commands'
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 // Login
-Cypress.Commands.add('login', (url) => {
+Cypress.Commands.add('login', (obj = {}) => {
   // NB: Cypress drops the `CYPRESS__` prefix when using:
   expect(Cypress.env('ADMIN_USERNAME')).not.to.be.undefined
   expect(Cypress.env('ADMIN_PASSWORD')).not.to.be.undefined
-  const login = url || 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup'
+  const url = obj.url || 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup'
+  const body = obj.body || {
+    user_name: Cypress.env('ADMIN_USERNAME'),
+    user_password: Cypress.env('ADMIN_PASSWORD'),
+    language: 'en',
+    requestedUrl: 'app',
+    forceAnonymousLogin: true,
+    form_submitted_marker: undefined,
+    Submit: 'Log+In',
+  }
   // Login
-  cy.log(`--- LOGGING IN (${login}) ---`)
+  cy.log(`--- LOGGING IN: ${url} ---`)
   cy.request({
     method: 'POST',
-    url: login,
+    url,
     form: true, // we are submitting a regular form body
-    body: {
-      user_name: Cypress.env('ADMIN_USERNAME'),
-      user_password: Cypress.env('ADMIN_PASSWORD'),
-      language: 'en',
-      requestedUrl: 'app',
-      forceAnonymousLogin: true,
-      form_submitted_marker: undefined,
-      Submit: 'Log+In',
-    },
+    body,
   })
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
@@ -83,11 +84,13 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
   if (_obj.shouldPaginate) {
     cy.log('--- AlphabetListView: Navigate to next page  ---')
     // Navigate to next page
+    cy.wait(500)
     cy.getByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- AlphabetListView: Confirm data  ---')
       // Confirm data
+      cy.wait(500)
       cy.getByTestId('DictionaryList__row').should('exist')
     }
   }
@@ -104,6 +107,7 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
 //   confirmData: true, // Verify data exists after click (& after pagination if also set)
 //   shouldPaginate: false, // Filtering should result in pagination, click next arrow
 //   clearFilter: true // clear the filtering at end of test
+//   clearFilterText: 'button text' // text for clear button
 // }
 //
 // eg:
@@ -112,10 +116,11 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
 //   confirmData: true,
 //   shouldPaginate: true,
 //   clearFilter: true,
+//   clearFilterText: ''
 // })
 Cypress.Commands.add('DialectFilterList', (obj) => {
   const _obj = Object.assign(
-    {category: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
+    {category: undefined, confirmData: true, shouldPaginate: false, clearFilter: true, clearFilterText: 'stop browsing by category'},
     obj
   )
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
@@ -134,17 +139,19 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   if (_obj.shouldPaginate) {
     cy.log('--- DialectFilterList: Navigate to next page  ---')
     // Navigate to next page
+    cy.wait(500)
     cy.getByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- DialectFilterList: Confirm data  ---')
       // Confirm data
+      cy.wait(500)
       cy.getByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
     cy.log('--- DialectFilterList: Clear filter ---')
-    cy.queryByText(/stop browsing by category/i).click()
+    cy.queryByText(new RegExp(_obj.clearFilterText, 'i')).click()
   }
 })
 
@@ -182,10 +189,12 @@ Cypress.Commands.add('FlashcardList', (obj) => {
 
   if (_obj.shouldPaginate) {
     cy.log('--- FlashcardList: Paginate  ---')
+    cy.wait(500)
     cy.getByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- FlashcardList: Confirm flashcard  ---')
+      cy.wait(500)
       cy.getByTestId('Flashcard').should('exist')
     }
   }
@@ -198,40 +207,22 @@ Cypress.Commands.add('FlashcardList', (obj) => {
   }
 })
 
-/*
-browseSearch({
-  search
-  word
-  definitions
-  literalTranslations
-  partsOfSpeech
-})
-
-*/
 // browseSearch
 //
-// eg:
-// cy.browseSearch({
-//   term: '',
-//   searchWord: true,
-//   searchDefinitions: true,
-//   searchLiteralTranslations: false,
-//   searchPartsOfSpeech: 'Noun',
-//   confirmData: true,
-//   shouldPaginate: false,
-//   clearFilter: true,
-// })
 Cypress.Commands.add('browseSearch', (obj) => {
   const _obj = Object.assign(
     {
       btnSearch: 'search words',
-      searchWord: true,
+      searchWord: undefined,
+      searchPhrase: undefined,
       searchDefinitions: true,
-      searchLiteralTranslations: false,
+      searchLiteralTranslations: undefined,
+      searchCulturalNotes: undefined,
       searchPartsOfSpeech: undefined,
       confirmData: true,
       confirmNoData: false,
       searchingText: 'Showing words that contain the search',
+      postClearFilterText: 'Showing all words in the',
       shouldPaginate: false,
       clearFilter: true,
     },
@@ -239,9 +230,12 @@ Cypress.Commands.add('browseSearch', (obj) => {
   )
 
   const searchingByWordText = 'Word'
+  const searchingByPhraseText = 'Phrase'
   const searchingByDefinitionsText = 'Definitions'
   const searchingByLiteralTranslationsText = 'Literal translations'
+  const searchingByCulturalNotesText = 'Cultural notes'
   const searchingByPartsOfSpeech = 'Parts of speech'
+
   cy.log('--- Running cypress/support/commands.js > browseSearch ---')
 
   cy.log('--- browseSearch: Searching  ---')
@@ -252,9 +246,20 @@ Cypress.Commands.add('browseSearch', (obj) => {
 
   // set all search options:
   cy.getByTestId('SearchDialect').within(() => {
-    _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
+    if (_obj.searchWord !== undefined) {
+      _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
+    }
+    if (_obj.searchPhrase !== undefined) {
+      _obj.searchPhrase ? cy.getByLabelText(new RegExp(searchingByPhraseText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByPhraseText, 'i')).uncheck()
+    }
+
     _obj.searchDefinitions ? cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
-    _obj.searchLiteralTranslations ? cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
+    if (_obj.searchLiteralTranslations !== undefined) {
+      _obj.searchLiteralTranslations ? cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
+    }
+    if (_obj.searchCulturalNotes !== undefined) {
+      _obj.searchCulturalNotes ? cy.getByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).uncheck()
+    }
     if (_obj.searchPartsOfSpeech) {
       cy.getByLabelText(new RegExp(searchingByPartsOfSpeech, 'i')).select(_obj.searchPartsOfSpeech)
     }
@@ -277,10 +282,12 @@ Cypress.Commands.add('browseSearch', (obj) => {
 
   if (_obj.shouldPaginate) {
     cy.log('--- browseSearch: Paginate  ---')
+    cy.wait(500)
     cy.getByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- browseSearch: Confirm data  ---')
+      cy.wait(500)
       cy.getByTestId('DictionaryList__row').should('exist')
     }
     if (_obj.confirmNoData) {
@@ -293,7 +300,7 @@ Cypress.Commands.add('browseSearch', (obj) => {
     cy.queryByText(/reset search/i).click()
 
     cy.log('--- browseSearch: Confirm not in search mode (only when after clicking reset search)  ---')
-    cy.queryByText(/Showing all words in the/i).should('exist')
+    cy.queryByText(new RegExp(_obj.postClearFilterText, 'i')).should('exist')
   }
 })
 
