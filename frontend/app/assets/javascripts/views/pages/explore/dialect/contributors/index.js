@@ -38,7 +38,7 @@ import '!style-loader!css-loader!./Contributors.css'
 let contributorsPath = undefined
 let _computeContributors = undefined
 let _computeDialect2 = undefined
-const { array, func, number, object, string } = PropTypes
+const { array, func, number, element, object, string } = PropTypes
 
 const iconUnsorted = (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -66,6 +66,7 @@ export class Contributors extends Component {
     DEFAULT_SORT_TYPE: string,
     editUrl: string,
     copy: object,
+    btnCreate: element,
     // REDUX: reducers/state
     routeParams: object.isRequired,
     computeContributors: object.isRequired,
@@ -111,6 +112,7 @@ export class Contributors extends Component {
         th: '',
       },
     },
+    btnCreate: null,
     deletedUids: [],
     selected: [],
   }
@@ -123,8 +125,23 @@ export class Contributors extends Component {
             return _copy.default
           }
         )
-
-    await this._getData({ copy })
+    const btnCreate = this.props.btnCreate || (
+      <a
+        className="_btn _btn--primary Contributors__btnCreate"
+        href={`/${this.props.routeParams.theme}${this.props.routeParams.dialect_path}/create/contributor`}
+        onClick={(e) => {
+          e.preventDefault()
+          NavigationHelpers.navigate(
+            `/${this.props.routeParams.theme}${this.props.routeParams.dialect_path}/create/contributor`,
+            this.props.pushWindowPath,
+            false
+          )
+        }}
+      >
+        Create a new contributor
+      </a>
+    )
+    await this._getData({ copy, btnCreate })
   }
 
   async componentDidUpdate(prevProps) {
@@ -139,23 +156,27 @@ export class Contributors extends Component {
 
   render() {
     const { routeParams } = this.props
+    const { btnCreate } = this.state
     const { pageSize, page } = routeParams
 
     return (
-      <DocumentListView
-        cssModifier="DictionaryList--contributors"
-        sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?
-        className="browseDataGrid"
-        columns={this._getColumns()}
-        data={this._filterDeletedData()}
-        dialect={selectn('response', _computeDialect2)}
-        gridCols={4}
-        gridListView={false}
-        page={Number(page)}
-        pageSize={Number(pageSize)}
-        refetcher={this.handleRefetch}
-        type="FVContributor"
-      />
+      <div>
+        {btnCreate}
+        <DocumentListView
+          cssModifier="DictionaryList--contributors"
+          sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?
+          className="browseDataGrid"
+          columns={this._getColumns()}
+          data={this._filterDeletedData()}
+          dialect={selectn('response', _computeDialect2)}
+          gridCols={4}
+          gridListView={false}
+          page={Number(page)}
+          pageSize={Number(pageSize)}
+          refetcher={this.handleRefetch}
+          type="FVContributor"
+        />
+      </div>
     )
   }
 
