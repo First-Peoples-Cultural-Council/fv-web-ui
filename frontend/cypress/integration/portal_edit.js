@@ -1,5 +1,6 @@
 describe('Authentication', () => {
-  it('Logins to //firstvoices-dev.apps.prod.nuxeo.io as SENCOTEN_ADMIN and updates the portal About Us on //0.0.0.0:3001', () => {
+  it('Update Dialect Home >  About Us', () => {
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'
     // export ADMIN_PASSWORD='THE_PASSWORD'
@@ -8,7 +9,7 @@ describe('Authentication', () => {
     cy.login()
 
     cy.visit(
-      'http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/SEN%C4%86O%C5%A6EN/SEN%C4%86O%C5%A6EN/SEN%C4%86O%C5%A6EN'
+      "http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Demonstration/%7BDemonstration%7D/Alex's%20Demo"
     )
     cy.get('#pageNavigation').contains('FPCCAdmin')
 
@@ -35,7 +36,9 @@ describe('Authentication', () => {
       .parents('div:first')
       .parent()
       .within(() => {
+        cy.wait(500)
         cy.getByText(updateMessage).should('exist')
       })
+    cy.log('Test complete')
   })
 })

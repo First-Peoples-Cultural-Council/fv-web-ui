@@ -9,37 +9,39 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Re
 
 describe('Recorder', () => {
   it('Create', () => {
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Login
     cy.login()
 
-    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
-    cy.queryByText(copy.default.title).should('exist')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+    cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
-    cy.getByText(copy.default.submit).click()
+    cy.getByText(copy.create.submit).click()
 
     // Error should be displayed
     cy.getByLabelText(copy.validation.name)
 
     // Fill in required field
-    cy.getByLabelText(copy.default.name).type('[CY] Contributor Name')
+    cy.getByLabelText(`${copy.create.name} *`).type('[CY] Contributor Name')
 
     // Resubmit
-    cy.getByText(copy.default.submit).click()
+    cy.getByText(copy.create.submit).click()
 
     // Should see success
-    cy.getByText(copy.default.success.title).should('exist')
+    cy.getByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.default.success.createAnother).click()
+    cy.getByText(copy.create.success.createAnother).click()
 
     // Confirm
-    cy.queryByText(copy.default.title).should('exist')
+    cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
-    cy.getByText(copy.default.submit).click()
+    cy.getByText(copy.create.submit).click()
 
     // Error should be displayed
     cy.getByLabelText(copy.validation.name)
+    cy.log('Test complete')
   })
 })

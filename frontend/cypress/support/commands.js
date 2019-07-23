@@ -26,12 +26,13 @@ Cypress.Commands.add('login', (obj = {}) => {
   // NB: Cypress drops the `CYPRESS__` prefix when using:
   expect(Cypress.env('ADMIN_USERNAME')).not.to.be.undefined
   expect(Cypress.env('ADMIN_PASSWORD')).not.to.be.undefined
-  const url = obj.url || 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup'
+
+  const url = obj.url || 'https://preprod.firstvoices.com/nuxeo/startup'
   const body = obj.body || {
     user_name: Cypress.env('ADMIN_USERNAME'),
     user_password: Cypress.env('ADMIN_PASSWORD'),
     language: 'en',
-    requestedUrl: 'app',
+    requestedUrl: 'nxstartup.faces',
     forceAnonymousLogin: true,
     form_submitted_marker: undefined,
     Submit: 'Log+In',
@@ -44,6 +45,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     form: true, // we are submitting a regular form body
     body,
   })
+  cy.wait(500)
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
 
@@ -309,7 +311,7 @@ Cypress.Commands.add('createContributor', () => {
   cy.log('--- Running createContributor ---')
   return cy.request({
     method: 'POST',
-    url: 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/api/v1/path/FV/Workspaces/Data/Athabascan/Dene/Dene/Contributors',
+    url: 'https://preprod.firstvoices.com/nuxeo/api/v1/path/FV/Workspaces/Data/Athabascan/Dene/Dene/Contributors',
     body: {
       'entity-type': 'document',
       'type': 'FVContributor',
@@ -323,7 +325,7 @@ Cypress.Commands.add('deleteContributor', (uid) => {
   cy.log('--- Running deleteContributor ---')
   return cy.request({
     method: 'POST',
-    url: 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/api/v1/automation/Document.Trash',
+    url: 'https://preprod.firstvoices.com/nuxeo/api/v1/automation/Document.Trash',
     body: {
       'params': {},
       'context': {},
