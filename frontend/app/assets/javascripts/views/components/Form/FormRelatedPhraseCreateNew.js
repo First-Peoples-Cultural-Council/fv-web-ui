@@ -78,6 +78,7 @@ export class FormRelatedPhraseCreateNew extends React.Component {
     'FormRelatedPhraseCreateNew.fv:related_videos': [],
     'FormRelatedPhraseCreateNew.fv:cultural_note': [],
     'FormRelatedPhraseCreateNew.fv:reference': '',
+    'FormRelatedPhraseCreateNew.fv:acknowledgement': '',
     'FormRelatedPhraseCreateNew.fv:source': [],
     'FormRelatedPhraseCreateNew.fv:available_in_childrens_archive': false,
   }
@@ -205,6 +206,22 @@ export class FormRelatedPhraseCreateNew extends React.Component {
           <span id="describedByReference">Origin of record (person, book, etc).</span>
         </div>
 
+        {/* ACKNOWLEDGEMENT --------------- */}
+        <div className="Form__group">
+          <Text
+            className=""
+            id="CreateWord__Acknowledgement"
+            labelText="Reference"
+            name="FormRelatedPhraseCreateNew.fv:acknowledgement"
+            ariaDescribedby="describedByReference"
+            value={this.state['FormRelatedPhraseCreateNew.fv:acknowledgement']}
+            handleChange={(acknowledgement) => {
+              this.setState({ 'FormRelatedPhraseCreateNew.fv:acknowledgement': acknowledgement })
+            }}
+          />
+          <span id="describedByAcknowledgement">Acknowledgement or Data Usage</span>
+        </div>
+
         {/* Contributors --------------- */}
         <FormContributors
           className="Form__group"
@@ -268,11 +285,12 @@ export class FormRelatedPhraseCreateNew extends React.Component {
     'FormRelatedPhraseCreateNew.fv:related_videos': yup.array().of(yup.string()),
     'FormRelatedPhraseCreateNew.fv:cultural_note': yup.array().of(yup.string()),
     'FormRelatedPhraseCreateNew.fv:reference': yup.string(),
+    'FormRelatedPhraseCreateNew.fv:acknowledgement': yup.string(),
     'FormRelatedPhraseCreateNew.fv:source': yup.array().of(yup.string()),
     'FormRelatedPhraseCreateNew.fv:available_in_childrens_archive': yup.string(),
   })
 
-  _handleCreateItemSubmit = async() => {
+  _handleCreateItemSubmit = async () => {
     const formData = this._getFormData()
     // console.log(':::formData::::', formData)
     const formValidation = await this._validateForm(formData)
@@ -339,13 +357,14 @@ export class FormRelatedPhraseCreateNew extends React.Component {
       'FormRelatedPhraseCreateNew.fv:related_videos': this.state['FormRelatedPhraseCreateNew.fv:related_videos'],
       'FormRelatedPhraseCreateNew.fv:cultural_note': this.state['FormRelatedPhraseCreateNew.fv:cultural_note'],
       'FormRelatedPhraseCreateNew.fv:reference': this.state['FormRelatedPhraseCreateNew.fv:reference'],
+      'FormRelatedPhraseCreateNew.fv:acknowledgement': this.state['FormRelatedPhraseCreateNew.fv:acknowledgement'],
       'FormRelatedPhraseCreateNew.fv:source': this.state['FormRelatedPhraseCreateNew.fv:source'],
       'FormRelatedPhraseCreateNew.fv:available_in_childrens_archive': this.state[
         'FormRelatedPhraseCreateNew.fv:available_in_childrens_archive'
       ],
     }
   }
-  _validateForm = async(formData) => {
+  _validateForm = async (formData) => {
     // Note: When `abortEarly === true` then `{ path, type } = invalid` is defined.
     // When `abortEarly === false` then `{ path, type } = invalid` is not defined! Data is found in `invalid.errors[]`.
     const validation = await this.schemaCreateForm.validate(formData, { abortEarly: false }).then(
@@ -373,7 +392,7 @@ export class FormRelatedPhraseCreateNew extends React.Component {
     )
     return validation
   }
-  _validateField = async({ name, data }) => {
+  _validateField = async ({ name, data }) => {
     // const formDataFormatted = this._getFormData()
     const results = await this._validateForm(data)
     const { valid, errors } = results

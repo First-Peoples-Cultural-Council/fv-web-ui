@@ -13,6 +13,7 @@ const validForm = yup.object().shape({
   'fv:definitions': yup.array().of(yup.object().shape({ language: yup.string(), translation: yup.string() })),
   'fv:literal_translation': yup.array().of(yup.object().shape({ language: yup.string(), translation: yup.string() })),
   'fv:reference': yup.string(),
+  'fv-word:acknowledgement': yup.string(),
   'fv:related_audio': yup.array().of(yup.string()),
   'fv:related_pictures': yup.array().of(yup.string()),
   'fv:source': yup.array().of(yup.string()),

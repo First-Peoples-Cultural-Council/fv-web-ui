@@ -6,6 +6,7 @@ describe('Phrase', () => {
   const waitShort = 50
 
   it('CRUD', () => {
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'
     // export ADMIN_PASSWORD='THE_PASSWORD'

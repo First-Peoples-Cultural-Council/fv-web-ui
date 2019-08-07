@@ -30,12 +30,11 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from 'common/NavigationHelpers'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
-import RaisedButton from 'material-ui/lib/raised-button'
-
+// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GeneralList from 'views/components/Browsing/general-list'
@@ -47,8 +46,7 @@ import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
 
-const FilteredCardList = withFilter(GeneralList)
-
+let FilteredCardList = null
 /**
  * Learn songs
  */
@@ -56,7 +54,6 @@ const FilteredCardList = withFilter(GeneralList)
 const { array, func, object, string } = PropTypes
 export class PageDialectLearnStoriesAndSongs extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     typeFilter: string,
     typePlural: string,
     // REDUX: reducers/state
@@ -65,6 +62,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
     computeLogin: object.isRequired,
     computePortal: object.isRequired,
     properties: object.isRequired,
+    routeParams: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
@@ -73,58 +71,28 @@ export class PageDialectLearnStoriesAndSongs extends Component {
     fetchPortal: func.isRequired,
     pushWindowPath: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      filteredList: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_onNavigateRequest', '_onEntryNavigateRequest', 'fixedListFetcher'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-
-    newProps.fetchBooks(newProps.routeParams.dialect_path, '&sortBy=dc:title' + '&sortOrder=ASC')
+  state = {
+    filteredList: null,
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
+  async componentDidMount() {
+    FilteredCardList = withFilter(GeneralList, { 'properties.fvbook:type': this.props.typeFilter })
+    await this.fetchData(this.props)
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+  async componentDidUpdate(prevProps) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
+      await this.fetchData(this.props)
     }
-  }
-
-  fixedListFetcher(list) {
-    this.setState({
-      filteredList: list,
-    })
-  }
-
-  _onEntryNavigateRequest(item) {
-    // NOTE: generateUIDPath: function (theme, item, pluralPathId)
-    this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(
-        this.props.routeParams.theme || 'explore',
-        item,
-        selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
-      )
-    )
-  }
-
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
   }
 
   render() {
@@ -160,12 +128,20 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       action: this._onEntryNavigateRequest,
     }
 
-    let listView = <FilteredCardList {...listProps} />
+    let listView = null
 
     if (isKidsTheme) {
       listView = <GeneralList {...listProps} cols={3} theme={this.props.routeParams.theme} />
+    } else {
+      listView = FilteredCardList ? <FilteredCardList {...listProps} /> : null
     }
     const dialectClassName = getDialectClassname(computeDialect2)
+
+    const hrefPath = `/${appendPathArrayAfterLandmark({
+      pathArray: ['create'],
+      splitWindowPath: this.props.splitWindowPath,
+      landmarkArray: this.props.typeFilter === 'story' ? ['stories'] : ['songs'],
+    })}`
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper', { hidden: isKidsTheme })}>
@@ -177,16 +153,21 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <RaisedButton
-                label={intl.trans(
+              <a
+                className="_btn _btn--primary"
+                href={hrefPath}
+                onClick={(e) => {
+                  e.preventDefault()
+                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+                }}
+              >
+                {intl.trans(
                   'views.pages.explore.dialect.learn.songs_stories.create_x_book',
                   'Create ' + this.props.typeFilter + ' Book',
                   'words',
                   [this.props.typeFilter]
                 )}
-                onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                primary
-              />
+              </a>
             </AuthorizationFilter>
           </div>
         </div>
@@ -202,13 +183,40 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       </PromiseWrapper>
     )
   }
+
+  fetchData = (newProps) => {
+    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
+
+    newProps.fetchBooks(newProps.routeParams.dialect_path, '&sortBy=dc:title' + '&sortOrder=ASC')
+  }
+  fixedListFetcher = (list) => {
+    this.setState({
+      filteredList: list,
+    })
+  }
+
+  _onEntryNavigateRequest = (item) => {
+    // NOTE: generateUIDPath: function (theme, item, pluralPathId)
+    this.props.pushWindowPath(
+      NavigationHelpers.generateUIDPath(
+        this.props.routeParams.theme || 'explore',
+        item,
+        selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
+      )
+    )
+  }
+
+  _onNavigateRequest = (path) => {
+    this.props.pushWindowPath(path)
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvBook, fvDialect, fvPortal, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeBooks } = fvBook
   const { computeDialect2 } = fvDialect
@@ -221,6 +229,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePortal,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }

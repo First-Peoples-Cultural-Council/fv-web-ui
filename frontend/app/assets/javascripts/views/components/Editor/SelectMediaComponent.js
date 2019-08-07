@@ -31,7 +31,6 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-// import { Dialog, FlatButton, RaisedButton } from 'material-ui'
 // import IconButton from 'material-ui/lib/icon-button'
 // import ActionInfo from 'material-ui/lib/svg-icons/action/info'
 // import ActionInfoOutline from 'material-ui/lib/svg-icons/action/info-outline'
@@ -86,8 +85,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
+            selectn('dc:title', resourceParentDialect),
+          ])
         : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <div title={tooltip} className={classNames('action-info', { 'action-info--outline': isDialectShared })}>
@@ -142,8 +141,8 @@ class SelectMediaComponent extends React.Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {
@@ -170,7 +169,7 @@ class SelectMediaComponent extends React.Component {
       //   secondary
       //   onClick={this._handleClose}
       // />,
-      <button key="flatButton1" onClick={this._handleClose} type="button">
+      <button className="FlatButton" key="flatButton1" onClick={this._handleClose} type="button">
         {intl.trans('cancel', 'Cancel', 'first')}
       </button>,
     ]
@@ -215,8 +214,7 @@ class SelectMediaComponent extends React.Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        {/* <RaisedButton label={this.props.label} onClick={this._handleOpen} /> */}
-        <button onClick={this._handleOpen} type="button">
+        <button className="RaisedButton" onClick={this._handleOpen} type="button">
           {this.props.label}
         </button>
         <Dialog

@@ -54,14 +54,14 @@ const intl = IntlService.instance
  */
 
 const { array, func, object, string } = PropTypes
-export class View extends Component {
+export class AlphabetView extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     // REDUX: reducers/state
     computeCharacter: object.isRequired,
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
     properties: object.isRequired,
+    routeParams: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
@@ -72,70 +72,22 @@ export class View extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      deleteDialogOpen: false,
-    }
-
-    // Bind methods to 'this'
-    ;['_handleConfirmDelete', '_onNavigateRequest', '_publishChangesAction'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
-  }
-
-  fetchData(newProps) {
-    newProps.fetchCharacter(this._getCharacterPath(newProps))
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+  state = {
+    deleteDialogOpen: false,
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
-      this.fetchData(nextProps)
-    } else if (nextProps.routeParams.word !== this.props.routeParams.word) {
-      this.fetchData(nextProps)
+  async componentDidUpdate(prevProps) {
+    const dialectChanged = this.props.routeParams.dialect_path !== prevProps.routeParams.dialect_path
+    const wordChanged = this.props.routeParams.word !== prevProps.routeParams.word
+    if (dialectChanged || wordChanged) {
+      await this.fetchData()
     }
-    // else if (nextProps.computeLogin.success !== this.props.computeLogin.success) {
-    //     this.fetchData(nextProps);
-    // }
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
-  }
-
-  _getCharacterPath(props = null) {
-    const _props = props === null ? this.props : props
-
-    return _props.routeParams.dialect_path + '/Alphabet/' + _props.routeParams.character
-  }
-
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
-  }
-
-  _handleConfirmDelete(item /*, event*/) {
-    this.props.deleteWord(item.uid)
-    this.setState({ deleteDialogOpen: false })
-  }
-
-  /**
-   * Publish changes
-   */
-  _publishChangesAction() {
-    this.props.publishCharacter(
-      this._getCharacterPath(),
-      null,
-      null,
-      intl.trans(
-        'views.pages.explore.dialect.learn.alphabet.character_published_success',
-        'Character published successfully!',
-        'first'
-      )
-    )
+  async componentDidMount() {
+    await this.fetchData()
   }
 
   render() {
@@ -159,7 +111,8 @@ export class View extends Component {
 
     // Generate photos
     const photos = []
-    ;(selectn('response.contextParameters.word.related_pictures', computeCharacter) || []).map((picture, key) => {
+    const photosMap = selectn('response.contextParameters.word.related_pictures', computeCharacter) || []
+    photosMap.map((picture, key) => {
       const image = {
         original: selectn('views[2].url', picture),
         thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
@@ -173,7 +126,8 @@ export class View extends Component {
 
     // Generate videos
     const videos = []
-    ;(selectn('response.contextParameters.word.related_videos', computeCharacter) || []).map((video, key) => {
+    const videosMap = selectn('response.contextParameters.word.related_videos', computeCharacter) || []
+    videosMap.map((video, key) => {
       const vid = {
         original: NavigationHelpers.getBaseURL() + video.path,
         thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
@@ -187,38 +141,98 @@ export class View extends Component {
 
     const currentAppliedFilter = new Map({
       currentAppliedFilter: new Map({
-        startsWith: " AND dc:title LIKE '" + selectn('response.title', computeCharacter) + "%'",
+        // startsWith: " AND dc:title LIKE '" + selectn('response.title', computeCharacter) + "%'",
+        startsWith: " AND ( dc:title ILIKE '" + selectn('response.title', computeCharacter) + "%' )",
       }),
     })
+
+    let pageToolbar = null
+    if (this.props.routeParams.area === WORKSPACES) {
+      if (selectn('response', computeCharacter)) {
+        pageToolbar = (
+          <PageToolbar
+            label={intl.trans('character', 'Character', 'first')}
+            handleNavigateRequest={this._onNavigateRequest}
+            computeEntity={computeCharacter}
+            computePermissionEntity={computeDialect2}
+            computeLogin={this.props.computeLogin}
+            actions={['edit', 'publish']}
+            publishChangesAction={this._publishChangesAction}
+            {...this.props}
+          />
+        )
+      }
+    }
+
+    const noAudioMessage =
+      selectn('response.contextParameters.character.related_audio.length', computeCharacter) === 0 ? (
+        <span>
+          {intl.trans('views.pages.explore.dialect.learn.words.no_audio_yet', 'No audio is available yet', 'first')}.
+        </span>
+      ) : null
+
+    const audioPreview = (selectn('response.contextParameters.character.related_audio', computeCharacter) || []).map((
+      audio /*, key*/
+    ) => {
+      return <Preview styles={{ maxWidth: '350px' }} key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />
+    })
+
+    let relatedWords = null
+    if (selectn('response.contextParameters.character.related_words.length', computeCharacter) > 0) {
+      const relatedWordsContentMap =
+        selectn('response.contextParameters.character.related_words', computeCharacter) || []
+
+      const relatedWordsContent = relatedWordsContentMap.map((word, key) => {
+        const wordItem =
+          selectn('fv:definitions.length', word) > 0
+            ? selectn('fv:definitions', word)
+            : selectn('fv:literal_translation', word)
+
+        const hrefPath = NavigationHelpers.navigate(
+          '/explore' + selectn('path', word).replace('/Dictionary/', '/learn/words/'),
+          null,
+          true
+        )
+
+        return (
+          <SubViewTranslation key={key} group={wordItem} groupByElement="language" groupValue="translation">
+            <p>
+              <a
+                key={selectn('uid', word)}
+                href={hrefPath}
+                onClick={(e) => {
+                  e.preventDefault()
+                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+                }}
+              >
+                {selectn('dc:title', word)}
+              </a>
+            </p>
+          </SubViewTranslation>
+        )
+      })
+
+      relatedWords = (
+        <div>
+          <h3>{intl.trans('related_words', 'Related Words', 'words')}:</h3>
+          {relatedWordsContent}
+        </div>
+      )
+    }
 
     /**
      * Generate definitions body
      */
     return (
       <PromiseWrapper computeEntities={computeEntities}>
-        {(() => {
-          if (this.props.routeParams.area === WORKSPACES) {
-            if (selectn('response', computeCharacter))
-              return (
-                <PageToolbar
-                  label={intl.trans('character', 'Character', 'first')}
-                  handleNavigateRequest={this._onNavigateRequest}
-                  computeEntity={computeCharacter}
-                  computePermissionEntity={computeDialect2}
-                  computeLogin={this.props.computeLogin}
-                  actions={['edit', 'publish']}
-                  publishChangesAction={this._publishChangesAction}
-                  {...this.props}
-                />
-              )
-          }
-        })()}
+        {pageToolbar}
 
         <div className="row">
           <div className="col-xs-12">
             <div>
               <Card>
                 <Tabs tabItemContainerStyle={tabItemStyles}>
+                  {/* TAB: DEFINITION */}
                   <Tab label={intl.trans('definition', 'Definition', 'first')}>
                     <div>
                       <CardText>
@@ -230,102 +244,13 @@ export class View extends Component {
                               <h3>{intl.trans('audio', 'Audio', 'first')}</h3>
 
                               <div>
-                                {selectn(
-                                  'response.contextParameters.character.related_audio.length',
-                                  computeCharacter
-                                ) === 0 ? (
-                                  <span>
-                                    {intl.trans(
-                                      'views.pages.explore.dialect.learn.words.no_audio_yet',
-                                      'No audio is available yet',
-                                      'first'
-                                    )}
-                                    .
-                                  </span>
-                                ) : (
-                                  ''
-                                )}
+                                {noAudioMessage}
 
-                                {(
-                                  selectn('response.contextParameters.character.related_audio', computeCharacter) || []
-                                ).map((audio /*, key*/) => {
-                                  return (
-                                    <Preview
-                                      styles={{ maxWidth: '350px' }}
-                                      key={selectn('uid', audio)}
-                                      expandedValue={audio}
-                                      type="FVAudio"
-                                    />
-                                  )
-                                })}
+                                {audioPreview}
                               </div>
                             </div>
 
-                            <div className={classNames('col-md-6', 'col-xs-12')}>
-                              {(() => {
-                                if (
-                                  selectn(
-                                    'response.contextParameters.character.related_words.length',
-                                    computeCharacter
-                                  ) > 0
-                                ) {
-                                  return (
-                                    <div>
-                                      <h3>{intl.trans('related_words', 'Related Words', 'words')}:</h3>
-
-                                      {(
-                                        selectn(
-                                          'response.contextParameters.character.related_words',
-                                          computeCharacter
-                                        ) || []
-                                      ).map((word, key) => {
-                                        const wordItem =
-                                          selectn('fv:definitions.length', word) > 0
-                                            ? selectn('fv:definitions', word)
-                                            : selectn('fv:literal_translation', word)
-                                        const hrefPath = NavigationHelpers.navigate(
-                                          '/explore' + selectn('path', word).replace('/Dictionary/', '/learn/words/'),
-                                          null,
-                                          true
-                                        )
-                                        return (
-                                          <SubViewTranslation
-                                            key={key}
-                                            group={wordItem}
-                                            groupByElement="language"
-                                            groupValue="translation"
-                                          >
-                                            <p>
-                                              {/* <Link
-                                                key={selectn('uid', word)}
-                                                href={NavigationHelpers.navigate(
-                                                  '/explore' +
-                                                    selectn('path', word).replace('/Dictionary/', '/learn/words/'),
-                                                  null,
-                                                  true
-                                                )}
-                                              >
-                                                {selectn('dc:title', word)}
-                                              </Link> */}
-                                              <a
-                                                key={selectn('uid', word)}
-                                                href={hrefPath}
-                                                onClick={(e) => {
-                                                  e.preventDefault()
-                                                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-                                                }}
-                                              >
-                                                {selectn('dc:title', word)}
-                                              </a>
-                                            </p>
-                                          </SubViewTranslation>
-                                        )
-                                      })}
-                                    </div>
-                                  )
-                                }
-                              })()}
-                            </div>
+                            <div className={classNames('col-md-6', 'col-xs-12')}>{relatedWords}</div>
                           </div>
                         </div>
 
@@ -344,6 +269,8 @@ export class View extends Component {
                       </CardText>
                     </div>
                   </Tab>
+
+                  {/* TAB: WORDS */}
                   <Tab
                     label={
                       UIHelpers.isViewSize('xs')
@@ -369,14 +296,16 @@ export class View extends Component {
                         </h2>
                         <div className="row">
                           <WordListView
-                            dialect={selectn('response', computeDialect2)}
                             filter={currentAppliedFilter}
                             routeParams={this.props.routeParams}
+                            disableClickItem={false}
                           />
                         </div>
                       </CardText>
                     </div>
                   </Tab>
+
+                  {/* TAB: PHRASES */}
                   <Tab
                     label={
                       UIHelpers.isViewSize('xs')
@@ -405,6 +334,7 @@ export class View extends Component {
                             dialect={selectn('response', computeDialect2)}
                             filter={currentAppliedFilter}
                             routeParams={this.props.routeParams}
+                            disableClickItem={false}
                           />
                         </div>
                       </CardText>
@@ -418,13 +348,48 @@ export class View extends Component {
       </PromiseWrapper>
     )
   }
+
+  fetchData = async () => {
+    await this.props.fetchCharacter(this._getCharacterPath(this.props))
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+  }
+
+  _getCharacterPath = (props = null) => {
+    const _props = props === null ? this.props : props
+
+    return `${_props.routeParams.dialect_path}/Alphabet/${_props.routeParams.character}`
+  }
+
+  _onNavigateRequest = (path) => {
+    this.props.pushWindowPath(path)
+  }
+
+  _handleConfirmDelete = (item /*, event*/) => {
+    this.props.deleteWord(item.uid)
+    this.setState({ deleteDialogOpen: false })
+  }
+
+  /**
+   * Publish changes
+   */
+  _publishChangesAction = () => {
+    this.props.publishCharacter(
+      this._getCharacterPath(),
+      null,
+      null,
+      intl.trans(
+        'views.pages.explore.dialect.learn.alphabet.character_published_success',
+        'Character published successfully!',
+        'first'
+      )
+    )
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvCharacter, fvDialect, navigation, nuxeo, windowPath } = state
-
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeCharacter } = fvCharacter
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
@@ -435,6 +400,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeDialect2,
     computeLogin,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -452,4 +418,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(AlphabetView)

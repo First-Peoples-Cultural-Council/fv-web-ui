@@ -52,7 +52,7 @@ import {
 import { fetchPortal, updatePortal } from 'providers/redux/reducers/fvPortal'
 
 import selectn from 'selectn'
-
+import { routeHasChanged } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import Header from 'views/pages/explore/dialect/header'
@@ -156,7 +156,14 @@ export class DialectLearn extends Component {
 
   // Refetch data on URL change
   componentDidUpdate(prevProps) {
-    if (prevProps.windowPath !== this.props.windowPath) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
       this.fetchData(this.props)
     }
 

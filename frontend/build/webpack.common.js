@@ -31,6 +31,8 @@ const outputLibrariesDirectory = path.join(outputAssetsDirectory, 'libraries')
 const outputGamesDirectory = path.join(outputAssetsDirectory, 'games')
 
 // Plugins
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const WarningsToErrorsPlugin = require('warnings-to-errors-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -157,6 +159,8 @@ module.exports = env => ({
    * Plugins
    */
   plugins: [
+    new CaseSensitivePathsPlugin({debug: true}),
+    new WarningsToErrorsPlugin(),
     new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: rootDirectory }),
     new HtmlWebpackPlugin({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
@@ -198,7 +202,6 @@ module.exports = env => ({
           cacheDirectory: true,
           presets: ['@babel/preset-env', '@babel/preset-react'],
           plugins: [
-            ['transform-react-jsx-component-data-ids'],
             ['@babel/plugin-syntax-dynamic-import'],
             ['@babel/plugin-proposal-decorators', { legacy: true }],
             ['@babel/plugin-proposal-class-properties', { loose: true }],

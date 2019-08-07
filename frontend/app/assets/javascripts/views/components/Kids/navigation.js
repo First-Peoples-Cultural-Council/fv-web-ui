@@ -40,7 +40,7 @@ import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 
 const { array, func, object, bool } = PropTypes
-export class Navigation extends Component {
+export class KidsNavigation extends Component {
   static propTypes = {
     frontpage: bool,
     routeParams: object,
@@ -273,4 +273,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Navigation)
+)(KidsNavigation)

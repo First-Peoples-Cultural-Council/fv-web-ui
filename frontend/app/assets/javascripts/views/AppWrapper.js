@@ -32,69 +32,11 @@ import UIHelpers from 'common/UIHelpers'
 
 import AppFrontController from './AppFrontController'
 
-import Shepherd from 'tether-shepherd'
-
 // import FontIcon from 'material-ui/lib/font-icon'
 // import Paper from 'material-ui/lib/paper'
 // import FlatButton from 'material-ui/lib/flat-button'
 
 import IntlService from 'views/services/intl'
-
-// const getPosition = function getPosition() {
-//   const doc = document
-//   const w = window
-//   let x
-//   let y
-//   let docEl
-
-//   if (typeof w.pageYOffset === 'number') {
-//     x = w.pageXOffset
-//     y = w.pageYOffset
-//   } else {
-//     docEl = doc.compatMode && doc.compatMode === 'CSS1Compat' ? doc.documentElement : doc.body
-//     x = docEl.scrollLeft
-//     y = docEl.scrollTop
-//   }
-//   return { x: x, y: y }
-// }
-
-/**
- * Finds the xPath for a component, leading up to the 'app-wrapper'.
- * Used as a utility for creating Shepherd tours
- */
-function findComponentParents(_el) {
-  let parents = []
-  let el = _el
-  const originalEl = el
-
-  if (!el.getAttribute('data-component-id')) {
-    return null
-  }
-
-  while (el.parentNode) {
-    el = el.parentNode
-
-    if (el.getAttribute('id') === 'app-wrapper') {
-      break
-    }
-
-    if (el.tagName) {
-      const appendClass = el.className ? '.' + el.className.replace(/\s/g, '.').replace(/\:/g, '\\:') : '' // eslint-disable-line
-      const appendData = el.getAttribute('data-component-id')
-        ? "[data-component-id='" + el.getAttribute('data-component-id') + "']"
-        : ''
-
-      parents.push(el.tagName.toLowerCase() + appendClass + appendData)
-    }
-  }
-
-  parents = parents.reverse()
-  parents.push(
-    originalEl.tagName.toLowerCase() + "[data-component-id='" + originalEl.getAttribute('data-component-id') + "']"
-  )
-
-  return parents.join(' ')
-}
 
 const getPreferences = function getPreferences(login, dialect) {
   const preferenceString = selectn('response.properties.preferences', login)
@@ -165,7 +107,6 @@ class AppWrapper extends Component {
     this.props.getCurrentUser()
 
     this.state = {
-      adminGuideStarted: false,
       dialect: null,
     }
   }
@@ -194,31 +135,6 @@ class AppWrapper extends Component {
         }}
       >
         <AppFrontController preferences={preferences} warnings={warnings} />
-
-        {/*<AuthorizationFilter filter={{
-                role: ['Everything'],
-                entity: selectn('response.entries[0]', dialects),
-                login: this.props.computeLogin
-            }}>
-                <div className="row" style={{backgroundColor: '#406f85', textAlign: 'center', color: '#8caab8'}}>
-
-                    {this.intl.translate({
-                        key: 'super_admin_tools',
-                        default: 'Super Admin Tools',
-                        case: 'words'
-                    })}: <FlatButton onClick={this._startAdminGuideAssist.bind(this.props.windowPath)}
-                                     disabled={this.state.adminGuideStarted} label={this.intl.translate({
-                    key: 'admin_guide_assist',
-                    default: 'Admin Guide Assist', case: 'words'
-                })}/>
-                    {(this.state.adminGuideStarted) ? this.intl.translate({
-                        key: 'only_one_tour_per_page',
-                        default: 'You can only run one tour per page. Navigate to another page and remember to hit \'Refresh\'',
-                        case: 'first'
-                    }) : ''}
-
-                </div>
-            </AuthorizationFilter>*/}
       </div>
     )
   }
@@ -228,63 +144,6 @@ class AppWrapper extends Component {
       let index = event.nativeEvent.target.selectedIndex;
       this.props.changeTheme(event.target[index].value);
     }*/
-
-  _startAdminGuideAssist = () => {
-    const doms = document.querySelectorAll('[data-component-id]')
-
-    const tour = new Shepherd.Tour({
-      defaults: {
-        classes: 'shepherd-theme-arrows',
-      },
-    })
-
-    document.onkeydown = function documentOnkeydown(_e) {
-      const e = _e || window.event
-      switch (e.which || e.keyCode) {
-        case 37:
-          tour.back()
-          break
-
-        case 39:
-          tour.next()
-          break
-        default: // Note: do nothing
-      }
-    }
-
-    doms.forEach(function domsForEach(dom, i) {
-      const xpath = findComponentParents(dom)
-
-      //if (!document.querySelector(xpath)) {
-      //  console.log(xpath);
-      //}
-
-      if (xpath !== null) {
-        tour.addStep('step' + i, {
-          title: 'Element xPath',
-          text: xpath + '<textarea>' + dom.textContent + '</textarea>',
-          classes: 'shepherd-theme-arrows admin-guide-step',
-          attachTo: xpath + ' bottom',
-          showCancelLink: true,
-          scrollTo: true,
-          when: {
-            show: () => {
-              dom.style.border = '2px blue dashed'
-            },
-            hide: () => {
-              dom.style.border = 'initial'
-            },
-          },
-        })
-      }
-    })
-
-    this.setState({
-      adminGuideStarted: true,
-    })
-
-    tour.start()
-  }
 }
 
 // REDUX: reducers/state

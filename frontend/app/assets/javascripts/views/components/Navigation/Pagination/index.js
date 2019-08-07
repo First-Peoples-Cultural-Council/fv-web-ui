@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-import classNames from 'classnames'
 
 import ReactPaginate from 'react-paginate'
-
 import ChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left'
 import ChevronRight from 'material-ui/lib/svg-icons/navigation/chevron-right'
 
@@ -35,7 +33,7 @@ export default class Pagination extends Component {
     return (
       <ReactPaginate
         previousLabel={<ChevronLeft />}
-        nextLabel={<ChevronRight />}
+        nextLabel={<ChevronRight data-testid="pagination__next" />}
         forcePage={this.props.forcePage}
         breakLabel={<a style={{ paddingBottom: '7px' }}>...</a>}
         breakClassName={'pagination-page'}

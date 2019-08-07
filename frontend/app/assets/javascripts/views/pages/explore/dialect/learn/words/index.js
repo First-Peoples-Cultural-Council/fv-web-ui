@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { PropTypes } from 'react'
-import Immutable, { Set, Map } from 'immutable'
+import Immutable, { Set, Map, is } from 'immutable'
 
 import classNames from 'classnames'
 import { isMobile } from 'react-device-detect'
@@ -462,13 +462,22 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    this.setState({ filterInfo: newFilter }, () => {
-      this._resetURLPagination()
-      // See about updating url
-      if (href && updateUrl) {
-        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-      }
-    })
+    if (is(this.state.filterInfo, newFilter) === false) {
+      this.setState({ filterInfo: newFilter }, () => {
+        // NOTE: `_resetURLPagination` below can trigger FW-256:
+        // "Back button is not working properly when paginating within alphabet chars
+        // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
+        // You will be sent to the first page)"
+        //
+        // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
+        // and any other unnecessary updates (ie: the filter didn't change)
+        this._resetURLPagination()
+        // See about updating url
+        if (href && updateUrl) {
+          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+        }
+      })
+    }
   }
 
   handleAlphabetClick(letter, href, updateHistory = true) {

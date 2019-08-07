@@ -12,7 +12,7 @@ limitations under the License.
 */
 import React, { Component, PropTypes } from 'react' // eslint-disable-line
 import selectn from 'selectn'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
@@ -99,7 +99,14 @@ export default class DataListView extends Component {
         this._resetPagination(this.props)
       }
     } else {
-      if (this.props.windowPath !== prevProps.windowPath) {
+      if (
+        routeHasChanged({
+          prevWindowPath: prevProps.windowPath,
+          curWindowPath: this.props.windowPath,
+          prevRouteParams: prevProps.routeParams,
+          curRouteParams: this.props.routeParams,
+        })
+      ) {
         this.fetchData(this.props)
       }
     }
@@ -146,13 +153,18 @@ export default class DataListView extends Component {
     if (!this.props.controlViaURL) {
       this._fetchListViewData(this.props, page, pageSize, sortInfo, currentSortCols)
     } else {
+      // TODO: Investigate why splitWindowPath could not be used (instead of this.props.routeParams)
+      // Note: routeParams is currently passed in via a parent component, not provided by Redux
       const _urlPage = selectn('page', this.props.routeParams)
       const _urlPageSize = selectn('pageSize', this.props.routeParams)
       const urlPage = _urlPage !== undefined ? parseInt(_urlPage, 10) : _urlPage
       const urlPageSize = _urlPageSize !== undefined ? parseInt(_urlPageSize, 10) : _urlPageSize
-      // If page and pageSize exist, and are different, replace them; otherwise - add them
-      if (urlPage && urlPageSize) {
+
+      const hasPaginationUrl = hasPagination(this.props.splitWindowPath)
+      if (hasPaginationUrl) {
+        // Replace pagination in url if present (eg: .../learn/words/10/1) and the incoming `page` || `pageSize` is different
         if (urlPage !== page || urlPageSize !== pageSize) {
+          // urlPageSize / page
           NavigationHelpers.navigateForwardReplaceMultiple(
             this.props.splitWindowPath,
             [pageSize, page],
@@ -160,6 +172,7 @@ export default class DataListView extends Component {
           )
         }
       } else {
+        // No pagination in url (eg: .../learn/words), append `page` & `pageSize`
         NavigationHelpers.navigateForward(this.props.splitWindowPath, [pageSize, page], this.props.pushWindowPath)
       }
 

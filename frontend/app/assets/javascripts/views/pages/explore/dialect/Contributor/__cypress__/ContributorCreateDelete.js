@@ -9,15 +9,16 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Co
 
 describe('Contributor', () => {
   it('Create', () => {
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Should see error message when not logged in:
-    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
     cy.queryByText(copy.errorBoundary.title).should('exist')
 
     // Login
     cy.login()
 
-    // Should see form:
-    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
+
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
@@ -35,10 +36,14 @@ describe('Contributor', () => {
     // Should see success
     cy.getByText(copy.create.success.title).should('exist')
 
-    // Visit edit & delete contributor:
+    // Visit edit page & delete this contributor:
     cy.getByText(copy.create.success.linkEdit).click()
+
     cy.getByText(copy.edit.btnInitiate).click()
     cy.getByText(copy.edit.btnConfirm).click()
+
     cy.getByText(copy.edit.successDelete.title).should('exist')
+
+    cy.log('Test complete')
   })
 })

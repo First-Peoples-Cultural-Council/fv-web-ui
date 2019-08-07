@@ -9,13 +9,16 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Re
 
 describe('Recorder', () => {
   it('Create', () => {
-    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
+
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
     cy.queryByText(copy.errorBoundary.title).should('exist')
 
     // Login
     cy.login()
 
-    cy.visit('http://0.0.0.0:3001/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
@@ -38,5 +41,6 @@ describe('Recorder', () => {
     cy.getByText(copy.edit.btnInitiate).click()
     cy.getByText(copy.edit.btnConfirm).click()
     cy.getByText(copy.edit.successDelete.title).should('exist')
+    cy.log('Test complete')
   })
 })

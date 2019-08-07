@@ -225,6 +225,7 @@ const options = {
       'fv-word:categories',
       'fv:cultural_note',
       'fv:reference',
+      'fv-word:acknowledgement',
       'fv:source',
       'fv:available_in_childrens_archive',
       'fv-word:available_in_games',
@@ -409,6 +410,11 @@ const options = {
         help: <i>{intl.trans('models.origin_of_record', 'Origin of record (person, book, etc)', 'first')}.</i>,
         factory: VirtualKeyboardFactory,
       },
+      'fv-word:acknowledgement': {
+        label: intl.trans('acknowledgement', 'Acknowledgement', 'first'),
+        help: <i>{intl.trans('models.acknowledgement', 'Acknowledgement or Data Usage', 'first')}.</i>,
+        factory: VirtualKeyboardFactory,
+      },
       'fv:source': {
         label: intl.trans('source', 'Source', 'first'),
         help: (
@@ -450,6 +456,7 @@ const options = {
       'fv:related_videos',
       'fv:cultural_note',
       'fv:reference',
+      'fv-phrase:acknowledgement',
       'fv:source',
       'fv:available_in_childrens_archive',
     ],
@@ -563,6 +570,10 @@ const options = {
       'fv:reference': {
         label: intl.trans('reference', 'Reference', 'first'),
         help: <i>{intl.trans('models.origin_of_record', 'Origin of record (person, book, etc)', 'first')}</i>,
+      },
+      'fv-phrase:acknowledgement': {
+        label: intl.trans('acknowledgement', 'Acknowledgement', 'first'),
+        help: <i>{intl.trans('models.acknowledgement', 'Acknowledgement or Data Usage', 'first')}</i>,
       },
       'fv:source': {
         label: intl.trans('source', 'Source', 'first'),

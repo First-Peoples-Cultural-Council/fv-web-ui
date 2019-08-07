@@ -87,7 +87,11 @@ export default class FlashcardList extends Component {
   _generateFlashcards(obj) {
     const { items, columns } = obj
     return (items || []).map((item, i) => (
-      <div className={`Flashcard Flashcard${i} ${i % 3 === 0 && i !== 0 ? 'PrintPageBreak' : ''}`} key={i}>
+      <div
+        data-testid="Flashcard"
+        className={`Flashcard Flashcard${i} ${i % 3 === 0 && i !== 0 ? 'PrintPageBreak' : ''}`}
+        key={i}
+      >
         {(columns || []).map((column, j) => {
           const cellValue = selectn(column.name, item)
           const cellRender = typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue

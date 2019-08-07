@@ -166,26 +166,38 @@ body {
   font-weight: 500;
   border: 2px solid transparent;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: inline-block;
 }
 ._btn--primary {
   color: #fff;
   background-color: #0793eb;
   border-color: #0793eb;
 }
-._btn--primary:hover,
-._btn--primary:active {
+._btn--primary:active,
+._btn--primary:hover {
   background-color: #0571b5;
   border-color: #0571b5;
+}
+._btn._btn--primary:visited,
+a._btn._btn--primary:visited {
+  color: #fff;
+  text-decoration-line: none;
 }
 ._btn--secondary {
   background-color: #fff;
   color: #06588c;
   border-color: #fff;
 }
+._btn--secondary:active,
 ._btn--secondary:hover {
   color: #fff;
   background-color: #06588c;
   border-color: #06588c;
+}
+._btn._btn--secondary:visited,
+a._btn._btn--secondary:visited {
+  color: #fff;
+  text-decoration-line: none;
 }
 ._btn--compact {
   padding: 0.6rem;
@@ -957,29 +969,30 @@ audio::-webkit-media-controls-enclosure {
 }
 
 @import "AlphabetGridTile";
+@import "AlphabetListView";
 @import "AudioOptimal";
-@import "Button";
 @import "CardView";
+@import "CreateV2";
 @import "Dialect";
+@import "DialectFilterList";
+@import "DialectViewWordPhrase";
 @import "DictionaryList";
+@import "DictionaryList";
+@import "Flashcard";
+@import "FlatButton";
+@import "Form";
+@import "FormMoveButtons";
+@import "FormRelatedAudioItem";
+@import "FormRemoveButton";
 @import "Introduction";
 @import "kids";
 @import "Navigation";
-@import "Select";
+@import "RaisedButton";
 @import "SearchDialect";
+@import "SearchResultTile";
+@import "Select";
 @import "Text";
 @import "Textarea";
-@import "DialectFilterList";
-@import "AlphabetListView";
-@import "DictionaryList";
-@import "DialectViewWordPhrase";
-@import "SearchResultTile";
-@import "Flashcard";
-@import "FormRelatedAudioItem";
-@import "CreateV2";
-@import "Form";
-@import "FormMoveButtons";
-@import "FormRemoveButton";
 
 @media print {
   // Note: Flashcard print styles are in Flashcard.less

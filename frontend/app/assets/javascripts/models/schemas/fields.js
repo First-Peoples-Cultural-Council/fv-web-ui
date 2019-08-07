@@ -47,10 +47,12 @@ const fields = {
     'fv-word:related_phrases': t.list(t.String),
     'fv-word:part_of_speech': t.maybe(t.String),
     'fv-word:available_in_games': t.Boolean,
+    'fv-word:acknowledgement': t.maybe(t.String),
   }),
   FVPhrase: Object.assign({}, Dublincore, FVCore, {
     'fv:literal_translation': t.maybe(t.String), // make optional
     'fv-phrase:phrase_books': t.list(t.String),
+    'fv-phrase:acknowledgement': t.maybe(t.String),
   }),
   FVAudio: Object.assign({}, Dublincore, FVMedia),
   FVPicture: Object.assign({}, Dublincore, FVMedia),

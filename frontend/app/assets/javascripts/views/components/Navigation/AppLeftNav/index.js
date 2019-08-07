@@ -25,12 +25,11 @@ import selectn from 'selectn'
 
 import { Divider, List, ListItem, LeftNav, AppBar } from 'material-ui/lib'
 
-import IconButton from 'material-ui/lib/icon-button'
+// import IconButton from 'material-ui/lib/icon-button'
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
-
 import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance'
 import IntlService from 'views/services/intl'
-
+import '!style-loader!css-loader!./AppLeftNav.css'
 const SelectableList = SelectableContainerEnhance(List)
 
 const { func, object } = PropTypes
@@ -46,21 +45,10 @@ export class AppLeftNav extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  intl = IntlService.instance
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = this._getInitialState()
-
-    // Bind methods to 'this'
-    ;['_onNavigateRequest', '_onRequestChange'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
   /**
    * Initial state
    */
-  _getInitialState() {
+  _getInitialState = () => {
     const routes = Immutable.fromJS([
       {
         id: 'home',
@@ -94,7 +82,13 @@ export class AppLeftNav extends Component {
     }
   }
 
+  intl = IntlService.instance
+  state = this._getInitialState()
+
   componentDidUpdate() {
+    if (this.props.computeToggleMenuAction.menuVisible) {
+      this.AppLeftNavClose.focus()
+    }
     /**
      * If the user is connected, display modified routes (splitting Explore path)
      */
@@ -184,26 +178,6 @@ export class AppLeftNav extends Component {
     }
   }
 
-  _onNavigateRequest(event, path) {
-    if (path === null) {
-      return
-    }
-    if (path === 'logout') {
-      window.location.href = NavigationHelpers.getBaseURL() + 'logout'
-    } else {
-      // Request to navigate to
-      this.props.pushWindowPath(path)
-    }
-
-    // Close side-menu
-    this.props.toggleMenuAction()
-  }
-
-  _onRequestChange() {
-    // Close side-menu
-    this.props.toggleMenuAction()
-  }
-
   render() {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
@@ -226,9 +200,18 @@ export class AppLeftNav extends Component {
       >
         <AppBar
           iconElementLeft={
-            <IconButton onClick={this._onRequestChange}>
-              <NavigationClose />
-            </IconButton>
+            <button
+              type="button"
+              className="AppLeftNav__close"
+              data-testid="AppLeftNav__close"
+              onClick={this._onRequestChange}
+              ref={(_element) => {
+                this.AppLeftNavClose = _element
+              }}
+            >
+              <NavigationClose className="AppLeftNav__closeIcon" />
+              <span className="visually-hidden">Menu close</span>
+            </button>
           }
           title={
             <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
@@ -290,6 +273,25 @@ export class AppLeftNav extends Component {
         })()}
       </LeftNav>
     )
+  }
+
+  _onNavigateRequest = (event, path) => {
+    if (path === null) {
+      return
+    }
+    if (path === 'logout') {
+      window.location.href = NavigationHelpers.getBaseURL() + 'logout'
+    } else {
+      NavigationHelpers.navigate(path, this.props.pushWindowPath, false)
+    }
+
+    // Close side-menu
+    this.props.toggleMenuAction()
+  }
+
+  _onRequestChange = () => {
+    // Close side-menu
+    this.props.toggleMenuAction()
   }
 }
 

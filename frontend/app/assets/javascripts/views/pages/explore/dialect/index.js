@@ -45,6 +45,7 @@ import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import { routeHasChanged } from 'common/NavigationHelpers'
 import Kids from './kids'
 
 import IntlService from 'views/services/intl'
@@ -125,7 +126,14 @@ export class ExploreDialect extends Component {
 
   // Refetch data on URL change
   componentDidUpdate(prevProps) {
-    if (prevProps.windowPath !== this.props.windowPath) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
       this.fetchData(this.props)
     }
   }

@@ -309,6 +309,18 @@ the 'Move Category up' and 'Move Category down' buttons`}
             />
             <span id="describedByReference">Origin of record (person, book, etc).</span>
           </div>
+          {/* ACKNOWLEDGEMENT --------------- */}
+          <div className="Form__group">
+            <Text
+              className=""
+              id="CreateWord__Acknowledgement"
+              labelText="Acknowledgement"
+              name="fv-word:acknowledgement"
+              ariaDescribedby="describedByAcknowledgement"
+              value=""
+            />
+            <span id="describedByAcknowledgement">Acknowledgement or Data Usage</span>
+          </div>
           {/* Contributors --------------- */}
           <FormContributors
             className="Form__group"
@@ -341,7 +353,7 @@ the 'Move Category up' and 'Move Category down' buttons`}
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
   }
 
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
       toParse,

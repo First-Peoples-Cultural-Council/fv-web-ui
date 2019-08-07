@@ -27,6 +27,7 @@ import selectn from 'selectn'
 import classNames from 'classnames'
 
 import ProviderHelpers from 'common/ProviderHelpers'
+import { routeHasChanged } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -46,11 +47,11 @@ const { func, object, string } = PropTypes
 export class PageContent extends Component {
   static propTypes = {
     area: string.isRequired,
-    routeParams: object.isRequired,
     // REDUX: reducers/state
     computeLogin: object.isRequired,
     computePage: object.isRequired,
     properties: object.isRequired,
+    routeParams: object.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     changeTitleParams: func.isRequired,
@@ -66,36 +67,19 @@ export class PageContent extends Component {
     super(props, context)
 
     this.state = {
+      page: null,
+      pageAction: undefined,
       mapVisible: false,
       pagePath: '/' + this.props.properties.domain + '/' + this.props.area + '/Site/Resources/',
       dialectsPath: '/' + this.props.properties.domain + '/' + this.props.area + '/',
     }
-    ;['_onNavigateRequest'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   componentDidMount() {
     this.fetchData(this.props)
   }
 
-  // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.windowPath != this.props.windowPath) {
-      this.fetchData(nextProps)
-    }
-  }
-
-  fetchData(newProps) {
-    newProps.queryPage(
-      this.state.pagePath,
-      " AND fvpage:url LIKE '" +
-        StringHelpers.clean(newProps.routeParams.friendly_url) +
-        "'" +
-        '&sortOrder=ASC' +
-        '&sortBy=dc:title'
-    )
-  }
-
-  componentDidUpdate(/*prevProps, prevState*/) {
+  componentDidUpdate(prevProps) {
     const title = selectn(
       'response.entries[0].properties.dc:title',
       ProviderHelpers.getEntry(this.props.computePage, this.state.pagePath)
@@ -104,10 +88,57 @@ export class PageContent extends Component {
     if (title && selectn('pageTitleParams.pageTitle', this.props.properties) != title) {
       this.props.changeTitleParams({ pageTitle: title })
     }
-  }
 
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
+      this.setState(
+        {
+          page: null,
+          pageAction: undefined,
+        },
+        () => {
+          this.fetchData(this.props)
+        }
+      )
+      return
+      // Note: return ▲ prevents the code below from running ▼
+    }
+
+    const computePage = ProviderHelpers.getEntry(this.props.computePage, this.state.pagePath)
+    if (computePage.action !== this.state.pageAction) {
+      let page = null
+
+      // if (computePage.isError === true) {
+      //   page = <div>isError</div>
+      // }
+
+      if (computePage.success === true) {
+        const _properties = selectn('response.entries[0].properties', computePage)
+
+        page = (
+          <div>
+            <TextHeader
+              title={intl.searchAndReplace(selectn('fvpage:blocks[0].title', _properties), 'first')}
+              tag="h1"
+              properties={this.props.properties}
+            />
+
+            <div dangerouslySetInnerHTML={{ __html: selectn('fvpage:blocks[0].text', _properties) }} />
+          </div>
+        )
+      }
+
+      this.setState({
+        page,
+        pageAction: computePage.action,
+      })
+    }
   }
 
   render() {
@@ -118,41 +149,30 @@ export class PageContent extends Component {
       },
     ])
 
-    const computePage = ProviderHelpers.getEntry(this.props.computePage, this.state.pagePath)
-
-    const page = selectn('response.entries[0].properties', computePage)
-
-    // getting started page translated
-    /*if (selectn('dc:title', page) === 'Get Started') {
-            var originalContent = selectn('fvpage:blocks[0].text', page);
-            var content = intl.trans('views.pages.get_started.page', originalContent)
-            page['fvpage:blocks'][0]['text'] = content;
-        }
-
-        // contribute page translated
-        else if (selectn('dc:title', page) === 'Contribute') {
-            var originalContent = selectn('fvpage:blocks[0].text', page);
-            var content = intl.trans('views.pages.contribute.page', originalContent)
-            page['fvpage:blocks'][0]['text'] = content;
-        }*/
-
-    // const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
-
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row')} style={{ margin: '25px 0' }}>
           <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-            <TextHeader
-              title={intl.searchAndReplace(selectn('fvpage:blocks[0].title', page), 'first')}
-              tag="h1"
-              properties={this.props.properties}
-            />
-
-            <div dangerouslySetInnerHTML={{ __html: selectn('fvpage:blocks[0].text', page) }} />
+            {this.state.page}
           </div>
         </div>
       </PromiseWrapper>
     )
+  }
+
+  fetchData = (newProps) => {
+    newProps.queryPage(
+      this.state.pagePath,
+      " AND fvpage:url LIKE '" +
+        StringHelpers.clean(newProps.routeParams.friendly_url) +
+        "'" +
+        '&sortOrder=ASC' +
+        '&sortBy=dc:title'
+    )
+  }
+
+  _onNavigateRequest = (path) => {
+    this.props.pushWindowPath(path)
   }
 }
 
@@ -160,7 +180,7 @@ export class PageContent extends Component {
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvPage, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computePage } = fvPage
   const { _windowPath } = windowPath
@@ -169,6 +189,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePage,
     properties,
+    routeParams: route.routeParams,
     windowPath: _windowPath,
   }
 }

@@ -22,17 +22,13 @@ import { loadNavigation, toggleMenuAction } from 'providers/redux/reducers/navig
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
-
-import Shepherd from 'tether-shepherd'
 
 // Components
 import AppBar from 'material-ui/lib/app-bar'
-
 import TextField from 'material-ui/lib/text-field'
 
-// import IconMenu from 'material-ui/lib/menus/icon-menu'
 import MenuItem from 'material-ui/lib/menus/menu-item'
 // import SelectField from 'material-ui/lib/select-field'
 
@@ -47,6 +43,8 @@ import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
 import IconButton from 'material-ui/lib/icon-button'
 import Popover from 'material-ui/lib/popover/popover'
 import Avatar from 'material-ui/lib/avatar'
+
+import IconMenu from 'material-ui/lib/svg-icons/action/reorder'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 
@@ -84,6 +82,7 @@ export class Navigation extends Component {
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
+    // computeToggleMenuAction: object.isRequired,
     // computeCountTotalTasks: object.isRequired,
     // computeLoadGuide: object.isRequired,
 
@@ -100,8 +99,6 @@ export class Navigation extends Component {
 
     this.state = {
       searchBarVisibleInMobile: false,
-      guidePopoverOpen: false,
-      guidePopoverAnchorEl: null,
       searchContextPopoverOpen: false,
       searchContextPopoverAnchorEl: null,
       searchLocal: true,
@@ -109,37 +106,8 @@ export class Navigation extends Component {
       userRegistrationTasksPath: '/management/registrationRequests/',
       pathOrId: '/' + props.properties.domain + '/' + selectn('routeParams.area', props),
       locale: this.intl.locale,
+      searchValue: '',
     }
-
-    // Bind methods to 'this'
-    ;[
-      '_handleChangeLocale',
-      '_handleDisplayLocaleOptions',
-      'handleChangeRequestLeftNav',
-      'handleRequestChangeList',
-      '_handleNavigationSearchSubmit',
-      '_startTour',
-      '_removePopoverUnlessOptionSelected',
-      '_handleOpenMenuRequest',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  _setExplorePath(props = this.props) {
-    let fetchPath = selectn('routeParams.area', props)
-
-    if (!fetchPath) {
-      if (selectn('isConnected', props.computeLogin)) {
-        fetchPath = WORKSPACES
-      } else {
-        fetchPath = SECTIONS
-      }
-    }
-
-    const pathOrId = '/' + props.properties.domain + '/' + fetchPath
-
-    this.setState({
-      pathOrId: pathOrId,
-    })
   }
 
   componentDidUpdate(prevProps) {
@@ -150,7 +118,6 @@ export class Navigation extends Component {
     //         'sortOrder': 'ASC'
     //     });
     // }
-
     const USER_LOG_IN_STATUS_CHANGED =
       this.props.computeLogin.isConnected !== prevProps.computeLogin.isConnected &&
       this.props.computeLogin.isConnected !== undefined &&
@@ -161,7 +128,14 @@ export class Navigation extends Component {
     }
 
     // Remove popover upon navigation
-    if (this.props.windowPath !== prevProps.windowPath) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
       this.setState({
         searchContextPopoverOpen: false,
       })
@@ -180,131 +154,6 @@ export class Navigation extends Component {
     }
   }
 
-  componentWillUnmount() {
-    //document.body.removeEventListener('click', this._removePopoverUnlessOptionSelected);
-  }
-
-  _removePopoverUnlessOptionSelected(e) {
-    if (
-      this.props.routeParams.hasOwnProperty('dialect_path') &&
-      e.target.name !== 'searchTarget' &&
-      e.target.name !== 'searchbox'
-    ) {
-      this.setState({
-        searchContextPopoverOpen: false,
-      })
-    }
-  }
-
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
-  }
-
-  handleChangeRequestLeftNav(open) {
-    this.setState({
-      leftNavOpen: open,
-    })
-  }
-
-  handleRequestChangeList() {
-    //this.context.router.push(value);
-    this.setState({
-      leftNavOpen: false,
-    })
-  }
-
-  _startTour(tourContent) {
-    this.setState({ guidePopoverOpen: false })
-
-    const newTour = new Shepherd.Tour({
-      defaults: {
-        classes: 'shepherd-theme-arrows',
-      },
-    })
-    ;(selectn('properties.fvguide:steps', tourContent) || []).map((step, i) => {
-      newTour.addStep('step' + i, {
-        title: this.intl.searchAndReplace(selectn('title', step)),
-        text: this.intl.searchAndReplace(selectn('text', step)),
-        attachTo: selectn('attachTo', step),
-        advanceOn: selectn('advanceOn', step),
-        showCancelLink: selectn('showCancelLink', step),
-      })
-    })
-
-    newTour.start()
-  }
-
-  _handleNavigationSearchSubmit(e) {
-    // If search bar is not visible, this button should show it
-    // TODO: this.refs DEPRECATED
-    if (this.refs.navigationSearchField._getInputNode().offsetParent === null) {
-      this.setState({
-        searchBarVisibleInMobile: true,
-        searchContextPopoverOpen: false,
-      })
-
-      e.preventDefault()
-    } else {
-      this.setState({
-        searchBarVisibleInMobile: false,
-        searchContextPopoverOpen: false,
-      })
-      // TODO: this.refs DEPRECATED
-      const searchQueryParam = this.refs.navigationSearchField.getValue()
-      const path = '/' + this.props.splitWindowPath.join('/')
-      let queryPath = ''
-
-      // Do a global search in either the workspace or section
-      if (path.includes('/explore/FV/Workspaces/Data')) {
-        queryPath = 'explore/FV/Workspaces/Data'
-      } else if (path.includes('/explore/FV/sections/Data')) {
-        queryPath = 'explore/FV/sections/Data'
-      } else {
-        queryPath = 'explore/FV/sections/Data'
-      }
-
-      // Do a dialect search
-      if (this.props.routeParams.dialect_path && this.state.searchLocal) {
-        queryPath = 'explore' + this.props.routeParams.dialect_path
-      }
-
-      // Clear out the input field
-      // TODO: this.refs DEPRECATED
-      this.refs.navigationSearchField.setValue('')
-
-      if (searchQueryParam && searchQueryParam !== '') {
-        const finalPath = NavigationHelpers.generateStaticURL(queryPath + '/search/' + searchQueryParam)
-        this.props.replaceWindowPath(finalPath)
-      }
-    }
-  }
-
-  _handleDisplayLocaleOptions() {
-    this.setState({
-      localePopoverOpen: true,
-    })
-  }
-
-  _handleChangeLocale(e, n, v) {
-    if (v !== this.intl.locale) {
-      this.intl.locale = v
-      setTimeout(() => {
-        // timeout, such that the select box doesn't freeze in a wierd way (looks bad)
-        window.location.reload(true)
-      }, 250)
-    }
-  }
-
-  _handleOpenMenuRequest() {
-    // // Only load navigation once
-    // if (!this.props.computeLoadNavigation.success) {
-    //   console.log('!!!!!!!!!!')
-    //   this.props.loadNavigation();
-    // }
-
-    this.props.toggleMenuAction('AppLeftNav')
-  }
-
   render() {
     const themePalette = this.props.properties.theme.palette.rawTheme.palette
     const isDialect = this.props.routeParams.hasOwnProperty('dialect_path')
@@ -316,7 +165,6 @@ export class Navigation extends Component {
     // NOTE: TBD, looks like work in progress. There's related jsx
     // const computeCountTotalTasks = ProviderHelpers.getEntry(this.props.computeCountTotalTasks, "count_total_tasks")
     // const userTaskCount = selectn("response.entries[0].COUNT(ecm:uuid)", computeCountTotalTasks) || 0
-    //const guideCount = selectn('response.resultsCount', this.props.computeLoadGuide) || 0;
 
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computePortal)
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
@@ -339,11 +187,17 @@ export class Navigation extends Component {
               <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
             </span>
           }
-          showMenuIconButton={isDialect ? true : true}
-          // TODO: see about removing onLeftIconButtonTouchTap
-          onLeftIconButtonTouchTap={() => {
-            this._handleOpenMenuRequest()
-          }}
+          iconElementLeft={
+            <button
+              type="button"
+              className="Navigation__open"
+              data-testid="Navigation__open"
+              onClick={this._handleOpenMenuRequest}
+            >
+              <IconMenu className="Navigation__openIcon" />
+              <span className="visually-hidden">Menu open</span>
+            </button>
+          }
         >
           <ToolbarGroup style={{ position: 'relative', color: '#fff' }}>
             <div
@@ -414,62 +268,8 @@ export class Navigation extends Component {
                 <a href={NavigationHelpers.generateStaticURL('/tasks')} className="Navigation__link nav_link">
                   View My Tasks
                 </a>
-
-                {/*<Badge
-                  badgeContent={guideCount}
-                  style={{top: '8px', left: '-15px', padding: '0 0 12px 12px'}}
-                  badgeStyle={{top: '12px',left: '42px', width: '15px', height: '15px', borderRadius: '25%', visibility: (guideCount == 0) ? 'hidden' : 'visible'}}
-                  primary={true}
-                >
-                  <IconButton iconStyle={{fill: '#fff'}} onClick={(e) => this.setState({guidePopoverOpen: !this.state.guidePopoverOpen, guidePopoverAnchorEl: e.target})} disabled={(guideCount == 0) ? true : false}>
-                    <ActionHelp />
-                  </IconButton>
-                </Badge>*/}
               </span>
             </AuthenticationFilter>
-
-            {/*<Popover
-                open={this.state.guidePopoverOpen}
-                anchorEl={this.state.guidePopoverAnchorEl}
-                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            >
-                <div>
-                    <div className={classNames('panel', 'panel-default')} style={{marginBottom: 0}}>
-                        <div className="panel-heading">
-                            <h3 className="panel-title">{this.intl.translate({
-                                key: 'views.components.navigation.interactive_guides',
-                                default: 'Interactive Guides',
-                                case: 'words'
-                            })}</h3>
-                        </div>
-                        <div className="panel-body">
-                            <p>{this.intl.translate({
-                                key: 'views.components.navigation.learn_how_to_use_this_page',
-                                default: 'Learn how to use this page quickly and efficiently',
-                                case: 'first',
-                                append: ':'
-                            })}</p>
-                            <table>
-                                <tbody>
-                                {(selectn('response.entries', this.props.computeLoadGuide) || []).map(function (guide, i) {
-                                    return <tr key={'guide' + i}>
-                                        <td>{selectn('properties.dc:title', guide)}<br/>{selectn('properties.dc:description', guide)}
-                                        </td>
-                                        <td><RaisedButton onClick={this._startTour.bind(this, guide)}
-                                                            primary={false} label={this.intl.translate({
-                                            key: 'views.components.navigation.launch_guide',
-                                            default: 'Launch Guide',
-                                            case: 'words'
-                                        })}/></td>
-                                    </tr>;
-                                }.bind(this))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </Popover>*/}
 
             <ToolbarSeparator
               className="search-bar-seperator"
@@ -502,6 +302,10 @@ export class Navigation extends Component {
                 onFocus={(e) =>
                   this.setState({ searchContextPopoverOpen: true, searchContextPopoverAnchorEl: e.target })
                 }
+                onChange={(e) => {
+                  this.setState({ searchValue: e.target.value })
+                }}
+                value={this.state.searchValue}
                 className={getDialectClassname()}
                 onEnterKeyDown={this._handleNavigationSearchSubmit}
                 name="searchbox"
@@ -710,9 +514,118 @@ export class Navigation extends Component {
       </div>
     )
   }
-}
 
-// export default provide(Navigation)
+  _removePopoverUnlessOptionSelected = (e) => {
+    if (
+      this.props.routeParams.hasOwnProperty('dialect_path') &&
+      e.target.name !== 'searchTarget' &&
+      e.target.name !== 'searchbox'
+    ) {
+      this.setState({
+        searchContextPopoverOpen: false,
+      })
+    }
+  }
+
+  _onNavigateRequest = (path) => {
+    this.props.pushWindowPath(path)
+  }
+
+  handleChangeRequestLeftNav = (open) => {
+    this.setState({
+      leftNavOpen: open,
+    })
+  }
+
+  handleRequestChangeList = () => {
+    //this.context.router.push(value);
+    this.setState({
+      leftNavOpen: false,
+    })
+  }
+
+  _handleNavigationSearchSubmit = (e) => {
+    // If search bar is not visible, this button should show it
+    // TODO: this.refs DEPRECATED
+    if (this.refs.navigationSearchField._getInputNode().offsetParent === null) {
+      this.setState({
+        searchBarVisibleInMobile: true,
+        searchContextPopoverOpen: false,
+      })
+
+      e.preventDefault()
+    } else {
+      this.setState({
+        searchBarVisibleInMobile: false,
+        searchContextPopoverOpen: false,
+      })
+
+      const searchQueryParam = this.state.searchValue
+      const path = '/' + this.props.splitWindowPath.join('/')
+      let queryPath = ''
+
+      // Do a global search in either the workspace or section
+      if (path.includes('/explore/FV/Workspaces/Data')) {
+        queryPath = 'explore/FV/Workspaces/Data'
+      } else if (path.includes('/explore/FV/sections/Data')) {
+        queryPath = 'explore/FV/sections/Data'
+      } else {
+        queryPath = 'explore/FV/sections/Data'
+      }
+
+      // Do a dialect search
+      if (this.props.routeParams.dialect_path && this.state.searchLocal) {
+        queryPath = 'explore' + this.props.routeParams.dialect_path
+      }
+
+      // Clear out the input field
+      this.setState({ searchValue: '' })
+
+      if (searchQueryParam && searchQueryParam !== '') {
+        const finalPath = NavigationHelpers.generateStaticURL(queryPath + '/search/' + searchQueryParam)
+        this.props.replaceWindowPath(finalPath)
+      }
+    }
+  }
+
+  _handleDisplayLocaleOptions = () => {
+    this.setState({
+      localePopoverOpen: true,
+    })
+  }
+
+  _handleChangeLocale = (e, n, v) => {
+    if (v !== this.intl.locale) {
+      this.intl.locale = v
+      setTimeout(() => {
+        // timeout, such that the select box doesn't freeze in a wierd way (looks bad)
+        window.location.reload(true)
+      }, 250)
+    }
+  }
+
+  _handleOpenMenuRequest = () => {
+    this.props.toggleMenuAction('AppLeftNav')
+  }
+
+  _setExplorePath = (props = this.props) => {
+    let fetchPath = selectn('routeParams.area', props)
+
+    if (!fetchPath) {
+      if (selectn('isConnected', props.computeLogin)) {
+        fetchPath = WORKSPACES
+      } else {
+        fetchPath = SECTIONS
+      }
+    }
+
+    const pathOrId = '/' + props.properties.domain + '/' + fetchPath
+
+    this.setState({
+      pathOrId: pathOrId,
+    })
+  }
+}
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {

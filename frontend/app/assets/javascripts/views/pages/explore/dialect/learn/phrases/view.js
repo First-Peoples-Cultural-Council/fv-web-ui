@@ -90,28 +90,12 @@ export class DialectViewPhrase extends Component {
 
   constructor(props, context) {
     super(props, context)
-
     this.state = {
       computePhrase: undefined,
       computeDialect2: undefined,
       computeEntities: undefined,
       deleteDialogOpen: false,
     }
-    // Bind methods to 'this'
-    ;[
-      '_getAcknowledgement',
-      '_getAudio',
-      '_getCulturalNotes',
-      '_getDefinitions',
-      '_getLiteralTranslations',
-      '_getPhotos',
-      '_getPhraseBooks',
-      '_getPhrasePath',
-      '_getTabs',
-      '_getVideos',
-      '_groupBy',
-      '_onNavigateRequest',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   async fetchData(newProps) {
@@ -202,7 +186,7 @@ export class DialectViewPhrase extends Component {
         computeEntities={computeEntities || Immutable.List()}
         {...this.props}
       >
-        <main className="DialectViewWordPhrase" id="contentMain">
+        <div className="DialectViewWordPhrase" id="contentMain">
           <div className="DialectViewWordPhraseGroup">
             <div className="DialectViewWordPhraseContentPrimary">
               <div className="DialectViewWordPhraseTitleAudio">
@@ -219,29 +203,29 @@ export class DialectViewPhrase extends Component {
               {this._getPhotos(computePhrase)}
               {this._getVideos(computePhrase)}
               {this._getPhraseBooks(computePhrase)}
+              {this._getAcknowledgement(computePhrase)}
 
               {/* METADATA PANEL */}
-
               {selectn('response', computePhrase) ? (
                 <MetadataPanel properties={this.props.properties} computeEntity={computePhrase} />
               ) : null}
-
-              {this._getAcknowledgement(computePhrase)}
             </aside>
           </div>
-        </main>
+        </div>
       </DetailsViewWithActions>
     )
   }
 
-  _getAcknowledgement(computePhrase) {
-    const acknowledgement = selectn('response.properties.fv-word:acknowledgement', computePhrase)
+  _getAcknowledgement = (computePhrase) => {
+    const acknowledgement = selectn('response.properties.fv-phrase:acknowledgement', computePhrase)
     if (acknowledgement && acknowledgement !== '') {
       return (
-        <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseAcknowledgement">
-          <h3 className="DialectViewWordPhraseContentItemTitle">Acknowledgement / Data Usage</h3>
+        <div className="DialectViewWordPhraseContentItem">
+          <h4 className="DialectViewWordPhraseContentItemTitle">
+            {intl.trans('acknowledgement', 'Acknowledgement', 'first')}
+          </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
-            <div dangerouslySetInnerHTML={{ __html: acknowledgement }} />
+            <div>{acknowledgement}</div>
           </div>
         </div>
       )
@@ -249,7 +233,7 @@ export class DialectViewPhrase extends Component {
     return null
   }
 
-  _getAudio(computePhrase) {
+  _getAudio = (computePhrase) => {
     const audios = []
     ;(selectn('response.contextParameters.phrase.related_audio', computePhrase) || []).map((audio) => {
       audios.push(
@@ -265,7 +249,7 @@ export class DialectViewPhrase extends Component {
     return audios.length > 0 ? <div className="DialectViewWordPhraseAudio">{audios}</div> : null
   }
 
-  _getCulturalNotes(computePhrase) {
+  _getCulturalNotes = (computePhrase) => {
     const _cultNote = selectn('response.properties.fv:cultural_note', computePhrase) || []
     const culturalNotes = _cultNote.map((culturalNote, key) => {
       return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
@@ -280,7 +264,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getDefinitions(computePhrase) {
+  _getDefinitions = (computePhrase) => {
     const definitions = selectn('response.properties.fv:definitions', computePhrase)
 
     let _definitions = []
@@ -308,7 +292,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getLiteralTranslations(computePhrase) {
+  _getLiteralTranslations = (computePhrase) => {
     const literalTranslations = selectn('response.properties.fv:literal_translation', computePhrase)
     let _literalTranslations = []
     if (literalTranslations) {
@@ -342,7 +326,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getPhotos(computePhrase) {
+  _getPhotos = (computePhrase) => {
     const photos = []
     ;(selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []).map((picture, key) => {
       const image = {
@@ -364,7 +348,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getPhraseBooks(computePhrase) {
+  _getPhraseBooks = (computePhrase) => {
     const _phbook = selectn('response.contextParameters.phrase.phrase_books', computePhrase) || []
     const phraseBooks = _phbook.map((phraseBook, key) => {
       return <li key={key}>{selectn('dc:title', phraseBook)}</li>
@@ -377,7 +361,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getTabs(computePhrase) {
+  _getTabs = (computePhrase) => {
     const tabs = []
 
     // Photos
@@ -436,7 +420,7 @@ export class DialectViewPhrase extends Component {
     return tabs
   }
 
-  _getVideos(computePhrase) {
+  _getVideos = (computePhrase) => {
     const videos = []
     ;(selectn('response.contextParameters.phrase.related_videos', computePhrase) || []).map((video, key) => {
       const vid = {
@@ -457,7 +441,7 @@ export class DialectViewPhrase extends Component {
     ) : null
   }
 
-  _getPhrasePath(props = this.props) {
+  _getPhrasePath = (props = this.props) => {
     if (StringHelpers.isUUID(props.routeParams.phrase)) {
       return props.routeParams.phrase
     }
@@ -465,13 +449,13 @@ export class DialectViewPhrase extends Component {
   }
 
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
-  _groupBy(arrOfObj, property = 'language') {
+  _groupBy = (arrOfObj, property = 'language') => {
     const _arrOfObj = [...arrOfObj]
     // eslint-disable-next-line
     return _arrOfObj.reduce((r, v, i, a, k = v[property]) => ((r[k] || (r[k] = [])).push(v), r), {})
   }
 
-  _onNavigateRequest(path) {
+  _onNavigateRequest = (path) => {
     this.props.pushWindowPath(path)
   }
 }

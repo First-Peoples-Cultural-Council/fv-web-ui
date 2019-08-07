@@ -33,7 +33,7 @@ import t from 'tcomb-form'
 import fields from 'models/schemas/filter-fields'
 import options from 'models/schemas/filter-options'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -51,6 +51,8 @@ import withToggle from 'views/hoc/view/with-toggle'
 import IntlService from 'views/services/intl'
 import NavigationHelpers from 'common/NavigationHelpers'
 import { SECTIONS } from 'common/Constants'
+import '!style-loader!css-loader!./Search.css'
+
 const FiltersWithToggle = withToggle()
 const intl = IntlService.instance
 
@@ -137,8 +139,7 @@ export class Search extends DataListView {
 
   _fetchListViewData(props = this.props, pageIndex, pageSize, sortOrder, sortBy, formValue = this.state.formValue) {
     if (props.routeParams.searchTerm && props.routeParams.searchTerm !== '') {
-      const documentTypeFilter = "'" + formValue.documentTypes.join("','") + "'"
-      // const documentTypeFilter = `'${formValue.documentTypes.join("','")}'`
+      const documentTypeFilter = "'" + (formValue.documentTypes || []).join("','") + "'"
       props.searchDocuments(
         this._getQueryPath(props),
         (props.routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' ') +
@@ -166,7 +167,6 @@ export class Search extends DataListView {
       e.preventDefault()
     }
 
-    //let form = this.refs["search_form"];
     const form = this.refs.search_form
 
     const properties = FormHelpers.getProperties(form)
@@ -272,7 +272,7 @@ export class Search extends DataListView {
     })
 
     return (
-      <div>
+      <div className="Search">
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-3')}>
             <div className="col-xs-12">
@@ -289,8 +289,18 @@ export class Search extends DataListView {
                       options={selectn('Search', options)}
                     />
                   </div>
-                  <RaisedButton onClick={this._onReset} label={intl.trans('reset', 'Reset', 'first')} primary /> &nbsp;
-                  <RaisedButton type="submit" label={intl.trans('search', 'Search', 'first')} primary />
+                  <div className="Search__btnGroup">
+                    <button
+                      type="button"
+                      className="Search__btn RaisedButton RaisedButton--primary"
+                      onClick={this._onReset}
+                    >
+                      {intl.trans('reset', 'Reset', 'first')}
+                    </button>
+                    <button type="submit" className="Search__btn RaisedButton RaisedButton--primary">
+                      {intl.trans('search', 'Search', 'first')}
+                    </button>
+                  </div>
                 </FiltersWithToggle>
               </form>
             </div>
@@ -310,7 +320,22 @@ export class Search extends DataListView {
 
                 if (entries) {
                   if (entries.length === 0) {
-                    return <div>Sorry, no results were found for this search.</div>
+                    const suggestDocumentTypes =
+                      this.state.formValue.documentTypes === undefined ? (
+                        <div className="alert alert-info">
+                          <span>
+                            {
+                              "Tip: Try searching again with a selected 'Document type'. Click the '+ ADD NEW' button if there are none displayed."
+                            }
+                          </span>
+                        </div>
+                      ) : null
+                    return (
+                      <div>
+                        <p>Sorry, no results were found for this search.</p>
+                        {suggestDocumentTypes}
+                      </div>
+                    )
                   }
                   return (
                     <DocumentListView

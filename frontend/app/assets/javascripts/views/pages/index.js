@@ -90,7 +90,7 @@ import { default as PageDialectCategoryCreate } from './explore/dialect/category
 
 // CONTRIBUTOR
 // ----------------------
-import ContributorBrowse from './explore/dialect/Contributors' // Browse
+import ContributorBrowse from './explore/dialect/contributors' // Browse
 import { default as ContributorDetail } from './explore/dialect/Contributor/detail' // Detail
 import { default as ContributorCreateV1 } from './explore/dialect/Contributor/createV1' // Create V1
 import { default as ContributorCreate } from './explore/dialect/Contributor/create' // Create V2
