@@ -5,10 +5,7 @@ import copy from './internationalization'
 
 const validForm = yup.object().shape({
   'dc:title': yup.string().required(copy.validation.title),
-  'fv-word:part_of_speech': yup
-    .string()
-    .label('Part of speech')
-    .required(),
+  'fv-word:part_of_speech': yup.string(),
   'fv-word:pronunciation': yup.string(),
   'fv-word:available_in_games': yup.string(),
   'fv:available_in_childrens_archive': yup.string(),
@@ -16,6 +13,7 @@ const validForm = yup.object().shape({
   'fv:definitions': yup.array().of(yup.object().shape({ language: yup.string(), translation: yup.string() })),
   'fv:literal_translation': yup.array().of(yup.object().shape({ language: yup.string(), translation: yup.string() })),
   'fv:reference': yup.string(),
+  'fv-word:acknowledgement': yup.string(),
   'fv:related_audio': yup.array().of(yup.string()),
   'fv:related_pictures': yup.array().of(yup.string()),
   'fv:source': yup.array().of(yup.string()),

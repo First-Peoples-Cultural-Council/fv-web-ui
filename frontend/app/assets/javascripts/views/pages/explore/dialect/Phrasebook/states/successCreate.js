@@ -1,8 +1,10 @@
 import React from 'react'
 import { PropTypes } from 'react'
+import NavigationHelpers from 'common/NavigationHelpers'
 
 // REDUX
 import { connect } from 'react-redux'
+import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 const { string, object, func } = PropTypes
 export class PhrasebookStateSuccessCreate extends React.Component {
@@ -42,8 +44,25 @@ export class PhrasebookStateSuccessCreate extends React.Component {
           <div className="Phrasebook__successReview">
             <dl className="">
               <dt>
-                <a href={phrasebookDetailUrl}>{name}</a> -{' '}
-                <a href={phrasebookEditUrl}>{copy.create.success.editView}</a>
+                <a
+                  href={phrasebookDetailUrl}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    NavigationHelpers.navigate(phrasebookDetailUrl, this.props.pushWindowPath, false)
+                  }}
+                >
+                  {name}
+                </a>{' '}
+                -{' '}
+                <a
+                  href={phrasebookEditUrl}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    NavigationHelpers.navigate(phrasebookEditUrl, this.props.pushWindowPath, false)
+                  }}
+                >
+                  {copy.create.success.editView}
+                </a>
               </dt>
               <dd>
                 <div dangerouslySetInnerHTML={{ __html: description }} />
@@ -88,7 +107,12 @@ const mapStateToProps = (state /*, ownProps*/) => {
   }
 }
 
+// REDUX: actions/dispatch/func
+const mapDispatchToProps = {
+  pushWindowPath,
+}
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(PhrasebookStateSuccessCreate)

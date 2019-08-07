@@ -175,7 +175,7 @@ export class SearchDialect extends Component {
       searchBody = this._getSearchForm()
     }
     return (
-      <div className="SearchDialect">
+      <div data-testid="SearchDialect" className="SearchDialect">
         {this.state.searchInfoOutput}
         {searchBody}
       </div>
@@ -250,7 +250,7 @@ export class SearchDialect extends Component {
     let searchByTitleText = ''
     if (isSearchingPhrases) {
       searchByTitleText = 'Phrase'
-      searchButtonText = 'Search'
+      searchButtonText = 'Search Phrases'
     } else {
       searchByTitleText = 'Word'
       searchButtonText = intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
@@ -260,6 +260,7 @@ export class SearchDialect extends Component {
       <div className="SearchDialectForm">
         <div className="SearchDialectFormPrimary">
           <input
+            data-testid="SearchDialectFormPrimaryInput"
             className={`SearchDialectFormPrimaryInput ${getDialectClassname()}`}
             type="text"
             onChange={this._updateSearchTerm}
@@ -519,9 +520,9 @@ export class SearchDialect extends Component {
 
     return searchTerm
       ? {
-        DEFAULT_SORT_COL: searchSortBy,
-        DEFAULT_SORT_TYPE: 'asc',
-      }
+          DEFAULT_SORT_COL: searchSortBy,
+          DEFAULT_SORT_TYPE: 'asc',
+        }
       : {}
   }
 

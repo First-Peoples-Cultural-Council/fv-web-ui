@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-import Immutable from 'immutable'
+import Immutable, { is } from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -50,17 +50,18 @@ import '!style-loader!css-loader!./PhrasesEdit.css'
 const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
-const { array, func, object } = PropTypes
+const { array, func, object, string } = PropTypes
 export class PhrasesEdit extends Component {
   static propTypes = {
     phrase: object,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
+    computeLogin: object.isRequired,
     computePhrase: object.isRequired,
     properties: object.isRequired,
-    splitWindowPath: array.isRequired,
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
+    splitWindowPath: array.isRequired,
+    windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     changeTitleParams: func.isRequired,
     fetchDialect2: func.isRequired,
@@ -114,6 +115,22 @@ export class PhrasesEdit extends Component {
         this.props.replaceWindowPath,
         true
       )
+    }
+  }
+  shouldComponentUpdate(newProps, newState) {
+    switch (true) {
+      case this.state.componentState != newState.componentState:
+        return true
+      case newProps.windowPath != this.props.windowPath:
+        return true
+
+      case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        return true
+
+      case is(newProps.computePhrase, this.props.computePhrase) === false:
+        return true
+      default:
+        return false
     }
   }
 

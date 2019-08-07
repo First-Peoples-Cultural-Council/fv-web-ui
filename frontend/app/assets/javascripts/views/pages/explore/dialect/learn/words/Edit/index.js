@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-import Immutable from 'immutable'
+import Immutable, { is } from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -87,7 +87,7 @@ export class WordsEdit extends Component {
     this.fetchData({ copy })
   }
 
-  // shouldComponentUpdate(newProps /*, newState*/) {
+  // shouldComponentUpdate(newProps, newState) {
   //   const previousWord = this.props.computeWord
   //   const nextWord = newProps.computeWord
 
@@ -95,6 +95,9 @@ export class WordsEdit extends Component {
   //   const nextDialect = newProps.computeDialect2
 
   //   switch (true) {
+  //     case this.state.componentState != newState.componentState:
+  //       return true
+
   //     case newProps.routeParams.word != this.props.routeParams.word:
   //       return true
 
@@ -110,6 +113,44 @@ export class WordsEdit extends Component {
   //       return false
   //   }
   // }
+
+  shouldComponentUpdate(newProps, newState) {
+    const previousWord = this.props.computeWord
+    const nextWord = newProps.computeWord
+
+    // const previousDialect = this.props.computeDialect2
+    // const nextDialect = newProps.computeDialect2
+    switch (true) {
+      case newProps.routeParams.word != this.props.routeParams.word:
+        return true
+
+      case newProps.routeParams.dialect_path != this.props.routeParams.dialect_path:
+        return true
+
+      case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
+        return true
+
+      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+      //   console.log(4)
+      //   return true
+
+      case this.state.componentState != newState.componentState:
+        return true
+
+      case newProps.windowPath != this.props.windowPath:
+        return true
+
+      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+      //   console.log(7)
+      //   return true
+
+      case is(newProps.computeWord, this.props.computeWord) === false:
+        return true
+
+      default:
+        return false
+    }
+  }
 
   componentDidUpdate(prevProps) {
     const word = selectn('response', ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath()))

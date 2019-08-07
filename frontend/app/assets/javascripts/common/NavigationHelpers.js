@@ -17,6 +17,7 @@ limitations under the License.
 import selectn from 'selectn'
 import ConfGlobal from 'conf/local.js'
 import ConfRoutes, { paramMatch } from 'conf/routes'
+import Immutable, { is } from 'immutable'
 import { SECTIONS } from 'common/Constants'
 const arrayPopImmutable = (array, sizeToPop = 1) => {
   return array.slice(0, array.length - sizeToPop)
@@ -216,14 +217,26 @@ If not found, returns `undefined`
 
 */
 export const appendPathArrayAfterLandmark = ({ pathArray, splitWindowPath, landmarkArray = ['words', 'phrases'] }) => {
-  const _splitWindowPath = [...splitWindowPath].reverse()
   let toReturn = undefined
+
+  if (!splitWindowPath) {
+    return toReturn
+  }
+
+  const _splitWindowPath = [...splitWindowPath].reverse()
+
   landmarkArray.some((landmarkValue) => {
     const indexLandmark = _splitWindowPath.indexOf(landmarkValue)
     if (indexLandmark !== -1) {
       const cut = _splitWindowPath.slice(indexLandmark)
       cut.reverse()
-      toReturn = [...cut, ...pathArray].join('/')
+
+      if (pathArray) {
+        toReturn = [...cut, ...pathArray].join('/')
+      } else {
+        // if there is no pathArray just return the shorter splitWindowPath
+        toReturn = [...cut].join('/')
+      }
       return true
     }
     return false
@@ -249,4 +262,43 @@ export const getSearchObject = () => {
     },
     search
   )
+}
+
+// Analyzes splitWindowPath (array)
+// Determines if it has pagination values eg: ['learn', 'words', '10', '1'] // .../learn/words/10/1
+// Returns array if pagination found: [pageSize, page] or undefined if not
+export const hasPagination = (arr = []) => {
+  let _arr = undefined
+  const arrLength = arr.length
+  if (arrLength >= 2) {
+    // See if the last 2 items in the splitWindowPath array are pagination urls
+    const pageSize = arr[arrLength - 2]
+    const page = arr[arrLength - 1]
+    // Test for pagination url segments
+    const onlyNumber = /^([\d]+)$/
+    const hasPaginationUrl = pageSize.match(onlyNumber) && page.match(onlyNumber)
+    if (hasPaginationUrl) {
+      _arr = [pageSize, page]
+    }
+  }
+
+  return _arr
+}
+/*
+routeHasChanged({
+  prevWindowPath,
+  curWindowPath,
+  prevRouteParams,
+  curRouteParams
+})
+*/
+export const routeHasChanged = (obj = {}) => {
+  const { prevWindowPath, curWindowPath, prevRouteParams, curRouteParams } = obj
+  // Note: the following Prevents infinite loops
+  if (curRouteParams === undefined) {
+    return false
+  }
+  const immutablePrevRouteParams = Immutable.fromJS(prevRouteParams)
+  const immutableCurRouteParams = Immutable.fromJS(curRouteParams)
+  return prevWindowPath !== curWindowPath || is(immutablePrevRouteParams, immutableCurRouteParams) === false
 }

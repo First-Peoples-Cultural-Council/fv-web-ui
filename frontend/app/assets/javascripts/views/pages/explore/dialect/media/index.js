@@ -27,7 +27,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
@@ -78,7 +78,14 @@ export class DialectMedia extends Component {
 
   // Refetch data on URL change
   componentDidUpdate(prevProps) {
-    if (this.props.windowPath !== prevProps.windowPath) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
       this.props.fetchPortal(`${this.props.routeParams.dialect_path}/Portal`)
       this.fetchData(DefaultFetcherParams, this.props)
     }

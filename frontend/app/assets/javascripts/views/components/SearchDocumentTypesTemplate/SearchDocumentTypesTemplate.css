@@ -1,0 +1,17 @@
+.SearchDocumentTypesTemplate {
+  margin: 15px 0;
+}
+
+.SearchDocumentTypesTemplate__DocumentTypesGroup {
+  display: flex;
+  margin: 0 0 15px 0;
+  align-items: center;
+}
+.SearchDocumentTypesTemplate__inputContainer {
+  flex-grow: 1;
+}
+
+/* Fighting Bootstrap */
+.SearchDocumentTypesTemplate__inputContainer .form-group {
+  margin-bottom: 0;
+}

@@ -1,0 +1,10 @@
+.FilteredGridList {
+}
+.FilteredGridList__btnGroup {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.FilteredGridList__btn + .FilteredGridList__btn {
+  margin-left: 10px;
+}

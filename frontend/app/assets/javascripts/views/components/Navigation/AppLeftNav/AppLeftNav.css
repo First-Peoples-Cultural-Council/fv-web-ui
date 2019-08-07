@@ -1,0 +1,14 @@
+.AppLeftNav__close {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  height: 48px;
+  width: 48px;
+}
+.AppLeftNav__closeIcon {
+  fill: #fff !important;
+}

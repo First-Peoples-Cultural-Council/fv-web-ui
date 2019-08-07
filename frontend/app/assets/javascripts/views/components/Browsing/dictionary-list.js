@@ -92,6 +92,7 @@ export default class DictionaryList extends Component {
           {(items || []).map((item, i) => (
             <tr
               key={i}
+              data-testid="DictionaryList__row"
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
             >
               {(columns || []).map((column, j) => {

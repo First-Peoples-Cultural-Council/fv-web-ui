@@ -49,15 +49,15 @@ const FilteredList = withFilter(GeneralList)
 const { array, func, object, string } = PropTypes
 export class PageDialectGalleries extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     typeFilter: string,
     typePlural: string,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
-    computePortal: object.isRequired,
     computeGalleries: object.isRequired,
     computeLogin: object.isRequired,
+    computePortal: object.isRequired,
     properties: object.isRequired,
+    routeParams: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
@@ -67,25 +67,8 @@ export class PageDialectGalleries extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      filteredList: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_onNavigateRequest', '_onItemNavigateRequest', 'fixedListFetcher'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
-
-    const path = `${newProps.routeParams.dialect_path}/Portal`
-    newProps.fetchPortal(path)
-    newProps.fetchGalleries(path)
+  state = {
+    filteredList: null,
   }
 
   // Fetch data on initial render
@@ -94,26 +77,10 @@ export class PageDialectGalleries extends Component {
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+  async componentDidUpdate(prevProps) {
+    if (this.props.windowPath !== prevProps.windowPath) {
+      await this.fetchData(this.props)
     }
-  }
-
-  fixedListFetcher(list) {
-    this.setState({
-      filteredList: list,
-    })
-  }
-
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
-  }
-
-  _onItemNavigateRequest(item) {
-    this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', item, 'gallery')
-    )
   }
 
   render() {
@@ -202,13 +169,37 @@ export class PageDialectGalleries extends Component {
       </PromiseWrapper>
     )
   }
+
+  fetchData = (newProps) => {
+    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+
+    const path = `${newProps.routeParams.dialect_path}/Portal`
+    newProps.fetchPortal(path)
+    newProps.fetchGalleries(path)
+  }
+
+  fixedListFetcher = (list) => {
+    this.setState({
+      filteredList: list,
+    })
+  }
+
+  _onNavigateRequest = (path) => {
+    this.props.pushWindowPath(path)
+  }
+
+  _onItemNavigateRequest = (item) => {
+    this.props.pushWindowPath(
+      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', item, 'gallery')
+    )
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvDialect, fvPortal, fvGallery, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { computePortal } = fvPortal
@@ -217,10 +208,11 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeDialect2,
-    computePortal,
     computeGalleries,
     computeLogin,
+    computePortal,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }

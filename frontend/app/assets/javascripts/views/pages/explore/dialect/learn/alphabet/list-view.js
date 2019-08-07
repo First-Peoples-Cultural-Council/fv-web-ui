@@ -56,8 +56,8 @@ export class ListView extends DataListView {
     gridListView: bool,
     gridViewProps: object,
     pagination: bool,
-    routeParams: object.isRequired,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
     computeCharacters: object.isRequired,
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
@@ -146,46 +146,11 @@ export class ListView extends DataListView {
       this.state.columns = this.state.columns.filter((v) => ['title', 'related_words'].indexOf(v.name) != -1)
       this.state.hideStateColumn = true
     }
-
-    // Bind methods to 'this'
-    [
-      '_onNavigateRequest',
-      '_onEntryNavigateRequest',
-      '_handleRefetch',
-      '_handleSortChange',
-      '_handleColumnOrderChange',
-      '_resetColumns',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
-
-  // NOTE: DataListView calls `fetchData`
-  fetchData(newProps) {
-    ProviderHelpers.fetchIfMissing(newProps.routeParams.dialect_path, newProps.fetchDialect2)
-
-    // if (newProps.dialect == null) {
-    //     newProps.fetchDialect2(newProps.routeParams.dialect_path);
-    // }
-
-    this._fetchListViewData(
-      newProps,
-      newProps.DEFAULT_PAGE,
-      newProps.DEFAULT_PAGE_SIZE,
-      newProps.DEFAULT_SORT_TYPE,
-      newProps.DEFAULT_SORT_COL
-    )
-  }
-
-  _onEntryNavigateRequest(item) {
-    this.props.pushWindowPath(`/${this.props.routeParams.theme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
-  }
-
-  _fetchListViewData(props, pageIndex, pageSize, sortOrder, sortBy) {
-    const _pageIndex = 0
-    const _pageSize = 100
-    props.fetchCharacters(
-      `${props.routeParams.dialect_path}/Alphabet`,
-      `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
-    )
+  componentDidUpdate(prevProps) {
+    if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
+      ProviderHelpers.fetchIfMissing(this.props.routeParams.dialect_path, this.props.fetchDialect2)
+    }
   }
 
   render() {
@@ -243,13 +208,37 @@ export class ListView extends DataListView {
       </PromiseWrapper>
     )
   }
+
+  // NOTE: DataListView calls `fetchData`
+  fetchData = (newProps) => {
+    this._fetchListViewData(
+      newProps,
+      newProps.DEFAULT_PAGE,
+      newProps.DEFAULT_PAGE_SIZE,
+      newProps.DEFAULT_SORT_TYPE,
+      newProps.DEFAULT_SORT_COL
+    )
+  }
+
+  _fetchListViewData = (props, pageIndex, pageSize, sortOrder, sortBy) => {
+    const _pageIndex = 0
+    const _pageSize = 100
+    props.fetchCharacters(
+      `${props.routeParams.dialect_path}/Alphabet`,
+      `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+    )
+  }
+
+  _onEntryNavigateRequest = (item) => {
+    this.props.pushWindowPath(`/${this.props.routeParams.theme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvCharacter, fvDialect, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
@@ -260,6 +249,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeDialect2,
     computeLogin,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }

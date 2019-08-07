@@ -32,7 +32,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 
 import PhrasebookDelete from 'views/components/Confirmation'
-import PhrasebooksSelected from 'views/pages/explore/dialect/Contributors/ContributorsSelected'
+import PhrasebooksSelected from 'views/pages/explore/dialect/contributors/ContributorsSelected'
 import Checkbox from 'views/components/Form/Common/Checkbox'
 
 import { STATE_LOADING } from 'common/Constants'
@@ -140,22 +140,34 @@ export class Phrasebooks extends Component {
 
   render() {
     const { routeParams } = this.props
-    const { pageSize, page } = routeParams
+    const { dialect_path, pageSize, page, theme } = routeParams
     return (
-      <DocumentListView
-        cssModifier="DictionaryList--phrasebooks"
-        sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?
-        className="browseDataGrid"
-        columns={this._getColumns()}
-        data={this._filterDeletedData()}
-        dialect={selectn('response', _computeDialect2)}
-        gridCols={4}
-        gridListView={false}
-        page={Number(page)}
-        pageSize={Number(pageSize)}
-        refetcher={this.handleRefetch}
-        type="FVCategory"
-      />
+      <div>
+        <a
+          className="_btn _btn--primary Contributors__btnCreate"
+          href={`/${theme}${dialect_path}/create/phrasebook`}
+          onClick={(e) => {
+            e.preventDefault()
+            NavigationHelpers.navigate(`/${theme}${dialect_path}/create/phrasebook`, this.props.pushWindowPath, false)
+          }}
+        >
+          Create a new phrase book
+        </a>
+        <DocumentListView
+          cssModifier="DictionaryList--phrasebooks"
+          sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?
+          className="browseDataGrid"
+          columns={this._getColumns()}
+          data={this._filterDeletedData()}
+          dialect={selectn('response', _computeDialect2)}
+          gridCols={4}
+          gridListView={false}
+          page={Number(page)}
+          pageSize={Number(pageSize)}
+          refetcher={this.handleRefetch}
+          type="FVCategory"
+        />
+      </div>
     )
   }
 

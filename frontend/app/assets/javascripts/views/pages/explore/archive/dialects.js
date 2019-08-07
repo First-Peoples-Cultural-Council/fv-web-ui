@@ -63,24 +63,12 @@ export class ExploreDialects extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      filteredList: null,
-      open: false,
-    }
-
-    this.titleFieldMapping = 'contextParameters.lightancestry.dialect.dc:title'
-    this.logoFieldMapping = 'contextParameters.lightportal.fv-portal:logo'
-
-    // Bind methods to 'this'
-    ;['_portalEntriesSort'].forEach((method) => (this[method] = this[method].bind(this)))
+  state = {
+    filteredList: null,
+    open: false,
   }
+  titleFieldMapping = 'contextParameters.lightancestry.dialect.dc:title'
+  logoFieldMapping = 'contextParameters.lightportal.fv-portal:logo'
 
   // Fetch data on initial render
   componentDidMount() {
@@ -88,9 +76,9 @@ export class ExploreDialects extends Component {
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.routeParams.area != this.props.routeParams.area) {
-      this._fetchData(nextProps)
+  async componentDidUpdate(prevProps) {
+    if (this.props.routeParams.area != prevProps.routeParams.area) {
+      await this._fetchData(this.props)
     }
   }
 
@@ -132,6 +120,14 @@ export class ExploreDialects extends Component {
       )
     }
 
+    let content = (
+      <div>
+        <CircularProgress mode="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
+      </div>
+    )
+    if (this.props.computePortals && this.props.computePortals.success) {
+      content = <PortalListDialects {...portalListProps} />
+    }
     return (
       <div>
         <div className="row">
@@ -140,13 +136,7 @@ export class ExploreDialects extends Component {
               <h1>{intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}</h1>
             </div>
             {introText1}
-            {this.props.computePortals && this.props.computePortals.isFetching ? (
-              <div>
-                <CircularProgress mode="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
-              </div>
-            ) : (
-              <PortalListDialects {...portalListProps} />
-            )}
+            {content}
             {introText2}
           </div>
         </div>
@@ -154,7 +144,7 @@ export class ExploreDialects extends Component {
     )
   }
 
-  _fetchData(newProps) {
+  _fetchData = (newProps) => {
     newProps.fetchPortals(
       'get_dialects',
       { 'enrichers.document': 'lightancestry,lightportal', properties: '' },
@@ -162,21 +152,21 @@ export class ExploreDialects extends Component {
     )
   }
 
-  _getQueryPath(props = this.props) {
+  _getQueryPath = (props = this.props) => {
     // Perform an API query for sections
     if (props.routeParams.area === SECTIONS) {
       // From s3 (static) (NOTE: when fetchPortals is fully switched remove headers from FVPortal to save OPTIONS call)
-      return ConfGlobal.apiURL + 's3dialects/?area=' + props.routeParams.area
+      return `${ConfGlobal.apiURL}s3dialects/?area=${props.routeParams.area}`
 
       // Proxy (not cached at the moment)
       //return 'https://api.firstvoices.com/v1/api/v1/query/get_dialects?queryParams=' + props.routeParams.area;
     }
 
     // Direct method
-    return '/api/v1/query/get_dialects?queryParams=' + props.routeParams.area
+    return `/api/v1/query/get_dialects?queryParams=${props.routeParams.area}`
   }
 
-  _portalEntriesSort(a, b) {
+  _portalEntriesSort = (a, b) => {
     const a2 = selectn(this.titleFieldMapping, a)
     const b2 = selectn(this.titleFieldMapping, b)
 

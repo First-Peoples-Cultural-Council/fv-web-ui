@@ -4,6 +4,8 @@
     <startURLPattern>
       <patterns>
         <pattern>app/</pattern>
+        <pattern>app/evergreen</pattern>
+        <pattern>app/legacy</pattern>
       </patterns>
     </startURLPattern>
   </extension>

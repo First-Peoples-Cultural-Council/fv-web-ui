@@ -1,13 +1,14 @@
-describe('Word', () => {
+describe('word_crud.js > PageDialectWordsCreate', () => {
   const host = 'http://0.0.0.0:3001'
   const create =
-    'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/api/v1/path/FV/Workspaces/Data/Athabascan/Dene/Dene/Dictionary'
+    'https://preprod.firstvoices.com/nuxeo/api/v1/path/FV/Workspaces/Data/Athabascan/Dene/Dene/Dictionary'
   const prefix = '/nuxeo/app'
   // const waitLong = 5000
   const waitMedium = 2000
   const waitShort = 50
 
   it('CRUD', () => {
+    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'
     // export ADMIN_PASSWORD='THE_PASSWORD'
@@ -149,6 +150,7 @@ describe('Word', () => {
         .parent()
         .parent()
         .parent()
+        .parent()
         .within(() => {
           cy.getByLabelText('phrase', { exact: false }).type('UPDATE > PHRASE')
           cy.getByText('cancel', { exact: false }).click()
@@ -215,15 +217,17 @@ describe('Word', () => {
 
       cy.getByText('delete word', { exact: false }).click()
       cy.wait(waitShort)
+
+      // TODO: need more reliable hook
       cy.getByText('Deleting word', { exact: false })
         .parent()
         .within(() => {
-          cy.get('button')
-            .eq(1)
+          cy.getByText('Delete')
             .click()
         })
       cy.wait(waitShort)
       cy.getByText('Delete word success', { exact: false }).should('exist')
+      cy.log('Test complete')
     })
   })
 })

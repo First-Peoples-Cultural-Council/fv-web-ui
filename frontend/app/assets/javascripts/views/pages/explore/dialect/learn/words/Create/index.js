@@ -1,12 +1,9 @@
 /*
 Copyright 2016 First People's Cultural Council
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-import Immutable from 'immutable'
+import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 
 // REDUX
@@ -28,7 +25,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -49,7 +46,7 @@ const intl = IntlService.instance
  */
 
 const { array, func, object, string } = PropTypes
-export class WordsCreate extends Component {
+export class PageDialectWordsCreate extends Component {
   static propTypes = {
     // REDUX: reducers/state
     routeParams: object.isRequired,
@@ -83,42 +80,50 @@ export class WordsCreate extends Component {
 
   // Refetch data on URL change
   componentDidUpdate(prevProps) {
-    let currentWord
-    let nextWord
+    const previousWord = ProviderHelpers.getEntry(prevProps.computeWord, this.state.wordPath)
+    const currentWord = ProviderHelpers.getEntry(this.props.computeWord, this.state.wordPath)
 
-    if (this.state.wordPath === null) {
-      currentWord = ProviderHelpers.getEntry(prevProps.computeWord, this.state.wordPath)
-      nextWord = ProviderHelpers.getEntry(this.props.computeWord, this.state.wordPath)
-    }
-
-    if (this.props.windowPath !== prevProps.windowPath) {
+    // TODO: is fetchData necessary?
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
       this.fetchData()
     }
 
     // 'Redirect' on success
-    if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
+    if (
+      selectn('success', previousWord) != selectn('success', currentWord) &&
+      selectn('success', currentWord) === true
+    ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextWord), 'words'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentWord), 'words'),
         this.props.replaceWindowPath,
         true
       )
     }
   }
 
-  // shouldComponentUpdate(newProps /*, newState*/) {
-  //   switch (true) {
-  //     case newProps.windowPath != this.props.windowPath:
-  //       return true
+  shouldComponentUpdate(newProps, newState) {
+    switch (true) {
+      case this.state.componentState != newState.componentState:
+        return true
+      case newProps.windowPath != this.props.windowPath:
+        return true
 
-  //     case newProps.computeDialect2 != this.props.computeDialect2:
-  //       return true
+      case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        return true
 
-  //     case newProps.computeWord != this.props.computeWord:
-  //       return true
-  //     default:
-  //       return false
-  //   }
-  // }
+      case is(newProps.computeWord, this.props.computeWord) === false:
+        return true
+      default:
+        return false
+    }
+  }
 
   render() {
     const content = this._getContent()
@@ -320,4 +325,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(WordsCreate)
+)(PageDialectWordsCreate)

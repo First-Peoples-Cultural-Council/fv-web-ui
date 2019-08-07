@@ -1,7 +1,7 @@
 import React, { Component /*, PropTypes */ } from 'react'
 import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
-import { RaisedButton, FontIcon, FlatButton } from 'material-ui'
+import { RaisedButton, FontIcon } from 'material-ui'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import Tabs from 'material-ui/lib/tabs/tabs'
 import Toolbar from 'material-ui/lib/toolbar/toolbar'
@@ -260,10 +260,10 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 [StringHelpers.toTitleCase(this.props.labels.single)]
               )}
               actions={[
-                <FlatButton
+                <button
+                  type="button"
                   key="0"
-                  label={intl.trans('cancel', 'Cancel', 'first')}
-                  secondary
+                  className="FlatButton FlatButton--secondary"
                   onClick={() =>
                     this.setState({
                       prePublishDialogOpen: false,
@@ -271,14 +271,18 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       prePublishCompleteAction: null,
                     })
                   }
-                />,
-                <FlatButton
+                >
+                  {intl.trans('cancel', 'Cancel', 'first')}
+                </button>,
+                <button
+                  type="button"
                   key="1"
-                  label={intl.trans('publish', 'Publish', 'first')}
-                  primary
+                  className="FlatButton FlatButton--primary"
                   keyboardFocused
                   onClick={this.state.prePublishCompleteAction}
-                />,
+                >
+                  {intl.trans('publish', 'Publish', 'first')}
+                </button>,
               ]}
               modal={false}
               open={this.state.prePublishDialogOpen}
@@ -353,19 +357,23 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   [StringHelpers.toTitleCase(this.props.labels.single)]
                 )}
                 actions={[
-                  <FlatButton
+                  <button
                     key="0"
-                    label={intl.trans('cancel', 'Cancel', 'first')}
-                    secondary
+                    type="button"
+                    className="FlatButton FlatButton--secondary"
                     onClick={() => this.setState({ deleteDialogOpen: false })}
-                  />,
-                  <FlatButton
+                  >
+                    {intl.trans('cancel', 'Cancel', 'first')}
+                  </button>,
+                  <button
                     key="1"
-                    label={intl.trans('delete', 'Delete', 'first')}
-                    primary
+                    className="FlatButton FlatButton--primary"
                     keyboardFocused
+                    type="button"
                     onClick={this._delete.bind(this, selectn('response', this.props.computeItem))}
-                  />,
+                  >
+                    {intl.trans('delete', 'Delete', 'first')}
+                  </button>,
                 ]}
                 modal={false}
                 open={this.state.deleteDialogOpen}
@@ -398,26 +406,26 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   [StringHelpers.toTitleCase(this.props.labels.single)]
                 )}
                 actions={[
-                  <FlatButton
+                  <button
+                    type="button"
                     key="0"
-                    label={intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
-                    secondary
+                    className="FlatButton FlatButton--secondary"
                     onClick={() => window.history.back()}
-                  />,
-                  <FlatButton
+                  >
+                    {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
+                  </button>,
+                  <button
+                    type="button"
                     key="1"
-                    label={intl.trans(
-                      'views.hoc.view.go_to_dialect_language_home',
-                      'Go to Dialect Language Home',
-                      'words'
-                    )}
-                    primary
+                    className="FlatButton FlatButton--primary"
                     keyboardFocused
                     onClick={this.props.onNavigateRequest.bind(
                       this,
                       '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
                     )}
-                  />,
+                  >
+                    {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
+                  </button>,
                 ]}
                 modal
                 open={this.state.deleteSuccessDialogOpen}

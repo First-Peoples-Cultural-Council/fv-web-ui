@@ -11,8 +11,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvResources'
-import { fetchResources } from 'providers/redux/reducers/fvDialect'
+import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 
 import selectn from 'selectn'
 

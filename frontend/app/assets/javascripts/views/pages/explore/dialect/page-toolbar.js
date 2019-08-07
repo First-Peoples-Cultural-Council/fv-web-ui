@@ -482,6 +482,21 @@ export class PageToolbar extends Component {
                   key="media"
                   primaryText={intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
                 />,
+                <MenuItem
+                  key="contributors"
+                  primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
+                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
+                />,
+                <MenuItem
+                  key="recorders"
+                  primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
+                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
+                />,
+                <MenuItem
+                  key="phrasebooks"
+                  primaryText={intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
+                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
+                />,
               ]
 
               return React.createElement(

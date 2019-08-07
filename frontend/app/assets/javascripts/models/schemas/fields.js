@@ -10,14 +10,13 @@ import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 
 // Very basic email validation
-var Email = t.subtype(t.Str, function(s) {
-  return /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/.test(
-    s
-  )
+const Email = t.subtype(t.String, (email) => {
+  const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  return reg.test(email)
 })
 
-var confGlobalPreferences = intl.translateObject(ConfGlobal.preferences)
-var UserPreferences = t.maybe(
+const confGlobalPreferences = intl.translateObject(ConfGlobal.preferences)
+const UserPreferences = t.maybe(
   t.struct({
     General: t.maybe(
       t.struct({
@@ -46,12 +45,14 @@ const fields = {
     'fv-word:categories': t.list(t.String),
     'fv-word:pronunciation': t.maybe(t.String),
     'fv-word:related_phrases': t.list(t.String),
-    'fv-word:part_of_speech': t.String,
+    'fv-word:part_of_speech': t.maybe(t.String),
     'fv-word:available_in_games': t.Boolean,
+    'fv-word:acknowledgement': t.maybe(t.String),
   }),
   FVPhrase: Object.assign({}, Dublincore, FVCore, {
     'fv:literal_translation': t.maybe(t.String), // make optional
     'fv-phrase:phrase_books': t.list(t.String),
+    'fv-phrase:acknowledgement': t.maybe(t.String),
   }),
   FVAudio: Object.assign({}, Dublincore, FVMedia),
   FVPicture: Object.assign({}, Dublincore, FVMedia),

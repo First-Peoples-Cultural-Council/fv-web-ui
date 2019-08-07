@@ -50,54 +50,55 @@ export class PortalListDialects extends Component {
     },
   }
 
-  constructor(props, context) {
-    super(props, context)
-  }
-
   render() {
+    const content = this._getContent()
+    return <div className="DialectList">{content}</div>
+  }
+  _getContent = () => {
     const items = this.props.filteredItems || this.props.items
+    const toReturn = items.map((tile) => {
+      // Switch roles
+      const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
+      const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
+        <ActionGrade style={{ margin: '0 15px' }} color={Colors.amber200} />
+      ) : null
 
-    return (
-      <div className="DialectList">
-        {items.map((tile) => {
-          // Switch roles
-          const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
-          let actionIcon = null
-
-          if (ProviderHelpers.isActiveRole(dialectRoles)) {
-            actionIcon = <ActionGrade style={{ margin: '0 15px' }} color={Colors.amber200} />
-          }
-
-          // Dialect title
-          const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
-          const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
-          const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
-          const dialectDescription = IntlService.instance.searchAndReplace(tile.description) || null
-          const href = `/${this.props.theme}${tile.path.replace('/Portal', '')}`
-
-          return (
-            <a
-              key={tile.uid}
-              className="Dialect"
-              href={NavigationHelpers.generateStaticURL(href)}
-              onClick={(e) => {
-                e.preventDefault()
-                NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-              }}
-              title={title}
-            >
-              <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
-              <span className="DialectData">
-                <span className="DialectTitle fontAboriginalSans">
-                  {IntlService.instance.searchAndReplace(title)} {actionIcon}
-                </span>
-                {dialectDescription && <span className="DialectDescription">{dialectDescription}</span>}
-              </span>
-            </a>
-          )
-        })}
-      </div>
-    )
+      // Dialect title
+      const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
+      const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
+      const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
+      const href = `/${this.props.theme}${tile.path.replace('/Portal', '')}`
+      const dialectTitle = IntlService.instance.searchAndReplace(title)
+      const dialectDescription = tile.description ? (
+        <span className="DialectDescription">{IntlService.instance.searchAndReplace(tile.description)}</span>
+      ) : null
+      // const dialectTitle = title
+      // const dialectDescription = tile.description ? (
+      //   <span className="DialectDescription">{tile.description}</span>
+      // ) : null
+      return (
+        <a
+          key={tile.uid}
+          className="Dialect"
+          href={NavigationHelpers.generateStaticURL(href)}
+          onClick={(e) => {
+            e.preventDefault()
+            NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+          }}
+          title={title}
+        >
+          <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
+          <span className="DialectData">
+            <span className="DialectTitle fontAboriginalSans">
+              {dialectTitle}
+              {actionIcon}
+            </span>
+            {dialectDescription}
+          </span>
+        </a>
+      )
+    })
+    return toReturn
   }
 }
 

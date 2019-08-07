@@ -113,7 +113,9 @@ export class DialectList extends Component {
           </SelectField>
         ) : (
           <select className="form-control" value={this.props.value} onChange={this._handleStandardSelectChange}>
-            <option value>Please select:</option>
+            <option value>
+              {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
+            </option>
             {entries.map((entry) => (
               <option key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
                 {selectn('dc:title', entry)}

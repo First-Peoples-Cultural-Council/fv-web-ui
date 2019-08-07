@@ -12,9 +12,8 @@ import withToggle from 'views/hoc/view/with-toggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
-
-import { RaisedButton } from 'material-ui'
 import IntlService from 'views/services/intl'
+import '!style-loader!css-loader!./FilteredGridList.css'
 
 const intl = IntlService.instance
 const FiltersWithToggle = withToggle()
@@ -63,7 +62,6 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
         defaultFormValue: props.formValues,
         initialFormValue: props.initialFormValue,
       }
-      ;['_onReset', '_doFilter', '_onFilterSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
     }
 
     componentDidMount() {
@@ -73,17 +71,17 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       }
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.area !== this.props.area) {
-        this._onReset(null, nextProps)
+    componentDidUpdate(prevProps) {
+      if (this.props.area !== prevProps.area) {
+        this._onReset(null, this.props)
       }
 
       // Items may change in a fixed list (e.g. deleted, added)
-      const nextPropsItemsList = Immutable.fromJS(nextProps.items)
-      const prevPropsItemsList = Immutable.fromJS(this.props.items)
+      const curPropsItemsList = Immutable.fromJS(this.props.items)
+      const prevPropsItemsList = Immutable.fromJS(prevProps.items)
 
-      if (this.props.fixedList && nextPropsItemsList.equals(prevPropsItemsList) === false) {
-        this._onReset(null, nextProps)
+      if (prevProps.fixedList && curPropsItemsList.equals(prevPropsItemsList) === false) {
+        this._onReset(null, this.props)
       }
     }
 
@@ -109,7 +107,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       }
 
       return (
-        <div>
+        <div className="FilteredGridList">
           <div className="row">
             <div
               className={classNames('col-xs-12', {
@@ -129,8 +127,20 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                     value={this.state.formValue}
                     options={options.toJS()}
                   />
-                  <RaisedButton onClick={this._onReset} label={intl.trans('reset', 'Reset', 'first')} primary /> &nbsp;
-                  <RaisedButton type="submit" label={intl.trans('filter', 'Filter', 'first')} primary />
+                  <div className="FilteredGridList__btnGroup">
+                    <button
+                      type="button"
+                      className="FilteredGridList__btn RaisedButton RaisedButton--primary"
+                      onClick={(e) => {
+                        this._onReset(e, this.props)
+                      }}
+                    >
+                      {intl.trans('reset', 'Reset', 'first')}
+                    </button>
+                    <button type="submit" className="FilteredGridList__btn RaisedButton RaisedButton--primary">
+                      {intl.trans('filter', 'Filter', 'first')}
+                    </button>
+                  </div>
                 </FiltersWithToggle>
               </form>
             </div>
@@ -148,7 +158,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       )
     }
 
-    _doFilter(filters, props = this.props, isReset) {
+    _doFilter = (filters, props = this.props, isReset) => {
       // Filter a fixed list (i.e. all items sent to component)
       if (this.props.fixedList) {
         const filteredList = new List(props.items).filter(function filteredListFilterer(item) {
@@ -184,7 +194,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       }
     }
 
-    _onReset(event, props = this.props) {
+    _onReset = (event, props = this.props) => {
       const form = this.refs.filter_form
 
       // Reset all controlled inputs
@@ -214,7 +224,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       }
     }
 
-    _onFilterSaveForm(e) {
+    _onFilterSaveForm = (e) => {
       // Prevent default behaviour
       if (e) {
         e.preventDefault()

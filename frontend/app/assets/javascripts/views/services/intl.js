@@ -1,3 +1,5 @@
+// TODO: remove eslint-disable
+/* eslint-disable */
 import selectn from 'selectn'
 import en from 'views/../locale/locale.en.json'
 import fr from 'views/../locale/locale.fr.json'
@@ -35,9 +37,9 @@ export default class IntlService {
   tagsRegex = /(<[^>]+>)(.*)(<\/[^>]+>)/i
 
   constructor() {
-    var localStorageLocale = this.getLocaleFromSessionStorage()
+    const localStorageLocale = this.getLocaleFromSessionStorage()
     if (localStorageLocale === null) {
-      var navigatorLocale = this.getLocaleFromNavigator()
+      const navigatorLocale = this.getLocaleFromNavigator()
       if (navigatorLocale !== null) {
         this.localeString = navigatorLocale || 'en'
       }
@@ -49,7 +51,7 @@ export default class IntlService {
 
   getLocaleFromNavigator() {
     if (navigator !== null && navigator !== undefined) {
-      var ls = navigator.language
+      const ls = navigator.language
       if (ls[0] !== null && ls[0] !== undefined) {
         if (ls[0].search('en') >= 0) {
           return 'en'
@@ -95,9 +97,9 @@ export default class IntlService {
     if (typeof obj !== 'object' || obj === null || obj === undefined) {
       return obj
     }
-    var translatedObj = {}
-    for (var key in obj) {
-      var item = obj[key]
+    const translatedObj = {}
+    for (const key in obj) {
+      const item = obj[key]
       if (item === null || item === undefined) {
         translatedObj[key] = null
       } else if (typeof item === 'string') {
@@ -118,11 +120,11 @@ export default class IntlService {
     if (Array.isArray(key)) {
       key = key.join('.')
     }
-    let self = this
-    let postProcessResult = function(result, translateData) {
+    const self = this
+    const postProcessResult = function(result, translateData) {
       if (result !== null) {
-        var charCase = translateData.case || null
-        var params = translateData.params || []
+        const charCase = translateData.case || null
+        const params = translateData.params || []
 
         // lets handle any string replacements
         // if theres something to put in
@@ -145,17 +147,17 @@ export default class IntlService {
         result = (result + '').replace('&amp;', '&')
         result = (result + '').replace('&AMP;', '&')
 
-        let postProcessSwaps = function(result) {
-          var swapMatches = (result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
+        const postProcessSwaps = function(result) {
+          const swapMatches = (result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
           if (swapMatches !== null && swapMatches.length > 0) {
-            for (var idx in swapMatches) {
-              var match = swapMatches[idx],
-                matchKey = swapMatches[idx].substr(2, swapMatches[idx].length - 3),
-                matchTranslated = self.translate({
-                  key: matchKey.toLowerCase(),
-                  default: null,
-                  case: translateData.case || null,
-                })
+            for (const idx in swapMatches) {
+              const match = swapMatches[idx]
+              const matchKey = swapMatches[idx].substr(2, swapMatches[idx].length - 3)
+              const matchTranslated = self.translate({
+                key: matchKey.toLowerCase(),
+                default: null,
+                case: translateData.case || null,
+              })
 
               if (matchTranslated !== null && matchTranslated !== undefined && (match + '').length > 0) {
                 result = result.replace(match, matchTranslated)
@@ -176,7 +178,7 @@ export default class IntlService {
     }
 
     if (key !== null) {
-      var res = null
+      let res = null
       // if it's a simple string, lets first check general
       if (((key + '').match(/\./g) || []).length === 0) {
         // single entry, let's check general first
@@ -243,14 +245,14 @@ export default class IntlService {
       translateData || {}
     )
 
-    var originalString = string + ''
+    const originalString = string + ''
 
-    var keyData = this.locateEnglishKey(string)
+    const keyData = this.locateEnglishKey(string)
     if (keyData !== null && keyData !== undefined) {
       translateData.params = translateData.params.concat(keyData.params || [])
       translateData = Object.assign(translateData, keyData)
       translateData.default = null
-      var translatedString = this.translate(translateData)
+      const translatedString = this.translate(translateData)
       if (translatedString !== null && translateData !== undefined) {
         return translatedString
       }
@@ -271,7 +273,7 @@ export default class IntlService {
       return this.searchAndReplace(string, translateData)
     }
 
-    var originalString = string + ''
+    const originalString = string + ''
     translateData = Object.assign(
       {
         key: null,
@@ -282,17 +284,17 @@ export default class IntlService {
       translateData || {}
     )
 
-    var tags = { start: '', end: '' },
-      pieces = this.tagsRegex.exec(originalString)
+    const tags = { start: '', end: '' }
+    const pieces = this.tagsRegex.exec(originalString)
 
     if (pieces.length > 3) {
       tags.start = pieces[1]
       tags.end = pieces[3]
-      var taglessString = pieces[2],
-        taglessKeyData = this.locateEnglishKey(taglessString)
+      const taglessString = pieces[2]
+      const taglessKeyData = this.locateEnglishKey(taglessString)
 
       if (taglessKeyData !== null && taglessKeyData !== undefined) {
-        var taglessResult = this.translate(Object.assign(translateData, taglessKeyData, { default: null }))
+        const taglessResult = this.translate(Object.assign(translateData, taglessKeyData, { default: null }))
         if (taglessResult !== null && taglessResult !== undefined && (taglessResult + '').toLowerCase() !== 'null') {
           // we found something
           return tags.start + taglessResult + tags.end
@@ -300,9 +302,9 @@ export default class IntlService {
       }
 
       // still nothing, lets check with tags
-      var keyData = this.locateEnglishKey(originalString)
+      const keyData = this.locateEnglishKey(originalString)
       if (keyData !== null && keyData !== undefined) {
-        var result = this.translate(Object.assign(translateData, keyData, { default: null }))
+        const result = this.translate(Object.assign(translateData, keyData, { default: null }))
         if (result !== null && result !== undefined && (result + '').toLowerCase() !== 'null') {
           return result
         }
@@ -321,16 +323,16 @@ export default class IntlService {
     baseKey = baseKey || 'en'
     regex = regex === true
     // regex = false;
-    var searchData = selectn(baseKey, IntlService.locales)
+    const searchData = selectn(baseKey, IntlService.locales)
     if (searchData !== null && typeof searchData === 'object') {
-      for (var key in searchData) {
-        var res = this.locateEnglishKey(string, baseKey + '.' + key, regex)
+      for (const key in searchData) {
+        const res = this.locateEnglishKey(string, baseKey + '.' + key, regex)
         if (res !== null && res !== undefined) {
           return res
         }
       }
     } else if (searchData !== null) {
-      var hasRegex = (searchData + '').search('%s') >= 0
+      const hasRegex = (searchData + '').search('%s') >= 0
       if (!regex && !hasRegex) {
         // normal string comparison
         if (this.normalizeString(string) == this.normalizeString(searchData)) {
@@ -343,9 +345,9 @@ export default class IntlService {
         // search the regular expression
         var regex = new RegExp((searchData + '').replace(/%s/g, '(.*)'), 'i')
         if (regex.test(string + '')) {
-          var pieces = regex.exec(string + ''),
-            params = []
-          for (var i = 0; i < ((searchData + '').match(/%s/g) || []).length; i++) {
+          const pieces = regex.exec(string + '')
+          const params = []
+          for (let i = 0; i < ((searchData + '').match(/%s/g) || []).length; i++) {
             if (pieces[i + 1] !== null && pieces[i + 1] !== undefined) {
               params.push(pieces[i + 1])
             }
@@ -369,7 +371,7 @@ export default class IntlService {
 
   locateEnglishKey2(string, baseKey) {
     baseKey = baseKey || 'en'
-    var searchData = selectn(baseKey, IntlService.locales)
+    const searchData = selectn(baseKey, IntlService.locales)
     if (searchData !== null && typeof searchData === 'object') {
       if (searchData.general !== null && typeof searchData.general === 'object') {
         // lets loop through general first
@@ -393,24 +395,23 @@ export default class IntlService {
           key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
           params: [],
         }
-      } else {
-        // OK, so there may not have been a match on those strings BUT
-        // what about matching against %s strings?
-        // lets compare the lowercase versions, IF the %s is present in the string
-        if ((searchData + '').search('%s') >= 0) {
-          var regex = new RegExp(searchData.replace(/%s/g, '(.*)'), 'i')
-          if (regex.test(string + '')) {
-            var pieces = regex.exec(string + ''),
-              params = []
-            for (var i = 0; i < ((searchData + '').match(/%s/g) || []).length; i++) {
-              if (pieces[i + 1] !== null && pieces[i + 1] !== undefined) {
-                params.push(pieces[i + 1])
-              }
+      }
+      // OK, so there may not have been a match on those strings BUT
+      // what about matching against %s strings?
+      // lets compare the lowercase versions, IF the %s is present in the string
+      if ((searchData + '').search('%s') >= 0) {
+        const regex = new RegExp(searchData.replace(/%s/g, '(.*)'), 'i')
+        if (regex.test(string + '')) {
+          const pieces = regex.exec(string + '')
+          const params = []
+          for (let i = 0; i < ((searchData + '').match(/%s/g) || []).length; i++) {
+            if (pieces[i + 1] !== null && pieces[i + 1] !== undefined) {
+              params.push(pieces[i + 1])
             }
-            return {
-              key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
-              params: params || [],
-            }
+          }
+          return {
+            key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
+            params: params || [],
           }
         }
       }
@@ -423,14 +424,16 @@ export default class IntlService {
   }
 
   loadLocales(force) {
-    if (typeof IntlService.locales['en'] != 'object') {
-      IntlService.locales['en'] = en
+    if (typeof IntlService.locales.en !== 'object') {
+      IntlService.locales.en = en
     }
-    if (typeof IntlService.locales['fr'] != 'object') {
-      IntlService.locales['fr'] = fr
+    if (typeof IntlService.locales.fr !== 'object') {
+      IntlService.locales.fr = fr
     }
-    if (typeof IntlService.locales['sp'] != 'object') {
-      IntlService.locales['sp'] = sp
+    if (typeof IntlService.locales.sp !== 'object') {
+      IntlService.locales.sp = sp
     }
   }
 }
+// TODO: remove eslint-disable
+/* eslint-enable */

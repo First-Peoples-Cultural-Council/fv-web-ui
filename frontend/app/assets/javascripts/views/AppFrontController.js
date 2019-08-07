@@ -16,7 +16,7 @@ import ConfRoutes, { matchPath } from 'conf/routes'
 import { WORKSPACES } from 'common/Constants'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { getSearchObject } from 'common/NavigationHelpers'
+import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -117,22 +117,23 @@ export class AppFrontController extends Component {
 
   componentDidUpdate(prevProps) {
     this._updateTitle()
-
-    if (prevProps.windowPath !== this.props.windowPath) {
+    const _routeHasChanged = routeHasChanged({
+      prevWindowPath: prevProps.windowPath,
+      curWindowPath: this.props.windowPath,
+      prevRouteParams: prevProps.routeParams,
+      curRouteParams: this.props.routeParams,
+    })
+    if (_routeHasChanged) {
       // Track page view
       if (window.snowplow) {
         window.snowplow('trackPageView')
       }
     }
 
-    // Re-route when:
-    // - window path changes
-    // - logged in
-    const pathChanged = prevProps.windowPath !== this.props.windowPath
-    // const loggedIn = prevProps.computeLogin != this.props.computeLogin
+    // Re-route if needed:
     const prevCl = prevProps.computeLogin
     const curCl = this.props.computeLogin
-    const loggedIn = prevCl.isFetching !== curCl.isFetching || prevCl.success !== curCl.success
+    const loggedIn = prevCl.isConnected !== curCl.isConnected && curCl.isConnected === true
 
     const { sortOrder: newSortOrder, sortBy: newSortBy } = this.props.search
     const { sortOrder: prevSortOrder, sortBy: prevSortBy } = prevProps.search
@@ -143,7 +144,7 @@ export class AppFrontController extends Component {
     const sortOrderChanged = newSortOrder !== prevSortOrder || windowLocationSearchSortOrder != newSortOrder
     const sortByChanged = newSortBy !== prevSortBy || windowLocationSearchSortBy != newSortBy
 
-    if (pathChanged || loggedIn || sortOrderChanged || sortByChanged) {
+    if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
       this._route(this.props)
     }
   }
@@ -227,7 +228,7 @@ export class AppFrontController extends Component {
           <div id="pageNavigation" className="AppFrontController__navigation row">
             {navigation}
           </div>
-          <div id="pageContainer" className="AppFrontController__content">
+          <div id="pageContainer" data-testid="pageContainer" className="AppFrontController__content">
             {page}
           </div>
           <div id="pageFooter" className="AppFrontController__footer row">

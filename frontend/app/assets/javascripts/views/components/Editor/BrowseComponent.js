@@ -26,15 +26,7 @@ import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
 
 import selectn from 'selectn'
 
-// import ProviderHelpers from 'common/ProviderHelpers'
-// import StringHelpers from 'common/StringHelpers'
-
-import { Dialog /*, FlatButton, RaisedButton*/ } from 'material-ui'
-// import GridTile from 'material-ui/lib/grid-list/grid-tile'
-// import IconButton from 'material-ui/lib/icon-button'
-// import ActionInfo from 'material-ui/lib/svg-icons/action/info'
-// import ActionInfoOutline from 'material-ui/lib/svg-icons/action/info-outline'
-
+import { Dialog } from 'material-ui'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
@@ -149,8 +141,7 @@ export class BrowseComponent extends React.Component {
     const dialectPath = selectn('path', dialect)
 
     const actions = [
-      // <FlatButton key="action1" label={intl.trans('cancel', 'Cancel', 'first')} secondary onTouchTap={this._handleClose} />,
-      <button key="action1" onClick={this._handleClose} type="button">
+      <button className="FlatButton" key="action1" onClick={this._handleClose} type="button">
         {intl.trans('cancel', 'Cancel', 'first')}
       </button>,
     ]
@@ -265,8 +256,7 @@ export class BrowseComponent extends React.Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        {/* <RaisedButton label={this.props.label} onClick={this._handleOpen} /> */}
-        <button type="button" disabled={this.props.disabled} onClick={this._handleOpen}>
+        <button className="RaisedButton" type="button" disabled={this.props.disabled} onClick={this._handleOpen}>
           {this.props.label}
         </button>
         <Dialog

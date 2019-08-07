@@ -22,13 +22,19 @@
     RewriteCond %{REQUEST_URI} !.*/logout/(.*)
     RewriteCond %{REQUEST_URI} !.*/register/(.*)
     RewriteCond %{REQUEST_URI} !.*/forgotpassword/(.*)
-    RewriteRule ^/app/(.*) /app/ [L]
+    RewriteRule ^/app/(.*) /app/evergreen/ [L]
   </extension>
   
    <extension target="rewrite#RULE">
-    RewriteRule .*/assets/(.*) /app/assets/$1 [L]
-    RewriteRule .*/register/ /app/register/ [L]
-    RewriteRule .*/forgotpassword/ /app/forgotpassword/ [L]
+    RewriteRule .*/assets/(.*) /app/evergreen/assets/$1 [L]
+    RewriteRule .*/register/ /app/evergreen/register/ [L]
+    RewriteRule .*/forgotpassword/ /app/evergreen/forgotpassword/ [L]
+  </extension>
+
+  <!--  Serve IE11 (Trident 7.0) legacy code -->
+  <extension target="rewrite#RULE">
+    RewriteCond %{HTTP_USER_AGENT} ".*Trident/7.*"
+    RewriteRule ^/app/(.*) /app/legacy/ [L]
   </extension>
 
 </fragment>

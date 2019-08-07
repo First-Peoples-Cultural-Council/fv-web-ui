@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-import Immutable from 'immutable'
+import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -121,6 +121,22 @@ export class PhrasesCreate extends Component {
         this.props.replaceWindowPath,
         true
       )
+    }
+  }
+  shouldComponentUpdate(newProps, newState) {
+    switch (true) {
+      case this.state.componentState != newState.componentState:
+        return true
+      case newProps.windowPath != this.props.windowPath:
+        return true
+
+      case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        return true
+
+      case is(newProps.computePhrase, this.props.computePhrase) === false:
+        return true
+      default:
+        return false
     }
   }
 

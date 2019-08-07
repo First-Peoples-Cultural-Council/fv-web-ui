@@ -1,13 +1,9 @@
-import React from 'react'
 import t from 'tcomb-form'
-
-import classNames from 'classnames'
-
 import ValuedCheckboxFactory from 'views/components/Editor/fields/valued-checkbox'
+import SearchDocumentTypesTemplate from 'views/components/SearchDocumentTypesTemplate'
+
 import RangeSelector from 'views/components/Editor/fields/range'
 // import SelectFactory from 'views/components/Editor/fields/select'
-
-import { FlatButton, IconButton } from 'material-ui'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
@@ -23,45 +19,6 @@ const i18nExt = {
   optional: '(' + intl.translate({ key: 'optional', default: 'Optional', case: 'first' }) + ')',
 }
 
-const SearchDocumentTypesTemplate = (locals) => {
-  return (
-    <div className="row" style={{ margin: '15px 0' }}>
-      <fieldset>
-        <legend>
-          {locals.label}{' '}
-          {locals.items.length < 4 ? <FlatButton label={locals.add.label} onClick={locals.add.click} /> : ''}
-        </legend>
-        {(locals.items || []).map((item, i) => {
-          return (
-            <div key={i} className={classNames('col-xs-12')}>
-              <div style={{ width: '60%', display: 'inline-block' }}>{item.input}</div>
-              <div style={{ width: '40%', display: 'inline-block' }}>
-                {item.buttons.map((button, j) => {
-                  if (button.type == 'remove') {
-                    return (
-                      <IconButton
-                        tooltip={intl.translate({
-                          key: 'remove_item',
-                          default: 'Remove Item',
-                          case: 'words',
-                        })}
-                        iconClassName="material-icons"
-                        key={j}
-                        onClick={button.click}
-                      >
-                        clear
-                      </IconButton>
-                    )
-                  }
-                })}
-              </div>
-            </div>
-          )
-        })}
-      </fieldset>
-    </div>
-  )
-}
 const ResourcesFields = {
   fields: {
     'properties.dc:title': {
