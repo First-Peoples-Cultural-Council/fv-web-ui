@@ -22,8 +22,8 @@ describe('portal_edit.js > ExploreDialect', () => {
           .click()
         // Note: need to wait for WYSIWYG editor to init
         cy.wait(500)
-        // TODO: need user visible hook, not implementation detail
-        cy.get('#editablePortal_introduction')
+
+        cy.getByTestId('wysiwyg__userInput')
           .clear()
           .type(updateMessage)
 
