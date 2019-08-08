@@ -66,6 +66,7 @@ export class LearningSidebar extends Component {
                       properties={properties}
                     />
                     <EditableComponentHelper
+                      dataTestid="EditableComponent__fvdialect-language_resources"
                       isSection={isSection}
                       computeEntity={dialect.compute}
                       updateEntity={dialect.update}
@@ -97,6 +98,7 @@ export class LearningSidebar extends Component {
                       properties={properties}
                     />
                     <EditableComponentHelper
+                      dataTestid="EditableComponent__fvdialect-keyboards"
                       isSection={isSection}
                       computeEntity={dialect.compute}
                       updateEntity={dialect.update}
@@ -128,6 +130,7 @@ export class LearningSidebar extends Component {
                       properties={properties}
                     />
                     <EditableComponentHelper
+                      dataTestid="EditableComponent__fvdialect-contact_information"
                       isSection={isSection}
                       computeEntity={dialect.compute}
                       updateEntity={dialect.update}
