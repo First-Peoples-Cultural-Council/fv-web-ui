@@ -14,9 +14,12 @@ import { Document } from 'nuxeo'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import IconButton from 'material-ui/lib/icon-button'
+// import IconButton from 'material-ui/lib/icon-button'
 import CircularProgress from 'material-ui/lib/circular-progress'
 import IntlService from 'views/services/intl'
+import IconEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
+
+import '!style-loader!css-loader!./EditableComponent.css'
 
 const intl = IntlService.instance
 
@@ -54,7 +57,6 @@ class EditableComponent extends Component {
     accessDenied: bool, // NOTE: not certain being used
     computeEntity: object.isRequired,
     context: object,
-    className: string,
     isSection: bool,
     options: array, // NOTE: not certain being used
     previewType: string,
@@ -66,7 +68,6 @@ class EditableComponent extends Component {
 
   static defaultProps = {
     accessDenied: false,
-    className: '',
     showPreview: false,
   }
 
@@ -145,7 +146,7 @@ class EditableComponent extends Component {
           fieldFormValues[property] = currentValue
 
           toReturn = (
-            <form className="editableComponentForm" onSubmit={(e) => this._onRequestSaveField(e, property)}>
+            <form className="EditableComponent__form" onSubmit={(e) => this._onRequestSaveField(e, property)}>
               <t.form.Form
                 ref={'form_' + property}
                 value={fieldFormValues}
@@ -153,7 +154,7 @@ class EditableComponent extends Component {
                 context={selectn('response', this.props.context) || selectn('response', this.props.computeEntity)}
                 options={fieldFormOptions}
               />
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="EditableComponent__btnSave FlatButton FlatButton--primary">
                 {intl.trans('save', 'Save', 'first')}
               </button>
             </form>
@@ -162,10 +163,8 @@ class EditableComponent extends Component {
       }
     } else {
       // Render regular field if not in edit mode
-      toReturn = (
-        <div>
-          {RenderRegular(currentValue, this.props.showPreview, this.props.previewType)}
-          <IconButton
+      /*
+      <IconButton
             iconClassName="material-icons"
             iconStyle={{ fontSize: '20px' }}
             style={{
@@ -181,6 +180,25 @@ class EditableComponent extends Component {
           >
             mode_edit
           </IconButton>
+          */
+      const editButton = this.props.accessDenied ? null : (
+        <button
+          type="button"
+          className={'EditableComponent__btnEdit FlatButton FlatButton--compact'}
+          data-testid="EditableComponent__edit"
+          onClick={(e) => {
+            e.preventDefault()
+            this._onEditRequest()
+          }}
+        >
+          <IconEdit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
+          <span className="FlatButton__label">{intl.trans('edit', 'Edit', 'first')}</span>
+        </button>
+      )
+      toReturn = (
+        <div>
+          {RenderRegular(currentValue, this.props.showPreview, this.props.previewType)}
+          {editButton}
         </div>
       )
     }
@@ -253,7 +271,7 @@ export class EditableComponentHelper extends Component {
     } else {
       toReturn = <EditableComponent {...this.props} />
     }
-    return <div className="EditableComponentHelper">{toReturn}</div>
+    return <div className={`EditableComponentHelper ${this.props.className}`}>{toReturn}</div>
   }
 }
 

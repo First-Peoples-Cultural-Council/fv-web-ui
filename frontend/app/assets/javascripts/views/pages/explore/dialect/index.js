@@ -358,6 +358,7 @@ export class ExploreDialect extends Component {
             renderPartial
           >
             <EditableComponentHelper
+              dataTestid="EditableComponent__fv-portal-greeting"
               className="fv-portal-greeting"
               isSection={isSection}
               computeEntity={computePortal}
@@ -381,6 +382,7 @@ export class ExploreDialect extends Component {
           <div>
             <h3>{intl.trans('news', 'News', 'first')}</h3>
             <EditableComponentHelper
+              dataTestid="EditableComponent__fv-portal-news"
               isSection={isSection}
               computeEntity={computePortal}
               updateEntity={updatePortal}
@@ -450,6 +452,7 @@ export class ExploreDialect extends Component {
                 renderPartial
               >
                 <EditableComponentHelper
+                  dataTestid="EditableComponent__fv-portal-about"
                   className="fv-portal-about"
                   isSection={isSection}
                   computeEntity={computePortal}
@@ -510,6 +513,7 @@ export class ExploreDialect extends Component {
                           properties={this.props.properties}
                         />
                         <EditableComponentHelper
+                          dataTestid="EditableComponent__fv-portal-related_links"
                           isSection={isSection}
                           computeEntity={computePortal}
                           updateEntity={updatePortal}
@@ -542,6 +546,7 @@ export class ExploreDialect extends Component {
                     renderPartial
                   >
                     <EditableComponentHelper
+                    dataTestid="EditableComponent__dc-title"
                       isSection={isSection}
                       computeEntity={computeDialect2}
                       updateEntity={updateDialect2}
@@ -557,6 +562,8 @@ export class ExploreDialect extends Component {
                         renderPartial
                       >
                         <EditableComponentHelper
+                          className="EditableComponent--inline"
+                          dataTestid="EditableComponent__fv-dialect-country"
                           isSection={isSection}
                           computeEntity={computeDialect2}
                           updateEntity={updateDialect2}
@@ -572,6 +579,8 @@ export class ExploreDialect extends Component {
                         renderPartial
                       >
                         <EditableComponentHelper
+                          className="EditableComponent--inline"
+                          dataTestid="EditableComponent__fv-dialect-region"
                           isSection={isSection}
                           computeEntity={computeDialect2}
                           updateEntity={updateDialect2}
