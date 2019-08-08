@@ -386,6 +386,7 @@ export class DialectLearn extends Component {
                 renderPartial
               >
                 <EditableComponentHelper
+                  dataTestid="EditableComponent__dc-description"
                   isSection={isSection}
                   computeEntity={computeDialect2}
                   updateEntity={this.props.updateDialect2}
