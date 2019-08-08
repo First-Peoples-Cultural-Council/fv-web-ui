@@ -1,40 +1,67 @@
 .FlatButton {
-  border: 10px;
-  background: none rgba(0, 0, 0, 0);
-  box-sizing: border-box;
-  display: inline-block;
-  font-style: inherit;
-  font-variant: inherit;
-  font-stretch: inherit;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-  outline: none;
-  transform: translate3d(0px, 0px, 0px);
-  vertical-align: middle;
-  color: rgb(38, 166, 154);
-  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-  font-size: 14px;
-  letter-spacing: 0px;
-  text-transform: uppercase;
-  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  color: rgb(74, 82, 82);
+  background-color: rgb(249, 255, 254);
+  border: 1px solid rgba(74, 82, 82, 0.025);
+
   border-radius: 2px;
-  user-select: none;
-  position: relative;
-  overflow: hidden;
-  line-height: 36px;
-  min-width: 88px;
-  padding: 0px 16px;
+  padding: 10px;
   margin: 0px;
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  font-family: arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 .FlatButton:hover {
   background: none rgba(153, 153, 153, 0.2);
   text-decoration: none;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.025);
 }
 
+/* ELEMENT */
+.FlatButton__icon {
+  fill: rgb(74, 82, 82) !important;
+}
+
+/* MODIFIERS */
+.FlatButton--inline {
+  display: inline-flex;
+}
+.FlatButton--compact {
+  padding: 4px;
+}
 .FlatButton--primary {
-  color: rgb(255, 64, 129);
+  color: rgb(109, 40, 63);
+  border: 1px solid rgba(109, 40, 63, 0.1);
+  background-color: rgb(253, 238, 243);
+}
+.FlatButton--primary .FlatButton__icon{
+  fill: rgb(109, 40, 63) !important;
 }
 .FlatButton--secondary {
-  color: rgb(38, 166, 154);
+  color: rgb(0, 95, 86);
+  border: 1px solid rgba(0, 95, 86, 0.1);
+  background-color: #dcfbf8;
+}
+.FlatButton--secondary .FlatButton__icon{
+  fill: rgb(0, 95, 86) !important;
+}
+
+.FlatButton--primary:hover,
+.FlatButton--secondary:hover {
+  color: rgb(0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.FlatButton--primary:hover .FlatButton__icon,
+.FlatButton--secondary:hover .FlatButton__icon {
+  fill: rgb(0,0,0) !important;
 }
