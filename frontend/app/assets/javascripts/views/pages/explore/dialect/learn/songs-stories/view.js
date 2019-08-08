@@ -66,7 +66,7 @@ const DEFAULT_LANGUAGE = 'english'
  */
 
 const { array, func, object, string } = PropTypes
-export class View extends Component {
+export class SongsStoriesView extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     //typePlural: string,
@@ -139,15 +139,10 @@ export class View extends Component {
     this.fetchData(this.props)
   }
 
-  // Refetch data on URL change
-  // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+  componentDidUpdate(prevProps /*, prevState*/) {
+    if (this.props.windowPath !== prevProps.windowPath) {
+      this.fetchData(this.props)
     }
-  }
-
-  componentDidUpdate(/*prevProps, prevState*/) {
     const book = selectn('response', ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath()))
     const title = selectn('properties.dc:title', book)
     const uid = selectn('uid', book)
@@ -309,4 +304,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(SongsStoriesView)
