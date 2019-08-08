@@ -1,22 +1,23 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 import t from 'tcomb-form'
-import classNames from 'classnames'
 import AlloyEditorComponent from 'views/components/Editor/AlloyEditorComponent'
 
 /**
  * Custom textarea field for tcomb-form that uses alloy-editor
  */
 function renderTextarea(locals) {
-  const onContentChange = function(value) {
+  const onContentChange = (value) => {
     locals.onChange(value)
   }
 
   return (
-    <AlloyEditorComponent
-      content={locals.value}
-      onContentChange={onContentChange}
-      container={'editable' + locals.label.replace(' ', '_')}
-    />
+    <div data-testId="Wysiwyg">
+      <AlloyEditorComponent
+        content={locals.value}
+        onContentChange={onContentChange}
+        container={'editable' + locals.label.replace(' ', '_')}
+      />
+    </div>
   )
 }
 
