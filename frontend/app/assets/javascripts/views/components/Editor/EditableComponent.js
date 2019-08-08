@@ -53,6 +53,7 @@ const { array, bool, func, object, string } = PropTypes
 
 class EditableComponent extends Component {
   static propTypes = {
+    className: string,
     dataTestid: string,
     accessDenied: bool, // NOTE: not certain being used
     computeEntity: object.isRequired,
@@ -67,6 +68,7 @@ class EditableComponent extends Component {
   }
 
   static defaultProps = {
+    className: '',
     accessDenied: false,
     showPreview: false,
   }
@@ -86,7 +88,10 @@ class EditableComponent extends Component {
 
   render() {
     return (
-      <div data-testid={this.props.dataTestid} className={`EditableComponent ${this.props.className}`}>
+      <div
+        data-testid={this.props.dataTestid}
+        className={`EditableComponent ${this.props.className ? this.props.className : ''}`}
+      >
         {this._editableElement()}
         <StatusBar message={selectn('message', this.props.computeEntity)} />
       </div>
@@ -247,6 +252,7 @@ class EditableComponent extends Component {
 
 export class EditableComponentHelper extends Component {
   static propTypes = {
+    className: string,
     dataTestid: string,
     entity: object,
     isSection: bool,
@@ -254,6 +260,9 @@ export class EditableComponentHelper extends Component {
     property: string.isRequired,
     showPreview: bool,
     sectionProperty: string,
+  }
+  defaultProps = {
+    className: '',
   }
   render() {
     let toReturn = null
@@ -271,7 +280,9 @@ export class EditableComponentHelper extends Component {
     } else {
       toReturn = <EditableComponent {...this.props} />
     }
-    return <div className={`EditableComponentHelper ${this.props.className}`}>{toReturn}</div>
+    return (
+      <div className={`EditableComponentHelper ${this.props.className ? this.props.className : ''}`}>{toReturn}</div>
+    )
   }
 }
 
