@@ -69,7 +69,6 @@
     "@fpcc/fv-game-jigsaw": "^1.0.1",
     "@fpcc/fv-game-memory": "^1.0.0",
     "@fpcc/fv-game-wordsearch": "^1.0.0",
-    "alloyeditor": "1.5.16",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "~6.26.0",
     "bootstrap": "^3.3.7",
