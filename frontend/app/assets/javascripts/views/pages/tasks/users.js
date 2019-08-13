@@ -135,17 +135,13 @@ export class UserTasks extends React.Component {
     newProps.fetchDialect2(selectn('routeParams.dialect', newProps))
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.computeLogin != this.props.computeLogin) {
-      this.fetchData(newProps)
-    } else if (newProps.computeUserTasksApprove != this.props.computeUserTasksApprove) {
-      this.fetchData(newProps)
-    } else if (newProps.computeUserTasksReject != this.props.computeUserTasksReject) {
-      this.fetchData(newProps)
-    } else if (newProps.computeUserRegistrationApprove != this.props.computeUserRegistrationApprove) {
-      this.fetchData(newProps)
-    } else if (newProps.computeUserRegistrationReject != this.props.computeUserRegistrationReject) {
-      this.fetchData(newProps)
+  componentDidUpdate(prevProps) {
+    const test1 = this.props.computeUserTasksApprove != prevProps.computeUserTasksApprove
+    const test2 = this.props.computeUserTasksReject != prevProps.computeUserTasksReject
+    const test3 = this.props.computeUserRegistrationApprove != prevProps.computeUserRegistrationApprove
+    const test4 = this.props.computeUserRegistrationReject != prevProps.computeUserRegistrationReject
+    if (test1 || test2 || test3 || test4) {
+      this.fetchData(this.props)
     }
   }
 
@@ -227,7 +223,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 

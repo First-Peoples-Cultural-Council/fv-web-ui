@@ -5,7 +5,6 @@ import 'cypress-testing-library/add-commands'
 
 describe('Navigation.js > Navigation', () => {
   it('FW-266: Navigation: clicking between "Get Started", "Contribute", & "FirstVoices Apps" loads incorrect page content', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/')
     cy.getByText('menu open', { exact: false }).click({ force: true })
     cy.getByText('get started', { exact: false }).click()
@@ -18,7 +17,5 @@ describe('Navigation.js > Navigation', () => {
     cy.getByTestId('pageContainer').within(() => {
       cy.queryByText('FirstVoices Apps', { exact: false }).should('exist')
     })
-
-    cy.log('Test complete')
   })
 })

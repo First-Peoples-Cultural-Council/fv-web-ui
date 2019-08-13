@@ -9,12 +9,6 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Co
 
 describe('ContributorCreateDelete.js > Contributor', () => {
   it('Create', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
-
-    // Should see error message when not logged in:
-    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
-    cy.queryByText(copy.errorBoundary.title).should('exist')
-
     // Login
     cy.login()
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
@@ -41,6 +35,7 @@ describe('ContributorCreateDelete.js > Contributor', () => {
     cy.getByText(copy.edit.btnConfirm).click()
     cy.getByText(copy.edit.successDelete.title).should('exist')
 
-    cy.log('Test complete')
+    // Error should be displayed
+    cy.getByLabelText(copy.validation.name)
   })
 })

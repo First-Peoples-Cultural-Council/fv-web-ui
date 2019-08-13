@@ -18,6 +18,5 @@ describe('SearchDialect-Words-Private.js > SearchDialect', () => {
 
     testSearch()
     testSearchWords()
-    cy.log('Test complete')
   })
 })

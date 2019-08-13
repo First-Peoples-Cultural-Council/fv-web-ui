@@ -16,6 +16,5 @@ describe('SearchDialectPhrases-Private.js > SearchDialect', () => {
     cy.location('pathname').should('eq', '/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/learn/phrases')
 
     testSearchPhrases()
-    cy.log('Test complete')
   })
 })

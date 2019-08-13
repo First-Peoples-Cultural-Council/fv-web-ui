@@ -9,7 +9,6 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Co
 
 describe('ContributorDelete.js > Contributor', () => {
   it('Delete', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     cy.login()
     cy.createContributor().then((response) => {
       const uid = response.body.uid
@@ -20,7 +19,6 @@ describe('ContributorDelete.js > Contributor', () => {
         cy.visit(url)
         cy.getByText(copy.detail.isTrashed)
       })
-      cy.log('Test complete')
     })
   })
 })

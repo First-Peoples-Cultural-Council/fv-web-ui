@@ -6,7 +6,6 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
   const waitShort = 50
 
   it('CRUD', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'
     // export ADMIN_PASSWORD='THE_PASSWORD'
@@ -290,6 +289,5 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
       })
     cy.wait(waitShort)
     cy.getByText('Delete phrase success', { exact: false }).should('exist')
-    cy.log('Test complete')
   })
 })

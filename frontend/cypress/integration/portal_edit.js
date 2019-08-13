@@ -1,6 +1,5 @@
 describe('portal_edit.js > ExploreDialect', () => {
   it('Update Dialect Home >  About Us', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'
     // export ADMIN_PASSWORD='THE_PASSWORD'
@@ -38,6 +37,5 @@ describe('portal_edit.js > ExploreDialect', () => {
         cy.wait(500)
         cy.getByText(updateMessage).should('exist')
       })
-    cy.log('Test complete')
   })
 })

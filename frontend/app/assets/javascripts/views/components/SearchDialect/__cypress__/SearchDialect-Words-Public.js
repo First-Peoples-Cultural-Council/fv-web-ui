@@ -5,10 +5,8 @@ import testSearch from '../../../app/assets/javascripts/views/components/SearchD
 import testSearchWords from '../../../app/assets/javascripts/views/components/SearchDialect/__cypress__/common/testSearchWords.js'
 describe('SearchDialect-Words-Public.js > SearchDialect', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
     testSearch()
     testSearchWords()
-    cy.log('Test complete')
   })
 })

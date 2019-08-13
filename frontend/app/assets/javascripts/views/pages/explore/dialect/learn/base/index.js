@@ -169,7 +169,7 @@ export default class PageDialectLearnBase extends Component {
     this.setState({ filterInfo: newFilter })
   }
 
-  handleDialectFilterList(facetField, selected, unselected, type = 'words') {
+  handleDialectFilterList(facetField, selected, unselected, type = 'words', resetUrlPagination = true) {
     const categoriesOrPhraseBook = type === 'words' ? 'categories' : 'phraseBook'
     const currentDialectFilterIds = this.state.filterInfo.get('currentCategoryFilterIds')
     let dialectFilter = ''
@@ -247,7 +247,9 @@ export default class PageDialectLearnBase extends Component {
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    this._resetURLPagination()
+    if (resetUrlPagination === true) {
+      this._resetURLPagination()
+    }
 
     this.setState({ filterInfo: newFilter })
   }

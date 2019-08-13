@@ -21,6 +21,13 @@ import 'cypress-testing-library/add-commands'
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+beforeEach(function() {
+  cy.log('NOTE: Tests are typically run with `npm run startPreprod`')
+  cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
+})
+afterEach(function() {
+  cy.log('Test complete')
+})
 
 // Login
 // Defaults:

@@ -8,12 +8,6 @@ import 'cypress-testing-library/add-commands'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Phrasebook/internationalization.js'
 describe('PhrasebookCreateDelete.js > Phrasebook', () => {
   it('Create', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
-
-    // Should see error page
-    cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/phrasebook')
-    cy.queryByText(copy.errorBoundary.title).should('exist')
-
     // Login
     cy.login()
 
@@ -36,10 +30,15 @@ describe('PhrasebookCreateDelete.js > Phrasebook', () => {
     cy.getByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.create.success.editView).click()
-    cy.getByText(copy.edit.btnInitiate).click()
-    cy.getByText(copy.edit.btnConfirm).click()
-    cy.getByText(copy.edit.successDelete.title).should('exist')
-    cy.log('Test complete')
+    cy.getByText(copy.create.success.createAnother).click()
+
+    // Confirm
+    cy.queryByText(copy.create.title).should('exist')
+
+    // Submit w/no data
+    cy.getByText(copy.create.submit).click()
+
+    // Error should be displayed
+    cy.getByLabelText(copy.validation.name)
   })
 })

@@ -5,7 +5,6 @@ import 'cypress-testing-library/add-commands'
 
 describe('Breadcrumb.js > Breadcrumb', () => {
   it('FW-235: Breadcrumb link to home page from Photo Gallery broken', () => {
-    cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     cy.visit(
       'http://0.0.0.0:3001/nuxeo/app/explore/FV/sections/Data/Wakashan/Nuu%C4%8Daan%CC%93u%C9%AB/Ehattesaht%20Nuchatlaht/gallery'
     )
@@ -22,7 +21,5 @@ describe('Breadcrumb.js > Breadcrumb', () => {
       cy.queryByText('play a game', { exact: false }).should('exist')
       cy.queryByText('photo gallery', { exact: false }).should('exist')
     })
-
-    cy.log('Test complete')
   })
 })
