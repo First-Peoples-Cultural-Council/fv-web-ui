@@ -15,7 +15,6 @@ const sourceScriptsDirectory = path.resolve(sourceAssetsDirectory, 'javascripts'
 const sourceStylesDirectory = path.resolve(sourceAssetsDirectory, 'stylesheets')
 const sourceImagesDirectory = path.resolve(sourceAssetsDirectory, 'images')
 const sourceFontsDirectory = path.resolve(sourceAssetsDirectory, 'fonts')
-const sourceLibrariesDirectory = path.resolve(sourceAssetsDirectory, 'libraries')
 const sourceFaviconsDirectory = path.resolve(sourceAssetsDirectory, 'favicons')
 const sourceGamesDirectory = path.resolve(sourceAssetsDirectory, 'games')
 
@@ -27,7 +26,6 @@ const outputScriptsDirectory = path.join(outputAssetsDirectory, 'javascripts')
 const outputFontsDirectory = path.join(outputAssetsDirectory, 'fonts')
 const outputImagesDirectory = path.join(outputAssetsDirectory, 'images')
 const outputStylesDirectory = path.join(outputAssetsDirectory, 'styles')
-const outputLibrariesDirectory = path.join(outputAssetsDirectory, 'libraries')
 const outputGamesDirectory = path.join(outputAssetsDirectory, 'games')
 
 // Plugins
@@ -175,7 +173,6 @@ module.exports = env => ({
     new CopyPlugin([
       { from: sourceFontsDirectory, to: outputFontsDirectory },
       { from: sourceImagesDirectory, to: outputImagesDirectory },
-      { from: sourceLibrariesDirectory, to: outputLibrariesDirectory },
       { from: sourceFaviconsDirectory, to: env && env.legacy ? outputDirectoryLegacy : outputDirectory },
       { from: sourceGamesDirectory, to: outputGamesDirectory },
     ]),
