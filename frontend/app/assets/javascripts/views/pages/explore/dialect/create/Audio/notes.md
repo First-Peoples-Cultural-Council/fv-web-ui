@@ -1,6 +1,6 @@
 # States
 
-## Unavailable - STATE_UNAVAILABLE
+## Loading - STATE_LOADING
 
 Spinner screen. Form will probably need to get dialect or user data on load.
 

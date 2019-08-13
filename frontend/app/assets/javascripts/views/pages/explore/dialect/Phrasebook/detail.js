@@ -9,11 +9,11 @@ import { fetchCategory, fetchCategories } from 'providers/redux/reducers/fvCateg
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import { STATE_UNAVAILABLE, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
+import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import StateUnavailable from './states/unavailable'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import StateDetail from './states/detail'
-import StateErrorBoundary from './states/errorBoundary'
 
 import '!style-loader!css-loader!./Phrasebook.css'
 
@@ -44,7 +44,7 @@ export class PhrasebookDetail extends React.Component {
   }
 
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
   }
   async componentDidMount() {
     const copy = this.props.copy
@@ -60,8 +60,8 @@ export class PhrasebookDetail extends React.Component {
   render() {
     let content = null
     switch (this.state.componentState) {
-      case STATE_UNAVAILABLE: {
-        content = this._stateGetUnavailable()
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
         break
       }
 
@@ -102,9 +102,9 @@ export class PhrasebookDetail extends React.Component {
       })
     }
   }
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />

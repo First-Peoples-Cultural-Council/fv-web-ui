@@ -19,7 +19,9 @@ const copy = {
     title: 'Create a new contributor',
     profilePhoto: 'Contributor photo',
     success: {
-      createAnother: 'Create a new contributor',
+      linkCreateAnother: 'Create a new contributor',
+      linkProfile: 'Profile',
+      linkEdit: 'Edit',
       noName: '(No name)',
       thanks: 'Thanks for creating a contributor. Your contributions help make the site better!',
       title: 'We created a new contributor',
@@ -45,7 +47,7 @@ const copy = {
     profilePhoto: 'Contributor photo',
     profilePhotoExists: 'Replace current contributor photo',
     success: {
-      createAnother: 'Made a mistake? Edit the contributor again',
+      linkCreateAnother: 'Made a mistake? Edit the contributor again',
       noName: '(No name)',
       thanks: 'Thanks for updating a contributor. Your contributions help make the site better!',
       title: 'We updated the contributor',

@@ -40,7 +40,7 @@ export class PhrasebookStateSuccessDelete extends React.Component {
               NavigationHelpers.navigate(_createUrl, this.props.pushWindowPath, false)
             }}
           >
-            {copy.create.success.createAnother}
+            {copy.create.success.linkCreateAnother}
           </a>
         </p>
       </div>

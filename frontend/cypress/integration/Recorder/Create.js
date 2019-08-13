@@ -25,7 +25,7 @@ describe('Recorder/Create.js > RecorderCreate', () => {
     cy.getByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.create.success.createAnother).click()
+    cy.getByText(copy.create.success.linkCreateAnother).click()
 
     // Confirm
     cy.queryByText(copy.create.title).should('exist')

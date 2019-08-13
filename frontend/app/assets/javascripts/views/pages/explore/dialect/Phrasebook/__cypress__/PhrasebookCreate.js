@@ -6,7 +6,7 @@ import 'cypress-testing-library/add-commands'
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
 // import copy from '/views/pages/explore/dialect/Phrasebook/internationalization'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Phrasebook/internationalization.js'
-describe('PhrasebookCreate.js > Phrasebook', () => {
+describe('PhrasebookCreateDelete.js > Phrasebook', () => {
   it('Create', () => {
     // Login
     cy.login()
@@ -21,7 +21,7 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
     cy.getByLabelText(copy.validation.name)
 
     // Fill in required field
-    cy.getByLabelText(copy.create.name).type('[CY] Name')
+    cy.getByLabelText(copy.create.name).type('[CY] Phrase book name')
 
     // Resubmit
     cy.getByText(copy.create.submit).click()

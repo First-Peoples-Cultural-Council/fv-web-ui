@@ -21,7 +21,7 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createGallery } from 'providers/redux/reducers/fvGallery'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
@@ -34,12 +34,15 @@ import Paper from 'material-ui/lib/paper'
 // import Snackbar from 'material-ui/lib/snackbar'
 
 import ProviderHelpers from 'common/ProviderHelpers'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import IntlService from 'views/services/intl'
-
+import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 const intl = IntlService.instance
 /**
  * Create book entry
@@ -49,51 +52,37 @@ export class PageDialectGalleryCreate extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     // REDUX: reducers/state
+    computeLogin: object.isRequired,
     computeDialect2: object.isRequired,
     computeGallery: object.isRequired,
     windowPath: string.isRequired,
     splitWindowPath: array.isRequired,
     // REDUX: actions/dispatch/func
     createGallery: func.isRequired,
+    fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      formValue: null,
-      galleryPath: null,
-    }
-
-    // Bind methods to 'this'
-    // eslint-disable-next-line
-    ;['_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+  state = {
+    formValue: null,
+    galleryPath: null,
+    componentState: STATE_LOADING,
   }
 
   // Fetch data on initial render
   componentDidMount() {
-    this.fetchData(this.props)
+    this.fetchData()
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     let currentGallery
     let nextGallery
 
     if (this.state.galleryPath != null) {
-      currentGallery = ProviderHelpers.getEntry(this.props.computeGallery, this.state.galleryPath)
-      nextGallery = ProviderHelpers.getEntry(nextProps.computeGallery, this.state.galleryPath)
-    }
-
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+      currentGallery = ProviderHelpers.getEntry(prevProps.computeGallery, this.state.galleryPath)
+      nextGallery = ProviderHelpers.getEntry(this.props.computeGallery, this.state.galleryPath)
     }
 
     // 'Redirect' on success
@@ -101,32 +90,69 @@ export class PageDialectGalleryCreate extends Component {
       selectn('success', currentGallery) != selectn('success', nextGallery) &&
       selectn('success', nextGallery) === true
     ) {
-      nextProps.replaceWindowPath(
-        `${NavigationHelpers.getContextPath()}/${nextProps.routeParams.theme}${selectn(
+      this.props.replaceWindowPath(
+        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.theme}${selectn(
           'response.path',
           nextGallery
         ).replace('Portal', 'gallery')}`
       )
+    } else if (this.props.windowPath !== prevProps.windowPath) {
+      this.fetchData()
     }
   }
 
-  shouldComponentUpdate(newProps) {
-    switch (true) {
-      case newProps.windowPath != this.props.windowPath:
-        return true
+  // shouldComponentUpdate(newProps) {
+  //   switch (true) {
+  //     case newProps.windowPath != this.props.windowPath:
+  //       return true
 
-      case newProps.computeDialect2 != this.props.computeDialect2:
-        return true
+  //     case newProps.computeDialect2 != this.props.computeDialect2:
+  //       return true
 
-      case newProps.computeGallery != this.props.computeGallery:
-        return true
-      default: // Note: do nothing
-    }
+  //     case newProps.computeGallery != this.props.computeGallery:
+  //       return true
+  //     default: // Note: do nothing
+  //   }
 
-    return false
+  //   return false
+  // }
+
+  render() {
+    const content = this._getContent()
+    return content
   }
 
-  _onRequestSaveForm(e) {
+  fetchData = async () => {
+    await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+      })
+      return
+    }
+
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+    })
+  }
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+  _onRequestSaveForm = (e) => {
     // Prevent default behaviour
     e.preventDefault()
 
@@ -171,8 +197,7 @@ export class PageDialectGalleryCreate extends Component {
       window.scrollTo(0, 0)
     }
   }
-
-  render() {
+  _stateGetDefault = () => {
     const FVGalleryOptions = Object.assign({}, selectn('FVGallery', options))
 
     const computeEntities = Immutable.fromJS([
@@ -190,56 +215,74 @@ export class PageDialectGalleryCreate extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.gallery.add_new_gallery_to_x',
-            'Add New Gallery to ' + selectn('response.title', computeDialect2),
-            null,
-            [selectn('response.title', computeDialect2)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <h1>
+            {intl.trans(
+              'views.pages.explore.dialect.gallery.add_new_gallery_to_x',
+              'Add New Gallery to ' + selectn('response.title', computeDialect2),
+              null,
+              [selectn('response.title', computeDialect2)]
+            )}
+          </h1>
 
-        <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
-              <t.form.Form
-                ref="form_gallery_create" // TODO: DEPRECATED
-                type={t.struct(selectn('FVGallery', fields))}
-                context={selectn('response', computeDialect2)}
-                value={this.state.formValue}
-                options={FVGalleryOptions}
-              />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
-                </button>
-              </div>
-            </form>
-          </div>
+          <div className="row" style={{ marginTop: '15px' }}>
+            <div className={classNames('col-xs-8', 'col-md-10')}>
+              <form onSubmit={this._onRequestSaveForm}>
+                <t.form.Form
+                  ref="form_gallery_create" // TODO: DEPRECATED
+                  type={t.struct(selectn('FVGallery', fields))}
+                  context={selectn('response', computeDialect2)}
+                  value={this.state.formValue}
+                  options={FVGalleryOptions}
+                />
+                <div className="form-group">
+                  <button type="submit" className="btn btn-primary">
+                    {intl.trans('save', 'Save', 'first')}
+                  </button>
+                </div>
+              </form>
+            </div>
 
-          <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-            </Paper>
+            <div className={classNames('col-xs-4', 'col-md-2')}>
+              <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+                <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+              </Paper>
+            </div>
           </div>
-        </div>
-      </PromiseWrapper>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
+  }
+  _stateGetErrorBoundary = () => {
+    const { copy, errorMessage } = this.state
+    return <StateErrorBoundary copy={copy} errorMessage={errorMessage} />
+  }
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvGallery, windowPath } = state
+  const { fvDialect, fvGallery, navigation, nuxeo, windowPath } = state
 
   const { computeGallery } = fvGallery
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { route } = navigation
+  const { computeLogin } = nuxeo
 
   return {
     computeDialect2,
     computeGallery,
+    computeLogin,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -248,6 +291,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   createGallery,
+  fetchDialect,
   fetchDialect2,
   pushWindowPath,
   replaceWindowPath,

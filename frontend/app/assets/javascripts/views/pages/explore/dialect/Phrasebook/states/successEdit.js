@@ -84,7 +84,7 @@ export class PhrasebookStateSuccessEdit extends React.Component {
                     NavigationHelpers.navigate(phrasebookCreateUrl, this.props.pushWindowPath, false)
                   }}
                 >
-                  {copy.edit.success.createAnother}
+                  {copy.edit.success.linkCreateAnother}
                 </a>
               </li>
 

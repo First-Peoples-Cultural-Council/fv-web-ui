@@ -1,10 +1,13 @@
 import React from 'react'
 import { PropTypes } from 'react'
+import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
-import StateSuccessDefault from './states/successCreate'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import StateSuccessCreate from './states/successCreate'
 import StateCreate from './states/create'
-import StateErrorBoundary from './states/errorBoundary'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -16,7 +19,7 @@ import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -44,7 +47,11 @@ export class Contributor extends React.Component {
     DEFAULT_SORT_COL: string,
     DEFAULT_SORT_TYPE: string,
     validator: object,
+    generateUrlDetail: func,
+    generateUrlEdit: func,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeContributor: object.isRequired,
     computeCreateContributor: object,
     computeDialect: object.isRequired,
@@ -57,7 +64,7 @@ export class Contributor extends React.Component {
     pushWindowPath: func.isRequired,
   }
   static defaultProps = {
-    className: 'FormContributor',
+    className: '',
     groupName: '',
     breadcrumb: null,
     DEFAULT_PAGE,
@@ -73,7 +80,7 @@ export class Contributor extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -99,15 +106,6 @@ export class Contributor extends React.Component {
 
     // Get data for computeDialect
     await this.props.fetchDialect('/' + this.DIALECT_PATH)
-    if (this.props.computeDialect.isError && this.props.computeDialect.error) {
-      // Flip to ready state...
-      this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
-        copy,
-        errorMessage: this.props.computeDialect.error,
-      })
-      return
-    }
 
     let currentAppliedFilter = '' // eslint-disable-line
     // if (filter.has('currentAppliedFilter')) {
@@ -137,8 +135,8 @@ export class Contributor extends React.Component {
   render() {
     let content = null
     switch (this.state.componentState) {
-      case STATE_UNAVAILABLE: {
-        content = this._stateGetUnavailable()
+      case STATE_LOADING: {
+        content = this._stateGetLoading()
         break
       }
 
@@ -165,9 +163,9 @@ export class Contributor extends React.Component {
     return content
   }
 
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />
@@ -175,24 +173,37 @@ export class Contributor extends React.Component {
   _stateGetCreate = () => {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy } = this.state
-    //   isFetching || isSuccess
-    // const isInProgress = false
-    // // const isFetching = selectn('isFetching', computeCreate)
-    // const isFetching = false
-    // const formStatus = isFetching ? <div className="alert alert-info">{'Uploading... Please be patient...'}</div> : null
     return (
-      <StateCreate
-        className={className}
-        copy={this.state.copy}
-        groupName={groupName}
-        breadcrumb={breadcrumb}
-        errors={errors}
-        isBusy={isBusy}
-        onRequestSaveForm={() => {
-          this._onRequestSaveForm()
-        }}
-        setFormRef={this.setFormRef}
-      />
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={
+          <StateErrorBoundary copy={this.state.copy} errorMessage={this.props.computeDialect.error} />
+        }
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: this.props.routeParams.dialect_path,
+              entity: this.props.computeDialect,
+            },
+          ])}
+        >
+          <StateCreate
+            className={className}
+            copy={this.state.copy}
+            groupName={groupName}
+            breadcrumb={breadcrumb}
+            errors={errors}
+            isBusy={isBusy}
+            onRequestSaveForm={() => {
+              this._onRequestSaveForm()
+            }}
+            setFormRef={this.setFormRef}
+          />
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetError = () => {
@@ -200,12 +211,14 @@ export class Contributor extends React.Component {
     return this._stateGetCreate()
   }
   _stateGetSuccess = () => {
-    const { className } = this.props
+    const { className, generateUrlDetail, generateUrlEdit } = this.props
     const { formData, itemUid } = this.state
     return (
-      <StateSuccessDefault
+      <StateSuccessCreate
         className={className}
         copy={this.state.copy}
+        generateUrlDetail={generateUrlDetail}
+        generateUrlEdit={generateUrlEdit}
         formData={formData}
         itemUid={itemUid}
         handleClick={() => {
@@ -297,17 +310,20 @@ export class Contributor extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvContributor, windowPath } = state
+  const { fvDialect, fvContributor, navigation, nuxeo, windowPath } = state
 
   const { computeContributor, computeCreateContributor } = fvContributor
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
-
+  const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
     computeContributor,
     computeCreateContributor,
     computeDialect,
     computeDialect2,
+    computeLogin,
+    routeParams: route.routeParams,
     splitWindowPath,
   }
 }

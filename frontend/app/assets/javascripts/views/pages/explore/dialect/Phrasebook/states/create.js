@@ -80,9 +80,9 @@ export class PhrasebookStateCreate extends React.Component {
       >
         {breadcrumb}
 
-        <div className="Contributor__btnHeader">
+        <div className="Phrasebook__btnHeader">
           <button
-            className="_btn _btn--secondary Contributor__btnBack"
+            className="_btn _btn--secondary Phrasebook__btnBack"
             type="button"
             onClick={() => {
               window.history.back()
@@ -137,7 +137,7 @@ export class PhrasebookStateCreate extends React.Component {
 
         {getErrorFeedback({ errors })}
 
-        <div className="Contributor__btn-container">
+        <div className="Phrasebook__btn-container">
           {/* BTN: Create ------------- */}
           <button className="_btn _btn--primary" disabled={isBusy || isTrashed} type="submit">
             {_copy.submit}
