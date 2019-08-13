@@ -1,11 +1,14 @@
 import React from 'react'
 import { PropTypes } from 'react'
+import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import StateSuccessEdit from './states/successEdit'
 import StateSuccessDelete from './states/successDelete'
 import StateEdit from './states/create'
-import StateErrorBoundary from './states/errorBoundary'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -27,7 +30,7 @@ import { getFormData, handleSubmit } from 'common/FormHelpers'
 import { Document } from 'nuxeo'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -64,6 +67,7 @@ export class EditContributor extends React.Component {
     computeCreateContributor: object,
     computeDialect: object.isRequired,
     computeDialect2: object.isRequired,
+    computeLogin: object.isRequired,
     routeParams: object.isRequired,
     splitWindowPath: array.isRequired,
     // REDUX: actions/dispatch/func
@@ -93,7 +97,7 @@ export class EditContributor extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -144,22 +148,24 @@ export class EditContributor extends React.Component {
         break
       }
       default:
-        // STATE_UNAVAILABLE === loading
-        content = this._stateGetUnavailable()
+        // STATE_LOADING === loading
+        content = this._stateGetLoading()
     }
     return content
   }
   _getData = async (addToState = {}) => {
-    // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
+
+    // Get data for computeDialect
+    await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     await this.props.fetchContributor(itemId)
     const contributor = await this._getItem()
 
     if (contributor.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: contributor.message,
         ...addToState,
       })
@@ -178,9 +184,9 @@ export class EditContributor extends React.Component {
       })
     }
   }
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} copy={this.state.copy} />
+    return <StateLoading className={className} copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     return <StateErrorBoundary errorMessage={this.state.errorMessage} copy={this.state.copy} />
@@ -189,30 +195,46 @@ export class EditContributor extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy, isTrashed, valueDescription, valueName, valuePhotoName, valuePhotoData } = this.state
     return (
-      <StateEdit
-        copy={this.state.copy}
-        className={className}
-        groupName={groupName}
-        breadcrumb={breadcrumb}
-        errors={errors}
-        isBusy={isBusy}
-        isTrashed={isTrashed}
-        isEdit
-        deleteItem={() => {
-          this.props.deleteContributor(this.state.contributor.id)
-          this.setState({
-            componentState: STATE_SUCCESS_DELETE,
-          })
-        }}
-        onRequestSaveForm={() => {
-          this._onRequestSaveForm()
-        }}
-        setFormRef={this.setFormRef}
-        valueName={valueName}
-        valueDescription={valueDescription}
-        valuePhotoName={valuePhotoName}
-        valuePhotoData={valuePhotoData}
-      />
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: this.props.routeParams.dialect_path,
+              entity: this.props.computeDialect,
+            },
+          ])}
+        >
+          <StateEdit
+            copy={this.state.copy}
+            className={className}
+            groupName={groupName}
+            breadcrumb={breadcrumb}
+            errors={errors}
+            isBusy={isBusy}
+            isTrashed={isTrashed}
+            isEdit
+            deleteItem={() => {
+              this.props.deleteContributor(this.state.contributor.id)
+              this.setState({
+                componentState: STATE_SUCCESS_DELETE,
+              })
+            }}
+            onRequestSaveForm={() => {
+              this._onRequestSaveForm()
+            }}
+            setFormRef={this.setFormRef}
+            valueName={valueName}
+            valueDescription={valueDescription}
+            valuePhotoName={valuePhotoName}
+            valuePhotoData={valuePhotoData}
+          />
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetError = () => {
@@ -342,12 +364,13 @@ export class EditContributor extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvContributor, fvDialect, navigation, windowPath } = state
+  const { fvContributor, fvDialect, navigation, nuxeo, windowPath } = state
 
   const { computeContributor, computeContributors, computeCreateContributor } = fvContributor
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
+  const { computeLogin } = nuxeo
 
   return {
     computeContributor,
@@ -355,6 +378,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeCreateContributor,
     computeDialect,
     computeDialect2,
+    computeLogin,
     routeParams: route.routeParams,
     splitWindowPath,
   }

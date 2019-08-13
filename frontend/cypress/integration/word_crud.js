@@ -149,6 +149,7 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
         .parent()
         .parent()
         .parent()
+        .parent()
         .within(() => {
           cy.getByLabelText('phrase', { exact: false }).type('UPDATE > PHRASE')
           cy.getByText('cancel', { exact: false }).click()

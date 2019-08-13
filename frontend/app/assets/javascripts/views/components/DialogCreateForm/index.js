@@ -3,7 +3,7 @@ import Dialog from 'material-ui/lib/dialog'
 import FlatButton from 'material-ui/lib/flat-button'
 import RaisedButton from 'material-ui/lib/raised-button'
 
-import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/create'
+import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
 import PageDialectCategoryCreate from 'views/pages/explore/dialect/category/create'
 
 import PageDialectContributorsCreate from 'views/pages/explore/dialect/Contributor/createV1'

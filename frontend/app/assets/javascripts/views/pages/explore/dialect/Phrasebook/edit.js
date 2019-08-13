@@ -1,11 +1,14 @@
 import React from 'react'
 import { PropTypes } from 'react'
+import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateUnavailable from './states/unavailable'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 import StateSuccessEdit from './states/successEdit'
 import StateSuccessDelete from './states/successDelete'
 import StateEdit from './states/create'
-import StateErrorBoundary from './states/errorBoundary'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -27,7 +30,7 @@ import { getFormData, handleSubmit } from 'common/FormHelpers'
 import { Document } from 'nuxeo'
 
 import {
-  STATE_UNAVAILABLE,
+  STATE_LOADING,
   STATE_DEFAULT,
   STATE_ERROR,
   STATE_SUCCESS,
@@ -65,6 +68,7 @@ export class PhrasebookEdit extends React.Component {
     computeDialect: object.isRequired,
     computeDialect2: object.isRequired,
     routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     splitWindowPath: array.isRequired,
     // REDUX: actions/dispatch/func
     createCategory: func.isRequired,
@@ -93,7 +97,7 @@ export class PhrasebookEdit extends React.Component {
     isBusy: false,
   }
   state = {
-    componentState: STATE_UNAVAILABLE,
+    componentState: STATE_LOADING,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -144,8 +148,8 @@ export class PhrasebookEdit extends React.Component {
         break
       }
       default:
-        // STATE_UNAVAILABLE === loading
-        content = this._stateGetUnavailable()
+        // STATE_LOADING === loading
+        content = this._stateGetLoading()
     }
     return content
   }
@@ -153,13 +157,13 @@ export class PhrasebookEdit extends React.Component {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
-
+    await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchCategory(itemId)
     const item = await this._getItem()
 
     if (item.isError) {
       this.setState({
-        componentState: STATE_ERROR_BOUNDARY,
+        componentState: STATE_DEFAULT,
         errorMessage: item.message,
         ...addToState,
       })
@@ -176,9 +180,9 @@ export class PhrasebookEdit extends React.Component {
       })
     }
   }
-  _stateGetUnavailable = () => {
+  _stateGetLoading = () => {
     const { className } = this.props
-    return <StateUnavailable className={className} isEdit copy={this.state.copy} />
+    return <StateLoading className={className} isEdit copy={this.state.copy} />
   }
   _stateGetErrorBoundary = () => {
     // Make `errorBoundary.explanation` === `errorBoundary.explanationEdit`
@@ -190,28 +194,44 @@ export class PhrasebookEdit extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy, isTrashed, valueDescription, valueName } = this.state
     return (
-      <StateEdit
-        copy={this.state.copy}
-        className={className}
-        groupName={groupName}
-        breadcrumb={breadcrumb}
-        errors={errors}
-        isBusy={isBusy}
-        isTrashed={isTrashed}
-        isEdit
-        deleteItem={() => {
-          this.props.deleteCategory(this.state.item.id)
-          this.setState({
-            componentState: STATE_SUCCESS_DELETE,
-          })
-        }}
-        onRequestSaveForm={() => {
-          this._onRequestSaveForm()
-        }}
-        setFormRef={this.setFormRef}
-        valueName={valueName}
-        valueDescription={valueDescription}
-      />
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper
+          computeEntities={Immutable.fromJS([
+            {
+              id: `/${this.props.routeParams.dialect_path}`,
+              entity: this.props.fetchDialect,
+            },
+          ])}
+        >
+          <StateEdit
+            copy={this.state.copy}
+            className={className}
+            groupName={groupName}
+            breadcrumb={breadcrumb}
+            errors={errors}
+            isBusy={isBusy}
+            isTrashed={isTrashed}
+            isEdit
+            deleteItem={() => {
+              this.props.deleteCategory(this.state.item.id)
+              this.setState({
+                componentState: STATE_SUCCESS_DELETE,
+              })
+            }}
+            onRequestSaveForm={() => {
+              this._onRequestSaveForm()
+            }}
+            setFormRef={this.setFormRef}
+            valueName={valueName}
+            valueDescription={valueDescription}
+          />
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
   _stateGetError = () => {
@@ -328,14 +348,15 @@ export class PhrasebookEdit extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, navigation, windowPath } = state
+  const { fvCategory, fvDialect, navigation, nuxeo, windowPath } = state
 
   const { computeCategory, computeCategories, computeCreateCategory } = fvCategory
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
-
+  const { computeLogin } = nuxeo
   return {
+    computeLogin,
     computeCategory,
     computeCategories,
     computeCreateCategory,

@@ -21,7 +21,7 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createBook } from 'providers/redux/reducers/fvBook'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
@@ -30,13 +30,18 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
+
+import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 /**
  * Create song/story book
  */
@@ -45,84 +50,101 @@ const { array, func, object, string } = PropTypes
 export class PageDialectStoriesAndSongsCreate extends Component {
   static propTypes = {
     typeFilter: string,
-    routeParams: object.isRequired,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeBook: object.isRequired,
     computeDialect2: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     createBook: func.isRequired,
+    fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      formValue: null,
-      dialectPath: null,
-      bookPath: null,
-    }
-
-    // Bind methods to 'this'
-    ;['_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+  state = {
+    formValue: null,
+    dialectPath: null,
+    bookPath: null,
+    componentState: STATE_LOADING,
   }
 
   // Fetch data on initial render
   componentDidMount() {
-    this.fetchData(this.props)
+    this.fetchData()
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    let previousBook
     let currentBook
-    let nextBook
 
     if (this.state.bookPath !== null) {
+      previousBook = ProviderHelpers.getEntry(prevProps.computeBook, this.state.bookPath)
       currentBook = ProviderHelpers.getEntry(this.props.computeBook, this.state.bookPath)
-      nextBook = ProviderHelpers.getEntry(nextProps.computeBook, this.state.bookPath)
     }
 
-    if (nextProps.windowPath !== this.props.windowPath) {
-      this.fetchData(nextProps)
+    if (this.props.windowPath !== prevProps.windowPath) {
+      this.fetchData()
     }
 
     // 'Redirect' on success
-    if (selectn('success', currentBook) != selectn('success', nextBook) && selectn('success', nextBook) === true) {
+    if (
+      selectn('success', previousBook) != selectn('success', currentBook) &&
+      selectn('success', currentBook) === true
+    ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          nextProps.routeParams.theme,
-          selectn('response', nextBook),
-          this.props.typeFilter === 'story' ? 'stories' : 'songs'
+          this.props.routeParams.theme,
+          selectn('response', currentBook),
+          prevProps.typeFilter === 'story' ? 'stories' : 'songs'
         ),
-        nextProps.replaceWindowPath,
+        this.props.replaceWindowPath,
         true
       )
     }
   }
 
-  shouldComponentUpdate(newProps /*, newState*/) {
-    switch (true) {
-      case newProps.windowPath !== this.props.windowPath:
-        return true
-
-      case newProps.computeDialect2 != this.props.computeDialect2:
-        return true
-
-      case newProps.computeBook != this.props.computeBook:
-        return true
-      default:
-        return false
-    }
+  render() {
+    const content = this._getContent()
+    return content
   }
 
-  _onRequestSaveForm(e) {
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+
+  fetchData = async (addToState = {}) => {
+    await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+        ...addToState,
+      })
+      return
+    }
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+      ...addToState,
+    })
+  }
+
+  _onRequestSaveForm = (e) => {
     // Prevent default behaviour
     e.preventDefault()
 
@@ -166,8 +188,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
       window.scrollTo(0, 0)
     }
   }
-
-  render() {
+  _stateGetDefault = () => {
     const FVBookOptions = Object.assign({}, selectn('FVBook', options))
 
     const computeEntities = Immutable.fromJS([
@@ -204,50 +225,64 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     }
 
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.learn.songs_stories.add_new_x_book_to_x',
-            'Add New ' + this.props.typeFilter + ' Book to ' + selectn('response.title', _computeDialect2),
-            'first',
-            [this.props.typeFilter, selectn('response.title', _computeDialect2)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <h1>
+            {intl.trans(
+              'views.pages.explore.dialect.learn.songs_stories.add_new_x_book_to_x',
+              'Add New ' + this.props.typeFilter + ' Book to ' + selectn('response.title', _computeDialect2),
+              'first',
+              [this.props.typeFilter, selectn('response.title', _computeDialect2)]
+            )}
+          </h1>
 
-        <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
-              <t.form.Form
-                ref="form_book_create" // TODO: DEPRECATED
-                type={t.struct(selectn('FVBook', fields))}
-                context={selectn('response', _computeDialect2)}
-                value={this.state.formValue || { 'fvbook:type': this.props.typeFilter }}
-                options={FVBookOptions}
-              />
-              <div data-testid="PageDialectStoriesAndSongsCreate__btnGroup" className="form-group">
-                <button type="submit" className="RaisedButton RaisedButton--primary">
-                  {intl.trans('save', 'Save', 'first')}
-                </button>
-              </div>
-            </form>
+          <div className="row" style={{ marginTop: '15px' }}>
+            <div className={classNames('col-xs-8', 'col-md-10')}>
+              <form onSubmit={this._onRequestSaveForm}>
+                <t.form.Form
+                  ref="form_book_create" // TODO: DEPRECATED
+                  type={t.struct(selectn('FVBook', fields))}
+                  context={selectn('response', _computeDialect2)}
+                  value={this.state.formValue || { 'fvbook:type': this.props.typeFilter }}
+                  options={FVBookOptions}
+                />
+                <div data-testid="PageDialectStoriesAndSongsCreate__btnGroup" className="form-group">
+                  <button type="submit" className="RaisedButton RaisedButton--primary">
+                    {intl.trans('save', 'Save', 'first')}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </PromiseWrapper>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
+  }
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, windowPath } = state
+  const { fvBook, fvDialect, navigation, nuxeo, windowPath } = state
 
   const { computeBook } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { route } = navigation
+  const { computeLogin } = nuxeo
 
   return {
     computeBook,
     computeDialect2,
+    computeLogin,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -256,6 +291,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   createBook,
+  fetchDialect,
   fetchDialect2,
   pushWindowPath,
   replaceWindowPath,

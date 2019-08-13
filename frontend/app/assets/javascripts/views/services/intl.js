@@ -1,3 +1,5 @@
+// TODO: remove eslint-disable
+/* eslint-disable */
 import selectn from 'selectn'
 import en from 'views/../locale/locale.en.json'
 import fr from 'views/../locale/locale.fr.json'
@@ -433,3 +435,5 @@ export default class IntlService {
     }
   }
 }
+// TODO: remove eslint-disable
+/* eslint-enable */

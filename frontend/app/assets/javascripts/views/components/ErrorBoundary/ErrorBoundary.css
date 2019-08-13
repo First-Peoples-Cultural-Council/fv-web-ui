@@ -1,0 +1,8 @@
+/* BLOCK */
+.ErrorBoundary {
+  margin-bottom: 7rem;
+}
+/* ELEMENT */
+.ErrorBoundary__heading {
+  font-size: 3rem;
+}

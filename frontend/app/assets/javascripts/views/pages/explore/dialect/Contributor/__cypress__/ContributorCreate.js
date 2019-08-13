@@ -7,7 +7,7 @@ import 'cypress-testing-library/add-commands'
 // import copy from '/views/pages/explore/dialect/Contributor/internationalization'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Contributor/internationalization.js'
 
-describe('ContributorCreate.js > Contributor', () => {
+describe('ContributorCreateDelete.js > Contributor', () => {
   it('Create', () => {
     // Login
     cy.login()
@@ -21,7 +21,7 @@ describe('ContributorCreate.js > Contributor', () => {
     cy.getByLabelText(copy.validation.name)
 
     // Fill in Name
-    cy.getByLabelText(`${copy.create.name} *`).type('contributor name [CY]')
+    cy.getByLabelText(`${copy.create.name} *`).type('[CY] Contributor name')
 
     // Resubmit
     cy.getByText(copy.create.submit).click()
@@ -29,14 +29,11 @@ describe('ContributorCreate.js > Contributor', () => {
     // Should see success
     cy.getByText(copy.create.success.title).should('exist')
 
-    // Create another
-    cy.getByText(copy.create.success.createAnother).click()
-
-    // Confirm
-    cy.queryByText(copy.create.title).should('exist')
-
-    // Submit w/no data
-    cy.getByText(copy.create.submit).click()
+    // Visit edit & delete contributor:
+    cy.getByText(copy.create.success.linkEdit).click()
+    cy.getByText(copy.edit.btnInitiate).click()
+    cy.getByText(copy.edit.btnConfirm).click()
+    cy.getByText(copy.edit.successDelete.title).should('exist')
 
     // Error should be displayed
     cy.getByLabelText(copy.validation.name)

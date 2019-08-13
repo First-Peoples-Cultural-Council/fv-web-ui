@@ -8,6 +8,7 @@ export default class AuthenticationFilter extends Component {
     hideFromSections: PropTypes.bool,
     containerStyle: PropTypes.object,
     login: PropTypes.object.isRequired,
+    notAuthenticatedComponent: PropTypes.node,
     routeParams: PropTypes.object,
     anon: PropTypes.bool,
     sections: PropTypes.bool,
@@ -16,6 +17,7 @@ export default class AuthenticationFilter extends Component {
   static defaultProps = {
     hideFromSections: false,
     anon: false,
+    notAuthenticatedComponent: null,
   }
 
   constructor(props, context) {
@@ -33,6 +35,7 @@ export default class AuthenticationFilter extends Component {
     if (anon) {
       return comonentToRender
     }
+
     // Logged in user.
     if (login.success && login.isConnected) {
       // Hide from sections for logged in user as well.
@@ -43,6 +46,6 @@ export default class AuthenticationFilter extends Component {
       return comonentToRender
     }
 
-    return null
+    return this.props.notAuthenticatedComponent
   }
 }

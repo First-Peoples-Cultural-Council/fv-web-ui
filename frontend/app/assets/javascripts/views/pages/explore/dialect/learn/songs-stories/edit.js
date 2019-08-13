@@ -28,7 +28,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
+
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import StateLoading from 'views/components/Loading'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
+import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
+
 import Tabs from 'material-ui/lib/tabs/tabs'
 import Tab from 'material-ui/lib/tabs/tab'
 
@@ -57,9 +63,10 @@ const EditViewWithForm = withForm(PromiseWrapper, true)
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
-    routeParams: object.isRequired,
     book: object,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
+    computeLogin: object.isRequired,
     computeBook: object.isRequired,
     computeBookEntries: object.isRequired,
     computeDialect2: object.isRequired,
@@ -76,58 +83,90 @@ export class PageDialectBookEdit extends Component {
     updateBook: func.isRequired,
     updateBookEntry: func.isRequired,
   }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      editPageDialogOpen: false,
-      editPageItem: null,
-      formValue: null,
-      sortedItems: List(),
-    }
-
-    // Bind methods to 'this'
-    ;['_editPage', '_pageSaved', '_storeSortOrder', '_handleSave', '_handleCancel'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
-    newProps.fetchBook(this._getBookPath())
-    newProps.fetchBookEntries(this._getBookPath(), DEFAULT_SORT_ORDER)
+  state = {
+    editPageDialogOpen: false,
+    editPageItem: null,
+    formValue: null,
+    sortedItems: List(),
+    componentState: STATE_LOADING,
   }
 
   // Redirect on success
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     let currentBook
     let nextBook
 
     if (this._getBookPath() !== null) {
-      currentBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
-      nextBook = ProviderHelpers.getEntry(nextProps.computeBook, this._getBookPath())
+      currentBook = ProviderHelpers.getEntry(prevProps.computeBook, this._getBookPath())
+      nextBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
     }
 
-    // 'Redirect' on success
     if (
       selectn('wasUpdated', currentBook) != selectn('wasUpdated', nextBook) &&
       selectn('wasUpdated', nextBook) === true
     ) {
+      // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextBook), 'songs-stories'),
-        nextProps.replaceWindowPath,
+        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextBook), 'songs-stories'),
+        this.props.replaceWindowPath,
         true
       )
+    } else {
+      const book = selectn('response', ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath()))
+      const title = selectn('properties.dc:title', book)
+      const uid = selectn('uid', book)
+
+      if (title && selectn('pageTitleParams.bookName', this.props.properties) != title) {
+        this.props.changeTitleParams({ bookName: title })
+        this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.bookName' })
+      }
     }
   }
 
   // Fetch data on initial render
   componentDidMount() {
-    this.fetchData(this.props)
+    this.fetchData()
   }
 
-  _handleSave(book, formValue) {
+  render() {
+    const content = this._getContent()
+    return content
+  }
+
+  _getContent = () => {
+    let content = null
+    switch (this.state.componentState) {
+      case STATE_DEFAULT: {
+        content = this._stateGetDefault()
+        break
+      }
+      default:
+        content = this._stateGetLoading()
+    }
+    return content
+  }
+  fetchData = async () => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+    if (_computeDialect2.isError) {
+      this.setState({
+        componentState: STATE_DEFAULT,
+        errorMessage: _computeDialect2.message,
+      })
+      return
+    }
+
+    await this.props.fetchBook(this._getBookPath())
+    await this.props.fetchBookEntries(this._getBookPath(), DEFAULT_SORT_ORDER)
+
+    this.setState({
+      componentState: STATE_DEFAULT,
+      errorMessage: undefined,
+    })
+  }
+
+  _handleSave = (book, formValue) => {
     const newDocument = new Document(book.response, {
       repository: book.response._repository,
       nuxeo: book.response._nuxeo,
@@ -142,21 +181,21 @@ export class PageDialectBookEdit extends Component {
     this.setState({ formValue: formValue })
   }
 
-  _handleCancel() {
+  _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.pushWindowPath)
   }
 
-  _storeSortOrder(items) {
+  _storeSortOrder = (items) => {
     this.setState({
       sortedItems: items,
     })
   }
 
-  _editPage(item) {
+  _editPage = (item) => {
     this.setState({ editPageDialogOpen: true, editPageItem: item })
   }
 
-  _getBookPath(props = null) {
+  _getBookPath = (props = null) => {
     const _props = props === null ? this.props : props
 
     if (StringHelpers.isUUID(_props.routeParams.bookName)) {
@@ -165,7 +204,7 @@ export class PageDialectBookEdit extends Component {
     return _props.routeParams.dialect_path + '/Stories & Songs/' + StringHelpers.clean(_props.routeParams.bookName)
   }
 
-  _pageSaved() {
+  _pageSaved = () => {
     // Ensure update is complete before re-fetch.
     setTimeout(
       function pageSavedSetTimeout() {
@@ -176,18 +215,7 @@ export class PageDialectBookEdit extends Component {
     this.setState({ editPageDialogOpen: false, editPageItem: null })
   }
 
-  componentDidUpdate(/*prevProps, prevState*/) {
-    const book = selectn('response', ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath()))
-    const title = selectn('properties.dc:title', book)
-    const uid = selectn('uid', book)
-
-    if (title && selectn('pageTitleParams.bookName', this.props.properties) != title) {
-      this.props.changeTitleParams({ bookName: title })
-      this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.bookName' })
-    }
-  }
-
-  render() {
+  _stateGetDefault = () => {
     let context
 
     const computeEntities = Immutable.fromJS([
@@ -205,99 +233,112 @@ export class PageDialectBookEdit extends Component {
       },
     ])
 
-    const computeBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
-    const computeBookEntries = ProviderHelpers.getEntry(this.props.computeBookEntries, this._getBookPath())
-    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+    const _computeBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
+    const _computeBookEntries = ProviderHelpers.getEntry(this.props.computeBookEntries, this._getBookPath())
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     // Additional context (in order to store origin), and initial filter value
-    if (selectn('response', computeDialect2) && selectn('response', computeBook)) {
+    if (selectn('response', _computeDialect2) && selectn('response', _computeBook)) {
       const providedFilter =
-        selectn('response.properties.fv-phrase:definitions[0].translation', computeBook) ||
-        selectn('response.properties.fv:literal_translation[0].translation', computeBook)
-      context = Object.assign(selectn('response', computeDialect2), {
+        selectn('response.properties.fv-phrase:definitions[0].translation', _computeBook) ||
+        selectn('response.properties.fv:literal_translation[0].translation', _computeBook)
+      context = Object.assign(selectn('response', _computeDialect2), {
         otherContext: {
-          parentId: selectn('response.uid', computeBook),
+          parentId: selectn('response.uid', _computeBook),
           providedFilter: providedFilter,
         },
       })
     }
 
     return (
-      <div>
-        <Tabs>
-          <Tab label={intl.trans('book', 'Book', 'first')}>
-            <h1>
-              {intl.trans(
-                'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
-                'Edit ' + selectn('response.properties.dc:title', computeBook) + ' Book',
-                'words',
-                [selectn('response.properties.dc:title', computeBook)]
-              )}
-            </h1>
-            <EditViewWithForm
-              computeEntities={computeEntities}
-              initialValues={context}
-              itemId={this._getBookPath()}
-              fields={fields}
-              options={options}
-              saveMethod={this._handleSave}
-              cancelMethod={this._handleCancel}
-              currentPath={this.props.splitWindowPath}
-              navigationMethod={this.props.pushWindowPath}
-              type="FVBook"
-              routeParams={this.props.routeParams}
-            />
-          </Tab>
-          <Tab label={intl.trans('pages', 'Pages', 'first')}>
-            <h1>
-              {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', computeBook) + ' pages', 'first', [
-                selectn('response.properties.dc:title', computeBook),
-              ])}
-            </h1>
-            <BookEntryList
-              reorder
-              sortOrderChanged={this._storeSortOrder}
-              defaultLanguage={DEFAULT_LANGUAGE}
-              editAction={this._editPage}
-              innerStyle={{ minHeight: 'inherit' }}
-              metadata={selectn('response', computeBookEntries) || {}}
-              items={selectn('response.entries', computeBookEntries) || []}
-            />
-          </Tab>
-        </Tabs>
+      <AuthenticationFilter
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
+      >
+        <div>
+          <Tabs>
+            <Tab label={intl.trans('book', 'Book', 'first')}>
+              <h1>
+                {intl.trans(
+                  'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
+                  'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' Book',
+                  'words',
+                  [selectn('response.properties.dc:title', _computeBook)]
+                )}
+              </h1>
+              <EditViewWithForm
+                computeEntities={computeEntities}
+                initialValues={context}
+                itemId={this._getBookPath()}
+                fields={fields}
+                options={options}
+                saveMethod={this._handleSave}
+                cancelMethod={this._handleCancel}
+                currentPath={this.props.splitWindowPath}
+                navigationMethod={this.props.pushWindowPath}
+                type="FVBook"
+                routeParams={this.props.routeParams}
+              />
+            </Tab>
+            <Tab label={intl.trans('pages', 'Pages', 'first')}>
+              <h1>
+                {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' pages', 'first', [
+                  selectn('response.properties.dc:title', _computeBook),
+                ])}
+              </h1>
+              <BookEntryList
+                reorder
+                sortOrderChanged={this._storeSortOrder}
+                defaultLanguage={DEFAULT_LANGUAGE}
+                editAction={this._editPage}
+                innerStyle={{ minHeight: 'inherit' }}
+                metadata={selectn('response', _computeBookEntries) || {}}
+                items={selectn('response.entries', _computeBookEntries) || []}
+              />
+            </Tab>
+          </Tabs>
 
-        <Dialog
-          autoScrollBodyContent
-          style={{ zIndex: 0 }}
-          overlayStyle={{ background: 'none' }}
-          open={this.state.editPageDialogOpen}
-          onRequestClose={() => this.setState({ editPageDialogOpen: false })}
-        >
-          <BookEntryEdit
-            entry={this.state.editPageItem}
-            handlePageSaved={this._pageSaved}
-            dialectEntry={computeDialect2}
-            {...this.props}
-          />
-        </Dialog>
-      </div>
+          <Dialog
+            autoScrollBodyContent
+            style={{ zIndex: 0 }}
+            overlayStyle={{ background: 'none' }}
+            open={this.state.editPageDialogOpen}
+            onRequestClose={() => this.setState({ editPageDialogOpen: false })}
+          >
+            <BookEntryEdit
+              entry={this.state.editPageItem}
+              handlePageSaved={this._pageSaved}
+              dialectEntry={_computeDialect2}
+              {...this.props}
+            />
+          </Dialog>
+        </div>
+      </AuthenticationFilter>
     )
+  }
+
+  _stateGetLoading = () => {
+    return <StateLoading copy={this.state.copy} />
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, navigation, windowPath } = state
+  const { fvBook, fvDialect, navigation, nuxeo, windowPath } = state
 
   const { computeBook, computeBookEntries } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { properties } = navigation
+  const { computeLogin } = nuxeo
 
   return {
     computeBook,
     computeBookEntries,
     computeDialect2,
+    computeLogin,
     properties,
     splitWindowPath,
   }
