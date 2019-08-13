@@ -1,3 +1,5 @@
+// TODO: REMOVE ESLINT DISABLE
+/* eslint-disable */
 import React, { Component, PropTypes } from 'react'
 import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
@@ -129,17 +131,25 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
             <ComposedFilter renderOnError {...this.props} {...this.state}>
               <div className="form-horizontal" style={{ padding: '0 15px' }}>
                 <form onSubmit={this._onRequestSaveForm.bind(this, computeItem)}>
-                  <div className="form-group" style={{ textAlign: 'right' }}>
+                  <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
                     <FlatButton
                       onClick={this._onRequestCancelForm}
                       style={{ marginRight: '10px' }}
                       label={intl.trans('cancel', 'Cancel', 'first')}
                     />
-                    <RaisedButton
+                    {/* <RaisedButton
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
                       primary
                       label={intl.trans('save', 'Save', 'first')}
-                    />
+                    /> */}
+
+                    <button
+                      type="submit"
+                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
+                      className="RaisedButton RaisedButton--primary"
+                    >
+                      {intl.trans('save', 'Save', 'first')}
+                    </button>
                   </div>
 
                   <hr />
@@ -154,17 +164,24 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
 
                   <hr />
 
-                  <div className="form-group" style={{ textAlign: 'right' }}>
+                  <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
                     <FlatButton
                       onClick={this._onRequestCancelForm}
                       style={{ marginRight: '10px' }}
                       label={intl.trans('cancel', 'Cancel', 'first')}
                     />
-                    <RaisedButton
+                    {/* <RaisedButton
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
                       primary
                       label={intl.trans('save', 'Save', 'first')}
-                    />
+                    /> */}
+                    <button
+                      type="submit"
+                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
+                      className="RaisedButton RaisedButton--primary"
+                    >
+                      {intl.trans('save', 'Save', 'first')}
+                    </button>
 
                     <Popover
                       open={this.state.showCancelWarning}
@@ -256,3 +273,5 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
 
   return ViewWithForm
 }
+// TODO: REMOVE ESLINT DISABLE
+/* eslint-enable */

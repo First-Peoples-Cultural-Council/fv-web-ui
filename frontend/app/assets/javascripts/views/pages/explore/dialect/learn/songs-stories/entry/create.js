@@ -253,8 +253,8 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
                 value={this.state.formValue}
                 options={FVBookEntryOptions}
               />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+              <div className="form-group" data-testid="PageDialectStoriesAndSongsBookEntryCreate__btnGroup">
+                <button type="submit" className="RaisedButton RaisedButton--primary">
                   {intl.trans('save', 'Save', 'first')}
                 </button>
               </div>

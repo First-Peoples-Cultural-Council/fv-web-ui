@@ -654,6 +654,7 @@ const options = {
         factory: WysiwygFactory,
         attrs: {
           placeholder: intl.trans('models.enter_book_introduction', 'Enter Book Introduction Here', 'first'),
+          dataTestId: 'wysiwyg-fvbook_introduction',
         },
       },
       'fvbook:introduction_literal_translation': {
@@ -664,6 +665,9 @@ const options = {
               label: intl.trans('translation', 'Translation', 'first'),
               type: 'textarea',
               factory: WysiwygFactory,
+              attrs: {
+                dataTestId: 'wysiwyg-fvbook_introduction_linteral_translation',
+              },
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),
@@ -758,6 +762,10 @@ const options = {
         label: intl.trans('models.page_content', 'Page Content', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
+
+        attrs: {
+          dataTestId: 'wysiwyg-dc_title',
+        },
       },
       'fvbookentry:dominant_language_text': {
         label: 'Dominant Language Text',
@@ -972,6 +980,9 @@ const options = {
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
+          dataTestId: 'wysiwyg-fv-portal_about',
+          idAlt: 'fv-portal_about',
+          nameAlt: 'fv-portal:about',
           placeholder: intl.trans('models.enter_portal_description', 'Enter portal description here', 'first'),
         },
       },
@@ -980,6 +991,9 @@ const options = {
         type: 'textarea',
         factory: WysiwygFactory,
         help: intl.trans('models.news_tip', 'Tip: Use * to start a bullet list!', 'first'),
+        attrs: {
+          dataTestId: 'wysiwyg-fv-portal_news',
+        },
       },
       'fv-portal:background_top_image': {
         label: intl.trans('models.background_image', 'Background Image', 'first'),
@@ -1032,6 +1046,9 @@ const options = {
         label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
+        attrs: {
+          dataTestId: 'wysiwyg-dc_description',
+        },
       },
       'fvdialect:country': {
         label: intl.trans('country', 'Country', 'first'),
@@ -1083,6 +1100,9 @@ const options = {
         label: intl.trans('contact_info', 'Contact Information', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
+        attrs: {
+          dataTestId: 'wysiwyg-fvdialect_contact_information',
+        },
       },
     },
     i18n: i18nExt,
