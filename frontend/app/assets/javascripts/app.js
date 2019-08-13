@@ -34,7 +34,6 @@ import store from 'providers/redux/store'
 import AppWrapper from 'views/AppWrapper'
 
 require('!style-loader!css-loader!normalize.css')
-require('!style-loader!css-loader!alloyeditor/dist/alloy-editor/assets/alloy-editor-ocean-min.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
 
