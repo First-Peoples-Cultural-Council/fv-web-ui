@@ -6,7 +6,9 @@ import 'cypress-testing-library/add-commands'
 describe('EditableComponent.js > EditableComponent', () => {
   it('FW-212: Drop AlloyEditor for Quill', () => {
     const updateMessage = `EditableComponent.js > EditableComponent @ ${new Date()}`
-
+    const updateMessage1 = `${updateMessage} 1`
+    const updateMessage2 = `${updateMessage} 2`
+    const updateMessage3 = `${updateMessage} 3`
     cy.login({
       url: 'https://firstvoices-dev.apps.prod.nuxeo.io/nuxeo/startup',
     })
@@ -20,14 +22,14 @@ describe('EditableComponent.js > EditableComponent', () => {
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
 
-      cy.getByTestId('wysiwyg__userInput')
+      cy.contains('EditableComponent.js > EditableComponent')
         .clear()
-        .type(updateMessage)
+        .type(updateMessage1)
 
       cy.getByText('Save', { exact: false }).click()
 
       cy.wait(500)
-      cy.getByText(updateMessage).should('exist')
+      cy.getByText(updateMessage1).should('exist')
     })
     cy.getByTestId('EditableComponent__fv-portal-news').within(() => {
       cy.getByTestId('EditableComponent__edit').click()
@@ -35,14 +37,14 @@ describe('EditableComponent.js > EditableComponent', () => {
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
 
-      cy.getByTestId('wysiwyg__userInput')
+      cy.contains('EditableComponent.js > EditableComponent')
         .clear()
-        .type(updateMessage)
+        .type(updateMessage2)
 
       cy.getByText('Save', { exact: false }).click()
 
       cy.wait(500)
-      cy.getByText(updateMessage).should('exist')
+      cy.getByText(updateMessage2).should('exist')
     })
 
     cy.log('■■□□□ 2/5')
@@ -54,12 +56,11 @@ describe('EditableComponent.js > EditableComponent', () => {
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
 
-      cy.getByTestId('wysiwyg__userInput')
+      cy.contains('EditableComponent.js > EditableComponent')
         .clear()
         .type(updateMessage)
-
-      cy.getByText('SAVE', { exact: false }).click()
     })
+    cy.getByText('SAVE', { exact: false }).click()
 
     cy.wait(500)
     cy.getByText(updateMessage).should('exist')
@@ -67,21 +68,19 @@ describe('EditableComponent.js > EditableComponent', () => {
     cy.log('■■■□□ 3/5')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/edit')
 
-    const updateMessage1 = `${updateMessage} 1`
-    const updateMessage2 = `${updateMessage} 2`
     /*
       Portal introduction
       News
         wysiwyg__userInput
         */
     cy.getByTestId('wysiwyg-fv-portal_about').within(() => {
-      cy.getByTestId('wysiwyg__userInput')
+      cy.contains('EditableComponent.js > EditableComponent')
         .clear()
         .type(updateMessage1)
     })
 
     cy.getByTestId('wysiwyg-fv-portal_news').within(() => {
-      cy.getByTestId('wysiwyg__userInput')
+      cy.contains('EditableComponent.js > EditableComponent')
         .clear()
         .type(updateMessage2)
     })
@@ -94,7 +93,7 @@ describe('EditableComponent.js > EditableComponent', () => {
     cy.getByText(updateMessage1).should('exist')
     cy.getByText(updateMessage2).should('exist')
 
-    const updateMessage3 = `${updateMessage} wysiwyg-dc_title`
+    cy.log('■■■■□ 4/5')
     cy.visit('http://0.0.0.0:3001/nuxeo/app/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/learn/stories')
     cy.getByText('Create Story Book', { exact: false }).click()
 
@@ -104,17 +103,16 @@ describe('EditableComponent.js > EditableComponent', () => {
 
     cy.getByLabelText('Book title', { exact: false }).type('[CY:SETUP] Title')
 
-    cy.log('■■■■□ 4/5')
     cy.getByTestId('wysiwyg-fvbook_introduction').within(() => {
-      cy.getByTestId('wysiwyg__userInput')
-        .clear()
-        .type(updateMessage)
+      // TODO: Quill 'implementation detail' hook
+      cy.get('.ql-blank').type(updateMessage)
     })
 
     cy.getByTestId('PageDialectStoriesAndSongsCreate__btnGroup').within(() => {
       cy.getByText('SAVE', { exact: false }).click()
     })
 
+    cy.log('■■■■■ 5/5')
     cy.getByText(updateMessage).should('exist')
 
     cy.getByText('add new page', { exact: false }).click()
@@ -123,10 +121,8 @@ describe('EditableComponent.js > EditableComponent', () => {
     cy.getByText('Add New Entry To', { exact: false }).should('exist')
 
     cy.getByTestId('wysiwyg-dc_title').within(() => {
-      cy.log('■■■■■ 5/5')
-      cy.getByTestId('wysiwyg__userInput')
-        .clear()
-        .type(updateMessage3)
+      // TODO: Quill 'implementation detail' hook
+      cy.get('.ql-blank').type(updateMessage3)
     })
 
     cy.getByTestId('PageDialectStoriesAndSongsBookEntryCreate__btnGroup').within(() => {

@@ -51,7 +51,6 @@ export class Editor extends Component {
           }}
           name={name}
           value={this.state.text}
-          onChange={this._handleChange}
           ref={setRef}
         />
         <ReactQuill
@@ -68,7 +67,9 @@ export class Editor extends Component {
   }
 
   handleChange = (value) => {
-    this.setState({ text: value })
+    this.setState({ text: value }, () => {
+      this.props.onChange(value)
+    })
   }
 
   attachQuillRefs = () => {

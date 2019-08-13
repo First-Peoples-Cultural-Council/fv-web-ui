@@ -57,6 +57,7 @@ const GetMetaData = (type, response) => {
 
   const recordersData = selectn('contextParameters.media.recorders', response) || []
   recordersData.map((recorder, key) => {
+    // NOTE: this is where the burst of missing prop warnings comes from
     recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
   })
 
