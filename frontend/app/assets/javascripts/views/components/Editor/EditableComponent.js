@@ -17,7 +17,7 @@ import options from 'models/schemas/options'
 
 import CircularProgress from 'material-ui/CircularProgress'
 import IntlService from 'views/services/intl'
-import IconEdit from 'material-ui/svg-icons/editor/mode-edit'
+import IconEdit from '@material-ui/icons/ModeEdit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
 

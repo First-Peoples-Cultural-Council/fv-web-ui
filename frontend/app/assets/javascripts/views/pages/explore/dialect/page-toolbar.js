@@ -37,7 +37,7 @@ import Toggle from 'material-ui/Toggle'
 import IconMenu from 'material-ui/IconMenu'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'

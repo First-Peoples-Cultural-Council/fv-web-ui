@@ -22,7 +22,7 @@ import Colors from 'material-ui/styles/colors'
 
 import GridList from 'material-ui/GridList/GridList'
 import GridTile from 'material-ui/GridList/GridTile'
-import ActionGrade from 'material-ui/svg-icons/action/grade'
+import ActionGrade from '@material-ui/icons/Grade'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'

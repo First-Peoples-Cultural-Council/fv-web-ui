@@ -42,7 +42,7 @@ import IconButton from 'material-ui/IconButton'
 import Popover from 'material-ui/Popover'
 import Avatar from 'material-ui/Avatar'
 
-import IconMenu from 'material-ui/svg-icons/action/reorder'
+import IconMenu from '@material-ui/icons/Reorder'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 

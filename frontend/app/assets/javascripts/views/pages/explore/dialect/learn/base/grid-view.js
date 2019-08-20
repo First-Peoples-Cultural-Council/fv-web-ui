@@ -26,8 +26,8 @@ import GridTile from 'material-ui/GridList/GridTile'
 
 import IconButton from 'material-ui/IconButton'
 
-import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/svg-icons/av/stop'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'

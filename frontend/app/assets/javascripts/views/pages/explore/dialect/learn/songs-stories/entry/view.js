@@ -33,7 +33,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Tabs from 'material-ui/Tabs/Tabs'
 import Tab from 'material-ui/Tabs/Tab'
 
-import ActionLaunch from 'material-ui/svg-icons/action/launch'
+import ActionLaunch from '@material-ui/icons/Launch'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

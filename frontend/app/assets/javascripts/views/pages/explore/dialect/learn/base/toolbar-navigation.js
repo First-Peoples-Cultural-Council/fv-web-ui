@@ -29,7 +29,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 // import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart'
+import EditorInsertChart from '@material-ui/icons/InsertChart'
 import FlatButton from 'material-ui/FlatButton'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import IntlService from 'views/services/intl'

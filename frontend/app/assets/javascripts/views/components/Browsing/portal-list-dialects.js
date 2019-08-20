@@ -20,7 +20,7 @@ import selectn from 'selectn'
 
 import Colors from 'material-ui/styles/colors'
 
-import ActionGrade from 'material-ui/svg-icons/action/grade'
+import ActionGrade from '@material-ui/icons/Grade'
 
 // REDUX
 import { connect } from 'react-redux'

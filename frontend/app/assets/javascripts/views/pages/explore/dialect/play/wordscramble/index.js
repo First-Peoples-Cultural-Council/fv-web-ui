@@ -21,8 +21,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Colors from 'material-ui/styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
-import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/svg-icons/av/stop'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
 
 import classNames from 'classnames'
 

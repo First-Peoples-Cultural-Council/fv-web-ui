@@ -21,8 +21,8 @@ import selectn from 'selectn'
 import DOMPurify from 'dompurify'
 
 import UIHelpers from 'common/UIHelpers'
-import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/svg-icons/av/stop'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IconButton from 'material-ui/IconButton'
 

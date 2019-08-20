@@ -28,8 +28,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import Preview from 'views/components/Editor/Preview'
 
-import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/svg-icons/av/stop'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
 
 import Card from 'material-ui/Card/Card'
 import CardTitle from 'material-ui/Card/CardTitle'
