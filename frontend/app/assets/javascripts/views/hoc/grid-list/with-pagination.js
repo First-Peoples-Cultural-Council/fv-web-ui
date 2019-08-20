@@ -136,7 +136,11 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
                 style={{ paddingLeft: '5px' }}
                 underlineStyle={{ width: '80px' }}
                 hintText="Enter #"
-                onEnterKeyDown={this._onGoToPage}
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    this._onGoToPage(e)
+                  }
+                }}
               />
             </div>
           </div>

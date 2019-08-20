@@ -308,7 +308,11 @@ export class Navigation extends Component {
                 }}
                 value={this.state.searchValue}
                 className={getDialectClassname()}
-                onEnterKeyDown={this._handleNavigationSearchSubmit}
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    this._handleNavigationSearchSubmit(e)
+                  }
+                }}
                 name="searchbox"
               />
               <FlatButton
