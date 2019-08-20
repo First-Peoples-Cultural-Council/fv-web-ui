@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from 'providers/redux/store'
 
-import ThemeManager from 'material-ui/styles/theme-manager';
+import ThemeManager from 'material-ui/styles/theme-manager'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import ConfGlobal from 'conf/local.js'
 
