@@ -49,7 +49,7 @@ import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import Dialog from 'material-ui/Dialog'
 
 import Card from 'material-ui/Card/Card'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import CardText from 'material-ui/Card/CardText'
 
 import ListUI from 'material-ui/List/List'
@@ -249,7 +249,7 @@ export class View extends Component {
                                     autoScrollBodyContent
                                     title={selectn('title', this.state.showThumbnailDialog)}
                                     actions={[
-                                      <FlatButton
+                                      <Button
                                         key="FlatButton0"
                                         label={intl.trans('close', 'Close', 'first')}
                                         secondary

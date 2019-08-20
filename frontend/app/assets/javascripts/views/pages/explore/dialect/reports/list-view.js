@@ -38,7 +38,7 @@ import CardHeader from 'material-ui/Card/CardHeader'
 import CardMedia from 'material-ui/Card/CardMedia'
 import CardText from 'material-ui/Card/CardText'
 
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import IconButton from 'material-ui/IconButton'
 
 import Tabs from 'material-ui/Tabs/Tabs'

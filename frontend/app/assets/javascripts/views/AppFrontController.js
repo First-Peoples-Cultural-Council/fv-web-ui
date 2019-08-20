@@ -20,7 +20,7 @@ import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import Navigation from 'views/components/Navigation'
 import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
 import KidsNavigation from 'views/components/Kids/navigation'
@@ -210,7 +210,7 @@ export class AppFrontController extends Component {
                 className={classNames('alert', 'alert-warning')}
               >
                 {selectn(warning, this.props.warnings)}
-                <FlatButton
+                <Button
                   label={intl.translate({
                     key: 'dismiss',
                     default: 'Dismiss',

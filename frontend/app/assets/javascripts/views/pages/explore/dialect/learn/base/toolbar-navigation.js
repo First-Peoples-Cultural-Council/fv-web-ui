@@ -30,7 +30,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import EditorInsertChart from '@material-ui/icons/InsertChart'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import IntlService from 'views/services/intl'
 
@@ -152,7 +152,7 @@ export class ToolbarNavigation extends Component {
                 firstChild={false}
                 float="right"
               >
-                <FlatButton
+                <Button
                   icon={<EditorInsertChart />}
                   style={{ color: '#fff' }}
                   onClick={this.props.showStats}

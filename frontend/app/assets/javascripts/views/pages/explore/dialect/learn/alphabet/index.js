@@ -40,7 +40,7 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
 import Paper from 'material-ui/Paper'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import GridTile from 'material-ui/GridList/GridTile'
@@ -292,7 +292,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                             display: 'inline-block',
                           }}
                         >
-                          <FlatButton
+                          <Button
                             icon={audioFile ? <FontIcon className="material-icons">play_arrow</FontIcon> : ''}
                             onClick={_this._onCharAudioTouchTap.bind(this, char)}
                             //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}

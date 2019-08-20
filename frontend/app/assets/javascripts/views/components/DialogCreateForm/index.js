@@ -1,6 +1,6 @@
 import React from 'react'
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
@@ -175,12 +175,7 @@ export default class DialogCreateForm extends React.Component {
     }
 
     const actions = [
-      <FlatButton
-        key="FlatButton0"
-        label={intl.trans('cancel', 'Cancel', 'first')}
-        secondary
-        onClick={this.handleClose}
-      />,
+      <Button key="FlatButton0" label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.handleClose} />,
     ]
 
     return (

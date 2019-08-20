@@ -35,7 +35,7 @@ import RadioButton from 'material-ui/RadioButton'
 import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
 
 import DropDownMenu from 'material-ui/DropDownMenu'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import Toolbar from 'material-ui/Toolbar/Toolbar'
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
 import IconButton from 'material-ui/IconButton'
@@ -310,7 +310,7 @@ export class Navigation extends Component {
                 }}
                 name="searchbox"
               />
-              <FlatButton
+              <Button
                 className={classNames({ hidden: !this.state.searchBarVisibleInMobile })}
                 style={{ color: themePalette.alternateTextColor }}
                 label={this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}

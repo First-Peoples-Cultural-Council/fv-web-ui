@@ -29,7 +29,7 @@ import CardMedia from 'material-ui/Card/CardMedia'
 import CardText from 'material-ui/Card/CardText'
 
 import IconButton from 'material-ui/IconButton'
-import FlatButton from 'material-ui/FlatButton'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const defaultStyle = { marginBottom: '20px' }
@@ -122,7 +122,7 @@ export default class CardView extends Component {
           </CardMedia>
 
           <CardText style={{ padding: '4px' }}>
-            <FlatButton
+            <Button
               onClick={this.props.action.bind(this, this.props.item)}
               primary
               label={this.intl.translate({
