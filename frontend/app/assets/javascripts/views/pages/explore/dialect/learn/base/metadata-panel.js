@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -47,15 +48,15 @@ export default class MetadataPanel extends Component {
   render() {
     const { computeEntity } = this.props
 
-    let metadata = []
+    const metadata = []
 
     /**
      * Categories
      */
-    let categories = []
+    const categories = []
 
     {
-      ;(selectn('response.contextParameters.word.categories', computeEntity) || []).map(function(category, key) {
+      (selectn('response.contextParameters.word.categories', computeEntity) || []).map(function(category, key) {
         categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
       })
     }
@@ -67,10 +68,10 @@ export default class MetadataPanel extends Component {
     /**
      * Phrase books
      */
-    let phrase_books = []
+    const phrase_books = []
 
     {
-      ;(selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []).map(function(phrase_book, key) {
+      (selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []).map(function(phrase_book, key) {
         phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
       })
     }
@@ -90,10 +91,10 @@ export default class MetadataPanel extends Component {
     /**
      * Sources
      */
-    let sources = []
+    const sources = []
 
     {
-      ;(selectn('response.contextParameters.word.sources', computeEntity) || []).map(function(source, key) {
+      (selectn('response.contextParameters.word.sources', computeEntity) || []).map(function(source, key) {
         sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
       })
     }
@@ -132,21 +133,21 @@ export default class MetadataPanel extends Component {
     const themePalette = this.props.properties.theme.palette.rawTheme.palette
 
     return (
-      <Card initiallyExpanded={true}>
+      <Card initiallyExpanded>
         <CardHeader
           className="card-header-custom"
           title={intl.trans('about_this_record', 'About this Record', 'upper')}
           titleStyle={{ lineHeight: 'initial' }}
           titleColor={themePalette.alternateTextColor}
-          actAsExpander={true}
+          actAsExpander
           style={{
             backgroundColor: themePalette.primary2Color,
             height: 'initial',
             borderBottom: '4px solid ' + themePalette.primary1Color,
           }}
-          showExpandableButton={true}
+          showExpandableButton
         />
-        <CardText expandable={true} style={{ backgroundColor: themePalette.accent4Color }}>
+        <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
           <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
         </CardText>
       </Card>

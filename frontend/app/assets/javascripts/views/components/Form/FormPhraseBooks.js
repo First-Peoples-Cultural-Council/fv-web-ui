@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import FormPhraseBook from 'views/components/Form/FormPhraseBook'
 import { getIndexOfElementById, removeItem, moveItemDown, moveItemUp } from 'views/components/Form/FormInteractions'
 import BrowseComponent from 'views/components/Editor/BrowseComponent'

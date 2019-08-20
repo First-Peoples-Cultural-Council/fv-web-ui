@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 const { bool, string, func, object } = PropTypes
 
 export default class File extends React.Component {

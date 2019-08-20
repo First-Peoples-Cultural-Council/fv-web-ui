@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 
@@ -41,12 +42,12 @@ export default class ListView extends Component {
   }
 
   _moveUp(entry) {
-    let entryIndex = this.state.items.findIndex((v) => {
+    const entryIndex = this.state.items.findIndex((v) => {
       return v.uid === entry.uid
     })
 
     if (entryIndex - 1 >= 0) {
-      let newList = this.state.items.delete(entryIndex).insert(entryIndex - 1, entry)
+      const newList = this.state.items.delete(entryIndex).insert(entryIndex - 1, entry)
 
       this.setState({
         items: newList,
@@ -58,12 +59,12 @@ export default class ListView extends Component {
   }
 
   _moveDown(entry) {
-    let entryIndex = this.state.items.findIndex((v) => {
+    const entryIndex = this.state.items.findIndex((v) => {
       return v.uid === entry.uid
     })
 
     if (entryIndex !== this.state.items.length) {
-      let newList = this.state.items.delete(entryIndex).insert(entryIndex + 1, entry)
+      const newList = this.state.items.delete(entryIndex).insert(entryIndex + 1, entry)
 
       this.setState({
         items: newList,
@@ -112,7 +113,7 @@ export default class ListView extends Component {
         )}
         {this.state.items.map(
           function(entry, i) {
-            let entryControls = []
+            const entryControls = []
 
             if (this.props.reorder) {
               entryControls.push(

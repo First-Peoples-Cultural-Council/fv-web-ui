@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import PromiseHelpers from 'common/PromiseHelpers'
 
@@ -61,7 +62,7 @@ export default class Game extends Component {
      * @todo Setup image paths based on dialect
      */
 
-    let gameConfig = {
+    const gameConfig = {
       images: {
         preloaderLoading: `${defaultImagesPath}/loading.png`,
         preloaderLogo: `${defaultImagesPath}/logo.png`,

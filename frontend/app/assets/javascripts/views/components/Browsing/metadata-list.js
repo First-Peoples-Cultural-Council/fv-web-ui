@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -40,7 +41,7 @@ export default class MetadataList extends Component {
     return (
       <ul style={{ overflow: 'scroll', listStyleType: 'none', padding: 0, maxHeight: '200px', ...style }}>
         {metadata.map(function(item, key) {
-          let value = selectn('value', item)
+          const value = selectn('value', item)
 
           if ((value && !Array.isArray(value)) || (Array.isArray(value) && value.length > 0)) {
             return (

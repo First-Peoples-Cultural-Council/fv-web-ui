@@ -1,8 +1,7 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Image from 'views/components/Image'
-import { bool } from 'prop-types'
-const { string, element, object } = PropTypes
+const { bool, string, element, object } = PropTypes
 export class ContributorStateDetail extends React.Component {
   static propTypes = {
     className: string,

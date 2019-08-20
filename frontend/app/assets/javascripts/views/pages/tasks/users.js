@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 import classNames from 'classnames'
 
@@ -223,7 +224,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 

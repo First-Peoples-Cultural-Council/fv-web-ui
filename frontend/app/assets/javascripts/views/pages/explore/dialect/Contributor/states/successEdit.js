@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 const { string, object, func } = PropTypes
 export class ContributorStateSuccessEdit extends React.Component {
   static propTypes = {

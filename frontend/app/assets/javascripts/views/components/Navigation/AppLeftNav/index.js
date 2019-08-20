@@ -10,7 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is, Map } from 'immutable'
 
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -182,13 +183,13 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-          <ListItem
-            className="2"
-            key={selectn('uid', d)}
-            value={NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))}
-            primaryText={selectn('properties.dc:title', d)}
-          />
-        ))
+        <ListItem
+          className="2"
+          key={selectn('uid', d)}
+          value={NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))}
+          primaryText={selectn('properties.dc:title', d)}
+        />
+      ))
       : null
 
     return (

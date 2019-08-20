@@ -1,6 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./SpinnerBallFall.css'
-import { PropTypes } from 'react'
 const { string, number } = PropTypes
 export class SpinnerBallFall extends React.Component {
   static propTypes = {

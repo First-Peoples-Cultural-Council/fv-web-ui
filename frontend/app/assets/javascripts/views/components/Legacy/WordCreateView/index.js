@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,16 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react')
-var _ = require('underscore')
-var t = require('tcomb-form')
-var Form = t.form.Form
+const React = require('react')
+const PropTypes = require('prop-types')
+const _ = require('underscore')
+const t = require('tcomb-form')
+const Form = t.form.Form
 
-var classNames = require('classnames')
+const classNames = require('classnames')
 
-var Word = require('models/Word')
+const Word = require('models/Word')
 
-var DirectoryOperations = require('../../../operations/DirectoryOperations')
+const DirectoryOperations = require('../../../operations/DirectoryOperations')
 
 class CreateForm extends React.Component {
   constructor(props) {
@@ -73,10 +74,10 @@ class CreateForm extends React.Component {
   }
 
   _save(evt) {
-    var client = this.props.client
-    var value = this.refs.form.getValue()
+    const client = this.props.client
+    const value = this.refs.form.getValue()
 
-    var self = this
+    const self = this
 
     if (value) {
       client
@@ -100,7 +101,7 @@ class CreateForm extends React.Component {
   }
 
   render() {
-    var form = ''
+    let form = ''
 
     if (this.state.schema != undefined) {
       form = (
@@ -147,7 +148,7 @@ class WordCreateView extends React.Component {
 }
 
 WordCreateView.contextTypes = {
-  router: React.PropTypes.func,
+  router: PropTypes.func,
 }
 
 export default WordCreateView

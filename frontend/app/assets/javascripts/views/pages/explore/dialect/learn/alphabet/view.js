@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 import classNames from 'classnames'
 
@@ -276,11 +277,11 @@ export class AlphabetView extends Component {
                       UIHelpers.isViewSize('xs')
                         ? intl.trans('words', 'Words', 'first')
                         : intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
-                            'Words Starting with ' + selectn('response.title', computeCharacter),
-                            'words',
-                            [selectn('response.title', computeCharacter)]
-                          )
+                          'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
+                          'Words Starting with ' + selectn('response.title', computeCharacter),
+                          'words',
+                          [selectn('response.title', computeCharacter)]
+                        )
                     }
                     id="find_words"
                   >
@@ -311,11 +312,11 @@ export class AlphabetView extends Component {
                       UIHelpers.isViewSize('xs')
                         ? intl.trans('phrases', 'Phrases', 'first')
                         : intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
-                            'Phrases Starting with ' + selectn('response.title', computeCharacter),
-                            'words',
-                            [selectn('response.title', computeCharacter)]
-                          )
+                          'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
+                          'Phrases Starting with ' + selectn('response.title', computeCharacter),
+                          'words',
+                          [selectn('response.title', computeCharacter)]
+                        )
                     }
                     id="find_phrases"
                   >
@@ -349,7 +350,7 @@ export class AlphabetView extends Component {
     )
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchCharacter(this._getCharacterPath(this.props))
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Text from 'views/components/Form/Common/Text'
 // import Textarea from 'views/components/Form/Common/Textarea'
 // import Select from 'views/components/Form/Common/Select`'
@@ -290,7 +290,7 @@ export class FormRelatedPhraseCreateNew extends React.Component {
     'FormRelatedPhraseCreateNew.fv:available_in_childrens_archive': yup.string(),
   })
 
-  _handleCreateItemSubmit = async () => {
+  _handleCreateItemSubmit = async() => {
     const formData = this._getFormData()
     // console.log(':::formData::::', formData)
     const formValidation = await this._validateForm(formData)
@@ -364,7 +364,7 @@ export class FormRelatedPhraseCreateNew extends React.Component {
       ],
     }
   }
-  _validateForm = async (formData) => {
+  _validateForm = async(formData) => {
     // Note: When `abortEarly === true` then `{ path, type } = invalid` is defined.
     // When `abortEarly === false` then `{ path, type } = invalid` is not defined! Data is found in `invalid.errors[]`.
     const validation = await this.schemaCreateForm.validate(formData, { abortEarly: false }).then(
@@ -392,7 +392,7 @@ export class FormRelatedPhraseCreateNew extends React.Component {
     )
     return validation
   }
-  _validateField = async ({ name, data }) => {
+  _validateField = async({ name, data }) => {
     // const formDataFormatted = this._getFormData()
     const results = await this._validateForm(data)
     const { valid, errors } = results

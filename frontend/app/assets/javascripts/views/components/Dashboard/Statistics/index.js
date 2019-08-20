@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import Doughnut from 'react-chartjs/lib/doughnut'
@@ -13,7 +14,7 @@ export default class Statistics extends Component {
   }
 
   _generateLifecycleStateDoughnutData(data, docType) {
-    let doughnutData = []
+    const doughnutData = []
     doughnutData.push({
       value: data[docType].new,
       color: '#949FB1',
@@ -32,33 +33,33 @@ export default class Statistics extends Component {
       highlight: '#5AD3D1',
       label: intl.trans('published', 'Published', 'first'),
     }),
-      doughnutData.push({
-        value: data[docType].disabled,
-        color: '#F7464A',
-        highlight: '#FF5A5E',
-        label: intl.trans('disabled', 'Disabled', 'first'),
-      })
+    doughnutData.push({
+      value: data[docType].disabled,
+      color: '#F7464A',
+      highlight: '#FF5A5E',
+      label: intl.trans('disabled', 'Disabled', 'first'),
+    })
     return doughnutData
   }
 
   _generateTwoSliceDoughnutData(total, subset, labels) {
-    let doughnutData = []
-    let totalMinusSubset = total - subset
+    const doughnutData = []
+    const totalMinusSubset = total - subset
     doughnutData.push({ value: totalMinusSubset, color: '#46BFBD', highlight: '#5AD3D1', label: labels[0] }),
-      doughnutData.push({ value: subset, color: '#F7464A', highlight: '#FF5A5E', label: labels[1] })
+    doughnutData.push({ value: subset, color: '#F7464A', highlight: '#FF5A5E', label: labels[1] })
     return doughnutData
   }
 
   render() {
-    let dataResponse = this.props.data
-    let docType = this.props.docType
+    const dataResponse = this.props.data
+    const docType = this.props.docType
 
     // If no documents of the specified type, don't display anything
     if (dataResponse[docType].total == '0') {
       return <div />
     }
 
-    let lifecycleStateDoughnutData = this._generateLifecycleStateDoughnutData(dataResponse, docType)
+    const lifecycleStateDoughnutData = this._generateLifecycleStateDoughnutData(dataResponse, docType)
 
     return (
       <div>

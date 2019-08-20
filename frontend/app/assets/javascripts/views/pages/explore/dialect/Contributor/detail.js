@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // REDUX
@@ -50,10 +50,10 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorDetailsInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     await this._getData({ copy })
   }
@@ -78,7 +78,7 @@ export class Contributor extends React.Component {
     }
     return content
   }
-  _getData = async (addToState = {}) => {
+  _getData = async(addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -128,7 +128,7 @@ export class Contributor extends React.Component {
       />
     )
   }
-  _getContributor = async () => {
+  _getContributor = async() => {
     const { computeContributor, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:

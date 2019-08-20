@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import selectn from 'selectn'
 import classNames from 'classnames'
@@ -34,7 +35,7 @@ export default class IntroCardView extends Component {
 
   render() {
     let imgTag = ''
-    let imgFile = selectn('file.data', this.props.block)
+    const imgFile = selectn('file.data', this.props.block)
 
     if (imgFile) {
       imgTag = (

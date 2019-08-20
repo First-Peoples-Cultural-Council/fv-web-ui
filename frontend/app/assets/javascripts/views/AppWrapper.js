@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import ReactDOM from 'react-dom'
 
 // REDUX
 import { connect } from 'react-redux'
 import { changeTheme } from 'providers/redux/reducers/navigation'
 import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
+
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
 import selectn from 'selectn'
@@ -74,7 +76,7 @@ class AppWrapper extends Component {
   }
 
   static childContextTypes = {
-    muiTheme: React.PropTypes.object,
+    muiTheme: PropTypes.object,
   }
 
   // TODO: SEE IF THIS IS AN ISSUE AFTER SWITCH TO REDUX

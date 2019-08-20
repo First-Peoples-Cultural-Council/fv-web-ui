@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Map } from 'immutable'
-import { PropTypes } from 'react'
 import {
   SEARCH_SORT_DEFAULT,
   SEARCH_BY_DEFAULT,
@@ -520,9 +520,9 @@ export class SearchDialect extends Component {
 
     return searchTerm
       ? {
-          DEFAULT_SORT_COL: searchSortBy,
-          DEFAULT_SORT_TYPE: 'asc',
-        }
+        DEFAULT_SORT_COL: searchSortBy,
+        DEFAULT_SORT_TYPE: 'asc',
+      }
       : {}
   }
 

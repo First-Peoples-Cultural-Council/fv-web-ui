@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StateLoading from 'views/components/Loading'
@@ -111,16 +111,16 @@ export class EditContributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
     await this._getData({ copy, validator })
   }
   render() {
@@ -153,7 +153,7 @@ export class EditContributor extends React.Component {
     }
     return content
   }
-  _getData = async (addToState = {}) => {
+  _getData = async(addToState = {}) => {
     const { routeParams } = this.props
     const { itemId } = routeParams
 
@@ -300,7 +300,7 @@ export class EditContributor extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
     })
@@ -328,7 +328,7 @@ export class EditContributor extends React.Component {
       invalid,
     })
   }
-  _getItem = async () => {
+  _getItem = async() => {
     const { computeContributor, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:

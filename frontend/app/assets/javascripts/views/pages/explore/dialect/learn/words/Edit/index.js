@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 
 // REDUX
@@ -130,9 +131,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-      //   console.log(4)
-      //   return true
+        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+        //   console.log(4)
+        //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -140,9 +141,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-      //   console.log(7)
-      //   return true
+        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        //   console.log(7)
+        //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -189,7 +190,7 @@ export class WordsEdit extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

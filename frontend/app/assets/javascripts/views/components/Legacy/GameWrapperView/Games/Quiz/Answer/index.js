@@ -16,6 +16,7 @@ limitations under the License.
 const React = require('react')
 const classNames = require('classnames')
 const Mui = require('material-ui')
+const PropTypes = require('prop-types')
 const PubSub = require('pubsub-js')
 const { RaisedButton } = Mui
 
@@ -64,7 +65,7 @@ class Answer extends React.Component {
 }
 
 Answer.childContextTypes = {
-  muiTheme: React.PropTypes.object,
+  muiTheme: PropTypes.object,
 }
 
 export default Answer

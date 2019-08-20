@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import classNames from 'classnames'
 import selectn from 'selectn'
 
@@ -121,10 +122,10 @@ export class Contributors extends Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
     const btnCreate = this.props.btnCreate || (
       <a
         className="_btn _btn--primary Contributors__btnCreate"
@@ -193,7 +194,7 @@ export class Contributors extends Component {
     currentSortType: this.props.DEFAULT_SORT_TYPE,
   }
 
-  _deleteItem = async (uid) => {
+  _deleteItem = async(uid) => {
     /* NOTE: save uid to state */
     this.setState(
       {
@@ -206,14 +207,14 @@ export class Contributors extends Component {
     )
   }
 
-  _deleteSelected = async () => {
+  _deleteSelected = async() => {
     const { selected } = this.state
     this.setState(
       {
         deletedUids: [...this.state.deletedUids, ...selected],
       },
       () => {
-        selected.forEach(async (uid) => {
+        selected.forEach(async(uid) => {
           await this.props.deleteContributor(uid)
         })
         this.setState({
@@ -420,7 +421,7 @@ export class Contributors extends Component {
     ]
   }
 
-  _getData = async (addToState) => {
+  _getData = async(addToState) => {
     const { routeParams, search } = this.props
     const { pageSize, page } = routeParams
     const { sortBy, sortOrder } = search

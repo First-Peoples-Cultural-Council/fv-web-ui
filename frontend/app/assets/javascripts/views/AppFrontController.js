@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
 import { connect } from 'react-redux'

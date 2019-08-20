@@ -1,6 +1,7 @@
 // TODO: REMOVE ESLINT DISABLE
 /* eslint-disable */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'

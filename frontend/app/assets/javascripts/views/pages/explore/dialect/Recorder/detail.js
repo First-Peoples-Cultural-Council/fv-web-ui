@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 import ContributorDetail from 'views/pages/explore/dialect/Contributor/detail'
 import validator from './validator'

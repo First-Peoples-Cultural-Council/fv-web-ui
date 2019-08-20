@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 // TODO: See about using something similar to:
 // TODO: import CircularProgress from 'material-ui/lib/circular-progress'

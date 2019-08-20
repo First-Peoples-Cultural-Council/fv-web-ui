@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
@@ -8,15 +9,15 @@ import Preview from 'views/components/Editor/Preview'
  * Define auto-suggest factory
  */
 const renderInput = function renderInput(locals) {
-  let fileObj = selectn('context.otherContext.file', locals)
-  let type = 'FVPicture'
+  const fileObj = selectn('context.otherContext.file', locals)
+  const type = 'FVPicture'
 
-  let content = (
+  const content = (
     <div>
       <Preview
         expandedValue={fileObj}
         type={type}
-        crop={true}
+        crop
         minimal={!fileObj ? false : true}
         tagStyles={type == 'FVPicture' ? { height: '200px' } : null}
       />
@@ -33,13 +34,12 @@ const textboxTemplateDefault = t.form.Form.templates.textbox
 
 export default class FileFactory extends t.form.Textbox {
   getTemplate() {
-    let locals = this.getLocals()
-    let fileObj = selectn('context.otherContext.file', locals)
+    const locals = this.getLocals()
+    const fileObj = selectn('context.otherContext.file', locals)
 
     if (fileObj) {
       return textboxTemplate
-    } else {
-      return textboxTemplateDefault
     }
+    return textboxTemplateDefault
   }
 }

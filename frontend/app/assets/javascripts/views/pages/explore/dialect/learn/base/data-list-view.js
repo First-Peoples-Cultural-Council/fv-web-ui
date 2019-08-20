@@ -10,7 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react' // eslint-disable-line
+import React, { Component } from 'react' // eslint-disable-line
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'

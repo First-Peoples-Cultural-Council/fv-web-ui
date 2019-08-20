@@ -18,7 +18,7 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import injectTapEventPlugin from 'react-tap-event-plugin'
+// import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import ThemeManager from 'material-ui/lib/styles/theme-manager'
 
@@ -37,7 +37,7 @@ require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
 
-injectTapEventPlugin()
+// injectTapEventPlugin()
 
 const context = {
   providedState: {

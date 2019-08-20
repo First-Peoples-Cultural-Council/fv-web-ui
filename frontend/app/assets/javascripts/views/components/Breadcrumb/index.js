@@ -6,8 +6,7 @@
     Mi’kmaw Home Page → Learn → Words
 */
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
-
+import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'

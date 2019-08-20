@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 const React = require('react')
+const PropTypes = require('prop-types')
 const PubSub = require('pubsub-js')
 
 const _ = require('underscore')
@@ -310,12 +311,12 @@ class Quiz extends React.Component {
 }
 
 Quiz.contextTypes = {
-  muiTheme: React.PropTypes.object,
-  router: React.PropTypes.func,
+  muiTheme: PropTypes.object,
+  router: PropTypes.func,
 }
 
 Quiz.childContextTypes = {
-  muiTheme: React.PropTypes.object,
+  muiTheme: PropTypes.object,
 }
 
 export default Quiz

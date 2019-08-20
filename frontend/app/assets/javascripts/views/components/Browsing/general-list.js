@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -54,7 +55,7 @@ export default class GeneralList extends Component {
   }
 
   render() {
-    let items = this.props.filteredItems || this.props.items
+    const items = this.props.filteredItems || this.props.items
 
     if (selectn('length', items) == 0) {
       return (
@@ -69,7 +70,7 @@ export default class GeneralList extends Component {
       )
     }
 
-    let card = this.props.card || <CardView />
+    const card = this.props.card || <CardView />
 
     return (
       <div className="row" style={this.props.wrapperStyle}>

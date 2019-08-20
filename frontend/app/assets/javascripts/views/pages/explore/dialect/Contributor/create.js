@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StateLoading from 'views/components/Loading'
@@ -94,10 +94,10 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     // USING this.DIALECT_PATH instead of setting state
     // this.setState({ dialectPath: dialectPath })
@@ -121,8 +121,8 @@ export class Contributor extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
 
     // Flip to ready state...
     this.setState({
@@ -231,7 +231,7 @@ export class Contributor extends React.Component {
     )
   }
 
-  _handleCreateItemSubmit = async (formData) => {
+  _handleCreateItemSubmit = async(formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -278,7 +278,7 @@ export class Contributor extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
     })

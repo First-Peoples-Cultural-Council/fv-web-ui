@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { /* Component, */ PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 // import { Immutable, Map } from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchResources } from 'providers/redux/reducers/fvResources'
+
 import { fetchSharedAudios } from 'providers/redux/reducers/fvAudio'
 import { fetchSharedPictures } from 'providers/redux/reducers/fvPicture'
 import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
@@ -126,8 +128,8 @@ export class BrowseComponent extends React.Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {

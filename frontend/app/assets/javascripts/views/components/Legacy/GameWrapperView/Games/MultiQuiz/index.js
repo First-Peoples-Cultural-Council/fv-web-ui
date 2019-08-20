@@ -13,23 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react')
-var PubSub = require('pubsub-js')
+const React = require('react')
+const PropTypes = require('prop-types')
+const PubSub = require('pubsub-js')
 
-var _ = require('underscore')
+const _ = require('underscore')
 
-var classNames = require('classnames')
-var Mui = require('material-ui')
+const classNames = require('classnames')
+const Mui = require('material-ui')
 
-var { IconButton, RaisedButton, LinearProgress, Snackbar } = Mui
+const { IconButton, RaisedButton, LinearProgress, Snackbar } = Mui
 
-var ThemeManager = new Mui.Styles.ThemeManager()
+const ThemeManager = new Mui.Styles.ThemeManager()
 
-var WordOperations = require('operations/WordOperations')
+const WordOperations = require('operations/WordOperations')
 
-var AnswerMQ = require('./AnswerMQ')
+const AnswerMQ = require('./AnswerMQ')
 
-var loadingComponent = (
+const loadingComponent = (
   <div className={classNames('alert', 'alert-info', 'text-center')} role="alert">
     Loading...
   </div>
@@ -98,9 +99,9 @@ class MultiQuiz extends React.Component {
   }
 
   displayAnswers(selectedAnswerKey = null) {
-    var selected = false
-    var tmpAnswers = []
-    var incorrectAnswers = _.without(_.shuffle(this.state.questions), this.state.currentAnswer)
+    const selected = false
+    const tmpAnswers = []
+    const incorrectAnswers = _.without(_.shuffle(this.state.questions), this.state.currentAnswer)
 
     // If question being displayed for the first time
     if (!(this.state.currentAnswerIndex in this.state.displayedAnswers)) {
@@ -115,7 +116,7 @@ class MultiQuiz extends React.Component {
           />
         )
 
-        for (var i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
           tmpAnswers.push(
             <AnswerMQ
               key={incorrectAnswers[i].uid}
@@ -128,7 +129,7 @@ class MultiQuiz extends React.Component {
         }
 
         var arrayvar = this.state.displayedAnswers.slice()
-        var newelement = _.shuffle(tmpAnswers)
+        const newelement = _.shuffle(tmpAnswers)
         arrayvar[this.state.currentAnswerIndex] = newelement
 
         this.setState({ displayedAnswers: arrayvar })
@@ -139,7 +140,7 @@ class MultiQuiz extends React.Component {
       var arrayvar = this.state.displayedAnswers.slice()
 
       _.each(this.state.displayedAnswers[this.state.currentAnswerIndex], function(element, index, list) {
-        var selected = false
+        let selected = false
 
         if (element.key === selectedAnswerKey) {
           selected = true
@@ -155,7 +156,7 @@ class MultiQuiz extends React.Component {
   }
 
   handleAnswerSelected(msg, data) {
-    var arrayvar = this.state.selectedAnswers.slice()
+    const arrayvar = this.state.selectedAnswers.slice()
     arrayvar[this.state.currentAnswerIndex] = data
 
     this.setState({ selectedAnswers: arrayvar })
@@ -165,10 +166,10 @@ class MultiQuiz extends React.Component {
   }
 
   checkAnswer() {
-    var correct = false
+    let correct = false
 
     // Build utility for this...
-    var arrayvar = this.state.checkedAnswers.slice()
+    const arrayvar = this.state.checkedAnswers.slice()
 
     if (this.state.selectedAnswers[this.state.currentAnswerIndex] == this.state.currentAnswer.uid) {
       correct = true
@@ -181,7 +182,7 @@ class MultiQuiz extends React.Component {
   }
 
   handleNavigate(direction) {
-    var newIndex
+    let newIndex
 
     if (direction == 'next') newIndex = this.state.currentAnswerIndex + 1
     else newIndex = this.state.currentAnswerIndex - 1
@@ -222,7 +223,7 @@ class MultiQuiz extends React.Component {
   }
 
   render() {
-    var main = this.state.currentAnswer != null ? <h2>{this.state.currentAnswer.title}</h2> : loadingComponent
+    let main = this.state.currentAnswer != null ? <h2>{this.state.currentAnswer.title}</h2> : loadingComponent
 
     if (this.state.questions.length == 0) {
       main = (
@@ -260,7 +261,7 @@ class MultiQuiz extends React.Component {
           <div className={classNames('col-xs-8', 'text-center')}>
             <div>
               <RaisedButton
-                secondary={true}
+                secondary
                 disabled={this.state.currentAnswerIndex in this.state.selectedAnswers ? false : true}
                 onClick={this.checkAnswer.bind(this)}
                 label="Check Answer"
@@ -292,12 +293,12 @@ class MultiQuiz extends React.Component {
 }
 
 MultiQuiz.contextTypes = {
-  muiTheme: React.PropTypes.object,
-  router: React.PropTypes.func,
+  muiTheme: PropTypes.object,
+  router: PropTypes.func,
 }
 
 MultiQuiz.childContextTypes = {
-  muiTheme: React.PropTypes.object,
+  muiTheme: PropTypes.object,
 }
 
 export default MultiQuiz

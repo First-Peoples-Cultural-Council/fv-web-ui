@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./Confirmation.css'
 import SpinnerBallFall from 'views/components/SpinnerBallFall'
 const { string, bool, func, object } = PropTypes
@@ -49,10 +49,10 @@ export class Confirmation extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ConfirmationInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
     // Flip to ready state...
     this.setState({
       componentState: STATE_DEFAULT,

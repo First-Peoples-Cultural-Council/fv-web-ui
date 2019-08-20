@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
 import DictionaryList from 'views/components/Browsing/dictionary-list'

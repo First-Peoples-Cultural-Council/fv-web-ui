@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,15 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react')
-var t = require('tcomb-form')
-var Form = t.form.Form
+const React = require('react')
+const PropTypes = require('prop-types')
+const t = require('tcomb-form')
+const Form = t.form.Form
 
-var _ = require('underscore')
+const _ = require('underscore')
 
-var classNames = require('classnames')
-var Mui = require('material-ui')
-var {
+const classNames = require('classnames')
+const Mui = require('material-ui')
+const {
   Card,
   CardHeader,
   CardMedia,
@@ -43,7 +44,7 @@ var {
   Dialog,
 } = Mui
 
-var Word = require('models/Word')
+const Word = require('models/Word')
 
 class MediaUploader extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class MediaUploader extends React.Component {
     this._change = this._change.bind(this)
     this._save = this._save.bind(this)
 
-    var schema = t.struct({
+    const schema = t.struct({
       file: t.form.File,
     })
 
@@ -84,18 +85,18 @@ class MediaUploader extends React.Component {
   _save(evt) {
     this.setState({ uploading: true })
 
-    var client = this.state.word.get('client')
-    var value = this.refs.form.getValue()
+    const client = this.state.word.get('client')
+    const value = this.refs.form.getValue()
 
-    var self = this
+    const self = this
 
     // if validation fails, value will be null
     if (value) {
-      var tempFileObj
-      var fd = new FormData()
+      let tempFileObj
+      const fd = new FormData()
 
-      for (var k in value) {
-        var v = value[k]
+      for (const k in value) {
+        const v = value[k]
         if (t.form.File.is(v)) {
           fd.append(k, v, v.name)
           tempFileObj = v
@@ -104,12 +105,12 @@ class MediaUploader extends React.Component {
         }
       }
 
-      var request = new XMLHttpRequest()
+      const request = new XMLHttpRequest()
 
       request.onreadystatechange = function() {
         if (request.readyState == 4) {
-          var jsonResponse = JSON.parse(request.responseText)
-          var nuxeoType = 'File'
+          const jsonResponse = JSON.parse(request.responseText)
+          let nuxeoType = 'File'
 
           switch (tempFileObj.type.substring(0, tempFileObj.type.indexOf('/'))) {
             case 'image':
@@ -160,7 +161,7 @@ class MediaUploader extends React.Component {
   }
 
   render() {
-    var form = ''
+    let form = ''
 
     if (this.state.schema != undefined) {
       form = (
@@ -179,7 +180,7 @@ class MediaUploader extends React.Component {
       )
     }
 
-    var uploadText = ''
+    let uploadText = ''
 
     if (this.state.uploading) {
       uploadText = (
@@ -217,7 +218,7 @@ class WordAddMediaView extends React.Component {
 }
 
 WordAddMediaView.contextTypes = {
-  router: React.PropTypes.func,
+  router: PropTypes.func,
 }
 
 export default WordAddMediaView

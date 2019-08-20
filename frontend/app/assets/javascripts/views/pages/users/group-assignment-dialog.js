@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -43,9 +44,8 @@ function renderSelect(locals) {
         {this.renderOptions(locals)}
       </select>
     )
-  } else {
-    return <div>{StringHelpers.toTitleCase(locals.value.replace(/_/g, ' '))}</div>
   }
+  return <div>{StringHelpers.toTitleCase(locals.value.replace(/_/g, ' '))}</div>
 }
 
 const selectGroupTemplate = t.form.Form.templates.select.clone({ renderSelect })
@@ -107,10 +107,10 @@ export default class GroupAssignmentDialog extends Component {
     e.preventDefault()
 
     // tcomb validation not required, will not work with groups
-    let formValue = this.refs['form_group_assignment'].getValue()
-    let properties = {}
+    const formValue = this.refs.form_group_assignment.getValue()
+    const properties = {}
 
-    for (let key in formValue) {
+    for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] != '') {
           properties[key] = formValue[key]
@@ -126,8 +126,8 @@ export default class GroupAssignmentDialog extends Component {
   }
 
   render() {
-    let currentlyAssignedGroups = selectn(this.props.fieldMapping.groups, this.props.selectedItem) || []
-    let currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group) => {
+    const currentlyAssignedGroups = selectn(this.props.fieldMapping.groups, this.props.selectedItem) || []
+    const currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group) => {
       return (
         <span className={classNames('label', 'label-default')} style={{ marginRight: '5px' }}>
           {StringHelpers.toTitleCase(group.replace(/_/g, ' '))}
@@ -135,12 +135,12 @@ export default class GroupAssignmentDialog extends Component {
       )
     })
 
-    let dialectGroups = ProviderHelpers.getDialectGroups(
+    const dialectGroups = ProviderHelpers.getDialectGroups(
       selectn('response.contextParameters.acls[0].aces', this.props.dialect),
       currentlyAssignedGroups
     )
 
-    let formSchema = t.struct({
+    const formSchema = t.struct({
       id: t.String,
       group: dialectGroups.new
         ? !this.isUserRegistration
@@ -150,7 +150,7 @@ export default class GroupAssignmentDialog extends Component {
       //'comment': t.maybe(t.String)
     })
 
-    let formOptions = {
+    const formOptions = {
       fields: {
         id: {
           type: 'hidden',
@@ -185,18 +185,18 @@ export default class GroupAssignmentDialog extends Component {
         actions={[
           <FlatButton
             label={intl.trans('cancel', 'Cancel', 'first')}
-            secondary={true}
+            secondary
             onClick={this.props.closeMethod}
           />,
           <FlatButton
             label={intl.trans('submit', 'Submit', 'first')}
-            primary={true}
-            keyboardFocused={true}
+            primary
+            keyboardFocused
             onClick={this._onRequestSaveForm}
           />,
         ]}
         onRequestClose={this.props.closeMethod}
-        autoScrollBodyContent={true}
+        autoScrollBodyContent
       >
         <h1>
           {selectn('properties.userinfo:firstName', this.props.selectedItem)}
