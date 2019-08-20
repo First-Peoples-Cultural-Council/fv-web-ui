@@ -2,7 +2,7 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import FontIcon from 'material-ui/FontIcon'
+import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
@@ -58,9 +58,9 @@ function renderInput(locals) {
         label={intl.trans('replace', 'Replace', 'first')}
         labelPosition="after"
       >
-        <FontIcon style={{ verticalAlign: 'middle' }} className="material-icons">
+        <Icon style={{ verticalAlign: 'middle' }} className="material-icons">
           swap_horiz
-        </FontIcon>
+        </Icon>
       </Button>
     </div>
   )

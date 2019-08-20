@@ -19,7 +19,7 @@ import Immutable, { List } from 'immutable'
 
 import Button from '@material-ui/core/Button'
 import Colors from 'material-ui/styles/colors'
-import FontIcon from 'material-ui/FontIcon'
+import Icon from '@material-ui/core/Icon'
 import IconButton from 'material-ui/IconButton'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
@@ -316,7 +316,7 @@ export class Scramble extends Component {
               )
             })}
             {this.state.complete ? (
-              <FontIcon
+              <Icon
                 className="material-icons"
                 style={{
                   color: Colors.greenA200,
@@ -327,12 +327,12 @@ export class Scramble extends Component {
                 }}
               >
                 check_box
-              </FontIcon>
+              </Icon>
             ) : (
               false
             )}
             {this.state.incorrect ? (
-              <FontIcon
+              <Icon
                 className="material-icons"
                 style={{
                   color: Colors.red600,
@@ -343,7 +343,7 @@ export class Scramble extends Component {
                 }}
               >
                 indeterminate_check_box
-              </FontIcon>
+              </Icon>
             ) : (
               false
             )}
