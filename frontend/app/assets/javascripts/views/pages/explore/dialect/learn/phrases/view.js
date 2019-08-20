@@ -47,7 +47,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tab from 'material-ui/Tabs/Tab'
 
 import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
 

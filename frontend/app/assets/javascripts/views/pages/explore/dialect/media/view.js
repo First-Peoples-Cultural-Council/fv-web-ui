@@ -46,20 +46,17 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
-//import Header from 'views/pages/explore/dialect/header';
-//import PageHeader from 'views/pages/explore/dialect/page-header';
+import Dialog from 'material-ui/Dialog'
 
-import Dialog from 'material-ui/lib/dialog'
+import Card from 'material-ui/Card/Card'
+import FlatButton from 'material-ui/FlatButton'
+import CardText from 'material-ui/Card/CardText'
 
-import Card from 'material-ui/lib/card/card'
-import FlatButton from 'material-ui/lib/flat-button'
-import CardText from 'material-ui/lib/card/card-text'
+import ListUI from 'material-ui/List/List'
+import ListItem from 'material-ui/List/ListItem'
 
-import ListUI from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
-
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tabs from 'material-ui/Tabs/Tabs'
+import Tab from 'material-ui/Tabs/Tab'
 
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'

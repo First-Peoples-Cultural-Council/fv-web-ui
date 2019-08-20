@@ -44,7 +44,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'

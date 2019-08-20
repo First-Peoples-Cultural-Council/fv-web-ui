@@ -33,13 +33,13 @@ import { fetchUserDialects } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
 
-import Dialog from 'material-ui/lib/dialog'
+import Dialog from 'material-ui/Dialog'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/lib/table'
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/table'
 
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'

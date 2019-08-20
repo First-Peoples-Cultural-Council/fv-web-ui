@@ -11,11 +11,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from 'providers/redux/store'
 
-// Component to test
-// import { JestTestSetup } from 'views/components/JestTestSetup'
-
-// import injectTapEventPlugin from 'react-tap-event-plugin'
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
+import ThemeManager from 'material-ui/styles/theme-manager';
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import ConfGlobal from 'conf/local.js'
 

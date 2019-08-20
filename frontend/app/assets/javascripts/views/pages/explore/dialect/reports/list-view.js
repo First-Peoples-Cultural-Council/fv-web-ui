@@ -28,21 +28,21 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import Preview from 'views/components/Editor/Preview'
 
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
+import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
+import AVStop from 'material-ui/svg-icons/av/stop'
 
-import Card from 'material-ui/lib/card/card'
-import CardTitle from 'material-ui/lib/card/card-title'
-import CardActions from 'material-ui/lib/card/card-actions'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardMedia from 'material-ui/lib/card/card-media'
-import CardText from 'material-ui/lib/card/card-text'
+import Card from 'material-ui/Card/Card'
+import CardTitle from 'material-ui/Card/CardTitle'
+import CardActions from 'material-ui/Card/CardActions'
+import CardHeader from 'material-ui/Card/CardHeader'
+import CardMedia from 'material-ui/Card/CardMedia'
+import CardText from 'material-ui/Card/CardText'
 
-import FlatButton from 'material-ui/lib/flat-button'
-import IconButton from 'material-ui/lib/icon-button'
+import FlatButton from 'material-ui/FlatButton'
+import IconButton from 'material-ui/IconButton'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tabs from 'material-ui/Tabs/Tabs'
+import Tab from 'material-ui/Tabs/Tab'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

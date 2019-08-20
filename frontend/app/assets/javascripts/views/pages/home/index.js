@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'

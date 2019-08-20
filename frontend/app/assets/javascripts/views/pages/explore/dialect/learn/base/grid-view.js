@@ -21,13 +21,13 @@ import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import GridList from 'material-ui/lib/grid-list/grid-list'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridList from 'material-ui/GridList/GridList'
+import GridTile from 'material-ui/GridList/GridTile'
 
-import IconButton from 'material-ui/lib/icon-button'
+import IconButton from 'material-ui/IconButton'
 
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
+import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
+import AVStop from 'material-ui/svg-icons/av/stop'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'

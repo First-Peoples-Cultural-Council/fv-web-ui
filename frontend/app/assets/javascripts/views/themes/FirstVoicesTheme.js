@@ -13,10 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import Colors from 'material-ui/lib/styles/colors'
-import ColorManipulator from 'material-ui/lib/utils/color-manipulator'
-import Spacing from 'material-ui/lib/styles/spacing'
-import zIndex from 'material-ui/lib/styles/zIndex'
+import Colors from 'material-ui/styles/colors'
+import ColorManipulator from 'material-ui/utils/color-manipulator'
+import Spacing from 'material-ui/styles/spacing'
+import zIndex from 'material-ui/styles/zIndex'
 
 export default {
   spacing: Spacing,

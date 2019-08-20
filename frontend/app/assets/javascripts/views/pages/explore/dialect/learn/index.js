@@ -69,9 +69,9 @@ import AuthenticationFilter from 'views/components/Document/AuthenticationFilter
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'
 
-import Card from 'material-ui/lib/card/card'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardText from 'material-ui/lib/card/card-text'
+import Card from 'material-ui/Card/Card'
+import CardHeader from 'material-ui/Card/CardHeader'
+import CardText from 'material-ui/Card/CardText'
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { WORKSPACES, SECTIONS } from 'common/Constants'

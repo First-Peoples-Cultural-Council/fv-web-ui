@@ -18,9 +18,9 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import Colors from 'material-ui/lib/styles/colors'
+import Colors from 'material-ui/styles/colors'
 
-import ActionGrade from 'material-ui/lib/svg-icons/action/grade'
+import ActionGrade from 'material-ui/svg-icons/action/grade'
 
 // REDUX
 import { connect } from 'react-redux'

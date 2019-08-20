@@ -23,8 +23,8 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 
 import selectn from 'selectn'
 
-import SelectField from 'material-ui/lib/SelectField'
-import MenuItem from 'material-ui/lib/menus/menu-item'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 import StringHelpers, { CLEAN_ID } from 'common/StringHelpers'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance

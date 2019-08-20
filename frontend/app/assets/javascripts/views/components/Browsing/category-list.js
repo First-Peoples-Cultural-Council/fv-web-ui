@@ -20,10 +20,10 @@ import selectn from 'selectn'
 
 import ConfGlobal from 'conf/local.js'
 
-import Colors from 'material-ui/lib/styles/colors'
+import Colors from 'material-ui/styles/colors'
 
-import GridList from 'material-ui/lib/grid-list/grid-list'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridList from 'material-ui/GridList/GridList'
+import GridTile from 'material-ui/GridList/GridTile'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'

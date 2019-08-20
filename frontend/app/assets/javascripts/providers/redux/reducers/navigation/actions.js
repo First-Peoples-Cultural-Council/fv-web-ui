@@ -17,7 +17,7 @@ import {
 import DirectoryOperations from 'operations/DirectoryOperations'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
+import ThemeManager from 'material-ui/styles/theme-manager'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
 import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'

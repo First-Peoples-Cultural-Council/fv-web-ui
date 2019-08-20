@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 

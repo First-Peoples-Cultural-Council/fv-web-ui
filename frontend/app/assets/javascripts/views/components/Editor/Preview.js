@@ -37,12 +37,12 @@ import UIHelpers from 'common/UIHelpers'
 import MetadataList from 'views/components/Browsing/metadata-list'
 import AudioOptimal from 'views/components/Browsing/audio-optimal'
 
-import Avatar from 'material-ui/lib/avatar'
-import Card from 'material-ui/lib/card/card'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardMedia from 'material-ui/lib/card/card-media'
-import CardText from 'material-ui/lib/card/card-text'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import Avatar from 'material-ui/Avatar'
+import Card from 'material-ui/Card/Card'
+import CardHeader from 'material-ui/Card/CardHeader'
+import CardMedia from 'material-ui/Card/CardMedia'
+import CardText from 'material-ui/Card/CardText'
+import CircularProgress from 'material-ui/CircularProgress'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

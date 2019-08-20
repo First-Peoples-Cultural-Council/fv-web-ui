@@ -26,26 +26,23 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-// Components
-import AppBar from 'material-ui/lib/app-bar'
-import TextField from 'material-ui/lib/text-field'
+import AppBar from 'material-ui/AppBar'
+import TextField from 'material-ui/TextField'
 
-import MenuItem from 'material-ui/lib/menus/menu-item'
-// import SelectField from 'material-ui/lib/select-field'
+import MenuItem from 'material-ui/MenuItem'
+import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
+import RadioButton from 'material-ui/RadioButton'
+import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
 
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator'
-import RadioButton from 'material-ui/lib/radio-button'
-import RadioButtonGroup from 'material-ui/lib/radio-button-group'
+import DropDownMenu from 'material-ui/DropDownMenu'
+import FlatButton from 'material-ui/FlatButton'
+import Toolbar from 'material-ui/Toolbar/Toolbar'
+import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
+import IconButton from 'material-ui/IconButton'
+import Popover from 'material-ui/Popover'
+import Avatar from 'material-ui/Avatar'
 
-import DropDownMenu from 'material-ui/lib/DropDownMenu'
-import FlatButton from 'material-ui/lib/flat-button'
-import Toolbar from 'material-ui/lib/toolbar/toolbar'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import IconButton from 'material-ui/lib/icon-button'
-import Popover from 'material-ui/lib/popover/popover'
-import Avatar from 'material-ui/lib/avatar'
-
-import IconMenu from 'material-ui/lib/svg-icons/action/reorder'
+import IconMenu from 'material-ui/svg-icons/action/reorder'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 
@@ -54,9 +51,7 @@ import AppLeftNav from 'views/components/Navigation/AppLeftNav'
 
 import IntlService from 'views/services/intl'
 
-// import FontIcon from 'material-ui/lib/font-icon'
-// import NavigationExpandMoreIcon from 'material-ui/lib/svg-icons/navigation/expand-more'
-import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title'
+import ToolbarTitle from 'material-ui/Toolbar/ToolbarTitle'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'

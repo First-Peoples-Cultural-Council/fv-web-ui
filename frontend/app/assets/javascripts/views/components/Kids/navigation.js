@@ -28,13 +28,12 @@ import { toggleMenuAction } from 'providers/redux/reducers/navigation'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-// Components
-import AppBar from 'material-ui/lib/app-bar'
+import AppBar from 'material-ui/AppBar'
 
-import Avatar from 'material-ui/lib/avatar'
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import IconButton from 'material-ui/lib/icon-button'
+import Avatar from 'material-ui/Avatar'
+import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
+import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
+import IconButton from 'material-ui/IconButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

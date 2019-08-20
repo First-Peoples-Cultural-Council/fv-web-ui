@@ -20,7 +20,7 @@ import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import Paper from 'material-ui/lib/paper'
+import Paper from 'material-ui/Paper'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -29,11 +29,11 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 
 import { Introduction } from '../list-view'
 
-import RaisedButton from 'material-ui/lib/raised-button'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import RaisedButton from 'material-ui/RaisedButton'
+import Tabs from 'material-ui/Tabs/Tabs'
+import Tab from 'material-ui/Tabs/Tab'
 
-import ActionLaunch from 'material-ui/lib/svg-icons/action/launch'
+import ActionLaunch from 'material-ui/svg-icons/action/launch'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

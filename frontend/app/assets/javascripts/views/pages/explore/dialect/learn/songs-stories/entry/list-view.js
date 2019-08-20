@@ -20,7 +20,7 @@ import classNames from 'classnames'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
 

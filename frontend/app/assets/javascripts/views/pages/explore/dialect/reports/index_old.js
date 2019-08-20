@@ -29,12 +29,12 @@ import {
 } from 'providers/redux/reducers/reports'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import List from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
+import List from 'material-ui/List/List'
+import ListItem from 'material-ui/List/ListItem'
 
 import DocumentListView from 'views/components/Document/DocumentListView'
 
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from 'material-ui/CircularProgress'
 import Doughnut from 'react-chartjs/lib/doughnut'
 
 const DEFAULT_PAGE = 0

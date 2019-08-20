@@ -16,7 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

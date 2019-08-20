@@ -36,7 +36,7 @@ import StringHelpers from 'common/StringHelpers'
 // import ActionInfo from 'material-ui/lib/svg-icons/action/info'
 // import ActionInfoOutline from 'material-ui/lib/svg-icons/action/info-outline'
 import { Dialog } from 'material-ui'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridTile from 'material-ui/GridList/GridTile'
 
 import MediaList from 'views/components/Browsing/media-list'
 import withPagination from 'views/hoc/grid-list/with-pagination'

@@ -28,8 +28,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import SelectField from 'material-ui/lib/SelectField'
-import MenuItem from 'material-ui/lib/menus/menu-item'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

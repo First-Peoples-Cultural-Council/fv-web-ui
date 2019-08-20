@@ -17,12 +17,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
-import RaisedButton from 'material-ui/lib/raised-button'
-import Colors from 'material-ui/lib/styles/colors'
-import FontIcon from 'material-ui/lib/font-icon'
-import IconButton from 'material-ui/lib/icon-button'
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
+import RaisedButton from 'material-ui/RaisedButton'
+import Colors from 'material-ui/styles/colors'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
+import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
+import AVStop from 'material-ui/svg-icons/av/stop'
 
 import classNames from 'classnames'
 

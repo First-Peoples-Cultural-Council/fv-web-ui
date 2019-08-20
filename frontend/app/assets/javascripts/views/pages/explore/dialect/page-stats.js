@@ -22,10 +22,10 @@ import { connect } from 'react-redux'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import Paper from 'material-ui/lib/paper'
+import Paper from 'material-ui/Paper'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tabs from 'material-ui/Tabs/Tabs'
+import Tab from 'material-ui/Tabs/Tab'
 import Statistics from 'views/components/Dashboard/Statistics'
 
 import IntlService from 'views/services/intl'

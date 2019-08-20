@@ -26,7 +26,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import classNames from 'classnames'
 
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from 'material-ui/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'

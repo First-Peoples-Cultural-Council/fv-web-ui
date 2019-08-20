@@ -33,7 +33,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
 import IntlService from 'views/services/intl'

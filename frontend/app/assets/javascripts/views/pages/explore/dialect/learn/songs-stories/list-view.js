@@ -21,13 +21,13 @@ import selectn from 'selectn'
 import DOMPurify from 'dompurify'
 
 import UIHelpers from 'common/UIHelpers'
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
+import AVPlayArrow from 'material-ui/svg-icons/av/play-arrow'
+import AVStop from 'material-ui/svg-icons/av/stop'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IconButton from 'material-ui/lib/icon-button'
+import IconButton from 'material-ui/IconButton'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tabs from 'material-ui/Tabs/Tabs'
+import Tab from 'material-ui/Tabs/Tab'
 import IntlService from 'views/services/intl'
 import { Cover } from 'components/svg/cover'
 const intl = IntlService.instance

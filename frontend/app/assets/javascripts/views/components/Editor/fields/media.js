@@ -2,8 +2,8 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import FontIcon from 'material-ui/lib/font-icon'
-import FlatButton from 'material-ui/lib/flat-button'
+import FontIcon from 'material-ui/FontIcon'
+import FlatButton from 'material-ui/FlatButton'
 
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
 import SelectMediaComponent from 'views/components/Editor/SelectMediaComponent'

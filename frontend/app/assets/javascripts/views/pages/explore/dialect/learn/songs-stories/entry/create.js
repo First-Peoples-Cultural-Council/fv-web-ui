@@ -33,8 +33,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-// Views
-import Paper from 'material-ui/lib/paper'
+import Paper from 'material-ui/Paper'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import IntlService from 'views/services/intl'

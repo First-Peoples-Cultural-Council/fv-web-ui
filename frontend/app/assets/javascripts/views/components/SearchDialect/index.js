@@ -18,7 +18,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 import selectn from 'selectn'
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 

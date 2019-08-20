@@ -17,8 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import ReactPaginate from 'react-paginate'
-import ChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left'
-import ChevronRight from 'material-ui/lib/svg-icons/navigation/chevron-right'
+import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left'
+import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right'
 
 export default class Pagination extends Component {
   static defaultProps = {}

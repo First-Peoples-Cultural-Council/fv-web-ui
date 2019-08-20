@@ -15,7 +15,7 @@ import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 import Autosuggest from 'react-autosuggest'
 
-import LinearProgress from 'material-ui/lib/linear-progress'
+import LinearProgress from 'material-ui/LinearProgress'
 import IntlService from 'views/services/intl'
 
 const theme = {

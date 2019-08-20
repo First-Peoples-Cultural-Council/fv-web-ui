@@ -15,10 +15,9 @@ import { Document } from 'nuxeo'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-// import IconButton from 'material-ui/lib/icon-button'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from 'material-ui/CircularProgress'
 import IntlService from 'views/services/intl'
-import IconEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
+import IconEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
 

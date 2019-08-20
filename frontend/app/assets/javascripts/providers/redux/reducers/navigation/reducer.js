@@ -17,7 +17,7 @@ import {
   SET_ROUTE_PARAMS,
 } from './actionTypes'
 
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
+import ThemeManager from 'material-ui/styles/theme-manager'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 const initialStateProperties = {
   title: ConfGlobal.title,

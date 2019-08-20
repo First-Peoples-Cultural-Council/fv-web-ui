@@ -36,7 +36,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/RaisedButton'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
