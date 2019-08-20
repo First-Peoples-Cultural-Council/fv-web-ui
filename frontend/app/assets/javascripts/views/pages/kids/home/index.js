@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 
@@ -76,7 +76,8 @@ export class PageKidsHome extends Component {
           <div className="row" style={homePageStyle}>
             <div className={classNames('col-xs-8', 'col-xs-offset-2', 'text-center')}>
               <span style={{ width: '45%' }}>
-                <RaisedButton
+                <Button
+                  variant="contained"
                   fullWidth
                   label={intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
                   onClick={(e) => {

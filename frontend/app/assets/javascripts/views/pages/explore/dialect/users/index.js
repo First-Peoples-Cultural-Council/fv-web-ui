@@ -33,7 +33,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
 import IntlService from 'views/services/intl'
@@ -114,7 +114,8 @@ export class Index extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <RaisedButton
+              <Button
+                variant="contained"
                 label={intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
                 onClick={this._onNavigateRequest.bind(this, ['register'])}
                 primary

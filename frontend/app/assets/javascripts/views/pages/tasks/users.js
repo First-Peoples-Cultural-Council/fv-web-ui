@@ -36,7 +36,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
@@ -249,7 +249,8 @@ export class UserTasks extends React.Component {
             <td>{comment}</td>
             <td>{StringHelpers.formatUTCDateString(dateCreated)}</td>
             <td>
-              <RaisedButton
+              <Button
+                variant="contained"
                 label={intl.trans('add_to_group', 'Add to Group', 'first')}
                 secondary
                 onClick={this._handlePreApprovalOpen.bind(this, task, 'approve')}

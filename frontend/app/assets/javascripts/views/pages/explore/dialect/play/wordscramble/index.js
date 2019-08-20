@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import Colors from 'material-ui/styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
@@ -306,7 +306,8 @@ export class Scramble extends Component {
           <div style={{ minHeight: '50px', borderBottom: '1px solid #CCC', marginBottom: '16px' }}>
             {this.state.selected.map((word, index) => {
               return (
-                <RaisedButton
+                <Button
+                  variant="contained"
                   key={index}
                   style={{ backgroundColor: '#a7fba5' }}
                   label={word}
@@ -354,15 +355,27 @@ export class Scramble extends Component {
               disabled = true
             }
             return (
-              <RaisedButton disabled={disabled} label={word} key={index} onMouseUp={this.selectWord.bind(this, word)} />
+              <Button
+                variant="contained"
+                disabled={disabled}
+                label={word}
+                key={index}
+                onMouseUp={this.selectWord.bind(this, word)}
+              />
             )
           })}
           {this.state.complete ? (
-            <RaisedButton label={intl.trans('reset', 'Reset', 'first')} primary onMouseUp={this.reset.bind(this)} />
+            <Button
+              variant="contained"
+              label={intl.trans('reset', 'Reset', 'first')}
+              primary
+              onMouseUp={this.reset.bind(this)}
+            />
           ) : (
             false
           )}
-          <RaisedButton
+          <Button
+            variant="contained"
             label={intl.trans('check', 'Check', 'first')}
             className={classNames({ invisible: this.state.complete })}
             style={{ margin: '0 5px' }}
@@ -373,7 +386,12 @@ export class Scramble extends Component {
           {this.state.complete ? (
             false
           ) : (
-            <RaisedButton label={intl.trans('reset', 'Reset', 'first')} primary onMouseUp={this.reset.bind(this)} />
+            <Button
+              variant="contained"
+              label={intl.trans('reset', 'Reset', 'first')}
+              primary
+              onMouseUp={this.reset.bind(this)}
+            />
           )}
         </div>
       </div>

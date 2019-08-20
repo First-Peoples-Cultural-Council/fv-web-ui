@@ -16,7 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -322,13 +322,15 @@ export default class HangmanGame extends Component {
         {this.state.failed ? this.renderFailure() : false}
 
         <div style={{ margin: '15px 0' }}>
-          <RaisedButton
+          <Button
+            variant="contained"
             secondary
             onClick={this.props.newPuzzle}
             label={intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
             style={{ marginRight: '10px' }}
           />
-          <RaisedButton
+          <Button
+            variant="contained"
             primary
             onMouseDown={this.restart}
             label={intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}

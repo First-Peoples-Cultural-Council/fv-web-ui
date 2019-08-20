@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 
 import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
@@ -167,7 +167,8 @@ export class PageHome extends Component {
     ;(selectn('response.entries', _computeUserStartpage) || []).map(
       function computeUserStartPageMap(dialect, index) {
         const tableRow = (
-          <RaisedButton
+          <Button
+            variant="contained"
             key={index}
             label={'Access ' + selectn('properties.dc:title', dialect)}
             primary
@@ -187,7 +188,8 @@ export class PageHome extends Component {
 
     if (accessButtons.length === 0) {
       accessButtons[0] = (
-        <RaisedButton
+        <Button
+          variant="contained"
           key={0}
           label={
             this.intl.translate({

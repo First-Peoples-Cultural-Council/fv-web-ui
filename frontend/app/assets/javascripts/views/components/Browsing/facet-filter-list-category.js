@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { Set } from 'immutable'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import memoize from 'memoize-one'
 import selectn from 'selectn'
 
@@ -80,7 +80,8 @@ export default class FacetFilterListCategory extends Component {
   render() {
     return (
       <div>
-        <RaisedButton
+        <Button
+          variant="contained"
           disabled={this.checkedCount === 0}
           style={{ margin: '0 0 10px 0' }}
           // label={this.intl.trans('views.pages.explore.dialect.learn.words.find_by_category', 'Show All Words', 'words')}

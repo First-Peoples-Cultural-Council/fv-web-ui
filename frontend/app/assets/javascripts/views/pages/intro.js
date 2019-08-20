@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 /**
@@ -82,7 +82,8 @@ export class PageHome extends Component {
               <img src="assets/images/logo.gif" alt="FirstVoices Logo" className="img-responsive" />
             </p>
             <a href="http://legacy.firstvoices.com/">
-              <RaisedButton
+              <Button
+                variant="contained"
                 label="Legacy Site"
                 style={{
                   textAlign: 'center',
@@ -90,7 +91,8 @@ export class PageHome extends Component {
                 }}
               />
             </a>
-            <RaisedButton
+            <Button
+              variant="contained"
               label={this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
               onClick={() => this._onNavigateRequest('/')}
               style={{ textAlign: 'center' }}

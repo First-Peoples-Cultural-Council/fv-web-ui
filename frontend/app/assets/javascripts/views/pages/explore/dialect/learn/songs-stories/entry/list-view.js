@@ -20,7 +20,7 @@ import classNames from 'classnames'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
 
@@ -102,7 +102,8 @@ export default class ListView extends Component {
               "Note: This new sort order will be saved once the book is saved in the 'Book' tab.",
               'first'
             )}
-            <RaisedButton
+            <Button
+              variant="contained"
               style={{ marginLeft: '15px' }}
               label={intl.trans('reset_order', 'Reset Order', 'words')}
               onClick={this._reset}
@@ -117,7 +118,8 @@ export default class ListView extends Component {
 
             if (this.props.reorder) {
               entryControls.push(
-                <RaisedButton
+                <Button
+                  variant="contained"
                   key="up"
                   label={intl.trans('move_up', 'move up', 'words')}
                   disabled={i == 0}
@@ -125,7 +127,8 @@ export default class ListView extends Component {
                 />
               )
               entryControls.push(
-                <RaisedButton
+                <Button
+                  variant="contained"
                   key="down"
                   label={intl.trans('move_down', 'move down', 'words')}
                   disabled={i == this.state.items.size - 1}

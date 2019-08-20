@@ -37,7 +37,7 @@ import Dialog from 'material-ui/Dialog'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/table'
 
@@ -149,13 +149,15 @@ export class Tasks extends React.Component {
               <span>{intl.searchAndReplace(task.name)}</span>
             </TableRowColumn>
             <TableRowColumn>
-              <RaisedButton
+              <Button
+                variant="contained"
                 label={intl.trans('approve', 'Approve', 'first')}
                 secondary
                 onClick={this._handleTaskActions.bind(this, task.id, 'approve')}
               />{' '}
               &nbsp;
-              <RaisedButton
+              <Button
+                variant="contained"
                 label={intl.trans('reject', 'Reject', 'first')}
                 secondary
                 onClick={this._handleTaskActions.bind(this, task.id, 'reject')}

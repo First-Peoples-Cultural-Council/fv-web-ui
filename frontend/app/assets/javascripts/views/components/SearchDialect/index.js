@@ -18,7 +18,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 import selectn from 'selectn'
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
@@ -199,7 +199,8 @@ export class SearchDialect extends Component {
     }
     return (
       <div className="SearchDialectForm SearchDialectForm--filtering">
-        <RaisedButton
+        <Button
+          variant="contained"
           label={resetButtonText}
           onClick={() => {
             this._resetSearch()
@@ -215,7 +216,8 @@ export class SearchDialect extends Component {
 
     if (flashcardMode !== undefined) {
       return flashcardMode ? (
-        <RaisedButton
+        <Button
+          variant="contained"
           style={{ marginLeft: 'auto' }}
           label="Stop viewing Flashcards"
           primary
@@ -224,7 +226,8 @@ export class SearchDialect extends Component {
           }}
         />
       ) : (
-        <RaisedButton
+        <Button
+          variant="contained"
           style={{ marginLeft: 'auto' }}
           label="Flashcards"
           onClick={() => {
@@ -268,9 +271,10 @@ export class SearchDialect extends Component {
             value={searchTerm}
           />
 
-          <RaisedButton label={searchButtonText} onClick={this._handleSearch} primary />
+          <Button variant="contained" label={searchButtonText} onClick={this._handleSearch} primary />
 
-          <RaisedButton
+          <Button
+            variant="contained"
             label={resetButtonText}
             onClick={this._resetSearch}
             primary={false}

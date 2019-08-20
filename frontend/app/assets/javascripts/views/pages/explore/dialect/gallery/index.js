@@ -32,7 +32,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import GeneralList from 'views/components/Browsing/general-list'
 import withFilter from 'views/hoc/grid-list/with-filter'
@@ -133,7 +133,8 @@ export class PageDialectGalleries extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <RaisedButton
+              <Button
+                variant="contained"
                 label={'Create Gallery'}
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
                 primary

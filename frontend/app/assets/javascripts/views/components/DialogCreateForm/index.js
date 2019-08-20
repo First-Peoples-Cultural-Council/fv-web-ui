@@ -1,7 +1,6 @@
 import React from 'react'
 import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
-import RaisedButton from 'material-ui/RaisedButton'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
 import PageDialectCategoryCreate from 'views/pages/explore/dialect/category/create'
@@ -171,7 +170,7 @@ export default class DialogCreateForm extends React.Component {
       !this.props.fieldAttributes.disableCreateNewButton ||
       this.props.fieldAttributes.disableCreateNewButton === false
     ) {
-      createNewButton = <RaisedButton label={createNewButtonLabel} onClick={this.handleOpen} />
+      createNewButton = <Button variant="contained" label={createNewButtonLabel} onClick={this.handleOpen} />
     }
 
     const actions = [
