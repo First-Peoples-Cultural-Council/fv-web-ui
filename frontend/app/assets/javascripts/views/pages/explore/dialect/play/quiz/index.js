@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 
 import classNames from 'classnames'
@@ -291,7 +291,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    (selectn('response.entries', computeWords) || []).forEach(
+    ;(selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -439,9 +439,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                  disabled: true,
-                  key: i,
-                })
+                    disabled: true,
+                    key: i,
+                  })
                 : answer
             })}
           </div>

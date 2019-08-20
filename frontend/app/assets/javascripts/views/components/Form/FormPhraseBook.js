@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import FormMoveButtons from 'views/components/Form/FormMoveButtons'
 import FormRemoveButton from 'views/components/Form/FormRemoveButton'
 
