@@ -33,7 +33,7 @@ import { RaisedButton, IconButton } from 'material-ui'
 import Toolbar from 'material-ui/Toolbar/Toolbar'
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
 import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
-import Toggle from 'material-ui/Toggle'
+import Switch from '@material-ui/core/Switch'
 import IconMenu from 'material-ui/IconMenu'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
@@ -261,9 +261,9 @@ export class PageToolbar extends Component {
                       position: 'relative',
                     }}
                   >
-                    <Toggle
-                      toggled={documentEnabled || documentPublished}
-                      onToggle={this._documentActionsToggleEnabled}
+                    <Switch
+                      checked={documentEnabled || documentPublished}
+                      onChange={this._documentActionsToggleEnabled}
                       ref="enabled" // TODO: DEPRECATED
                       disabled={documentPublished}
                       name="enabled"
