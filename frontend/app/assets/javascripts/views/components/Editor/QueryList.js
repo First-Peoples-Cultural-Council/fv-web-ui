@@ -29,7 +29,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from '@material-ui/core/MenuItem'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -108,11 +108,9 @@ export class QueryList extends Component {
             }
           >
             {entries.map((entry) => (
-              <MenuItem
-                key={selectn('ecm:uuid', entry)}
-                value={selectn('ecm:uuid', entry)}
-                primaryText={selectn('dc:title', entry)}
-              />
+              <MenuItem key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
+                {selectn('dc:title', entry)}
+              </MenuItem>
             ))}
           </SelectField>
         ) : (

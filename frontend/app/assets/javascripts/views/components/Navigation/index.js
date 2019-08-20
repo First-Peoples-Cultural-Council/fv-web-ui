@@ -29,7 +29,7 @@ import UIHelpers from 'common/UIHelpers'
 import AppBar from 'material-ui/AppBar'
 import TextField from 'material-ui/TextField'
 
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from '@material-ui/core/MenuItem'
 import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
 import RadioButton from 'material-ui/RadioButton'
 import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
@@ -477,9 +477,9 @@ export class Navigation extends Component {
               text={this.intl.trans('choose_lang', 'Choose a Language', 'first')}
             />
             <DropDownMenu value={this.intl.locale} onChange={this._handleChangeLocale} labelStyle={{ color: '#fff' }}>
-              <MenuItem value="en" primaryText="English" />
-              <MenuItem value="fr" primaryText="Français" />
-              {/*<MenuItem value="sp" primaryText="Español" />*/}
+              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="fr">Français</MenuItem>
+              {/* <MenuItem value="sp">Español</MenuItem> */}
             </DropDownMenu>
           </ToolbarGroup>
         </Toolbar>

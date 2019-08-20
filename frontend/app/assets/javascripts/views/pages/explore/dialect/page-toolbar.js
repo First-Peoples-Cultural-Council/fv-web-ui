@@ -36,7 +36,7 @@ import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
 import Switch from '@material-ui/core/Switch'
 import IconMenu from 'material-ui/IconMenu'
 import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from '@material-ui/core/MenuItem'
 import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
@@ -476,28 +476,33 @@ export class PageToolbar extends Component {
                 <MenuItem
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
                   key="reports"
-                  primaryText={intl.trans('reports', 'Reports', 'first')}
-                />,
+                >
+                  {intl.trans('reports', 'Reports', 'first')}
+                </MenuItem>,
                 <MenuItem
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')}
                   key="media"
-                  primaryText={intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
-                />,
+                >
+                  {intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
+                </MenuItem>,
                 <MenuItem
                   key="contributors"
-                  primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
-                />,
+                >
+                  {intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
+                </MenuItem>,
                 <MenuItem
                   key="recorders"
-                  primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
-                />,
+                >
+                  {intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
+                </MenuItem>,
                 <MenuItem
                   key="phrasebooks"
-                  primaryText={intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
-                />,
+                >
+                  {intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
+                </MenuItem>,
               ]
 
               return React.createElement(

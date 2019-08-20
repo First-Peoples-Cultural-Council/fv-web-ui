@@ -24,7 +24,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import selectn from 'selectn'
 
 import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from '@material-ui/core/MenuItem'
 import StringHelpers, { CLEAN_ID } from 'common/StringHelpers'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
@@ -94,7 +94,9 @@ export class DirectoryList extends Component {
             floatingLabelText={intl.trans('select_x', 'Select ' + this.props.label, 'first', [this.props.label]) + ':'}
           >
             {entries.map((entry) => (
-              <MenuItem key={entry.value} value={entry.value} primaryText={entry.text} />
+              <MenuItem key={entry.value} value={entry.value}>
+                {entry.text}
+              </MenuItem>
             ))}
           </SelectField>
         ) : (
