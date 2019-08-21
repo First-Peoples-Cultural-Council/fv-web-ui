@@ -15,45 +15,53 @@ limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
 
-import classNames from 'classnames'
 import selectn from 'selectn'
 
-import Preview from 'views/components/Editor/Preview'
-import IntlService from 'views/services/intl'
-
+import '!style-loader!css-loader!./MetadataList.css'
 /**
  * Metadata list
  */
 export default class MetadataList extends Component {
   static propTypes = {
     metadata: PropTypes.array.isRequired,
-    style: PropTypes.object,
-  }
-
-  constructor(props, context) {
-    super(props, context)
   }
 
   render() {
-    const { metadata, style } = this.props
+    const content = this._getContent()
+    return content
+  }
 
-    return (
-      <ul style={{ overflow: 'scroll', listStyleType: 'none', padding: 0, maxHeight: '200px', ...style }}>
-        {metadata.map(function(item, key) {
-          let value = selectn('value', item)
+  _getContent = () => {
+    const { metadata } = this.props
+    let toReturn = null
 
-          if ((value && !Array.isArray(value)) || (Array.isArray(value) && value.length > 0)) {
-            return (
-              <li key={key} style={{ paddingBottom: '5px' }}>
-                <strong>{selectn('label', item)}:</strong>
-                <br />
-                {value}
-                <hr style={{ margin: '5px 0' }} />
-              </li>
-            )
-          }
-        })}
-      </ul>
-    )
+    const listItems = metadata.map((item, key) => {
+      const value = selectn('value', item)
+      const label = selectn('label', item)
+
+      if (value.constructor === Array) {
+        // Array of jsx
+        if (value.length > 0) {
+          return (
+            <li key={key} className="MetadataList__entry">
+              <strong className="MetadataList__label">{label}:</strong>
+              {value}
+            </li>
+          )
+        }
+        return null
+      }
+      // jsx/string
+      return (
+        <li key={key} className="MetadataList__entry">
+          <strong className="MetadataList__label">{label}:</strong>
+          <span className="MetadataList__value"> {value}</span>
+        </li>
+      )
+    })
+
+    toReturn = <ul className="MetadataList">{listItems}</ul>
+
+    return toReturn
   }
 }
