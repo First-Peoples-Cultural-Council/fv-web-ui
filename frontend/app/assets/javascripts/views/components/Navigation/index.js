@@ -26,21 +26,18 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import AppBar from 'material-ui/AppBar'
-import TextField from 'material-ui/TextField'
-
-import MenuItem from '@material-ui/core/MenuItem'
-import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
-import RadioButton from 'material-ui/RadioButton'
-import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
-
-import DropDownMenu from 'material-ui/DropDownMenu'
+import AppBar from '@material-ui/core/AppBar'
+import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import Toolbar from 'material-ui/Toolbar/Toolbar'
-import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
-import IconButton from 'material-ui/IconButton'
-import Popover from 'material-ui/Popover'
-import Avatar from 'material-ui/Avatar'
+import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
+import Popover from '@material-ui/core/Popover'
+import RadioButton from '@material-ui/core/Radio'
+import RadioButtonGroup from '@material-ui/core/RadioGroup'
+import Select from '@material-ui/core/Select'
+import TextField from '@material-ui/core/TextField'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
+import Typography from '@material-ui/core/Typography'
 
 import IconMenu from '@material-ui/icons/Reorder'
 
@@ -51,7 +48,6 @@ import AppLeftNav from 'views/components/Navigation/AppLeftNav'
 
 import IntlService from 'views/services/intl'
 
-import ToolbarTitle from 'material-ui/Toolbar/ToolbarTitle'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
@@ -195,7 +191,7 @@ export class Navigation extends Component {
             </button>
           }
         >
-          <ToolbarGroup style={{ position: 'relative', color: '#fff' }}>
+          <div style={{ position: 'relative', color: '#fff' }}>
             <div
               style={{ display: 'inline-block', paddingRight: '10px', paddingTop: '15px', textTransform: 'uppercase' }}
             >
@@ -227,7 +223,7 @@ export class Navigation extends Component {
               })}
             />
 
-            <ToolbarSeparator
+            <div
               className={classNames({ hidden: !this.props.computeLogin.isConnected })}
               style={{ float: 'none', marginLeft: 0, marginRight: 10 }}
             />
@@ -267,10 +263,7 @@ export class Navigation extends Component {
               </span>
             </AuthenticationFilter>
 
-            <ToolbarSeparator
-              className="search-bar-seperator"
-              style={{ float: 'none', marginRight: 0, marginLeft: 10 }}
-            />
+            <div className="search-bar-seperator" style={{ float: 'none', marginRight: 0, marginLeft: 10 }} />
 
             <div
               style={{ background: themePalette.primary1Color, display: 'inline-block' }}
@@ -457,7 +450,7 @@ export class Navigation extends Component {
               </div>
             </Popover>
 
-            <ToolbarSeparator className="locale-seperator" style={{ float: 'none', marginRight: 0, marginLeft: 0 }} />
+            <div className="locale-seperator" style={{ float: 'none', marginRight: 0, marginLeft: 0 }} />
 
             <IconButton
               onClick={this._handleDisplayLocaleOptions}
@@ -467,21 +460,20 @@ export class Navigation extends Component {
             >
               settings
             </IconButton>
-          </ToolbarGroup>
+          </div>
         </AppBar>
 
         <Toolbar style={{ display: this.state.localePopoverOpen ? 'block' : 'none' }}>
-          <ToolbarGroup firstChild float="right">
-            <ToolbarTitle
-              style={{ color: '#fff', padding: '0 0 0 15px', fontSize: '15px' }}
-              text={this.intl.trans('choose_lang', 'Choose a Language', 'first')}
-            />
-            <DropDownMenu value={this.intl.locale} onChange={this._handleChangeLocale} labelStyle={{ color: '#fff' }}>
+          <div firstChild float="right">
+            <Typography variant="title" style={{ color: '#fff', padding: '0 0 0 15px', fontSize: '15px' }}>
+              {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
+            </Typography>
+            <Select value={this.intl.locale} onChange={this._handleChangeLocale} labelStyle={{ color: '#fff' }}>
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="fr">Français</MenuItem>
               {/* <MenuItem value="sp">Español</MenuItem> */}
-            </DropDownMenu>
-          </ToolbarGroup>
+            </Select>
+          </div>
         </Toolbar>
 
         <AppLeftNav

@@ -34,10 +34,6 @@ import UIHelpers from 'common/UIHelpers'
 
 import AppFrontController from './AppFrontController'
 
-// import FontIcon from 'material-ui/lib/font-icon'
-// import Paper from 'material-ui/lib/paper'
-// import FlatButton from 'material-ui/lib/flat-button'
-
 import IntlService from 'views/services/intl'
 
 const getPreferences = function getPreferences(login, dialect) {

@@ -2,7 +2,7 @@ import React from 'react'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 import '!style-loader!css-loader!./SearchDocumentTypesTemplate.css'
-import { IconButton } from 'material-ui'
+import { IconButton } from '@material-ui/core'
 export const SearchDocumentTypesTemplate = (locals) => {
   return (
     <div className="SearchDocumentTypesTemplate row">

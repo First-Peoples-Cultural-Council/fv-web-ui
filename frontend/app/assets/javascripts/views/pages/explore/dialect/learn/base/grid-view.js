@@ -21,10 +21,10 @@ import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import GridList from 'material-ui/GridList/GridList'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridList from '@material-ui/core/GridList/GridList'
+import GridTile from '@material-ui/core/GridListTile'
 
-import IconButton from 'material-ui/IconButton'
+import IconButton from '@material-ui/core/IconButton'
 
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'

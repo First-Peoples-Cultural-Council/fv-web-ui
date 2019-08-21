@@ -28,12 +28,10 @@ import { toggleMenuAction } from 'providers/redux/reducers/navigation'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import AppBar from 'material-ui/AppBar'
+import AppBar from '@material-ui/core/AppBar'
 
-import Avatar from 'material-ui/Avatar'
-import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
-import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
-import IconButton from 'material-ui/IconButton'
+import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -189,7 +187,7 @@ export class KidsNavigation extends Component {
           // TODO: This creates an empty, transparent button that can be clicked
           iconClassNameRight="muidocs-icon-navigation-expand-more"
         >
-          <ToolbarGroup style={{ paddingTop: '5px' }}>
+          <div style={{ paddingTop: '5px' }}>
             <IconButton
               className={classNames({ hidden: this.props.frontpage })}
               onClick={() => NavigationHelpers.navigateBack()}
@@ -224,7 +222,7 @@ export class KidsNavigation extends Component {
               apps
             </IconButton>
 
-            <ToolbarSeparator style={{ float: 'none', marginLeft: '0', marginRight: '15px' }} />
+            <div style={{ float: 'none', marginLeft: '0', marginRight: '15px' }} />
 
             <IconButton
               style={{ paddingTop: 0, paddingRight: 0, top: '8px', left: '-10px' }}
@@ -235,7 +233,7 @@ export class KidsNavigation extends Component {
             >
               clear
             </IconButton>
-          </ToolbarGroup>
+          </div>
         </AppBar>
       </div>
     )

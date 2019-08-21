@@ -10,7 +10,8 @@ import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
 import SelectFactory from 'views/components/Editor/fields/select'
 import MediaFactory from 'views/components/Editor/fields/media'
 
-import { FlatButton, IconButton } from 'material-ui'
+import { IconButton } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 import ProviderHelpers from '../../common/ProviderHelpers'
 
@@ -86,7 +87,7 @@ const RelatedMediaLayout = (locals) => (
     <fieldset>
       <legend>
         {locals.label}{' '}
-        <FlatButton
+        <Button
           style={{
             border: '1px solid rgb(204, 204, 204)',
             borderRadius: '4px',

@@ -37,12 +37,12 @@ import UIHelpers from 'common/UIHelpers'
 import MetadataList from 'views/components/Browsing/metadata-list'
 import AudioOptimal from 'views/components/Browsing/audio-optimal'
 
-import Avatar from 'material-ui/Avatar'
-import Card from 'material-ui/Card/Card'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardMedia from 'material-ui/Card/CardMedia'
-import CardText from 'material-ui/Card/CardText'
-import CircularProgress from 'material-ui/CircularProgress'
+import Avatar from '@material-ui/core/Avatar'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia'
+import CardContent from '@material-ui/core/CardContent'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -489,7 +489,7 @@ export class Preview extends Component {
                 <CardHeader
                   title={selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
                   titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
-                  subtitle={
+                  subheader={
                     description && description != 'undefined'
                       ? intl.trans('description', 'Description', 'first') + ': ' + description
                       : ''
@@ -511,7 +511,7 @@ export class Preview extends Component {
                     borderBottom: '4px solid ' + themePalette.primary1Color,
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
+                <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
                   <MetadataList
                     style={{
                       lineHeight: 'initial',
@@ -521,7 +521,7 @@ export class Preview extends Component {
                     }}
                     metadata={GetMetaData('picture', pictureResponse)}
                   />
-                </CardText>
+                </CardContent>
               </Card>
             )
           }
@@ -605,7 +605,7 @@ export class Preview extends Component {
                   titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
                   titleColor={themePalette.textColor}
                   subtitleColor={themePalette.textColorFaded}
-                  subtitle={description && description != 'undefined' ? 'Description: ' + description : ''}
+                  subheader={description && description != 'undefined' ? 'Description: ' + description : ''}
                   subtitleStyle={{ lineHeight: 'initial' }}
                   style={{ height: 'initial', padding: 0 }}
                 />
@@ -629,7 +629,7 @@ export class Preview extends Component {
                     borderBottom: '4px solid ' + themePalette.primary1Color,
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
+                <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
                   <MetadataList
                     style={{
                       lineHeight: 'initial',
@@ -639,7 +639,7 @@ export class Preview extends Component {
                     }}
                     metadata={GetMetaData('audio', audioResponse)}
                   />
-                </CardText>
+                </CardContent>
               </Card>
             )
           }
@@ -711,7 +711,7 @@ export class Preview extends Component {
                 <CardHeader
                   title={selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
                   titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
-                  subtitle={
+                  subheader={
                     selectn('properties.dc:description', videoResponse) || selectn('dc:description', videoResponse)
                   }
                   subtitleStyle={{ lineHeight: 'initial' }}
@@ -731,7 +731,7 @@ export class Preview extends Component {
                     borderBottom: '4px solid ' + themePalette.primary1Color,
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
+                <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
                   <MetadataList
                     style={{
                       lineHeight: 'initial',
@@ -741,7 +741,7 @@ export class Preview extends Component {
                     }}
                     metadata={GetMetaData('video', videoResponse)}
                   />
-                </CardText>
+                </CardContent>
               </Card>
             )
           }

@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 import StatusBar from 'views/components/StatusBar'
-import CircularProgress from 'material-ui/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
 

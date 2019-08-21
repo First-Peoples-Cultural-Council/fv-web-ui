@@ -35,7 +35,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import { FlatButton, RaisedButton, Dialog } from 'material-ui'
+import { Dialog } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -213,7 +214,7 @@ export class AddMediaComponent extends Component {
     let fileTypeLabel = intl.trans('file', 'File', 'first')
 
     const actions = [
-      <FlatButton key="fb0" label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.handleClose} />,
+      <Button key="fb0" label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.handleClose} />,
     ]
 
     switch (this.props.type) {
@@ -279,7 +280,7 @@ export class AddMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <RaisedButton label={this.props.label} onClick={this.handleOpen} />
+        <Button variant="contained" label={this.props.label} onClick={this.handleOpen} />
         <Dialog
           title={intl.trans(
             'views.components.editor.create_new_x_in_the_x_dialect',

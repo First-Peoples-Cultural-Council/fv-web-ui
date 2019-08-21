@@ -20,8 +20,7 @@ import selectn from 'selectn'
 import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
 // import DictionaryList from 'views/components/Browsing/dictionary-list'
 import DataGrid from 'react-datagrid'
-import ClearFix from 'material-ui/clearfix'
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 // import FlashcardList from 'views/components/Browsing/flashcard-list'
 
 import withPagination from 'views/hoc/grid-list/with-pagination'
@@ -162,35 +161,33 @@ export default class DocumentListViewDatatable extends Component {
 
     return (
       <Paper>
-        <ClearFix>
-          <DataGrid
-            idProperty="uid"
-            dataSource={selectn('response.entries', data)}
-            dataSourceCount={selectn('response.totalSize', data)}
-            columns={columns}
-            rowHeight={55}
-            style={{
-              minHeight: '70vh',
-              zIndex: 0,
-            }}
-            selected={this.state.selectedId}
-            onSelectionChange={this._handleSelectionChange}
-            onSortChange={onSortChange}
-            withColumnMenu={false}
-            pagination={pagination}
-            paginationToolbarProps={{
-              showRefreshIcon: false,
-              pageSizes: [10, 20, 50],
-            }}
-            sortInfo={sortInfo}
-            page={page}
-            pageSize={pageSize}
-            onPageChange={this._onPageChange}
-            onPageSizeChange={this._onPageSizeChange}
-            emptyText={this.intl.trans('no_records', 'No records', 'words')}
-            showCellBorders
-          />
-        </ClearFix>
+        <DataGrid
+          idProperty="uid"
+          dataSource={selectn('response.entries', data)}
+          dataSourceCount={selectn('response.totalSize', data)}
+          columns={columns}
+          rowHeight={55}
+          style={{
+            minHeight: '70vh',
+            zIndex: 0,
+          }}
+          selected={this.state.selectedId}
+          onSelectionChange={this._handleSelectionChange}
+          onSortChange={onSortChange}
+          withColumnMenu={false}
+          pagination={pagination}
+          paginationToolbarProps={{
+            showRefreshIcon: false,
+            pageSizes: [10, 20, 50],
+          }}
+          sortInfo={sortInfo}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={this._onPageChange}
+          onPageSizeChange={this._onPageSizeChange}
+          emptyText={this.intl.trans('no_records', 'No records', 'words')}
+          showCellBorders
+        />
       </Paper>
     )
   }

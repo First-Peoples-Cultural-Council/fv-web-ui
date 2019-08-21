@@ -13,30 +13,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import Colors from 'material-ui/styles/colors'
-import ColorManipulator from 'material-ui/utils/color-manipulator'
-import Spacing from 'material-ui/styles/spacing'
-import zIndex from 'material-ui/styles/zIndex'
+import { teal, grey, pink } from '@material-ui/core/colors'
+import Spacing from '@material-ui/core/styles/spacing'
+import zIndex from '@material-ui/core/styles/zIndex'
 
 export default {
   spacing: Spacing,
   zIndex: zIndex,
   fontFamily: 'Arial, sans-serif',
   palette: {
-    primary1Color: Colors.teal400,
-    primary2Color: Colors.teal700,
-    primary3Color: Colors.lightBlack,
-    accent1Color: Colors.pinkA200,
+    primary1Color: teal[400],
+    primary2Color: teal[700],
+    primary3Color: grey[800],
+    accent1Color: pink.A200,
     accent2Color: '#529c95',
-    accent3Color: Colors.grey500,
-    textColor: Colors.darkBlack,
-    alternateTextColor: Colors.white,
-    canvasColor: Colors.white,
-    borderColor: Colors.grey300,
-    disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
-    pickerHeaderColor: Colors.teal400,
+    accent3Color: grey[500],
+    textColor: grey[900],
+    alternateTextColor: grey[50],
+    canvasColor: grey[50],
+    borderColor: grey[300],
+    disabledColor: grey[500],
+    pickerHeaderColor: teal[400],
   },
   wrapper: {
-    backgroundColor: Colors.white,
+    backgroundColor: grey[50],
   },
 }

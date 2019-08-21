@@ -42,7 +42,6 @@ import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import { Document } from 'nuxeo'
 
 // Views
-// import Paper from 'material-ui/lib/paper'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import withForm from 'views/hoc/view/with-form'

@@ -13,10 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import Colors from 'material-ui/styles/colors'
-import ColorManipulator from 'material-ui/utils/color-manipulator'
-import Spacing from 'material-ui/styles/spacing'
-import zIndex from 'material-ui/styles/zIndex'
+import { cyan, pink, grey } from '@material-ui/core/colors'
+import Spacing from '@material-ui/core/styles/spacing'
+import zIndex from '@material-ui/core/styles/zIndex'
 
 export default {
   spacing: Spacing,
@@ -24,19 +23,19 @@ export default {
   fontFamily: 'Arial, sans-serif',
   palette: {
     primary1Color: '#b40000',
-    primary2Color: Colors.cyan700,
-    primary3Color: Colors.lightBlack,
-    accent1Color: Colors.pinkA200,
-    accent2Color: Colors.grey100,
-    accent3Color: Colors.grey500,
-    textColor: Colors.darkBlack,
-    alternateTextColor: Colors.white,
-    canvasColor: Colors.white,
-    borderColor: Colors.grey300,
-    disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
-    pickerHeaderColor: Colors.cyan500,
+    primary2Color: cyan[700],
+    primary3Color: grey[800],
+    accent1Color: pink.A200,
+    accent2Color: grey[100],
+    accent3Color: grey[500],
+    textColor: grey[900],
+    alternateTextColor: grey[50],
+    canvasColor: grey[50],
+    borderColor: grey[300],
+    disabledColor: grey[500],
+    pickerHeaderColor: cyan[500],
   },
   wrapper: {
-    backgroundColor: Colors.white,
+    backgroundColor: grey[50],
   },
 }

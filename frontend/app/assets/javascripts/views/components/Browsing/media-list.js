@@ -18,8 +18,8 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import GridList from 'material-ui/GridList/GridList'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridList from '@material-ui/core/GridList/GridList'
+import GridTile from '@material-ui/core/GridListTile'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 

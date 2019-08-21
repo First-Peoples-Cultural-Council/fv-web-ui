@@ -18,7 +18,7 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import ThemeManager from 'material-ui/styles/theme-manager'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 
@@ -35,8 +35,7 @@ require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
 
-// injectTapEventPlugin()
-
+const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
 const context = {
   providedState: {
     properties: {
@@ -44,7 +43,7 @@ const context = {
       pageTitleParams: null,
       domain: ConfGlobal.domain,
       theme: {
-        palette: ThemeManager.getMuiTheme(FirstVoicesTheme),
+        palette: createdMuiTheme,
         id: 'default',
       },
     },
@@ -53,7 +52,9 @@ const context = {
 
 render(
   <Provider store={store}>
-    <AppWrapper {...context} />
+    <MuiThemeProvider theme={createdMuiTheme}>
+      <AppWrapper {...context} />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('app-wrapper')
 )

@@ -26,8 +26,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import GridList from 'material-ui/GridList/GridList'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridList from '@material-ui/core/GridList/GridList'
+import GridTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 

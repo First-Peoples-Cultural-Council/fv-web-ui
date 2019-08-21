@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
+// import PropTypes from 'prop-types'
 
 import Doughnut from 'react-chartjs/lib/doughnut'
-import CircularProgress from 'material-ui/CircularProgress'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

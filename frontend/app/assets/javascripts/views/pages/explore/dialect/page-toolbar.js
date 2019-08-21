@@ -28,15 +28,14 @@ import { fetchTasks } from 'providers/redux/reducers/tasks'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import { RaisedButton, IconButton } from 'material-ui'
+import { IconButton } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 
-import Toolbar from 'material-ui/Toolbar/Toolbar'
-import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
-import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Switch from '@material-ui/core/Switch'
-import IconMenu from 'material-ui/IconMenu'
-import Menu from 'material-ui/Menu'
+import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import IconMenu from '@material-ui/icons/Menu'
 import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
@@ -228,7 +227,7 @@ export class PageToolbar extends Component {
         style={toolbarStyles}
         className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true })}
       >
-        <ToolbarGroup className="visible-xs" style={{ textAlign: 'right' }}>
+        <div className="visible-xs" style={{ textAlign: 'right' }}>
           <IconButton
             iconClassName="material-icons"
             onClick={(e) => {
@@ -238,9 +237,9 @@ export class PageToolbar extends Component {
           >
             menu
           </IconButton>
-        </ToolbarGroup>
+        </div>
 
-        <ToolbarGroup
+        <div
           float="left"
           className={classNames({ 'hidden-xs': !this.state.showActionsMobile, isRecorderWithApproval, clearfix: true })}
         >
@@ -347,7 +346,8 @@ export class PageToolbar extends Component {
                   <div>
                     <span style={{ paddingRight: '15px' }}>{`${requestButtonGroupText}: `}</span>
 
-                    <RaisedButton
+                    <Button
+                      variant="contained"
                       label={
                         intl.trans('enable', 'Enable', 'first') +
                         ' (' +
@@ -362,7 +362,8 @@ export class PageToolbar extends Component {
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
                     />
-                    <RaisedButton
+                    <Button
+                      variant="contained"
                       label={
                         intl.trans('disable', 'Disable', 'first') +
                         ' (' +
@@ -377,7 +378,8 @@ export class PageToolbar extends Component {
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
                     />
-                    <RaisedButton
+                    <Button
+                      variant="contained"
                       label={
                         intl.trans('publish', 'Publish', 'first') +
                         ' (' +
@@ -389,7 +391,8 @@ export class PageToolbar extends Component {
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
                     />
-                    <RaisedButton
+                    <Button
+                      variant="contained"
                       label={
                         intl.trans('unpublish', 'Unpublish', 'first') +
                         ' (' +
@@ -406,9 +409,9 @@ export class PageToolbar extends Component {
               )
             }
           })()}
-        </ToolbarGroup>
+        </div>
 
-        <ToolbarGroup float="right" className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}>
+        <div float="right" className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}>
           {(() => {
             if (this.props.actions.includes('publish')) {
               return (
@@ -416,7 +419,8 @@ export class PageToolbar extends Component {
                   filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}
                   style={toolbarGroupItem}
                 >
-                  <RaisedButton
+                  <Button
+                    variant="contained"
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
                     label={intl.trans('publish_changes', 'Publish Changes', 'words')}
@@ -436,7 +440,8 @@ export class PageToolbar extends Component {
                   filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}
                   style={toolbarGroupItem}
                 >
-                  <RaisedButton
+                  <Button
+                    variant="contained"
                     label={intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     primary
@@ -457,7 +462,8 @@ export class PageToolbar extends Component {
                   filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}
                   style={toolbarGroupItem}
                 >
-                  <RaisedButton
+                  <Button
+                    variant="contained"
                     label={intl.trans('add_new_page', 'Add New Page', 'words')}
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
@@ -468,7 +474,7 @@ export class PageToolbar extends Component {
             }
           })()}
 
-          <ToolbarSeparator className="hidden-xs" />
+          <div className="hidden-xs" />
 
           {(() => {
             if (this.props.actions.includes('more-options')) {
@@ -525,7 +531,7 @@ export class PageToolbar extends Component {
               )
             }
           })()}
-        </ToolbarGroup>
+        </div>
       </Toolbar>
     )
   }

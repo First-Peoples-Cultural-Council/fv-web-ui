@@ -15,9 +15,9 @@ import { Document } from 'nuxeo'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import CircularProgress from 'material-ui/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import IntlService from 'views/services/intl'
-import IconEdit from '@material-ui/icons/ModeEdit'
+import Edit from '@material-ui/icons/Edit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
 
@@ -196,7 +196,7 @@ class EditableComponent extends Component {
             this._onEditRequest()
           }}
         >
-          <IconEdit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
+          <Edit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
           <span className="FlatButton__label">{intl.trans('edit', 'Edit', 'first')}</span>
         </button>
       )

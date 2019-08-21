@@ -39,10 +39,10 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Icon from '@material-ui/core/Icon'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridTile from '@material-ui/core/GridListTile'
 
 import Header from 'views/pages/explore/dialect/header'
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'

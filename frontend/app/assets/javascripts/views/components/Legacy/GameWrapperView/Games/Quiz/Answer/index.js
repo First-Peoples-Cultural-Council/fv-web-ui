@@ -15,7 +15,7 @@ limitations under the License.
 */
 const React = require('react')
 const classNames = require('classnames')
-const Mui = require('material-ui')
+const Mui = require('@material-ui')
 const PropTypes = require('prop-types')
 const PubSub = require('pubsub-js')
 const { RaisedButton } = Mui

@@ -15,7 +15,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import { RaisedButton, FlatButton, Popover } from 'material-ui'
+import { Popover } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -133,17 +134,11 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
               <div className="form-horizontal" style={{ padding: '0 15px' }}>
                 <form onSubmit={this._onRequestSaveForm.bind(this, computeItem)}>
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <FlatButton
+                    <Button
                       onClick={this._onRequestCancelForm}
                       style={{ marginRight: '10px' }}
                       label={intl.trans('cancel', 'Cancel', 'first')}
                     />
-                    {/* <RaisedButton
-                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
-                      primary
-                      label={intl.trans('save', 'Save', 'first')}
-                    /> */}
-
                     <button
                       type="submit"
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
@@ -166,16 +161,11 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <FlatButton
+                    <Button
                       onClick={this._onRequestCancelForm}
                       style={{ marginRight: '10px' }}
                       label={intl.trans('cancel', 'Cancel', 'first')}
                     />
-                    {/* <RaisedButton
-                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
-                      primary
-                      label={intl.trans('save', 'Save', 'first')}
-                    /> */}
                     <button
                       type="submit"
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
@@ -201,12 +191,12 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                             ),
                           }}
                         />
-                        <FlatButton
+                        <Button
                           style={confirmationButtonsStyle}
                           onClick={this._onRequestCancelForm.bind(this, true)}
                           label={intl.trans('yes', 'Yes', 'first') + '!'}
                         />
-                        <FlatButton
+                        <Button
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
                           label={intl.trans('no', 'No', 'first') + '!'}

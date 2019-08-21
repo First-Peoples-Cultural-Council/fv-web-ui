@@ -15,23 +15,10 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
-import classNames from 'classnames'
 import selectn from 'selectn'
 
-import DOMPurify from 'dompurify'
-
-import Card from 'material-ui/Card/Card'
-import CardTitle from 'material-ui/Card/CardTitle'
-import CardActions from 'material-ui/Card/CardActions'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardMedia from 'material-ui/Card/CardMedia'
-import CardText from 'material-ui/Card/CardText'
-
-import IconButton from 'material-ui/IconButton'
+import IconButton from '@material-ui/core/IconButton'
 import IntlService from 'views/services/intl'
-
-const defaultStyle = { marginBottom: '20px' }
 
 export default class AudioOptimal extends Component {
   static propTypes = {

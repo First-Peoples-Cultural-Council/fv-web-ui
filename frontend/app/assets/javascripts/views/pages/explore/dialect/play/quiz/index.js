@@ -19,7 +19,8 @@ import { List, Map } from 'immutable'
 
 import classNames from 'classnames'
 
-import { IconButton, RaisedButton, LinearProgress } from 'material-ui'
+import { IconButton, LinearProgress } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -75,7 +76,8 @@ class Answer extends React.Component {
 
     return (
       <div className="col-xs-6">
-        <RaisedButton
+        <Button
+          variant="contained"
           style={{ width: '100%' }}
           labelColor={labelColor}
           disabled={disabled}
@@ -291,7 +293,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    ;(selectn('response.entries', computeWords) || []).forEach(
+    (selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -408,7 +410,8 @@ export class Quiz extends Component {
                       "Nice! You've completed this quiz!"
                     )}{' '}
                     {skillLevel}
-                    <RaisedButton
+                    <Button
+                      variant="contained"
                       onClick={this._restart}
                       label={intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
                       style={{ marginLeft: '10px' }}
@@ -439,9 +442,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                    disabled: true,
-                    key: i,
-                  })
+                  disabled: true,
+                  key: i,
+                })
                 : answer
             })}
           </div>

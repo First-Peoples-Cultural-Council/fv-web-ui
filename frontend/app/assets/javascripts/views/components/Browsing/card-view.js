@@ -14,21 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
+// import PropTypes from 'prop-types'
+
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import DOMPurify from 'dompurify'
-
-import Card from 'material-ui/Card/Card'
-import CardTitle from 'material-ui/Card/CardTitle'
-import CardActions from 'material-ui/Card/CardActions'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardMedia from 'material-ui/Card/CardMedia'
-import CardText from 'material-ui/Card/CardText'
-
-import IconButton from 'material-ui/IconButton'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia'
+import CardContent from '@material-ui/core/CardContent'
+import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
@@ -75,14 +70,11 @@ export default class CardView extends Component {
         className={classNames('col-xs-12', 'col-md-' + Math.ceil(12 / this.props.cols))}
       >
         <Card style={{ minHeight: '260px' }}>
-          <CardMedia
-            overlay={
-              <CardTitle
-                title={<span>{this.intl.searchAndReplace(this.props.item.title)}</span>}
-                subtitle={this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
-              />
-            }
-          >
+          <CardHeader
+            title={<span>{this.intl.searchAndReplace(this.props.item.title)}</span>}
+            subheader={this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
+          />
+          <CardMedia>
             <div
               style={{
                 backgroundSize: selectn('width', coverImage) > 200 ? '100%' : 'cover',
@@ -121,7 +113,7 @@ export default class CardView extends Component {
             </div>
           </CardMedia>
 
-          <CardText style={{ padding: '4px' }}>
+          <CardContent style={{ padding: '4px' }}>
             <Button
               onClick={this.props.action.bind(this, this.props.item)}
               primary
@@ -153,7 +145,7 @@ export default class CardView extends Component {
                 )
               }
             })()}
-          </CardText>
+          </CardContent>
         </Card>
       </div>
     )

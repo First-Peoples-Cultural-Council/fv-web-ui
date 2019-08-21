@@ -28,7 +28,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import SelectField from 'material-ui/SelectField'
+import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import IntlService from 'views/services/intl'
 
@@ -95,7 +95,7 @@ export class DialectList extends Component {
     return (
       <PromiseWrapper hideProgress computeEntities={computeEntities}>
         {this.props.fancy ? (
-          <SelectField
+          <Select
             maxHeight={300}
             autoWidth
             value={this.props.value}
@@ -109,7 +109,7 @@ export class DialectList extends Component {
                 {selectn('dc:title', entry)}
               </MenuItem>
             ))}
-          </SelectField>
+          </Select>
         ) : (
           <select className="form-control" value={this.props.value} onChange={this._handleStandardSelectChange}>
             <option value>

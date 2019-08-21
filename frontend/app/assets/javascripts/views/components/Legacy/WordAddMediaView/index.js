@@ -21,7 +21,7 @@ const Form = t.form.Form
 const _ = require('underscore')
 
 const classNames = require('classnames')
-const Mui = require('material-ui')
+const Mui = require('@material-ui')
 const {
   Card,
   CardHeader,

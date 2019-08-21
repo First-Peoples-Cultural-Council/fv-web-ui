@@ -15,15 +15,11 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
+import Immutable, { List } from 'immutable'
 import selectn from 'selectn'
 
-import ConfGlobal from 'conf/local.js'
-
-import Colors from 'material-ui/styles/colors'
-
-import GridList from 'material-ui/GridList/GridList'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridList from '@material-ui/core/GridList/GridList'
+import GridTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'

@@ -25,7 +25,7 @@ import StringHelpers from 'common/StringHelpers'
 import t from 'tcomb-form'
 
 import Button from '@material-ui/core/Button'
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

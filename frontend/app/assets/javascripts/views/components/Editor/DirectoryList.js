@@ -23,7 +23,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 
 import selectn from 'selectn'
 
-import SelectField from 'material-ui/SelectField'
+import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import StringHelpers, { CLEAN_ID } from 'common/StringHelpers'
 import IntlService from 'views/services/intl'
@@ -85,7 +85,7 @@ export class DirectoryList extends Component {
     return (
       <div>
         {this.props.fancy ? (
-          <SelectField
+          <Select
             data-testid={dataTestId}
             maxHeight={300}
             autoWidth
@@ -98,7 +98,7 @@ export class DirectoryList extends Component {
                 {entry.text}
               </MenuItem>
             ))}
-          </SelectField>
+          </Select>
         ) : (
           <select onChange={this._handleStandardSelectChange} data-testid={dataTestId}>
             {this.props.placeholder ? <option value>Please select:</option> : ''}

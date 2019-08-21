@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import DOMPurify from 'dompurify'
 
-import GridTile from 'material-ui/GridList/GridTile'
+import GridTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'

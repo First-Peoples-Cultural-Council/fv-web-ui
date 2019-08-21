@@ -37,10 +37,10 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import SubViewTranslation from 'views/pages/explore/dialect/learn/base/subview-translation'
-import Card from 'material-ui/Card/Card'
-import CardText from 'material-ui/Card/CardText'
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
@@ -236,7 +236,7 @@ export class AlphabetView extends Component {
                   {/* TAB: DEFINITION */}
                   <Tab label={intl.trans('definition', 'Definition', 'first')}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <div className="col-xs-8">
                           <h2>{selectn('response.title', computeCharacter)}</h2>
 
@@ -267,7 +267,7 @@ export class AlphabetView extends Component {
                             items={videos}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
 
@@ -286,7 +286,7 @@ export class AlphabetView extends Component {
                     id="find_words"
                   >
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans(
                             'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
@@ -302,7 +302,7 @@ export class AlphabetView extends Component {
                             disableClickItem={false}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
 
@@ -321,7 +321,7 @@ export class AlphabetView extends Component {
                     id="find_phrases"
                   >
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans(
                             'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
@@ -338,7 +338,7 @@ export class AlphabetView extends Component {
                             disableClickItem={false}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
                 </Tabs>

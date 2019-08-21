@@ -32,17 +32,12 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-// import IconButton from 'material-ui/lib/icon-button'
-// import ActionInfo from 'material-ui/lib/svg-icons/action/info'
-// import ActionInfoOutline from 'material-ui/lib/svg-icons/action/info-outline'
-import { Dialog } from 'material-ui'
-import GridTile from 'material-ui/GridList/GridTile'
+import { Dialog } from '@material-ui/core'
+import GridTile from '@material-ui/core/GridListTile'
 
 import MediaList from 'views/components/Browsing/media-list'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import withFilter from 'views/hoc/grid-list/with-filter'
-// import LinearProgress from 'material-ui/lib/linear-progress'
-
 import IntlService from 'views/services/intl'
 
 // const gridListStyle = { width: '100%', height: '100vh', overflowY: 'auto', marginBottom: 10 }

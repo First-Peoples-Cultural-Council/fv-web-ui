@@ -27,7 +27,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-import CircularProgress from 'material-ui/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
 

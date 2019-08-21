@@ -14,35 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
+// import PropTypes from 'prop-types'
+// import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import ConfGlobal from 'conf/local.js'
-
-import UIHelpers from 'common/UIHelpers'
+// import ConfGlobal from 'conf/local.js'
+// import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import Preview from 'views/components/Editor/Preview'
-
-import AVPlayArrow from '@material-ui/icons/PlayArrow'
-import AVStop from '@material-ui/icons/Stop'
-
-import Card from 'material-ui/Card/Card'
-import CardTitle from 'material-ui/Card/CardTitle'
-import CardActions from 'material-ui/Card/CardActions'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardMedia from 'material-ui/Card/CardMedia'
-import CardText from 'material-ui/Card/CardText'
-
-import Button from '@material-ui/core/Button'
-import IconButton from 'material-ui/IconButton'
-
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+// import AVPlayArrow from '@material-ui/icons/PlayArrow'
+// import AVStop from '@material-ui/icons/Stop'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -106,40 +92,38 @@ class CardView extends Component {
   }
 
   render() {
-    // If action is not defined
-    let action
+    // // If action is not defined
+    // let action
 
-    let audioIcon = null
-    let audioCallback = null
+    // let audioIcon = null
+    // let audioCallback = null
 
-    if (this.props.hasOwnProperty('action') && typeof this.props.action === 'function') {
-      action = this.props.action
-    } else {
-      action = () => {}
-    }
+    // if (this.props.hasOwnProperty('action') && typeof this.props.action === 'function') {
+    //   action = this.props.action
+    // } else {
+    //   action = () => {}
+    // }
 
-    const DEFAULT_LANGUAGE = this.props.defaultLanguage
+    // const DEFAULT_LANGUAGE = this.props.defaultLanguage
 
-    const mediumImage = selectn('contextParameters.book.related_pictures[0].views[2]', this.props.item)
-    const coverImage = selectn('url', mediumImage) || 'assets/images/cover.png'
+    // const mediumImage = selectn('contextParameters.book.related_pictures[0].views[2]', this.props.item)
+    // const coverImage = selectn('url', mediumImage) || 'assets/images/cover.png'
     const audioObj = selectn('contextParameters.book.related_audio[0].path', this.props.item)
 
     if (audioObj) {
-      const stateFunc = function(state) {
-        this.setState(state)
-      }.bind(this)
-
-      audioIcon =
-        decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj ? (
-          <AVPlayArrow style={{ marginRight: '10px' }} />
-        ) : (
-          <AVStop style={{ marginRight: '10px' }} />
-        )
-
-      audioCallback =
-        decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj
-          ? UIHelpers.playAudio.bind(this, this.state, stateFunc, ConfGlobal.baseURL + audioObj)
-          : UIHelpers.stopAudio.bind(this, this.state, stateFunc)
+      // const stateFunc = function(state) {
+      //   this.setState(state)
+      // }.bind(this)
+      // audioIcon =
+      //   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj ? (
+      //     <AVPlayArrow style={{ marginRight: '10px' }} />
+      //   ) : (
+      //     <AVStop style={{ marginRight: '10px' }} />
+      //   )
+      // audioCallback =
+      //   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj
+      //     ? UIHelpers.playAudio.bind(this, this.state, stateFunc, ConfGlobal.baseURL + audioObj)
+      //     : UIHelpers.stopAudio.bind(this, this.state, stateFunc)
     }
 
     return (

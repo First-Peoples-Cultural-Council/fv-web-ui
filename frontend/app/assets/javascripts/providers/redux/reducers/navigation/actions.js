@@ -17,7 +17,7 @@ import {
 import DirectoryOperations from 'operations/DirectoryOperations'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import ThemeManager from 'material-ui/styles/theme-manager'
+import { createMuiTheme } from '@material-ui/core/styles'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
 import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
@@ -92,15 +92,15 @@ export const toggleMenuAction = () => {
 
 // Change theme
 export const changeTheme = (id) => {
-  let theme = ThemeManager.getMuiTheme(FirstVoicesTheme)
+  let theme = createMuiTheme(FirstVoicesTheme)
 
   switch (id) {
     case 'kids':
-      theme = ThemeManager.getMuiTheme(FirstVoicesKidsTheme)
+      theme = createMuiTheme(FirstVoicesKidsTheme)
       break
 
     case 'workspace':
-      theme = ThemeManager.getMuiTheme(FirstVoicesWorkspaceTheme)
+      theme = createMuiTheme(FirstVoicesWorkspaceTheme)
       break
     default: // NOTE: do nothing
   }

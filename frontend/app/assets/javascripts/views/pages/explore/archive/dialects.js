@@ -26,22 +26,11 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import classNames from 'classnames'
 
-import CircularProgress from 'material-ui/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
-// Operations
-// import DirectoryOperations from "operations/DirectoryOperations"
-
-// import Checkbox from "material-ui/lib/checkbox"
-// import TextField from "material-ui/lib/text-field"
-// import RaisedButton from "material-ui/lib/raised-button"
-// import SelectField from "material-ui/lib/select-field"
-// import MenuItem from "material-ui/lib/menus/menu-item"
-
-// import withPagination from "views/hoc/grid-list/with-pagination"
-// import withFilter from "views/hoc/grid-list/with-filter"
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

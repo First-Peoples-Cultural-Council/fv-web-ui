@@ -1,13 +1,13 @@
-import React, { Component /*, PropTypes */ } from 'react'
+import React, { Component } from 'react'
 import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
-import { RaisedButton, FontIcon } from 'material-ui'
+import Icon from '@material-ui/core/Icon'
+import Button from '@material-ui/core/Button'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
-import Tabs from 'material-ui/Tabs/Tabs'
-import Toolbar from 'material-ui/Toolbar/Toolbar'
-import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup'
+import Tabs from '@material-ui/core/Tabs'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 import IntlService from 'views/services/intl'
 import { WORKSPACES } from 'common/Constants'
 
@@ -334,9 +334,10 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <div className="col-xs-12" style={{ marginTop: '15px' }}>
               <Toolbar className="toolbar">
-                <ToolbarGroup key={0} float="right">
-                  <RaisedButton
-                    icon={<FontIcon className="material-icons">delete</FontIcon>}
+                <div key={0} float="right">
+                  <Button
+                    variant="contained"
+                    icon={<Icon className="material-icons">delete</Icon>}
                     onClick={() => this.setState({ deleteDialogOpen: true })}
                     secondary
                     label={intl.trans(
@@ -346,7 +347,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       [StringHelpers.toTitleCase(this.props.labels.single)]
                     )}
                   />
-                </ToolbarGroup>
+                </div>
               </Toolbar>
 
               <Dialog

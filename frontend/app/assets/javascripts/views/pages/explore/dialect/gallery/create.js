@@ -29,9 +29,7 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 import selectn from 'selectn'
 import t from 'tcomb-form'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Paper from 'material-ui/Paper'
-// import CircularProgress from 'material-ui/lib/circular-progress'
-// import Snackbar from 'material-ui/lib/snackbar'
+import Paper from '@material-ui/core/Paper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'

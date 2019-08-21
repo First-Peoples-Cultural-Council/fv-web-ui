@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from 'providers/redux/store'
 
-import ThemeManager from 'material-ui/styles/theme-manager'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import ConfGlobal from 'conf/local.js'
 
@@ -22,8 +22,8 @@ import AppWrapper from '../AppWrapper'
 // require('bootstrap/less/bootstrap')
 // require('styles/main')
 
-// injectTapEventPlugin()
 
+const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
 const context = {
   providedState: {
     properties: {
@@ -31,7 +31,7 @@ const context = {
       pageTitleParams: null,
       domain: ConfGlobal.domain,
       theme: {
-        palette: ThemeManager.getMuiTheme(FirstVoicesTheme),
+        palette: createdMuiTheme,
         id: 'default',
       },
     },
@@ -43,7 +43,9 @@ describe('AppWrapper', () => {
     const container = document.createElement('div')
     ReactDOM.render(
       <Provider store={store}>
-        <AppWrapper {...context} />
+        <MuiThemeProvider theme={createdMuiTheme}>
+          <AppWrapper {...context} />
+        </MuiThemeProvider>
       </Provider>,
       container)
 

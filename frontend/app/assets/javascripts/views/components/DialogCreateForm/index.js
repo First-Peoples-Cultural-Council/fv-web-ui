@@ -1,5 +1,5 @@
 import React from 'react'
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 import Button from '@material-ui/core/Button'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'

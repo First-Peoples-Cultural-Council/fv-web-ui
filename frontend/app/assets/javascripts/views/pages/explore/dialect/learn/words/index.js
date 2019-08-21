@@ -30,9 +30,6 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 
 import selectn from 'selectn'
 
-// import GridTile from 'material-ui/lib/grid-list/grid-tile'
-// import RaisedButton from 'material-ui/lib/raised-button'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import SearchDialect from 'views/components/SearchDialect'

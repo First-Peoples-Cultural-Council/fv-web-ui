@@ -69,9 +69,10 @@ import AuthenticationFilter from 'views/components/Document/AuthenticationFilter
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'
 
-import Card from 'material-ui/Card/Card'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardText from 'material-ui/Card/CardText'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
@@ -421,7 +422,7 @@ export class DialectLearn extends Component {
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     showExpandableButton
                   />
-                  <CardText expandable>
+                  <CardContent expandable>
                     <div className="row" style={{ paddingTop: '20px' }}>
                       <div className={classNames('col-xs-6')}>
                         <RecentActivityList
@@ -476,7 +477,7 @@ export class DialectLearn extends Component {
                         </div>
                       </AuthenticationFilter>
                     </div>
-                  </CardText>
+                  </CardContent>
                 </Card>
               </div>
 
@@ -495,7 +496,7 @@ export class DialectLearn extends Component {
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     showExpandableButton
                   />
-                  <CardText expandable>
+                  <CardContent expandable>
                     <div className="row" style={{ paddingTop: '20px' }}>
                       <div className={classNames('col-xs-6')}>
                         <RecentActivityList
@@ -548,7 +549,7 @@ export class DialectLearn extends Component {
                         </div>
                       </AuthenticationFilter>
                     </div>
-                  </CardText>
+                  </CardContent>
                 </Card>
               </div>
 
@@ -567,7 +568,7 @@ export class DialectLearn extends Component {
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     showExpandableButton
                   />
-                  <CardText expandable>
+                  <CardContent expandable>
                     <div className="row" style={{ paddingTop: '20px' }}>
                       <div className={classNames('col-xs-6')}>
                         <RecentActivityList
@@ -620,7 +621,7 @@ export class DialectLearn extends Component {
                         </div>
                       </AuthenticationFilter>
                     </div>
-                  </CardText>
+                  </CardContent>
                 </Card>
               </div>
 
@@ -639,7 +640,7 @@ export class DialectLearn extends Component {
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     showExpandableButton
                   />
-                  <CardText expandable>
+                  <CardContent expandable>
                     <div className="row" style={{ paddingTop: '20px' }}>
                       <div className={classNames('col-xs-6')}>
                         <RecentActivityList
@@ -692,7 +693,7 @@ export class DialectLearn extends Component {
                         </div>
                       </AuthenticationFilter>
                     </div>
-                  </CardText>
+                  </CardContent>
                 </Card>
               </div>
             </div>

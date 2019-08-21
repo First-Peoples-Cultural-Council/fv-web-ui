@@ -20,7 +20,7 @@ const PubSub = require('pubsub-js')
 const _ = require('underscore')
 
 const classNames = require('classnames')
-const Mui = require('material-ui')
+const Mui = require('@material-ui')
 
 const { IconButton, RaisedButton, LinearProgress, Snackbar } = Mui
 

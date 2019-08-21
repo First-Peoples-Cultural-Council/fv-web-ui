@@ -18,9 +18,9 @@ import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
 import Button from '@material-ui/core/Button'
-import Colors from 'material-ui/styles/colors'
+import { green, red } from '@material-ui/core/colors'
 import Icon from '@material-ui/core/Icon'
-import IconButton from 'material-ui/IconButton'
+import IconButton from '@material-ui/core/IconButton'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
 
@@ -319,7 +319,7 @@ export class Scramble extends Component {
               <Icon
                 className="material-icons"
                 style={{
-                  color: Colors.greenA200,
+                  color: green.A200,
                   fontSize: '50px',
                   position: 'absolute',
                   top: '5px',
@@ -335,7 +335,7 @@ export class Scramble extends Component {
               <Icon
                 className="material-icons"
                 style={{
-                  color: Colors.red600,
+                  color: red[600],
                   fontSize: '50px',
                   position: 'absolute',
                   top: '5px',

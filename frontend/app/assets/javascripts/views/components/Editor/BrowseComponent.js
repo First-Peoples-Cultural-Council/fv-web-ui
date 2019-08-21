@@ -28,7 +28,7 @@ import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
 
 import selectn from 'selectn'
 
-import { Dialog } from 'material-ui'
+import { Dialog } from '@material-ui/core'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'

@@ -35,7 +35,6 @@ import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
-// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GeneralList from 'views/components/Browsing/general-list'

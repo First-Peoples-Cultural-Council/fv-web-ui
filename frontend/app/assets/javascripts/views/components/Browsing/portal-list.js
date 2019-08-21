@@ -18,10 +18,10 @@ import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import selectn from 'selectn'
 
-import Colors from 'material-ui/styles/colors'
+import { amber } from '@material-ui/core/colors'
 
-import GridList from 'material-ui/GridList/GridList'
-import GridTile from 'material-ui/GridList/GridTile'
+import GridList from '@material-ui/core/GridList/GridList'
+import GridTile from '@material-ui/core/GridListTile'
 import ActionGrade from '@material-ui/icons/Grade'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -68,7 +68,7 @@ export default class PortalList extends Component {
               let actionIcon = null
 
               if (ProviderHelpers.isActiveRole(dialectRoles)) {
-                actionIcon = <ActionGrade style={{ margin: '0 15px' }} color={Colors.amber200} />
+                actionIcon = <ActionGrade style={{ margin: '0 15px' }} color={amber[200]} />
                 //roleDesc = " ROLE(S): " + dialectRoles.join(", ")
               }
 

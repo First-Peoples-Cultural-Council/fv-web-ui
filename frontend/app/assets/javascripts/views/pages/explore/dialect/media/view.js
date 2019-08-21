@@ -46,17 +46,17 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 
-import Card from 'material-ui/Card/Card'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
-import CardText from 'material-ui/Card/CardText'
 
-import ListUI from 'material-ui/List/List'
-import ListItem from 'material-ui/List/ListItem'
+import ListUI from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
@@ -207,7 +207,7 @@ export class View extends Component {
                 <Tabs tabItemContainerStyle={tabItemStyles}>
                   <Tab label={intl.trans('overview', 'Overview', 'first')}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <div className={classNames('col-md-8', 'col-xs-12')}>{preview}</div>
 
                         <div className={classNames('col-md-4', 'hidden-xs')}>
@@ -281,7 +281,7 @@ export class View extends Component {
                             }
                           })()}
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
                   <Tab
@@ -293,7 +293,7 @@ export class View extends Component {
                     id="find_words"
                   >
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans('views.pages.explore.dialect.media.words_featuring', 'Words Featuring')}
                           <strong>{selectn('response.title', computeResource)}</strong>
@@ -301,7 +301,7 @@ export class View extends Component {
                         <div className="row">
                           <WordListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
                   <Tab
@@ -313,7 +313,7 @@ export class View extends Component {
                     id="find_phrases"
                   >
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans('views.pages.explore.dialect.media.words_featuring_with', 'Words Featuring with')}
                           <strong>{selectn('response.title', computeResource)}</strong>
@@ -321,7 +321,7 @@ export class View extends Component {
                         <div className="row">
                           <PhraseListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
                   </Tab>
                 </Tabs>

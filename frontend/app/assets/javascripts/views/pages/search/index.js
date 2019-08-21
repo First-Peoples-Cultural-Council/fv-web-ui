@@ -34,7 +34,6 @@ import t from 'tcomb-form'
 import fields from 'models/schemas/filter-fields'
 import options from 'models/schemas/filter-options'
 
-// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'

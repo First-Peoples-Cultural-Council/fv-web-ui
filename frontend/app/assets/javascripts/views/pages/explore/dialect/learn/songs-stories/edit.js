@@ -36,8 +36,8 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 // Models
 import { Document } from 'nuxeo'
@@ -46,7 +46,7 @@ import { Document } from 'nuxeo'
 import BookEntryEdit from 'views/pages/explore/dialect/learn/songs-stories/entry/edit'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
 
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'

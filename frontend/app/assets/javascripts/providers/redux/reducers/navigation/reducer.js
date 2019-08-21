@@ -17,13 +17,13 @@ import {
   SET_ROUTE_PARAMS,
 } from './actionTypes'
 
-import ThemeManager from 'material-ui/styles/theme-manager'
+import { createMuiTheme } from '@material-ui/core/styles'
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 const initialStateProperties = {
   title: ConfGlobal.title,
   pageTitleParams: null,
   domain: ConfGlobal.domain,
-  theme: { palette: ThemeManager.getMuiTheme(FirstVoicesTheme), id: 'default' },
+  theme: { palette: createMuiTheme(FirstVoicesTheme), id: 'default' },
 }
 const DEFAULT_ROUTE_PARAMS = {
   pageSize: '10', // using strings since these values are pulled from the url bar

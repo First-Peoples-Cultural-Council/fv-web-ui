@@ -24,10 +24,10 @@ import UIHelpers from 'common/UIHelpers'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IconButton from 'material-ui/IconButton'
+import IconButton from '@material-ui/core/IconButton'
 
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import IntlService from 'views/services/intl'
 import { Cover } from 'components/svg/cover'
 const intl = IntlService.instance

@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -30,8 +30,8 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { Introduction } from '../list-view'
 
 import Button from '@material-ui/core/Button'
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 import ActionLaunch from '@material-ui/icons/Launch'
 import IntlService from 'views/services/intl'
@@ -141,7 +141,7 @@ class Page extends Component {
 
     // Audio
     const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio, key) {
+    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
       audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
     })
 
@@ -266,7 +266,7 @@ export default class View extends Component {
 
     // Audio
     const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio, key) {
+    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
       audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
     })
 

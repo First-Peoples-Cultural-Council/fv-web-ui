@@ -4,7 +4,8 @@ import classNames from 'classnames'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-import { FlatButton, FontIcon } from 'material-ui'
+import Icon from '@material-ui/core/Icon'
+import Button from '@material-ui/core/Button'
 
 export default function withToggle() {
   class ViewwithToggle extends Component {
@@ -34,13 +35,13 @@ export default function withToggle() {
     render() {
       const { mobileOnly, label } = this.props
 
-      const icon = <FontIcon className="material-icons">{this.state.open ? 'expand_less' : 'expand_more'}</FontIcon>
+      const icon = <Icon className="material-icons">{this.state.open ? 'expand_less' : 'expand_more'}</Icon>
       const labelText = this.state.open ? intl.trans('hide', 'Hide', 'first') : intl.trans('show', 'Show', 'first')
       return (
         <div className={classNames(...this.rootClassNames)}>
           <div className="panel-heading">
             {label}
-            <FlatButton
+            <Button
               className={classNames({ 'visible-xs': mobileOnly })}
               icon={icon}
               label={labelText}

@@ -18,10 +18,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _ from 'underscore'
 
-import Tabs from 'material-ui/Tabs/Tabs'
-import Tab from 'material-ui/Tabs/Tab'
-import List from 'material-ui/List/List'
-import ListItem from 'material-ui/List/ListItem'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -83,8 +83,8 @@ export default class SubViewTranslation extends Component {
               return (
                 <Tab style={SubViewTranslation.tabStyles.headline} label={intl.searchAndReplace(key) + ':'} key={key}>
                   <List>
-                    {group.map((groupValue, key) => {
-                      return <ListItem key={key} primaryText={groupValue[_this.props.groupValue]} />
+                    {group.map((groupValue, _key) => {
+                      return <ListItem key={_key} primaryText={groupValue[_this.props.groupValue]} />
                     })}
                   </List>
                 </Tab>

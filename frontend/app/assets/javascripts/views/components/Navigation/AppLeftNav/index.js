@@ -24,10 +24,10 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import { Divider, List, ListItem, LeftNav, AppBar } from 'material-ui/lib'
+import { Divider, Drawer, List, ListItem, AppBar } from '@material-ui/core'
 
-// import IconButton from 'material-ui/lib/icon-button'
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
+import Close from '@material-ui/icons/Close'
+// TODO: USING v0.14.4 of Material UI
 import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance'
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
@@ -193,7 +193,7 @@ export class AppLeftNav extends Component {
       : null
 
     return (
-      <LeftNav
+      <Drawer
         docked
         style={{ height: 'auto' }}
         open={this.props.computeToggleMenuAction.menuVisible}
@@ -210,7 +210,7 @@ export class AppLeftNav extends Component {
                 this.AppLeftNavClose = _element
               }}
             >
-              <NavigationClose className="AppLeftNav__closeIcon" />
+              <Close className="AppLeftNav__closeIcon" />
               <span className="visually-hidden">Menu close</span>
             </button>
           }
@@ -272,7 +272,7 @@ export class AppLeftNav extends Component {
             )
           }
         })()}
-      </LeftNav>
+      </Drawer>
     )
   }
 
