@@ -79,13 +79,14 @@ export class PageKidsHome extends Component {
                 <Button
                   variant="contained"
                   fullWidth
-                  label={intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate('/kids/FV/Workspaces/Data/', this.props.pushWindowPath, false)
                   }}
                   style={{ marginTop: '20vh' }}
-                />
+                >
+                  {intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
+                </Button>
               </span>
             </div>
           </div>

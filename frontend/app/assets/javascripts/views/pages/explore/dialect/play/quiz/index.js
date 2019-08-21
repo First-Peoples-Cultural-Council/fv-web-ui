@@ -79,12 +79,13 @@ class Answer extends React.Component {
         <Button
           variant="contained"
           style={{ width: '100%' }}
-          labelColor={labelColor}
+          // labelColor={labelColor}
           disabled={disabled}
           backgroundColor={backgroundColor}
           onClick={this.props.onSelect.bind(this, data, correct)}
-          label={data ? selectn('word', data) : 'Loading...'}
-        />
+        >
+          {data ? selectn('word', data) : 'Loading...'}
+        </Button>
       </div>
     )
   }
@@ -410,12 +411,9 @@ export class Quiz extends Component {
                       "Nice! You've completed this quiz!"
                     )}{' '}
                     {skillLevel}
-                    <Button
-                      variant="contained"
-                      onClick={this._restart}
-                      label={intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
-                      style={{ marginLeft: '10px' }}
-                    />
+                    <Button variant="contained" onClick={this._restart} style={{ marginLeft: '10px' }}>
+                      {intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
+                    </Button>
                   </div>
                 ) : (
                   ''
@@ -454,7 +452,7 @@ export class Quiz extends Component {
               <IconButton
                 style={{ backgroundColor: '#ffffff' }}
                 onClick={this._handleNavigate.bind(this, 'previous')}
-                iconClassName="material-icons"
+                // iconClassName="material-icons"
                 tooltip={intl.trans(
                   'views.pages.explore.dialect.play.quiz.previous_question',
                   'Previous Question',
@@ -483,7 +481,7 @@ export class Quiz extends Component {
                 style={{ backgroundColor: '#ffffff' }}
                 onClick={this._handleNavigate.bind(this, 'next')}
                 disabled={!isCorrect || isComplete}
-                iconClassName="material-icons"
+                // iconClassName="material-icons"
                 tooltip={intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
               >
                 chevron_right

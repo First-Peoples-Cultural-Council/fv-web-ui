@@ -49,7 +49,7 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import Tab from '@material-ui/core/Tab'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
 import IntlService from 'views/services/intl'

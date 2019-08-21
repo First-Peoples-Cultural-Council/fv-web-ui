@@ -127,7 +127,7 @@ export class ToolbarNavigation extends Component {
       <div className="dialect-navigation">
         <div className="row">
           <div className="col-xs-12 col-md-10">
-            <div firstChild float="left">
+            <div float="left">
               <a href={this._getNavigationURL('words')} onClick={this._onNavigateRequest.bind(this, 'words')}>
                 {intl.trans('words', 'Words', 'first') + ''}
               </a>
@@ -147,17 +147,10 @@ export class ToolbarNavigation extends Component {
           </div>
           <div className="col-xs-12 col-md-2">
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
-              <div
-                className={classNames('hidden-xs', { hidden: !this.props.showStats })}
-                firstChild={false}
-                float="right"
-              >
-                <Button
-                  icon={<EditorInsertChart />}
-                  style={{ color: '#fff' }}
-                  onClick={this.props.showStats}
-                  label={intl.trans('language_statistics', 'Language Statistics')}
-                />
+              <div className={classNames('hidden-xs', { hidden: !this.props.showStats })} float="right">
+                <Button icon={<EditorInsertChart />} style={{ color: '#fff' }} onClick={this.props.showStats}>
+                  {intl.trans('language_statistics', 'Language Statistics')}
+                </Button>
               </div>
             </AuthenticationFilter>
           </div>

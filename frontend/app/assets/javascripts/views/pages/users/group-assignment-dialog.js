@@ -183,13 +183,12 @@ export default class GroupAssignmentDialog extends Component {
       <Dialog
         open={this.props.open}
         actions={[
-          <Button label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.props.closeMethod} />,
-          <Button
-            label={intl.trans('submit', 'Submit', 'first')}
-            primary
-            keyboardFocused
-            onClick={this._onRequestSaveForm}
-          />,
+          <Button secondary onClick={this.props.closeMethod}>
+            {intl.trans('cancel', 'Cancel', 'first')}
+          </Button>,
+          <Button primary keyboardFocused onClick={this._onRequestSaveForm}>
+            {intl.trans('submit', 'Submit', 'first')}
+          </Button>,
         ]}
         onRequestClose={this.props.closeMethod}
         autoScrollBodyContent

@@ -265,8 +265,9 @@ export class Register extends Component {
                   variant="contained"
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
                   primary
-                  label={intl.trans('register', 'Register', 'first')}
-                />
+                >
+                  {intl.trans('register', 'Register', 'first')}
+                </Button>
               </div>
             </form>
           </div>
@@ -285,10 +286,11 @@ export class Register extends Component {
             </p>
             <Button
               variant="contained"
-              label={intl.translate('choose_lang', 'Choose a Language', 'first')}
               primary
               onClick={() => NavigationHelpers.navigate('/explore/FV/sections/Data', this.props.pushWindowPath)}
-            />
+            >
+              {intl.translate('choose_lang', 'Choose a Language', 'first')}
+            </Button>
           </div>
         </div>
       </PromiseWrapper>

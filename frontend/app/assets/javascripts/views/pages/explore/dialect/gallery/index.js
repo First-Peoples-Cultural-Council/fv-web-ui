@@ -135,10 +135,11 @@ export class PageDialectGalleries extends Component {
             >
               <Button
                 variant="contained"
-                label={'Create Gallery'}
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
                 primary
-              />
+              >
+                {'Create Gallery'}
+              </Button>
             </AuthorizationFilter>
           </div>
 

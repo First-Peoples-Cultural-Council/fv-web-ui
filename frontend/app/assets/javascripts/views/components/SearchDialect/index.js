@@ -201,12 +201,13 @@ export class SearchDialect extends Component {
       <div className="SearchDialectForm SearchDialectForm--filtering">
         <Button
           variant="contained"
-          label={resetButtonText}
           onClick={() => {
             this._resetSearch()
           }}
           primary
-        />
+        >
+          {resetButtonText}
+        </Button>
         {this._getFlashcardMode()}
       </div>
     )
@@ -219,21 +220,23 @@ export class SearchDialect extends Component {
         <Button
           variant="contained"
           style={{ marginLeft: 'auto' }}
-          label="Stop viewing Flashcards"
           primary
           onClick={() => {
             this.props.updateAncestorState({ flashcardMode: false })
           }}
-        />
+        >
+          {'Stop viewing Flashcards'}
+        </Button>
       ) : (
         <Button
           variant="contained"
           style={{ marginLeft: 'auto' }}
-          label="Flashcards"
           onClick={() => {
             this.props.updateAncestorState({ flashcardMode: true })
           }}
-        />
+        >
+          {'Flashcards'}
+        </Button>
       )
     }
     return null
@@ -271,15 +274,13 @@ export class SearchDialect extends Component {
             value={searchTerm}
           />
 
-          <Button variant="contained" label={searchButtonText} onClick={this._handleSearch} primary />
+          <Button variant="contained" onClick={this._handleSearch} primary>
+            {searchButtonText}
+          </Button>
 
-          <Button
-            variant="contained"
-            label={resetButtonText}
-            onClick={this._resetSearch}
-            primary={false}
-            style={{ marginLeft: '20px' }}
-          />
+          <Button variant="contained" onClick={this._resetSearch} primary={false} style={{ marginLeft: '20px' }}>
+            {resetButtonText}
+          </Button>
 
           {this._getFlashcardMode()}
         </div>

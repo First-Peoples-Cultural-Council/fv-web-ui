@@ -85,9 +85,10 @@ export default class FacetFilterListCategory extends Component {
           disabled={this.checkedCount === 0}
           style={{ margin: '0 0 10px 0' }}
           // label={this.intl.trans('views.pages.explore.dialect.learn.words.find_by_category', 'Show All Words', 'words')}
-          label={this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
           onClick={this._clearCategoryFilter}
-        />
+        >
+          {this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
+        </Button>
         <FiltersWithToggle className="panel-category" label={this.title} mobileOnly style={this.props.styles}>
           <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
             <ListUI>{this.listItems}</ListUI>

@@ -310,9 +310,10 @@ export class Scramble extends Component {
                   variant="contained"
                   key={index}
                   style={{ backgroundColor: '#a7fba5' }}
-                  label={word}
                   onMouseUp={this.unSelectWord.bind(this, word, index)}
-                />
+                >
+                  {word}
+                </Button>
               )
             })}
             {this.state.complete ? (
@@ -355,43 +356,34 @@ export class Scramble extends Component {
               disabled = true
             }
             return (
-              <Button
-                variant="contained"
-                disabled={disabled}
-                label={word}
-                key={index}
-                onMouseUp={this.selectWord.bind(this, word)}
-              />
+              <Button variant="contained" disabled={disabled} key={index} onMouseUp={this.selectWord.bind(this, word)}>
+                {word}
+              </Button>
             )
           })}
           {this.state.complete ? (
-            <Button
-              variant="contained"
-              label={intl.trans('reset', 'Reset', 'first')}
-              primary
-              onMouseUp={this.reset.bind(this)}
-            />
+            <Button variant="contained" primary onMouseUp={this.reset.bind(this)}>
+              {intl.trans('reset', 'Reset', 'first')}
+            </Button>
           ) : (
             false
           )}
           <Button
             variant="contained"
-            label={intl.trans('check', 'Check', 'first')}
             className={classNames({ invisible: this.state.complete })}
             style={{ margin: '0 5px' }}
             disabled={this.state.complete ? true : false}
             secondary
             onMouseUp={this.checkAnswer.bind(this)}
-          />
+          >
+            {intl.trans('check', 'Check', 'first')}
+          </Button>
           {this.state.complete ? (
             false
           ) : (
-            <Button
-              variant="contained"
-              label={intl.trans('reset', 'Reset', 'first')}
-              primary
-              onMouseUp={this.reset.bind(this)}
-            />
+            <Button variant="contained" primary onMouseUp={this.reset.bind(this)}>
+              {intl.trans('reset', 'Reset', 'first')}
+            </Button>
           )}
         </div>
       </div>

@@ -147,7 +147,7 @@ export class Navigation extends Component {
   }
 
   render() {
-    const themePalette = this.props.properties.theme.palette.rawTheme.palette
+    const themePalette = this.props.properties.theme.palette
     const isDialect = this.props.routeParams.hasOwnProperty('dialect_path')
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
@@ -249,7 +249,7 @@ export class Navigation extends Component {
                   primary
                 >
                   <IconButton
-                    iconStyle={{ fill: "#fff" }}
+                    // iconStyle={{ fill: "#fff" }}
                     onClick={this._onNavigateRequest.bind(this, "/tasks/")}
                     disabled={userTaskCount == 0 ? true : false}
                   >
@@ -273,7 +273,6 @@ export class Navigation extends Component {
               })}
             >
               <TextField
-                underlineStyle={{ width: '79%' }}
                 style={{
                   marginLeft: this.state.searchBarVisibleInMobile ? '15px' : '30px',
                   fontSize: '15px',
@@ -286,7 +285,7 @@ export class Navigation extends Component {
                     '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
                 }}
                 ref="navigationSearchField" // TODO: DEPRECATED
-                hintText={this.intl.translate({ key: 'general.search', default: 'Search', case: 'first', append: ':' })}
+                // hintText={this.intl.translate({ key: 'general.search', default: 'Search', case: 'first', append: ':' })}
                 onBlur={() => this.setState({ searchContextPopoverOpen: isDialect ? true : false })}
                 onFocus={(e) =>
                   this.setState({ searchContextPopoverOpen: true, searchContextPopoverAnchorEl: e.target })
@@ -306,19 +305,20 @@ export class Navigation extends Component {
               <Button
                 className={classNames({ hidden: !this.state.searchBarVisibleInMobile })}
                 style={{ color: themePalette.alternateTextColor }}
-                label={this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
                 onClick={(e) => {
                   this.setState({ searchBarVisibleInMobile: false })
                   e.preventDefault()
                 }}
-              />
+              >
+                {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
+              </Button>
             </div>
 
             <IconButton
               onClick={this._handleNavigationSearchSubmit}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
+              // iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
               style={{ position: 'relative', top: '7px', padding: '0', left: 0 }}
-              iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
             >
               search
             </IconButton>
@@ -454,9 +454,9 @@ export class Navigation extends Component {
 
             <IconButton
               onClick={this._handleDisplayLocaleOptions}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
+              // iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
               style={{ position: 'relative', top: '7px', padding: '0', left: 0 }}
-              iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
             >
               settings
             </IconButton>
@@ -464,11 +464,11 @@ export class Navigation extends Component {
         </AppBar>
 
         <Toolbar style={{ display: this.state.localePopoverOpen ? 'block' : 'none' }}>
-          <div firstChild float="right">
+          <div float="right">
             <Typography variant="title" style={{ color: '#fff', padding: '0 0 0 15px', fontSize: '15px' }}>
               {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
             </Typography>
-            <Select value={this.intl.locale} onChange={this._handleChangeLocale} labelStyle={{ color: '#fff' }}>
+            <Select value={this.intl.locale} onChange={this._handleChangeLocale} /*labelStyle={{ color: '#fff' }}*/>
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="fr">Français</MenuItem>
               {/* <MenuItem value="sp">Español</MenuItem> */}

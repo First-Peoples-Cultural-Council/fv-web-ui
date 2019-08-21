@@ -229,7 +229,7 @@ export class PageToolbar extends Component {
       >
         <div className="visible-xs" style={{ textAlign: 'right' }}>
           <IconButton
-            iconClassName="material-icons"
+            // iconClassName="material-icons"
             onClick={(e) => {
               this.setState({ showActionsMobile: !this.state.showActionsMobile })
               e.preventDefault()
@@ -348,12 +348,6 @@ export class PageToolbar extends Component {
 
                     <Button
                       variant="contained"
-                      label={
-                        intl.trans('enable', 'Enable', 'first') +
-                        ' (' +
-                        (enableTasks.length + this.state.enableActions) +
-                        ')'
-                      }
                       disabled={
                         selectn('response.state', computeEntity) !== 'Disabled' &&
                         selectn('response.state', computeEntity) !== 'New'
@@ -361,15 +355,14 @@ export class PageToolbar extends Component {
                       style={{ marginRight: '5px', marginLeft: '0' }}
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
-                    />
+                    >
+                      {intl.trans('enable', 'Enable', 'first') +
+                        ' (' +
+                        (enableTasks.length + this.state.enableActions) +
+                        ')'}
+                    </Button>
                     <Button
                       variant="contained"
-                      label={
-                        intl.trans('disable', 'Disable', 'first') +
-                        ' (' +
-                        (disableTasks.length + this.state.disableActions) +
-                        ')'
-                      }
                       disabled={
                         selectn('response.state', computeEntity) !== 'Enabled' &&
                         selectn('response.state', computeEntity) !== 'New'
@@ -377,33 +370,36 @@ export class PageToolbar extends Component {
                       style={{ marginRight: '5px', marginLeft: '0' }}
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
-                    />
+                    >
+                      {intl.trans('disable', 'Disable', 'first') +
+                        ' (' +
+                        (disableTasks.length + this.state.disableActions) +
+                        ')'}
+                    </Button>
                     <Button
                       variant="contained"
-                      label={
-                        intl.trans('publish', 'Publish', 'first') +
-                        ' (' +
-                        (publishTasks.length + this.state.publishActions) +
-                        ')'
-                      }
                       disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                       style={{ marginRight: '5px', marginLeft: '0' }}
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
-                    />
+                    >
+                      {intl.trans('publish', 'Publish', 'first') +
+                        ' (' +
+                        (publishTasks.length + this.state.publishActions) +
+                        ')'}
+                    </Button>
                     <Button
                       variant="contained"
-                      label={
-                        intl.trans('unpublish', 'Unpublish', 'first') +
-                        ' (' +
-                        (unpublishTasks.length + this.state.unpublishActions) +
-                        ')'
-                      }
                       disabled={selectn('response.state', computeEntity) !== 'Published'}
                       style={{ marginRight: '5px', marginLeft: '0' }}
                       secondary
                       onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
-                    />
+                    >
+                      {intl.trans('unpublish', 'Unpublish', 'first') +
+                        ' (' +
+                        (unpublishTasks.length + this.state.unpublishActions) +
+                        ')'}
+                    </Button>
                   </div>
                 </AuthorizationFilter>
               )
@@ -423,11 +419,12 @@ export class PageToolbar extends Component {
                     variant="contained"
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
-                    label={intl.trans('publish_changes', 'Publish Changes', 'words')}
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     secondary
                     onClick={this._publishChanges}
-                  />
+                  >
+                    {intl.trans('publish_changes', 'Publish Changes', 'words')}
+                  </Button>
                 </AuthorizationFilter>
               )
             }
@@ -442,14 +439,15 @@ export class PageToolbar extends Component {
                 >
                   <Button
                     variant="contained"
-                    label={intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     primary
                     onClick={this.props.handleNavigateRequest.bind(
                       this,
                       this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
                     )}
-                  />
+                  >
+                    {intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
+                  </Button>
                 </AuthorizationFilter>
               )
             }
@@ -464,11 +462,12 @@ export class PageToolbar extends Component {
                 >
                   <Button
                     variant="contained"
-                    label={intl.trans('add_new_page', 'Add New Page', 'words')}
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
                     primary
-                  />
+                  >
+                    {intl.trans('add_new_page', 'Add New Page', 'words')}
+                  </Button>
                 </AuthorizationFilter>
               )
             }

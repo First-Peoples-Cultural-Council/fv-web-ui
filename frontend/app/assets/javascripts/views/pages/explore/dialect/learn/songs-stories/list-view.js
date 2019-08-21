@@ -182,7 +182,7 @@ class CardView extends Component {
         <IconButton
           className="CardViewPopoverClose"
           style={{ position: 'absolute' }}
-          iconClassName="material-icons"
+          // iconClassName="material-icons"
           onClick={() => this.setState({ showIntro: false })}
         >
           clear
@@ -195,7 +195,7 @@ class CardView extends Component {
               audioIcon ? (
                 <IconButton
                   style={{ verticalAlign: 'middle', padding: '0', width: '25px', height: '25px' }}
-                  iconStyle={{ width: '25px', height: '25px' }}
+                  // iconStyle={{ width: '25px', height: '25px' }}
                   onClick={audioCallback}
                 >
                   {audioIcon}
@@ -240,7 +240,7 @@ class CardView extends Component {
               </a>
               {selectn('properties.fvbook:introduction', item) && (
                 <IconButton
-                  iconClassName="material-icons"
+                  // iconClassName="material-icons"
                   style={{
                     padding: '0',
                     width: '24px',

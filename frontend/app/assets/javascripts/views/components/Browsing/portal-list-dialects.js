@@ -18,9 +18,8 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import Colors from 'material-ui/styles/colors'
-
-import ActionGrade from '@material-ui/icons/Grade'
+import { amber } from '@material-ui/core/colors'
+import Grade from '@material-ui/icons/Grade'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -61,7 +60,9 @@ export class PortalListDialects extends Component {
       // Switch roles
       const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
       const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
-        <ActionGrade style={{ margin: '0 15px' }} color={Colors.amber200} />
+        <span>
+          <Grade /*style={{ margin: '0 15px' }} color={amber[200]}*/ />
+        </span>
       ) : null
 
       // Dialect title

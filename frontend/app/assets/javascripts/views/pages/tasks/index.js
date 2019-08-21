@@ -149,19 +149,13 @@ export class Tasks extends React.Component {
               <span>{intl.searchAndReplace(task.name)}</span>
             </TableRowColumn>
             <TableRowColumn>
-              <Button
-                variant="contained"
-                label={intl.trans('approve', 'Approve', 'first')}
-                secondary
-                onClick={this._handleTaskActions.bind(this, task.id, 'approve')}
-              />{' '}
+              <Button variant="contained" secondary onClick={this._handleTaskActions.bind(this, task.id, 'approve')}>
+                {intl.trans('approve', 'Approve', 'first')}
+              </Button>{' '}
               &nbsp;
-              <Button
-                variant="contained"
-                label={intl.trans('reject', 'Reject', 'first')}
-                secondary
-                onClick={this._handleTaskActions.bind(this, task.id, 'reject')}
-              />
+              <Button variant="contained" secondary onClick={this._handleTaskActions.bind(this, task.id, 'reject')}>
+                {intl.trans('reject', 'Reject', 'first')}
+              </Button>
             </TableRowColumn>
             <TableRowColumn>{task.dueDate}</TableRowColumn>
           </TableRow>

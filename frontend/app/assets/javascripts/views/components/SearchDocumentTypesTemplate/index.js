@@ -28,7 +28,7 @@ export const SearchDocumentTypesTemplate = (locals) => {
                         default: 'Remove Item',
                         case: 'words',
                       })}
-                      iconClassName="material-icons"
+                      // iconClassName="material-icons"
                       key={j}
                       onClick={button.click}
                     >

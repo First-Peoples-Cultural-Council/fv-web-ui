@@ -28,10 +28,11 @@ import { Divider, Drawer, List, ListItem, AppBar } from '@material-ui/core'
 
 import Close from '@material-ui/icons/Close'
 // TODO: USING v0.14.4 of Material UI
-import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance'
+// import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance'
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
-const SelectableList = SelectableContainerEnhance(List)
+// const SelectableList = SelectableContainerEnhance(List)
+const SelectableList = List
 
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {

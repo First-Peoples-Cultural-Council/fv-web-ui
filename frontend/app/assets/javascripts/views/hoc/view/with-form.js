@@ -134,11 +134,9 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
               <div className="form-horizontal" style={{ padding: '0 15px' }}>
                 <form onSubmit={this._onRequestSaveForm.bind(this, computeItem)}>
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button
-                      onClick={this._onRequestCancelForm}
-                      style={{ marginRight: '10px' }}
-                      label={intl.trans('cancel', 'Cancel', 'first')}
-                    />
+                    <Button onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                      {intl.trans('cancel', 'Cancel', 'first')}
+                    </Button>
                     <button
                       type="submit"
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
@@ -161,11 +159,9 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button
-                      onClick={this._onRequestCancelForm}
-                      style={{ marginRight: '10px' }}
-                      label={intl.trans('cancel', 'Cancel', 'first')}
-                    />
+                    <Button onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                      {intl.trans('cancel', 'Cancel', 'first')}
+                    </Button>
                     <button
                       type="submit"
                       onClick={this._onRequestSaveForm.bind(this, computeItem)}
@@ -191,16 +187,15 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                             ),
                           }}
                         />
-                        <Button
-                          style={confirmationButtonsStyle}
-                          onClick={this._onRequestCancelForm.bind(this, true)}
-                          label={intl.trans('yes', 'Yes', 'first') + '!'}
-                        />
+                        <Button style={confirmationButtonsStyle} onClick={this._onRequestCancelForm.bind(this, true)}>
+                          {intl.trans('yes', 'Yes', 'first') + '!'}
+                        </Button>
                         <Button
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
-                          label={intl.trans('no', 'No', 'first') + '!'}
-                        />
+                        >
+                          {intl.trans('no', 'No', 'first') + '!'}
+                        </Button>
                       </div>
                     </Popover>
                   </div>

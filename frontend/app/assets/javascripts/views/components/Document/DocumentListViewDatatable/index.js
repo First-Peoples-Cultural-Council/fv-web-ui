@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
 // import DictionaryList from 'views/components/Browsing/dictionary-list'
-import DataGrid from 'react-datagrid'
+import DataGrid from 'react-datagrid2'
 import Paper from '@material-ui/core/Paper'
 // import FlashcardList from 'views/components/Browsing/flashcard-list'
 
@@ -27,7 +27,7 @@ import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 
 // Stylesheet
-import '!style-loader!css-loader!react-datagrid/dist/index.min.css'
+// import '!style-loader!css-loader!react-datagrid/dist/index.min.css'
 
 // is TapEvent needed here?! Test on mobile
 //var injectTapEventPlugin = require("react-tap-event-plugin");
@@ -164,29 +164,30 @@ export default class DocumentListViewDatatable extends Component {
         <DataGrid
           idProperty="uid"
           dataSource={selectn('response.entries', data)}
-          dataSourceCount={selectn('response.totalSize', data)}
+          // dataSourceCount={selectn('response.totalSize', data)} // No react-datagrid2 equivalent
           columns={columns}
-          rowHeight={55}
+          // rowHeight={55} // No react-datagrid2 equivalent
           style={{
             minHeight: '70vh',
             zIndex: 0,
           }}
-          selected={this.state.selectedId}
-          onSelectionChange={this._handleSelectionChange}
+          // selected={this.state.selectedId} // rowStyle={(data, props)=>{}} // expected to return a style object
+          // onSelectionChange={this._handleSelectionChange} // No react-datagrid2 equivalent
           onSortChange={onSortChange}
-          withColumnMenu={false}
+          // withColumnMenu={false} // No react-datagrid2 equivalent
           pagination={pagination}
-          paginationToolbarProps={{
-            showRefreshIcon: false,
-            pageSizes: [10, 20, 50],
-          }}
+          // No react-datagrid2 equivalent
+          // paginationToolbarProps={{
+          //   showRefreshIcon: false,
+          //   pageSizes: [10, 20, 50],
+          // }}
           sortInfo={sortInfo}
           page={page}
           pageSize={pageSize}
           onPageChange={this._onPageChange}
           onPageSizeChange={this._onPageSizeChange}
-          emptyText={this.intl.trans('no_records', 'No records', 'words')}
-          showCellBorders
+          // emptyText={this.intl.trans('no_records', 'No records', 'words')} // No react-datagrid2 equivalent
+          // showCellBorders // No react-datagrid2 equivalent
         />
       </Paper>
     )

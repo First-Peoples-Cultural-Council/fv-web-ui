@@ -170,16 +170,17 @@ export class PageHome extends Component {
           <Button
             variant="contained"
             key={index}
-            label={'Access ' + selectn('properties.dc:title', dialect)}
             primary
             onClick={this._onNavigateRequest.bind(
               this,
               NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
             )}
             style={{ marginRight: '10px', height: '50px' }}
-            labelColor={alternateTextColor}
-            labelStyle={{ fontSize: '1.34em' }}
-          />
+            // labelColor={alternateTextColor}
+            // labelStyle={{ fontSize: '1.34em' }}
+          >
+            {'Access ' + selectn('properties.dc:title', dialect)}
+          </Button>
         )
 
         accessButtons.push(tableRow)
@@ -191,22 +192,21 @@ export class PageHome extends Component {
         <Button
           variant="contained"
           key={0}
-          label={
-            this.intl.translate({
-              key: 'get_started!',
-              default: 'Get Started!',
-              case: 'words',
-            }) + '!'
-          }
           primary
           onClick={this._onNavigateRequest.bind(
             this,
             NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
           )}
           style={{ marginRight: '10px', height: '50px' }}
-          labelColor={alternateTextColor}
-          labelStyle={{ fontSize: '1.34em' }}
-        />
+          // labelColor={alternateTextColor}
+          // labelStyle={{ fontSize: '1.34em' }}
+        >
+          {this.intl.translate({
+            key: 'get_started!',
+            default: 'Get Started!',
+            case: 'words',
+          }) + '!'}
+        </Button>
       )
     }
 

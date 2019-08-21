@@ -63,7 +63,7 @@ import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import { WORKSPACES } from 'common/Constants'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -251,10 +251,11 @@ export class View extends Component {
                                     actions={[
                                       <Button
                                         key="FlatButton0"
-                                        label={intl.trans('close', 'Close', 'first')}
                                         secondary
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
-                                      />,
+                                      >
+                                        {intl.trans('close', 'Close', 'first')}
+                                      </Button>,
                                     ]}
                                     modal={false}
                                     open={this.state.showThumbnailDialog === null ? false : true}

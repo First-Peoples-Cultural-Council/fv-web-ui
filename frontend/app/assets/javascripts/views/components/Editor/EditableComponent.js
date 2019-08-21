@@ -170,8 +170,8 @@ class EditableComponent extends Component {
       // Render regular field if not in edit mode
       /*
       <IconButton
-            iconClassName="material-icons"
-            iconStyle={{ fontSize: '20px' }}
+            // iconClassName="material-icons"
+            // iconStyle={{ fontSize: '20px' }}
             style={{
               verticalAlign: '-4px',
               margin: '0 5px 0 -5px',

@@ -107,7 +107,7 @@ export default class AudioOptimal extends Component {
             default: 'Audio Information',
             case: 'words',
           })}
-          iconClassName="material-icons"
+          // iconClassName="material-icons"
           onClick={this._getMoreAudioInfo}
         >
           info
@@ -123,7 +123,7 @@ export default class AudioOptimal extends Component {
               default: 'Hide Audio Information',
               case: 'words',
             })}
-            iconClassName="material-icons"
+            // iconClassName="material-icons"
             onClick={() => this.setState({ showAudioMetadata: false })}
           >
             close

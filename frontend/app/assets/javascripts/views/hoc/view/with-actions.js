@@ -340,13 +340,14 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     icon={<Icon className="material-icons">delete</Icon>}
                     onClick={() => this.setState({ deleteDialogOpen: true })}
                     secondary
-                    label={intl.trans(
+                  >
+                    {intl.trans(
                       'views.hoc.view.delete_x',
                       'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
                       'first',
                       [StringHelpers.toTitleCase(this.props.labels.single)]
                     )}
-                  />
+                  </Button>
                 </div>
               </Toolbar>
 

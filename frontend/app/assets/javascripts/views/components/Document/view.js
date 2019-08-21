@@ -29,7 +29,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance

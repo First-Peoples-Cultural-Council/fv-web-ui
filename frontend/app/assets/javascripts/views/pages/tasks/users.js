@@ -249,12 +249,9 @@ export class UserTasks extends React.Component {
             <td>{comment}</td>
             <td>{StringHelpers.formatUTCDateString(dateCreated)}</td>
             <td>
-              <Button
-                variant="contained"
-                label={intl.trans('add_to_group', 'Add to Group', 'first')}
-                secondary
-                onClick={this._handlePreApprovalOpen.bind(this, task, 'approve')}
-              />
+              <Button variant="contained" secondary onClick={this._handlePreApprovalOpen.bind(this, task, 'approve')}>
+                {intl.trans('add_to_group', 'Add to Group', 'first')}
+              </Button>
             </td>
           </tr>
         )

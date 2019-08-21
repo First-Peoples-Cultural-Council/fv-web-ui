@@ -218,12 +218,13 @@ export class SongsStoriesView extends Component {
             this.state.bookOpen ? (
               <Button
                 variant="contained"
-                label={intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
                 key="close"
                 onClick={() => {
                   this.setState({ bookOpen: false })
                 }}
-              />
+              >
+                {intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
+              </Button>
             ) : (
               ''
             ),

@@ -84,19 +84,17 @@ export class PageHome extends Component {
             <a href="http://legacy.firstvoices.com/">
               <Button
                 variant="contained"
-                label="Legacy Site"
                 style={{
                   textAlign: 'center',
                   marginRight: '14px',
                 }}
-              />
+              >
+                {'Legacy Site'}
+              </Button>
             </a>
-            <Button
-              variant="contained"
-              label={this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
-              onClick={() => this._onNavigateRequest('/')}
-              style={{ textAlign: 'center' }}
-            />
+            <Button variant="contained" onClick={() => this._onNavigateRequest('/')} style={{ textAlign: 'center' }}>
+              {this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
+            </Button>
             <p>
               <img
                 src="assets/images/intro-french.gif"

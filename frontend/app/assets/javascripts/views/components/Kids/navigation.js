@@ -185,14 +185,14 @@ export class KidsNavigation extends Component {
             this.props.toggleMenuAction('AppLeftNav')
           }}
           // TODO: This creates an empty, transparent button that can be clicked
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          // iconClassNameRight="muidocs-icon-navigation-expand-more"
         >
           <div style={{ paddingTop: '5px' }}>
             <IconButton
               className={classNames({ hidden: this.props.frontpage })}
               onClick={() => NavigationHelpers.navigateBack()}
               style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
               tooltipPosition="bottom-left"
               tooltip={intl.trans('back', 'Back', 'first')}
             >
@@ -202,7 +202,7 @@ export class KidsNavigation extends Component {
             <IconButton
               onClick={this._onNavigateRequest.bind(this, homeURL)}
               style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
               tooltipPosition="bottom-left"
               tooltip={intl.trans('home', 'Home', 'first')}
             >
@@ -215,7 +215,7 @@ export class KidsNavigation extends Component {
                 NavigationHelpers.generateStaticURL('/kids/FV/Workspaces/Data')
               )}
               style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
               tooltipPosition="bottom-left"
               tooltip={intl.trans('choose_lang', 'Choose a Language', 'first')}
             >
@@ -226,7 +226,7 @@ export class KidsNavigation extends Component {
 
             <IconButton
               style={{ paddingTop: 0, paddingRight: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
+              // iconClassName="material-icons"
               onClick={this._onNavigateRequest.bind(this, NavigationHelpers.generateStaticURL('/'))}
               tooltipPosition="bottom-left"
               tooltip={intl.trans('back_to_main_site', 'Back to Main Site', 'words')}

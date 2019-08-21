@@ -407,7 +407,7 @@ export class ExploreDialect extends Component {
           <div className="dialect-navigation">
             <div className="row">
               <div className="col-xs-12">
-                <div firstChild float="left">
+                <div float="left">
                   <a
                     href={this.props.windowPath + '/learn'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/learn')}

@@ -214,7 +214,9 @@ export class AddMediaComponent extends Component {
     let fileTypeLabel = intl.trans('file', 'File', 'first')
 
     const actions = [
-      <Button key="fb0" label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.handleClose} />,
+      <Button key="fb0" secondary onClick={this.handleClose}>
+        {intl.trans('cancel', 'Cancel', 'first')}
+      </Button>,
     ]
 
     switch (this.props.type) {
@@ -280,7 +282,9 @@ export class AddMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <Button variant="contained" label={this.props.label} onClick={this.handleOpen} />
+        <Button variant="contained" onClick={this.handleOpen}>
+          {this.props.label}
+        </Button>
         <Dialog
           title={intl.trans(
             'views.components.editor.create_new_x_in_the_x_dialect',

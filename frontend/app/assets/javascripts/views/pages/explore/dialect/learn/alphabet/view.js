@@ -46,7 +46,7 @@ import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import { WORKSPACES } from 'common/Constants'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance

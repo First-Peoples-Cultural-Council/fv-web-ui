@@ -272,7 +272,7 @@ class Quiz extends React.Component {
           <div className={classNames('col-xs-2', 'text-left')}>
             <IconButton
               onClick={this.handleNavigate.bind(this, 'previous')}
-              iconClassName={classNames('glyphicon', 'glyphicon-chevron-left')}
+              // iconClassName={classNames('glyphicon', 'glyphicon-chevron-left')}
               tooltip="Previous Question"
             />
           </div>
@@ -300,7 +300,7 @@ class Quiz extends React.Component {
           <div className={classNames('col-xs-2', 'text-right')}>
             <IconButton
               onClick={this.handleNavigate.bind(this, 'next')}
-              iconClassName={classNames('glyphicon', 'glyphicon-chevron-right')}
+              // iconClassName={classNames('glyphicon', 'glyphicon-chevron-right')}
               tooltip="Next Question"
             />
           </div>

@@ -322,19 +322,12 @@ export default class HangmanGame extends Component {
         {this.state.failed ? this.renderFailure() : false}
 
         <div style={{ margin: '15px 0' }}>
-          <Button
-            variant="contained"
-            secondary
-            onClick={this.props.newPuzzle}
-            label={intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
-            style={{ marginRight: '10px' }}
-          />
-          <Button
-            variant="contained"
-            primary
-            onMouseDown={this.restart}
-            label={intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
-          />
+          <Button variant="contained" secondary onClick={this.props.newPuzzle} style={{ marginRight: '10px' }}>
+            {intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
+          </Button>
+          <Button variant="contained" primary onMouseDown={this.restart}>
+            {intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
+          </Button>
         </div>
       </div>
     )

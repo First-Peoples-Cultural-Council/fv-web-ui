@@ -44,14 +44,15 @@ export default function withToggle() {
             <Button
               className={classNames({ 'visible-xs': mobileOnly })}
               icon={icon}
-              label={labelText}
               labelPosition="before"
               onClick={(e) => {
                 this.setState({ open: !this.state.open })
                 e.preventDefault()
               }}
               style={{ float: 'right', lineHeight: 1 }}
-            />
+            >
+              {labelText}
+            </Button>
           </div>
 
           <div className={classNames('panel-body', { 'hidden-xs': !this.state.open && mobileOnly })}>

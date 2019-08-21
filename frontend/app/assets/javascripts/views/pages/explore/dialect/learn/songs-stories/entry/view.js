@@ -121,10 +121,11 @@ class Cover extends Component {
                 variant="contained"
                 style={{ marginRight: '10px' }}
                 primary
-                label="Open Book"
                 onClick={this.props.openBookAction}
                 icon={<ActionLaunch />}
-              />
+              >
+                {'Open Book'}
+              </Button>
             ) : (
               ''
             )}
@@ -196,11 +197,9 @@ class Page extends Component {
         <div className="row">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
-              <Button
-                variant="contained"
-                label={intl.trans('edit', 'Edit', 'first')}
-                onClick={this.props.editAction.bind(this, this.props.entry)}
-              />
+              <Button variant="contained" onClick={this.props.editAction.bind(this, this.props.entry)}>
+                {intl.trans('edit', 'Edit', 'first')}
+              </Button>
             ) : (
               ''
             )}

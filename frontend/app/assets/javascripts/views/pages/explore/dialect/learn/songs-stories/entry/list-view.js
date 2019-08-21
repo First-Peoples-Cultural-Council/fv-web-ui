@@ -102,12 +102,9 @@ export default class ListView extends Component {
               "Note: This new sort order will be saved once the book is saved in the 'Book' tab.",
               'first'
             )}
-            <Button
-              variant="contained"
-              style={{ marginLeft: '15px' }}
-              label={intl.trans('reset_order', 'Reset Order', 'words')}
-              onClick={this._reset}
-            />
+            <Button variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
+              {intl.trans('reset_order', 'Reset Order', 'words')}
+            </Button>
           </div>
         ) : (
           ''
@@ -118,22 +115,19 @@ export default class ListView extends Component {
 
             if (this.props.reorder) {
               entryControls.push(
-                <Button
-                  variant="contained"
-                  key="up"
-                  label={intl.trans('move_up', 'move up', 'words')}
-                  disabled={i == 0}
-                  onClick={this._moveUp.bind(this, entry)}
-                />
+                <Button variant="contained" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
+                  {intl.trans('move_up', 'move up', 'words')}
+                </Button>
               )
               entryControls.push(
                 <Button
                   variant="contained"
                   key="down"
-                  label={intl.trans('move_down', 'move down', 'words')}
                   disabled={i == this.state.items.size - 1}
                   onClick={this._moveDown.bind(this, entry)}
-                />
+                >
+                  {intl.trans('move_down', 'move down', 'words')}
+                </Button>
               )
             }
 

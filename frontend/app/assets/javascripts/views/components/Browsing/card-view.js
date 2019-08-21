@@ -102,7 +102,7 @@ export default class CardView extends Component {
               }}
             >
               <IconButton
-                iconClassName="material-icons"
+                // iconClassName="material-icons"
                 style={{ position: 'absolute', right: 0, zIndex: 1000 }}
                 onClick={() => this.setState({ showIntro: false })}
               >
@@ -114,21 +114,19 @@ export default class CardView extends Component {
           </CardMedia>
 
           <CardContent style={{ padding: '4px' }}>
-            <Button
-              onClick={this.props.action.bind(this, this.props.item)}
-              primary
-              label={this.intl.translate({
+            <Button onClick={this.props.action.bind(this, this.props.item)} primary>
+              {this.intl.translate({
                 key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
                 default: 'Continue to Entry',
                 case: 'words',
               })}
-            />
+            </Button>
 
             {(() => {
               if (introduction) {
                 return (
                   <IconButton
-                    iconClassName="material-icons"
+                    // iconClassName="material-icons"
                     style={{
                       verticalAlign: '-5px',
                       padding: '5px',

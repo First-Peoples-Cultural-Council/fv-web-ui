@@ -95,9 +95,10 @@ const RelatedMediaLayout = (locals) => (
             color: 'rgb(51, 51, 51)',
             textTransform: 'none',
           }}
-          label={locals.add.label}
           onClick={locals.add.click}
-        />
+        >
+          {locals.add.label}
+        </Button>
       </legend>
       {(locals.items || []).map((item, i) => (
         <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
@@ -135,7 +136,7 @@ const RelatedMediaLayout = (locals) => (
               return (
                 <IconButton
                   tooltip={label}
-                  iconClassName="material-icons"
+                  // iconClassName="material-icons"
                   key={j}
                   onClick={button.click}
                   style={{ verticalAlign: '-8px' }}

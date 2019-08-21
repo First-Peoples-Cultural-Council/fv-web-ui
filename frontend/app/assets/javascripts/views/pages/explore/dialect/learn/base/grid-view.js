@@ -151,7 +151,7 @@ export default class GridView extends Component {
               const audioIconAction = (
                 <IconButton
                   style={{ marginRight: '10px' }}
-                  iconStyle={{ width: '40px', height: '40px' }}
+                  // iconStyle={{ width: '40px', height: '40px' }}
                   onClick={audioCallback}
                 >
                   {audioIcon}

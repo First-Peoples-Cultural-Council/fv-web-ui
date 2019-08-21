@@ -83,7 +83,7 @@ function renderInput(locals) {
           dialect={locals.context}
         />
         {selectn('context.initialValues.' + locals.attrs.name, locals) ? (
-          <Button onClick={onCancel} label={intl.trans('cancel', 'Cancel', 'first')} />
+          <Button onClick={onCancel}>{intl.trans('cancel', 'Cancel', 'first')}</Button>
         ) : (
           ''
         )}

@@ -114,12 +114,9 @@ export class Index extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <Button
-                variant="contained"
-                label={intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
-                onClick={this._onNavigateRequest.bind(this, ['register'])}
-                primary
-              />
+              <Button variant="contained" onClick={this._onNavigateRequest.bind(this, ['register'])} primary>
+                {intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
+              </Button>
             </AuthorizationFilter>
           </div>
         </div>
