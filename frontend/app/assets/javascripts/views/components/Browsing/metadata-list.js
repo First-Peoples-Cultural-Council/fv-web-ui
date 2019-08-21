@@ -38,8 +38,7 @@ export default class MetadataList extends Component {
     const listItems = metadata.map((item, key) => {
       const value = selectn('value', item)
       const label = selectn('label', item)
-
-      if (value.constructor === Array) {
+      if (value && value.constructor === Array) {
         // Array of jsx
         if (value.length > 0) {
           return (

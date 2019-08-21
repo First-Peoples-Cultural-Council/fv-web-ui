@@ -812,7 +812,9 @@ export class Preview extends Component {
      */
     metadata.push({
       label: intl.trans('size', 'Size', 'first'),
-      value: StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response)),
+      value: selectn('properties.file:content.length', response)
+        ? StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response))
+        : '-',
     })
 
     /**
@@ -820,7 +822,7 @@ export class Preview extends Component {
      */
     metadata.push({
       label: intl.trans('status', 'Status', 'first'),
-      value: selectn('state', response),
+      value: selectn('state', response) ? selectn('state', response) : '-',
     })
 
     /**
@@ -828,7 +830,9 @@ export class Preview extends Component {
      */
     metadata.push({
       label: intl.trans('date_created', 'Date Created', 'first'),
-      value: StringHelpers.formatUTCDateString(selectn('properties.dc:created', response)),
+      value: selectn('properties.dc:created', response)
+        ? StringHelpers.formatUTCDateString(selectn('properties.dc:created', response))
+        : '-',
     })
 
     return metadata
