@@ -145,7 +145,9 @@ const GetMetaData = (type, response) => {
    */
   metadata.push({
     label: intl.trans('size', 'Size', 'first'),
-    value: StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response)),
+    value: selectn('properties.file:content.length', response)
+      ? StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response))
+      : '-',
   })
 
   /**
@@ -153,7 +155,7 @@ const GetMetaData = (type, response) => {
    */
   metadata.push({
     label: intl.trans('status', 'Status', 'first'),
-    value: selectn('state', response),
+    value: selectn('state', response) ? selectn('state', response) : '-',
   })
 
   /**
@@ -161,7 +163,9 @@ const GetMetaData = (type, response) => {
    */
   metadata.push({
     label: intl.trans('date_created', 'Date Created', 'first'),
-    value: StringHelpers.formatUTCDateString(selectn('properties.dc:created', response)),
+    value: selectn('properties.dc:created', response)
+      ? StringHelpers.formatUTCDateString(selectn('properties.dc:created', response))
+      : '-',
   })
 
   return metadata
@@ -211,16 +215,8 @@ export class Preview extends Component {
     minimal: false,
     initiallyExpanded: false,
   }
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showAudioMetadata: false,
-    }
-
-    // Bind methods to 'this'
-    ;['_handleExpandChange'].forEach((method) => (this[method] = this[method].bind(this)))
+  state = {
+    showAudioMetadata: false,
   }
 
   componentDidMount() {
@@ -498,12 +494,12 @@ export class Preview extends Component {
                   style={{ height: 'inherit', padding: '16px 0' }}
                 />
                 <CardHeader
-                  className="card-header-custom"
-                  title={intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
-                  titleStyle={{ lineHeight: 'initial' }}
-                  titleColor={themePalette.alternateTextColor}
                   actAsExpander
+                  className="card-header-custom"
                   showExpandableButton
+                  title={intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
+                  titleColor={themePalette.alternateTextColor}
+                  titleStyle={{ lineHeight: 'initial' }}
                   style={{
                     height: 'initial',
                     backgroundColor: themePalette.primary2Color,
