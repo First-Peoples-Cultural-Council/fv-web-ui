@@ -344,7 +344,7 @@ export class Preview extends Component {
               <Card
                 style={{ boxShadow: 'none' }}
                 initiallyExpanded={this.props.initiallyExpanded}
-                // onExpandChange={handleExpandChange} // Note: Triggers FW-329
+                onExpandChange={handleExpandChange}
               >
                 <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', pictureResponse) ||
