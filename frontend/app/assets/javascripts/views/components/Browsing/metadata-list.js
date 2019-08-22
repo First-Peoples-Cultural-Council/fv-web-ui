@@ -25,10 +25,19 @@ export default class MetadataList extends Component {
   static propTypes = {
     metadata: PropTypes.array.isRequired,
   }
-
+  // Note: assume the following is less resource intensive than once every render()
+  // state = {
+  //   content: null,
+  // }
+  // componentDidMount() {
+  //   this.setState({
+  //     content: this._getContent(),
+  //   })
+  // }
   render() {
     const content = this._getContent()
     return content
+    // return this.state.content
   }
 
   _getContent = () => {
@@ -39,7 +48,7 @@ export default class MetadataList extends Component {
       const value = selectn('value', item)
       const label = selectn('label', item)
 
-      if (value.constructor === Array) {
+      if (value && value.constructor === Array) {
         // Array of jsx
         if (value.length > 0) {
           return (
