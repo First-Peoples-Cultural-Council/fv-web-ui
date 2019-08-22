@@ -14,22 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, PropTypes } from 'react'
-
-import classNames from 'classnames'
 import selectn from 'selectn'
+import Card from 'material-ui/lib/card/card'
+import CardHeader from 'material-ui/lib/card/card-header'
+import CardText from 'material-ui/lib/card/card-text'
 
 import StringHelpers from 'common/StringHelpers'
+import IntlService from 'views/services/intl'
 
 import Preview from 'views/components/Editor/Preview'
 import MetadataList from 'views/components/Browsing/metadata-list'
 
-import Card from 'material-ui/lib/card/card'
-import CardActions from 'material-ui/lib/card/card-actions'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardMedia from 'material-ui/lib/card/card-media'
-import CardTitle from 'material-ui/lib/card/card-title'
-import CardText from 'material-ui/lib/card/card-text'
-import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 /**
  * Metadata panel for word or phrase views.
@@ -47,18 +42,16 @@ export default class MetadataPanel extends Component {
   render() {
     const { computeEntity } = this.props
 
-    let metadata = []
+    const metadata = []
 
     /**
      * Categories
      */
-    let categories = []
-
-    {
-      ;(selectn('response.contextParameters.word.categories', computeEntity) || []).map(function(category, key) {
-        categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
-      })
-    }
+    const categories = []
+    const categoriesMap = selectn('response.contextParameters.word.categories', computeEntity) || []
+    categoriesMap.map((category, key) => {
+      categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
+    })
     metadata.push({
       label: intl.trans('categories', 'Categories', 'first'),
       value: categories,
@@ -67,13 +60,13 @@ export default class MetadataPanel extends Component {
     /**
      * Phrase books
      */
-    let phrase_books = []
+    const phrase_books = []
+    const phraseBooksMap = selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []
 
-    {
-      ;(selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []).map(function(phrase_book, key) {
-        phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
-      })
-    }
+    phraseBooksMap.map((phrase_book, key) => {
+      phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
+    })
+
     metadata.push({
       label: intl.trans('phrase_books', 'Phrase Books', 'first'),
       value: phrase_books,
@@ -90,13 +83,13 @@ export default class MetadataPanel extends Component {
     /**
      * Sources
      */
-    let sources = []
+    const sources = []
+    const sourcesMap = selectn('response.contextParameters.word.sources', computeEntity) || []
 
-    {
-      ;(selectn('response.contextParameters.word.sources', computeEntity) || []).map(function(source, key) {
-        sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
-      })
-    }
+    sourcesMap.map((source, key) => {
+      sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
+    })
+
     metadata.push({
       label: intl.trans('sources', 'Sources', 'first'),
       value: sources,
@@ -132,21 +125,21 @@ export default class MetadataPanel extends Component {
     const themePalette = this.props.properties.theme.palette.rawTheme.palette
 
     return (
-      <Card initiallyExpanded={true}>
+      <Card initiallyExpanded>
         <CardHeader
           className="card-header-custom"
           title={intl.trans('about_this_record', 'About this Record', 'upper')}
           titleStyle={{ lineHeight: 'initial' }}
           titleColor={themePalette.alternateTextColor}
-          actAsExpander={true}
+          actAsExpander
           style={{
             backgroundColor: themePalette.primary2Color,
             height: 'initial',
             borderBottom: '4px solid ' + themePalette.primary1Color,
           }}
-          showExpandableButton={true}
+          showExpandableButton
         />
-        <CardText expandable={true} style={{ backgroundColor: themePalette.accent4Color }}>
+        <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
           <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
         </CardText>
       </Card>
