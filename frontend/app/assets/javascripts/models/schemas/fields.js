@@ -129,8 +129,8 @@ const fields = {
     {},
     {
       'dc:title': t.String,
-      'fvcharacter:upper_case_character': t.String,
-      'fvcharacter:alphabet_order': t.Number,
+      'fvcharacter:upper_case_character': t.maybe(t.String),
+      'fvcharacter:alphabet_order': t.maybe(t.Number),
       'fvcharacter:related_words': t.list(t.String),
       'fv:related_audio': t.list(t.String),
     }

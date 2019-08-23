@@ -164,19 +164,6 @@ export class AlphabetView extends Component {
       }
     }
 
-    const noAudioMessage =
-      selectn('response.contextParameters.character.related_audio.length', computeCharacter) === 0 ? (
-        <span>
-          {intl.trans('views.pages.explore.dialect.learn.words.no_audio_yet', 'No audio is available yet', 'first')}.
-        </span>
-      ) : null
-
-    const audioPreview = (selectn('response.contextParameters.character.related_audio', computeCharacter) || []).map((
-      audio /*, key*/
-    ) => {
-      return <Preview styles={{ maxWidth: '350px' }} key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />
-    })
-
     let relatedWords = null
     if (selectn('response.contextParameters.character.related_words.length', computeCharacter) > 0) {
       const relatedWordsContentMap =
@@ -240,15 +227,7 @@ export class AlphabetView extends Component {
                           <h2>{selectn('response.title', computeCharacter)}</h2>
 
                           <div className="row">
-                            <div className={classNames('col-md-6', 'col-xs-12')}>
-                              <h3>{intl.trans('audio', 'Audio', 'first')}</h3>
-
-                              <div>
-                                {noAudioMessage}
-
-                                {audioPreview}
-                              </div>
-                            </div>
+                            {this._getAudio()}
 
                             <div className={classNames('col-md-6', 'col-xs-12')}>{relatedWords}</div>
                           </div>
@@ -353,7 +332,32 @@ export class AlphabetView extends Component {
     await this.props.fetchCharacter(this._getCharacterPath(this.props))
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
   }
+  _getAudio = () => {
+    const computeCharacter = ProviderHelpers.getEntry(this.props.computeCharacter, this._getCharacterPath())
+    const noAudioMessage =
+      selectn('response.contextParameters.character.related_audio.length', computeCharacter) === 0 ? (
+        <span>
+          {intl.trans('views.pages.explore.dialect.learn.words.no_audio_yet', 'No audio is available yet', 'first')}.
+        </span>
+      ) : null
+    const audioPreviewMap = selectn('response.contextParameters.character.related_audio', computeCharacter) || []
+    const audioPreview = audioPreviewMap.map((audio) => {
+      return <Preview styles={{ maxWidth: '350px' }} key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />
+    })
+    if (audioPreview.length > 0 || noAudioMessage !== null) {
+      return (
+        <div className={classNames('col-md-6', 'col-xs-12')}>
+          <h3>{intl.trans('audio', 'Audio', 'first')}</h3>
 
+          <div>
+            {noAudioMessage}
+            {audioPreview}
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
   _getCharacterPath = (props = null) => {
     const _props = props === null ? this.props : props
 

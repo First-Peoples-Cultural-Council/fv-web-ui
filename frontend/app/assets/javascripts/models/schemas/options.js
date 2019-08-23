@@ -1128,6 +1128,11 @@ const options = {
           factory: MediaFactory,
           type: 'FVAudio',
         },
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add_audio', 'Add Audio', 'first')}`,
+          remove: <span data-testid="removeAudio">X</span>,
+        },
       },
       'fvcharacter:related_words': {
         label: intl.trans('featured_words', 'Featured Words', 'first'),
@@ -1137,6 +1142,10 @@ const options = {
           attrs: {
             disableCreateNewButton: true,
           },
+        },
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add_words', 'Add Words', 'first')}`,
         },
       },
     },
