@@ -16,9 +16,12 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-
+import Tooltip from '@material-ui/core/Tooltip'
+import Info from '@material-ui/icons/Info'
+import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import IntlService from 'views/services/intl'
+const intl = IntlService.instance
 
 export default class AudioOptimal extends Component {
   static propTypes = {
@@ -101,33 +104,33 @@ export default class AudioOptimal extends Component {
     return (
       <div className="AudioOptimal">
         {this.props.audioTag}
-        <IconButton
-          tooltip={intl.translate({
+        <Tooltip
+          title={intl.translate({
             key: 'audio_information',
             default: 'Audio Information',
             case: 'words',
           })}
-          // iconClassName="material-icons"
-          onClick={this._getMoreAudioInfo}
         >
-          info
-        </IconButton>
+          <IconButton onClick={this._getMoreAudioInfo}>
+            <Info aria-label="Show Audio Information" />
+          </IconButton>
+        </Tooltip>
         <div className="AudioOptimalMetadata" style={{ display: this.state.showAudioMetadata ? 'block' : 'none' }}>
           {this._getDescription(metadata)}
           {this._getSpeakers(metadata)}
           {this._getRecorders(metadata)}
 
-          <IconButton
-            tooltip={intl.translate({
+          <Tooltip
+            title={intl.translate({
               key: 'audio_information',
               default: 'Hide Audio Information',
               case: 'words',
             })}
-            // iconClassName="material-icons"
-            onClick={() => this.setState({ showAudioMetadata: false })}
           >
-            close
-          </IconButton>
+            <IconButton onClick={() => this.setState({ showAudioMetadata: false })}>
+              <Close aria-label="Hide Audio Information" />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
     )
