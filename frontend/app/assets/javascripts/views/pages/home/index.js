@@ -158,7 +158,7 @@ export class PageHome extends Component {
 
     const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
     const primary2Color = selectn('theme.palette.baseTheme.palette.primary2Color', this.props.properties)
-    const alternateTextColor = selectn('theme.palette.baseTheme.palette.alternateTextColor', this.props.properties)
+    // const alternateTextColor = selectn('theme.palette.baseTheme.palette.alternateTextColor', this.props.properties)
     const intl = this.intl
 
     const accessButtons = []
@@ -170,7 +170,7 @@ export class PageHome extends Component {
           <Button
             variant="contained"
             key={index}
-            primary
+            // primary
             onClick={this._onNavigateRequest.bind(
               this,
               NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
@@ -192,7 +192,7 @@ export class PageHome extends Component {
         <Button
           variant="contained"
           key={0}
-          primary
+          // primary
           onClick={this._onNavigateRequest.bind(
             this,
             NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
