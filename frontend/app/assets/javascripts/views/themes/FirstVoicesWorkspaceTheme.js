@@ -20,7 +20,15 @@ import zIndex from '@material-ui/core/styles/zIndex'
 export default {
   spacing: Spacing,
   zIndex: zIndex,
-  fontFamily: 'Arial, sans-serif',
+  typography: {
+    fontFamily: 'Arial, sans-serif',
+  },
+  primary: {
+    contrastText: '#0000ff',
+    dark: '#0b1735',
+    light: '#eeeed1',
+    main: '#b40000',
+  },
   palette: {
     primary1Color: teal[400],
     primary2Color: teal[700],
