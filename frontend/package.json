@@ -71,7 +71,7 @@
     "@fpcc/fv-game-memory": "^1.0.0",
     "@fpcc/fv-game-wordsearch": "^1.0.0",
     "@material-ui/core": "1.5.1",
-    "@material-ui/icons": "^4.2.1",
+    "@material-ui/icons": "2.0.3",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "~6.26.0",
     "bootstrap": "^3.3.7",
