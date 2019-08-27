@@ -5,17 +5,9 @@
 .Navigation__link:visited {
   color: #fff;
 }
-.Navigation__open {
-  background-color: transparent;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  height: 48px;
-  width: 48px;
-}
-.Navigation__openIcon {
-  fill: #fff !important;
+
+.Navigation__popoverInner {
+  padding: 10px 10px 1px 10px;
+  background-color: #fff;
+  font-size: 1.7rem;
 }

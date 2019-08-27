@@ -24,7 +24,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import { Divider, Drawer, List, ListItem, AppBar } from '@material-ui/core'
+import { Divider, Drawer, List, ListItem, Toolbar } from '@material-ui/core'
 
 import Close from '@material-ui/icons/Close'
 // TODO: USING v0.14.4 of Material UI
@@ -184,13 +184,13 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-        <ListItem
-          className="2"
-          key={selectn('uid', d)}
-          value={NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))}
-          primaryText={selectn('properties.dc:title', d)}
-        />
-      ))
+          <ListItem
+            className="2"
+            key={selectn('uid', d)}
+            value={NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))}
+            primaryText={selectn('properties.dc:title', d)}
+          />
+        ))
       : null
 
     return (
@@ -200,25 +200,21 @@ export class AppLeftNav extends Component {
         open={this.props.computeToggleMenuAction.menuVisible}
         onRequestChange={this._onRequestChange}
       >
-        <AppBar
-          iconElementLeft={
-            <button
-              type="button"
-              className="AppLeftNav__close"
-              data-testid="AppLeftNav__close"
-              onClick={this._onRequestChange}
-              ref={(_element) => {
-                this.AppLeftNavClose = _element
-              }}
-            >
-              <Close className="AppLeftNav__closeIcon" />
-              <span className="visually-hidden">Menu close</span>
-            </button>
-          }
-          title={
-            <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
-          }
-        />
+        <Toolbar>
+          <button
+            type="button"
+            className="AppLeftNav__close"
+            data-testid="AppLeftNav__close"
+            onClick={this._onRequestChange}
+            ref={(_element) => {
+              this.AppLeftNavClose = _element
+            }}
+          >
+            <Close className="AppLeftNav__closeIcon" />
+            <span className="visually-hidden">Menu close</span>
+          </button>
+          <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
+        </Toolbar>
 
         <SelectableList
           valueLink={{

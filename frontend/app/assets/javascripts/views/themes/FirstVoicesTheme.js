@@ -24,7 +24,7 @@ export default {
     fontFamily: 'Arial, sans-serif',
   },
   primary: {
-    contrastText: '#0000ff',
+    contrastText: '#fff',
     dark: '#0b1735',
     light: '#eeeed1',
     main: '#b40000',

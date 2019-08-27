@@ -28,7 +28,7 @@ import { toggleMenuAction } from 'providers/redux/reducers/navigation'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
@@ -167,26 +167,21 @@ export class KidsNavigation extends Component {
 
     return (
       <div className="Navigation">
-        <AppBar
-          title={
-            <a style={{ textDecoration: 'none', color: '#fff' }} onClick={this._onNavigateRequest.bind(this, homeURL)}>
-              {avatar}
-              <span className="hidden-xs">
-                {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-                  this.props.properties.title) +
-                  ' ' +
-                  intl.trans('views.pages.explore.dialect.for_kids', 'for Kids')}
-              </span>
-            </a>
-          }
+        <Toolbar
           showMenuIconButton
-          // TODO: This doesn't seem to work
           onRightIconButtonTouchTap={() => {
             this.props.toggleMenuAction('AppLeftNav')
           }}
-          // TODO: This creates an empty, transparent button that can be clicked
-          // iconClassNameRight="muidocs-icon-navigation-expand-more"
         >
+          <a style={{ textDecoration: 'none', color: '#fff' }} onClick={this._onNavigateRequest.bind(this, homeURL)}>
+            {avatar}
+            <span className="hidden-xs">
+              {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
+                this.props.properties.title) +
+                ' ' +
+                intl.trans('views.pages.explore.dialect.for_kids', 'for Kids')}
+            </span>
+          </a>
           <div style={{ paddingTop: '5px' }}>
             <IconButton
               className={classNames({ hidden: this.props.frontpage })}
@@ -234,7 +229,7 @@ export class KidsNavigation extends Component {
               clear
             </IconButton>
           </div>
-        </AppBar>
+        </Toolbar>
       </div>
     )
   }
