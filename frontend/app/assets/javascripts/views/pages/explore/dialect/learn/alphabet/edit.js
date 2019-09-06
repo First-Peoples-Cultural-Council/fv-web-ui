@@ -22,6 +22,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchCharacter, updateCharacter } from 'providers/redux/reducers/fvCharacter'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
 import selectn from 'selectn'
 
@@ -67,61 +68,30 @@ export class PageDialectAlphabetCharacterEdit extends Component {
       characterPath: props.routeParams.dialect_path + '/Alphabet/' + props.routeParams.character,
       formValue: null,
     }
-
-    // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  fetchData(newProps) {
-    newProps.fetchDialect2(this.props.routeParams.dialect_path)
-    newProps.fetchCharacter(this.state.characterPath)
   }
 
   // Fetch data on initial render
-  componentDidMount() {
-    this.fetchData(this.props)
+  async componentDidMount() {
+    await this.fetchData()
   }
 
   // Refetch data on URL change
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    let previousCharacter
     let currentCharacter
-    let nextCharacter
 
     if (this.state.characterPath !== null) {
+      previousCharacter = ProviderHelpers.getEntry(prevProps.computeCharacter, this.state.characterPath)
       currentCharacter = ProviderHelpers.getEntry(this.props.computeCharacter, this.state.characterPath)
-      nextCharacter = ProviderHelpers.getEntry(nextProps.computeCharacter, this.state.characterPath)
     }
 
     // 'Redirect' on success
     if (
-      selectn('wasUpdated', currentCharacter) != selectn('wasUpdated', nextCharacter) &&
-      selectn('wasUpdated', nextCharacter) === true
+      selectn('wasUpdated', previousCharacter) != selectn('wasUpdated', currentCharacter) &&
+      selectn('wasUpdated', currentCharacter) === true
     ) {
-      nextProps.replaceWindowPath(
-        '/' +
-          nextProps.routeParams.theme +
-          selectn('response.path', nextCharacter).replace('Dictionary', 'learn/alphabet')
-      )
+      this._navigateUp()
     }
-  }
-
-  _handleSave(character, formValue) {
-    const newDocument = new Document(character.response, {
-      repository: character.response._repository,
-      nuxeo: character.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateCharacter(newDocument)
-
-    this.setState({ formValue: formValue })
-  }
-
-  _handleCancel() {
-    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
 
   render() {
@@ -166,7 +136,7 @@ export class PageDialectAlphabetCharacterEdit extends Component {
           fields={fields}
           options={options}
           saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
+          cancelMethod={this._navigateUp}
           currentPath={this.props.splitWindowPath}
           navigationMethod={this.props.replaceWindowPath}
           type="FVCharacter"
@@ -175,6 +145,30 @@ export class PageDialectAlphabetCharacterEdit extends Component {
       </div>
     )
   }
+
+  fetchData = () => {
+    this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    this.props.fetchCharacter(this.state.characterPath)
+  }
+
+  _handleSave = (character, formValue) => {
+    const newDocument = new Document(character.response, {
+      repository: character.response._repository,
+      nuxeo: character.response._nuxeo,
+    })
+
+    // Set new value property on document
+    newDocument.set(formValue)
+
+    // Save document
+    this.props.updateCharacter(newDocument)
+
+    this.setState({ formValue: formValue })
+  }
+
+  _navigateUp = () => {
+    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+  }
 }
 
 // REDUX: reducers/state
@@ -182,20 +176,21 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { fvCharacter, fvDialect, windowPath } = state
 
   const { computeCharacter } = fvCharacter
-  const { computeDialect2, fetchDialect2 } = fvDialect
-  const { splitWindowPath } = windowPath
+  const { computeDialect2 } = fvDialect
+  const { splitWindowPath, _windowPath } = windowPath
 
   return {
     computeCharacter,
     computeDialect2,
-    fetchDialect2,
     splitWindowPath,
+    windowPath: _windowPath,
   }
 }
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCharacter,
+  fetchDialect2,
   pushWindowPath,
   replaceWindowPath,
   updateCharacter,

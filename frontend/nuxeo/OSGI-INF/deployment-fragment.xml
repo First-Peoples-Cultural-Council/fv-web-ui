@@ -20,12 +20,20 @@
 
   <!--  Serve IE11 (Trident 7.0) and sooner (Trident 6.0) legacy code -->
   <extension target="rewrite#RULE">
-    RewriteCond %{HTTP_USER_AGENT} ".*Trident/(7|6).*"
+    RewriteCond %{HTTP_USER_AGENT} ^.*(Trident/7|Trident/6).*$ [NC]
     RewriteCond %{REQUEST_URI} !.*/assets/(.*)
     RewriteCond %{REQUEST_URI} !.*/logout/(.*)
     RewriteCond %{REQUEST_URI} !.*/register/(.*)
     RewriteCond %{REQUEST_URI} !.*/forgotpassword/(.*)
     RewriteRule ^/app/(.*) /app/legacy/ [L]
+  </extension>
+
+  <extension target="rewrite#RULE">
+    RewriteCond %{HTTP_USER_AGENT} ^.*(Trident/7|Trident/6).*$ [NC]
+    RewriteCond %{REQUEST_URI} .*/assets/(.*)
+    RewriteCond %{REQUEST_URI} .*/register/(.*)
+    RewriteCond %{REQUEST_URI} .*/forgotpassword/(.*)
+    RewriteRule .*/(assets|register|forgotpassword)/(.*) /app/legacy/$1/$2 [L]
   </extension>
 
   <!-- Serve all modern browsers from evergreen folder -->

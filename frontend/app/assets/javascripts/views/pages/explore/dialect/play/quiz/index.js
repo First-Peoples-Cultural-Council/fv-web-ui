@@ -76,16 +76,14 @@ class Answer extends React.Component {
 
     return (
       <div className="col-xs-6">
-        <Button
-          variant="contained"
-          style={{ width: '100%' }}
-          // labelColor={labelColor}
+        <button
+          className="_btn _btn--secondary QuizAnswer__btn"
+          style={{ color: labelColor, backgroundColor: backgroundColor }}
           disabled={disabled}
-          backgroundColor={backgroundColor}
           onClick={this.props.onSelect.bind(this, data, correct)}
         >
           {data ? selectn('word', data) : 'Loading...'}
-        </Button>
+        </button>
       </div>
     )
   }

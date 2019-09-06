@@ -34,6 +34,8 @@ import ContributorDelete from 'views/components/Confirmation'
 import ContributorsSelected from './ContributorsSelected'
 import Checkbox from 'views/components/Form/Common/Checkbox'
 
+import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
+import NavigationCheck from 'material-ui/lib/svg-icons/navigation/check'
 import '!style-loader!css-loader!./Contributors.css'
 
 let contributorsPath = undefined
@@ -66,6 +68,7 @@ export class Contributors extends Component {
     DEFAULT_SORT_COL: string,
     DEFAULT_SORT_TYPE: string,
     editUrl: string,
+    detailUrl: string,
     copy: object,
     btnCreate: element,
     // REDUX: reducers/state
@@ -272,7 +275,7 @@ export class Contributors extends Component {
 
   _getColumns = () => {
     const { copy } = this.state
-    const { routeParams, editUrl } = this.props
+    const { routeParams, editUrl, detailUrl } = this.props
     const { theme, dialect_path } = routeParams
 
     return [
@@ -342,7 +345,7 @@ export class Contributors extends Component {
         },
         render: (value, data) => {
           const uid = data.uid
-          const url = editUrl ? `${editUrl}/${uid}` : `/${theme}${dialect_path}/contributor/${uid}`
+          const url = detailUrl ? `${detailUrl}/${uid}` : `/${theme}${dialect_path}/contributor/${uid}`
 
           return (
             <a
@@ -375,8 +378,18 @@ export class Contributors extends Component {
           )
         },
         render: (v, data /*, cellProps*/) => {
-          const bio = selectn('properties.dc:description', data) || '-'
-          return <div dangerouslySetInnerHTML={{ __html: bio }} />
+          const bio = selectn('properties.dc:description', data) ? (
+            <div className="Contributors__biographyStatus">
+              <NavigationCheck />
+              <span className="Contributors__biographyText">Yes</span>
+            </div>
+          ) : (
+            <div className="Contributors__biographyStatus">
+              <NavigationClose />
+              <span className="Contributors__biographyText">No</span>
+            </div>
+          )
+          return bio
         },
       },
       {

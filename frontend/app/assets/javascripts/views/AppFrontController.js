@@ -80,7 +80,6 @@ export class AppFrontController extends Component {
     // loadNavigation: func.isRequired
 
     // REDUX: reducers/state
-    computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
     properties: object.isRequired,
     routeParams: object.isRequired,
@@ -488,15 +487,13 @@ export class AppFrontController extends Component {
   }
 }
 // REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, navigation, nuxeo, windowPath } = state
+const mapStateToProps = (state) => {
+  const { navigation, nuxeo, windowPath } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
-  const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   return {
-    computeDialect2,
     computeLogin,
     properties,
     routeParams: route.routeParams,

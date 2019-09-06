@@ -215,16 +215,18 @@ export class DialectViewWord extends Component {
               </div> */}
 
               {/* METADATA PANEL */}
-              {selectn('response', computeWord) ? (
-                <MetadataPanel properties={this.props.properties} computeEntity={computeWord} />
-              ) : null}
+              {this._getMetadataPanel(computeWord)}
             </aside>
           </div>
         </div>
       </DetailsViewWithActions>
     )
   }
-
+  _getMetadataPanel = (computeWord) => {
+    return selectn('response', computeWord) ? (
+      <MetadataPanel properties={this.props.properties} computeEntity={computeWord} />
+    ) : null
+  }
   _getAcknowledgement = (computeWord) => {
     const acknowledgement = selectn('response.properties.fv-word:acknowledgement', computeWord)
     if (acknowledgement && acknowledgement !== '') {

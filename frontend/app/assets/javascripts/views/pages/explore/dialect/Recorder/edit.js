@@ -23,11 +23,9 @@ export class RecorderEdit extends React.Component {
     const { routeParams } = this.props
     const { theme, dialect_path } = routeParams
     const createUrl = `/${theme}${dialect_path}/create/recorder`
-    const editUrl = `/${theme}${dialect_path}/edit/recorder`
     return (
       <ContributorEdit
         createUrl={createUrl}
-        editUrl={editUrl}
         className={this.props.className}
         validator={validator}
         copy={internationalization}

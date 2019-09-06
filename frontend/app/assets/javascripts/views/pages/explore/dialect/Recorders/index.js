@@ -27,7 +27,8 @@ export class Recorders extends React.Component {
   render() {
     const { routeParams } = this.props
     const { theme, dialect_path } = routeParams
-    const editUrl = `/${theme}${dialect_path}/edit/recorder/`
+    const editUrl = `/${theme}${dialect_path}/edit/recorder`
+    const detailUrl = `/${theme}${dialect_path}/recorder`
     const btnCreate = (
       <a
         className="_btn _btn--primary Contributors__btnCreate"
@@ -45,6 +46,7 @@ export class Recorders extends React.Component {
         className={this.props.className}
         copy={internationalization}
         editUrl={editUrl}
+        detailUrl={detailUrl}
         btnCreate={btnCreate}
       />
     )

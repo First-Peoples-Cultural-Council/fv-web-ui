@@ -19,8 +19,7 @@ import {
  * --------------------------------------
  */
 export const _createContributor = create('FV_CONTRIBUTOR', 'FVContributor')
-export const createContributor = (arg) => {
-  const { parentDoc, docParams, file, timestamp, xpath } = arg
+export const createContributor = (parentDoc, docParams, file, timestamp, xpath) => {
   return _createContributor(parentDoc, docParams, file, timestamp, xpath)
 }
 
@@ -136,7 +135,6 @@ export const _updateContributor = update(
   { headers: { 'enrichers.document': 'ancestry' } },
   false
 )
-export const updateContributor = (arg) => {
-  const { newDoc, messageStart, messageSuccess, messageError, file, xpath } = arg
+export const updateContributor = (newDoc, messageStart, messageSuccess, messageError, file, xpath) => {
   return _updateContributor(newDoc, messageStart, messageSuccess, messageError, file, xpath)
 }

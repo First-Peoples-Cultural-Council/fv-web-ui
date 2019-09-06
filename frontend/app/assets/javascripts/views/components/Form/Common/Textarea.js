@@ -48,8 +48,8 @@ export default class Textarea extends React.Component {
             id={id}
             initialValue={this.state.value}
             name={name}
-            onChange={(content, delta, source, editor) => {
-              this._handleChange(content, delta, source, editor)
+            onChange={(content /*, delta, source, editor*/) => {
+              this._handleChange(content)
             }}
             setRef={setRef}
           />
@@ -63,7 +63,9 @@ export default class Textarea extends React.Component {
         defaultValue={this.state.value}
         id={id}
         name={name}
-        onChange={this._handleChange}
+        onChange={(event) => {
+          this._handleChange(event.target.value)
+        }}
         ref={setRef}
       />
     )
@@ -98,8 +100,7 @@ export default class Textarea extends React.Component {
       </div>
     )
   }
-  _handleChange = (event) => {
-    const value = event.target.value
+  _handleChange = (value) => {
     this.setState({ value })
     this.props.handleChange(value)
   }

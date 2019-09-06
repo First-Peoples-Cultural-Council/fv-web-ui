@@ -23,3 +23,11 @@
 .Contributors__btnCreate {
   margin: 0 0 2rem 0;
 }
+.Contributors__biographyStatus {
+  display: flex;
+  align-items: center;
+}
+.Contributors__biographyText {
+  display: inline-block;
+  margin: 5px;
+}

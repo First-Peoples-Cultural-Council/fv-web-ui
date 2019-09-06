@@ -10,210 +10,17 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import Dialog from '@material-ui/core/Dialog'
 import IntlService from 'views/services/intl'
 import { WORKSPACES } from 'common/Constants'
+import '!style-loader!css-loader!./ViewWithActions.css'
 
 const intl = IntlService.instance
 export default function withActions(ComposedFilter, publishWarningEnabled = false) {
   class ViewWithActions extends Component {
-    constructor(props, context) {
-      super(props, context)
-
-      this.state = {
-        deleteSuccessDialogOpen: false,
-        deleteDialogOpen: false,
-        prePublishDialogOpen: false,
-        prePublishCompleteAction: null,
-        publishToggleCancelled: false,
-      }
-      ;['_publishToggleAction', '_enableToggleAction', '_publishChangesAction', '_delete'].forEach(
-        (method) => (this[method] = this[method].bind(this))
-      )
-    }
-
-    // Toggle (enabled/disabled)
-    _enableToggleAction(toggled, workflow) {
-      if (toggled) {
-        if (workflow) {
-          this.props.askToEnableAction(
-            this.props.itemPath,
-            {
-              id: 'FVEnableLanguageAsset',
-              start: 'true',
-            },
-            null,
-            intl.trans(
-              'views.hoc.view.request_to_enable_x_successfully_submitted',
-              'Request to enable ' + this.props.labels.single + ' successfully submitted!',
-              'first',
-              [this.props.labels.single]
-            ),
-            null
-          )
-        } else {
-          this.props.enableAction(
-            this.props.itemPath,
-            null,
-            null,
-            intl.trans(
-              'views.hoc.view.x_enabled',
-              StringHelpers.toTitleCase(this.props.labels.single) + ' Enabled!',
-              'first',
-              [StringHelpers.toTitleCase(this.props.labels.single)]
-            )
-          )
-        }
-      } else {
-        if (workflow) {
-          this.props.askToDisableAction(
-            this.props.itemPath,
-            {
-              id: 'FVDisableLanguageAsset',
-              start: 'true',
-            },
-            null,
-            intl.trans(
-              'views.hoc.view.request_to_disable_x_successfully_submitted',
-              'Request to disable ' + this.props.labels.single + ' successfully submitted!',
-              'first',
-              [this.props.labels.single]
-            ),
-            null
-          )
-        } else {
-          this.props.disableAction(
-            this.props.itemPath,
-            null,
-            null,
-            intl.trans(
-              'views.hoc.view.x_disabled',
-              StringHelpers.toTitleCase(this.props.labels.single) + ' Disabled!',
-              'first',
-              [StringHelpers.toTitleCase(this.props.labels.single)]
-            )
-          )
-        }
-      }
-    }
-
-    // Publish changes
-    _publishChangesAction() {
-      const publishChangesAction = function() {
-        this.props.publishAction(
-          this.props.itemPath,
-          null,
-          null,
-          intl.trans(
-            'views.hoc.view.x_published_successfully',
-            StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
-            'first',
-            [StringHelpers.toTitleCase(this.props.labels.single)]
-          )
-        )
-        this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
-      }.bind(this)
-
-      if (publishWarningEnabled) {
-        this.setState({
-          prePublishDialogOpen: true,
-          prePublishCompleteAction: publishChangesAction,
-        })
-      } else {
-        publishChangesAction()
-      }
-    }
-
-    // Toggle published
-    _publishToggleAction(toggled, workflow) {
-      if (toggled) {
-        if (workflow) {
-          const askToPublishToggleAction = function() {
-            this.props.askToPublishAction(
-              this.props.itemPath,
-              {
-                id: 'FVPublishLanguageAsset',
-                start: 'true',
-              },
-              null,
-              intl.trans(
-                'views.hoc.view.request_to_publish_x_successfully_submitted',
-                'Request to publish ' + this.props.labels.single + ' successfully submitted!',
-                'first',
-                [this.props.labels.single]
-              ),
-              null
-            )
-
-            this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
-          }.bind(this)
-
-          if (publishWarningEnabled) {
-            this.setState({
-              prePublishDialogOpen: true,
-              prePublishCompleteAction: askToPublishToggleAction,
-            })
-          } else {
-            askToPublishToggleAction()
-          }
-        } else {
-          const publishToggleAction = function() {
-            this.props.publishAction(
-              this.props.itemPath,
-              null,
-              null,
-              intl.trans(
-                'views.hoc.view.x_published_successfully',
-                StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
-                'first',
-                [StringHelpers.toTitleCase(this.props.labels.single)]
-              )
-            )
-            this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
-          }.bind(this)
-
-          if (publishWarningEnabled) {
-            this.setState({
-              prePublishDialogOpen: true,
-              prePublishCompleteAction: publishToggleAction,
-            })
-          } else {
-            publishToggleAction()
-          }
-        }
-      } else {
-        if (workflow) {
-          this.props.askToUnpublishAction(
-            this.props.itemPath,
-            {
-              id: 'FVUnpublishLanguageAsset',
-              start: 'true',
-            },
-            null,
-            intl.trans(
-              'views.hoc.view.request_to_unpublish_x_successfully_submitted',
-              'Request to unpublish ' + this.props.labels.single + ' successfully submitted!',
-              'first',
-              [this.props.labels.single]
-            ),
-            null
-          )
-        } else {
-          this.props.unpublishAction(
-            this.props.itemPath,
-            null,
-            null,
-            intl.trans(
-              'views.hoc.view.x_unpublished_successfully',
-              StringHelpers.toTitleCase(this.props.labels.single) + ' Unpublished Successfully!',
-              'first',
-              [StringHelpers.toTitleCase(this.props.labels.single)]
-            )
-          )
-        }
-      }
-    }
-
-    _delete(item) {
-      this.props.deleteAction(item.uid)
-      this.setState({ deleteDialogOpen: false, deleteSuccessDialogOpen: true })
+    state = {
+      deleteSuccessDialogOpen: false,
+      deleteDialogOpen: false,
+      prePublishDialogOpen: false,
+      prePublishCompleteAction: null,
+      publishToggleCancelled: false,
     }
 
     render() {
@@ -222,7 +29,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
       }
 
       return (
-        <div className="row">
+        <div className="ViewWithActions row">
           <div className="col-xs-12">
             {(() => {
               if (selectn('response', this.props.computeItem)) {
@@ -251,6 +58,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <Dialog
+              className="ViewWithActions__dialog"
               contentStyle={{ height: '20vh' }}
               autoScrollBodyContent
               title={intl.trans(
@@ -261,25 +69,31 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               )}
               actions={[
                 <button
+                  data-testid="ViewWithActions__buttonCancel"
                   type="button"
                   key="0"
-                  className="FlatButton FlatButton--secondary"
-                  onClick={() =>
+                  className="FlatButton FlatButton--secondary ViewWithActions__button"
+                  onClick={(e) => {
+                    e.preventDefault()
                     this.setState({
                       prePublishDialogOpen: false,
                       publishToggleCancelled: true,
                       prePublishCompleteAction: null,
                     })
-                  }
+                  }}
                 >
                   {intl.trans('cancel', 'Cancel', 'first')}
                 </button>,
                 <button
+                  data-testid="ViewWithActions__buttonPublish"
                   type="button"
                   key="1"
-                  className="FlatButton FlatButton--primary"
+                  className="FlatButton FlatButton--primary ViewWithActions__button"
                   keyboardFocused
-                  onClick={this.state.prePublishCompleteAction}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    this.state.prePublishCompleteAction()
+                  }}
                 >
                   {intl.trans('publish', 'Publish', 'first')}
                 </button>,
@@ -352,6 +166,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </Toolbar>
 
               <Dialog
+                className="ViewWithActions__dialog"
                 title={intl.trans(
                   'views.hoc.view.deleting_x',
                   'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
@@ -360,19 +175,27 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 )}
                 actions={[
                   <button
+                    data-testid="ViewWithActions__buttonCancel"
                     key="0"
                     type="button"
-                    className="FlatButton FlatButton--secondary"
-                    onClick={() => this.setState({ deleteDialogOpen: false })}
+                    className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      this.setState({ deleteDialogOpen: false })
+                    }}
                   >
                     {intl.trans('cancel', 'Cancel', 'first')}
                   </button>,
                   <button
+                    data-testid="ViewWithActions__buttonDelete"
                     key="1"
-                    className="FlatButton FlatButton--primary"
+                    className="FlatButton FlatButton--primary ViewWithActions__button"
                     keyboardFocused
                     type="button"
-                    onClick={this._delete.bind(this, selectn('response', this.props.computeItem))}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      this._delete(selectn('response', this.props.computeItem))
+                    }}
                   >
                     {intl.trans('delete', 'Delete', 'first')}
                   </button>,
@@ -381,26 +204,30 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 open={this.state.deleteDialogOpen}
                 onRequestClose={this._handleCancelDelete}
               >
-                {intl.trans(
-                  'views.hoc.delete_confirm_x_x_x',
-                  'Are you sure you would like to delete the ' +
-                    this.props.labels.single +
-                    ' <strong>' +
-                    selectn('response.title', this.props.computeItem) +
-                    '</strong>?<br/>' +
-                    'Proceeding will also delete all published versions of this ' +
-                    this.props.labels.single,
-                  'first',
-                  [
-                    this.props.labels.single,
-                    selectn('response.title', this.props.computeItem),
-                    this.props.labels.single,
-                  ]
-                )}
-                .
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: intl.trans(
+                      'views.hoc.delete_confirm_x_x_x',
+                      'Are you sure you would like to delete the ' +
+                        this.props.labels.single +
+                        ' <strong>' +
+                        selectn('response.title', this.props.computeItem) +
+                        '</strong>?<br/>' +
+                        'Proceeding will also delete all published versions of this ' +
+                        this.props.labels.single,
+                      'first',
+                      [
+                        this.props.labels.single,
+                        selectn('response.title', this.props.computeItem),
+                        this.props.labels.single,
+                      ]
+                    ),
+                  }}
+                />
               </Dialog>
 
               <Dialog
+                className="ViewWithActions__dialog"
                 title={intl.trans(
                   'views.hoc.view.delete_x',
                   'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
@@ -409,22 +236,25 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 )}
                 actions={[
                   <button
+                    data-testid="ViewWithActions__buttonReturn"
                     type="button"
                     key="0"
-                    className="FlatButton FlatButton--secondary"
+                    className="FlatButton FlatButton--secondary ViewWithActions__button"
                     onClick={() => window.history.back()}
                   >
                     {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
                   </button>,
                   <button
+                    data-testid="ViewWithActions__buttonHome"
                     type="button"
                     key="1"
-                    className="FlatButton FlatButton--primary"
+                    className="FlatButton FlatButton--primary ViewWithActions__button"
                     keyboardFocused
-                    onClick={this.props.onNavigateRequest.bind(
-                      this,
-                      '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
-                    )}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      const url = this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
+                      this.props.onNavigateRequest(`/${url}`)
+                    }}
                   >
                     {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
                   </button>,
@@ -447,6 +277,193 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           </AuthorizationFilter>
         </div>
       )
+    }
+
+    _delete = (item) => {
+      this.props.deleteAction(item.uid)
+      this.setState({ deleteDialogOpen: false, deleteSuccessDialogOpen: true })
+    }
+
+    // Toggle (enabled/disabled)
+    _enableToggleAction = (toggled, workflow) => {
+      if (toggled) {
+        if (workflow) {
+          this.props.askToEnableAction(
+            this.props.itemPath,
+            {
+              id: 'FVEnableLanguageAsset',
+              start: 'true',
+            },
+            null,
+            intl.trans(
+              'views.hoc.view.request_to_enable_x_successfully_submitted',
+              'Request to enable ' + this.props.labels.single + ' successfully submitted!',
+              'first',
+              [this.props.labels.single]
+            ),
+            null
+          )
+        } else {
+          this.props.enableAction(
+            this.props.itemPath,
+            null,
+            null,
+            intl.trans(
+              'views.hoc.view.x_enabled',
+              StringHelpers.toTitleCase(this.props.labels.single) + ' Enabled!',
+              'first',
+              [StringHelpers.toTitleCase(this.props.labels.single)]
+            )
+          )
+        }
+      } else {
+        if (workflow) {
+          this.props.askToDisableAction(
+            this.props.itemPath,
+            {
+              id: 'FVDisableLanguageAsset',
+              start: 'true',
+            },
+            null,
+            intl.trans(
+              'views.hoc.view.request_to_disable_x_successfully_submitted',
+              'Request to disable ' + this.props.labels.single + ' successfully submitted!',
+              'first',
+              [this.props.labels.single]
+            ),
+            null
+          )
+        } else {
+          this.props.disableAction(
+            this.props.itemPath,
+            null,
+            null,
+            intl.trans(
+              'views.hoc.view.x_disabled',
+              StringHelpers.toTitleCase(this.props.labels.single) + ' Disabled!',
+              'first',
+              [StringHelpers.toTitleCase(this.props.labels.single)]
+            )
+          )
+        }
+      }
+    }
+
+    // Publish changes
+    _publishChangesAction = () => {
+      const publishChangesAction = () => {
+        this.props.publishAction(
+          this.props.itemPath,
+          null,
+          null,
+          intl.trans(
+            'views.hoc.view.x_published_successfully',
+            StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
+            'first',
+            [StringHelpers.toTitleCase(this.props.labels.single)]
+          )
+        )
+        this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
+      }
+
+      if (publishWarningEnabled) {
+        this.setState({
+          prePublishDialogOpen: true,
+          prePublishCompleteAction: publishChangesAction,
+        })
+      } else {
+        publishChangesAction()
+      }
+    }
+
+    // Toggle published
+    _publishToggleAction = (toggled, workflow) => {
+      if (toggled) {
+        if (workflow) {
+          const askToPublishToggleAction = () => {
+            this.props.askToPublishAction(
+              this.props.itemPath,
+              {
+                id: 'FVPublishLanguageAsset',
+                start: 'true',
+              },
+              null,
+              intl.trans(
+                'views.hoc.view.request_to_publish_x_successfully_submitted',
+                'Request to publish ' + this.props.labels.single + ' successfully submitted!',
+                'first',
+                [this.props.labels.single]
+              ),
+              null
+            )
+
+            this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
+          }
+
+          if (publishWarningEnabled) {
+            this.setState({
+              prePublishDialogOpen: true,
+              prePublishCompleteAction: askToPublishToggleAction,
+            })
+          } else {
+            askToPublishToggleAction()
+          }
+        } else {
+          const publishToggleAction = () => {
+            this.props.publishAction(
+              this.props.itemPath,
+              null,
+              null,
+              intl.trans(
+                'views.hoc.view.x_published_successfully',
+                StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
+                'first',
+                [StringHelpers.toTitleCase(this.props.labels.single)]
+              )
+            )
+            this.setState({ prePublishCompleteAction: null, prePublishDialogOpen: false })
+          }
+
+          if (publishWarningEnabled) {
+            this.setState({
+              prePublishDialogOpen: true,
+              prePublishCompleteAction: publishToggleAction,
+            })
+          } else {
+            publishToggleAction()
+          }
+        }
+      } else {
+        if (workflow) {
+          this.props.askToUnpublishAction(
+            this.props.itemPath,
+            {
+              id: 'FVUnpublishLanguageAsset',
+              start: 'true',
+            },
+            null,
+            intl.trans(
+              'views.hoc.view.request_to_unpublish_x_successfully_submitted',
+              'Request to unpublish ' + this.props.labels.single + ' successfully submitted!',
+              'first',
+              [this.props.labels.single]
+            ),
+            null
+          )
+        } else {
+          this.props.unpublishAction(
+            this.props.itemPath,
+            null,
+            null,
+            intl.trans(
+              'views.hoc.view.x_unpublished_successfully',
+              StringHelpers.toTitleCase(this.props.labels.single) + ' Unpublished Successfully!',
+              'first',
+              [StringHelpers.toTitleCase(this.props.labels.single)]
+            )
+          )
+        }
+      }
     }
   }
 

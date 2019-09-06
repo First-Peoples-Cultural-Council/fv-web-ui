@@ -164,6 +164,7 @@ module.exports = env => ({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
       templateParameters: {
         VERSION: gitRevisionPlugin.version(),
+        IS_LEGACY: env && env.legacy ? true : false,
       },
     }),
     new MiniCssExtractPlugin({

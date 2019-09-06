@@ -50,8 +50,8 @@ export default class Text extends React.Component {
             id={id}
             initialValue={this.state.value}
             name={name}
-            onChange={(content, delta, source, editor) => {
-              this._handleChange(content, delta, source, editor)
+            onChange={(content /*, delta, source, editor*/) => {
+              this._handleChange(content /*, delta, source, editor*/)
             }}
             setRef={setRef}
           />
@@ -65,7 +65,9 @@ export default class Text extends React.Component {
         id={id}
         name={name}
         defaultValue={this.state.value}
-        onChange={this._handleChange}
+        onChange={(event) => {
+          this._handleChange(event.target.value)
+        }}
         type="text"
         ref={setRef}
       />
@@ -100,8 +102,7 @@ export default class Text extends React.Component {
       </div>
     )
   }
-  _handleChange = (event) => {
-    const value = event.target.value
+  _handleChange = (value) => {
     this.setState({ value })
     this.props.handleChange(value)
   }

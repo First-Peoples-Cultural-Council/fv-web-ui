@@ -148,16 +148,25 @@ export class PhrasesCreate extends Component {
 
   fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
-    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
-    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-    if (_computeDialect2.isError) {
-      this.setState({
-        componentState: STATE_DEFAULT,
-        errorMessage: _computeDialect2.message,
-        ...addToState,
-      })
-      return
+    // Call fetchDialect2 if not already called:
+    // 1) At `.../learn/words/create` fetchDialect2 has been called by the parent component `PageDialectWordsCreate`
+    // 2) At `.../learn/phrases/create` PhrasesCreate is on a stand alone page and fetchDialect2 has not been called
+    // NOTE: For an unknown reason if fetchDialect2 is called w/#1 it triggers issue FW-373
+    if (ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path) === null) {
+      await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+      const computingDialect2 = ProviderHelpers.getEntry(
+        this.props.computeDialect2,
+        this.props.routeParams.dialect_path
+      )
+      if (computingDialect2.isError) {
+        this.setState({
+          componentState: STATE_DEFAULT,
+          errorMessage: computingDialect2.message,
+          ...addToState,
+        })
+        return
+      }
     }
 
     this.setState({

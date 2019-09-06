@@ -37,7 +37,6 @@ import Dialog from '@material-ui/core/Dialog'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Button from '@material-ui/core/Button'
 
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from '@material-ui/core/Table'
 
@@ -46,6 +45,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import IntlService from 'views/services/intl'
+import '!style-loader!css-loader!./Tasks.css'
 
 const intl = IntlService.instance
 
@@ -71,30 +71,27 @@ export class Tasks extends React.Component {
     rejectTask: func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      open: false,
-      preApprovalDialogOpen: false,
-      selectedTask: null,
-      selectedPreapprovalTask: null,
-      lastActionedTaskId: null,
-      userRegistrationTasksPath: '/management/registrationRequests/',
-    }
+  state = {
+    open: false,
+    preApprovalDialogOpen: false,
+    selectedTask: null,
+    selectedPreapprovalTask: null,
+    lastActionedTaskId: null,
+    userRegistrationTasksPath: '/management/registrationRequests/',
   }
 
   componentDidUpdate(prevProps) {
-    // NOTE: computeLogin will always be different after a login (since prev. state was logged out)
-    // const updatedLogin = prevProps.computeLogin != this.props.computeLogin
+    const updatedUserId =
+      selectn('response.id', prevProps.computeLogin) != selectn('response.id', this.props.computeLogin)
     const updatedUserTasksApprove = prevProps.computeUserTasksApprove != this.props.computeUserTasksApprove
     const updatedUserTasksReject = prevProps.computeUserTasksReject != this.props.computeUserTasksReject
     const updatedUserRegistrationApprove =
       prevProps.computeUserRegistrationApprove != this.props.computeUserRegistrationApprove
     const updatedUserRegistrationReject =
       prevProps.computeUserRegistrationReject != this.props.computeUserRegistrationReject
+
     if (
-      // updatedLogin ||
+      updatedUserId ||
       updatedUserTasksApprove ||
       updatedUserTasksReject ||
       updatedUserRegistrationApprove ||
@@ -127,7 +124,7 @@ export class Tasks extends React.Component {
     ])
 
     const computeUserDialects = ProviderHelpers.getEntry(this.props.computeUserDialects, userID)
-    const computeUserTasks = ProviderHelpers.getEntry(this.props.computeUserTasks, userID)
+    const _computeUserTasks = ProviderHelpers.getEntry(this.props.computeUserTasks, userID)
 
     const computeDialect = ProviderHelpers.getEntry(
       this.props.computeDialect2,
@@ -138,35 +135,59 @@ export class Tasks extends React.Component {
     const userRegistrationTasks = []
 
     // Compute General Tasks
-    ;(selectn('response', computeUserTasks) || []).map(
-      function computeUserTasksMap(task, i) {
-        const tableRow = (
-          <TableRow key={i}>
-            <TableRowColumn>
-              <a onClick={this._handleOpen.bind(this, task.docref)}>{task.documentTitle}</a>
-            </TableRowColumn>
-            <TableRowColumn>
-              <span>{intl.searchAndReplace(task.name)}</span>
-            </TableRowColumn>
-            <TableRowColumn>
-              <Button variant="contained" secondary onClick={this._handleTaskActions.bind(this, task.id, 'approve')}>
+    const computeUserTasksMap = selectn('response', _computeUserTasks) || []
+    computeUserTasksMap.map((task, i) => {
+      const tableRow = (
+        <TableRow key={i}>
+          <TableRowColumn>
+            <button
+              type="button"
+              className="FlatButton FlatButton--secondary Tasks__taskTitle"
+              onClick={this._handleOpen.bind(this, task.docref)}
+            >
+              {task.documentTitle}
+            </button>
+          </TableRowColumn>
+          <TableRowColumn className="Tasks__taskTypeContainer">
+            <span className="Tasks__taskType">{intl.searchAndReplace(task.name)}</span>
+          </TableRowColumn>
+          <TableRowColumn>
+            <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
+              <button
+                type="button"
+                className="RaisedButton RaisedButton--primary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  this._handleTaskActions(task.id, 'approve')
+                }}
+              >
                 {intl.trans('approve', 'Approve', 'first')}
-              </Button>{' '}
-              &nbsp;
-              <Button variant="contained" secondary onClick={this._handleTaskActions.bind(this, task.id, 'reject')}>
-                {intl.trans('reject', 'Reject', 'first')}
-              </Button>
-            </TableRowColumn>
-            <TableRowColumn>{task.dueDate}</TableRowColumn>
-          </TableRow>
-        )
+              </button>
 
-        userTasks.push(tableRow)
-      }.bind(this)
-    )
+              <button
+                type="button"
+                className="RaisedButton RaisedButton--primary Tasks__reject"
+                onClick={(e) => {
+                  e.preventDefault()
+                  this._handleTaskActions(task.id, 'reject')
+                }}
+              >
+                {intl.trans('reject', 'Reject', 'first')}
+              </button>
+            </div>
+          </TableRowColumn>
+          <TableRowColumn className="Tasks__taskDueDateContainer">
+            <span className="Tasks__taskDueDate">{task.dueDate}</span>
+          </TableRowColumn>
+        </TableRow>
+      )
+
+      userTasks.push(tableRow)
+    })
 
     // Compute User Registration Tasks
-    ;(selectn('response.entries', computeUserDialects) || []).map((dialect, i) => {
+    const computeUserDialectsMap = selectn('response.entries', computeUserDialects) || []
+    computeUserDialectsMap.map((dialect, i) => {
       const uid = selectn('uid', dialect)
 
       const tableRow = (
@@ -181,30 +202,46 @@ export class Tasks extends React.Component {
       userRegistrationTasks.push(tableRow)
     })
 
+    const noUserTasks =
+      userTasks.length === 0 && userRegistrationTasks.length === 0 ? (
+        <h2>{intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')}</h2>
+      ) : null
+
+    const userRegistrationTaskList = userRegistrationTasks.length > 0 ? <ul>{userRegistrationTasks}</ul> : null
+    const userTasksTable =
+      userTasks.length > 0 ? (
+        <Table>
+          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+            <TableRow>
+              <TableHeaderColumn>
+                <span className="Tasks__colHeader">{intl.trans('document_title', 'Document Title', 'words')}</span>
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <span className="Tasks__colHeader">{intl.trans('task_type', 'Task Type', 'words')}</span>
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <span className="Tasks__colHeader Tasks__colHeader--actions">
+                  {intl.trans('actions', 'Actions', 'words')}
+                </span>
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <span className="Tasks__colHeader">{intl.trans('task_due_date', 'Task Due Date', 'words')}</span>
+              </TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={false}>{userTasks}</TableBody>
+        </Table>
+      ) : null
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div>
           <h1>{intl.trans('tasks', 'Tasks', 'first')}</h1>
 
-          <ul>{userRegistrationTasks}</ul>
+          {noUserTasks}
 
-          <Table>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-              <TableRow>
-                <TableHeaderColumn>{intl.trans('document_title', 'Document Title', 'words')}</TableHeaderColumn>
-                <TableHeaderColumn>{intl.trans('task_type', 'Task Type', 'words')}</TableHeaderColumn>
-                <TableHeaderColumn>{intl.trans('actions', 'Actions', 'words')}</TableHeaderColumn>
-                <TableHeaderColumn>{intl.trans('task_due_date', 'Task Due Date', 'words')}</TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>{userTasks}</TableBody>
-          </Table>
+          {userRegistrationTaskList}
 
-          <p>
-            {userTasks.length === 0 && userRegistrationTasks.length === 0
-              ? intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')
-              : ''}
-          </p>
+          {userTasksTable}
 
           <Dialog open={this.state.open} onRequestClose={this._handleClose} autoScrollBodyContent>
             <DocumentView id={this.state.selectedTask} />

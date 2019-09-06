@@ -171,12 +171,12 @@ export class Navigation extends Component {
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 
     // V1:
-    // const computeDialect = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-    // const portalTitle =
-    //   selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-    //   selectn('response.properties.dc:title', computeDialect)
+    const computeDialect = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+    const portalTitle =
+      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
+      selectn('response.properties.dc:title', computeDialect)
     // V2:
-    const portalTitle = this.props.routeParams.dialect_name || ''
+    // const portalTitle = this.props.routeParams.dialect_name || ''
 
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const hrefPath = NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)

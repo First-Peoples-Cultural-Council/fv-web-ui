@@ -16,10 +16,10 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import classNames from 'classnames'
 import selectn from 'selectn'
 
 import StringHelpers from 'common/StringHelpers'
+import IntlService from 'views/services/intl'
 
 import Preview from 'views/components/Editor/Preview'
 import MetadataList from 'views/components/Browsing/metadata-list'
@@ -27,7 +27,7 @@ import MetadataList from 'views/components/Browsing/metadata-list'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
-import IntlService from 'views/services/intl'
+
 const intl = IntlService.instance
 /**
  * Metadata panel for word or phrase views.
@@ -51,12 +51,10 @@ export default class MetadataPanel extends Component {
      * Categories
      */
     const categories = []
-
-    {
-      (selectn('response.contextParameters.word.categories', computeEntity) || []).map(function(category, key) {
-        categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
-      })
-    }
+    const categoriesMap = selectn('response.contextParameters.word.categories', computeEntity) || []
+    categoriesMap.map((category, key) => {
+      categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
+    })
     metadata.push({
       label: intl.trans('categories', 'Categories', 'first'),
       value: categories,
@@ -66,12 +64,12 @@ export default class MetadataPanel extends Component {
      * Phrase books
      */
     const phrase_books = []
+    const phraseBooksMap = selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []
 
-    {
-      (selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []).map(function(phrase_book, key) {
-        phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
-      })
-    }
+    phraseBooksMap.map((phrase_book, key) => {
+      phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
+    })
+
     metadata.push({
       label: intl.trans('phrase_books', 'Phrase Books', 'first'),
       value: phrase_books,
@@ -89,12 +87,12 @@ export default class MetadataPanel extends Component {
      * Sources
      */
     const sources = []
+    const sourcesMap = selectn('response.contextParameters.word.sources', computeEntity) || []
 
-    {
-      (selectn('response.contextParameters.word.sources', computeEntity) || []).map(function(source, key) {
-        sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
-      })
-    }
+    sourcesMap.map((source, key) => {
+      sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
+    })
+
     metadata.push({
       label: intl.trans('sources', 'Sources', 'first'),
       value: sources,

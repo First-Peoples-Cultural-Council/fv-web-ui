@@ -1284,6 +1284,11 @@ const routes = [
       'recorders',
       ...PAGINATION_PATH,
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2)
+      return _pathArray
+    },
     title: 'Browse Recorders, {$dialect_name}',
     page: <Pages.RecorderBrowse hasPagination />,
     extractPaths: true,
@@ -1301,6 +1306,11 @@ const routes = [
       'recorder',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'recorders', 'detail')
+      return _pathArray
+    },
     title: 'Recorder Detail, {$dialect_name}',
     page: <Pages.RecorderDetail />,
     extractPaths: true,
@@ -1318,6 +1328,11 @@ const routes = [
       'create',
       'recorder',
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'recorders', 'create')
+      return _pathArray
+    },
     title: 'Create Recorder, {$dialect_name}',
     page: <Pages.RecorderCreate />,
     extractPaths: true,
@@ -1336,6 +1351,11 @@ const routes = [
       'recorder',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 3, 3, 'recorders', 'edit')
+      return _pathArray
+    },
     title: 'Edit Recorder, {$dialect_name}',
     page: <Pages.RecorderEdit />,
     extractPaths: true,
@@ -1371,6 +1391,11 @@ const routes = [
       'contributors',
       ...PAGINATION_PATH,
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2)
+      return _pathArray
+    },
     title: 'Browse Contributors, {$dialect_name}',
     page: <Pages.ContributorBrowse hasPagination />,
     extractPaths: true,
@@ -1388,6 +1413,11 @@ const routes = [
       'contributor',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'contributors', 'detail')
+      return _pathArray
+    },
     title: 'Contributor Detail, {$dialect_name}',
     page: <Pages.ContributorDetail />,
     extractPaths: true,
@@ -1405,6 +1435,11 @@ const routes = [
       'create',
       'contributor',
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'contributors', 'create')
+      return _pathArray
+    },
     title: 'Create Contributor, {$dialect_name}',
     page: <Pages.ContributorCreate />,
     extractPaths: true,
@@ -1423,6 +1458,11 @@ const routes = [
       'contributor',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 3, 3, 'contributors', 'edit')
+      return _pathArray
+    },
     title: 'Edit Contributor, {$dialect_name}',
     page: <Pages.ContributorEdit />,
     extractPaths: true,
@@ -1459,6 +1499,11 @@ const routes = [
       'phrasebooks',
       ...PAGINATION_PATH,
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2)
+      return _pathArray
+    },
     title: 'Browse Phrasebooks, {$dialect_name}',
     page: <Pages.PhrasebookBrowse hasPagination />,
     extractPaths: true,
@@ -1476,6 +1521,11 @@ const routes = [
       'phrasebook',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'phrasebooks', 'detail')
+      return _pathArray
+    },
     title: 'Phrasebook Detail, {$dialect_name}',
     page: <Pages.PhrasebookDetail />,
     extractPaths: true,
@@ -1493,6 +1543,11 @@ const routes = [
       'create',
       'phrasebook',
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'phrasebooks', 'create')
+      return _pathArray
+    },
     title: 'Create Phrasebook, {$dialect_name}',
     page: <Pages.PhrasebookCreate />,
     extractPaths: true,
@@ -1540,6 +1595,11 @@ const routes = [
       'phrasebook',
       new paramMatch('itemId', ANYTHING_BUT_SLASH),
     ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 3, 3, 'phrasebooks', 'edit')
+      return _pathArray
+    },
     title: 'Edit Phrasebook, {$dialect_name}',
     page: <Pages.PhrasebookEdit />,
     extractPaths: true,

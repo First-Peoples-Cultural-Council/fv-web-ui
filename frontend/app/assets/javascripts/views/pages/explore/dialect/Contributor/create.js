@@ -236,12 +236,12 @@ export class Contributor extends React.Component {
     const now = Date.now()
     const name = formData['dc:title']
     const file = formData['fvcontributor:profile_picture'] || null
-
+    /*
     const results = await this.props.createContributor({
       parentDoc: `${this.DIALECT_PATH}/Contributors`,
       docParams: {
         type: 'FVContributor',
-        name: name,
+        name,
         properties: {
           'dc:description': formData['dc:description'],
           'dc:title': formData['dc:title'],
@@ -250,7 +250,21 @@ export class Contributor extends React.Component {
       file: file[0],
       timestamp: now,
       xpath: 'fvcontributor:profile_picture',
-    })
+    })*/
+    const results = await this.props.createContributor(
+      `${this.DIALECT_PATH}/Contributors`,
+      {
+        type: 'FVContributor',
+        name,
+        properties: {
+          'dc:description': formData['dc:description'],
+          'dc:title': formData['dc:title'],
+        },
+      },
+      file[0],
+      now,
+      'fvcontributor:profile_picture'
+    )
 
     if (results.success === false) {
       this.setState({

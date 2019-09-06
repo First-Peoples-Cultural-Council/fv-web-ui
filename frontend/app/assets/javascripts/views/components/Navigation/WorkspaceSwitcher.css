@@ -12,26 +12,37 @@
 }
 
 .WorkspaceSwitcher__item {
-  border-radius: 4px 4px 0 0;
+  border: none;
   color: #000;
   display: flex;
   height: 100%;
   align-items: center;
   padding: 10px 15px;
+  background-color: rgba(255, 255, 255, 0);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .WorkspaceSwitcher__item:hover,
 .WorkspaceSwitcher__item:focus {
-  background-color: #dcdcdc;
-  cursor: pointer;
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 /* MODIFIER */
-.WorkspaceSwitcher__itemContainer--active {
-  border-bottom: 4px solid #a7a7a7;
+.WorkspaceSwitcher--section .WorkspaceSwitcher__item:hover,
+.WorkspaceSwitcher--section .WorkspaceSwitcher__item:focus {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+}
+.WorkspaceSwitcher--workspace .WorkspaceSwitcher__item:hover,
+.WorkspaceSwitcher--workspace .WorkspaceSwitcher__item:focus {
+  background-color: rgba(77, 148, 141, 0.5);
+  color: #000;
 }
 .WorkspaceSwitcher__itemContainer--active .WorkspaceSwitcher__item {
   color: #000;
-  background-color: transparent;
-  padding-bottom: 5px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.WorkspaceSwitcher--workspace .WorkspaceSwitcher__itemContainer--active .WorkspaceSwitcher__item {
+  color: #fff;
+  background-color: rgba(77, 148, 141, 1);
 }

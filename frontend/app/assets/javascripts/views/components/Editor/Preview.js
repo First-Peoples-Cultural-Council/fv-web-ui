@@ -43,129 +43,11 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia'
 import CardContent from '@material-ui/core/CardContent'
 import CircularProgress from '@material-ui/core/CircularProgress'
+
+import PreviewMetaDataContributor from 'views/components/Editor/PreviewMetaDataContributor'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-
-const GetMetaData = (type, response) => {
-  const metadata = []
-
-  /**
-   * Recorders
-   */
-  const recorders = []
-
-  const recordersData = selectn('contextParameters.media.recorders', response) || []
-  recordersData.map((recorder, key) => {
-    // NOTE: this is where the burst of missing prop warnings comes from
-    recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
-  })
-
-  metadata.push({
-    label: 'Recorder(s)',
-    value: recorders,
-  })
-
-  /**
-   * Contributors
-   */
-  const contributors = []
-  const contributorsData = selectn('contextParameters.media.sources', response) || []
-
-  contributorsData.map((contributor, key) => {
-    contributors.push(<Preview expandedValue={contributor} key={key} type="FVContributor" />)
-  })
-
-  metadata.push({
-    label: intl.trans('contributor_s', 'Contributor(s)', 'first'),
-    value: contributors,
-  })
-
-  /**
-   * Origin
-   */
-  if (selectn('contextParameters.media.origin', response)) {
-    metadata.push({
-      label: intl.trans('original_associated_word_phrase', 'Original Associated Word/Phrase', 'words'),
-      value:
-        selectn('contextParameters.media.origin.dc:title', response) +
-        ' (Path: ' +
-        selectn('contextParameters.media.origin.path', response) +
-        ')',
-    })
-  }
-
-  /**
-   * Child Focused
-   */
-  metadata.push({
-    label: intl.trans('models.child_focused', 'Child Focused', 'words'),
-    value: selectn('properties.fvm:child_focused', response)
-      ? intl.trans('yes', 'Yes', 'first')
-      : intl.trans('no', 'No', 'first'),
-  })
-
-  /**
-   * Shared
-   */
-  metadata.push({
-    label: intl.trans('shared', 'Shared', 'first'),
-    value: selectn('properties.fvm:shared', response)
-      ? intl.trans('yes', 'Yes', 'first')
-      : intl.trans('no', 'No', 'first'),
-  })
-
-  /**
-   * Direct Link
-   */
-  if (selectn('path', response)) {
-    const directLinkValue = NavigationHelpers.generateUIDPath('explore', response, 'media')
-
-    metadata.push({
-      label: intl.trans('direct_link', 'Direct Link', 'words'),
-      value: (
-        <span>
-          <input
-            type="textbox"
-            readOnly
-            style={{ width: '100%', padding: '5px', maxWidth: '650px' }}
-            value={directLinkValue}
-          />{' '}
-          <br />
-          <a href={directLinkValue} target="_blank" rel="noopener noreferrer">
-            {intl.trans('go_to_record', 'Go to Record', 'words')}
-          </a>
-        </span>
-      ),
-    })
-  }
-
-  /**
-   * File size
-   */
-  metadata.push({
-    label: intl.trans('size', 'Size', 'first'),
-    value: StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response)),
-  })
-
-  /**
-   * Status
-   */
-  metadata.push({
-    label: intl.trans('status', 'Status', 'first'),
-    value: selectn('state', response),
-  })
-
-  /**
-   * Date created
-   */
-  metadata.push({
-    label: intl.trans('date_created', 'Date Created', 'first'),
-    value: StringHelpers.formatUTCDateString(selectn('properties.dc:created', response)),
-  })
-
-  return metadata
-}
 
 const { bool, func, object, string } = PropTypes
 
@@ -211,63 +93,48 @@ export class Preview extends Component {
     minimal: false,
     initiallyExpanded: false,
   }
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showAudioMetadata: false,
-    }
-
-    // Bind methods to 'this'
-    ;['_handleExpandChange'].forEach((method) => (this[method] = this[method].bind(this)))
+  state = {
+    showAudioMetadata: false,
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Only fetch from server if expanded value isn't provided
     if (!this.props.expandedValue && this.props.id) {
       switch (this.props.type) {
         case 'FVWord':
-          this.props.fetchWord(this.props.id)
+          await this.props.fetchWord(this.props.id)
           break
 
         case 'FVPhrase':
-          this.props.fetchPhrase(this.props.id)
+          await this.props.fetchPhrase(this.props.id)
           break
 
         case 'FVCategory':
-          this.props.fetchCategory(this.props.id)
+          await this.props.fetchCategory(this.props.id)
           break
 
         case 'FVPicture':
-          this.props.fetchPicture(this.props.id)
+          await this.props.fetchPicture(this.props.id)
           break
 
         case 'FVAudio':
-          this.props.fetchAudio(this.props.id)
+          await this.props.fetchAudio(this.props.id)
           break
 
         case 'FVVideo':
-          this.props.fetchVideo(this.props.id)
+          await this.props.fetchVideo(this.props.id)
           break
 
         case 'FVContributor':
-          this.props.fetchContributor(this.props.id)
+          await this.props.fetchContributor(this.props.id)
           break
 
         case 'FVLink':
-          this.props.fetchLink(this.props.id)
+          await this.props.fetchLink(this.props.id)
           break
         default: // NOTE: do nothing
       }
     }
-  }
-
-  /**
-   * Request additional media info when expanded.
-   */
-  _handleExpandChange(id, fetchFunc /*, event, expanded*/) {
-    fetchFunc(id)
   }
 
   render() {
@@ -498,12 +365,12 @@ export class Preview extends Component {
                   style={{ height: 'inherit', padding: '16px 0' }}
                 />
                 <CardHeader
-                  className="card-header-custom"
-                  title={intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
-                  titleStyle={{ lineHeight: 'initial' }}
-                  titleColor={themePalette.alternateTextColor}
                   actAsExpander
+                  className="card-header-custom"
                   showExpandableButton
+                  title={intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
+                  titleColor={themePalette.alternateTextColor}
+                  titleStyle={{ lineHeight: 'initial' }}
                   style={{
                     height: 'initial',
                     backgroundColor: themePalette.primary2Color,
@@ -519,7 +386,7 @@ export class Preview extends Component {
                       overflow: 'hidden',
                       ...this.props.metadataListStyles,
                     }}
-                    metadata={GetMetaData('picture', pictureResponse)}
+                    metadata={this._getMetaData('picture', pictureResponse)}
                   />
                 </CardContent>
               </Card>
@@ -630,15 +497,7 @@ export class Preview extends Component {
                   }}
                 />
                 <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
-                  <MetadataList
-                    style={{
-                      lineHeight: 'initial',
-                      maxHeight: '100%',
-                      overflow: 'hidden',
-                      ...this.props.metadataListStyles,
-                    }}
-                    metadata={GetMetaData('audio', audioResponse)}
-                  />
+                  <MetadataList metadata={this._getMetaData('audio', audioResponse)} />
                 </CardContent>
               </Card>
             )
@@ -739,7 +598,7 @@ export class Preview extends Component {
                       overflow: 'hidden',
                       ...this.props.metadataListStyles,
                     }}
-                    metadata={GetMetaData('video', videoResponse)}
+                    metadata={this._getMetaData('video', videoResponse)}
                   />
                 </CardContent>
               </Card>
@@ -842,6 +701,142 @@ export class Preview extends Component {
     }
 
     return <div style={previewStyles}>{body}</div>
+  }
+  /**
+   * Request additional media info when expanded.
+   */
+  _handleExpandChange = (id, fetchFunc /*, event, expanded*/) => {
+    fetchFunc(id)
+  }
+
+  _getMetaData = (type, response) => {
+    // if (type === 'audio') {
+    //   debugger
+    // }
+    const metadata = []
+
+    /**
+     * Recorders
+     */
+    const recorders = []
+
+    const recordersData = selectn('contextParameters.media.recorders', response) || []
+    recordersData.map((recorder, key) => {
+      // NOTE: The following triggers FW-299
+      // recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
+      recorders.push(<PreviewMetaDataContributor expandedValue={recorder} key={key} />)
+    })
+
+    metadata.push({
+      label: 'Recorder(s)',
+      value: recorders,
+    })
+
+    /**
+     * Contributors
+     */
+    const contributors = []
+    const contributorsData = selectn('contextParameters.media.sources', response) || []
+
+    contributorsData.map((contributor, key) => {
+      // NOTE: The following triggers FW-299
+      // contributors.push(<Preview expandedValue={contributor} key={key} type="FVContributor" />)
+      contributors.push(<PreviewMetaDataContributor expandedValue={contributor} key={key} />)
+    })
+
+    metadata.push({
+      label: intl.trans('contributor_s', 'Contributor(s)', 'first'),
+      value: contributors,
+    })
+
+    /**
+     * Origin
+     */
+    if (selectn('contextParameters.media.origin', response)) {
+      metadata.push({
+        label: intl.trans('original_associated_word_phrase', 'Original Associated Word/Phrase', 'words'),
+        value:
+          selectn('contextParameters.media.origin.dc:title', response) +
+          ' (Path: ' +
+          selectn('contextParameters.media.origin.path', response) +
+          ')',
+      })
+    }
+
+    /**
+     * Child Focused
+     */
+    metadata.push({
+      label: intl.trans('models.child_focused', 'Child Focused', 'words'),
+      value: selectn('properties.fvm:child_focused', response)
+        ? intl.trans('yes', 'Yes', 'first')
+        : intl.trans('no', 'No', 'first'),
+    })
+
+    /**
+     * Shared
+     */
+    metadata.push({
+      label: intl.trans('shared', 'Shared', 'first'),
+      value: selectn('properties.fvm:shared', response)
+        ? intl.trans('yes', 'Yes', 'first')
+        : intl.trans('no', 'No', 'first'),
+    })
+
+    /**
+     * Direct Link
+     */
+    if (selectn('path', response)) {
+      const directLinkValue = NavigationHelpers.generateUIDPath('explore', response, 'media')
+
+      metadata.push({
+        label: intl.trans('direct_link', 'Direct Link', 'words'),
+        value: (
+          <span>
+            <input
+              type="textbox"
+              readOnly
+              style={{ width: '100%', padding: '5px', maxWidth: '650px' }}
+              value={directLinkValue}
+            />{' '}
+            <br />
+            <a href={directLinkValue} target="_blank" rel="noopener noreferrer">
+              {intl.trans('go_to_record', 'Go to Record', 'words')}
+            </a>
+          </span>
+        ),
+      })
+    }
+
+    /**
+     * File size
+     */
+    metadata.push({
+      label: intl.trans('size', 'Size', 'first'),
+      value: selectn('properties.file:content.length', response)
+        ? StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response))
+        : '-',
+    })
+
+    /**
+     * Status
+     */
+    metadata.push({
+      label: intl.trans('status', 'Status', 'first'),
+      value: selectn('state', response) ? selectn('state', response) : '-',
+    })
+
+    /**
+     * Date created
+     */
+    metadata.push({
+      label: intl.trans('date_created', 'Date Created', 'first'),
+      value: selectn('properties.dc:created', response)
+        ? StringHelpers.formatUTCDateString(selectn('properties.dc:created', response))
+        : '-',
+    })
+
+    return metadata
   }
 }
 

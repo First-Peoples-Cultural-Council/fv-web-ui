@@ -238,24 +238,6 @@ export class AddMediaComponent extends Component {
       default: // NOTE: do nothing
     }
 
-    //if (this.state.schema != undefined){
-    form = (
-      <form onSubmit={this._save} id="myForm" encType="multipart/form-data">
-        <t.form.Form
-          ref="form_media" // TODO: deprecated
-          options={selectn('FVResource', options)}
-          type={t.struct(selectn(this.props.type, fields))}
-          value={this.state.value}
-          context={this.props.dialect}
-          onChange={this._change}
-        />
-        <button type="submit" className={classNames('btn', 'btn-primary')}>
-          {intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
-        </button>
-      </form>
-    )
-    //}
-
     if (computeCreate && computeCreate.isFetching) {
       uploadText = (
         <div className={classNames('alert', 'alert-info')} role="alert">
@@ -264,20 +246,52 @@ export class AddMediaComponent extends Component {
       )
     }
 
+    //if (this.state.schema != undefined){
+    form = (
+      <form onSubmit={this._save} id="AddMediaComponent" encType="multipart/form-data">
+        <t.form.Form
+          ref="form_media" // TODO: deprecated
+          options={selectn('FVResource', options)}
+          type={t.struct(selectn(this.props.type, fields))}
+          value={this.state.value}
+          context={this.props.dialect}
+          onChange={this._change}
+        />
+        {uploadText}
+        <button type="submit" className={classNames('btn', 'btn-primary')}>
+          {intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
+        </button>
+      </form>
+    )
+    //}
+
     if (computeCreate && computeCreate.success) {
-      uploadText = (
-        <div className={classNames('alert', 'alert-success')} role="success">
-          Upload successful!
+      form = (
+        <div>
+          <div className={classNames('alert', 'alert-success')} role="success">
+            Upload successful!
+          </div>
+
+          <button
+            className="FlatButton FlatButton--primary"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              this._handleSelectElement(computeCreate.response)
+            }}
+          >
+            {intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
+          </button>
         </div>
       )
-      actions.push(
-        <FlatButton
-          label={intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
-          primary
-          onClick={this._handleSelectElement.bind(this, computeCreate.response)}
-        />
-      )
-      form = ''
+      // actions.push(
+      //   <FlatButton
+      //     label={intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
+      //     primary
+      //     onClick={this._handleSelectElement.bind(this, computeCreate.response)}
+      //   />
+      // )
+      // form = ''
     }
 
     return (
@@ -303,7 +317,6 @@ export class AddMediaComponent extends Component {
         >
           <div className="form-horizontal">
             {this.state.typeError}
-            {uploadText}
             {form}
           </div>
         </Dialog>

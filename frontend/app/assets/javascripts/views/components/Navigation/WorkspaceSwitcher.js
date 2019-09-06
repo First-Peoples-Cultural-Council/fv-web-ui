@@ -57,26 +57,24 @@ export class WorkspaceSwitcher extends Component {
     className: '',
   }
 
-  constructor(props, context) {
-    super(props, context)
-  }
-
   _getPotentialUUID = () => {
     return this.props.splitWindowPath[this.props.splitWindowPath.length - 1]
   }
 
-  _getSourceDocument = () => {
-    if (StringHelpers.isUUID(this._getPotentialUUID())) {
-      this.props.fetchSourceDocument(this._getPotentialUUID())
+  _getSourceDocument = async () => {
+    const potentialUUID = this._getPotentialUUID()
+    if (StringHelpers.isUUID(potentialUUID)) {
+      await this.props.fetchSourceDocument(potentialUUID)
     } else {
       window.location.href = this._toggleWorkspaceSections(this.props.windowPath)
     }
   }
 
-  _getPublishedDocument = () => {
-    if (StringHelpers.isUUID(this._getPotentialUUID())) {
-      this.props.fetchResultSet('published_for_' + this._getPotentialUUID(), {
-        query: "SELECT ecm:uuid FROM Document WHERE ecm:proxyVersionableId = '" + this._getPotentialUUID() + "'",
+  _getPublishedDocument = async () => {
+    const potentialUUID = this._getPotentialUUID()
+    if (StringHelpers.isUUID(potentialUUID)) {
+      await this.props.fetchResultSet('published_for_' + potentialUUID, {
+        query: "SELECT ecm:uuid FROM Document WHERE ecm:proxyVersionableId = '" + potentialUUID + "'",
         language: 'nxql',
         pageSize: 1,
       })
@@ -94,44 +92,31 @@ export class WorkspaceSwitcher extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Moving from Workspaces to sections
+    const potentialUUID = this._getPotentialUUID()
     if (this._isSection()) {
-      const prev_source_doc = ProviderHelpers.getEntry(prevProps.computeSourceDocument, this._getPotentialUUID())
-      const next_source_doc = ProviderHelpers.getEntry(prevProps.computeSourceDocument, this._getPotentialUUID())
+      // Moving from Workspaces to sections
+      const prev_source_doc = ProviderHelpers.getEntry(prevProps.computeSourceDocument, potentialUUID)
+      const next_source_doc = ProviderHelpers.getEntry(this.props.computeSourceDocument, potentialUUID)
 
       const next_uuid = selectn('response.uid', next_source_doc)
 
       // 'Redirect' on success
       if (selectn('response.uid', prev_source_doc) != next_uuid && StringHelpers.isUUID(next_uuid)) {
-        window.location.href = this._toggleWorkspaceSections(this.props.windowPath).replace(
-          this._getPotentialUUID(),
-          next_uuid
-        )
+        window.location.href = this._toggleWorkspaceSections(this.props.windowPath).replace(potentialUUID, next_uuid)
       }
     } else {
       // Moving from sections to Workspaces
-      const prev_result_set = ProviderHelpers.getEntry(
-        prevProps.computeResultSet,
-        'published_for_' + this._getPotentialUUID()
-      )
-      const next_result_set = ProviderHelpers.getEntry(
-        this.props.computeResultSet,
-        'published_for_' + this._getPotentialUUID()
-      )
+      const prev_result_set = ProviderHelpers.getEntry(prevProps.computeResultSet, 'published_for_' + potentialUUID)
+      const next_result_set = ProviderHelpers.getEntry(this.props.computeResultSet, 'published_for_' + potentialUUID)
 
       const next_uuid = selectn('response.entries[0].ecm:uuid', next_result_set)
 
       // 'Redirect' on success
       if (selectn('response.entries[0].ecm:uuid', prev_result_set) != next_uuid && StringHelpers.isUUID(next_uuid)) {
-        window.location.href = this._toggleWorkspaceSections(this.props.windowPath).replace(
-          this._getPotentialUUID(),
-          next_uuid
-        )
+        window.location.href = this._toggleWorkspaceSections(this.props.windowPath).replace(potentialUUID, next_uuid)
       }
     }
   }
-
-  // Fetch if missing
 
   render() {
     let noPublishedDocFound = ''
@@ -145,29 +130,46 @@ export class WorkspaceSwitcher extends Component {
     }
 
     return (
-      <ul className={`WorkspaceSwitcher ${this.props.className}`}>
+      <ul
+        className={`WorkspaceSwitcher ${this.props.className} ${
+          this._isSection() ? 'WorkspaceSwitcher--section' : 'WorkspaceSwitcher--workspace'
+        }`}
+      >
         <li
           role="presentation"
           className={`WorkspaceSwitcher__itemContainer ${
             this._isSection() ? '' : 'WorkspaceSwitcher__itemContainer--active'
           }`}
         >
-          <a className="WorkspaceSwitcher__item" onClick={() => (this._isSection() ? this._getSourceDocument() : null)}>
+          <button
+            className="WorkspaceSwitcher__item"
+            onClick={(e) => {
+              e.preventDefault()
+              if (this._isSection()) {
+                this._getSourceDocument()
+              }
+            }}
+          >
             {intl.translate({
               key: 'workspace',
               default: 'Workspace',
               case: 'words',
             })}
-          </a>
+          </button>
         </li>
         <li
           className={`WorkspaceSwitcher__itemContainer ${
             this._isSection() ? 'WorkspaceSwitcher__itemContainer--active' : ''
           }`}
         >
-          <a
+          <button
             className="WorkspaceSwitcher__item"
-            onClick={() => (!this._isSection() ? this._getPublishedDocument() : null)}
+            onClick={(e) => {
+              e.preventDefault()
+              if (!this._isSection()) {
+                this._getPublishedDocument()
+              }
+            }}
           >
             {intl.translate({
               key: 'public_view',
@@ -175,7 +177,7 @@ export class WorkspaceSwitcher extends Component {
               case: 'words',
             })}
             {noPublishedDocFound}
-          </a>
+          </button>
         </li>
       </ul>
     )
