@@ -28,16 +28,12 @@ import UIHelpers from 'common/UIHelpers'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Popover from '@material-ui/core/Popover'
-// import RadioButton from '@material-ui/core/Radio'
-// import RadioButtonGroup from '@material-ui/core/RadioGroup'
-// import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-
 import Select from '@material-ui/core/Select'
 import TextField from '@material-ui/core/TextField'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
@@ -344,7 +340,12 @@ export class Navigation extends Component {
             <Typography variant="title" style={{ color: '#fff', padding: '0 0 0 15px', fontSize: '15px' }}>
               {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
             </Typography>
-            <Select value={this.intl.locale} onChange={this._handleChangeLocale} /*labelStyle={{ color: '#fff' }}*/>
+            <Select
+              value={this.intl.locale || 'en'}
+              onChange={(event) => {
+                this._handleChangeLocale(event.target.value)
+              }}
+            >
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="fr">Français</MenuItem>
               {/* <MenuItem value="sp">Español</MenuItem> */}
@@ -504,7 +505,7 @@ export class Navigation extends Component {
         style={{
           maxWidth: isDialect ? '320px' : '220px',
         }}
-        transformOrigin={{ horizontal: 'middle', vertical: 'top' }}
+        // transformOrigin={{ horizontal: 'middle', vertical: 'top' }}
         useLayerForClickAway={false}
       >
         {popoverContent}
@@ -575,9 +576,9 @@ export class Navigation extends Component {
     })
   }
 
-  _handleChangeLocale = (e, n, v) => {
-    if (v !== this.intl.locale) {
-      this.intl.locale = v
+  _handleChangeLocale = (value) => {
+    if (value !== this.intl.locale) {
+      this.intl.locale = value
       setTimeout(() => {
         // timeout, such that the select box doesn't freeze in a wierd way (looks bad)
         window.location.reload(true)
@@ -586,7 +587,7 @@ export class Navigation extends Component {
   }
 
   _handleOpenMenuRequest = () => {
-    this.props.toggleMenuAction('AppLeftNav')
+    this.props.toggleMenuAction()
   }
 
   _setExplorePath = (props = this.props) => {
