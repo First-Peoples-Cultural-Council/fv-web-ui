@@ -170,7 +170,7 @@ export class KidsNavigation extends Component {
         <Toolbar
           showMenuIconButton
           onRightIconButtonTouchTap={() => {
-            this.props.toggleMenuAction('AppLeftNav')
+            this.props.toggleMenuAction()
           }}
         >
           <a style={{ textDecoration: 'none', color: '#fff' }} onClick={this._onNavigateRequest.bind(this, homeURL)}>
