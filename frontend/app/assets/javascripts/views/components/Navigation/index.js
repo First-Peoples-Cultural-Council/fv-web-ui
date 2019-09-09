@@ -47,7 +47,7 @@ import Settings from '@material-ui/icons/Settings'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 
 import Login from 'views/components/Navigation/Login'
-import AppLeftNav from 'views/components/Navigation/AppLeftNav'
+import AppLeftNav from 'views/components/Navigation/AppLeftNav/index.v2'
 
 import IntlService from 'views/services/intl'
 
