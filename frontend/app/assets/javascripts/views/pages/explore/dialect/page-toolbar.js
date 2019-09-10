@@ -291,7 +291,7 @@ export class PageToolbar extends Component {
                         position: 'relative',
                       }}
                     >
-                      <Toggle
+                      <Switch
                         toggled={documentPublished}
                         onToggle={this._documentActionsTogglePublished}
                         disabled={!documentEnabled && !documentPublished}
@@ -487,21 +487,18 @@ export class PageToolbar extends Component {
                 <MenuItem
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')}
                   key="media"
-                >
-                  {intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
-                </MenuItem>,
-                <MenuItem
-                  key="contributors"
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
-                >
-                  {intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
-                </MenuItem>,
-                <MenuItem
-                  key="recorders"
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
-                >
-                  {intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
-                </MenuItem>,
+                  primaryText={intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
+                />,
+                // <MenuItem
+                //   key="contributors"
+                //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
+                //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
+                // />,
+                // <MenuItem
+                //   key="recorders"
+                //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
+                //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
+                // />,
                 <MenuItem
                   key="phrasebooks"
                   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
