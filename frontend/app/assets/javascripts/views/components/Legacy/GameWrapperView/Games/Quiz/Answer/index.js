@@ -34,11 +34,11 @@ class Answer extends React.Component {
     this.state = {}
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   _getStyles() {
     return {
@@ -64,8 +64,8 @@ class Answer extends React.Component {
   }
 }
 
-Answer.childContextTypes = {
-  muiTheme: PropTypes.object,
-}
+// Answer.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default Answer

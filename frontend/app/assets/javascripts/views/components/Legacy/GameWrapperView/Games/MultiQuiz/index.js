@@ -92,11 +92,11 @@ class MultiQuiz extends React.Component {
     PubSub.subscribe(this.eventName + ':DATALOADED', this.displayAnswers)
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   displayAnswers(selectedAnswerKey = null) {
     const selected = false
@@ -293,12 +293,12 @@ class MultiQuiz extends React.Component {
 }
 
 MultiQuiz.contextTypes = {
-  muiTheme: PropTypes.object,
+  // muiTheme: PropTypes.object,
   router: PropTypes.func,
 }
 
-MultiQuiz.childContextTypes = {
-  muiTheme: PropTypes.object,
-}
+// MultiQuiz.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default MultiQuiz

@@ -40,10 +40,6 @@ export class PageKidsHome extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  /*static contextTypes = {
-        muiTheme: React.PropTypes.object.isRequired
-    };*/
-
   constructor(props, context) {
     super(props, context)
 

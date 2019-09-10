@@ -54,25 +54,6 @@ export class KidsNavigation extends Component {
     toggleMenuAction: func.isRequired,
   }
 
-  /*static childContextTypes = {
-      client: React.object,
-      muiTheme: React.object,
-      siteProps: React.object
-    };
-
-    static contextTypes = {
-        muiTheme: React.object.isRequired,
-        siteProps: React.object.isRequired
-    };
-
-    getChildContext() {
-      return {
-        //client: this.props.clientStore.client,
-        muiTheme: this.context.muiTheme,
-        siteProps: this.context.siteProps
-      };
-    }*/
-
   constructor(props, context) {
     super(props, context)
 

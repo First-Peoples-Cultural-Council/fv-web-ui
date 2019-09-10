@@ -47,10 +47,6 @@ export class ServiceShortURL extends Component {
     queryDialect2ByShortURL: func.isRequired,
   }
 
-  static contextTypes = {
-    muiTheme: object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
 

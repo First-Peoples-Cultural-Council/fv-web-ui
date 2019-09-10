@@ -37,10 +37,6 @@ export default class AuthorizationFilter extends Component {
     showAuthError: false,
   }
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
 

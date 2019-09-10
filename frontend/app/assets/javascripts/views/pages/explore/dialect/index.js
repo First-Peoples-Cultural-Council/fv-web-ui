@@ -86,10 +86,6 @@ export class ExploreDialect extends Component {
     updatePortal: func.isRequired,
   }
 
-  static contextTypes = {
-    muiTheme: object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
 

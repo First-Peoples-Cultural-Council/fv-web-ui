@@ -43,10 +43,6 @@ export class Kids extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  static contextTypes = {
-    muiTheme: object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
   }

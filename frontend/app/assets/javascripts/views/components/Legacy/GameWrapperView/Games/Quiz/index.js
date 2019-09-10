@@ -117,11 +117,11 @@ class Quiz extends React.Component {
     PubSub.subscribe(this.eventName + ':DATALOADED', this.displayAnswers)
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   displayAnswers(selectedAnswerKey = null) {
     const selected = false
@@ -311,12 +311,12 @@ class Quiz extends React.Component {
 }
 
 Quiz.contextTypes = {
-  muiTheme: PropTypes.object,
+  // muiTheme: PropTypes.object,
   router: PropTypes.func,
 }
 
-Quiz.childContextTypes = {
-  muiTheme: PropTypes.object,
-}
+// Quiz.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default Quiz

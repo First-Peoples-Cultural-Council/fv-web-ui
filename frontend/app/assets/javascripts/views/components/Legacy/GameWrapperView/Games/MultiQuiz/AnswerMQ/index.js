@@ -81,11 +81,11 @@ class AnswerMQ extends React.Component {
     }
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   _handleClick() {
     if (this.state.audio == null) {
@@ -148,8 +148,8 @@ class AnswerMQ extends React.Component {
   }
 }
 
-AnswerMQ.childContextTypes = {
-  muiTheme: PropTypes.object,
-}
+// AnswerMQ.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default AnswerMQ

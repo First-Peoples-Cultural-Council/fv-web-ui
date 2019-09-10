@@ -73,10 +73,6 @@ export class PageToolbar extends Component {
     actions: [], // ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options']
   }
 
-  static contextTypes = {
-    muiTheme: object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
 
@@ -166,9 +162,9 @@ export class PageToolbar extends Component {
 
     const toolbarGroupItem = {
       float: 'left',
-      margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px ${
-        this.context.muiTheme.baseTheme.spacing.desktopGutter
-      }px`,
+      // margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px ${
+      //   this.context.muiTheme.baseTheme.spacing.desktopGutter
+      // }px`,
       position: 'relative',
     }
 
@@ -213,12 +209,12 @@ export class PageToolbar extends Component {
       ? 'Request approval from the Language Admin to'
       : `${intl.trans('request', 'Request', 'first')}`
     const toolbarStyles = isRecorderWithApproval
-      ? { height: 'auto', minHeight: `${this.context.muiTheme.toolbar.height}px` }
+      ? { height: 'auto' /*, minHeight: `${this.context.muiTheme.toolbar.height}px`*/ }
       : {}
 
     const toolbarGroupItemIsRecorderWithApproval = {
       clear: 'both',
-      margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px 0`,
+      // margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px 0`,
       position: 'relative',
     }
     const requestButtonGroupStyles = isRecorderWithApproval ? toolbarGroupItemIsRecorderWithApproval : toolbarGroupItem
@@ -229,7 +225,6 @@ export class PageToolbar extends Component {
       >
         <div className="visible-xs" style={{ textAlign: 'right' }}>
           <IconButton
-            // iconClassName="material-icons"
             onClick={(e) => {
               this.setState({ showActionsMobile: !this.state.showActionsMobile })
               e.preventDefault()

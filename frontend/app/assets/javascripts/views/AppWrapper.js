@@ -71,6 +71,7 @@ class AppWrapper extends Component {
     windowPath: string.isRequired,
   }
 
+  /*
   static childContextTypes = {
     muiTheme: PropTypes.object,
   }
@@ -86,9 +87,7 @@ class AppWrapper extends Component {
   // TODO: The legacy API will continue working for all 16.x releases.
   // via: https://reactjs.org/docs/legacy-context.html
 
-  /**
-   * Pass essential context to all children
-   */
+  // Pass essential context to all children
   getChildContext() {
     const newContext = {
       muiTheme: this.props.properties.theme.v0.palette,
@@ -96,6 +95,7 @@ class AppWrapper extends Component {
 
     return newContext
   }
+  */
 
   constructor(props, context) {
     super(props, context)

@@ -54,10 +54,6 @@ export class PageDebugAPI extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  /*static contextTypes = {
-      muiTheme: React.object.isRequired
-  };*/
-
   constructor(props, context) {
     super(props, context)
     /*let computeEntities = new List();

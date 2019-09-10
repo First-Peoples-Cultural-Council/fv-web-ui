@@ -56,10 +56,6 @@ export class AutoSuggestComponent extends Component {
     fetchSharedWords: func.isRequired,
   }
 
-  static contextTypes = {
-    muiTheme: React.object,
-  }
-
   shouldRenderSuggestions(value) {
     return value.trim().length > 2
   }

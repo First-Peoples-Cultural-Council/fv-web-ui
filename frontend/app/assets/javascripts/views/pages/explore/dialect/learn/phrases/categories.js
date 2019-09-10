@@ -54,10 +54,6 @@ export class Categories extends Component {
     replaceWindowPath: func.isRequired,
   }
 
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
-
   constructor(props, context) {
     super(props, context)
 

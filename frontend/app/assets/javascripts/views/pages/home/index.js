@@ -59,10 +59,6 @@ export class PageHome extends Component {
     queryPage: func.isRequired,
   }
 
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
-
   intl = IntlService.instance
 
   constructor(props, context) {
