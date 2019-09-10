@@ -224,7 +224,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 
@@ -294,7 +294,7 @@ export class UserTasks extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody displayRowCheckbox={false}>
+                <tbody>
                   {userTasks}
                   {userRegistrationTasks}
                 </tbody>

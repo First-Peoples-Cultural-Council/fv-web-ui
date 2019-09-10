@@ -233,7 +233,7 @@ export class Tasks extends React.Component {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody displayRowCheckbox={false}>{userTasks}</TableBody>
+          <TableBody>{userTasks}</TableBody>
         </Table>
       ) : null
 
