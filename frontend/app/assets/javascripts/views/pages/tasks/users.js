@@ -282,7 +282,7 @@ export class UserTasks extends React.Component {
           >
             <div>
               <table border="1" style={{ width: '100%' }}>
-                <thead adjustForCheckbox={false} displaySelectAll={false}>
+                <thead>
                   <tr style={{ borderBottom: '1px solid #000' }}>
                     <th style={{ minWidth: '100px' }}>{intl.trans('last_name', 'Last Name', 'words')}</th>
                     <th style={{ minWidth: '100px' }}>{intl.trans('first_name', 'First Name', 'words')}</th>

@@ -215,7 +215,7 @@ export class Tasks extends React.Component {
     const userTasksTable =
       userTasks.length > 0 ? (
         <Table>
-          <TableHead adjustForCheckbox={false} displaySelectAll={false}>
+          <TableHead>
             <TableRow>
               <TableCell>
                 <span className="Tasks__colHeader">{intl.trans('document_title', 'Document Title', 'words')}</span>
