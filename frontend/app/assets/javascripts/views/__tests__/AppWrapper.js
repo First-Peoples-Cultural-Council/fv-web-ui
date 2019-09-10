@@ -12,7 +12,7 @@ import { Provider } from 'react-redux'
 import store from 'providers/redux/store'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
 import ConfGlobal from 'conf/local.js'
 
 // Views
@@ -31,7 +31,7 @@ const context = {
       pageTitleParams: null,
       domain: ConfGlobal.domain,
       theme: {
-        palette: createdMuiTheme,
+        ...createdMuiTheme,
         id: 'default',
       },
     },

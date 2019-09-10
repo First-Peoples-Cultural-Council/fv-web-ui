@@ -8,7 +8,7 @@ export default class TextHeader extends Component {
   }
 
   render() {
-    const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
+    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props.properties)
     const sectionHrStyle = { backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }
 
     return (

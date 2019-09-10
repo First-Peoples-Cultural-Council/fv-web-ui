@@ -18,12 +18,13 @@ import {
 } from './actionTypes'
 
 import { createMuiTheme } from '@material-ui/core/styles'
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
+const theme = createMuiTheme(FirstVoicesTheme)
 const initialStateProperties = {
   title: ConfGlobal.title,
   pageTitleParams: null,
   domain: ConfGlobal.domain,
-  theme: { palette: createMuiTheme(FirstVoicesTheme), id: 'default' },
+  theme: { ...theme, id: 'default' },
 }
 const DEFAULT_ROUTE_PARAMS = {
   pageSize: '10', // using strings since these values are pulled from the url bar

@@ -91,7 +91,7 @@ class AppWrapper extends Component {
    */
   getChildContext() {
     const newContext = {
-      muiTheme: this.props.properties.theme.palette,
+      muiTheme: this.props.properties.theme.v0.palette,
     }
 
     return newContext
@@ -128,7 +128,7 @@ class AppWrapper extends Component {
       <div
         id="AppWrapper"
         style={{
-          backgroundColor: selectn('theme.palette.basePalette.wrapper.backgroundColor', this.props.properties),
+          backgroundColor: selectn('theme.v0.wrapper.backgroundColor', this.props.properties),
           fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
         }}
       >

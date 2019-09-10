@@ -17,7 +17,8 @@ import { cyan, pink, grey } from '@material-ui/core/colors'
 import Spacing from '@material-ui/core/styles/spacing'
 import zIndex from '@material-ui/core/styles/zIndex'
 
-export default {
+// v0
+const v0 = {
   spacing: Spacing,
   zIndex: zIndex,
   typography: {
@@ -33,10 +34,14 @@ export default {
     primary1Color: '#b40000',
     primary2Color: cyan[700],
     primary3Color: grey[800],
+    // primary4Color
+    // primary4ColorLightest
     accent1Color: pink.A200,
     accent2Color: grey[100],
     accent3Color: grey[500],
+    // accent4Color
     textColor: grey[900],
+    // textColorFaded
     alternateTextColor: grey[50],
     canvasColor: grey[50],
     borderColor: grey[300],
@@ -46,4 +51,35 @@ export default {
   wrapper: {
     backgroundColor: grey[50],
   },
+}
+
+// V1
+export const FirstVoicesKidsThemeV1 = {
+  spacing: Spacing,
+  zIndex: zIndex,
+  typography: {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: 18,
+  },
+  palette: {
+    primary: {
+      light: '#ee492d',
+      main: '#b40000',
+      dark: '#7d0000',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      light: '#5888a4',
+      main: '#275b75',
+      dark: '#003249',
+      //   contrastText: getContrastText(palette.secondary.A400),
+    },
+    // error: {
+    //   light: palette.error[300],
+    //   main: palette.error[500],
+    //   dark: palette.error[700],
+    //   contrastText: getContrastText(palette.error[500]),
+    // },
+  },
+  v0,
 }

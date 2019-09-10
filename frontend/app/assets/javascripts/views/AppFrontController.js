@@ -266,7 +266,7 @@ export class AppFrontController extends Component {
   }
 
   _renderWithBreadcrumb = (reactElement, matchedPage, props, theme) => {
-    const themePalette = props.properties.theme.palette
+    const themePalette = props.properties.theme.v0.palette
     const { routeParams } = reactElement.props
     const { /*splitWindowPath, */ computeLogin } = props
     const { routes } = this.state

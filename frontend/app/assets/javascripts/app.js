@@ -20,7 +20,7 @@ import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
 
 import ConfGlobal from 'conf/local.js'
 
@@ -32,7 +32,6 @@ import store from 'providers/redux/store'
 import AppWrapper from 'views/AppWrapper'
 
 require('!style-loader!css-loader!normalize.css')
-require('bootstrap/less/bootstrap')
 require('styles/main')
 
 const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
@@ -43,7 +42,7 @@ const context = {
       pageTitleParams: null,
       domain: ConfGlobal.domain,
       theme: {
-        palette: createdMuiTheme,
+        ...createdMuiTheme,
         id: 'default',
       },
     },

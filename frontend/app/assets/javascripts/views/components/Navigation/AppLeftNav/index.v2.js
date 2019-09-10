@@ -107,6 +107,8 @@ export class AppLeftNav extends Component {
     ),
   }
   render() {
+    const _backgroundColor = selectn('properties.theme.palette.primary.main', this.props)
+    const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
     return (
       <Drawer
         style={{ height: 'auto' }}
@@ -115,20 +117,24 @@ export class AppLeftNav extends Component {
           this.props.toggleMenuAction()
         }}
       >
-        <div data-testid="LeftNav" style={{ backgroundColor: 'red' }}>
-          <Toolbar>
-            <button
-              type="button"
-              className="AppLeftNav__close"
-              data-testid="AppLeftNav__close"
-              onClick={() => {
-                this.props.toggleMenuAction()
-              }}
-            >
-              <Close className="AppLeftNav__closeIcon" />
-              <span className="visually-hidden">Menu close</span>
-            </button>
-            <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
+        <div data-testid="LeftNav">
+          <Toolbar disableGutters style={{ backgroundColor }}>
+            <div className="AppLeftNav__toolbar">
+              <button
+                type="button"
+                className="AppLeftNav__close"
+                data-testid="AppLeftNav__close"
+                onClick={() => {
+                  this.props.toggleMenuAction()
+                }}
+              >
+                <Close className="AppLeftNav__closeIcon" />
+                <span className="visually-hidden">Menu close</span>
+              </button>
+              <div className="AppLeftNav__logo">
+                <img src="assets/images/logo.png" alt={this.props.properties.title} />
+              </div>
+            </div>
           </Toolbar>
 
           {this.getNavigation()}

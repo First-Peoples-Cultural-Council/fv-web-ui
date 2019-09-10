@@ -26,6 +26,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
+// MAT-UI: Core
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -40,6 +41,7 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 
+// MAT-UI: Icons
 import Reorder from '@material-ui/icons/Reorder'
 import Search from '@material-ui/icons/Search'
 import Settings from '@material-ui/icons/Settings'
@@ -152,7 +154,6 @@ export class Navigation extends Component {
   }
 
   render() {
-    const themePalette = this.props.properties.theme.palette
     const isDialect = this.props.routeParams.hasOwnProperty('dialect_path')
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
@@ -177,6 +178,7 @@ export class Navigation extends Component {
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const hrefPath = NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)
 
+    const themePalette = this.props.properties.theme.v0.palette
     const _backgroundColor = selectn('properties.theme.palette.primary.main', this.props)
     const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
     const color = selectn('properties.theme.palette.primary.contrastText', this.props)

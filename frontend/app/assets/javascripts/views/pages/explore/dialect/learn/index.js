@@ -341,7 +341,7 @@ export class DialectLearn extends Component {
       })
     }
 
-    const themePalette = this.props.properties.theme.palette
+    const themePalette = this.props.properties.theme.v0.palette
     const dialectClassName = getDialectClassname(computeDialect2)
 
     return (
