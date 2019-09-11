@@ -32,6 +32,7 @@ import store from 'providers/redux/store'
 import AppWrapper from 'views/AppWrapper'
 
 require('!style-loader!css-loader!normalize.css')
+require('bootstrap/less/bootstrap')
 require('styles/main')
 
 const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
