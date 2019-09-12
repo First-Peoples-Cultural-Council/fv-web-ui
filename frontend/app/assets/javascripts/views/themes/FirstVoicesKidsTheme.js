@@ -33,6 +33,7 @@ const v0 = {
   palette: {
     primary1Color: '#b40000',
     primary2Color: cyan[700],
+    primary2ColorText: '#000',
     primary3Color: grey[800],
     // primary4Color
     // primary4ColorLightest

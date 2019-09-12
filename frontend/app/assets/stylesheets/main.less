@@ -779,23 +779,6 @@ audio::-webkit-media-controls-enclosure {
 /**
 * Responsive design fixes
 */
-.search-bar-mobile {
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  z-index: 99999;
-  position: fixed;
-  border: 1px #e8e8e8 solid;
-  padding: 20px 0 10px 0;
-  text-align: center;
-
-  span {
-    text-align: right;
-    width: 100%;
-    display: inline-block;
-    padding-right: 20px;
-  }
-}
 
 @media screen and (max-width: @mobile-xs-width) {
   // Common
@@ -943,7 +926,6 @@ audio::-webkit-media-controls-enclosure {
 @import "FormRemoveButton";
 @import "Introduction";
 @import "kids";
-@import "Navigation";
 @import "RaisedButton";
 @import "SearchDialect";
 @import "SearchResultTile";
@@ -995,4 +977,18 @@ audio::-webkit-media-controls-enclosure {
   overflow: hidden;
   clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
   clip: rect(1px, 1px, 1px, 1px);
+}
+
+
+
+/* MODIFIERS */
+@media (min-width: 651px) {
+  .hideLarge {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .hideSmall {
+    display: none;
+  }
 }

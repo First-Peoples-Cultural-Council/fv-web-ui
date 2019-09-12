@@ -33,6 +33,7 @@ const v0 = {
   palette: {
     primary1Color: '#b40000',
     primary2Color: '#3a6880',
+    primary2ColorText: '#fff',
     primary3Color: grey[800],
     primary4Color: '#c4baa7',
     primary4ColorLightest: '#f0eee9',
@@ -62,10 +63,10 @@ export const FirstVoicesThemeV1 = {
   },
   palette: {
     primary: {
+      contrastText: '#ffffff',
+      dark: '#7d0000',
       light: '#ee492d',
       main: '#b40000',
-      dark: '#7d0000',
-      contrastText: '#ffffff',
     },
     secondary: {
       light: '#5888a4',

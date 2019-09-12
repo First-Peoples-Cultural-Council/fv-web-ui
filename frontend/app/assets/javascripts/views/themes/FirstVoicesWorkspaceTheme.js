@@ -25,14 +25,15 @@ const v0 = {
     fontFamily: 'Arial, sans-serif',
   },
   primary: {
-    contrastText: '#0000ff',
+    // contrastText: '#0000ff',
     dark: '#0b1735',
     light: '#eeeed1',
-    main: '#b40000',
+    main: '#eaeaea',
   },
   palette: {
     primary1Color: teal[400],
     primary2Color: teal[700],
+    primary2ColorText: '#fff',
     primary3Color: grey[800],
     // primary4Color
     // primary4ColorLightest
@@ -63,10 +64,10 @@ export const FirstVoicesWorkspaceThemeV1 = {
   },
   palette: {
     primary: {
+      contrastText: '#000000',
+      dark: '#00766c',
       light: '#64d8cb',
       main: '#26a69a',
-      dark: '#00766c',
-      contrastText: '#000000',
     },
     secondary: {
       light: '#718792',
