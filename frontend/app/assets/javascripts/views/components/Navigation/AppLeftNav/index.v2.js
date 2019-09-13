@@ -191,13 +191,13 @@ export class AppLeftNav extends Component {
                 default: 'Workspace Dialects',
               })}
               secondary={
-                <p>
+                <span>
                   {this.intl.translate({
                     key: 'views.components.navigation.view_work_in_progress',
                     default: 'View work in progress or unpublished content',
                   })}
                   .
-                </p>
+                </span>
               }
             />
           </ListItem>
@@ -217,13 +217,13 @@ export class AppLeftNav extends Component {
                 default: 'Published Dialects',
               })}
               secondary={
-                <p>
+                <span>
                   {this.intl.translate({
                     key: 'views.components.navigation.view_dialects_as_end_user',
                     default: 'View dialects as an end user would view them',
                   })}
                   .
-                </p>
+                </span>
               }
             />
           </ListItem>
