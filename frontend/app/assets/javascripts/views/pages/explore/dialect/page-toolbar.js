@@ -348,7 +348,7 @@ export class PageToolbar extends Component {
                         selectn('response.state', computeEntity) !== 'New'
                       }
                       style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
+                      color="secondary"
                       onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
                     >
                       {intl.trans('enable', 'Enable', 'first') +
@@ -363,7 +363,7 @@ export class PageToolbar extends Component {
                         selectn('response.state', computeEntity) !== 'New'
                       }
                       style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
+                      color="secondary"
                       onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
                     >
                       {intl.trans('disable', 'Disable', 'first') +
@@ -375,7 +375,7 @@ export class PageToolbar extends Component {
                       variant="contained"
                       disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                       style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
+                      color="secondary"
                       onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
                     >
                       {intl.trans('publish', 'Publish', 'first') +
@@ -387,7 +387,7 @@ export class PageToolbar extends Component {
                       variant="contained"
                       disabled={selectn('response.state', computeEntity) !== 'Published'}
                       style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
+                      color="secondary"
                       onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
                     >
                       {intl.trans('unpublish', 'Unpublish', 'first') +
@@ -415,7 +415,7 @@ export class PageToolbar extends Component {
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
                     style={{ marginRight: '5px', marginLeft: '0' }}
-                    secondary
+                    color="secondary"
                     onClick={this._publishChanges}
                   >
                     {intl.trans('publish_changes', 'Publish Changes', 'words')}
@@ -435,7 +435,7 @@ export class PageToolbar extends Component {
                   <Button
                     variant="contained"
                     style={{ marginRight: '5px', marginLeft: '0' }}
-                    primary
+                    color="primary"
                     onClick={this.props.handleNavigateRequest.bind(
                       this,
                       this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
@@ -459,7 +459,7 @@ export class PageToolbar extends Component {
                     variant="contained"
                     style={{ marginRight: '5px', marginLeft: '0' }}
                     onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                    primary
+                    color="primary"
                   >
                     {intl.trans('add_new_page', 'Add New Page', 'words')}
                   </Button>

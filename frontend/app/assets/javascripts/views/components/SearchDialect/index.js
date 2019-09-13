@@ -204,7 +204,7 @@ export class SearchDialect extends Component {
           onClick={() => {
             this._resetSearch()
           }}
-          primary
+          color="primary"
         >
           {resetButtonText}
         </Button>
@@ -220,7 +220,7 @@ export class SearchDialect extends Component {
         <Button
           variant="contained"
           style={{ marginLeft: 'auto' }}
-          primary
+          color="primary"
           onClick={() => {
             this.props.updateAncestorState({ flashcardMode: false })
           }}
@@ -274,11 +274,11 @@ export class SearchDialect extends Component {
             value={searchTerm}
           />
 
-          <Button variant="contained" onClick={this._handleSearch} primary>
+          <Button variant="contained" onClick={this._handleSearch} color="primary">
             {searchButtonText}
           </Button>
 
-          <Button variant="contained" onClick={this._resetSearch} primary={false} style={{ marginLeft: '20px' }}>
+          <Button variant="contained" onClick={this._resetSearch} style={{ marginLeft: '20px' }}>
             {resetButtonText}
           </Button>
 

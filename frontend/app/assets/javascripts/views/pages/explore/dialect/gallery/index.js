@@ -136,7 +136,7 @@ export class PageDialectGalleries extends Component {
               <Button
                 variant="contained"
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                primary
+                color="primary"
               >
                 {'Create Gallery'}
               </Button>

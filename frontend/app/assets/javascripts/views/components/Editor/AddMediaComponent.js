@@ -214,7 +214,7 @@ export class AddMediaComponent extends Component {
     let fileTypeLabel = intl.trans('file', 'File', 'first')
 
     const actions = [
-      <Button key="fb0" secondary onClick={this.handleClose}>
+      <Button key="fb0" color="secondary" onClick={this.handleClose}>
         {intl.trans('cancel', 'Cancel', 'first')}
       </Button>,
     ]

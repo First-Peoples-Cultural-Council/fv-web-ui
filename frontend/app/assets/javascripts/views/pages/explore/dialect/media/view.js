@@ -253,7 +253,7 @@ export class View extends Component {
                                     actions={[
                                       <Button
                                         key="FlatButton0"
-                                        secondary
+                                        color="secondary"
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
                                       >
                                         {intl.trans('close', 'Close', 'first')}

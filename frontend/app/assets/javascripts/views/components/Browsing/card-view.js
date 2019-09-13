@@ -114,7 +114,7 @@ export default class CardView extends Component {
           </CardMedia>
 
           <CardContent style={{ padding: '4px' }}>
-            <Button onClick={this.props.action.bind(this, this.props.item)} primary>
+            <Button onClick={this.props.action.bind(this, this.props.item)} color="primary">
               {this.intl.translate({
                 key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
                 default: 'Continue to Entry',

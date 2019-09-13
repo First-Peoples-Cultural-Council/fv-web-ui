@@ -120,7 +120,7 @@ class Cover extends Component {
               <Button
                 variant="contained"
                 style={{ marginRight: '10px' }}
-                primary
+                color="primary"
                 onClick={this.props.openBookAction}
                 icon={<ActionLaunch />}
               >

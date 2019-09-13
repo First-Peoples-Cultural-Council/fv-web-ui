@@ -166,7 +166,7 @@ export class PageHome extends Component {
           <Button
             variant="contained"
             key={index}
-            // primary
+            color="primary"
             onClick={this._onNavigateRequest.bind(
               this,
               NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
@@ -188,7 +188,7 @@ export class PageHome extends Component {
         <Button
           variant="contained"
           key={0}
-          // primary
+          color="primary"
           onClick={this._onNavigateRequest.bind(
             this,
             NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')

@@ -258,7 +258,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                 return (
                   <Button
                     variant="contained"
-                    primary
+                    color="primary"
                     onClick={this._onNavigateRequest.bind(
                       this,
                       this.state.current_char.path.split('/')[this.state.current_char.path.split('/').length - 1]

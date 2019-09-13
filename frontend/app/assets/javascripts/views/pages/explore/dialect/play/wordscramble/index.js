@@ -362,7 +362,7 @@ export class Scramble extends Component {
             )
           })}
           {this.state.complete ? (
-            <Button variant="contained" primary onMouseUp={this.reset.bind(this)}>
+            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
               {intl.trans('reset', 'Reset', 'first')}
             </Button>
           ) : (
@@ -373,7 +373,7 @@ export class Scramble extends Component {
             className={classNames({ invisible: this.state.complete })}
             style={{ margin: '0 5px' }}
             disabled={this.state.complete ? true : false}
-            secondary
+            color="secondary"
             onMouseUp={this.checkAnswer.bind(this)}
           >
             {intl.trans('check', 'Check', 'first')}
@@ -381,7 +381,7 @@ export class Scramble extends Component {
           {this.state.complete ? (
             false
           ) : (
-            <Button variant="contained" primary onMouseUp={this.reset.bind(this)}>
+            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
               {intl.trans('reset', 'Reset', 'first')}
             </Button>
           )}

@@ -264,7 +264,7 @@ export class Register extends Component {
                 <Button
                   variant="contained"
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
-                  primary
+                  color="primary"
                 >
                   {intl.trans('register', 'Register', 'first')}
                 </Button>
@@ -286,7 +286,7 @@ export class Register extends Component {
             </p>
             <Button
               variant="contained"
-              primary
+              color="primary"
               onClick={() => NavigationHelpers.navigate('/explore/FV/sections/Data', this.props.pushWindowPath)}
             >
               {intl.translate('choose_lang', 'Choose a Language', 'first')}

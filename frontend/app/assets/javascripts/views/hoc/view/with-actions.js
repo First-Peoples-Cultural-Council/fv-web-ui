@@ -153,7 +153,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     variant="contained"
                     icon={<Icon className="material-icons">delete</Icon>}
                     onClick={() => this.setState({ deleteDialogOpen: true })}
-                    secondary
+                    color="secondary"
                   >
                     {intl.trans(
                       'views.hoc.view.delete_x',
