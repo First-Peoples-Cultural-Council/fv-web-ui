@@ -80,6 +80,17 @@ export const FirstVoicesThemeV1 = {
     //   dark: palette.error[700],
     //   contrastText: getContrastText(palette.error[500]),
     // },
+    colorSwitchBase: {
+      color: '#b71c1c',
+      '&$colorChecked': {
+        color: '#1B5E20',
+        '& + $colorBar': {
+          backgroundColor: '#0D47A1',
+        },
+      },
+    },
+    colorChecked: {},
+    colorBar: {},
   },
   v0,
 }
