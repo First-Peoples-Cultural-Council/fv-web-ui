@@ -18,10 +18,11 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
-
+import { FirstVoicesKidsThemeV1 as FirstVoicesKidsTheme } from 'views/themes/FirstVoicesKidsTheme.js'
+import { FirstVoicesWorkspaceThemeV1 as FirstVoicesWorkspaceTheme } from 'views/themes/FirstVoicesWorkspaceTheme.js'
 import ConfGlobal from 'conf/local.js'
 
 // REDUX
@@ -34,8 +35,8 @@ import AppWrapper from 'views/AppWrapper'
 require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
-
-const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
+const themes = [FirstVoicesTheme, FirstVoicesWorkspaceTheme, FirstVoicesKidsTheme]
+const createdMuiTheme = createMuiTheme(themes[0])
 const context = {
   providedState: {
     properties: {
@@ -52,9 +53,7 @@ const context = {
 
 render(
   <Provider store={store}>
-    <MuiThemeProvider theme={createdMuiTheme}>
-      <AppWrapper {...context} />
-    </MuiThemeProvider>
+    <AppWrapper {...context} />
   </Provider>,
   document.getElementById('app-wrapper')
 )

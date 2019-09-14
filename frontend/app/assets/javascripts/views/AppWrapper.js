@@ -36,6 +36,8 @@ import AppFrontController from './AppFrontController'
 
 import IntlService from 'views/services/intl'
 
+import { MuiThemeProvider } from '@material-ui/core/styles'
+
 const getPreferences = function getPreferences(login, dialect) {
   const preferenceString = selectn('response.properties.preferences', login)
   const parsedPreferences = preferenceString ? JSON.parse(preferenceString) : {}
@@ -125,15 +127,17 @@ class AppWrapper extends Component {
     const preferences = getPreferences(this.props.computeLogin, selectn('response', _computeDialect2))
 
     return (
-      <div
-        id="AppWrapper"
-        style={{
-          backgroundColor: selectn('theme.v0.wrapper.backgroundColor', this.props.properties),
-          fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
-        }}
-      >
-        <AppFrontController preferences={preferences} warnings={warnings} />
-      </div>
+      <MuiThemeProvider theme={this.props.properties.theme}>
+        <div
+          id="AppWrapper"
+          style={{
+            backgroundColor: selectn('theme.v0.wrapper.backgroundColor', this.props.properties),
+            fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
+          }}
+        >
+          <AppFrontController preferences={preferences} warnings={warnings} />
+        </div>
+      </MuiThemeProvider>
     )
   }
 
