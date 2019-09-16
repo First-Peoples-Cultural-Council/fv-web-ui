@@ -421,8 +421,6 @@ export class PageToolbar extends Component {
         <div className="PageToolbar__menuMore">
           <IconButton
             tooltip={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
-            tooltipPosition="top-center"
-            touch
             className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
             onClick={(event) => {
               this.setState({
@@ -434,7 +432,7 @@ export class PageToolbar extends Component {
           </IconButton>
           <Menu
             anchorEl={this.state.anchorEl}
-            open={this.state.anchorEl}
+            open={this.state.anchorEl || false}
             onClose={() => {
               this.setState({
                 anchorEl: null,
