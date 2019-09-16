@@ -27,12 +27,13 @@ import MetadataList from 'views/components/Browsing/metadata-list'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import { withTheme } from '@material-ui/core/styles'
 
 const intl = IntlService.instance
 /**
  * Metadata panel for word or phrase views.
  */
-export default class MetadataPanel extends Component {
+export class MetadataPanel extends Component {
   static propTypes = {
     computeEntity: PropTypes.object.isRequired,
     properties: PropTypes.object.isRequired,
@@ -125,7 +126,7 @@ export default class MetadataPanel extends Component {
         selectn('response.properties.uid:minor_version', computeEntity),
     })
 
-    const themePalette = this.props.properties.theme.v0.palette
+    const themePalette = this.props.theme.v0.palette
 
     return (
       <Card initiallyExpanded>
@@ -149,3 +150,4 @@ export default class MetadataPanel extends Component {
     )
   }
 }
+export default withTheme()(MetadataPanel)

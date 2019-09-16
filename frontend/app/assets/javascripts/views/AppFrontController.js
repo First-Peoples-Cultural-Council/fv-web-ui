@@ -15,6 +15,8 @@ import ConfGlobal from 'conf/local.js'
 import ConfRoutes, { matchPath } from 'conf/routes'
 import { WORKSPACES } from 'common/Constants'
 
+import { withTheme } from '@material-ui/core/styles'
+
 import ProviderHelpers from 'common/ProviderHelpers'
 import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
@@ -266,7 +268,7 @@ export class AppFrontController extends Component {
   }
 
   _renderWithBreadcrumb = (reactElement, matchedPage, props, theme) => {
-    const themePalette = props.properties.theme.v0.palette
+    const themePalette = props.theme.v0.palette
     const { routeParams } = reactElement.props
     const { /*splitWindowPath, */ computeLogin } = props
     const { routes } = this.state
@@ -513,7 +515,9 @@ const mapDispatchToProps = {
   updateWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppFrontController)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AppFrontController)
+)

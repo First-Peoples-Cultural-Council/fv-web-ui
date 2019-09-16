@@ -28,6 +28,7 @@ import { Collapse, Divider, Drawer, List, ListItem, ListItemText, Toolbar } from
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import Close from '@material-ui/icons/Close'
+import { withTheme } from '@material-ui/core/styles'
 
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
@@ -107,7 +108,7 @@ export class AppLeftNav extends Component {
     ),
   }
   render() {
-    const _backgroundColor = selectn('properties.theme.palette.primary.main', this.props)
+    const _backgroundColor = selectn('theme.palette.primary.main', this.props)
     const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
     return (
       <Drawer
@@ -307,7 +308,9 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppLeftNav)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AppLeftNav)
+)

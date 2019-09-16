@@ -36,7 +36,11 @@ import AppFrontController from './AppFrontController'
 
 import IntlService from 'views/services/intl'
 
-import { MuiThemeProvider } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+
+import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
+import { FirstVoicesKidsThemeV1 as FirstVoicesKidsTheme } from 'views/themes/FirstVoicesKidsTheme.js'
+import { FirstVoicesWorkspaceThemeV1 as FirstVoicesWorkspaceTheme } from 'views/themes/FirstVoicesWorkspaceTheme.js'
 
 const getPreferences = function getPreferences(login, dialect) {
   const preferenceString = selectn('response.properties.preferences', login)
@@ -73,32 +77,6 @@ class AppWrapper extends Component {
     windowPath: string.isRequired,
   }
 
-  /*
-  static childContextTypes = {
-    muiTheme: PropTypes.object,
-  }
-
-  // TODO: SEE IF THIS IS AN ISSUE AFTER SWITCH TO REDUX
-  // react-redux-provide will pass context such as providers (Note: this is only needed for debugging the store atm)
-  static contextTypes = {
-    providers: PropTypes.object,
-  }
-
-  // TODO: The legacy context API will be removed in a future major version.
-  // TODO: Use the new context API introduced with version 16.3.
-  // TODO: The legacy API will continue working for all 16.x releases.
-  // via: https://reactjs.org/docs/legacy-context.html
-
-  // Pass essential context to all children
-  getChildContext() {
-    const newContext = {
-      muiTheme: this.props.properties.theme.v0.palette,
-    }
-
-    return newContext
-  }
-  */
-
   constructor(props, context) {
     super(props, context)
 
@@ -120,18 +98,33 @@ class AppWrapper extends Component {
   }
 
   render() {
+    const { properties } = this.props
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.state.dialect)
 
     const warnings = {}
 
     const preferences = getPreferences(this.props.computeLogin, selectn('response', _computeDialect2))
 
+    const themeId = selectn('theme.id', properties)
+    let theme = null
+    switch (themeId) {
+      case 'kids':
+        theme = createMuiTheme(FirstVoicesKidsTheme)
+        break
+
+      case 'workspace':
+        theme = createMuiTheme(FirstVoicesWorkspaceTheme)
+        break
+      default:
+        theme = createMuiTheme(FirstVoicesTheme)
+    }
+    const backgroundColor = selectn('v0.wrapper.backgroundColor', theme)
     return (
-      <MuiThemeProvider theme={this.props.properties.theme}>
+      <MuiThemeProvider theme={theme}>
         <div
           id="AppWrapper"
           style={{
-            backgroundColor: selectn('theme.v0.wrapper.backgroundColor', this.props.properties),
+            backgroundColor,
             fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
           }}
         >

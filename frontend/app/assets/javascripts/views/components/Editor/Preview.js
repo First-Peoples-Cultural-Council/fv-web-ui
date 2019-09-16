@@ -43,6 +43,7 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia'
 import CardContent from '@material-ui/core/CardContent'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { withTheme } from '@material-ui/core/styles'
 
 import PreviewMetaDataContributor from 'views/components/Editor/PreviewMetaDataContributor'
 import IntlService from 'views/services/intl'
@@ -138,7 +139,7 @@ export class Preview extends Component {
   }
 
   render() {
-    const themePalette = this.props.properties.theme.v0.palette
+    const themePalette = this.props.theme.v0.palette
 
     let handleExpandChange = () => {}
 
@@ -879,7 +880,9 @@ const mapDispatchToProps = {
   fetchWord,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Preview)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Preview)
+)

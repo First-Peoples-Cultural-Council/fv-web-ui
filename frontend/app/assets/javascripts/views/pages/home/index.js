@@ -32,6 +32,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Button from '@material-ui/core/Button'
+import { withTheme } from '@material-ui/core/styles'
 
 import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
@@ -152,9 +153,9 @@ export class PageHome extends Component {
     const page = selectn('response.entries[0].properties', computePage)
     //const dialects = selectn('response.entries', computePortals);
 
-    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props.properties)
-    const primary2Color = selectn('theme.v0.palette.primary2Color', this.props.properties)
-    // const alternateTextColor = selectn('theme.v0.palette.alternateTextColor', this.props.properties)
+    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props)
+    const primary2Color = selectn('theme.v0.palette.primary2Color', this.props)
+    // const alternateTextColor = selectn('theme.v0.palette.alternateTextColor', this.props)
     const intl = this.intl
 
     const accessButtons = []
@@ -357,7 +358,9 @@ const mapDispatchToProps = {
   queryPage,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageHome)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PageHome)
+)

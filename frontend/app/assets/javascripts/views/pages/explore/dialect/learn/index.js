@@ -72,6 +72,7 @@ import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sid
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
+import { withTheme } from '@material-ui/core/styles'
 
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -341,7 +342,7 @@ export class DialectLearn extends Component {
       })
     }
 
-    const themePalette = this.props.properties.theme.v0.palette
+    const themePalette = this.props.theme.v0.palette
     const dialectClassName = getDialectClassname(computeDialect2)
 
     return (
@@ -791,7 +792,9 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DialectLearn)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DialectLearn)
+)

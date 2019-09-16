@@ -17,11 +17,6 @@ import {
 import DirectoryOperations from 'operations/DirectoryOperations'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import { createMuiTheme } from '@material-ui/core/styles'
-import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
-import { FirstVoicesKidsThemeV1 as FirstVoicesKidsTheme } from 'views/themes/FirstVoicesKidsTheme.js'
-import { FirstVoicesWorkspaceThemeV1 as FirstVoicesWorkspaceTheme } from 'views/themes/FirstVoicesWorkspaceTheme.js'
-
 export const loadGuide = (currentPage, pageMatch) => {
   return (dispatch) => {
     dispatch({ type: LOAD_GUIDE_STARTED, page: pageMatch })
@@ -92,20 +87,7 @@ export const toggleMenuAction = () => {
 
 // Change theme
 export const changeTheme = (id) => {
-  let theme = null
-
-  switch (id) {
-    case 'kids':
-      theme = createMuiTheme(FirstVoicesKidsTheme)
-      break
-
-    case 'workspace':
-      theme = createMuiTheme(FirstVoicesWorkspaceTheme)
-      break
-    default:
-      theme = createMuiTheme(FirstVoicesTheme)
-  }
-  return { type: CHANGE_THEME, theme: { ...theme, id: id } }
+  return { type: CHANGE_THEME, theme: { id: id } }
 }
 
 export const changeTitleParams = (titleParams) => {

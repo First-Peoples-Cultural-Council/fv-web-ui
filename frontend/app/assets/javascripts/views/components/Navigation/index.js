@@ -39,6 +39,7 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import Grow from '@material-ui/core/Grow'
+import { withTheme } from '@material-ui/core/styles'
 
 // MAT-UI: Icons
 import Reorder from '@material-ui/icons/Reorder'
@@ -259,10 +260,10 @@ export class Navigation extends Component {
       </div>
     )
 
-    const themePalette = this.props.properties.theme.v0.palette
-    const _backgroundColor = selectn('properties.theme.palette.primary.main', this.props)
+    const themePalette = this.props.theme.v0.palette
+    const _backgroundColor = selectn('theme.palette.primary.main', this.props)
     const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
-    const color = selectn('properties.theme.palette.primary.contrastText', this.props)
+    const color = selectn('theme.palette.primary.contrastText', this.props)
 
     return (
       <div
@@ -612,7 +613,9 @@ const mapDispatchToProps = {
   toggleMenuAction,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Navigation)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Navigation)
+)

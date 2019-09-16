@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
+import { withTheme } from '@material-ui/core/styles'
 
-export default class TextHeader extends Component {
+export class TextHeader extends Component {
   constructor(props, context) {
     super(props, context)
   }
 
   render() {
-    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props.properties)
+    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props)
     const sectionHrStyle = { backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }
 
     return (
@@ -43,3 +44,5 @@ export default class TextHeader extends Component {
     )
   }
 }
+
+export default withTheme()(TextHeader)
