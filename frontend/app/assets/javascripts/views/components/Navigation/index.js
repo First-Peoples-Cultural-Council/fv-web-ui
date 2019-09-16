@@ -398,9 +398,12 @@ export class Navigation extends Component {
                 className="Navigation__searchPopupContainer"
                 tabIndex={-1}
                 onFocus={() => {
-                  this.setState({
-                    searchPopoverOpen: true,
-                  })
+                  this.setState(
+                    {
+                      searchPopoverOpen: true,
+                    },
+                    () => {}
+                  )
                 }}
                 onBlur={() => {
                   this.setState({
@@ -408,7 +411,7 @@ export class Navigation extends Component {
                   })
                 }}
               >
-                <Grow in={this.state.searchPopoverOpen}>
+                <Grow mountOnEnter unmountOnExit in={this.state.searchPopoverOpen}>
                   {/* Search Popup Menu */}
                   <div className={`Navigation__searchPopup ${isDialect ? 'Navigation__searchPopup--dialect' : ''}`}>
                     {popoverContent}
