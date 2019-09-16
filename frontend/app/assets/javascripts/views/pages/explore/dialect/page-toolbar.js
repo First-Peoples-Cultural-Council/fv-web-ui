@@ -73,7 +73,8 @@ export class PageToolbar extends Component {
     publishChangesAction: null,
     handleNavigateRequest: null,
     showPublish: true,
-    actions: [], // ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options']
+    actions: [],
+    // actions: ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options'],
   }
 
   constructor(props, context) {
@@ -156,7 +157,7 @@ export class PageToolbar extends Component {
   }
 
   render() {
-    const { theme, computeEntity, computePermissionEntity, computeLogin } = this.props
+    const { computeEntity, computePermissionEntity, computeLogin } = this.props
 
     const enableTasks = []
     const disableTasks = []
@@ -205,24 +206,9 @@ export class PageToolbar extends Component {
       ? 'Request approval from the Language Admin to'
       : `${intl.trans('request', 'Request', 'first')}`
 
-    // const themeZeroPalette = this.props.properties.theme.v0.palette
-    // const _backgroundColor = themeZeroPalette.primary2Color
-    // const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
-    // const color = themeZeroPalette.primary2ColorText
-    // const themePalette = this.props.properties.theme.palette
-
-    const { classes } = this.props
-    console.log('classes', classes, classes.colorSwitchBase)
-
-    // const { palette } = this.props.theme
-    // console.log('palette', palette, palette.colorSwitchBase)
-
     return (
       <AppBar position="static">
-        <Toolbar
-          // style={{ backgroundColor, color }}
-          className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true, row: true })}
-        >
+        <Toolbar className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true, row: true })}>
           {/* MOBILE MENU (doesn't work in dev/preprod) */}
           {/* <div className="visible-xs" style={{ textAlign: 'right' }}>
           <IconButton
@@ -236,7 +222,7 @@ export class PageToolbar extends Component {
         </div> */}
 
           <div
-            float="left"
+            // float="left"
             className={classNames({
               'hidden-xs': !this.state.showActionsMobile,
               isRecorderWithApproval,
@@ -256,28 +242,6 @@ export class PageToolbar extends Component {
                       disabled={documentPublished}
                       name="enabled"
                       value="enabled"
-                      // 1)[built in theming]: Defined in .js, `FirstVoicesTheme`, etc.
-                      // color="secondary"
-                      // 1a) withTheme
-                      // classes={{
-                      //   switchBase: palette.colorSwitchBase,
-                      //   checked: palette.colorChecked,
-                      //   bar: palette.colorBar,
-                      // }}
-                      // 1b) withStyles
-                      classes={{
-                        switchBase: classes.colorSwitchBase,
-                        checked: classes.colorChecked,
-                        bar: classes.colorBar,
-                      }}
-                      // 2) Pro: external from js dependencies, css, stable class names. Con: Another location to define theme
-                      // classes={{
-                      //   switchBase: 'matUi__switchBase',
-                      //   checked: 'matUi__checked',
-                      //   bar: 'matUi__bar',
-                      // }}
-                      // 3) Limited support for styling. Affects "top level" of component.
-                      // style={{ color: 'red' }}
                     />
                   }
                   label={intl.trans('enabled', 'Enabled', 'first')}
@@ -377,7 +341,7 @@ export class PageToolbar extends Component {
               <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={this.props.handleNavigateRequest.bind(
                     this,
                     this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
