@@ -81,8 +81,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
+            selectn('dc:title', resourceParentDialect),
+          ])
         : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <div title={tooltip} className={classNames('action-info', { 'action-info--outline': isDialectShared })}>
@@ -111,7 +111,7 @@ class SharedResourceGridTile extends Component {
   }
 }
 
-class SelectMediaComponent extends React.Component {
+class SelectMediaComponent extends Component {
   static propTypes = {
     dialect: object.isRequired,
     label: string.isRequired,
@@ -137,8 +137,8 @@ class SelectMediaComponent extends React.Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {
@@ -195,11 +195,9 @@ class SelectMediaComponent extends React.Component {
     const computeResources = ProviderHelpers.getEntry(this.props.computeResources, '/FV/Workspaces/')
     const dialect = this.props.dialect
 
-    const SharedResourceGridTileWithDialect = React.createClass({
-      render: function SharedResourceGridTileWithDialectRender() {
-        return React.createElement(SharedResourceGridTile, { ...this.props, dialect: dialect })
-      },
-    })
+    const SharedResourceGridTileWithDialect = () => {
+      return React.createElement(SharedResourceGridTile, { ...this.props, dialect })
+    }
     const items =
       selectn('response.entries', computeResources) || selectn('response_prev.entries', computeResources) || []
 
