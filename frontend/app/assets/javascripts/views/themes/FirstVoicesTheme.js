@@ -68,12 +68,12 @@ export const FirstVoicesThemeV1 = {
       light: '#ee492d',
       main: '#b40000',
     },
-    secondary: {
-      light: '#5888a4',
-      main: '#275b75',
-      dark: '#003249',
-      //   contrastText: getContrastText(palette.secondary.A400),
-    },
+    // secondary: {
+    //   light: '#5888a4',
+    //   main: '#275b75',
+    //   dark: '#003249',
+    //   //   contrastText: getContrastText(palette.secondary.A400),
+    // },
     // error: {
     //   light: palette.error[300],
     //   main: palette.error[500],

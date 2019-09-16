@@ -26,6 +26,7 @@ import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 // MAT-UI: Core
+import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -260,19 +261,11 @@ export class Navigation extends Component {
       </div>
     )
 
-    const themePalette = this.props.theme.v0.palette
-    const _backgroundColor = selectn('theme.palette.primary.main', this.props)
-    const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
+    const themeZeroPalette = selectn('theme.v0.palette', this.props)
     const color = selectn('theme.palette.primary.contrastText', this.props)
 
     return (
-      <div
-        className="Navigation"
-        style={{
-          backgroundColor,
-          color,
-        }}
-      >
+      <AppBar position="static">
         <Toolbar disableGutters className="Navigation__toolbarMain">
           {/* Menu Button */}
           <Tooltip title="Menu open">
@@ -332,7 +325,7 @@ export class Navigation extends Component {
                 this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
               }`}
               style={{
-                background: themePalette.primary1Color,
+                background: themeZeroPalette.primary1Color,
               }}
               onFocus={() => {
                 this.setState({
@@ -471,7 +464,7 @@ export class Navigation extends Component {
 
         {/* Dialect sub-menu */}
         {isDialect && (
-          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themePalette.primary2Color }}>
+          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themeZeroPalette.primary2Color }}>
             <h2 className="Navigation__dialectHeader">
               <a
                 href={NavigationHelpers.generateStaticURL(dialectLink)}
@@ -481,7 +474,7 @@ export class Navigation extends Component {
                   NavigationHelpers.navigate(dialectLink, this.props.pushWindowPath, false)
                 }}
                 style={{
-                  color: themePalette.primary2ColorText,
+                  color: themeZeroPalette.primary2ColorText,
                 }}
               >
                 <Avatar src={avatarSrc} size={50} />
@@ -492,7 +485,7 @@ export class Navigation extends Component {
             </h2>
           </div>
         )}
-      </div>
+      </AppBar>
     )
   }
   showSearchPopup = (e) => {

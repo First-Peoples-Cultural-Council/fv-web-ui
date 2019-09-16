@@ -69,12 +69,15 @@ export const FirstVoicesWorkspaceThemeV1 = {
       light: '#64d8cb',
       main: '#26a69a',
     },
-    secondary: {
-      light: '#718792',
-      main: '#455a64',
-      dark: '#1c313a',
-      //   contrastText: getContrastText(palette.secondary.A400),
-    },
+    // secondary: {
+    //   // contrastText: getContrastText(palette.secondary.A400),
+    //   dark: '#1c313a',
+    //   light: '#718792',
+    //   // main: '#455a64', // v1
+    //   // main: '#337ab7', // blue
+    //   // main: '#b40000', // red
+    //   main: '#ff4081', // red/pink
+    // },
     // error: {
     //   light: palette.error[300],
     //   main: palette.error[500],
