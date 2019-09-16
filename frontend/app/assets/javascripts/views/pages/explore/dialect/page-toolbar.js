@@ -26,7 +26,6 @@ import { connect } from 'react-redux'
 import { fetchTasks } from 'providers/redux/reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import UIHelpers from 'common/UIHelpers'
 
 import { IconButton } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
@@ -35,13 +34,14 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Switch from '@material-ui/core/Switch'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import IconMenu from '@material-ui/icons/Menu'
-import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { withStyles /*, withTheme*/ } from '@material-ui/core/styles'
+
+import IconMenu from '@material-ui/icons/Menu'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
+
+import '!style-loader!css-loader!./PageToolbar.css'
 
 import IntlService from 'views/services/intl'
 
@@ -86,6 +86,7 @@ export class PageToolbar extends Component {
       publishActions: 0,
       unpublishActions: 0,
       showActionsMobile: false,
+      anchorEl: null,
     }
 
     // Bind methods to 'this'
@@ -207,26 +208,24 @@ export class PageToolbar extends Component {
       : `${intl.trans('request', 'Request', 'first')}`
 
     return (
-      <AppBar position="static">
+      <AppBar position="static" className="PageToolbar">
         <Toolbar className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true, row: true })}>
           {/* MOBILE MENU (doesn't work in dev/preprod) */}
           {/* <div className="visible-xs" style={{ textAlign: 'right' }}>
-          <IconButton
-            onClick={(e) => {
-              this.setState({ showActionsMobile: !this.state.showActionsMobile })
-              e.preventDefault()
-            }}
-          >
-            menu
-          </IconButton>
-        </div> */}
+            <IconButton
+              onClick={(e) => {
+                this.setState({ showActionsMobile: !this.state.showActionsMobile })
+                e.preventDefault()
+              }}
+            >
+              menu
+            </IconButton>
+          </div> */}
 
           <div
-            // float="left"
             className={classNames({
               'hidden-xs': !this.state.showActionsMobile,
               isRecorderWithApproval,
-              clearfix: true,
             })}
           >
             {this.props.children}
@@ -264,6 +263,8 @@ export class PageToolbar extends Component {
                   <span>{`${requestButtonGroupText}: `}</span>
                   {/* Button: Enable */}
                   <Button
+                    className="PageToolbar__button"
+                    size="medium"
                     variant="contained"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Disabled' &&
@@ -279,6 +280,8 @@ export class PageToolbar extends Component {
                   </Button>
                   {/* Button: Disable */}
                   <Button
+                    className="PageToolbar__button"
+                    size="medium"
                     variant="contained"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Enabled' &&
@@ -294,6 +297,8 @@ export class PageToolbar extends Component {
                   </Button>
                   {/* Button: Publish */}
                   <Button
+                    className="PageToolbar__button"
+                    size="medium"
                     variant="contained"
                     disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                     color="secondary"
@@ -306,6 +311,8 @@ export class PageToolbar extends Component {
                   </Button>
                   {/* Button: Unpublish */}
                   <Button
+                    className="PageToolbar__button"
+                    size="medium"
                     variant="contained"
                     disabled={selectn('response.state', computeEntity) !== 'Published'}
                     color="secondary"
@@ -321,108 +328,125 @@ export class PageToolbar extends Component {
             ) : null}
           </div>
 
-          <div float="right" className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}>
-            {/* Button: Publish */}
-            {this.props.actions.includes('publish') ? (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
-                <Button
-                  variant="contained"
-                  data-guide-role="publish-changes"
-                  disabled={!documentPublished}
-                  color="secondary"
-                  onClick={this._publishChanges}
-                >
-                  {intl.trans('publish_changes', 'Publish Changes', 'words')}
-                </Button>
-              </AuthorizationFilter>
-            ) : null}
-            {/* Button: Edit */}
-            {this.props.actions.includes('edit') ? (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={this.props.handleNavigateRequest.bind(
-                    this,
-                    this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
-                  )}
-                >
-                  {intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
-                </Button>
-              </AuthorizationFilter>
-            ) : null}
+          <div className={classNames({ 'hidden-xs': !this.state.showActionsMobile, PageToolbar__menuGroup: true })}>
+            <div>
+              {/* Button: Publish */}
+              {this.props.actions.includes('publish') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="contained"
+                    data-guide-role="publish-changes"
+                    disabled={!documentPublished}
+                    color="secondary"
+                    onClick={this._publishChanges}
+                  >
+                    {intl.trans('publish_changes', 'Publish Changes', 'words')}
+                  </Button>
+                </AuthorizationFilter>
+              ) : null}
+              {/* Button: Edit */}
+              {this.props.actions.includes('edit') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="contained"
+                    color="secondary"
+                    onClick={this.props.handleNavigateRequest.bind(
+                      this,
+                      this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
+                    )}
+                  >
+                    {intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
+                  </Button>
+                </AuthorizationFilter>
+              ) : null}
 
-            {/* Button: New */}
-            {this.props.actions.includes('add-child') ? (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
-                <Button
-                  variant="contained"
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                  color="primary"
-                >
-                  {intl.trans('add_new_page', 'Add New Page', 'words')}
-                </Button>
-              </AuthorizationFilter>
-            ) : null}
+              {/* Button: New */}
+              {this.props.actions.includes('add-child') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="contained"
+                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
+                    color="secondary"
+                  >
+                    {intl.trans('add_new_page', 'Add New Page', 'words')}
+                  </Button>
+                </AuthorizationFilter>
+              ) : null}
+            </div>
 
-            <div className="hidden-xs" />
             {/* Menu */}
-            {(() => {
-              if (this.props.actions.includes('more-options')) {
-                const children = [
-                  <MenuItem
-                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
-                    key="reports"
-                  >
-                    {intl.trans('reports', 'Reports', 'first')}
-                  </MenuItem>,
-                  <MenuItem
-                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')}
-                    key="media"
-                    primaryText={intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
-                  />,
-                  // <MenuItem
-                  //   key="contributors"
-                  //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
-                  //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
-                  // />,
-                  // <MenuItem
-                  //   key="recorders"
-                  //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
-                  //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
-                  // />,
-                  <MenuItem
-                    key="phrasebooks"
-                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
-                  >
-                    {intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
-                  </MenuItem>,
-                ]
-
-                return React.createElement(
-                  UIHelpers.isViewSize('xs') ? Menu : IconMenu,
-                  {
-                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                    targetOrigin: { horizontal: 'right', vertical: 'top' },
-                    iconButtonElement: (
-                      <IconButton
-                        tooltip={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
-                        tooltipPosition="top-center"
-                        touch
-                        className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
-                      >
-                        <NavigationExpandMoreIcon />
-                      </IconButton>
-                    ),
-                  },
-                  children
-                )
-              }
-            })()}
+            {this.getMenu()}
           </div>
         </Toolbar>
       </AppBar>
     )
+  }
+  getMenu = () => {
+    if (this.props.actions.includes('more-options')) {
+      const children = [
+        <MenuItem
+          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
+          key="reports"
+        >
+          {intl.trans('reports', 'Reports', 'first')}
+        </MenuItem>,
+        <MenuItem onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')} key="media">
+          {intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
+        </MenuItem>,
+        // <MenuItem
+        //   key="contributors"
+        //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
+        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
+        // />,
+        // <MenuItem
+        //   key="recorders"
+        //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
+        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
+        // />,
+        <MenuItem
+          key="phrasebooks"
+          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
+        >
+          {intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
+        </MenuItem>,
+      ]
+
+      return (
+        <div className="PageToolbar__menuMore">
+          <IconButton
+            tooltip={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
+            tooltipPosition="top-center"
+            touch
+            className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
+            onClick={(event) => {
+              this.setState({
+                anchorEl: event.currentTarget,
+              })
+            }}
+          >
+            <IconMenu />
+          </IconButton>
+          <Menu
+            anchorEl={this.state.anchorEl}
+            open={this.state.anchorEl}
+            onClose={() => {
+              this.setState({
+                anchorEl: null,
+              })
+            }}
+          >
+            {children}
+          </Menu>
+        </div>
+      )
+    }
+    return null
   }
   getPublishUi = () => {
     const { computeEntity, computePermissionEntity } = this.props
@@ -465,7 +489,7 @@ export class PageToolbar extends Component {
     }
 
     return (
-      <div>
+      <div className="PageToolbar__publishUiContainer">
         {publishToggle}
         {publishMessage}
       </div>
@@ -495,30 +519,7 @@ const mapDispatchToProps = {
   fetchTasks,
 }
 
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(PageToolbar)
-
-const styles = (theme) => {
-  // console.log('!', theme)
-  return {
-    colorSwitchBase: theme.palette.colorSwitchBase,
-    colorBar: {},
-    colorChecked: {},
-  }
-}
-
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(PageToolbar)
-)
-
-// export default withTheme()(
-//   connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-//   )(PageToolbar)
-// )
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageToolbar)
