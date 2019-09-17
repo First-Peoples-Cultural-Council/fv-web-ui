@@ -148,8 +148,8 @@ export class ToolbarNavigation extends Component {
           <div className="col-xs-12 col-md-2">
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
               <div className={classNames('hidden-xs', { hidden: !this.props.showStats })} float="right">
-                <Button icon={<EditorInsertChart />} style={{ color: '#fff' }} onClick={this.props.showStats}>
-                  {intl.trans('language_statistics', 'Language Statistics')}
+                <Button variant="flat" style={{ color: '#fff' }} onClick={this.props.showStats}>
+                  <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
                 </Button>
               </div>
             </AuthenticationFilter>
