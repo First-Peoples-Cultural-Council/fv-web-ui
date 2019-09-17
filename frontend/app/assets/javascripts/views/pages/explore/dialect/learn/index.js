@@ -69,10 +69,14 @@ import AuthenticationFilter from 'views/components/Document/AuthenticationFilter
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'
 
+import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
-import { withTheme } from '@material-ui/core/styles'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -84,6 +88,24 @@ const intl = IntlService.instance
  */
 
 const { func, object, string } = PropTypes
+
+// const styles = (theme) => {
+//   return {
+//     expand: {
+//       transform: 'rotate(0deg)',
+//       transition: theme.transitions.create('transform', {
+//         duration: theme.transitions.duration.shortest,
+//       }),
+//       marginLeft: 'auto',
+//       [theme.breakpoints.up('sm')]: {
+//         marginRight: -8,
+//       },
+//     },
+//     expandOpen: {
+//       transform: 'rotate(180deg)',
+//     },
+//   }
+// }
 export class DialectLearn extends Component {
   static propTypes = {
     routeParams: object.isRequired,
@@ -141,6 +163,12 @@ export class DialectLearn extends Component {
       showStats: false,
       fetchedStats: false,
       fetchedRecentActivityLists: new Set(),
+      expandedCards: {
+        words: false,
+        phrases: false,
+        songs: false,
+        stories: false,
+      },
     }
     ;['_showStats', '_publishChangesAction', '_loadRecentActivity'].forEach(
       (method) => (this[method] = this[method].bind(this))
@@ -342,7 +370,7 @@ export class DialectLearn extends Component {
       })
     }
 
-    const themePalette = this.props.theme.v0.palette
+    const themePalette = this.props.theme.palette
     const dialectClassName = getDialectClassname(computeDialect2)
 
     return (
@@ -409,128 +437,116 @@ export class DialectLearn extends Component {
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-6')}>
-                <Card
-                  initiallyExpanded={false}
-                  style={{ marginBottom: '15px' }}
-                  onExpandChange={this._loadRecentActivity.bind(this, 'words')}
-                >
+                <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
                     title={intl.trans('words', 'WORDS', 'upper')}
-                    titleStyle={{ lineHeight: 'initial' }}
-                    titleColor={themePalette.alternateTextColor}
-                    actAsExpander
+                    titleTypographyProps={{ color: 'textSecondary' }}
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
-                    showExpandableButton
+                    action={
+                      <IconButton
+                        onClick={() => this.setState({ expandedCards: { words: !this.state.expandedCards.words } })}
+                      >
+                        {this.state.expandedCards.words ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    }
                   />
-                  <CardContent expandable>
-                    <div className="row" style={{ paddingTop: '20px' }}>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeModifiedWords)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_modified',
-                            'Recently Modified',
-                            'words'
-                          )}
-                          docType="word"
-                        />
-                      </div>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeCreatedWords)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_created',
-                            'Recently Created',
-                            'words'
-                          )}
-                          docType="word"
-                        />
-                      </div>
-
-                      <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                  <Collapse
+                    in={this.state.expandedCards.words}
+                    timeout="auto"
+                    unmountOnExit
+                    onEnter={this._loadRecentActivity.bind(this, 'words')}
+                  >
+                    <CardContent>
+                      <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserModifiedWords)}
+                            data={selectn('response', computeModifiedWords)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_modified',
-                              'My Recently Modified',
+                              'views.pages.explore.dialect.learn.recently_modified',
+                              'Recently Modified',
+                              'words'
+                            )}
+                            docType="word"
+                          />
+                        </div>
+                        <div className={classNames('col-xs-6')}>
+                          <RecentActivityList
+                            theme={this.props.routeParams.theme}
+                            data={selectn('response', computeCreatedWords)}
+                            title={intl.trans(
+                              'views.pages.explore.dialect.learn.recently_created',
+                              'Recently Created',
                               'words'
                             )}
                             docType="word"
                           />
                         </div>
 
-                        <div className={classNames('col-xs-6')}>
-                          <RecentActivityList
-                            theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserCreatedWords)}
-                            title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_created',
-                              'My Recently Created',
-                              'words'
-                            )}
-                            docType="word"
-                          />
-                        </div>
-                      </AuthenticationFilter>
-                    </div>
-                  </CardContent>
+                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserModifiedWords)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_modified',
+                                'My Recently Modified',
+                                'words'
+                              )}
+                              docType="word"
+                            />
+                          </div>
+
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserCreatedWords)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_created',
+                                'My Recently Created',
+                                'words'
+                              )}
+                              docType="word"
+                            />
+                          </div>
+                        </AuthenticationFilter>
+                      </div>
+                    </CardContent>
+                  </Collapse>
                 </Card>
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-6')}>
-                <Card
-                  initiallyExpanded={false}
-                  style={{ marginBottom: '15px' }}
-                  onExpandChange={this._loadRecentActivity.bind(this, 'phrases')}
-                >
+                <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
                     title={intl.trans('phrases', 'PHRASES', 'upper')}
-                    titleStyle={{ lineHeight: 'initial' }}
-                    titleColor={themePalette.alternateTextColor}
-                    actAsExpander
+                    titleTypographyProps={{ color: 'textSecondary' }}
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
-                    showExpandableButton
+                    action={
+                      <IconButton
+                        onClick={() => this.setState({ expandedCards: { phrases: !this.state.expandedCards.phrases } })}
+                      >
+                        {this.state.expandedCards.phrases ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    }
                   />
-                  <CardContent expandable>
-                    <div className="row" style={{ paddingTop: '20px' }}>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeModifiedPhrases)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_modified',
-                            'Recently Modified',
-                            'words'
-                          )}
-                          docType="phrase"
-                        />
-                      </div>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeCreatedPhrases)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_created',
-                            'Recently Created',
-                            'words'
-                          )}
-                          docType="phrase"
-                        />
-                      </div>
-                      <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                  <Collapse
+                    in={this.state.expandedCards.phrases}
+                    timeout="auto"
+                    unmountOnExit
+                    onEnter={this._loadRecentActivity.bind(this, 'phrases')}
+                  >
+                    <CardContent>
+                      <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserModifiedPhrases)}
+                            data={selectn('response', computeModifiedPhrases)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_modified',
-                              'My Recently Modified',
+                              'views.pages.explore.dialect.learn.recently_modified',
+                              'Recently Modified',
                               'words'
                             )}
                             docType="phrase"
@@ -539,70 +555,77 @@ export class DialectLearn extends Component {
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserCreatedPhrases)}
+                            data={selectn('response', computeCreatedPhrases)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_created',
-                              'My Recently Created',
+                              'views.pages.explore.dialect.learn.recently_created',
+                              'Recently Created',
                               'words'
                             )}
                             docType="phrase"
                           />
                         </div>
-                      </AuthenticationFilter>
-                    </div>
-                  </CardContent>
+                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserModifiedPhrases)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_modified',
+                                'My Recently Modified',
+                                'words'
+                              )}
+                              docType="phrase"
+                            />
+                          </div>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserCreatedPhrases)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_created',
+                                'My Recently Created',
+                                'words'
+                              )}
+                              docType="phrase"
+                            />
+                          </div>
+                        </AuthenticationFilter>
+                      </div>
+                    </CardContent>
+                  </Collapse>
                 </Card>
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-6')}>
-                <Card
-                  initiallyExpanded={false}
-                  style={{ marginBottom: '15px' }}
-                  onExpandChange={this._loadRecentActivity.bind(this, 'songs')}
-                >
+                <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
                     title={intl.trans('songs', 'SONGS', 'upper')}
-                    titleStyle={{ lineHeight: 'initial' }}
-                    titleColor={themePalette.alternateTextColor}
-                    actAsExpander
+                    titleTypographyProps={{ color: 'textSecondary' }}
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
-                    showExpandableButton
+                    action={
+                      <IconButton
+                        onClick={() => this.setState({ expandedCards: { songs: !this.state.expandedCards.songs } })}
+                      >
+                        {this.state.expandedCards.songs ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    }
                   />
-                  <CardContent expandable>
-                    <div className="row" style={{ paddingTop: '20px' }}>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeModifiedSongs)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_modified',
-                            'Recently Modified',
-                            'words'
-                          )}
-                          docType="song"
-                        />
-                      </div>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeCreatedSongs)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_created',
-                            'Recently Created',
-                            'words'
-                          )}
-                          docType="song"
-                        />
-                      </div>
-                      <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                  <Collapse
+                    in={this.state.expandedCards.songs}
+                    timeout="auto"
+                    unmountOnExit
+                    onEnter={this._loadRecentActivity.bind(this, 'songs')}
+                  >
+                    <CardContent>
+                      <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserModifiedSongs)}
+                            data={selectn('response', computeModifiedSongs)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_modified',
-                              'My Recently Modified',
+                              'views.pages.explore.dialect.learn.recently_modified',
+                              'Recently Modified',
                               'words'
                             )}
                             docType="song"
@@ -611,70 +634,77 @@ export class DialectLearn extends Component {
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserCreatedSongs)}
+                            data={selectn('response', computeCreatedSongs)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_created',
-                              'My Recently Created',
+                              'views.pages.explore.dialect.learn.recently_created',
+                              'Recently Created',
                               'words'
                             )}
                             docType="song"
                           />
                         </div>
-                      </AuthenticationFilter>
-                    </div>
-                  </CardContent>
+                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserModifiedSongs)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_modified',
+                                'My Recently Modified',
+                                'words'
+                              )}
+                              docType="song"
+                            />
+                          </div>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserCreatedSongs)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_created',
+                                'My Recently Created',
+                                'words'
+                              )}
+                              docType="song"
+                            />
+                          </div>
+                        </AuthenticationFilter>
+                      </div>
+                    </CardContent>
+                  </Collapse>
                 </Card>
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-6')}>
-                <Card
-                  initiallyExpanded={false}
-                  style={{ marginBottom: '15px' }}
-                  onExpandChange={this._loadRecentActivity.bind(this, 'stories')}
-                >
+                <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
                     title={intl.trans('stories', 'STORIES', 'upper')}
-                    titleStyle={{ lineHeight: 'initial' }}
-                    titleColor={themePalette.alternateTextColor}
-                    actAsExpander
+                    titleTypographyProps={{ color: 'textSecondary' }}
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
-                    showExpandableButton
+                    action={
+                      <IconButton
+                        onClick={() => this.setState({ expandedCards: { stories: !this.state.expandedCards.stories } })}
+                      >
+                        {this.state.expandedCards.stories ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    }
                   />
-                  <CardContent expandable>
-                    <div className="row" style={{ paddingTop: '20px' }}>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeModifiedStories)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_modified',
-                            'Recently Modified',
-                            'words'
-                          )}
-                          docType="stories"
-                        />
-                      </div>
-                      <div className={classNames('col-xs-6')}>
-                        <RecentActivityList
-                          theme={this.props.routeParams.theme}
-                          data={selectn('response', computeCreatedStories)}
-                          title={intl.trans(
-                            'views.pages.explore.dialect.learn.recently_created',
-                            'Recently Created',
-                            'words'
-                          )}
-                          docType="stories"
-                        />
-                      </div>
-                      <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                  <Collapse
+                    in={this.state.expandedCards.stories}
+                    timeout="auto"
+                    unmountOnExit
+                    onEnter={this._loadRecentActivity.bind(this, 'stories')}
+                  >
+                    <CardContent>
+                      <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserModifiedStories)}
+                            data={selectn('response', computeModifiedStories)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_modified',
-                              'My Recently Modified',
+                              'views.pages.explore.dialect.learn.recently_modified',
+                              'Recently Modified',
                               'words'
                             )}
                             docType="stories"
@@ -683,18 +713,44 @@ export class DialectLearn extends Component {
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
                             theme={this.props.routeParams.theme}
-                            data={selectn('response', computeUserCreatedStories)}
+                            data={selectn('response', computeCreatedStories)}
                             title={intl.trans(
-                              'views.pages.explore.dialect.learn.my_recently_created',
-                              'My Recently Created',
+                              'views.pages.explore.dialect.learn.recently_created',
+                              'Recently Created',
                               'words'
                             )}
                             docType="stories"
                           />
                         </div>
-                      </AuthenticationFilter>
-                    </div>
-                  </CardContent>
+                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserModifiedStories)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_modified',
+                                'My Recently Modified',
+                                'words'
+                              )}
+                              docType="stories"
+                            />
+                          </div>
+                          <div className={classNames('col-xs-6')}>
+                            <RecentActivityList
+                              theme={this.props.routeParams.theme}
+                              data={selectn('response', computeUserCreatedStories)}
+                              title={intl.trans(
+                                'views.pages.explore.dialect.learn.my_recently_created',
+                                'My Recently Created',
+                                'words'
+                              )}
+                              docType="stories"
+                            />
+                          </div>
+                        </AuthenticationFilter>
+                      </div>
+                    </CardContent>
+                  </Collapse>
                 </Card>
               </div>
             </div>
