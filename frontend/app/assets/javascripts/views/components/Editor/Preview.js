@@ -102,6 +102,7 @@ export class Preview extends Component {
   }
   state = {
     showAudioMetadata: false,
+    open: this.props.initiallyExpanded || false,
   }
 
   async componentDidMount() {
