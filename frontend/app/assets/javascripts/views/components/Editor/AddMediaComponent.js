@@ -35,7 +35,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import { Dialog } from '@material-ui/core'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
@@ -61,7 +62,8 @@ export class AddMediaComponent extends Component {
   }
 
   getDefaultValues() {
-    intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    // intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    label: intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
   }
 
   handleOpen() {
@@ -319,6 +321,11 @@ export class AddMediaComponent extends Component {
             {this.state.typeError}
             {form}
           </div>
+          <DialogActions>
+            <Button variant="flat" color="secondary" onClick={this.handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )
