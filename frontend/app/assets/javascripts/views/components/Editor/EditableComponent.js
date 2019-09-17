@@ -261,7 +261,7 @@ export class EditableComponentHelper extends Component {
     showPreview: bool,
     sectionProperty: string,
   }
-  defaultProps = {
+  static defaultProps = {
     className: '',
   }
   render() {
