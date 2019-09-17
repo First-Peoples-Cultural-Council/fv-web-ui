@@ -462,7 +462,7 @@ export class PageToolbar extends Component {
             <FormControlLabel
               control={
                 <Switch
-                  toggled={documentPublished}
+                  toggled={documentPublished === true ? true : undefined}
                   onToggle={this._documentActionsTogglePublished}
                   disabled={!documentEnabled && !documentPublished}
                   name="published"
