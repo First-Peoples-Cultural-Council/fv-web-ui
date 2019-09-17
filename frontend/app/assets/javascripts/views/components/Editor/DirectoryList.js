@@ -25,6 +25,8 @@ import selectn from 'selectn'
 
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
 import StringHelpers, { CLEAN_ID } from 'common/StringHelpers'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
@@ -85,20 +87,25 @@ export class DirectoryList extends Component {
     return (
       <div>
         {this.props.fancy ? (
-          <Select
-            data-testid={dataTestId}
-            maxHeight={300}
-            autoWidth
-            value={this.props.value}
-            onChange={this._handleChange}
-            floatingLabelText={intl.trans('select_x', 'Select ' + this.props.label, 'first', [this.props.label]) + ':'}
-          >
-            {entries.map((entry) => (
-              <MenuItem key={entry.value} value={entry.value}>
-                {entry.text}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl style={{ minWidth: 200 }}>
+            <InputLabel htmlFor={`${this.props.label}_select`}>
+              {intl.trans('select_x', 'Select ' + this.props.label, 'first', [this.props.label]) + ':'}
+            </InputLabel>
+            <Select
+              data-testid={dataTestId}
+              maxHeight={300}
+              autoWidth
+              value={this.props.value}
+              onChange={this._handleChange}
+              inputProps={{ name: `${this.props.label}_select` }}
+            >
+              {entries.map((entry) => (
+                <MenuItem key={entry.value} value={entry.value}>
+                  {entry.text}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         ) : (
           <select onChange={this._handleStandardSelectChange} data-testid={dataTestId}>
             {this.props.placeholder ? <option value>Please select:</option> : ''}
