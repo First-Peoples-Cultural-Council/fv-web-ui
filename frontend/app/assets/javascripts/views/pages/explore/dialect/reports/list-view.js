@@ -125,10 +125,10 @@ class CardView extends Component {
       //     ? UIHelpers.playAudio.bind(this, this.state, stateFunc, ConfGlobal.baseURL + audioObj)
       //     : UIHelpers.stopAudio.bind(this, this.state, stateFunc)
     }
-
+    const _style = Object.assign({}, defaultStyle, this.props.style)
     return (
       <div
-        style={Object.assign(defaultStyle, this.props.style)}
+        style={_style}
         key={this.props.item.uid}
         className={classNames('col-xs-12', 'col-md-12', { 'col-md-4': !this.props.fullWidth })}
       >
