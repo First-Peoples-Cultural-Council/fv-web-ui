@@ -27,6 +27,11 @@ import MetadataList from 'views/components/Browsing/metadata-list'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
+import Collapse from '@material-ui/core/Collapse'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import IconButton from '@material-ui/core/IconButton'
 import { withTheme } from '@material-ui/core/styles'
 
 const intl = IntlService.instance
@@ -37,6 +42,9 @@ export class MetadataPanel extends Component {
   static propTypes = {
     computeEntity: PropTypes.object.isRequired,
     properties: PropTypes.object.isRequired,
+  }
+  state = {
+    open: false,
   }
 
   constructor(props, context) {
@@ -129,24 +137,55 @@ export class MetadataPanel extends Component {
     const themePalette = this.props.theme.palette
 
     return (
-      <Card initiallyExpanded>
+      <Card>
         <CardHeader
           className="card-header-custom"
-          title={intl.trans('about_this_record', 'About this Record', 'upper')}
-          titleStyle={{ lineHeight: 'initial' }}
-          titleColor={themePalette.alternateTextColor}
-          actAsExpander
+          title={
+            <Typography variant="title">
+              {intl.trans('metadata', 'METADATA', 'upper')}
+              <IconButton
+                onClick={() => {
+                  this.setState({
+                    open: !this.state.open,
+                  })
+                }}
+              >
+                {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            </Typography>
+          }
+          // titleColor={themePalette.alternateTextColor}
           style={{
             backgroundColor: themePalette.primary2Color,
             height: 'initial',
             borderBottom: '4px solid ' + themePalette.primary1Color,
           }}
-          showExpandableButton
         />
-        <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
-          <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
-        </CardContent>
+        <Collapse in={this.state.open}>
+          <CardContent style={{ backgroundColor: themePalette.accent4Color }}>
+            <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
+          </CardContent>
+        </Collapse>
       </Card>
+      // v0:
+      // <Card initiallyExpanded>
+      //   <CardHeader
+      //     className="card-header-custom"
+      //     title={intl.trans('about_this_record', 'About this Record', 'upper')}
+      //     titleStyle={{ lineHeight: 'initial' }}
+      //     titleColor={themePalette.alternateTextColor}
+      //     actAsExpander
+      //     style={{
+      //       backgroundColor: themePalette.primary2Color,
+      //       height: 'initial',
+      //       borderBottom: '4px solid ' + themePalette.primary1Color,
+      //     }}
+      //     showExpandableButton
+      //   />
+      //   <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
+      //     <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
+      //   </CardContent>
+      // </Card>
     )
   }
 }
