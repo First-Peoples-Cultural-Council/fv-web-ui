@@ -32,8 +32,15 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import { Dialog } from '@material-ui/core'
-import GridTile from '@material-ui/core/GridListTile'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import Button from '@material-ui/core/Button'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+// import LinearProgress from '@material-ui/core/LinearProgress'
+import IconButton from '@material-ui/core/IconButton'
+import ActionInfo from '@material-ui/icons/Info'
+import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
 
 import MediaList from 'views/components/Browsing/media-list'
 import withPagination from 'views/hoc/grid-list/with-pagination'
@@ -81,32 +88,34 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
+            selectn('dc:title', resourceParentDialect),
+          ])
         : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
-        <div title={tooltip} className={classNames('action-info', { 'action-info--outline': isDialectShared })}>
-          i
-        </div>
+        <IconButton tooltip={tooltip} tooltipPosition="top-left">
+          {isDialectShared ? <ActionInfoOutline color="white" /> : <ActionInfo color="white" />}
+        </IconButton>
       )
     }
 
     return (
-      <GridTile
+      <GridListTile
         onClick={this.props.action ? this.props.action.bind(this, this.props.tile) : null}
         key={selectn('uid', tile)}
-        title={selectn('properties.dc:title', tile)}
-        actionPosition="right"
-        titlePosition={this.props.fileTypeTilePosition}
-        actionIcon={actionIcon}
-        subtitle={
-          <span>
-            <strong>{Math.round(selectn('properties.common:size', tile) * 0.001)} KB</strong>
-          </span>
-        }
       >
         {this.props.preview}
-      </GridTile>
+        <GridListTileBar
+          title={selectn('properties.dc:title', tile)}
+          actionPosition="right"
+          titlePosition={this.props.fileTypeTilePosition}
+          actionIcon={actionIcon}
+          subtitle={
+            <span>
+              <strong>{Math.round(selectn('properties.common:size', tile) * 0.001)} KB</strong>
+            </span>
+          }
+        />
+      </GridListTile>
     )
   }
 }
@@ -137,8 +146,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {
@@ -208,9 +217,9 @@ class SelectMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <button className="RaisedButton" onClick={this._handleOpen} type="button">
+        <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
-        </button>
+        </Button>
         <Dialog
           title={`${intl.searchAndReplace(
             `Select existing ${fileTypeLabel} from ${selectn(
@@ -245,6 +254,11 @@ class SelectMediaComponent extends Component {
             metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
             style={{ overflowY: 'auto', maxHeight: '100vh' }}
           />
+          <DialogActions>
+            <Button variant="flat" color="secondary" onClick={this._handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )
