@@ -2,7 +2,7 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import Icon from '@material-ui/core/Icon'
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import Button from '@material-ui/core/Button'
 
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
@@ -42,6 +42,7 @@ function renderInput(locals) {
         tagStyles={locals.type == 'FVPicture' ? { height: '200px' } : null}
       />
       <Button
+        variant="flat"
         style={{
           position: 'absolute',
           top: 0,
@@ -55,12 +56,9 @@ function renderInput(locals) {
           borderRight: 0,
         }}
         onClick={_onRequestEdit}
-        label={intl.trans('replace', 'Replace', 'first')}
-        labelPosition="after"
       >
-        <Icon style={{ verticalAlign: 'middle' }} className="material-icons">
-          swap_horiz
-        </Icon>
+        <SwapHorizIcon style={{ verticalAlign: 'middle' }} className="material-icons" />
+        {intl.trans('replace', 'Replace', 'first')}
       </Button>
     </div>
   )
@@ -83,7 +81,9 @@ function renderInput(locals) {
           dialect={locals.context}
         />
         {selectn('context.initialValues.' + locals.attrs.name, locals) ? (
-          <Button onClick={onCancel}>{intl.trans('cancel', 'Cancel', 'first')}</Button>
+          <Button variant="flat" onClick={onCancel}>
+            {intl.trans('cancel', 'Cancel', 'first')}
+          </Button>
         ) : (
           ''
         )}
