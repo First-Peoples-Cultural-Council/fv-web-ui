@@ -10,7 +10,10 @@ import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
 import SelectFactory from 'views/components/Editor/fields/select'
 import MediaFactory from 'views/components/Editor/fields/media'
 
-import { IconButton } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import Clear from '@material-ui/icons/Clear'
+import ArrowForward from '@material-ui/icons/ArrowForward'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 import ProviderHelpers from '../../common/ProviderHelpers'
@@ -117,17 +120,17 @@ const RelatedMediaLayout = (locals) => (
 
               switch (button.type) {
                 case 'remove':
-                  icon = 'clear'
+                  icon = <Clear />
                   label = intl.trans('remove_item', 'Remove Item', 'first')
                   break
 
                 case 'move-up':
-                  icon = 'arrow_back'
+                  icon = <ArrowBack />
                   label = intl.trans('move_left', 'Move left (appears first)', 'first')
                   break
 
                 case 'move-down':
-                  icon = 'arrow_forward'
+                  icon = <ArrowForward />
                   label = intl.trans('move_right', 'Move right', 'first')
                   break
                 default: // Note: do nothing
