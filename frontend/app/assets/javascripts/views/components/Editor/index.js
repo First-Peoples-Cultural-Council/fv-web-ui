@@ -51,6 +51,7 @@ export class Editor extends Component {
           }}
           name={name}
           value={this.state.text}
+          onChange={() => {}} // Note: ReactQuill sets this input
           ref={setRef}
         />
         <ReactQuill
