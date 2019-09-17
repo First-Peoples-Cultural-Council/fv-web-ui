@@ -1,5 +1,6 @@
 import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
@@ -170,21 +171,24 @@ export default class DialogCreateForm extends React.Component {
       !this.props.fieldAttributes.disableCreateNewButton ||
       this.props.fieldAttributes.disableCreateNewButton === false
     ) {
-      createNewButton = <Button variant="contained" label={createNewButtonLabel} onClick={this.handleOpen} />
+      createNewButton = (
+        <Button variant="raised" onClick={this.handleOpen}>
+          {createNewButtonLabel}
+        </Button>
+      )
     }
-
-    const actions = [
-      <Button key="FlatButton0" color="secondary" onClick={this.handleClose}>
-        {intl.trans('cancel', 'Cancel', 'first')}
-      </Button>,
-    ]
 
     return (
       <div>
         {createNewButton}
 
-        <Dialog open={this.state.open} onRequestClose={this.handleClose} autoScrollBodyContent actions={actions}>
+        <Dialog open={this.state.open} onClose={this.handleClose}>
           {createForm}
+          <DialogActions>
+            <Button variant="flat" color="secondary" onClick={this.handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )
