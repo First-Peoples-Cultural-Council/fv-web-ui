@@ -153,9 +153,9 @@ export class PageHome extends Component {
     const page = selectn('response.entries[0].properties', computePage)
     //const dialects = selectn('response.entries', computePortals);
 
-    const primary1Color = selectn('theme.v0.palette.primary1Color', this.props)
-    const primary2Color = selectn('theme.v0.palette.primary2Color', this.props)
-    // const alternateTextColor = selectn('theme.v0.palette.alternateTextColor', this.props)
+    const primary1Color = selectn('theme.palette.primary1Color', this.props)
+    const primary2Color = selectn('theme.palette.primary2Color', this.props)
+    // const alternateTextColor = selectn('theme.palette.alternateTextColor', this.props)
     const intl = this.intl
 
     const accessButtons = []

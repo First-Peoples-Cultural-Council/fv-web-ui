@@ -38,9 +38,9 @@ import IntlService from 'views/services/intl'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
-import { FirstVoicesKidsThemeV1 as FirstVoicesKidsTheme } from 'views/themes/FirstVoicesKidsTheme.js'
-import { FirstVoicesWorkspaceThemeV1 as FirstVoicesWorkspaceTheme } from 'views/themes/FirstVoicesWorkspaceTheme.js'
+import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
+import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
 
 const getPreferences = function getPreferences(login, dialect) {
   const preferenceString = selectn('response.properties.preferences', login)
@@ -118,7 +118,7 @@ class AppWrapper extends Component {
       default:
         theme = createMuiTheme(FirstVoicesTheme)
     }
-    const backgroundColor = selectn('v0.wrapper.backgroundColor', theme)
+    const backgroundColor = selectn('wrapper.backgroundColor', theme)
     return (
       <MuiThemeProvider theme={theme}>
         <div

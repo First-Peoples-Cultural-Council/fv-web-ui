@@ -13,49 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { cyan, pink, grey } from '@material-ui/core/colors'
+import { cyan, grey, pink } from '@material-ui/core/colors'
+import * as ColorManipulator from '@material-ui/core/styles/colorManipulator'
 import Spacing from '@material-ui/core/styles/spacing'
 import zIndex from '@material-ui/core/styles/zIndex'
 
-// v0
-const v0 = {
-  spacing: Spacing,
-  zIndex: zIndex,
-  typography: {
-    fontFamily: 'Arial, sans-serif',
-  },
-  primary: {
-    contrastText: '#0000ff',
-    dark: '#0b1735',
-    light: '#eeeed1',
-    main: '#b40000',
-  },
-  palette: {
-    primary1Color: '#b40000',
-    primary2Color: cyan[700],
-    primary2ColorText: '#000',
-    primary3Color: grey[800],
-    // primary4Color
-    // primary4ColorLightest
-    accent1Color: pink.A200,
-    accent2Color: grey[100],
-    accent3Color: grey[500],
-    // accent4Color
-    textColor: grey[900],
-    // textColorFaded
-    alternateTextColor: grey[50],
-    canvasColor: grey[50],
-    borderColor: grey[300],
-    disabledColor: grey[500],
-    pickerHeaderColor: cyan[500],
-  },
-  wrapper: {
-    backgroundColor: grey[50],
-  },
-}
-
-// V1
-export const FirstVoicesKidsThemeV1 = {
+export default {
   spacing: Spacing,
   zIndex: zIndex,
   typography: {
@@ -67,20 +30,22 @@ export const FirstVoicesKidsThemeV1 = {
       light: '#ee492d',
       main: '#b40000',
       dark: '#7d0000',
-      contrastText: '#ffffff',
+      contrastText: '#fff',
     },
-    // secondary: {
-    //   light: '#5888a4',
-    //   main: '#275b75',
-    //   dark: '#003249',
-    //   //   contrastText: getContrastText(palette.secondary.A400),
-    // },
-    // error: {
-    //   light: palette.error[300],
-    //   main: palette.error[500],
-    //   dark: palette.error[700],
-    //   contrastText: getContrastText(palette.error[500]),
-    // },
+    primary1Color: '#b40000',
+    primary2Color: cyan[700],
+    primary3Color: grey[800],
+    accent1Color: pink.A200,
+    accent2Color: grey[100],
+    accent3Color: grey[500],
+    textColor: grey[900],
+    alternateTextColor: '#fff',
+    canvasColor: '#fff',
+    borderColor: grey[300],
+    disabledColor: ColorManipulator.fade('#000000', 0.3),
+    pickerHeaderColor: cyan[500],
   },
-  v0,
+  wrapper: {
+    backgroundColor: '#fff',
+  },
 }

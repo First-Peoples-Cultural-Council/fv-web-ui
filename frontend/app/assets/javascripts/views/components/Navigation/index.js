@@ -261,7 +261,7 @@ export class Navigation extends Component {
       </div>
     )
 
-    const themeZeroPalette = selectn('theme.v0.palette', this.props)
+    const themeZeroPalette = selectn('theme.palette', this.props)
     const color = selectn('theme.palette.primary.contrastText', this.props)
 
     return (

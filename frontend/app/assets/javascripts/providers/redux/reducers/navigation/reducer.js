@@ -18,7 +18,7 @@ import {
 } from './actionTypes'
 
 import { createMuiTheme } from '@material-ui/core/styles'
-import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
+import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 const theme = createMuiTheme(FirstVoicesTheme)
 const initialStateProperties = {
   title: ConfGlobal.title,

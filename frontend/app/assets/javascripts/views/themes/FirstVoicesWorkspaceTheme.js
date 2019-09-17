@@ -14,48 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { teal, grey, pink } from '@material-ui/core/colors'
+import { fade } from '@material-ui/core/styles/colorManipulator'
 import Spacing from '@material-ui/core/styles/spacing'
 import zIndex from '@material-ui/core/styles/zIndex'
 
-// v0
-const v0 = {
-  spacing: Spacing,
-  zIndex: zIndex,
-  typography: {
-    fontFamily: 'Arial, sans-serif',
-  },
-  primary: {
-    // contrastText: '#0000ff',
-    dark: '#0b1735',
-    light: '#eeeed1',
-    main: '#eaeaea',
-  },
-  palette: {
-    primary1Color: teal[400],
-    primary2Color: teal[700],
-    primary2ColorText: '#fff',
-    primary3Color: grey[800],
-    // primary4Color
-    // primary4ColorLightest
-    accent1Color: pink.A200,
-    accent2Color: '#529c95',
-    accent3Color: grey[500],
-    // accent4Color
-    textColor: grey[900],
-    // textColorFaded
-    alternateTextColor: grey[50],
-    canvasColor: grey[50],
-    borderColor: grey[300],
-    disabledColor: grey[500],
-    pickerHeaderColor: teal[400],
-  },
-  wrapper: {
-    backgroundColor: grey[50],
-  },
-}
-
-// v1
-export const FirstVoicesWorkspaceThemeV1 = {
+export default {
   spacing: Spacing,
   zIndex: zIndex,
   typography: {
@@ -69,32 +32,20 @@ export const FirstVoicesWorkspaceThemeV1 = {
       light: '#64d8cb',
       main: '#26a69a',
     },
-    // secondary: {
-    //   // contrastText: getContrastText(palette.secondary.A400),
-    //   dark: '#1c313a',
-    //   light: '#718792',
-    //   // main: '#455a64', // v1
-    //   // main: '#337ab7', // blue
-    //   // main: '#b40000', // red
-    //   main: '#ff4081', // red/pink
-    // },
-    // error: {
-    //   light: palette.error[300],
-    //   main: palette.error[500],
-    //   dark: palette.error[700],
-    //   contrastText: getContrastText(palette.error[500]),
-    // },
-    colorSwitchBase: {
-      color: '#0D47A1',
-      '&$colorChecked': {
-        color: '#b71c1c',
-        '& + $colorBar': {
-          backgroundColor: '#1B5E20',
-        },
-      },
-    },
-    colorChecked: {},
-    colorBar: {},
+    primary1Color: teal[400],
+    primary2Color: teal[700],
+    primary3Color: grey[800],
+    accent1Color: pink.A200,
+    accent2Color: '#529c95',
+    accent3Color: grey[500],
+    textColor: grey[900],
+    alternateTextColor: '#fff',
+    canvasColor: '#fff',
+    borderColor: grey[300],
+    disabledColor: fade('#000000', 0.3),
+    pickerHeaderColor: teal[400],
   },
-  v0,
+  wrapper: {
+    backgroundColor: '#fff',
+  },
 }

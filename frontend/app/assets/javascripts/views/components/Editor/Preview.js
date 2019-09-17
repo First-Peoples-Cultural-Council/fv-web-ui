@@ -139,7 +139,7 @@ export class Preview extends Component {
   }
 
   render() {
-    const themePalette = this.props.theme.v0.palette
+    const themePalette = this.props.theme.palette
 
     let handleExpandChange = () => {}
 

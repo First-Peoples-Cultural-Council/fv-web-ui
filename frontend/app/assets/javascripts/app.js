@@ -20,9 +20,9 @@ import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
 import { createMuiTheme } from '@material-ui/core/styles'
 
-import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
-import { FirstVoicesKidsThemeV1 as FirstVoicesKidsTheme } from 'views/themes/FirstVoicesKidsTheme.js'
-import { FirstVoicesWorkspaceThemeV1 as FirstVoicesWorkspaceTheme } from 'views/themes/FirstVoicesWorkspaceTheme.js'
+import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
+import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
 import ConfGlobal from 'conf/local.js'
 
 // REDUX
