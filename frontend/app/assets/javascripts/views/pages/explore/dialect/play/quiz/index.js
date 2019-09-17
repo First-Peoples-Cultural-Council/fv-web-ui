@@ -387,7 +387,7 @@ export class Quiz extends Component {
             <div className="col-xs-12">
               <LinearProgress
                 style={{ height: '15px' }}
-                mode="determinate"
+                variant="determinate"
                 value={((this.state.currentAnswerIndex + 1) / this.state.totalQuestions) * 100}
               />
             </div>

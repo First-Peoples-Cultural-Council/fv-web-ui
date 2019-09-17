@@ -81,8 +81,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-            selectn('dc:title', resourceParentDialect),
-          ])
+          selectn('dc:title', resourceParentDialect),
+        ])
         : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <div title={tooltip} className={classNames('action-info', { 'action-info--outline': isDialectShared })}>
@@ -137,8 +137,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {
@@ -227,7 +227,7 @@ class SelectMediaComponent extends Component {
           <div className={classNames('alert', 'alert-info', { hidden: !selectn('isFetching', computeResources) })}>
             {intl.trans('loading_results_please_wait', 'Loading results, please wait.', 'first')}
             {/* <br /> */}
-            {/* <LinearProgress mode="indeterminate" /> */}
+            {/* <LinearProgress variant="indeterminate" /> */}
           </div>
           <FilteredPaginatedMediaList
             action={this._handleSelectElement}

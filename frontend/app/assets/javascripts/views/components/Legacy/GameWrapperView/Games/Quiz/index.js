@@ -257,7 +257,7 @@ class Quiz extends React.Component {
           <div className="col-xs-12">
             <LinearProgress
               style={this.linearProgressStyle}
-              mode="determinate"
+              variant="determinate"
               value={((this.state.currentAnswerIndex + 1) / this.totalQuestion) * 100}
             />
           </div>
