@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 // import { Immutable, Map } from 'immutable'
 
@@ -28,14 +28,17 @@ import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
 
 import selectn from 'selectn'
 
-import { Dialog } from '@material-ui/core'
-import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
+import { WORKSPACES } from 'common/Constants'
+
+import Button from '@material-ui/core/Button'
 import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
 import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
-import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import IntlService from 'views/services/intl'
-import { WORKSPACES } from 'common/Constants'
+import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
+import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
+import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 
 const intl = IntlService.instance
 const DefaultFetcherParams = {
@@ -98,7 +101,7 @@ class SharedResourceGridTile extends Component {
 
 const { func, object, string } = PropTypes
 
-export class BrowseComponent extends React.Component {
+export class BrowseComponent extends Component {
   static propTypes = {
     containerType: string,
     dialect: object.isRequired,
@@ -128,8 +131,8 @@ export class BrowseComponent extends React.Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {
@@ -258,9 +261,9 @@ export class BrowseComponent extends React.Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <button className="RaisedButton" type="button" disabled={this.props.disabled} onClick={this._handleOpen}>
+        <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
-        </button>
+        </Button>
         <Dialog
           title={title}
           actions={actions}
@@ -274,6 +277,12 @@ export class BrowseComponent extends React.Component {
               return view
             }
           })()}
+
+          <DialogActions>
+            <Button variant="flat" color="secondary" onClick={this._handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )
