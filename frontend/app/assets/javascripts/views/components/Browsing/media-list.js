@@ -18,8 +18,10 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import GridList from '@material-ui/core/GridList/GridList'
-import GridTile from '@material-ui/core/GridListTile'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -141,25 +143,24 @@ export class MediaList extends Component {
 
             const href = NavigationHelpers.generateUIDPath(this.props.theme, tile, 'media')
             return (
-              <GridTile
-                onClick={action.bind(this, tile)}
-                key={tile.uid}
-                title={
-                  <a
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-                    }}
-                  >
-                    {tile.title}
-                  </a>
-                }
-                titlePosition={fileTypeTilePosition}
-                subtitle={subtitle}
-              >
+              <GridListTile onClick={action.bind(this, tile)} key={tile.uid}>
                 {this._getMediaPreview(tile)}
-              </GridTile>
+                <GridListTileBar
+                  title={
+                    <a
+                      href={href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+                      }}
+                    >
+                      {tile.title}
+                    </a>
+                  }
+                  titlePosition={fileTypeTilePosition}
+                  subtitle={subtitle}
+                />
+              </GridListTile>
             )
           })}
         </GridList>
