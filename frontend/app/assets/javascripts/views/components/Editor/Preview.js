@@ -157,7 +157,7 @@ export class Preview extends Component {
       this.props.styles
     )
 
-    let body = <CircularProgress mode="indeterminate" size={1} />
+    let body = <CircularProgress variant="indeterminate" size={1} />
 
     switch (this.props.type) {
       case 'FVWord': {
