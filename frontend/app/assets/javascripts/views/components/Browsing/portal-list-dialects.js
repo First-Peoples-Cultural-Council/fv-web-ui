@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import { amber } from '@material-ui/core/colors'
+// import { amber } from '@material-ui/core/colors'
 import Grade from '@material-ui/icons/Grade'
 
 // REDUX
