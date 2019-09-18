@@ -19,12 +19,16 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardMedia from '@material-ui/core/CardMedia'
-import CardContent from '@material-ui/core/CardContent'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+
+import ClearIcon from '@material-ui/icons/Clear'
+import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
+
 import IntlService from 'views/services/intl'
 
 const defaultStyle = { marginBottom: '20px' }
@@ -41,7 +45,11 @@ export default class CardView extends Component {
   intl = IntlService.instance
 
   render() {
+    // NOTE: `action` not being used,
+    // defaultProps may be useful in this situation
+
     // If action is not defined
+    /*
     let action
 
     if (this.props.hasOwnProperty('action') && typeof this.props.action === 'function') {
@@ -49,6 +57,7 @@ export default class CardView extends Component {
     } else {
       action = () => {}
     }
+    */
 
     let coverImage = null
 
@@ -70,11 +79,18 @@ export default class CardView extends Component {
         className={classNames('col-xs-12', 'col-md-' + Math.ceil(12 / this.props.cols))}
       >
         <Card style={{ minHeight: '260px' }}>
-          <CardHeader
-            title={<span>{this.intl.searchAndReplace(this.props.item.title)}</span>}
-            subheader={this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
-          />
-          <CardMedia>
+          <CardMedia
+            overlay={
+              <div>
+                <Typography variant="headline" component="h2">
+                  <span>{this.intl.searchAndReplace(this.props.item.title)}</span>
+                </Typography>
+                <Typography variant="subheading" component="h3">
+                  {this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
+                </Typography>
+              </div>
+            }
+          >
             <div
               style={{
                 backgroundSize: selectn('width', coverImage) > 200 ? '100%' : 'cover',
@@ -102,11 +118,10 @@ export default class CardView extends Component {
               }}
             >
               <IconButton
-                // iconClassName="material-icons"
                 style={{ position: 'absolute', right: 0, zIndex: 1000 }}
                 onClick={() => this.setState({ showIntro: false })}
               >
-                clear
+                <ClearIcon />
               </IconButton>
 
               {this.intl.searchAndReplace(introduction)}
@@ -114,7 +129,7 @@ export default class CardView extends Component {
           </CardMedia>
 
           <CardContent style={{ padding: '4px' }}>
-            <Button onClick={this.props.action.bind(this, this.props.item)} color="primary">
+            <Button variant="flat" onClick={this.props.action.bind(this, this.props.item)} color="primary">
               {this.intl.translate({
                 key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
                 default: 'Continue to Entry',
@@ -126,7 +141,6 @@ export default class CardView extends Component {
               if (introduction) {
                 return (
                   <IconButton
-                    // iconClassName="material-icons"
                     style={{
                       verticalAlign: '-5px',
                       padding: '5px',
@@ -138,7 +152,7 @@ export default class CardView extends Component {
                     onClick={() => this.setState({ showIntro: !this.state.showIntro })}
                     touch
                   >
-                    flip_to_front
+                    <FlipToFrontIcon />
                   </IconButton>
                 )
               }
