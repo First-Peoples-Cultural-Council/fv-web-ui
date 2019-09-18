@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { Set } from 'immutable'
+import { Set } from 'immutable'
 
 import Button from '@material-ui/core/Button'
 import memoize from 'memoize-one'
@@ -8,7 +8,7 @@ import selectn from 'selectn'
 
 import { debounce } from 'debounce'
 import Paper from '@material-ui/core/Paper'
-import ListUI from '@material-ui/core/List'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Checkbox from '@material-ui/core/Checkbox'
 import withToggle from 'views/hoc/view/with-toggle'
@@ -91,7 +91,7 @@ export default class FacetFilterListCategory extends Component {
         </Button>
         <FiltersWithToggle className="panel-category" label={this.title} mobileOnly style={this.props.styles}>
           <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
-            <ListUI>{this.listItems}</ListUI>
+            <List>{this.listItems}</List>
           </Paper>
         </FiltersWithToggle>
       </div>
@@ -99,7 +99,6 @@ export default class FacetFilterListCategory extends Component {
   }
 
   _clearCategoryFilter() {
-    console.log('_clearCategoryFilter')
     this.props.clearCategoryFilter()
   }
 

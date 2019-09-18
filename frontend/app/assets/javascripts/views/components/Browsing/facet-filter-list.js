@@ -7,7 +7,7 @@ import { debounce } from 'debounce'
 import memoize from 'memoize-one'
 
 import Paper from '@material-ui/core/Paper'
-import ListUI from '@material-ui/core/List'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -141,10 +141,10 @@ export default class FacetFilterList extends Component {
     return (
       <FiltersWithToggle label={this.title} mobileOnly style={this.props.styles}>
         <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
-          <ListUI>
+          <List>
             <ListSubheader>{this.title}</ListSubheader>
             {this.listItems}
-          </ListUI>
+          </List>
         </Paper>
       </FiltersWithToggle>
     )
