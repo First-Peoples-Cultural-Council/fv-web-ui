@@ -53,21 +53,6 @@ export class DialectList extends Component {
     fancy: true,
   }
 
-  constructor(props) {
-    super(props)
-
-    this._handleChange = this._handleChange.bind(this)
-    this._handleStandardSelectChange = this._handleStandardSelectChange.bind(this)
-  }
-
-  _handleChange(event, index, value) {
-    this.props.onChange(value)
-  }
-
-  _handleStandardSelectChange(event) {
-    this.props.onChange(event.target.value)
-  }
-
   componentWillReceiveProps(nextProps) {
     // Ensure value is in sync -- relevant for setting default value dynamically
     if (nextProps.value != undefined) {
@@ -91,19 +76,13 @@ export class DialectList extends Component {
         entity: this.props.computeDialectList,
       },
     ])
-
     return (
       <PromiseWrapper hideProgress computeEntities={computeEntities}>
         {this.props.fancy ? (
-          <Select
-            maxHeight={300}
-            autoWidth
-            value={this.props.value}
-            onChange={this._handleChange}
-            floatingLabelText={
-              intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'
-            }
-          >
+          <Select maxHeight={300} autoWidth value={this.props.value} onChange={this._handleChange}>
+            <MenuItem value>
+              {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
+            </MenuItem>
             {entries.map((entry) => (
               <MenuItem key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
                 {selectn('dc:title', entry)}
@@ -111,7 +90,7 @@ export class DialectList extends Component {
             ))}
           </Select>
         ) : (
-          <select className="form-control" value={this.props.value} onChange={this._handleStandardSelectChange}>
+          <select className="form-control" value={this.props.value} onChange={this._handleChange}>
             <option value>
               {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
             </option>
@@ -124,6 +103,10 @@ export class DialectList extends Component {
         )}
       </PromiseWrapper>
     )
+  }
+
+  _handleChange = (event) => {
+    this.props.onChange(event.target.value)
   }
 }
 
