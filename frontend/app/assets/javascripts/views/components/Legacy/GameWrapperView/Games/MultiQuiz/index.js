@@ -22,7 +22,7 @@ const _ = require('underscore')
 const classNames = require('classnames')
 const Mui = require('@material-ui')
 
-const { IconButton, RaisedButton, LinearProgress, Snackbar } = Mui
+const { IconButton, Button, LinearProgress, Snackbar } = Mui
 
 const ThemeManager = new Mui.Styles.ThemeManager()
 
@@ -260,12 +260,14 @@ class MultiQuiz extends React.Component {
           </div>
           <div className={classNames('col-xs-8', 'text-center')}>
             <div>
-              <RaisedButton
-                secondary
+              <Button
+                variant="raised"
+                color="secondary"
                 disabled={this.state.currentAnswerIndex in this.state.selectedAnswers ? false : true}
                 onClick={this.checkAnswer.bind(this)}
-                label="Check Answer"
-              />
+              >
+                Check Answer
+              </Button>
             </div>
             <Snackbar
               ref="feedback"
