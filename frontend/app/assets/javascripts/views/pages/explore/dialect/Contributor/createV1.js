@@ -172,7 +172,7 @@ export class PageDialectContributorsCreate extends Component {
     const contributor = ProviderHelpers.getEntry(computeContributor, this.state.contributorPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress mode="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" size={2} />
     }
 
     return (
@@ -211,7 +211,7 @@ export class PageDialectContributorsCreate extends Component {
           </div>
 
           <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+            <Paper style={{ padding: '15px', margin: '20px 0' }}>
               <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
             </Paper>
           </div>
