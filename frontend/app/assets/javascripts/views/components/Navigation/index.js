@@ -29,17 +29,19 @@ import UIHelpers from 'common/UIHelpers'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grow from '@material-ui/core/Grow'
 import IconButton from '@material-ui/core/IconButton'
+import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Select from '@material-ui/core/Select'
 import TextField from '@material-ui/core/TextField'
-import Toolbar from '@material-ui/core/Toolbar/Toolbar'
+import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
-import Grow from '@material-ui/core/Grow'
 import { withTheme } from '@material-ui/core/styles'
 
 // MAT-UI: Icons
@@ -382,6 +384,7 @@ export class Navigation extends Component {
                 {/* Search Button: Cancel (only on small screens) */}
                 <span className="hideLarge">
                   <Button
+                    variant="flat"
                     onClick={(e) => {
                       e.preventDefault()
                       // this.navigationSearchButton.focus()
@@ -451,16 +454,23 @@ export class Navigation extends Component {
               <Typography variant="title" className="Navigation__localeTitle" style={{ color }}>
                 {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
               </Typography>
-              <Select
-                value={this.intl.locale || 'en'}
-                onChange={(event) => {
-                  this._handleChangeLocale(event.target.value)
-                }}
-                style={{ color }}
-              >
-                <MenuItem value="en">English</MenuItem>
-                <MenuItem value="fr">Français</MenuItem>
-              </Select>
+              <FormControl>
+                <InputLabel htmlFor="locale-select">Language</InputLabel>
+                <Select
+                  value={this.intl.locale || 'en'}
+                  onChange={(event) => {
+                    this._handleChangeLocale(event.target.value)
+                  }}
+                  style={{ color }}
+                  inputProps={{
+                    name: 'locale',
+                    id: 'locale-select',
+                  }}
+                >
+                  <MenuItem value="en">English</MenuItem>
+                  <MenuItem value="fr">Français</MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </Toolbar>
         </div>
