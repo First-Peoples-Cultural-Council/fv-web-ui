@@ -33,17 +33,16 @@ import { fetchUserDialects } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
 
+import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-
-import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
-
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
+import ProviderHelpers from 'common/ProviderHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
@@ -157,27 +156,29 @@ export class Tasks extends React.Component {
           </TableCell>
           <TableCell>
             <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
-              <button
-                type="button"
-                className="RaisedButton RaisedButton--primary"
+              <Button
+                variant="raised"
+                color="secondary"
+                // className="RaisedButton RaisedButton--primary"
                 onClick={(e) => {
                   e.preventDefault()
                   this._handleTaskActions(task.id, 'approve')
                 }}
               >
                 {intl.trans('approve', 'Approve', 'first')}
-              </button>
+              </Button>
 
-              <button
-                type="button"
-                className="RaisedButton RaisedButton--primary Tasks__reject"
+              <Button
+                variant="raised"
+                color="secondary"
+                // className="RaisedButton RaisedButton--primary Tasks__reject"
                 onClick={(e) => {
                   e.preventDefault()
                   this._handleTaskActions(task.id, 'reject')
                 }}
               >
                 {intl.trans('reject', 'Reject', 'first')}
-              </button>
+              </Button>
             </div>
           </TableCell>
           <TableCell className="Tasks__taskDueDateContainer">
