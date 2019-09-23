@@ -46,17 +46,17 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
-import Dialog from '@material-ui/core/Dialog'
-
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
-
-import ListUI from '@material-ui/core/List'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import List from '@material-ui/core/Button'
 import ListItem from '@material-ui/core/ListItem'
-
-import Tabs from '@material-ui/core/Tabs'
+import ListItemText from '@material-ui/core/ListItemText'
 import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
@@ -127,17 +127,13 @@ export class View extends Component {
     const title = selectn('properties.dc:title', media)
     const uid = selectn('uid', media)
 
-    if (title && selectn('pageTitleParams.media', this.props.properties) != title) {
+    if (title && selectn('pageTitleParams.media', this.props.properties) !== title) {
       this.props.changeTitleParams({ media: title })
       this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.media' })
     }
   }
 
   render() {
-    const tabItemStyles = {
-      userSelect: 'none',
-    }
-
     const _computeEntities = Immutable.fromJS([
       {
         id: this._getMediaPath(),
@@ -206,8 +202,27 @@ export class View extends Component {
           <div className="col-xs-12">
             <div>
               <Card>
-                <Tabs tabItemContainerStyle={tabItemStyles}>
-                  <Tab label={intl.trans('overview', 'Overview', 'first')}>
+                <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+                  <Tab label={intl.trans('overview', 'Overview', 'first')} />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('words', 'Words', 'first')
+                        : intl.trans('linked_words', 'Linked Words', 'words')
+                    }
+                    id="find_words"
+                  />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('phrases', 'Phrases', 'first')
+                        : intl.trans('linked_phrases', 'Linked Phrases', 'words')
+                    }
+                    id="find_phrases"
+                  />
+                </Tabs>
+                {this.state.tabValue === 0 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
                       <CardContent>
                         <div className={classNames('col-md-8', 'col-xs-12')}>{preview}</div>
@@ -219,7 +234,7 @@ export class View extends Component {
                             if (thumbnails && thumbnails.length > 0) {
                               return (
                                 <div>
-                                  <ListUI
+                                  <List
                                     subheader={intl.trans(
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
@@ -230,17 +245,20 @@ export class View extends Component {
                                         <ListItem
                                           onClick={() => this.setState({ showThumbnailDialog: thumbnail })}
                                           key={key}
-                                          primaryText={thumbnail.title}
-                                          secondaryText={
-                                            <p>
-                                              <span style={{ color: '#000' }}>{thumbnail.description}</span> -- (
-                                              {thumbnail.width + 'x' + thumbnail.height})
-                                            </p>
-                                          }
-                                        />
+                                        >
+                                          <ListItemText
+                                            primary={thumbnail.title}
+                                            secondary={
+                                              <p>
+                                                <span style={{ color: '#000' }}>{thumbnail.description}</span>
+                                                -- ({thumbnail.width + 'x' + thumbnail.height})
+                                              </p>
+                                            }
+                                          />
+                                        </ListItem>
                                       )
                                     })}
-                                  </ListUI>
+                                  </List>
 
                                   <Dialog
                                     contentStyle={{
@@ -250,15 +268,6 @@ export class View extends Component {
                                     }}
                                     autoScrollBodyContent
                                     title={selectn('title', this.state.showThumbnailDialog)}
-                                    actions={[
-                                      <Button
-                                        key="FlatButton0"
-                                        color="secondary"
-                                        onClick={() => this.setState({ showThumbnailDialog: null })}
-                                      >
-                                        {intl.trans('close', 'Close', 'first')}
-                                      </Button>,
-                                    ]}
                                     modal={false}
                                     open={this.state.showThumbnailDialog === null ? false : true}
                                     onRequestClose={() => this.setState({ showThumbnailDialog: null })}
@@ -278,6 +287,15 @@ export class View extends Component {
                                         style={{ width: '100%', padding: '5px' }}
                                       />
                                     </p>
+                                    <DialogActions>
+                                      <Button
+                                        variant="flat"
+                                        color="secondary"
+                                        onClick={() => this.setState({ showThumbnailDialog: null })}
+                                      >
+                                        {intl.trans('close', 'Close', 'first')}
+                                      </Button>
+                                    </DialogActions>
                                   </Dialog>
                                 </div>
                               )
@@ -286,15 +304,10 @@ export class View extends Component {
                         </div>
                       </CardContent>
                     </div>
-                  </Tab>
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('words', 'Words', 'first')
-                        : intl.trans('linked_words', 'Linked Words', 'words')
-                    }
-                    id="find_words"
-                  >
+                  </Typography>
+                )}
+                {this.state.tabValue === 1 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
                       <CardContent>
                         <h2>
@@ -306,15 +319,10 @@ export class View extends Component {
                         </div>
                       </CardContent>
                     </div>
-                  </Tab>
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('phrases', 'Phrases', 'first')
-                        : intl.trans('linked_phrases', 'Linked Phrases', 'words')
-                    }
-                    id="find_phrases"
-                  >
+                  </Typography>
+                )}
+                {this.state.tabValue === 2 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
                       <CardContent>
                         <h2>
@@ -326,8 +334,8 @@ export class View extends Component {
                         </div>
                       </CardContent>
                     </div>
-                  </Tab>
-                </Tabs>
+                  </Typography>
+                )}
               </Card>
             </div>
           </div>
