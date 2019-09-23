@@ -15,8 +15,6 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { Map } from 'immutable'
-import classNames from 'classnames'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -26,6 +24,7 @@ import t from 'tcomb-form'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -127,13 +126,13 @@ export default class GroupAssignmentDialog extends Component {
 
   render() {
     const currentlyAssignedGroups = selectn(this.props.fieldMapping.groups, this.props.selectedItem) || []
-    const currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group) => {
-      return (
-        <span className={classNames('label', 'label-default')} style={{ marginRight: '5px' }}>
-          {StringHelpers.toTitleCase(group.replace(/_/g, ' '))}
-        </span>
-      )
-    })
+    // const currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group, key) => {
+    //   return (
+    //     <span key={key} className={classNames('label', 'label-default')} style={{ marginRight: '5px' }}>
+    //       {StringHelpers.toTitleCase(group.replace(/_/g, ' '))}
+    //     </span>
+    //   )
+    // })
 
     const dialectGroups = ProviderHelpers.getDialectGroups(
       selectn('response.contextParameters.acls[0].aces', this.props.dialect),
@@ -180,19 +179,7 @@ export default class GroupAssignmentDialog extends Component {
     }
 
     return (
-      <Dialog
-        open={this.props.open}
-        actions={[
-          <Button color="secondary" onClick={this.props.closeMethod}>
-            {intl.trans('cancel', 'Cancel', 'first')}
-          </Button>,
-          <Button color="primary" keyboardFocused onClick={this._onRequestSaveForm}>
-            {intl.trans('submit', 'Submit', 'first')}
-          </Button>,
-        ]}
-        onRequestClose={this.props.closeMethod}
-        autoScrollBodyContent
-      >
+      <Dialog open={this.props.open} onClose={this.props.closeMethod}>
         <h1>
           {selectn('properties.userinfo:firstName', this.props.selectedItem)}
           &nbsp;
@@ -210,6 +197,14 @@ export default class GroupAssignmentDialog extends Component {
             options={formOptions}
           />
         </form>
+        <DialogActions>
+          <Button Button variant="flat" color="secondary" onClick={this.props.closeMethod}>
+            {intl.trans('cancel', 'Cancel', 'first')}
+          </Button>
+          <Button Button variant="flat" color="primary" onClick={this._onRequestSaveForm}>
+            {intl.trans('submit', 'Submit', 'first')}
+          </Button>
+        </DialogActions>
       </Dialog>
     )
   }
