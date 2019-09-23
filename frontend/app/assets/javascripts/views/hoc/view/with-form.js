@@ -1,18 +1,12 @@
-// TODO: REMOVE ESLINT DISABLE
-/* eslint-disable */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
+import { List } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
 import t from 'tcomb-form'
 
-import fields from 'models/schemas/filter-fields'
-import options from 'models/schemas/filter-options'
-
 import ProviderHelpers from 'common/ProviderHelpers'
-import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import { Popover } from '@material-ui/core'
@@ -22,7 +16,7 @@ import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 const confirmationButtonsStyle = { padding: '0', marginLeft: '5px', minWidth: 'auto', border: '1px solid gray' }
 
-export default function withForm(ComposedFilter, publishWarningEnabled = false) {
+export default function withForm(ComposedFilter /*, publishWarningEnabled = false*/) {
   class ViewWithForm extends Component {
     static propTypes = {
       routeParams: PropTypes.object,
@@ -56,7 +50,7 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
     _getComputeItem(props) {
       const { computeEntities, itemId } = props
 
-      const item = computeEntities.find((value, key) => value.get('id') === itemId)
+      const item = computeEntities.find((value /*, key*/) => value.get('id') === itemId)
 
       return ProviderHelpers.getEntry(item.get('entity'), itemId)
     }
@@ -134,7 +128,7 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
               <div className="form-horizontal" style={{ padding: '0 15px' }}>
                 <form onSubmit={this._onRequestSaveForm.bind(this, computeItem)}>
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <Button variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {intl.trans('cancel', 'Cancel', 'first')}
                     </Button>
                     <button
@@ -159,7 +153,7 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <Button variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {intl.trans('cancel', 'Cancel', 'first')}
                     </Button>
                     <button
@@ -174,8 +168,8 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                       open={this.state.showCancelWarning}
                       anchorEl={this.state.cancelButtonEl}
                       anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
-                      targetOrigin={{ horizontal: 'right', vertical: 'center' }}
-                      onRequestClose={() => this.setState({ showCancelWarning: false })}
+                      transformOrigin={{ horizontal: 'right', vertical: 'center' }}
+                      onClose={() => this.setState({ showCancelWarning: false })}
                     >
                       <div style={{ padding: '10px', margin: '0 15px', borderRadius: '5px' }}>
                         <span
@@ -187,10 +181,15 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
                             ),
                           }}
                         />
-                        <Button style={confirmationButtonsStyle} onClick={this._onRequestCancelForm.bind(this, true)}>
+                        <Button
+                          variant="flat"
+                          style={confirmationButtonsStyle}
+                          onClick={this._onRequestCancelForm.bind(this, true)}
+                        >
                           {intl.trans('yes', 'Yes', 'first') + '!'}
                         </Button>
                         <Button
+                          variant="flat"
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
                         >
@@ -259,5 +258,3 @@ export default function withForm(ComposedFilter, publishWarningEnabled = false) 
 
   return ViewWithForm
 }
-// TODO: REMOVE ESLINT DISABLE
-/* eslint-enable */
