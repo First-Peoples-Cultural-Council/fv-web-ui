@@ -17,12 +17,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
-import Button from '@material-ui/core/Button'
 import { green, red } from '@material-ui/core/colors'
-import Icon from '@material-ui/core/Icon'
-import IconButton from '@material-ui/core/IconButton'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
+import Button from '@material-ui/core/Button'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import IconButton from '@material-ui/core/IconButton'
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 
 import classNames from 'classnames'
 
@@ -317,7 +318,7 @@ export class Scramble extends Component {
               )
             })}
             {this.state.complete ? (
-              <Icon
+              <CheckBoxIcon
                 className="material-icons"
                 style={{
                   color: green.A200,
@@ -326,14 +327,12 @@ export class Scramble extends Component {
                   top: '5px',
                   right: '5px',
                 }}
-              >
-                check_box
-              </Icon>
+              />
             ) : (
               false
             )}
             {this.state.incorrect ? (
-              <Icon
+              <IndeterminateCheckBoxIcon
                 className="material-icons"
                 style={{
                   color: red[600],
@@ -342,9 +341,7 @@ export class Scramble extends Component {
                   top: '5px',
                   right: '5px',
                 }}
-              >
-                indeterminate_check_box
-              </Icon>
+              />
             ) : (
               false
             )}
