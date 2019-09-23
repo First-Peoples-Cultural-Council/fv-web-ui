@@ -4,8 +4,10 @@ import classNames from 'classnames'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-import Icon from '@material-ui/core/Icon'
+
 import Button from '@material-ui/core/Button'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 export default function withToggle() {
   class ViewwithToggle extends Component {
@@ -34,14 +36,19 @@ export default function withToggle() {
 
     render() {
       const { mobileOnly, label } = this.props
-
-      const icon = <Icon className="material-icons">{this.state.open ? 'expand_less' : 'expand_more'}</Icon>
+      const fontStyle = { float: 'right', lineHeight: 1 }
+      const icon = this.state.open ? (
+        <ExpandLessIcon className="material-icons" style={fontStyle} />
+      ) : (
+        <ExpandMoreIcon className="material-icons" style={fontStyle} />
+      )
       const labelText = this.state.open ? intl.trans('hide', 'Hide', 'first') : intl.trans('show', 'Show', 'first')
       return (
         <div className={classNames(...this.rootClassNames)}>
           <div className="panel-heading">
             {label}
             <Button
+              variant="flat"
               className={classNames({ 'visible-xs': mobileOnly })}
               icon={icon}
               onClick={(e) => {
