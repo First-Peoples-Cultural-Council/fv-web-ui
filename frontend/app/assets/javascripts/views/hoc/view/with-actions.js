@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
-import Icon from '@material-ui/core/Icon'
+
 import Button from '@material-ui/core/Button'
-import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import Tabs from '@material-ui/core/Tabs'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
+
+import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import Dialog from '@material-ui/core/Dialog'
 import IntlService from 'views/services/intl'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWithActions.css'
@@ -67,37 +70,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 'first',
                 [StringHelpers.toTitleCase(this.props.labels.single)]
               )}
-              actions={[
-                <button
-                  data-testid="ViewWithActions__buttonCancel"
-                  type="button"
-                  key="0"
-                  className="FlatButton FlatButton--secondary ViewWithActions__button"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({
-                      prePublishDialogOpen: false,
-                      publishToggleCancelled: true,
-                      prePublishCompleteAction: null,
-                    })
-                  }}
-                >
-                  {intl.trans('cancel', 'Cancel', 'first')}
-                </button>,
-                <button
-                  data-testid="ViewWithActions__buttonPublish"
-                  type="button"
-                  key="1"
-                  className="FlatButton FlatButton--primary ViewWithActions__button"
-                  keyboardFocused
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.state.prePublishCompleteAction()
-                  }}
-                >
-                  {intl.trans('publish', 'Publish', 'first')}
-                </button>,
-              ]}
               modal={false}
               open={this.state.prePublishDialogOpen}
               onRequestClose={() =>
@@ -142,64 +114,66 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   </div>
                 )
               })()}
+
+              <DialogActions>
+                <Button
+                  data-testid="ViewWithActions__buttonCancel"
+                  // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                  variant="flat"
+                  color="secondary"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    this.setState({
+                      prePublishDialogOpen: false,
+                      publishToggleCancelled: true,
+                      prePublishCompleteAction: null,
+                    })
+                  }}
+                >
+                  {intl.trans('cancel', 'Cancel', 'first')}
+                </Button>
+                <Button
+                  data-testid="ViewWithActions__buttonPublish"
+                  variant="flat"
+                  color="primary"
+                  keyboardFocused
+                  onClick={(e) => {
+                    e.preventDefault()
+                    this.state.prePublishCompleteAction()
+                  }}
+                >
+                  {intl.trans('publish', 'Publish', 'first')}
+                </Button>
+              </DialogActions>
             </Dialog>
           </AuthorizationFilter>
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <div className="col-xs-12" style={{ marginTop: '15px' }}>
-              <Toolbar className="toolbar">
-                <div key={0} float="right">
-                  <Button
-                    variant="contained"
-                    icon={<Icon className="material-icons">delete</Icon>}
-                    onClick={() => this.setState({ deleteDialogOpen: true })}
-                    color="secondary"
-                  >
-                    {intl.trans(
-                      'views.hoc.view.delete_x',
-                      'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
-                      'first',
-                      [StringHelpers.toTitleCase(this.props.labels.single)]
-                    )}
-                  </Button>
-                </div>
+              <Toolbar className="toolbar" style={{ justifyContent: 'flex-end' }}>
+                <Button
+                  variant="raised"
+                  icon={<DeleteIcon className="material-icons" />}
+                  onClick={() => this.setState({ deleteDialogOpen: true })}
+                  color="secondary"
+                >
+                  {intl.trans(
+                    'views.hoc.view.delete_x',
+                    'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
+                    'first',
+                    [StringHelpers.toTitleCase(this.props.labels.single)]
+                  )}
+                </Button>
               </Toolbar>
 
               <Dialog
-                className="ViewWithActions__dialog"
+                // className="ViewWithActions__dialog"
                 title={intl.trans(
                   'views.hoc.view.deleting_x',
                   'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
                   'first',
                   [StringHelpers.toTitleCase(this.props.labels.single)]
                 )}
-                actions={[
-                  <button
-                    data-testid="ViewWithActions__buttonCancel"
-                    key="0"
-                    type="button"
-                    className="FlatButton FlatButton--secondary ViewWithActions__button"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      this.setState({ deleteDialogOpen: false })
-                    }}
-                  >
-                    {intl.trans('cancel', 'Cancel', 'first')}
-                  </button>,
-                  <button
-                    data-testid="ViewWithActions__buttonDelete"
-                    key="1"
-                    className="FlatButton FlatButton--primary ViewWithActions__button"
-                    keyboardFocused
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      this._delete(selectn('response', this.props.computeItem))
-                    }}
-                  >
-                    {intl.trans('delete', 'Delete', 'first')}
-                  </button>,
-                ]}
                 modal={false}
                 open={this.state.deleteDialogOpen}
                 onRequestClose={this._handleCancelDelete}
@@ -224,41 +198,43 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     ),
                   }}
                 />
+                <DialogActions>
+                  <Button
+                    data-testid="ViewWithActions__buttonCancel"
+                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    variant="flat"
+                    color="secondary"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      this.setState({ deleteDialogOpen: false })
+                    }}
+                  >
+                    {intl.trans('cancel', 'Cancel', 'first')}
+                  </Button>
+                  <Button
+                    data-testid="ViewWithActions__buttonDelete"
+                    // className="FlatButton FlatButton--primary ViewWithActions__button"
+                    variant="flat"
+                    color="primary"
+                    keyboardFocused
+                    onClick={(e) => {
+                      e.preventDefault()
+                      this._delete(selectn('response', this.props.computeItem))
+                    }}
+                  >
+                    {intl.trans('delete', 'Delete', 'first')}
+                  </Button>
+                </DialogActions>
               </Dialog>
 
               <Dialog
-                className="ViewWithActions__dialog"
+                // className="ViewWithActions__dialog"
                 title={intl.trans(
                   'views.hoc.view.delete_x',
                   'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
                   'words',
                   [StringHelpers.toTitleCase(this.props.labels.single)]
                 )}
-                actions={[
-                  <button
-                    data-testid="ViewWithActions__buttonReturn"
-                    type="button"
-                    key="0"
-                    className="FlatButton FlatButton--secondary ViewWithActions__button"
-                    onClick={() => window.history.back()}
-                  >
-                    {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
-                  </button>,
-                  <button
-                    data-testid="ViewWithActions__buttonHome"
-                    type="button"
-                    key="1"
-                    className="FlatButton FlatButton--primary ViewWithActions__button"
-                    keyboardFocused
-                    onClick={(e) => {
-                      e.preventDefault()
-                      const url = this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
-                      this.props.onNavigateRequest(`/${url}`)
-                    }}
-                  >
-                    {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
-                  </button>,
-                ]}
                 modal
                 open={this.state.deleteSuccessDialogOpen}
               >
@@ -272,6 +248,31 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   'first',
                   [this.props.labels.single, selectn('response.title', this.props.computeItem)]
                 )}
+
+                <DialogActions>
+                  <Button
+                    data-testid="ViewWithActions__buttonReturn"
+                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    variant="flat"
+                    color="secondary"
+                    onClick={() => window.history.back()}
+                  >
+                    {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
+                  </Button>
+                  <Button
+                    data-testid="ViewWithActions__buttonHome"
+                    // className="FlatButton FlatButton--primary ViewWithActions__button"
+                    variant="flat"
+                    color="primary"
+                    keyboardFocused
+                    onClick={this.props.onNavigateRequest.bind(
+                      this,
+                      '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
+                    )}
+                  >
+                    {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
+                  </Button>
+                </DialogActions>
               </Dialog>
             </div>
           </AuthorizationFilter>
