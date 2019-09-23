@@ -25,13 +25,14 @@ export const SearchDocumentTypesTemplate = (locals) => {
                 if (button.type == 'remove') {
                   return (
                     <Tooltip
+                      key={`Tooltip__${j}`}
                       title={intl.translate({
                         key: 'remove_item',
                         default: 'Remove Item',
                         case: 'words',
                       })}
                     >
-                      <IconButton key={j} onClick={button.click}>
+                      <IconButton key={`IconButton__${j}`} onClick={button.click}>
                         <Clear />
                       </IconButton>
                     </Tooltip>
