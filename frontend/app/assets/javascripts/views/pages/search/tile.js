@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import DOMPurify from 'dompurify'
 
-import GridTile from '@material-ui/core/GridListTile'
+import GridListTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -25,10 +25,6 @@ export default class SearchResultTile extends Component {
     this.state = {
       showInfo: false,
     }
-  }
-
-  _getSubtitle() {
-    return 'test'
   }
 
   render() {
@@ -179,31 +175,22 @@ export default class SearchResultTile extends Component {
         '<strong className="fontAboriginalSans">' + this.props.searchTerm + '</strong>'
       )
     }
-
     title = DOMPurify.sanitize(title)
     const SearchResultTileTitleType = type.replace('FV', '')
+
     return (
-      <GridTile
+      <GridListTile
         className="SearchResultTile"
         style={{ borderBottom: '1px solid #e0e0e0', margin: '20px 0', paddingTop: '65px' }}
         key={selectn('uid', tile)}
-        title={
-          <a
-            href={targetPath}
-            className="SearchResultTileTitle fontAboriginalSans"
-            //onClick={(typeof this.props.action === "function") ? this.props.action.bind(this, targetPath) : null}
-          >
+      >
+        <div className="SearchResultTileMain fontAboriginalSans" style={{ marginLeft: '16px', width: '80%' }}>
+          <a href={targetPath} className="SearchResultTileTitle fontAboriginalSans">
             {title}
             <small className="SearchResultTileTitleType">[{SearchResultTileTitleType}]</small>
           </a>
-        }
-        actionPosition="right"
-        titlePosition="top"
-        //actionIcon={actionIcon}
-        titleBackground="#ffffff"
-        subtitle={<span className="SearchResultTileSubtitle">{subtitle}</span>}
-      >
-        <div className="SearchResultTileMain fontAboriginalSans" style={{ marginLeft: '16px', width: '80%' }}>
+          <span className="SearchResultTileSubtitle">{subtitle}</span>
+
           <div className="SearchResultTileImgContainer">
             {imgObj ? (
               <div
@@ -225,7 +212,7 @@ export default class SearchResultTile extends Component {
             <span style={{ color: 'gray' }} dangerouslySetInnerHTML={{ __html: path.join(' &raquo; ') }} />
           </p>
         </div>
-      </GridTile>
+      </GridListTile>
     )
   }
 }
