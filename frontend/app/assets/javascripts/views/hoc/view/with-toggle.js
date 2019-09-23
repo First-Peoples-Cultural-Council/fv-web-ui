@@ -44,7 +44,6 @@ export default function withToggle() {
             <Button
               className={classNames({ 'visible-xs': mobileOnly })}
               icon={icon}
-              labelPosition="before"
               onClick={(e) => {
                 this.setState({ open: !this.state.open })
                 e.preventDefault()
