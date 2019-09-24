@@ -41,8 +41,8 @@ import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-vi
 
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
-import Icon from '@material-ui/core/Icon'
-import GridTile from '@material-ui/core/GridListTile'
+import GridListTile from '@material-ui/core/GridListTile'
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 
 import Header from 'views/pages/explore/dialect/header'
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
@@ -51,7 +51,7 @@ import IntlService from 'views/services/intl'
 import { SECTIONS } from 'common/Constants'
 const intl = IntlService.instance
 const { any, array, bool, func, object, string } = PropTypes
-class AlphabetGridTile extends Component {
+class AlphabetGridListTile extends Component {
   static propTypes = {
     tile: any, // TODO: set appropriate propType
   }
@@ -61,7 +61,7 @@ class AlphabetGridTile extends Component {
 
   render() {
     return (
-      <GridTile
+      <GridListTile
         key={selectn('uid', this.props.tile)}
         style={{
           border: '3px solid #e0e0e0',
@@ -85,7 +85,7 @@ class AlphabetGridTile extends Component {
             'contextParameters.character.related_words[0].fv:literal_translation[0].translation',
             this.props.tile
           )}
-      </GridTile>
+      </GridListTile>
     )
   }
 }
@@ -213,7 +213,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
               {React.cloneElement(alphabetListView, {
                 gridListView: true,
                 gridViewProps: { style: { overflowY: 'auto', maxHeight: '100%' } },
-                gridListTile: AlphabetGridTile,
+                gridListTile: AlphabetGridListTile,
                 dialect: selectn('response', _computeDialect2),
               })}
             </div>
@@ -257,7 +257,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
               if (this.state.current_char !== null) {
                 return (
                   <Button
-                    variant="contained"
+                    variant="raised"
                     color="primary"
                     onClick={this._onNavigateRequest.bind(
                       this,
@@ -294,11 +294,12 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                           }}
                         >
                           <Button
-                            icon={audioFile ? <Icon className="material-icons">play_arrow</Icon> : ''}
+                            variant="flat"
                             onClick={_this._onCharAudioTouchTap.bind(this, char)}
                             //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
                             style={{ minWidth: 'inherit', textTransform: 'initial' }}
                           >
+                            {audioFile ? <PlayArrowIcon className="material-icons" /> : null}
                             {text}
                           </Button>
                           {audioFile ? (
