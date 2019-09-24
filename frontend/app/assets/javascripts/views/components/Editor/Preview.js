@@ -864,6 +864,11 @@ export class Preview extends Component {
 
     return metadata
   }
+  _toggleOpen() {
+    this.setState({
+      open: !this.state.open,
+    })
+  }
 }
 
 // REDUX: reducers/state
