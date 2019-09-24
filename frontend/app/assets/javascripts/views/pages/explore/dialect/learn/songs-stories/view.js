@@ -217,7 +217,7 @@ export class SongsStoriesView extends Component {
           appendControls={[
             this.state.bookOpen ? (
               <Button
-                variant="contained"
+                variant="raised"
                 key="close"
                 onClick={() => {
                   this.setState({ bookOpen: false })
