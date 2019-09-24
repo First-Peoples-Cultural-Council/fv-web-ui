@@ -41,16 +41,27 @@ const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }
 
 class MediaThumbnail extends Component {
+  state = {
+    tabValue: 0,
+  }
   render() {
     const photoMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={this.props.photos} />
     const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={this.props.videos} />
 
     if (this.props.photos.length > 0 && this.props.videos.length > 0) {
       return (
-        <Tabs style={{ marginTop: '15px' }}>
-          <Tab label="Photo(s)">{photoMediaPanel}</Tab>
-          <Tab label="Video(s)">{videoMediaPanel}</Tab>
-        </Tabs>
+        <div>
+          <Tabs
+            value={this.state.tabValue}
+            onChange={(e, tabValue) => this.setState({ tabValue })}
+            style={{ marginTop: '15px' }}
+          >
+            <Tab label="Photo(s)" />
+            <Tab label="Video(s)" />
+          </Tabs>
+          {this.state.tabValue === 0 && photoMediaPanel}
+          {this.state.tabValue === 1 && videoMediaPanel}
+        </div>
       )
     } else if (this.props.photos.length > 0) {
       return photoMediaPanel
@@ -118,7 +129,7 @@ class Cover extends Component {
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.openBookAction && this.props.pageCount > 0 ? (
               <Button
-                variant="contained"
+                variant="raised"
                 style={{ marginRight: '10px' }}
                 color="primary"
                 onClick={this.props.openBookAction}
@@ -197,7 +208,7 @@ class Page extends Component {
         <div className="row">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
-              <Button variant="contained" onClick={this.props.editAction.bind(this, this.props.entry)}>
+              <Button variant="raised" onClick={this.props.editAction.bind(this, this.props.entry)}>
                 {intl.trans('edit', 'Edit', 'first')}
               </Button>
             ) : (
