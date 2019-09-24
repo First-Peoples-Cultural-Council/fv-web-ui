@@ -36,8 +36,10 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
-import Tabs from '@material-ui/core/Tabs'
+import Dialog from '@material-ui/core/Dialog'
 import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
 // Models
 import { Document } from 'nuxeo'
@@ -45,8 +47,6 @@ import { Document } from 'nuxeo'
 // Views
 import BookEntryEdit from 'views/pages/explore/dialect/learn/songs-stories/entry/edit'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
-
-import Dialog from '@material-ui/core/Dialog'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
@@ -259,8 +259,12 @@ export class PageDialectBookEdit extends Component {
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <Tabs>
-            <Tab label={intl.trans('book', 'Book', 'first')}>
+          <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+            <Tab label={intl.trans('book', 'Book', 'first')} />
+            <Tab label={intl.trans('pages', 'Pages', 'first')} />
+          </Tabs>
+          {this.state.tabValue === 0 && (
+            <Typography component="div" style={{ padding: 8 * 3 }}>
               <h1>
                 {intl.trans(
                   'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
@@ -282,8 +286,10 @@ export class PageDialectBookEdit extends Component {
                 type="FVBook"
                 routeParams={this.props.routeParams}
               />
-            </Tab>
-            <Tab label={intl.trans('pages', 'Pages', 'first')}>
+            </Typography>
+          )}
+          {this.state.tabValue === 1 && (
+            <Typography component="div" style={{ padding: 8 * 3 }}>
               <h1>
                 {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' pages', 'first', [
                   selectn('response.properties.dc:title', _computeBook),
@@ -298,8 +304,8 @@ export class PageDialectBookEdit extends Component {
                 metadata={selectn('response', _computeBookEntries) || {}}
                 items={selectn('response.entries', _computeBookEntries) || []}
               />
-            </Tab>
-          </Tabs>
+            </Typography>
+          )}
 
           <Dialog
             autoScrollBodyContent
