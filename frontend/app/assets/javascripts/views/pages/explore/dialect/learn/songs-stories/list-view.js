@@ -20,19 +20,30 @@ import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import UIHelpers from 'common/UIHelpers'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
-import NavigationHelpers from 'common/NavigationHelpers'
-import IconButton from '@material-ui/core/IconButton'
+import ClearIcon from '@material-ui/icons/Clear'
+import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 
-import Tabs from '@material-ui/core/Tabs'
+import { withTheme } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+// import GridList from '@material-ui/core/GridList'
+// import GridListTile from '@material-ui/core/GridListTile'
+// import GridListTileBar from '@material-ui/core/GridListTileBar'
+import IconButton from '@material-ui/core/IconButton'
 import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
+
+import UIHelpers from 'common/UIHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 import { Cover } from 'components/svg/cover'
 const intl = IntlService.instance
 
-class Introduction extends Component {
+class _Introduction extends Component {
   static propTypes = {
     defaultLanguage: PropTypes.any, // TODO: set correct type
     style: PropTypes.any, // TODO: set correct type
@@ -42,7 +53,11 @@ class Introduction extends Component {
   static defaultProps = {
     style: {},
   }
+  state = {
+    tabValue: 0,
+  }
   render() {
+    const backgroundColor = selectn('theme.palette.primary.main', this.props)
     const DEFAULT_LANGUAGE = this.props.defaultLanguage
     const item = this.props.item
     const introduction = selectn('properties.fvbook:introduction', item)
@@ -69,13 +84,32 @@ class Introduction extends Component {
         </div>
       )
     }
+    const introTabStyle = {
+      width: '99%',
+      position: 'relative',
+      overflowY: 'scroll',
+      padding: '15px',
+      height: '100px',
+    }
 
     return (
-      <Tabs>
-        <Tab label={intl.trans('introduction', 'Introduction', 'first')}>{introductionDiv}</Tab>
-        <Tab label={intl.searchAndReplace(DEFAULT_LANGUAGE)}>
-          <div className="IntroductionContent" style={this.props.style}>
-            <div>
+      <div>
+        <Tabs
+          style={{ backgroundColor }}
+          value={this.state.tabValue}
+          onChange={(e, tabValue) => this.setState({ tabValue })}
+        >
+          <Tab label={intl.trans('introduction', 'Introduction', 'first')} />
+          <Tab label={intl.searchAndReplace(DEFAULT_LANGUAGE)} />
+        </Tabs>
+        {this.state.tabValue === 0 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            {introductionDiv}
+          </Typography>
+        )}
+        {this.state.tabValue === 1 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <div style={Object.assign(introTabStyle, this.props.style)}>
               {introductionTranslations.map(function introductionTranslationsMapper(translation, i) {
                 if (translation.language === DEFAULT_LANGUAGE) {
                   return (
@@ -84,12 +118,13 @@ class Introduction extends Component {
                 }
               })}
             </div>
-          </div>
-        </Tab>
-      </Tabs>
+          </Typography>
+        )}
+      </div>
     )
   }
 }
+const Introduction = withTheme()(_Introduction)
 
 class CardView extends Component {
   static propTypes = {
@@ -170,6 +205,7 @@ class CardView extends Component {
         return <span key={i}>{translation.translation}</span>
       }
     })
+
     const cardViewPopover = (
       <div
         className="CardViewPopover"
@@ -185,12 +221,14 @@ class CardView extends Component {
           // iconClassName="material-icons"
           onClick={() => this.setState({ showIntro: false })}
         >
-          clear
+          <ClearIcon />
         </IconButton>
 
         {selectn('properties.fvbook:introduction', item) && (
           <Introduction
-            {...this.props}
+            defaultLanguage={this.props.defaultLanguage}
+            item={this.props.item}
+            style={this.props.style}
             audio={
               audioIcon ? (
                 <IconButton
@@ -218,11 +256,14 @@ class CardView extends Component {
     )
     return (
       <div key={item.uid} className={CardClasses} style={this.props.style}>
-        <div className="CardViewCard">
-          <div className="CardViewMediaContainer" onClick={this.props.action.bind(this, item)}>
-            {cardImage}
-          </div>
-          <div className="CardViewCopy">
+        <Card className="CardViewCard">
+          <CardMedia>
+            <div className="CardViewMediaContainer" onClick={this.props.action.bind(this, item)}>
+              {cardImage}
+            </div>
+            {this.state.showIntro && cardViewPopover}
+          </CardMedia>
+          <CardContent style={{ padding: '4px' }}>
             <div className="CardViewTitles">
               <h2
                 className={classNames('CardViewTitle', 'fontAboriginalSans')}
@@ -240,23 +281,19 @@ class CardView extends Component {
               </a>
               {selectn('properties.fvbook:introduction', item) && (
                 <IconButton
-                  // iconClassName="material-icons"
                   style={{
                     padding: '0',
                     width: '24px',
                     height: '24px',
                   }}
-                  tooltipPosition="top-left"
                   onClick={() => this.setState({ showIntro: !this.state.showIntro })}
-                  touch
                 >
-                  flip_to_front
+                  <FlipToFrontIcon />
                 </IconButton>
               )}
             </div>
-          </div>
-        </div>
-        {this.state.showIntro && cardViewPopover}
+          </CardContent>
+        </Card>
       </div>
     )
   }
