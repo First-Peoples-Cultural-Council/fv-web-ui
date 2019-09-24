@@ -180,7 +180,7 @@ export class PageDialectCategoryCreate extends Component {
     const category = ProviderHelpers.getEntry(computeCategory, this.state.categoryPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress mode="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" size={2} />
     }
 
     return (
