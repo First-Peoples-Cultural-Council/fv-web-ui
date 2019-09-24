@@ -134,7 +134,7 @@ export class PageDialectGalleries extends Component {
               }}
             >
               <Button
-                variant="contained"
+                variant="raised"
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
                 color="primary"
               >
