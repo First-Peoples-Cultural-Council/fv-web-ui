@@ -90,6 +90,7 @@ export class PageDialectBookEdit extends Component {
     formValue: null,
     sortedItems: List(),
     componentState: STATE_LOADING,
+    tabValue: 0,
   }
 
   // Redirect on success
