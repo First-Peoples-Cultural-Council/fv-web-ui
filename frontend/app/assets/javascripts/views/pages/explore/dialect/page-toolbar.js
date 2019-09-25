@@ -27,16 +27,20 @@ import { fetchTasks } from 'providers/redux/reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import { IconButton } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar/Toolbar'
-import Switch from '@material-ui/core/Switch'
+import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
+// import MenuList from '@material-ui/core/MenuList'
+// import Paper from '@material-ui/core/Paper'
+import Switch from '@material-ui/core/Switch'
+import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
 
-import IconMenu from '@material-ui/icons/Menu'
+// import MenuIcon from '@material-ui/icons/Menu'
+import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
@@ -265,7 +269,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Disabled' &&
                       selectn('response.state', computeEntity) !== 'New'
@@ -282,7 +286,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Enabled' &&
                       selectn('response.state', computeEntity) !== 'New'
@@ -299,7 +303,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                     color="secondary"
                     onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
@@ -313,7 +317,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     disabled={selectn('response.state', computeEntity) !== 'Published'}
                     color="secondary"
                     onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
@@ -336,7 +340,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
                     color="secondary"
@@ -352,7 +356,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     color="secondary"
                     onClick={this.props.handleNavigateRequest.bind(
                       this,
@@ -370,7 +374,7 @@ export class PageToolbar extends Component {
                   <Button
                     className="PageToolbar__button"
                     size="medium"
-                    variant="contained"
+                    variant="raised"
                     onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
                     color="secondary"
                   >
@@ -419,17 +423,22 @@ export class PageToolbar extends Component {
 
       return (
         <div className="PageToolbar__menuMore">
-          <IconButton
-            tooltip={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
-            className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
-            onClick={(event) => {
-              this.setState({
-                anchorEl: event.currentTarget,
-              })
-            }}
+          <Tooltip
+            title={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
+            placement="top"
           >
-            <IconMenu />
-          </IconButton>
+            <IconButton
+              className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
+              onClick={(event) => {
+                this.setState({
+                  anchorEl: event.currentTarget,
+                })
+              }}
+            >
+              {' '}
+              <NavigationExpandMoreIcon />
+            </IconButton>
+          </Tooltip>
           <Menu
             anchorEl={this.state.anchorEl}
             open={this.state.anchorEl || false}
