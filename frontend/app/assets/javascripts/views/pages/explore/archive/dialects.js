@@ -112,7 +112,7 @@ export class ExploreDialects extends Component {
 
     let content = (
       <div>
-        <CircularProgress mode="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
+        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
       </div>
     )
     if (this.props.computePortals && this.props.computePortals.success) {
