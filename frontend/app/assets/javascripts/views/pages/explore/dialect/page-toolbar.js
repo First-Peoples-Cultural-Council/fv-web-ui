@@ -33,8 +33,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-// import MenuList from '@material-ui/core/MenuList'
-// import Paper from '@material-ui/core/Paper'
 import Switch from '@material-ui/core/Switch'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -222,7 +220,7 @@ export class PageToolbar extends Component {
                 e.preventDefault()
               }}
             >
-              menu
+              <MenuIcon />
             </IconButton>
           </div> */}
 
