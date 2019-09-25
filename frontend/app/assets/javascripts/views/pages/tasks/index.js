@@ -249,7 +249,7 @@ export class Tasks extends React.Component {
 
           {userTasksTable}
 
-          <Dialog open={this.state.open} onRequestClose={this._handleClose} autoScrollBodyContent>
+          <Dialog open={this.state.open} onClose={this._handleClose}>
             <DocumentView id={this.state.selectedTask} />
           </Dialog>
 

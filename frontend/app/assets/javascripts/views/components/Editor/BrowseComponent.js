@@ -35,6 +35,7 @@ import CategoriesListView from 'views/pages/explore/dialect/learn/words/categori
 import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import IntlService from 'views/services/intl'
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
@@ -264,14 +265,8 @@ export class BrowseComponent extends Component {
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog
-          title={title}
-          actions={actions}
-          modal
-          contentStyle={{ width: '80%', height: '80vh', maxWidth: '100%' }}
-          autoScrollBodyContent
-          open={this.state.open}
-        >
+        <Dialog actions={actions} modal open={this.state.open}>
+          <DialogTitle>{title}</DialogTitle>
           {(() => {
             if (dialectPath) {
               return view

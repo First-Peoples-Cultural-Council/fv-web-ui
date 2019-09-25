@@ -37,6 +37,7 @@ import options from 'models/schemas/options'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
@@ -301,22 +302,19 @@ export class AddMediaComponent extends Component {
         <Button variant="contained" onClick={this.handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog
-          title={intl.trans(
-            'views.components.editor.create_new_x_in_the_x_dialect',
-            'Create New ' +
-              fileTypeLabel +
-              ' in the ' +
-              selectn('properties.dc:title', this.props.dialect) +
-              ' dialect.',
-            'first',
-            [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
-          )}
-          actions={actions}
-          modal
-          autoScrollBodyContent
-          open={this.state.open}
-        >
+        <Dialog actions={actions} modal open={this.state.open}>
+          <DialogTitle>
+            {intl.trans(
+              'views.components.editor.create_new_x_in_the_x_dialect',
+              'Create New ' +
+                fileTypeLabel +
+                ' in the ' +
+                selectn('properties.dc:title', this.props.dialect) +
+                ' dialect.',
+              'first',
+              [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
+            )}
+          </DialogTitle>
           <div className="form-horizontal">
             {this.state.typeError}
             {form}

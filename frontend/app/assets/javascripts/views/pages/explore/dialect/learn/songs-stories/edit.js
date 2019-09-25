@@ -147,7 +147,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -308,13 +308,7 @@ export class PageDialectBookEdit extends Component {
             </Typography>
           )}
 
-          <Dialog
-            autoScrollBodyContent
-            style={{ zIndex: 0 }}
-            overlayStyle={{ background: 'none' }}
-            open={this.state.editPageDialogOpen}
-            onRequestClose={() => this.setState({ editPageDialogOpen: false })}
-          >
+          <Dialog open={this.state.editPageDialogOpen} onClose={() => this.setState({ editPageDialogOpen: false })}>
             <BookEntryEdit
               entry={this.state.editPageItem}
               handlePageSaved={this._pageSaved}

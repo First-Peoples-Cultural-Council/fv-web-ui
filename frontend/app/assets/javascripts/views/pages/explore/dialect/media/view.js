@@ -51,6 +51,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import List from '@material-ui/core/Button'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -261,17 +262,10 @@ export class View extends Component {
                                   </List>
 
                                   <Dialog
-                                    contentStyle={{
-                                      textAlign: 'center',
-                                      height: '500px',
-                                      maxHeight: '500px',
-                                    }}
-                                    autoScrollBodyContent
-                                    title={selectn('title', this.state.showThumbnailDialog)}
-                                    modal={false}
                                     open={this.state.showThumbnailDialog === null ? false : true}
-                                    onRequestClose={() => this.setState({ showThumbnailDialog: null })}
+                                    onClose={() => this.setState({ showThumbnailDialog: null })}
                                   >
+                                    <DialogTitle>{selectn('title', this.state.showThumbnailDialog)}</DialogTitle>
                                     <p>
                                       <img
                                         src={selectn('content.data', this.state.showThumbnailDialog)}

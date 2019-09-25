@@ -5,6 +5,7 @@ import StringHelpers from 'common/StringHelpers'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
 import Tabs from '@material-ui/core/Tabs'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
@@ -62,17 +63,8 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <Dialog
               className="ViewWithActions__dialog"
-              contentStyle={{ height: '20vh' }}
-              autoScrollBodyContent
-              title={intl.trans(
-                'views.hoc.view.publish_x',
-                'Publish ' + StringHelpers.toTitleCase(this.props.labels.single),
-                'first',
-                [StringHelpers.toTitleCase(this.props.labels.single)]
-              )}
-              modal={false}
               open={this.state.prePublishDialogOpen}
-              onRequestClose={() =>
+              onClose={() =>
                 this.setState({
                   prePublishDialogOpen: false,
                   publishToggleCancelled: true,
@@ -80,6 +72,14 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 })
               }
             >
+              <DialogTitle>
+                {intl.trans(
+                  'views.hoc.view.publish_x',
+                  'Publish ' + StringHelpers.toTitleCase(this.props.labels.single),
+                  'first',
+                  [StringHelpers.toTitleCase(this.props.labels.single)]
+                )}
+              </DialogTitle>
               {(() => {
                 if (this.props.tabs && this.props.tabs.length > 0) {
                   return (
@@ -168,16 +168,17 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
               <Dialog
                 // className="ViewWithActions__dialog"
-                title={intl.trans(
-                  'views.hoc.view.deleting_x',
-                  'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
-                  'first',
-                  [StringHelpers.toTitleCase(this.props.labels.single)]
-                )}
-                modal={false}
                 open={this.state.deleteDialogOpen}
-                onRequestClose={this._handleCancelDelete}
+                onClose={this._handleCancelDelete}
               >
+                <DialogTitle>
+                  {intl.trans(
+                    'views.hoc.view.deleting_x',
+                    'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
+                    'first',
+                    [StringHelpers.toTitleCase(this.props.labels.single)]
+                  )}
+                </DialogTitle>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: intl.trans(
@@ -229,15 +230,17 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
               <Dialog
                 // className="ViewWithActions__dialog"
-                title={intl.trans(
-                  'views.hoc.view.delete_x',
-                  'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
-                  'words',
-                  [StringHelpers.toTitleCase(this.props.labels.single)]
-                )}
                 modal
                 open={this.state.deleteSuccessDialogOpen}
               >
+                <DialogTitle>
+                  {intl.trans(
+                    'views.hoc.view.delete_x',
+                    'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
+                    'words',
+                    [StringHelpers.toTitleCase(this.props.labels.single)]
+                  )}
+                </DialogTitle>
                 {intl.trans(
                   'views.hoc.view.delete_x_success',
                   'The ' +

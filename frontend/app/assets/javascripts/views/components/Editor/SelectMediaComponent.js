@@ -34,6 +34,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
@@ -220,19 +221,15 @@ class SelectMediaComponent extends Component {
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog
-          title={`${intl.searchAndReplace(
-            `Select existing ${fileTypeLabel} from ${selectn(
-              'properties.dc:title',
-              dialect
-            )} dialect or shared resources`
-          )}:`}
-          actions={actions}
-          modal
-          contentStyle={{ width: '80%', height: '80vh', maxWidth: '100%' }}
-          autoScrollBodyContent
-          open={this.state.open}
-        >
+        <Dialog actions={actions} modal open={this.state.open}>
+          <DialogTitle>
+            {`${intl.searchAndReplace(
+              `Select existing ${fileTypeLabel} from ${selectn(
+                'properties.dc:title',
+                dialect
+              )} dialect or shared resources`
+            )}:`}
+          </DialogTitle>
           <div className={classNames('alert', 'alert-info', { hidden: !selectn('isFetching', computeResources) })}>
             {intl.trans('loading_results_please_wait', 'Loading results, please wait.', 'first')}
             {/* <br /> */}
