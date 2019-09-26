@@ -111,7 +111,7 @@ export default class PromiseWrapper extends Component {
         render =
           this.props.hideFetch && selectn('response_prev', reducedOperation) ? null : (
             <div className="PromiseWrapper__spinnerContainer">
-              <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" size={1} />
+              <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" />
               {selectn('message', reducedOperation) ? (
                 <div className="PromiseWrapper__spinnerMessage">{selectn('message', reducedOperation)}</div>
               ) : null}
