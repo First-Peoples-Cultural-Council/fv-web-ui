@@ -22,6 +22,8 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { fetchDocument } from 'providers/redux/reducers/document'
 
+import Typography from '@material-ui/core/Typography'
+
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -29,7 +31,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
+import '!style-loader!css-loader!./DocumentView.css'
+
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -39,7 +42,7 @@ const { array, func, object, string } = PropTypes
 /**
  * View word entry
  */
-export class View extends Component {
+export class DocumentView extends Component {
   static propTypes = {
     id: string.isRequired,
     // REDUX: reducers/state
@@ -98,46 +101,48 @@ export class View extends Component {
     ])
 
     const computeDocument = ProviderHelpers.getEntry(this.props.computeDocument, this.props.id)
+    let content = null
+    let actionButton = null
+    if (selectn('response', computeDocument)) {
+      switch (selectn('response.type', computeDocument)) {
+        case 'FVWord':
+          actionButton = (
+            <a href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'words')}>
+              {intl.trans('view_word', 'View Word', 'words')}
+            </a>
+          )
+          break
+
+        case 'FVPhrase':
+          actionButton = (
+            <a href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'phrases')}>
+              {intl.trans('view_phrase', 'View Phrase', 'phrases')}
+            </a>
+          )
+          break
+        default: // NOTE: do nothing
+      }
+
+      content = (
+        <div className="DocumentView">
+          <Typography variant="display1">{selectn('response.title', computeDocument)}</Typography>
+
+          <Typography variant="headline">
+            {intl.trans('type', 'Type', 'first')}: {selectn('response.type', computeDocument).replace('FV', '')}
+          </Typography>
+
+          {actionButton && (
+            <div className="DocumentView__actionButtons">
+              <Typography variant="title">{actionButton}</Typography>
+            </div>
+          )}
+        </div>
+      )
+    }
 
     return (
-      <PromiseWrapper computeEntities={computeEntities}>
-        {(() => {
-          if (selectn('response', computeDocument)) {
-            let actionButton = ''
-
-            switch (selectn('response.type', computeDocument)) {
-              case 'FVWord':
-                actionButton = (
-                  <a href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'words')}>
-                    {intl.trans('view_word', 'View Word', 'words')}
-                  </a>
-                )
-                break
-
-              case 'FVPhrase':
-                actionButton = (
-                  <a
-                    href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'phrases')}
-                  >
-                    {intl.trans('view_phrase', 'View Phrase', 'phrases')}
-                  </a>
-                )
-                break
-              default: // NOTE: do nothing
-            }
-
-            return (
-              <div>
-                <strong>{intl.trans('title', 'Title', 'first')}</strong>: {selectn('response.title', computeDocument)}
-                <br />
-                <strong>{intl.trans('type', 'Type', 'first')}</strong>:{' '}
-                {selectn('response.type', computeDocument).replace('FV', '')}
-                <br />
-                {actionButton}
-              </div>
-            )
-          }
-        })()}
+      <PromiseWrapper computeEntities={computeEntities} renderOnError={false}>
+        {content}
       </PromiseWrapper>
     )
   }
@@ -168,4 +173,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(DocumentView)

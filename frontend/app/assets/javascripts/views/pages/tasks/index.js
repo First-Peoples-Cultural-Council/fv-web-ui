@@ -250,7 +250,9 @@ export class Tasks extends React.Component {
           {userTasksTable}
 
           <Dialog open={this.state.open} onClose={this._handleClose}>
-            <DocumentView id={this.state.selectedTask} />
+            <div className="Tasks__modal">
+              {this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}
+            </div>
           </Dialog>
 
           <GroupAssignmentDialog

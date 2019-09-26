@@ -22,6 +22,10 @@
   display: inline-block;
   width: 100%;
 }
+.Tasks__modal {
+  padding: 24px;
+  min-width: 33vw;
+}
 .Tasks__taskTitle {
   white-space: normal;
   font-size: 1.8rem;
