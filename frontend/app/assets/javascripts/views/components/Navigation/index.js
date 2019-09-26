@@ -486,9 +486,7 @@ export class Navigation extends Component {
                   e.preventDefault()
                   NavigationHelpers.navigate(dialectLink, this.props.pushWindowPath, false)
                 }}
-                style={{
-                  color: themeZeroPalette.primary2ColorText,
-                }}
+                style={{ color }}
               >
                 <Avatar src={avatarSrc} size={50} />
                 <span className="Navigation__dialectName fontAboriginalSans">
