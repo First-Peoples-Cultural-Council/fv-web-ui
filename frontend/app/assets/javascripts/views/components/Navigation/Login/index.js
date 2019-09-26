@@ -27,6 +27,8 @@ import { isMobile } from 'react-device-detect'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 
+import { withTheme } from '@material-ui/core/styles'
+
 import '!style-loader!css-loader!./styles.css'
 
 const { func, object, string } = PropTypes
@@ -94,13 +96,15 @@ export class Login extends Component {
   }
 
   render() {
+    const color = selectn('theme.palette.primary.contrastText', this.props)
+
     // TODO: `loginFeedbackMessage` is not being used
     // eslint-disable-next-line
     let loginFeedbackMessage = ''
 
     if (this.props.computeLogin.isFetching) {
       return (
-        <div className="Login Login--busy">
+        <div className="Login Login--busy" style={{ color }}>
           {this.intl.translate({
             key: 'views.components.navigation.processing_request',
             default: 'Processing request',
@@ -114,7 +118,7 @@ export class Login extends Component {
     // Handle success (anonymous or actual)
     if (this.props.computeLogin.success && this.props.computeLogin.isConnected) {
       return (
-        <div className="Login Login--welcome hidden-xs">
+        <div className="Login Login--welcome hidden-xs" style={{ color }}>
           {this.intl.translate({ key: 'general.welcome', default: 'WELCOME', case: 'upper' })},{' '}
           {selectn('response.properties.firstName', this.props.computeLogin)}
         </div>
@@ -135,7 +139,7 @@ export class Login extends Component {
 
     return (
       <div className="Login Login--signIn">
-        <a className="nav_link" href={NavigationHelpers.getBaseURL() + 'logout'}>
+        <a className="nav_link" style={{ color }} href={NavigationHelpers.getBaseURL() + 'logout'}>
           SIGN IN
         </a>
       </div>
@@ -161,7 +165,9 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Login)
+)
