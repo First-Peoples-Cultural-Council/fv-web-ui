@@ -222,7 +222,7 @@ class Page extends Component {
   }
 }
 
-export default class View extends Component {
+export default class SongsStoriesEntryView extends Component {
   constructor(props, context) {
     super(props, context)
   }

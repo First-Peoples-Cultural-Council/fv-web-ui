@@ -72,7 +72,7 @@ const intl = IntlService.instance
  * View word entry
  */
 const { array, func, object, string } = PropTypes
-export class View extends Component {
+export class MediaView extends Component {
   static propTypes = {
     deleteResource: func, // TODO: NOT CERTAIN WHERE THIS COMES FROM
     routeParams: object.isRequired,
@@ -555,4 +555,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(MediaView)
