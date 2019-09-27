@@ -230,7 +230,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
               <Dialog
                 // className="ViewWithActions__dialog"
-                modal
                 open={this.state.deleteSuccessDialogOpen}
               >
                 <DialogTitle>

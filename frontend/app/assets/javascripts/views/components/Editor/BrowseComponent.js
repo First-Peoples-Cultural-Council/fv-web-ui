@@ -265,7 +265,7 @@ export class BrowseComponent extends Component {
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog actions={actions} modal open={this.state.open}>
+        <Dialog actions={actions} open={this.state.open}>
           <DialogTitle>{title}</DialogTitle>
           {(() => {
             if (dialectPath) {
