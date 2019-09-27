@@ -136,7 +136,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   data-testid="ViewWithActions__buttonPublish"
                   variant="flat"
                   color="primary"
-                  keyboardFocused
                   onClick={(e) => {
                     e.preventDefault()
                     this.state.prePublishCompleteAction()
@@ -217,7 +216,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="flat"
                     color="primary"
-                    keyboardFocused
                     onClick={(e) => {
                       e.preventDefault()
                       this._delete(selectn('response', this.props.computeItem))
@@ -266,7 +264,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="flat"
                     color="primary"
-                    keyboardFocused
                     onClick={this.props.onNavigateRequest.bind(
                       this,
                       '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
