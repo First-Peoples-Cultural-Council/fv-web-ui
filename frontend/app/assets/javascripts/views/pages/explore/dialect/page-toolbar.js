@@ -439,7 +439,7 @@ export class PageToolbar extends Component {
           </Tooltip>
           <Menu
             anchorEl={this.state.anchorEl}
-            open={this.state.anchorEl || false}
+            open={this.state.anchorEl ? true : false}
             onClose={() => {
               this.setState({
                 anchorEl: null,
