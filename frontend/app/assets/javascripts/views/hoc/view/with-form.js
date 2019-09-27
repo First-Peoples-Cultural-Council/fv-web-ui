@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-const confirmationButtonsStyle = { padding: '0', marginLeft: '5px', minWidth: 'auto', border: '1px solid gray' }
+const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
 export default function withForm(ComposedFilter /*, publishWarningEnabled = false*/) {
   class ViewWithForm extends Component {
@@ -183,6 +183,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                         />
                         <Button
                           variant="flat"
+                          size="small"
                           style={confirmationButtonsStyle}
                           onClick={this._onRequestCancelForm.bind(this, true)}
                         >
@@ -190,6 +191,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                         </Button>
                         <Button
                           variant="flat"
+                          size="small"
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
                         >
