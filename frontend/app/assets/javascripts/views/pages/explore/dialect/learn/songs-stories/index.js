@@ -38,7 +38,7 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GeneralList from 'views/components/Browsing/general-list'
-import { CardView } from './list-view'
+import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import withFilter from 'views/hoc/grid-list/with-filter'
 import IntlService from 'views/services/intl'
@@ -118,7 +118,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       fixedList: true,
       fixedListFetcher: this.fixedListFetcher,
       filteredItems: this.state.filteredList,
-      card: <CardView />,
+      card: <SongsStoriesCardView />,
       area: this.props.routeParams.area,
       applyDefaultFormValues: true,
       formValues: { 'properties.fvbook:type': this.props.typeFilter },

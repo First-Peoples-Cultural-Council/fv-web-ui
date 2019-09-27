@@ -101,7 +101,7 @@ class Introduction extends Component {
   }
 }
 
-class CardView extends Component {
+class ReportsCardView extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -168,4 +168,4 @@ class CardView extends Component {
   }
 }
 
-export { Introduction, CardView }
+export { Introduction, ReportsCardView }

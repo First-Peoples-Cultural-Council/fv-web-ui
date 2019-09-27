@@ -28,7 +28,6 @@ import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 // import GridList from '@material-ui/core/GridList'
 // import GridListTile from '@material-ui/core/GridListTile'
 // import GridListTileBar from '@material-ui/core/GridListTileBar'
@@ -126,7 +125,7 @@ class _Introduction extends Component {
 }
 const Introduction = withTheme()(_Introduction)
 
-class CardView extends Component {
+class SongsStoriesCardView extends Component {
   static propTypes = {
     action: PropTypes.func,
     item: PropTypes.any, // TODO: set correct type
@@ -257,12 +256,10 @@ class CardView extends Component {
     return (
       <div key={item.uid} className={CardClasses} style={this.props.style}>
         <Card className="CardViewCard">
-          <CardMedia>
-            <div className="CardViewMediaContainer" onClick={this.props.action.bind(this, item)}>
-              {cardImage}
-            </div>
-            {this.state.showIntro && cardViewPopover}
-          </CardMedia>
+          <div className="CardViewMediaContainer" onClick={this.props.action.bind(this, item)}>
+            {cardImage}
+          </div>
+          {this.state.showIntro && cardViewPopover}
           <CardContent style={{ padding: '4px' }}>
             <div className="CardViewTitles">
               <h2
@@ -299,4 +296,4 @@ class CardView extends Component {
   }
 }
 
-export { Introduction, CardView }
+export { Introduction, SongsStoriesCardView }

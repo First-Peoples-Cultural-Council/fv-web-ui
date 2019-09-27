@@ -42,7 +42,6 @@ import Avatar from '@material-ui/core/Avatar'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
-import CardMedia from '@material-ui/core/CardMedia'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
@@ -480,12 +479,12 @@ export class Preview extends Component {
                   subtitle={description && description != 'undefined' ? 'Description: ' + description : ''}
                   style={{ height: 'initial', padding: 0, lineHeight: 'initial', fontSize: '18px' }}
                 />
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+                <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', audioResponse) ||
                   (selectn('path', audioResponse) && selectn('path', audioResponse).indexOf('nxfile') != -1)
                     ? audioTag
                     : null}
-                </CardMedia>
+                </div>
                 <CardHeader
                   className="card-header-custom"
                   title={
@@ -579,12 +578,12 @@ export class Preview extends Component {
 
             body = (
               <Card style={{ boxShadow: 'none' }}>
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+                <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', videoResponse) ||
                   (selectn('path', videoResponse) && selectn('path', videoResponse).indexOf('nxfile') != -1)
                     ? videoTag
                     : null}
-                </CardMedia>
+                </div>
                 <CardHeader
                   title={selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
                   subtitle={

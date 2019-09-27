@@ -19,10 +19,8 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 
@@ -33,7 +31,7 @@ import IntlService from 'views/services/intl'
 
 const defaultStyle = { marginBottom: '20px' }
 
-export default class CardView extends Component {
+export default class BrowsingCardView extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -70,27 +68,16 @@ export default class CardView extends Component {
 
     coverImage = coverImage || { url: 'assets/images/cover.png' }
 
-    const introduction = this.props.introduction ? React.cloneElement(this.props.introduction, { ...this.props }) : ''
+    const introduction = this.props.introduction ? React.cloneElement(this.props.introduction, { ...this.props }) : null
 
     return (
       <div
         style={Object.assign(defaultStyle, this.props.style)}
         key={this.props.item.uid}
-        className={classNames('col-xs-12', 'col-md-' + Math.ceil(12 / this.props.cols))}
+        className={classNames('CardView', 'col-xs-12', 'col-md-' + Math.ceil(12 / this.props.cols))}
       >
-        <Card style={{ minHeight: '260px' }}>
-          <CardMedia
-            overlay={
-              <div>
-                <Typography variant="headline" component="h2">
-                  <span>{this.intl.searchAndReplace(this.props.item.title)}</span>
-                </Typography>
-                <Typography variant="subheading" component="h3">
-                  {this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
-                </Typography>
-              </div>
-            }
-          >
+        <Card className="CardViewCard" style={{ minHeight: '260px' }}>
+          <div className="CardViewMediaContainer">
             <div
               style={{
                 backgroundSize: selectn('width', coverImage) > 200 ? '100%' : 'cover',
@@ -101,62 +88,71 @@ export default class CardView extends Component {
                 backgroundImage: "url('" + selectn('url', coverImage) + "?inline=true')",
               }}
             />
-
-            <div
-              style={{
-                position: 'absolute',
-                zIndex: this.state.showIntro ? 2 : -1,
-                top: '10px',
-                left: '10px',
-                width: '95%',
-                minWidth: 'auto',
-                padding: 0,
-                backgroundColor: '#fff',
-                height: '100%',
-                border: '1px solid #777777',
-                borderRadius: '0 0 10px 10px',
-              }}
-            >
-              <IconButton
-                style={{ position: 'absolute', right: 0, zIndex: 1000 }}
-                onClick={() => this.setState({ showIntro: false })}
-              >
-                <ClearIcon />
-              </IconButton>
-
-              {this.intl.searchAndReplace(introduction)}
-            </div>
-          </CardMedia>
-
+          </div>
           <CardContent style={{ padding: '4px' }}>
-            <Button variant="flat" onClick={this.props.action.bind(this, this.props.item)} color="primary">
-              {this.intl.translate({
-                key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
-                default: 'Continue to Entry',
-                case: 'words',
-              })}
-            </Button>
+            <div className="CardViewCopy">
+              <div className="CardViewTitles">
+                <Typography className="CardViewTitle" variant="headline" component="h2">
+                  <span>{this.intl.searchAndReplace(this.props.item.title)}</span>
+                </Typography>
+                <Typography className="CardViewSubtitle" variant="subheading" component="h3">
+                  {this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
+                </Typography>
+              </div>
 
-            {(() => {
-              if (introduction) {
-                return (
-                  <IconButton
-                    style={{
-                      verticalAlign: '-5px',
-                      padding: '5px',
-                      width: 'auto',
-                      height: 'auto',
-                      float: 'right',
-                    }}
-                    tooltipPosition="top-left"
-                    onClick={() => this.setState({ showIntro: !this.state.showIntro })}
-                    touch
-                  >
-                    <FlipToFrontIcon />
-                  </IconButton>
-                )
-              }
-            })()}
+              <div
+                style={{
+                  position: 'absolute',
+                  zIndex: this.state.showIntro ? 2 : -1,
+                  top: '10px',
+                  left: '10px',
+                  width: '95%',
+                  minWidth: 'auto',
+                  padding: 0,
+                  backgroundColor: '#fff',
+                  height: '100%',
+                  border: '1px solid #777777',
+                  borderRadius: '0 0 10px 10px',
+                }}
+              >
+                <IconButton
+                  style={{ position: 'absolute', right: 0, zIndex: 1000 }}
+                  onClick={() => this.setState({ showIntro: false })}
+                >
+                  <ClearIcon />
+                </IconButton>
+
+                {this.intl.searchAndReplace(introduction)}
+              </div>
+              <div className="CardViewCardActions">
+                <button className="FlatButton" onClick={this.props.action.bind(this, this.props.item)} type="button">
+                  {this.intl.translate({
+                    key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
+                    default: 'Continue to Entry',
+                    case: 'words',
+                  })}
+                </button>
+
+                {(() => {
+                  if (introduction) {
+                    return (
+                      <IconButton
+                        style={{
+                          verticalAlign: '-5px',
+                          padding: '5px',
+                          width: 'auto',
+                          height: 'auto',
+                          float: 'right',
+                        }}
+                        onClick={() => this.setState({ showIntro: !this.state.showIntro })}
+                      >
+                        <FlipToFrontIcon />
+                      </IconButton>
+                    )
+                  }
+                })()}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

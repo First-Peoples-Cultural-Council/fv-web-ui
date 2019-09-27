@@ -15,15 +15,9 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
-import classNames from 'classnames'
+import { List, Map } from 'immutable'
 import selectn from 'selectn'
-
-import ConfGlobal from 'conf/local.js'
-
-import CardView from './card-view'
-
-import Preview from 'views/components/Editor/Preview'
+import BrowsingCardView from './card-view'
 import IntlService from 'views/services/intl'
 
 export default class GeneralList extends Component {
@@ -70,7 +64,7 @@ export default class GeneralList extends Component {
       )
     }
 
-    const card = this.props.card || <CardView />
+    const card = this.props.card || <BrowsingCardView />
 
     return (
       <div className="row" style={this.props.wrapperStyle}>
