@@ -348,15 +348,15 @@ export class Preview extends Component {
           } else {
             const description =
               selectn('properties.dc:description', pictureResponse) || selectn('dc:description', pictureResponse)
-
             body = (
               <Card style={{ boxShadow: 'none' }}>
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+                <CardContent style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', pictureResponse) ||
                   (selectn('path', pictureResponse) && selectn('path', pictureResponse).indexOf('nxfile') != -1)
                     ? pictureTag
                     : null}
-                </CardMedia>
+                </CardContent>
+
                 <CardHeader
                   title={selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
                   subtitle={
