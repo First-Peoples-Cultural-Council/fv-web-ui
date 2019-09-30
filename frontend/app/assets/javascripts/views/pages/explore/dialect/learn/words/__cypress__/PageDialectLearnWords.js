@@ -5,22 +5,26 @@ import 'cypress-testing-library/add-commands'
 
 describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
   it('Click our lang. > Words, click create new, fill in fields, save', () => {
+    // TODO: Add database setup here.
+    // Requires no words to exist in database for SENCOTEN.
+
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
+
     /*
-            Checking to make sure no word currently exists.
-            Database should be reset prior to test.
-         */
+      Checking to make sure no word currently exists.
+      Database should be reset prior to test.
+    */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
+
     /*
-            Going through the steps to create a word
-         */
+      Going through the steps to create a word
+    */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
-    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Words', { exact: true }).click()
@@ -33,9 +37,10 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
     cy.getByTestId('fv-definitions0translation').type('TestTranslation')
     cy.getByText('+ Add literal translation', { exact: true }).click()
     cy.getByTestId('fv-literal_translation0translation').type('TestLiteralTranslation')
+
     /*
-            Audio upload
-         */
+      Audio upload
+    */
     cy.getByText('+ Add related audio', { exact: true }).click()
     cy.getByText('Upload audio', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -47,11 +52,12 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(1500)
+    cy.wait(2000)
     cy.getByText('Insert into entry').click()
+
     /*
-            Image upload
-         */
+      Image upload
+    */
     cy.getByText('+ Add related pictures', { exact: true }).click()
     cy.getByText('Upload picture', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -63,11 +69,12 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(1500)
+    cy.wait(2000)
     cy.getByText('Insert into entry').click()
+
     /*
-            Video upload
-         */
+      Video upload
+    */
     cy.getByText('+ Add related videos', { exact: true }).click()
     cy.getByText('Upload video', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -79,20 +86,22 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(1500)
+    cy.wait(2000)
     cy.getByText('Insert into entry').click()
+
     /*
-            Finishing the word creation form
-         */
+      Finishing the word creation form
+    */
     cy.getByText('+ Add cultural note', { exact: true }).click()
     cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.getByTestId('fv-reference', { exact: true }).type('TestReference')
     cy.getByTestId('fv-word-acknowledgement', { exact: true }).type('TestAcknowledgement')
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
+
     /*
-            Checking to see if the word now exists.
-         */
+      Checking to see if the word now exists.
+    */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
