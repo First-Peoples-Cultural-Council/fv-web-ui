@@ -6,7 +6,7 @@ import 'cypress-testing-library/add-commands'
 describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
   it('Click our lang. > Words, click create new, fill in fields, save', () => {
     // TODO: Add database setup here.
-    // Requires no words to exist in database for SENCOTEN.
+    // Requires no words exist in database for SENCOTEN.
 
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
