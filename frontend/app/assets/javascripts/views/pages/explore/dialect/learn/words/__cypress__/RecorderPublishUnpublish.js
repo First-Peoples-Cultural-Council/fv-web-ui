@@ -9,8 +9,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     // A test word which has been enabled but not published must exist for SENCOTEN.
 
     /*
-            Login as Recorder and check that the publish counter increases after it is clicked.
-        */
+      Login as Recorder and check that the publish counter increases after it is clicked.
+    */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
@@ -35,8 +35,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Admin and verify/reject task.
-         */
+      Login as Admin and verify/reject task.
+    */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
@@ -52,8 +52,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     // TODO: verify site user can't see word.
 
     /*
-            Login as recorder and click publish again.
-         */
+      Login as recorder and click publish again.
+    */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
@@ -71,8 +71,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Admin and verify/approve task.
-         */
+      Login as Admin and verify/approve task.
+    */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
@@ -101,8 +101,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as recorder and click unpublish.
-         */
+      Login as recorder and click unpublish.
+    */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
@@ -117,8 +117,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Admin and verify/reject task.
-         */
+      Login as Admin and verify/reject task.
+    */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
@@ -140,8 +140,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as recorder and click unpublish again.
-        */
+      Login as recorder and click unpublish again.
+    */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
@@ -156,8 +156,8 @@ describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Admin and verify/approve task.
-         */
+      Login as Admin and verify/approve task.
+    */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
