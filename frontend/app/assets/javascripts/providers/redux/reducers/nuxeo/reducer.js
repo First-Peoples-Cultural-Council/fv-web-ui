@@ -19,6 +19,7 @@ export const nuxeoReducer = combineReducers({
   computeLogin: (
     state = {
       isFetching: false,
+      hasFetched: false,
       response: {
         get: () => {
           return ''
@@ -36,6 +37,7 @@ export const nuxeoReducer = combineReducers({
           ...state,
           response: action.user,
           isFetching: false,
+          hasFetched: true,
           success: true,
           isConnected: !action.isAnonymous,
           isNewLogin: newLoginValue,
@@ -43,7 +45,7 @@ export const nuxeoReducer = combineReducers({
       }
 
       default:
-        return { ...state, isFetching: false }
+        return { ...state, isFetching: false, hasFetched: true }
     }
   },
 })

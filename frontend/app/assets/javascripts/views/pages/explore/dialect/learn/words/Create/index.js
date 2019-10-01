@@ -115,6 +115,8 @@ export class PageDialectWordsCreate extends Component {
         return true
       case newProps.windowPath != this.props.windowPath:
         return true
+      case newProps.computeLogin != this.props.computeLogin:
+        return true
 
       case is(newProps.computeDialect2, this.props.computeDialect2) === false:
         return true
@@ -127,6 +129,9 @@ export class PageDialectWordsCreate extends Component {
   }
 
   render() {
+    if (this.props.computeLogin.hasFetched === false) {
+      return this._stateGetLoading()
+    }
     const content = this._getContent()
     return content
   }

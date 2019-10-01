@@ -42,22 +42,13 @@ limitations under the License.
 
   <target name="build" depends="npmInstall">
 
-    <!-- run prod build for evergreen -->
+    <!-- run prod build for evergreen + legacy -->
     <exec executable="${cmd.npm}" failonerror="true">
       <!-- <arg value="copy:nuxeo" /> -->
       <arg value="run" />
-      <arg value="production"/>
+      <arg value="build:production"/>
       <arg value="--"/> 
     </exec>
-
-    <!-- run prod build for legacy browsers -->
-    <exec executable="${cmd.npm}" failonerror="true">
-      <!-- <arg value="copy:nuxeo" /> -->
-      <arg value="run" />
-      <arg value="production:legacy"/>
-      <arg value="--"/> 
-    </exec>
-  	
     
     <copy todir="target/classes/nuxeo.war/app">
       <fileset dir="public"/>
