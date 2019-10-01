@@ -4,7 +4,7 @@
 import 'cypress-testing-library/add-commands'
 
 describe('MemberWordVisibility.js > MemberWordVisibility', () => {
-  it('Test to check the publish/unpublish functionality for a recorder.', () => {
+  it('Test to check the word visibility for a member.', () => {
     // TODO: Add database setup here.
     // A test word which has been enabled but not published must exist for SENCOTEN.
 
