@@ -5,8 +5,9 @@ import StringHelpers from 'common/StringHelpers'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Tabs from '@material-ui/core/Tabs'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 
@@ -178,26 +179,28 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     [StringHelpers.toTitleCase(this.props.labels.single)]
                   )}
                 </DialogTitle>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: intl.trans(
-                      'views.hoc.delete_confirm_x_x_x',
-                      'Are you sure you would like to delete the ' +
-                        this.props.labels.single +
-                        ' <strong>' +
-                        selectn('response.title', this.props.computeItem) +
-                        '</strong>?<br/>' +
-                        'Proceeding will also delete all published versions of this ' +
-                        this.props.labels.single,
-                      'first',
-                      [
-                        this.props.labels.single,
-                        selectn('response.title', this.props.computeItem),
-                        this.props.labels.single,
-                      ]
-                    ),
-                  }}
-                />
+                <DialogContent>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: intl.trans(
+                        'views.hoc.delete_confirm_x_x_x',
+                        'Are you sure you would like to delete the ' +
+                          this.props.labels.single +
+                          ' <strong>' +
+                          selectn('response.title', this.props.computeItem) +
+                          '</strong>?<br/>' +
+                          'Proceeding will also delete all published versions of this ' +
+                          this.props.labels.single,
+                        'first',
+                        [
+                          this.props.labels.single,
+                          selectn('response.title', this.props.computeItem),
+                          this.props.labels.single,
+                        ]
+                      ),
+                    }}
+                  />
+                </DialogContent>
                 <DialogActions>
                   <Button
                     data-testid="ViewWithActions__buttonCancel"
@@ -238,17 +241,18 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     [StringHelpers.toTitleCase(this.props.labels.single)]
                   )}
                 </DialogTitle>
-                {intl.trans(
-                  'views.hoc.view.delete_x_success',
-                  'The ' +
-                    this.props.labels.single +
-                    ' <strong>' +
-                    selectn('response.title', this.props.computeItem) +
-                    '</strong> has been successfully deleted.',
-                  'first',
-                  [this.props.labels.single, selectn('response.title', this.props.computeItem)]
-                )}
-
+                <DialogContent>
+                  {intl.trans(
+                    'views.hoc.view.delete_x_success',
+                    'The ' +
+                      this.props.labels.single +
+                      ' <strong>' +
+                      selectn('response.title', this.props.computeItem) +
+                      '</strong> has been successfully deleted.',
+                    'first',
+                    [this.props.labels.single, selectn('response.title', this.props.computeItem)]
+                  )}
+                </DialogContent>
                 <DialogActions>
                   <Button
                     data-testid="ViewWithActions__buttonReturn"
