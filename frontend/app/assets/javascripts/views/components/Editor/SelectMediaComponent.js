@@ -41,7 +41,6 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
 
 import ActionInfo from '@material-ui/icons/Info'
 import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
@@ -214,14 +213,12 @@ class SelectMediaComponent extends Component {
         </Button>
         <Dialog open={this.state.open} fullWidth maxWidth={false}>
           <DialogTitle>
-            <Typography variant="headline">
-              {`${intl.searchAndReplace(
-                `Select existing ${fileTypeLabel} from ${selectn(
-                  'properties.dc:title',
-                  dialect
-                )} dialect or shared resources`
-              )}:`}
-            </Typography>
+            {`${intl.searchAndReplace(
+              `Select existing ${fileTypeLabel} from ${selectn(
+                'properties.dc:title',
+                dialect
+              )} dialect or shared resources`
+            )}:`}
           </DialogTitle>
           <DialogContent>
             <div className={classNames('alert', 'alert-info', { hidden: !selectn('isFetching', computeResources) })}>

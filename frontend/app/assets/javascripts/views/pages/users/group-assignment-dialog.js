@@ -25,6 +25,8 @@ import t from 'tcomb-form'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -180,28 +182,29 @@ export default class GroupAssignmentDialog extends Component {
 
     return (
       <Dialog open={this.props.open} onClose={this.props.closeMethod}>
-        <h1>
+        <DialogTitle>
           {selectn('properties.userinfo:firstName', this.props.selectedItem)}
           &nbsp;
           {selectn('properties.userinfo:lastName', this.props.selectedItem)}: {this.props.title}
-        </h1>
-
-        <form onSubmit={this._onRequestSaveForm}>
-          <t.form.Form
-            ref="form_group_assignment"
-            value={{
-              id: selectn(this.props.fieldMapping.id, this.props.selectedItem),
-              group: currentlyAssignedGroups,
-            }}
-            type={formSchema}
-            options={formOptions}
-          />
-        </form>
+        </DialogTitle>
+        <DialogContent>
+          <form onSubmit={this._onRequestSaveForm}>
+            <t.form.Form
+              ref="form_group_assignment"
+              value={{
+                id: selectn(this.props.fieldMapping.id, this.props.selectedItem),
+                group: currentlyAssignedGroups,
+              }}
+              type={formSchema}
+              options={formOptions}
+            />
+          </form>
+        </DialogContent>
         <DialogActions>
-          <Button Button variant="flat" color="secondary" onClick={this.props.closeMethod}>
+          <Button variant="contained" color="secondary" onClick={this.props.closeMethod}>
             {intl.trans('cancel', 'Cancel', 'first')}
           </Button>
-          <Button Button variant="flat" color="primary" onClick={this._onRequestSaveForm}>
+          <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
             {intl.trans('submit', 'Submit', 'first')}
           </Button>
         </DialogActions>

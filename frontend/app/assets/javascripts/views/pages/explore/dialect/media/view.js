@@ -51,6 +51,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import List from '@material-ui/core/Button'
 import ListItem from '@material-ui/core/ListItem'
@@ -266,24 +267,26 @@ export class MediaView extends Component {
                                     onClose={() => this.setState({ showThumbnailDialog: null })}
                                   >
                                     <DialogTitle>{selectn('title', this.state.showThumbnailDialog)}</DialogTitle>
-                                    <p>
-                                      <img
-                                        src={selectn('content.data', this.state.showThumbnailDialog)}
-                                        alt={selectn('title', this.state.showThumbnailDialog)}
-                                        style={{ maxHeight: '500px' }}
-                                      />
-                                    </p>
-                                    <p>
-                                      <input
-                                        readOnly
-                                        type="text"
-                                        value={selectn('content.data', this.state.showThumbnailDialog)}
-                                        style={{ width: '100%', padding: '5px' }}
-                                      />
-                                    </p>
+                                    <DialogContent>
+                                      <p>
+                                        <img
+                                          src={selectn('content.data', this.state.showThumbnailDialog)}
+                                          alt={selectn('title', this.state.showThumbnailDialog)}
+                                          style={{ maxHeight: '500px' }}
+                                        />
+                                      </p>
+                                      <p>
+                                        <input
+                                          readOnly
+                                          type="text"
+                                          value={selectn('content.data', this.state.showThumbnailDialog)}
+                                          style={{ width: '100%', padding: '5px' }}
+                                        />
+                                      </p>
+                                    </DialogContent>
                                     <DialogActions>
                                       <Button
-                                        variant="flat"
+                                        variant="contained"
                                         color="secondary"
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
                                       >

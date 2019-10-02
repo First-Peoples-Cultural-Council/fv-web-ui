@@ -35,10 +35,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
+import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -315,12 +316,14 @@ export class AddMediaComponent extends Component {
               [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
             )}
           </DialogTitle>
-          <div className="form-horizontal">
-            {this.state.typeError}
-            {form}
-          </div>
+          <DialogContent>
+            <div className="form-horizontal">
+              {this.state.typeError}
+              {form}
+            </div>
+          </DialogContent>
           <DialogActions>
-            <Button variant="flat" color="secondary" onClick={this.handleClose}>
+            <Button variant="contained" color="secondary" onClick={this.handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
             </Button>
           </DialogActions>

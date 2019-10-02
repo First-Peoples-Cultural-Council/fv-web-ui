@@ -35,6 +35,7 @@ import selectn from 'selectn'
 
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -250,9 +251,7 @@ export class Tasks extends React.Component {
           {userTasksTable}
 
           <Dialog open={this.state.open} onClose={this._handleClose}>
-            <div className="Tasks__modal">
-              {this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}
-            </div>
+            <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
           </Dialog>
 
           <GroupAssignmentDialog

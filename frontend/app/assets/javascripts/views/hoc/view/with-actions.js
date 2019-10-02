@@ -81,46 +81,47 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   [StringHelpers.toTitleCase(this.props.labels.single)]
                 )}
               </DialogTitle>
-              {(() => {
-                if (this.props.tabs && this.props.tabs.length > 0) {
+              <DialogContent>
+                {(() => {
+                  if (this.props.tabs && this.props.tabs.length > 0) {
+                    return (
+                      <div>
+                        <p>
+                          {intl.trans(
+                            'views.hoc.view.warning1_x',
+                            'Publishing this ' +
+                              this.props.labels.single +
+                              ' will also publish (or republish) the following related items',
+                            'first',
+                            [this.props.labels.single]
+                          )}
+                          :
+                        </p>
+                        <Tabs>{this.props.tabs}</Tabs>
+                      </div>
+                    )
+                  }
                   return (
                     <div>
                       <p>
                         {intl.trans(
-                          'views.hoc.view.warning1_x',
+                          'views.hoc.view.warning2_x',
                           'Publishing this ' +
                             this.props.labels.single +
-                            ' will also publish (or republish) the following related items',
+                            ' all the media and child items associated with it',
                           'first',
                           [this.props.labels.single]
                         )}
-                        :
                       </p>
-                      <Tabs>{this.props.tabs}</Tabs>
                     </div>
                   )
-                }
-                return (
-                  <div>
-                    <p>
-                      {intl.trans(
-                        'views.hoc.view.warning2_x',
-                        'Publishing this ' +
-                          this.props.labels.single +
-                          ' all the media and child items associated with it',
-                        'first',
-                        [this.props.labels.single]
-                      )}
-                    </p>
-                  </div>
-                )
-              })()}
-
+                })()}
+              </DialogContent>
               <DialogActions>
                 <Button
                   data-testid="ViewWithActions__buttonCancel"
                   // className="FlatButton FlatButton--secondary ViewWithActions__button"
-                  variant="flat"
+                  variant="contained"
                   color="secondary"
                   onClick={(e) => {
                     e.preventDefault()
@@ -135,7 +136,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 </Button>
                 <Button
                   data-testid="ViewWithActions__buttonPublish"
-                  variant="flat"
+                  variant="contained"
                   color="primary"
                   onClick={(e) => {
                     e.preventDefault()
@@ -205,7 +206,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   <Button
                     data-testid="ViewWithActions__buttonCancel"
                     // className="FlatButton FlatButton--secondary ViewWithActions__button"
-                    variant="flat"
+                    variant="contained"
                     color="secondary"
                     onClick={(e) => {
                       e.preventDefault()
@@ -217,7 +218,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   <Button
                     data-testid="ViewWithActions__buttonDelete"
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
-                    variant="flat"
+                    variant="contained"
                     color="primary"
                     onClick={(e) => {
                       e.preventDefault()

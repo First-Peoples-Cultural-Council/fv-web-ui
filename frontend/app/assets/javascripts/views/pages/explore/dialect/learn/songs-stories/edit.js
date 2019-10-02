@@ -37,6 +37,7 @@ import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
 import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
@@ -147,7 +148,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -309,12 +310,14 @@ export class PageDialectBookEdit extends Component {
           )}
 
           <Dialog open={this.state.editPageDialogOpen} onClose={() => this.setState({ editPageDialogOpen: false })}>
-            <BookEntryEdit
-              entry={this.state.editPageItem}
-              handlePageSaved={this._pageSaved}
-              dialectEntry={_computeDialect2}
-              {...this.props}
-            />
+            <DialogContent>
+              <BookEntryEdit
+                entry={this.state.editPageItem}
+                handlePageSaved={this._pageSaved}
+                dialectEntry={_computeDialect2}
+                {...this.props}
+              />
+            </DialogContent>
           </Dialog>
         </div>
       </AuthenticationFilter>
