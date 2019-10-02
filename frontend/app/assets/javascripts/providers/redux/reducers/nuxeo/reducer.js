@@ -1,4 +1,5 @@
-import { CONNECT, GET_CURRENT_USER_SUCCESS } from './actionTypes'
+import { CONNECT, GET_CURRENT_USER_SUCCESS, GET_CURRENT_USER_START,
+  GET_CURRENT_USER_ERROR } from './actionTypes'
 import { combineReducers } from 'redux'
 
 let isNewLoginValue = false
@@ -30,6 +31,12 @@ export const nuxeoReducer = combineReducers({
     action = {}
   ) => {
     switch (action.type) {
+      case GET_CURRENT_USER_START: {
+        return {
+          ...state,
+          isFetching: true,
+        }
+      }
       case GET_CURRENT_USER_SUCCESS: {
         const newLoginValue = isNewLoginValue
         isNewLoginValue = false
@@ -43,9 +50,12 @@ export const nuxeoReducer = combineReducers({
           isNewLogin: newLoginValue,
         }
       }
+      case GET_CURRENT_USER_ERROR: {
+        return { ...state, isFetching: false, hasFetched: true }
+      }
 
       default:
-        return { ...state, isFetching: false, hasFetched: true }
+        return state
     }
   },
 })
