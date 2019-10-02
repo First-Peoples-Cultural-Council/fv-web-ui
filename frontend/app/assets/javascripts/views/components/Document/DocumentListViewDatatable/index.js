@@ -142,8 +142,7 @@ export default class DocumentListViewDatatable extends Component {
         <DataGrid
           idProperty="uid"
           dataSource={selectn('response.entries', data)}
-          // No react-datagrid2 equivalent
-          // dataSourceCount={selectn('response.totalSize', data)}
+          dataSourceCount={selectn('response.totalSize', data)}
           columns={columns}
           rowStyle={{
             minHeight: '55px',
@@ -153,27 +152,22 @@ export default class DocumentListViewDatatable extends Component {
             zIndex: 0,
           }}
           selected={this.state.selectedId}
-          // No react-datagrid2 equivalent
-          // onSelectionChange={this._handleSelectionChange}
+          onSelectionChange={this._handleSelectionChange}
           onColumnOrderChange={this.props.onColumnOrderChange}
           onSortChange={onSortChange}
-          // No react-datagrid2 equivalent
-          // withColumnMenu={false}
+          withColumnMenu={false}
           pagination={pagination}
-          // No react-datagrid2 equivalent
-          // paginationToolbarProps={{
-          //   showRefreshIcon: false,
-          //   pageSizes: [10, 20, 50],
-          // }}
+          paginationToolbarProps={{
+            showRefreshIcon: false,
+            pageSizes: [10, 20, 50],
+          }}
           sortInfo={sortInfo}
           page={page}
           pageSize={pageSize}
           onPageChange={this._onPageChange}
           onPageSizeChange={this._onPageSizeChange}
-          // No react-datagrid2 equivalent
-          // emptyText={this.intl.trans('no_records', 'No records', 'words')}
-          // No react-datagrid2 equivalent
-          // showCellBorders
+          emptyText={this.intl.trans('no_records', 'No records', 'words')}
+          showCellBorders
         />
       </Paper>
     )
