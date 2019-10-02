@@ -98,7 +98,7 @@ import { default as ContributorEdit } from './explore/dialect/Contributor/edit' 
 
 // PHRASEBOOK
 // ----------------------
-import PhrasebookBrowse from './explore/dialect/Phrasebooks' // Browse
+import PhrasebookBrowse from './explore/dialect/phrasebooks' // Browse
 import { default as PhrasebookDetail } from './explore/dialect/Phrasebook/detail' // Detail
 import { default as PageDialectPhraseBooksCreate } from './explore/dialect/Phrasebook/createV1' // Create V1
 import { default as PhrasebookCreate } from './explore/dialect/Phrasebook/create' // Create V2
