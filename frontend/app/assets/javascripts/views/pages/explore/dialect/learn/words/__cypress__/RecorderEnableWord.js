@@ -6,7 +6,7 @@ import 'cypress-testing-library/add-commands'
 describe('RecorderEnableWord.js > RecorderEnableWord', () => {
   it('Test to check that when a recorder enables a word the request to the language admin is received.', () => {
     // TODO: Add database setup here.
-    // A test word must exist for SENCOTEN.
+    // A test word that is not enabled or published must exist for SENCOTEN.
 
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
@@ -26,7 +26,7 @@ describe('RecorderEnableWord.js > RecorderEnableWord', () => {
     cy.wait(500)
 
     /*
-      Click enable as Recorder and check that publish is not clickable
+      Click enable as Recorder and check that publish is not clickable.
     */
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Enable (0)', { exact: true }).click()
@@ -90,10 +90,26 @@ describe('RecorderEnableWord.js > RecorderEnableWord', () => {
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
-    // TODO: Login as member and verify that word is visible once enabled.
+    /*
+      Login as Site Member and check that the word is visible once enabled.
+     */
+    cy.login({
+      userName: 'SITE_MEMBER_USERNAME',
+      userPassword: 'SITE_MEMBER_PASSWORD',
+      url: 'https://dev.firstvoices.com/nuxeo/startup',
+    })
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.getByTestId('DictionaryList__row').within(() => {
+      cy.getByText('TestWord').should('exist')
+      cy.getByText('TestTranslation').should('exist')
+      cy.getByText('Noun').should('exist')
+      cy.getByText('Enabled').should('exist')
+    })
+    cy.getByTestId('Navigation__open').click()
+    cy.getByText('Sign Out').click()
 
     /*
-      Login as Recorder and verify that publish is now clickable
+      Login as Recorder and verify that publish is now clickable.
      */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
