@@ -32,14 +32,15 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
+import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import Button from '@material-ui/core/Button'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-// import LinearProgress from '@material-ui/core/LinearProgress'
 import IconButton from '@material-ui/core/IconButton'
+import Tooltip from '@material-ui/core/Tooltip'
+
 import ActionInfo from '@material-ui/icons/Info'
 import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
 
@@ -89,13 +90,13 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-            selectn('dc:title', resourceParentDialect),
-          ])
+          selectn('dc:title', resourceParentDialect),
+        ])
         : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
-        <IconButton tooltip={tooltip} tooltipPosition="top-left">
-          {isDialectShared ? <ActionInfoOutline color="white" /> : <ActionInfo color="white" />}
-        </IconButton>
+        <Tooltip title={tooltip}>
+          <IconButton>{isDialectShared ? <ActionInfoOutline /> : <ActionInfo />}</IconButton>
+        </Tooltip>
       )
     }
 
@@ -147,8 +148,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {
@@ -168,18 +169,6 @@ class SelectMediaComponent extends Component {
   }
 
   render() {
-    const actions = [
-      // <FlatButton
-      //   key="flatButton1"
-      //   label={intl.trans('cancel', 'Cancel', 'first')}
-      //   secondary
-      //   onClick={this._handleClose}
-      // />,
-      <button className="FlatButton" key="flatButton1" onClick={this._handleClose} type="button">
-        {intl.trans('cancel', 'Cancel', 'first')}
-      </button>,
-    ]
-
     let fileTypeLabel = intl.trans('file', 'file', 'lower')
     // let fileTypeCellHeight = 210
     // let fileTypeTilePosition = 'bottom'
@@ -221,7 +210,7 @@ class SelectMediaComponent extends Component {
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog actions={actions} modal open={this.state.open}>
+        <Dialog open={this.state.open}>
           <DialogTitle>
             {`${intl.searchAndReplace(
               `Select existing ${fileTypeLabel} from ${selectn(

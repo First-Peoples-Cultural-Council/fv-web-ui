@@ -47,58 +47,6 @@ const DefaultFetcherParams = {
   pageSize: 10,
   filters: { 'properties.dc:title': { appliedFilter: '' }, dialect: { appliedFilter: '' } },
 }
-/*
-class SharedResourceGridTile extends Component {
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      showInfo: false,
-    }
-  }
-
-  render() {
-    const tile = this.props.tile
-    const resourceParentDialect = selectn('contextParameters.ancestry.dialect', tile)
-    let actionIcon = null
-
-    const isFVShared = selectn('path', tile) && selectn('path', tile).indexOf('SharedResources') != -1
-    const isDialectShared = selectn('uid', resourceParentDialect) != selectn('uid', this.props.dialect)
-
-    // If resource is from different dialect, show notification so user is aware
-    if (isDialectShared || isFVShared) {
-      const tooltip = isDialectShared
-        ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
-        : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
-      actionIcon = (
-        <IconButton tooltip={tooltip} tooltipPosition="top-left">
-          {isDialectShared ? <ActionInfoOutline color="white" /> : <ActionInfo color="white" />}
-        </IconButton>
-      )
-    }
-
-    return (
-      <GridTile
-        onClick={this.props.action ? this.props.action.bind(this, this.props.tile) : null}
-        key={selectn('uid', tile)}
-        title={selectn('properties.dc:title', tile)}
-        actionPosition="right"
-        titlePosition={this.props.fileTypeTilePosition}
-        actionIcon={actionIcon}
-        subtitle={
-          <span>
-            <strong>{Math.round(selectn('properties.common:size', tile) * 0.001)} KB</strong>
-          </span>
-        }
-      >
-        {this.props.preview}
-      </GridTile>
-    )
-  }
-}
-*/
 
 const { func, object, string } = PropTypes
 
