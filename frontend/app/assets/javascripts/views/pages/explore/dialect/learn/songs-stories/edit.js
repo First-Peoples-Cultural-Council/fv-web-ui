@@ -309,7 +309,12 @@ export class PageDialectBookEdit extends Component {
             </Typography>
           )}
 
-          <Dialog open={this.state.editPageDialogOpen} onClose={() => this.setState({ editPageDialogOpen: false })}>
+          <Dialog
+            fullWidth
+            maxWidth="md"
+            open={this.state.editPageDialogOpen}
+            onClose={() => this.setState({ editPageDialogOpen: false })}
+          >
             <DialogContent>
               <BookEntryEdit
                 entry={this.state.editPageItem}

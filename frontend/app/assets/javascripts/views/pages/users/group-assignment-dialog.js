@@ -181,7 +181,7 @@ export default class GroupAssignmentDialog extends Component {
     }
 
     return (
-      <Dialog open={this.props.open} onClose={this.props.closeMethod}>
+      <Dialog fullWidth maxWidth="md" open={this.props.open} onClose={this.props.closeMethod}>
         <DialogTitle>
           {selectn('properties.userinfo:firstName', this.props.selectedItem)}
           &nbsp;

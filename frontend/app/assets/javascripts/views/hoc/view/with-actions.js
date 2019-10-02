@@ -62,7 +62,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           </div>
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <Dialog
+            <Dialog fullWidth maxWidth="md"
               className="ViewWithActions__dialog"
               open={this.state.prePublishDialogOpen}
               onClose={() =>
@@ -168,7 +168,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </Toolbar>
 
               <Dialog
-                // className="ViewWithActions__dialog"
+                 fullWidth maxWidth="md"
                 open={this.state.deleteDialogOpen}
                 onClose={this._handleCancelDelete}
               >
@@ -231,7 +231,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </Dialog>
 
               <Dialog
-                // className="ViewWithActions__dialog"
+                 fullWidth maxWidth="md"
                 open={this.state.deleteSuccessDialogOpen}
               >
                 <DialogTitle>

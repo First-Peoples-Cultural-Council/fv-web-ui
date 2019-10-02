@@ -303,7 +303,7 @@ export class AddMediaComponent extends Component {
         <Button variant="contained" onClick={this.handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog actions={actions} open={this.state.open}>
+        <Dialog fullWidth maxWidth="md" actions={actions} open={this.state.open}>
           <DialogTitle>
             {intl.trans(
               'views.components.editor.create_new_x_in_the_x_dialect',

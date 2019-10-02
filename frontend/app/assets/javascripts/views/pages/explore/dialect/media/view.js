@@ -265,6 +265,8 @@ export class MediaView extends Component {
                                   <Dialog
                                     open={this.state.showThumbnailDialog === null ? false : true}
                                     onClose={() => this.setState({ showThumbnailDialog: null })}
+                                    fullWidth
+                                    maxWidth="md"
                                   >
                                     <DialogTitle>{selectn('title', this.state.showThumbnailDialog)}</DialogTitle>
                                     <DialogContent>

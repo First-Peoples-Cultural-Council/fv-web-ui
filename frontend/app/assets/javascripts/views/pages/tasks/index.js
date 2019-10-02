@@ -250,7 +250,7 @@ export class Tasks extends React.Component {
 
           {userTasksTable}
 
-          <Dialog open={this.state.open} onClose={this._handleClose}>
+          <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this._handleClose}>
             <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
           </Dialog>
 

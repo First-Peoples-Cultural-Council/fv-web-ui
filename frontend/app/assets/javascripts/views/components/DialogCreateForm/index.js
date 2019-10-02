@@ -183,7 +183,7 @@ export default class DialogCreateForm extends React.Component {
       <div>
         {createNewButton}
 
-        <Dialog open={this.state.open} onClose={this.handleClose}>
+        <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
           <DialogContent>{createForm}</DialogContent>
           <DialogActions>
             <Button variant="contained" color="secondary" onClick={this.handleClose}>
