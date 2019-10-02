@@ -15,8 +15,8 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
     })
 
     /*
-      Checking to make sure no word currently exists.
-      Database should be reset prior to test.
+      Checking to make sure no word currently exists
+      Database should be reset prior to test
     */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
@@ -29,7 +29,7 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
     cy.wait(500)
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('CREATE NEW WORD', { exact: false }).click()
+    cy.getByText('Create New Word', { exact: true }).click()
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
     cy.getByTestId('fv-word-pronunciation').type('TestPronunciation')
@@ -100,7 +100,7 @@ describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
     cy.wait(500)
 
     /*
-      Checking to see if the word now exists.
+      Checking to see if the word now exists
     */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
