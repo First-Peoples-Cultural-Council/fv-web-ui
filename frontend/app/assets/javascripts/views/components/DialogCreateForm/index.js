@@ -1,7 +1,9 @@
 import React from 'react'
+
+import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
-import Button from '@material-ui/core/Button'
+import DialogContent from '@material-ui/core/DialogContent'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
 import PageDialectCategoryCreate from 'views/pages/explore/dialect/category/create'
@@ -139,12 +141,11 @@ export default class DialogCreateForm extends React.Component {
         break
 
       case 'FVLink':
+        // Create
         createForm = <PageDialectLinksCreate embedded onDocumentCreated={this._onDocumentCreated} />
-        createNewButtonLabel =
-          this.props.value || this.props.expandedValue
-            ? intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
-            : intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
+        createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.create_link', 'Create Link', 'words')
 
+        // Edit
         if (this.props.value) {
           createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
           createForm = (
@@ -183,9 +184,9 @@ export default class DialogCreateForm extends React.Component {
         {createNewButton}
 
         <Dialog open={this.state.open} onClose={this.handleClose}>
-          {createForm}
+          <DialogContent>{createForm}</DialogContent>
           <DialogActions>
-            <Button variant="flat" color="secondary" onClick={this.handleClose}>
+            <Button variant="contained" color="secondary" onClick={this.handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
             </Button>
           </DialogActions>

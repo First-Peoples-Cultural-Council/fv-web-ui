@@ -28,6 +28,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography'
 
 import StatusBar from 'views/components/StatusBar'
 
@@ -176,14 +177,14 @@ export class PageDialectLinksCreate extends Component {
 
     return (
       <div>
-        <h1>
+        <Typography variant="headline" component="h2">
           {intl.trans(
             'views.pages.explore.dialect.links.add_new_link_to_x',
             'Add New Link to ' + dialect.get('dc:title'),
             'words',
             [dialect.get('dc:title')]
           )}
-        </h1>
+        </Typography>
 
         {link && link.message && link.action.includes('CREATE') ? <StatusBar message={link.message} /> : ''}
 
