@@ -31,11 +31,13 @@ import selectn from 'selectn'
 import { WORKSPACES } from 'common/Constants'
 
 import Button from '@material-ui/core/Button'
-import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
-import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+
+import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
+import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
 import IntlService from 'views/services/intl'
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
@@ -80,8 +82,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {
@@ -210,19 +212,23 @@ export class BrowseComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
+        {/* Dialog Button */}
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog actions={actions} open={this.state.open}>
-          <DialogTitle>{title}</DialogTitle>
-          {(() => {
-            if (dialectPath) {
-              return view
-            }
-          })()}
 
+        {/* Dialog */}
+        <Dialog actions={actions} fullWidth maxWidth="md" open={this.state.open}>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogContent>
+            {(() => {
+              if (dialectPath) {
+                return view
+              }
+            })()}
+          </DialogContent>
           <DialogActions>
-            <Button variant="flat" color="secondary" onClick={this._handleClose}>
+            <Button variant="contained" color="secondary" onClick={this._handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
             </Button>
           </DialogActions>

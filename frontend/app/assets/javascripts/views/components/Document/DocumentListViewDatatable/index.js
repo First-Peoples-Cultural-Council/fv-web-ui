@@ -15,41 +15,34 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import selectn from 'selectn'
-import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
-// import DictionaryList from 'views/components/Browsing/dictionary-list'
 import DataGrid from 'react-datagrid2'
-import Paper from '@material-ui/core/Paper'
-// import FlashcardList from 'views/components/Browsing/flashcard-list'
 
+import Paper from '@material-ui/core/Paper'
+
+import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
-
 // Stylesheet
-// import '!style-loader!css-loader!react-datagrid/dist/index.min.css'
-
-// is TapEvent needed here?! Test on mobile
-//var injectTapEventPlugin = require("react-tap-event-plugin");
-//injectTapEventPlugin();
+import '!style-loader!css-loader!react-datagrid2/dist/index.min.css'
 
 const GridViewWithPagination = withPagination(GridView, 8)
-const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
+/* eslint-disable */
 function debounce(a, b, c) {
-  var d, e // eslint-disable-line
-  // eslint-disable-next-line
-  return function() {
+  let d
+  let e
+  return function dB1() {
     function h() {
-      ;(d = null), c || (e = a.apply(f, g)) // eslint-disable-line
+      ;(d = null), c || (e = a.apply(f, g))
     }
 
-    var f = this // eslint-disable-line
-
-    var g = arguments // eslint-disable-line
-    return clearTimeout(d), (d = setTimeout(h, b)), c && !d && (e = a.apply(f, g)), e // eslint-disable-line
+    var f = this
+    var g = arguments
+    return clearTimeout(d), (d = setTimeout(h, b)), c && !d && (e = a.apply(f, g)), e
   }
 }
+/* eslint-enable */
 
 export default class DocumentListViewDatatable extends Component {
   static propTypes = {
@@ -67,7 +60,6 @@ export default class DocumentListViewDatatable extends Component {
     pageSize: PropTypes.number,
     pagination: PropTypes.bool,
     refetcher: PropTypes.func,
-    renderSimpleTable: PropTypes.any, // TODO: set appropriate propType
     sortInfo: PropTypes.any, // TODO: set appropriate propType
     type: PropTypes.any, // TODO: set appropriate propType
     flashcard: PropTypes.bool,
@@ -90,18 +82,12 @@ export default class DocumentListViewDatatable extends Component {
     this.state = {
       selectedId: null,
     }
-
-    // Bind methods to 'this'
-    // eslint-disable-next-line
-    ;['_handleSelectionChange', '_onPageChange', '_onPageSizeChange', '_gridListFetcher'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
   }
 
   intl = IntlService.instance
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data !== this.props.data) {
+  componentDidUpdate(prevProps) {
+    if (this.props.data != prevProps.data) {
       this.setState({
         page: 1,
       })
@@ -114,36 +100,35 @@ export default class DocumentListViewDatatable extends Component {
       data,
       dialect,
       disablePageSize,
+      flashcardTitle,
       gridCols,
       gridListTile,
       gridListView,
       onSortChange,
-      pagination,
       page,
       pageSize,
-      renderSimpleTable,
+      pagination,
       sortInfo,
       type,
     } = this.props
 
-    let gridViewProps = {
-      style: { overflowY: 'auto', maxHeight: '50vh' },
-      cols: gridCols,
-      cellHeight: 160,
-      fetcher: this._gridListFetcher,
-      type: type,
-      pagination: pagination,
-      fetcherParams: { currentPageIndex: page, pageSize: pageSize },
-      metadata: selectn('response', data),
-      gridListTile: gridListTile,
-      disablePageSize: disablePageSize,
-      dialect: dialect,
-      items: selectn('response.entries', data),
-      flashcardTitle: this.props.flashcardTitle,
-    }
-
-    // TODO: IS THIS NEEDED FOR THIS VIEW?
     if (gridListView) {
+      let gridViewProps = {
+        style: { overflowY: 'auto', maxHeight: '50vh' },
+        cols: gridCols,
+        cellHeight: 160,
+        fetcher: this._gridListFetcher,
+        type: type,
+        pagination: pagination,
+        fetcherParams: { currentPageIndex: page, pageSize },
+        metadata: selectn('response', data),
+        gridListTile: gridListTile,
+        disablePageSize,
+        dialect,
+        items: selectn('response.entries', data),
+        flashcardTitle,
+      }
+
       gridViewProps = Object.assign({}, gridViewProps, this.props.gridViewProps)
 
       if (pagination) {
@@ -152,29 +137,28 @@ export default class DocumentListViewDatatable extends Component {
       return <GridView {...gridViewProps} />
     }
 
-    // TODO: IS THIS NEEDED FOR THIS VIEW?
-    // const FilteredPaginatedDictionaryList = withPagination(
-    //   this.props.flashcard ? FlashcardList : DictionaryList,
-    //   DefaultFetcherParams.pageSize
-    // )
-    // return <FilteredPaginatedDictionaryList {...gridViewProps} columns={columns} />
-
     return (
       <Paper>
         <DataGrid
           idProperty="uid"
           dataSource={selectn('response.entries', data)}
-          // dataSourceCount={selectn('response.totalSize', data)} // No react-datagrid2 equivalent
+          // No react-datagrid2 equivalent
+          // dataSourceCount={selectn('response.totalSize', data)}
           columns={columns}
-          // rowHeight={55} // No react-datagrid2 equivalent
+          rowStyle={{
+            minHeight: '55px',
+          }}
           style={{
             minHeight: '70vh',
             zIndex: 0,
           }}
-          // selected={this.state.selectedId} // rowStyle={(data, props)=>{}} // expected to return a style object
-          // onSelectionChange={this._handleSelectionChange} // No react-datagrid2 equivalent
+          selected={this.state.selectedId}
+          // No react-datagrid2 equivalent
+          // onSelectionChange={this._handleSelectionChange}
+          onColumnOrderChange={this.props.onColumnOrderChange}
           onSortChange={onSortChange}
-          // withColumnMenu={false} // No react-datagrid2 equivalent
+          // No react-datagrid2 equivalent
+          // withColumnMenu={false}
           pagination={pagination}
           // No react-datagrid2 equivalent
           // paginationToolbarProps={{
@@ -186,18 +170,20 @@ export default class DocumentListViewDatatable extends Component {
           pageSize={pageSize}
           onPageChange={this._onPageChange}
           onPageSizeChange={this._onPageSizeChange}
-          // emptyText={this.intl.trans('no_records', 'No records', 'words')} // No react-datagrid2 equivalent
-          // showCellBorders // No react-datagrid2 equivalent
+          // No react-datagrid2 equivalent
+          // emptyText={this.intl.trans('no_records', 'No records', 'words')}
+          // No react-datagrid2 equivalent
+          // showCellBorders
         />
       </Paper>
     )
   }
 
-  _gridListFetcher(fetcherParams) {
+  _gridListFetcher = (fetcherParams) => {
     this.props.refetcher(this.props, fetcherParams.currentPageIndex, fetcherParams.pageSize)
   }
 
-  _handleSelectionChange(newSelectedId, data) {
+  _handleSelectionChange = (newSelectedId, data) => {
     this.setState({
       selectedId: newSelectedId,
     })
@@ -218,7 +204,7 @@ export default class DocumentListViewDatatable extends Component {
     this.props.refetcher(this.props, page, this.props.pageSize)
   }, 750)
 
-  _onPageSizeChange(pageSize) {
+  _onPageSizeChange = (pageSize) => {
     // Skip if page size hasn't actually changed
     if (pageSize === this.props.pageSize) {
       return
