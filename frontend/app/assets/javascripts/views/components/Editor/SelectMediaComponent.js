@@ -36,10 +36,12 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
 import ActionInfo from '@material-ui/icons/Info'
 import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
@@ -210,38 +212,42 @@ class SelectMediaComponent extends Component {
         <Button variant="raised" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
-        <Dialog open={this.state.open}>
+        <Dialog open={this.state.open} fullWidth maxWidth={false}>
           <DialogTitle>
-            {`${intl.searchAndReplace(
-              `Select existing ${fileTypeLabel} from ${selectn(
-                'properties.dc:title',
-                dialect
-              )} dialect or shared resources`
-            )}:`}
+            <Typography variant="headline">
+              {`${intl.searchAndReplace(
+                `Select existing ${fileTypeLabel} from ${selectn(
+                  'properties.dc:title',
+                  dialect
+                )} dialect or shared resources`
+              )}:`}
+            </Typography>
           </DialogTitle>
-          <div className={classNames('alert', 'alert-info', { hidden: !selectn('isFetching', computeResources) })}>
-            {intl.trans('loading_results_please_wait', 'Loading results, please wait.', 'first')}
-            {/* <br /> */}
-            {/* <LinearProgress variant="indeterminate" /> */}
-          </div>
-          <FilteredPaginatedMediaList
-            action={this._handleSelectElement}
-            cols={5}
-            cellHeight={150}
-            fetcherParams={this.state.fetcherParams}
-            filterOptionsKey={'ResourcesSelector'}
-            fetcher={this.fetchData}
-            gridListTile={SharedResourceGridTileWithDialect}
-            initialFormValue={this.state.initialFormValue}
-            initialValues={{
-              'dc:contributors': selectn('response.properties.username', this.props.computeLogin),
-            }}
-            items={items}
-            metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
-            style={{ overflowY: 'auto', maxHeight: '100vh' }}
-          />
+          <DialogContent>
+            <div className={classNames('alert', 'alert-info', { hidden: !selectn('isFetching', computeResources) })}>
+              {intl.trans('loading_results_please_wait', 'Loading results, please wait.', 'first')}
+              {/* <br /> */}
+              {/* <LinearProgress variant="indeterminate" /> */}
+            </div>
+            <FilteredPaginatedMediaList
+              action={this._handleSelectElement}
+              cols={5}
+              cellHeight={150}
+              fetcherParams={this.state.fetcherParams}
+              filterOptionsKey={'ResourcesSelector'}
+              fetcher={this.fetchData}
+              gridListTile={SharedResourceGridTileWithDialect}
+              initialFormValue={this.state.initialFormValue}
+              initialValues={{
+                'dc:contributors': selectn('response.properties.username', this.props.computeLogin),
+              }}
+              items={items}
+              metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
+              style={{ overflowY: 'auto', maxHeight: '100vh' }}
+            />
+          </DialogContent>
           <DialogActions>
-            <Button variant="flat" color="secondary" onClick={this._handleClose}>
+            <Button variant="contained" color="secondary" onClick={this._handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
             </Button>
           </DialogActions>
