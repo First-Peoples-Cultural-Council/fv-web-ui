@@ -4,7 +4,7 @@
 import 'cypress-testing-library/add-commands'
 
 describe('RecorderCreatePhrase.js > RecorderCreatePhrase', () => {
-  it('Test to check the word visibility for a member.', () => {
+  it('Test to check a recorder creating a phrase.', () => {
     // TODO: Add database setup here.
     // Requires no phrases exist in database for SENCOTEN.
 
@@ -136,6 +136,7 @@ describe('RecorderCreatePhrase.js > RecorderCreatePhrase', () => {
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.wait(500)
     cy.getByText('TestPhrase', { exact: true }).click()
     cy.get('div.hidden-xs.clearfix').within(() => {
       cy.get('input[type=checkbox]')
