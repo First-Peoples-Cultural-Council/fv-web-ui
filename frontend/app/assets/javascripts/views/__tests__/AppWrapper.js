@@ -30,7 +30,6 @@ const context = {
       title: ConfGlobal.title,
       pageTitleParams: null,
       domain: ConfGlobal.domain,
-      siteTheme: 'default',
     },
   },
 }

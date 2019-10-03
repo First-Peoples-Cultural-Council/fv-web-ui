@@ -18,11 +18,6 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import { createMuiTheme } from '@material-ui/core/styles'
-
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
-import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
-import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
 import ConfGlobal from 'conf/local.js'
 
 // REDUX
@@ -35,18 +30,13 @@ import AppWrapper from 'views/AppWrapper'
 require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
-const themes = [FirstVoicesTheme, FirstVoicesWorkspaceTheme, FirstVoicesKidsTheme]
-const createdMuiTheme = createMuiTheme(themes[0])
+
 const context = {
   providedState: {
     properties: {
       title: ConfGlobal.title,
       pageTitleParams: null,
       domain: ConfGlobal.domain,
-      theme: {
-        ...createdMuiTheme,
-        id: 'default',
-      },
     },
   },
 }
