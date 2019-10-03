@@ -208,7 +208,7 @@ class SelectMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <Button variant="raised" onClick={this._handleOpen}>
+        <Button variant="outlined" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
         <Dialog open={this.state.open} fullWidth maxWidth={false}>

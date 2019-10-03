@@ -213,7 +213,7 @@ export class BrowseComponent extends Component {
     return (
       <div style={{ display: 'inline' }}>
         {/* Dialog Button */}
-        <Button variant="raised" onClick={this._handleOpen}>
+        <Button variant="outlined" onClick={this._handleOpen}>
           {this.props.label}
         </Button>
 

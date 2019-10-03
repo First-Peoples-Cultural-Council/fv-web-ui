@@ -300,7 +300,7 @@ export class AddMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <Button variant="contained" onClick={this.handleOpen}>
+        <Button variant="outlined" onClick={this.handleOpen}>
           {this.props.label}
         </Button>
         <Dialog fullWidth maxWidth="md" actions={actions} open={this.state.open}>

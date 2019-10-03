@@ -173,7 +173,7 @@ export default class DialogCreateForm extends React.Component {
       this.props.fieldAttributes.disableCreateNewButton === false
     ) {
       createNewButton = (
-        <Button variant="raised" onClick={this.handleOpen}>
+        <Button variant="outlined" onClick={this.handleOpen}>
           {createNewButtonLabel}
         </Button>
       )
