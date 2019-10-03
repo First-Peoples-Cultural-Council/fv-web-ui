@@ -150,7 +150,7 @@ describe('LangAdminCreateDelete.js > LangAdminCreateDelete', () => {
 
     // Possible bug with first voices here requiring button to be clicked 3 times.
     cy.getByText('Return To Previous Page').click()
-    cy.getByTestId('ViewWithActions__buttonReturn').click()
+    cy.getByText('Return To Previous Page').click()
     cy.getByText('Return To Previous Page').click()
 
     cy.getByText('No results found.', { exact: true }).should('be.visible')
