@@ -27,7 +27,6 @@ export default class GeneralList extends Component {
     filteredItems: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
     fields: PropTypes.instanceOf(Map),
     type: PropTypes.string,
-    theme: PropTypes.string,
     action: PropTypes.func,
     cols: PropTypes.number,
     cellHeight: PropTypes.number,

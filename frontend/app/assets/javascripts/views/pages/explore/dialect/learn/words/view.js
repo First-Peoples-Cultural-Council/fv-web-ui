@@ -387,10 +387,10 @@ export class DialectViewWord extends Component {
 
   _getPhrases = (computeWord) => {
     const phrases = []
-    const theme = this.props.routeParams.theme
+    const siteTheme = this.props.routeParams.siteTheme
     ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
-      const hrefPath = NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
         <a
           key={selectn('uid', phrase)}
@@ -509,12 +509,12 @@ export class DialectViewWord extends Component {
 
     // Phrases
     const phrases = []
-    const theme = this.props.routeParams.theme
+    const siteTheme = this.props.routeParams.siteTheme
     ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
-      const hrefPath = NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
-        // <Link key={selectn('uid', phrase)} href={NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')}>
+        // <Link key={selectn('uid', phrase)} href={NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')}>
         //   {selectn('dc:title', phrase)}
         // </Link>
         <a

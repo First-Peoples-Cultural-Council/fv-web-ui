@@ -100,7 +100,7 @@ export class PageDialectMediaEdit extends Component {
       selectn('wasUpdated', nextResource) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextResource), 'media'),
+        NavigationHelpers.generateUIDPath(nextProps.routeParams.siteTheme, selectn('response', nextResource), 'media'),
         nextProps.replaceWindowPath,
         true
       )

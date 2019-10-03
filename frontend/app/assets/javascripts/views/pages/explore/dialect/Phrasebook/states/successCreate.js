@@ -27,13 +27,13 @@ export class PhrasebookStateSuccessCreate extends React.Component {
   }
   render() {
     const { className, copy, formData, handleClick, routeParams, itemUid } = this.props
-    const { theme, dialect_path } = routeParams
+    const { siteTheme, dialect_path } = routeParams
     const name = formData['dc:title']
     const description = formData['dc:description']
     // const photo = formData['fvcontributor:profile_picture'] ? formData['fvcontributor:profile_picture'][0] : {}
-    const phrasebookDetailUrl = `/${theme}${dialect_path}/phrasebook/${itemUid}`
-    const phrasebookEditUrl = `/${theme}${dialect_path}/edit/phrasebook/${itemUid}`
-    const phrasebookBrowseUrl = `/${theme}${dialect_path}/phrasebooks/10/1`
+    const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${itemUid}`
+    const phrasebookEditUrl = `/${siteTheme}${dialect_path}/edit/phrasebook/${itemUid}`
+    const phrasebookBrowseUrl = `/${siteTheme}${dialect_path}/phrasebooks/10/1`
     return (
       <div className={`${className} Phrasebook Phrasebook--successCreate`}>
         <h1 className="Phrasebook__heading">{copy.create.success.title}</h1>

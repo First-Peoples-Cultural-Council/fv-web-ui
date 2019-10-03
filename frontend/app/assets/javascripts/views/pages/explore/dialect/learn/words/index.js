@@ -131,7 +131,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       searchNxqlSort: {},
       searchPartOfSpeech: SEARCH_SORT_DEFAULT,
       computeEntities,
-      isKidsTheme: props.routeParams.theme === 'kids',
+      isKidsTheme: props.routeParams.siteTheme === 'kids',
       flashcardMode: false,
     }
 

@@ -37,7 +37,7 @@ export class PortalListDialects extends Component {
     items: oneOfType([array, instanceOf(List)]),
     filteredItems: oneOfType([array, instanceOf(List)]),
     fieldMapping: object,
-    theme: string.isRequired, // NOTE: comes from parent, not redux: state.navigation.theme
+    siteTheme: string.isRequired,
     // REDUX: reducers/state - none
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
@@ -69,7 +69,7 @@ export class PortalListDialects extends Component {
       const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
       const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
       const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
-      const href = `/${this.props.theme}${tile.path.replace('/Portal', '')}`
+      const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
       const dialectTitle = IntlService.instance.searchAndReplace(title)
       const dialectDescription = tile.description ? (
         <span className="DialectDescription">{IntlService.instance.searchAndReplace(tile.description)}</span>
@@ -107,9 +107,9 @@ export class PortalListDialects extends Component {
 // REDUX: reducers/state
 // const mapStateToProps = (state /*, ownProps*/) => {
 //   const { navigation } = state
-//   const { theme } = navigation
+//   const { siteTheme } = navigation
 //   return {
-//     theme,
+//     siteTheme,
 //   }
 // }
 

@@ -208,7 +208,7 @@ export class Edit extends Component {
           currentPath={this.props.splitWindowPath}
           navigationMethod={() => {}}
           type="FVPhraseBook"
-          routeParams={this.props.routeParams}
+          // routeParams={this.props.routeParams}
         />
       </div>
     )

@@ -21,8 +21,8 @@ export class RecorderEdit extends React.Component {
 
   render() {
     const { routeParams } = this.props
-    const { theme, dialect_path } = routeParams
-    const createUrl = `/${theme}${dialect_path}/create/recorder`
+    const { siteTheme, dialect_path } = routeParams
+    const createUrl = `/${siteTheme}${dialect_path}/create/recorder`
     return (
       <ContributorEdit
         createUrl={createUrl}

@@ -118,7 +118,7 @@ export class PhrasesCreate extends Component {
       selectn('success', nextPhrase) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextPhrase), 'phrases'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', nextPhrase), 'phrases'),
         this.props.replaceWindowPath,
         true
       )

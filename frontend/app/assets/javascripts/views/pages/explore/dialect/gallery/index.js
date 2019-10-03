@@ -100,7 +100,7 @@ export class PageDialectGalleries extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const computeGalleries = ProviderHelpers.getEntry(this.props.computeGalleries, path)
 
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     const listProps = {
       defaultLanguage: DEFAULT_LANGUAGE,
@@ -117,7 +117,7 @@ export class PageDialectGalleries extends Component {
     let listView = <FilteredList {...listProps} />
 
     if (isKidsTheme) {
-      listView = <GeneralList {...listProps} cols={3} theme={this.props.routeParams.theme} />
+      listView = <GeneralList {...listProps} cols={3} siteTheme={this.props.routeParams.siteTheme} />
     }
 
     return (
@@ -193,7 +193,7 @@ export class PageDialectGalleries extends Component {
 
   _onItemNavigateRequest = (item) => {
     this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', item, 'gallery')
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', item, 'gallery')
     )
   }
 }

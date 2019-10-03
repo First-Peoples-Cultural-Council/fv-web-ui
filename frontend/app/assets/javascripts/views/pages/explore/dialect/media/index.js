@@ -135,7 +135,7 @@ export class DialectMedia extends Component {
               items={
                 selectn('response.entries', computeResources) || selectn('response_prev.entries', computeResources)
               }
-              theme={this.props.routeParams.theme}
+              siteTheme={this.props.routeParams.siteTheme}
               formValues={this.state.formValues}
               // For `with-filter`
               area={this.props.routeParams.area}
@@ -160,10 +160,10 @@ export class DialectMedia extends Component {
   _onNavigateRequest = (media) => {
     // V1
     this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', media, 'media')
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', media, 'media')
     )
     // V2 - still reloads after page transition for some reason
-    // const hrefPath = NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', media, 'media')
+    // const hrefPath = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', media, 'media')
     // NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
   }
 

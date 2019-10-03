@@ -51,7 +51,7 @@ export class Play extends Component {
   }
 
   render() {
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     const cellStyle = {
       border: '1px solid #000',

@@ -114,7 +114,7 @@ export class BrowseComponent extends Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               dialect_path: dialectPath,
             }}
           />
@@ -138,7 +138,7 @@ export class BrowseComponent extends Component {
                 : dialectPath + '/Phrase Books/'
             }
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -159,7 +159,7 @@ export class BrowseComponent extends Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -180,7 +180,7 @@ export class BrowseComponent extends Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -201,7 +201,7 @@ export class BrowseComponent extends Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               dialect_path: dialectPath,
             }}
           />

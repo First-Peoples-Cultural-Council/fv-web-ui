@@ -110,7 +110,11 @@ export class PageDialectBookEdit extends Component {
     ) {
       // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextBook), 'songs-stories'),
+        NavigationHelpers.generateUIDPath(
+          this.props.routeParams.siteTheme,
+          selectn('response', nextBook),
+          'songs-stories'
+        ),
         this.props.replaceWindowPath,
         true
       )

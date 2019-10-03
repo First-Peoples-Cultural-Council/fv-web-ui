@@ -263,7 +263,7 @@ export class Navigation extends Component {
       </div>
     )
 
-    const themeZeroPalette = selectn('theme.palette', this.props)
+    const themePalette = selectn('theme.palette', this.props)
     const color = selectn('theme.palette.primary.contrastText', this.props)
 
     return (
@@ -327,7 +327,7 @@ export class Navigation extends Component {
                 this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
               }`}
               style={{
-                background: themeZeroPalette.primary1Color,
+                background: themePalette.primary1Color,
               }}
               onFocus={() => {
                 this.setState({
@@ -477,7 +477,7 @@ export class Navigation extends Component {
 
         {/* Dialect sub-menu */}
         {isDialect && (
-          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themeZeroPalette.primary2Color }}>
+          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themePalette.primary2Color }}>
             <h2 className="Navigation__dialectHeader">
               <a
                 href={NavigationHelpers.generateStaticURL(dialectLink)}

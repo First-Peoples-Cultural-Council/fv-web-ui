@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
-import { changeTheme } from 'providers/redux/reducers/navigation'
+import { changeSiteTheme } from 'providers/redux/reducers/navigation'
 import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
 
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
@@ -66,7 +66,7 @@ class AppWrapper extends Component {
 
   static propTypes = {
     // REDUX: actions/dispatch/func
-    changeTheme: func.isRequired,
+    changeSiteTheme: func.isRequired,
     fetchDialect2: func.isRequired,
     getCurrentUser: func.isRequired,
     nuxeoConnect: func.isRequired,
@@ -89,11 +89,11 @@ class AppWrapper extends Component {
     }
   }
 
-  // Force update of theme if out of sync
+  // Force update of siteTheme if out of sync
   // This is a fix that may be unecessary in future versions of Material-UI, React, Reat-redux-provide
   componentDidUpdate(prevProps) {
-    if (prevProps.properties.theme.id !== this.props.properties.theme.id) {
-      this.props.changeTheme(this.props.properties.theme.id)
+    if (prevProps.properties.siteTheme !== this.props.properties.siteTheme) {
+      this.props.changeSiteTheme(this.props.properties.siteTheme)
     }
   }
 
@@ -105,9 +105,9 @@ class AppWrapper extends Component {
 
     const preferences = getPreferences(this.props.computeLogin, selectn('response', _computeDialect2))
 
-    const themeId = selectn('theme.id', properties)
     let theme = null
-    switch (themeId) {
+
+    switch (selectn('siteTheme', properties)) {
       case 'kids':
         theme = createMuiTheme(FirstVoicesKidsTheme)
         break
@@ -135,9 +135,9 @@ class AppWrapper extends Component {
   }
 
   // Changing a theme manually...
-  /*_changeTheme(event) {
+  /*_changeSiteTheme(event) {
       let index = event.nativeEvent.target.selectedIndex;
-      this.props.changeTheme(event.target[index].value);
+      this.props.changeSiteTheme(event.target[index].value);
     }*/
 }
 
@@ -160,7 +160,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  changeTheme,
+  changeSiteTheme,
   fetchDialect2,
   nuxeoConnect,
   getCurrentUser,

@@ -461,7 +461,7 @@ export class DialectLearn extends Component {
                       <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedWords)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
@@ -473,7 +473,7 @@ export class DialectLearn extends Component {
                         </div>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedWords)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
@@ -487,7 +487,7 @@ export class DialectLearn extends Component {
                         <AuthenticationFilter login={this.props.computeLogin} anon={false}>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedWords)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
@@ -500,7 +500,7 @@ export class DialectLearn extends Component {
 
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedWords)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
@@ -542,7 +542,7 @@ export class DialectLearn extends Component {
                       <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedPhrases)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
@@ -554,7 +554,7 @@ export class DialectLearn extends Component {
                         </div>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedPhrases)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
@@ -567,7 +567,7 @@ export class DialectLearn extends Component {
                         <AuthenticationFilter login={this.props.computeLogin} anon={false}>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedPhrases)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
@@ -579,7 +579,7 @@ export class DialectLearn extends Component {
                           </div>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedPhrases)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
@@ -621,7 +621,7 @@ export class DialectLearn extends Component {
                       <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedSongs)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
@@ -633,7 +633,7 @@ export class DialectLearn extends Component {
                         </div>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedSongs)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
@@ -646,7 +646,7 @@ export class DialectLearn extends Component {
                         <AuthenticationFilter login={this.props.computeLogin} anon={false}>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedSongs)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
@@ -658,7 +658,7 @@ export class DialectLearn extends Component {
                           </div>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedSongs)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
@@ -700,7 +700,7 @@ export class DialectLearn extends Component {
                       <div className="row" style={{ paddingTop: '20px' }}>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedStories)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
@@ -712,7 +712,7 @@ export class DialectLearn extends Component {
                         </div>
                         <div className={classNames('col-xs-6')}>
                           <RecentActivityList
-                            theme={this.props.routeParams.theme}
+                            siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedStories)}
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
@@ -725,7 +725,7 @@ export class DialectLearn extends Component {
                         <AuthenticationFilter login={this.props.computeLogin} anon={false}>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedStories)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
@@ -737,7 +737,7 @@ export class DialectLearn extends Component {
                           </div>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
-                              theme={this.props.routeParams.theme}
+                              siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedStories)}
                               title={intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',

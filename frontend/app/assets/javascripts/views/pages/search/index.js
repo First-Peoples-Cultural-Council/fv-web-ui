@@ -195,7 +195,7 @@ export class Search extends DataListView {
   }
 
   _onEntryNavigateRequest(path) {
-    this.props.pushWindowPath(`/${this.props.routeParams.theme}${path}`)
+    this.props.pushWindowPath(`/${this.props.routeParams.siteTheme}${path}`)
   }
 
   _getQueryPath(props = this.props) {

@@ -99,7 +99,11 @@ export class PageDialectGalleryEdit extends Component {
     ) {
       // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentGallery), 'gallery'),
+        NavigationHelpers.generateUIDPath(
+          this.props.routeParams.siteTheme,
+          selectn('response', currentGallery),
+          'gallery'
+        ),
         this.props.replaceWindowPath,
         true
       )

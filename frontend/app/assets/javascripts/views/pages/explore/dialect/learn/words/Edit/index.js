@@ -178,7 +178,7 @@ export class WordsEdit extends Component {
       selectn('wasUpdated', currentWord) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentWord), 'words'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', currentWord), 'words'),
         this.props.replaceWindowPath,
         true
       )

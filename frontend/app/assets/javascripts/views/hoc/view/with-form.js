@@ -19,7 +19,7 @@ const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1
 export default function withForm(ComposedFilter /*, publishWarningEnabled = false*/) {
   class ViewWithForm extends Component {
     static propTypes = {
-      routeParams: PropTypes.object,
+      // routeParams: PropTypes.object,
       initialValues: PropTypes.object,
       fields: PropTypes.object.isRequired,
       options: PropTypes.object.isRequired,
@@ -111,7 +111,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
           } else if (nextWordWasCreated) {
             //navigateForwardReplace
-            //nextProps.replaceWindowPath('/' + nextProps.routeParams.theme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
+            //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
           }
         }
       }

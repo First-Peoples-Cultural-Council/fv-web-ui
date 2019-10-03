@@ -259,8 +259,8 @@ export class EditContributor extends React.Component {
   _stateGetSuccessDelete = () => {
     const { createUrl, className, routeParams } = this.props
     const { formData } = this.state
-    const { theme, dialect_path } = routeParams
-    const _createUrl = createUrl || `/${theme}${dialect_path}/create/contributor`
+    const { siteTheme, dialect_path } = routeParams
+    const _createUrl = createUrl || `/${siteTheme}${dialect_path}/create/contributor`
     return (
       <StateSuccessDelete createUrl={_createUrl} className={className} copy={this.state.copy} formData={formData} />
     )

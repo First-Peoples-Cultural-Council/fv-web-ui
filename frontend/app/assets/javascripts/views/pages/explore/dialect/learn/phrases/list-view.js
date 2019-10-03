@@ -104,7 +104,7 @@ export class ListView extends DataListView {
   constructor(props, context) {
     super(props, context)
 
-    const currentTheme = this.props.routeParams.theme
+    const currentTheme = this.props.routeParams.siteTheme
 
     this.state = {
       columns: [
@@ -342,7 +342,7 @@ export class ListView extends DataListView {
       this.props.action(item)
     } else {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, item, 'phrases'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, item, 'phrases'),
         this.props.pushWindowPath,
         true
       )

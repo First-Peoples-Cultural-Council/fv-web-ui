@@ -1,7 +1,7 @@
 import {
   TOGGLE_MENU,
   NAVIGATE_PAGE,
-  CHANGE_THEME,
+  CHANGE_SITE_THEME,
   CHANGE_TITLE_PARAMS,
   OVERRIDE_BREADCRUMBS,
   PAGE_PROPERTIES,
@@ -85,9 +85,9 @@ export const toggleMenuAction = () => {
   return { type: TOGGLE_MENU }
 }
 
-// Change theme
-export const changeTheme = (id) => {
-  return { type: CHANGE_THEME, theme: { id: id } }
+// Change siteTheme
+export const changeSiteTheme = (id) => {
+  return { type: CHANGE_SITE_THEME, siteTheme: id }
 }
 
 export const changeTitleParams = (titleParams) => {

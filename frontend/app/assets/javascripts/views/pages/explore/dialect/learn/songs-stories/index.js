@@ -110,7 +110,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
     const computeBooks = ProviderHelpers.getEntry(this.props.computeBooks, this.props.routeParams.dialect_path)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     const listProps = {
       defaultLanguage: DEFAULT_LANGUAGE,
@@ -124,14 +124,14 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       formValues: { 'properties.fvbook:type': this.props.typeFilter },
       metadata: selectn('response', computeBooks),
       items: selectn('response.entries', computeBooks) || [],
-      theme: this.props.routeParams.theme || 'explore',
+      siteTheme: this.props.routeParams.siteTheme || 'explore',
       action: this._onEntryNavigateRequest,
     }
 
     let listView = null
 
     if (isKidsTheme) {
-      listView = <GeneralList {...listProps} cols={3} theme={this.props.routeParams.theme} />
+      listView = <GeneralList {...listProps} cols={3} siteTheme={this.props.routeParams.siteTheme} />
     } else {
       listView = FilteredCardList ? <FilteredCardList {...listProps} /> : null
     }
@@ -197,10 +197,10 @@ export class PageDialectLearnStoriesAndSongs extends Component {
   }
 
   _onEntryNavigateRequest = (item) => {
-    // NOTE: generateUIDPath: function (theme, item, pluralPathId)
+    // NOTE: generateUIDPath: function (siteTheme, item, pluralPathId)
     this.props.pushWindowPath(
       NavigationHelpers.generateUIDPath(
-        this.props.routeParams.theme || 'explore',
+        this.props.routeParams.siteTheme || 'explore',
         item,
         selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
       )

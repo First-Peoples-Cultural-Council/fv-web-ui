@@ -132,12 +132,12 @@ class SongsStoriesCardView extends Component {
     defaultLanguage: PropTypes.any, // TODO: set correct type
     style: PropTypes.any, // TODO: set correct type
     cols: PropTypes.any, // TODO: set correct type
-    theme: PropTypes.any, // TODO: set correct type
+    siteTheme: PropTypes.any, // TODO: set correct type
   }
   static defaultProps = {
     action: () => {},
     style: {},
-    theme: 'explore',
+    siteTheme: 'explore',
   }
   constructor(props, context) {
     super(props, context)
@@ -249,7 +249,7 @@ class SongsStoriesCardView extends Component {
       [`col-md-${Math.ceil(12 / this.props.cols)}`]: true,
     })
     const href = NavigationHelpers.generateUIDPath(
-      this.props.theme,
+      this.props.siteTheme,
       item,
       selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
     )

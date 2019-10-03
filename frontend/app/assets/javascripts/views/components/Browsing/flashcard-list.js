@@ -26,7 +26,6 @@ export default class FlashcardList extends Component {
     fields: PropTypes.instanceOf(Map),
     columns: PropTypes.array.isRequired,
     type: PropTypes.string,
-    theme: PropTypes.string,
     action: PropTypes.func,
     cols: PropTypes.number,
     cellHeight: PropTypes.number,

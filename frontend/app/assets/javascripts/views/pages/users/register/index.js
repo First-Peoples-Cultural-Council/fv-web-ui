@@ -100,7 +100,7 @@ export class Register extends Component {
 
     // 'Redirect' on success
     if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
-      //nextProps.replaceWindowPath('/' + nextProps.routeParams.theme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
+      //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
     }
   }
 

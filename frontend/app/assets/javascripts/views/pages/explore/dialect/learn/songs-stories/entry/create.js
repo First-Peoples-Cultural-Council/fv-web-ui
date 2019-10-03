@@ -117,7 +117,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          nextProps.routeParams.theme,
+          nextProps.routeParams.siteTheme,
           selectn('response', parentBook),
           nextProps.typePlural.toLowerCase()
         ),

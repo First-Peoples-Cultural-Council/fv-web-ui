@@ -97,7 +97,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          this.props.routeParams.theme,
+          this.props.routeParams.siteTheme,
           selectn('response', currentBook),
           prevProps.typeFilter === 'story' ? 'stories' : 'songs'
         ),

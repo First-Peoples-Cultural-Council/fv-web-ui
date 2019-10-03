@@ -91,7 +91,7 @@ export class Categories extends Component {
     } else {
       NavigationHelpers.navigate(
         '/' +
-          this.props.routeParams.theme +
+          this.props.routeParams.siteTheme +
           this.props.routeParams.dialect_path +
           '/learn/words/categories/' +
           category.uid,

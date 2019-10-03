@@ -91,7 +91,7 @@ export default class DialogCreateForm extends React.Component {
                 dialect={this.props.context}
                 routeParams={{
                   dialect_path: this.props.context.path,
-                  theme: 'explore',
+                  siteTheme: 'explore',
                 }}
                 value={this.props.value}
                 embedded
@@ -129,7 +129,7 @@ export default class DialogCreateForm extends React.Component {
               dialect={this.props.context}
               routeParams={{
                 dialect_path: this.props.context.path,
-                theme: 'explore',
+                siteTheme: 'explore',
               }}
               value={this.props.value}
               embedded
@@ -153,7 +153,7 @@ export default class DialogCreateForm extends React.Component {
               dialect={this.props.context}
               routeParams={{
                 dialect_path: this.props.context.path,
-                theme: 'explore',
+                siteTheme: 'explore',
               }}
               value={this.props.value}
               embedded

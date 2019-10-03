@@ -231,7 +231,7 @@ export class ListView extends DataListView {
   }
 
   _onEntryNavigateRequest = (item) => {
-    this.props.pushWindowPath(`/${this.props.routeParams.theme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
+    this.props.pushWindowPath(`/${this.props.routeParams.siteTheme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
   }
 }
 

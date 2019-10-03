@@ -109,7 +109,7 @@ export class CreateV2 extends Component {
   //   // 'Redirect' on success
   //   if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
   //     NavigationHelpers.navigate(
-  //       NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextWord), 'words'),
+  //       NavigationHelpers.generateUIDPath(nextProps.routeParams.siteTheme, selectn('response', nextWord), 'words'),
   //       nextProps.replaceWindowPath,
   //       true
   //     )

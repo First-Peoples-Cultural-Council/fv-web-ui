@@ -242,7 +242,7 @@ export class ExploreDialect extends Component {
 
   _handleSelectionChange(itemId, item) {
     NavigationHelpers.navigate(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('properties', item), 'words'),
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('properties', item), 'words'),
       this.props.pushWindowPath,
       true
     )
@@ -268,7 +268,7 @@ export class ExploreDialect extends Component {
     )
 
     const isSection = this.props.routeParams.area === SECTIONS
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     // Render kids view
     if (isKidsTheme && computePortal) {

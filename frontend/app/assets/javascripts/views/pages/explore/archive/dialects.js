@@ -86,7 +86,7 @@ export class ExploreDialects extends Component {
     const isLoggedIn = this.props.computeLogin.success && this.props.computeLogin.isConnected
 
     const portalListProps = {
-      theme: this.props.routeParams.theme,
+      siteTheme: this.props.routeParams.siteTheme,
       filteredItems: this.state.filteredList,
       fieldMapping: {
         title: this.titleFieldMapping,
@@ -122,7 +122,7 @@ export class ExploreDialects extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <div className={classNames({ hidden: this.props.routeParams.theme === 'kids' })}>
+            <div className={classNames({ hidden: this.props.routeParams.siteTheme === 'kids' })}>
               <h1>{intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}</h1>
             </div>
             {introText1}

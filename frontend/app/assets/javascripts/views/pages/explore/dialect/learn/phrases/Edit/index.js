@@ -112,7 +112,11 @@ export class PhrasesEdit extends Component {
       selectn('wasUpdated', currentPhrase) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentPhrase), 'phrases'),
+        NavigationHelpers.generateUIDPath(
+          this.props.routeParams.siteTheme,
+          selectn('response', currentPhrase),
+          'phrases'
+        ),
         this.props.replaceWindowPath,
         true
       )

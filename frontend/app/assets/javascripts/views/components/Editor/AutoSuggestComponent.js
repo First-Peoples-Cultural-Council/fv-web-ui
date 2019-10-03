@@ -18,7 +18,7 @@ import Autosuggest from 'react-autosuggest'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import IntlService from 'views/services/intl'
 
-const theme = {
+const AutoSuggestTheme = {
   container: 'autosuggest dropdown',
   containerOpen: 'dropdown open',
   input: 'form-control',
@@ -307,7 +307,7 @@ export class AutoSuggestComponent extends Component {
         <div className="col-xs-12">
           <Autosuggest
             ref="suggestion_widget" // TODO: deprecated
-            theme={theme}
+            theme={AutoSuggestTheme}
             suggestions={this.getComputeType().response.entries || []}
             shouldRenderSuggestions={this.shouldRenderSuggestions}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}

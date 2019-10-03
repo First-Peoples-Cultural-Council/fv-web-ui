@@ -284,7 +284,7 @@ export class CreateAudio extends React.Component {
     // const pathOrId = `${DIALECT_PATH}/Resources/${createItemName}.${timestamp}`
     // this.setState({ pathOrId })
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
       toParse,
@@ -344,7 +344,7 @@ export class CreateAudio extends React.Component {
 
 // // REDUX: actions/dispatch/func
 // const mapDispatchToProps = {
-//   changeTheme
+//   changeSiteTheme
 // };
 
 export default connect(

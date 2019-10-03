@@ -35,7 +35,6 @@ export default class DictionaryList extends Component {
     items: oneOfType([array, instanceOf(List)]),
     style: object,
     type: string,
-    theme: string,
     wrapperStyle: object,
   }
 

@@ -86,7 +86,7 @@ export class ListViewAlt extends DataListView {
   constructor(props, context) {
     super(props, context)
 
-    const currentTheme = this.props.routeParams.theme
+    const currentTheme = this.props.routeParams.siteTheme
 
     this.state = {
       columns: [
@@ -172,7 +172,7 @@ export class ListViewAlt extends DataListView {
     } else {
       this.props.pushWindowPath(
         NavigationHelpers.generateUIDPath(
-          this.props.theme || 'explore',
+          this.props.siteTheme || 'explore',
           item,
           selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
         )

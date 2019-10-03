@@ -41,14 +41,14 @@ export class MediaList extends Component {
     gridListTile: func,
     items: oneOfType([array, instanceOf(List)]),
     style: object,
-    theme: string,
+    siteTheme: string,
     type: string,
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
   }
 
   static defaultProps = {
-    theme: 'explore',
+    siteTheme: 'explore',
     cols: 3,
     cellHeight: 210,
     style: null,
@@ -141,7 +141,7 @@ export class MediaList extends Component {
               </span>
             ) : null
 
-            const href = NavigationHelpers.generateUIDPath(this.props.theme, tile, 'media')
+            const href = NavigationHelpers.generateUIDPath(this.props.siteTheme, tile, 'media')
             return (
               <GridListTile onClick={action.bind(this, tile)} key={tile.uid}>
                 {this._getMediaPreview(tile)}

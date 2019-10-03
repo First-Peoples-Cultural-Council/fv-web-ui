@@ -89,7 +89,7 @@ export class PageDialectGalleryCreate extends Component {
       selectn('success', nextGallery) === true
     ) {
       this.props.replaceWindowPath(
-        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.theme}${selectn(
+        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.siteTheme}${selectn(
           'response.path',
           nextGallery
         ).replace('Portal', 'gallery')}`

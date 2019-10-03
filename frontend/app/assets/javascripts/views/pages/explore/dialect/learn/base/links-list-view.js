@@ -164,7 +164,7 @@ class ListView extends DataListView {
     if (this.props.action) {
       this.props.action(item)
     } else {
-      //this.props.pushWindowPath('/' + this.props.routeParams.theme + item.path.replace('Dictionary', 'words/links/' + item.uid));
+      //this.props.pushWindowPath('/' + this.props.routeParams.siteTheme + item.path.replace('Dictionary', 'words/links/' + item.uid));
     }
   }
 
