@@ -110,7 +110,7 @@ describe('RecorderCreatePhrase.js > RecorderCreatePhrase', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Check that the phrase is not visible for Site User when not enabled
+            Check that the phrase is not visible for Site Member when not enabled
          */
     cy.login({
       userName: 'SITE_MEMBER_USERNAME',
@@ -136,8 +136,8 @@ describe('RecorderCreatePhrase.js > RecorderCreatePhrase', () => {
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
-    cy.wait(500)
-    cy.getByText('TestPhrase', { exact: true }).click()
+    cy.wait(800)
+    cy.getByText('TestPhrase', { exact: false }).click()
     cy.get('div.hidden-xs.clearfix').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
