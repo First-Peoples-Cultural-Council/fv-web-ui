@@ -285,10 +285,9 @@ export default class SongsStoriesEntryView extends Component {
       videos: videos,
       audios: audios,
     }
-
     const appliedStyle = this.props.cover
-      ? Object.assign(defaultCoverStyle, this.props.innerStyle)
-      : Object.assign(defaultInnerStyle, this.props.innerStyle)
+      ? Object.assign({}, defaultCoverStyle, this.props.innerStyle)
+      : Object.assign({}, defaultInnerStyle, this.props.innerStyle)
 
     return (
       <div className="row" style={{ marginBottom: '20px' }}>
