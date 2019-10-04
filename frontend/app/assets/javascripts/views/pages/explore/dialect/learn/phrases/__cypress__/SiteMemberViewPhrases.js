@@ -6,14 +6,14 @@ import 'cypress-testing-library/add-commands'
 describe('SiteMemberViewPhrases.js > SiteMemberViewPhrases', () => {
   it('Test to check the word visibility for a member.', () => {
     // TODO: Add database setup here.
-    // Requires a phrase that is enabled and not published exist in database for SENCOTEN.
+    // Requires a new phrase that is enabled and not published exist in database for SENCOTEN.
 
     /*
-            Login as Site Member, navigate to phrases and check that a phrase exists.
+            Login as Language Member, navigate to phrases and check that a phrase exists.
         */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
+      userName: 'SENCOTEN_MEMBER_USERNAME',
+      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
