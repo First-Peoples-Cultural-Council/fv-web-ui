@@ -92,7 +92,6 @@ export class ExploreDialect extends Component {
     // Bind methods to 'this'
     ;[
       '_onNavigateRequest',
-      '_handleDialectSearchSubmit',
       '_onSwitchAreaRequest',
       '_enableToggleAction',
       '_publishToggleAction',
@@ -223,14 +222,6 @@ export class ExploreDialect extends Component {
         )
       )
     }
-  }
-
-  _handleDialectSearchSubmit() {
-    // TODO: this.refs DEPRECATED
-    const queryParam = this.refs.dialectSearchField.getValue()
-    // Clear out the input field
-    //this.refs.dialectSearchField.setValue("");
-    this.props.replaceWindowPath(this.props.windowPath + '/search/' + queryParam)
   }
 
   _handleGalleryDropDownChange(event, key, payload) {

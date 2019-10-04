@@ -40,10 +40,8 @@ export class Confirmation extends React.Component {
     isPerformingAction: false,
     componentState: STATE_INITIALIZING,
   }
-  // NOTE: Using callback refs since on old React
-  // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
-  btnInitiate = null
-  btnDeny = null
+  btnInitiate = React.createRef()
+  btnDeny = React.createRef()
 
   async componentDidMount() {
     const copy = this.props.copy
@@ -94,9 +92,7 @@ export class Confirmation extends React.Component {
         <div className={'Confirmation__initiate'}>
           <button
             className={`Confirmation__btnInitiate _btn _btn--secondary ${classNameBtnCompact}`}
-            ref={(_element) => {
-              this.btnInitiate = _element
-            }}
+            ref={this.btnInitiate}
             disabled={disabled}
             onClick={this._initiate}
             type="button"
@@ -109,9 +105,7 @@ export class Confirmation extends React.Component {
           <div className="Confirmation__confirmOrDenyInner">
             <button
               className={`Confirmation__btnDeny _btn _btn--secondary ${classNameBtnCompact}`}
-              ref={(_element) => {
-                this.btnDeny = _element
-              }}
+              ref={this.btnDeny}
               disabled={disabled || componentState === STATE_PERFORMING_ACTION}
               onClick={this._deny}
               type="button"
@@ -138,7 +132,7 @@ export class Confirmation extends React.Component {
         componentState: STATE_CONFIRM_OR_DENY,
       },
       () => {
-        this.btnDeny.focus()
+        this.btnDeny.current.focus()
       }
     )
   }
@@ -158,7 +152,7 @@ export class Confirmation extends React.Component {
         componentState: STATE_DEFAULT,
       },
       () => {
-        this.btnInitiate.focus()
+        this.btnInitiate.current.focus()
       }
     )
   }

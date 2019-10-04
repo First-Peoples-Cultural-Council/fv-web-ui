@@ -68,6 +68,8 @@ export class PageDialectGalleryCreate extends Component {
     componentState: STATE_LOADING,
   }
 
+  formGalleryCreate = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -154,8 +156,7 @@ export class PageDialectGalleryCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_gallery_create.getValue()
+    const formValue = this.formGalleryCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -233,7 +234,7 @@ export class PageDialectGalleryCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_gallery_create" // TODO: DEPRECATED
+                  ref={this.formGalleryCreate}
                   type={t.struct(selectn('FVGallery', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}

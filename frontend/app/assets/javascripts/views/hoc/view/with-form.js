@@ -54,12 +54,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
       return ProviderHelpers.getEntry(item.get('entity'), itemId)
     }
-
     _onRequestSaveForm(portal, e) {
       // Prevent default behaviour
       e.preventDefault()
-
-      const formValue = this.refs['form_' + this.props.type].getValue()
+      const formValue = this['form_' + this.props.type].getValue()
 
       // Passed validation
       if (formValue) {
@@ -143,7 +141,9 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   <hr />
 
                   <t.form.Form
-                    ref={'form_' + type}
+                    ref={(element) => {
+                      this['form_' + type] = element
+                    }}
                     type={t.struct(selectn(type, fields))}
                     context={initialValues}
                     value={this.state.formValue || selectn('response.properties', computeItem)}

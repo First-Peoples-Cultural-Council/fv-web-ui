@@ -83,6 +83,8 @@ export class AddMediaComponent extends Component {
   constructor(props) {
     super(props)
 
+    this.formMedia = React.createRef()
+
     this._change = this._change.bind(this)
     this._save = this._save.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
@@ -106,11 +108,13 @@ export class AddMediaComponent extends Component {
 
     this.setState({ uploading: true })
 
-    // TODO: `this.refs` deprecated
-    const formValue = this.refs.form_media.getValue()
+    // tcomb-form > getValue():
+    // Returns null if the validation failed; otherwise returns an instance of your model.
+    const formValue = this.formMedia.current.getValue()
 
     // If validation passed
     if (formValue) {
+      debugger
       let file
       const fd = new FormData()
 
@@ -254,7 +258,7 @@ export class AddMediaComponent extends Component {
     form = (
       <form onSubmit={this._save} id="AddMediaComponent" encType="multipart/form-data">
         <t.form.Form
-          ref="form_media" // TODO: deprecated
+          ref={this.formMedia}
           options={selectn('FVResource', options)}
           type={t.struct(selectn(this.props.type, fields))}
           value={this.state.value}

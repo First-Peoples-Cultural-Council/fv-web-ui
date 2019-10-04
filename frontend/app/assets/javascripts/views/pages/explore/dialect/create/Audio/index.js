@@ -43,12 +43,8 @@ export class CreateAudio extends React.Component {
   state = {
     componentState: STATE_LOADING,
   }
-  // NOTE: Using callback refs since on old React
-  // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
-  form = null
-  setFormRef = (_element) => {
-    this.form = _element
-  }
+
+  form = React.createRef()
 
   componentDidMount() {
     // Do any loading here...
@@ -112,7 +108,7 @@ export class CreateAudio extends React.Component {
     return (
       <form
         className={className}
-        ref={this.setFormRef}
+        ref={this.form}
         onSubmit={(e) => {
           e.preventDefault()
           this._onRequestSaveForm()

@@ -90,6 +90,8 @@ export class FormRelatedPhrases extends React.Component {
     FormRelatedPhraseCreateNew: null,
   }
 
+  buttonCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const { computeDialect, splitWindowPath } = this.props
@@ -151,7 +153,7 @@ export class FormRelatedPhrases extends React.Component {
           onClick={() => {
             this.handleClickCreateItem()
           }}
-          ref={(element) => (this.buttonCreate = element)}
+          ref={this.buttonCreate}
         >
           {textBtnAddItem}
         </button>
@@ -179,7 +181,7 @@ export class FormRelatedPhrases extends React.Component {
                   componentState: this.STATE_DEFAULT,
                 },
                 () => {
-                  this.buttonCreate.focus()
+                  this.buttonCreate.current.focus()
                 }
               )
             }}

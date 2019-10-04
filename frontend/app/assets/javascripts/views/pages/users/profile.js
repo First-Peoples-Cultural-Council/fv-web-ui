@@ -59,6 +59,8 @@ class Profile extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formUserEdit = React.createRef()
+
     this.state = {
       formValue: null,
       userRequest: null,
@@ -122,10 +124,9 @@ class Profile extends Component {
   }
 
   _onRequestSaveForm(e) {
-    // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_user_edit.getValue()
+    debugger
+    const formValue = this.formUserEdit.current.getValue()
 
     const properties = {}
 
@@ -190,7 +191,7 @@ class Profile extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_user_edit" // TODO: DEPRECATED
+                ref={this.formUserEdit}
                 type={t.struct(FVUserProfileFields)}
                 value={this.state.formValue || normalizedPayload}
                 options={FVUserProfileOptions}

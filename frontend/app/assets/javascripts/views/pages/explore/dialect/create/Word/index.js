@@ -79,12 +79,7 @@ export class CreateV2 extends Component {
       errors: [],
     }
 
-    // NOTE: Using callback refs since on old React
-    // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
-    this.form = null
-    this.setFormRef = (element) => {
-      this.form = element
-    }
+    this.form = React.createRef()
   }
 
   // Fetch data on initial render
@@ -175,7 +170,7 @@ export class CreateV2 extends Component {
 
         <form
           className="CreateV2"
-          ref={this.setFormRef}
+          ref={this.form}
           onSubmit={(e) => {
             e.preventDefault()
             this._onRequestSaveForm()

@@ -57,6 +57,8 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
     constructor(props, context) {
       super(props, context)
 
+      this.filter_form = React.createRef()
+
       this.state = {
         options: options,
         formValue: props.initialFormValue || props.formValues,
@@ -122,7 +124,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                   mobileOnly
                 >
                   <t.form.Form
-                    ref="filter_form"
+                    ref={this.filter_form}
                     type={t.struct(selectn(this.props.filterOptionsKey, fields))}
                     context={this.props.initialValues}
                     value={this.state.formValue}
@@ -196,12 +198,11 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
     }
 
     _onReset = (event, props = this.props) => {
-      const form = this.refs.filter_form
+      const form = this.filter_form.current
 
       // Reset all controlled inputs
       const inputs = Object.assign({}, selectn('refs.input.refs', form), selectn('inputRef.childRefs', form))
 
-      // TODO: see if getProperties() is modifying form
       const properties = FormHelpers.getProperties(form) // eslint-disable-line
 
       for (const inputKey in inputs) {
@@ -231,7 +232,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
         e.preventDefault()
       }
 
-      const form = this.refs.filter_form
+      const form = this.filter_form.current
       const properties = FormHelpers.getProperties(form)
 
       if (Object.keys(properties).length != 0) {

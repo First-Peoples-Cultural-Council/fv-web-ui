@@ -153,7 +153,9 @@ class EditableComponent extends Component {
           toReturn = (
             <form className="EditableComponent__form" onSubmit={(e) => this._onRequestSaveField(e, property)}>
               <t.form.Form
-                ref={'form_' + property}
+                ref={(element) => {
+                  this['form_' + property] = element
+                }}
                 value={fieldFormValues}
                 type={fieldFormStruct}
                 context={selectn('response', this.props.context) || selectn('response', this.props.computeEntity)}
@@ -221,19 +223,18 @@ class EditableComponent extends Component {
       repository: this.props.computeEntity.response._repository,
       nuxeo: this.props.computeEntity.response._nuxeo,
     })
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs['form_' + property].getValue()
+    // Note: getValue() is tcomb-form
+    const formValue = this['form_' + property].getValue()
 
     // Set new value property on document
     newDocument.set(formValue)
 
     // Save document
-    // TODO: this.refs DEPRECATED
     this.props.updateEntity(
       newDocument,
       null,
       "'" +
-        selectn('props.options.fields' + '.' + property + '.label', this.refs['form_' + property]) +
+        selectn('props.options.fields' + '.' + property + '.label', this['form_' + property]) +
         "' updated successfully!"
     )
 

@@ -66,6 +66,8 @@ export class PageDialectPhraseBooksCreate extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formPhrasebookCreate = React.createRef()
+
     this.state = {
       formValue: null,
       dialectPath: null,
@@ -125,8 +127,7 @@ export class PageDialectPhraseBooksCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_phrasebook_create.getValue()
+    const formValue = this.formPhrasebookCreate.current.getValue()
 
     const properties = {}
 
@@ -194,16 +195,16 @@ export class PageDialectPhraseBooksCreate extends Component {
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
+            <form>
               <t.form.Form
-                ref="form_phrasebook_create" // TODO: DEPRECATED
+                ref={this.formPhrasebookCreate}
                 type={t.struct(selectn('FVCategory', fields))}
                 context={dialect}
                 value={this.state.formValue}
                 options={selectn('FVPhraseBook', options)}
               />
               <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+                <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
                   {intl.trans('save', 'Save', 'first')}
                 </button>
               </div>

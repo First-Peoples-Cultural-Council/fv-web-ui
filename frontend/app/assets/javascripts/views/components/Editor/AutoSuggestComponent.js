@@ -148,6 +148,7 @@ export class AutoSuggestComponent extends Component {
       isLoading: false,
       selectObj: null,
     }
+    this.suggestionWidget = React.createRef()
 
     this.onChange = this.onChange.bind(this)
     this.getSuggestionValue = this.getSuggestionValue.bind(this)
@@ -306,7 +307,7 @@ export class AutoSuggestComponent extends Component {
       <div className="row">
         <div className="col-xs-12">
           <Autosuggest
-            ref="suggestion_widget" // TODO: deprecated
+            ref={this.suggestionWidget}
             theme={AutoSuggestTheme}
             suggestions={this.getComputeType().response.entries || []}
             shouldRenderSuggestions={this.shouldRenderSuggestions}

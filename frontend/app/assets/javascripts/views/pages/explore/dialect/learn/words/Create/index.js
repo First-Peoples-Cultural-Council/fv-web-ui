@@ -69,6 +69,8 @@ export class PageDialectWordsCreate extends Component {
     wordPath: null,
   }
 
+  formWordCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "WordsCreateInternationalization" */ './internationalization').then(
@@ -182,8 +184,7 @@ export class PageDialectWordsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_word_create.getValue()
+    const formValue = this.formWordCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -219,7 +220,6 @@ export class PageDialectWordsCreate extends Component {
         wordPath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
       window.scrollTo(0, 0)
     }
   }
@@ -272,7 +272,7 @@ export class PageDialectWordsCreate extends Component {
               <div className={classNames('col-xs-8', 'col-md-10')}>
                 <form onSubmit={this._onRequestSaveForm}>
                   <t.form.Form
-                    ref="form_word_create" // TODO: DEPRECATED
+                    ref={this.formWordCreate}
                     type={t.struct(selectn('FVWord', fields))}
                     context={selectn('response', _computeDialect2)}
                     value={this.state.formValue}

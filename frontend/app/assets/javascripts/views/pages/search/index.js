@@ -99,6 +99,8 @@ export class Search extends DataListView {
   constructor(props, context) {
     super(props, context)
 
+    this.formSearch = React.createRef()
+
     this.state = {
       pageInfo: {
         page: props.DEFAULT_PAGE,
@@ -167,8 +169,7 @@ export class Search extends DataListView {
       e.preventDefault()
     }
 
-    const form = this.refs.search_form
-
+    const form = this.formSearch.current
     const properties = FormHelpers.getProperties(form)
 
     if (Object.keys(properties).length !== 0) {
@@ -220,7 +221,7 @@ export class Search extends DataListView {
 
   _onReset() {
     // Reset all controlled inputs
-    const inputs = selectn('refs.input.refs', this.refs.search_form)
+    const inputs = selectn('refs.input.refs', this.formSearch.current)
 
     for (const inputKey in inputs) {
       if (typeof inputs[inputKey].reset === 'function') {
@@ -283,7 +284,7 @@ export class Search extends DataListView {
                 >
                   <div className="fontAboriginalSans">
                     <t.form.Form
-                      ref="search_form" // TODO: DEPRECATED
+                      ref={this.formSearch}
                       value={Object.assign({}, this.state.formValue, { searchTerm: this.props.routeParams.searchTerm })}
                       type={t.struct(selectn('Search', fields))}
                       options={selectn('Search', options)}

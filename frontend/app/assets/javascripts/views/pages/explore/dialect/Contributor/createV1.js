@@ -67,6 +67,8 @@ export class PageDialectContributorsCreate extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formContributorCreate = React.createRef()
+
     this.state = {
       formValue: null,
       dialectPath: null,
@@ -123,10 +125,9 @@ export class PageDialectContributorsCreate extends Component {
   }
 
   _onRequestSaveForm(e) {
-    // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_contributor_create.getValue()
+
+    const formValue = this.formContributorCreate.current.getValue()
 
     const properties = {}
 
@@ -196,7 +197,7 @@ export class PageDialectContributorsCreate extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_contributor_create" // TODO: DEPRECATED
+                ref={this.formContributorCreate}
                 type={t.struct(selectn('FVContributor', fields))}
                 context={dialect}
                 value={this.state.formValue}

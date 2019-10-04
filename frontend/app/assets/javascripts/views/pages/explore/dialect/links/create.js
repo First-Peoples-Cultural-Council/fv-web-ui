@@ -66,6 +66,8 @@ export class PageDialectLinksCreate extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formLinkCreate = React.createRef()
+
     this.state = {
       formValue: null,
       dialectPath: null,
@@ -122,11 +124,9 @@ export class PageDialectLinksCreate extends Component {
   _onRequestSaveForm(e) {
     // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_link_create.getValue()
 
+    const formValue = this.formLinkCreate.current.getValue()
     const properties = {}
-
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
@@ -141,7 +141,6 @@ export class PageDialectLinksCreate extends Component {
 
     // Check if a parent link was specified in the form
     const parentPathOrId = '/' + this.state.dialectPath + '/Links'
-
     // Passed validation
     if (formValue) {
       const now = Date.now()
@@ -160,7 +159,6 @@ export class PageDialectLinksCreate extends Component {
         linkPath: parentPathOrId + '/' + formValue['dc:title'] + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
       if (!this.props.embedded) window.scrollTo(0, 0)
     }
   }
@@ -190,16 +188,16 @@ export class PageDialectLinksCreate extends Component {
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
+            <form /*onSubmit={this._onRequestSaveForm}*/>
               <t.form.Form
-                ref="form_link_create" // TODO: DEPRECATED
+                ref={this.formLinkCreate}
                 type={t.struct(selectn('FVLink', fields))}
                 context={dialect}
                 value={this.state.formValue}
                 options={selectn('FVLink', options)}
               />
               <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+                <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
                   {intl.trans('save', 'Save', 'first')}
                 </button>
               </div>

@@ -65,6 +65,8 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formBookEntryCreate = React.createRef()
+
     this.state = {
       formValue: null,
       dialectPath: null,
@@ -153,8 +155,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_entry_create.getValue()
+    const formValue = this.formBookEntryCreate.current.getValue()
 
     const properties = {}
 
@@ -247,7 +248,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_book_entry_create" // TODO: DEPRECATED
+                ref={this.formBookEntryCreate}
                 type={t.struct(selectn('FVBookEntry', fields))}
                 context={selectn('response', computeDialect2)}
                 value={this.state.formValue}

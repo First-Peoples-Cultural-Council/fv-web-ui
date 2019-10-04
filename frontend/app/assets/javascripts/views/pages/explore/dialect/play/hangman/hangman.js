@@ -87,6 +87,8 @@ export default class HangmanGame extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.audio = React.createRef()
+
     //Get default start
     this.state = this.getDefaultState()
 
@@ -213,7 +215,7 @@ export default class HangmanGame extends Component {
         }
 
         if (succeeded) {
-          this.audio.play()
+          this.audio.current.play()
         }
         this.setState({ guessedLetters, puzzle, guessesLeft, succeeded, failed })
       }
@@ -306,14 +308,7 @@ export default class HangmanGame extends Component {
 
         <div>Hint: {this.props.translation} </div>
 
-        <audio
-          style={{ maxWidth: '350px' }}
-          ref={(el) => {
-            this.audio = el
-          }}
-          src={this.props.audio}
-          controls
-        />
+        <audio style={{ maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
 
         <div />
 

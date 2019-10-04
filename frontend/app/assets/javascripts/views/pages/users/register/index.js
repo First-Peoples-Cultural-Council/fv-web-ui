@@ -64,6 +64,8 @@ export class Register extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formUserCreate = React.createRef()
+
     this.state = {
       formValue: null,
       userRequest: null,
@@ -123,8 +125,8 @@ export class Register extends Component {
   _onRequestSaveForm(currentUser, e) {
     // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_user_create.getValue()
+
+    const formValue = this.formUserCreate.current.getValue()
 
     const properties = {}
 
@@ -140,12 +142,12 @@ export class Register extends Component {
       formValue: properties,
     })
 
-    const payload = Object.assign({}, properties, {
-      'userinfo:groups': [properties['userinfo:groups']],
-    })
-
     // Passed validation
     if (formValue) {
+      const payload = Object.assign({}, properties, {
+        'userinfo:groups': [properties['userinfo:groups']],
+      })
+
       const userRequest = {
         'entity-type': 'document',
         type: 'FVUserRegistration',
@@ -246,7 +248,7 @@ export class Register extends Component {
           <div className={classNames('col-xs-12', 'col-md-8')}>
             <form onSubmit={this._onRequestSaveForm.bind(this, this.props.computeLogin)}>
               <t.form.Form
-                ref="form_user_create" // TODO: DEPRECATED
+                ref={this.formUserCreate}
                 type={t.struct(FVUserFields)}
                 context={selectn('response', computeDialect2)}
                 value={

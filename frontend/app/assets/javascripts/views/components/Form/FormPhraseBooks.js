@@ -65,6 +65,8 @@ export class FormPhraseBooks extends React.Component {
     componentState: this.STATE_LOADING,
   }
 
+  buttonCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const { splitWindowPath } = this.props
@@ -101,9 +103,7 @@ export class FormPhraseBooks extends React.Component {
           onClick={() => {
             this._handleClickCreateItem()
           }}
-          ref={(_element) => {
-            this.buttonCreate = _element
-          }}
+          ref={this.buttonCreate}
         >
           {textBtnCreateItem}
         </button>
@@ -184,7 +184,7 @@ export class FormPhraseBooks extends React.Component {
         componentState: this.STATE_DEFAULT,
       },
       () => {
-        this.buttonCreate.focus()
+        this.buttonCreate.current.focus()
       }
     )
   }

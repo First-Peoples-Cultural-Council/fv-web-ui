@@ -92,6 +92,8 @@ export default class GroupAssignmentDialog extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formGroupAssignment = React.createRef()
+
     this.state = {
       open: false,
     }
@@ -108,7 +110,7 @@ export default class GroupAssignmentDialog extends Component {
     e.preventDefault()
 
     // tcomb validation not required, will not work with groups
-    const formValue = this.refs.form_group_assignment.getValue()
+    const formValue = this.formGroupAssignment.current.getValue()
     const properties = {}
 
     for (const key in formValue) {
@@ -190,7 +192,7 @@ export default class GroupAssignmentDialog extends Component {
         <DialogContent>
           <form onSubmit={this._onRequestSaveForm}>
             <t.form.Form
-              ref="form_group_assignment"
+              ref={this.formGroupAssignment}
               value={{
                 id: selectn(this.props.fieldMapping.id, this.props.selectedItem),
                 group: currentlyAssignedGroups,

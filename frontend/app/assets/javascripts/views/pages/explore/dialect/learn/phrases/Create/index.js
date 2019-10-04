@@ -80,6 +80,8 @@ export class PhrasesCreate extends Component {
     copy: {},
   }
 
+  formPhraseCreate = React.createRef()
+
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "PhrasesCreateInternationalization" */ './internationalization').then(
       (_module) => {
@@ -191,8 +193,7 @@ export class PhrasesCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_phrase_create.getValue()
+    const formValue = this.formPhraseCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -277,7 +278,7 @@ export class PhrasesCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_phrase_create" // TODO: DEPRECATED
+                  ref={this.formPhraseCreate}
                   type={t.struct(selectn('FVPhrase', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}

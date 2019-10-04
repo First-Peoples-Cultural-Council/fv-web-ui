@@ -31,7 +31,7 @@ export default class Game extends Component {
    */
   constructor(props, context) {
     super(props, context)
-    this.gameContainer = null
+    this.gameContainer = React.createRef()
   }
 
   loadGameScript() {
@@ -102,7 +102,7 @@ export default class Game extends Component {
     this.loadScriptTask = this.loadGameScript()
     this.loadScriptTask.promise.then((jigsaw) => {
       this.jigsaw = jigsaw
-      const gameContainerNode = ReactDOM.findDOMNode(this.gameContainer)
+      const gameContainerNode = this.gameContainer.current
       jigsaw.init(gameContainerNode, gameConfig)
     })
   }
@@ -124,13 +124,6 @@ export default class Game extends Component {
       margin: 'auto',
     }
 
-    return (
-      <div
-        style={gameContainerStyles}
-        ref={(el) => {
-          this.gameContainer = el
-        }}
-      />
-    )
+    return <div style={gameContainerStyles} ref={this.gameContainer} />
   }
 }

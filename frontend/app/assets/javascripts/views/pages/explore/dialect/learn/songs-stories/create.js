@@ -72,6 +72,8 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     componentState: STATE_LOADING,
   }
 
+  formBookCreate = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -167,8 +169,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_create.getValue()
+    const formValue = this.formBookCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -264,7 +265,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form className="PageDialectStoriesAndSongsCreate__form" onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_book_create" // TODO: DEPRECATED
+                  ref={this.formBookCreate}
                   type={t.struct(selectn('FVBook', fields))}
                   context={selectn('response', _computeDialect2)}
                   value={this.state.formValue || { 'fvbook:type': this.props.typeFilter }}
