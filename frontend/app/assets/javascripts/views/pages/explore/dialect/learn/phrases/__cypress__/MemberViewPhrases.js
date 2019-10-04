@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('SiteMemberViewPhrases.js > SiteMemberViewPhrases', () => {
+describe('MemberViewPhrases.js > MemberViewPhrases', () => {
   it('Test to check the word visibility for a member.', () => {
     // TODO: Add database setup here.
     // Requires a new phrase that is enabled and not published exist in database for SENCOTEN.
