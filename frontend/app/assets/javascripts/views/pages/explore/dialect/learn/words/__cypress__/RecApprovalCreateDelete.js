@@ -9,7 +9,7 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     // Requires no words exist in database for SENCOTEN
 
     /*
-                Login as Language Admin and check that no word currently exists.
+                Login as Recorder with approval and check that no word currently exists.
             */
     cy.login({
       userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',

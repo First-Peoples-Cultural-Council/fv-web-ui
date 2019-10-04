@@ -3,17 +3,17 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () => {
-  it('Test to check that a language admin can create and delete phrases.', () => {
+describe('RecApprovalCreateDelete-Phrases.js > RecApprovalCreateDelete-Phrases', () => {
+  it('Test to check recorder with approval creation and deletion of phrases.', () => {
     // TODO: Add database setup here.
-    // Requires no phrases exist in database for SENCOTEN
+    // Requires no phrases in database for SENCOTEN
 
     /*
-                Login as Language Admin and check that no phrases currently exists.
-            */
+                    Login as Recorder with Approval and check that no phrases currently exists.
+                */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
+      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
@@ -31,8 +31,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Create New Phrase', { exact: false }).click()
 
     /*
-            Enter data to create a new phrase
-         */
+                Enter data to create a new phrase
+             */
     cy.get('fieldset.fieldset').within(() => {
       cy.get('[name="dc:title"]').type('TestPhrase')
       cy.getByText('+ Add definition', { exact: true }).click()
@@ -40,8 +40,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
 
     /*
-                Audio upload
-            */
+                    Audio upload
+                */
     cy.getByText('+ Add related audio', { exact: true }).click()
     cy.getByText('Upload audio', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -57,8 +57,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Insert into entry').click()
 
     /*
-                Image upload
-            */
+                    Image upload
+                */
     cy.getByText('+ Add related pictures', { exact: true }).click()
     cy.getByText('Upload picture', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -74,8 +74,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Insert into entry').click()
 
     /*
-              Video upload
-            */
+                  Video upload
+                */
     cy.getByText('+ Add related videos', { exact: true }).click()
     cy.getByText('Upload video', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -91,8 +91,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Insert into entry').click()
 
     /*
-                Finishing the phrase creation form and save
-            */
+                    Finishing the phrase creation form and save
+                */
     cy.getByText('+ Add cultural note', { exact: true }).click()
     cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestCulturalNote')
     cy.get('[name="fv:reference"]', { exact: true }).type('TestReference')
@@ -111,10 +111,30 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
 
     /*
+                Make sure that the enabled toggle is available and click it.
+                Make sure that the published toggle becomes available and click it.
+            */
+    cy.wait(500)
+    cy.getByText('TestPhrase').click()
+    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
+      cy.get('input[type=checkbox]')
+        .eq(0)
+        .click()
+    })
+    cy.wait(500)
+    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
+      cy.get('input[type=checkbox]')
+        .eq(1)
+        .click()
+    })
+    cy.getByTestId('ViewWithActions__buttonPublish').click()
+
+    /*
                 Check that edit phrase button is visible and functional.
                 Check that the cancel button when editing phrase works.
             */
-    cy.wait(500)
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.wait(800)
     cy.getByText('TestPhrase').click()
     cy.getByText('Edit phrase')
       .should('exist')
@@ -130,8 +150,8 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
 
     /*
-                Check that edit phrase saves properly.
-            */
+        Check that edit phrase saves properly.
+        */
     cy.getByText('Edit phrase')
       .should('exist')
       .click()
@@ -141,6 +161,11 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.getByText('Save').click()
     })
     cy.getByText('TestPhraseTestPhrase1', { exact: true }).should('exist')
+
+    /*
+                Test fonts.
+             */
+    cy.get('div.PromiseWrapper').should('have.css', 'font-family', 'Arial, sans-serif')
 
     /*
                 Delete the phrase and check that it no longer exists.
