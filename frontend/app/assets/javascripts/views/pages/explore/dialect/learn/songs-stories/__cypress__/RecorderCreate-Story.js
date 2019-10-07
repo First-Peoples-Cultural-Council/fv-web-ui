@@ -3,14 +3,14 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
-  it('Test to check song creation for recorders.', () => {
+describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
+  it('Test to check story creation for recorders.', () => {
     // TODO: Add database setup here.
-    // Requires no songs exist in database for SENCOTEN.
+    // Requires no stories exist in database for SENCOTEN.
 
     /*
-            Login as Recorder and check that no songs exist.
-        */
+                Login as Recorder and check that no stories exist.
+            */
     cy.login({
       userName: 'SENCOTEN_RECORDER_USERNAME',
       userPassword: 'SENCOTEN_RECORDER_PASSWORD',
@@ -19,33 +19,33 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Songs', { exact: true }).click()
+      cy.getByText('Stories', { exact: true }).click()
     })
-    cy.queryByText('TestSongTitle').should('not.exist')
-    cy.queryByText('Continue to song').should('not.exist')
-    cy.getByText('Create Song Book', { exact: true }).click()
+    cy.queryByText('TestStoryTitle').should('not.exist')
+    cy.queryByText('Continue to story').should('not.exist')
+    cy.getByText('Create Story Book', { exact: true }).click()
 
     /*
-            Enter the data to create a new song book.
-         */
+                Enter the data to create a new story book.
+             */
     cy.get('fieldset.fieldset').within(() => {
-      cy.get('[name="dc:title"]').type('TestSongTitle')
+      cy.get('[name="dc:title"]').type('TestStoryTitle')
       cy.queryAllByText('+ Add new')
         .eq(0)
         .click()
-      cy.get('[name="fvbook:title_literal_translation[0][translation]"]').type('TestSongTranslation')
-      cy.get('div.ql-editor.ql-blank').type('TestSongBookIntroduction')
+      cy.get('[name="fvbook:title_literal_translation[0][translation]"]').type('TestStoryTranslation')
+      cy.get('div.ql-editor.ql-blank').type('TestStoryBookIntroduction')
       cy.queryAllByText('+ Add new')
         .eq(1)
         .click()
       cy.get('table').within(() => {
-        cy.get('div.ql-editor.ql-blank').type('TestSongBookIntroductionTranslation')
+        cy.get('div.ql-editor.ql-blank').type('TestStoryBookIntroductionTranslation')
       })
     })
 
     /*
-            Audio upload
-         */
+                Audio upload
+             */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(2)
@@ -53,8 +53,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
       cy.getByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
-      cy.get('[name="dc:title"]').type('TestSongAudio')
-      cy.get('[name="dc:description"]').type('TestSongAudioDescription')
+      cy.get('[name="dc:title"]').type('TestStoryAudio')
+      cy.get('[name="dc:description"]').type('TestStoryAudioDescription')
       const fileName = 'TestRelatedAudio.wav'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
@@ -65,8 +65,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-            Image upload
-         */
+                Image upload
+             */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(3)
@@ -74,8 +74,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
       cy.getByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
-      cy.get('[name="dc:title"]').type('TestSongImage')
-      cy.get('[name="dc:description"]').type('TestSongImageDescription')
+      cy.get('[name="dc:title"]').type('TestStoryImage')
+      cy.get('[name="dc:description"]').type('TestStoryImageDescription')
       const fileName = 'TestRelatedImage.png'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
@@ -86,8 +86,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-            Video upload
-         */
+                Video upload
+             */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(4)
@@ -95,8 +95,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
       cy.getByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
-      cy.get('[name="dc:title"]').type('TestSongVideo')
-      cy.get('[name="dc:description"]').type('TestSongVideoDescription')
+      cy.get('[name="dc:title"]').type('TestStoryVideo')
+      cy.get('[name="dc:description"]').type('TestStoryVideoDescription')
       const fileName = 'TestRelatedVideo.mp4'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
@@ -107,57 +107,57 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-            Finishing the song creation form and save
-         */
+                Finishing the story creation form and save
+             */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(6)
         .click()
-      cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestSongCulturalNote')
+      cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestStoryCulturalNote')
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
 
     /*
-            Checking to see if the song now exists
-         */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+                Checking to see if the story now exists
+             */
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestSongTitle').should('exist')
-      cy.getByText('TestSongTranslation').should('exist')
-      cy.getByText('Continue to song').should('exist')
+      cy.getByText('TestStoryTitle').should('exist')
+      cy.getByText('TestStoryTranslation').should('exist')
+      cy.getByText('Continue to story').should('exist')
     })
 
     /*
-                Test fonts.
-             */
+                    Test fonts.
+                 */
     cy.get('div.CardViewCard').should('have.css', 'font-family', 'Arial, sans-serif')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
     /*
-            Login as language member and check that the song is not visible.
-         */
+                Login as language member and check that the story is not visible.
+             */
     cy.login({
       userName: 'SENCOTEN_MEMBER_USERNAME',
       userPassword: 'SENCOTEN_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
-    cy.queryByText('TestSongTitle').should('not.exist')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.queryByText('TestStoryTitle').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
     /*
-            Login as admin, check that the song is editable, and enable the song.
-         */
+                Login as admin, check that the story is editable, and enable the story.
+             */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
-    cy.queryByText('TestSongTitle')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.queryByText('TestStoryTitle')
       .should('exist')
       .click()
     cy.getByText('Edit book')
@@ -169,11 +169,11 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestSongTranslation').should('exist')
-      cy.getByText('Continue to song').should('exist')
-      cy.getByText('TestSongTitleEdited')
+      cy.getByText('TestStoryTranslation').should('exist')
+      cy.getByText('Continue to story').should('exist')
+      cy.getByText('TestStoryTitleEdited')
         .should('exist')
         .click()
     })
@@ -187,32 +187,32 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as language member and check that the song is now visible.
-         */
+                Login as language member and check that the story is now visible.
+             */
     cy.login({
       userName: 'SENCOTEN_MEMBER_USERNAME',
       userPassword: 'SENCOTEN_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestSongTitleEdited').should('exist')
-      cy.getByText('TestSongTranslation').should('exist')
-      cy.getByText('Continue to song').should('exist')
+      cy.getByText('TestStoryTitleEdited').should('exist')
+      cy.getByText('TestStoryTranslation').should('exist')
+      cy.getByText('Continue to story').should('exist')
     })
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
     /*
-            Login as admin and publish the song.
-         */
+                Login as admin and publish the story.
+             */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
       userPassword: 'SENCOTEN_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
-    cy.queryByText('TestSongTitleEdited')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.queryByText('TestStoryTitleEdited')
       .should('exist')
       .click()
     cy.wait(500)
