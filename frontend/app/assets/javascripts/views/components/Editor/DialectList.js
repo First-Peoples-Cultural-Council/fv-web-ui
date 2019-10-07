@@ -79,7 +79,7 @@ export class DialectList extends Component {
     return (
       <PromiseWrapper hideProgress computeEntities={computeEntities}>
         {this.props.fancy ? (
-          <Select maxHeight={300} autoWidth value={this.props.value} onChange={this._handleChange}>
+          <Select autoWidth value={this.props.value} onChange={this._handleChange}>
             <MenuItem value>
               {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
             </MenuItem>

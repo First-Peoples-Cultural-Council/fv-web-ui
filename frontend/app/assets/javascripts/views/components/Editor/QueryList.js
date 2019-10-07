@@ -99,7 +99,6 @@ export class QueryList extends Component {
       <PromiseWrapper hideProgress computeEntities={computeEntities}>
         {this.props.fancy ? (
           <Select
-            maxHeight={300}
             autoWidth
             value={this.props.value}
             onChange={this._handleChange}

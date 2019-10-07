@@ -93,7 +93,6 @@ export class DirectoryList extends Component {
             </InputLabel>
             <Select
               data-testid={dataTestId}
-              maxHeight={300}
               autoWidth
               value={this.props.value}
               onChange={this._handleChange}
