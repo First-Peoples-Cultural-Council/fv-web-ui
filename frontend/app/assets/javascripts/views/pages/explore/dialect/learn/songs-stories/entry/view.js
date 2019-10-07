@@ -292,7 +292,7 @@ export default class SongsStoriesEntryView extends Component {
     return (
       <div className="row" style={{ marginBottom: '20px' }}>
         <div className="col-xs-12">
-          <Paper style={appliedStyle} zDepth={2}>
+          <Paper style={appliedStyle}>
             {this.props.cover ? <Cover {...this.props} {...media} /> : <Page {...this.props} {...media} />}
           </Paper>
         </div>
