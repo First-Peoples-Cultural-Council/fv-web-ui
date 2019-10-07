@@ -19,7 +19,13 @@ import { List, Map } from 'immutable'
 
 import classNames from 'classnames'
 
-import { IconButton, LinearProgress } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Tooltip from '@material-ui/core/Tooltip'
+
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
+
 import Button from '@material-ui/core/Button'
 
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -447,18 +453,26 @@ export class Quiz extends Component {
 
           <div className={classNames('row', 'row-navigation')}>
             <div className={classNames('col-xs-2', 'text-left')}>
-              <IconButton
-                style={{ backgroundColor: '#ffffff' }}
-                onClick={this._handleNavigate.bind(this, 'previous')}
-                // iconClassName="material-icons"
-                tooltip={intl.trans(
+              <Tooltip
+                title={intl.trans(
                   'views.pages.explore.dialect.play.quiz.previous_question',
                   'Previous Question',
                   'words'
                 )}
               >
-                chevron_left
-              </IconButton>
+                <IconButton
+                  style={{ backgroundColor: '#ffffff' }}
+                  onClick={this._handleNavigate.bind(this, 'previous')}
+                >
+                  <ChevronLeft
+                    aria-label={intl.trans(
+                      'views.pages.explore.dialect.play.quiz.previous_question',
+                      'Previous Question',
+                      'words'
+                    )}
+                  />
+                </IconButton>
+              </Tooltip>
             </div>
 
             <div className={classNames('col-xs-8', 'text-center')}>
@@ -475,15 +489,19 @@ export class Quiz extends Component {
             </div>
 
             <div className={classNames('col-xs-2', 'text-right')}>
-              <IconButton
-                style={{ backgroundColor: '#ffffff' }}
-                onClick={this._handleNavigate.bind(this, 'next')}
-                disabled={!isCorrect || isComplete}
-                // iconClassName="material-icons"
-                tooltip={intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
+              <Tooltip
+                title={intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
               >
-                chevron_right
-              </IconButton>
+                <IconButton style={{ backgroundColor: '#ffffff' }} onClick={this._handleNavigate.bind(this, 'next')}>
+                  <ChevronRight
+                    aria-label={intl.trans(
+                      'views.pages.explore.dialect.play.quiz.next_question',
+                      'Next Question',
+                      'words'
+                    )}
+                  />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
 
