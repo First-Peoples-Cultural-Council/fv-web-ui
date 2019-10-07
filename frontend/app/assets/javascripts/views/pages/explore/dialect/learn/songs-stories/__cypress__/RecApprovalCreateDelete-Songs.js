@@ -3,22 +3,32 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
-  it('Test to check that a language admin can create and delete songs.', () => {
+describe('RecApprovalCreateDelete-Songs.js > RecApprovalCreateDelete-Songs', () => {
+  it('Test to check recorder with approval creation and deletion of songs.', () => {
     // TODO: Add database setup here.
     // Requires no songs exist in database for SENCOTEN
 
     /*
-                    Login as Language Admin and check that no songs currently exists.
-                */
+                        Login as Recorder with Approval and check that no songs currently exists.
+                    */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
+      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
+
+    /*
+                    Going through the steps to create a phrase
+                */
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.getByText('Learn our Language', { exact: false }).click()
+    cy.get('div.Header.row').within(() => {
+      cy.getByText('Songs', { exact: true }).click()
+    })
+    cy.wait(500)
     cy.getByText('Create Song Book', { exact: true }).click()
 
     /*
@@ -40,8 +50,8 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     })
 
     /*
-                Audio upload
-             */
+                    Audio upload
+                 */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(2)
@@ -61,8 +71,8 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-                Image upload
-             */
+                    Image upload
+                 */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(3)
@@ -82,8 +92,8 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-                Video upload
-             */
+                    Video upload
+                 */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(4)
@@ -103,8 +113,8 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-                Finishing the song creation form and save
-             */
+                    Finishing the song creation form and save
+                 */
     cy.get('fieldset.fieldset').within(() => {
       cy.queryAllByText('+ Add new')
         .eq(6)
@@ -125,9 +135,30 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     })
 
     /*
-                    Check that edit song button is visible and functional.
+                    Make sure that the enabled toggle is available and click it.
+                    Make sure that the published toggle becomes available and click it.
+                */
+    cy.wait(500)
+    cy.getByText('TestSongTitle').click()
+    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
+      cy.get('input[type=checkbox]')
+        .eq(0)
+        .click()
+    })
+    cy.wait(500)
+    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
+      cy.get('input[type=checkbox]')
+        .eq(1)
+        .click()
+    })
+    cy.getByTestId('ViewWithActions__buttonPublish').click()
+
+    /*
+                    Check that edit book button is visible and functional.
                     Check that the cancel button when editing song works.
                 */
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.wait(800)
     cy.getByText('TestSongTitle').click()
     cy.getByText('Edit book')
       .should('exist')
@@ -143,7 +174,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     })
 
     /*
-                    Check that edit song saves properly.
+                    Check that edit book saves properly.
                 */
     cy.getByText('Edit book')
       .should('exist')
@@ -158,6 +189,11 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('TestSongTitleTestSongTitle1', { exact: true })
       .should('exist')
       .click()
+
+    /*
+                    Test fonts.
+                 */
+    cy.get('div.PromiseWrapper').should('have.css', 'font-family', 'Arial, sans-serif')
 
     /*
                     Delete the song and check that it no longer exists.
