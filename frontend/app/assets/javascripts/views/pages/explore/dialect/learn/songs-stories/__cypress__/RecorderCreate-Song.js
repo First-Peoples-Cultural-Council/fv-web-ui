@@ -197,14 +197,17 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.queryByText('TestSongTitle')
       .should('exist')
       .click()
+    cy.wait(500)
     cy.get('div.hidden-xs.clearfix').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
         .click()
     })
+    cy.wait(500)
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
+    cy.wait(500)
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
