@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
 
+import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Dialog from '@material-ui/core/Dialog'
@@ -62,7 +63,9 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           </div>
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <Dialog fullWidth maxWidth="md"
+            <Dialog
+              fullWidth
+              maxWidth="md"
               className="ViewWithActions__dialog"
               open={this.state.prePublishDialogOpen}
               onClose={() =>
@@ -150,28 +153,21 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           </AuthorizationFilter>
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <div className="col-xs-12" style={{ marginTop: '15px' }}>
-              <Toolbar className="toolbar" style={{ justifyContent: 'flex-end' }}>
-                <Button
-                  variant="raised"
-                  icon={<DeleteIcon className="material-icons" />}
-                  onClick={() => this.setState({ deleteDialogOpen: true })}
-                  color="secondary"
-                >
-                  {intl.trans(
-                    'views.hoc.view.delete_x',
-                    'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
-                    'first',
-                    [StringHelpers.toTitleCase(this.props.labels.single)]
-                  )}
-                </Button>
-              </Toolbar>
-
-              <Dialog
-                 fullWidth maxWidth="md"
-                open={this.state.deleteDialogOpen}
-                onClose={this._handleCancelDelete}
-              >
+            <div className="col-xs-12">
+              <AppBar position="static" className="PageToolbar__secondary">
+                <Toolbar style={{ justifyContent: 'flex-end' }}>
+                  <Button variant="raised" onClick={() => this.setState({ deleteDialogOpen: true })} color="secondary">
+                    <DeleteIcon />
+                    {intl.trans(
+                      'views.hoc.view.delete_x',
+                      'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
+                      'first',
+                      [StringHelpers.toTitleCase(this.props.labels.single)]
+                    )}
+                  </Button>
+                </Toolbar>
+              </AppBar>
+              <Dialog fullWidth maxWidth="md" open={this.state.deleteDialogOpen} onClose={this._handleCancelDelete}>
                 <DialogTitle>
                   {intl.trans(
                     'views.hoc.view.deleting_x',
@@ -230,10 +226,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 </DialogActions>
               </Dialog>
 
-              <Dialog
-                 fullWidth maxWidth="md"
-                open={this.state.deleteSuccessDialogOpen}
-              >
+              <Dialog fullWidth maxWidth="md" open={this.state.deleteSuccessDialogOpen}>
                 <DialogTitle>
                   {intl.trans(
                     'views.hoc.view.delete_x',

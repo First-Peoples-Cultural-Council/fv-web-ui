@@ -98,17 +98,29 @@ class _Introduction extends Component {
           value={this.state.tabValue}
           onChange={(e, tabValue) => this.setState({ tabValue })}
         >
-          <Tab label={intl.trans('introduction', 'Introduction', 'first')} />
-          <Tab label={intl.searchAndReplace(DEFAULT_LANGUAGE)} />
+          <Tab
+            label={
+              <Typography variant="subheading" component="div">
+                {intl.trans('introduction', 'Introduction', 'first')}
+              </Typography>
+            }
+          />
+          <Tab
+            label={
+              <Typography variant="subheading" component="div">
+                {intl.searchAndReplace(DEFAULT_LANGUAGE)}
+              </Typography>
+            }
+          />
         </Tabs>
         {this.state.tabValue === 0 && (
-          <Typography component="div" style={{ padding: 8 * 3 }}>
+          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
             {introductionDiv}
           </Typography>
         )}
         {this.state.tabValue === 1 && (
-          <Typography component="div" style={{ padding: 8 * 3 }}>
-            <div style={Object.assign(introTabStyle, this.props.style)}>
+          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
+            <div className="IntroductionContent">
               {introductionTranslations.map(function introductionTranslationsMapper(translation, i) {
                 if (translation.language === DEFAULT_LANGUAGE) {
                   return (

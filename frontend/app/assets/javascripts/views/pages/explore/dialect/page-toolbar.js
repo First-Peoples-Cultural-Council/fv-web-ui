@@ -36,6 +36,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Switch from '@material-ui/core/Switch'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
 // import MenuIcon from '@material-ui/icons/Menu'
 import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
@@ -211,7 +212,7 @@ export class PageToolbar extends Component {
 
     return (
       <AppBar position="static" className="PageToolbar">
-        <Toolbar className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true, row: true })}>
+        <Toolbar>
           {/* MOBILE MENU (doesn't work in dev/preprod) */}
           {/* <div className="visible-xs" style={{ textAlign: 'right' }}>
             <IconButton
@@ -223,11 +224,9 @@ export class PageToolbar extends Component {
               <MenuIcon />
             </IconButton>
           </div> */}
-
           <div
             className={classNames({
               'hidden-xs': !this.state.showActionsMobile,
-              isRecorderWithApproval,
             })}
           >
             {this.props.children}
@@ -245,7 +244,7 @@ export class PageToolbar extends Component {
                       value="enabled"
                     />
                   }
-                  label={intl.trans('enabled', 'Enabled', 'first')}
+                  label={<Typography variant="title">{intl.trans('enabled', 'Enabled', 'first')}</Typography>}
                 />
               </AuthorizationFilter>
             ) : null}
@@ -329,7 +328,6 @@ export class PageToolbar extends Component {
               </AuthorizationFilter>
             ) : null}
           </div>
-
           <div className={classNames({ 'hidden-xs': !this.state.showActionsMobile, PageToolbar__menuGroup: true })}>
             <div>
               {/* Button: Publish */}
@@ -476,7 +474,7 @@ export class PageToolbar extends Component {
                   value="published"
                 />
               }
-              label={intl.trans('published', 'Published', 'first')}
+              label={<Typography variant="title">{intl.trans('published', 'Published', 'first')}</Typography>}
             />
           </AuthorizationFilter>
         )

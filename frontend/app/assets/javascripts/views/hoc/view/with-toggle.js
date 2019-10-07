@@ -50,13 +50,13 @@ export default function withToggle() {
             <Button
               variant="flat"
               className={classNames({ 'visible-xs': mobileOnly })}
-              icon={icon}
               onClick={(e) => {
                 this.setState({ open: !this.state.open })
                 e.preventDefault()
               }}
               style={{ float: 'right', lineHeight: 1 }}
             >
+              {icon}
               {labelText}
             </Button>
           </div>

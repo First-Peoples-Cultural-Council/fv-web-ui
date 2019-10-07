@@ -16,25 +16,22 @@ limitations under the License.
 import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import DOMPurify from 'dompurify'
 import selectn from 'selectn'
 
-import DOMPurify from 'dompurify'
-
-import Paper from '@material-ui/core/Paper'
-
-import NavigationHelpers from 'common/NavigationHelpers'
-
-import Preview from 'views/components/Editor/Preview'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
-
-import { Introduction } from '../list-view'
-
 import Button from '@material-ui/core/Button'
-import Tabs from '@material-ui/core/Tabs'
+import Paper from '@material-ui/core/Paper'
 import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
 import ActionLaunch from '@material-ui/icons/Launch'
+
+import { Introduction } from '../list-view'
 import IntlService from 'views/services/intl'
+import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import NavigationHelpers from 'common/NavigationHelpers'
+import Preview from 'views/components/Editor/Preview'
 
 const intl = IntlService.instance
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
@@ -96,14 +93,17 @@ class Cover extends Component {
 
           <div className="col-xs-12 col-md-9 fontAboriginalSans">
             <header style={{ marginBottom: '10px' }}>
-              <h1 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
-              <h2
-                style={{ fontSize: '1.3em' }}
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(selectn('[0].translation', dominant_language_title_translation)),
-                }}
-              />
-              <subheader>
+              <Typography variant="display2" component="h2">
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
+              </Typography>
+              <Typography variant="display1" component="h3">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(selectn('[0].translation', dominant_language_title_translation)),
+                  }}
+                />
+              </Typography>
+              <div className="subheader">
                 {(selectn('contextParameters.book.authors', this.props.entry) || []).map(function(author, i) {
                   return (
                     <span className={classNames('label', 'label-default')} key={i}>
@@ -111,7 +111,7 @@ class Cover extends Component {
                     </span>
                   )
                 })}
-              </subheader>
+              </div>
             </header>
 
             <div>
@@ -133,8 +133,8 @@ class Cover extends Component {
                 style={{ marginRight: '10px' }}
                 color="primary"
                 onClick={this.props.openBookAction}
-                icon={<ActionLaunch />}
               >
+                <ActionLaunch />
                 {'Open Book'}
               </Button>
             ) : (

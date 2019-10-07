@@ -270,15 +270,17 @@ export class PageDialectBookEdit extends Component {
             <Tab label={intl.trans('pages', 'Pages', 'first')} />
           </Tabs>
           {this.state.tabValue === 0 && (
-            <Typography component="div" style={{ padding: 8 * 3 }}>
-              <h1>
-                {intl.trans(
-                  'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
-                  'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' Book',
-                  'words',
-                  [selectn('response.properties.dc:title', _computeBook)]
-                )}
-              </h1>
+            <div style={{ padding: 8 * 3 }}>
+              <Typography variant="headline">
+                <h1>
+                  {intl.trans(
+                    'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
+                    'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' Book',
+                    'words',
+                    [selectn('response.properties.dc:title', _computeBook)]
+                  )}
+                </h1>
+              </Typography>
               <EditViewWithForm
                 computeEntities={computeEntities}
                 initialValues={context}
@@ -292,15 +294,15 @@ export class PageDialectBookEdit extends Component {
                 type="FVBook"
                 routeParams={this.props.routeParams}
               />
-            </Typography>
+            </div>
           )}
           {this.state.tabValue === 1 && (
-            <Typography component="div" style={{ padding: 8 * 3 }}>
-              <h1>
+            <div style={{ padding: 8 * 3 }}>
+              <Typography variant="headline">
                 {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' pages', 'first', [
                   selectn('response.properties.dc:title', _computeBook),
                 ])}
-              </h1>
+              </Typography>
               <BookEntryList
                 reorder
                 sortOrderChanged={this._storeSortOrder}
@@ -310,7 +312,7 @@ export class PageDialectBookEdit extends Component {
                 metadata={selectn('response', _computeBookEntries) || {}}
                 items={selectn('response.entries', _computeBookEntries) || []}
               />
-            </Typography>
+            </div>
           )}
 
           <Dialog
