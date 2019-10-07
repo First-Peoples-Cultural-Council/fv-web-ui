@@ -13,14 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { teal, grey, pink } from '@material-ui/core/colors'
-import { fade } from '@material-ui/core/styles/colorManipulator'
-import Spacing from '@material-ui/core/styles/spacing'
-import zIndex from '@material-ui/core/styles/zIndex'
-
+import { teal } from '@material-ui/core/colors'
 export default {
-  spacing: Spacing,
-  zIndex: zIndex,
   typography: {
     fontFamily: 'Arial, sans-serif',
     fontSize: 18,
@@ -32,20 +26,10 @@ export default {
       light: '#64d8cb',
       main: '#26a69a',
     },
+    secondary: {
+      main: '#2b2e34',
+    },
     primary1Color: teal[400],
     primary2Color: teal[700],
-    primary3Color: grey[800],
-    accent1Color: pink.A200,
-    accent2Color: '#529c95',
-    accent3Color: grey[500],
-    textColor: grey[900],
-    alternateTextColor: '#fff',
-    canvasColor: '#fff',
-    borderColor: grey[300],
-    disabledColor: fade('#000000', 0.3),
-    pickerHeaderColor: teal[400],
-  },
-  wrapper: {
-    backgroundColor: '#fff',
   },
 }

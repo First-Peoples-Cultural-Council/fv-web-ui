@@ -155,7 +155,6 @@ export class MetadataPanel extends Component {
               </IconButton>
             </Typography>
           }
-          // titleColor={themePalette.alternateTextColor}
           style={{
             backgroundColor: themePalette.primary2Color,
             height: 'initial',
@@ -168,25 +167,6 @@ export class MetadataPanel extends Component {
           </CardContent>
         </Collapse>
       </Card>
-      // v0:
-      // <Card initiallyExpanded>
-      //   <CardHeader
-      //     className="card-header-custom"
-      //     title={intl.trans('about_this_record', 'About this Record', 'upper')}
-      //     titleStyle={{ lineHeight: 'initial' }}
-      //     titleColor={themePalette.alternateTextColor}
-      //     actAsExpander
-      //     style={{
-      //       backgroundColor: themePalette.primary2Color,
-      //       height: 'initial',
-      //       borderBottom: '4px solid ' + themePalette.primary1Color,
-      //     }}
-      //     showExpandableButton
-      //   />
-      //   <CardContent expandable style={{ backgroundColor: themePalette.accent4Color }}>
-      //     <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
-      //   </CardContent>
-      // </Card>
     )
   }
 }

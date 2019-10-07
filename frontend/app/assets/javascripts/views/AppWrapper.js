@@ -118,16 +118,9 @@ class AppWrapper extends Component {
       default:
         theme = createMuiTheme(FirstVoicesTheme)
     }
-    const backgroundColor = selectn('wrapper.backgroundColor', theme)
     return (
       <MuiThemeProvider theme={theme}>
-        <div
-          id="AppWrapper"
-          style={{
-            backgroundColor,
-            fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
-          }}
-        >
+        <div id="AppWrapper">
           <AppFrontController preferences={preferences} warnings={warnings} />
         </div>
       </MuiThemeProvider>

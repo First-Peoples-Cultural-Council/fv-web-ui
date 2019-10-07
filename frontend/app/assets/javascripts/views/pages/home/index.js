@@ -155,7 +155,6 @@ export class PageHome extends Component {
 
     const primary1Color = selectn('theme.palette.primary1Color', this.props)
     const primary2Color = selectn('theme.palette.primary2Color', this.props)
-    // const alternateTextColor = selectn('theme.palette.alternateTextColor', this.props)
     const intl = this.intl
 
     const accessButtons = []
@@ -173,8 +172,6 @@ export class PageHome extends Component {
               NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
             )}
             style={{ marginRight: '10px', height: '50px' }}
-            // labelColor={alternateTextColor}
-            // labelStyle={{ fontSize: '1.34em' }}
           >
             {'Access ' + selectn('properties.dc:title', dialect)}
           </Button>
@@ -195,8 +192,6 @@ export class PageHome extends Component {
             NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
           )}
           style={{ marginRight: '10px', height: '50px' }}
-          // labelColor={alternateTextColor}
-          // labelStyle={{ fontSize: '1.34em' }}
         >
           {this.intl.translate({
             key: 'get_started!',
