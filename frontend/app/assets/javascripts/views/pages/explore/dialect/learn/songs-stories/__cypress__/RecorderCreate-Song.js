@@ -149,7 +149,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as admin and enable the song.
+            Login as admin, check that the song is editable, and enable the song.
          */
     cy.login({
       userName: 'SENCOTEN_ADMIN_USERNAME',
@@ -160,6 +160,24 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.queryByText('TestSongTitle')
       .should('exist')
       .click()
+    cy.getByText('Edit book')
+      .should('exist')
+      .click()
+
+    cy.get('fieldset.fieldset').within(() => {
+      cy.get('[name="dc:title"]').type('Edited')
+    })
+    cy.getByText('Save', { exact: true }).click()
+    cy.wait(500)
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs-stories')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.getByText('TestSongTranslation').should('exist')
+      cy.getByText('Continue to song').should('exist')
+      cy.getByText('TestSongTitleEdited')
+        .should('exist')
+        .click()
+    })
+
     cy.get('div.hidden-xs.clearfix').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -178,7 +196,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestSongTitle').should('exist')
+      cy.getByText('TestSongTitleEdited').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
       cy.getByText('Continue to song').should('exist')
     })
@@ -194,7 +212,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
-    cy.queryByText('TestSongTitle')
+    cy.queryByText('TestSongTitleEdited')
       .should('exist')
       .click()
     cy.wait(500)
