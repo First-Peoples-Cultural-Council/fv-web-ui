@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecApprovalCreateDelete-Phrases.js > RecApprovalCreateDelete-Phrases', () => {
+describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', () => {
   it('Test to check recorder with approval creation and deletion of phrases.', () => {
     // TODO: Add database setup here.
     // Requires no phrases in database for SENCOTEN

@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('LangAdminViewEdit.js > LangAdminViewEdit', () => {
+describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
   it('Test to check language admin viewing and editing of words permissions.', () => {
     // TODO: Add database setup here.
     // A test word that is not published or enabled must exist for SENCOTEN.

@@ -3,8 +3,8 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderPublishUnpublish.js > RecorderPublishUnpublish', () => {
-  it('Test to check the publish/unpublish functionality for a recorder.', () => {
+describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () => {
+  it('Test to check the word publish/unpublish functionality for a recorder.', () => {
     // TODO: Add database setup here.
     // A test word which has been enabled but not published must exist for SENCOTEN.
 

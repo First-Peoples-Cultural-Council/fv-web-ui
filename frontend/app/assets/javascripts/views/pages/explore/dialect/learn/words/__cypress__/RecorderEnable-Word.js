@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderEnableWord.js > RecorderEnableWord', () => {
+describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
   it('Test to check that when a recorder enables a word the request to the language admin is received.', () => {
     // TODO: Add database setup here.
     // A test word that is not enabled or published must exist for SENCOTEN.

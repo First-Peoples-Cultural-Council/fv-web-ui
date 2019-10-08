@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecApprovalCreateDelete-Songs.js > RecApprovalCreateDelete-Songs', () => {
+describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () => {
   it('Test to check recorder with approval creation and deletion of songs.', () => {
     // TODO: Add database setup here.
     // Requires no songs exist in database for SENCOTEN

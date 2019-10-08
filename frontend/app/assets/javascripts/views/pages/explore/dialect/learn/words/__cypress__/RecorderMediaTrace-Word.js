@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderWordMediaTrace.js > RecorderWordMediaTrace', () => {
+describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
   it('Test to check that media added to a word traces back to the word properly.', () => {
     // TODO: Add database setup here.
     // A single test word that has a photo, audio, and a video must exist for SENCOTEN.

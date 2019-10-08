@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderCreatePhrase.js > RecorderCreatePhrase', () => {
+describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
   it('Test to check a recorder creating a phrase.', () => {
     // TODO: Add database setup here.
     // Requires no phrases exist in database for SENCOTEN.

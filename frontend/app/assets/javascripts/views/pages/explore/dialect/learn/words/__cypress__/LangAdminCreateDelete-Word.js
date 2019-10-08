@@ -3,25 +3,25 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
-  it('Test to check recorder with approval creation and deletion of words.', () => {
+describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
+  it('Test to check language admin creation and deletion of words.', () => {
     // TODO: Add database setup here.
     // Requires no words exist in database for SENCOTEN
 
     /*
-                Login as Recorder with approval and check that no word currently exists.
-            */
+            Login as Language Admin and check that no word currently exists.
+        */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
+      userName: 'SENCOTEN_ADMIN_USERNAME',
+      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
-                Going through the steps to create a word
-            */
+            Going through the steps to create a word
+        */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.wait(500)
@@ -37,8 +37,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.getByTestId('fv-literal_translation0translation').type('TestLiteralTranslation')
 
     /*
-              Audio upload
-            */
+          Audio upload
+        */
     cy.getByText('+ Add related audio', { exact: true }).click()
     cy.getByText('Upload audio', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -54,8 +54,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-              Image upload
-            */
+          Image upload
+        */
     cy.getByText('+ Add related pictures', { exact: true }).click()
     cy.getByText('Upload picture', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -71,8 +71,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-              Video upload
-            */
+          Video upload
+        */
     cy.getByText('+ Add related videos', { exact: true }).click()
     cy.getByText('Upload video', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
@@ -88,8 +88,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.getByText('Insert into entry').click()
 
     /*
-              Finishing the word creation form
-            */
+          Finishing the word creation form
+        */
     cy.getByText('+ Add cultural note', { exact: true }).click()
     cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.getByTestId('fv-reference', { exact: true }).type('TestReference')
@@ -98,8 +98,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.wait(500)
 
     /*
-                Checking to see if the word now exists.
-            */
+            Checking to see if the word now exists.
+        */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
@@ -109,29 +109,9 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     })
 
     /*
-            Make sure that the enabled toggle is available and click it.
-            Make sure that the published toggle becomes available and click it.
+            Check that edit word button is visible and functional.
+            Check that the cancel button when editing word works.
         */
-    cy.wait(500)
-    cy.getByText('TestWord').click()
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
-    })
-    cy.wait(500)
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
-    })
-    cy.getByTestId('ViewWithActions__buttonPublish').click()
-
-    /*
-                Check that edit word button is visible and functional.
-                Check that the cancel button when editing word works.
-            */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
     cy.wait(500)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
@@ -148,8 +128,8 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     })
 
     /*
-                Check that edit word saves properly.
-            */
+            Check that edit word saves properly.
+        */
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')
@@ -162,20 +142,15 @@ describe('RecApprovalCreateDelete.js > RecApprovalCreateDelete', () => {
     cy.getByText('TestWordTestWord1', { exact: true }).should('exist')
 
     /*
-            Test fonts.
-         */
-    cy.get('div.PromiseWrapper').should('have.css', 'font-family', 'Arial, sans-serif')
-
-    /*
-                Delete the word and check that it no longer exists.
-            */
+            Delete the word and check that it no longer exists.
+        */
     cy.getByText('Delete word').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete word success').should('exist')
 
     // Possible bug with first voices here requiring button to be clicked 3 times.
     cy.getByText('Return To Previous Page').click()
-    cy.getByTestId('ViewWithActions__buttonReturn').click()
+    cy.getByText('Return To Previous Page').click()
     cy.getByText('Return To Previous Page').click()
 
     cy.getByText('No results found.', { exact: true }).should('be.visible')
