@@ -368,7 +368,12 @@ export class Preview extends Component {
                 <CardHeader
                   className="card-header-custom"
                   title={
-                    <Typography variant="title">
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
                       {intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
                       <IconButton
                         onClick={() => {
@@ -381,14 +386,13 @@ export class Preview extends Component {
                     </Typography>
                   }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    borderBottom: '4px solid ' + themePalette.primary.light,
+                    padding: '8px 16px',
                   }}
                 />
                 <Collapse in={this.state.open}>
-                  <CardContent style={{ backgroundColor: themePalette.accent4Color }}>
+                  <CardContent>
                     <MetadataList
                       style={{
                         lineHeight: 'initial',
@@ -488,7 +492,12 @@ export class Preview extends Component {
                 <CardHeader
                   className="card-header-custom"
                   title={
-                    <Typography variant="title">
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
                       {intl.trans('more_audio_info', 'MORE AUDIO INFO', 'upper')}
                       <IconButton
                         onClick={() => {
@@ -501,10 +510,9 @@ export class Preview extends Component {
                     </Typography>
                   }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    padding: '8px 16px',
+                    borderBottom: '4px solid ' + themePalette.primary.light,
                   }}
                 />
                 <Collapse in={this.state.open}>
@@ -594,7 +602,12 @@ export class Preview extends Component {
                 <CardHeader
                   className="card-header-custom"
                   title={
-                    <Typography>
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
                       {intl.trans('more_video_info', 'MORE VIDEO INFO', 'upper')}
                       <IconButton
                         onClick={() => {
@@ -607,10 +620,9 @@ export class Preview extends Component {
                     </Typography>
                   }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    padding: '8px 16px',
+                    borderBottom: '4px solid ' + themePalette.primary.light,
                   }}
                 />
                 <Collapse in={this.state.open}>

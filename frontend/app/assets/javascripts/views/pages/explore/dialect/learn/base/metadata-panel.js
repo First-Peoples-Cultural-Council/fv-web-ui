@@ -142,7 +142,12 @@ export class MetadataPanel extends Component {
         <CardHeader
           className="card-header-custom"
           title={
-            <Typography variant="title">
+            <Typography
+              variant="title"
+              style={{
+                color: themePalette.secondary.contrastText,
+              }}
+            >
               {intl.trans('metadata', 'METADATA', 'upper')}
               <IconButton
                 onClick={() => {
@@ -157,12 +162,12 @@ export class MetadataPanel extends Component {
           }
           style={{
             backgroundColor: themePalette.primary2Color,
-            height: 'initial',
-            borderBottom: '4px solid ' + themePalette.primary1Color,
+            borderBottom: '4px solid ' + themePalette.primary.light,
+            padding: '0 16px',
           }}
         />
         <Collapse in={this.state.open}>
-          <CardContent style={{ backgroundColor: themePalette.accent4Color }}>
+          <CardContent>
             <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
           </CardContent>
         </Collapse>
