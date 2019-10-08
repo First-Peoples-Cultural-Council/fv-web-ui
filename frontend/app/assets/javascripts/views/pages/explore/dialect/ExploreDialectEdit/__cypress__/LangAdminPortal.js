@@ -7,6 +7,7 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
   it('Test to check that a language admin can edit the portal.', () => {
     // TODO: Add database setup here.
     // Requires the default portal information and media is all that exists for SENCOTEN.
+    // Also requires that a test word exists in the database for SENCOTEN called "TestWord".
 
     /*
                         Login as Language Admin and navigate to the edit portal page.
@@ -41,6 +42,29 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       .eq(0)
       .type('TestPortalIntroduction')
     cy.get('div.ql-editor.ql-blank').type('TestPortalNews')
+    cy.getByText('Featured words')
+      .parent()
+      .within(() => {
+        cy.getByText('+ Add new').click()
+        cy.getByText('Browse Existing').click()
+      })
+    cy.wait(500)
+    cy.getByText('TestWord').click()
+    cy.wait(500)
+    cy.getByText('Related links')
+      .parent()
+      .within(() => {
+        cy.getByText('+ Add new').click()
+        cy.getByText('Edit Link').click()
+      })
+    cy.getByText('Add New Link To Sencoten')
+      .parent()
+      .within(() => {
+        cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
+        cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
+        cy.get('[name="fvlink:url"]').type('https://dev.firstvoices.com/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+        cy.getByText('Save').click()
+      })
 
     /*
             Add audio to the portal.
@@ -120,5 +144,11 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
     cy.get('#pageNavigation > div > div.row > h2').within(() => {
       cy.get('img[src="assets/images/cover.png"]').should('not.exist')
     })
+
+    cy.getByText('Public View').click()
+    cy.queryByText('TestPortalGreeting').should('not.exist')
+    cy.queryByText('TestPortalIntroduction').should('not.exist')
+    cy.queryByText('TestPortalNews').should('not.exist')
+    cy.queryByText('TestPortalRelatedLinkTitle').should('not.exist')
   })
 })

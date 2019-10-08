@@ -82,5 +82,14 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
     cy.getByText('TestPortalInlineRelatedLinkTitle').should('exist')
     cy.getByText('US', { exact: true }).should('exist')
     cy.getByText('TestPortalInlineRegion').should('exist')
+
+    /*
+      Test to make sure the public view does not change yet.
+     */
+    cy.getByText('Public View').click()
+    cy.queryByText('TestPortalInlineGreeting').should('not.exist')
+    cy.queryByText('TestPortalInlineAbout').should('not.exist')
+    cy.queryByText('TestPortalInlineNews').should('not.exist')
+    cy.queryByText('TestPortalInlineRelatedLinkTitle').should('not.exist')
   })
 })
