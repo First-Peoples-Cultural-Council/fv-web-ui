@@ -17,8 +17,6 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
-    cy.getByText('Edit Portal').click()
-    cy.wait(500)
 
     /*
             Test that the default images are showing and not the new ones already.
@@ -31,6 +29,9 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       'background-image',
       'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
     )
+
+    cy.getByText('Edit Portal').click()
+    cy.wait(500)
 
     /*
             Add info to portal form.
@@ -105,15 +106,19 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
             Save and check that the info is now live on the home language page.
          */
     cy.getByText('Save').click()
+    cy.wait(500)
+    cy.reload()
+    cy.wait(500)
 
     cy.get('#portalFeaturedAudio').should('exist')
-    cy.get('#pageNavigation > div > div.row > h2').within(() => {
-      cy.get('img[src="assets/images/cover.png"]').should('not.exist')
-    })
+
     cy.get('div.Header.row').should(
       'not.have.css',
       'background-image',
       'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
     )
+    cy.get('#pageNavigation > div > div.row > h2').within(() => {
+      cy.get('img[src="assets/images/cover.png"]').should('not.exist')
+    })
   })
 })
