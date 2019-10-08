@@ -145,10 +145,28 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       cy.get('img[src="assets/images/cover.png"]').should('not.exist')
     })
 
+    /*
+        Test that the changes are not reflected on the public view.
+     */
     cy.getByText('Public View').click()
     cy.queryByText('TestPortalGreeting').should('not.exist')
     cy.queryByText('TestPortalIntroduction').should('not.exist')
     cy.queryByText('TestPortalNews').should('not.exist')
     cy.queryByText('TestPortalRelatedLinkTitle').should('not.exist')
+
+    /*
+        Test that if a user clicks cancel when editing, the changes don't save.
+     */
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.getByText('Edit Portal').click()
+    cy.wait(500)
+
+    cy.get('input.form-control').type('ThisShouldNotSave')
+    cy.getByTestId('withForm__btnGroup2').within(() => {
+      cy.getByText('Cancel').click()
+    })
+
+    cy.queryByText('ThisShouldNotSave').should('not.exist')
+    cy.queryByText('TestPortalGreetingThisShouldNotSave').should('not.exist')
   })
 })
