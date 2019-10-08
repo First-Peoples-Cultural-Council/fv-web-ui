@@ -263,6 +263,7 @@ export default class DocumentOperations {
         .catch((error) => {
           if (error.hasOwnProperty('response')) {
             error.response.json().then((jsonError) => {
+              // Note: Intentional == comparison
               if (jsonError.hasOwnProperty('status') && jsonError.status == '404') {
                 jsonError.message =
                   jsonError.message +
@@ -272,6 +273,10 @@ export default class DocumentOperations {
                     default: 'Document not found',
                   }) +
                   ')'
+              }
+              // Note: intentional == comparison
+              if (jsonError.hasOwnProperty('status') && jsonError.status == '403') {
+                reject(jsonError.status)
               }
 
               reject(StringHelpers.extractErrorMessage(jsonError))

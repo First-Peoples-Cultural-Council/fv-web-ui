@@ -83,6 +83,7 @@ export class Phrasebook extends React.Component {
   }
   state = {
     componentState: STATE_LOADING,
+    is403: false,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -111,6 +112,8 @@ export class Phrasebook extends React.Component {
     if (this.props.computeDialect.isError && this.props.computeDialect.error) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: this.props.computeDialect.error == '403',
         copy,
         errorMessage: this.props.computeDialect.error,
       })
@@ -187,6 +190,7 @@ export class Phrasebook extends React.Component {
     const { errors, isBusy } = this.state
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}

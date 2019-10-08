@@ -31,6 +31,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 
 // Views
 import Paper from 'material-ui/lib/paper'
@@ -49,6 +51,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     routeParams: object,
     typePlural: string.isRequired,
     // REDUX: reducers/state
+    computeLogin: object.isRequired,
     computeBook: object.isRequired,
     computeBookEntry: object.isRequired,
     computeDialect2: object.isRequired,
@@ -70,18 +73,28 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
       dialectPath: null,
       parentBookPath: null,
       bookEntryPath: null,
+      is403: false,
     }
 
     // Bind methods to 'this'
     ;['_onNavigateRequest', '_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
-  fetchData(newProps) {
+  fetchData = async(newProps) => {
     const parentBookPath = newProps.routeParams.parentBookName
 
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
+    await newProps.fetchDialect2(newProps.routeParams.dialect_path)
     newProps.fetchBook(parentBookPath)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
+    if (_computeDialect2.isError) {
+      this.setState({
+        // Note: Intentional == comparison
+        is403: _computeDialect2.message == '403',
+        errorMessage: _computeDialect2.message,
+      })
+      return
+    }
     this.setState({
       dialectPath: newProps.routeParams.dialect_path,
       parentBookPath: parentBookPath,
@@ -231,59 +244,70 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
         )
       }
     }
-
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.learn.songs_stories.add_new_entry_to_x_book',
-            'Add New Entry to ' + selectn('response.properties.dc:title', computeBook) + ' Book',
-            'words',
-            [selectn('response.properties.dc:title', computeBook)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        is403={this.state.is403}
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={
+          <StateErrorBoundary /*copy={this.state.copy} errorMessage={this.state.errorMessage}*/ />
+        }
+      >
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <h1>
+            {intl.trans(
+              'views.pages.explore.dialect.learn.songs_stories.add_new_entry_to_x_book',
+              'Add New Entry to ' + selectn('response.properties.dc:title', computeBook) + ' Book',
+              'words',
+              [selectn('response.properties.dc:title', computeBook)]
+            )}
+          </h1>
 
-        <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
-              <t.form.Form
-                ref="form_book_entry_create" // TODO: DEPRECATED
-                type={t.struct(selectn('FVBookEntry', fields))}
-                context={selectn('response', computeDialect2)}
-                value={this.state.formValue}
-                options={FVBookEntryOptions}
-              />
-              <div className="form-group" data-testid="PageDialectStoriesAndSongsBookEntryCreate__btnGroup">
-                <button type="submit" className="RaisedButton RaisedButton--primary">
-                  {intl.trans('save', 'Save', 'first')}
-                </button>
-              </div>
-            </form>
-          </div>
+          <div className="row" style={{ marginTop: '15px' }}>
+            <div className={classNames('col-xs-8', 'col-md-10')}>
+              <form onSubmit={this._onRequestSaveForm}>
+                <t.form.Form
+                  ref="form_book_entry_create" // TODO: DEPRECATED
+                  type={t.struct(selectn('FVBookEntry', fields))}
+                  context={selectn('response', computeDialect2)}
+                  value={this.state.formValue}
+                  options={FVBookEntryOptions}
+                />
+                <div className="form-group" data-testid="PageDialectStoriesAndSongsBookEntryCreate__btnGroup">
+                  <button type="submit" className="RaisedButton RaisedButton--primary">
+                    {intl.trans('save', 'Save', 'first')}
+                  </button>
+                </div>
+              </form>
+            </div>
 
-          <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-            </Paper>
+            <div className={classNames('col-xs-4', 'col-md-2')}>
+              <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+                <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+              </Paper>
+            </div>
           </div>
-        </div>
-      </PromiseWrapper>
+        </PromiseWrapper>
+      </AuthenticationFilter>
     )
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, windowPath } = state
+  const { fvBook, fvDialect, nuxeo, windowPath } = state
 
   const { computeBook, computeBookEntry } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { computeLogin } = nuxeo
 
   return {
     computeBook,
     computeBookEntry,
     computeDialect2,
+    computeLogin,
     splitWindowPath,
     windowPath: _windowPath,
   }

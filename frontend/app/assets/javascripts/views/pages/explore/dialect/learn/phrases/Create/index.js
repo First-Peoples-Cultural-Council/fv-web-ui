@@ -77,6 +77,7 @@ export class PhrasesCreate extends Component {
     componentState: STATE_LOADING,
     ErrorBoundary: null,
     copy: {},
+    is403: false,
   }
 
   async componentDidMount() {
@@ -161,6 +162,8 @@ export class PhrasesCreate extends Component {
       if (computingDialect2.isError) {
         this.setState({
           componentState: STATE_DEFAULT,
+          // Note: Intentional == comparison
+          is403: computingDialect2.message == '403',
           errorMessage: computingDialect2.message,
           ...addToState,
         })
@@ -261,6 +264,7 @@ export class PhrasesCreate extends Component {
     return (
       <AuthenticationFilter
         login={this.props.computeLogin}
+        is403={this.state.is403}
         anon={false}
         routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}

@@ -95,6 +95,7 @@ export class PhrasebookEdit extends React.Component {
     errors: [],
     formData: {},
     isBusy: false,
+    is403: false,
   }
   state = {
     componentState: STATE_LOADING,
@@ -164,6 +165,8 @@ export class PhrasebookEdit extends React.Component {
     if (item.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: item.message == '403',
         errorMessage: item.message,
         ...addToState,
       })
@@ -195,6 +198,7 @@ export class PhrasebookEdit extends React.Component {
     const { errors, isBusy, isTrashed, valueDescription, valueName } = this.state
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}

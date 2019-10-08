@@ -89,6 +89,7 @@ export class PageDialectBookEdit extends Component {
     formValue: null,
     sortedItems: List(),
     componentState: STATE_LOADING,
+    is403: false,
   }
 
   // Redirect on success
@@ -152,6 +153,8 @@ export class PageDialectBookEdit extends Component {
     if (_computeDialect2.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: _computeDialect2.message == '403',
         errorMessage: _computeDialect2.message,
       })
       return
@@ -252,6 +255,7 @@ export class PageDialectBookEdit extends Component {
 
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}
