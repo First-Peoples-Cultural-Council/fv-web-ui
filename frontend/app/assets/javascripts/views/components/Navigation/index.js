@@ -326,9 +326,6 @@ export class Navigation extends Component {
               className={`Navigation__searchContainer ${
                 this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
               }`}
-              style={{
-                background: themePalette.primary1Color,
-              }}
               onFocus={() => {
                 this.setState({
                   searchPopoverOpen: true,
