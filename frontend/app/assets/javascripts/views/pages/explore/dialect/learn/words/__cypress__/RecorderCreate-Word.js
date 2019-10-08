@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('PageDialectLearnWords.js > PageDialectLearnWords', () => {
+describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
   it('Test to check recorder word creation functionality.', () => {
     // TODO: Add database setup here.
     // Requires no words exist in database for SENCOTEN.
