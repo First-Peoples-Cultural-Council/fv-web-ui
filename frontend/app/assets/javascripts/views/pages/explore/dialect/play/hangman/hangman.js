@@ -103,7 +103,7 @@ export default class HangmanGame extends Component {
     return {
       puzzle: this.preparePuzzle(props),
       guessesLeft: 7,
-      alphabet: this.prepareAlphabet(props),
+      alphabet: this.props.alphabet,
       guessedLetters: [],
       succeeded: false,
       failed: false,
@@ -128,6 +128,9 @@ export default class HangmanGame extends Component {
    * Prepare puzzle
    * breaks up puzzle into letters
    */
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+  }
   preparePuzzle(props) {
     const puzzle = props.puzzle
     const letters = props.alphabet
@@ -135,7 +138,7 @@ export default class HangmanGame extends Component {
     let letterRegexStr = ''
 
     for (let i = 0; i < letterCount; i++) {
-      letterRegexStr += '(' + letters[i] + ')|'
+      letterRegexStr += '(' + this.escapeRegExp(letters[i]) + ')|'
     }
 
     const letterRegex = new RegExp(letterRegexStr, 'g')
@@ -153,7 +156,7 @@ export default class HangmanGame extends Component {
         words.push(word)
         word = []
       } else {
-        word.push({ letter: letter.toUpperCase(), found: false })
+        word.push({ letter, found: false })
       }
       if (index === parts.length - 1) {
         words.push(word)

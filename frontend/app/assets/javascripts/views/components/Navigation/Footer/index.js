@@ -66,10 +66,10 @@ export default class Footer extends React.Component {
                     })}
                   </a>{' '}
                   |{' '}
-                  <a href="https://firstvoices.atlassian.net/servicedesk/customer/portal/1/create/16">
+                  <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
                     {this.intl.translate({
-                      key: 'general.feedback',
-                      default: 'Feedback',
+                      key: 'general.help',
+                      default: 'Help',
                       case: 'first',
                     })}
                   </a>{' '}

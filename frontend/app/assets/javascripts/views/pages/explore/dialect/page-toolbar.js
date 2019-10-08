@@ -244,7 +244,13 @@ export class PageToolbar extends Component {
                       value="enabled"
                     />
                   }
-                  label={<Typography variant="title">{intl.trans('enabled', 'Enabled', 'first')}</Typography>}
+                  label={
+                    <Typography variant="title">
+                      {documentEnabled || documentPublished
+                        ? intl.trans('enabled', 'Enabled', 'first')
+                        : intl.trans('enable', 'Enable', 'first')}
+                    </Typography>
+                  }
                 />
               </AuthorizationFilter>
             ) : null}
@@ -474,7 +480,13 @@ export class PageToolbar extends Component {
                   value="published"
                 />
               }
-              label={<Typography variant="title">{intl.trans('published', 'Published', 'first')}</Typography>}
+              label={
+                <Typography variant="title">
+                  {documentPublished
+                    ? intl.trans('published', 'Published', 'first')
+                    : intl.trans('publish', 'Publish', 'first')}
+                </Typography>
+              }
             />
           </AuthorizationFilter>
         )

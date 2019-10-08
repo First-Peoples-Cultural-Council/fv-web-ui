@@ -168,6 +168,12 @@ export class Wordscramble extends Component {
         {(selectn('response.entries', computePhrases) || [])
           .filter((phrase) => selectn('properties.dc:title', phrase).indexOf(' ') > 0)
           .map((phrase, i) => {
+            console.log('?', {
+              original: selectn('properties.dc:title', phrase),
+              translation: selectn('properties.fv:definitions[0].translation', phrase),
+              audio: selectn('contextParameters.phrase.related_audio[0].path', phrase),
+              picture: selectn('contextParameters.phrase.related_pictures[0]', phrase),
+            })
             return (
               <Scramble
                 key={i}
