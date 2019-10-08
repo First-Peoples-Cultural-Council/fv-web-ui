@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
+describe('ReportViewFilter.js > ReportViewFilter', () => {
   it('Test to check that reports are generated properly.', () => {
     // TODO: Add database setup here.
     // A test word which has been enabled but not published must exist for SENCOTEN.
@@ -12,8 +12,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'SENCOTEN_MEMBER_USERNAME',
+      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
@@ -50,8 +50,8 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'SENCOTEN_MEMBER_USERNAME',
+      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
