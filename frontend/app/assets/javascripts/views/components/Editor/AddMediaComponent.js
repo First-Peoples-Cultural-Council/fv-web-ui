@@ -114,7 +114,6 @@ export class AddMediaComponent extends Component {
 
     // If validation passed
     if (formValue) {
-      debugger
       let file
       const fd = new FormData()
 
