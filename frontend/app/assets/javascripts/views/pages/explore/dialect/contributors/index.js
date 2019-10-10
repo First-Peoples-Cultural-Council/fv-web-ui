@@ -36,6 +36,8 @@ import Checkbox from 'views/components/Form/Common/Checkbox'
 
 import NavigationClose from '@material-ui/icons/Close'
 import NavigationCheck from '@material-ui/icons/Check'
+import Button from '@material-ui/core/Button'
+
 import '!style-loader!css-loader!./Contributors.css'
 
 let contributorsPath = undefined
@@ -130,9 +132,10 @@ export class Contributors extends Component {
         }
       )
     const btnCreate = this.props.btnCreate || (
-      <a
-        className="_btn _btn--primary Contributors__btnCreate"
-        href={`/${this.props.routeParams.siteTheme}${this.props.routeParams.dialect_path}/create/contributor`}
+      <Button
+        variant="contained"
+        color="primary"
+        className="Contributors__btnCreate"
         onClick={(e) => {
           e.preventDefault()
           NavigationHelpers.navigate(
@@ -143,7 +146,7 @@ export class Contributors extends Component {
         }}
       >
         Create a new contributor
-      </a>
+      </Button>
     )
     await this._getData({ copy, btnCreate })
   }

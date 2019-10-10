@@ -117,15 +117,16 @@ export class PageContent extends Component {
 
       if (computePage.success === true) {
         const _properties = selectn('response.entries[0].properties', computePage)
-
+        const pageTitle = selectn('dc:title', _properties)
+        const _contentTitle = selectn('fvpage:blocks[0].title', _properties)
+        const contentTitle = pageTitle !== _contentTitle ? _contentTitle : undefined
+        const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
         page = (
           <div>
-            <TextHeader
-              title={intl.searchAndReplace(selectn('fvpage:blocks[0].title', _properties), 'first')}
-              tag="h1"
-              properties={this.props.properties}
-            />
+            {pageTitle && <h1>{intl.searchAndReplace(pageTitle, { case: 'first' })}</h1>}
+            <hr style={{ backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }} />
 
+            {contentTitle && <h2>{intl.searchAndReplace(contentTitle, { case: 'first' })}</h2>}
             <div dangerouslySetInnerHTML={{ __html: selectn('fvpage:blocks[0].text', _properties) }} />
           </div>
         )

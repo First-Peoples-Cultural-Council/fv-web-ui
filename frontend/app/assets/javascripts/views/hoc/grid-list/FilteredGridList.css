@@ -4,7 +4,8 @@
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
-.FilteredGridList__btn + .FilteredGridList__btn {
-  margin-left: 10px;
+.FilteredGridList__btn {
+  margin: 10px 0;
 }

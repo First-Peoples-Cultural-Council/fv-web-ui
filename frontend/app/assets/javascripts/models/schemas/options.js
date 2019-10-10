@@ -952,7 +952,7 @@ const options = {
     fields: {
       'dc:title': {
         label: intl.trans('models.contributor_name', 'Contributor Name', 'first'),
-        help: <i>{intl.trans('models.name_of_contributor', 'The name of the contributor', 'first')}</i>,
+        // help: <i>{intl.trans('models.name_of_contributor', 'The name of the contributor', 'first')}</i>,
       },
 
       'dc:description': {

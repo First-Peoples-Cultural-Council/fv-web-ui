@@ -234,7 +234,7 @@ export class Search extends DataListView {
     })
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
 
     if (selectn('response.totalSize', computeSearchDocuments) !== undefined) {
@@ -244,6 +244,27 @@ export class Search extends DataListView {
         category: false,
         results: selectn('response.totalSize', computeSearchDocuments),
       })
+    }
+
+    // if search came from nav bar
+    if (prevProps.windowPath !== this.props.windowPath) {
+      this.setState(
+        {
+          pageInfo: {
+            page: 1,
+            pageSize: this.state.pageInfo.pageSize,
+          },
+        },
+        () => {
+          this._fetchListViewData(
+            this.props,
+            1,
+            this.state.pageInfo.pageSize,
+            this.props.DEFAULT_SORT_TYPE,
+            this.props.DEFAULT_SORT_COL
+          )
+        }
+      )
     }
   }
 
@@ -256,7 +277,6 @@ export class Search extends DataListView {
     ])
 
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
-
     const _onEntryNavigateRequest = this._onEntryNavigateRequest
     const searchTerm = this.props.routeParams.searchTerm
     const SearchResultTileWithProps = React.Component({

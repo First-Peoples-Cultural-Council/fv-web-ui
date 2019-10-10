@@ -26,6 +26,7 @@ import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 // MAT-UI: Core
+import { withTheme } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -42,9 +43,9 @@ import TextField from '@material-ui/core/TextField'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
-import { withTheme } from '@material-ui/core/styles'
 
 // MAT-UI: Icons
+import Clear from '@material-ui/icons/Clear'
 import Reorder from '@material-ui/icons/Reorder'
 import Search from '@material-ui/icons/Search'
 import Settings from '@material-ui/icons/Settings'
@@ -265,6 +266,7 @@ export class Navigation extends Component {
 
     const themePalette = selectn('theme.palette', this.props)
     const color = selectn('theme.palette.primary.contrastText', this.props)
+    const backgroundColor = selectn('theme.palette.primary.main', this.props)
 
     return (
       <AppBar position="static">
@@ -326,6 +328,9 @@ export class Navigation extends Component {
               className={`Navigation__searchContainer ${
                 this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
               }`}
+              style={{
+                backgroundColor,
+              }}
               onFocus={() => {
                 this.setState({
                   searchPopoverOpen: true,
@@ -433,7 +438,7 @@ export class Navigation extends Component {
 
             {/* Locale Button */}
             <Tooltip title="Settings">
-              <IconButton type="button" onClick={this._handleDisplayLocaleOptions}>
+              <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
                 <Settings style={{ color }} aria-label="Settings" />
               </IconButton>
             </Tooltip>
@@ -468,6 +473,10 @@ export class Navigation extends Component {
                   <MenuItem value="fr">Français</MenuItem>
                 </Select>
               </FormControl>
+
+              <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
+                <Clear style={{ color }} aria-label="Close" />
+              </IconButton>
             </div>
           </Toolbar>
         </div>
@@ -545,9 +554,9 @@ export class Navigation extends Component {
     }
   }
 
-  _handleDisplayLocaleOptions = () => {
+  _toggleDisplayLocaleOptions = () => {
     this.setState({
-      localePopoverOpen: true,
+      localePopoverOpen: !this.state.localePopoverOpen,
     })
   }
 

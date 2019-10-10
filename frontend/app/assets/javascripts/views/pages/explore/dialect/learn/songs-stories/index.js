@@ -27,6 +27,8 @@ import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
+import Button from '@material-ui/core/Button'
+
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -142,6 +144,8 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       splitWindowPath: this.props.splitWindowPath,
       landmarkArray: this.props.typeFilter === 'story' ? ['stories'] : ['songs'],
     })}`
+
+    // const themePalette = this.props.properties.theme.palette.rawTheme.palette
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper', { hidden: isKidsTheme })}>
@@ -152,9 +156,29 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                 entity: selectn('response', computeDialect2),
                 login: this.props.computeLogin,
               }}
+              hideFromSections
+              routeParams={this.props.routeParams}
             >
-              <a
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={(e) => {
+                  e.preventDefault()
+                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+                }}
+              >
+                {intl.trans(
+                  'views.pages.explore.dialect.learn.songs_stories.create_x_book',
+                  'Create ' + this.props.typeFilter + ' Book',
+                  'words',
+                  [this.props.typeFilter]
+                )}
+              </Button>
+              {/* <a
                 className="_btn _btn--primary"
+                style={{
+                  backgroundColor: themePalette.primary1Color,
+                }}
                 href={hrefPath}
                 onClick={(e) => {
                   e.preventDefault()
@@ -167,7 +191,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                   'words',
                   [this.props.typeFilter]
                 )}
-              </a>
+              </a> */}
             </AuthorizationFilter>
           </div>
         </div>

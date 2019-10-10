@@ -21,6 +21,8 @@ import selectn from 'selectn'
 // Immutable
 import Immutable, { Map } from 'immutable' // eslint-disable-line
 
+import Button from '@material-ui/core/Button'
+
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -144,7 +146,7 @@ export class Phrasebooks extends Component {
     const { dialect_path, pageSize, page, siteTheme } = routeParams
     return (
       <div>
-        <a
+        {/* <a
           className="_btn _btn--primary Contributors__btnCreate"
           href={`/${siteTheme}${dialect_path}/create/phrasebook`}
           onClick={(e) => {
@@ -157,7 +159,21 @@ export class Phrasebooks extends Component {
           }}
         >
           Create a new phrase book
-        </a>
+        </a> */}
+        <Button
+          variant="contained"
+          className="Contributors__btnCreate"
+          onClick={(e) => {
+            e.preventDefault()
+            NavigationHelpers.navigate(
+              `/${siteTheme}${dialect_path}/create/phrasebook`,
+              this.props.pushWindowPath,
+              false
+            )
+          }}
+        >
+          Create a new phrase book
+        </Button>
         <DocumentListView
           cssModifier="DictionaryList--phrasebooks"
           sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?

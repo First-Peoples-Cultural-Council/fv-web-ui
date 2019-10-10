@@ -54,6 +54,7 @@ import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 import IntlService from 'views/services/intl'
+import { string } from 'prop-types'
 
 const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
@@ -66,6 +67,7 @@ const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
     book: object,
+    typePlural: string,
     // REDUX: reducers/state
     routeParams: object.isRequired,
     computeLogin: object.isRequired,
@@ -98,7 +100,6 @@ export class PageDialectBookEdit extends Component {
   componentDidUpdate(prevProps) {
     let currentBook
     let nextBook
-
     if (this._getBookPath() !== null) {
       currentBook = ProviderHelpers.getEntry(prevProps.computeBook, this._getBookPath())
       nextBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
@@ -113,7 +114,7 @@ export class PageDialectBookEdit extends Component {
         NavigationHelpers.generateUIDPath(
           this.props.routeParams.siteTheme,
           selectn('response', nextBook),
-          'songs-stories'
+          this.props.typePlural.toLowerCase()
         ),
         this.props.replaceWindowPath,
         true
@@ -257,6 +258,7 @@ export class PageDialectBookEdit extends Component {
       })
     }
 
+    const title = selectn('response.properties.dc:title', _computeBook)
     return (
       <AuthenticationFilter
         login={this.props.computeLogin}
@@ -271,16 +273,18 @@ export class PageDialectBookEdit extends Component {
           </Tabs>
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
-              <Typography variant="headline">
-                <h1>
-                  {intl.trans(
-                    'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
-                    'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' Book',
-                    'words',
-                    [selectn('response.properties.dc:title', _computeBook)]
-                  )}
-                </h1>
-              </Typography>
+              {title && (
+                <Typography variant="headline">
+                  <h1>
+                    {intl.trans(
+                      'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
+                      'Edit ' + title + ' Book',
+                      'words',
+                      [title]
+                    )}
+                  </h1>
+                </Typography>
+              )}
               <EditViewWithForm
                 computeEntities={computeEntities}
                 initialValues={context}
@@ -298,11 +302,11 @@ export class PageDialectBookEdit extends Component {
           )}
           {this.state.tabValue === 1 && (
             <div style={{ padding: 8 * 3 }}>
-              <Typography variant="headline">
-                {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' pages', 'first', [
-                  selectn('response.properties.dc:title', _computeBook),
-                ])}
-              </Typography>
+              {title && (
+                <Typography variant="headline">
+                  {intl.trans('', 'Edit ' + title + ' pages', 'first', [title])}
+                </Typography>
+              )}
               <BookEntryList
                 reorder
                 sortOrderChanged={this._storeSortOrder}

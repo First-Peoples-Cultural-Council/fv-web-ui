@@ -350,7 +350,7 @@ export class ExploreDialect extends Component {
               className="fv-portal-greeting"
               isSection={isSection}
               computeEntity={computePortal}
-              updateEntity={updatePortal}
+              updateEntity={this.props.updatePortal}
               property="fv-portal:greeting"
               entity={selectn('response', computePortal)}
             />
@@ -373,7 +373,7 @@ export class ExploreDialect extends Component {
               dataTestid="EditableComponent__fv-portal-news"
               isSection={isSection}
               computeEntity={computePortal}
-              updateEntity={updatePortal}
+              updateEntity={this.props.updatePortal}
               property="fv-portal:news"
               entity={selectn('response', computePortal)}
             />
@@ -444,7 +444,7 @@ export class ExploreDialect extends Component {
                   className="fv-portal-about"
                   isSection={isSection}
                   computeEntity={computePortal}
-                  updateEntity={updatePortal}
+                  updateEntity={this.props.updatePortal}
                   property="fv-portal:about"
                   entity={selectn('response', computePortal)}
                 />
@@ -504,7 +504,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-portal-related_links"
                           isSection={isSection}
                           computeEntity={computePortal}
-                          updateEntity={updatePortal}
+                          updateEntity={this.props.updatePortal}
                           context={computeDialect2}
                           showPreview
                           previewType="FVLink"
@@ -537,7 +537,7 @@ export class ExploreDialect extends Component {
                     dataTestid="EditableComponent__dc-title"
                       isSection={isSection}
                       computeEntity={computeDialect2}
-                      updateEntity={updateDialect2}
+                      updateEntity={this.props.updateDialect2}
                       property="dc:title"
                       entity={selectn("response", computeDialect2)}
                     />
@@ -554,7 +554,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-dialect-country"
                           isSection={isSection}
                           computeEntity={computeDialect2}
-                          updateEntity={updateDialect2}
+                          updateEntity={this.props.updateDialect2}
                           property="fvdialect:country"
                           entity={selectn('response', computeDialect2)}
                         />
@@ -571,7 +571,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-dialect-region"
                           isSection={isSection}
                           computeEntity={computeDialect2}
-                          updateEntity={updateDialect2}
+                          updateEntity={this.props.updateDialect2}
                           property="fvdialect:region"
                           entity={selectn('response', computeDialect2)}
                         />

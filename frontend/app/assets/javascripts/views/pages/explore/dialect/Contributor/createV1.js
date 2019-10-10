@@ -28,7 +28,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
@@ -178,7 +178,7 @@ export class PageDialectContributorsCreate extends Component {
 
     return (
       <div>
-        <h1>
+        <h1 style={{ lineHeight: '1.2', margin: '0 0 10px' }}>
           {intl.trans(
             'views.pages.explore.dialect.contributors.add_new_contributor_to_x',
             'Add New Contributor to ' + dialect.get('dc:title'),
@@ -189,9 +189,7 @@ export class PageDialectContributorsCreate extends Component {
 
         {contributor && contributor.message && contributor.action.includes('CREATE') ? (
           <StatusBar message={contributor.message} />
-        ) : (
-          ''
-        )}
+        ) : null}
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
@@ -203,18 +201,12 @@ export class PageDialectContributorsCreate extends Component {
                 value={this.state.formValue}
                 options={selectn('FVContributor', options)}
               />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+              <div className="form-group" style={{ marginTop: '20px' }}>
+                <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
                   {intl.trans('save', 'Save', 'first')}
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-
-          <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-            </Paper>
           </div>
         </div>
       </div>
