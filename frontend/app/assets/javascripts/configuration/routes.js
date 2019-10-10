@@ -929,12 +929,12 @@ const routes = [
       ANYTHING_BUT_SLASH,
       ANYTHING_BUT_SLASH,
       'play',
-      'hangman',
+      'parachute',
     ],
     title:
       intl.translate({
-        key: 'hangman',
-        default: 'Hangman',
+        key: 'parachute',
+        default: 'Parachute',
         case: 'words',
       }) +
       ' | ' +
