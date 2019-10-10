@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
   it('Test to check that a language admin can create and delete stories.', () => {
     // TODO: Add database setup here.

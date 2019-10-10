@@ -1,17 +1,13 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
   it('Test to check that a guest can view the website in French if they prefer.', () => {
     /*
             Navigate to main page as a guest.
          */
     cy.visit('/home')
-    cy.get('div.Navigation').within(() => {
-      cy.getByText('settings', { exact: true }).click()
-    })
+    cy.getByText('settings', { exact: true }).click()
 
     /*
             Change the website to French.

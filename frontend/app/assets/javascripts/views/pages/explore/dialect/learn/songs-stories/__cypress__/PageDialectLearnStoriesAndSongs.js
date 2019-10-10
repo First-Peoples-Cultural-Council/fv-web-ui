@@ -1,4 +1,6 @@
-import 'cypress-testing-library/add-commands'
+// NOTE: this file will be copied to `cypress/integration` and run from there,
+// so imports paths will be based on that location!
+
 describe('PageDialectLearnStoriesAndSongs.js > PageDialectLearnStoriesAndSongs', () => {
   it('FW-257: On the Browse > Songs page, the user can click a button to get to Create Song page', () => {
     cy.login({

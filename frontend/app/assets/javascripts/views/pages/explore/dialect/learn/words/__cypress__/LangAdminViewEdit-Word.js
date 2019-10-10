@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
   it('Test to check language admin viewing and editing of words permissions.', () => {
     // TODO: Add database setup here.

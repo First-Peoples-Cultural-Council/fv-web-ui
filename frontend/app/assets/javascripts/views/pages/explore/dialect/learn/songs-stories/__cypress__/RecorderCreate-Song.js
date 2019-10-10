@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
   it('Test to check song creation for recorders.', () => {
     // TODO: Add database setup here.

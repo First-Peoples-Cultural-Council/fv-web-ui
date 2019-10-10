@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
   it('Test to check that when a recorder enables a word the request to the language admin is received.', () => {
     // TODO: Add database setup here.

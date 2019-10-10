@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () => {
   it('Test to check recorder with approval creation and deletion of songs.', () => {
     // TODO: Add database setup here.

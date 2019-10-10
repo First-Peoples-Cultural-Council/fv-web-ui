@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
   it('Test to check that a language admin can edit the portal.', () => {
     // TODO: Add database setup here.

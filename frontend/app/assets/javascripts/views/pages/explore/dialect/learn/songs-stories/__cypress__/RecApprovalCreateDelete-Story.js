@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', () => {
   it('Test to check recorder with approval creation and deletion of stories.', () => {
     // TODO: Add database setup here.

@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () => {
   it('Test to check the word publish/unpublish functionality for a recorder.', () => {
     // TODO: Add database setup here.

@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
   it('Test to check recorder word creation functionality.', () => {
     // TODO: Add database setup here.

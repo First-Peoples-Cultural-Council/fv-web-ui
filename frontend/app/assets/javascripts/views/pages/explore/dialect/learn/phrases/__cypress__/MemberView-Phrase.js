@@ -1,12 +1,10 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('MemberView-Phrase.js > MemberView-Phrase', () => {
   it('Test to check the word visibility for a member.', () => {
     // TODO: Add database setup here.
-    // Requires a new phrase that is enabled and not published exist in database for SENCOTEN.
+    // Requires a new phrase that is enabled and not published called TestPhrase exist in database for SENCOTEN.
 
     /*
             Login as Language Member, navigate to phrases and check that a phrase exists.
@@ -45,11 +43,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.getByText('Phrases in New Status', { exact: true }).click()
     cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('exist')
-    cy.get('div.col-md-5.col-xs-12 > div').within(() => {
-      cy.get('span:nth-child(6)')
-        .contains('0')
-        .should('exist')
-    })
+    cy.queryByText('TestPhrase').should('not.exist')
 
     /*
             Check that the phrase exists in "Phrases in Enabled Status" page and make sure it has "Enabled" status
@@ -57,11 +51,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.getByText('reports', { exact: true }).click()
     cy.getByText('Phrases in Enabled Status', { exact: true }).click()
     cy.wait(500)
-    cy.get('div.col-md-5.col-xs-12 > div').within(() => {
-      cy.get('span:nth-child(6)')
-        .contains('1')
-        .should('exist')
-    })
+    cy.queryByText('No results found').should('not.exist')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')

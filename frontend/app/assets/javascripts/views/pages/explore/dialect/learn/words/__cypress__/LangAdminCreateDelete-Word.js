@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
   it('Test to check language admin creation and deletion of words.', () => {
     // TODO: Add database setup here.
@@ -147,12 +145,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     cy.getByText('Delete word').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete word success').should('exist')
-
-    // Possible bug with first voices here requiring button to be clicked 3 times.
     cy.getByText('Return To Previous Page').click()
-    cy.getByText('Return To Previous Page').click()
-    cy.getByText('Return To Previous Page').click()
-
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })

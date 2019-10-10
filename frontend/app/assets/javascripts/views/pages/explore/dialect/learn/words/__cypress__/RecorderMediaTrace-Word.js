@@ -1,8 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
-
 describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
   it('Test to check that media added to a word traces back to the word properly.', () => {
     // TODO: Add database setup here.
