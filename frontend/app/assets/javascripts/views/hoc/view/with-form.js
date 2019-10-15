@@ -44,7 +44,6 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
         showCancelWarning: false,
         saved: false,
       }
-      ;['_onRequestSaveForm', '_onRequestCancelForm'].forEach((method) => (this[method] = this[method].bind(this)))
     }
 
     _getComputeItem(props) {
@@ -54,7 +53,8 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
       return ProviderHelpers.getEntry(item.get('entity'), itemId)
     }
-    _onRequestSaveForm(portal, e) {
+
+    _onRequestSaveForm = (e, portal) => {
       // Prevent default behaviour
       e.preventDefault()
       const formValue = this['form_' + this.props.type].getValue()
@@ -72,7 +72,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       }
     }
 
-    _onRequestCancelForm(e, force = false) {
+    _onRequestCancelForm = (e, force = false) => {
       if (force) {
         if (this.props.cancelMethod) {
           this.props.cancelMethod()
@@ -118,20 +118,25 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     render() {
       const { initialValues, fields, options, type } = this.props
       const computeItem = this._getComputeItem(this.props)
-
       return (
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-9')}>
             <ComposedFilter renderOnError {...this.props} {...this.state}>
               <div className="form-horizontal" style={{ padding: '0 15px' }}>
-                <form onSubmit={this._onRequestSaveForm.bind(this, computeItem)}>
+                <form
+                  onSubmit={(e) => {
+                    this._onRequestSaveForm(e, computeItem)
+                  }}
+                >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
                     <Button variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {intl.trans('cancel', 'Cancel', 'first')}
                     </Button>
                     <button
                       type="submit"
-                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
+                      onClick={(e) => {
+                        this._onRequestSaveForm(e, computeItem)
+                      }}
                       className="RaisedButton RaisedButton--primary"
                     >
                       {intl.trans('save', 'Save', 'first')}
@@ -158,7 +163,9 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     </Button>
                     <button
                       type="submit"
-                      onClick={this._onRequestSaveForm.bind(this, computeItem)}
+                      onClick={(e) => {
+                        this._onRequestSaveForm(e, computeItem)
+                      }}
                       className="RaisedButton RaisedButton--primary"
                     >
                       {intl.trans('save', 'Save', 'first')}
@@ -185,7 +192,9 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           variant="flat"
                           size="small"
                           style={confirmationButtonsStyle}
-                          onClick={this._onRequestCancelForm.bind(this, true)}
+                          onClick={(e) => {
+                            this._onRequestCancelForm(e, true)
+                          }}
                         >
                           {intl.trans('yes', 'Yes', 'first') + '!'}
                         </Button>

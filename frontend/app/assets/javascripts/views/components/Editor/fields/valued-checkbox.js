@@ -4,9 +4,6 @@ import t from 'tcomb-form'
 function renderInput(locals) {
   const onChange = (event) => {
     if (event.target.checked) {
-      // NOTE: on dialect media browsing page locals.context === undefined,
-      // so accessing `locals.context[locals.attrs.name]` triggers an error.
-      // It's not clear to me what `locals.context[locals.attrs.name]` should be doing.
       locals.onChange(locals.context[locals.attrs.name])
     } else {
       locals.onChange(null)
@@ -19,11 +16,9 @@ function renderInput(locals) {
         type="checkbox"
         ref="valued_checkbox" // TODO: FW-572
         id={'virtual-keyboard-helper-' + locals.attrs.name}
-        value={locals.context}
+        value={locals.context[locals.attrs.name]}
+        name={locals.attrs.name}
         onChange={onChange}
-        // NOTE: would this be better?
-        // onChange={locals.onChange}
-        // name={locals.attrs.name}
       />
       <span>&nbsp;</span>
       <span>{locals.label}</span>

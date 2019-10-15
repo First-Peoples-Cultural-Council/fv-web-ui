@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import selectn from 'selectn'
 
 // REDUX
@@ -87,10 +86,8 @@ export class KidsNavigation extends Component {
     ) : (
       ''
     )
-
-    const homeURL = !this.props.routeParams.dialect_path
-      ? NavigationHelpers.generateStaticURL('/kids')
-      : NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
+    const homeURL = NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
+    const showHome = this.props.routeParams.dialect_path !== undefined && homeURL !== window.location.pathname
 
     return (
       <div className="Navigation">
@@ -110,19 +107,20 @@ export class KidsNavigation extends Component {
                 </span>
               </a>
             </Typography>
-            <Tooltip title={intl.trans('back', 'Back', 'first')} placement="bottom-end">
-              <IconButton
-                className={classNames({ hidden: this.props.frontpage })}
-                onClick={() => NavigationHelpers.navigateBack()}
-              >
-                <KeyboardBackspaceIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={intl.trans('home', 'Home', 'first')} placement="bottom-end">
-              <IconButton onClick={this._onNavigateRequest.bind(this, homeURL)}>
-                <HomeIcon />
-              </IconButton>
-            </Tooltip>
+            {this.props.frontpage !== true && (
+              <Tooltip title={intl.trans('back', 'Back', 'first')} placement="bottom-end">
+                <IconButton onClick={() => NavigationHelpers.navigateBack()}>
+                  <KeyboardBackspaceIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            {showHome && (
+              <Tooltip title={intl.trans('home', 'Home', 'first')} placement="bottom-end">
+                <IconButton onClick={this._onNavigateRequest.bind(this, homeURL)}>
+                  <HomeIcon />
+                </IconButton>
+              </Tooltip>
+            )}
 
             <Tooltip title={intl.trans('choose_lang', 'Choose a Language', 'first')} placement="bottom-end">
               <IconButton
