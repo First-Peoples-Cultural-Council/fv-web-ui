@@ -23,6 +23,7 @@
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
+	"test:databaseSetup": "./scripts/TestDatabaseSetup.sh",
     "test:e2e": "start-server-and-test startPreprod http://127.0.0.1:3001 cy:open",
     "test:e2e:dev": "start-server-and-test startDev http://127.0.0.1:3001 cy:open",
     "test:e2e:ci": "start-server-and-test start http://127.0.0.1:3001 cy:run",

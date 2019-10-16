@@ -16,3 +16,5 @@ target/
 .settings
 .factorypath
 nashorn_code_cache
+/frontend/fv-utils/
+/frontend/fv-batch-import/
