@@ -1,13 +1,17 @@
-import React, { Component, PropTypes } from 'react'
-import Immutable, { List, Set, Map } from 'immutable'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Set } from 'immutable'
 
 import selectn from 'selectn'
 import { debounce } from 'debounce'
 import memoize from 'memoize-one'
-import Paper from 'material-ui/lib/paper'
-import ListUI from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
-import Checkbox from 'material-ui/lib/checkbox'
+
+import Paper from '@material-ui/core/Paper'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import Checkbox from '@material-ui/core/Checkbox'
+
 import withToggle from 'views/hoc/view/with-toggle'
 import IntlService from 'views/services/intl'
 
@@ -86,7 +90,7 @@ export default class FacetFilterList extends Component {
           if (a.title > b.title) return 1
           return 0
         })
-        childrenSort.map((facetChild, i) => {
+        childrenSort.map((facetChild) => {
           const facetUidChild = facetChild.uid
           childrenIds.push(facetUidChild)
 
@@ -99,7 +103,7 @@ export default class FacetFilterList extends Component {
               leftCheckbox={
                 <Checkbox
                   checked={checkedChild}
-                  onCheck={() => {
+                  onChange={() => {
                     this._toggleCheckbox(facetUidChild, null, !checkedChild, facetUidParent)
                   }}
                 />
@@ -137,7 +141,10 @@ export default class FacetFilterList extends Component {
     return (
       <FiltersWithToggle label={this.title} mobileOnly style={this.props.styles}>
         <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
-          <ListUI subheader={this.title}>{this.listItems}</ListUI>
+          <List>
+            <ListSubheader>{this.title}</ListSubheader>
+            {this.listItems}
+          </List>
         </Paper>
       </FiltersWithToggle>
     )

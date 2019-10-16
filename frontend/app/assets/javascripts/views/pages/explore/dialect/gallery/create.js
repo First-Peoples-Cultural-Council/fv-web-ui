@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
 
@@ -21,17 +22,14 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createGallery } from 'providers/redux/reducers/fvGallery'
+
 import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
 import NavigationHelpers from 'common/NavigationHelpers'
-// Views
-// import RaisedButton from 'material-ui/lib/raised-button'
-import Paper from 'material-ui/lib/paper'
-// import CircularProgress from 'material-ui/lib/circular-progress'
-// import Snackbar from 'material-ui/lib/snackbar'
+import Paper from '@material-ui/core/Paper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
@@ -70,6 +68,8 @@ export class PageDialectGalleryCreate extends Component {
     componentState: STATE_LOADING,
   }
 
+  formGalleryCreate = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -91,7 +91,7 @@ export class PageDialectGalleryCreate extends Component {
       selectn('success', nextGallery) === true
     ) {
       this.props.replaceWindowPath(
-        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.theme}${selectn(
+        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.siteTheme}${selectn(
           'response.path',
           nextGallery
         ).replace('Portal', 'gallery')}`
@@ -122,7 +122,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -156,8 +156,7 @@ export class PageDialectGalleryCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_gallery_create.getValue()
+    const formValue = this.formGalleryCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -235,7 +234,7 @@ export class PageDialectGalleryCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_gallery_create" // TODO: DEPRECATED
+                  ref={this.formGalleryCreate}
                   type={t.struct(selectn('FVGallery', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}
@@ -250,7 +249,7 @@ export class PageDialectGalleryCreate extends Component {
             </div>
 
             <div className={classNames('col-xs-4', 'col-md-2')}>
-              <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+              <Paper style={{ padding: '15px', margin: '20px 0' }}>
                 <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
               </Paper>
             </div>

@@ -13,27 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { /* Component, */ PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import { Immutable, Map } from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchResources } from 'providers/redux/reducers/fvResources'
+
 import { fetchSharedAudios } from 'providers/redux/reducers/fvAudio'
 import { fetchSharedPictures } from 'providers/redux/reducers/fvPicture'
 import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
 
 import selectn from 'selectn'
 
-import { Dialog } from 'material-ui'
-import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
+import { WORKSPACES } from 'common/Constants'
+
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+
 import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
 import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
-import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import IntlService from 'views/services/intl'
-import { WORKSPACES } from 'common/Constants'
+import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
+import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
+import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 
 const intl = IntlService.instance
 const DefaultFetcherParams = {
@@ -41,62 +49,10 @@ const DefaultFetcherParams = {
   pageSize: 10,
   filters: { 'properties.dc:title': { appliedFilter: '' }, dialect: { appliedFilter: '' } },
 }
-/*
-class SharedResourceGridTile extends Component {
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      showInfo: false,
-    }
-  }
-
-  render() {
-    const tile = this.props.tile
-    const resourceParentDialect = selectn('contextParameters.ancestry.dialect', tile)
-    let actionIcon = null
-
-    const isFVShared = selectn('path', tile) && selectn('path', tile).indexOf('SharedResources') != -1
-    const isDialectShared = selectn('uid', resourceParentDialect) != selectn('uid', this.props.dialect)
-
-    // If resource is from different dialect, show notification so user is aware
-    if (isDialectShared || isFVShared) {
-      const tooltip = isDialectShared
-        ? intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
-        : intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
-      actionIcon = (
-        <IconButton tooltip={tooltip} tooltipPosition="top-left">
-          {isDialectShared ? <ActionInfoOutline color="white" /> : <ActionInfo color="white" />}
-        </IconButton>
-      )
-    }
-
-    return (
-      <GridTile
-        onClick={this.props.action ? this.props.action.bind(this, this.props.tile) : null}
-        key={selectn('uid', tile)}
-        title={selectn('properties.dc:title', tile)}
-        actionPosition="right"
-        titlePosition={this.props.fileTypeTilePosition}
-        actionIcon={actionIcon}
-        subtitle={
-          <span>
-            <strong>{Math.round(selectn('properties.common:size', tile) * 0.001)} KB</strong>
-          </span>
-        }
-      >
-        {this.props.preview}
-      </GridTile>
-    )
-  }
-}
-*/
 
 const { func, object, string } = PropTypes
 
-export class BrowseComponent extends React.Component {
+export class BrowseComponent extends Component {
   static propTypes = {
     containerType: string,
     dialect: object.isRequired,
@@ -126,8 +82,8 @@ export class BrowseComponent extends React.Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {
@@ -158,7 +114,7 @@ export class BrowseComponent extends React.Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               dialect_path: dialectPath,
             }}
           />
@@ -182,7 +138,7 @@ export class BrowseComponent extends React.Component {
                 : dialectPath + '/Phrase Books/'
             }
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -203,7 +159,7 @@ export class BrowseComponent extends React.Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -224,7 +180,7 @@ export class BrowseComponent extends React.Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
@@ -245,7 +201,7 @@ export class BrowseComponent extends React.Component {
             useDatatable
             dialect={dialect}
             routeParams={{
-              theme: 'explore',
+              siteTheme: 'explore',
               dialect_path: dialectPath,
             }}
           />
@@ -256,22 +212,26 @@ export class BrowseComponent extends React.Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <button className="RaisedButton" type="button" disabled={this.props.disabled} onClick={this._handleOpen}>
+        {/* Dialog Button */}
+        <Button variant="outlined" onClick={this._handleOpen}>
           {this.props.label}
-        </button>
-        <Dialog
-          title={title}
-          actions={actions}
-          modal
-          contentStyle={{ width: '80%', height: '80vh', maxWidth: '100%' }}
-          autoScrollBodyContent
-          open={this.state.open}
-        >
-          {(() => {
-            if (dialectPath) {
-              return view
-            }
-          })()}
+        </Button>
+
+        {/* Dialog */}
+        <Dialog actions={actions} fullWidth maxWidth="md" open={this.state.open}>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogContent>
+            {(() => {
+              if (dialectPath) {
+                return view
+              }
+            })()}
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="secondary" onClick={this._handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -69,7 +70,7 @@ export default class MediaPanel extends Component {
                   </div>
                 )
               }}
-              showThumbnails={true}
+              showThumbnails
               showBullets={false}
             />
           )}

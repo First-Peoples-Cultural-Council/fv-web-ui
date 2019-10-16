@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -32,13 +33,17 @@ import { fetchUserDialects } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
 
-import Dialog from 'material-ui/lib/dialog'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/lib/table'
-
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
@@ -138,7 +143,7 @@ export class Tasks extends React.Component {
     computeUserTasksMap.map((task, i) => {
       const tableRow = (
         <TableRow key={i}>
-          <TableRowColumn>
+          <TableCell>
             <button
               type="button"
               className="FlatButton FlatButton--secondary Tasks__taskTitle"
@@ -146,38 +151,40 @@ export class Tasks extends React.Component {
             >
               {task.documentTitle}
             </button>
-          </TableRowColumn>
-          <TableRowColumn className="Tasks__taskTypeContainer">
+          </TableCell>
+          <TableCell className="Tasks__taskTypeContainer">
             <span className="Tasks__taskType">{intl.searchAndReplace(task.name)}</span>
-          </TableRowColumn>
-          <TableRowColumn>
+          </TableCell>
+          <TableCell>
             <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
-              <button
-                type="button"
-                className="RaisedButton RaisedButton--primary"
+              <Button
+                variant="raised"
+                color="secondary"
+                // className="RaisedButton RaisedButton--primary"
                 onClick={(e) => {
                   e.preventDefault()
                   this._handleTaskActions(task.id, 'approve')
                 }}
               >
                 {intl.trans('approve', 'Approve', 'first')}
-              </button>
+              </Button>
 
-              <button
-                type="button"
-                className="RaisedButton RaisedButton--primary Tasks__reject"
+              <Button
+                variant="raised"
+                color="secondary"
+                // className="RaisedButton RaisedButton--primary Tasks__reject"
                 onClick={(e) => {
                   e.preventDefault()
                   this._handleTaskActions(task.id, 'reject')
                 }}
               >
                 {intl.trans('reject', 'Reject', 'first')}
-              </button>
+              </Button>
             </div>
-          </TableRowColumn>
-          <TableRowColumn className="Tasks__taskDueDateContainer">
+          </TableCell>
+          <TableCell className="Tasks__taskDueDateContainer">
             <span className="Tasks__taskDueDate">{task.dueDate}</span>
-          </TableRowColumn>
+          </TableCell>
         </TableRow>
       )
 
@@ -210,27 +217,28 @@ export class Tasks extends React.Component {
     const userTasksTable =
       userTasks.length > 0 ? (
         <Table>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableHead>
             <TableRow>
-              <TableHeaderColumn>
+              <TableCell>
                 <span className="Tasks__colHeader">{intl.trans('document_title', 'Document Title', 'words')}</span>
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <span className="Tasks__colHeader">{intl.trans('task_type', 'Task Type', 'words')}</span>
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <span className="Tasks__colHeader Tasks__colHeader--actions">
                   {intl.trans('actions', 'Actions', 'words')}
                 </span>
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <span className="Tasks__colHeader">{intl.trans('task_due_date', 'Task Due Date', 'words')}</span>
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>{userTasks}</TableBody>
+          </TableHead>
+          <TableBody>{userTasks}</TableBody>
         </Table>
       ) : null
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div>
@@ -242,8 +250,8 @@ export class Tasks extends React.Component {
 
           {userTasksTable}
 
-          <Dialog open={this.state.open} onRequestClose={this._handleClose} autoScrollBodyContent>
-            <DocumentView id={this.state.selectedTask} />
+          <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this._handleClose}>
+            <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
           </Dialog>
 
           <GroupAssignmentDialog

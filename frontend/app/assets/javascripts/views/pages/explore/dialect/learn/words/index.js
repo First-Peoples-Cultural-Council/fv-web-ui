@@ -12,7 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Set, Map, is } from 'immutable'
 
 import classNames from 'classnames'
@@ -28,9 +29,6 @@ import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reduc
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
-
-// import GridTile from 'material-ui/lib/grid-list/grid-tile'
-// import RaisedButton from 'material-ui/lib/raised-button'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -133,7 +131,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       searchNxqlSort: {},
       searchPartOfSpeech: SEARCH_SORT_DEFAULT,
       computeEntities,
-      isKidsTheme: props.routeParams.theme === 'kids',
+      isKidsTheme: props.routeParams.siteTheme === 'kids',
       flashcardMode: false,
     }
 

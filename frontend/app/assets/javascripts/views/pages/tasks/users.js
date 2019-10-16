@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 import classNames from 'classnames'
 
@@ -35,7 +36,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
@@ -223,7 +224,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 
@@ -248,11 +249,13 @@ export class UserTasks extends React.Component {
             <td>{comment}</td>
             <td>{StringHelpers.formatUTCDateString(dateCreated)}</td>
             <td>
-              <RaisedButton
-                label={intl.trans('add_to_group', 'Add to Group', 'first')}
-                secondary
+              <Button
+                variant="contained"
+                color="secondary"
                 onClick={this._handlePreApprovalOpen.bind(this, task, 'approve')}
-              />
+              >
+                {intl.trans('add_to_group', 'Add to Group', 'first')}
+              </Button>
             </td>
           </tr>
         )
@@ -283,7 +286,7 @@ export class UserTasks extends React.Component {
           >
             <div>
               <table border="1" style={{ width: '100%' }}>
-                <thead adjustForCheckbox={false} displaySelectAll={false}>
+                <thead>
                   <tr style={{ borderBottom: '1px solid #000' }}>
                     <th style={{ minWidth: '100px' }}>{intl.trans('last_name', 'Last Name', 'words')}</th>
                     <th style={{ minWidth: '100px' }}>{intl.trans('first_name', 'First Name', 'words')}</th>
@@ -295,7 +298,7 @@ export class UserTasks extends React.Component {
                   </tr>
                 </thead>
 
-                <tbody displayRowCheckbox={false}>
+                <tbody>
                   {userTasks}
                   {userRegistrationTasks}
                 </tbody>

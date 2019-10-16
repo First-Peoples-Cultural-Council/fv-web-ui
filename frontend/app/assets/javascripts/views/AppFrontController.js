@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath, replaceWindowPath, updateWindowPath } from 'providers/redux/reducers/windowPath'
-import { changeTheme, setRouteParams } from 'providers/redux/reducers/navigation'
+import { changeSiteTheme, setRouteParams } from 'providers/redux/reducers/navigation'
 
 import selectn from 'selectn'
 
@@ -15,14 +15,14 @@ import ConfGlobal from 'conf/local.js'
 import ConfRoutes, { matchPath } from 'conf/routes'
 import { WORKSPACES } from 'common/Constants'
 
+import { withTheme } from '@material-ui/core/styles'
+
 import ProviderHelpers from 'common/ProviderHelpers'
 import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
-// import AnalyticsHelpers from 'common/AnalyticsHelpers'
-
-import FlatButton from 'material-ui/lib/flat-button'
+import Button from '@material-ui/core/Button'
 import Navigation from 'views/components/Navigation'
 import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
 import KidsNavigation from 'views/components/Kids/navigation'
@@ -92,7 +92,7 @@ export class AppFrontController extends Component {
     // REDUX: actions/dispatch/func
     updateWindowPath: func.isRequired,
     setRouteParams: func.isRequired,
-    changeTheme: func.isRequired,
+    changeSiteTheme: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
@@ -163,7 +163,7 @@ export class AppFrontController extends Component {
     let page
 
     let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
-    const theme = routeParams.hasOwnProperty('theme') ? routeParams.theme : 'default'
+    const siteTheme = routeParams.hasOwnProperty('siteTheme') ? routeParams.siteTheme : 'default'
     // prettier-ignore
     const print = matchedPage
       ? matchedPage
@@ -172,7 +172,7 @@ export class AppFrontController extends Component {
         .get('print') === true
       : false
 
-    let footer = <Footer className={'footer-' + theme + '-theme'} />
+    let footer = <Footer className={'footer-' + siteTheme + '-theme'} />
 
     const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
 
@@ -182,8 +182,8 @@ export class AppFrontController extends Component {
     }
 
     // Remove breadcrumbs for Kids portal
-    // TODO: Make more generic if additional themes are added in the future.
-    if (theme === 'kids') {
+    // TODO: Make more generic if additional siteThemes are added in the future.
+    if (siteTheme === 'kids') {
       page = clonedElement
       navigation = <KidsNavigation frontpage={isFrontPage} routeParams={routeParams} />
     } else {
@@ -192,7 +192,7 @@ export class AppFrontController extends Component {
         page = clonedElement
       } else {
         // With breadcrumbs
-        page = this._renderWithBreadcrumb(clonedElement, matchedPage, this.props, theme)
+        page = this._renderWithBreadcrumb(clonedElement, matchedPage, this.props, siteTheme)
       }
     }
 
@@ -211,14 +211,13 @@ export class AppFrontController extends Component {
                 className={classNames('alert', 'alert-warning')}
               >
                 {selectn(warning, this.props.warnings)}
-                <FlatButton
-                  label={intl.translate({
+                <Button onClick={() => this.setState({ warningsDismissed: true })}>
+                  {intl.translate({
                     key: 'dismiss',
                     default: 'Dismiss',
                     case: 'words',
                   })}
-                  onClick={() => this.setState({ warningsDismissed: true })}
-                />
+                </Button>
               </div>
             )
           }
@@ -268,8 +267,8 @@ export class AppFrontController extends Component {
     }
   }
 
-  _renderWithBreadcrumb = (reactElement, matchedPage, props, theme) => {
-    const themePalette = props.properties.theme.palette.rawTheme.palette
+  _renderWithBreadcrumb = (reactElement, matchedPage, props, siteTheme) => {
+    const themePalette = props.theme.palette
     const { routeParams } = reactElement.props
     const { /*splitWindowPath, */ computeLogin } = props
     const { routes } = this.state
@@ -302,7 +301,7 @@ export class AppFrontController extends Component {
             {_workspaceSwitcher}
           </div>
         </div>
-        <div className={'page-' + theme + '-theme'}>{reactElement}</div>
+        <div className={'page-' + siteTheme + '-theme'}>{reactElement}</div>
       </div>
     )
   }
@@ -391,28 +390,24 @@ export class AppFrontController extends Component {
         })
       }
 
-      // Switch themes based on route params
-      if (_routeParams.hasOwnProperty('theme')) {
-        let newTheme = _routeParams.theme
+      // Switch siteThemes based on route params
+      if (_routeParams.hasOwnProperty('siteTheme')) {
+        let newTheme = _routeParams.siteTheme
 
-        // Switch to workspace theme if available
+        // Switch to workspace siteTheme if available
         if (
           ((_routeParams.hasOwnProperty('area') && _routeParams.area === WORKSPACES) ||
             matchedPage.get('path').indexOf(WORKSPACES) !== -1) &&
-          _routeParams.theme === 'explore'
+          _routeParams.siteTheme === 'explore'
         ) {
           newTheme = 'workspace'
           // Note: Also updating routeParams.area
           _routeParams.area = WORKSPACES
         }
 
-        if (props.properties.theme.id !== newTheme) {
-          props.changeTheme(newTheme)
+        if (props.properties.siteTheme !== newTheme) {
+          props.changeSiteTheme(newTheme)
         }
-      } else {
-        // NOTE: Initial theme state is now set in a redux reducer located at:
-        //   app/assets/javascripts/providers/redux/reducers/navigation/reducer.js
-        // props.changeTheme('default')
       }
       const matchReturn = {
         matchedPage,
@@ -511,12 +506,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   pushWindowPath,
   replaceWindowPath,
-  changeTheme,
+  changeSiteTheme,
   setRouteParams,
   updateWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppFrontController)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AppFrontController)
+)

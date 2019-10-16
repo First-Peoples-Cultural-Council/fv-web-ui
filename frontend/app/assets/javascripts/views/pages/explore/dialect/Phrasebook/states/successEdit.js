@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -29,14 +29,14 @@ export class PhrasebookStateSuccessEdit extends React.Component {
   }
   render() {
     const { className, copy, formData, routeParams, itemUid } = this.props
-    const { theme, dialect_path } = routeParams
+    const { siteTheme, dialect_path } = routeParams
 
     const name = formData['dc:title']
     const description = formData['dc:description']
-    const phrasebookDetailUrl = `/${theme}${dialect_path}/phrasebook/${itemUid || ''}`
-    const phrasebookCreateUrl = `/${theme}${dialect_path}/create/phrasebook`
-    const phrasebookEditUrl = `/${theme}${dialect_path}/edit/phrasebook/${itemUid || ''}`
-    const phrasebookBrowseUrl = `/${theme}${dialect_path}/phrasebooks/10/1`
+    const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${itemUid || ''}`
+    const phrasebookCreateUrl = `/${siteTheme}${dialect_path}/create/phrasebook`
+    const phrasebookEditUrl = `/${siteTheme}${dialect_path}/edit/phrasebook/${itemUid || ''}`
+    const phrasebookBrowseUrl = `/${siteTheme}${dialect_path}/phrasebooks/10/1`
     return (
       <div className={`${className} Phrasebook Phrasebook--successEdit`}>
         <h1 className="Phrasebook__heading">{copy.edit.success.title}</h1>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 const { string, number, bool, func, oneOfType, object } = PropTypes
 
 export default class Checkbox extends React.Component {

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -47,10 +48,6 @@ export class Test extends Component {
     fetchWord: func.isRequired,
     pushWindowPath: func.isRequired,
   }
-
-  /*static contextTypes = {
-      muiTheme: React.object.isRequired
-  };*/
 
   constructor(props, context) {
     super(props, context)

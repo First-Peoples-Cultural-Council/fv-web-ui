@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ConfGlobal from 'conf/local.js'
 
 // REDUX
@@ -25,22 +26,11 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import classNames from 'classnames'
 
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
-// Operations
-// import DirectoryOperations from "operations/DirectoryOperations"
-
-// import Checkbox from "material-ui/lib/checkbox"
-// import TextField from "material-ui/lib/text-field"
-// import RaisedButton from "material-ui/lib/raised-button"
-// import SelectField from "material-ui/lib/select-field"
-// import MenuItem from "material-ui/lib/menus/menu-item"
-
-// import withPagination from "views/hoc/grid-list/with-pagination"
-// import withFilter from "views/hoc/grid-list/with-filter"
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -96,7 +86,7 @@ export class ExploreDialects extends Component {
     const isLoggedIn = this.props.computeLogin.success && this.props.computeLogin.isConnected
 
     const portalListProps = {
-      theme: this.props.routeParams.theme,
+      siteTheme: this.props.routeParams.siteTheme,
       filteredItems: this.state.filteredList,
       fieldMapping: {
         title: this.titleFieldMapping,
@@ -122,7 +112,7 @@ export class ExploreDialects extends Component {
 
     let content = (
       <div>
-        <CircularProgress mode="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
+        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
       </div>
     )
     if (this.props.computePortals && this.props.computePortals.success) {
@@ -132,7 +122,7 @@ export class ExploreDialects extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <div className={classNames({ hidden: this.props.routeParams.theme === 'kids' })}>
+            <div className={classNames({ hidden: this.props.routeParams.siteTheme === 'kids' })}>
               <h1>{intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}</h1>
             </div>
             {introText1}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Text from 'views/components/Form/Common/Text'
 import Textarea from 'views/components/Form/Common/Textarea'
 import File from 'views/components/Form/Common/File'

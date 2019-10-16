@@ -27,7 +27,7 @@ export default class ColouringBook extends Component {
    */
   constructor(props, context) {
     super(props, context)
-    this.gameContainer = null
+    this.gameContainer = React.createRef()
   }
 
   loadGameScript() {
@@ -57,7 +57,7 @@ export default class ColouringBook extends Component {
      * @todo Setup image paths based on dialect
      */
 
-    let gameConfig = {
+    const gameConfig = {
       images: {
         preloaderLoading: `${defaultImagesPath}/loading.png`,
         preloaderLogo: `${defaultImagesPath}/logo.png`,
@@ -84,7 +84,8 @@ export default class ColouringBook extends Component {
       /**
        * Create the game, with container and game config
        */
-      const gameContainerNode = ReactDOM.findDOMNode(this.gameContainer)
+      debugger
+      const gameContainerNode = this.gameContainer.current
       coloringBook.init(gameContainerNode, gameConfig)
     })
   }
@@ -116,12 +117,7 @@ export default class ColouringBook extends Component {
         <div className="row">
           <div className="col-xs-12">
             <h1>{intl.trans('colouring_book', 'Colouring Book', 'words')}</h1>
-            <div
-              style={gameContainerStyles}
-              ref={(el) => {
-                this.gameContainer = el
-              }}
-            />
+            <div style={gameContainerStyles} ref={this.gameContainer} />
           </div>
         </div>
       </div>

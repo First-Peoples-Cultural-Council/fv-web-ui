@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import FormPhraseBook from 'views/components/Form/FormPhraseBook'
 import { getIndexOfElementById, removeItem, moveItemDown, moveItemUp } from 'views/components/Form/FormInteractions'
 import BrowseComponent from 'views/components/Editor/BrowseComponent'
@@ -65,6 +65,8 @@ export class FormPhraseBooks extends React.Component {
     componentState: this.STATE_LOADING,
   }
 
+  buttonCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const { splitWindowPath } = this.props
@@ -101,9 +103,7 @@ export class FormPhraseBooks extends React.Component {
           onClick={() => {
             this._handleClickCreateItem()
           }}
-          ref={(_element) => {
-            this.buttonCreate = _element
-          }}
+          ref={this.buttonCreate}
         >
           {textBtnCreateItem}
         </button>
@@ -184,7 +184,7 @@ export class FormPhraseBooks extends React.Component {
         componentState: this.STATE_DEFAULT,
       },
       () => {
-        this.buttonCreate.focus()
+        this.buttonCreate.current.focus()
       }
     )
   }

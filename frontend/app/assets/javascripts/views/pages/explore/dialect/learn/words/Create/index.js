@@ -10,7 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 
@@ -68,6 +69,8 @@ export class PageDialectWordsCreate extends Component {
     wordPath: null,
   }
 
+  formWordCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "WordsCreateInternationalization" */ './internationalization').then(
@@ -101,7 +104,7 @@ export class PageDialectWordsCreate extends Component {
       selectn('success', currentWord) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentWord), 'words'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', currentWord), 'words'),
         this.props.replaceWindowPath,
         true
       )
@@ -113,6 +116,8 @@ export class PageDialectWordsCreate extends Component {
       case this.state.componentState != newState.componentState:
         return true
       case newProps.windowPath != this.props.windowPath:
+        return true
+      case newProps.computeLogin != this.props.computeLogin:
         return true
 
       case is(newProps.computeDialect2, this.props.computeDialect2) === false:
@@ -126,11 +131,14 @@ export class PageDialectWordsCreate extends Component {
   }
 
   render() {
+    if (this.props.computeLogin.hasFetched === false) {
+      return this._stateGetLoading()
+    }
     const content = this._getContent()
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -176,8 +184,7 @@ export class PageDialectWordsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_word_create.getValue()
+    const formValue = this.formWordCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -213,7 +220,6 @@ export class PageDialectWordsCreate extends Component {
         wordPath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
       window.scrollTo(0, 0)
     }
   }
@@ -266,7 +272,7 @@ export class PageDialectWordsCreate extends Component {
               <div className={classNames('col-xs-8', 'col-md-10')}>
                 <form onSubmit={this._onRequestSaveForm}>
                   <t.form.Form
-                    ref="form_word_create" // TODO: DEPRECATED
+                    ref={this.formWordCreate}
                     type={t.struct(selectn('FVWord', fields))}
                     context={selectn('response', _computeDialect2)}
                     value={this.state.formValue}

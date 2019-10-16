@@ -15,14 +15,15 @@ limitations under the License.
 */
 const React = require('react')
 const classNames = require('classnames')
-const Mui = require('material-ui')
+const Mui = require('@material-ui')
 const _ = require('underscore')
+const PropTypes = require('prop-types')
 const PubSub = require('pubsub-js')
 // const { RaisedButton } = Mui
 
 const WordOperations = require('operations/WordOperations')
 
-const injectTapEventPlugin = require('react-tap-event-plugin')
+// const injectTapEventPlugin = require('react-tap-event-plugin')
 
 // https://github.com/facebook/react/issues/3451#issuecomment-83000311
 const ThemeManager = new Mui.Styles.ThemeManager()
@@ -37,7 +38,7 @@ class AnswerMQ extends React.Component {
     // Can go away when react 1.0 release
     // Check this repo:
     // https://github.com/zilverline/react-tap-event-plugin
-    injectTapEventPlugin()
+    // injectTapEventPlugin()
 
     this.eventName = 'ANSWERMQ'
 
@@ -80,11 +81,11 @@ class AnswerMQ extends React.Component {
     }
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   _handleClick() {
     if (this.state.audio == null) {
@@ -147,8 +148,8 @@ class AnswerMQ extends React.Component {
   }
 }
 
-AnswerMQ.childContextTypes = {
-  muiTheme: React.PropTypes.object,
-}
+// AnswerMQ.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default AnswerMQ

@@ -11,8 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { Component, PropTypes } from 'react'
-import classNames from 'classnames'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 // import ConfGlobal from 'conf/local.js'
 
@@ -25,37 +25,37 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-// Components
-import AppBar from 'material-ui/lib/app-bar'
-import TextField from 'material-ui/lib/text-field'
+// MAT-UI: Core
+import { withTheme } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import FormControl from '@material-ui/core/FormControl'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grow from '@material-ui/core/Grow'
+import IconButton from '@material-ui/core/IconButton'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Select from '@material-ui/core/Select'
+import TextField from '@material-ui/core/TextField'
+import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
-import MenuItem from 'material-ui/lib/menus/menu-item'
-// import SelectField from 'material-ui/lib/select-field'
-
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator'
-import RadioButton from 'material-ui/lib/radio-button'
-import RadioButtonGroup from 'material-ui/lib/radio-button-group'
-
-import DropDownMenu from 'material-ui/lib/DropDownMenu'
-import FlatButton from 'material-ui/lib/flat-button'
-import Toolbar from 'material-ui/lib/toolbar/toolbar'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import IconButton from 'material-ui/lib/icon-button'
-import Popover from 'material-ui/lib/popover/popover'
-import Avatar from 'material-ui/lib/avatar'
-
-import IconMenu from 'material-ui/lib/svg-icons/action/reorder'
+// MAT-UI: Icons
+import Clear from '@material-ui/icons/Clear'
+import Reorder from '@material-ui/icons/Reorder'
+import Search from '@material-ui/icons/Search'
+import Settings from '@material-ui/icons/Settings'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-
 import Login from 'views/components/Navigation/Login'
-import AppLeftNav from 'views/components/Navigation/AppLeftNav'
+import AppLeftNav from 'views/components/Navigation/AppLeftNav/index.v2'
 
 import IntlService from 'views/services/intl'
 
-// import FontIcon from 'material-ui/lib/font-icon'
-// import NavigationExpandMoreIcon from 'material-ui/lib/svg-icons/navigation/expand-more'
-import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
@@ -97,11 +97,11 @@ export class Navigation extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.navigationSearchField = null
+
     this.state = {
-      searchBarVisibleInMobile: false,
-      searchContextPopoverOpen: false,
-      searchContextPopoverAnchorEl: null,
-      searchLocal: true,
+      searchPopoverOpen: false,
+      searchLocation: 'local',
       localePopoverOpen: false,
       userRegistrationTasksPath: '/management/registrationRequests/',
       pathOrId: '/' + props.properties.domain + '/' + selectn('routeParams.area', props),
@@ -137,16 +137,13 @@ export class Navigation extends Component {
       })
     ) {
       this.setState({
-        searchContextPopoverOpen: false,
+        searchPopoverOpen: false,
       })
     }
   }
 
   componentDidMount() {
     this._setExplorePath()
-
-    // Ensure Search Box blur does not remove Popover when focusing on search options (only applies to Dialect pages)
-    //document.body.addEventListener('click', this._removePopoverUnlessOptionSelected);
 
     // Only load navigation once
     if (!this.props.computeLoadNavigation.success) {
@@ -155,7 +152,6 @@ export class Navigation extends Component {
   }
 
   render() {
-    const themePalette = this.props.properties.theme.palette.rawTheme.palette
     const isDialect = this.props.routeParams.hasOwnProperty('dialect_path')
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
@@ -179,49 +175,120 @@ export class Navigation extends Component {
 
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const hrefPath = NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)
+
+    const popoverContent = isDialect ? (
+      <div className="Navigation__popoverInner">
+        <Typography variant="title" gutterBottom>
+          {this.intl.translate({
+            key: 'general.select_search_option',
+            default: 'Select Search Option',
+            case: 'words',
+          })}
+        </Typography>
+
+        <div>
+          <RadioGroup
+            onChange={(event, value) => {
+              this.setState({ searchLocation: value })
+            }}
+            name="searchTarget"
+            value={this.state.searchLocation}
+          >
+            <FormControlLabel
+              value={this.intl.translate({
+                key: 'general.all',
+                default: 'all',
+                case: 'lower',
+              })}
+              control={<Radio />}
+              label={
+                <div>
+                  <Typography variant="title" gutterBottom>
+                    FirstVoices.com
+                  </Typography>
+                  <Typography gutterBottom>
+                    {this.intl.translate({
+                      key: 'views.components.navigation.all_languages_and_words',
+                      default: 'All languages & words',
+                      case: 'words',
+                      append: '.',
+                    })}
+                  </Typography>
+                </div>
+              }
+            />
+            <FormControlLabel
+              value="local"
+              control={<Radio />}
+              label={
+                <div>
+                  <Typography variant="title" gutterBottom>
+                    {selectn('routeParams.dialect_name', this.props) ||
+                      this.intl.translate({
+                        key: 'views.components.navigation.this_dialect',
+                        default: 'This Dialect',
+                        case: 'words',
+                      })}
+                  </Typography>
+                  <Typography gutterBottom>
+                    {`${this.intl.translate({
+                      key: 'general.words',
+                      default: 'Words',
+                      case: 'first',
+                    })}, ${this.intl.translate({
+                      key: 'general.phrases',
+                      default: 'Phrases',
+                      case: 'first',
+                    })}, ${this.intl.translate({
+                      key: 'general.songs_and_stories',
+                      default: 'Songs &amp; Stories',
+                      case: 'words',
+                      append: '.',
+                    })}`}
+                  </Typography>
+                </div>
+              }
+            />
+          </RadioGroup>
+        </div>
+      </div>
+    ) : (
+      <div className="Navigation__popoverInner">
+        <Typography variant="title">
+          {this.intl.translate({
+            key: 'views.components.navigation.search_all',
+            default: 'Search all languages & words at FirstVoices.com',
+            case: 'first',
+          })}
+        </Typography>
+      </div>
+    )
+
+    const themePalette = selectn('theme.palette', this.props)
+    const color = selectn('theme.palette.primary.contrastText', this.props)
+    const backgroundColor = selectn('theme.palette.primary.main', this.props)
+
     return (
-      <div className="Navigation">
-        <AppBar
-          title={
-            <span className="hidden-xs">
-              <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
-            </span>
-          }
-          iconElementLeft={
-            <button
-              type="button"
+      <AppBar position="static">
+        <Toolbar disableGutters className="Navigation__toolbarMain">
+          {/* Menu Button */}
+          <Tooltip title="Menu open">
+            <IconButton
+              onClick={this._handleOpenMenuRequest}
               className="Navigation__open"
               data-testid="Navigation__open"
-              onClick={this._handleOpenMenuRequest}
             >
-              <IconMenu className="Navigation__openIcon" />
-              <span className="visually-hidden">Menu open</span>
-            </button>
-          }
-        >
-          <ToolbarGroup style={{ position: 'relative', color: '#fff' }}>
-            <div
-              style={{ display: 'inline-block', paddingRight: '10px', paddingTop: '15px', textTransform: 'uppercase' }}
-            >
-              {/* <Link
-                className="nav_link hidden-xs"
-                href={NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)}
-              >
-                {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
-              </Link> */}
-              <a
-                href={hrefPath}
-                className="Navigation__link nav_link hidden-xs"
-                onClick={(e) => {
-                  e.preventDefault()
-                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-                }}
-              >
-                {/* {this.intl.trans('choose_lang', 'Choose a Language', 'first')} */}
-                {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}
-              </a>
-            </div>
+              <Reorder style={{ color }} aria-label="Menu open" />
+            </IconButton>
+          </Tooltip>
 
+          {/* Menu */}
+          <AppLeftNav menu={{ main: true }} open={false} docked={false} />
+
+          {/* Logo */}
+          <img className="Navigation__logo" src="assets/images/logo.png" alt={this.props.properties.title} />
+
+          <div className="Navigation__toolbarMainInner">
             <Login
               routeParams={this.props.routeParams}
               label={this.intl.translate({
@@ -231,372 +298,271 @@ export class Navigation extends Component {
               })}
             />
 
-            <ToolbarSeparator
-              className={classNames({ hidden: !this.props.computeLogin.isConnected })}
-              style={{ float: 'none', marginLeft: 0, marginRight: 10 }}
-            />
-
             <AuthenticationFilter
               login={this.props.computeLogin}
               anon={false}
               routeParams={this.props.routeParams}
               containerStyle={{ display: 'inline' }}
             >
-              <span>
-                {/* <Badge
-                  badgeContent={userTaskCount}
-                  style={{ top: "8px", left: "-15px", padding: "0 0 12px 12px" }}
-                  badgeStyle={{
-                    top: "12px",
-                    left: "42px",
-                    width: "15px",
-                    height: "15px",
-                    borderRadius: "25%",
-                    visibility: userTaskCount == 0 ? "hidden" : "visible",
-                  }}
-                  primary
-                >
-                  <IconButton
-                    iconStyle={{ fill: "#fff" }}
-                    onClick={this._onNavigateRequest.bind(this, "/tasks/")}
-                    disabled={userTaskCount == 0 ? true : false}
-                  >
-                    <NotificationsIcon />
-                  </IconButton>
-                </Badge> */}
-
-                <a href={NavigationHelpers.generateStaticURL('/tasks')} className="Navigation__link nav_link">
-                  View My Tasks
-                </a>
-              </span>
+              <a href={NavigationHelpers.generateStaticURL('/tasks')} style={{ color }} className="Navigation__link">
+                View My Tasks
+              </a>
             </AuthenticationFilter>
 
-            <ToolbarSeparator
-              className="search-bar-seperator"
-              style={{ float: 'none', marginRight: 0, marginLeft: 10 }}
-            />
-
-            <div
-              style={{ background: themePalette.primary1Color, display: 'inline-block' }}
-              className={classNames({
-                'hidden-xs': !this.state.searchBarVisibleInMobile,
-                'search-bar-mobile': this.state.searchBarVisibleInMobile,
-              })}
+            <a
+              href={hrefPath}
+              className="Navigation__link hideSmall"
+              style={{ color }}
+              onClick={(e) => {
+                e.preventDefault()
+                NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+              }}
             >
-              <TextField
-                underlineStyle={{ width: '79%' }}
-                style={{
-                  marginLeft: this.state.searchBarVisibleInMobile ? '15px' : '30px',
-                  fontSize: '15px',
-                  backgroundColor: '#fff',
-                  paddingLeft: '10px',
-                  lineHeight: '1.5',
-                  width: this.state.searchBarVisibleInMobile ? '214px' : 'inherit',
-                  paddingRight: this.state.searchBarVisibleInMobile ? '0' : '40px',
-                  fontFamily:
-                    '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
+              {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}
+            </a>
+
+            <div className="Navigation__separator " />
+
+            {/* Search Container */}
+            <div
+              className={`Navigation__searchContainer ${
+                this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
+              }`}
+              style={{
+                backgroundColor,
+              }}
+              onFocus={() => {
+                this.setState({
+                  searchPopoverOpen: true,
+                })
+              }}
+            >
+              <div className="Navigation__searchContainerInner">
+                {/* Search: Input */}
+                <TextField
+                  className={`Navigation__searchInput ${getDialectClassname()}`}
+                  inputRef={(element) => {
+                    this.navigationSearchField = element
+                  }}
+                  placeholder={this.intl.translate({
+                    key: 'general.search',
+                    default: 'Search',
+                    case: 'first',
+                    append: ':',
+                  })}
+                  onBlur={() => {
+                    this.setState({
+                      searchPopoverOpen: false,
+                    })
+                  }}
+                  onFocus={() => {
+                    this.setState({
+                      searchPopoverOpen: true,
+                    })
+                  }}
+                  onChange={(e) => {
+                    this.setState({ searchValue: e.target.value })
+                  }}
+                  value={this.state.searchValue}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      this._handleNavigationSearchSubmit(e)
+                    }
+                  }}
+                  name="searchbox"
+                />
+
+                {/* Search Button: Submit */}
+                <Tooltip title="Search">
+                  <IconButton
+                    type="button"
+                    data-testid="Navigation__search"
+                    onClick={this._handleNavigationSearchSubmit}
+                  >
+                    <Search style={{ color }} aria-label="Search" />
+                  </IconButton>
+                </Tooltip>
+
+                {/* Search Button: Cancel (only on small screens) */}
+                <span className="hideLarge">
+                  <Button
+                    variant="flat"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      // this.navigationSearchButton.focus()
+                      this.setState({ searchPopoverOpen: false })
+                    }}
+                    style={{ color }}
+                  >
+                    {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
+                  </Button>
+                </span>
+              </div>
+
+              <div
+                className="Navigation__searchPopupContainer"
+                tabIndex={-1}
+                onFocus={() => {
+                  this.setState(
+                    {
+                      searchPopoverOpen: true,
+                    },
+                    () => {}
+                  )
                 }}
-                ref="navigationSearchField" // TODO: DEPRECATED
-                hintText={this.intl.translate({ key: 'general.search', default: 'Search', case: 'first', append: ':' })}
-                onBlur={() => this.setState({ searchContextPopoverOpen: isDialect ? true : false })}
-                onFocus={(e) =>
-                  this.setState({ searchContextPopoverOpen: true, searchContextPopoverAnchorEl: e.target })
-                }
-                onChange={(e) => {
-                  this.setState({ searchValue: e.target.value })
+                onBlur={() => {
+                  this.setState({
+                    searchPopoverOpen: false,
+                  })
                 }}
-                value={this.state.searchValue}
-                className={getDialectClassname()}
-                onEnterKeyDown={this._handleNavigationSearchSubmit}
-                name="searchbox"
-              />
-              <FlatButton
-                className={classNames({ hidden: !this.state.searchBarVisibleInMobile })}
-                style={{ color: themePalette.alternateTextColor }}
-                label={this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
-                onClick={(e) => {
-                  this.setState({ searchBarVisibleInMobile: false })
-                  e.preventDefault()
-                }}
-              />
+              >
+                <Grow mountOnEnter unmountOnExit in={this.state.searchPopoverOpen}>
+                  {/* Search Popup Menu */}
+                  <div className={`Navigation__searchPopup ${isDialect ? 'Navigation__searchPopup--dialect' : ''}`}>
+                    {popoverContent}
+                  </div>
+                </Grow>
+              </div>
             </div>
 
-            <IconButton
-              onClick={this._handleNavigationSearchSubmit}
-              iconClassName="material-icons"
-              style={{ position: 'relative', top: '7px', padding: '0', left: 0 }}
-              iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
-            >
-              search
-            </IconButton>
+            {/* Search Button: Open drawer (only on small screens) */}
+            <span className="hideLarge">
+              <Tooltip title="Search">
+                <IconButton type="button" data-testid="Navigation__search" onClick={this.showSearchPopup}>
+                  <Search style={{ color }} aria-label="Search" />
+                </IconButton>
+              </Tooltip>
+            </span>
 
-            <Popover
-              useLayerForClickAway={false}
-              open={this.state.searchContextPopoverOpen}
-              anchorEl={this.state.searchContextPopoverAnchorEl}
-              style={{
-                maxWidth: isDialect ? '320px' : '220px',
-                marginTop: '-14px',
-                backgroundColor: 'transparent',
-                boxShadow: 'none',
-              }}
-              anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-              targetOrigin={{ horizontal: 'middle', vertical: 'top' }}
-            >
-              <div>
-                <img
-                  style={{ position: 'relative', top: '14px', zIndex: 999999, paddingTop: '14px', left: '80%' }}
-                  src="assets/images/popover-arrow.png"
-                  alt=""
-                />
-                {(() => {
-                  if (isDialect) {
-                    return (
-                      <div
-                        style={{
-                          marginBottom: 0,
-                          padding: '10px 10px 1px 10px',
-                          backgroundColor: '#fff',
-                          fontSize: '0.95em',
-                        }}
-                      >
-                        <p style={{ padding: 0 }}>
-                          {this.intl.translate({
-                            key: 'general.select_search_option',
-                            default: 'Select Search Option',
-                            case: 'words',
-                          })}
-                        </p>
-                        <div>
-                          <RadioButtonGroup
-                            onChange={() => this.setState({ searchLocal: !this.state.searchLocal })}
-                            name="searchTarget"
-                            defaultSelected="local"
-                          >
-                            <RadioButton
-                              value={this.intl.translate({
-                                key: 'general.all',
-                                default: 'all',
-                                case: 'lower',
-                              })}
-                              label={
-                                <span style={{ fontWeight: '400' }}>
-                                  FirstVoices.com <br />{' '}
-                                  <span
-                                    style={{
-                                      fontWeight: '300',
-                                      color: '#959595',
-                                    }}
-                                  >
-                                    {this.intl.translate({
-                                      key: 'views.components.navigation.all_languages_and_words',
-                                      default: 'All languages & words',
-                                      case: 'words',
-                                      append: '.',
-                                    })}
-                                  </span>
-                                </span>
-                              }
-                            />
-                            <RadioButton
-                              value="local"
-                              label={
-                                <span style={{ fontWeight: '400' }}>
-                                  {portalTitle ||
-                                    this.intl.translate({
-                                      key: 'views.components.navigation.this_dialect',
-                                      default: 'This Dialect',
-                                      case: 'words',
-                                    })}
-                                  <br />{' '}
-                                  <span
-                                    style={{
-                                      fontWeight: '300',
-                                      color: '#959595',
-                                    }}
-                                  >
-                                    {this.intl.translate({
-                                      key: 'general.words',
-                                      default: 'Words',
-                                      case: 'first',
-                                    })}
-                                    ,{' '}
-                                    {this.intl.translate({
-                                      key: 'general.phrases',
-                                      default: 'Phrases',
-                                      case: 'first',
-                                    })}
-                                    ,{' '}
-                                    {this.intl.translate({
-                                      key: 'general.songs_and_stories',
-                                      default: 'Songs &amp; Stories',
-                                      case: 'words',
-                                      append: '.',
-                                    })}
-                                  </span>
-                                </span>
-                              }
-                            />
-                          </RadioButtonGroup>
-                        </div>
-                      </div>
-                    )
-                  }
-                  return (
-                    <div style={{ marginBottom: 0, padding: '10px 10px 1px 10px', backgroundColor: '#fff' }}>
-                      <p style={{ padding: 0 }}>
-                        {this.intl.translate({
-                          key: 'views.components.navigation.search_all',
-                          default: 'Search all languages & words at FirstVoices.com',
-                          case: 'first',
-                        })}
-                      </p>
-                    </div>
-                  )
-                })()}
-              </div>
-            </Popover>
+            <div className="Navigation__separator" />
 
-            <ToolbarSeparator className="locale-seperator" style={{ float: 'none', marginRight: 0, marginLeft: 0 }} />
-
-            <IconButton
-              onClick={this._handleDisplayLocaleOptions}
-              iconClassName="material-icons"
-              style={{ position: 'relative', top: '7px', padding: '0', left: 0 }}
-              iconStyle={{ fontSize: '24px', padding: '3px', borderRadius: '20px', color: '#FFFFFF' }}
-            >
-              settings
-            </IconButton>
-          </ToolbarGroup>
-        </AppBar>
-
-        <Toolbar style={{ display: this.state.localePopoverOpen ? 'block' : 'none' }}>
-          <ToolbarGroup firstChild float="right">
-            <ToolbarTitle
-              style={{ color: '#fff', padding: '0 0 0 15px', fontSize: '15px' }}
-              text={this.intl.trans('choose_lang', 'Choose a Language', 'first')}
-            />
-            <DropDownMenu value={this.intl.locale} onChange={this._handleChangeLocale} labelStyle={{ color: '#fff' }}>
-              <MenuItem value="en" primaryText="English" />
-              <MenuItem value="fr" primaryText="Français" />
-              {/*<MenuItem value="sp" primaryText="Español" />*/}
-            </DropDownMenu>
-          </ToolbarGroup>
+            {/* Locale Button */}
+            <Tooltip title="Settings">
+              <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
+                <Settings style={{ color }} aria-label="Settings" />
+              </IconButton>
+            </Tooltip>
+          </div>
         </Toolbar>
 
-        <AppLeftNav
-          menu={{ main: true }}
-          open={false}
-          //onRequestChangeLeftNav={this.handleChangeRequestLeftNav}
-          //onRequestChangeList={this.handleRequestChangeList}
-          docked={false}
-        />
+        {/* Locale Container */}
+        <div
+          className={`Navigation__localeContainer ${
+            this.state.localePopoverOpen ? 'Navigation__localeContainer--open' : ''
+          }`}
+        >
+          <Toolbar>
+            <div className="Navigation__localeInner">
+              <Typography variant="title" className="Navigation__localeTitle" style={{ color }}>
+                {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
+              </Typography>
+              <FormControl>
+                <InputLabel htmlFor="locale-select">Language</InputLabel>
+                <Select
+                  value={this.intl.locale || 'en'}
+                  onChange={(event) => {
+                    this._handleChangeLocale(event.target.value)
+                  }}
+                  style={{ color }}
+                  inputProps={{
+                    name: 'locale',
+                    id: 'locale-select',
+                  }}
+                >
+                  <MenuItem value="en">English</MenuItem>
+                  <MenuItem value="fr">Français</MenuItem>
+                </Select>
+              </FormControl>
 
+              <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
+                <Clear style={{ color }} aria-label="Close" />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </div>
+
+        {/* Dialect sub-menu */}
         {isDialect && (
-          <div className="row" style={{ backgroundColor: themePalette.primary2Color, minHeight: '64px', margin: '0' }}>
-            <h2 className="NavigationDialectHeader">
+          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themePalette.primary2Color }}>
+            <h2 className="Navigation__dialectHeader">
               <a
                 href={NavigationHelpers.generateStaticURL(dialectLink)}
-                className="NavigationDialectLink"
+                className="Navigation__dialectLink"
                 onClick={(e) => {
                   e.preventDefault()
                   NavigationHelpers.navigate(dialectLink, this.props.pushWindowPath, false)
                 }}
+                style={{ color }}
               >
                 <Avatar src={avatarSrc} size={50} />
-                <span className="NavigationDialectName fontAboriginalSans">
+                <span className="Navigation__dialectName fontAboriginalSans">
                   {this.intl.searchAndReplace(portalTitle)}
                 </span>
               </a>
             </h2>
           </div>
         )}
-      </div>
+      </AppBar>
     )
   }
+  showSearchPopup = (e) => {
+    e.preventDefault()
 
-  _removePopoverUnlessOptionSelected = (e) => {
-    if (
-      this.props.routeParams.hasOwnProperty('dialect_path') &&
-      e.target.name !== 'searchTarget' &&
-      e.target.name !== 'searchbox'
-    ) {
-      this.setState({
-        searchContextPopoverOpen: false,
-      })
-    }
+    this.setState(
+      {
+        searchPopoverOpen: true,
+      },
+      () => {
+        this.navigationSearchField.focus()
+      }
+    )
   }
-
-  _onNavigateRequest = (path) => {
-    this.props.pushWindowPath(path)
-  }
-
-  handleChangeRequestLeftNav = (open) => {
-    this.setState({
-      leftNavOpen: open,
-    })
-  }
-
-  handleRequestChangeList = () => {
-    //this.context.router.push(value);
-    this.setState({
-      leftNavOpen: false,
-    })
-  }
-
   _handleNavigationSearchSubmit = (e) => {
-    // If search bar is not visible, this button should show it
-    // TODO: this.refs DEPRECATED
-    if (this.refs.navigationSearchField._getInputNode().offsetParent === null) {
-      this.setState({
-        searchBarVisibleInMobile: true,
-        searchContextPopoverOpen: false,
-      })
+    // If searched w/nothing focus on input and don't continue
+    if (this.state.searchValue === '') {
+      this.showSearchPopup(e)
+      return
+    }
+    this.setState({
+      searchPopoverOpen: false,
+    })
 
-      e.preventDefault()
+    const searchQueryParam = this.state.searchValue
+    const path = '/' + this.props.splitWindowPath.join('/')
+    let queryPath = ''
+
+    // Do a global search in either the workspace or section
+    if (path.includes('/explore/FV/Workspaces/Data')) {
+      queryPath = 'explore/FV/Workspaces/Data'
+    } else if (path.includes('/explore/FV/sections/Data')) {
+      queryPath = 'explore/FV/sections/Data'
     } else {
-      this.setState({
-        searchBarVisibleInMobile: false,
-        searchContextPopoverOpen: false,
-      })
+      queryPath = 'explore/FV/sections/Data'
+    }
 
-      const searchQueryParam = this.state.searchValue
-      const path = '/' + this.props.splitWindowPath.join('/')
-      let queryPath = ''
+    // Do a dialect search
+    if (this.props.routeParams.dialect_path && this.state.searchLocation === 'local') {
+      queryPath = 'explore' + this.props.routeParams.dialect_path
+    }
 
-      // Do a global search in either the workspace or section
-      if (path.includes('/explore/FV/Workspaces/Data')) {
-        queryPath = 'explore/FV/Workspaces/Data'
-      } else if (path.includes('/explore/FV/sections/Data')) {
-        queryPath = 'explore/FV/sections/Data'
-      } else {
-        queryPath = 'explore/FV/sections/Data'
-      }
+    // Clear out the input field
+    this.setState({ searchValue: '' })
 
-      // Do a dialect search
-      if (this.props.routeParams.dialect_path && this.state.searchLocal) {
-        queryPath = 'explore' + this.props.routeParams.dialect_path
-      }
-
-      // Clear out the input field
-      this.setState({ searchValue: '' })
-
-      if (searchQueryParam && searchQueryParam !== '') {
-        const finalPath = NavigationHelpers.generateStaticURL(queryPath + '/search/' + searchQueryParam)
-        this.props.replaceWindowPath(finalPath)
-      }
+    if (searchQueryParam && searchQueryParam !== '') {
+      const finalPath = NavigationHelpers.generateStaticURL(queryPath + '/search/' + searchQueryParam)
+      this.props.replaceWindowPath(finalPath)
     }
   }
 
-  _handleDisplayLocaleOptions = () => {
+  _toggleDisplayLocaleOptions = () => {
     this.setState({
-      localePopoverOpen: true,
+      localePopoverOpen: !this.state.localePopoverOpen,
     })
   }
 
-  _handleChangeLocale = (e, n, v) => {
-    if (v !== this.intl.locale) {
-      this.intl.locale = v
+  _handleChangeLocale = (value) => {
+    if (value !== this.intl.locale) {
+      this.intl.locale = value
       setTimeout(() => {
         // timeout, such that the select box doesn't freeze in a wierd way (looks bad)
         window.location.reload(true)
@@ -605,7 +571,7 @@ export class Navigation extends Component {
   }
 
   _handleOpenMenuRequest = () => {
-    this.props.toggleMenuAction('AppLeftNav')
+    this.props.toggleMenuAction()
   }
 
   _setExplorePath = (props = this.props) => {
@@ -657,7 +623,9 @@ const mapDispatchToProps = {
   toggleMenuAction,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Navigation)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Navigation)
+)

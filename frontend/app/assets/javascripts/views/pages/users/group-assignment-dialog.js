@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
-import Immutable, { Map } from 'immutable'
-import classNames from 'classnames'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -23,8 +22,11 @@ import StringHelpers from 'common/StringHelpers'
 
 import t from 'tcomb-form'
 
-import FlatButton from 'material-ui/lib/flat-button'
-import Dialog from 'material-ui/lib/dialog'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -43,9 +45,8 @@ function renderSelect(locals) {
         {this.renderOptions(locals)}
       </select>
     )
-  } else {
-    return <div>{StringHelpers.toTitleCase(locals.value.replace(/_/g, ' '))}</div>
   }
+  return <div>{StringHelpers.toTitleCase(locals.value.replace(/_/g, ' '))}</div>
 }
 
 const selectGroupTemplate = t.form.Form.templates.select.clone({ renderSelect })
@@ -91,6 +92,8 @@ export default class GroupAssignmentDialog extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formGroupAssignment = React.createRef()
+
     this.state = {
       open: false,
     }
@@ -107,10 +110,10 @@ export default class GroupAssignmentDialog extends Component {
     e.preventDefault()
 
     // tcomb validation not required, will not work with groups
-    let formValue = this.refs['form_group_assignment'].getValue()
-    let properties = {}
+    const formValue = this.formGroupAssignment.current.getValue()
+    const properties = {}
 
-    for (let key in formValue) {
+    for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] != '') {
           properties[key] = formValue[key]
@@ -126,21 +129,21 @@ export default class GroupAssignmentDialog extends Component {
   }
 
   render() {
-    let currentlyAssignedGroups = selectn(this.props.fieldMapping.groups, this.props.selectedItem) || []
-    let currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group) => {
-      return (
-        <span className={classNames('label', 'label-default')} style={{ marginRight: '5px' }}>
-          {StringHelpers.toTitleCase(group.replace(/_/g, ' '))}
-        </span>
-      )
-    })
+    const currentlyAssignedGroups = selectn(this.props.fieldMapping.groups, this.props.selectedItem) || []
+    // const currentlyAssignedGroupsLabels = currentlyAssignedGroups.map((group, key) => {
+    //   return (
+    //     <span key={key} className={classNames('label', 'label-default')} style={{ marginRight: '5px' }}>
+    //       {StringHelpers.toTitleCase(group.replace(/_/g, ' '))}
+    //     </span>
+    //   )
+    // })
 
-    let dialectGroups = ProviderHelpers.getDialectGroups(
+    const dialectGroups = ProviderHelpers.getDialectGroups(
       selectn('response.contextParameters.acls[0].aces', this.props.dialect),
       currentlyAssignedGroups
     )
 
-    let formSchema = t.struct({
+    const formSchema = t.struct({
       id: t.String,
       group: dialectGroups.new
         ? !this.isUserRegistration
@@ -150,7 +153,7 @@ export default class GroupAssignmentDialog extends Component {
       //'comment': t.maybe(t.String)
     })
 
-    let formOptions = {
+    const formOptions = {
       fields: {
         id: {
           type: 'hidden',
@@ -180,41 +183,33 @@ export default class GroupAssignmentDialog extends Component {
     }
 
     return (
-      <Dialog
-        open={this.props.open}
-        actions={[
-          <FlatButton
-            label={intl.trans('cancel', 'Cancel', 'first')}
-            secondary={true}
-            onClick={this.props.closeMethod}
-          />,
-          <FlatButton
-            label={intl.trans('submit', 'Submit', 'first')}
-            primary={true}
-            keyboardFocused={true}
-            onClick={this._onRequestSaveForm}
-          />,
-        ]}
-        onRequestClose={this.props.closeMethod}
-        autoScrollBodyContent={true}
-      >
-        <h1>
+      <Dialog fullWidth maxWidth="md" open={this.props.open} onClose={this.props.closeMethod}>
+        <DialogTitle>
           {selectn('properties.userinfo:firstName', this.props.selectedItem)}
           &nbsp;
           {selectn('properties.userinfo:lastName', this.props.selectedItem)}: {this.props.title}
-        </h1>
-
-        <form onSubmit={this._onRequestSaveForm}>
-          <t.form.Form
-            ref="form_group_assignment"
-            value={{
-              id: selectn(this.props.fieldMapping.id, this.props.selectedItem),
-              group: currentlyAssignedGroups,
-            }}
-            type={formSchema}
-            options={formOptions}
-          />
-        </form>
+        </DialogTitle>
+        <DialogContent>
+          <form onSubmit={this._onRequestSaveForm}>
+            <t.form.Form
+              ref={this.formGroupAssignment}
+              value={{
+                id: selectn(this.props.fieldMapping.id, this.props.selectedItem),
+                group: currentlyAssignedGroups,
+              }}
+              type={formSchema}
+              options={formOptions}
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="secondary" onClick={this.props.closeMethod}>
+            {intl.trans('cancel', 'Cancel', 'first')}
+          </Button>
+          <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
+            {intl.trans('submit', 'Submit', 'first')}
+          </Button>
+        </DialogActions>
       </Dialog>
     )
   }

@@ -1,6 +1,6 @@
 // import Image from 'views/components/Image'
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 const { string } = PropTypes
 
 export default class Image extends React.Component {

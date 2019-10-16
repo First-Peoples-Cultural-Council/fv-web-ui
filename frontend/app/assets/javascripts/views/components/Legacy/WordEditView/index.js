@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react')
-var t = require('tcomb-form')
-var Form = t.form.Form
+const React = require('react')
+const PropTypes = require('prop-types')
+const t = require('tcomb-form')
+const Form = t.form.Form
 
-var classNames = require('classnames')
+const classNames = require('classnames')
 
 // Models
 import Word from 'models/Word'
@@ -79,10 +80,10 @@ class EditForm extends React.Component {
   }
 
   _save(evt) {
-    var client = this.props.word.get('client')
-    var value = this.refs.form.getValue()
+    const client = this.props.word.get('client')
+    const value = this.refs.form.getValue()
 
-    var self = this
+    const self = this
 
     if (value) {
       client.document(this.props.word.get('id')).fetch(function(error, doc) {
@@ -101,7 +102,7 @@ class EditForm extends React.Component {
   }
 
   render() {
-    var form = ''
+    let form = ''
 
     if (this.state.schema != undefined) {
       form = (
@@ -153,7 +154,7 @@ class WordEditView extends React.Component {
 }
 
 WordEditView.contextTypes = {
-  router: React.PropTypes.func,
+  router: PropTypes.func,
 }
 
 export default WordEditView

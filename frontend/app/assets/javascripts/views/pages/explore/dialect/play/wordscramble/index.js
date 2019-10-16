@@ -13,15 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
-import RaisedButton from 'material-ui/lib/raised-button'
-import Colors from 'material-ui/lib/styles/colors'
-import FontIcon from 'material-ui/lib/font-icon'
-import IconButton from 'material-ui/lib/icon-button'
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
+import { green, red } from '@material-ui/core/colors'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
+import Button from '@material-ui/core/Button'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import IconButton from '@material-ui/core/IconButton'
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 
 import classNames from 'classnames'
 
@@ -166,6 +168,12 @@ export class Wordscramble extends Component {
         {(selectn('response.entries', computePhrases) || [])
           .filter((phrase) => selectn('properties.dc:title', phrase).indexOf(' ') > 0)
           .map((phrase, i) => {
+            console.log('?', {
+              original: selectn('properties.dc:title', phrase),
+              translation: selectn('properties.fv:definitions[0].translation', phrase),
+              audio: selectn('contextParameters.phrase.related_audio[0].path', phrase),
+              picture: selectn('contextParameters.phrase.related_pictures[0]', phrase),
+            })
             return (
               <Scramble
                 key={i}
@@ -305,43 +313,41 @@ export class Scramble extends Component {
           <div style={{ minHeight: '50px', borderBottom: '1px solid #CCC', marginBottom: '16px' }}>
             {this.state.selected.map((word, index) => {
               return (
-                <RaisedButton
+                <Button
+                  variant="contained"
                   key={index}
                   style={{ backgroundColor: '#a7fba5' }}
-                  label={word}
                   onMouseUp={this.unSelectWord.bind(this, word, index)}
-                />
+                >
+                  {word}
+                </Button>
               )
             })}
             {this.state.complete ? (
-              <FontIcon
+              <CheckBoxIcon
                 className="material-icons"
                 style={{
-                  color: Colors.greenA200,
+                  color: green.A200,
                   fontSize: '50px',
                   position: 'absolute',
                   top: '5px',
                   right: '5px',
                 }}
-              >
-                check_box
-              </FontIcon>
+              />
             ) : (
               false
             )}
             {this.state.incorrect ? (
-              <FontIcon
+              <IndeterminateCheckBoxIcon
                 className="material-icons"
                 style={{
-                  color: Colors.red600,
+                  color: red[600],
                   fontSize: '50px',
                   position: 'absolute',
                   top: '5px',
                   right: '5px',
                 }}
-              >
-                indeterminate_check_box
-              </FontIcon>
+              />
             ) : (
               false
             )}
@@ -353,26 +359,34 @@ export class Scramble extends Component {
               disabled = true
             }
             return (
-              <RaisedButton disabled={disabled} label={word} key={index} onMouseUp={this.selectWord.bind(this, word)} />
+              <Button variant="contained" disabled={disabled} key={index} onMouseUp={this.selectWord.bind(this, word)}>
+                {word}
+              </Button>
             )
           })}
           {this.state.complete ? (
-            <RaisedButton label={intl.trans('reset', 'Reset', 'first')} primary onMouseUp={this.reset.bind(this)} />
+            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
+              {intl.trans('reset', 'Reset', 'first')}
+            </Button>
           ) : (
             false
           )}
-          <RaisedButton
-            label={intl.trans('check', 'Check', 'first')}
+          <Button
+            variant="contained"
             className={classNames({ invisible: this.state.complete })}
             style={{ margin: '0 5px' }}
             disabled={this.state.complete ? true : false}
-            secondary
+            color="secondary"
             onMouseUp={this.checkAnswer.bind(this)}
-          />
+          >
+            {intl.trans('check', 'Check', 'first')}
+          </Button>
           {this.state.complete ? (
             false
           ) : (
-            <RaisedButton label={intl.trans('reset', 'Reset', 'first')} primary onMouseUp={this.reset.bind(this)} />
+            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
+              {intl.trans('reset', 'Reset', 'first')}
+            </Button>
           )}
         </div>
       </div>

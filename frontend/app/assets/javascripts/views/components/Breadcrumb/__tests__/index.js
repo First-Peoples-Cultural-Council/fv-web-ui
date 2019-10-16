@@ -17,22 +17,22 @@ expect.extend(toHaveNoViolations)
 
 const matchedPageHome = {'id': 'page_explore_dialect', 'path': ['nuxeo', 'app', {'id': 'theme', 'matcher': {}}, 'FV', {'id': 'area', 'matcher': {}}, 'Data', {}, {}, {}], 'title': '{$dialect_name} Home | {$theme}', 'page': {'key': null, 'ref': null, 'props': {}, '_owner': null, '_store': {}}, 'extractPaths': true, 'redirects': [{}], 'warnings': ['multiple_dialects']}
 const findReplaceHome = undefined
-const routeParamsHome = {'theme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
+const routeParamsHome = {'siteTheme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
 const splitWindowPathHome = ['nuxeo', 'app', 'explore', 'FV', 'sections', 'Data', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN']
 
 const matchedPageLearn = {'path': ['nuxeo', 'app', {'id': 'theme', 'matcher': {}}, 'FV', {'id': 'area', 'matcher': {}}, 'Data', {}, {}, {}, 'learn'], 'title': 'Learn {$dialect_name}', 'page': {'key': null, 'ref': null, 'props': {}, '_owner': null, '_store': {}}, 'extractPaths': true, 'redirects': [{}]}
 const findReplaceLearn = undefined
-const routeParamsLearn = {'theme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
+const routeParamsLearn = {'siteTheme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
 const splitWindowPathLearn = ['nuxeo', 'app', 'explore', 'FV', 'sections', 'Data', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'learn']
 
 const matchedPageWords = {'path': ['nuxeo', 'app', {'id': 'theme', 'matcher': {}}, 'FV', {'id': 'area', 'matcher': {}}, 'Data', {}, {}, {}, 'learn', 'words'], 'title': 'Words | {$dialect_name}', 'page': {'key': null, 'ref': null, 'props': {}, '_owner': null, '_store': {}}, 'extractPaths': true, 'redirects': [{}]}
 const findReplaceWords = undefined
-const routeParamsWords = {'theme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
+const routeParamsWords = {'siteTheme': 'explore', 'area': 'sections', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
 const splitWindowPathWords = ['nuxeo', 'app', 'explore', 'FV', 'sections', 'Data', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'learn', 'words']
 
 const matchedPageWord = {'path': ['nuxeo', 'app', {'id': 'theme', 'matcher': {}}, 'FV', {'id': 'area', 'matcher': {}}, 'Data', {}, {}, {}, 'learn', 'words', {'id': 'word', 'matcher': {}}], 'title': '{$word} | Words | {$dialect_name}', 'page': {'key': null, 'ref': null, 'props': {}, '_owner': null, '_store': {}}, 'redirects': [{}], 'extractPaths': true}
 const findReplaceWord = {'find': '3110f4c7-69d5-459d-bcc1-78314e2e6474', 'replace': 'animal word'}
-const routeParamsWord = {'theme': 'explore', 'area': 'sections', 'word': '3110f4c7-69d5-459d-bcc1-78314e2e6474', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
+const routeParamsWord = {'siteTheme': 'explore', 'area': 'sections', 'word': '3110f4c7-69d5-459d-bcc1-78314e2e6474', 'dialect_name': 'SENĆOŦEN', 'dialect_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN/SENĆOŦEN', 'language_name': 'SENĆOŦEN', 'language_path': '/FV/sections/Data/SENĆOŦEN/SENĆOŦEN', 'language_family_name': 'SENĆOŦEN', 'language_family_path': '/FV/sections/Data/SENĆOŦEN'}
 const splitWindowPathWord = ['nuxeo', 'app', 'explore', 'FV', 'sections', 'Data', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'SEN%C4%86O%C5%A6EN', 'learn', 'words', '3110f4c7-69d5-459d-bcc1-78314e2e6474']
 
 

@@ -13,41 +13,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
-import Immutable, { List, Map } from 'immutable'
+import React, { Component } from 'react'
+// import PropTypes from 'prop-types'
+// import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import ConfGlobal from 'conf/local.js'
-
-import UIHelpers from 'common/UIHelpers'
+// import ConfGlobal from 'conf/local.js'
+// import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import Preview from 'views/components/Editor/Preview'
+// import AVPlayArrow from '@material-ui/icons/PlayArrow'
+// import AVStop from '@material-ui/icons/Stop'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
-
-import Card from 'material-ui/lib/card/card'
-import CardTitle from 'material-ui/lib/card/card-title'
-import CardActions from 'material-ui/lib/card/card-actions'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardMedia from 'material-ui/lib/card/card-media'
-import CardText from 'material-ui/lib/card/card-text'
-
-import FlatButton from 'material-ui/lib/flat-button'
-import IconButton from 'material-ui/lib/icon-button'
-
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
 const defaultStyle = { marginBottom: '20px' }
 
 class Introduction extends Component {
+  state = {
+    tabValue: 0,
+  }
+
   render() {
     const DEFAULT_LANGUAGE = this.props.defaultLanguage
     const introTabStyle = { width: '99%', position: 'relative', overflowY: 'scroll', padding: '15px', height: '100px' }
@@ -61,7 +54,7 @@ class Introduction extends Component {
       />
     )
 
-    if (!introductionTranslations || introductionTranslations.length == 0) {
+    if (!introductionTranslations || introductionTranslations.length === 0) {
       if (!introduction) {
         return null
       }
@@ -79,23 +72,36 @@ class Introduction extends Component {
     }
 
     return (
-      <Tabs>
-        <Tab label={intl.trans('introduction', 'Introduction', 'first')}>{introductionDiv}</Tab>
-        <Tab label={DEFAULT_LANGUAGE}>
-          <div style={Object.assign(introTabStyle, this.props.style)}>
-            {introductionTranslations.map(function(translation, i) {
-              if (translation.language == DEFAULT_LANGUAGE) {
-                return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} key={i} />
-              }
-            })}
-          </div>
-        </Tab>
-      </Tabs>
+      <div>
+        <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+          <Tab label={intl.trans('introduction', 'Introduction', 'first')} />
+          <Tab label={DEFAULT_LANGUAGE} />
+        </Tabs>
+        {this.state.tabValue === 0 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            {introductionDiv}
+          </Typography>
+        )}
+
+        {this.state.tabValue === 1 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <div style={Object.assign(introTabStyle, this.props.style)}>
+              {introductionTranslations.map((translation, i) => {
+                if (translation.language === DEFAULT_LANGUAGE) {
+                  return (
+                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} key={i} />
+                  )
+                }
+              })}
+            </div>
+          </Typography>
+        )}
+      </div>
     )
   }
 }
 
-class CardView extends Component {
+class ReportsCardView extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -105,45 +111,43 @@ class CardView extends Component {
   }
 
   render() {
-    // If action is not defined
-    let action
+    // // If action is not defined
+    // let action
 
-    let audioIcon = null
-    let audioCallback = null
+    // let audioIcon = null
+    // let audioCallback = null
 
-    if (this.props.hasOwnProperty('action') && typeof this.props.action === 'function') {
-      action = this.props.action
-    } else {
-      action = () => {}
-    }
+    // if (this.props.hasOwnProperty('action') && typeof this.props.action === 'function') {
+    //   action = this.props.action
+    // } else {
+    //   action = () => {}
+    // }
 
-    const DEFAULT_LANGUAGE = this.props.defaultLanguage
+    // const DEFAULT_LANGUAGE = this.props.defaultLanguage
 
-    const mediumImage = selectn('contextParameters.book.related_pictures[0].views[2]', this.props.item)
-    const coverImage = selectn('url', mediumImage) || 'assets/images/cover.png'
+    // const mediumImage = selectn('contextParameters.book.related_pictures[0].views[2]', this.props.item)
+    // const coverImage = selectn('url', mediumImage) || 'assets/images/cover.png'
     const audioObj = selectn('contextParameters.book.related_audio[0].path', this.props.item)
 
     if (audioObj) {
-      const stateFunc = function(state) {
-        this.setState(state)
-      }.bind(this)
-
-      audioIcon =
-        decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj ? (
-          <AVPlayArrow style={{ marginRight: '10px' }} />
-        ) : (
-          <AVStop style={{ marginRight: '10px' }} />
-        )
-
-      audioCallback =
-        decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj
-          ? UIHelpers.playAudio.bind(this, this.state, stateFunc, ConfGlobal.baseURL + audioObj)
-          : UIHelpers.stopAudio.bind(this, this.state, stateFunc)
+      // const stateFunc = function(state) {
+      //   this.setState(state)
+      // }.bind(this)
+      // audioIcon =
+      //   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj ? (
+      //     <AVPlayArrow style={{ marginRight: '10px' }} />
+      //   ) : (
+      //     <AVStop style={{ marginRight: '10px' }} />
+      //   )
+      // audioCallback =
+      //   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== ConfGlobal.baseURL + audioObj
+      //     ? UIHelpers.playAudio.bind(this, this.state, stateFunc, ConfGlobal.baseURL + audioObj)
+      //     : UIHelpers.stopAudio.bind(this, this.state, stateFunc)
     }
-
+    const _style = Object.assign({}, defaultStyle, this.props.style)
     return (
       <div
-        style={Object.assign(defaultStyle, this.props.style)}
+        style={_style}
         key={this.props.item.uid}
         className={classNames('col-xs-12', 'col-md-12', { 'col-md-4': !this.props.fullWidth })}
       >
@@ -164,4 +168,4 @@ class CardView extends Component {
   }
 }
 
-export { Introduction, CardView }
+export { Introduction, ReportsCardView }

@@ -13,12 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 
 import classNames from 'classnames'
 
-import { IconButton, RaisedButton, LinearProgress } from 'material-ui'
+import IconButton from '@material-ui/core/IconButton'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Tooltip from '@material-ui/core/Tooltip'
+
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
+
+import Button from '@material-ui/core/Button'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -290,7 +298,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    ;(selectn('response.entries', computeWords) || []).forEach(
+    (selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -385,7 +393,7 @@ export class Quiz extends Component {
             <div className="col-xs-12">
               <LinearProgress
                 style={{ height: '15px' }}
-                mode="determinate"
+                variant="determinate"
                 value={((this.state.currentAnswerIndex + 1) / this.state.totalQuestions) * 100}
               />
             </div>
@@ -407,11 +415,9 @@ export class Quiz extends Component {
                       "Nice! You've completed this quiz!"
                     )}{' '}
                     {skillLevel}
-                    <RaisedButton
-                      onClick={this._restart}
-                      label={intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
-                      style={{ marginLeft: '10px' }}
-                    />
+                    <Button variant="contained" onClick={this._restart} style={{ marginLeft: '10px' }}>
+                      {intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
+                    </Button>
                   </div>
                 ) : (
                   ''
@@ -438,27 +444,35 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                    disabled: true,
-                    key: i,
-                  })
+                  disabled: true,
+                  key: i,
+                })
                 : answer
             })}
           </div>
 
           <div className={classNames('row', 'row-navigation')}>
             <div className={classNames('col-xs-2', 'text-left')}>
-              <IconButton
-                style={{ backgroundColor: '#ffffff' }}
-                onClick={this._handleNavigate.bind(this, 'previous')}
-                iconClassName="material-icons"
-                tooltip={intl.trans(
+              <Tooltip
+                title={intl.trans(
                   'views.pages.explore.dialect.play.quiz.previous_question',
                   'Previous Question',
                   'words'
                 )}
               >
-                chevron_left
-              </IconButton>
+                <IconButton
+                  style={{ backgroundColor: '#ffffff' }}
+                  onClick={this._handleNavigate.bind(this, 'previous')}
+                >
+                  <ChevronLeft
+                    aria-label={intl.trans(
+                      'views.pages.explore.dialect.play.quiz.previous_question',
+                      'Previous Question',
+                      'words'
+                    )}
+                  />
+                </IconButton>
+              </Tooltip>
             </div>
 
             <div className={classNames('col-xs-8', 'text-center')}>
@@ -475,15 +489,19 @@ export class Quiz extends Component {
             </div>
 
             <div className={classNames('col-xs-2', 'text-right')}>
-              <IconButton
-                style={{ backgroundColor: '#ffffff' }}
-                onClick={this._handleNavigate.bind(this, 'next')}
-                disabled={!isCorrect || isComplete}
-                iconClassName="material-icons"
-                tooltip={intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
+              <Tooltip
+                title={intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
               >
-                chevron_right
-              </IconButton>
+                <IconButton style={{ backgroundColor: '#ffffff' }} onClick={this._handleNavigate.bind(this, 'next')}>
+                  <ChevronRight
+                    aria-label={intl.trans(
+                      'views.pages.explore.dialect.play.quiz.next_question',
+                      'Next Question',
+                      'words'
+                    )}
+                  />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
 

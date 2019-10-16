@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 
@@ -71,6 +72,8 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     componentState: STATE_LOADING,
   }
 
+  formBookCreate = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -96,7 +99,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          this.props.routeParams.theme,
+          this.props.routeParams.siteTheme,
           selectn('response', currentBook),
           prevProps.typeFilter === 'story' ? 'stories' : 'songs'
         ),
@@ -142,7 +145,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -166,8 +169,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_create.getValue()
+    const formValue = this.formBookCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -263,7 +265,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form className="PageDialectStoriesAndSongsCreate__form" onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_book_create" // TODO: DEPRECATED
+                  ref={this.formBookCreate}
                   type={t.struct(selectn('FVBook', fields))}
                   context={selectn('response', _computeDialect2)}
                   value={this.state.formValue || { 'fvbook:type': this.props.typeFilter }}

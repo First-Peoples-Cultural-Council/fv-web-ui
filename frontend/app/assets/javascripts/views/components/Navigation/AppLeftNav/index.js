@@ -10,7 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is, Map } from 'immutable'
 
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -23,15 +24,19 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import { Divider, List, ListItem, LeftNav, AppBar } from 'material-ui/lib'
+import AppBar from '@material-ui/core/AppBar'
+import Divider from '@material-ui/core/Divider'
+import Drawer from '@material-ui/core/Drawer'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core'
+import ListItem from '@material-ui/core'
+import ListItemText from '@material-ui/core'
+import Toolbar from '@material-ui/core/Toolbar'
 
-// import IconButton from 'material-ui/lib/icon-button'
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
-import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance'
+import NavigationClose from '@material-ui/icons/Close'
+
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
-const SelectableList = SelectableContainerEnhance(List)
-
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {
   static propTypes = {
@@ -95,42 +100,54 @@ export class AppLeftNav extends Component {
     if (selectn('isConnected', this.props.computeLogin)) {
       const nestedItems = [
         <ListItem
+          button
+          onClick={this._onListItemClick(NavigationHelpers.generateStaticURL('/explore/FV/Workspaces/Data/'))}
           key="Workspaces"
-          value={NavigationHelpers.generateStaticURL('/explore/FV/Workspaces/Data/')}
-          secondaryText={
-            <p>
-              {this.intl.translate({
-                key: 'views.components.navigation.view_work_in_progress',
-                default: 'View work in progress or unpublished content',
-              })}
-              .
-            </p>
-          }
-          secondaryTextLines={2}
-          primaryText={this.intl.translate({
-            key: 'views.components.navigation.workspace_dialects',
-            default: 'Workspace Dialects',
-          })}
-        />,
+        >
+          <ListItemText
+            primary={this.intl.translate({
+              key: 'views.components.navigation.workspace_dialects',
+              default: 'Workspace Dialects',
+            })}
+            secondary={
+              <p>
+                {this.intl.translate({
+                  key: 'views.components.navigation.view_work_in_progress',
+                  default: 'View work in progress or unpublished content',
+                })}
+                .
+              </p>
+            }
+            style={{ paddingLeft: '16px' }}
+            primaryTypographyProps={{ style: { fontSize: '16px' } }}
+            secondaryTypographyProps={{ style: { fontSize: '14px' } }}
+          />
+        </ListItem>,
 
         <ListItem
+          button
+          onClick={this._onListItemClick(NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'))}
           key="sections"
-          value={NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')}
-          secondaryText={
-            <p>
-              {this.intl.translate({
-                key: 'views.components.navigation.view_dialects_as_end_user',
-                default: 'View dialects as an end user would view them',
-              })}
-              .
-            </p>
-          }
-          secondaryTextLines={2}
-          primaryText={this.intl.translate({
-            key: 'views.components.navigation.published_dialects',
-            default: 'Published Dialects',
-          })}
-        />,
+        >
+          <ListItemText
+            primary={this.intl.translate({
+              key: 'views.components.navigation.published_dialects',
+              default: 'Published Dialects',
+            })}
+            secondary={
+              <p>
+                {this.intl.translate({
+                  key: 'views.components.navigation.view_dialects_as_end_user',
+                  default: 'View dialects as an end user would view them',
+                })}
+                .
+              </p>
+            }
+            style={{ paddingLeft: '16px' }}
+            primaryTypographyProps={{ style: { fontSize: '16px' } }}
+            secondaryTypographyProps={{ style: { fontSize: '14px' } }}
+          />
+        </ListItem>,
       ]
 
       const exploreEntry = this.state.routes.findEntry((value) => value.get('id') === 'explore')
@@ -183,98 +200,89 @@ export class AppLeftNav extends Component {
     this.additionalEntries = entries
       ? entries.map((d) => (
           <ListItem
-            className="2"
+            button
+            onClick={this._onListItemClick(
+              NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
+            )}
             key={selectn('uid', d)}
-            value={NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))}
-            primaryText={selectn('properties.dc:title', d)}
-          />
+          >
+            <ListItemText
+              primary={selectn('properties.dc:title', d)}
+              primaryTypographyProps={{ style: { fontSize: '16px' } }}
+            />
+          </ListItem>
         ))
       : null
 
     return (
-      <LeftNav
-        docked
+      <Drawer
         style={{ height: 'auto' }}
         open={this.props.computeToggleMenuAction.menuVisible}
-        onRequestChange={this._onRequestChange}
+        onClose={this._onRequestChange}
       >
         <div data-testid="LeftNav">
-          <AppBar
-            iconElementLeft={
-              <button
-                type="button"
-                className="AppLeftNav__close"
-                data-testid="AppLeftNav__close"
-                onClick={this._onRequestChange}
-                ref={(_element) => {
-                  this.AppLeftNavClose = _element
-                }}
-              >
-                <NavigationClose className="AppLeftNav__closeIcon" />
-                <span className="visually-hidden">Menu close</span>
-              </button>
-            }
-            title={
+          <AppBar position="static">
+            <Toolbar variant="dense">
+              <IconButton onClick={this._onRequestChange} color="inherit">
+                <NavigationClose />
+              </IconButton>
               <img src="assets/images/logo.png" style={{ padding: '0 0 5px 0' }} alt={this.props.properties.title} />
-            }
-          />
+            </Toolbar>
+          </AppBar>
 
-          <SelectableList
-            valueLink={{
-              value: location.pathname,
-              requestChange: this._onNavigateRequest,
-            }}
-          >
-            {this.state.routes.map((d) => (
-              <ListItem
-                className="1"
-                key={d.get('id')}
-                value={d.get('path')}
-                nestedItems={d.get('nestedItems')}
-                primaryText={d.get('label')}
-              />
+          <List value={location.pathname} onChange={this._onNavigateRequest}>
+            {this.state.routes.map((d, i) => (
+              <div key={i}>
+                <ListItem button onClick={this._onListItemClick(d.get('path'))} key={d.get('id')}>
+                  <ListItemText primary={d.get('label')} primaryTypographyProps={{ style: { fontSize: '16px' } }} />
+                </ListItem>
+                {d.get('nestedItems') && <List disablePadding>{d.get('nestedItems')}</List>}
+              </div>
             ))}
 
             {this.additionalEntries}
-          </SelectableList>
+          </List>
 
           <Divider />
 
           {(() => {
             if (selectn('isConnected', this.props.computeLogin)) {
               return (
-                <SelectableList
-                  valueLink={{
-                    value: location.pathname,
-                    requestChange: this._onNavigateRequest,
-                  }}
-                >
-                  {/* <ListItem
-                  key="profile"
-                  value="/profile/"
-                  primaryText={this.intl.translate({
-                    key: "views.pages.users.profile.my_profile",
-                    default: "My Profile",
-                    case: "words",
-                  })}
-                /> */}
+                <List value={location.pathname} onChange={this._onNavigateRequest}>
+                  {/* <ListItem button onClick={this._onListItemClick('/profile/')} key="profile">
+                    <ListItemText
+                      primary={this.intl.translate({
+                        key: 'views.pages.users.profile.my_profile',
+                        default: 'My Profile',
+                        case: 'words',
+                      })}
+                      primaryTypographyProps={{ style: { fontSize: '16px' } }}
+                    />
+                  </ListItem> */}
 
-                  <ListItem
-                    key="sign-out"
-                    value={'logout'}
-                    primaryText={this.intl.translate({
-                      key: 'sign_out',
-                      default: 'Sign Out',
-                      case: 'words',
-                    })}
-                  />
-                </SelectableList>
+                  <ListItem button onClick={this._onListItemClick('/logout/')} key="sign-out">
+                    <ListItemText
+                      primary={this.intl.translate({
+                        key: 'sign_out',
+                        default: 'Sign Out',
+                        case: 'words',
+                      })}
+                      primaryTypographyProps={{ style: { fontSize: '16px' } }}
+                    />
+                  </ListItem>
+                </List>
               )
             }
           })()}
         </div>
-      </LeftNav>
+      </Drawer>
     )
+  }
+
+  _onListItemClick(path) {
+    return (event) => {
+      this._onNavigateRequest(event, path)
+    }
   }
 
   _onNavigateRequest = (event, path) => {

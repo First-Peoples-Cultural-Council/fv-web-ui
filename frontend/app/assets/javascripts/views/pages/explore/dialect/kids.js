@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import classNames from 'classnames'
@@ -25,8 +26,9 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import GridList from 'material-ui/lib/grid-list/grid-list'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
 
 import UIHelpers from 'common/UIHelpers'
 
@@ -40,10 +42,6 @@ export class Kids extends Component {
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
-  }
-
-  static contextTypes = {
-    muiTheme: object.isRequired,
   }
 
   constructor(props, context) {
@@ -87,7 +85,7 @@ export class Kids extends Component {
                 cellHeight={200}
                 style={{ width: '100%', overflowY: 'auto', marginBottom: 0 }}
               >
-                <GridTile
+                <GridListTile
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(
@@ -97,13 +95,13 @@ export class Kids extends Component {
                     )
                   }}
                   key="words"
-                  title={<span style={tileTitleStyle}>Words</span>}
                   style={tileStyle}
                 >
                   <div className={classNames('kids-image-grid-container', 'words-main')} />
-                </GridTile>
+                  <GridListTileBar title={<span style={tileTitleStyle}>Words</span>} />
+                </GridListTile>
 
-                <GridTile
+                <GridListTile
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(
@@ -113,13 +111,13 @@ export class Kids extends Component {
                     )
                   }}
                   key="phrases"
-                  title={<span style={tileTitleStyle}>Phrases</span>}
                   style={tileStyle}
                 >
                   <div className={classNames('kids-image-grid-container', 'phrases-main')} />
-                </GridTile>
+                  <GridListTileBar title={<span style={tileTitleStyle}>Phrases</span>} />
+                </GridListTile>
 
-                <GridTile
+                <GridListTile
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(
@@ -129,23 +127,23 @@ export class Kids extends Component {
                     )
                   }}
                   key="songs-stories"
-                  title={<span style={tileTitleStyle}>Songs and Stories</span>}
                   style={tileStyle}
                 >
                   <div className={classNames('kids-image-grid-container', 'songs-stories-main')} />
-                </GridTile>
+                  <GridListTileBar title={<span style={tileTitleStyle}>Songs and Stories</span>} />
+                </GridListTile>
 
-                <GridTile
+                <GridListTile
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(this.props.windowPath + '/play', this.props.pushWindowPath, false)
                   }}
                   key="games"
-                  title={<span style={tileTitleStyle}>Games</span>}
                   style={tileStyle}
                 >
                   <div className={classNames('kids-image-grid-container', 'games-main')} />
-                </GridTile>
+                  <GridListTileBar title={<span style={tileTitleStyle}>Games</span>} />
+                </GridListTile>
               </GridList>
             </div>
           </div>

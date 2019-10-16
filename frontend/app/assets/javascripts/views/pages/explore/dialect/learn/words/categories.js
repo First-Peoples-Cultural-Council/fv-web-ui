@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -48,10 +49,6 @@ export class Categories extends Component {
     fetchPortal: func.isRequired,
     pushWindowPath: func.isRequired,
   }
-
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
 
   constructor(props, context) {
     super(props, context)
@@ -94,7 +91,7 @@ export class Categories extends Component {
     } else {
       NavigationHelpers.navigate(
         '/' +
-          this.props.routeParams.theme +
+          this.props.routeParams.siteTheme +
           this.props.routeParams.dialect_path +
           '/learn/words/categories/' +
           category.uid,

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -28,12 +29,12 @@ import {
 } from 'providers/redux/reducers/reports'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import List from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 
 import DocumentListView from 'views/components/Document/DocumentListView'
 
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Doughnut from 'react-chartjs/lib/doughnut'
 
 const DEFAULT_PAGE = 0

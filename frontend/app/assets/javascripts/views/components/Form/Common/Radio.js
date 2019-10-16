@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 const { string, func } = PropTypes
 
 export default class Radio extends React.Component {

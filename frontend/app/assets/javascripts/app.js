@@ -18,12 +18,6 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import injectTapEventPlugin from 'react-tap-event-plugin'
-
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
-
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
-
 import ConfGlobal from 'conf/local.js'
 
 // REDUX
@@ -37,18 +31,12 @@ require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
 require('styles/main')
 
-injectTapEventPlugin()
-
 const context = {
   providedState: {
     properties: {
       title: ConfGlobal.title,
       pageTitleParams: null,
       domain: ConfGlobal.domain,
-      theme: {
-        palette: ThemeManager.getMuiTheme(FirstVoicesTheme),
-        id: 'default',
-      },
     },
   },
 }

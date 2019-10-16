@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -65,10 +66,10 @@ export default class Footer extends React.Component {
                     })}
                   </a>{' '}
                   |{' '}
-                  <a href="https://firstvoices.atlassian.net/servicedesk/customer/portal/1/create/16">
+                  <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
                     {this.intl.translate({
-                      key: 'general.feedback',
-                      default: 'Feedback',
+                      key: 'general.help',
+                      default: 'Help',
                       case: 'first',
                     })}
                   </a>{' '}

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
 // REDUX
@@ -103,7 +104,7 @@ export class ListView extends DataListView {
   constructor(props, context) {
     super(props, context)
 
-    const currentTheme = this.props.routeParams.theme
+    const currentTheme = this.props.routeParams.siteTheme
 
     this.state = {
       columns: [
@@ -341,7 +342,7 @@ export class ListView extends DataListView {
       this.props.action(item)
     } else {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, item, 'phrases'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, item, 'phrases'),
         this.props.pushWindowPath,
         true
       )

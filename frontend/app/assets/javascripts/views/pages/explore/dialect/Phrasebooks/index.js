@@ -13,12 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import classNames from 'classnames'
 import selectn from 'selectn'
 
 // Immutable
 import Immutable, { Map } from 'immutable' // eslint-disable-line
+
+import Button from '@material-ui/core/Button'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -120,10 +123,10 @@ export class Phrasebooks extends Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebooksInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     this._getData({ copy })
   }
@@ -140,19 +143,37 @@ export class Phrasebooks extends Component {
 
   render() {
     const { routeParams } = this.props
-    const { dialect_path, pageSize, page, theme } = routeParams
+    const { dialect_path, pageSize, page, siteTheme } = routeParams
     return (
       <div>
-        <a
+        {/* <a
           className="_btn _btn--primary Contributors__btnCreate"
-          href={`/${theme}${dialect_path}/create/phrasebook`}
+          href={`/${siteTheme}${dialect_path}/create/phrasebook`}
           onClick={(e) => {
             e.preventDefault()
-            NavigationHelpers.navigate(`/${theme}${dialect_path}/create/phrasebook`, this.props.pushWindowPath, false)
+            NavigationHelpers.navigate(
+              `/${siteTheme}${dialect_path}/create/phrasebook`,
+              this.props.pushWindowPath,
+              false
+            )
           }}
         >
           Create a new phrase book
-        </a>
+        </a> */}
+        <Button
+          variant="contained"
+          className="Contributors__btnCreate"
+          onClick={(e) => {
+            e.preventDefault()
+            NavigationHelpers.navigate(
+              `/${siteTheme}${dialect_path}/create/phrasebook`,
+              this.props.pushWindowPath,
+              false
+            )
+          }}
+        >
+          Create a new phrase book
+        </Button>
         <DocumentListView
           cssModifier="DictionaryList--phrasebooks"
           sortInfo={this.sortInfo.uiSortOrder} // TODO: NOT USED?
@@ -173,8 +194,8 @@ export class Phrasebooks extends Component {
 
   handleRefetch = (componentProps, page, pageSize) => {
     const { routeParams } = this.props
-    const { theme, dialect_path } = routeParams
-    const url = `/${theme}${dialect_path}/phrasebooks/${pageSize}/${page}${window.location.search}`
+    const { siteTheme, dialect_path } = routeParams
+    const url = `/${siteTheme}${dialect_path}/phrasebooks/${pageSize}/${page}${window.location.search}`
     NavigationHelpers.navigate(url, this.props.pushWindowPath, false)
   }
 
@@ -184,7 +205,7 @@ export class Phrasebooks extends Component {
     currentSortType: this.props.DEFAULT_SORT_TYPE,
   }
 
-  _deleteItem = async (uid) => {
+  _deleteItem = async(uid) => {
     /* NOTE: save uid to state */
     this.setState(
       {
@@ -197,14 +218,14 @@ export class Phrasebooks extends Component {
     )
   }
 
-  _deleteSelected = async () => {
+  _deleteSelected = async() => {
     const { selected } = this.state
     this.setState(
       {
         deletedUids: [...this.state.deletedUids, ...selected],
       },
       () => {
-        selected.forEach(async (uid) => {
+        selected.forEach(async(uid) => {
           await this.props.deleteCategory(uid)
         })
         this.setState({
@@ -264,7 +285,7 @@ export class Phrasebooks extends Component {
   _getColumns = () => {
     const { copy } = this.state
     const { routeParams, editUrl } = this.props
-    const { theme, dialect_path } = routeParams
+    const { siteTheme, dialect_path } = routeParams
 
     return [
       {
@@ -334,7 +355,7 @@ export class Phrasebooks extends Component {
           )
         },
         render: (v, data /*, cellProps*/) => {
-          const phrasebookDetailUrl = `/${theme}${dialect_path}/phrasebook/${data.uid || ''}`
+          const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${data.uid || ''}`
           return (
             <a
               href={phrasebookDetailUrl}
@@ -375,7 +396,7 @@ export class Phrasebooks extends Component {
         title: copy.actions.th,
         render: (v, data /*, cellProps*/) => {
           const uid = data.uid
-          const url = editUrl ? `${editUrl}/${uid}` : `/${theme}${dialect_path}/edit/phrasebook/${uid}`
+          const url = editUrl ? `${editUrl}/${uid}` : `/${siteTheme}${dialect_path}/edit/phrasebook/${uid}`
 
           return (
             <ul className="Phrasebooks__actions">
@@ -412,7 +433,7 @@ export class Phrasebooks extends Component {
     ]
   }
 
-  _getData = async (addToState) => {
+  _getData = async(addToState) => {
     const { routeParams, search /*, filter*/ } = this.props
     const { pageSize, page } = routeParams
     const { sortBy, sortOrder } = search
@@ -487,10 +508,10 @@ export class Phrasebooks extends Component {
 
   _sortCol = (arg) => {
     const { routeParams, search } = this.props
-    const { theme, dialect_path, pageSize } = routeParams
+    const { siteTheme, dialect_path, pageSize } = routeParams
     const { sortOrder } = search
 
-    const url = `/${theme}${dialect_path}/phrasebooks/${pageSize}/1?sortBy=${arg.sortBy}&sortOrder=${
+    const url = `/${siteTheme}${dialect_path}/phrasebooks/${pageSize}/1?sortBy=${arg.sortBy}&sortOrder=${
       sortOrder === 'asc' ? 'desc' : 'asc'
     }`
     NavigationHelpers.navigate(url, this.props.pushWindowPath, false)

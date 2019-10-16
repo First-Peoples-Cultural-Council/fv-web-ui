@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 // REDUX
@@ -26,8 +27,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-// Views
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography'
 
 import StatusBar from 'views/components/StatusBar'
 
@@ -64,6 +65,8 @@ export class PageDialectLinksCreate extends Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formLinkCreate = React.createRef()
 
     this.state = {
       formValue: null,
@@ -121,11 +124,9 @@ export class PageDialectLinksCreate extends Component {
   _onRequestSaveForm(e) {
     // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_link_create.getValue()
 
+    const formValue = this.formLinkCreate.current.getValue()
     const properties = {}
-
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
@@ -140,7 +141,6 @@ export class PageDialectLinksCreate extends Component {
 
     // Check if a parent link was specified in the form
     const parentPathOrId = '/' + this.state.dialectPath + '/Links'
-
     // Passed validation
     if (formValue) {
       const now = Date.now()
@@ -159,7 +159,6 @@ export class PageDialectLinksCreate extends Component {
         linkPath: parentPathOrId + '/' + formValue['dc:title'] + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
       if (!this.props.embedded) window.scrollTo(0, 0)
     }
   }
@@ -171,34 +170,34 @@ export class PageDialectLinksCreate extends Component {
     const link = ProviderHelpers.getEntry(computeLink, this.state.linkPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress mode="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" size={2} />
     }
 
     return (
       <div>
-        <h1>
+        <Typography variant="headline" component="h2">
           {intl.trans(
             'views.pages.explore.dialect.links.add_new_link_to_x',
             'Add New Link to ' + dialect.get('dc:title'),
             'words',
             [dialect.get('dc:title')]
           )}
-        </h1>
+        </Typography>
 
         {link && link.message && link.action.includes('CREATE') ? <StatusBar message={link.message} /> : ''}
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
+            <form /*onSubmit={this._onRequestSaveForm}*/>
               <t.form.Form
-                ref="form_link_create" // TODO: DEPRECATED
+                ref={this.formLinkCreate}
                 type={t.struct(selectn('FVLink', fields))}
                 context={dialect}
                 value={this.state.formValue}
                 options={selectn('FVLink', options)}
               />
               <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+                <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
                   {intl.trans('save', 'Save', 'first')}
                 </button>
               </div>

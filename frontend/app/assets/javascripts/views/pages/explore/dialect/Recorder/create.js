@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -21,9 +21,9 @@ export class RecorderCreate extends React.Component {
 
   render() {
     const { routeParams } = this.props
-    const { theme, dialect_path } = routeParams
-    const generateUrlDetail = (uid) => `/${theme}${dialect_path}/recorder/${uid}`
-    const generateUrlEdit = (uid) => `/${theme}${dialect_path}/edit/recorder/${uid}`
+    const { siteTheme, dialect_path } = routeParams
+    const generateUrlDetail = (uid) => `/${siteTheme}${dialect_path}/recorder/${uid}`
+    const generateUrlEdit = (uid) => `/${siteTheme}${dialect_path}/edit/recorder/${uid}`
     return (
       <ContributorCreate
         className={this.props.className}

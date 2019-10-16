@@ -1,0 +1,21 @@
+.PageToolbar__publishUiContainer {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.PageToolbar__menuGroup {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+}
+.PageToolbar__secondary {
+  margin: 10px 0 20px 0;
+}
+.PageToolbar .PageToolbar__button {
+  margin: 0 5px;
+}
+.PageToolbar__menuMore:before {
+  content: ' ';
+  border-left: 1px solid rgba(0, 0, 0, 0.5);
+  margin: 5px 0 5px 15px;
+}

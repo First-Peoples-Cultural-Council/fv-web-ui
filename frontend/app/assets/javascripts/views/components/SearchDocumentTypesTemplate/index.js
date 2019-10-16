@@ -2,7 +2,9 @@ import React from 'react'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 import '!style-loader!css-loader!./SearchDocumentTypesTemplate.css'
-import { IconButton } from 'material-ui'
+import IconButton from '@material-ui/core/IconButton'
+import Clear from '@material-ui/icons/Clear'
+import Tooltip from '@material-ui/core/Tooltip'
 export const SearchDocumentTypesTemplate = (locals) => {
   return (
     <div className="SearchDocumentTypesTemplate row">
@@ -22,18 +24,18 @@ export const SearchDocumentTypesTemplate = (locals) => {
               {item.buttons.map((button, j) => {
                 if (button.type == 'remove') {
                   return (
-                    <IconButton
-                      tooltip={intl.translate({
+                    <Tooltip
+                      key={`Tooltip__${j}`}
+                      title={intl.translate({
                         key: 'remove_item',
                         default: 'Remove Item',
                         case: 'words',
                       })}
-                      iconClassName="material-icons"
-                      key={j}
-                      onClick={button.click}
                     >
-                      clear
-                    </IconButton>
+                      <IconButton key={`IconButton__${j}`} onClick={button.click}>
+                        <Clear />
+                      </IconButton>
+                    </Tooltip>
                   )
                 }
               })}

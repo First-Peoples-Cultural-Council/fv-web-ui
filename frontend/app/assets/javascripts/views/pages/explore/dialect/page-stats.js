@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // REDUX
@@ -21,12 +22,12 @@ import { connect } from 'react-redux'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import Paper from 'material-ui/lib/paper'
+import Paper from '@material-ui/core/Paper'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
 import Statistics from 'views/components/Dashboard/Statistics'
-
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -40,7 +41,9 @@ export class PageStats extends Component {
     computeDialectStats: object.isRequired,
     windowPath: string.isRequired,
   }
-
+  state = {
+    tabValue: 0,
+  }
   constructor(props, context) {
     super(props, context)
     ;[].forEach((method) => (this[method] = this[method].bind(this)))
@@ -54,47 +57,58 @@ export class PageStats extends Component {
     }
 
     return (
-      <Tabs>
-        <Tab label="Words" id="statisticsWords">
-          <Paper style={{ padding: '15px' }} zDepth={2}>
-            <Statistics
-              data={selectn('response', computeDialectStats)}
-              docType="words"
-              headerText={intl.trans('words', 'Words', 'first')}
-            />
-          </Paper>
-        </Tab>
-
-        <Tab label="Phrases" id="statisticsPhrases">
-          <Paper style={{ padding: '15px' }} zDepth={2}>
-            <Statistics
-              data={selectn('response', computeDialectStats)}
-              docType="phrases"
-              headerText={intl.trans('phrases', 'Phrases', 'first')}
-            />
-          </Paper>
-        </Tab>
-
-        <Tab label="Songs" id="statisticsSongs">
-          <Paper style={{ padding: '15px' }} zDepth={2}>
-            <Statistics
-              data={selectn('response', computeDialectStats)}
-              docType="songs"
-              headerText={intl.trans('songs', 'Songs', 'first')}
-            />
-          </Paper>
-        </Tab>
-
-        <Tab label="Stories" id="statisticsStories">
-          <Paper style={{ padding: '15px' }} zDepth={2}>
-            <Statistics
-              data={selectn('response', computeDialectStats)}
-              docType="stories"
-              headerText={intl.trans('stories', 'Stories', 'first')}
-            />
-          </Paper>
-        </Tab>
-      </Tabs>
+      <div>
+        <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+          <Tab label="Words" id="statisticsWords" />
+          <Tab label="Phrases" id="statisticsPhrases" />
+          <Tab label="Songs" id="statisticsSongs" />
+          <Tab label="Stories" id="statisticsStories" />
+        </Tabs>
+        {this.state.tabValue === 0 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <Paper style={{ padding: '15px' }}>
+              <Statistics
+                data={selectn('response', computeDialectStats)}
+                docType="words"
+                headerText={intl.trans('words', 'Words', 'first')}
+              />
+            </Paper>
+          </Typography>
+        )}
+        {this.state.tabValue === 1 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <Paper style={{ padding: '15px' }}>
+              <Statistics
+                data={selectn('response', computeDialectStats)}
+                docType="phrases"
+                headerText={intl.trans('phrases', 'Phrases', 'first')}
+              />
+            </Paper>
+          </Typography>
+        )}
+        {this.state.tabValue === 2 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <Paper style={{ padding: '15px' }}>
+              <Statistics
+                data={selectn('response', computeDialectStats)}
+                docType="songs"
+                headerText={intl.trans('songs', 'Songs', 'first')}
+              />
+            </Paper>
+          </Typography>
+        )}
+        {this.state.tabValue === 3 && (
+          <Typography component="div" style={{ padding: 8 * 3 }}>
+            <Paper style={{ padding: '15px' }}>
+              <Statistics
+                data={selectn('response', computeDialectStats)}
+                docType="stories"
+                headerText={intl.trans('stories', 'Stories', 'first')}
+              />
+            </Paper>
+          </Typography>
+        )}
+      </div>
     )
 
     /*return <Toolbar>

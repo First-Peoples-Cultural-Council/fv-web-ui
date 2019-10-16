@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
@@ -25,7 +26,6 @@ export default class FlashcardList extends Component {
     fields: PropTypes.instanceOf(Map),
     columns: PropTypes.array.isRequired,
     type: PropTypes.string,
-    theme: PropTypes.string,
     action: PropTypes.func,
     cols: PropTypes.number,
     cellHeight: PropTypes.number,

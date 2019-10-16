@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
 import ImageGallery from 'react-image-gallery'
@@ -47,7 +48,7 @@ import withActions from 'views/hoc/view/with-actions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 //Stylesheet
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 const { array, func, object, string } = PropTypes
 

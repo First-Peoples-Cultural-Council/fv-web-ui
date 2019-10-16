@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 // import classNames from 'classnames'
 
@@ -41,7 +42,6 @@ import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import { Document } from 'nuxeo'
 
 // Views
-// import Paper from 'material-ui/lib/paper'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import withForm from 'views/hoc/view/with-form'
@@ -78,6 +78,8 @@ export class PageDialectGalleryEdit extends Component {
     componentState: STATE_LOADING,
   }
 
+  formGallery = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -99,7 +101,11 @@ export class PageDialectGalleryEdit extends Component {
     ) {
       // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentGallery), 'gallery'),
+        NavigationHelpers.generateUIDPath(
+          this.props.routeParams.siteTheme,
+          selectn('response', currentGallery),
+          'gallery'
+        ),
         this.props.replaceWindowPath,
         true
       )
@@ -141,7 +147,7 @@ export class PageDialectGalleryEdit extends Component {
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     await this.props.fetchGallery(this._getGalleryPath())
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -204,7 +210,7 @@ export class PageDialectGalleryEdit extends Component {
     // Prevent default behaviour
     e.preventDefault()
     // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_gallery.getValue()
+    const formValue = this.formGallery.current.getValue()
 
     // Passed validation
     if (formValue) {
@@ -306,7 +312,7 @@ export class PageDialectGalleryEdit extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_gallery"
+                ref={this.formGallery}
                 type={t.struct(selectn('FVGallery', fields))}
                 context={selectn('response', _computeDialect2)}
                 value={this.state.formValue || selectn('response.properties', _computeGallery)}
@@ -321,7 +327,7 @@ export class PageDialectGalleryEdit extends Component {
           </div>
 
           <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+            <Paper style={{ padding: '15px', margin: '20px 0' }}>
               <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
             </Paper>
           </div>

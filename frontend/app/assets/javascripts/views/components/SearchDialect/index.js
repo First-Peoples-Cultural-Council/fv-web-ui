@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Map } from 'immutable'
-import { PropTypes } from 'react'
 import {
   SEARCH_SORT_DEFAULT,
   SEARCH_BY_DEFAULT,
@@ -18,7 +18,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 import selectn from 'selectn'
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
@@ -199,13 +199,15 @@ export class SearchDialect extends Component {
     }
     return (
       <div className="SearchDialectForm SearchDialectForm--filtering">
-        <RaisedButton
-          label={resetButtonText}
+        <Button
+          variant="contained"
           onClick={() => {
             this._resetSearch()
           }}
-          primary
-        />
+          color="primary"
+        >
+          {resetButtonText}
+        </Button>
         {this._getFlashcardMode()}
       </div>
     )
@@ -215,22 +217,26 @@ export class SearchDialect extends Component {
 
     if (flashcardMode !== undefined) {
       return flashcardMode ? (
-        <RaisedButton
+        <Button
+          variant="contained"
           style={{ marginLeft: 'auto' }}
-          label="Stop viewing Flashcards"
-          primary
+          color="primary"
           onClick={() => {
             this.props.updateAncestorState({ flashcardMode: false })
           }}
-        />
+        >
+          {'Stop viewing Flashcards'}
+        </Button>
       ) : (
-        <RaisedButton
+        <Button
+          variant="contained"
           style={{ marginLeft: 'auto' }}
-          label="Flashcards"
           onClick={() => {
             this.props.updateAncestorState({ flashcardMode: true })
           }}
-        />
+        >
+          {'Flashcards'}
+        </Button>
       )
     }
     return null
@@ -268,14 +274,13 @@ export class SearchDialect extends Component {
             value={searchTerm}
           />
 
-          <RaisedButton label={searchButtonText} onClick={this._handleSearch} primary />
+          <Button variant="contained" onClick={this._handleSearch} color="primary">
+            {searchButtonText}
+          </Button>
 
-          <RaisedButton
-            label={resetButtonText}
-            onClick={this._resetSearch}
-            primary={false}
-            style={{ marginLeft: '20px' }}
-          />
+          <Button variant="contained" onClick={this._resetSearch} style={{ marginLeft: '20px' }}>
+            {resetButtonText}
+          </Button>
 
           {this._getFlashcardMode()}
         </div>
@@ -520,9 +525,9 @@ export class SearchDialect extends Component {
 
     return searchTerm
       ? {
-          DEFAULT_SORT_COL: searchSortBy,
-          DEFAULT_SORT_TYPE: 'asc',
-        }
+        DEFAULT_SORT_COL: searchSortBy,
+        DEFAULT_SORT_TYPE: 'asc',
+      }
       : {}
   }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Text from 'views/components/Form/Common/Text'
 import Textarea from 'views/components/Form/Common/Textarea'
 // import Select from 'views/components/Form/Common/Select`'
@@ -43,12 +43,8 @@ export class CreateAudio extends React.Component {
   state = {
     componentState: STATE_LOADING,
   }
-  // NOTE: Using callback refs since on old React
-  // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
-  form = null
-  setFormRef = (_element) => {
-    this.form = _element
-  }
+
+  form = React.createRef()
 
   componentDidMount() {
     // Do any loading here...
@@ -112,7 +108,7 @@ export class CreateAudio extends React.Component {
     return (
       <form
         className={className}
-        ref={this.setFormRef}
+        ref={this.form}
         onSubmit={(e) => {
           e.preventDefault()
           this._onRequestSaveForm()
@@ -284,7 +280,7 @@ export class CreateAudio extends React.Component {
     // const pathOrId = `${DIALECT_PATH}/Resources/${createItemName}.${timestamp}`
     // this.setState({ pathOrId })
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
       toParse,
@@ -344,7 +340,7 @@ export class CreateAudio extends React.Component {
 
 // // REDUX: actions/dispatch/func
 // const mapDispatchToProps = {
-//   changeTheme
+//   changeSiteTheme
 // };
 
 export default connect(

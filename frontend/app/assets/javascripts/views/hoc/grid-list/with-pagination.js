@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import classNames from 'classnames'
 
 import Pagination from 'views/components/Navigation/Pagination'
 
-import { MenuItem, SelectField, TextField } from 'material-ui'
+import { MenuItem, Select, TextField } from '@material-ui/core'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'
@@ -133,9 +134,12 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
               Skip to Page:
               <TextField
                 style={{ paddingLeft: '5px' }}
-                underlineStyle={{ width: '80px' }}
-                hintText="Enter #"
-                onEnterKeyDown={this._onGoToPage}
+                // hintText="Enter #"
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    this._onGoToPage(e)
+                  }
+                }}
               />
             </div>
           </div>
@@ -162,7 +166,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
           >
             Per Page:
           </label>
-          <SelectField
+          <Select
             style={{ width: '45px', marginRight: '8px' }}
             value={this.state.currentPageSize}
             onChange={this._onPageSizeChange}
@@ -173,7 +177,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
             <MenuItem value={100} primaryText={100} />
             <MenuItem value={250} primaryText={250} />
             <MenuItem value={500} primaryText={500} />
-          </SelectField>
+          </Select>
           <label
             style={{
               verticalAlign: '4px',

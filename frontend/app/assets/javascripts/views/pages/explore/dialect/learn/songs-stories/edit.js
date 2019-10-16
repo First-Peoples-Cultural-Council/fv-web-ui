@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List } from 'immutable'
 
 // REDUX
@@ -35,8 +36,11 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
 // Models
 import { Document } from 'nuxeo'
@@ -45,13 +49,12 @@ import { Document } from 'nuxeo'
 import BookEntryEdit from 'views/pages/explore/dialect/learn/songs-stories/entry/edit'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
 
-import Dialog from 'material-ui/lib/dialog'
-
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 import IntlService from 'views/services/intl'
+import { string } from 'prop-types'
 
 const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
@@ -64,6 +67,7 @@ const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
     book: object,
+    typePlural: string,
     // REDUX: reducers/state
     routeParams: object.isRequired,
     computeLogin: object.isRequired,
@@ -89,13 +93,13 @@ export class PageDialectBookEdit extends Component {
     formValue: null,
     sortedItems: List(),
     componentState: STATE_LOADING,
+    tabValue: 0,
   }
 
   // Redirect on success
   componentDidUpdate(prevProps) {
     let currentBook
     let nextBook
-
     if (this._getBookPath() !== null) {
       currentBook = ProviderHelpers.getEntry(prevProps.computeBook, this._getBookPath())
       nextBook = ProviderHelpers.getEntry(this.props.computeBook, this._getBookPath())
@@ -107,7 +111,11 @@ export class PageDialectBookEdit extends Component {
     ) {
       // 'Redirect' on success
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextBook), 'songs-stories'),
+        NavigationHelpers.generateUIDPath(
+          this.props.routeParams.siteTheme,
+          selectn('response', nextBook),
+          this.props.typePlural.toLowerCase()
+        ),
         this.props.replaceWindowPath,
         true
       )
@@ -145,7 +153,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -250,6 +258,7 @@ export class PageDialectBookEdit extends Component {
       })
     }
 
+    const title = selectn('response.properties.dc:title', _computeBook)
     return (
       <AuthenticationFilter
         login={this.props.computeLogin}
@@ -258,16 +267,24 @@ export class PageDialectBookEdit extends Component {
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <Tabs>
-            <Tab label={intl.trans('book', 'Book', 'first')}>
-              <h1>
-                {intl.trans(
-                  'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
-                  'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' Book',
-                  'words',
-                  [selectn('response.properties.dc:title', _computeBook)]
-                )}
-              </h1>
+          <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+            <Tab label={intl.trans('book', 'Book', 'first')} />
+            <Tab label={intl.trans('pages', 'Pages', 'first')} />
+          </Tabs>
+          {this.state.tabValue === 0 && (
+            <div style={{ padding: 8 * 3 }}>
+              {title && (
+                <Typography variant="headline">
+                  <h1>
+                    {intl.trans(
+                      'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
+                      'Edit ' + title + ' Book',
+                      'words',
+                      [title]
+                    )}
+                  </h1>
+                </Typography>
+              )}
               <EditViewWithForm
                 computeEntities={computeEntities}
                 initialValues={context}
@@ -281,13 +298,15 @@ export class PageDialectBookEdit extends Component {
                 type="FVBook"
                 routeParams={this.props.routeParams}
               />
-            </Tab>
-            <Tab label={intl.trans('pages', 'Pages', 'first')}>
-              <h1>
-                {intl.trans('', 'Edit ' + selectn('response.properties.dc:title', _computeBook) + ' pages', 'first', [
-                  selectn('response.properties.dc:title', _computeBook),
-                ])}
-              </h1>
+            </div>
+          )}
+          {this.state.tabValue === 1 && (
+            <div style={{ padding: 8 * 3 }}>
+              {title && (
+                <Typography variant="headline">
+                  {intl.trans('', 'Edit ' + title + ' pages', 'first', [title])}
+                </Typography>
+              )}
               <BookEntryList
                 reorder
                 sortOrderChanged={this._storeSortOrder}
@@ -297,22 +316,23 @@ export class PageDialectBookEdit extends Component {
                 metadata={selectn('response', _computeBookEntries) || {}}
                 items={selectn('response.entries', _computeBookEntries) || []}
               />
-            </Tab>
-          </Tabs>
+            </div>
+          )}
 
           <Dialog
-            autoScrollBodyContent
-            style={{ zIndex: 0 }}
-            overlayStyle={{ background: 'none' }}
+            fullWidth
+            maxWidth="md"
             open={this.state.editPageDialogOpen}
-            onRequestClose={() => this.setState({ editPageDialogOpen: false })}
+            onClose={() => this.setState({ editPageDialogOpen: false })}
           >
-            <BookEntryEdit
-              entry={this.state.editPageItem}
-              handlePageSaved={this._pageSaved}
-              dialectEntry={_computeDialect2}
-              {...this.props}
-            />
+            <DialogContent>
+              <BookEntryEdit
+                entry={this.state.editPageItem}
+                handlePageSaved={this._pageSaved}
+                dialectEntry={_computeDialect2}
+                {...this.props}
+              />
+            </DialogContent>
           </Dialog>
         </div>
       </AuthenticationFilter>

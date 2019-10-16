@@ -96,7 +96,7 @@ getFormData({
 */
 export const getFormData = ({ formReference, toParse = [] }) => {
   const formDataFormatted = {}
-  const formData = new FormData(formReference)
+  const formData = new FormData(formReference.current)
 
   for (const value of formData.entries()) {
     // parse any stringify-ed array/objects

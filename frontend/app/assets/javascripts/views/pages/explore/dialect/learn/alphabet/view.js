@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 import classNames from 'classnames'
 
@@ -36,16 +37,19 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import SubViewTranslation from 'views/pages/explore/dialect/learn/base/subview-translation'
-import Card from 'material-ui/lib/card/card'
-import CardText from 'material-ui/lib/card/card-text'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Typography from '@material-ui/core/Typography'
+
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import { WORKSPACES } from 'common/Constants'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
@@ -74,6 +78,7 @@ export class AlphabetView extends Component {
 
   state = {
     deleteDialogOpen: false,
+    tabValue: 0,
   }
 
   // Refetch data on URL change
@@ -218,11 +223,45 @@ export class AlphabetView extends Component {
           <div className="col-xs-12">
             <div>
               <Card>
-                <Tabs tabItemContainerStyle={tabItemStyles}>
-                  {/* TAB: DEFINITION */}
-                  <Tab label={intl.trans('definition', 'Definition', 'first')}>
+                <Tabs
+                  value={this.state.tabValue}
+                  tabItemContainerStyle={tabItemStyles}
+                  onChange={(e, tabValue) => this.setState({ tabValue })}
+                >
+                  <Tab label={intl.trans('definition', 'Definition', 'first')} />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('words', 'Words', 'first')
+                        : intl.trans(
+                          'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
+                          'Words Starting with ' + selectn('response.title', computeCharacter),
+                          'words',
+                          [selectn('response.title', computeCharacter)]
+                        )
+                    }
+                    id="find_words"
+                  />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('phrases', 'Phrases', 'first')
+                        : intl.trans(
+                          'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
+                          'Phrases Starting with ' + selectn('response.title', computeCharacter),
+                          'words',
+                          [selectn('response.title', computeCharacter)]
+                        )
+                    }
+                    id="find_phrases"
+                  />
+                </Tabs>
+
+                {/* TAB: DEFINITION */}
+                {this.state.tabValue === 0 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <div className="col-xs-8">
                           <h2>{selectn('response.title', computeCharacter)}</h2>
 
@@ -245,26 +284,16 @@ export class AlphabetView extends Component {
                             items={videos}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
+                  </Typography>
+                )}
 
-                  {/* TAB: WORDS */}
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('words', 'Words', 'first')
-                        : intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
-                            'Words Starting with ' + selectn('response.title', computeCharacter),
-                            'words',
-                            [selectn('response.title', computeCharacter)]
-                          )
-                    }
-                    id="find_words"
-                  >
+                {/* TAB: WORDS */}
+                {this.state.tabValue === 1 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans(
                             'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
@@ -280,26 +309,15 @@ export class AlphabetView extends Component {
                             disableClickItem={false}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
+                  </Typography>
+                )}
 
-                  {/* TAB: PHRASES */}
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('phrases', 'Phrases', 'first')
-                        : intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
-                            'Phrases Starting with ' + selectn('response.title', computeCharacter),
-                            'words',
-                            [selectn('response.title', computeCharacter)]
-                          )
-                    }
-                    id="find_phrases"
-                  >
+                {this.state.tabValue === 2 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans(
                             'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
@@ -316,10 +334,10 @@ export class AlphabetView extends Component {
                             disableClickItem={false}
                           />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
-                </Tabs>
+                  </Typography>
+                )}
               </Card>
             </div>
           </div>
@@ -328,7 +346,7 @@ export class AlphabetView extends Component {
     )
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchCharacter(this._getCharacterPath(this.props))
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
   }
