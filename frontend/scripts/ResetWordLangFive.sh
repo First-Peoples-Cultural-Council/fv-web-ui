@@ -1,12 +1,12 @@
 #!/bin/bash
-DIRECTORY=/$PWD/../
+DIRECTORY=$PWD
 echo $DIRECTORY
 
 # Delete existing Dictionary directory and all files
 cd $DIRECTORY/fv-utils/target
 java -jar fv-nuxeo-utils-*.jar clear-words -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageFive dictionary clear failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageFive dictionary clear failed \n'; exit 1
   echo
 fi
 
@@ -14,14 +14,14 @@ fi
 cd $DIRECTORY/fv-batch-import/target
 java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit 1
   echo
 fi
 # Import Phrase using fv-batch-import
 cd $DIRECTORY/scripts/batch_jarfiles/
 java -jar fv-batch-import-phrases.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'; exit 1
   echo
 fi
 # Remove generated batch files
@@ -44,3 +44,4 @@ echo
 echo '-----------------------------------------------'
 echo 'Reset TestLanguageFive dictionary successfully.'
 echo '-----------------------------------------------'
+exit 0

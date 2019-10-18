@@ -2,6 +2,7 @@
 DIRECTORY=$PWD
 echo $DIRECTORY
 
+cd $DIRECTORY
 # If "-skip-clone" parameter is supplied then don't do a fresh clone of fv-batch-import and fv-utils
 if [ "$1" != "-skip-clone" ]; then
 
@@ -149,3 +150,4 @@ echo
 echo '--------------------------------------'
 echo 'Database setup completed successfully.'
 echo '--------------------------------------'
+exit 0
