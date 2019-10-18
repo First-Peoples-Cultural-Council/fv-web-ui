@@ -36,7 +36,11 @@ fi
 # If the parameter "enabled-true" is found then send a CURL request to enable the word
 if [[ $1 == 'enabled-true' ]]; then
     echo "Enabling word"
-    curl -s -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVEnableDocument' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive/Dictionary/TestWord","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD > /dev/null
+    response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVEnableDocument' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive/Dictionary/TestWord","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+    if [[ "$response" -ne 200 ]]; then
+        echo -e 'TestLanguageFive word enable failed \n'; exit $response
+    echo
+fi
     echo
 fi
 
