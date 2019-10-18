@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { cyan } from '@material-ui/core/colors'
+import typography from './FirstVoicesTypography'
 export default {
-  typography: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: 18,
-  },
+  typography,
   palette: {
     primary: {
       contrastText: '#fff',
@@ -31,5 +29,60 @@ export default {
     },
     primary1Color: '#b40000',
     primary2Color: cyan[700],
+  },
+  appBarIcon: {
+    color: '#fff',
+  },
+  appBar: {
+    color: '#fff',
+    backgroundColor: '#b40000',
+    'a&:hover': {
+      color: '#000',
+    },
+  },
+  localePicker: {
+    color: '#fff',
+    backgroundColor: '#ab0000',
+  },
+  dialectContainer: {
+    color: '#fff',
+    backgroundColor: '#3a6880',
+    '&:visited': {
+      color: '#fff',
+    },
+  },
+  button: {
+    containedPrimary: {
+      color: 'white',
+      backgroundColor: 'black',
+      '&:hover': {
+        color: 'black',
+        backgroundColor: 'white',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'yellow',
+        },
+      },
+      '&$disabled': {
+        color: '#000',
+        backgroundColor: '#e5e5e5',
+      },
+    },
+    containedSecondary: {
+      color: 'blue',
+      backgroundColor: 'yellow',
+      '&:hover': {
+        color: 'yellow',
+        backgroundColor: 'blue',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'pink',
+        },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        backgroundColor: '#e5e5e5',
+      },
+    },
   },
 }

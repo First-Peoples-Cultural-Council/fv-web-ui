@@ -32,7 +32,7 @@
   margin-right: 15px;
 }
 .Navigation__link {
-  margin: 0 5px;
+  margin: 0 10px;
 }
 .Navigation__link,
 .Navigation__link:visited {
@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
 }
-.Navigation__localeTitle {
+.Navigation .Navigation__localeTitle {
   margin-right: 15px;
 }
 
@@ -58,20 +58,23 @@
 
 .Navigation__separator {
   width: 1px;
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.175);
+  height: 32px;
+  margin: 0 4px;
+  display: inline-block;
+}
+.Navigation__separator + .Navigation__separator {
+  display: none;
 }
 .Navigation__searchContainer {
-  padding: 10px;
   flex-shrink: 0;
 }
-.Navigation__searchInput {
+.Navigation .Navigation__searchInput {
   margin-left: 30px;
   font-size: 15px;
   background-color: #fff;
-  padding-left: 10px;
+  padding: 10px 40px 10px 10px;
   line-height: 1.2;
-  padding-right: 40px;
-  /* font-family: "Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001; */
 }
 .Navigation__searchPopupContainer {
   position: relative;
@@ -135,4 +138,9 @@
 .Navigation__localeContainer--open {
   display: flex;
   flex-direction: row-reverse;
+}
+.Navigation__searchContainerInner {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
 }

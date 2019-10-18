@@ -27,8 +27,8 @@ import { fetchTasks } from 'providers/redux/reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
-import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -40,6 +40,8 @@ import Typography from '@material-ui/core/Typography'
 
 // import MenuIcon from '@material-ui/icons/Menu'
 import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
+import FVButton from 'views/components/FVButton'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
@@ -54,6 +56,7 @@ const { array, bool, func, node, object, string } = PropTypes
 
 export class PageToolbar extends Component {
   static propTypes = {
+    classes: object, // MAT-UI
     actions: array,
     children: node,
     computeEntity: object.isRequired,
@@ -161,7 +164,7 @@ export class PageToolbar extends Component {
   }
 
   render() {
-    const { computeEntity, computePermissionEntity, computeLogin } = this.props
+    const { classes, computeEntity, computePermissionEntity, computeLogin } = this.props
 
     const enableTasks = []
     const disableTasks = []
@@ -211,19 +214,8 @@ export class PageToolbar extends Component {
       : `${intl.trans('request', 'Request', 'first')}`
 
     return (
-      <AppBar position="static" className="PageToolbar">
+      <AppBar color="primary" position="static" className="PageToolbar" classes={classes}>
         <Toolbar>
-          {/* MOBILE MENU (doesn't work in dev/preprod) */}
-          {/* <div className="visible-xs" style={{ textAlign: 'right' }}>
-            <IconButton
-              onClick={(e) => {
-                this.setState({ showActionsMobile: !this.state.showActionsMobile })
-                e.preventDefault()
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div> */}
           <div
             className={classNames({
               'hidden-xs': !this.state.showActionsMobile,
@@ -245,7 +237,7 @@ export class PageToolbar extends Component {
                     />
                   }
                   label={
-                    <Typography variant="title">
+                    <Typography variant="body1">
                       {documentEnabled || documentPublished
                         ? intl.trans('enabled', 'Enabled', 'first')
                         : intl.trans('enable', 'Enable', 'first')}
@@ -266,70 +258,66 @@ export class PageToolbar extends Component {
                   login: computeLogin,
                 }}
               >
-                <div>
+                <div className="PageToolbar__request">
                   <span>{`${requestButtonGroupText}: `}</span>
                   {/* Button: Enable */}
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
+                    color="secondary"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Disabled' &&
                       selectn('response.state', computeEntity) !== 'New'
                     }
-                    color="secondary"
                     onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
+                    variant="contained"
                   >
                     {intl.trans('enable', 'Enable', 'first') +
                       ' (' +
                       (enableTasks.length + this.state.enableActions) +
                       ')'}
-                  </Button>
+                  </FVButton>
                   {/* Button: Disable */}
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
+                    color="secondary"
                     disabled={
                       selectn('response.state', computeEntity) !== 'Enabled' &&
                       selectn('response.state', computeEntity) !== 'New'
                     }
-                    color="secondary"
                     onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
+                    variant="contained"
                   >
                     {intl.trans('disable', 'Disable', 'first') +
                       ' (' +
                       (disableTasks.length + this.state.disableActions) +
                       ')'}
-                  </Button>
+                  </FVButton>
                   {/* Button: Publish */}
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
-                    disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                     color="secondary"
+                    disabled={selectn('response.state', computeEntity) !== 'Enabled'}
                     onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
+                    variant="contained"
                   >
                     {intl.trans('publish', 'Publish', 'first') +
                       ' (' +
                       (publishTasks.length + this.state.publishActions) +
                       ')'}
-                  </Button>
+                  </FVButton>
                   {/* Button: Unpublish */}
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
-                    disabled={selectn('response.state', computeEntity) !== 'Published'}
                     color="secondary"
+                    disabled={selectn('response.state', computeEntity) !== 'Published'}
                     onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
+                    variant="contained"
                   >
                     {intl.trans('unpublish', 'Unpublish', 'first') +
                       ' (' +
                       (unpublishTasks.length + this.state.unpublishActions) +
                       ')'}
-                  </Button>
+                  </FVButton>
                 </div>
               </AuthorizationFilter>
             ) : null}
@@ -339,49 +327,46 @@ export class PageToolbar extends Component {
               {/* Button: Publish */}
               {this.props.actions.includes('publish') ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
+                    color="secondary"
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
-                    color="secondary"
                     onClick={this._publishChanges}
+                    variant="contained"
                   >
                     {intl.trans('publish_changes', 'Publish Changes', 'words')}
-                  </Button>
+                  </FVButton>
                 </AuthorizationFilter>
               ) : null}
               {/* Button: Edit */}
               {this.props.actions.includes('edit') ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
-                    color="secondary"
+                    color="primary"
                     onClick={this.props.handleNavigateRequest.bind(
                       this,
                       this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
                     )}
+                    variant="contained"
                   >
                     {intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
-                  </Button>
+                  </FVButton>
                 </AuthorizationFilter>
               ) : null}
 
               {/* Button: New */}
               {this.props.actions.includes('add-child') ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
-                  <Button
+                  <FVButton
                     className="PageToolbar__button"
-                    size="medium"
-                    variant="raised"
-                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
                     color="secondary"
+                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
+                    variant="contained"
                   >
                     {intl.trans('add_new_page', 'Add New Page', 'words')}
-                  </Button>
+                  </FVButton>
                 </AuthorizationFilter>
               ) : null}
             </div>
@@ -481,7 +466,7 @@ export class PageToolbar extends Component {
                 />
               }
               label={
-                <Typography variant="title">
+                <Typography variant="body1">
                   {documentPublished
                     ? intl.trans('published', 'Published', 'first')
                     : intl.trans('publish', 'Publish', 'first')}
@@ -534,7 +519,17 @@ const mapDispatchToProps = {
   fetchTasks,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageToolbar)
+const styles = {
+  colorPrimary: {
+    backgroundColor: '#4d948d',
+  },
+  colorSecondary: {
+    backgroundColor: '#000',
+  },
+}
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PageToolbar)
+)
