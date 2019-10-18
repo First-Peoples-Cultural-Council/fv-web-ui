@@ -3,18 +3,15 @@
 
 describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
   it('Test to check that a language admin can create and delete songs.', () => {
-    // TODO: Add database setup here.
-    // Requires no songs exist in database for SENCOTEN
-
     /*
                     Login as Language Admin and check that no songs currently exists.
                 */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/songs')
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
     cy.getByText('Create Song Book', { exact: true }).click()
@@ -115,7 +112,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     /*
                     Checking to see if the song now exists.
                 */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitle').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -152,7 +149,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/songs')
     cy.getByText('TestSongTitleTestSongTitle1', { exact: true })
       .should('exist')
       .click()

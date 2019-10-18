@@ -3,18 +3,23 @@
 
 describe('MemberView-Phrase.js > MemberView-Phrase', () => {
   it('Test to check the word visibility for a member.', () => {
-    // TODO: Add database setup here.
-    // Requires a new phrase that is enabled and not published called TestPhrase exist in database for SENCOTEN.
+    /*
+    Reset words for language
+   */
+    cy.exec('bash ./scripts/ResetWordLangFive.sh enabled-true')
+      .its('stdout')
+      .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 
     /*
             Login as Language Member, navigate to phrases and check that a phrase exists.
         */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -31,14 +36,13 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
             Check that the edit button does not exists
         */
     cy.queryByText('Edit phrase').should('not.exist')
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
 
     /*
             Check that the phrase does not exist in "Phrases in New Status" page.
         */
-    cy.get('div.clearfix.page-toolbar').within(() => {
-      cy.get('button.hidden-xs', { exact: true }).click()
-    })
+    cy.wait(500)
+    cy.get('[title="More Options"]').click()
     cy.getByText('Reports', { exact: true }).click()
     cy.getByText('Phrases in New Status', { exact: true }).click()
     cy.wait(500)

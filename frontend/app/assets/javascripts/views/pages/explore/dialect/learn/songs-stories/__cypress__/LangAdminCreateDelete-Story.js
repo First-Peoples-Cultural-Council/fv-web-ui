@@ -3,18 +3,15 @@
 
 describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
   it('Test to check that a language admin can create and delete stories.', () => {
-    // TODO: Add database setup here.
-    // Requires no stories exist in database for SENCOTEN
-
     /*
                         Login as Language Admin and check that no stories currently exists.
                     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
     cy.getByText('Create Story Book', { exact: true }).click()
@@ -115,7 +112,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
     /*
                         Checking to see if the story now exists.
                     */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -152,7 +149,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/stories')
     cy.getByText('TestStoryTitleTestStoryTitle1', { exact: true })
       .should('exist')
       .click()
