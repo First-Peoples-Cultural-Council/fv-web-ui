@@ -120,7 +120,7 @@ export class AppLeftNav extends Component {
     ),
   }
   render() {
-    const _backgroundColor = selectn('theme.palette.primary.main', this.props)
+    const _backgroundColor = selectn('theme.appBar.backgroundColor', this.props)
     const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
     return (
       <Drawer
