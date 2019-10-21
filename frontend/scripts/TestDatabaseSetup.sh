@@ -129,6 +129,13 @@ if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFive creation failed \n'; exit $rc
   echo
 fi
+# Publish the language TestLanguageFive
+echo "Enabling language"
+response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+if [[ "$response" -ne 200 ]]; then
+    echo -e 'TestLanguageFive publish failed \n'; exit $response
+    echo
+fi
 # Import Word using fv-batch-import
 cd $DIRECTORY/fv-batch-import/target
 java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
