@@ -82,6 +82,13 @@ if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageTwo Phrases batch failed \n'; exit $rc
   echo
 fi
+# Publish the language TestLanguageTwo
+echo "Enabling language"
+response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+if [[ "$response" -ne 200 ]]; then
+    echo -e 'TestLanguageTwo publish failed \n'; exit $response
+    echo
+fi
 
 cd $DIRECTORY/fv-utils/target/
 # Delete existing TestLanguageThree directory and all files
