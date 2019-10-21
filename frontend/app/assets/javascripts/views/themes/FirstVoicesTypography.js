@@ -80,7 +80,7 @@ export default {
     color: 'rgba(0, 0, 0, 0.54)',
   },
   button: {
-    fontSize: '1.8rem',
+    fontSize: '1.6rem',
     textTransform: 'none',
     fontWeight: 300,
     fontFamily: 'Arial, sans-serif',
