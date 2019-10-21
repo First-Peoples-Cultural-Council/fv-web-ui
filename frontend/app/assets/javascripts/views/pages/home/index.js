@@ -218,7 +218,7 @@ export class PageHome extends Component {
                   {this.intl.searchAndReplace(selectn('fvpage:blocks[0].title', page), {})}
                 </h1>
                 <div className={classNames('home-intro-p-cont', 'body')}>
-                  <p
+                  <div
                     dangerouslySetInnerHTML={{
                       __html: this.intl.searchAndReplace(selectn('fvpage:blocks[0].text', page), {}),
                     }}
