@@ -53,6 +53,7 @@ import PageDialectLearnPhrasesCategories from './explore/dialect/learn/phrases/c
 
 import PageTest from './test.js'
 import PageDebugAPI from './debug-api.js'
+import PageDebugTypography from './debug-typography.js'
 import PageError from './error.js'
 import PageHome from './home'
 import PageContent from './content'
@@ -114,6 +115,7 @@ import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edi
 export {
   PageTest,
   PageDebugAPI,
+  PageDebugTypography,
   PageError,
   PageIntro,
   PageHome,
