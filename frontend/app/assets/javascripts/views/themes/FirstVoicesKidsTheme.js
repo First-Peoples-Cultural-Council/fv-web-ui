@@ -53,27 +53,27 @@ export default {
   },
   button: {
     containedPrimary: {
-      color: 'white',
-      backgroundColor: 'black',
+      color: '#fff', // '#000',
+      backgroundColor: '#FF5790',
       '&:hover': {
-        color: 'black',
-        backgroundColor: 'white',
+        color: '#222',
+        backgroundColor: '#ff87b0',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'yellow',
+          backgroundColor: '#ff87b0',
         },
       },
       '&$disabled': {
-        color: '#000',
+        color: '#a1a1a1',
         backgroundColor: '#e5e5e5',
       },
     },
     containedSecondary: {
-      color: 'blue',
-      backgroundColor: 'yellow',
+      color: '#fff', // '#000',
+      backgroundColor: '#26a69a',
       '&:hover': {
-        color: 'yellow',
-        backgroundColor: 'blue',
+        color: '#2f2f2f',
+        backgroundColor: '#89cac2',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'pink',

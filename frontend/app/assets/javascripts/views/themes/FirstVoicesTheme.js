@@ -66,18 +66,18 @@ export default {
   },
   button: {
     containedPrimary: {
-      color: 'white',
-      backgroundColor: 'black',
+      color: '#fff',
+      backgroundColor: '#b40000',
       '&:hover': {
-        color: 'black',
-        backgroundColor: 'white',
+        color: '#fff',
+        backgroundColor: '#d57470',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'yellow',
+          backgroundColor: '#d57470',
         },
       },
       '&$disabled': {
-        color: '#000',
+        color: '#a1a1a1',
         backgroundColor: '#e5e5e5',
       },
     },

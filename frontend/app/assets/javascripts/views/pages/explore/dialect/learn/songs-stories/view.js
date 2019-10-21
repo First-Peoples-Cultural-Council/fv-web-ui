@@ -44,7 +44,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
@@ -216,15 +216,15 @@ export class SongsStoriesView extends Component {
           items={selectn('response.entries', computeBookEntries) || []}
           appendControls={[
             this.state.bookOpen ? (
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 key="close"
                 onClick={() => {
                   this.setState({ bookOpen: false })
                 }}
               >
                 {intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
-              </Button>
+              </FVButton>
             ) : (
               ''
             ),

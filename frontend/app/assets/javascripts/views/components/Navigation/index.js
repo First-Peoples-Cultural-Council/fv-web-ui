@@ -29,7 +29,7 @@ import UIHelpers from 'common/UIHelpers'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grow from '@material-ui/core/Grow'
@@ -295,7 +295,7 @@ export class Navigation extends Component {
 
                 {/* Search Button: Cancel (only on small screens) */}
                 <span className="hideLarge">
-                  <Button
+                  <FVButton
                     variant="flat"
                     onClick={(e) => {
                       e.preventDefault()
@@ -305,7 +305,7 @@ export class Navigation extends Component {
                     className={appBar}
                   >
                     {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
-                  </Button>
+                  </FVButton>
                 </span>
               </div>
 

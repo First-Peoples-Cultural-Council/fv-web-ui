@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import { withTheme } from '@material-ui/core/styles'
 
 import IntroCardView from 'views/components/Browsing/intro-card-view'
@@ -163,7 +163,7 @@ export class PageHome extends Component {
     ;(selectn('response.entries', _computeUserStartpage) || []).map(
       function computeUserStartPageMap(dialect, index) {
         const tableRow = (
-          <Button
+          <FVButton
             variant="contained"
             key={index}
             color="primary"
@@ -174,7 +174,7 @@ export class PageHome extends Component {
             style={{ marginRight: '10px', height: '50px' }}
           >
             {'Access ' + selectn('properties.dc:title', dialect)}
-          </Button>
+          </FVButton>
         )
 
         accessButtons.push(tableRow)
@@ -183,7 +183,7 @@ export class PageHome extends Component {
 
     if (accessButtons.length === 0) {
       accessButtons[0] = (
-        <Button
+        <FVButton
           variant="contained"
           key={0}
           color="primary"
@@ -198,7 +198,7 @@ export class PageHome extends Component {
             default: 'Get Started!',
             case: 'words',
           }) + '!'}
-        </Button>
+        </FVButton>
       )
     }
 

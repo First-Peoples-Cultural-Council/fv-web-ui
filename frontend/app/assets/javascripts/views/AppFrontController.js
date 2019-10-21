@@ -22,7 +22,7 @@ import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Navigation from 'views/components/Navigation'
 import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
 import KidsNavigation from 'views/components/Kids/navigation'
@@ -211,13 +211,13 @@ export class AppFrontController extends Component {
                 className={classNames('alert', 'alert-warning')}
               >
                 {selectn(warning, this.props.warnings)}
-                <Button onClick={() => this.setState({ warningsDismissed: true })}>
+                <FVButton onClick={() => this.setState({ warningsDismissed: true })}>
                   {intl.translate({
                     key: 'dismiss',
                     default: 'Dismiss',
                     case: 'words',
                   })}
-                </Button>
+                </FVButton>
               </div>
             )
           }

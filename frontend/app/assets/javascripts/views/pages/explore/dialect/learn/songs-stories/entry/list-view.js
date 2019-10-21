@@ -15,13 +15,12 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
+import { List } from 'immutable'
 import classNames from 'classnames'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
-import Button from '@material-ui/core/Button'
-import selectn from 'selectn'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -102,9 +101,9 @@ export default class ListView extends Component {
               "Note: This new sort order will be saved once the book is saved in the 'Book' tab.",
               'first'
             )}
-            <Button variant="raised" style={{ marginLeft: '15px' }} onClick={this._reset}>
+            <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
               {intl.trans('reset_order', 'Reset Order', 'words')}
-            </Button>
+            </FVButton>
           </div>
         ) : (
           ''
@@ -115,19 +114,19 @@ export default class ListView extends Component {
 
             if (this.props.reorder) {
               entryControls.push(
-                <Button variant="raised" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
+                <FVButton variant="contained" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
                   {intl.trans('move_up', 'move up', 'words')}
-                </Button>
+                </FVButton>
               )
               entryControls.push(
-                <Button
-                  variant="raised"
+                <FVButton
+                  variant="contained"
                   key="down"
                   disabled={i == this.state.items.size - 1}
                   onClick={this._moveDown.bind(this, entry)}
                 >
                   {intl.trans('move_down', 'move down', 'words')}
-                </Button>
+                </FVButton>
               )
             }
 

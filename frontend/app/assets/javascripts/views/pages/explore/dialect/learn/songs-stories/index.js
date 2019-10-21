@@ -27,7 +27,7 @@ import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 import selectn from 'selectn'
 
@@ -159,7 +159,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
               hideFromSections
               routeParams={this.props.routeParams}
             >
-              <Button
+              <FVButton
                 color="primary"
                 variant="contained"
                 onClick={(e) => {
@@ -173,7 +173,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                   'words',
                   [this.props.typeFilter]
                 )}
-              </Button>
+              </FVButton>
               {/* <a
                 className="_btn _btn--primary"
                 style={{

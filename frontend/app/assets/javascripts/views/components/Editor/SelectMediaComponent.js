@@ -32,7 +32,7 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -216,9 +216,9 @@ class SelectMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <Button variant="outlined" onClick={this._handleOpen}>
+        <FVButton variant="outlined" onClick={this._handleOpen}>
           {this.props.label}
-        </Button>
+        </FVButton>
         <Dialog open={this.state.open} fullWidth maxWidth={false}>
           <DialogTitle>
             {`${intl.searchAndReplace(
@@ -252,9 +252,9 @@ class SelectMediaComponent extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="secondary" onClick={this._handleClose}>
+            <FVButton variant="contained" color="secondary" onClick={this._handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
-            </Button>
+            </FVButton>
           </DialogActions>
         </Dialog>
       </div>

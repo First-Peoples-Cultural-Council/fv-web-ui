@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 // import copy from '../internationalization'
 import File from 'views/components/Form/Common/File'
@@ -172,7 +172,7 @@ export class ContributorStateCreate extends React.Component {
           {/* <button className="_btn _btn--primary" disabled={isBusy || isTrashed} type="submit">
             {_copy.submit}
           </button> */}
-          <Button
+          <FVButton
             variant="contained"
             color="primary"
             disabled={isBusy || isTrashed}
@@ -182,7 +182,7 @@ export class ContributorStateCreate extends React.Component {
             }}
           >
             {_copy.submit}
-          </Button>
+          </FVButton>
         </div>
       </form>
     )

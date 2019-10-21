@@ -35,7 +35,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -221,9 +221,9 @@ export class AddMediaComponent extends Component {
     let fileTypeLabel = intl.trans('file', 'File', 'first')
 
     const actions = [
-      <Button key="fb0" color="secondary" onClick={this.handleClose}>
+      <FVButton key="fb0" color="secondary" onClick={this.handleClose}>
         {intl.trans('cancel', 'Cancel', 'first')}
-      </Button>,
+      </FVButton>,
     ]
 
     switch (this.props.type) {
@@ -303,9 +303,9 @@ export class AddMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <Button variant="outlined" onClick={this.handleOpen}>
+        <FVButton variant="outlined" onClick={this.handleOpen}>
           {this.props.label}
-        </Button>
+        </FVButton>
         <Dialog fullWidth maxWidth="md" actions={actions} open={this.state.open}>
           <DialogTitle>
             {intl.trans(
@@ -326,9 +326,9 @@ export class AddMediaComponent extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="secondary" onClick={this.handleClose}>
+            <FVButton variant="contained" color="secondary" onClick={this.handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
-            </Button>
+            </FVButton>
           </DialogActions>
         </Dialog>
       </div>

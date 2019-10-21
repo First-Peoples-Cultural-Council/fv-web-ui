@@ -30,7 +30,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import EditorInsertChart from '@material-ui/icons/InsertChart'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import IntlService from 'views/services/intl'
 
@@ -148,9 +148,9 @@ export class ToolbarNavigation extends Component {
           <div className="col-xs-12 col-md-2">
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
               <div className={classNames('hidden-xs', { hidden: !this.props.showStats })} float="right">
-                <Button variant="flat" style={{ color: '#fff' }} onClick={this.props.showStats}>
+                <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.showStats}>
                   <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
-                </Button>
+                </FVButton>
               </div>
             </AuthenticationFilter>
           </div>

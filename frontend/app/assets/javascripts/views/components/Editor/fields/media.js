@@ -3,7 +3,7 @@ import t from 'tcomb-form'
 import selectn from 'selectn'
 
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
 import SelectMediaComponent from 'views/components/Editor/SelectMediaComponent'
@@ -41,7 +41,7 @@ function renderInput(locals) {
         crop
         tagStyles={locals.type == 'FVPicture' ? { height: '200px' } : null}
       />
-      <Button
+      <FVButton
         variant="flat"
         style={{
           position: 'absolute',
@@ -59,7 +59,7 @@ function renderInput(locals) {
       >
         <SwapHorizIcon style={{ verticalAlign: 'middle' }} className="material-icons" />
         {intl.trans('replace', 'Replace', 'first')}
-      </Button>
+      </FVButton>
     </div>
   )
 
@@ -81,9 +81,9 @@ function renderInput(locals) {
           dialect={locals.context}
         />
         {selectn('context.initialValues.' + locals.attrs.name, locals) ? (
-          <Button variant="flat" onClick={onCancel}>
+          <FVButton variant="flat" onClick={onCancel}>
             {intl.trans('cancel', 'Cancel', 'first')}
-          </Button>
+          </FVButton>
         ) : (
           ''
         )}
