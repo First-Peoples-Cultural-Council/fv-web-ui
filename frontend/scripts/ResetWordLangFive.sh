@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# This script is used by individual Cypress tests to reset only the dictionary for
+# the testing language "TestLanguageFive" so that it can be reused.
+
 DIRECTORY=$PWD
 echo $DIRECTORY
 

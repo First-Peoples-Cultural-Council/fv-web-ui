@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# This script is used exclusively to reset the test languages prior to running the Cypress tests.
+# To use the script ensure the correct username and password environment variables are set for
+# $CYPRESS_FPCCAdmin_USERNAME and $CYPRESS_FPCCAdmin_PASSWORD . Optionally use the -skip-clone flag
+# to bypass the cloning of fv-utils and fv-batch-import if they have already been cloned.
+
 DIRECTORY=$PWD
 echo $DIRECTORY
 
@@ -12,7 +18,7 @@ if [ "$1" != "-skip-clone" ]; then
       rm -rf $DIRECTORY/fv-utils
     fi
     if [ -d "$DIRECTORY/fv-batch-import" ]; then
-      echo "Removing old fv--batch-import"
+      echo "Removing old fv-batch-import"
       rm -rf $DIRECTORY/fv-batch-import
     fi
 
