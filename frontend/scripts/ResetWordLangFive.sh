@@ -9,6 +9,13 @@ if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFive dictionary clear failed \n'; exit 1
   echo
 fi
+# Publish the fresh dictionary to match the language
+echo "Publishing dictionary"
+response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive/Dictionary","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+if [[ "$response" -ne 200 ]]; then
+    echo -e 'TestLanguageFive dictionary publish failed \n'; exit $response
+    echo
+fi
 
 # Import Word using fv-batch-import
 cd $DIRECTORY/fv-batch-import/target
