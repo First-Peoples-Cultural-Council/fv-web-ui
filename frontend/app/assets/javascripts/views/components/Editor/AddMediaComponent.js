@@ -265,7 +265,7 @@ export class AddMediaComponent extends Component {
           onChange={this._change}
         />
         {uploadText}
-        <button type="submit" className={classNames('btn', 'btn-primary')}>
+        <button type="button" onClick={this._save} className={classNames('btn', 'btn-primary')}>
           {intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
         </button>
       </form>

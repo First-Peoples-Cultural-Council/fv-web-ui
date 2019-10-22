@@ -27,10 +27,6 @@ import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-// import StringHelpers from 'common/StringHelpers'
-import UIHelpers from 'common/UIHelpers'
-
-// import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
 import AppFrontController from './AppFrontController'
 

@@ -53,7 +53,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import List from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Tab from '@material-ui/core/Tab'
@@ -245,6 +245,7 @@ export class MediaView extends Component {
                                     {thumbnails.map((thumbnail, key) => {
                                       return (
                                         <ListItem
+                                          button
                                           onClick={() => this.setState({ showThumbnailDialog: thumbnail })}
                                           key={key}
                                         >
