@@ -3,25 +3,22 @@
 
 describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', () => {
   it('Test to check recorder with approval creation and deletion of stories.', () => {
-    // TODO: Add database setup here.
-    // Requires no stories exist in database for SENCOTEN
-
     /*
                             Login as Recorder with Approval and check that no stories currently exists.
                         */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
+      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER_USERNAME',
+      userPassword: 'TESTLANGUAGETHREE_RECORDER_APPROVER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
 
     /*
                         Going through the steps to create a phrase
                     */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Stories', { exact: true }).click()
@@ -125,7 +122,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     /*
                         Checking to see if the story now exists.
                     */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -138,16 +135,20 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
                     */
     cy.wait(500)
     cy.getByText('TestStoryTitle').click()
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(0)
+          .click()
+      })
     })
     cy.wait(500)
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
     })
     cy.getByTestId('ViewWithActions__buttonPublish').click()
 
@@ -155,7 +156,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
                         Check that edit book button is visible and functional.
                         Check that the cancel button when editing story works.
                     */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/stories')
     cy.wait(800)
     cy.getByText('TestStoryTitle').click()
     cy.getByText('Edit book')
@@ -170,6 +171,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
 
     /*
                         Check that edit book saves properly.
@@ -183,7 +185,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/stories')
     cy.getByText('TestStoryTitleTestStoryTitle1', { exact: true })
       .should('exist')
       .click()

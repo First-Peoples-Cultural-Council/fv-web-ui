@@ -119,10 +119,13 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.getByText('Definitions', { exact: true }).should('exist')
       cy.getByText('Phrase books', { exact: true }).should('exist')
     })
+    cy.get('[name="dc:title"]').type('ShouldNotShow')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
+    cy.queryByText('TestPhraseShouldNotShow').should('not.exist')
 
     /*
                 Check that edit phrase saves properly.

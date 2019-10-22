@@ -133,7 +133,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
-    cy.get('div.hidden-xs.clearfix').within(() => {
+    cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
@@ -142,11 +142,11 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Check that the phrase is now visible for Site User when enabled
-         */
+              Login as language member and check that the story is now visible.
+           */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
@@ -156,7 +156,50 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.getByText('Enabled').should('exist')
     })
     cy.queryByText('No results found.').should('not.exist')
+    cy.getByTestId('Navigation__open').click()
+    cy.getByText('Sign Out').click()
 
-    // TODO: Test that phrase is visible to public once published.  FW-569 needs looking at first.
+    /*
+                Login as admin and publish the phrase.
+             */
+    cy.login({
+      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
+      url: 'https://dev.firstvoices.com/nuxeo/startup',
+    })
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
+    cy.queryByText('TestPhrase')
+      .should('exist')
+      .click()
+    cy.wait(500)
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
+    })
+    cy.wait(500)
+    cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
+      cy.getByText('Publish', { exact: true }).click()
+    })
+    cy.wait(1000)
+
+    /*
+        Check that the published phrase is visible.
+     */
+    cy.getByText('Public View').click()
+    cy.wait(1500)
+    cy.get('[id="pageNavigation"]').within(() => {
+      cy.get('div.row.Navigation__dialectContainer')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(58, 104, 128)')
+    })
+    cy.getByText('TestPhrase').should('exist')
+    cy.getByText('TestTranslation').should('exist')
+    cy.getByText('TestCulturalNote').should('exist')
+    cy.getByText('TestImage').should('exist')
+    cy.getByText('TestVideo').should('exist')
+    cy.getByText('TestAcknowledgement').should('exist')
   })
 })

@@ -3,24 +3,21 @@
 
 describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', () => {
   it('Test to check recorder with approval creation and deletion of phrases.', () => {
-    // TODO: Add database setup here.
-    // Requires no phrases in database for SENCOTEN
-
     /*
                     Login as Recorder with Approval and check that no phrases currently exists.
                 */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
+      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER_USERNAME',
+      userPassword: 'TESTLANGUAGETHREE_RECORDER_APPROVER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/phrases')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -101,7 +98,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     /*
                 Checking to see if the phrase now exists.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/phrases')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -114,16 +111,20 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
             */
     cy.wait(500)
     cy.getByText('TestPhrase').click()
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(0)
+          .click()
+      })
     })
     cy.wait(500)
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
     })
     cy.getByTestId('ViewWithActions__buttonPublish').click()
 
@@ -131,7 +132,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                 Check that edit phrase button is visible and functional.
                 Check that the cancel button when editing phrase works.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase').click()
     cy.getByText('Edit phrase')
@@ -146,6 +147,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
 
     /*
         Check that edit phrase saves properly.

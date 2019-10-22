@@ -117,10 +117,13 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       cy.getByText('Part of speech', { exact: true }).should('exist')
       cy.getByText('Pronunciation', { exact: true }).should('exist')
     })
+    cy.getByTestId('dc-title').type('ShouldNotShow')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
+    cy.queryByText('TestWordShouldNotShow').should('not.exist')
 
     /*
             Check that edit word saves properly.
@@ -129,7 +132,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     cy.getByText('Edit word')
       .should('exist')
       .click()
-    cy.get('#virtual-keyboard-helper-dc-title').type('TestWord1')
+    cy.getByTestId('dc-title').type('TestWord1')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
