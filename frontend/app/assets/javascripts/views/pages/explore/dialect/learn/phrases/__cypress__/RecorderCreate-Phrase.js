@@ -3,18 +3,15 @@
 
 describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
   it('Test to check a recorder creating a phrase.', () => {
-    // TODO: Add database setup here.
-    // Requires no phrases exist in database for SENCOTEN.
-
     /*
                 Login as Recorder, go to phrase creation page and click create new phrase
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -94,7 +91,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Check that the phrase now exists
          */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -115,7 +112,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userPassword: 'SITE_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.getByText('No results found.').should('exist')
 
@@ -129,11 +126,11 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Login as admin and enable the phrase
          */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
     cy.get('div.hidden-xs.clearfix').within(() => {
@@ -152,7 +149,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userPassword: 'SITE_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')

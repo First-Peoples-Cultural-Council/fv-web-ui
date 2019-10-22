@@ -45,7 +45,6 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     /*
             Check for edit phrase button and then enable the phrase.
          */
-    cy.log('Check for edit phrase button and then enable the phrase.')
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
@@ -98,6 +97,21 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    // TODO: Add test for public view here. Public view not currently working so can't implement test.
+    cy.wait(1000)
+
+    /*
+    Check that the word is now visible to the public.
+   */
+    cy.getByText('Public View').click()
+    cy.wait(1000)
+    cy.get('div.row.Navigation__dialectContainer')
+      .should('have.css', 'background-color')
+      .and('eq', 'rgb(58, 104, 128)')
+    cy.getByText('TestPhrase').should('exist')
+    cy.getByText('TestTranslation').should('exist')
+    cy.getByText('TestCulturalNote').should('exist')
+    cy.getByText('TestImage').should('exist')
+    cy.getByText('TestVideo').should('exist')
+    cy.getByText('TestAcknowledgement').should('exist')
   })
 })

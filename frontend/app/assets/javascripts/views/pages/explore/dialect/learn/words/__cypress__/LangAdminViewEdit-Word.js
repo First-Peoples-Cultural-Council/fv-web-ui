@@ -7,47 +7,52 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     // A test word that is not published or enabled must exist for SENCOTEN.
 
     /*
-            Login as Site Member and check that the word is not visible when not enabled.
+            Login as Language Member and check that the word is not visible when not enabled.
         */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
-    cy.getByText('No results found.', { exact: true }).should('exist')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.get('div.Header.row').within(() => {
+      cy.getByText('Words', { exact: true }).click()
+    })
+    cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Admin, check that edit functionality works, and enable word.
-        */
+                Login as Language Admin, navigate to words and check that a word exists.
+            */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
-    cy.getByText('Workspace', { exact: true }).click()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.get('div.Header.row').within(() => {
+      cy.getByText('Words', { exact: true }).click()
+    })
     cy.getByTestId('DictionaryList__row').within(() => {
+      cy.getByText('New').should('exist')
+      cy.getByText('TestTranslation').should('exist')
       cy.getByText('TestWord')
         .should('exist')
         .click()
     })
-    cy.getByText('Edit word')
-      .should('exist')
-      .click()
-    cy.get('div.form-horizontal').within(() => {
-      cy.getByText('Word', { exact: true }).should('exist')
-      cy.getByText('Part of speech', { exact: true }).should('exist')
-      cy.getByText('Pronunciation', { exact: true }).should('exist')
-    })
-    cy.wait(500)
-    cy.getByTestId('withForm__btnGroup1').within(() => {
-      cy.getByText('Cancel').click()
-    })
-    cy.get('div.hidden-xs.clearfix').within(() => {
+
+    /*
+            Check for edit word button and then enable the word.
+         */
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
+    cy.wait(800)
+    cy.getByText('TestWord').click()
+    cy.queryByText('Edit word', { exact: true }).should('exist')
+    cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
@@ -56,18 +61,21 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByText('Sign Out').click()
 
     /*
-            Login as Site Member and check that the word is now visible.
-        */
+            Login as member and check that the word is now visible and enabled.
+         */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.get('div.Header.row').within(() => {
+      cy.getByText('Words', { exact: true }).click()
+    })
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
       cy.getByText('Enabled').should('exist')
     })
     cy.getByTestId('Navigation__open').click()
@@ -77,18 +85,14 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
             Login as Admin and publish the word.
         */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
-    cy.getByText('Workspace', { exact: true }).click()
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord')
-        .should('exist')
-        .click()
-    })
-    cy.get('div.hidden-xs.clearfix').within(() => {
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
+    cy.wait(800)
+    cy.getByText('TestWord', { exact: true }).click()
+    cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
         .click()
@@ -96,6 +100,23 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    // TODO: Add test for public view here. Public view not currently working so can't implement test.
+    cy.wait(1000)
+
+    /*
+      Check that the word is now visible to the public.
+     */
+    cy.getByText('Public View').click()
+    cy.wait(1000)
+    cy.get('div.row.Navigation__dialectContainer')
+      .should('have.css', 'background-color')
+      .and('eq', 'rgb(58, 104, 128)')
+    cy.getByText('TestWord').should('exist')
+    cy.getByText('TestTranslation').should('exist')
+    cy.getByText('TestCulturalNote').should('exist')
+    cy.getByText('TestLiteralTranslation').should('exist')
+    cy.getByText('TestPronunciation').should('exist')
+    cy.getByText('TestImage').should('exist')
+    cy.getByText('TestVideo').should('exist')
+    cy.getByText('TestAcknowledgement').should('exist')
   })
 })

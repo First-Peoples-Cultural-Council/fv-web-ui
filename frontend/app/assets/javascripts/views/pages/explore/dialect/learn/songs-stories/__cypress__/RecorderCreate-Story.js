@@ -3,18 +3,15 @@
 
 describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
   it('Test to check story creation for recorders.', () => {
-    // TODO: Add database setup here.
-    // Requires no stories exist in database for SENCOTEN.
-
     /*
                 Login as Recorder and check that no stories exist.
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Stories', { exact: true }).click()
@@ -119,7 +116,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     /*
                 Checking to see if the story now exists
              */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -137,11 +134,11 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is not visible.
              */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -150,11 +147,11 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin, check that the story is editable, and enable the story.
              */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle')
       .should('exist')
       .click()
@@ -167,7 +164,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTranslation').should('exist')
       cy.getByText('Continue to story').should('exist')
@@ -188,11 +185,11 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is now visible.
              */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitleEdited').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -205,11 +202,11 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin and publish the story.
              */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitleEdited')
       .should('exist')
       .click()
