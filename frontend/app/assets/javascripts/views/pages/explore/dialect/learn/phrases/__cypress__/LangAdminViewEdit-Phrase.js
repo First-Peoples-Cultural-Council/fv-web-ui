@@ -100,7 +100,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.wait(1000)
 
     /*
-    Check that the word is now visible to the public.
+    Check that the phrase is now visible to the public.
    */
     cy.getByText('Public View').click()
     cy.wait(1000)
@@ -110,8 +110,8 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.getByText('TestPhrase').should('exist')
     cy.getByText('TestTranslation').should('exist')
     cy.getByText('TestCulturalNote').should('exist')
-    cy.getByText('TestImage').should('exist')
-    cy.getByText('TestVideo').should('exist')
+    cy.getByText('TestPhraseImage').should('exist')
+    cy.getByText('TestPhraseVideo').should('exist')
     cy.getByText('TestAcknowledgement').should('exist')
   })
 })

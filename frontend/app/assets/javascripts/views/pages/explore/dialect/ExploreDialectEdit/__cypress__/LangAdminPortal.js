@@ -142,7 +142,6 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
     cy.wait(500)
 
     cy.get('#portalFeaturedAudio').should('exist')
-    cy.getByText('Public View').click()
     cy.queryByText('TestPortalGreeting').should('exist')
     cy.queryByText('TestPortalIntroduction').should('exist')
     cy.queryByText('TestPortalNews').should('exist')
@@ -153,15 +152,6 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       'background-image',
       'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
     )
-
-    /*
-        Test that the changes are not reflected on the public view.
-     */
-    cy.getByText('Public View').click()
-    cy.queryByText('TestPortalGreeting').should('not.exist')
-    cy.queryByText('TestPortalIntroduction').should('not.exist')
-    cy.queryByText('TestPortalNews').should('not.exist')
-    cy.queryByText('TestPortalRelatedLinkTitle').should('not.exist')
 
     /*
         Test that if a user clicks cancel when editing, the changes don't save.
@@ -178,5 +168,22 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
 
     cy.queryByText('ThisShouldNotSave').should('not.exist')
     cy.queryByText('TestPortalGreetingThisShouldNotSave').should('not.exist')
+
+    /*
+        Check that the information is visible on the public view
+     */
+    cy.getByText('Public View').click()
+    cy.wait(1000)
+    cy.get('#portalFeaturedAudio').should('exist')
+    cy.queryByText('TestPortalGreeting').should('exist')
+    cy.queryByText('TestPortalIntroduction').should('exist')
+    cy.queryByText('TestPortalNews').should('exist')
+    cy.queryByText('TestPortalRelatedLinkTitle').should('exist')
+
+    cy.get('div.Header.row').should(
+      'not.have.css',
+      'background-image',
+      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
+    )
   })
 })
