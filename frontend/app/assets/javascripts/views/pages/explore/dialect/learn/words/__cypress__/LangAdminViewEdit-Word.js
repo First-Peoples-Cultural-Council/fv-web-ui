@@ -3,9 +3,6 @@
 
 describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
   it('Test to check language admin viewing and editing of words permissions.', () => {
-    // TODO: Add database setup here.
-    // A test word that is not published or enabled must exist for SENCOTEN.
-
     /*
             Login as Language Member and check that the word is not visible when not enabled.
         */

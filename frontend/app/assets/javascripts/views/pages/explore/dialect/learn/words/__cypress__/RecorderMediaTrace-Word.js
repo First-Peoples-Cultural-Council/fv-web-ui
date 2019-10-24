@@ -3,9 +3,7 @@
 
 describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
   it('Test to check that media added to a word traces back to the word properly.', () => {
-    // TODO: Add database setup here.
-    // A single test word that has a photo, audio, and a video must exist for TESTLANGUAGETWO.
-    // Notes: Media is currently not deleted when a word is deleted and this test
+    // Note: Media is currently not deleted when a word is deleted and this test
     // will fail if leftover media exists.
 
     /*

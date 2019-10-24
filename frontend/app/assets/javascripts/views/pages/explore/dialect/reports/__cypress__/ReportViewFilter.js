@@ -5,21 +5,20 @@ import 'cypress-testing-library/add-commands'
 
 describe('ReportViewFilter.js > ReportViewFilter', () => {
   it('Test to check that reports are generated properly.', () => {
-    // TODO: Add database setup here.
-    // A test word which has been enabled but not published must exist for SENCOTEN.
+    cy.exec('bash ./scripts/ResetWordLangFive.sh enabled-true')
+      .its('stdout')
+      .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 
     /*
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
-    cy.get('div.clearfix.page-toolbar').within(() => {
-      cy.get('button.hidden-xs', { exact: true }).click()
-    })
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.get('[title="More Options"]', { exact: true }).click()
     cy.getByText('Reports', { exact: true }).click()
 
     /*
@@ -50,14 +49,12 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
-    cy.get('div.clearfix.page-toolbar').within(() => {
-      cy.get('button.hidden-xs', { exact: true }).click()
-    })
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.get('[title="More Options"]', { exact: true }).click()
     cy.getByText('Reports', { exact: true }).click()
 
     /*
@@ -78,16 +75,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
       cy.get('input.form-control').type('Audio')
     })
     cy.wait(500)
-    /*
-        // TODO: Uncomment the next three lines of code and remove the following three lines of code when FW-591 is fixed.
-        cy.get('div.FilteredGridList__btnGroup').within(() => {
-            cy.getByText('Filter').click()
-        })
-        */
-    // TODO: Remove the following three lines when FW-591 is fixed.
-    cy.get('fieldset.fieldset').within(() => {
-      cy.get('input.form-control').type('{enter}')
-    })
+    cy.getByText('Filter').click()
 
     /*
             Check that after filtering only the proper four exist.

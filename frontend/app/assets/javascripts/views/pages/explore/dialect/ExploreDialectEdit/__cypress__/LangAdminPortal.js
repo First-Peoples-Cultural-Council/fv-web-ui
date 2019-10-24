@@ -3,10 +3,6 @@
 
 describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
   it('Test to check that a language admin can edit the portal.', () => {
-    // TODO: Add database setup here.
-    // Requires the default portal information and media is all that exists for TESTLANGUAGETWO.
-    // Also requires that a test word exists in the database for TESTLANGUAGETWO called "TestWord".
-
     /*
                         Login as Language Admin and navigate to the edit portal page.
                     */
