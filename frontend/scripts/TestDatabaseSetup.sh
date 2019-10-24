@@ -2,7 +2,7 @@
 
 # This script is used exclusively to reset the test languages prior to running the Cypress tests.
 # To use the script ensure the correct username and password environment variables are set for
-# $CYPRESS_FPCCAdmin_USERNAME and $CYPRESS_FPCCAdmin_PASSWORD . Optionally use the -skip-clone flag
+# $CYPRESS_FV_USERNAME and $CYPRESS_FV_PASSWORD . Optionally use the -skip-clone flag
 # to bypass the cloning of fv-utils and fv-batch-import if they have already been cloned.
 
 DIRECTORY=$PWD
@@ -34,7 +34,7 @@ mvn clean install
 # Check that the return code is zero
 if [[ "$?" -ne 0 ]]; then
   echo
-  echo -e 'fv-utils build failed \n'; exit $rc
+  echo -e 'fv-utils build failed \n'; exit 1
   echo
 fi
 echo
@@ -43,117 +43,117 @@ mvn clean install
 # Check that the return code is zero
 if [[ "$?" -ne 0 ]]; then
   echo
-  echo -e 'fv-batch-import build failed \n'; exit $rc
+  echo -e 'fv-batch-import build failed \n'; exit 1
   echo
 fi
 
 echo
 cd $DIRECTORY/fv-utils/target/
 # Delete existing TestLanguageOne directory and all files
-java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageOne
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageOne
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageOne teardown failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageOne teardown failed \n'; exit 1
   echo
 fi
 # Create a fresh TestLanguageOne directory and all files
-java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageOne
+java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageOne
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageOne creation failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageOne creation failed \n'; exit 1
   echo
 fi
 
 # Delete existing TestLanguageTwo directory and all files
-java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageTwo
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageTwo teardown failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageTwo teardown failed \n'; exit 1
   echo
 fi
 # Create a fresh TestLanguageTwo directory and all files
-java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageTwo
+java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageTwo creation failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageTwo creation failed \n'; exit 1
   echo
 fi
 # Publish the language TestLanguageTwo
 echo "Enabling language"
-response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$response" -ne 200 ]]; then
     echo -e 'TestLanguageTwo publish failed \n'; exit $response
     echo
 fi
 # Import Word using fv-batch-import
 cd $DIRECTORY/fv-batch-import/target
-java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
+java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageTwo Words batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageTwo Words batch failed \n'; exit 1
   echo
 fi
 # Import Phrase using fv-batch-import
 cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoPhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
+java -jar fv-batch-import-phrases.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoPhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageTwo Phrases batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageTwo Phrases batch failed \n'; exit 1
   echo
 fi
 
 cd $DIRECTORY/fv-utils/target/
 # Delete existing TestLanguageThree directory and all files
-java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageThree
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageThree
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageThree teardown failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageThree teardown failed \n'; exit 1
   echo
 fi
 # Create a fresh TestLanguageThree directory and all files
-java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageThree
+java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageThree
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageThree creation failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageThree creation failed \n'; exit 1
   echo
 fi
 
 # Delete existing TestLanguageFour directory and all files
-java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFour
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFour
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageFour teardown failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageFour teardown failed \n'; exit 1
   echo
 fi
 # Create a fresh TestLanguageFour directory and all files
-java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFour
+java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFour
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageFour creation failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageFour creation failed \n'; exit 1
   echo
 fi
 
 # Delete existing TestLanguageFive directory and all files
-java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageFive teardown failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageFive teardown failed \n'; exit 1
   echo
 fi
 # Create a fresh TestLanguageFive directory and all files
-java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
+java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-utils TestLanguageFive creation failed \n'; exit $rc
+  echo -e 'fv-utils TestLanguageFive creation failed \n'; exit 1
   echo
 fi
 # Publish the language TestLanguageFive
 echo "Enabling language"
-response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FPCCAdmin_USERNAME:$CYPRESS_FPCCAdmin_PASSWORD)
+response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$response" -ne 200 ]]; then
     echo -e 'TestLanguageFive publish failed \n'; exit $response
     echo
 fi
 # Import Word using fv-batch-import
 cd $DIRECTORY/fv-batch-import/target
-java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
+java -jar fv-batch-import-*.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit 1
   echo
 fi
 # Import Phrase using fv-batch-import
 cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FPCCAdmin_USERNAME -password $CYPRESS_FPCCAdmin_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
+java -jar fv-batch-import-phrases.jar -url "https://dev.firstvoices.com/nuxeo/" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
-  echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'; exit $rc
+  echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'; exit 1
   echo
 fi
 
