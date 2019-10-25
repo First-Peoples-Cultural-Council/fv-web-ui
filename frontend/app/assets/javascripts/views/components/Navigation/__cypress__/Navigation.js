@@ -5,6 +5,12 @@ import 'cypress-testing-library/add-commands'
 
 describe('Navigation.js > Navigation', () => {
   it('FW-266: Navigation: clicking between "Get Started", "Contribute", & "FirstVoices Apps" loads incorrect page content', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     cy.visit('/')
     cy.getByText('menu open', { exact: false }).click({ force: true })
     cy.getByText('get started', { exact: false }).click()

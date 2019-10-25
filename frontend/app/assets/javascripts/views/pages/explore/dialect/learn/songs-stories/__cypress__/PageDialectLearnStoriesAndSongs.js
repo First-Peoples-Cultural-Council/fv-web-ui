@@ -3,6 +3,12 @@
 
 describe('PageDialectLearnStoriesAndSongs.js > PageDialectLearnStoriesAndSongs', () => {
   it('FW-257: On the Browse > Songs page, the user can click a button to get to Create Song page', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     cy.login({
       userName: 'SENCOTEN_USERNAME',
       userPassword: 'SENCOTEN_PASSWORD',

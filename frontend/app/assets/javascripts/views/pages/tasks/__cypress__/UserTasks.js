@@ -5,6 +5,12 @@ import 'cypress-testing-library/add-commands'
 
 describe('UserTasks.js > UserTasks', () => {
   it('FW-295: Language Admin user registration approval page not loading', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     cy.log('Note: If FW-295 has regressed the following `visit()` will loop forever, hanging the test')
     cy.visit('/tasks/users/13e3f46d-72aa-4afc-8687-207926f644e5')
     cy.getByTestId('pageContainer').within(() => {
@@ -21,6 +27,12 @@ CyRecorder	CyRecorder	CyRecorder
 CyRecorderApproval	CyRecorderApproval	CyRecorderApproval
 */
   it('FW-339: No tasks are displayed for Language Admins', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     cy.login({
       userName: 'CY_RECOREDER_USERNAME',
       userPassword: 'CY_RECOREDER_PASSWORD',

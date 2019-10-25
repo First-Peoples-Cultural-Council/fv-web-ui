@@ -9,6 +9,18 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Co
 
 describe('ContributorCreateDelete.js > Contributor', () => {
   it('Create', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
+    /*
+      Temporary line to force the test to fail until it is updated.
+     */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     // Login
     cy.login()
     cy.visit('/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/contributor')
