@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
+describe('LangAdminPortal.js > LangAdminPortal', () => {
   it('Test to check that a language admin can edit the portal.', () => {
     /*
                         Login as Language Admin and navigate to the edit portal page.

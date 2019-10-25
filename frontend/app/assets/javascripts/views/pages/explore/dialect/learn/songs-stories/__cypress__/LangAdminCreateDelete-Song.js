@@ -164,8 +164,9 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
+    cy.wait(500)
 
-    cy.queryByText('TestSongTitle').should('not.exist')
+    cy.queryByText('TestSongTitleTestSongTitle1').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
   })
 })
