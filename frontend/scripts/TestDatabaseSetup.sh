@@ -78,7 +78,7 @@ fi
 echo "Enabling language"
 response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$response" -ne 200 ]]; then
-    echo -e 'TestLanguageTwo publish failed \n'; exit $response
+    echo -e 'TestLanguageTwo publish failed: Error ' $response ' \n'; exit $response
     echo
 fi
 # Import Word using fv-batch-import
@@ -139,7 +139,7 @@ fi
 echo "Enabling language"
 response=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$response" -ne 200 ]]; then
-    echo -e 'TestLanguageFive publish failed \n'; exit $response
+    echo -e 'TestLanguageFive publish failed: Error ' $response ' \n'; exit $response
     echo
 fi
 # Import Word using fv-batch-import
