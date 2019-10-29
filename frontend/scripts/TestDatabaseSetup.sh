@@ -76,7 +76,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 # Publish the language TestLanguageTwo
 echo "Publishing language TestLanguageTwo"
-responseOne=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+responseOne=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$responseOne" -ne 200 ]]; then
     echo -e 'TestLanguageTwo publish failed: Error ' $responseOne ' \n'; exit $responseOne
     echo
@@ -137,7 +137,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 # Publish the language TestLanguageFive
 echo "Publishing language TestLanguageFive"
-responseTwo=$(curl -o /dev/null -s -w "%{http_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+responseTwo=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$responseTwo" -ne 200 ]]; then
     echo -e 'TestLanguageFive publish failed: Error ' $responseTwo ' \n'; exit $responseTwo
     echo
