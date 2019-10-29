@@ -1,6 +1,12 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () => {
   it('Test to check that a language admin can create and delete phrases.', () => {
     /*
@@ -146,7 +152,13 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Delete phrase').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete phrase success').should('exist')
-    cy.getByText('Return To Previous Page').click()
+
+    // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+    cy.getByText('Return To Previous Page')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })
