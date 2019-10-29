@@ -29,3 +29,7 @@ cy.on('uncaught:exception', () => {
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.Screenshot.defaults({
+  screenshotOnRunFailure: false,
+})

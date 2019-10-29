@@ -164,8 +164,10 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
+    cy.wait(500)
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/stories')
 
-    cy.queryByText('TestStoryTitle').should('not.exist')
+    cy.queryByText('TestStoryTitleTestStoryTitle1').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
   })
 })

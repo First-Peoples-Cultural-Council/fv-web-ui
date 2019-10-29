@@ -166,6 +166,8 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Return To Previous Page').click()
     cy.wait(500)
 
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/songs')
+
     cy.queryByText('TestSongTitleTestSongTitle1').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
   })
