@@ -122,6 +122,13 @@ if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFour creation failed \n'; exit 1
   echo
 fi
+# Publish the language TestLanguageFour
+echo "Publishing language TestLanguageFour"
+responseThree=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST 'https://dev.firstvoices.com/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFour","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+if [[ "$responseThree" -ne 200 ]]; then
+    echo -e 'TestLanguageFour publish failed: Error ' $responseThree ' \n'; exit $responseThree
+    echo
+fi
 
 # Delete existing TestLanguageFive directory and all files
 java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url https://dev.firstvoices.com/nuxeo -language-directory TEst/Test/ -language-name TestLanguageFive
