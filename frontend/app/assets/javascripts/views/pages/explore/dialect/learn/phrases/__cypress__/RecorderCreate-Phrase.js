@@ -101,6 +101,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Logout
          */
+    cy.wait(500)
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -119,6 +120,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Logout
          */
+    cy.wait(500)
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -138,6 +140,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
         .eq(0)
         .click()
     })
+    cy.wait(500)
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -156,6 +159,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.getByText('Enabled').should('exist')
     })
     cy.queryByText('No results found.').should('not.exist')
+    cy.wait(500)
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -168,6 +172,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
+    cy.wait(500)
     cy.queryByText('TestPhrase')
       .should('exist')
       .click()
@@ -183,6 +188,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
+    cy.reload()
     cy.wait(1000)
 
     /*

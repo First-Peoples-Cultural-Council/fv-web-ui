@@ -1,6 +1,12 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
   it('Test to check that a language admin can view, edit, enable, and publish phrases.', () => {
     /*
@@ -102,7 +108,11 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     /*
     Check that the phrase is now visible to the public.
    */
-    cy.getByText('Public View').click()
+    cy.getByText('Public View')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.wait(1000)
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')

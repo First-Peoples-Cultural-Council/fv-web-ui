@@ -1,6 +1,12 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
   it('Test to check language admin viewing and editing of words permissions.', () => {
     /*
@@ -13,9 +19,8 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
-    cy.get('div.Header.row').within(() => {
-      cy.getByText('Words', { exact: true }).click()
-    })
+    cy.getByText('Words', { exact: true }).click()
+    cy.wait(500)
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
     cy.getByTestId('Navigation__open').click()
@@ -34,6 +39,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('New').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -49,6 +55,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.wait(800)
     cy.getByText('TestWord').click()
     cy.queryByText('Edit word', { exact: true }).should('exist')
+    cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -102,7 +109,11 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     /*
       Check that the word is now visible to the public.
      */
-    cy.getByText('Public View').click()
+    cy.getByText('Public View')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.wait(1000)
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')

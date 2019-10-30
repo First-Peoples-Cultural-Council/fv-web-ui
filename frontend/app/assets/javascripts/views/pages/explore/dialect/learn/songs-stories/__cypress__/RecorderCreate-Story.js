@@ -224,6 +224,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
+    cy.reload()
     cy.wait(1000)
 
     /*

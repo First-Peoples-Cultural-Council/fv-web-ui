@@ -1,6 +1,12 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', () => {
   it('Test to check recorder with approval creation and deletion of phrases.', () => {
     /*
@@ -22,7 +28,6 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(500)
     cy.getByText('Create New Phrase', { exact: false }).click()
 
     /*
@@ -99,6 +104,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                 Checking to see if the phrase now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/phrases')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -173,7 +179,12 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.getByText('Delete phrase').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete phrase success').should('exist')
-    cy.getByText('Return To Previous Page').click()
+    // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+    cy.getByText('Return To Previous Page')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })
