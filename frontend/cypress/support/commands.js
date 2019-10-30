@@ -27,7 +27,11 @@ beforeEach(function() {
   cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
 })
 afterEach(function() {
+  // Logout to fix issue with user being logged in between tests.
+  cy.logout()
   cy.log('Test complete')
+  // Wait to ensure video recording is not cut early on failed test.
+  cy.wait(1000)
 })
 
 // Login
@@ -54,7 +58,7 @@ Cypress.Commands.add('login', (obj = {}) => {
   expect(userName).not.to.be.undefined
   expect(userPassword).not.to.be.undefined
 
-  const url = obj.url || 'https://preprod.firstvoices.com/nuxeo/startup'
+  const url = obj.url || 'https://dev.firstvoices.com/nuxeo/startup'
   const body = obj.body || {
     user_name: userName,
     user_password: userPassword,
@@ -74,6 +78,11 @@ Cypress.Commands.add('login', (obj = {}) => {
   })
   cy.wait(500)
   cy.log('--- SHOULD BE LOGGED IN ---')
+})
+
+// Logs any user out using a GET request.
+Cypress.Commands.add('logout', () => {
+  cy.request({method: 'GET', url: 'dev.firstvoices.com/nuxeo/logout', failOnStatusCode: false})
 })
 
 // AlphabetListView
