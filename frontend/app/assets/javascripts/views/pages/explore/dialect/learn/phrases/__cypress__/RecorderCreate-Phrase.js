@@ -101,9 +101,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Logout
          */
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Check that the phrase is not visible for Site Member when not enabled
@@ -120,9 +118,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Logout
          */
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as admin and enable the phrase
@@ -140,9 +136,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
         .eq(0)
         .click()
     })
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
               Login as language member and check that the story is now visible.
@@ -159,9 +153,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.getByText('Enabled').should('exist')
     })
     cy.queryByText('No results found.').should('not.exist')
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as admin and publish the phrase.
