@@ -27,6 +27,7 @@ import UIHelpers from 'common/UIHelpers'
 
 // MAT-UI: Core
 import { withTheme } from '@material-ui/core/styles'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -324,106 +325,109 @@ export class Navigation extends Component {
             <div className="Navigation__separator " />
 
             {/* Search Container */}
-            <div
-              className={`Navigation__searchContainer ${
-                this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
-              }`}
-              style={{
-                backgroundColor,
-              }}
-              onFocus={() => {
+            <ClickAwayListener
+              onClickAway={() => {
                 this.setState({
-                  searchPopoverOpen: true,
+                  searchPopoverOpen: false,
                 })
               }}
             >
-              <div className="Navigation__searchContainerInner">
-                {/* Search: Input */}
-                <TextField
-                  className={`Navigation__searchInput ${getDialectClassname()}`}
-                  inputRef={(element) => {
-                    this.navigationSearchField = element
+              <div
+                className={`Navigation__searchContainer ${
+                  this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
+                }`}
+                style={{
+                  backgroundColor,
+                }}
+                onFocus={() => {
+                  this.setState({
+                    searchPopoverOpen: true,
+                  })
+                }}
+              >
+                <div className="Navigation__searchContainerInner">
+                  {/* Search: Input */}
+                  <TextField
+                    className={`Navigation__searchInput ${getDialectClassname()}`}
+                    inputRef={(element) => {
+                      this.navigationSearchField = element
+                    }}
+                    placeholder={this.intl.translate({
+                      key: 'general.search',
+                      default: 'Search',
+                      case: 'first',
+                      append: ':',
+                    })}
+                    onFocus={() => {
+                      this.setState({
+                        searchPopoverOpen: true,
+                      })
+                    }}
+                    onChange={(e) => {
+                      this.setState({ searchValue: e.target.value })
+                    }}
+                    value={this.state.searchValue}
+                    onKeyDown={(e) => {
+                      if (e.keyCode === 13) {
+                        this._handleNavigationSearchSubmit(e)
+                      }
+                    }}
+                    name="searchbox"
+                  />
+
+                  {/* Search Button: Submit */}
+                  <Tooltip title="Search">
+                    <IconButton
+                      type="button"
+                      data-testid="Navigation__search"
+                      onClick={this._handleNavigationSearchSubmit}
+                    >
+                      <Search style={{ color }} aria-label="Search" />
+                    </IconButton>
+                  </Tooltip>
+
+                  {/* Search Button: Cancel (only on small screens) */}
+                  <span className="hideLarge">
+                    <Button
+                      variant="flat"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        // this.navigationSearchButton.focus()
+                        this.setState({ searchPopoverOpen: false })
+                      }}
+                      style={{ color }}
+                    >
+                      {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
+                    </Button>
+                  </span>
+                </div>
+
+                <div
+                  className="Navigation__searchPopupContainer"
+                  tabIndex={-1}
+                  onFocus={() => {
+                    this.setState(
+                      {
+                        searchPopoverOpen: true,
+                      },
+                      () => {}
+                    )
                   }}
-                  placeholder={this.intl.translate({
-                    key: 'general.search',
-                    default: 'Search',
-                    case: 'first',
-                    append: ':',
-                  })}
                   onBlur={() => {
                     this.setState({
                       searchPopoverOpen: false,
                     })
                   }}
-                  onFocus={() => {
-                    this.setState({
-                      searchPopoverOpen: true,
-                    })
-                  }}
-                  onChange={(e) => {
-                    this.setState({ searchValue: e.target.value })
-                  }}
-                  value={this.state.searchValue}
-                  onKeyDown={(e) => {
-                    if (e.keyCode === 13) {
-                      this._handleNavigationSearchSubmit(e)
-                    }
-                  }}
-                  name="searchbox"
-                />
-
-                {/* Search Button: Submit */}
-                <Tooltip title="Search">
-                  <IconButton
-                    type="button"
-                    data-testid="Navigation__search"
-                    onClick={this._handleNavigationSearchSubmit}
-                  >
-                    <Search style={{ color }} aria-label="Search" />
-                  </IconButton>
-                </Tooltip>
-
-                {/* Search Button: Cancel (only on small screens) */}
-                <span className="hideLarge">
-                  <Button
-                    variant="flat"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      // this.navigationSearchButton.focus()
-                      this.setState({ searchPopoverOpen: false })
-                    }}
-                    style={{ color }}
-                  >
-                    {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
-                  </Button>
-                </span>
+                >
+                  <Grow mountOnEnter unmountOnExit in={this.state.searchPopoverOpen}>
+                    {/* Search Popup Menu */}
+                    <div className={`Navigation__searchPopup ${isDialect ? 'Navigation__searchPopup--dialect' : ''}`}>
+                      {popoverContent}
+                    </div>
+                  </Grow>
+                </div>
               </div>
-
-              <div
-                className="Navigation__searchPopupContainer"
-                tabIndex={-1}
-                onFocus={() => {
-                  this.setState(
-                    {
-                      searchPopoverOpen: true,
-                    },
-                    () => {}
-                  )
-                }}
-                onBlur={() => {
-                  this.setState({
-                    searchPopoverOpen: false,
-                  })
-                }}
-              >
-                <Grow mountOnEnter unmountOnExit in={this.state.searchPopoverOpen}>
-                  {/* Search Popup Menu */}
-                  <div className={`Navigation__searchPopup ${isDialect ? 'Navigation__searchPopup--dialect' : ''}`}>
-                    {popoverContent}
-                  </div>
-                </Grow>
-              </div>
-            </div>
+            </ClickAwayListener>
 
             {/* Search Button: Open drawer (only on small screens) */}
             <span className="hideLarge">
