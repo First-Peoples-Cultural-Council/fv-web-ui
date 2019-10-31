@@ -13,33 +13,78 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import Colors from 'material-ui/lib/styles/colors'
-import ColorManipulator from 'material-ui/lib/utils/color-manipulator'
-import Spacing from 'material-ui/lib/styles/spacing'
-import zIndex from 'material-ui/lib/styles/zIndex'
+/*
+'Cedar'
+#a3291d
+rgb(163, 41, 29)
 
+'Black'
+#2b2e34
+rgb(43, 46, 52)
+
+'Grey'
+#59584c
+rgb(89, 88, 76)
+*/
 export default {
-  spacing: Spacing,
-  zIndex: zIndex,
-  fontFamily: 'Arial, sans-serif',
+  typography: {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: 18,
+  },
   palette: {
+    primary: {
+      contrastText: '#ffffff',
+      dark: '#7d0000',
+      light: '#ee492d',
+      main: '#a3291d',
+    },
+    secondary: {
+      main: '#2b2e34',
+    },
     primary1Color: '#b40000',
     primary2Color: '#3a6880',
-    primary3Color: Colors.lightBlack,
-    primary4Color: '#c4baa7',
-    primary4ColorLightest: '#f0eee9',
-    accent1Color: '#b40000',
-    accent2Color: '#b40000',
-    accent3Color: '#c4baa7',
     accent4Color: '#e1e1e2',
-    textColor: '#666666',
-    textColorFaded: ColorManipulator.fade('#666666', 0.6),
-    alternateTextColor: Colors.white,
-    canvasColor: Colors.white,
-    borderColor: Colors.grey300,
-    disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
-    pickerHeaderColor: '#b40000',
+  },
+  button: {
+    contained: {
+      color: 'red',
+      backgroundColor: 'black',
+      '&:hover': {
+        color: 'black',
+        backgroundColor: 'red',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'blue',
+        },
+        // NOTE:  the '&$disabled' rule below triggers a warning for some reason
+        // '&$disabled': {
+        //   backgroundColor: 'grey',
+        // },
+      },
+    },
+    containedPrimary: {
+      color: 'white',
+      backgroundColor: 'black',
+      '&:hover': {
+        color: 'black',
+        backgroundColor: 'white',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'yellow',
+        },
+      },
+    },
+    containedSecondary: {
+      color: 'blue',
+      backgroundColor: 'yellow',
+      '&:hover': {
+        color: 'yellow',
+        backgroundColor: 'blue',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'pink',
+        },
+      },
+    },
   },
 }
-
-// Tip: https://cimdalli.github.io/mui-theme-generator/

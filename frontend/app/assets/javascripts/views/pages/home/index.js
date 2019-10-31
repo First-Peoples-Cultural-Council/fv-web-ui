@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -30,7 +31,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
+import { withTheme } from '@material-ui/core/styles'
 
 import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
@@ -57,10 +59,6 @@ export class PageHome extends Component {
     pushWindowPath: func.isRequired,
     queryPage: func.isRequired,
   }
-
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
 
   intl = IntlService.instance
 
@@ -155,9 +153,8 @@ export class PageHome extends Component {
     const page = selectn('response.entries[0].properties', computePage)
     //const dialects = selectn('response.entries', computePortals);
 
-    const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
-    const primary2Color = selectn('theme.palette.baseTheme.palette.primary2Color', this.props.properties)
-    const alternateTextColor = selectn('theme.palette.baseTheme.palette.alternateTextColor', this.props.properties)
+    const primary1Color = selectn('theme.palette.primary1Color', this.props)
+    const primary2Color = selectn('theme.palette.primary2Color', this.props)
     const intl = this.intl
 
     const accessButtons = []
@@ -166,18 +163,18 @@ export class PageHome extends Component {
     ;(selectn('response.entries', _computeUserStartpage) || []).map(
       function computeUserStartPageMap(dialect, index) {
         const tableRow = (
-          <RaisedButton
+          <Button
+            variant="contained"
             key={index}
-            label={'Access ' + selectn('properties.dc:title', dialect)}
-            primary
+            color="primary"
             onClick={this._onNavigateRequest.bind(
               this,
               NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
             )}
             style={{ marginRight: '10px', height: '50px' }}
-            labelColor={alternateTextColor}
-            labelStyle={{ fontSize: '1.34em' }}
-          />
+          >
+            {'Access ' + selectn('properties.dc:title', dialect)}
+          </Button>
         )
 
         accessButtons.push(tableRow)
@@ -186,24 +183,22 @@ export class PageHome extends Component {
 
     if (accessButtons.length === 0) {
       accessButtons[0] = (
-        <RaisedButton
+        <Button
+          variant="contained"
           key={0}
-          label={
-            this.intl.translate({
-              key: 'get_started!',
-              default: 'Get Started!',
-              case: 'words',
-            }) + '!'
-          }
-          primary
+          color="primary"
           onClick={this._onNavigateRequest.bind(
             this,
             NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
           )}
           style={{ marginRight: '10px', height: '50px' }}
-          labelColor={alternateTextColor}
-          labelStyle={{ fontSize: '1.34em' }}
-        />
+        >
+          {this.intl.translate({
+            key: 'get_started!',
+            default: 'Get Started!',
+            case: 'words',
+          }) + '!'}
+        </Button>
       )
     }
 
@@ -358,7 +353,9 @@ const mapDispatchToProps = {
   queryPage,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageHome)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PageHome)
+)

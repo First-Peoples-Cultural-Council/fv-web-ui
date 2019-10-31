@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import PromiseHelpers from 'common/PromiseHelpers'
 
@@ -30,7 +31,7 @@ export default class Game extends Component {
    */
   constructor(props, context) {
     super(props, context)
-    this.gameContainer = null
+    this.gameContainer = React.createRef()
   }
 
   loadGameScript() {
@@ -77,7 +78,7 @@ export default class Game extends Component {
     /**
      * @todo Setup image paths based on dialect
      */
-    let gameConfig = {
+    const gameConfig = {
       images: Object.assign({
         preloaderLoading: `${defaultImagesPath}/loading.png`,
         preloaderLogo: `${defaultImagesPath}/logo.png`,
@@ -101,7 +102,7 @@ export default class Game extends Component {
     this.loadScriptTask = this.loadGameScript()
     this.loadScriptTask.promise.then((jigsaw) => {
       this.jigsaw = jigsaw
-      const gameContainerNode = ReactDOM.findDOMNode(this.gameContainer)
+      const gameContainerNode = this.gameContainer.current
       jigsaw.init(gameContainerNode, gameConfig)
     })
   }
@@ -123,13 +124,6 @@ export default class Game extends Component {
       margin: 'auto',
     }
 
-    return (
-      <div
-        style={gameContainerStyles}
-        ref={(el) => {
-          this.gameContainer = el
-        }}
-      />
-    )
+    return <div style={gameContainerStyles} ref={this.gameContainer} />
   }
 }

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 
@@ -72,6 +73,8 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     is403: false,
   }
 
+  formBookCreate = React.createRef()
+
   // Fetch data on initial render
   componentDidMount() {
     this.fetchData()
@@ -97,7 +100,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          this.props.routeParams.theme,
+          this.props.routeParams.siteTheme,
           selectn('response', currentBook),
           prevProps.typeFilter === 'story' ? 'stories' : 'songs'
         ),
@@ -169,8 +172,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_create.getValue()
+    const formValue = this.formBookCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -178,8 +180,13 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
-          //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
-          properties[key] = formValue[key]
+          // Filter out null values in an array
+          if (formValue[key] instanceof Array) {
+            const formValueKey = formValue[key].filter((item) => item !== null)
+            properties[key] = formValueKey
+          } else {
+            properties[key] = formValue[key]
+          }
         }
       }
     }
@@ -267,7 +274,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form className="PageDialectStoriesAndSongsCreate__form" onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_book_create" // TODO: DEPRECATED
+                  ref={this.formBookCreate}
                   type={t.struct(selectn('FVBook', fields))}
                   context={selectn('response', _computeDialect2)}
                   value={this.state.formValue || { 'fvbook:type': this.props.typeFilter }}

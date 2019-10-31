@@ -1,5 +1,5 @@
 import React from 'react'
-import Snackbar from 'material-ui/lib/snackbar'
+import Snackbar from '@material-ui/core/Snackbar'
 
 export default class StatusBar extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class StatusBar extends React.Component {
             open={this.state.open}
             message={this.props.message}
             autoHideDuration={5000}
-            onRequestClose={this.handleRequestClose}
+            onClose={this.handleRequestClose}
           />
         </div>
       )

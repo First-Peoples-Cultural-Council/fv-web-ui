@@ -13,16 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
-import Immutable, { List, Map } from 'immutable'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import selectn from 'selectn'
 
-import ConfGlobal from 'conf/local.js'
-
-import Colors from 'material-ui/lib/styles/colors'
-
-import GridList from 'material-ui/lib/grid-list/grid-list'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
 
 import UIHelpers from 'common/UIHelpers'
 import IntlService from 'views/services/intl'
@@ -55,7 +53,7 @@ export default class CategoryList extends Component {
   render() {
     const items = this.props.filteredItems || this.props.items
 
-    if (!items || selectn('length', items) == 0) {
+    if (!items || selectn('length', items) === 0) {
       return (
         <div style={{ margin: '20px 0' }}>
           {this.intl.translate({
@@ -84,17 +82,12 @@ export default class CategoryList extends Component {
           style={Object.assign(defaultStyle, this.props.style)}
         >
           {items.map(
-            function(tile, i) {
+            function itemsMap(tile) {
               return (
-                <GridTile
-                  onClick={action.bind(this, tile)}
-                  key={tile.uid}
-                  title={this.intl.searchAndReplace(tile.title)}
-                  className="category-grid-tile"
-                  titlePosition="bottom"
-                >
-                  <img src={selectn('properties.file:content.data', tile) || 'assets/images/cover.png'} />
-                </GridTile>
+                <GridListTile onClick={action.bind(this, tile)} key={tile.uid} className="category-grid-tile">
+                  <img src={selectn('properties.file:content.data', tile) || '/assets/images/cover.png'} />
+                  <GridListTileBar title={this.intl.searchAndReplace(tile.title)} titlePosition="bottom" />
+                </GridListTile>
               )
             }.bind(this)
           )}

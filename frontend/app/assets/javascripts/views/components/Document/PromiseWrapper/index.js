@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 import StatusBar from 'views/components/StatusBar'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
 import Error403 from 'views/components/Error403'
@@ -116,7 +117,7 @@ export default class PromiseWrapper extends Component {
         render =
           this.props.hideFetch && selectn('response_prev', reducedOperation) ? null : (
             <div className="PromiseWrapper__spinnerContainer">
-              <CircularProgress mode="indeterminate" className="PromiseWrapper__spinner" size={1} />
+              <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" />
               {selectn('message', reducedOperation) ? (
                 <div className="PromiseWrapper__spinnerMessage">{selectn('message', reducedOperation)}</div>
               ) : null}

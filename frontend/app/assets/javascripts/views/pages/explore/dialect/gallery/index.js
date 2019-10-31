@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 import classNames from 'classnames'
@@ -31,7 +32,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import GeneralList from 'views/components/Browsing/general-list'
 import withFilter from 'views/hoc/grid-list/with-filter'
@@ -99,7 +100,7 @@ export class PageDialectGalleries extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const computeGalleries = ProviderHelpers.getEntry(this.props.computeGalleries, path)
 
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     const listProps = {
       defaultLanguage: DEFAULT_LANGUAGE,
@@ -116,7 +117,7 @@ export class PageDialectGalleries extends Component {
     let listView = <FilteredList {...listProps} />
 
     if (isKidsTheme) {
-      listView = <GeneralList {...listProps} cols={3} theme={this.props.routeParams.theme} />
+      listView = <GeneralList {...listProps} cols={3} siteTheme={this.props.routeParams.siteTheme} />
     }
 
     return (
@@ -132,11 +133,13 @@ export class PageDialectGalleries extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <RaisedButton
-                label={'Create Gallery'}
+              <Button
+                variant="raised"
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                primary
-              />
+                color="primary"
+              >
+                {'Create Gallery'}
+              </Button>
             </AuthorizationFilter>
           </div>
 
@@ -190,7 +193,7 @@ export class PageDialectGalleries extends Component {
 
   _onItemNavigateRequest = (item) => {
     this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', item, 'gallery')
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', item, 'gallery')
     )
   }
 }

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -34,10 +35,6 @@ export default class AuthorizationFilter extends Component {
     hideFromSections: false,
     renderPartial: false,
     showAuthError: false,
-  }
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {

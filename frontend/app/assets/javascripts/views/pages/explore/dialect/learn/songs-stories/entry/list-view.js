@@ -13,13 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { List, Map } from 'immutable'
 import classNames from 'classnames'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
 
@@ -41,12 +42,12 @@ export default class ListView extends Component {
   }
 
   _moveUp(entry) {
-    let entryIndex = this.state.items.findIndex((v) => {
+    const entryIndex = this.state.items.findIndex((v) => {
       return v.uid === entry.uid
     })
 
     if (entryIndex - 1 >= 0) {
-      let newList = this.state.items.delete(entryIndex).insert(entryIndex - 1, entry)
+      const newList = this.state.items.delete(entryIndex).insert(entryIndex - 1, entry)
 
       this.setState({
         items: newList,
@@ -58,12 +59,12 @@ export default class ListView extends Component {
   }
 
   _moveDown(entry) {
-    let entryIndex = this.state.items.findIndex((v) => {
+    const entryIndex = this.state.items.findIndex((v) => {
       return v.uid === entry.uid
     })
 
     if (entryIndex !== this.state.items.length) {
-      let newList = this.state.items.delete(entryIndex).insert(entryIndex + 1, entry)
+      const newList = this.state.items.delete(entryIndex).insert(entryIndex + 1, entry)
 
       this.setState({
         items: newList,
@@ -101,35 +102,32 @@ export default class ListView extends Component {
               "Note: This new sort order will be saved once the book is saved in the 'Book' tab.",
               'first'
             )}
-            <RaisedButton
-              style={{ marginLeft: '15px' }}
-              label={intl.trans('reset_order', 'Reset Order', 'words')}
-              onClick={this._reset}
-            />
+            <Button variant="raised" style={{ marginLeft: '15px' }} onClick={this._reset}>
+              {intl.trans('reset_order', 'Reset Order', 'words')}
+            </Button>
           </div>
         ) : (
           ''
         )}
         {this.state.items.map(
           function(entry, i) {
-            let entryControls = []
+            const entryControls = []
 
             if (this.props.reorder) {
               entryControls.push(
-                <RaisedButton
-                  key="up"
-                  label={intl.trans('move_up', 'move up', 'words')}
-                  disabled={i == 0}
-                  onClick={this._moveUp.bind(this, entry)}
-                />
+                <Button variant="raised" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
+                  {intl.trans('move_up', 'move up', 'words')}
+                </Button>
               )
               entryControls.push(
-                <RaisedButton
+                <Button
+                  variant="raised"
                   key="down"
-                  label={intl.trans('move_down', 'move down', 'words')}
                   disabled={i == this.state.items.size - 1}
                   onClick={this._moveDown.bind(this, entry)}
-                />
+                >
+                  {intl.trans('move_down', 'move down', 'words')}
+                </Button>
               )
             }
 

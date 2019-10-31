@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 const React = require('react')
+const PropTypes = require('prop-types')
 const PubSub = require('pubsub-js')
 
 const _ = require('underscore')
 
 const classNames = require('classnames')
-const Mui = require('material-ui')
+const Mui = require('@material-ui')
 
-const { IconButton, RaisedButton, LinearProgress, Snackbar } = Mui
+const { IconButton, Button, LinearProgress, Snackbar } = Mui
 
 const ThemeManager = new Mui.Styles.ThemeManager()
 
@@ -116,11 +117,11 @@ class Quiz extends React.Component {
     PubSub.subscribe(this.eventName + ':DATALOADED', this.displayAnswers)
   }
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     muiTheme: ThemeManager.getCurrentTheme(),
+  //   }
+  // }
 
   displayAnswers(selectedAnswerKey = null) {
     const selected = false
@@ -256,7 +257,7 @@ class Quiz extends React.Component {
           <div className="col-xs-12">
             <LinearProgress
               style={this.linearProgressStyle}
-              mode="determinate"
+              variant="determinate"
               value={((this.state.currentAnswerIndex + 1) / this.totalQuestion) * 100}
             />
           </div>
@@ -271,18 +272,20 @@ class Quiz extends React.Component {
           <div className={classNames('col-xs-2', 'text-left')}>
             <IconButton
               onClick={this.handleNavigate.bind(this, 'previous')}
-              iconClassName={classNames('glyphicon', 'glyphicon-chevron-left')}
+              // iconClassName={classNames('glyphicon', 'glyphicon-chevron-left')}
               tooltip="Previous Question"
             />
           </div>
           <div className={classNames('col-xs-8', 'text-center')}>
             <div>
-              <RaisedButton
-                secondary
+              <Button
+                variant="raised"
+                color="secondary"
                 disabled={this.state.currentAnswerIndex in this.state.selectedAnswers ? false : true}
                 onClick={this.checkAnswer.bind(this)}
-                label="Check Answer"
-              />
+              >
+                Check Answer
+              </Button>
             </div>
             <Snackbar
               ref="feedback"
@@ -299,7 +302,7 @@ class Quiz extends React.Component {
           <div className={classNames('col-xs-2', 'text-right')}>
             <IconButton
               onClick={this.handleNavigate.bind(this, 'next')}
-              iconClassName={classNames('glyphicon', 'glyphicon-chevron-right')}
+              // iconClassName={classNames('glyphicon', 'glyphicon-chevron-right')}
               tooltip="Next Question"
             />
           </div>
@@ -310,12 +313,12 @@ class Quiz extends React.Component {
 }
 
 Quiz.contextTypes = {
-  muiTheme: React.PropTypes.object,
-  router: React.PropTypes.func,
+  // muiTheme: PropTypes.object,
+  router: PropTypes.func,
 }
 
-Quiz.childContextTypes = {
-  muiTheme: React.PropTypes.object,
-}
+// Quiz.childContextTypes = {
+//   muiTheme: PropTypes.object,
+// }
 
 export default Quiz

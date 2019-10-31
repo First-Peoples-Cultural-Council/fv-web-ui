@@ -12,3 +12,14 @@
 .AppLeftNav__closeIcon {
   fill: #fff !important;
 }
+.AppLeftNav__toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.AppLeftNav__logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 20px;
+}

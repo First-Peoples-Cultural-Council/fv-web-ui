@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, {Component, PropTypes} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -26,26 +27,37 @@ const intl = IntlService.instance
  * Header for dialect pages
  */
 export default class PageHeader extends Component {
-    static propTypes = {
-      portalLogo: PropTypes.string,
-      dialectName: PropTypes.string,
-      title: PropTypes.string,
-    };
+  static propTypes = {
+    portalLogo: PropTypes.string,
+    dialectName: PropTypes.string,
+    title: PropTypes.string,
+  }
 
-    constructor(props, context) {
-      super(props, context)
-    }
+  constructor(props, context) {
+    super(props, context)
+  }
 
-    render() {
-      const {title, portalLogo, dialectName} = this.props
+  render() {
+    const { title, portalLogo, dialectName } = this.props
 
-      return <div className="page-header" style={{minHeight: '100px', marginTop: '10px'}}>
-        {(portalLogo) ? <img className="pull-left" style={{maxHeight: '100px', marginRight: '45px'}}
-          src={NavigationHelpers.getBaseURL() + portalLogo}/> : ''}
-        <h1 style={{fontSize: '2em'}}>{dialectName} {intl.searchAndReplace(title)}</h1>
+    return (
+      <div className="page-header" style={{ minHeight: '100px', marginTop: '10px' }}>
+        {portalLogo ? (
+          <img
+            className="pull-left"
+            style={{ maxHeight: '100px', marginRight: '45px' }}
+            src={NavigationHelpers.getBaseURL() + portalLogo}
+          />
+        ) : (
+          ''
+        )}
+        <h1 style={{ fontSize: '2em' }}>
+          {dialectName} {intl.searchAndReplace(title)}
+        </h1>
         {/*<div>
                 <span className={classNames('label', 'label-primary')}><strong>543</strong> Words</span> <span className={classNames('label', 'label-primary')}><strong>143</strong> Phrases</span> <span className={classNames('label', 'label-primary')}><strong>243</strong> Songs</span> <span className={classNames('label', 'label-primary')}><strong>43</strong> Stories</span>
               </div>*/}
       </div>
-    }
+    )
+  }
 }

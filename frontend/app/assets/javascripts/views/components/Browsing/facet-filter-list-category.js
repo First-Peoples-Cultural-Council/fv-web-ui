@@ -1,15 +1,16 @@
-import React, { Component, PropTypes } from 'react'
-import Immutable, { Set } from 'immutable'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Set } from 'immutable'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import memoize from 'memoize-one'
 import selectn from 'selectn'
 
 import { debounce } from 'debounce'
-import Paper from 'material-ui/lib/paper'
-import ListUI from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
-import Checkbox from 'material-ui/lib/checkbox'
+import Paper from '@material-ui/core/Paper'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import Checkbox from '@material-ui/core/Checkbox'
 import withToggle from 'views/hoc/view/with-toggle'
 import IntlService from 'views/services/intl'
 const FiltersWithToggle = withToggle()
@@ -79,16 +80,18 @@ export default class FacetFilterListCategory extends Component {
   render() {
     return (
       <div>
-        <RaisedButton
+        <Button
+          variant="contained"
           disabled={this.checkedCount === 0}
           style={{ margin: '0 0 10px 0' }}
           // label={this.intl.trans('views.pages.explore.dialect.learn.words.find_by_category', 'Show All Words', 'words')}
-          label={this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
           onClick={this._clearCategoryFilter}
-        />
+        >
+          {this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
+        </Button>
         <FiltersWithToggle className="panel-category" label={this.title} mobileOnly style={this.props.styles}>
           <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
-            <ListUI>{this.listItems}</ListUI>
+            <List>{this.listItems}</List>
           </Paper>
         </FiltersWithToggle>
       </div>
@@ -96,7 +99,6 @@ export default class FacetFilterListCategory extends Component {
   }
 
   _clearCategoryFilter() {
-    console.log('_clearCategoryFilter')
     this.props.clearCategoryFilter()
   }
 

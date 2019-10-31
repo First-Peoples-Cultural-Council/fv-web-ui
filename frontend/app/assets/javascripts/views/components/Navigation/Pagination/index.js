@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import ReactPaginate from 'react-paginate'
-import ChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left'
-import ChevronRight from 'material-ui/lib/svg-icons/navigation/chevron-right'
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
 
 export default class Pagination extends Component {
   static defaultProps = {}

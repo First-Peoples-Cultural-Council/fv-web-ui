@@ -1,7 +1,9 @@
 import React from 'react'
-import Dialog from 'material-ui/lib/dialog'
-import FlatButton from 'material-ui/lib/flat-button'
-import RaisedButton from 'material-ui/lib/raised-button'
+
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
 import PageDialectCategoryCreate from 'views/pages/explore/dialect/category/create'
@@ -89,7 +91,7 @@ export default class DialogCreateForm extends React.Component {
                 dialect={this.props.context}
                 routeParams={{
                   dialect_path: this.props.context.path,
-                  theme: 'explore',
+                  siteTheme: 'explore',
                 }}
                 value={this.props.value}
                 embedded
@@ -127,7 +129,7 @@ export default class DialogCreateForm extends React.Component {
               dialect={this.props.context}
               routeParams={{
                 dialect_path: this.props.context.path,
-                theme: 'explore',
+                siteTheme: 'explore',
               }}
               value={this.props.value}
               embedded
@@ -139,12 +141,11 @@ export default class DialogCreateForm extends React.Component {
         break
 
       case 'FVLink':
+        // Create
         createForm = <PageDialectLinksCreate embedded onDocumentCreated={this._onDocumentCreated} />
-        createNewButtonLabel =
-          this.props.value || this.props.expandedValue
-            ? intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
-            : intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
+        createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.create_link', 'Create Link', 'words')
 
+        // Edit
         if (this.props.value) {
           createNewButtonLabel = intl.trans('views.pages.explore.dialect.phrases.edit_link', 'Edit Link', 'words')
           createForm = (
@@ -152,7 +153,7 @@ export default class DialogCreateForm extends React.Component {
               dialect={this.props.context}
               routeParams={{
                 dialect_path: this.props.context.path,
-                theme: 'explore',
+                siteTheme: 'explore',
               }}
               value={this.props.value}
               embedded
@@ -171,24 +172,24 @@ export default class DialogCreateForm extends React.Component {
       !this.props.fieldAttributes.disableCreateNewButton ||
       this.props.fieldAttributes.disableCreateNewButton === false
     ) {
-      createNewButton = <RaisedButton label={createNewButtonLabel} onClick={this.handleOpen} />
+      createNewButton = (
+        <Button variant="outlined" onClick={this.handleOpen}>
+          {createNewButtonLabel}
+        </Button>
+      )
     }
-
-    const actions = [
-      <FlatButton
-        key="FlatButton0"
-        label={intl.trans('cancel', 'Cancel', 'first')}
-        secondary
-        onClick={this.handleClose}
-      />,
-    ]
 
     return (
       <div>
         {createNewButton}
 
-        <Dialog open={this.state.open} onRequestClose={this.handleClose} autoScrollBodyContent actions={actions}>
-          {createForm}
+        <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
+          <DialogContent>{createForm}</DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="secondary" onClick={this.handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )

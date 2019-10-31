@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 const { bool, string, element, object } = PropTypes
 export class PhrasebookStateDetail extends React.Component {

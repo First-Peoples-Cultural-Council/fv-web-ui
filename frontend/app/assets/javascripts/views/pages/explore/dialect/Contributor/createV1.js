@@ -13,11 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 // REDUX
 import { connect } from 'react-redux'
+
 // REDUX: actions/dispatch/func
 import { createContributor } from 'providers/redux/reducers/fvContributor'
 import { fetchDialect } from 'providers/redux/reducers/fvDialect'
@@ -26,9 +28,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-// Views
-import Paper from 'material-ui/lib/paper'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
 
@@ -65,6 +66,8 @@ export class PageDialectContributorsCreate extends Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formContributorCreate = React.createRef()
 
     this.state = {
       formValue: null,
@@ -122,10 +125,9 @@ export class PageDialectContributorsCreate extends Component {
   }
 
   _onRequestSaveForm(e) {
-    // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_contributor_create.getValue()
+
+    const formValue = this.formContributorCreate.current.getValue()
 
     const properties = {}
 
@@ -171,12 +173,12 @@ export class PageDialectContributorsCreate extends Component {
     const contributor = ProviderHelpers.getEntry(computeContributor, this.state.contributorPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress mode="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" size={2} />
     }
 
     return (
       <div>
-        <h1>
+        <h1 style={{ lineHeight: '1.2', margin: '0 0 10px' }}>
           {intl.trans(
             'views.pages.explore.dialect.contributors.add_new_contributor_to_x',
             'Add New Contributor to ' + dialect.get('dc:title'),
@@ -187,32 +189,24 @@ export class PageDialectContributorsCreate extends Component {
 
         {contributor && contributor.message && contributor.action.includes('CREATE') ? (
           <StatusBar message={contributor.message} />
-        ) : (
-          ''
-        )}
+        ) : null}
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_contributor_create" // TODO: DEPRECATED
+                ref={this.formContributorCreate}
                 type={t.struct(selectn('FVContributor', fields))}
                 context={dialect}
                 value={this.state.formValue}
                 options={selectn('FVContributor', options)}
               />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
+              <div className="form-group" style={{ marginTop: '20px' }}>
+                <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
                   {intl.trans('save', 'Save', 'first')}
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-
-          <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-            </Paper>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ import React from 'react'
 import StringHelpers from 'common/StringHelpers'
 export default {
   // Get properties from form value
-  getProperties: function(form) {
+  getProperties: (form) => {
     const properties = {}
     const formValue = form.getValue()
 
@@ -30,12 +30,13 @@ export default {
       let valuedCheckbox = null
 
       // Ensure Input for Form Ref is defined
-      if (form.refs.input) {
-        valuedCheckbox = form.refs.input.refs[key].refs.valued_checkbox
+      if (form.inputRef.childRefs && form.inputRef.childRefs[key]) {
+        // Checking to see if the input has it's own ref set (from within valued-checkbox.js)
+        valuedCheckbox = selectn('valued_checkbox.current', form.inputRef.childRefs[key])
       }
 
       if (valuedCheckbox) {
-        if (!valuedCheckbox.checked) {
+        if (valuedCheckbox.checked === false) {
           continue
         }
       }
@@ -96,7 +97,7 @@ getFormData({
 */
 export const getFormData = ({ formReference, toParse = [] }) => {
   const formDataFormatted = {}
-  const formData = new FormData(formReference)
+  const formData = new FormData(formReference.current)
 
   for (const value of formData.entries()) {
     // parse any stringify-ed array/objects
@@ -154,7 +155,7 @@ const formData = getFormData({
 const formValidation = await validateForm({formData, validator})
 
 */
-export const validateForm = async({ formData, abortEarly = false, validator }) => {
+export const validateForm = async ({ formData, abortEarly = false, validator }) => {
   // Note: When `abortEarly === true` then `{ path, type } = invalid` is defined.
   // When `abortEarly === false` then `{ path, type } = invalid` is not defined! Data is found in `invalid.errors[]`.
   const validation = await validator.validate(formData, { abortEarly }).then(
@@ -205,7 +206,7 @@ Return
   [yup error?]: [?]
 }
 */
-export const validateField = async({ name, formData, validator }) => {
+export const validateField = async ({ name, formData, validator }) => {
   const results = await this._validateForm({ formData, validator })
   const { valid, errors } = results
 
@@ -251,7 +252,7 @@ export const getError = ({ errors = [], fieldName }) => {
   return {}
 }
 
-export const handleSubmit = async({ validator, formData, valid, invalid }) => {
+export const handleSubmit = async ({ validator, formData, valid, invalid }) => {
   const formValidation = await validateForm({ formData, validator })
 
   if (formValidation.valid) {

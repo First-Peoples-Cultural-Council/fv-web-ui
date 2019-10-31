@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -43,7 +44,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
@@ -187,7 +188,7 @@ export class SongsStoriesView extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     let page
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     if (!this.state.bookOpen) {
       page = (
@@ -215,13 +216,15 @@ export class SongsStoriesView extends Component {
           items={selectn('response.entries', computeBookEntries) || []}
           appendControls={[
             this.state.bookOpen ? (
-              <RaisedButton
-                label={intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
+              <Button
+                variant="raised"
                 key="close"
                 onClick={() => {
                   this.setState({ bookOpen: false })
                 }}
-              />
+              >
+                {intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
+              </Button>
             ) : (
               ''
             ),

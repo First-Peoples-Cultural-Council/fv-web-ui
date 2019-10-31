@@ -54,7 +54,7 @@ const AddForwardSlash = (path) => {
  * Stores some default route parameters
  */
 const DefaultRouteParams = {
-  theme: 'explore',
+  siteTheme: 'explore',
   area: SECTIONS,
 }
 
@@ -137,8 +137,8 @@ export default {
     // TODO: How do we fall back gracefully when no path is found?
   },
   // Generate a UID link from a Nuxeo document path
-  generateUIDPath: (theme, item, pluralPathId) => {
-    let path = '/' + theme + selectn('path', item)
+  generateUIDPath: (siteTheme, item, pluralPathId) => {
+    let path = '/' + siteTheme + selectn('path', item)
     // const type = selectn('type', item)
 
     switch (pluralPathId) {

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -46,9 +47,9 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import Tab from 'material-ui/lib/tabs/tab'
+import Tab from '@material-ui/core/Tab'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
 import IntlService from 'views/services/intl'
@@ -386,10 +387,10 @@ export class DialectViewWord extends Component {
 
   _getPhrases = (computeWord) => {
     const phrases = []
-    const theme = this.props.routeParams.theme
+    const siteTheme = this.props.routeParams.siteTheme
     ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
-      const hrefPath = NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
         <a
           key={selectn('uid', phrase)}
@@ -508,12 +509,12 @@ export class DialectViewWord extends Component {
 
     // Phrases
     const phrases = []
-    const theme = this.props.routeParams.theme
+    const siteTheme = this.props.routeParams.siteTheme
     ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
-      const hrefPath = NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
-        // <Link key={selectn('uid', phrase)} href={NavigationHelpers.generateUIDPath(theme, phrase, 'phrases')}>
+        // <Link key={selectn('uid', phrase)} href={NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')}>
         //   {selectn('dc:title', phrase)}
         // </Link>
         <a

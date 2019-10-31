@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-import React, { Component, PropTypes } from 'react'
-import classNames from 'classnames'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // REDUX
@@ -28,13 +27,17 @@ import { toggleMenuAction } from 'providers/redux/reducers/navigation'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-// Components
-import AppBar from 'material-ui/lib/app-bar'
+import AppBar from '@material-ui/core/AppBar'
+import AppsIcon from '@material-ui/icons/Apps'
+import Avatar from '@material-ui/core/Avatar'
+import ClearIcon from '@material-ui/icons/Clear'
+import HomeIcon from '@material-ui/icons/Home'
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace'
+import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
-import Avatar from 'material-ui/lib/avatar'
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import IconButton from 'material-ui/lib/icon-button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -56,92 +59,12 @@ export class KidsNavigation extends Component {
     replaceWindowPath: func.isRequired,
     toggleMenuAction: func.isRequired,
   }
-
-  /*static childContextTypes = {
-      client: React.object,
-      muiTheme: React.object,
-      siteProps: React.object
-    };
-
-    static contextTypes = {
-        muiTheme: React.object.isRequired,
-        siteProps: React.object.isRequired
-    };
-
-    getChildContext() {
-      return {
-        //client: this.props.clientStore.client,
-        muiTheme: this.context.muiTheme,
-        siteProps: this.context.siteProps
-      };
-    }*/
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      hintTextSearch: intl.trans('search_site', 'Search Site', 'words') + ':',
-    }
-
-    this._handleMenuToggle = this._handleMenuToggle.bind(this)
-    this.handleChangeRequestLeftNav = this.handleChangeRequestLeftNav.bind(this)
-    this.handleRequestChangeList = this.handleRequestChangeList.bind(this)
-    this._handleNavigationSearchSubmit = this._handleNavigationSearchSubmit.bind(this)
-    //this._test = this._test.bind(this);
-  }
-
-  // componentWillReceiveProps(newProps) {
-  //   if (newProps.computeLogin != this.props.computeLogin) {
-  //     this.props.fetchUserTasks(selectn('response.id', newProps.computeLogin))
-  //   }
-  // }
-
-  // eslint-disable-next-line
-  _handleMenuToggle(event) {
-    //console.log(event);
-    //const test = this.props.toggle("helloworld");
-    //console.log(test);
-    /*this.setState({
-          leftNavOpen: !this.state.leftNavOpen,
-        });*/
+  state = {
+    hintTextSearch: intl.trans('search_site', 'Search Site', 'words') + ':',
   }
 
   _onNavigateRequest(path) {
     this.props.pushWindowPath(path)
-  }
-
-  handleChangeRequestLeftNav(open) {
-    this.setState({
-      leftNavOpen: open,
-    })
-  }
-  // eslint-disable-next-line
-  handleRequestChangeList(event, value) {
-    //this.context.router.push(value);
-    this.setState({
-      leftNavOpen: false,
-    })
-  }
-
-  _handleNavigationSearchSubmit() {
-    // TODO: this.refs DEPRECATED
-    const searchQueryParam = this.refs.navigationSearchField.getValue()
-    const path = '/' + this.props.splitWindowPath.join('/')
-    let queryPath = ''
-
-    // Do a global search in either the workspace or section
-    if (path.includes('/explore/FV/Workspaces/Data')) {
-      queryPath = '/explore/FV/Workspaces/Data'
-    } else if (path.includes('/explore/FV/sections/Data')) {
-      queryPath = '/explore/FV/sections/Data'
-    } else {
-      queryPath = '/explore/FV/sections/Data'
-    }
-
-    // Clear out the input field
-    // TODO: this.refs DEPRECATED
-    this.refs.navigationSearchField.setValue('')
-    this.props.replaceWindowPath(queryPath + '/search/' + searchQueryParam)
   }
 
   render() {
@@ -163,80 +86,59 @@ export class KidsNavigation extends Component {
     ) : (
       ''
     )
-
-    const homeURL = !this.props.routeParams.dialect_path
-      ? NavigationHelpers.generateStaticURL('/kids')
-      : NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
+    const homeURL = NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
+    const showHome = this.props.routeParams.dialect_path !== undefined && homeURL !== window.location.pathname
 
     return (
       <div className="Navigation">
-        <AppBar
-          title={
-            <a style={{ textDecoration: 'none', color: '#fff' }} onClick={this._onNavigateRequest.bind(this, homeURL)}>
-              {avatar}
-              <span className="hidden-xs">
-                {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-                  this.props.properties.title) +
-                  ' ' +
-                  intl.trans('views.pages.explore.dialect.for_kids', 'for Kids')}
-              </span>
-            </a>
-          }
-          showMenuIconButton
-          // TODO: This doesn't seem to work
-          onRightIconButtonTouchTap={() => {
-            this.props.toggleMenuAction('AppLeftNav')
-          }}
-          // TODO: This creates an empty, transparent button that can be clicked
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
-        >
-          <ToolbarGroup style={{ paddingTop: '5px' }}>
-            <IconButton
-              className={classNames({ hidden: this.props.frontpage })}
-              onClick={() => NavigationHelpers.navigateBack()}
-              style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
-              tooltipPosition="bottom-left"
-              tooltip={intl.trans('back', 'Back', 'first')}
-            >
-              keyboard_backspace
-            </IconButton>
+        <AppBar position="static">
+          <Toolbar style={{ alignItems: 'center', backgroundColor: 'inherit' }}>
+            <Typography variant="title" noWrap style={{ flexGrow: 1 }}>
+              <a
+                style={{ textDecoration: 'none', color: '#fff' }}
+                onClick={this._onNavigateRequest.bind(this, homeURL)}
+              >
+                {avatar}
+                <span className="hidden-xs">
+                  {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
+                    this.props.properties.title) +
+                    ' ' +
+                    intl.trans('views.pages.explore.dialect.for_kids', 'for Kids')}
+                </span>
+              </a>
+            </Typography>
+            {this.props.frontpage !== true && (
+              <Tooltip title={intl.trans('back', 'Back', 'first')} placement="bottom-end">
+                <IconButton onClick={() => NavigationHelpers.navigateBack()}>
+                  <KeyboardBackspaceIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            {showHome && (
+              <Tooltip title={intl.trans('home', 'Home', 'first')} placement="bottom-end">
+                <IconButton onClick={this._onNavigateRequest.bind(this, homeURL)}>
+                  <HomeIcon />
+                </IconButton>
+              </Tooltip>
+            )}
 
-            <IconButton
-              onClick={this._onNavigateRequest.bind(this, homeURL)}
-              style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
-              tooltipPosition="bottom-left"
-              tooltip={intl.trans('home', 'Home', 'first')}
-            >
-              home
-            </IconButton>
+            <Tooltip title={intl.trans('choose_lang', 'Choose a Language', 'first')} placement="bottom-end">
+              <IconButton
+                onClick={this._onNavigateRequest.bind(
+                  this,
+                  NavigationHelpers.generateStaticURL('/kids/FV/Workspaces/Data')
+                )}
+              >
+                <AppsIcon />
+              </IconButton>
+            </Tooltip>
 
-            <IconButton
-              onClick={this._onNavigateRequest.bind(
-                this,
-                NavigationHelpers.generateStaticURL('/kids/FV/Workspaces/Data')
-              )}
-              style={{ paddingTop: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
-              tooltipPosition="bottom-left"
-              tooltip={intl.trans('choose_lang', 'Choose a Language', 'first')}
-            >
-              apps
-            </IconButton>
-
-            <ToolbarSeparator style={{ float: 'none', marginLeft: '0', marginRight: '15px' }} />
-
-            <IconButton
-              style={{ paddingTop: 0, paddingRight: 0, top: '8px', left: '-10px' }}
-              iconClassName="material-icons"
-              onClick={this._onNavigateRequest.bind(this, NavigationHelpers.generateStaticURL('/'))}
-              tooltipPosition="bottom-left"
-              tooltip={intl.trans('back_to_main_site', 'Back to Main Site', 'words')}
-            >
-              clear
-            </IconButton>
-          </ToolbarGroup>
+            <Tooltip title={intl.trans('back_to_main_site', 'Back to Main Site', 'words')} placement="bottom-end">
+              <IconButton onClick={this._onNavigateRequest.bind(this, NavigationHelpers.generateStaticURL('/'))}>
+                <ClearIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
         </AppBar>
       </div>
     )

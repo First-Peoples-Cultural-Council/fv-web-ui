@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -134,7 +135,7 @@ export class DialectMedia extends Component {
               items={
                 selectn('response.entries', computeResources) || selectn('response_prev.entries', computeResources)
               }
-              theme={this.props.routeParams.theme}
+              siteTheme={this.props.routeParams.siteTheme}
               formValues={this.state.formValues}
               // For `with-filter`
               area={this.props.routeParams.area}
@@ -143,6 +144,11 @@ export class DialectMedia extends Component {
               fetcher={this.fetchData}
               fetcherParams={this.state.fetcherParams}
               metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
+              // Note: initialValues becomes locals.context in .../views/components/Editor/fields/valued-checkbox.js
+              // via withFilter: <t.form.Form context={this.props.initialValues}
+              initialValues={{
+                'dc:contributors': selectn('response.properties.username', this.props.computeLogin),
+              }}
             />
           </div>
         </div>
@@ -159,10 +165,10 @@ export class DialectMedia extends Component {
   _onNavigateRequest = (media) => {
     // V1
     this.props.pushWindowPath(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', media, 'media')
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', media, 'media')
     )
     // V2 - still reloads after page transition for some reason
-    // const hrefPath = NavigationHelpers.generateUIDPath(this.props.routeParams.theme || 'explore', media, 'media')
+    // const hrefPath = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme || 'explore', media, 'media')
     // NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
   }
 

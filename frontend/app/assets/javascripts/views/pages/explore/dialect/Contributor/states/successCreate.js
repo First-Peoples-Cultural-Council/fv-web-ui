@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
@@ -27,16 +27,16 @@ export class ContributorStateSuccessCreate extends React.Component {
   }
   render() {
     const { className, copy, generateUrlDetail, generateUrlEdit, handleClick, routeParams, itemUid } = this.props
-    const { theme, dialect_path } = routeParams
+    const { siteTheme, dialect_path } = routeParams
     // const name = formData['dc:title']
     // const description = formData['dc:description']
     // const photo = formData['fvcontributor:profile_picture'] ? formData['fvcontributor:profile_picture'][0] : {}
     const contributorDetailUrl = generateUrlDetail
       ? generateUrlDetail(itemUid)
-      : `/${theme}${dialect_path}/contributor/${itemUid}`
+      : `/${siteTheme}${dialect_path}/contributor/${itemUid}`
     const contributorEditUrl = generateUrlEdit
       ? generateUrlEdit(itemUid)
-      : `/${theme}${dialect_path}/edit/contributor/${itemUid}`
+      : `/${siteTheme}${dialect_path}/edit/contributor/${itemUid}`
     return (
       <div className={`${className} Contributor Contributor--successCreate`}>
         <h1>{copy.create.success.title}</h1>

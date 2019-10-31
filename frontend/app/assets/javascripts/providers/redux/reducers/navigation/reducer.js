@@ -4,7 +4,7 @@ import { SECTIONS } from 'common/Constants'
 import {
   TOGGLE_MENU,
   NAVIGATE_PAGE,
-  CHANGE_THEME,
+  CHANGE_SITE_THEME,
   CHANGE_TITLE_PARAMS,
   OVERRIDE_BREADCRUMBS,
   PAGE_PROPERTIES,
@@ -17,18 +17,16 @@ import {
   SET_ROUTE_PARAMS,
 } from './actionTypes'
 
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 const initialStateProperties = {
   title: ConfGlobal.title,
   pageTitleParams: null,
   domain: ConfGlobal.domain,
-  theme: { palette: ThemeManager.getMuiTheme(FirstVoicesTheme), id: 'default' },
+  siteTheme: 'default',
 }
 const DEFAULT_ROUTE_PARAMS = {
   pageSize: '10', // using strings since these values are pulled from the url bar
   page: '1', // using strings since these values are pulled from the url bar
-  theme: 'explore',
+  siteTheme: 'explore',
   area: SECTIONS,
 }
 const DEFAULT_SEARCH = {
@@ -49,10 +47,10 @@ export const navigationReducer = combineReducers({
   },
   properties(state = initialStateProperties, action = {}) {
     switch (action.type) {
-      case CHANGE_THEME:
+      case CHANGE_SITE_THEME:
         return {
           ...state,
-          theme: action.theme,
+          siteTheme: action.siteTheme,
         }
 
       case CHANGE_TITLE_PARAMS:
@@ -153,7 +151,7 @@ export const navigationReducer = combineReducers({
       case SET_ROUTE_PARAMS: {
         const { matchedRouteParams = {}, matchedPage, search } = action
 
-        // routeParams defaults: pagination, theme, area
+        // routeParams defaults: pagination, siteTheme, area
         const _matchedRouteParams = {
           ...matchedRouteParams,
         }

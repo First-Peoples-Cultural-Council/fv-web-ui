@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 import classNames from 'classnames'
 
@@ -45,27 +46,26 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
-//import Header from 'views/pages/explore/dialect/header';
-//import PageHeader from 'views/pages/explore/dialect/page-header';
-
-import Dialog from 'material-ui/lib/dialog'
-
-import Card from 'material-ui/lib/card/card'
-import FlatButton from 'material-ui/lib/flat-button'
-import CardText from 'material-ui/lib/card/card-text'
-
-import ListUI from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
-
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import { WORKSPACES } from 'common/Constants'
 
-import '!style-loader!css-loader!react-image-gallery/build/image-gallery.css'
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -73,7 +73,7 @@ const intl = IntlService.instance
  * View word entry
  */
 const { array, func, object, string } = PropTypes
-export class View extends Component {
+export class MediaView extends Component {
   static propTypes = {
     deleteResource: func, // TODO: NOT CERTAIN WHERE THIS COMES FROM
     routeParams: object.isRequired,
@@ -129,17 +129,13 @@ export class View extends Component {
     const title = selectn('properties.dc:title', media)
     const uid = selectn('uid', media)
 
-    if (title && selectn('pageTitleParams.media', this.props.properties) != title) {
+    if (title && selectn('pageTitleParams.media', this.props.properties) !== title) {
       this.props.changeTitleParams({ media: title })
       this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.media' })
     }
   }
 
   render() {
-    const tabItemStyles = {
-      userSelect: 'none',
-    }
-
     const _computeEntities = Immutable.fromJS([
       {
         id: this._getMediaPath(),
@@ -208,10 +204,29 @@ export class View extends Component {
           <div className="col-xs-12">
             <div>
               <Card>
-                <Tabs tabItemContainerStyle={tabItemStyles}>
-                  <Tab label={intl.trans('overview', 'Overview', 'first')}>
+                <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
+                  <Tab label={intl.trans('overview', 'Overview', 'first')} />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('words', 'Words', 'first')
+                        : intl.trans('linked_words', 'Linked Words', 'words')
+                    }
+                    id="find_words"
+                  />
+                  <Tab
+                    label={
+                      UIHelpers.isViewSize('xs')
+                        ? intl.trans('phrases', 'Phrases', 'first')
+                        : intl.trans('linked_phrases', 'Linked Phrases', 'words')
+                    }
+                    id="find_phrases"
+                  />
+                </Tabs>
+                {this.state.tabValue === 0 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <div className={classNames('col-md-8', 'col-xs-12')}>{preview}</div>
 
                         <div className={classNames('col-md-4', 'hidden-xs')}>
@@ -221,7 +236,7 @@ export class View extends Component {
                             if (thumbnails && thumbnails.length > 0) {
                               return (
                                 <div>
-                                  <ListUI
+                                  <List
                                     subheader={intl.trans(
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
@@ -230,74 +245,71 @@ export class View extends Component {
                                     {thumbnails.map((thumbnail, key) => {
                                       return (
                                         <ListItem
+                                          button
                                           onClick={() => this.setState({ showThumbnailDialog: thumbnail })}
                                           key={key}
-                                          primaryText={thumbnail.title}
-                                          secondaryText={
-                                            <p>
-                                              <span style={{ color: '#000' }}>{thumbnail.description}</span> -- (
-                                              {thumbnail.width + 'x' + thumbnail.height})
-                                            </p>
-                                          }
-                                        />
+                                        >
+                                          <ListItemText
+                                            primary={thumbnail.title}
+                                            secondary={
+                                              <p>
+                                                <span style={{ color: '#000' }}>{thumbnail.description}</span>
+                                                -- ({thumbnail.width + 'x' + thumbnail.height})
+                                              </p>
+                                            }
+                                          />
+                                        </ListItem>
                                       )
                                     })}
-                                  </ListUI>
+                                  </List>
 
                                   <Dialog
-                                    contentStyle={{
-                                      textAlign: 'center',
-                                      height: '500px',
-                                      maxHeight: '500px',
-                                    }}
-                                    autoScrollBodyContent
-                                    title={selectn('title', this.state.showThumbnailDialog)}
-                                    actions={[
-                                      <FlatButton
-                                        key="FlatButton0"
-                                        label={intl.trans('close', 'Close', 'first')}
-                                        secondary
-                                        onClick={() => this.setState({ showThumbnailDialog: null })}
-                                      />,
-                                    ]}
-                                    modal={false}
                                     open={this.state.showThumbnailDialog === null ? false : true}
-                                    onRequestClose={() => this.setState({ showThumbnailDialog: null })}
+                                    onClose={() => this.setState({ showThumbnailDialog: null })}
+                                    fullWidth
+                                    maxWidth="md"
                                   >
-                                    <p>
-                                      <img
-                                        src={selectn('content.data', this.state.showThumbnailDialog)}
-                                        alt={selectn('title', this.state.showThumbnailDialog)}
-                                        style={{ maxHeight: '500px' }}
-                                      />
-                                    </p>
-                                    <p>
-                                      <input
-                                        readOnly
-                                        type="text"
-                                        value={selectn('content.data', this.state.showThumbnailDialog)}
-                                        style={{ width: '100%', padding: '5px' }}
-                                      />
-                                    </p>
+                                    <DialogTitle>{selectn('title', this.state.showThumbnailDialog)}</DialogTitle>
+                                    <DialogContent>
+                                      <p>
+                                        <img
+                                          src={selectn('content.data', this.state.showThumbnailDialog)}
+                                          alt={selectn('title', this.state.showThumbnailDialog)}
+                                          style={{ maxHeight: '500px' }}
+                                        />
+                                      </p>
+                                      <p>
+                                        <input
+                                          readOnly
+                                          type="text"
+                                          value={selectn('content.data', this.state.showThumbnailDialog)}
+                                          style={{ width: '100%', padding: '5px' }}
+                                        />
+                                      </p>
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => this.setState({ showThumbnailDialog: null })}
+                                      >
+                                        {intl.trans('close', 'Close', 'first')}
+                                      </Button>
+                                    </DialogActions>
                                   </Dialog>
                                 </div>
                               )
                             }
                           })()}
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('words', 'Words', 'first')
-                        : intl.trans('linked_words', 'Linked Words', 'words')
-                    }
-                    id="find_words"
-                  >
+                  </Typography>
+                )}
+                {this.state.tabValue === 1 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans('views.pages.explore.dialect.media.words_featuring', 'Words Featuring')}
                           <strong>{selectn('response.title', computeResource)}</strong>
@@ -305,19 +317,14 @@ export class View extends Component {
                         <div className="row">
                           <WordListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
-                        ? intl.trans('phrases', 'Phrases', 'first')
-                        : intl.trans('linked_phrases', 'Linked Phrases', 'words')
-                    }
-                    id="find_phrases"
-                  >
+                  </Typography>
+                )}
+                {this.state.tabValue === 2 && (
+                  <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
-                      <CardText>
+                      <CardContent>
                         <h2>
                           {intl.trans('views.pages.explore.dialect.media.words_featuring_with', 'Words Featuring with')}
                           <strong>{selectn('response.title', computeResource)}</strong>
@@ -325,10 +332,10 @@ export class View extends Component {
                         <div className="row">
                           <PhraseListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
                         </div>
-                      </CardText>
+                      </CardContent>
                     </div>
-                  </Tab>
-                </Tabs>
+                  </Typography>
+                )}
               </Card>
             </div>
           </div>
@@ -554,4 +561,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(MediaView)

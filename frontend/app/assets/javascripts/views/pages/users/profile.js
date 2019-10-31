@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
 // REDUX
@@ -58,6 +59,8 @@ class Profile extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formUserEdit = React.createRef()
+
     this.state = {
       formValue: null,
       userRequest: null,
@@ -101,7 +104,7 @@ class Profile extends Component {
 
     // 'Redirect' on success
     if (selectn('success', currentUser) != selectn('success', nextUser) && selectn('success', nextUser) === true) {
-      //nextProps.replaceWindowPath('/' + nextProps.routeParams.theme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
+      //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
     } else if (nextProps.computeLogin.success !== this.props.computeLogin.success) {
       this.fetchData(nextProps)
     }
@@ -121,10 +124,8 @@ class Profile extends Component {
   }
 
   _onRequestSaveForm(e) {
-    // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_user_edit.getValue()
+    const formValue = this.formUserEdit.current.getValue()
 
     const properties = {}
 
@@ -189,7 +190,7 @@ class Profile extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_user_edit" // TODO: DEPRECATED
+                ref={this.formUserEdit}
                 type={t.struct(FVUserProfileFields)}
                 value={this.state.formValue || normalizedPayload}
                 options={FVUserProfileOptions}

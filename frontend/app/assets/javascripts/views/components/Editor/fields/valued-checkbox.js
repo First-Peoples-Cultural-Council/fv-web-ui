@@ -1,47 +1,48 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-function renderInput(locals) {
-  const onChange = (event) => {
-    if (event.target.checked) {
-      // NOTE: on dialect media browsing page locals.context === undefined,
-      // so accessing `locals.context[locals.attrs.name]` triggers an error.
-      // It's not clear to me what `locals.context[locals.attrs.name]` should be doing.
-      locals.onChange(locals.context[locals.attrs.name])
-    } else {
-      locals.onChange(null)
-    }
-  }
-
-  return (
-    <label style={{ fontWeight: 'normal' }}>
-      <input
-        type="checkbox"
-        ref="valued_checkbox"
-        id={'virtual-keyboard-helper-' + locals.attrs.name}
-        value={locals.context}
-        onChange={onChange}
-        // NOTE: would this be better?
-        // onChange={locals.onChange}
-        // name={locals.attrs.name}
-      />
-      <span>&nbsp;</span>
-      <span>{locals.label}</span>
-    </label>
-  )
-}
-
-const textboxTemplate = t.form.Form.templates.textbox.clone({ renderInput })
-
 export default class ValuedCheckboxFactory extends t.form.Textbox {
+  constructor(props) {
+    super(props)
+    this.valued_checkbox = React.createRef()
+  }
   /**
    * Manually reset element
    */
-  forceReset() {
-    this.refs.valued_checkbox.checked = false
+  forceReset = () => {
+    if (this.valued_checkbox) {
+      this.valued_checkbox.current.checked = false
+    }
   }
 
-  getTemplate() {
-    return textboxTemplate
+  inputRender = (locals) => {
+    const onChange = (event) => {
+      if (event.target.checked) {
+        locals.onChange(locals.context[locals.attrs.name])
+      } else {
+        locals.onChange(null)
+      }
+    }
+
+    return (
+      <label style={{ fontWeight: 'normal' }}>
+        <input
+          type="checkbox"
+          ref={this.valued_checkbox}
+          id={'virtual-keyboard-helper-' + locals.attrs.name}
+          value={locals.context[locals.attrs.name]}
+          name={locals.attrs.name}
+          onChange={onChange}
+          checked={locals.value === locals.context[locals.attrs.name]}
+        />
+        <span>&nbsp;</span>
+        <span>{locals.label}</span>
+      </label>
+    )
+  }
+
+  getTemplate = () => {
+    const template = t.form.Form.templates.textbox.clone({ renderInput: this.inputRender })
+    return template
   }
 }

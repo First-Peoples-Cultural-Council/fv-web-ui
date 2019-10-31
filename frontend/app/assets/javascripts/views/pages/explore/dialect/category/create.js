@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import classNames from 'classnames'
 
 // REDUX
@@ -26,9 +27,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-// Views
-import Paper from 'material-ui/lib/paper'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import Paper from '@material-ui/core/Paper'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
 
@@ -65,6 +65,8 @@ export class PageDialectCategoryCreate extends Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formCategoryCreate = React.createRef()
 
     this.state = {
       formValue: null,
@@ -125,8 +127,9 @@ export class PageDialectCategoryCreate extends Component {
   _onRequestSaveForm(e) {
     // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_category_create.getValue()
+
+    // NOTE: getValue() is a tcomb-form
+    const formValue = this.formCategoryCreate.current.getValue()
 
     const properties = {}
 
@@ -142,16 +145,16 @@ export class PageDialectCategoryCreate extends Component {
       formValue: properties,
     })
 
-    // Check if a parent category was specified in the form
-    let parentPathOrId = ''
-    if (formValue['fvcategory:parent_category']) {
-      parentPathOrId = formValue['fvcategory:parent_category']
-    } else {
-      parentPathOrId = '/' + this.state.dialectPath + '/Categories'
-    }
-
     // Passed validation
     if (formValue) {
+      // Check if a parent category was specified in the form
+      let parentPathOrId = ''
+      if (formValue['fvcategory:parent_category']) {
+        parentPathOrId = formValue['fvcategory:parent_category']
+      } else {
+        parentPathOrId = '/' + this.state.dialectPath + '/Categories'
+      }
+
       const now = Date.now()
       this.props.createCategory(
         parentPathOrId,
@@ -180,7 +183,7 @@ export class PageDialectCategoryCreate extends Component {
     const category = ProviderHelpers.getEntry(computeCategory, this.state.categoryPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress mode="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" size={2} />
     }
 
     return (
@@ -204,7 +207,7 @@ export class PageDialectCategoryCreate extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_category_create" // TODO: DEPRECATED
+                ref={this.formCategoryCreate}
                 type={t.struct(selectn('FVCategory', fields))}
                 context={dialect}
                 value={this.state.formValue}
@@ -219,7 +222,7 @@ export class PageDialectCategoryCreate extends Component {
           </div>
 
           <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+            <Paper style={{ padding: '15px', margin: '20px 0' }}>
               <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
             </Paper>
           </div>

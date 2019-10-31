@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
 // REDUX
@@ -230,7 +231,7 @@ export class ListView extends DataListView {
   }
 
   _onEntryNavigateRequest = (item) => {
-    this.props.pushWindowPath(`/${this.props.routeParams.theme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
+    this.props.pushWindowPath(`/${this.props.routeParams.siteTheme}${item.path.replace('Alphabet', 'learn/alphabet')}`)
   }
 }
 

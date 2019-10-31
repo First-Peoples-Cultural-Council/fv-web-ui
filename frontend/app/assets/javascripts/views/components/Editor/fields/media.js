@@ -2,8 +2,8 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import FontIcon from 'material-ui/lib/font-icon'
-import FlatButton from 'material-ui/lib/flat-button'
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
+import Button from '@material-ui/core/Button'
 
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
 import SelectMediaComponent from 'views/components/Editor/SelectMediaComponent'
@@ -41,7 +41,8 @@ function renderInput(locals) {
         crop
         tagStyles={locals.type == 'FVPicture' ? { height: '200px' } : null}
       />
-      <FlatButton
+      <Button
+        variant="flat"
         style={{
           position: 'absolute',
           top: 0,
@@ -55,13 +56,10 @@ function renderInput(locals) {
           borderRight: 0,
         }}
         onClick={_onRequestEdit}
-        label={intl.trans('replace', 'Replace', 'first')}
-        labelPosition="after"
       >
-        <FontIcon style={{ verticalAlign: 'middle' }} className="material-icons">
-          swap_horiz
-        </FontIcon>
-      </FlatButton>
+        <SwapHorizIcon style={{ verticalAlign: 'middle' }} className="material-icons" />
+        {intl.trans('replace', 'Replace', 'first')}
+      </Button>
     </div>
   )
 
@@ -83,7 +81,9 @@ function renderInput(locals) {
           dialect={locals.context}
         />
         {selectn('context.initialValues.' + locals.attrs.name, locals) ? (
-          <FlatButton onClick={onCancel} label={intl.trans('cancel', 'Cancel', 'first')} />
+          <Button variant="flat" onClick={onCancel}>
+            {intl.trans('cancel', 'Cancel', 'first')}
+          </Button>
         ) : (
           ''
         )}

@@ -13,12 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import GridList from 'material-ui/lib/grid-list/grid-list'
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -38,14 +41,14 @@ export class MediaList extends Component {
     gridListTile: func,
     items: oneOfType([array, instanceOf(List)]),
     style: object,
-    theme: string,
+    siteTheme: string,
     type: string,
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
   }
 
   static defaultProps = {
-    theme: 'explore',
+    siteTheme: 'explore',
     cols: 3,
     cellHeight: 210,
     style: null,
@@ -138,27 +141,26 @@ export class MediaList extends Component {
               </span>
             ) : null
 
-            const href = NavigationHelpers.generateUIDPath(this.props.theme, tile, 'media')
+            const href = NavigationHelpers.generateUIDPath(this.props.siteTheme, tile, 'media')
             return (
-              <GridTile
-                onClick={action.bind(this, tile)}
-                key={tile.uid}
-                title={
-                  <a
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-                    }}
-                  >
-                    {tile.title}
-                  </a>
-                }
-                titlePosition={fileTypeTilePosition}
-                subtitle={subtitle}
-              >
+              <GridListTile onClick={action.bind(this, tile)} key={tile.uid}>
                 {this._getMediaPreview(tile)}
-              </GridTile>
+                <GridListTileBar
+                  title={
+                    <a
+                      href={href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+                      }}
+                    >
+                      {tile.title}
+                    </a>
+                  }
+                  titlePosition={fileTypeTilePosition}
+                  subtitle={subtitle}
+                />
+              </GridListTile>
             )
           })}
         </GridList>

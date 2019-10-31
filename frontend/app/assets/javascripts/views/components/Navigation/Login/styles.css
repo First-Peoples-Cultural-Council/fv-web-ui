@@ -8,7 +8,7 @@
 }
 .Login--welcome {
   display: inline-block;
-  padding-right: 15px;
+  /* padding-right: 15px; */
 }
 .Login--signIn {
   display: inline-block;

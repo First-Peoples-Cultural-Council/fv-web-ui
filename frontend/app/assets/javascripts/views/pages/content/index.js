@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 // REDUX
@@ -58,10 +59,6 @@ export class PageContent extends Component {
     queryPage: func.isRequired,
     pushWindowPath: func.isRequired,
   }
-
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
 
   constructor(props, context) {
     super(props, context)
@@ -120,15 +117,16 @@ export class PageContent extends Component {
 
       if (computePage.success === true) {
         const _properties = selectn('response.entries[0].properties', computePage)
-
+        const pageTitle = selectn('dc:title', _properties)
+        const _contentTitle = selectn('fvpage:blocks[0].title', _properties)
+        const contentTitle = pageTitle !== _contentTitle ? _contentTitle : undefined
+        const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
         page = (
           <div>
-            <TextHeader
-              title={intl.searchAndReplace(selectn('fvpage:blocks[0].title', _properties), 'first')}
-              tag="h1"
-              properties={this.props.properties}
-            />
+            {pageTitle && <h1>{intl.searchAndReplace(pageTitle, { case: 'first' })}</h1>}
+            <hr style={{ backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }} />
 
+            {contentTitle && <h2>{intl.searchAndReplace(contentTitle, { case: 'first' })}</h2>}
             <div dangerouslySetInnerHTML={{ __html: selectn('fvpage:blocks[0].text', _properties) }} />
           </div>
         )

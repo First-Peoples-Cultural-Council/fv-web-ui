@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import IntlService from 'views/services/intl'
 const intl = IntlService.instance
 const { func } = PropTypes

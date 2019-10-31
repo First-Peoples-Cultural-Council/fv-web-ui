@@ -16,7 +16,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -34,7 +35,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-import { FlatButton, RaisedButton, Dialog } from 'material-ui'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -59,7 +64,8 @@ export class AddMediaComponent extends Component {
   }
 
   getDefaultValues() {
-    intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    // intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    label: intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
   }
 
   handleOpen() {
@@ -76,6 +82,8 @@ export class AddMediaComponent extends Component {
 
   constructor(props) {
     super(props)
+
+    this.formMedia = React.createRef()
 
     this._change = this._change.bind(this)
     this._save = this._save.bind(this)
@@ -100,8 +108,9 @@ export class AddMediaComponent extends Component {
 
     this.setState({ uploading: true })
 
-    // TODO: `this.refs` deprecated
-    const formValue = this.refs.form_media.getValue()
+    // tcomb-form > getValue():
+    // Returns null if the validation failed; otherwise returns an instance of your model.
+    const formValue = this.formMedia.current.getValue()
 
     // If validation passed
     if (formValue) {
@@ -212,7 +221,9 @@ export class AddMediaComponent extends Component {
     let fileTypeLabel = intl.trans('file', 'File', 'first')
 
     const actions = [
-      <FlatButton key="fb0" label={intl.trans('cancel', 'Cancel', 'first')} secondary onClick={this.handleClose} />,
+      <Button key="fb0" color="secondary" onClick={this.handleClose}>
+        {intl.trans('cancel', 'Cancel', 'first')}
+      </Button>,
     ]
 
     switch (this.props.type) {
@@ -246,7 +257,7 @@ export class AddMediaComponent extends Component {
     form = (
       <form onSubmit={this._save} id="AddMediaComponent" encType="multipart/form-data">
         <t.form.Form
-          ref="form_media" // TODO: deprecated
+          ref={this.formMedia}
           options={selectn('FVResource', options)}
           type={t.struct(selectn(this.props.type, fields))}
           value={this.state.value}
@@ -254,7 +265,7 @@ export class AddMediaComponent extends Component {
           onChange={this._change}
         />
         {uploadText}
-        <button type="submit" className={classNames('btn', 'btn-primary')}>
+        <button type="button" onClick={this._save} className={classNames('btn', 'btn-primary')}>
           {intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
         </button>
       </form>
@@ -292,27 +303,33 @@ export class AddMediaComponent extends Component {
 
     return (
       <div style={{ display: 'inline' }}>
-        <RaisedButton label={this.props.label} onClick={this.handleOpen} />
-        <Dialog
-          title={intl.trans(
-            'views.components.editor.create_new_x_in_the_x_dialect',
-            'Create New ' +
-              fileTypeLabel +
-              ' in the ' +
-              selectn('properties.dc:title', this.props.dialect) +
-              ' dialect.',
-            'first',
-            [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
-          )}
-          actions={actions}
-          modal
-          autoScrollBodyContent
-          open={this.state.open}
-        >
-          <div className="form-horizontal">
-            {this.state.typeError}
-            {form}
-          </div>
+        <Button variant="outlined" onClick={this.handleOpen}>
+          {this.props.label}
+        </Button>
+        <Dialog fullWidth maxWidth="md" actions={actions} open={this.state.open}>
+          <DialogTitle>
+            {intl.trans(
+              'views.components.editor.create_new_x_in_the_x_dialect',
+              'Create New ' +
+                fileTypeLabel +
+                ' in the ' +
+                selectn('properties.dc:title', this.props.dialect) +
+                ' dialect.',
+              'first',
+              [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
+            )}
+          </DialogTitle>
+          <DialogContent>
+            <div className="form-horizontal">
+              {this.state.typeError}
+              {form}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="secondary" onClick={this.handleClose}>
+              {intl.trans('cancel', 'Cancel', 'first')}
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     )

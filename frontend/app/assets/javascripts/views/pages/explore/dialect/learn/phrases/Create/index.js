@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
@@ -80,6 +81,8 @@ export class PhrasesCreate extends Component {
     is403: false,
   }
 
+  formPhraseCreate = React.createRef()
+
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "PhrasesCreateInternationalization" */ './internationalization').then(
       (_module) => {
@@ -118,7 +121,7 @@ export class PhrasesCreate extends Component {
       selectn('success', nextPhrase) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', nextPhrase), 'phrases'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', nextPhrase), 'phrases'),
         this.props.replaceWindowPath,
         true
       )
@@ -193,8 +196,7 @@ export class PhrasesCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_phrase_create.getValue()
+    const formValue = this.formPhraseCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -202,8 +204,14 @@ export class PhrasesCreate extends Component {
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
-          //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
-          properties[key] = formValue[key]
+          // Filter out null values in an array
+          if (formValue[key] instanceof Array) {
+            const formValueKey = formValue[key].filter((item) => item !== null)
+            properties[key] = formValueKey
+          } else {
+            //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
+            properties[key] = formValue[key]
+          }
         }
       }
     }
@@ -280,7 +288,7 @@ export class PhrasesCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_phrase_create" // TODO: DEPRECATED
+                  ref={this.formPhraseCreate}
                   type={t.struct(selectn('FVPhrase', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}

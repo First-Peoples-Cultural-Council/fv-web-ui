@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
-
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -29,14 +29,6 @@ import { fetchWord } from 'providers/redux/reducers/fvWord'
 
 import selectn from 'selectn'
 
-// TODO: drop material-ui
-import Avatar from 'material-ui/lib/avatar'
-import Card from 'material-ui/lib/card/card'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardMedia from 'material-ui/lib/card/card-media'
-import CardText from 'material-ui/lib/card/card-text'
-import CircularProgress from 'material-ui/lib/circular-progress'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -44,134 +36,24 @@ import UIHelpers from 'common/UIHelpers'
 
 import MetadataList from 'views/components/Browsing/metadata-list'
 import AudioOptimal from 'views/components/Browsing/audio-optimal'
+
+import { withTheme } from '@material-ui/core/styles'
+import Avatar from '@material-ui/core/Avatar'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+
 import PreviewMetaDataContributor from 'views/components/Editor/PreviewMetaDataContributor'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-
-const GetMetaData = (type, response) => {
-  const metadata = []
-
-  /**
-   * Recorders
-   */
-  const recorders = []
-
-  const recordersData = selectn('contextParameters.media.recorders', response) || []
-  recordersData.map((recorder, key) => {
-    // NOTE: this is where the burst of missing prop warnings comes from
-    recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
-  })
-
-  metadata.push({
-    label: 'Recorder(s)',
-    value: recorders,
-  })
-
-  /**
-   * Contributors
-   */
-  const contributors = []
-  const contributorsData = selectn('contextParameters.media.sources', response) || []
-
-  contributorsData.map((contributor, key) => {
-    contributors.push(<Preview expandedValue={contributor} key={key} type="FVContributor" />)
-  })
-
-  metadata.push({
-    label: intl.trans('contributor_s', 'Contributor(s)', 'first'),
-    value: contributors,
-  })
-
-  /**
-   * Origin
-   */
-  if (selectn('contextParameters.media.origin', response)) {
-    metadata.push({
-      label: intl.trans('original_associated_word_phrase', 'Original Associated Word/Phrase', 'words'),
-      value:
-        selectn('contextParameters.media.origin.dc:title', response) +
-        ' (Path: ' +
-        selectn('contextParameters.media.origin.path', response) +
-        ')',
-    })
-  }
-
-  /**
-   * Child Focused
-   */
-  metadata.push({
-    label: intl.trans('models.child_focused', 'Child Focused', 'words'),
-    value: selectn('properties.fvm:child_focused', response)
-      ? intl.trans('yes', 'Yes', 'first')
-      : intl.trans('no', 'No', 'first'),
-  })
-
-  /**
-   * Shared
-   */
-  metadata.push({
-    label: intl.trans('shared', 'Shared', 'first'),
-    value: selectn('properties.fvm:shared', response)
-      ? intl.trans('yes', 'Yes', 'first')
-      : intl.trans('no', 'No', 'first'),
-  })
-
-  /**
-   * Direct Link
-   */
-  if (selectn('path', response)) {
-    const directLinkValue = NavigationHelpers.generateUIDPath('explore', response, 'media')
-
-    metadata.push({
-      label: intl.trans('direct_link', 'Direct Link', 'words'),
-      value: (
-        <span>
-          <input
-            type="textbox"
-            readOnly
-            style={{ width: '100%', padding: '5px', maxWidth: '650px' }}
-            value={directLinkValue}
-          />{' '}
-          <br />
-          <a href={directLinkValue} target="_blank" rel="noopener noreferrer">
-            {intl.trans('go_to_record', 'Go to Record', 'words')}
-          </a>
-        </span>
-      ),
-    })
-  }
-
-  /**
-   * File size
-   */
-  metadata.push({
-    label: intl.trans('size', 'Size', 'first'),
-    value: selectn('properties.file:content.length', response)
-      ? StringHelpers.getReadableFileSize(selectn('properties.file:content.length', response))
-      : '-',
-  })
-
-  /**
-   * Status
-   */
-  metadata.push({
-    label: intl.trans('status', 'Status', 'first'),
-    value: selectn('state', response) ? selectn('state', response) : '-',
-  })
-
-  /**
-   * Date created
-   */
-  metadata.push({
-    label: intl.trans('date_created', 'Date Created', 'first'),
-    value: selectn('properties.dc:created', response)
-      ? StringHelpers.formatUTCDateString(selectn('properties.dc:created', response))
-      : '-',
-  })
-
-  return metadata
-}
 
 const { bool, func, object, string } = PropTypes
 
@@ -219,6 +101,7 @@ export class Preview extends Component {
   }
   state = {
     showAudioMetadata: false,
+    open: this.props.initiallyExpanded || false,
   }
 
   async componentDidMount() {
@@ -262,7 +145,7 @@ export class Preview extends Component {
   }
 
   render() {
-    const themePalette = this.props.properties.theme.palette.rawTheme.palette
+    const themePalette = this.props.theme.palette
 
     let handleExpandChange = () => {}
 
@@ -273,7 +156,7 @@ export class Preview extends Component {
       this.props.styles
     )
 
-    let body = <CircularProgress mode="indeterminate" size={1} />
+    let body = <CircularProgress variant="indeterminate" size={1} />
 
     switch (this.props.type) {
       case 'FVWord': {
@@ -464,55 +347,63 @@ export class Preview extends Component {
           } else {
             const description =
               selectn('properties.dc:description', pictureResponse) || selectn('dc:description', pictureResponse)
-
             body = (
-              <Card
-                style={{ boxShadow: 'none' }}
-                initiallyExpanded={this.props.initiallyExpanded}
-                onExpandChange={handleExpandChange}
-              >
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+              <Card style={{ boxShadow: 'none' }}>
+                <CardContent style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', pictureResponse) ||
                   (selectn('path', pictureResponse) && selectn('path', pictureResponse).indexOf('nxfile') != -1)
                     ? pictureTag
                     : null}
-                </CardMedia>
+                </CardContent>
+
                 <CardHeader
                   title={selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
-                  titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
                   subtitle={
                     description && description != 'undefined'
                       ? intl.trans('description', 'Description', 'first') + ': ' + description
                       : ''
                   }
-                  subtitleStyle={{ lineHeight: 'initial' }}
-                  style={{ height: 'inherit', padding: '16px 0' }}
+                  style={{ lineHeight: 'initial', fontSize: '18px', height: 'inherit', padding: '16px 0' }}
                 />
                 <CardHeader
-                  actAsExpander
                   className="card-header-custom"
-                  showExpandableButton
-                  title={intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
-                  titleColor={themePalette.alternateTextColor}
-                  titleStyle={{ lineHeight: 'initial' }}
+                  title={
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
+                      {intl.trans('more_image_info', 'MORE IMAGE INFO', 'upper')}
+                      <IconButton
+                        onClick={() => {
+                          this._toggleOpen()
+                          handleExpandChange()
+                        }}
+                      >
+                        {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    </Typography>
+                  }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    borderBottom: '4px solid ' + themePalette.primary.light,
+                    padding: '8px 16px',
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
-                  <MetadataList
-                    style={{
-                      lineHeight: 'initial',
-                      maxHeight: '100%',
-                      overflow: 'hidden',
-                      ...this.props.metadataListStyles,
-                    }}
-                    metadata={this._getMetaData('picture', pictureResponse)}
-                  />
-                </CardText>
+                <Collapse in={this.state.open}>
+                  <CardContent>
+                    <MetadataList
+                      style={{
+                        lineHeight: 'initial',
+                        maxHeight: '100%',
+                        overflow: 'hidden',
+                        ...this.props.metadataListStyles,
+                      }}
+                      metadata={this._getMetaData('picture', pictureResponse)}
+                    />
+                  </CardContent>
+                </Collapse>
               </Card>
             )
           }
@@ -586,43 +477,57 @@ export class Preview extends Component {
             )
           } else {
             body = (
-              <Card
-                style={{ boxShadow: 'none' }}
-                initiallyExpanded={this.props.initiallyExpanded}
-                onExpandChange={handleExpandChange}
-              >
+              <Card style={{ boxShadow: 'none' }}>
                 <CardHeader
-                  title={title}
-                  titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
-                  titleColor={themePalette.textColor}
-                  subtitleColor={themePalette.textColorFaded}
+                  title={selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
                   subtitle={description && description != 'undefined' ? 'Description: ' + description : ''}
-                  subtitleStyle={{ lineHeight: 'initial' }}
-                  style={{ height: 'initial', padding: 0 }}
+                  style={{ height: 'initial', padding: 0, lineHeight: 'initial', fontSize: '18px' }}
                 />
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+                <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', audioResponse) ||
                   (selectn('path', audioResponse) && selectn('path', audioResponse).indexOf('nxfile') != -1)
                     ? audioTag
                     : null}
-                </CardMedia>
+                </div>
                 <CardHeader
                   className="card-header-custom"
-                  title={intl.trans('more_audio_info', 'MORE AUDIO INFO', 'upper')}
-                  titleStyle={{ lineHeight: 'initial' }}
-                  titleColor={themePalette.alternateTextColor}
-                  actAsExpander
-                  showExpandableButton
+                  title={
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
+                      {intl.trans('more_audio_info', 'MORE AUDIO INFO', 'upper')}
+                      <IconButton
+                        onClick={() => {
+                          this._toggleOpen()
+                          handleExpandChange()
+                        }}
+                      >
+                        {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>{' '}
+                    </Typography>
+                  }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    padding: '8px 16px',
+                    borderBottom: '4px solid ' + themePalette.primary.light,
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
-                  <MetadataList metadata={this._getMetaData('audio', audioResponse)} />
-                </CardText>
+                <Collapse in={this.state.open}>
+                  <CardContent style={{ backgroundColor: themePalette.accent4Color }}>
+                    <MetadataList
+                      style={{
+                        lineHeight: 'initial',
+                        maxHeight: '100%',
+                        overflow: 'hidden',
+                        ...this.props.metadataListStyles,
+                      }}
+                      metadata={this._getMetaData('audio', audioResponse)}
+                    />
+                  </CardContent>
+                </Collapse>
               </Card>
             )
           }
@@ -680,51 +585,59 @@ export class Preview extends Component {
             //   selectn('properties.dc:description', videoResponse) || selectn('dc:description', videoResponse)
 
             body = (
-              <Card
-                style={{ boxShadow: 'none' }}
-                initiallyExpanded={this.props.initiallyExpanded}
-                onExpandChange={handleExpandChange}
-              >
-                <CardMedia style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
+              <Card style={{ boxShadow: 'none' }}>
+                <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', videoResponse) ||
                   (selectn('path', videoResponse) && selectn('path', videoResponse).indexOf('nxfile') != -1)
                     ? videoTag
                     : null}
-                </CardMedia>
+                </div>
                 <CardHeader
                   title={selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
-                  titleStyle={{ lineHeight: 'initial', fontSize: '18px' }}
                   subtitle={
                     selectn('properties.dc:description', videoResponse) || selectn('dc:description', videoResponse)
                   }
-                  subtitleStyle={{ lineHeight: 'initial' }}
-                  style={{ height: 'inherit', padding: '16px 0' }}
+                  style={{ height: 'inherit', padding: '16px 0', lineHeight: 'initial', fontSize: '18px' }}
                 />
                 <CardHeader
                   className="card-header-custom"
-                  title={intl.trans('more_video_info', 'MORE VIDEO INFO', 'upper')}
-                  titleStyle={{ lineHeight: 'initial' }}
-                  titleColor={themePalette.alternateTextColor}
-                  actAsExpander
-                  showExpandableButton
+                  title={
+                    <Typography
+                      variant="title"
+                      style={{
+                        color: themePalette.secondary.contrastText,
+                      }}
+                    >
+                      {intl.trans('more_video_info', 'MORE VIDEO INFO', 'upper')}
+                      <IconButton
+                        onClick={() => {
+                          this._toggleOpen()
+                          handleExpandChange()
+                        }}
+                      >
+                        {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    </Typography>
+                  }
                   style={{
-                    height: 'initial',
                     backgroundColor: themePalette.primary2Color,
-                    padding: '8px',
-                    borderBottom: '4px solid ' + themePalette.primary1Color,
+                    padding: '8px 16px',
+                    borderBottom: '4px solid ' + themePalette.primary.light,
                   }}
                 />
-                <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
-                  <MetadataList
-                    style={{
-                      lineHeight: 'initial',
-                      maxHeight: '100%',
-                      overflow: 'hidden',
-                      ...this.props.metadataListStyles,
-                    }}
-                    metadata={this._getMetaData('video', videoResponse)}
-                  />
-                </CardText>
+                <Collapse in={this.state.open}>
+                  <CardContent style={{ backgroundColor: themePalette.accent4Color }}>
+                    <MetadataList
+                      style={{
+                        lineHeight: 'initial',
+                        maxHeight: '100%',
+                        overflow: 'hidden',
+                        ...this.props.metadataListStyles,
+                      }}
+                      metadata={this._getMetaData('video', videoResponse)}
+                    />
+                  </CardContent>
+                </Collapse>
               </Card>
             )
           }
@@ -846,7 +759,7 @@ export class Preview extends Component {
 
     const recordersData = selectn('contextParameters.media.recorders', response) || []
     recordersData.map((recorder, key) => {
-      // NOTE: Triggers FW-299
+      // NOTE: The following triggers FW-299
       // recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
       recorders.push(<PreviewMetaDataContributor expandedValue={recorder} key={key} />)
     })
@@ -863,7 +776,7 @@ export class Preview extends Component {
     const contributorsData = selectn('contextParameters.media.sources', response) || []
 
     contributorsData.map((contributor, key) => {
-      // NOTE: Triggers FW-299
+      // NOTE: The following triggers FW-299
       // contributors.push(<Preview expandedValue={contributor} key={key} type="FVContributor" />)
       contributors.push(<PreviewMetaDataContributor expandedValue={contributor} key={key} />)
     })
@@ -962,6 +875,11 @@ export class Preview extends Component {
 
     return metadata
   }
+  _toggleOpen() {
+    this.setState({
+      open: !this.state.open,
+    })
+  }
 }
 
 // REDUX: reducers/state
@@ -1003,7 +921,9 @@ const mapDispatchToProps = {
   fetchWord,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Preview)
+export default withTheme()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Preview)
+)

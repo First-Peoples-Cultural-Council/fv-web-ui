@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
 // REDUX
@@ -132,7 +133,7 @@ class ListView extends DataListView {
           name: 'title',
           title: intl.trans('word', 'Word', 'first'),
           render: (v, data) => {
-            const href = NavigationHelpers.generateUIDPath(this.props.routeParams.theme, data, 'words')
+            const href = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, data, 'words')
             // NOTE: FW-135: Using `onClick={()=>{}}` for unknown reasons causes the following error when on Words and clicking between categories:
             //`Uncaught Invariant Violation: findComponentRoot(..., .0.0.2.0.1.0.0:1.1.2.0.0.0.0.0.0.1:$0.$0.0): Unable to find element`
             // That's why `undefined` is used in `clickHandler`
@@ -283,7 +284,7 @@ class ListView extends DataListView {
       this.props.action(item)
     } else {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, item, 'words'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, item, 'words'),
         this.props.pushWindowPath,
         true
       )

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
@@ -14,10 +15,9 @@ import { Document } from 'nuxeo'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
-// import IconButton from 'material-ui/lib/icon-button'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import IntlService from 'views/services/intl'
-import IconEdit from 'material-ui/lib/svg-icons/editor/mode-edit'
+import Edit from '@material-ui/icons/Edit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
 
@@ -153,7 +153,9 @@ class EditableComponent extends Component {
           toReturn = (
             <form className="EditableComponent__form" onSubmit={(e) => this._onRequestSaveField(e, property)}>
               <t.form.Form
-                ref={'form_' + property}
+                ref={(element) => {
+                  this['form_' + property] = element
+                }}
                 value={fieldFormValues}
                 type={fieldFormStruct}
                 context={selectn('response', this.props.context) || selectn('response', this.props.computeEntity)}
@@ -170,8 +172,8 @@ class EditableComponent extends Component {
       // Render regular field if not in edit mode
       /*
       <IconButton
-            iconClassName="material-icons"
-            iconStyle={{ fontSize: '20px' }}
+            // iconClassName="material-icons"
+            // iconStyle={{ fontSize: '20px' }}
             style={{
               verticalAlign: '-4px',
               margin: '0 5px 0 -5px',
@@ -196,7 +198,7 @@ class EditableComponent extends Component {
             this._onEditRequest()
           }}
         >
-          <IconEdit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
+          <Edit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
           <span className="FlatButton__label">{intl.trans('edit', 'Edit', 'first')}</span>
         </button>
       )
@@ -221,19 +223,18 @@ class EditableComponent extends Component {
       repository: this.props.computeEntity.response._repository,
       nuxeo: this.props.computeEntity.response._nuxeo,
     })
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs['form_' + property].getValue()
+    // Note: getValue() is tcomb-form
+    const formValue = this['form_' + property].getValue()
 
     // Set new value property on document
     newDocument.set(formValue)
 
     // Save document
-    // TODO: this.refs DEPRECATED
     this.props.updateEntity(
       newDocument,
       null,
       "'" +
-        selectn('props.options.fields' + '.' + property + '.label', this.refs['form_' + property]) +
+        selectn('props.options.fields' + '.' + property + '.label', this['form_' + property]) +
         "' updated successfully!"
     )
 
@@ -261,7 +262,7 @@ export class EditableComponentHelper extends Component {
     showPreview: bool,
     sectionProperty: string,
   }
-  defaultProps = {
+  static defaultProps = {
     className: '',
   }
   render() {

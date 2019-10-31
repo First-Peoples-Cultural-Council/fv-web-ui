@@ -13,11 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
 import selectn from 'selectn'
-import Card from 'material-ui/lib/card/card'
-import CardHeader from 'material-ui/lib/card/card-header'
-import CardText from 'material-ui/lib/card/card-text'
 
 import StringHelpers from 'common/StringHelpers'
 import IntlService from 'views/services/intl'
@@ -25,14 +24,28 @@ import IntlService from 'views/services/intl'
 import Preview from 'views/components/Editor/Preview'
 import MetadataList from 'views/components/Browsing/metadata-list'
 
+import { withTheme } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+
 const intl = IntlService.instance
 /**
  * Metadata panel for word or phrase views.
  */
-export default class MetadataPanel extends Component {
+export class MetadataPanel extends Component {
   static propTypes = {
     computeEntity: PropTypes.object.isRequired,
     properties: PropTypes.object.isRequired,
+  }
+  state = {
+    open: false,
   }
 
   constructor(props, context) {
@@ -122,27 +135,44 @@ export default class MetadataPanel extends Component {
         selectn('response.properties.uid:minor_version', computeEntity),
     })
 
-    const themePalette = this.props.properties.theme.palette.rawTheme.palette
+    const themePalette = this.props.theme.palette
 
     return (
-      <Card initiallyExpanded>
+      <Card>
         <CardHeader
           className="card-header-custom"
-          title={intl.trans('about_this_record', 'About this Record', 'upper')}
-          titleStyle={{ lineHeight: 'initial' }}
-          titleColor={themePalette.alternateTextColor}
-          actAsExpander
+          title={
+            <Typography
+              variant="title"
+              style={{
+                color: themePalette.secondary.contrastText,
+              }}
+            >
+              {intl.trans('metadata', 'METADATA', 'upper')}
+              <IconButton
+                onClick={() => {
+                  this.setState({
+                    open: !this.state.open,
+                  })
+                }}
+              >
+                {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            </Typography>
+          }
           style={{
             backgroundColor: themePalette.primary2Color,
-            height: 'initial',
-            borderBottom: '4px solid ' + themePalette.primary1Color,
+            borderBottom: '4px solid ' + themePalette.primary.light,
+            padding: '0 16px',
           }}
-          showExpandableButton
         />
-        <CardText expandable style={{ backgroundColor: themePalette.accent4Color }}>
-          <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
-        </CardText>
+        <Collapse in={this.state.open}>
+          <CardContent>
+            <MetadataList metadata={metadata} style={{ overflow: 'auto', maxHeight: '100%' }} />
+          </CardContent>
+        </Collapse>
       </Card>
     )
   }
 }
+export default withTheme()(MetadataPanel)

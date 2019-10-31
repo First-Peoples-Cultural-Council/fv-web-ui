@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
 import classNames from 'classnames'
@@ -33,7 +34,6 @@ import t from 'tcomb-form'
 import fields from 'models/schemas/filter-fields'
 import options from 'models/schemas/filter-options'
 
-// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -98,6 +98,8 @@ export class Search extends DataListView {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formSearch = React.createRef()
 
     this.state = {
       pageInfo: {
@@ -167,8 +169,7 @@ export class Search extends DataListView {
       e.preventDefault()
     }
 
-    const form = this.refs.search_form
-
+    const form = this.formSearch.current
     const properties = FormHelpers.getProperties(form)
 
     if (Object.keys(properties).length !== 0) {
@@ -195,7 +196,7 @@ export class Search extends DataListView {
   }
 
   _onEntryNavigateRequest(path) {
-    this.props.pushWindowPath(`/${this.props.routeParams.theme}${path}`)
+    this.props.pushWindowPath(`/${this.props.routeParams.siteTheme}${path}`)
   }
 
   _getQueryPath(props = this.props) {
@@ -220,7 +221,7 @@ export class Search extends DataListView {
 
   _onReset() {
     // Reset all controlled inputs
-    const inputs = selectn('refs.input.refs', this.refs.search_form)
+    const inputs = selectn('refs.input.refs', this.formSearch.current)
 
     for (const inputKey in inputs) {
       if (typeof inputs[inputKey].reset === 'function') {
@@ -233,7 +234,7 @@ export class Search extends DataListView {
     })
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
 
     if (selectn('response.totalSize', computeSearchDocuments) !== undefined) {
@@ -243,6 +244,27 @@ export class Search extends DataListView {
         category: false,
         results: selectn('response.totalSize', computeSearchDocuments),
       })
+    }
+
+    // if search came from nav bar
+    if (prevProps.windowPath !== this.props.windowPath) {
+      this.setState(
+        {
+          pageInfo: {
+            page: 1,
+            pageSize: this.state.pageInfo.pageSize,
+          },
+        },
+        () => {
+          this._fetchListViewData(
+            this.props,
+            1,
+            this.state.pageInfo.pageSize,
+            this.props.DEFAULT_SORT_TYPE,
+            this.props.DEFAULT_SORT_COL
+          )
+        }
+      )
     }
   }
 
@@ -255,10 +277,9 @@ export class Search extends DataListView {
     ])
 
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
-
     const _onEntryNavigateRequest = this._onEntryNavigateRequest
     const searchTerm = this.props.routeParams.searchTerm
-    const SearchResultTileWithProps = React.createClass({
+    const SearchResultTileWithProps = React.Component({
       // Note: don't switch the render fn to a fat arrow, eg:
       // render: () => {
       // It breaks the search results display
@@ -283,7 +304,7 @@ export class Search extends DataListView {
                 >
                   <div className="fontAboriginalSans">
                     <t.form.Form
-                      ref="search_form" // TODO: DEPRECATED
+                      ref={this.formSearch}
                       value={Object.assign({}, this.state.formValue, { searchTerm: this.props.routeParams.searchTerm })}
                       type={t.struct(selectn('Search', fields))}
                       options={selectn('Search', options)}

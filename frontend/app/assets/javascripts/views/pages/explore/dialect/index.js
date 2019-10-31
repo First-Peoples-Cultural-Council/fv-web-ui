@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 import classNames from 'classnames'
@@ -85,17 +86,12 @@ export class ExploreDialect extends Component {
     updatePortal: func.isRequired,
   }
 
-  static contextTypes = {
-    muiTheme: object.isRequired,
-  }
-
   constructor(props, context) {
     super(props, context)
 
     // Bind methods to 'this'
     ;[
       '_onNavigateRequest',
-      '_handleDialectSearchSubmit',
       '_onSwitchAreaRequest',
       '_enableToggleAction',
       '_publishToggleAction',
@@ -228,14 +224,6 @@ export class ExploreDialect extends Component {
     }
   }
 
-  _handleDialectSearchSubmit() {
-    // TODO: this.refs DEPRECATED
-    const queryParam = this.refs.dialectSearchField.getValue()
-    // Clear out the input field
-    //this.refs.dialectSearchField.setValue("");
-    this.props.replaceWindowPath(this.props.windowPath + '/search/' + queryParam)
-  }
-
   _handleGalleryDropDownChange(event, key, payload) {
     //console.log(payload);
     if (payload !== 'dropDownLabel') {
@@ -245,7 +233,7 @@ export class ExploreDialect extends Component {
 
   _handleSelectionChange(itemId, item) {
     NavigationHelpers.navigate(
-      NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('properties', item), 'words'),
+      NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('properties', item), 'words'),
       this.props.pushWindowPath,
       true
     )
@@ -271,7 +259,7 @@ export class ExploreDialect extends Component {
     )
 
     const isSection = this.props.routeParams.area === SECTIONS
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     // Render kids view
     if (isKidsTheme && computePortal) {
@@ -362,7 +350,7 @@ export class ExploreDialect extends Component {
               className="fv-portal-greeting"
               isSection={isSection}
               computeEntity={computePortal}
-              updateEntity={updatePortal}
+              updateEntity={this.props.updatePortal}
               property="fv-portal:greeting"
               entity={selectn('response', computePortal)}
             />
@@ -385,7 +373,7 @@ export class ExploreDialect extends Component {
               dataTestid="EditableComponent__fv-portal-news"
               isSection={isSection}
               computeEntity={computePortal}
-              updateEntity={updatePortal}
+              updateEntity={this.props.updatePortal}
               property="fv-portal:news"
               entity={selectn('response', computePortal)}
             />
@@ -406,7 +394,7 @@ export class ExploreDialect extends Component {
           <div className="dialect-navigation">
             <div className="row">
               <div className="col-xs-12">
-                <div firstChild float="left">
+                <div float="left">
                   <a
                     href={this.props.windowPath + '/learn'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/learn')}
@@ -456,7 +444,7 @@ export class ExploreDialect extends Component {
                   className="fv-portal-about"
                   isSection={isSection}
                   computeEntity={computePortal}
-                  updateEntity={updatePortal}
+                  updateEntity={this.props.updatePortal}
                   property="fv-portal:about"
                   entity={selectn('response', computePortal)}
                 />
@@ -516,7 +504,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-portal-related_links"
                           isSection={isSection}
                           computeEntity={computePortal}
-                          updateEntity={updatePortal}
+                          updateEntity={this.props.updatePortal}
                           context={computeDialect2}
                           showPreview
                           previewType="FVLink"
@@ -549,7 +537,7 @@ export class ExploreDialect extends Component {
                     dataTestid="EditableComponent__dc-title"
                       isSection={isSection}
                       computeEntity={computeDialect2}
-                      updateEntity={updateDialect2}
+                      updateEntity={this.props.updateDialect2}
                       property="dc:title"
                       entity={selectn("response", computeDialect2)}
                     />
@@ -566,7 +554,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-dialect-country"
                           isSection={isSection}
                           computeEntity={computeDialect2}
-                          updateEntity={updateDialect2}
+                          updateEntity={this.props.updateDialect2}
                           property="fvdialect:country"
                           entity={selectn('response', computeDialect2)}
                         />
@@ -583,7 +571,7 @@ export class ExploreDialect extends Component {
                           dataTestid="EditableComponent__fv-dialect-region"
                           isSection={isSection}
                           computeEntity={computeDialect2}
-                          updateEntity={updateDialect2}
+                          updateEntity={this.props.updateDialect2}
                           property="fvdialect:region"
                           entity={selectn('response', computeDialect2)}
                         />

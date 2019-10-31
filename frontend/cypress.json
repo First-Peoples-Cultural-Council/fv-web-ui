@@ -1,4 +1,4 @@
 {
   "chromeWebSecurity": false,
-  "baseUrl": "http://0.0.0.0:3001"
+  "baseUrl": "http://127.0.0.1:3001"
 }

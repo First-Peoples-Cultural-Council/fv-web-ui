@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -22,7 +23,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import ReportsJson from './reports.json'
 import GeneralList from 'views/components/Browsing/general-list'
-import { CardView } from './list-view'
+import { ReportsCardView } from './list-view'
 
 import withFilter from 'views/hoc/grid-list/with-filter'
 const FilteredCardList = withFilter(GeneralList)
@@ -76,7 +77,7 @@ export class ReportBrowser extends Component {
       fullWidth: this.props.fullWidth,
       style: { fontSize: '1.2em', padding: '8px 0 0 30px' },
       wrapperStyle: this.props.style,
-      card: <CardView fullWidth={this.props.fullWidth} dialectPath={this.props.routeParams.dialect_path} />,
+      card: <ReportsCardView fullWidth={this.props.fullWidth} dialectPath={this.props.routeParams.dialect_path} />,
       area: this.props.routeParams.area,
       items: ReportsJson,
       action: this._onNavigateRequest,

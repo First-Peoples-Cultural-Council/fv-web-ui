@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 // REDUX
@@ -62,6 +63,8 @@ export class PageDialectBookEdit extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.formBookEntry = React.createRef()
+
     this.state = {
       book: null,
       bookEntryPath:
@@ -95,8 +98,7 @@ export class PageDialectBookEdit extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_entry.getValue()
+    const formValue = this.formBookEntry.current.getValue()
 
     // Passed validation
     if (formValue) {
@@ -146,7 +148,7 @@ export class PageDialectBookEdit extends Component {
           <div className={classNames('col-xs-8', 'col-md-10')}>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
-                ref="form_book_entry" // TODO: DEPRECATED
+                ref={this.formBookEntry}
                 type={t.struct(selectn('FVBookEntry', fields))}
                 context={selectn('response', computeDialect2)}
                 value={this.state.formValue || selectn('response.properties', computeBookEntry)}

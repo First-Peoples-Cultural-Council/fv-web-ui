@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import classNames from 'classnames'
 import selectn from 'selectn'
 
@@ -33,8 +34,10 @@ import ContributorDelete from 'views/components/Confirmation'
 import ContributorsSelected from './ContributorsSelected'
 import Checkbox from 'views/components/Form/Common/Checkbox'
 
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
-import NavigationCheck from 'material-ui/lib/svg-icons/navigation/check'
+import NavigationClose from '@material-ui/icons/Close'
+import NavigationCheck from '@material-ui/icons/Check'
+import Button from '@material-ui/core/Button'
+
 import '!style-loader!css-loader!./Contributors.css'
 
 let contributorsPath = undefined
@@ -124,25 +127,26 @@ export class Contributors extends Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
     const btnCreate = this.props.btnCreate || (
-      <a
-        className="_btn _btn--primary Contributors__btnCreate"
-        href={`/${this.props.routeParams.theme}${this.props.routeParams.dialect_path}/create/contributor`}
+      <Button
+        variant="contained"
+        color="primary"
+        className="Contributors__btnCreate"
         onClick={(e) => {
           e.preventDefault()
           NavigationHelpers.navigate(
-            `/${this.props.routeParams.theme}${this.props.routeParams.dialect_path}/create/contributor`,
+            `/${this.props.routeParams.siteTheme}${this.props.routeParams.dialect_path}/create/contributor`,
             this.props.pushWindowPath,
             false
           )
         }}
       >
         Create a new contributor
-      </a>
+      </Button>
     )
     await this._getData({ copy, btnCreate })
   }
@@ -185,8 +189,8 @@ export class Contributors extends Component {
 
   handleRefetch = (componentProps, page, pageSize) => {
     const { routeParams } = this.props
-    const { theme, dialect_path } = routeParams
-    const url = `/${theme}${dialect_path}/contributors/${pageSize}/${page}${window.location.search}`
+    const { siteTheme, dialect_path } = routeParams
+    const url = `/${siteTheme}${dialect_path}/contributors/${pageSize}/${page}${window.location.search}`
     NavigationHelpers.navigate(url, this.props.pushWindowPath, false)
   }
 
@@ -196,7 +200,7 @@ export class Contributors extends Component {
     currentSortType: this.props.DEFAULT_SORT_TYPE,
   }
 
-  _deleteItem = async (uid) => {
+  _deleteItem = async(uid) => {
     /* NOTE: save uid to state */
     this.setState(
       {
@@ -209,14 +213,14 @@ export class Contributors extends Component {
     )
   }
 
-  _deleteSelected = async () => {
+  _deleteSelected = async() => {
     const { selected } = this.state
     this.setState(
       {
         deletedUids: [...this.state.deletedUids, ...selected],
       },
       () => {
-        selected.forEach(async (uid) => {
+        selected.forEach(async(uid) => {
           await this.props.deleteContributor(uid)
         })
         this.setState({
@@ -275,7 +279,7 @@ export class Contributors extends Component {
   _getColumns = () => {
     const { copy } = this.state
     const { routeParams, editUrl, detailUrl } = this.props
-    const { theme, dialect_path } = routeParams
+    const { siteTheme, dialect_path } = routeParams
 
     return [
       {
@@ -344,7 +348,7 @@ export class Contributors extends Component {
         },
         render: (value, data) => {
           const uid = data.uid
-          const url = detailUrl ? `${detailUrl}/${uid}` : `/${theme}${dialect_path}/contributor/${uid}`
+          const url = detailUrl ? `${detailUrl}/${uid}` : `/${siteTheme}${dialect_path}/contributor/${uid}`
 
           return (
             <a
@@ -396,7 +400,7 @@ export class Contributors extends Component {
         title: copy.actions.th,
         render: (v, data) => {
           const uid = data.uid
-          const url = editUrl ? `${editUrl}/${uid}` : `/${theme}${dialect_path}/edit/contributor/${uid}`
+          const url = editUrl ? `${editUrl}/${uid}` : `/${siteTheme}${dialect_path}/edit/contributor/${uid}`
 
           return (
             <ul className="Contributors__actions">
@@ -433,7 +437,7 @@ export class Contributors extends Component {
     ]
   }
 
-  _getData = async (addToState) => {
+  _getData = async(addToState) => {
     const { routeParams, search } = this.props
     const { pageSize, page } = routeParams
     const { sortBy, sortOrder } = search
@@ -504,10 +508,10 @@ export class Contributors extends Component {
 
   _sortCol = (arg) => {
     const { routeParams, search } = this.props
-    const { theme, dialect_path, pageSize } = routeParams
+    const { siteTheme, dialect_path, pageSize } = routeParams
     const { sortOrder } = search
 
-    const url = `/${theme}${dialect_path}/contributors/${pageSize}/1?sortBy=${arg.sortBy}&sortOrder=${
+    const url = `/${siteTheme}${dialect_path}/contributors/${pageSize}/1?sortBy=${arg.sortBy}&sortOrder=${
       sortOrder === 'asc' ? 'desc' : 'asc'
     }`
     NavigationHelpers.navigate(url, this.props.pushWindowPath, false)

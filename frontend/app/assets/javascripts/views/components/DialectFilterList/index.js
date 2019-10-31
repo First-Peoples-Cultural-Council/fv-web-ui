@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // eslint-disable-next-line
 import Immutable, { Set } from 'immutable'
 import selectn from 'selectn'

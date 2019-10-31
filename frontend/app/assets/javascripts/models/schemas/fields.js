@@ -48,18 +48,24 @@ const fields = {
     'fv-word:part_of_speech': t.maybe(t.String),
     'fv-word:available_in_games': t.Boolean,
     'fv-word:acknowledgement': t.maybe(t.String),
+    'fv:related_audio': t.list(t.maybe(t.String)),
+    'fv:related_pictures': t.list(t.maybe(t.String)),
+    'fv:related_videos': t.list(t.maybe(t.String)),
   }),
   FVPhrase: Object.assign({}, Dublincore, FVCore, {
-    'fv:literal_translation': t.maybe(t.String), // make optional
+    'fv:literal_translation': t.maybe(t.String),
     'fv-phrase:phrase_books': t.list(t.String),
     'fv-phrase:acknowledgement': t.maybe(t.String),
+    'fv:related_audio': t.list(t.maybe(t.String)),
+    'fv:related_pictures': t.list(t.maybe(t.String)),
+    'fv:related_videos': t.list(t.maybe(t.String)),
   }),
   FVAudio: Object.assign({}, Dublincore, FVMedia),
   FVPicture: Object.assign({}, Dublincore, FVMedia),
   FVVideo: Object.assign({}, Dublincore, FVMedia),
   FVBook: Object.assign({}, Dublincore, FVCore, {
-    'fv:definitions': t.maybe(t.String), // make optional
-    'fv:literal_translation': t.maybe(t.String), // make optional
+    'fv:definitions': t.maybe(t.String),
+    'fv:literal_translation': t.maybe(t.String),
     'fvbook:title_literal_translation': t.list(
       t.struct({
         translation: t.String,
@@ -77,9 +83,12 @@ const fields = {
     ),
     'fvbook:author': t.list(t.String),
     'fvbook:type': t.String,
+    'fv:related_audio': t.list(t.maybe(t.String)),
+    'fv:related_pictures': t.list(t.maybe(t.String)),
+    'fv:related_videos': t.list(t.maybe(t.String)),
   }),
   FVBookEntry: Object.assign({}, Dublincore, FVCore, {
-    'fv:definitions': t.maybe(t.String), // make optional
+    'fv:definitions': t.maybe(t.String),
     'fv:available_in_childrens_archive': t.maybe(t.String),
     'fv:literal_translation': t.maybe(
       t.list(
@@ -95,6 +104,9 @@ const fields = {
         language: t.String,
       })
     ),
+    'fv:related_audio': t.list(t.maybe(t.String)),
+    'fv:related_pictures': t.list(t.maybe(t.String)),
+    'fv:related_videos': t.list(t.maybe(t.String)),
   }),
   FVPortal: {
     'fv-portal:greeting': t.String,
@@ -132,7 +144,7 @@ const fields = {
       'fvcharacter:upper_case_character': t.maybe(t.String),
       'fvcharacter:alphabet_order': t.maybe(t.Number),
       'fvcharacter:related_words': t.list(t.String),
-      'fv:related_audio': t.list(t.String),
+      'fv:related_audio': t.list(t.maybe(t.String)),
     }
   ),
   FVUser: {

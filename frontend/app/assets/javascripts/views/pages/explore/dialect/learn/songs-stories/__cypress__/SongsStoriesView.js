@@ -1,4 +1,6 @@
-import 'cypress-testing-library/add-commands'
+// NOTE: this file will be copied to `cypress/integration` and run from there,
+// so imports paths will be based on that location!
+
 describe('SongsStoriesView.js > SongsStoriesView', () => {
   it('FW-298: Broken buttons on Book page', () => {
     cy.login()

@@ -1,7 +1,7 @@
 import {
   TOGGLE_MENU,
   NAVIGATE_PAGE,
-  CHANGE_THEME,
+  CHANGE_SITE_THEME,
   CHANGE_TITLE_PARAMS,
   OVERRIDE_BREADCRUMBS,
   PAGE_PROPERTIES,
@@ -16,11 +16,6 @@ import {
 
 import DirectoryOperations from 'operations/DirectoryOperations'
 import ProviderHelpers from 'common/ProviderHelpers'
-
-import ThemeManager from 'material-ui/lib/styles/theme-manager'
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
-import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
-import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
 
 export const loadGuide = (currentPage, pageMatch) => {
   return (dispatch) => {
@@ -90,22 +85,9 @@ export const toggleMenuAction = () => {
   return { type: TOGGLE_MENU }
 }
 
-// Change theme
-export const changeTheme = (id) => {
-  let theme = ThemeManager.getMuiTheme(FirstVoicesTheme)
-
-  switch (id) {
-    case 'kids':
-      theme = ThemeManager.getMuiTheme(FirstVoicesKidsTheme)
-      break
-
-    case 'workspace':
-      theme = ThemeManager.getMuiTheme(FirstVoicesWorkspaceTheme)
-      break
-    default: // NOTE: do nothing
-  }
-
-  return { type: CHANGE_THEME, theme: { palette: theme, id: id } }
+// Change siteTheme
+export const changeSiteTheme = (id) => {
+  return { type: CHANGE_SITE_THEME, siteTheme: id }
 }
 
 export const changeTitleParams = (titleParams) => {

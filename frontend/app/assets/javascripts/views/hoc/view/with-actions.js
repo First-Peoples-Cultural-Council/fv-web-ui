@@ -1,13 +1,19 @@
-import React, { Component /*, PropTypes */ } from 'react'
+import React, { Component } from 'react'
 import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
-import { RaisedButton, FontIcon } from 'material-ui'
+
+import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Tabs from '@material-ui/core/Tabs'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
+
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Toolbar from 'material-ui/lib/toolbar/toolbar'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import Dialog from 'material-ui/lib/dialog'
 import IntlService from 'views/services/intl'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWithActions.css'
@@ -58,21 +64,68 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <Dialog
+              fullWidth
+              maxWidth="md"
               className="ViewWithActions__dialog"
-              contentStyle={{ height: '20vh' }}
-              autoScrollBodyContent
-              title={intl.trans(
-                'views.hoc.view.publish_x',
-                'Publish ' + StringHelpers.toTitleCase(this.props.labels.single),
-                'first',
-                [StringHelpers.toTitleCase(this.props.labels.single)]
-              )}
-              actions={[
-                <button
+              open={this.state.prePublishDialogOpen}
+              onClose={() =>
+                this.setState({
+                  prePublishDialogOpen: false,
+                  publishToggleCancelled: true,
+                  prePublishCompleteAction: null,
+                })
+              }
+            >
+              <DialogTitle>
+                {intl.trans(
+                  'views.hoc.view.publish_x',
+                  'Publish ' + StringHelpers.toTitleCase(this.props.labels.single),
+                  'first',
+                  [StringHelpers.toTitleCase(this.props.labels.single)]
+                )}
+              </DialogTitle>
+              <DialogContent>
+                {(() => {
+                  if (this.props.tabs && this.props.tabs.length > 0) {
+                    return (
+                      <div>
+                        <p>
+                          {intl.trans(
+                            'views.hoc.view.warning1_x',
+                            'Publishing this ' +
+                              this.props.labels.single +
+                              ' will also publish (or republish) the following related items',
+                            'first',
+                            [this.props.labels.single]
+                          )}
+                          :
+                        </p>
+                        <Tabs>{this.props.tabs}</Tabs>
+                      </div>
+                    )
+                  }
+                  return (
+                    <div>
+                      <p>
+                        {intl.trans(
+                          'views.hoc.view.warning2_x',
+                          'Publishing this ' +
+                            this.props.labels.single +
+                            ' all the media and child items associated with it',
+                          'first',
+                          [this.props.labels.single]
+                        )}
+                      </p>
+                    </div>
+                  )
+                })()}
+              </DialogContent>
+              <DialogActions>
+                <Button
                   data-testid="ViewWithActions__buttonCancel"
-                  type="button"
-                  key="0"
-                  className="FlatButton FlatButton--secondary ViewWithActions__button"
+                  // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                  variant="contained"
+                  color="secondary"
                   onClick={(e) => {
                     e.preventDefault()
                     this.setState({
@@ -83,195 +136,140 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   }}
                 >
                   {intl.trans('cancel', 'Cancel', 'first')}
-                </button>,
-                <button
+                </Button>
+                <Button
                   data-testid="ViewWithActions__buttonPublish"
-                  type="button"
-                  key="1"
-                  className="FlatButton FlatButton--primary ViewWithActions__button"
-                  keyboardFocused
+                  variant="contained"
+                  color="primary"
                   onClick={(e) => {
                     e.preventDefault()
                     this.state.prePublishCompleteAction()
                   }}
                 >
                   {intl.trans('publish', 'Publish', 'first')}
-                </button>,
-              ]}
-              modal={false}
-              open={this.state.prePublishDialogOpen}
-              onRequestClose={() =>
-                this.setState({
-                  prePublishDialogOpen: false,
-                  publishToggleCancelled: true,
-                  prePublishCompleteAction: null,
-                })
-              }
-            >
-              {(() => {
-                if (this.props.tabs && this.props.tabs.length > 0) {
-                  return (
-                    <div>
-                      <p>
-                        {intl.trans(
-                          'views.hoc.view.warning1_x',
-                          'Publishing this ' +
-                            this.props.labels.single +
-                            ' will also publish (or republish) the following related items',
-                          'first',
-                          [this.props.labels.single]
-                        )}
-                        :
-                      </p>
-                      <Tabs>{this.props.tabs}</Tabs>
-                    </div>
-                  )
-                }
-                return (
-                  <div>
-                    <p>
-                      {intl.trans(
-                        'views.hoc.view.warning2_x',
-                        'Publishing this ' +
-                          this.props.labels.single +
-                          ' all the media and child items associated with it',
-                        'first',
-                        [this.props.labels.single]
-                      )}
-                    </p>
-                  </div>
-                )
-              })()}
+                </Button>
+              </DialogActions>
             </Dialog>
           </AuthorizationFilter>
 
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <div className="col-xs-12" style={{ marginTop: '15px' }}>
-              <Toolbar className="toolbar">
-                <ToolbarGroup key={0} float="right">
-                  {/* Delete Button
-                  ------------------------------- */}
-                  <RaisedButton
-                    icon={<FontIcon className="material-icons">delete</FontIcon>}
-                    onClick={() => this.setState({ deleteDialogOpen: true })}
-                    secondary
-                    label={intl.trans(
+            <div className="col-xs-12">
+              <AppBar position="static" className="PageToolbar__secondary">
+                <Toolbar style={{ justifyContent: 'flex-end' }}>
+                  <Button variant="raised" onClick={() => this.setState({ deleteDialogOpen: true })} color="secondary">
+                    <DeleteIcon />
+                    {intl.trans(
                       'views.hoc.view.delete_x',
                       'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
                       'first',
                       [StringHelpers.toTitleCase(this.props.labels.single)]
                     )}
+                  </Button>
+                </Toolbar>
+              </AppBar>
+              <Dialog fullWidth maxWidth="md" open={this.state.deleteDialogOpen} onClose={this._handleCancelDelete}>
+                <DialogTitle>
+                  {intl.trans(
+                    'views.hoc.view.deleting_x',
+                    'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
+                    'first',
+                    [StringHelpers.toTitleCase(this.props.labels.single)]
+                  )}
+                </DialogTitle>
+                <DialogContent>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: intl.trans(
+                        'views.hoc.delete_confirm_x_x_x',
+                        'Are you sure you would like to delete the ' +
+                          this.props.labels.single +
+                          ' <strong>' +
+                          selectn('response.title', this.props.computeItem) +
+                          '</strong>?<br/>' +
+                          'Proceeding will also delete all published versions of this ' +
+                          this.props.labels.single,
+                        'first',
+                        [
+                          this.props.labels.single,
+                          selectn('response.title', this.props.computeItem),
+                          this.props.labels.single,
+                        ]
+                      ),
+                    }}
                   />
-                </ToolbarGroup>
-              </Toolbar>
-
-              <Dialog
-                className="ViewWithActions__dialog"
-                title={intl.trans(
-                  'views.hoc.view.deleting_x',
-                  'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
-                  'first',
-                  [StringHelpers.toTitleCase(this.props.labels.single)]
-                )}
-                actions={[
-                  <button
+                </DialogContent>
+                <DialogActions>
+                  <Button
                     data-testid="ViewWithActions__buttonCancel"
-                    key="0"
-                    type="button"
-                    className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    variant="contained"
+                    color="secondary"
                     onClick={(e) => {
                       e.preventDefault()
                       this.setState({ deleteDialogOpen: false })
                     }}
                   >
                     {intl.trans('cancel', 'Cancel', 'first')}
-                  </button>,
-                  <button
+                  </Button>
+                  <Button
                     data-testid="ViewWithActions__buttonDelete"
-                    key="1"
-                    className="FlatButton FlatButton--primary ViewWithActions__button"
-                    keyboardFocused
-                    type="button"
+                    // className="FlatButton FlatButton--primary ViewWithActions__button"
+                    variant="contained"
+                    color="primary"
                     onClick={(e) => {
                       e.preventDefault()
                       this._delete(selectn('response', this.props.computeItem))
                     }}
                   >
                     {intl.trans('delete', 'Delete', 'first')}
-                  </button>,
-                ]}
-                modal={false}
-                open={this.state.deleteDialogOpen}
-                onRequestClose={this._handleCancelDelete}
-              >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: intl.trans(
-                      'views.hoc.delete_confirm_x_x_x',
-                      'Are you sure you would like to delete the ' +
-                        this.props.labels.single +
-                        ' <strong>' +
-                        selectn('response.title', this.props.computeItem) +
-                        '</strong>?<br/>' +
-                        'Proceeding will also delete all published versions of this ' +
-                        this.props.labels.single,
-                      'first',
-                      [
-                        this.props.labels.single,
-                        selectn('response.title', this.props.computeItem),
-                        this.props.labels.single,
-                      ]
-                    ),
-                  }}
-                />
+                  </Button>
+                </DialogActions>
               </Dialog>
 
-              <Dialog
-                className="ViewWithActions__dialog"
-                title={intl.trans(
-                  'views.hoc.view.delete_x',
-                  'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
-                  'words',
-                  [StringHelpers.toTitleCase(this.props.labels.single)]
-                )}
-                actions={[
-                  <button
+              <Dialog fullWidth maxWidth="md" open={this.state.deleteSuccessDialogOpen}>
+                <DialogTitle>
+                  {intl.trans(
+                    'views.hoc.view.delete_x',
+                    'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
+                    'words',
+                    [StringHelpers.toTitleCase(this.props.labels.single)]
+                  )}
+                </DialogTitle>
+                <DialogContent>
+                  {intl.trans(
+                    'views.hoc.view.delete_x_success',
+                    'The ' +
+                      this.props.labels.single +
+                      ' <strong>' +
+                      selectn('response.title', this.props.computeItem) +
+                      '</strong> has been successfully deleted.',
+                    'first',
+                    [this.props.labels.single, selectn('response.title', this.props.computeItem)]
+                  )}
+                </DialogContent>
+                <DialogActions>
+                  <Button
                     data-testid="ViewWithActions__buttonReturn"
-                    type="button"
-                    key="0"
-                    className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
+                    variant="flat"
+                    color="secondary"
                     onClick={() => window.history.back()}
                   >
                     {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
-                  </button>,
-                  <button
+                  </Button>
+                  <Button
                     data-testid="ViewWithActions__buttonHome"
-                    type="button"
-                    key="1"
-                    className="FlatButton FlatButton--primary ViewWithActions__button"
-                    keyboardFocused
-                    onClick={(e) => {
-                      e.preventDefault()
-                      const url = this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
-                      this.props.onNavigateRequest(`/${url}`)
-                    }}
+                    // className="FlatButton FlatButton--primary ViewWithActions__button"
+                    variant="flat"
+                    color="primary"
+                    onClick={this.props.onNavigateRequest.bind(
+                      this,
+                      '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
+                    )}
                   >
                     {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
-                  </button>,
-                ]}
-                modal
-                open={this.state.deleteSuccessDialogOpen}
-              >
-                {intl.trans(
-                  'views.hoc.view.delete_x_success',
-                  'The ' +
-                    this.props.labels.single +
-                    ' <strong>' +
-                    selectn('response.title', this.props.computeItem) +
-                    '</strong> has been successfully deleted.',
-                  'first',
-                  [this.props.labels.single, selectn('response.title', this.props.computeItem)]
-                )}
+                  </Button>
+                </DialogActions>
               </Dialog>
             </div>
           </AuthorizationFilter>

@@ -13,30 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import ReactDOM from 'react-dom'
 
 // REDUX
 import { connect } from 'react-redux'
-import { changeTheme } from 'providers/redux/reducers/navigation'
+import { changeSiteTheme } from 'providers/redux/reducers/navigation'
 import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
+
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-// import StringHelpers from 'common/StringHelpers'
-import UIHelpers from 'common/UIHelpers'
-
-// import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
 import AppFrontController from './AppFrontController'
 
-// import FontIcon from 'material-ui/lib/font-icon'
-// import Paper from 'material-ui/lib/paper'
-// import FlatButton from 'material-ui/lib/flat-button'
-
 import IntlService from 'views/services/intl'
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+
+import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
+import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
+import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
 
 const getPreferences = function getPreferences(login, dialect) {
   const preferenceString = selectn('response.properties.preferences', login)
@@ -62,7 +62,7 @@ class AppWrapper extends Component {
 
   static propTypes = {
     // REDUX: actions/dispatch/func
-    changeTheme: func.isRequired,
+    changeSiteTheme: func.isRequired,
     fetchDialect2: func.isRequired,
     getCurrentUser: func.isRequired,
     nuxeoConnect: func.isRequired,
@@ -71,32 +71,6 @@ class AppWrapper extends Component {
     computeLogin: object.isRequired,
     properties: object.isRequired,
     windowPath: string.isRequired,
-  }
-
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object,
-  }
-
-  // TODO: SEE IF THIS IS AN ISSUE AFTER SWITCH TO REDUX
-  // react-redux-provide will pass context such as providers (Note: this is only needed for debugging the store atm)
-  static contextTypes = {
-    providers: PropTypes.object,
-  }
-
-  // TODO: The legacy context API will be removed in a future major version.
-  // TODO: Use the new context API introduced with version 16.3.
-  // TODO: The legacy API will continue working for all 16.x releases.
-  // via: https://reactjs.org/docs/legacy-context.html
-
-  /**
-   * Pass essential context to all children
-   */
-  getChildContext() {
-    const newContext = {
-      muiTheme: this.props.properties.theme.palette,
-    }
-
-    return newContext
   }
 
   constructor(props, context) {
@@ -111,38 +85,48 @@ class AppWrapper extends Component {
     }
   }
 
-  // Force update of theme if out of sync
+  // Force update of siteTheme if out of sync
   // This is a fix that may be unecessary in future versions of Material-UI, React, Reat-redux-provide
   componentDidUpdate(prevProps) {
-    if (prevProps.properties.theme.id !== this.props.properties.theme.id) {
-      this.props.changeTheme(this.props.properties.theme.id)
+    if (prevProps.properties.siteTheme !== this.props.properties.siteTheme) {
+      this.props.changeSiteTheme(this.props.properties.siteTheme)
     }
   }
 
   render() {
+    const { properties } = this.props
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.state.dialect)
 
     const warnings = {}
 
     const preferences = getPreferences(this.props.computeLogin, selectn('response', _computeDialect2))
 
+    let theme = null
+
+    switch (selectn('siteTheme', properties)) {
+      case 'kids':
+        theme = createMuiTheme(FirstVoicesKidsTheme)
+        break
+
+      case 'workspace':
+        theme = createMuiTheme(FirstVoicesWorkspaceTheme)
+        break
+      default:
+        theme = createMuiTheme(FirstVoicesTheme)
+    }
     return (
-      <div
-        id="AppWrapper"
-        style={{
-          backgroundColor: selectn('theme.palette.basePalette.wrapper.backgroundColor', this.props.properties),
-          fontSize: UIHelpers.getPreferenceVal('font_size', preferences),
-        }}
-      >
-        <AppFrontController preferences={preferences} warnings={warnings} />
-      </div>
+      <MuiThemeProvider theme={theme}>
+        <div id="AppWrapper">
+          <AppFrontController preferences={preferences} warnings={warnings} />
+        </div>
+      </MuiThemeProvider>
     )
   }
 
   // Changing a theme manually...
-  /*_changeTheme(event) {
+  /*_changeSiteTheme(event) {
       let index = event.nativeEvent.target.selectedIndex;
-      this.props.changeTheme(event.target[index].value);
+      this.props.changeSiteTheme(event.target[index].value);
     }*/
 }
 
@@ -165,7 +149,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  changeTheme,
+  changeSiteTheme,
   fetchDialect2,
   nuxeoConnect,
   getCurrentUser,

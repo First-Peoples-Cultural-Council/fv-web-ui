@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
 
@@ -34,8 +35,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 
-// Views
-import Paper from 'material-ui/lib/paper'
+import Paper from '@material-ui/core/Paper'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import IntlService from 'views/services/intl'
@@ -67,6 +67,8 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formBookEntryCreate = React.createRef()
 
     this.state = {
       formValue: null,
@@ -130,7 +132,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     ) {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(
-          nextProps.routeParams.theme,
+          nextProps.routeParams.siteTheme,
           selectn('response', parentBook),
           nextProps.typePlural.toLowerCase()
         ),
@@ -166,15 +168,20 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_book_entry_create.getValue()
+    const formValue = this.formBookEntryCreate.current.getValue()
 
     const properties = {}
 
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
-          properties[key] = formValue[key]
+          // Filter out null values in an array
+          if (formValue[key] instanceof Array) {
+            const formValueKey = formValue[key].filter((item) => item !== null)
+            properties[key] = formValueKey
+          } else {
+            properties[key] = formValue[key]
+          }
         }
       }
     }
@@ -268,7 +275,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
             <div className={classNames('col-xs-8', 'col-md-10')}>
               <form onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
-                  ref="form_book_entry_create" // TODO: DEPRECATED
+                  ref={this.formBookEntryCreate}
                   type={t.struct(selectn('FVBookEntry', fields))}
                   context={selectn('response', computeDialect2)}
                   value={this.state.formValue}
@@ -283,7 +290,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
             </div>
 
             <div className={classNames('col-xs-4', 'col-md-2')}>
-              <Paper style={{ padding: '15px', margin: '20px 0' }} zDepth={2}>
+              <Paper style={{ padding: '15px', margin: '20px 0' }}>
                 <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
               </Paper>
             </div>

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 // REDUX
@@ -31,8 +32,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-// Views
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
@@ -63,6 +63,8 @@ export class Register extends Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.formUserCreate = React.createRef()
 
     this.state = {
       formValue: null,
@@ -100,7 +102,7 @@ export class Register extends Component {
 
     // 'Redirect' on success
     if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
-      //nextProps.replaceWindowPath('/' + nextProps.routeParams.theme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
+      //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
     }
   }
 
@@ -123,8 +125,8 @@ export class Register extends Component {
   _onRequestSaveForm(currentUser, e) {
     // Prevent default behaviour
     e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_user_create.getValue()
+
+    const formValue = this.formUserCreate.current.getValue()
 
     const properties = {}
 
@@ -140,12 +142,12 @@ export class Register extends Component {
       formValue: properties,
     })
 
-    const payload = Object.assign({}, properties, {
-      'userinfo:groups': [properties['userinfo:groups']],
-    })
-
     // Passed validation
     if (formValue) {
+      const payload = Object.assign({}, properties, {
+        'userinfo:groups': [properties['userinfo:groups']],
+      })
+
       const userRequest = {
         'entity-type': 'document',
         type: 'FVUserRegistration',
@@ -246,7 +248,7 @@ export class Register extends Component {
           <div className={classNames('col-xs-12', 'col-md-8')}>
             <form onSubmit={this._onRequestSaveForm.bind(this, this.props.computeLogin)}>
               <t.form.Form
-                ref="form_user_create" // TODO: DEPRECATED
+                ref={this.formUserCreate}
                 type={t.struct(FVUserFields)}
                 context={selectn('response', computeDialect2)}
                 value={
@@ -261,11 +263,13 @@ export class Register extends Component {
               </p>
 
               <div className="form-group">
-                <RaisedButton
+                <Button
+                  variant="contained"
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
-                  primary
-                  label={intl.trans('register', 'Register', 'first')}
-                />
+                  color="primary"
+                >
+                  {intl.trans('register', 'Register', 'first')}
+                </Button>
               </div>
             </form>
           </div>
@@ -282,11 +286,13 @@ export class Register extends Component {
               </strong>
               {'", and then picking your language/community.'}
             </p>
-            <RaisedButton
-              label={intl.translate('choose_lang', 'Choose a Language', 'first')}
-              primary
+            <Button
+              variant="contained"
+              color="primary"
               onClick={() => NavigationHelpers.navigate('/explore/FV/sections/Data', this.props.pushWindowPath)}
-            />
+            >
+              {intl.translate('choose_lang', 'Choose a Language', 'first')}
+            </Button>
           </div>
         </div>
       </PromiseWrapper>

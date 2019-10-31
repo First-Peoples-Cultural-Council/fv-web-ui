@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -21,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 /**
@@ -37,10 +38,6 @@ export class PageHome extends Component {
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
   }
-
-  /*static contextTypes = {
-        muiTheme: React.object.isRequired
-    };*/
 
   constructor(props, context) {
     super(props, context)
@@ -81,19 +78,19 @@ export class PageHome extends Component {
               <img src="assets/images/logo.gif" alt="FirstVoices Logo" className="img-responsive" />
             </p>
             <a href="http://legacy.firstvoices.com/">
-              <RaisedButton
-                label="Legacy Site"
+              <Button
+                variant="raised"
                 style={{
                   textAlign: 'center',
                   marginRight: '14px',
                 }}
-              />
+              >
+                {'Legacy Site'}
+              </Button>
             </a>
-            <RaisedButton
-              label={this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
-              onClick={() => this._onNavigateRequest('/')}
-              style={{ textAlign: 'center' }}
-            />
+            <Button variant="raised" onClick={() => this._onNavigateRequest('/')} style={{ textAlign: 'center' }}>
+              {this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
+            </Button>
             <p>
               <img
                 src="assets/images/intro-french.gif"

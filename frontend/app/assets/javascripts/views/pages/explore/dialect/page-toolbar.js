@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List } from 'immutable'
 
 import classNames from 'classnames'
@@ -25,21 +26,25 @@ import { connect } from 'react-redux'
 import { fetchTasks } from 'providers/redux/reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import UIHelpers from 'common/UIHelpers'
 
-import { RaisedButton, IconButton } from 'material-ui'
+import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Switch from '@material-ui/core/Switch'
+import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
 
-import Toolbar from 'material-ui/lib/toolbar/toolbar'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator'
-import Toggle from 'material-ui/lib/toggle'
-import IconMenu from 'material-ui/lib/menus/icon-menu'
-import Menu from 'material-ui/lib/menus/menu'
-import MenuItem from 'material-ui/lib/menus/menu-item'
-import NavigationExpandMoreIcon from 'material-ui/lib/svg-icons/navigation/expand-more'
+// import MenuIcon from '@material-ui/icons/Menu'
+import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
+
+import '!style-loader!css-loader!./PageToolbar.css'
 
 import IntlService from 'views/services/intl'
 
@@ -62,6 +67,7 @@ export class PageToolbar extends Component {
     // REDUX: reducers/state
     computeLogin: object.isRequired,
     computeTasks: object.isRequired,
+    properties: object.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     fetchTasks: func.isRequired,
@@ -70,11 +76,8 @@ export class PageToolbar extends Component {
     publishChangesAction: null,
     handleNavigateRequest: null,
     showPublish: true,
-    actions: [], // ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options']
-  }
-
-  static contextTypes = {
-    muiTheme: object.isRequired,
+    actions: [],
+    // actions: ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options'],
   }
 
   constructor(props, context) {
@@ -86,6 +89,7 @@ export class PageToolbar extends Component {
       publishActions: 0,
       unpublishActions: 0,
       showActionsMobile: false,
+      anchorEl: null,
     }
 
     // Bind methods to 'this'
@@ -164,14 +168,6 @@ export class PageToolbar extends Component {
     const publishTasks = []
     const unpublishTasks = []
 
-    const toolbarGroupItem = {
-      float: 'left',
-      margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px ${
-        this.context.muiTheme.baseTheme.spacing.desktopGutter
-      }px`,
-      position: 'relative',
-    }
-
     const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
     const documentPublished = selectn('response.state', computeEntity) === 'Published'
 
@@ -209,341 +205,326 @@ export class PageToolbar extends Component {
     }
 
     const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(computeLogin)
+
     const requestButtonGroupText = isRecorderWithApproval
       ? 'Request approval from the Language Admin to'
       : `${intl.trans('request', 'Request', 'first')}`
-    const toolbarStyles = isRecorderWithApproval
-      ? { height: 'auto', minHeight: `${this.context.muiTheme.toolbar.height}px` }
-      : {}
 
-    const toolbarGroupItemIsRecorderWithApproval = {
-      clear: 'both',
-      margin: `${(this.context.muiTheme.toolbar.height - this.context.muiTheme.button.height) / 2}px 0`,
-      position: 'relative',
-    }
-    const requestButtonGroupStyles = isRecorderWithApproval ? toolbarGroupItemIsRecorderWithApproval : toolbarGroupItem
     return (
-      <Toolbar
-        style={toolbarStyles}
-        className={classNames({ isRecorderWithApproval, clearfix: true, 'page-toolbar': true })}
-      >
-        <ToolbarGroup className="visible-xs" style={{ textAlign: 'right' }}>
-          <IconButton
-            iconClassName="material-icons"
-            onClick={(e) => {
-              this.setState({ showActionsMobile: !this.state.showActionsMobile })
-              e.preventDefault()
-            }}
+      <AppBar position="static" className="PageToolbar">
+        <Toolbar>
+          {/* MOBILE MENU (doesn't work in dev/preprod) */}
+          {/* <div className="visible-xs" style={{ textAlign: 'right' }}>
+            <IconButton
+              onClick={(e) => {
+                this.setState({ showActionsMobile: !this.state.showActionsMobile })
+                e.preventDefault()
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </div> */}
+          <div
+            className={classNames({
+              'hidden-xs': !this.state.showActionsMobile,
+            })}
           >
-            menu
-          </IconButton>
-        </ToolbarGroup>
+            {this.props.children}
 
-        <ToolbarGroup
-          float="left"
-          className={classNames({ 'hidden-xs': !this.state.showActionsMobile, isRecorderWithApproval, clearfix: true })}
-        >
-          {this.props.children}
-
-          {(() => {
-            if (this.props.actions.includes('enable-toggle')) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}
-                  style={toolbarGroupItem}
-                >
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      float: 'left',
-                      margin: '17px 5px 10px 5px',
-                      position: 'relative',
-                    }}
-                  >
-                    <Toggle
-                      toggled={documentEnabled || documentPublished}
-                      onToggle={this._documentActionsToggleEnabled}
-                      ref="enabled" // TODO: DEPRECATED
+            {/* Toggle: Enable */}
+            {this.props.actions.includes('enable-toggle') ? (
+              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={documentEnabled || documentPublished}
+                      onChange={this._documentActionsToggleEnabled}
                       disabled={documentPublished}
                       name="enabled"
                       value="enabled"
-                      label={
-                        documentEnabled || documentPublished
-                          ? intl.trans('enabled', 'Enabled', 'first')
-                          : intl.trans('enable', 'Enable', 'first')
-                      }
                     />
-                  </div>
-                </AuthorizationFilter>
-              )
-            }
-          })()}
+                  }
+                  label={
+                    <Typography variant="title">
+                      {documentEnabled || documentPublished
+                        ? intl.trans('enabled', 'Enabled', 'first')
+                        : intl.trans('enable', 'Enable', 'first')}
+                    </Typography>
+                  }
+                />
+              </AuthorizationFilter>
+            ) : null}
 
-          {(() => {
-            if (this.props.actions.includes('publish-toggle')) {
-              if (this.props.showPublish) {
-                return (
-                  <AuthorizationFilter
-                    filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}
-                    style={toolbarGroupItem}
-                  >
-                    <div
-                      style={{
-                        display: 'inline-block',
-                        float: 'left',
-                        margin: '17px 5px 10px 5px',
-                        position: 'relative',
-                      }}
-                    >
-                      <Toggle
-                        toggled={documentPublished}
-                        onToggle={this._documentActionsTogglePublished}
-                        disabled={!documentEnabled && !documentPublished}
-                        name="published"
-                        value="published"
-                        label={
-                          documentPublished
-                            ? intl.trans('published', 'Published', 'first')
-                            : intl.trans('publish', 'Publish', 'first')
-                        }
-                      />
-                    </div>
-                  </AuthorizationFilter>
-                )
-              }
+            {this.getPublishUi()}
 
-              if (documentPublished) {
-                return (
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      float: 'left',
-                      paddingTop: '16px',
-                    }}
+            {this.props.actions.includes('workflow') ? (
+              <AuthorizationFilter
+                filter={{
+                  role: 'Record',
+                  entity: selectn('response', permissionEntity),
+                  secondaryPermission: 'Write',
+                  login: computeLogin,
+                }}
+              >
+                <div>
+                  <span>{`${requestButtonGroupText}: `}</span>
+                  {/* Button: Enable */}
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
+                    disabled={
+                      selectn('response.state', computeEntity) !== 'Disabled' &&
+                      selectn('response.state', computeEntity) !== 'New'
+                    }
+                    color="secondary"
+                    onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
                   >
-                    This dialect is <strong>public</strong>. Contact us to make it private.
-                  </div>
-                )
-              }
-              return (
-                <div
-                  style={{
-                    display: 'inline-block',
-                    float: 'left',
-                    paddingTop: '16px',
-                  }}
-                >
-                  This dialect is <strong>private</strong>. Contact us to make it public.
+                    {intl.trans('enable', 'Enable', 'first') +
+                      ' (' +
+                      (enableTasks.length + this.state.enableActions) +
+                      ')'}
+                  </Button>
+                  {/* Button: Disable */}
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
+                    disabled={
+                      selectn('response.state', computeEntity) !== 'Enabled' &&
+                      selectn('response.state', computeEntity) !== 'New'
+                    }
+                    color="secondary"
+                    onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
+                  >
+                    {intl.trans('disable', 'Disable', 'first') +
+                      ' (' +
+                      (disableTasks.length + this.state.disableActions) +
+                      ')'}
+                  </Button>
+                  {/* Button: Publish */}
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
+                    disabled={selectn('response.state', computeEntity) !== 'Enabled'}
+                    color="secondary"
+                    onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
+                  >
+                    {intl.trans('publish', 'Publish', 'first') +
+                      ' (' +
+                      (publishTasks.length + this.state.publishActions) +
+                      ')'}
+                  </Button>
+                  {/* Button: Unpublish */}
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
+                    disabled={selectn('response.state', computeEntity) !== 'Published'}
+                    color="secondary"
+                    onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
+                  >
+                    {intl.trans('unpublish', 'Unpublish', 'first') +
+                      ' (' +
+                      (unpublishTasks.length + this.state.unpublishActions) +
+                      ')'}
+                  </Button>
                 </div>
-              )
-            }
-          })()}
-
-          {(() => {
-            if (this.props.actions.includes('workflow')) {
-              return (
-                <AuthorizationFilter
-                  filter={{
-                    role: 'Record',
-                    entity: selectn('response', permissionEntity),
-                    secondaryPermission: 'Write',
-                    login: computeLogin,
-                  }}
-                  style={requestButtonGroupStyles}
-                >
-                  <div>
-                    <span style={{ paddingRight: '15px' }}>{`${requestButtonGroupText}: `}</span>
-
-                    <RaisedButton
-                      label={
-                        intl.trans('enable', 'Enable', 'first') +
-                        ' (' +
-                        (enableTasks.length + this.state.enableActions) +
-                        ')'
-                      }
-                      disabled={
-                        selectn('response.state', computeEntity) !== 'Disabled' &&
-                        selectn('response.state', computeEntity) !== 'New'
-                      }
-                      style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
-                      onClick={this._documentActionsStartWorkflow.bind(this, 'enable')}
-                    />
-                    <RaisedButton
-                      label={
-                        intl.trans('disable', 'Disable', 'first') +
-                        ' (' +
-                        (disableTasks.length + this.state.disableActions) +
-                        ')'
-                      }
-                      disabled={
-                        selectn('response.state', computeEntity) !== 'Enabled' &&
-                        selectn('response.state', computeEntity) !== 'New'
-                      }
-                      style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
-                      onClick={this._documentActionsStartWorkflow.bind(this, 'disable')}
-                    />
-                    <RaisedButton
-                      label={
-                        intl.trans('publish', 'Publish', 'first') +
-                        ' (' +
-                        (publishTasks.length + this.state.publishActions) +
-                        ')'
-                      }
-                      disabled={selectn('response.state', computeEntity) !== 'Enabled'}
-                      style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
-                      onClick={this._documentActionsStartWorkflow.bind(this, 'publish')}
-                    />
-                    <RaisedButton
-                      label={
-                        intl.trans('unpublish', 'Unpublish', 'first') +
-                        ' (' +
-                        (unpublishTasks.length + this.state.unpublishActions) +
-                        ')'
-                      }
-                      disabled={selectn('response.state', computeEntity) !== 'Published'}
-                      style={{ marginRight: '5px', marginLeft: '0' }}
-                      secondary
-                      onClick={this._documentActionsStartWorkflow.bind(this, 'unpublish')}
-                    />
-                  </div>
-                </AuthorizationFilter>
-              )
-            }
-          })()}
-        </ToolbarGroup>
-
-        <ToolbarGroup float="right" className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}>
-          {(() => {
-            if (this.props.actions.includes('publish')) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}
-                  style={toolbarGroupItem}
-                >
-                  <RaisedButton
+              </AuthorizationFilter>
+            ) : null}
+          </div>
+          <div className={classNames({ 'hidden-xs': !this.state.showActionsMobile, PageToolbar__menuGroup: true })}>
+            <div>
+              {/* Button: Publish */}
+              {this.props.actions.includes('publish') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
                     data-guide-role="publish-changes"
                     disabled={!documentPublished}
-                    label={intl.trans('publish_changes', 'Publish Changes', 'words')}
-                    style={{ marginRight: '5px', marginLeft: '0' }}
-                    secondary
+                    color="secondary"
                     onClick={this._publishChanges}
-                  />
+                  >
+                    {intl.trans('publish_changes', 'Publish Changes', 'words')}
+                  </Button>
                 </AuthorizationFilter>
-              )
-            }
-          })()}
-
-          {(() => {
-            if (this.props.actions.includes('edit')) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}
-                  style={toolbarGroupItem}
-                >
-                  <RaisedButton
-                    label={intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
-                    style={{ marginRight: '5px', marginLeft: '0' }}
-                    primary
+              ) : null}
+              {/* Button: Edit */}
+              {this.props.actions.includes('edit') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
+                    color="secondary"
                     onClick={this.props.handleNavigateRequest.bind(
                       this,
                       this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/edit'
                     )}
-                  />
+                  >
+                    {intl.trans('edit', 'Edit', 'first') + ' ' + intl.searchAndReplace(this.props.label)}
+                  </Button>
                 </AuthorizationFilter>
-              )
-            }
-          })()}
+              ) : null}
 
-          {(() => {
-            if (this.props.actions.includes('add-child')) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}
-                  style={toolbarGroupItem}
-                >
-                  <RaisedButton
-                    label={intl.trans('add_new_page', 'Add New Page', 'words')}
-                    style={{ marginRight: '5px', marginLeft: '0' }}
+              {/* Button: New */}
+              {this.props.actions.includes('add-child') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <Button
+                    className="PageToolbar__button"
+                    size="medium"
+                    variant="raised"
                     onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/create')}
-                    primary
-                  />
+                    color="secondary"
+                  >
+                    {intl.trans('add_new_page', 'Add New Page', 'words')}
+                  </Button>
                 </AuthorizationFilter>
-              )
-            }
-          })()}
+              ) : null}
+            </div>
 
-          <ToolbarSeparator className="hidden-xs" />
+            {/* Menu */}
+            {this.getMenu()}
+          </div>
+        </Toolbar>
+      </AppBar>
+    )
+  }
+  getMenu = () => {
+    if (this.props.actions.includes('more-options')) {
+      const children = [
+        <MenuItem
+          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
+          key="reports"
+        >
+          {intl.trans('reports', 'Reports', 'first')}
+        </MenuItem>,
+        <MenuItem onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')} key="media">
+          {intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
+        </MenuItem>,
+        // <MenuItem
+        //   key="contributors"
+        //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
+        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
+        // />,
+        // <MenuItem
+        //   key="recorders"
+        //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
+        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
+        // />,
+        <MenuItem
+          key="phrasebooks"
+          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
+        >
+          {intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
+        </MenuItem>,
+      ]
 
-          {(() => {
-            if (this.props.actions.includes('more-options')) {
-              const children = [
-                <MenuItem
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
-                  key="reports"
-                  primaryText={intl.trans('reports', 'Reports', 'first')}
-                />,
-                <MenuItem
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')}
-                  key="media"
-                  primaryText={intl.trans('views.pages.explore.dialect.media_browser', 'Media Browser', 'words')}
-                />,
-                // <MenuItem
-                //   key="contributors"
-                //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
-                //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
-                // />,
-                // <MenuItem
-                //   key="recorders"
-                //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
-                //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
-                // />,
-                <MenuItem
-                  key="phrasebooks"
-                  primaryText={intl.trans('views.pages.explore.dialect.nav_phrase_books', 'Phrase books', 'words')}
-                  onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
-                />,
-              ]
+      return (
+        <div className="PageToolbar__menuMore">
+          <Tooltip
+            title={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
+            placement="top"
+          >
+            <IconButton
+              className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
+              onClick={(event) => {
+                this.setState({
+                  anchorEl: event.currentTarget,
+                })
+              }}
+            >
+              {' '}
+              <NavigationExpandMoreIcon />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            anchorEl={this.state.anchorEl}
+            open={this.state.anchorEl ? true : false}
+            onClose={() => {
+              this.setState({
+                anchorEl: null,
+              })
+            }}
+          >
+            {children}
+          </Menu>
+        </div>
+      )
+    }
+    return null
+  }
+  getPublishUi = () => {
+    const { computeEntity, computePermissionEntity } = this.props
+    const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
+    const documentPublished = selectn('response.state', computeEntity) === 'Published'
 
-              return React.createElement(
-                UIHelpers.isViewSize('xs') ? Menu : IconMenu,
-                {
-                  anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                  targetOrigin: { horizontal: 'right', vertical: 'top' },
-                  iconButtonElement: (
-                    <IconButton
-                      tooltip={intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
-                      tooltipPosition="top-center"
-                      touch
-                      className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
-                    >
-                      <NavigationExpandMoreIcon />
-                    </IconButton>
-                  ),
-                },
-                children
-              )
-            }
-          })()}
-        </ToolbarGroup>
-      </Toolbar>
+    const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
+
+    let publishMessage = null
+    let publishToggle = null
+    if (this.props.actions.includes('publish-toggle')) {
+      if (this.props.showPublish) {
+        publishToggle = (
+          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={documentPublished === true}
+                  onChange={this._documentActionsTogglePublished}
+                  disabled={!documentEnabled && !documentPublished}
+                  name="published"
+                  value="published"
+                />
+              }
+              label={
+                <Typography variant="title">
+                  {documentPublished
+                    ? intl.trans('published', 'Published', 'first')
+                    : intl.trans('publish', 'Publish', 'first')}
+                </Typography>
+              }
+            />
+          </AuthorizationFilter>
+        )
+      }
+
+      publishMessage = documentPublished ? (
+        <div>
+          This dialect is <strong>public</strong>. Contact us to make it private.
+        </div>
+      ) : (
+        <div>
+          This dialect is <strong>private</strong>. Contact us to make it public.
+        </div>
+      )
+    }
+
+    return (
+      <div className="PageToolbar__publishUiContainer">
+        {publishToggle}
+        {publishMessage}
+      </div>
     )
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { tasks, nuxeo, windowPath } = state
+  const { tasks, navigation, nuxeo, windowPath } = state
 
+  const { _windowPath } = windowPath
   const { computeLogin } = nuxeo
   const { computeTasks } = tasks
-  const { _windowPath } = windowPath
+  const { properties } = navigation
 
   return {
     computeLogin,
     computeTasks,
+    properties,
     windowPath: _windowPath,
   }
 }

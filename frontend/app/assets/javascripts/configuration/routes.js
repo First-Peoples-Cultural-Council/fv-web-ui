@@ -114,7 +114,7 @@ const ANYTHING_BUT_SLASH = new RegExp(ProviderHelpers.regex.ANYTHING_BUT_SLASH)
 const NUMBER = new RegExp(ProviderHelpers.regex.NUMBER)
 const WORKSPACE_OR_SECTION = new RegExp(ProviderHelpers.regex.WORKSPACE_OR_SECTION)
 //const ANY_LANGUAGE_CODE = new RegExp(ProviderHelpers.regex.ANY_LANGUAGE_CODE)
-const KIDS_OR_DEFAULT = new paramMatch('theme', RegExp(ProviderHelpers.regex.KIDS_OR_DEFAULT))
+const KIDS_OR_DEFAULT = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.KIDS_OR_DEFAULT))
 
 const WORKSPACE_TO_SECTION_REDIRECT = {
   condition: (params) => {
@@ -315,7 +315,7 @@ const routes = [
     breadcrumbs: false,
   },
   {
-    path: [new paramMatch('theme', new RegExp('kids'))],
+    path: [new paramMatch('siteTheme', new RegExp('kids'))],
     frontpage: true,
     title: intl.translate({ key: 'kids_home', default: 'Kids Home', case: 'words' }),
     page: <Pages.PageKidsHome />,
@@ -398,10 +398,10 @@ const routes = [
     path: [KIDS_OR_DEFAULT, 'FV', new paramMatch('area', WORKSPACE_OR_SECTION), 'Data'],
     title: intl.translate({
       key: 'x_dialects',
-      default: '{$theme} Dialects',
-      params: ['{$theme}'],
+      default: '{$siteTheme} Dialects',
+      params: ['{$siteTheme}'],
     }),
-    // title: '{$theme} Dialects',
+    // title: '{$siteTheme} Dialects',
     page: <Pages.PageExploreDialects />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
@@ -529,7 +529,7 @@ const routes = [
         default: 'Home',
         case: 'first',
       }) +
-      ' | {$theme}',
+      ' | {$siteTheme}',
     page: <Pages.PageExploreDialect />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
@@ -1170,7 +1170,7 @@ const routes = [
         default: 'Words',
         case: 'words',
       }) +
-      ' | {$dialect_name} | {$theme}',
+      ' | {$dialect_name} | {$siteTheme}',
     page: <Pages.PageDialectLearnWordsCategories />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
@@ -1684,7 +1684,7 @@ const routes = [
         key: 'phrase_categories',
         default: 'Phrase Categories',
         case: 'words',
-      }) + ' | {$dialect_name} | {$theme}',
+      }) + ' | {$dialect_name} | {$siteTheme}',
     page: <Pages.PageDialectLearnPhrasesCategories />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],

@@ -13,43 +13,52 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+// import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import DOMPurify from 'dompurify'
 import selectn from 'selectn'
 
-import DOMPurify from 'dompurify'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
 
-import Paper from 'material-ui/lib/paper'
-
-import NavigationHelpers from 'common/NavigationHelpers'
-
-import Preview from 'views/components/Editor/Preview'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import ActionLaunch from '@material-ui/icons/Launch'
 
 import { Introduction } from '../list-view'
-
-import RaisedButton from 'material-ui/lib/raised-button'
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
-
-import ActionLaunch from 'material-ui/lib/svg-icons/action/launch'
 import IntlService from 'views/services/intl'
+import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import NavigationHelpers from 'common/NavigationHelpers'
+import Preview from 'views/components/Editor/Preview'
 
 const intl = IntlService.instance
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }
 
 class MediaThumbnail extends Component {
+  state = {
+    tabValue: 0,
+  }
   render() {
     const photoMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={this.props.photos} />
     const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={this.props.videos} />
 
     if (this.props.photos.length > 0 && this.props.videos.length > 0) {
       return (
-        <Tabs style={{ marginTop: '15px' }}>
-          <Tab label="Photo(s)">{photoMediaPanel}</Tab>
-          <Tab label="Video(s)">{videoMediaPanel}</Tab>
-        </Tabs>
+        <div>
+          <Tabs
+            value={this.state.tabValue}
+            onChange={(e, tabValue) => this.setState({ tabValue })}
+            style={{ marginTop: '15px' }}
+          >
+            <Tab label="Photo(s)" />
+            <Tab label="Video(s)" />
+          </Tabs>
+          {this.state.tabValue === 0 && photoMediaPanel}
+          {this.state.tabValue === 1 && videoMediaPanel}
+        </div>
       )
     } else if (this.props.photos.length > 0) {
       return photoMediaPanel
@@ -84,14 +93,17 @@ class Cover extends Component {
 
           <div className="col-xs-12 col-md-9 fontAboriginalSans">
             <header style={{ marginBottom: '10px' }}>
-              <h1 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
-              <h2
-                style={{ fontSize: '1.3em' }}
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(selectn('[0].translation', dominant_language_title_translation)),
-                }}
-              />
-              <subheader>
+              <Typography variant="display2" component="h2">
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
+              </Typography>
+              <Typography variant="display1" component="h3">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(selectn('[0].translation', dominant_language_title_translation)),
+                  }}
+                />
+              </Typography>
+              <div className="subheader">
                 {(selectn('contextParameters.book.authors', this.props.entry) || []).map(function(author, i) {
                   return (
                     <span className={classNames('label', 'label-default')} key={i}>
@@ -99,7 +111,7 @@ class Cover extends Component {
                     </span>
                   )
                 })}
-              </subheader>
+              </div>
             </header>
 
             <div>
@@ -116,13 +128,15 @@ class Cover extends Component {
         <div className="col-xs-12">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.openBookAction && this.props.pageCount > 0 ? (
-              <RaisedButton
+              <Button
+                variant="raised"
                 style={{ marginRight: '10px' }}
-                primary
-                label="Open Book"
+                color="primary"
                 onClick={this.props.openBookAction}
-                icon={<ActionLaunch />}
-              />
+              >
+                <ActionLaunch />
+                {'Open Book'}
+              </Button>
             ) : (
               ''
             )}
@@ -139,7 +153,7 @@ class Page extends Component {
 
     // Audio
     const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio, key) {
+    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
       audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
     })
 
@@ -194,10 +208,9 @@ class Page extends Component {
         <div className="row">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
-              <RaisedButton
-                label={intl.trans('edit', 'Edit', 'first')}
-                onClick={this.props.editAction.bind(this, this.props.entry)}
-              />
+              <Button variant="raised" onClick={this.props.editAction.bind(this, this.props.entry)}>
+                {intl.trans('edit', 'Edit', 'first')}
+              </Button>
             ) : (
               ''
             )}
@@ -209,7 +222,7 @@ class Page extends Component {
   }
 }
 
-export default class View extends Component {
+export default class SongsStoriesEntryView extends Component {
   constructor(props, context) {
     super(props, context)
   }
@@ -263,7 +276,7 @@ export default class View extends Component {
 
     // Audio
     const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio, key) {
+    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
       audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
     })
 
@@ -272,15 +285,14 @@ export default class View extends Component {
       videos: videos,
       audios: audios,
     }
-
     const appliedStyle = this.props.cover
-      ? Object.assign(defaultCoverStyle, this.props.innerStyle)
-      : Object.assign(defaultInnerStyle, this.props.innerStyle)
+      ? Object.assign({}, defaultCoverStyle, this.props.innerStyle)
+      : Object.assign({}, defaultInnerStyle, this.props.innerStyle)
 
     return (
       <div className="row" style={{ marginBottom: '20px' }}>
         <div className="col-xs-12">
-          <Paper style={appliedStyle} zDepth={2}>
+          <Paper style={appliedStyle}>
             {this.props.cover ? <Cover {...this.props} {...media} /> : <Page {...this.props} {...media} />}
           </Paper>
         </div>

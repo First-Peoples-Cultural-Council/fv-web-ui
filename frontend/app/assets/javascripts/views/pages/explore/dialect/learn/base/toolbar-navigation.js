@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 
@@ -28,8 +29,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 // import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import EditorInsertChart from 'material-ui/lib/svg-icons/editor/insert-chart'
-import FlatButton from 'material-ui/lib/flat-button'
+import EditorInsertChart from '@material-ui/icons/InsertChart'
+import Button from '@material-ui/core/Button'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import IntlService from 'views/services/intl'
 
@@ -126,7 +127,7 @@ export class ToolbarNavigation extends Component {
       <div className="dialect-navigation">
         <div className="row">
           <div className="col-xs-12 col-md-10">
-            <div firstChild float="left">
+            <div float="left">
               <a href={this._getNavigationURL('words')} onClick={this._onNavigateRequest.bind(this, 'words')}>
                 {intl.trans('words', 'Words', 'first') + ''}
               </a>
@@ -146,17 +147,10 @@ export class ToolbarNavigation extends Component {
           </div>
           <div className="col-xs-12 col-md-2">
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
-              <div
-                className={classNames('hidden-xs', { hidden: !this.props.showStats })}
-                firstChild={false}
-                float="right"
-              >
-                <FlatButton
-                  icon={<EditorInsertChart />}
-                  style={{ color: '#fff' }}
-                  onClick={this.props.showStats}
-                  label={intl.trans('language_statistics', 'Language Statistics')}
-                />
+              <div className={classNames('hidden-xs', { hidden: !this.props.showStats })} float="right">
+                <Button variant="flat" style={{ color: '#fff' }} onClick={this.props.showStats}>
+                  <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
+                </Button>
               </div>
             </AuthenticationFilter>
           </div>

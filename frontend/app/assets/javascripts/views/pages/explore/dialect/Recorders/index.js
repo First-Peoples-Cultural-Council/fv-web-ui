@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -26,16 +26,16 @@ export class Recorders extends React.Component {
 
   render() {
     const { routeParams } = this.props
-    const { theme, dialect_path } = routeParams
-    const editUrl = `/${theme}${dialect_path}/edit/recorder`
-    const detailUrl = `/${theme}${dialect_path}/recorder`
+    const { siteTheme, dialect_path } = routeParams
+    const editUrl = `/${siteTheme}${dialect_path}/edit/recorder`
+    const detailUrl = `/${siteTheme}${dialect_path}/recorder`
     const btnCreate = (
       <a
         className="_btn _btn--primary Contributors__btnCreate"
-        href={`/${theme}${dialect_path}/create/recorder`}
+        href={`/${siteTheme}${dialect_path}/create/recorder`}
         onClick={(e) => {
           e.preventDefault()
-          NavigationHelpers.navigate(`/${theme}${dialect_path}/create/recorder`, this.props.pushWindowPath, false)
+          NavigationHelpers.navigate(`/${siteTheme}${dialect_path}/create/recorder`, this.props.pushWindowPath, false)
         }}
       >
         Create a new recorder

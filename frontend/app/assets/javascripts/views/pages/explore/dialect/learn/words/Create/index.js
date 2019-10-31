@@ -10,7 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
 
@@ -69,6 +70,8 @@ export class PageDialectWordsCreate extends Component {
     is403: false,
   }
 
+  formWordCreate = React.createRef()
+
   // Fetch data on initial render
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "WordsCreateInternationalization" */ './internationalization').then(
@@ -102,7 +105,7 @@ export class PageDialectWordsCreate extends Component {
       selectn('success', currentWord) === true
     ) {
       NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.theme, selectn('response', currentWord), 'words'),
+        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', currentWord), 'words'),
         this.props.replaceWindowPath,
         true
       )
@@ -184,8 +187,7 @@ export class PageDialectWordsCreate extends Component {
     // Prevent default behaviour
     e.preventDefault()
 
-    // TODO: this.refs DEPRECATED
-    const formValue = this.refs.form_word_create.getValue()
+    const formValue = this.formWordCreate.current.getValue()
 
     //let properties = '';
     const properties = {}
@@ -193,8 +195,14 @@ export class PageDialectWordsCreate extends Component {
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
         if (formValue[key] && formValue[key] !== '') {
-          //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
-          properties[key] = formValue[key]
+          // Filter out null values in an array
+          if (formValue[key] instanceof Array) {
+            const formValueKey = formValue[key].filter((item) => item !== null)
+            properties[key] = formValueKey
+          } else {
+            //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
+            properties[key] = formValue[key]
+          }
         }
       }
     }
@@ -216,12 +224,10 @@ export class PageDialectWordsCreate extends Component {
         null,
         now
       )
-
       this.setState({
         wordPath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
       })
     } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
       window.scrollTo(0, 0)
     }
   }
@@ -275,7 +281,7 @@ export class PageDialectWordsCreate extends Component {
               <div className={classNames('col-xs-8', 'col-md-10')}>
                 <form onSubmit={this._onRequestSaveForm}>
                   <t.form.Form
-                    ref="form_word_create" // TODO: DEPRECATED
+                    ref={this.formWordCreate}
                     type={t.struct(selectn('FVWord', fields))}
                     context={selectn('response', _computeDialect2)}
                     value={this.state.formValue}

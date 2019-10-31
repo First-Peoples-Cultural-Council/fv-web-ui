@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 // REDUX
@@ -14,10 +15,10 @@ import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 import Autosuggest from 'react-autosuggest'
 
-import LinearProgress from 'material-ui/lib/linear-progress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import IntlService from 'views/services/intl'
 
-const theme = {
+const AutoSuggestTheme = {
   container: 'autosuggest dropdown',
   containerOpen: 'dropdown open',
   input: 'form-control',
@@ -53,10 +54,6 @@ export class AutoSuggestComponent extends Component {
     fetchSharedLinks: func.isRequired,
     fetchSharedPhrases: func.isRequired,
     fetchSharedWords: func.isRequired,
-  }
-
-  static contextTypes = {
-    muiTheme: React.object,
   }
 
   shouldRenderSuggestions(value) {
@@ -151,6 +148,7 @@ export class AutoSuggestComponent extends Component {
       isLoading: false,
       selectObj: null,
     }
+    this.suggestionWidget = React.createRef()
 
     this.onChange = this.onChange.bind(this)
     this.getSuggestionValue = this.getSuggestionValue.bind(this)
@@ -309,8 +307,8 @@ export class AutoSuggestComponent extends Component {
       <div className="row">
         <div className="col-xs-12">
           <Autosuggest
-            ref="suggestion_widget" // TODO: deprecated
-            theme={theme}
+            ref={this.suggestionWidget}
+            theme={AutoSuggestTheme}
             suggestions={this.getComputeType().response.entries || []}
             shouldRenderSuggestions={this.shouldRenderSuggestions}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -322,7 +320,10 @@ export class AutoSuggestComponent extends Component {
         </div>
 
         <div className="col-xs-12">
-          <LinearProgress mode="indeterminate" className={classNames({ hidden: !this.getComputeType().isFetching })} />
+          <LinearProgress
+            variant="indeterminate"
+            className={classNames({ hidden: !this.getComputeType().isFetching })}
+          />
         </div>
       </div>
     )

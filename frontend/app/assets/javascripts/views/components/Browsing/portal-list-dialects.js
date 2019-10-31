@@ -13,13 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 
-import Colors from 'material-ui/lib/styles/colors'
-
-import ActionGrade from 'material-ui/lib/svg-icons/action/grade'
+// import { amber } from '@material-ui/core/colors'
+import Grade from '@material-ui/icons/Grade'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -37,7 +37,7 @@ export class PortalListDialects extends Component {
     items: oneOfType([array, instanceOf(List)]),
     filteredItems: oneOfType([array, instanceOf(List)]),
     fieldMapping: object,
-    theme: string.isRequired, // NOTE: comes from parent, not redux: state.navigation.theme
+    siteTheme: string.isRequired,
     // REDUX: reducers/state - none
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
@@ -60,14 +60,16 @@ export class PortalListDialects extends Component {
       // Switch roles
       const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
       const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
-        <ActionGrade style={{ margin: '0 15px' }} color={Colors.amber200} />
+        <span>
+          <Grade /*style={{ margin: '0 15px' }} color={amber[200]}*/ />
+        </span>
       ) : null
 
       // Dialect title
       const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
       const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
       const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
-      const href = `/${this.props.theme}${tile.path.replace('/Portal', '')}`
+      const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
       const dialectTitle = IntlService.instance.searchAndReplace(title)
       const dialectDescription = tile.description ? (
         <span className="DialectDescription">{IntlService.instance.searchAndReplace(tile.description)}</span>
@@ -105,9 +107,9 @@ export class PortalListDialects extends Component {
 // REDUX: reducers/state
 // const mapStateToProps = (state /*, ownProps*/) => {
 //   const { navigation } = state
-//   const { theme } = navigation
+//   const { siteTheme } = navigation
 //   return {
-//     theme,
+//     siteTheme,
 //   }
 // }
 

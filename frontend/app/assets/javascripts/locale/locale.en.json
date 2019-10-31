@@ -1100,7 +1100,8 @@
         "create_new_link": "Create New Link",
         "edit_contributor": "Edit Contributor",
         "edit_x_contributor": "Edit %s Contributor",
-        "edit_link": "Edit Link"
+        "edit_link": "Edit Link",
+        "create_link": "Create Link"
       },
       "document": {
         "view_phrase": "View Phrase",

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 // import classNames from 'classnames'
 
@@ -79,12 +79,7 @@ export class CreateV2 extends Component {
       errors: [],
     }
 
-    // NOTE: Using callback refs since on old React
-    // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
-    this.form = null
-    this.setFormRef = (element) => {
-      this.form = element
-    }
+    this.form = React.createRef()
   }
 
   // Fetch data on initial render
@@ -109,7 +104,7 @@ export class CreateV2 extends Component {
   //   // 'Redirect' on success
   //   if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
   //     NavigationHelpers.navigate(
-  //       NavigationHelpers.generateUIDPath(nextProps.routeParams.theme, selectn('response', nextWord), 'words'),
+  //       NavigationHelpers.generateUIDPath(nextProps.routeParams.siteTheme, selectn('response', nextWord), 'words'),
   //       nextProps.replaceWindowPath,
   //       true
   //     )
@@ -175,7 +170,7 @@ export class CreateV2 extends Component {
 
         <form
           className="CreateV2"
-          ref={this.setFormRef}
+          ref={this.form}
           onSubmit={(e) => {
             e.preventDefault()
             this._onRequestSaveForm()
@@ -353,7 +348,7 @@ the 'Move Category up' and 'Move Category down' buttons`}
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
   }
 
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
       toParse,

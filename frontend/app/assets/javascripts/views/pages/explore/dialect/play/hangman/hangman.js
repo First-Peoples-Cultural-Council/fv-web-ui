@@ -13,9 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -85,6 +86,8 @@ export default class HangmanGame extends Component {
    */
   constructor(props, context) {
     super(props, context)
+
+    this.audio = React.createRef()
 
     //Get default start
     this.state = this.getDefaultState()
@@ -215,7 +218,7 @@ export default class HangmanGame extends Component {
         }
 
         if (succeeded) {
-          this.audio.play()
+          this.audio.current.play()
         }
         this.setState({ guessedLetters, puzzle, guessesLeft, succeeded, failed })
       }
@@ -308,14 +311,7 @@ export default class HangmanGame extends Component {
 
         <div>Hint: {this.props.translation} </div>
 
-        <audio
-          style={{ maxWidth: '350px' }}
-          ref={(el) => {
-            this.audio = el
-          }}
-          src={this.props.audio}
-          controls
-        />
+        <audio style={{ maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
 
         <div />
 
@@ -324,17 +320,12 @@ export default class HangmanGame extends Component {
         {this.state.failed ? this.renderFailure() : false}
 
         <div style={{ margin: '15px 0' }}>
-          <RaisedButton
-            secondary
-            onClick={this.props.newPuzzle}
-            label={intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
-            style={{ marginRight: '10px' }}
-          />
-          <RaisedButton
-            primary
-            onMouseDown={this.restart}
-            label={intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
-          />
+          <Button variant="contained" color="secondary" onClick={this.props.newPuzzle} style={{ marginRight: '10px' }}>
+            {intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
+          </Button>
+          <Button variant="contained" color="primary" onMouseDown={this.restart}>
+            {intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
+          </Button>
         </div>
       </div>
     )

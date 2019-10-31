@@ -10,7 +10,11 @@ import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
 import SelectFactory from 'views/components/Editor/fields/select'
 import MediaFactory from 'views/components/Editor/fields/media'
 
-import { FlatButton, IconButton } from 'material-ui'
+import IconButton from '@material-ui/core/IconButton'
+import Clear from '@material-ui/icons/Clear'
+import ArrowForward from '@material-ui/icons/ArrowForward'
+import ArrowBack from '@material-ui/icons/ArrowBack'
+import Button from '@material-ui/core/Button'
 import IntlService from 'views/services/intl'
 import ProviderHelpers from '../../common/ProviderHelpers'
 
@@ -86,7 +90,7 @@ const RelatedMediaLayout = (locals) => (
     <fieldset>
       <legend>
         {locals.label}{' '}
-        <FlatButton
+        <Button
           style={{
             border: '1px solid rgb(204, 204, 204)',
             borderRadius: '4px',
@@ -94,9 +98,10 @@ const RelatedMediaLayout = (locals) => (
             color: 'rgb(51, 51, 51)',
             textTransform: 'none',
           }}
-          label={locals.add.label}
           onClick={locals.add.click}
-        />
+        >
+          {locals.add.label}
+        </Button>
       </legend>
       {(locals.items || []).map((item, i) => (
         <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
@@ -115,17 +120,17 @@ const RelatedMediaLayout = (locals) => (
 
               switch (button.type) {
                 case 'remove':
-                  icon = 'clear'
+                  icon = <Clear />
                   label = intl.trans('remove_item', 'Remove Item', 'first')
                   break
 
                 case 'move-up':
-                  icon = 'arrow_back'
+                  icon = <ArrowBack />
                   label = intl.trans('move_left', 'Move left (appears first)', 'first')
                   break
 
                 case 'move-down':
-                  icon = 'arrow_forward'
+                  icon = <ArrowForward />
                   label = intl.trans('move_right', 'Move right', 'first')
                   break
                 default: // Note: do nothing
@@ -134,7 +139,7 @@ const RelatedMediaLayout = (locals) => (
               return (
                 <IconButton
                   tooltip={label}
-                  iconClassName="material-icons"
+                  // iconClassName="material-icons"
                   key={j}
                   onClick={button.click}
                   style={{ verticalAlign: '-8px' }}
@@ -947,7 +952,7 @@ const options = {
     fields: {
       'dc:title': {
         label: intl.trans('models.contributor_name', 'Contributor Name', 'first'),
-        help: <i>{intl.trans('models.name_of_contributor', 'The name of the contributor', 'first')}</i>,
+        // help: <i>{intl.trans('models.name_of_contributor', 'The name of the contributor', 'first')}</i>,
       },
 
       'dc:description': {

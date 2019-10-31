@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import Immutable, {List, Map} from 'immutable'
 
 import selectn from 'selectn'
 import DOMPurify from 'dompurify'
 
-import GridTile from 'material-ui/lib/grid-list/grid-tile'
+import GridListTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -24,10 +25,6 @@ export default class SearchResultTile extends Component {
     this.state = {
       showInfo: false,
     }
-  }
-
-  _getSubtitle() {
-    return 'test'
   }
 
   render() {
@@ -62,21 +59,21 @@ export default class SearchResultTile extends Component {
         const definitions = selectn('properties.fv:definitions', tile) || []
         definitions.length > 0
           ? output.push(
-              '<em>' +
+            '<em>' +
                 intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 definitions.map((v) => v.translation).join(', ')
-            )
+          )
           : null
 
         const part_of_speech = selectn('properties.fv-word:part_of_speech', tile)
         part_of_speech
           ? output.push(
-              '<em>' +
+            '<em>' +
                 intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
                 '</em>: ' +
                 part_of_speech
-            )
+          )
           : null
 
         const pronunciation = selectn('properties.fv-word:pronunciation', tile)
@@ -87,11 +84,11 @@ export default class SearchResultTile extends Component {
         const categories = selectn('contextParameters.word.categories', tile) || []
         categories.length > 0
           ? output.push(
-              '<em>' +
+            '<em>' +
                 intl.trans('categories', 'Categories', 'first') +
                 '</em>: ' +
                 categories.map((v) => selectn('dc:title', v)).join(', ')
-            )
+          )
           : null
 
         desc = output.join(', ')
@@ -115,21 +112,21 @@ export default class SearchResultTile extends Component {
         const p_definitions = selectn('properties.fv:definitions', tile) || []
         p_definitions.length > 0
           ? p_output.push(
-              '<em>' +
+            '<em>' +
                 intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 p_definitions.map((v) => v.translation).join(', ')
-            )
+          )
           : null
 
         const p_categories = selectn('contextParameters.phrase.phrase_books', tile) || []
         p_categories.length > 0
           ? p_output.push(
-              '<em>' +
+            '<em>' +
                 intl.trans('phrase_bookes', 'Phrase Books', 'words') +
                 '</em>: ' +
                 p_categories.map((v) => selectn('dc:title', v)).join(', ')
-            )
+          )
           : null
 
         desc = p_output.join(', ')
@@ -178,31 +175,22 @@ export default class SearchResultTile extends Component {
         '<strong className="fontAboriginalSans">' + this.props.searchTerm + '</strong>'
       )
     }
-
     title = DOMPurify.sanitize(title)
     const SearchResultTileTitleType = type.replace('FV', '')
+
     return (
-      <GridTile
+      <GridListTile
         className="SearchResultTile"
         style={{ borderBottom: '1px solid #e0e0e0', margin: '20px 0', paddingTop: '65px' }}
         key={selectn('uid', tile)}
-        title={
-          <a
-            href={targetPath}
-            className="SearchResultTileTitle fontAboriginalSans"
-            //onClick={(typeof this.props.action === "function") ? this.props.action.bind(this, targetPath) : null}
-          >
+      >
+        <div className="SearchResultTileMain fontAboriginalSans" style={{ marginLeft: '16px', width: '80%' }}>
+          <a href={targetPath} className="SearchResultTileTitle fontAboriginalSans">
             {title}
             <small className="SearchResultTileTitleType">[{SearchResultTileTitleType}]</small>
           </a>
-        }
-        actionPosition="right"
-        titlePosition="top"
-        //actionIcon={actionIcon}
-        titleBackground="#ffffff"
-        subtitle={<span className="SearchResultTileSubtitle">{subtitle}</span>}
-      >
-        <div className="SearchResultTileMain fontAboriginalSans" style={{ marginLeft: '16px', width: '80%' }}>
+          <span className="SearchResultTileSubtitle">{subtitle}</span>
+
           <div className="SearchResultTileImgContainer">
             {imgObj ? (
               <div
@@ -224,7 +212,7 @@ export default class SearchResultTile extends Component {
             <span style={{ color: 'gray' }} dangerouslySetInnerHTML={{ __html: path.join(' &raquo; ') }} />
           </p>
         </div>
-      </GridTile>
+      </GridListTile>
     )
   }
 }

@@ -13,25 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
 import DOMPurify from 'dompurify'
 
-import UIHelpers from 'common/UIHelpers'
-import AVPlayArrow from 'material-ui/lib/svg-icons/av/play-arrow'
-import AVStop from 'material-ui/lib/svg-icons/av/stop'
-import NavigationHelpers from 'common/NavigationHelpers'
-import IconButton from 'material-ui/lib/icon-button'
+import AVPlayArrow from '@material-ui/icons/PlayArrow'
+import AVStop from '@material-ui/icons/Stop'
+import ClearIcon from '@material-ui/icons/Clear'
+import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
+import { withTheme } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+// import GridList from '@material-ui/core/GridList'
+// import GridListTile from '@material-ui/core/GridListTile'
+// import GridListTileBar from '@material-ui/core/GridListTileBar'
+import IconButton from '@material-ui/core/IconButton'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
+
+import UIHelpers from 'common/UIHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 import { Cover } from 'components/svg/cover'
 const intl = IntlService.instance
 
-class Introduction extends Component {
+class _Introduction extends Component {
   static propTypes = {
     defaultLanguage: PropTypes.any, // TODO: set correct type
     style: PropTypes.any, // TODO: set correct type
@@ -41,7 +52,11 @@ class Introduction extends Component {
   static defaultProps = {
     style: {},
   }
+  state = {
+    tabValue: 0,
+  }
   render() {
+    const backgroundColor = selectn('theme.palette.primary.main', this.props)
     const DEFAULT_LANGUAGE = this.props.defaultLanguage
     const item = this.props.item
     const introduction = selectn('properties.fvbook:introduction', item)
@@ -68,13 +83,44 @@ class Introduction extends Component {
         </div>
       )
     }
+    const introTabStyle = {
+      width: '99%',
+      position: 'relative',
+      overflowY: 'scroll',
+      padding: '15px',
+      height: '100px',
+    }
 
     return (
-      <Tabs>
-        <Tab label={intl.trans('introduction', 'Introduction', 'first')}>{introductionDiv}</Tab>
-        <Tab label={intl.searchAndReplace(DEFAULT_LANGUAGE)}>
-          <div className="IntroductionContent" style={this.props.style}>
-            <div>
+      <div>
+        <Tabs
+          style={{ backgroundColor }}
+          value={this.state.tabValue}
+          onChange={(e, tabValue) => this.setState({ tabValue })}
+        >
+          <Tab
+            label={
+              <Typography variant="subheading" component="div">
+                {intl.trans('introduction', 'Introduction', 'first')}
+              </Typography>
+            }
+          />
+          <Tab
+            label={
+              <Typography variant="subheading" component="div">
+                {intl.searchAndReplace(DEFAULT_LANGUAGE)}
+              </Typography>
+            }
+          />
+        </Tabs>
+        {this.state.tabValue === 0 && (
+          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
+            {introductionDiv}
+          </Typography>
+        )}
+        {this.state.tabValue === 1 && (
+          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
+            <div className="IntroductionContent">
               {introductionTranslations.map(function introductionTranslationsMapper(translation, i) {
                 if (translation.language === DEFAULT_LANGUAGE) {
                   return (
@@ -83,26 +129,27 @@ class Introduction extends Component {
                 }
               })}
             </div>
-          </div>
-        </Tab>
-      </Tabs>
+          </Typography>
+        )}
+      </div>
     )
   }
 }
+const Introduction = withTheme()(_Introduction)
 
-class CardView extends Component {
+class SongsStoriesCardView extends Component {
   static propTypes = {
     action: PropTypes.func,
     item: PropTypes.any, // TODO: set correct type
     defaultLanguage: PropTypes.any, // TODO: set correct type
     style: PropTypes.any, // TODO: set correct type
     cols: PropTypes.any, // TODO: set correct type
-    theme: PropTypes.any, // TODO: set correct type
+    siteTheme: PropTypes.any, // TODO: set correct type
   }
   static defaultProps = {
     action: () => {},
     style: {},
-    theme: 'explore',
+    siteTheme: 'explore',
   }
   constructor(props, context) {
     super(props, context)
@@ -169,6 +216,7 @@ class CardView extends Component {
         return <span key={i}>{translation.translation}</span>
       }
     })
+
     const cardViewPopover = (
       <div
         className="CardViewPopover"
@@ -181,20 +229,22 @@ class CardView extends Component {
         <IconButton
           className="CardViewPopoverClose"
           style={{ position: 'absolute' }}
-          iconClassName="material-icons"
+          // iconClassName="material-icons"
           onClick={() => this.setState({ showIntro: false })}
         >
-          clear
+          <ClearIcon />
         </IconButton>
 
         {selectn('properties.fvbook:introduction', item) && (
           <Introduction
-            {...this.props}
+            defaultLanguage={this.props.defaultLanguage}
+            item={this.props.item}
+            style={this.props.style}
             audio={
               audioIcon ? (
                 <IconButton
                   style={{ verticalAlign: 'middle', padding: '0', width: '25px', height: '25px' }}
-                  iconStyle={{ width: '25px', height: '25px' }}
+                  // iconStyle={{ width: '25px', height: '25px' }}
                   onClick={audioCallback}
                 >
                   {audioIcon}
@@ -211,17 +261,18 @@ class CardView extends Component {
       [`col-md-${Math.ceil(12 / this.props.cols)}`]: true,
     })
     const href = NavigationHelpers.generateUIDPath(
-      this.props.theme,
+      this.props.siteTheme,
       item,
       selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
     )
     return (
       <div key={item.uid} className={CardClasses} style={this.props.style}>
-        <div className="CardViewCard">
+        <Card className="CardViewCard">
           <div className="CardViewMediaContainer" onClick={this.props.action.bind(this, item)}>
             {cardImage}
           </div>
-          <div className="CardViewCopy">
+          {this.state.showIntro && cardViewPopover}
+          <CardContent style={{ padding: '4px' }}>
             <div className="CardViewTitles">
               <h2
                 className={classNames('CardViewTitle', 'fontAboriginalSans')}
@@ -239,26 +290,22 @@ class CardView extends Component {
               </a>
               {selectn('properties.fvbook:introduction', item) && (
                 <IconButton
-                  iconClassName="material-icons"
                   style={{
                     padding: '0',
                     width: '24px',
                     height: '24px',
                   }}
-                  tooltipPosition="top-left"
                   onClick={() => this.setState({ showIntro: !this.state.showIntro })}
-                  touch
                 >
-                  flip_to_front
+                  <FlipToFrontIcon />
                 </IconButton>
               )}
             </div>
-          </div>
-        </div>
-        {this.state.showIntro && cardViewPopover}
+          </CardContent>
+        </Card>
       </div>
     )
   }
 }
 
-export { Introduction, CardView }
+export { Introduction, SongsStoriesCardView }

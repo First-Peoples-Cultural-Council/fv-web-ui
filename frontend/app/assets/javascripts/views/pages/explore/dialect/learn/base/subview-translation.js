@@ -13,14 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _ from 'underscore'
+// ^ groupBy, isEmpty, map?
 
-import Tabs from 'material-ui/lib/tabs/tabs'
-import Tab from 'material-ui/lib/tabs/tab'
-import List from 'material-ui/lib/lists/list'
-import ListItem from 'material-ui/lib/lists/list-item'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
+
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -29,6 +34,9 @@ export default class SubViewTranslation extends Component {
   static propTypes = {
     group: PropTypes.any, // TODO: set appropriate propType
     children: PropTypes.any, // TODO: set appropriate propType
+  }
+  state = {
+    tabValue: 'english',
   }
   /*static containerStyles = {
       borderWidth: '1px',
@@ -77,19 +85,41 @@ export default class SubViewTranslation extends Component {
         </div>
 
         <div className={classNames('col-xs-12', 'col-md-10')}>
-          <Tabs tabItemContainerStyle={SubViewTranslation.tabsStyles.tabItemContainerStyle}>
+          <Tabs
+            tabItemContainerStyle={SubViewTranslation.tabsStyles.tabItemContainerStyle}
+            value={this.state.tabValue}
+            fullWidth
+            onChange={(e, tabValue) => this.setState({ tabValue })}
+          >
             {_.map(grouped, (group, key) => {
               return (
-                <Tab style={SubViewTranslation.tabStyles.headline} label={intl.searchAndReplace(key) + ':'} key={key}>
-                  <List>
-                    {group.map((groupValue, key) => {
-                      return <ListItem key={key} primaryText={groupValue[_this.props.groupValue]} />
-                    })}
-                  </List>
-                </Tab>
+                <Tab
+                  style={SubViewTranslation.tabStyles.headline}
+                  label={intl.searchAndReplace(key) + ':'}
+                  key={key}
+                  value={key}
+                />
               )
             })}
           </Tabs>
+
+          {_.map(
+            grouped,
+            (group, key) =>
+              this.state.tabValue === key && (
+                <Typography component="div" key={key}>
+                  <List>
+                    {group.map((groupValue, key2) => {
+                      return (
+                        <ListItem key={key2}>
+                          <ListItemText primary={groupValue[_this.props.groupValue]} />
+                        </ListItem>
+                      )
+                    })}
+                  </List>
+                </Typography>
+              )
+          )}
         </div>
       </div>
     )

@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Component, PropTypes } from 'react'
+import { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -44,10 +45,6 @@ export class ServiceShortURL extends Component {
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
     queryDialect2ByShortURL: func.isRequired,
-  }
-
-  static contextTypes = {
-    muiTheme: object.isRequired,
   }
 
   constructor(props, context) {

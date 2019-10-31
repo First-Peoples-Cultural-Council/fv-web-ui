@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -21,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 
@@ -38,10 +39,6 @@ export class PageKidsHome extends Component {
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
   }
-
-  /*static contextTypes = {
-        muiTheme: React.PropTypes.object.isRequired
-    };*/
 
   constructor(props, context) {
     super(props, context)
@@ -75,15 +72,17 @@ export class PageKidsHome extends Component {
           <div className="row" style={homePageStyle}>
             <div className={classNames('col-xs-8', 'col-xs-offset-2', 'text-center')}>
               <span style={{ width: '45%' }}>
-                <RaisedButton
+                <Button
+                  variant="contained"
                   fullWidth
-                  label={intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate('/kids/FV/Workspaces/Data/', this.props.pushWindowPath, false)
                   }}
                   style={{ marginTop: '20vh' }}
-                />
+                >
+                  {intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
+                </Button>
               </span>
             </div>
           </div>

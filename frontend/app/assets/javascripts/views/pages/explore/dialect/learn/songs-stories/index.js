@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 import classNames from 'classnames'
@@ -26,6 +27,8 @@ import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
+import Button from '@material-ui/core/Button'
+
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -34,11 +37,10 @@ import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
-// import RaisedButton from 'material-ui/lib/raised-button'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GeneralList from 'views/components/Browsing/general-list'
-import { CardView } from './list-view'
+import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import withFilter from 'views/hoc/grid-list/with-filter'
 import IntlService from 'views/services/intl'
@@ -110,7 +112,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
     const computeBooks = ProviderHelpers.getEntry(this.props.computeBooks, this.props.routeParams.dialect_path)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
-    const isKidsTheme = this.props.routeParams.theme === 'kids'
+    const isKidsTheme = this.props.routeParams.siteTheme === 'kids'
 
     const listProps = {
       defaultLanguage: DEFAULT_LANGUAGE,
@@ -118,20 +120,20 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       fixedList: true,
       fixedListFetcher: this.fixedListFetcher,
       filteredItems: this.state.filteredList,
-      card: <CardView />,
+      card: <SongsStoriesCardView />,
       area: this.props.routeParams.area,
       applyDefaultFormValues: true,
       formValues: { 'properties.fvbook:type': this.props.typeFilter },
       metadata: selectn('response', computeBooks),
       items: selectn('response.entries', computeBooks) || [],
-      theme: this.props.routeParams.theme || 'explore',
+      siteTheme: this.props.routeParams.siteTheme || 'explore',
       action: this._onEntryNavigateRequest,
     }
 
     let listView = null
 
     if (isKidsTheme) {
-      listView = <GeneralList {...listProps} cols={3} theme={this.props.routeParams.theme} />
+      listView = <GeneralList {...listProps} cols={3} siteTheme={this.props.routeParams.siteTheme} />
     } else {
       listView = FilteredCardList ? <FilteredCardList {...listProps} /> : null
     }
@@ -142,6 +144,8 @@ export class PageDialectLearnStoriesAndSongs extends Component {
       splitWindowPath: this.props.splitWindowPath,
       landmarkArray: this.props.typeFilter === 'story' ? ['stories'] : ['songs'],
     })}`
+
+    // const themePalette = this.props.properties.theme.palette.rawTheme.palette
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper', { hidden: isKidsTheme })}>
@@ -152,9 +156,29 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                 entity: selectn('response', computeDialect2),
                 login: this.props.computeLogin,
               }}
+              hideFromSections
+              routeParams={this.props.routeParams}
             >
-              <a
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={(e) => {
+                  e.preventDefault()
+                  NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+                }}
+              >
+                {intl.trans(
+                  'views.pages.explore.dialect.learn.songs_stories.create_x_book',
+                  'Create ' + this.props.typeFilter + ' Book',
+                  'words',
+                  [this.props.typeFilter]
+                )}
+              </Button>
+              {/* <a
                 className="_btn _btn--primary"
+                style={{
+                  backgroundColor: themePalette.primary1Color,
+                }}
                 href={hrefPath}
                 onClick={(e) => {
                   e.preventDefault()
@@ -167,7 +191,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                   'words',
                   [this.props.typeFilter]
                 )}
-              </a>
+              </a> */}
             </AuthorizationFilter>
           </div>
         </div>
@@ -197,10 +221,10 @@ export class PageDialectLearnStoriesAndSongs extends Component {
   }
 
   _onEntryNavigateRequest = (item) => {
-    // NOTE: generateUIDPath: function (theme, item, pluralPathId)
+    // NOTE: generateUIDPath: function (siteTheme, item, pluralPathId)
     this.props.pushWindowPath(
       NavigationHelpers.generateUIDPath(
-        this.props.routeParams.theme || 'explore',
+        this.props.routeParams.siteTheme || 'explore',
         item,
         selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
       )

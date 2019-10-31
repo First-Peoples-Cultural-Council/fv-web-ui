@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 
 import classNames from 'classnames'
@@ -32,7 +33,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Button from '@material-ui/core/Button'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
 import IntlService from 'views/services/intl'
@@ -57,10 +58,6 @@ export class Index extends Component {
     fetchPortal: func.isRequired,
     navigateTo: func.isRequired,
     pushWindowPath: func.isRequired,
-  }
-
-  static contextTypes = {
-    muiTheme: object.isRequired,
   }
 
   constructor(props, context) {
@@ -113,11 +110,9 @@ export class Index extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <RaisedButton
-                label={intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
-                onClick={this._onNavigateRequest.bind(this, ['register'])}
-                primary
-              />
+              <Button variant="contained" onClick={this._onNavigateRequest.bind(this, ['register'])} color="primary">
+                {intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
+              </Button>
             </AuthorizationFilter>
           </div>
         </div>
