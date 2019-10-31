@@ -153,10 +153,47 @@ We use BroswerStack in order to ensure our UI functions in the latest version of
 
 Via [Cypress](https://www.cypress.io/)
 
-Launch the Cypress app:
+Launch the Cypress app (GUI) where you can run tests individually:
 
 ```
-$ npm run test:e2e
+$ npm run test:e2e:dev
+```
+
+Launch the full Cypress test suite headlessly:
+```
+$ npm run test:e2e:dev:headless
+```
+With debugging output enabled:
+```
+$ npm run test:e2e:dev:headless:debug
+```
+
+These Cypress tests require that you have java and maven installed as well as the correct environment variables set for the following:
+
+For the database setup scripts:
+```
+CYPRESS_FV_ADMIN_USERNAME
+CYPRESS_FV_ADMIN_PASSWORD
+```
+
+For recording runs (optional):
+```
+CYPRESS_PROJECT_ID
+CYPRESS_RECORD_KEY
+```
+
+Additionally you will need to set environment variables for all of the users of the test languages (language admins, members, recorders, recorders with approval).
+
+Example: For TestLanguageOne you would set (must be repeated for language Two to Six):
+```
+CYPRESS_TESTLANGUAGEONE_MEMBER_USERNAME
+CYPRESS_TESTLANGUAGEONE_MEMBER_PASSWORD
+CYPRESS_TESTLANGUAGEONE_RECORDER_USERNAME
+CYPRESS_TESTLANGUAGEONE_RECORDER_PASSWORD
+CYPRESS_TESTLANGUAGEONE_RECORDER_APPROVER_USERNAME
+CYPRESS_TESTLANGUAGEONE_RECORDER_APPROVER_PASSWORD
+CYPRESS_TESTLANGUAGEONE_ADMIN_USERNAME
+CYPRESS_TESTLANGUAGEONE_ADMIN_PASSWORD
 ```
 
 ### Frontend: Unit testing
