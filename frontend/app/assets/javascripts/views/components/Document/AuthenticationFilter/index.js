@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { SECTIONS } from 'common/Constants'
 import Error403 from 'views/components/Error403'
-import CircularProgress from 'material-ui/lib/circular-progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 export default class AuthenticationFilter extends Component {
   static propTypes = {
     is403: PropTypes.bool,
