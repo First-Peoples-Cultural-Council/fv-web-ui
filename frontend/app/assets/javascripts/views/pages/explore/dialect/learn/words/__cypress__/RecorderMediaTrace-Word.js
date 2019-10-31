@@ -21,6 +21,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       cy.getByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.wait(500)
 
     /*
             Go to media browser and check that each media item has the
@@ -36,6 +37,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       cy.getByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/media')
+    cy.wait(500)
     cy.getByText('TestWordImage').click()
     cy.getByText('Linked Words').click()
     cy.getByTestId('DictionaryList__row').within(() => {
@@ -44,6 +46,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       cy.getByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/media')
+    cy.wait(500)
     cy.getByText('TestWordVideo').click()
     cy.getByText('Linked Words').click()
     cy.getByTestId('DictionaryList__row').within(() => {
