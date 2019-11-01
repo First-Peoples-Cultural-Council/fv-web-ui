@@ -12,6 +12,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/songs')
+    cy.wait(500)
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
 
@@ -204,7 +205,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
-
+    cy.wait(500)
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
   })
