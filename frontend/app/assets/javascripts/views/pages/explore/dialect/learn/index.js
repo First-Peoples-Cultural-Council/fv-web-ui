@@ -75,8 +75,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
 import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import Typography from '@material-ui/core/Typography'
 
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -440,8 +441,17 @@ export class DialectLearn extends Component {
                 <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
-                    title={intl.trans('words', 'WORDS', 'upper')}
-                    titleTypographyProps={{ color: 'textSecondary' }}
+                    onClick={() => this.setState({ expandedCards: { words: !this.state.expandedCards.words } })}
+                    title={
+                      <Typography
+                        variant="subtitle"
+                        style={{
+                          color: themePalette.secondary.contrastText,
+                        }}
+                      >
+                        {intl.trans('words', 'WORDS', 'upper')}
+                      </Typography>
+                    }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     action={
                       <IconButton
@@ -520,9 +530,18 @@ export class DialectLearn extends Component {
               <div className={classNames('col-xs-12', 'col-md-6')}>
                 <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
+                    onClick={() => this.setState({ expandedCards: { phrases: !this.state.expandedCards.phrases } })}
                     className="card-header-custom"
-                    title={intl.trans('phrases', 'PHRASES', 'upper')}
-                    titleTypographyProps={{ color: 'textSecondary' }}
+                    title={
+                      <Typography
+                        variant="subtitle"
+                        style={{
+                          color: themePalette.secondary.contrastText,
+                        }}
+                      >
+                        {intl.trans('phrases', 'PHRASES', 'upper')}
+                      </Typography>
+                    }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     action={
                       <IconButton
@@ -600,8 +619,17 @@ export class DialectLearn extends Component {
                 <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
-                    title={intl.trans('songs', 'SONGS', 'upper')}
-                    titleTypographyProps={{ color: 'textSecondary' }}
+                    onClick={() => this.setState({ expandedCards: { songs: !this.state.expandedCards.songs } })}
+                    title={
+                      <Typography
+                        variant="subtitle"
+                        style={{
+                          color: themePalette.secondary.contrastText,
+                        }}
+                      >
+                        {intl.trans('songs', 'SONGS', 'upper')}
+                      </Typography>
+                    }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     action={
                       <IconButton
@@ -679,8 +707,17 @@ export class DialectLearn extends Component {
                 <Card style={{ marginBottom: '15px' }}>
                   <CardHeader
                     className="card-header-custom"
-                    title={intl.trans('stories', 'STORIES', 'upper')}
-                    titleTypographyProps={{ color: 'textSecondary' }}
+                    onClick={() => this.setState({ expandedCards: { stories: !this.state.expandedCards.stories } })}
+                    title={
+                      <Typography
+                        variant="subtitle"
+                        style={{
+                          color: themePalette.secondary.contrastText,
+                        }}
+                      >
+                        {intl.trans('stories', 'STORIES', 'upper')}
+                      </Typography>
+                    }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
                     action={
                       <IconButton

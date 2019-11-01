@@ -487,7 +487,11 @@ export class Preview extends Component {
             body = (
               <Card style={{ boxShadow: 'none' }}>
                 <CardHeader
-                  title={selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
+                  title={
+                    <Typography variant="subtitle">
+                      {selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
+                    </Typography>
+                  }
                   subheader={description && description != 'undefined' ? 'Description: ' + description : ''}
                   style={{ height: 'initial', padding: 0, lineHeight: 'initial', fontSize: '18px' }}
                 />
@@ -605,7 +609,11 @@ export class Preview extends Component {
                     : null}
                 </div>
                 <CardHeader
-                  title={selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
+                  title={
+                    <Typography variant="subtitle">
+                      {selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
+                    </Typography>
+                  }
                   subheader={
                     selectn('properties.dc:description', videoResponse) || selectn('dc:description', videoResponse)
                   }
