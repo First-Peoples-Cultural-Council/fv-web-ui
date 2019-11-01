@@ -211,7 +211,7 @@ export class Navigation extends Component {
                 NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
               }}
             >
-              {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}
+              {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'upper' })}
             </a>
 
             <Login

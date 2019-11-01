@@ -357,8 +357,12 @@ export class Preview extends Component {
                 </CardContent>
 
                 <CardHeader
-                  title={selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
-                  subtitle={
+                  title={
+                    <Typography variant="subtitle">
+                      {selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
+                    </Typography>
+                  }
+                  subheader={
                     description && description != 'undefined'
                       ? intl.trans('description', 'Description', 'first') + ': ' + description
                       : ''
@@ -366,10 +370,14 @@ export class Preview extends Component {
                   style={{ lineHeight: 'initial', fontSize: '18px', height: 'inherit', padding: '16px 0' }}
                 />
                 <CardHeader
+                  onClick={() => {
+                    this._toggleOpen()
+                    handleExpandChange()
+                  }}
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="title"
+                      variant="subtitle"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
@@ -480,7 +488,7 @@ export class Preview extends Component {
               <Card style={{ boxShadow: 'none' }}>
                 <CardHeader
                   title={selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
-                  subtitle={description && description != 'undefined' ? 'Description: ' + description : ''}
+                  subheader={description && description != 'undefined' ? 'Description: ' + description : ''}
                   style={{ height: 'initial', padding: 0, lineHeight: 'initial', fontSize: '18px' }}
                 />
                 <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
@@ -490,10 +498,14 @@ export class Preview extends Component {
                     : null}
                 </div>
                 <CardHeader
+                  onClick={() => {
+                    this._toggleOpen()
+                    handleExpandChange()
+                  }}
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="title"
+                      variant="subtitle"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
@@ -594,16 +606,20 @@ export class Preview extends Component {
                 </div>
                 <CardHeader
                   title={selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
-                  subtitle={
+                  subheader={
                     selectn('properties.dc:description', videoResponse) || selectn('dc:description', videoResponse)
                   }
                   style={{ height: 'inherit', padding: '16px 0', lineHeight: 'initial', fontSize: '18px' }}
                 />
                 <CardHeader
+                  onClick={() => {
+                    this._toggleOpen()
+                    handleExpandChange()
+                  }}
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="title"
+                      variant="subtitle"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
