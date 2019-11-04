@@ -25,11 +25,11 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
 import selectn from 'selectn'
-
+import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-
+import StateErrorBoundary from 'views/components/ErrorBoundary'
 // Models
 import { Document } from 'nuxeo'
 
@@ -67,12 +67,13 @@ export class PageDialectAlphabetCharacterEdit extends Component {
       character: null,
       characterPath: props.routeParams.dialect_path + '/Alphabet/' + props.routeParams.character,
       formValue: null,
+      is403: false,
     }
   }
 
   // Fetch data on initial render
-  async componentDidMount() {
-    await this.fetchData()
+  componentDidMount() {
+    this.fetchData()
   }
 
   // Refetch data on URL change
@@ -119,35 +120,54 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     }
 
     return (
-      <div>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.learn.alphabet.edit_x_character',
-            'Edit ' + selectn('response.properties.dc:title', computeCharacter) + ' character',
-            'first',
-            [selectn('response.properties.dc:title', computeCharacter)]
-          )}
-        </h1>
+      <AuthenticationFilter
+        is403={this.state.is403}
+        login={this.props.computeLogin}
+        anon={false}
+        routeParams={this.props.routeParams}
+        notAuthenticatedComponent={
+          <StateErrorBoundary /*copy={this.state.copy} errorMessage={this.state.errorMessage}*/ />
+        }
+      >
+        <div>
+          <h1>
+            {intl.trans(
+              'views.pages.explore.dialect.learn.alphabet.edit_x_character',
+              'Edit ' + selectn('response.properties.dc:title', computeCharacter) + ' character',
+              'first',
+              [selectn('response.properties.dc:title', computeCharacter)]
+            )}
+          </h1>
 
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={context}
-          itemId={this.state.characterPath}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._navigateUp}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={this.props.replaceWindowPath}
-          type="FVCharacter"
-          routeParams={this.props.routeParams}
-        />
-      </div>
+          <EditViewWithForm
+            computeEntities={computeEntities}
+            initialValues={context}
+            itemId={this.state.characterPath}
+            fields={fields}
+            options={options}
+            saveMethod={this._handleSave}
+            cancelMethod={this._navigateUp}
+            currentPath={this.props.splitWindowPath}
+            navigationMethod={this.props.replaceWindowPath}
+            type="FVCharacter"
+            routeParams={this.props.routeParams}
+          />
+        </div>
+      </AuthenticationFilter>
     )
   }
 
-  fetchData = () => {
-    this.props.fetchDialect2(this.props.routeParams.dialect_path)
+  fetchData = async () => {
+    await this.props.fetchDialect2(this.props.routeParams.dialect_path)
+    const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+    if (_computeDialect2.isError) {
+      this.setState({
+        // Note: Intentional == comparison
+        is403: _computeDialect2.message == '403',
+        errorMessage: _computeDialect2.message,
+      })
+      return
+    }
     this.props.fetchCharacter(this.state.characterPath)
   }
 
@@ -173,15 +193,16 @@ export class PageDialectAlphabetCharacterEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCharacter, fvDialect, windowPath } = state
+  const { fvCharacter, fvDialect, nuxeo, windowPath } = state
 
   const { computeCharacter } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
-
+  const { computeLogin } = nuxeo
   return {
     computeCharacter,
     computeDialect2,
+    computeLogin,
     splitWindowPath,
     windowPath: _windowPath,
   }

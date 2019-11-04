@@ -95,6 +95,7 @@ export class PhrasebookEdit extends React.Component {
     errors: [],
     formData: {},
     isBusy: false,
+    is403: false,
   }
   state = {
     componentState: STATE_LOADING,
@@ -111,16 +112,16 @@ export class PhrasebookEdit extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
   render() {
@@ -153,7 +154,7 @@ export class PhrasebookEdit extends React.Component {
     }
     return content
   }
-  _getData = async(addToState = {}) => {
+  _getData = async (addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -164,6 +165,8 @@ export class PhrasebookEdit extends React.Component {
     if (item.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: item.message == '403',
         errorMessage: item.message,
         ...addToState,
       })
@@ -195,6 +198,7 @@ export class PhrasebookEdit extends React.Component {
     const { errors, isBusy, isTrashed, valueDescription, valueName } = this.state
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}
@@ -294,7 +298,7 @@ export class PhrasebookEdit extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })
@@ -322,7 +326,7 @@ export class PhrasebookEdit extends React.Component {
       invalid,
     })
   }
-  _getItem = async() => {
+  _getItem = async () => {
     const { computeCategory, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:

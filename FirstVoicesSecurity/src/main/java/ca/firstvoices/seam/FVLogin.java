@@ -32,42 +32,51 @@ public class FVLogin extends StartupHelper {
     // this is configured with a property to be set easily in nuxeo.conf in different envs
     static String fvContextPath = Framework.getProperty("fv.contextPath", "app");
 
+    // this is configured to avoid redirects for anonymous users, when Nuxeo is run standalone, for example in Dev localhost
+    static String fvDisableLoginRedirect = Framework.getProperty("fv.disableLoginRedirect");
+
     @In(create = true)
     protected transient FVUserProfileService fvUserProfileService;
 
     @Override
     @Begin(id = "#{conversationIdGenerator.nextMainConversationId}", join = true)
     public String initDomainAndFindStartupPage(String domainTitle, String viewId) {
-        if (documentManager == null) {
-            super.initServerAndFindStartupPage();
-        }
+        String result_from_default_helper = "view_home";
 
-        String NUXEO_URL = FVLoginUtils.getBaseURL(restHelper);
-
-        String redirectTo = (NUXEO_URL + fvContextPath).endsWith("/") ? (NUXEO_URL + fvContextPath)
-                : (NUXEO_URL + fvContextPath) + "/";
-        String backToPath = RestHelper.getHttpServletRequest().getParameter("backTo");
-
-        NuxeoPrincipal currentUser = documentManager.getPrincipal();
-        if (currentUser.isAdministrator()) {
-
-            return "view_home";
-        }
-        if (!currentUser.isAnonymous()) {
-            if (validatePath(backToPath)) {
-                redirectTo = NUXEO_URL + backToPath;
-            }
-            // Otherwise, send to default redirect path
-            else {
-                redirectTo = fvUserProfileService.getDefaultDialectRedirectPath(documentManager, currentUser, NUXEO_URL, true);
-            }
-        }
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
+
+            if (documentManager == null) {
+                result_from_default_helper = initServerAndFindStartupPage();
+            }
+
+            String NUXEO_URL = FVLoginUtils.getBaseURL(restHelper);
+
+            String redirectTo = (NUXEO_URL + fvContextPath).endsWith("/") ? (NUXEO_URL + fvContextPath)
+                    : (NUXEO_URL + fvContextPath) + "/";
+            String backToPath = RestHelper.getHttpServletRequest().getParameter("backTo");
+
+            NuxeoPrincipal currentUser = documentManager.getPrincipal();
+            if (currentUser.isAdministrator()) {
+
+                return "view_home";
+            }
+            if (!currentUser.isAnonymous()) {
+                if (validatePath(backToPath)) {
+                    redirectTo = NUXEO_URL + backToPath;
+                }
+                // Otherwise, send to default redirect path
+                else {
+                    redirectTo = fvUserProfileService.getDefaultDialectRedirectPath(documentManager, currentUser, NUXEO_URL, true);
+                }
+            } else if (!fvDisableLoginRedirect.equals("true")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
+            }
+
         } catch (URISyntaxException | IOException e) {
             log.error(e);
         }
-        return null;
+
+        return result_from_default_helper;
     }
 
     public static String getURIFromPath(String redirectTo) throws URISyntaxException, UnsupportedEncodingException {

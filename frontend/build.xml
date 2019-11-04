@@ -26,8 +26,6 @@ limitations under the License.
   </condition>
 
   <target name="clean" description="Clean npm and bower dependencies">
-    <!-- DY: For quicker build, skip deleting node_modules. -->
-    <!-- Deleting node_modules provides the least risk of remaining artifcats in node_modlues. Should be default -->
     <delete dir="node_modules" />
     <delete includeEmptyDirs="yes" failonerror="false">
       <fileset dir="bower_components" defaultexcludes="no" followsymlinks="false" />
@@ -60,21 +58,23 @@ limitations under the License.
     </copy>
 
   </target>
-  	
-  <target name="build-dev-sandbox" depends="npmInstall">
+
+  <!-- Development Build -->
+  <!-- Currently similar to prod build, but can be used to provide more verbose output; avoid minifying -->
+  <target name="build-dev" depends="npmInstall">
       <exec executable="${cmd.npm}" failonerror="true">
         <!-- <arg value="copy:nuxeo" /> -->
         <arg value="run" />
         <arg value="production"/>
-        <arg value="--"/> 
-        <arg value="--env.CONTEXT_PATH=/nuxeo/app"/>
+        <arg value="--"/>
+        <!--<arg value="dashdash_env.CONTEXT_PATH=/nuxeo/app"/>-->
       </exec>
-      
+
 
       <copy todir="target/classes/nuxeo.war/app">
         <fileset dir="public"/>
       </copy>
-       
+
       <!--MC: why is this not done by default?-->
       <copy todir="target/classes/OSGI-INF">
         <fileset dir="nuxeo/OSGI-INF"/>

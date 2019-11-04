@@ -83,6 +83,7 @@ export class Phrasebook extends React.Component {
   }
   state = {
     componentState: STATE_LOADING,
+    is403: false,
     ...this._commonInitialState,
   }
   // NOTE: Using callback refs since on old React
@@ -99,10 +100,10 @@ export class Phrasebook extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -111,6 +112,8 @@ export class Phrasebook extends React.Component {
     if (this.props.computeDialect.isError && this.props.computeDialect.error) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: this.props.computeDialect.error == '403',
         copy,
         errorMessage: this.props.computeDialect.error,
       })
@@ -133,8 +136,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -187,6 +190,7 @@ export class Phrasebook extends React.Component {
     const { errors, isBusy } = this.state
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}
@@ -239,7 +243,7 @@ export class Phrasebook extends React.Component {
     )
   }
 
-  _handleCreateItemSubmit = async(formData) => {
+  _handleCreateItemSubmit = async (formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -282,7 +286,7 @@ export class Phrasebook extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })

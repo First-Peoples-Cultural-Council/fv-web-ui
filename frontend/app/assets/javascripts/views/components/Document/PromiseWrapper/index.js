@@ -21,6 +21,7 @@ import StatusBar from 'views/components/StatusBar'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
+import Error403 from 'views/components/Error403'
 
 import '!style-loader!css-loader!./PromiseWrapper.css'
 
@@ -66,41 +67,46 @@ export default class PromiseWrapper extends Component {
         statusMessage = selectn('message', reducedOperation)
         const ErrorMessageMarkup = this._generateErrorMessageMarkup(statusMessage)
         if (!this.props.renderOnError) {
-          render = (
-            <div>
-              <h1 className="PromiseWrapper__heading">
-                404 -{' '}
-                {this.intl.translate({
-                  key: 'errors.page_not_found',
-                  default: 'Page Not Found',
-                  case: 'first',
-                })}
-              </h1>
-              <p>
-                {this.intl.translate({
-                  key: 'errors.report_via_feedback',
-                  default: 'Please report this error by emailing support@fpcc.ca so that we can fix it',
-                  case: 'first',
-                })}
-                .
-              </p>
-              <p>
-                {this.intl.translate({
-                  key: 'errors.feedback_include_link',
-                  default: 'Include the link or action you took to get to this page',
-                })}
-                .
-              </p>
-              {ErrorMessageMarkup}
-              <p>
-                {this.intl.translate({
-                  key: 'thank_you!',
-                  default: 'Thank You!',
-                  case: 'words',
-                })}
-              </p>
-            </div>
-          )
+          // Note: Intentional == comparison
+          if (statusMessage == '403') {
+            render = <Error403 redirect={window.location.pathname} />
+          } else {
+            render = (
+              <div>
+                <h1 className="PromiseWrapper__heading">
+                  404 -{' '}
+                  {this.intl.translate({
+                    key: 'errors.page_not_found',
+                    default: 'Page Not Found',
+                    case: 'first',
+                  })}
+                </h1>
+                <p>
+                  {this.intl.translate({
+                    key: 'errors.report_via_feedback',
+                    default: 'Please report this error by emailing support@fpcc.ca so that we can fix it',
+                    case: 'first',
+                  })}
+                  .
+                </p>
+                <p>
+                  {this.intl.translate({
+                    key: 'errors.feedback_include_link',
+                    default: 'Include the link or action you took to get to this page',
+                  })}
+                  .
+                </p>
+                {ErrorMessageMarkup}
+                <p>
+                  {this.intl.translate({
+                    key: 'thank_you!',
+                    default: 'Thank You!',
+                    case: 'words',
+                  })}
+                </p>
+              </div>
+            )
+          }
         }
 
         return false

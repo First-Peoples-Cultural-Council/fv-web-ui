@@ -76,6 +76,7 @@ export class WordsEdit extends Component {
     formValue: null,
     componentState: STATE_LOADING,
     copy: {},
+    is403: false,
   }
 
   // Fetch data on initial render
@@ -131,9 +132,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        //   console.log(4)
-        //   return true
+      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+      //   console.log(4)
+      //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -141,9 +142,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-        //   console.log(7)
-        //   return true
+      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+      //   console.log(7)
+      //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -190,13 +191,15 @@ export class WordsEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     if (_computeDialect2.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: _computeDialect2.message == '403',
         errorMessage: _computeDialect2.message,
         ...addToState,
       })
@@ -304,6 +307,7 @@ export class WordsEdit extends Component {
       <AuthenticationFilter
         login={this.props.computeLogin}
         anon={false}
+        is403={this.state.is403}
         routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
