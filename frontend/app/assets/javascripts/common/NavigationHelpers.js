@@ -167,6 +167,43 @@ export default {
 
     return (path = ContextPath() + path.substring(0, path.lastIndexOf('/') + 1) + selectn('uid', item))
   },
+  // Generate an edit href from a Nuxeo document path
+  // Differs from generateUIDPath in that it:
+  // - returns `undefined` if it doesn't recognize the passed in `pluralPathId`
+  // - appends `/edit` to the generated path
+  generateUIDEditPath: (siteTheme, item, pluralPathId) => {
+    let shouldReturnPath = true
+    let path = '/' + siteTheme + selectn('path', item)
+    // const type = selectn('type', item)
+
+    switch (pluralPathId) {
+      case 'words':
+      case 'phrases':
+        path = path.replace('/Dictionary/', '/learn/' + pluralPathId + '/')
+        break
+
+      case 'songs-stories':
+      case 'songs':
+      case 'stories':
+        path = path.replace('/Stories & Songs/', '/learn/' + pluralPathId + '/')
+        break
+
+      case 'gallery':
+        path = path.replace('/Portal/', '/' + pluralPathId + '/')
+        break
+
+      case 'media':
+        // Resources can be in folders, so ensure everything after 'Resources' is ignored
+        path = path.substring(0, path.lastIndexOf('/Resources/') + 11)
+        path = path.replace('/Resources/', '/' + pluralPathId + '/')
+        break
+      default: {
+        shouldReturnPath = false
+      }
+    }
+    path = `${ContextPath()}${path.substring(0, path.lastIndexOf('/') + 1)}${selectn('uid', item)}/edit`
+    return shouldReturnPath ? path : undefined
+  },
   // Disable link
   disable: (event) => {
     event.preventDefault()

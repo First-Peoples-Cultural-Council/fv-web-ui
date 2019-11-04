@@ -123,10 +123,10 @@ export class Phrasebooks extends Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebooksInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     this._getData({ copy })
   }
@@ -205,7 +205,7 @@ export class Phrasebooks extends Component {
     currentSortType: this.props.DEFAULT_SORT_TYPE,
   }
 
-  _deleteItem = async(uid) => {
+  _deleteItem = async (uid) => {
     /* NOTE: save uid to state */
     this.setState(
       {
@@ -218,14 +218,14 @@ export class Phrasebooks extends Component {
     )
   }
 
-  _deleteSelected = async() => {
+  _deleteSelected = async () => {
     const { selected } = this.state
     this.setState(
       {
         deletedUids: [...this.state.deletedUids, ...selected],
       },
       () => {
-        selected.forEach(async(uid) => {
+        selected.forEach(async (uid) => {
           await this.props.deleteCategory(uid)
         })
         this.setState({
@@ -358,6 +358,7 @@ export class Phrasebooks extends Component {
           const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${data.uid || ''}`
           return (
             <a
+              className="DictionaryList__link"
               href={phrasebookDetailUrl}
               onClick={(e) => {
                 e.preventDefault()
@@ -433,7 +434,7 @@ export class Phrasebooks extends Component {
     ]
   }
 
-  _getData = async(addToState) => {
+  _getData = async (addToState) => {
     const { routeParams, search /*, filter*/ } = this.props
     const { pageSize, page } = routeParams
     const { sortBy, sortOrder } = search

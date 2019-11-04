@@ -127,10 +127,10 @@ export class Contributors extends Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
     const btnCreate = this.props.btnCreate || (
       <Button
         variant="contained"
@@ -200,7 +200,7 @@ export class Contributors extends Component {
     currentSortType: this.props.DEFAULT_SORT_TYPE,
   }
 
-  _deleteItem = async(uid) => {
+  _deleteItem = async (uid) => {
     /* NOTE: save uid to state */
     this.setState(
       {
@@ -213,14 +213,14 @@ export class Contributors extends Component {
     )
   }
 
-  _deleteSelected = async() => {
+  _deleteSelected = async () => {
     const { selected } = this.state
     this.setState(
       {
         deletedUids: [...this.state.deletedUids, ...selected],
       },
       () => {
-        selected.forEach(async(uid) => {
+        selected.forEach(async (uid) => {
           await this.props.deleteContributor(uid)
         })
         this.setState({
@@ -352,6 +352,7 @@ export class Contributors extends Component {
 
           return (
             <a
+              className="DictionaryList__link"
               href={url}
               onClick={(e) => {
                 e.preventDefault()
@@ -437,7 +438,7 @@ export class Contributors extends Component {
     ]
   }
 
-  _getData = async(addToState) => {
+  _getData = async (addToState) => {
     const { routeParams, search } = this.props
     const { pageSize, page } = routeParams
     const { sortBy, sortOrder } = search
