@@ -49,8 +49,8 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
       )
     }
 
-    _onPageSizeChange(event, index, value) {
-      const currentPageSize = value
+    _onPageSizeChange(event) {
+      const currentPageSize = event.target.value
 
       this.props.fetcher(
         Object.assign({}, this.props.fetcherParams, {
@@ -171,12 +171,12 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
             value={this.state.currentPageSize}
             onChange={this._onPageSizeChange}
           >
-            <MenuItem value={10} primaryText={10} />
-            <MenuItem value={20} primaryText={20} />
-            <MenuItem value={50} primaryText={50} />
-            <MenuItem value={100} primaryText={100} />
-            <MenuItem value={250} primaryText={250} />
-            <MenuItem value={500} primaryText={500} />
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={50}>50</MenuItem>
+            <MenuItem value={100}>100</MenuItem>
+            <MenuItem value={250}>250</MenuItem>
+            <MenuItem value={500}>500</MenuItem>
           </Select>
           <label
             style={{

@@ -57,14 +57,9 @@ export class DirectoryList extends Component {
     super(props)
 
     this._handleChange = this._handleChange.bind(this)
-    this._handleStandardSelectChange = this._handleStandardSelectChange.bind(this)
   }
 
-  _handleChange(event, index, value) {
-    this.props.onChange(value)
-  }
-
-  _handleStandardSelectChange(event) {
+  _handleChange(event) {
     this.props.onChange(event.target.value)
   }
 
@@ -91,6 +86,7 @@ export class DirectoryList extends Component {
             <InputLabel htmlFor={`${this.props.label}_select`}>
               {intl.trans('select_x', 'Select ' + this.props.label, 'first', [this.props.label]) + ':'}
             </InputLabel>
+
             <Select
               data-testid={dataTestId}
               autoWidth
@@ -106,10 +102,8 @@ export class DirectoryList extends Component {
             </Select>
           </FormControl>
         ) : (
-          <select onChange={this._handleStandardSelectChange} data-testid={dataTestId}>
+          <select onChange={this._handleChange} data-testid={dataTestId}>
             {this.props.placeholder ? <option value>Please select:</option> : ''}
-            {/* Note: Had a conflict and `value={this.props.value}` was the incoming change */}
-            {/* <select value={this.props.value} onChange={this._handleStandardSelectChange} data-testid={dataTestId}> */}
             {entries.map((entry) => (
               <option key={entry.value} value={entry.value}>
                 {entry.text}
