@@ -3,7 +3,9 @@
 # This script is used exclusively to setup the test languages prior to running the Cypress tests.
 # To use the script ensure the correct username and password environment variables are set for
 # $CYPRESS_FV_USERNAME and $CYPRESS_FV_PASSWORD . Optionally use the -skip-clone flag
-# to bypass the cloning of fv-utils and fv-batch-import if they have already been cloned.
+# to bypass the cloning of fv-utils and fv-batch-import if they have already been cloned and to
+# skip building the jar files for fv-utils and fv-batch-import.
+# Example usage: "bash ./TestDatabaseSetup.sh http://127.0.0.1:8080 -skip-clone"
 
 DIRECTORY=$PWD
 echo $DIRECTORY
@@ -22,6 +24,7 @@ echo "Target URL found: " $TARGET
 
 cd $DIRECTORY
 # If "-skip-clone" parameter is supplied then don't do a fresh clone of fv-batch-import and fv-utils
+# and skip building the jars.
 if [ "$2" != "-skip-clone" ]; then
 
     # Delete old copies of fv-utils and fv-batch-import and clone fresh ones
@@ -37,26 +40,25 @@ if [ "$2" != "-skip-clone" ]; then
     git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git
     git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git
 
-fi
-exit 0
-# Compile jar files from fv-utils and fv-batch-upload
-echo
-cd $DIRECTORY/fv-utils
-mvn clean install
-# Check that the return code is zero
-if [[ "$?" -ne 0 ]]; then
-  echo
-  echo -e 'fv-utils build failed \n'; exit 1
-  echo
-fi
-echo
-cd $DIRECTORY/fv-batch-import
-mvn clean install
-# Check that the return code is zero
-if [[ "$?" -ne 0 ]]; then
-  echo
-  echo -e 'fv-batch-import build failed \n'; exit 1
-  echo
+    # Compile jar files from fv-utils and fv-batch-upload
+    echo
+    cd $DIRECTORY/fv-utils
+    mvn clean install
+    # Check that the return code is zero
+    if [[ "$?" -ne 0 ]]; then
+      echo
+      echo -e 'fv-utils build failed \n'; exit 1
+      echo
+    fi
+    echo
+    cd $DIRECTORY/fv-batch-import
+    mvn clean install
+    # Check that the return code is zero
+    if [[ "$?" -ne 0 ]]; then
+      echo
+      echo -e 'fv-batch-import build failed \n'; exit 1
+      echo
+    fi
 fi
 
 echo
