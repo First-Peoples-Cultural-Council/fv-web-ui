@@ -4,19 +4,19 @@
                        https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <servers>
     <server>
-      <id>hotfix-releases</id>
-      <username>FPCC_MAVEN_USERNAME</username>
-      <password>FPCC_MAVEN_ENCRYPTED_PASSWORD</password>
-    </server>
-    <server>
-      <id>hotfix-snapshots</id>
-      <username>FPCC_MAVEN_USERNAME</username>
-      <password>FPCC_MAVEN_ENCRYPTED_PASSWORD</password>
-    </server>
-    <server>
       <id>nuxeo-studio</id>
-      <username>YOUR_STUDIO_USERNAME</username>
-      <password>YOUR_ENCRYPTED_STUDIO_PASSWORD</password>
+      <username>username</username>
+      <password>password</password>
     </server>
   </servers>
+  
+  <mirrors>
+    <mirror>
+      <id>fv-s3-nuxeo-studio-mirror</id>
+      <name>Nuxeo Studio FV Mirror</name>
+      <url>s3://maven-repo-nuxeo-studio/release</url>
+      <mirrorOf>nuxeo-studio</mirrorOf>
+    </mirror>
+  </mirrors>
+
 </settings>

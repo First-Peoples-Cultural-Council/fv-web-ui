@@ -3,7 +3,8 @@ name: Build
 on:
   # Every day at 2:30am pst
   schedule:
-    - cron: '30 9 * * *'
+    # cron: '30 9 * * *'
+    - cron: '0 0 * * *'
   pull_request:
     branches: 
       - master
@@ -19,5 +20,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Copy settings.xml 
+      run: cp sample.settings.xml ~/.m2/settings.xml
     - name: Build with Maven
       run: mvn clean install
