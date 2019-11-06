@@ -58,14 +58,9 @@ export class QueryList extends Component {
     super(props)
 
     this._handleChange = this._handleChange.bind(this)
-    this._handleStandardSelectChange = this._handleStandardSelectChange.bind(this)
   }
 
-  _handleChange(event, index, value) {
-    this.props.onChange(value)
-  }
-
-  _handleStandardSelectChange(event) {
+  _handleChange(event) {
     this.props.onChange(event.target.value)
   }
 
@@ -113,7 +108,7 @@ export class QueryList extends Component {
             ))}
           </Select>
         ) : (
-          <select className="form-control" value={this.props.value} onChange={this._handleStandardSelectChange}>
+          <select className="form-control" value={this.props.value} onChange={this._handleChange}>
             <option value>Please select:</option>
             {entries.map((entry) => (
               <option key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>

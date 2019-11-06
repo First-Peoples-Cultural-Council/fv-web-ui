@@ -1,20 +1,23 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
   it('Test to check that a language admin can view, edit, enable, and publish phrases.', () => {
-    // TODO: Add database setup here.
-    // Requires a new phrase that is not enabled and not published exist in database for SENCOTEN in new status.
-
     /*
             Login as member and check that the phrase is not visible.
          */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -28,11 +31,11 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
                 Login as Language Admin, navigate to phrases and check that a phrase exists.
             */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -48,12 +51,11 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     /*
             Check for edit phrase button and then enable the phrase.
          */
-    cy.log('Check for edit phrase button and then enable the phrase.')
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
     cy.queryByText('Edit phrase', { exact: true }).should('exist')
-    cy.get('div.hidden-xs.clearfix').within(() => {
+    cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
@@ -65,11 +67,11 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Login as member and check that the phrase is now visible and enabled.
          */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
+      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -86,14 +88,14 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Login as Language Admin and publish the phrase.
          */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
-    cy.get('div.hidden-xs.clearfix').within(() => {
+    cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
         .click()
@@ -101,6 +103,25 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    // TODO: Add test for public view here. Public view not currently working so can't implement test.
+    cy.wait(1000)
+
+    /*
+    Check that the phrase is now visible to the public.
+   */
+    cy.getByText('Public View')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
+    cy.wait(1000)
+    cy.get('div.row.Navigation__dialectContainer')
+      .should('have.css', 'background-color')
+      .and('eq', 'rgb(58, 104, 128)')
+    cy.getByText('TestPhrase').should('exist')
+    cy.getByText('TestTranslation').should('exist')
+    cy.getByText('TestCulturalNote').should('exist')
+    cy.getByText('TestPhraseImage').should('exist')
+    cy.getByText('TestPhraseVideo').should('exist')
+    cy.getByText('TestAcknowledgement').should('exist')
   })
 })

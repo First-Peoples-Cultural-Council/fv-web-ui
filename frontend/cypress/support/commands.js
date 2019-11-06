@@ -27,7 +27,11 @@ beforeEach(function() {
   cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
 })
 afterEach(function() {
+  // Logout to fix issue with user being logged in between tests.
+  cy.logout()
   cy.log('Test complete')
+  // Wait to ensure video recording is not cut early on failed test.
+  cy.wait(1000)
 })
 
 // Login
@@ -51,10 +55,19 @@ Cypress.Commands.add('login', (obj = {}) => {
   // NOTE: Cypress drops the `CYPRESS_` prefix when using environment variables set in your bash file
   const userName = Cypress.env(obj.userName || 'ADMIN_USERNAME')
   const userPassword = Cypress.env(obj.userPassword || 'ADMIN_PASSWORD')
-  expect(userName).not.to.be.undefined
-  expect(userPassword).not.to.be.undefined
+  let loginInfoExists = false
+  if (userName != undefined && userPassword != undefined) {
+    loginInfoExists = true
+    cy.log('Login info found successfully').then(() => {
+      expect(loginInfoExists).to.be.true
+    })
+  } else {
+    cy.log('Error: Login info not found').then(() => {
+      expect(loginInfoExists).to.be.true
+    })
+  }
 
-  const url = obj.url || 'https://preprod.firstvoices.com/nuxeo/startup'
+  const url = obj.url || 'https://dev.firstvoices.com/nuxeo/startup'
   const body = obj.body || {
     user_name: userName,
     user_password: userPassword,
@@ -74,6 +87,11 @@ Cypress.Commands.add('login', (obj = {}) => {
   })
   cy.wait(500)
   cy.log('--- SHOULD BE LOGGED IN ---')
+})
+
+// Logs any user out using a GET request.
+Cypress.Commands.add('logout', () => {
+  cy.request({method: 'GET', url: 'dev.firstvoices.com/nuxeo/logout', failOnStatusCode: false})
 })
 
 // AlphabetListView

@@ -10,7 +10,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import { Popover } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -143,9 +143,9 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   }}
                 >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {intl.trans('cancel', 'Cancel', 'first')}
-                    </Button>
+                    </FVButton>
                     <button
                       type="submit"
                       onClick={(e) => {
@@ -172,9 +172,9 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <Button variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {intl.trans('cancel', 'Cancel', 'first')}
-                    </Button>
+                    </FVButton>
                     <button
                       type="submit"
                       onClick={(e) => {
@@ -202,7 +202,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                             ),
                           }}
                         />
-                        <Button
+                        <FVButton
                           variant="flat"
                           size="small"
                           style={confirmationButtonsStyle}
@@ -211,15 +211,15 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           }}
                         >
                           {intl.trans('yes', 'Yes', 'first') + '!'}
-                        </Button>
-                        <Button
+                        </FVButton>
+                        <FVButton
                           variant="flat"
                           size="small"
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
                         >
                           {intl.trans('no', 'No', 'first') + '!'}
-                        </Button>
+                        </FVButton>
                       </div>
                     </Popover>
                   </div>

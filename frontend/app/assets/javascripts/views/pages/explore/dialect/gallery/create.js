@@ -123,7 +123,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

@@ -3,18 +3,19 @@
 
 describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () => {
   it('Test to check the word publish/unpublish functionality for a recorder.', () => {
-    // TODO: Add database setup here.
-    // A test word which has been enabled but not published must exist for SENCOTEN.
+    cy.exec('bash ./scripts/ResetWordLangFive.sh enabled-true')
+      .its('stdout')
+      .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 
     /*
       Login as Recorder and check that the publish counter increases after it is clicked.
     */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -36,8 +37,8 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/reject task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.reload()
@@ -53,11 +54,11 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click publish again.
     */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Publish (0)', { exact: true }).click()
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
@@ -72,13 +73,13 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/approve task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.reload()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -88,7 +89,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Approve', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -102,11 +103,11 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click unpublish.
     */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Unpublish (0)', { exact: true }).click()
@@ -118,8 +119,8 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/reject task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.reload()
@@ -127,7 +128,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -141,11 +142,11 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click unpublish again.
     */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Unpublish (0)', { exact: true }).click()
@@ -157,8 +158,8 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/approve task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
     cy.reload()
@@ -166,7 +167,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Approve', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')

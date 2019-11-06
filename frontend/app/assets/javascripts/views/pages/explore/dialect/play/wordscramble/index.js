@@ -20,7 +20,7 @@ import Immutable, { List } from 'immutable'
 import { green, red } from '@material-ui/core/colors'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import IconButton from '@material-ui/core/IconButton'
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
@@ -168,12 +168,6 @@ export class Wordscramble extends Component {
         {(selectn('response.entries', computePhrases) || [])
           .filter((phrase) => selectn('properties.dc:title', phrase).indexOf(' ') > 0)
           .map((phrase, i) => {
-            console.log('?', {
-              original: selectn('properties.dc:title', phrase),
-              translation: selectn('properties.fv:definitions[0].translation', phrase),
-              audio: selectn('contextParameters.phrase.related_audio[0].path', phrase),
-              picture: selectn('contextParameters.phrase.related_pictures[0]', phrase),
-            })
             return (
               <Scramble
                 key={i}
@@ -313,14 +307,14 @@ export class Scramble extends Component {
           <div style={{ minHeight: '50px', borderBottom: '1px solid #CCC', marginBottom: '16px' }}>
             {this.state.selected.map((word, index) => {
               return (
-                <Button
+                <FVButton
                   variant="contained"
                   key={index}
                   style={{ backgroundColor: '#a7fba5' }}
                   onMouseUp={this.unSelectWord.bind(this, word, index)}
                 >
                   {word}
-                </Button>
+                </FVButton>
               )
             })}
             {this.state.complete ? (
@@ -359,19 +353,24 @@ export class Scramble extends Component {
               disabled = true
             }
             return (
-              <Button variant="contained" disabled={disabled} key={index} onMouseUp={this.selectWord.bind(this, word)}>
+              <FVButton
+                variant="contained"
+                disabled={disabled}
+                key={index}
+                onMouseUp={this.selectWord.bind(this, word)}
+              >
                 {word}
-              </Button>
+              </FVButton>
             )
           })}
           {this.state.complete ? (
-            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
+            <FVButton variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
               {intl.trans('reset', 'Reset', 'first')}
-            </Button>
+            </FVButton>
           ) : (
             false
           )}
-          <Button
+          <FVButton
             variant="contained"
             className={classNames({ invisible: this.state.complete })}
             style={{ margin: '0 5px' }}
@@ -380,13 +379,13 @@ export class Scramble extends Component {
             onMouseUp={this.checkAnswer.bind(this)}
           >
             {intl.trans('check', 'Check', 'first')}
-          </Button>
+          </FVButton>
           {this.state.complete ? (
             false
           ) : (
-            <Button variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
+            <FVButton variant="contained" color="primary" onMouseUp={this.reset.bind(this)}>
               {intl.trans('reset', 'Reset', 'first')}
-            </Button>
+            </FVButton>
           )}
         </div>
       </div>

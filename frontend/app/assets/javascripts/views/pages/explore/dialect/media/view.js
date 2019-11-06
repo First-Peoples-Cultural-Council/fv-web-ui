@@ -46,7 +46,7 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -288,13 +288,13 @@ export class MediaView extends Component {
                                       </p>
                                     </DialogContent>
                                     <DialogActions>
-                                      <Button
+                                      <FVButton
                                         variant="contained"
                                         color="secondary"
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
                                       >
                                         {intl.trans('close', 'Close', 'first')}
-                                      </Button>
+                                      </FVButton>
                                     </DialogActions>
                                   </Dialog>
                                 </div>

@@ -26,7 +26,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -298,7 +298,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    (selectn('response.entries', computeWords) || []).forEach(
+    ;(selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -415,9 +415,9 @@ export class Quiz extends Component {
                       "Nice! You've completed this quiz!"
                     )}{' '}
                     {skillLevel}
-                    <Button variant="contained" onClick={this._restart} style={{ marginLeft: '10px' }}>
+                    <FVButton variant="contained" onClick={this._restart} style={{ marginLeft: '10px' }}>
                       {intl.trans('views.pages.explore.dialect.play.quiz.new_quiz', 'New Quiz', 'words')}
-                    </Button>
+                    </FVButton>
                   </div>
                 ) : (
                   ''
@@ -444,9 +444,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                  disabled: true,
-                  key: i,
-                })
+                    disabled: true,
+                    key: i,
+                  })
                 : answer
             })}
           </div>

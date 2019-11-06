@@ -32,7 +32,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import GeneralList from 'views/components/Browsing/general-list'
 import withFilter from 'views/hoc/grid-list/with-filter'
@@ -133,13 +133,13 @@ export class PageDialectGalleries extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
                 color="primary"
               >
                 {'Create Gallery'}
-              </Button>
+              </FVButton>
             </AuthorizationFilter>
           </div>
 

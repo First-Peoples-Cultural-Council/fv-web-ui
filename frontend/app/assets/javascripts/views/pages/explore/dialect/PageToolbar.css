@@ -8,11 +8,14 @@
   display: inline-flex;
   align-items: center;
 }
+.PageToolbar__request {
+  margin: 10px 0;
+}
 .PageToolbar__secondary {
   margin: 10px 0 20px 0;
 }
 .PageToolbar .PageToolbar__button {
-  margin: 0 5px;
+  margin: 0 2px;
 }
 .PageToolbar__menuMore:before {
   content: ' ';

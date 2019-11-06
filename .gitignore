@@ -21,3 +21,5 @@ nashorn_code_cache
 /frontend/scripts/files/import.log
 /fontend/scripts/files/*_errors.csv
 *.iml
+/frontend/cypress/videos/
+/frontend/cypress/screenshots/

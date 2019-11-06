@@ -154,7 +154,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

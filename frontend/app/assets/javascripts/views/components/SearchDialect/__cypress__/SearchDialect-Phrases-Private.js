@@ -5,6 +5,12 @@ import testSearchPhrases from '../../../app/assets/javascripts/views/components/
 
 describe('SearchDialectPhrases-Private.js > SearchDialect', () => {
   it('Should redirect with anon user, no redirect with member', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    cy.expect(true).to.equal(false)
+
     cy.log('Trying to access private section with anon user')
     cy.visit('/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/learn/phrases')
     cy.wait(500)

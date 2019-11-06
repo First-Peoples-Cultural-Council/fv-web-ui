@@ -26,11 +26,9 @@ rgb(43, 46, 52)
 #59584c
 rgb(89, 88, 76)
 */
+import typography from './FirstVoicesTypography'
 export default {
-  typography: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: 18,
-  },
+  typography,
   palette: {
     primary: {
       contrastText: '#ffffff',
@@ -45,33 +43,42 @@ export default {
     primary2Color: '#3a6880',
     accent4Color: '#e1e1e2',
   },
-  button: {
-    contained: {
-      color: 'red',
-      backgroundColor: 'black',
-      '&:hover': {
-        color: 'black',
-        backgroundColor: 'red',
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'blue',
-        },
-        // NOTE:  the '&$disabled' rule below triggers a warning for some reason
-        // '&$disabled': {
-        //   backgroundColor: 'grey',
-        // },
-      },
+  appBarIcon: {
+    color: '#fff',
+  },
+  appBar: {
+    color: '#fff',
+    backgroundColor: '#b40000',
+    'a&:hover': {
+      color: '#000',
     },
+  },
+  localePicker: {
+    color: '#fff',
+    backgroundColor: '#ab0000',
+  },
+  dialectContainer: {
+    color: '#fff',
+    backgroundColor: '#3a6880',
+    '&:visited': {
+      color: '#fff',
+    },
+  },
+  button: {
     containedPrimary: {
-      color: 'white',
-      backgroundColor: 'black',
+      color: '#fff',
+      backgroundColor: '#b40000',
       '&:hover': {
-        color: 'black',
-        backgroundColor: 'white',
+        color: '#fff',
+        backgroundColor: '#d57470',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'yellow',
+          backgroundColor: '#d57470',
         },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        backgroundColor: '#e5e5e5',
       },
     },
     containedSecondary: {
@@ -84,6 +91,10 @@ export default {
         '@media (hover: none)': {
           backgroundColor: 'pink',
         },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        backgroundColor: '#e5e5e5',
       },
     },
   },

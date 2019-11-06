@@ -82,7 +82,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     ;['_onNavigateRequest', '_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
-  fetchData = async(newProps) => {
+  fetchData = async (newProps) => {
     const parentBookPath = newProps.routeParams.parentBookName
 
     await newProps.fetchDialect2(newProps.routeParams.dialect_path)

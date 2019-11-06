@@ -71,11 +71,11 @@ export class ExploreDialectEdit extends Component {
   }
   // Fetch data on initial render
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "ExploreDialectEditInternationalization" */ './internationalization').then(
-      (_module) => {
-        return _module.default
-      }
-    )
+    const copy = await import(
+      /* webpackChunkName: "ExploreDialectEditInternationalization" */ './internationalization'
+    ).then((_module) => {
+      return _module.default
+    })
     this.fetchData({ copy })
   }
 
@@ -104,7 +104,7 @@ export class ExploreDialectEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

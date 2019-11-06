@@ -14,7 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 import ProviderHelpers from '../../common/ProviderHelpers'
 
@@ -90,7 +90,7 @@ const RelatedMediaLayout = (locals) => (
     <fieldset>
       <legend>
         {locals.label}{' '}
-        <Button
+        <FVButton
           style={{
             border: '1px solid rgb(204, 204, 204)',
             borderRadius: '4px',
@@ -101,7 +101,7 @@ const RelatedMediaLayout = (locals) => (
           onClick={locals.add.click}
         >
           {locals.add.label}
-        </Button>
+        </FVButton>
       </legend>
       {(locals.items || []).map((item, i) => (
         <div key={i} className={classNames('col-xs-12', 'col-md-3')}>

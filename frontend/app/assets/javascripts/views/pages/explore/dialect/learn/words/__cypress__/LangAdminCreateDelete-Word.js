@@ -1,26 +1,29 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
   it('Test to check language admin creation and deletion of words.', () => {
-    // TODO: Add database setup here.
-    // Requires no words exist in database for SENCOTEN
-
     /*
             Login as Language Admin and check that no word currently exists.
         */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
+      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
+      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
       url: 'https://dev.firstvoices.com/nuxeo/startup',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
             Going through the steps to create a word
         */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Words', { exact: true }).click()
@@ -98,7 +101,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     /*
             Checking to see if the word now exists.
         */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -120,10 +123,13 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       cy.getByText('Part of speech', { exact: true }).should('exist')
       cy.getByText('Pronunciation', { exact: true }).should('exist')
     })
+    cy.getByTestId('dc-title').type('ShouldNotShow')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
+    cy.queryByText('TestWordShouldNotShow').should('not.exist')
 
     /*
             Check that edit word saves properly.
@@ -132,7 +138,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     cy.getByText('Edit word')
       .should('exist')
       .click()
-    cy.get('#virtual-keyboard-helper-dc-title').type('TestWord1')
+    cy.getByTestId('dc-title').type('TestWord1')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
@@ -145,7 +151,13 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     cy.getByText('Delete word').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete word success').should('exist')
-    cy.getByText('Return To Previous Page').click()
+
+    // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+    cy.getByText('Return To Previous Page')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })

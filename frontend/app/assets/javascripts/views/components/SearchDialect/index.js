@@ -18,7 +18,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 import selectn from 'selectn'
 import classNames from 'classnames'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
@@ -199,7 +199,7 @@ export class SearchDialect extends Component {
     }
     return (
       <div className="SearchDialectForm SearchDialectForm--filtering">
-        <Button
+        <FVButton
           variant="contained"
           onClick={() => {
             this._resetSearch()
@@ -207,7 +207,7 @@ export class SearchDialect extends Component {
           color="primary"
         >
           {resetButtonText}
-        </Button>
+        </FVButton>
         {this._getFlashcardMode()}
       </div>
     )
@@ -217,7 +217,7 @@ export class SearchDialect extends Component {
 
     if (flashcardMode !== undefined) {
       return flashcardMode ? (
-        <Button
+        <FVButton
           variant="contained"
           style={{ marginLeft: 'auto' }}
           color="primary"
@@ -226,9 +226,9 @@ export class SearchDialect extends Component {
           }}
         >
           {'Stop viewing Flashcards'}
-        </Button>
+        </FVButton>
       ) : (
-        <Button
+        <FVButton
           variant="contained"
           style={{ marginLeft: 'auto' }}
           onClick={() => {
@@ -236,7 +236,7 @@ export class SearchDialect extends Component {
           }}
         >
           {'Flashcards'}
-        </Button>
+        </FVButton>
       )
     }
     return null
@@ -274,13 +274,13 @@ export class SearchDialect extends Component {
             value={searchTerm}
           />
 
-          <Button variant="contained" onClick={this._handleSearch} color="primary">
+          <FVButton variant="contained" onClick={this._handleSearch} color="primary">
             {searchButtonText}
-          </Button>
+          </FVButton>
 
-          <Button variant="contained" onClick={this._resetSearch} style={{ marginLeft: '20px' }}>
+          <FVButton variant="contained" onClick={this._resetSearch} style={{ marginLeft: '20px' }}>
             {resetButtonText}
-          </Button>
+          </FVButton>
 
           {this._getFlashcardMode()}
         </div>
@@ -525,9 +525,9 @@ export class SearchDialect extends Component {
 
     return searchTerm
       ? {
-        DEFAULT_SORT_COL: searchSortBy,
-        DEFAULT_SORT_TYPE: 'asc',
-      }
+          DEFAULT_SORT_COL: searchSortBy,
+          DEFAULT_SORT_TYPE: 'asc',
+        }
       : {}
   }
 

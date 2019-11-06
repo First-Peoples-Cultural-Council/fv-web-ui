@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -173,9 +173,9 @@ export default class DialogCreateForm extends React.Component {
       this.props.fieldAttributes.disableCreateNewButton === false
     ) {
       createNewButton = (
-        <Button variant="outlined" onClick={this.handleOpen}>
+        <FVButton variant="outlined" onClick={this.handleOpen}>
           {createNewButtonLabel}
-        </Button>
+        </FVButton>
       )
     }
 
@@ -186,9 +186,9 @@ export default class DialogCreateForm extends React.Component {
         <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
           <DialogContent>{createForm}</DialogContent>
           <DialogActions>
-            <Button variant="contained" color="secondary" onClick={this.handleClose}>
+            <FVButton variant="contained" color="secondary" onClick={this.handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
-            </Button>
+            </FVButton>
           </DialogActions>
         </Dialog>
       </div>

@@ -32,7 +32,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
@@ -263,13 +263,13 @@ export class Register extends Component {
               </p>
 
               <div className="form-group">
-                <Button
+                <FVButton
                   variant="contained"
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
                   color="primary"
                 >
                   {intl.trans('register', 'Register', 'first')}
-                </Button>
+                </FVButton>
               </div>
             </form>
           </div>
@@ -286,13 +286,13 @@ export class Register extends Component {
               </strong>
               {'", and then picking your language/community.'}
             </p>
-            <Button
+            <FVButton
               variant="contained"
               color="primary"
               onClick={() => NavigationHelpers.navigate('/explore/FV/sections/Data', this.props.pushWindowPath)}
             >
               {intl.translate('choose_lang', 'Choose a Language', 'first')}
-            </Button>
+            </FVButton>
           </div>
         </div>
       </PromiseWrapper>
