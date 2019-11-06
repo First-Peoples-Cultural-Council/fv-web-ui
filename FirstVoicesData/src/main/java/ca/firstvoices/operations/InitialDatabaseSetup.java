@@ -27,7 +27,6 @@ public class InitialDatabaseSetup {
     @OperationMethod
     public DocumentModel run() {
         if (StringUtils.isBlank(path)) {
-            session.getPrincipal().
             return session.getRootDocument();
         } else {
             return session.getDocument(new PathRef(path));
