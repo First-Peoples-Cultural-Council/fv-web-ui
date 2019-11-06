@@ -28,7 +28,6 @@
     <module>migration-contributions</module>
     <module>frontend</module>
     <module>FirstVoicesData</module>
-      <module>FirstVoicesData</module>
   </modules>
 
   <dependencyManagement>
