@@ -27,6 +27,8 @@
     <module>FVUserRegistration</module>
     <module>migration-contributions</module>
     <module>frontend</module>
+    <module>FirstVoicesData</module>
+      <module>FirstVoicesData</module>
   </modules>
 
   <dependencyManagement>
@@ -62,7 +64,7 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-       <groupId>ca.firstvoices</groupId>
+        <groupId>ca.firstvoices</groupId>
         <artifactId>firstvoices-web-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -103,20 +105,25 @@
         <artifactId>FirstVoicesSecurity</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
-    </dependency>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesData</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <extensions>
-    <extension>
-      <groupId>com.allogy.maven.wagon</groupId>
-      <artifactId>maven-s3-wagon</artifactId>
-      <version>1.1.0</version>
-    </extension>
+      <extension>
+        <groupId>com.allogy.maven.wagon</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>1.1.0</version>
+      </extension>
     </extensions>
   </build>
-  
+
   <repositories>
     <repository>
       <id>public-snapshot</id>
@@ -174,15 +181,15 @@
   </repositories>
 
   <profiles>
-   <profile>
-     <id>release</id>
-     <distributionManagement>
-       <repository>
-         <id>external-releases</id>
-         <name>External Releases</name>
-         <url>${external.releases.url}</url>
-       </repository>
-     </distributionManagement>
-   </profile>
+    <profile>
+      <id>release</id>
+      <distributionManagement>
+        <repository>
+          <id>external-releases</id>
+          <name>External Releases</name>
+          <url>${external.releases.url}</url>
+        </repository>
+      </distributionManagement>
+    </profile>
   </profiles>
 </project>
