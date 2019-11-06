@@ -80,12 +80,12 @@ fi
 echo "Publishing language TestLanguageTwo"
 responseOne=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageTwo","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$responseOne" -ne 200 ]]; then
-    echo -e 'TestLanguageTwo publish failed: Error ' $responseOne ' \n'; exit $responseOne
+    echo -e 'TestLanguageTwo publish failed: Error ' $responseOne ' \n'; exit 1
     echo
 fi
 # Import Word using fv-batch-import
 cd $DIRECTORY/fv-batch-import/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username Administrator -password Administrator -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path TEst/Test/TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageTwo Words batch failed \n'; exit 1
   echo
@@ -116,7 +116,7 @@ fi
 echo "Publishing language TestLanguageFour"
 responseThree=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFour","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$responseThree" -ne 200 ]]; then
-    echo -e 'TestLanguageFour publish failed: Error ' $responseThree ' \n'; exit $responseThree
+    echo -e 'TestLanguageFour publish failed: Error ' $responseThree ' \n'; exit 1
     echo
 fi
 
@@ -130,7 +130,7 @@ fi
 echo "Publishing language TestLanguageFive"
 responseTwo=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/TEst/Test/TestLanguageFive","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$responseTwo" -ne 200 ]]; then
-    echo -e 'TestLanguageFive publish failed: Error ' $responseTwo ' \n'; exit $responseTwo
+    echo -e 'TestLanguageFive publish failed: Error ' $responseTwo ' \n'; exit 1
     echo
 fi
 # Import Word using fv-batch-import
