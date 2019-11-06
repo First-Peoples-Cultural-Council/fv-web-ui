@@ -33,7 +33,7 @@ import { fetchUserDialects } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import Table from '@material-ui/core/Table'
@@ -157,8 +157,8 @@ export class Tasks extends React.Component {
           </TableCell>
           <TableCell>
             <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 color="secondary"
                 // className="RaisedButton RaisedButton--primary"
                 onClick={(e) => {
@@ -167,10 +167,10 @@ export class Tasks extends React.Component {
                 }}
               >
                 {intl.trans('approve', 'Approve', 'first')}
-              </Button>
+              </FVButton>
 
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 color="secondary"
                 // className="RaisedButton RaisedButton--primary Tasks__reject"
                 onClick={(e) => {
@@ -179,7 +179,7 @@ export class Tasks extends React.Component {
                 }}
               >
                 {intl.trans('reject', 'Reject', 'first')}
-              </Button>
+              </FVButton>
             </div>
           </TableCell>
           <TableCell className="Tasks__taskDueDateContainer">

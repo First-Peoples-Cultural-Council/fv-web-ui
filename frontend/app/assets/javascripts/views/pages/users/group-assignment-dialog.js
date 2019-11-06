@@ -22,7 +22,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import t from 'tcomb-form'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -35,9 +35,11 @@ const intl = IntlService.instance
  * Custom select form field
  */
 function renderSelect(locals) {
+  /* eslint-disable */
   const onChange = function(value) {
     locals.onChange(value)
   }
+  /* eslint-enable */
 
   if (!locals.value) {
     return (
@@ -142,7 +144,7 @@ export default class GroupAssignmentDialog extends Component {
       selectn('response.contextParameters.acls[0].aces', this.props.dialect),
       currentlyAssignedGroups
     )
-
+    /* eslint-disable */
     const formSchema = t.struct({
       id: t.String,
       group: dialectGroups.new
@@ -152,6 +154,7 @@ export default class GroupAssignmentDialog extends Component {
         : t.String, //,
       //'comment': t.maybe(t.String)
     })
+    /* eslint-enable */
 
     const formOptions = {
       fields: {
@@ -203,12 +206,12 @@ export default class GroupAssignmentDialog extends Component {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="secondary" onClick={this.props.closeMethod}>
+          <FVButton variant="contained" color="secondary" onClick={this.props.closeMethod}>
             {intl.trans('cancel', 'Cancel', 'first')}
-          </Button>
-          <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
+          </FVButton>
+          <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
             {intl.trans('submit', 'Submit', 'first')}
-          </Button>
+          </FVButton>
         </DialogActions>
       </Dialog>
     )

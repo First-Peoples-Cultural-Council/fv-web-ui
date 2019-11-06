@@ -45,7 +45,7 @@ describe('AppWrapper', () => {
       </Provider>,
       container)
 
-    expect(container.querySelector('#pageNavigation').textContent).toMatch('Explore Languages')
+    expect(container.querySelector('#pageNavigation').textContent).toMatch('EXPLORE LANGUAGES')
     expect(container.querySelector('#pageFooter').textContent).toMatch('support@fpcc.ca')
 
     // Structure: Act

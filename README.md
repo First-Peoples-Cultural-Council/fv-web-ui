@@ -1,3 +1,4 @@
+[![](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/workflows/Build/badge.svg?branch=master)](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/actions)
 ## Install
 
 ### Using Tomcat distribution

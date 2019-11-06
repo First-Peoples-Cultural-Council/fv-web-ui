@@ -5,11 +5,14 @@ import Button from '@material-ui/core/Button'
 
 const styles = (theme) => {
   const { button } = theme
-  const { contained, containedPrimary, containedSecondary } = button
+  const { contained = {}, containedPrimary = {}, containedSecondary = {} } = button
   return {
     contained,
     containedPrimary,
     containedSecondary,
+    // NOTE: The property below increases specificity for the disabled style
+    // coming from theme so it will overide the default MAT-UI disabled styling
+    disabled: 'disabled',
   }
 }
 

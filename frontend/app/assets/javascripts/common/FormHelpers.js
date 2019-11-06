@@ -97,7 +97,8 @@ getFormData({
 */
 export const getFormData = ({ formReference, toParse = [] }) => {
   const formDataFormatted = {}
-  const formData = new FormData(formReference.current)
+  // Set form data using "current" only if it exists to allow for Callback refs
+  const formData = new FormData(formReference.current || formReference)
 
   for (const value of formData.entries()) {
     // parse any stringify-ed array/objects

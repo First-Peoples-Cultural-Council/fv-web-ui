@@ -140,10 +140,15 @@ export class MetadataPanel extends Component {
     return (
       <Card>
         <CardHeader
+          onClick={() => {
+            this.setState({
+              open: !this.state.open,
+            })
+          }}
           className="card-header-custom"
           title={
             <Typography
-              variant="title"
+              variant="subtitle"
               style={{
                 color: themePalette.secondary.contrastText,
               }}

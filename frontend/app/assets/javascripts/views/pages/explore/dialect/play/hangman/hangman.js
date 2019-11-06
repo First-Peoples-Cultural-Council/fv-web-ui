@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import ReactDOM from 'react-dom'
-import Button from '@material-ui/core/Button'
+// import PropTypes from 'prop-types'
+// import ReactDOM from 'react-dom'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
@@ -38,44 +38,44 @@ const spotStyle = {
   overflow: 'hidden',
 }
 
-const lineStyle = {
-  border: '2px solid #000',
-  width: '40px',
-  position: 'absolute',
-  bottom: '5px',
-  left: '10px',
-}
+// const lineStyle = {
+//   border: '2px solid #000',
+//   width: '40px',
+//   position: 'absolute',
+//   bottom: '5px',
+//   left: '10px',
+// }
 
-const inputStyle = {
-  outline: 'none',
-  border: '1px solid #CCC',
-  fontSize: '24px',
-  width: '80px',
-  textAlign: 'center',
-  verticalAlign: 'middle',
-  marginRight: '10px',
-}
+// const inputStyle = {
+//   outline: 'none',
+//   border: '1px solid #CCC',
+//   fontSize: '24px',
+//   width: '80px',
+//   textAlign: 'center',
+//   verticalAlign: 'middle',
+//   marginRight: '10px',
+// }
 
-const buttonStyle = {
-  background: '#22e376',
-  backgroundImage: 'linear-gradient(to bottom, #22e376, #2bb8ac)',
-  WebkitBorderRadius: '28',
-  MozBorderRadius: '28',
-  borderRadius: '28px',
-  fontFamily: 'Arial',
-  color: '#ffffff',
-  fontSize: '20px',
-  padding: '10px 20px 10px 20px',
-  textDecoration: 'none',
-  display: 'inline-block',
-  verticalAlign: 'top',
-  height: '90px',
-  borderRadius: '6px',
-  lineHeight: '70px',
-  marginLeft: '5px',
-  width: '190px',
-  cursor: 'pointer',
-}
+// const buttonStyle = {
+//   background: '#22e376',
+//   backgroundImage: 'linear-gradient(to bottom, #22e376, #2bb8ac)',
+//   WebkitBorderRadius: '28',
+//   MozBorderRadius: '28',
+//   borderRadius: '28px',
+//   // borderRadius: '6px',
+//   fontFamily: 'Arial',
+//   color: '#ffffff',
+//   fontSize: '20px',
+//   padding: '10px 20px 10px 20px',
+//   textDecoration: 'none',
+//   display: 'inline-block',
+//   verticalAlign: 'top',
+//   height: '90px',
+//   lineHeight: '70px',
+//   marginLeft: '5px',
+//   width: '190px',
+//   cursor: 'pointer',
+// }
 
 /**
  * Play games
@@ -297,9 +297,9 @@ export default class HangmanGame extends Component {
             }
             return (
               <div style={wordStyle} key={index}>
-                {word.map((letter, index) => {
+                {word.map((letter, index2) => {
                   return (
-                    <div key={index} className="spot" style={{ ...spotStyle, ...borderStyle }}>
+                    <div key={index2} className="spot" style={{ ...spotStyle, ...borderStyle }}>
                       <div className="letter">{letter.found ? letter.letter : false}</div>
                     </div>
                   )
@@ -320,12 +320,17 @@ export default class HangmanGame extends Component {
         {this.state.failed ? this.renderFailure() : false}
 
         <div style={{ margin: '15px 0' }}>
-          <Button variant="contained" color="secondary" onClick={this.props.newPuzzle} style={{ marginRight: '10px' }}>
+          <FVButton
+            variant="contained"
+            color="secondary"
+            onClick={this.props.newPuzzle}
+            style={{ marginRight: '10px' }}
+          >
             {intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
-          </Button>
-          <Button variant="contained" color="primary" onMouseDown={this.restart}>
+          </FVButton>
+          <FVButton variant="contained" color="primary" onMouseDown={this.restart}>
             {intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
-          </Button>
+          </FVButton>
         </div>
       </div>
     )
@@ -408,7 +413,7 @@ class Letter extends Component {
 const seconds2time = (seconds) => {
   const hours = Math.floor(seconds / 3600)
   let minutes = Math.floor((seconds - hours * 3600) / 60)
-  seconds = seconds - hours * 3600 - minutes * 60
+  const _seconds = seconds - hours * 3600 - minutes * 60
   let time = ''
 
   if (hours != 0) {
@@ -419,9 +424,9 @@ const seconds2time = (seconds) => {
     time += minutes + ':'
   }
   if (time === '') {
-    time = seconds + 's'
+    time = _seconds + 's'
   } else {
-    time += seconds < 10 ? '0' + seconds : String(seconds)
+    time += _seconds < 10 ? '0' + _seconds : String(_seconds)
   }
   return time
 }

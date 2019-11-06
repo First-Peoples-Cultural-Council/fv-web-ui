@@ -40,7 +40,7 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
 import Paper from '@material-ui/core/Paper'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 
@@ -256,8 +256,8 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
             {(() => {
               if (this.state.current_char !== null) {
                 return (
-                  <Button
-                    variant="raised"
+                  <FVButton
+                    variant="contained"
                     color="primary"
                     onClick={this._onNavigateRequest.bind(
                       this,
@@ -266,7 +266,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                     style={{ minWidth: 'inherit', textTransform: 'initial', margin: '10px 0' }}
                   >
                     {'View Words and Phrases that start with ' + this.state.current_char.title}
-                  </Button>
+                  </FVButton>
                 )
               }
             })()}
@@ -293,7 +293,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                             display: 'inline-block',
                           }}
                         >
-                          <Button
+                          <FVButton
                             variant="flat"
                             onClick={_this._onCharAudioTouchTap.bind(this, char)}
                             //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
@@ -301,7 +301,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                           >
                             {audioFile ? <PlayArrowIcon className="material-icons" /> : null}
                             {text}
-                          </Button>
+                          </FVButton>
                           {audioFile ? (
                             <span>
                               <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + audioFile} />

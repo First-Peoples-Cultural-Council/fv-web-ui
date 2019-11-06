@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 
 /**
@@ -78,19 +78,19 @@ export class PageHome extends Component {
               <img src="assets/images/logo.gif" alt="FirstVoices Logo" className="img-responsive" />
             </p>
             <a href="http://legacy.firstvoices.com/">
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 style={{
                   textAlign: 'center',
                   marginRight: '14px',
                 }}
               >
                 {'Legacy Site'}
-              </Button>
+              </FVButton>
             </a>
-            <Button variant="raised" onClick={() => this._onNavigateRequest('/')} style={{ textAlign: 'center' }}>
+            <FVButton variant="contained" onClick={() => this._onNavigateRequest('/')} style={{ textAlign: 'center' }}>
               {this.intl.translate({ key: 'enter_firstvoices', default: 'Enter FirstVoices' })}
-            </Button>
+            </FVButton>
             <p>
               <img
                 src="assets/images/intro-french.gif"

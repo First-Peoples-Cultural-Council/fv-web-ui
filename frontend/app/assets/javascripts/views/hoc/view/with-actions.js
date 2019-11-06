@@ -3,7 +3,7 @@ import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
 
 import AppBar from '@material-ui/core/AppBar'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -121,7 +121,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 })()}
               </DialogContent>
               <DialogActions>
-                <Button
+                <FVButton
                   data-testid="ViewWithActions__buttonCancel"
                   // className="FlatButton FlatButton--secondary ViewWithActions__button"
                   variant="contained"
@@ -136,8 +136,8 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   }}
                 >
                   {intl.trans('cancel', 'Cancel', 'first')}
-                </Button>
-                <Button
+                </FVButton>
+                <FVButton
                   data-testid="ViewWithActions__buttonPublish"
                   variant="contained"
                   color="primary"
@@ -147,7 +147,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   }}
                 >
                   {intl.trans('publish', 'Publish', 'first')}
-                </Button>
+                </FVButton>
               </DialogActions>
             </Dialog>
           </AuthorizationFilter>
@@ -156,7 +156,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             <div className="col-xs-12">
               <AppBar position="static" className="PageToolbar__secondary">
                 <Toolbar style={{ justifyContent: 'flex-end' }}>
-                  <Button variant="raised" onClick={() => this.setState({ deleteDialogOpen: true })} color="secondary">
+                  <FVButton
+                    variant="contained"
+                    onClick={() => this.setState({ deleteDialogOpen: true })}
+                    color="secondary"
+                  >
                     <DeleteIcon />
                     {intl.trans(
                       'views.hoc.view.delete_x',
@@ -164,7 +168,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       'first',
                       [StringHelpers.toTitleCase(this.props.labels.single)]
                     )}
-                  </Button>
+                  </FVButton>
                 </Toolbar>
               </AppBar>
               <Dialog fullWidth maxWidth="md" open={this.state.deleteDialogOpen} onClose={this._handleCancelDelete}>
@@ -199,7 +203,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   />
                 </DialogContent>
                 <DialogActions>
-                  <Button
+                  <FVButton
                     data-testid="ViewWithActions__buttonCancel"
                     // className="FlatButton FlatButton--secondary ViewWithActions__button"
                     variant="contained"
@@ -210,8 +214,8 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     }}
                   >
                     {intl.trans('cancel', 'Cancel', 'first')}
-                  </Button>
-                  <Button
+                  </FVButton>
+                  <FVButton
                     data-testid="ViewWithActions__buttonDelete"
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="contained"
@@ -222,7 +226,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     }}
                   >
                     {intl.trans('delete', 'Delete', 'first')}
-                  </Button>
+                  </FVButton>
                 </DialogActions>
               </Dialog>
 
@@ -248,7 +252,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   )}
                 </DialogContent>
                 <DialogActions>
-                  <Button
+                  <FVButton
                     data-testid="ViewWithActions__buttonReturn"
                     // className="FlatButton FlatButton--secondary ViewWithActions__button"
                     variant="flat"
@@ -256,8 +260,8 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     onClick={() => window.history.back()}
                   >
                     {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
-                  </Button>
-                  <Button
+                  </FVButton>
+                  <FVButton
                     data-testid="ViewWithActions__buttonHome"
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="flat"
@@ -268,7 +272,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     )}
                   >
                     {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
-                  </Button>
+                  </FVButton>
                 </DialogActions>
               </Dialog>
             </div>

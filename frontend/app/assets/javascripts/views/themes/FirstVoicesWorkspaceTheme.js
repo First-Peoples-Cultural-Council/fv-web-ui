@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { teal } from '@material-ui/core/colors'
+import typography from './FirstVoicesTypography'
 export default {
-  typography: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: 18,
-  },
+  typography,
   palette: {
     primary: {
       contrastText: '#000000',
@@ -32,25 +30,30 @@ export default {
     primary1Color: teal[400],
     primary2Color: teal[700],
   },
-  button: {
-    contained: {
-      color: 'red',
-      backgroundColor: 'black',
-      // '&:hover': {
-      //   color: 'black',
-      //   backgroundColor: 'red',
-      //   // Reset on touch devices, it doesn't add specificity
-      //   '@media (hover: none)': {
-      //     backgroundColor: 'blue',
-      //   },
-      //   // NOTE:  the '&$disabled' rule below triggers a warning for some reason
-      //   // '&$disabled': {
-      //   //   backgroundColor: 'grey',
-      //   // },
-      // },
-    },
-    containedPrimary: {
+  appBarIcon: {
+    color: '#fff',
+  },
+  appBar: {
+    color: '#fff',
+    backgroundColor: '#26a69a',
+    'a&:hover': {
       color: '#000',
+    },
+  },
+  localePicker: {
+    color: '#fff',
+    backgroundColor: '#4d948d',
+  },
+  dialectContainer: {
+    color: '#fff',
+    backgroundColor: '#00796b',
+    '&:visited': {
+      color: '#fff',
+    },
+  },
+  button: {
+    containedPrimary: {
+      color: '#fff', // '#000',
       backgroundColor: '#FF5790',
       '&:hover': {
         color: '#222',
@@ -60,9 +63,13 @@ export default {
           backgroundColor: '#ff87b0',
         },
       },
+      '&$disabled': {
+        color: '#a1a1a1',
+        backgroundColor: '#e5e5e5',
+      },
     },
     containedSecondary: {
-      color: '#000',
+      color: '#fff', // '#000',
       backgroundColor: '#26a69a',
       '&:hover': {
         color: '#2f2f2f',
@@ -71,6 +78,10 @@ export default {
         '@media (hover: none)': {
           backgroundColor: 'pink',
         },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        backgroundColor: '#e5e5e5',
       },
     },
   },

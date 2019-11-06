@@ -33,7 +33,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
 import IntlService from 'views/services/intl'
@@ -110,9 +110,9 @@ export class Index extends Component {
                 login: this.props.computeLogin,
               }}
             >
-              <Button variant="contained" onClick={this._onNavigateRequest.bind(this, ['register'])} color="primary">
+              <FVButton variant="contained" onClick={this._onNavigateRequest.bind(this, ['register'])} color="primary">
                 {intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
-              </Button>
+              </FVButton>
             </AuthorizationFilter>
           </div>
         </div>

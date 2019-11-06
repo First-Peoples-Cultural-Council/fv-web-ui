@@ -61,7 +61,10 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/home'))
         }}
       >
-        <ListItemText primary={this.intl.translate({ key: 'home', default: 'Home', case: 'first' })} />
+        <ListItemText
+          primary={this.intl.translate({ key: 'home', default: 'Home', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>
     ),
     getStarted: (
@@ -75,7 +78,10 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/content/get-started'))
         }}
       >
-        <ListItemText primary={this.intl.translate({ key: 'get_started', default: 'Get Started', case: 'first' })} />
+        <ListItemText
+          primary={this.intl.translate({ key: 'get_started', default: 'Get Started', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>
     ),
     kids: (
@@ -89,7 +95,10 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/kids'))
         }}
       >
-        <ListItemText primary={this.intl.translate({ key: 'kids', default: 'Kids', case: 'first' })} />
+        <ListItemText
+          primary={this.intl.translate({ key: 'kids', default: 'Kids', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>
     ),
     contribute: (
@@ -103,12 +112,15 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/content/contribute'))
         }}
       >
-        <ListItemText primary={this.intl.translate({ key: 'contribute', default: 'Contribute', case: 'first' })} />
+        <ListItemText
+          primary={this.intl.translate({ key: 'contribute', default: 'Contribute', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>
     ),
   }
   render() {
-    const _backgroundColor = selectn('theme.palette.primary.main', this.props)
+    const _backgroundColor = selectn('theme.appBar.backgroundColor', this.props)
     const backgroundColor = _backgroundColor ? _backgroundColor : 'transparent'
     return (
       <Drawer
@@ -161,7 +173,10 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', item)))
         }}
       >
-        <ListItemText primary={selectn('properties.dc:title', item)} />
+        <ListItemText
+          primary={selectn('properties.dc:title', item)}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>
     ))
 
@@ -171,6 +186,7 @@ export class AppLeftNav extends Component {
       <ListItem key="navExploreLoggedIn" button onClick={this.handleNestedClick}>
         <ListItemText
           primary={this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
         {this.state.navExploreOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>,
@@ -191,6 +207,7 @@ export class AppLeftNav extends Component {
                 key: 'views.components.navigation.workspace_dialects',
                 default: 'Workspace Dialects',
               })}
+              primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
               secondary={
                 <span>
                   {this.intl.translate({
@@ -200,6 +217,7 @@ export class AppLeftNav extends Component {
                   .
                 </span>
               }
+              secondaryTypographyProps={{ style: { fontSize: '1.4rem' } }}
             />
           </ListItem>
           <ListItem
@@ -217,6 +235,7 @@ export class AppLeftNav extends Component {
                 key: 'views.components.navigation.published_dialects',
                 default: 'Published Dialects',
               })}
+              primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
               secondary={
                 <span>
                   {this.intl.translate({
@@ -226,6 +245,7 @@ export class AppLeftNav extends Component {
                   .
                 </span>
               }
+              secondaryTypographyProps={{ style: { fontSize: '14px' } }}
             />
           </ListItem>
         </List>
@@ -240,7 +260,10 @@ export class AppLeftNav extends Component {
           this.handleNavClick(NavigationHelpers.generateStaticURL('/tasks'))
         }}
       >
-        <ListItemText primary={this.intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' })} />
+        <ListItemText
+          primary={this.intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
+        />
       </ListItem>,
       this.navCommon.kids,
       this.navCommon.contribute,
@@ -253,6 +276,7 @@ export class AppLeftNav extends Component {
             default: 'Sign Out',
             case: 'words',
           })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>,
     ]
@@ -271,6 +295,7 @@ export class AppLeftNav extends Component {
       >
         <ListItemText
           primary={this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
+          primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>,
       this.navCommon.kids,

@@ -5,7 +5,7 @@ import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
@@ -47,7 +47,7 @@ export default function withToggle() {
         <div className={classNames(...this.rootClassNames)}>
           <div className="panel-heading">
             {label}
-            <Button
+            <FVButton
               variant="flat"
               className={classNames({ 'visible-xs': mobileOnly })}
               onClick={(e) => {
@@ -58,7 +58,7 @@ export default function withToggle() {
             >
               {icon}
               {labelText}
-            </Button>
+            </FVButton>
           </div>
 
           <div className={classNames('panel-body', { 'hidden-xs': !this.state.open && mobileOnly })}>

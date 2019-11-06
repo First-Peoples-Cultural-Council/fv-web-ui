@@ -108,7 +108,7 @@
     "redux-logger": "~2.6.1",
     "redux-thunk": "~2.0.1",
     "redux": "~3.5.2",
-    "request": "~2.68.0",
+    "request": "~2.88.0",
     "require-dir": "~1.0.0",
     "selectn": "~1.0.9",
     "tcomb-form": "~0.9",

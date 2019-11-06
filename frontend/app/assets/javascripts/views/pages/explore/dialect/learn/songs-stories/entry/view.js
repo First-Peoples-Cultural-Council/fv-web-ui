@@ -19,7 +19,7 @@ import classNames from 'classnames'
 import DOMPurify from 'dompurify'
 import selectn from 'selectn'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import Paper from '@material-ui/core/Paper'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
@@ -128,15 +128,15 @@ class Cover extends Component {
         <div className="col-xs-12">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.openBookAction && this.props.pageCount > 0 ? (
-              <Button
-                variant="raised"
+              <FVButton
+                variant="contained"
                 style={{ marginRight: '10px' }}
                 color="primary"
                 onClick={this.props.openBookAction}
               >
                 <ActionLaunch />
                 {'Open Book'}
-              </Button>
+              </FVButton>
             ) : (
               ''
             )}
@@ -208,9 +208,9 @@ class Page extends Component {
         <div className="row">
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
-              <Button variant="raised" onClick={this.props.editAction.bind(this, this.props.entry)}>
+              <FVButton variant="contained" onClick={this.props.editAction.bind(this, this.props.entry)}>
                 {intl.trans('edit', 'Edit', 'first')}
-              </Button>
+              </FVButton>
             ) : (
               ''
             )}

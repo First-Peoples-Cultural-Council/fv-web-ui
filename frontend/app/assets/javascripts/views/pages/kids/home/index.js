@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 
@@ -72,7 +72,7 @@ export class PageKidsHome extends Component {
           <div className="row" style={homePageStyle}>
             <div className={classNames('col-xs-8', 'col-xs-offset-2', 'text-center')}>
               <span style={{ width: '45%' }}>
-                <Button
+                <FVButton
                   variant="contained"
                   fullWidth
                   onClick={(e) => {
@@ -82,7 +82,7 @@ export class PageKidsHome extends Component {
                   style={{ marginTop: '20vh' }}
                 >
                   {intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
-                </Button>
+                </FVButton>
               </span>
             </div>
           </div>

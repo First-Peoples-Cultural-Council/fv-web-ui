@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Set } from 'immutable'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import memoize from 'memoize-one'
 import selectn from 'selectn'
 
@@ -80,7 +80,7 @@ export default class FacetFilterListCategory extends Component {
   render() {
     return (
       <div>
-        <Button
+        <FVButton
           variant="contained"
           disabled={this.checkedCount === 0}
           style={{ margin: '0 0 10px 0' }}
@@ -88,7 +88,7 @@ export default class FacetFilterListCategory extends Component {
           onClick={this._clearCategoryFilter}
         >
           {this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
-        </Button>
+        </FVButton>
         <FiltersWithToggle className="panel-category" label={this.title} mobileOnly style={this.props.styles}>
           <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
             <List>{this.listItems}</List>

@@ -33,7 +33,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import TextHeader from 'views/components/Document/Typography/text-header'
+import Typography from '@material-ui/core/Typography'
 
 import IntlService from 'views/services/intl'
 
@@ -123,10 +123,20 @@ export class PageContent extends Component {
         const primary1Color = selectn('theme.palette.baseTheme.palette.primary1Color', this.props.properties)
         page = (
           <div>
-            {pageTitle && <h1>{intl.searchAndReplace(pageTitle, { case: 'first' })}</h1>}
+            {pageTitle && (
+              <Typography variant="headline" gutterBottom>
+                {intl.searchAndReplace(pageTitle, { case: 'first' })}
+              </Typography>
+            )}
+
             <hr style={{ backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }} />
 
-            {contentTitle && <h2>{intl.searchAndReplace(contentTitle, { case: 'first' })}</h2>}
+            {contentTitle && (
+              <Typography variant="title" gutterBottom>
+                {intl.searchAndReplace(contentTitle, { case: 'first' })}
+              </Typography>
+            )}
+
             <div dangerouslySetInnerHTML={{ __html: selectn('fvpage:blocks[0].text', _properties) }} />
           </div>
         )

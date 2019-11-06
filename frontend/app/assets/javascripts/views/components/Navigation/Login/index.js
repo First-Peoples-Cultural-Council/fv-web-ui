@@ -27,8 +27,6 @@ import { isMobile } from 'react-device-detect'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 
-import { withTheme } from '@material-ui/core/styles'
-
 import '!style-loader!css-loader!./styles.css'
 
 const { func, object, string } = PropTypes
@@ -37,6 +35,7 @@ export class Login extends Component {
   intl = IntlService.instance
 
   static propTypes = {
+    className: string,
     label: string.isRequired,
     routeParams: object,
     // REDUX: reducers/state
@@ -96,7 +95,7 @@ export class Login extends Component {
   }
 
   render() {
-    const color = selectn('theme.palette.primary.contrastText', this.props)
+    const { className } = this.props
 
     // TODO: `loginFeedbackMessage` is not being used
     // eslint-disable-next-line
@@ -104,7 +103,7 @@ export class Login extends Component {
 
     if (this.props.computeLogin.isFetching) {
       return (
-        <div className="Login Login--busy" style={{ color }}>
+        <div className={`Login Login--busy ${className}`}>
           {this.intl.translate({
             key: 'views.components.navigation.processing_request',
             default: 'Processing request',
@@ -118,7 +117,7 @@ export class Login extends Component {
     // Handle success (anonymous or actual)
     if (this.props.computeLogin.success && this.props.computeLogin.isConnected) {
       return (
-        <div className="Login Login--welcome hidden-xs" style={{ color }}>
+        <div className={`Login Login--welcome hidden-xs ${className}`}>
           {this.intl.translate({ key: 'general.welcome', default: 'WELCOME', case: 'upper' })},{' '}
           {selectn('response.properties.firstName', this.props.computeLogin)}
         </div>
@@ -139,7 +138,7 @@ export class Login extends Component {
 
     return (
       <div className="Login Login--signIn">
-        <a className="nav_link" style={{ color }} href={NavigationHelpers.getBaseURL() + 'logout'}>
+        <a className={`nav_link ${className}`} href={NavigationHelpers.getBaseURL() + 'logout'}>
           SIGN IN
         </a>
       </div>
@@ -165,9 +164,7 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default withTheme()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Login)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login)

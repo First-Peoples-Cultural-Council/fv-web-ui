@@ -26,19 +26,21 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import Edit from '@material-ui/icons/Edit'
 
-import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
-import StringHelpers from 'common/StringHelpers'
-import UIHelpers from 'common/UIHelpers'
-
+import { WORKSPACES } from 'common/Constants'
+import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import DocumentListView from 'views/components/Document/DocumentListView'
 import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
-import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-
-import Preview from 'views/components/Editor/Preview'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
+import NavigationHelpers from 'common/NavigationHelpers'
+import Preview from 'views/components/Editor/Preview'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import ProviderHelpers from 'common/ProviderHelpers'
+import StringHelpers from 'common/StringHelpers'
+import UIHelpers from 'common/UIHelpers'
 
 const intl = IntlService.instance
 
@@ -133,15 +135,52 @@ class ListView extends DataListView {
           name: 'title',
           title: intl.trans('word', 'Word', 'first'),
           render: (v, data) => {
+            const isWorkspaces = this.props.routeParams.area === WORKSPACES
+
             const href = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, data, 'words')
+            const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'words')
             // NOTE: FW-135: Using `onClick={()=>{}}` for unknown reasons causes the following error when on Words and clicking between categories:
             //`Uncaught Invariant Violation: findComponentRoot(..., .0.0.2.0.1.0.0:1.1.2.0.0.0.0.0.0.1:$0.$0.0): Unable to find element`
             // That's why `undefined` is used in `clickHandler`
             const clickHandler = props.disableClickItem ? NavigationHelpers.disable : undefined
+
+            const computeDialect2 = this.props.dialect || this.getDialect()
+
+            const editButton =
+              isWorkspaces && hrefEdit ? (
+                <AuthorizationFilter
+                  filter={{
+                    entity: selectn('response', computeDialect2),
+                    login: this.props.computeLogin,
+                    role: ['Record', 'Approve', 'Everything'],
+                  }}
+                  hideFromSections
+                  routeParams={this.props.routeParams}
+                >
+                  <FVButton
+                    type="button"
+                    variant="flat"
+                    size="small"
+                    component="a"
+                    href={hrefEdit}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                    }}
+                  >
+                    <Edit title={intl.trans('edit', 'Edit', 'first')} />
+                    {/* <span>{intl.trans('edit', 'Edit', 'first')}</span> */}
+                  </FVButton>
+                </AuthorizationFilter>
+              ) : null
+
             return (
-              <a onClick={clickHandler} href={href}>
-                {v}
-              </a>
+              <>
+                <a className="DictionaryList__link" onClick={clickHandler} href={href}>
+                  {v}
+                </a>
+                {editButton}
+              </>
             )
           },
           sortName: 'fv:custom_order',
@@ -249,7 +288,7 @@ class ListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest', // no references in file
       // '_onEntryNavigateRequest', // now an arrow fn, no need for binding
       '_handleRefetch', // Note: comes from DataListView
@@ -270,6 +309,7 @@ class ListView extends DataListView {
     if (newProps.dialect === null && !this.getDialect(newProps)) {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
+
     this._fetchListViewData(
       newProps,
       newProps.DEFAULT_PAGE,

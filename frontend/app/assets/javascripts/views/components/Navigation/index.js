@@ -26,11 +26,12 @@ import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 // MAT-UI: Core
-import { withTheme } from '@material-ui/core/styles'
+
+import { withStyles } from '@material-ui/core/styles'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grow from '@material-ui/core/Grow'
@@ -73,6 +74,7 @@ export class Navigation extends Component {
   }
 
   static propTypes = {
+    classes: object, // Mat-ui
     frontpage: bool,
     // REDUX: reducers/state
     routeParams: object.isRequired,
@@ -177,100 +179,11 @@ export class Navigation extends Component {
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const hrefPath = NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)
 
-    const popoverContent = isDialect ? (
-      <div className="Navigation__popoverInner">
-        <Typography variant="title" gutterBottom>
-          {this.intl.translate({
-            key: 'general.select_search_option',
-            default: 'Select Search Option',
-            case: 'words',
-          })}
-        </Typography>
-
-        <div>
-          <RadioGroup
-            onChange={(event, value) => {
-              this.setState({ searchLocation: value })
-            }}
-            name="searchTarget"
-            value={this.state.searchLocation}
-          >
-            <FormControlLabel
-              value={this.intl.translate({
-                key: 'general.all',
-                default: 'all',
-                case: 'lower',
-              })}
-              control={<Radio />}
-              label={
-                <div>
-                  <Typography variant="title" gutterBottom>
-                    FirstVoices.com
-                  </Typography>
-                  <Typography gutterBottom>
-                    {this.intl.translate({
-                      key: 'views.components.navigation.all_languages_and_words',
-                      default: 'All languages & words',
-                      case: 'words',
-                      append: '.',
-                    })}
-                  </Typography>
-                </div>
-              }
-            />
-            <FormControlLabel
-              value="local"
-              control={<Radio />}
-              label={
-                <div>
-                  <Typography variant="title" gutterBottom>
-                    {selectn('routeParams.dialect_name', this.props) ||
-                      this.intl.translate({
-                        key: 'views.components.navigation.this_dialect',
-                        default: 'This Dialect',
-                        case: 'words',
-                      })}
-                  </Typography>
-                  <Typography gutterBottom>
-                    {`${this.intl.translate({
-                      key: 'general.words',
-                      default: 'Words',
-                      case: 'first',
-                    })}, ${this.intl.translate({
-                      key: 'general.phrases',
-                      default: 'Phrases',
-                      case: 'first',
-                    })}, ${this.intl.translate({
-                      key: 'general.songs_and_stories',
-                      default: 'Songs &amp; Stories',
-                      case: 'words',
-                      append: '.',
-                    })}`}
-                  </Typography>
-                </div>
-              }
-            />
-          </RadioGroup>
-        </div>
-      </div>
-    ) : (
-      <div className="Navigation__popoverInner">
-        <Typography variant="title">
-          {this.intl.translate({
-            key: 'views.components.navigation.search_all',
-            default: 'Search all languages & words at FirstVoices.com',
-            case: 'first',
-          })}
-        </Typography>
-      </div>
-    )
-
-    const themePalette = selectn('theme.palette', this.props)
-    const color = selectn('theme.palette.primary.contrastText', this.props)
-    const backgroundColor = selectn('theme.palette.primary.main', this.props)
+    const { classes } = this.props
+    const { appBarIcon = {}, appBar = {}, dialectContainer = {}, localePicker = {} } = classes
 
     return (
-      <AppBar position="static">
+      <AppBar position="static" color="primary" className="Navigation" classes={{ colorPrimary: appBar }}>
         <Toolbar disableGutters className="Navigation__toolbarMain">
           {/* Menu Button */}
           <Tooltip title="Menu open">
@@ -279,7 +192,7 @@ export class Navigation extends Component {
               className="Navigation__open"
               data-testid="Navigation__open"
             >
-              <Reorder style={{ color }} aria-label="Menu open" />
+              <Reorder className={appBarIcon} aria-label="Menu open" />
             </IconButton>
           </Tooltip>
 
@@ -290,6 +203,17 @@ export class Navigation extends Component {
           <img className="Navigation__logo" src="assets/images/logo.png" alt={this.props.properties.title} />
 
           <div className="Navigation__toolbarMainInner">
+            <a
+              href={hrefPath}
+              className={`${appBar} Navigation__link hideSmall`}
+              onClick={(e) => {
+                e.preventDefault()
+                NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+              }}
+            >
+              {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'upper' })}
+            </a>
+
             <Login
               routeParams={this.props.routeParams}
               label={this.intl.translate({
@@ -297,7 +221,10 @@ export class Navigation extends Component {
                 default: 'Sign In',
                 case: 'words',
               })}
+              className={appBar}
             />
+
+            <div className="Navigation__separator" />
 
             <AuthenticationFilter
               login={this.props.computeLogin}
@@ -305,24 +232,11 @@ export class Navigation extends Component {
               routeParams={this.props.routeParams}
               containerStyle={{ display: 'inline' }}
             >
-              <a href={NavigationHelpers.generateStaticURL('/tasks')} style={{ color }} className="Navigation__link">
+              <a href={NavigationHelpers.generateStaticURL('/tasks')} className={`${appBar} Navigation__link`}>
                 View My Tasks
               </a>
             </AuthenticationFilter>
-
-            <a
-              href={hrefPath}
-              className="Navigation__link hideSmall"
-              style={{ color }}
-              onClick={(e) => {
-                e.preventDefault()
-                NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-              }}
-            >
-              {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'title' })}
-            </a>
-
-            <div className="Navigation__separator " />
+            <div className="Navigation__separator" />
 
             {/* Search Container */}
             <ClickAwayListener
@@ -335,10 +249,7 @@ export class Navigation extends Component {
               <div
                 className={`Navigation__searchContainer ${
                   this.state.searchPopoverOpen ? 'Navigation__searchContainer--active' : ''
-                }`}
-                style={{
-                  backgroundColor,
-                }}
+                } ${appBar}`}
                 onFocus={() => {
                   this.setState({
                     searchPopoverOpen: true,
@@ -382,23 +293,23 @@ export class Navigation extends Component {
                       data-testid="Navigation__search"
                       onClick={this._handleNavigationSearchSubmit}
                     >
-                      <Search style={{ color }} aria-label="Search" />
+                      <Search className={appBarIcon} aria-label="Search" />
                     </IconButton>
                   </Tooltip>
 
                   {/* Search Button: Cancel (only on small screens) */}
                   <span className="hideLarge">
-                    <Button
+                    <FVButton
                       variant="flat"
                       onClick={(e) => {
                         e.preventDefault()
                         // this.navigationSearchButton.focus()
                         this.setState({ searchPopoverOpen: false })
                       }}
-                      style={{ color }}
+                      className={appBar}
                     >
                       {this.intl.translate({ key: 'general.cancel', default: 'Cancel', case: 'first' })}
-                    </Button>
+                    </FVButton>
                   </span>
                 </div>
 
@@ -422,7 +333,7 @@ export class Navigation extends Component {
                   <Grow mountOnEnter unmountOnExit in={this.state.searchPopoverOpen}>
                     {/* Search Popup Menu */}
                     <div className={`Navigation__searchPopup ${isDialect ? 'Navigation__searchPopup--dialect' : ''}`}>
-                      {popoverContent}
+                      {isDialect ? this.popoverContentDialect() : this.popoverContent()}
                     </div>
                   </Grow>
                 </div>
@@ -433,7 +344,7 @@ export class Navigation extends Component {
             <span className="hideLarge">
               <Tooltip title="Search">
                 <IconButton type="button" data-testid="Navigation__search" onClick={this.showSearchPopup}>
-                  <Search style={{ color }} aria-label="Search" />
+                  <Search className={appBarIcon} aria-label="Search" />
                 </IconButton>
               </Tooltip>
             </span>
@@ -443,7 +354,7 @@ export class Navigation extends Component {
             {/* Locale Button */}
             <Tooltip title="Settings">
               <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
-                <Settings style={{ color }} aria-label="Settings" />
+                <Settings className={appBarIcon} aria-label="Settings" />
               </IconButton>
             </Tooltip>
           </div>
@@ -453,21 +364,23 @@ export class Navigation extends Component {
         <div
           className={`Navigation__localeContainer ${
             this.state.localePopoverOpen ? 'Navigation__localeContainer--open' : ''
-          }`}
+          } ${localePicker}`}
         >
           <Toolbar>
             <div className="Navigation__localeInner">
-              <Typography variant="title" className="Navigation__localeTitle" style={{ color }}>
+              <Typography variant="body1" className={`${localePicker} Navigation__localeTitle`}>
                 {this.intl.trans('choose_lang', 'Choose a Language', 'first')}
               </Typography>
               <FormControl>
-                <InputLabel htmlFor="locale-select">Language</InputLabel>
+                <InputLabel htmlFor="locale-select" className={`${localePicker}`}>
+                  Language
+                </InputLabel>
                 <Select
                   value={this.intl.locale || 'en'}
                   onChange={(event) => {
                     this._handleChangeLocale(event.target.value)
                   }}
-                  style={{ color }}
+                  className={localePicker}
                   inputProps={{
                     name: 'locale',
                     id: 'locale-select',
@@ -479,7 +392,7 @@ export class Navigation extends Component {
               </FormControl>
 
               <IconButton type="button" onClick={this._toggleDisplayLocaleOptions}>
-                <Clear style={{ color }} aria-label="Close" />
+                <Clear className={appBarIcon} aria-label="Close" />
               </IconButton>
             </div>
           </Toolbar>
@@ -487,16 +400,15 @@ export class Navigation extends Component {
 
         {/* Dialect sub-menu */}
         {isDialect && (
-          <div className="row Navigation__dialectContainer" style={{ backgroundColor: themePalette.primary2Color }}>
+          <div className={`row Navigation__dialectContainer ${dialectContainer}`}>
             <h2 className="Navigation__dialectHeader">
               <a
                 href={NavigationHelpers.generateStaticURL(dialectLink)}
-                className="Navigation__dialectLink"
+                className={`${dialectContainer} Navigation__dialectLink`}
                 onClick={(e) => {
                   e.preventDefault()
                   NavigationHelpers.navigate(dialectLink, this.props.pushWindowPath, false)
                 }}
-                style={{ color }}
               >
                 <Avatar src={avatarSrc} size={50} />
                 <span className="Navigation__dialectName fontAboriginalSans">
@@ -595,6 +507,97 @@ export class Navigation extends Component {
       pathOrId: pathOrId,
     })
   }
+  popoverContent = () => {
+    return (
+      <div className="Navigation__popoverInner">
+        <Typography variant="title">
+          {this.intl.translate({
+            key: 'views.components.navigation.search_all',
+            default: 'Search all languages & words at FirstVoices.com',
+            case: 'first',
+          })}
+        </Typography>
+      </div>
+    )
+  }
+  popoverContentDialect = () => {
+    return (
+      <div className="Navigation__popoverInner">
+        <Typography variant="body1" gutterBottom>
+          {this.intl.translate({
+            key: 'general.select_search_option',
+            default: 'Select Search Option',
+            case: 'words',
+          })}
+        </Typography>
+
+        <RadioGroup
+          onChange={(event, value) => {
+            this.setState({ searchLocation: value })
+          }}
+          name="searchTarget"
+          value={this.state.searchLocation}
+        >
+          <FormControlLabel
+            value={this.intl.translate({
+              key: 'general.all',
+              default: 'all',
+              case: 'lower',
+            })}
+            control={<Radio />}
+            label={
+              <div>
+                <Typography variant="body1" gutterBottom>
+                  FirstVoices.com
+                </Typography>
+                <Typography variant="caption" gutterBottom>
+                  {this.intl.translate({
+                    key: 'views.components.navigation.all_languages_and_words',
+                    default: 'All languages & words',
+                    case: 'words',
+                    append: '.',
+                  })}
+                </Typography>
+              </div>
+            }
+          />
+
+          <FormControlLabel
+            value="local"
+            control={<Radio />}
+            label={
+              <div>
+                <Typography variant="body1" gutterBottom>
+                  {selectn('routeParams.dialect_name', this.props) ||
+                    this.intl.translate({
+                      key: 'views.components.navigation.this_dialect',
+                      default: 'This Dialect',
+                      case: 'words',
+                    })}
+                </Typography>
+                <Typography variant="caption" gutterBottom>
+                  {`${this.intl.translate({
+                    key: 'general.words',
+                    default: 'Words',
+                    case: 'first',
+                  })}, ${this.intl.translate({
+                    key: 'general.phrases',
+                    default: 'Phrases',
+                    case: 'first',
+                  })}, ${this.intl.translate({
+                    key: 'general.songs_and_stories',
+                    default: 'Songs &amp; Stories',
+                    case: 'words',
+                    append: '.',
+                  })}`}
+                </Typography>
+              </div>
+            }
+          />
+        </RadioGroup>
+      </div>
+    )
+  }
 }
 
 // REDUX: reducers/state
@@ -627,7 +630,16 @@ const mapDispatchToProps = {
   toggleMenuAction,
 }
 
-export default withTheme()(
+const styles = (theme) => {
+  const { appBar, appBarIcon, dialectContainer, localePicker } = theme
+  return {
+    appBar,
+    appBarIcon,
+    dialectContainer,
+    localePicker,
+  }
+}
+export default withStyles(styles)(
   connect(
     mapStateToProps,
     mapDispatchToProps

@@ -28,7 +28,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-import Button from '@material-ui/core/Button'
+import FVButton from 'views/components/FVButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
@@ -202,9 +202,9 @@ export class PageDialectContributorsCreate extends Component {
                 options={selectn('FVContributor', options)}
               />
               <div className="form-group" style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={this._onRequestSaveForm}>
+                <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
                   {intl.trans('save', 'Save', 'first')}
-                </Button>
+                </FVButton>
               </div>
             </form>
           </div>
