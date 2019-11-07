@@ -203,26 +203,22 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         flashcard={this.state.flashcardMode}
         flashcardTitle={pageTitle}
       />
-    ) : (
-      <div />
-    )
+    ) : null
 
     // Render kids or mobile view
     if (isKidsTheme || isMobile) {
-      const pageSize = !isKidsTheme && isMobile ? 10 : 8
-      const kidsFilter = filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1')
-
+      const cloneWordListView = wordListView
+        ? React.cloneElement(wordListView, {
+            DEFAULT_PAGE_SIZE: !isKidsTheme && isMobile ? 10 : 8,
+            disablePageSize: true,
+            filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
+            gridListView: true,
+          })
+        : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <div className="row" style={{ marginTop: '15px' }}>
-            <div className={classNames('col-xs-12', 'col-md-8', 'col-md-offset-2')}>
-              {React.cloneElement(wordListView, {
-                DEFAULT_PAGE_SIZE: pageSize,
-                disablePageSize: true,
-                filter: kidsFilter,
-                gridListView: true,
-              })}
-            </div>
+            <div className={classNames('col-xs-12', 'col-md-8', 'col-md-offset-2')}>{cloneWordListView}</div>
           </div>
         </PromiseWrapper>
       )

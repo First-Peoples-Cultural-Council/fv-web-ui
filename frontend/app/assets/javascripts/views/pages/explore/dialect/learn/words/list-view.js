@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
@@ -31,10 +31,10 @@ import Edit from '@material-ui/icons/Edit'
 import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import DocumentListView from 'views/components/Document/DocumentListView'
-import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
+
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
+import Media from 'react-media'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -42,6 +42,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
+const ListViewSmallScreen = React.lazy(() => import('./listViewSmallScreen'))
+const DocumentListView = React.lazy(() => import('views/components/Document/DocumentListView'))
+const DocumentListViewDatatable = React.lazy(() => import('views/components/Document/DocumentListViewDatatable'))
 const intl = IntlService.instance
 
 /**
@@ -53,23 +56,23 @@ class ListView extends DataListView {
     action: func,
     controlViaURL: bool,
     data: string,
-    DEFAULT_PAGE: number,
     DEFAULT_PAGE_SIZE: number,
+    DEFAULT_PAGE: number,
     DEFAULT_SORT_COL: string,
     DEFAULT_SORT_TYPE: string,
     dialect: object,
-    DISABLED_SORT_COLS: array,
     disableClickItem: bool,
+    DISABLED_SORT_COLS: array,
     disablePageSize: bool,
     ENABLED_COLS: array,
     filter: object,
+    flashcard: bool,
+    flashcardTitle: string,
     gridListView: bool,
     pageProperties: object,
     parentID: string,
-    routeParams: object.isRequired,
     renderSimpleTable: bool,
-    flashcard: bool,
-    flashcardTitle: string,
+    routeParams: object.isRequired,
     useDatatable: bool,
 
     // REDUX: reducers/state
@@ -80,55 +83,40 @@ class ListView extends DataListView {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    fetchWords: func.isRequired,
     fetchDialect2: func.isRequired,
+    fetchWords: func.isRequired,
     pushWindowPath: func.isRequired,
   }
   static defaultProps = {
+    controlViaURL: false,
+    DEFAULT_LANGUAGE: 'english',
+    DEFAULT_PAGE_SIZE: 10,
+    DEFAULT_PAGE: 1,
+    DEFAULT_SORT_COL: 'fv:custom_order',
+    DEFAULT_SORT_TYPE: 'asc',
+    dialect: null,
     disableClickItem: true,
     DISABLED_SORT_COLS: ['state', 'fv-word:categories', 'related_audio', 'related_pictures', 'dc:modified'],
-    DEFAULT_PAGE: 1,
-    DEFAULT_PAGE_SIZE: 10,
-    DEFAULT_LANGUAGE: 'english',
-    DEFAULT_SORT_COL: 'fv:custom_order',
-    // DEFAULT_SORT_COL: 'dc:title',
-    DEFAULT_SORT_TYPE: 'asc',
+    disablePageSize: false,
     ENABLED_COLS: [
-      'title',
-      'related_pictures',
-      'related_audio',
-      'fv:definitions',
-      'fv-word:pronunciation',
       'fv-word:categories',
       'fv-word:part_of_speech',
+      'fv-word:pronunciation',
+      'fv:definitions',
+      'related_audio',
+      'related_pictures',
+      'title',
     ],
-    dialect: null,
     filter: new Map(),
-    gridListView: false,
-    controlViaURL: false,
-    renderSimpleTable: false,
-    disablePageSize: false,
     flashcard: false,
     flashcardTitle: '',
+    gridListView: false,
+    renderSimpleTable: false,
     useDatatable: false,
   }
 
   constructor(props, context) {
     super(props, context)
-    // TODO: Remove `let language` below?
-    /*
-    let language
-
-    switch (intl.locale) {
-    case 'en':
-      language = 'english'
-      break
-
-        case 'fr':
-      language = 'french'
-      break
-    }
-    */
     this.state = {
       columns: [
         {
@@ -290,13 +278,11 @@ class ListView extends DataListView {
     // Bind methods to 'this'
     ;[
       '_onNavigateRequest', // no references in file
-      // '_onEntryNavigateRequest', // now an arrow fn, no need for binding
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView
       '_handleColumnOrderChange', // Note: comes from DataListView
       '_resetColumns', // Note: comes from DataListView
       // '_fetchData2', // now an arrow fn, no need for binding, looks like it's not being used though
-      // '_getPathOrParentID', // now an arrow fn, no need for binding
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
@@ -352,6 +338,7 @@ class ListView extends DataListView {
     return ProviderHelpers.getEntry(props.computeDialect2, props.routeParams.dialect_path)
   }
 
+  // TODO: Is this fn() being used?
   _fetchData2 = (fetcherParams /*, props = this.props*/) => {
     this.setState({
       fetcherParams: fetcherParams,
@@ -412,14 +399,30 @@ class ListView extends DataListView {
       flashcard: this.props.flashcard,
       flashcardTitle: this.props.flashcardTitle,
     }
-    const DocumentView = this.props.useDatatable ? (
+    const documentView = this.props.useDatatable ? (
       <DocumentListViewDatatable {...listViewProps} />
     ) : (
       <DocumentListView {...listViewProps} />
     )
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        {selectn('response.entries', computeWords) && DocumentView}
+        <Suspense fallback={<div>Loading...</div>}>
+          {selectn('response.entries', computeWords) && (
+            <Media
+              queries={{
+                small: '(max-width: 850px)',
+                medium: '(min-width: 851px)',
+              }}
+            >
+              {(matches) => (
+                <>
+                  {matches.small && <ListViewSmallScreen {...listViewProps} />}
+                  {matches.medium && documentView}
+                </>
+              )}
+            </Media>
+          )}
+        </Suspense>
       </PromiseWrapper>
     )
   }
