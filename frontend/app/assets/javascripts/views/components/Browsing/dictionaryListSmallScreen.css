@@ -1,0 +1,65 @@
+.dictionaryListSmallScreen {
+}
+.dictionaryListSmallScreen__sortContainer {
+  background: linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%);
+  padding: 10px;
+  border-bottom: 1px solid #a8a8a8;
+}
+.dictionaryListSmallScreen__audio {
+  display: block;
+  min-width: 225px;
+  width: 100%;
+}
+.dictionaryListSmallScreen__sortHeading {
+  margin: 5px;
+}
+.dictionaryListSmallScreen__sortButton {
+  margin: 5px;
+}
+.dictionaryListSmallScreen__list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.dictionaryListSmallScreen__listItem {
+  background-color: #fff;
+  border-bottom: 1px dotted #a8a8a8;
+  padding: 20px 10px;
+  margin: 0;
+}
+.dictionaryListSmallScreen__group {
+  display: flex;
+  justify-content: space-around;
+}
+.dictionaryListSmallScreen__definitionsGroup {
+  width: 25%;
+}
+.dictionaryListSmallScreen__audioGroup {
+  width: 35%;
+}
+.dictionaryListSmallScreen__imageGroup {
+  width: 15%;
+  text-align: center;
+}
+.dictionaryListSmallScreen__miscGroup {
+  width: 25%;
+}
+@media (max-width: 750px) {
+  .dictionaryListSmallScreen__group {
+    flex-direction: column;
+  }
+
+  .dictionaryListSmallScreen__definitionsGroup,
+  .dictionaryListSmallScreen__audioGroup,
+  .dictionaryListSmallScreen__imageGroup,
+  .dictionaryListSmallScreen__miscGroup {
+    width: auto;
+  }
+  .dictionaryListSmallScreen__imageGroup {
+    text-align: left;
+  }
+}
+
+.dictionaryListSmallScreen__listItem--alt {
+  background: #f2f7ff;
+}

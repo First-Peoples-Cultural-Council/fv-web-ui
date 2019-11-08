@@ -41,8 +41,10 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
+import withPagination from 'views/hoc/grid-list/with-pagination'
 
-const ListViewSmallScreen = React.lazy(() => import('./listViewSmallScreen'))
+const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
+const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 const DocumentListView = React.lazy(() => import('views/components/Document/DocumentListView'))
 const DocumentListViewDatatable = React.lazy(() => import('views/components/Document/DocumentListViewDatatable'))
 const intl = IntlService.instance
@@ -276,7 +278,7 @@ class ListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
+    [
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView
@@ -384,6 +386,8 @@ class ListView extends DataListView {
       data: computeWords,
       dialect: selectn('response', computeDialect2),
       disablePageSize: this.props.disablePageSize,
+      flashcard: this.props.flashcard,
+      flashcardTitle: this.props.flashcardTitle,
       gridListView: this.props.gridListView,
       objectDescriptions: 'words',
       onColumnOrderChange: this._handleColumnOrderChange,
@@ -396,14 +400,8 @@ class ListView extends DataListView {
       renderSimpleTable: this.props.renderSimpleTable,
       sortInfo: this.state.sortInfo.uiSortOrder,
       type: 'FVWord',
-      flashcard: this.props.flashcard,
-      flashcardTitle: this.props.flashcardTitle,
     }
-    const documentView = this.props.useDatatable ? (
-      <DocumentListViewDatatable {...listViewProps} />
-    ) : (
-      <DocumentListView {...listViewProps} />
-    )
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <Suspense fallback={<div>Loading...</div>}>
@@ -414,12 +412,32 @@ class ListView extends DataListView {
                 medium: '(min-width: 851px)',
               }}
             >
-              {(matches) => (
-                <>
-                  {matches.small && <ListViewSmallScreen {...listViewProps} />}
-                  {matches.medium && documentView}
-                </>
-              )}
+              {(matches) => {
+                let mediaContent = null
+                if (matches.small) {
+                  const FilteredPaginatedDictionaryListSmallScreen = withPagination(
+                    this.props.flashcard ? FlashcardList : DictionaryListSmallScreen,
+                    10
+                  )
+                  mediaContent = (
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <FilteredPaginatedDictionaryListSmallScreen {...listViewProps} /* columns={columns}*/ />
+                    </Suspense>
+                  )
+                }
+                if (matches.medium) {
+                  mediaContent = (
+                    <Suspense fallback={<div>Loading...</div>}>
+                      {this.props.useDatatable ? (
+                        <DocumentListViewDatatable {...listViewProps} />
+                      ) : (
+                        <DocumentListView {...listViewProps} />
+                      )}
+                    </Suspense>
+                  )
+                }
+                return mediaContent
+              }}
             </Media>
           )}
         </Suspense>

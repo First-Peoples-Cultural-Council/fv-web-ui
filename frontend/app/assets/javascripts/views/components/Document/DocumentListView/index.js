@@ -27,28 +27,28 @@ import IntlService from 'views/services/intl'
 const GridViewWithPagination = withPagination(GridView, 8)
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
-const { any, bool, func, number, string } = PropTypes
+const { any, bool, func, number, object, string } = PropTypes
 
 export default class DocumentListView extends Component {
   static propTypes = {
     cssModifier: string,
     columns: any, // TODO: set appropriate propType
     data: any, // TODO: set appropriate propType
-    dialect: any, // TODO: set appropriate propType
+    dialect: object,
     disablePageSize: any, // TODO: set appropriate propType
     gridCols: any, // TODO: set appropriate propType
     gridListTile: any, // TODO: set appropriate propType
-    gridListView: any, // TODO: set appropriate propType
+    gridListView: bool,
     gridViewProps: any, // TODO: set appropriate propType
     onSelectionChange: func,
-    onSortChange: any, // TODO: set appropriate propType
+    onSortChange: func,
     page: number,
     pageSize: number,
     pagination: bool,
     refetcher: func,
-    renderSimpleTable: any, // TODO: set appropriate propType
+    renderSimpleTable: bool,
     sortInfo: any, // TODO: set appropriate propType
-    type: any, // TODO: set appropriate propType
+    type: string,
     flashcard: bool,
     flashcardTitle: string,
     usePrevResponse: bool,
@@ -75,6 +75,7 @@ export default class DocumentListView extends Component {
   intl = IntlService.instance
 
   componentDidUpdate(prevProps) {
+    // reset pagination after new data
     if (this.props.data !== prevProps.data) {
       this.setState({
         page: 1,
@@ -100,20 +101,20 @@ export default class DocumentListView extends Component {
     } = this.props
 
     let gridViewProps = {
-      cssModifier,
-      style: { overflowY: 'auto', maxHeight: '50vh' },
-      cols: gridCols,
       cellHeight: 160,
-      fetcher: this._gridListFetcher,
-      type,
-      pagination,
-      fetcherParams: { currentPageIndex: page, pageSize: pageSize },
-      metadata: selectn('response', data),
-      gridListTile,
-      disablePageSize,
+      cols: gridCols,
+      cssModifier,
       dialect,
-      items: selectn('response.entries', data),
+      disablePageSize,
+      fetcher: this._gridListFetcher,
+      fetcherParams: { currentPageIndex: page, pageSize: pageSize },
       flashcardTitle,
+      gridListTile,
+      items: selectn('response.entries', data),
+      metadata: selectn('response', data),
+      pagination,
+      style: { overflowY: 'auto', maxHeight: '50vh' },
+      type,
     }
 
     if (gridListView) {
