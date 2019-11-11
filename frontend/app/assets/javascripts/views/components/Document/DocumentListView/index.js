@@ -10,21 +10,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component } from 'react'
+import React, { Component, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import GridView from 'views/pages/explore/dialect/learn/base/grid-view'
-import DictionaryList from 'views/components/Browsing/dictionary-list'
-import FlashcardList from 'views/components/Browsing/flashcard-list'
+import Media from 'react-media'
 
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 
-// is TapEvent needed here?! Test on mobile
-//var injectTapEventPlugin = require("react-tap-event-plugin");
-//injectTapEventPlugin();
+const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
+const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list'))
+const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
+const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 
-const GridViewWithPagination = withPagination(GridView, 8)
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
 const { any, bool, func, number, object, string } = PropTypes
@@ -100,7 +98,7 @@ export default class DocumentListView extends Component {
       type,
     } = this.props
 
-    let gridViewProps = {
+    const listViewProps = {
       cellHeight: 160,
       cols: gridCols,
       cssModifier,
@@ -116,20 +114,62 @@ export default class DocumentListView extends Component {
       style: { overflowY: 'auto', maxHeight: '50vh' },
       type,
     }
+    return (
+      <Media
+        queries={{
+          small: '(max-width: 850px)',
+          medium: '(min-width: 851px)',
+        }}
+      >
+        {(matches) => {
+          let mediaContent = null
+          // Small screen
+          // -----------------------------------------
+          if (matches.small) {
+            const FilteredPaginatedDictionaryListSmallScreen = withPagination(
+              this.props.flashcard ? FlashcardList : DictionaryListSmallScreen,
+              10
+            )
 
-    if (gridListView) {
-      gridViewProps = Object.assign({}, gridViewProps, this.props.gridViewProps)
-
-      if (pagination) {
-        return <GridViewWithPagination {...gridViewProps} />
-      }
-      return <GridView {...gridViewProps} />
-    }
-    const FilteredPaginatedDictionaryList = withPagination(
-      this.props.flashcard ? FlashcardList : DictionaryList,
-      DefaultFetcherParams.pageSize
+            mediaContent = (
+              <Suspense fallback={<div>Loading...</div>}>
+                <FilteredPaginatedDictionaryListSmallScreen {...listViewProps} columns={columns} />
+              </Suspense>
+            )
+          }
+          // Large screen
+          // -----------------------------------------
+          if (matches.medium) {
+            // Large screen: grid
+            if (gridListView) {
+              const gridViewProps = Object.assign({}, listViewProps, this.props.gridViewProps)
+              const GridViewWithPagination = withPagination(GridView, 8)
+              mediaContent = pagination ? (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <GridViewWithPagination {...gridViewProps} />
+                </Suspense>
+              ) : (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <GridView {...gridViewProps} />
+                </Suspense>
+              )
+            } else {
+              // Large screen: list
+              const FilteredPaginatedDictionaryList = withPagination(
+                this.props.flashcard ? FlashcardList : DictionaryList,
+                DefaultFetcherParams.pageSize
+              )
+              mediaContent = (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <FilteredPaginatedDictionaryList {...listViewProps} columns={columns} />
+                </Suspense>
+              )
+            }
+          }
+          return mediaContent
+        }}
+      </Media>
     )
-    return <FilteredPaginatedDictionaryList {...gridViewProps} columns={columns} />
   }
 
   _gridListFetcher = (fetcherParams) => {

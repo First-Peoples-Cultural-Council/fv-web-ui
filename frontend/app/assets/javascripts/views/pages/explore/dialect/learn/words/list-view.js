@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Suspense } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
@@ -31,22 +31,17 @@ import Edit from '@material-ui/icons/Edit'
 import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-
+import DocumentListView from 'views/components/Document/DocumentListView'
+import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
-import Media from 'react-media'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-import withPagination from 'views/hoc/grid-list/with-pagination'
 
-const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
-const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
-const DocumentListView = React.lazy(() => import('views/components/Document/DocumentListView'))
-const DocumentListViewDatatable = React.lazy(() => import('views/components/Document/DocumentListViewDatatable'))
 const intl = IntlService.instance
 
 /**
@@ -278,7 +273,7 @@ class ListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView
@@ -401,46 +396,14 @@ class ListView extends DataListView {
       sortInfo: this.state.sortInfo.uiSortOrder,
       type: 'FVWord',
     }
-
+    const DocumentView = this.props.useDatatable ? (
+      <DocumentListViewDatatable {...listViewProps} />
+    ) : (
+      <DocumentListView {...listViewProps} />
+    )
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <Suspense fallback={<div>Loading...</div>}>
-          {selectn('response.entries', computeWords) && (
-            <Media
-              queries={{
-                small: '(max-width: 850px)',
-                medium: '(min-width: 851px)',
-              }}
-            >
-              {(matches) => {
-                let mediaContent = null
-                if (matches.small) {
-                  const FilteredPaginatedDictionaryListSmallScreen = withPagination(
-                    this.props.flashcard ? FlashcardList : DictionaryListSmallScreen,
-                    10
-                  )
-                  mediaContent = (
-                    <Suspense fallback={<div>Loading...</div>}>
-                      <FilteredPaginatedDictionaryListSmallScreen {...listViewProps} /* columns={columns}*/ />
-                    </Suspense>
-                  )
-                }
-                if (matches.medium) {
-                  mediaContent = (
-                    <Suspense fallback={<div>Loading...</div>}>
-                      {this.props.useDatatable ? (
-                        <DocumentListViewDatatable {...listViewProps} />
-                      ) : (
-                        <DocumentListView {...listViewProps} />
-                      )}
-                    </Suspense>
-                  )
-                }
-                return mediaContent
-              }}
-            </Media>
-          )}
-        </Suspense>
+        {selectn('response.entries', computeWords) && DocumentView}
       </PromiseWrapper>
     )
   }
