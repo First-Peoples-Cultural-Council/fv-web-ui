@@ -71,6 +71,9 @@ class ListView extends DataListView {
     renderSimpleTable: bool,
     routeParams: object.isRequired,
     useDatatable: bool,
+    // Search
+    handleSearch: func,
+    resetSearch: func,
 
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
