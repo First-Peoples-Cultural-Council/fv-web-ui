@@ -395,6 +395,8 @@ class ListView extends DataListView {
       renderSimpleTable: this.props.renderSimpleTable,
       sortInfo: this.state.sortInfo.uiSortOrder,
       type: 'FVWord',
+      handleSearch: this.props.handleSearch,
+      resetSearch: this.props.resetSearch,
     }
     const DocumentView = this.props.useDatatable ? (
       <DocumentListViewDatatable {...listViewProps} />
