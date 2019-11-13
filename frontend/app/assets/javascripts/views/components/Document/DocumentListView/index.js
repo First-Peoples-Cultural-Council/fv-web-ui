@@ -19,7 +19,8 @@ import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
-const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list'))
+// const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list'))
+const DictionaryListV2 = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 
@@ -113,6 +114,8 @@ export default class DocumentListView extends Component {
       pagination,
       style: { overflowY: 'auto', maxHeight: '50vh' },
       type,
+      handleSearch: this.props.handleSearch,
+      resetSearch: this.props.resetSearch,
     }
     return (
       <Media
@@ -156,7 +159,7 @@ export default class DocumentListView extends Component {
             } else {
               // Large screen: list
               const FilteredPaginatedDictionaryList = withPagination(
-                this.props.flashcard ? FlashcardList : DictionaryList,
+                this.props.flashcard ? FlashcardList : DictionaryListV2,
                 DefaultFetcherParams.pageSize
               )
               mediaContent = (
