@@ -51,6 +51,10 @@ export default class DocumentListView extends Component {
     flashcard: bool,
     flashcardTitle: string,
     usePrevResponse: bool,
+    // Search
+    handleSearch: func,
+    resetSearch: func,
+    hasSearch: bool,
   }
 
   static defaultProps = {
@@ -116,6 +120,7 @@ export default class DocumentListView extends Component {
       type,
       handleSearch: this.props.handleSearch,
       resetSearch: this.props.resetSearch,
+      hasSearch: this.props.hasSearch,
     }
     return (
       <Media

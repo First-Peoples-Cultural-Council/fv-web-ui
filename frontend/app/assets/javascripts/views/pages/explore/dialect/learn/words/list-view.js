@@ -74,6 +74,7 @@ class ListView extends DataListView {
     // Search
     handleSearch: func,
     resetSearch: func,
+    hasSearch: bool,
 
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
@@ -400,6 +401,7 @@ class ListView extends DataListView {
       type: 'FVWord',
       handleSearch: this.props.handleSearch,
       resetSearch: this.props.resetSearch,
+      hasSearch: this.props.hasSearch,
     }
     const DocumentView = this.props.useDatatable ? (
       <DocumentListViewDatatable {...listViewProps} />

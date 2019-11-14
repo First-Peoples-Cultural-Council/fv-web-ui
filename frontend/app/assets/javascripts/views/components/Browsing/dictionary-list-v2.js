@@ -15,15 +15,14 @@ limitations under the License.
 */
 
 // Libraries
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component, Suspense } from 'react'
+import PropTypes, { bool } from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
 
 // Components
 import IntlService from 'views/services/intl'
-import SearchDialect from 'views/components/SearchDialect'
-
+const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 // Variables
 const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
 
@@ -87,6 +86,7 @@ export default class DictionaryListV2 extends Component {
     type: string,
     wrapperStyle: object,
     // Search
+    hasSearch: bool,
     handleSearch: func,
     resetSearch: func,
   }
@@ -100,6 +100,7 @@ export default class DictionaryListV2 extends Component {
     style: null,
     wrapperStyle: null,
     // search
+    hasSearch: false,
     handleSearch: () => {},
     resetSearch: () => {},
   }
@@ -113,24 +114,31 @@ export default class DictionaryListV2 extends Component {
   }
 
   render() {
+    const { hasSearch } = this.props
     return (
       <>
         <h1>(DictionaryListV2)</h1>
-        <SearchDialect
-          columns={this.props.columns}
-          //   filterInfo={filterInfo}
-          handleSearch={this.props.handleSearch}
-          resetSearch={this.props.resetSearch}
-          //   searchByAlphabet={searchByAlphabet}
-          //   searchByDefinitions={searchByDefinitions}
-          //   searchByMode={searchByMode}
-          //   searchByTitle={searchByTitle}
-          //   searchByTranslations={searchByTranslations}
-          //   searchingDialectFilter={searchingDialectFilter}
-          //   searchPartOfSpeech={searchPartOfSpeech}
-          //   searchTerm={searchTerm}
-          //   flashcardMode={this.state.flashcardMode}
-        />
+
+        {hasSearch && (
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchDialect
+              columns={this.props.columns}
+              //   filterInfo={filterInfo}
+              handleSearch={this.props.handleSearch}
+              resetSearch={this.props.resetSearch}
+              //   searchByAlphabet={searchByAlphabet}
+              //   searchByDefinitions={searchByDefinitions}
+              //   searchByMode={searchByMode}
+              //   searchByTitle={searchByTitle}
+              //   searchByTranslations={searchByTranslations}
+              //   searchingDialectFilter={searchingDialectFilter}
+              //   searchPartOfSpeech={searchPartOfSpeech}
+              //   searchTerm={searchTerm}
+              //   flashcardMode={this.state.flashcardMode}
+            />
+          </Suspense>
+        )}
+
         {this._getItems()}
       </>
     )

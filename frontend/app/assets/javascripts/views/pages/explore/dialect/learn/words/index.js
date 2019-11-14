@@ -202,6 +202,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         // Search:
         handleSearch={this.handleSearch}
         resetSearch={this.resetSearch}
+        hasSearch
       />
     ) : null
 
