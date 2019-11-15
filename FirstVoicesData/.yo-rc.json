@@ -1,8 +1,8 @@
 {
   "generator-nuxeo": {
-    "lastRemote": "/root/.cache/node-yeoman-remote-cache/nuxeo/generator-nuxeo-meta/2.9.0",
+    "lastRemote": "/home/nolanvh/.cache/node-yeoman-remote-cache/nuxeo/generator-nuxeo-meta/2.9.0",
     "promptValues": {
-      "package": "ca.firstvoices.operations"
+      "package": "ca.firstvoices.services"
     }
   }
 }

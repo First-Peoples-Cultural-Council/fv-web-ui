@@ -3,7 +3,6 @@ package ca.firstvoices.operations;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -12,11 +11,9 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACE;
-import org.nuxeo.ecm.core.api.security.AdministratorGroupsProvider;
 import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
 import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.CoreSession;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
@@ -48,10 +45,6 @@ public class InitialDatabaseSetup {
     
     @Param(name = "path", required = false)
     protected String path;
-    
-    protected OperationContext ctx;
-    protected AutomationService automationService;
-    protected AdministratorGroupsProvider administratorGroupsProvider;
     
     @OperationMethod
     public DocumentModel run() throws OperationException {
