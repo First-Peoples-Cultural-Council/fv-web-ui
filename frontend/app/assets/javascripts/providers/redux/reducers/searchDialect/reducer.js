@@ -8,6 +8,7 @@ const initialState = {
   searchByMode: SEARCH_BY_DEFAULT,
   searchByTitle: true,
   searchByTranslations: false,
+  searchInfoOutput: null,
   searchNxqlQuery: undefined,
   searchNxqlSort: {},
   searchPartOfSpeech: SEARCH_SORT_DEFAULT,

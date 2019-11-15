@@ -389,16 +389,17 @@ class ListView extends DataListView {
       flashcardTitle: this.props.flashcardTitle,
       gridListView: this.props.gridListView,
       objectDescriptions: 'words',
-      onColumnOrderChange: this._handleColumnOrderChange,
-      onSelectionChange: this._onEntryNavigateRequest,
-      onSortChange: this._handleSortChange,
+      onColumnOrderChange: this._handleColumnOrderChange, // NOTE: comes from DataListView
+      onSelectionChange: this._onEntryNavigateRequest, // NOTE: may call this.props.action
+      onSortChange: this._handleSortChange, // NOTE: comes from DataListView
       page: this.state.pageInfo.page,
       pageSize: this.state.pageInfo.pageSize,
-      refetcher: this._handleRefetch,
-      refetcher2: this._handleRefetch,
+      refetcher: this._handleRefetch, // NOTE: comes from DataListView
+      refetcher2: this._handleRefetch, // NOTE: comes from DataListView
       renderSimpleTable: this.props.renderSimpleTable,
       sortInfo: this.state.sortInfo.uiSortOrder,
       type: 'FVWord',
+      // SEARCH:
       handleSearch: this.props.handleSearch,
       resetSearch: this.props.resetSearch,
       hasSearch: this.props.hasSearch,
