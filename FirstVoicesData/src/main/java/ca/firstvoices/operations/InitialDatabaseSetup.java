@@ -34,6 +34,7 @@ public class InitialDatabaseSetup {
     
     public static final String SECTIONS_PROPERTY_NAME = "publish:sections";
     
+    // Environment variables for the admin account that will be created.
     private static final String username = System.getenv("CYPRESS_FV_USERNAME");
     private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
     
@@ -52,14 +53,6 @@ public class InitialDatabaseSetup {
             /*
                 Create the proper folder structure.
              */
-            DocumentModel TEstDoc = session.createDocumentModel("/FV/Workspaces/Data", "TEst", "FVLanguageFamily");
-            TEstDoc.setPropertyValue("dc:title", "TEst");
-            TEstDoc = session.createDocument(TEstDoc);
-            
-            DocumentModel TestDoc = session.createDocumentModel("/FV/Workspaces/Data/TEst", "Test", "FVLanguage");
-            TestDoc.setPropertyValue("dc:title", "Test");
-            TestDoc = session.createDocument(TestDoc);
-            
             DocumentModel SiteWorkspace = session.createDocumentModel("/FV/Workspaces", "Site", "Workspace");
             SiteWorkspace.setPropertyValue("dc:title", "Site");
             SiteWorkspace = session.createDocument(SiteWorkspace);
