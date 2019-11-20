@@ -7,9 +7,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
                     Login as Language Admin and check that no songs currently exists.
                 */
     cy.login({
-      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/songs')
     cy.queryByText('TestSongTitle').should('not.exist')

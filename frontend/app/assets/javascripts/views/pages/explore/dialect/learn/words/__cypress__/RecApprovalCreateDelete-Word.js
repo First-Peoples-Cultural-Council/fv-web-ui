@@ -13,9 +13,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Login as Recorder with approval and check that no word currently exists.
             */
     cy.login({
-      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER_USERNAME',
-      userPassword: 'TESTLANGUAGETHREE_RECORDER_APPROVER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')

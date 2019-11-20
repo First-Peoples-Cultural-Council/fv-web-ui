@@ -13,9 +13,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Login as Language Admin and check that no phrases currently exists.
             */
     cy.login({
-      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/phrases')
     cy.getByText('No results found.', { exact: true }).should('be.visible')

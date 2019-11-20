@@ -7,9 +7,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
                         Login as Recorder with Approval and check that no songs currently exists.
                     */
     cy.login({
-      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER_USERNAME',
-      userPassword: 'TESTLANGUAGETHREE_RECORDER_APPROVER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/songs')
     cy.wait(500)

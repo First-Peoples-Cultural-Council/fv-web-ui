@@ -7,9 +7,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
                 Login as Recorder, go to phrase creation page and click create new phrase
             */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
@@ -107,9 +105,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Check that the phrase is not visible for Site Member when not enabled
          */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'SITE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.queryByText('TestPhrase').should('not.exist')
@@ -124,9 +120,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Login as admin and enable the phrase
          */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.wait(800)
@@ -142,9 +136,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
               Login as language member and check that the story is now visible.
            */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.getByTestId('DictionaryList__row').within(() => {
@@ -159,9 +151,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
                 Login as admin and publish the phrase.
              */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.wait(500)

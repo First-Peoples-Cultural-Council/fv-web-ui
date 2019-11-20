@@ -7,9 +7,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as Recorder and check that no stories exist.
             */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
@@ -134,9 +132,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is not visible.
              */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')
@@ -147,9 +143,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin, check that the story is editable, and enable the story.
              */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle')
@@ -187,9 +181,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is now visible.
              */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
@@ -204,9 +196,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin and publish the story.
              */
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitleEdited')

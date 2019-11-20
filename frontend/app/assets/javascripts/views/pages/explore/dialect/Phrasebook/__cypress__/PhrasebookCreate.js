@@ -10,9 +10,7 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Create', () => {
     // Login
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_RECORDER',
     })
 
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/create/phrasebook')

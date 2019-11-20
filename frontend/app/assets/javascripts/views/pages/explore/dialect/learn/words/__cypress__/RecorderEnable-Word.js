@@ -10,9 +10,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.wait(500)
 
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
     /*
@@ -44,9 +42,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Admin and verify task exists / reject task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
@@ -60,9 +56,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Recorder and click enable again.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
@@ -80,9 +74,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Admin and verify task exists / approve task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
@@ -96,9 +88,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Site Member and check that the word is visible once enabled.
      */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
@@ -115,9 +105,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Recorder and verify that publish is now clickable.
      */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')

@@ -11,9 +11,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Recorder and check that the publish counter increases after it is clicked.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
@@ -37,9 +35,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/reject task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
@@ -54,9 +50,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click publish again.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
@@ -73,9 +67,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/approve task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
@@ -103,9 +95,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click unpublish.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
@@ -119,9 +109,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/reject task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
@@ -142,9 +130,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as recorder and click unpublish again.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
@@ -158,9 +144,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       Login as Admin and verify/approve task.
     */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.reload()
     cy.wait(500)
