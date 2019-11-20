@@ -7,4 +7,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ManifestVersion: 2
 Bundle-Vendor: Nuxeo
-Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,OSGI-INF/startupdatabasesetup-service.xml
+Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml
