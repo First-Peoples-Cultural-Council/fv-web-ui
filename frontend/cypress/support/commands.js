@@ -53,8 +53,8 @@ afterEach(function() {
 Cypress.Commands.add('login', (obj = {}) => {
   cy.log('Confirming environment variables are set...')
   // NOTE: Cypress drops the `CYPRESS_` prefix when using environment variables set in your bash file
-  const userName = Cypress.env(obj.userName || 'ADMIN_USERNAME')
-  const userPassword = Cypress.env(obj.userPassword || 'ADMIN_PASSWORD')
+  const userName = (obj.userName || Cypress.env('ADMIN_USERNAME'))
+  const userPassword = Cypress.env(obj.userPassword || 'FV_PASSWORD' || 'ADMIN_PASSWORD')
   let loginInfoExists = false
   if (userName != undefined && userPassword != undefined) {
     loginInfoExists = true

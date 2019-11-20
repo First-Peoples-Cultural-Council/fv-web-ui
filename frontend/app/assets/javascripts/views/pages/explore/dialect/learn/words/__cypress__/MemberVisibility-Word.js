@@ -14,9 +14,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
             Login as Member
         */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     /*
             Check that edit button does not exist and go to reports page

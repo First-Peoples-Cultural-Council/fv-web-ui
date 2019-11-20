@@ -4,9 +4,7 @@
 describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
   it('Test to check recorder word creation functionality.', () => {
     cy.login({
-      userName: 'TESTLANGUAGEFOUR_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGEFOUR_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
 
     /*

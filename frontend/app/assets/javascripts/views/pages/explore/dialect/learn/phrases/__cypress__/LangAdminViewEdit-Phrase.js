@@ -13,9 +13,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Login as member and check that the phrase is not visible.
          */
     cy.login({
-      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
@@ -31,9 +29,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
                 Login as Language Admin, navigate to phrases and check that a phrase exists.
             */
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
@@ -67,9 +63,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Login as member and check that the phrase is now visible and enabled.
          */
     cy.login({
-      userName: 'TESTLANGUAGETWO_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
@@ -88,9 +82,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Login as Language Admin and publish the phrase.
          */
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/phrases')
     cy.wait(800)

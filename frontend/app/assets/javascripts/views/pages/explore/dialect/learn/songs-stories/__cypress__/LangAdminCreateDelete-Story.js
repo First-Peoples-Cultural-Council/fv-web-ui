@@ -7,9 +7,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
                         Login as Language Admin and check that no stories currently exists.
                     */
     cy.login({
-      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')

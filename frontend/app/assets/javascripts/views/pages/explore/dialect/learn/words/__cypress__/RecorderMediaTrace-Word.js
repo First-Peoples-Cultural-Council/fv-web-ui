@@ -10,9 +10,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
                 Login as Recorder and check that a test word exists and click it.
             */
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {

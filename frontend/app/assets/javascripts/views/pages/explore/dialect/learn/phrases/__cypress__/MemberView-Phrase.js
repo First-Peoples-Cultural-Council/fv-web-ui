@@ -14,9 +14,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
             Login as Language Member, navigate to phrases and check that a phrase exists.
         */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
     cy.wait(500)

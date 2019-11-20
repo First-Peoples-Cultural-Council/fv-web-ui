@@ -7,9 +7,7 @@ describe('LangAdminPortal-Inline.js > LangAdminPortal-Inline', () => {
             Login as Language Admin.
         */
     cy.login({
-      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne')
     cy.wait(500)

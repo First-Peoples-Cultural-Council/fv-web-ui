@@ -13,9 +13,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
     cy.get('[title="More Options"]', { exact: true }).click()
@@ -49,9 +47,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
                 Login as member and navigate to the reports page.
             */
     cy.login({
-      userName: 'TESTLANGUAGEFIVE_MEMBER_USERNAME',
-      userPassword: 'TESTLANGUAGEFIVE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
     cy.get('[title="More Options"]', { exact: true }).click()

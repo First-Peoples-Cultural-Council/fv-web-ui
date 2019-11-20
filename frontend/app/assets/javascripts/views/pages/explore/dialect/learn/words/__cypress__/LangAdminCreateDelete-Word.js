@@ -13,9 +13,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
             Login as Language Admin and check that no word currently exists.
         */
     cy.login({
-      userName: 'TESTLANGUAGEONE_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGEONE_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')

@@ -7,9 +7,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
                         Login as Language Admin and navigate to the edit portal page.
                     */
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN_USERNAME',
-      userPassword: 'TESTLANGUAGETWO_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
 
