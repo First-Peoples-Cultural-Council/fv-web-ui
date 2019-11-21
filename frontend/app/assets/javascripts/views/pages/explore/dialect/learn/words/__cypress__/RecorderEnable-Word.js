@@ -3,7 +3,7 @@
 
 describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
   it('Test to check that when a recorder enables a word, the request to the language admin is received.', () => {
-    cy.exec('bash ./scripts/ResetWordLangFive.sh')
+    cy.exec('bash ./scripts/ResetWordLangFive.sh', { env: { TARGET: Cypress.env('TARGET') } })
       .its('stdout')
       .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 

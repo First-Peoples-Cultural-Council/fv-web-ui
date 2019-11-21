@@ -62,6 +62,24 @@ if [ "$2" != "-skip-clone" ]; then
 fi
 
 echo
+if [[ "$1" == "http://127.0.0.1:8080" ]]; then
+    echo
+    echo "Creating TEst FVLanguageFamily directory"
+    response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST 'http://127.0.0.1:8080/nuxeo/site/automation/Document.Create' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"type":"FVLanguageFamily","name":"TEst","properties":"dc:title=TEst"},"input":"/FV/Workspaces/Data","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+    if [[ "response" -ne 200 ]]; then
+        echo -e 'TEst FVLanguageFamily creation failed: Error ' response ' \n'; exit 1
+        echo
+    fi
+    echo
+    echo "Creating Test FVLanguage directory"
+    response=$(curl -o /dev/null -s -w -X POST 'http://127.0.0.1:8080/nuxeo/site/automation/Document.Create' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"type":"FVLanguage","name":"Test","properties":"dc:title=Test"},"input":"/FV/Workspaces/Data/TEst","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+    if [[ "response" -ne 200 ]]; then
+        echo -e 'Test FVLanguage creation failed: Error ' response ' \n'; exit 1
+        echo
+    fi
+fi
+
+echo
 cd $DIRECTORY/fv-utils/target/
 # Create a fresh TestLanguageOne directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory TEst/Test/ -language-name TestLanguageOne

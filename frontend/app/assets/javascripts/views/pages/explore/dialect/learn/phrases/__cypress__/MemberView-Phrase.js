@@ -6,7 +6,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     /*
     Reset words for language
    */
-    cy.exec('bash ./scripts/ResetWordLangFive.sh enabled-true')
+    cy.exec('bash ./scripts/ResetWordLangFive.sh enabled-true', { env: { TARGET: Cypress.env('TARGET') } })
       .its('stdout')
       .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 
