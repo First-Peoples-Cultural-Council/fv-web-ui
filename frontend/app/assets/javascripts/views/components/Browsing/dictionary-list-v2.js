@@ -15,34 +15,41 @@ limitations under the License.
 */
 
 // Libraries
-import React, { Component, Suspense } from 'react'
+import React, { Suspense } from 'react'
 import PropTypes, { bool } from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
+import Media from 'react-media'
 
 // Components
+import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
-// Variables
-const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
+const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
+const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
+const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-large-screen'))
 
 /*
   FW-80
   =============================================================================
   - Search:
+    Known issues:
+    1) 1,2, & 3 char search doesn't work
+    2) Url params is getting removed by ancestor
+
     UI:
-      Field: Input
-      Button: Search
-      Button: reset/clear search
+      √ Field: Input
+      √ Button: Search
+      √ Button: reset/clear search
       Fields to search (related to columns?), eg: word, definitions, literal translations, parts of speech
-      Feedback:
+      √ Feedback:
         "Showing words that contain the search term 'test' in the 'Word' and 'Definitions' columns"
         "Showing all words in the dictionary listed alphabetically"
 
-    url = .../learn/words/[perPage]/[page]
-      &q=[term] // query
+    √ url = .../learn/words/[perPage]/[page]
+    X  &q=[term] // query
 
-      Section/Type related options (defined in columns prop array):
+    X  Section/Type related options (defined in columns prop array):
       &active=W,D,LT,POS&POS=adjective
       &W=1&D=1&LT=1&POS=1
       &w=[1,0] // word
@@ -50,7 +57,7 @@ const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
       &lT=[1,0] // literal translations
       &pS=[option value] // parts of speech
 
-    url = .../learn/words/[perPage]/[page]?sB=dc:title&sO=asc&q=searchTermHere&w=1&d=1&lT=1&pS=adjective
+    X url = .../learn/words/[perPage]/[page]?sB=dc:title&sO=asc&q=searchTermHere&w=1&d=1&lT=1&pS=adjective
 
   - Sorting:
     sB=[field] // sort by
@@ -71,198 +78,135 @@ const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
   - Select a row:
 
   */
-export default class DictionaryListV2 extends Component {
-  static propTypes = {
-    // dictionary-list
-    action: func,
-    cellHeight: number,
-    cols: number,
-    columns: array.isRequired,
-    cssModifier: string,
-    fields: instanceOf(Map),
-    filteredItems: oneOfType([array, instanceOf(List)]),
-    items: oneOfType([array, instanceOf(List)]),
-    style: object,
-    type: string,
-    wrapperStyle: object,
-    // Search
-    hasSearch: bool,
-    handleSearch: func,
-    resetSearch: func,
-  }
+const DictionaryListV2 = (props) => {
+  const intl = IntlService.instance
+  const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
-  static defaultProps = {
-    // dictionary-list
-    cellHeight: 210,
-    cols: 3,
-    columns: [],
-    cssModifier: '',
-    style: null,
-    wrapperStyle: null,
-    // search
-    hasSearch: false,
-    handleSearch: () => {},
-    resetSearch: () => {},
-  }
-
-  intl = IntlService.instance
-
-  constructor(props, context) {
-    super(props, context)
-
-    this._columnClassNames = this._getColumnClassNames()
-  }
-
-  render() {
-    const { hasSearch } = this.props
-    return (
-      <>
-        <h1>(DictionaryListV2)</h1>
-
-        {hasSearch && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <SearchDialect
-              columns={this.props.columns}
-              //   filterInfo={filterInfo}
-              handleSearch={this.props.handleSearch}
-              resetSearch={this.props.resetSearch}
-              //   searchByAlphabet={searchByAlphabet}
-              //   searchByDefinitions={searchByDefinitions}
-              //   searchByMode={searchByMode}
-              //   searchByTitle={searchByTitle}
-              //   searchByTranslations={searchByTranslations}
-              //   searchingDialectFilter={searchingDialectFilter}
-              //   searchPartOfSpeech={searchPartOfSpeech}
-              //   searchTerm={searchTerm}
-              //   flashcardMode={this.state.flashcardMode}
-            />
-          </Suspense>
-        )}
-
-        {this._getItems()}
-      </>
-    )
-  }
-
-  _columnClassNames = []
-
-  _getItems = () => {
-    const items = this.props.filteredItems || this.props.items
-    const columns = this.props.columns
-    if (this._columnClassNames.length === 0) {
-      this._columnClassNames = this._getColumnClassNames()
-    }
-
-    if (selectn('length', items) === 0) {
-      return (
-        <div className={`DictionaryList DictionaryList--noData  ${this.props.cssModifier}`}>
-          {this.intl.translate({
-            key: 'no_results_found',
-            default: 'No Results Found',
-            case: 'first',
-            append: '.',
-          })}
-        </div>
-      )
-    }
-
-    const columnHeaders = this._getColumnHeaders()
-    const columnFooter = this._getColumnFooter()
-    const trFooter = columnFooter ? (
-      <tr className="DictionaryList__row DictionaryList__row--footer">{columnFooter}</tr>
+  const items = props.filteredItems || props.items
+  const noResults =
+    selectn('length', items) === 0 ? (
+      <div className={`DictionaryList DictionaryList--noData  ${props.cssModifier}`}>
+        {intl.translate({
+          key: 'no_results_found',
+          default: 'No Results Found',
+          case: 'first',
+          append: '.',
+        })}
+      </div>
     ) : null
-    return (
-      <table className={`DictionaryList data-table fontAboriginalSans ${this.props.cssModifier}`}>
-        <tbody>
-          <tr className="DictionaryList__row DictionaryList__row--header">{columnHeaders}</tr>
 
-          {(items || []).map((item, i) => (
-            <tr
-              key={i}
-              data-testid="DictionaryList__row"
-              className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
-            >
-              {(columns || []).map((column, j) => {
-                const cellValue = selectn(column.name, item)
-                const cellRender =
-                  typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
-                const className = this._columnClassNames[j] || ''
-                return (
-                  <td key={j} className={className}>
-                    {cellRender}
-                  </td>
-                )
-              })}
-            </tr>
-          ))}
+  return (
+    <>
+      <h1>(DictionaryListV2)</h1>
 
-          {trFooter}
-        </tbody>
-      </table>
-    )
-  }
-  _getColumnClassNames = () => {
-    const { columns } = this.props
-    return columns.map((currentValue) => {
-      const name = selectn('name', currentValue)
-      const prefix = 'DictionaryList'
-      let className = ''
-      switch (name) {
-        case 'title':
-          className = `${prefix}__data ${prefix}__data--title `
-          break
-        case 'footer':
-          className = `${prefix}__data ${prefix}__data--footer `
-          break
-        case 'fv:definitions':
-          className = `${prefix}__data ${prefix}__data--definitions `
-          break
-        case 'related_audio':
-          className = `${prefix}__data ${prefix}__data--audio  PrintHide`
-          break
-        case 'related_pictures':
-          className = `${prefix}__data ${prefix}__data--pictures  PrintHide`
-          break
-        case 'fv-word:part_of_speech':
-          className = `${prefix}__data ${prefix}__data--speech `
-          break
-        case 'dc:description':
-          className = `${prefix}__data ${prefix}__data--description `
-          break
-        default:
-          className = `${prefix}__data ${prefix}__data--${name}`
-      }
-      return className
-    })
-  }
-  _getColumnHeaders = () => {
-    const { columns } = this.props
-    return columns.map((column, i) => {
-      const text = selectn('title', column)
-      const className = this._columnClassNames[i] || ''
-      return (
-        <th key={i} className={`${className} DictionaryList__header`}>
-          {text}
-        </th>
-      )
-    })
-  }
-  _getColumnFooter = () => {
-    const { columns } = this.props
-    let willUpdate = false
-    const tds = columns.map((column, i) => {
-      const footerData = selectn('footer', column) || {}
-      if (footerData && !willUpdate) {
-        willUpdate = true
-      }
-      const className = this._columnClassNames[i] || ''
-      const cellData = footerData.element ? (
-        <td key={i} className={`${className} DictionaryList__footer`} colSpan={footerData.colSpan || 1}>
-          {footerData.element}
-        </td>
-      ) : null
-      return cellData
-    })
-    return willUpdate ? tds : null
-  }
+      {props.hasSearch && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchDialect
+            columns={props.columns}
+            //   filterInfo={filterInfo}
+            handleSearch={props.handleSearch}
+            resetSearch={props.resetSearch}
+            //   searchByAlphabet={searchByAlphabet}
+            //   searchByDefinitions={searchByDefinitions}
+            //   searchByMode={searchByMode}
+            //   searchByTitle={searchByTitle}
+            //   searchByTranslations={searchByTranslations}
+            //   searchingDialectFilter={searchingDialectFilter}
+            //   searchPartOfSpeech={searchPartOfSpeech}
+            //   searchTerm={searchTerm}
+            //   flashcardMode={state.flashcardMode}
+          />
+        </Suspense>
+      )}
+
+      <Media
+        queries={{
+          small: '(max-width: 850px)',
+          medium: '(min-width: 851px)',
+        }}
+      >
+        {(matches) => {
+          //  All screens: no results
+          if (noResults) {
+            return noResults
+          }
+          let content = null
+          //  All screens: flashcard
+          if (props.hasFlashcard) {
+            content = <FlashcardList {...props} />
+            if (props.hasPagination) {
+              const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
+              content = <FlashcardsWithPagination {...props} />
+            }
+            return content
+          }
+
+          // Small screen
+          // -----------------------------------------
+          if (matches.small) {
+            //  Small screen: list view
+            content = <DictionaryListSmallScreen {...props} />
+            if (props.hasPagination) {
+              const DictionaryListSmallScreenWithPagination = withPagination(
+                DictionaryListSmallScreen,
+                DefaultFetcherParams.pageSize
+              )
+              content = <DictionaryListSmallScreenWithPagination {...props} />
+            }
+            return content
+          }
+          // Large screen
+          // -----------------------------------------
+          //  Large screen: no results
+          if (matches.medium) {
+            //  Large screen: list view
+            content = <DictionaryListLargeScreen {...props} />
+            if (props.hasPagination) {
+              const DictionaryListLargeScreenWithPagination = withPagination(
+                DictionaryListLargeScreen,
+                DefaultFetcherParams.pageSize
+              )
+              content = <DictionaryListLargeScreenWithPagination {...props} />
+            }
+          }
+          return content
+        }}
+      </Media>
+    </>
+  )
 }
+
+const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
+DictionaryListV2.propTypes = {
+  // dictionary-list
+  action: func,
+  cellHeight: number,
+  cols: number,
+  columns: array.isRequired,
+  cssModifier: string,
+  fields: instanceOf(Map),
+  filteredItems: oneOfType([array, instanceOf(List)]),
+  items: oneOfType([array, instanceOf(List)]),
+  style: object,
+  type: string,
+  wrapperStyle: object,
+  // Search
+  hasSearch: bool,
+  handleSearch: func,
+  resetSearch: func,
+}
+
+DictionaryListV2.defaultProps = {
+  // dictionary-list
+  cellHeight: 210,
+  cols: 3,
+  columns: [],
+  cssModifier: '',
+  style: null,
+  wrapperStyle: null,
+  // search
+  hasSearch: false,
+  handleSearch: () => {},
+  resetSearch: () => {},
+}
+export default DictionaryListV2

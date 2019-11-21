@@ -10,177 +10,125 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component, Suspense } from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import Media from 'react-media'
 
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import IntlService from 'views/services/intl'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
 // const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list'))
 const DictionaryListV2 = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
-const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
-const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 
-const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
-
-const { any, bool, func, number, object, string } = PropTypes
-
-export default class DocumentListView extends Component {
-  static propTypes = {
-    cssModifier: string,
-    columns: any, // TODO: set appropriate propType
-    data: any, // TODO: set appropriate propType
-    dialect: object,
-    disablePageSize: any, // TODO: set appropriate propType
-    gridCols: any, // TODO: set appropriate propType
-    gridListTile: any, // TODO: set appropriate propType
-    gridListView: bool,
-    gridViewProps: any, // TODO: set appropriate propType
-    onSelectionChange: func,
-    onSortChange: func,
-    page: number,
-    pageSize: number,
-    pagination: bool,
-    refetcher: func,
-    renderSimpleTable: bool,
-    sortInfo: any, // TODO: set appropriate propType
-    type: string,
-    flashcard: bool,
-    flashcardTitle: string,
-    usePrevResponse: bool,
-    // Search
-    handleSearch: func,
-    resetSearch: func,
-    hasSearch: bool,
-  }
-
-  static defaultProps = {
-    cssModifier: '',
-    data: {},
-    pagination: true,
-    usePrevResponse: false,
-    onSelectionChange: () => {},
-    flashcard: false,
-    flashcardTitle: '',
-  }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      selectedId: null,
+const DocumentListView = (props) => {
+  const getContent = () => {
+    if (props.gridListView) {
+      const gridViewProps = Object.assign(
+        {},
+        {
+          cellHeight: 160,
+          cols: props.gridCols,
+          cssModifier: props.cssModifier,
+          dialect: props.dialect,
+          disablePageSize: props.disablePageSize,
+          fetcher: gridListFetcher,
+          fetcherParams: { currentPageIndex: props.page, pageSize: props.pageSize },
+          flashcardTitle: props.flashcardTitle,
+          gridListTile: props.gridListTile,
+          items: selectn('response.entries', props.data),
+          metadata: selectn('response', props.data),
+          pagination: props.pagination,
+          style: { overflowY: 'auto', maxHeight: '50vh' },
+          type: props.type,
+          handleSearch: props.handleSearch,
+          resetSearch: props.resetSearch,
+          hasSearch: props.hasSearch,
+        },
+        props.gridViewProps
+      )
+      const GridViewWithPagination = withPagination(GridView, 8)
+      return props.pagination ? (
+        <Suspense fallback={<div>Loading...</div>}>
+          <GridViewWithPagination {...gridViewProps} />
+        </Suspense>
+      ) : (
+        <Suspense fallback={<div>Loading...</div>}>
+          <GridView {...gridViewProps} />
+        </Suspense>
+      )
     }
-  }
 
-  intl = IntlService.instance
-
-  componentDidUpdate(prevProps) {
-    // reset pagination after new data
-    if (this.props.data !== prevProps.data) {
-      this.setState({
-        page: 1,
-      })
-    }
-  }
-
-  render() {
-    const {
-      columns,
-      cssModifier,
-      data,
-      dialect,
-      disablePageSize,
-      flashcardTitle,
-      gridCols,
-      gridListTile,
-      gridListView,
-      pagination,
-      page,
-      pageSize,
-      type,
-    } = this.props
-
-    const listViewProps = {
-      cellHeight: 160,
-      cols: gridCols,
-      cssModifier,
-      dialect,
-      disablePageSize,
-      fetcher: this._gridListFetcher,
-      fetcherParams: { currentPageIndex: page, pageSize: pageSize },
-      flashcardTitle,
-      gridListTile,
-      items: selectn('response.entries', data),
-      metadata: selectn('response', data),
-      pagination,
-      style: { overflowY: 'auto', maxHeight: '50vh' },
-      type,
-      handleSearch: this.props.handleSearch,
-      resetSearch: this.props.resetSearch,
-      hasSearch: this.props.hasSearch,
-    }
     return (
-      <Media
-        queries={{
-          small: '(max-width: 850px)',
-          medium: '(min-width: 851px)',
-        }}
-      >
-        {(matches) => {
-          let mediaContent = null
-          // Small screen
-          // -----------------------------------------
-          if (matches.small) {
-            const FilteredPaginatedDictionaryListSmallScreen = withPagination(
-              this.props.flashcard ? FlashcardList : DictionaryListSmallScreen,
-              10
-            )
-
-            mediaContent = (
-              <Suspense fallback={<div>Loading...</div>}>
-                <FilteredPaginatedDictionaryListSmallScreen {...listViewProps} columns={columns} />
-              </Suspense>
-            )
-          }
-          // Large screen
-          // -----------------------------------------
-          if (matches.medium) {
-            // Large screen: grid
-            if (gridListView) {
-              const gridViewProps = Object.assign({}, listViewProps, this.props.gridViewProps)
-              const GridViewWithPagination = withPagination(GridView, 8)
-              mediaContent = pagination ? (
-                <Suspense fallback={<div>Loading...</div>}>
-                  <GridViewWithPagination {...gridViewProps} />
-                </Suspense>
-              ) : (
-                <Suspense fallback={<div>Loading...</div>}>
-                  <GridView {...gridViewProps} />
-                </Suspense>
-              )
-            } else {
-              // Large screen: list
-              const FilteredPaginatedDictionaryList = withPagination(
-                this.props.flashcard ? FlashcardList : DictionaryListV2,
-                DefaultFetcherParams.pageSize
-              )
-              mediaContent = (
-                <Suspense fallback={<div>Loading...</div>}>
-                  <FilteredPaginatedDictionaryList {...listViewProps} columns={columns} />
-                </Suspense>
-              )
-            }
-          }
-          return mediaContent
-        }}
-      </Media>
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryListV2
+          cellHeight={160}
+          cols={props.gridCols}
+          columns={props.columns}
+          cssModifier={props.cssModifier}
+          dialect={props.dialect}
+          disablePageSize={props.disablePageSize}
+          fetcher={gridListFetcher}
+          fetcherParams={{ currentPageIndex: props.page, pageSize: props.pageSize }}
+          flashcardTitle={props.flashcardTitle}
+          gridListTile={props.gridListTile}
+          handleSearch={props.handleSearch}
+          hasFlashcard={props.flashcard}
+          hasPagination={props.pagination}
+          hasSearch={props.hasSearch}
+          items={selectn('response.entries', props.data)}
+          metadata={selectn('response', props.data)}
+          resetSearch={props.resetSearch}
+          style={{ overflowY: 'auto', maxHeight: '50vh' }}
+          type={props.type}
+        />
+      </Suspense>
     )
   }
 
-  _gridListFetcher = (fetcherParams) => {
-    this.props.refetcher(this.props, fetcherParams.currentPageIndex, fetcherParams.pageSize)
+  const gridListFetcher = (fetcherParams) => {
+    props.refetcher(props, fetcherParams.currentPageIndex, fetcherParams.pageSize)
   }
+
+  return getContent()
 }
+
+const { any, bool, func, number, object, string } = PropTypes
+
+DocumentListView.propTypes = {
+  cssModifier: string,
+  columns: any, // TODO: set appropriate propType
+  data: any, // TODO: set appropriate propType
+  dialect: object,
+  disablePageSize: any, // TODO: set appropriate propType
+  gridCols: any, // TODO: set appropriate propType
+  gridListTile: any, // TODO: set appropriate propType
+  gridListView: bool,
+  gridViewProps: any, // TODO: set appropriate propType
+  onSelectionChange: func,
+  onSortChange: func,
+  page: number,
+  pageSize: number,
+  pagination: bool,
+  refetcher: func,
+  renderSimpleTable: bool,
+  sortInfo: any, // TODO: set appropriate propType
+  type: string,
+  flashcard: bool,
+  flashcardTitle: string,
+  usePrevResponse: bool,
+  // Search
+  handleSearch: func,
+  resetSearch: func,
+  hasSearch: bool,
+}
+
+DocumentListView.defaultProps = {
+  cssModifier: '',
+  data: {},
+  pagination: true,
+  usePrevResponse: false,
+  onSelectionChange: () => {},
+  flashcard: false,
+  flashcardTitle: '',
+}
+export default DocumentListView
