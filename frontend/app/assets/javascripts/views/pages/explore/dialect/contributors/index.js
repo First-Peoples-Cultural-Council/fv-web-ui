@@ -125,7 +125,10 @@ function Contributors(props) {
               deleteSelected({ deleteApi, deletedUids, selected, setDeletedUids, setSelected })
             },
             selected,
-            copyItemsSelected: copy.itemsSelected,
+            copyIsConfirmOrDenyTitle: copy.itemsSelected.isConfirmOrDenyTitle,
+            copyBtnInitiate: copy.itemsSelected.btnInitiate,
+            copyBtnDeny: copy.itemsSelected.btnDeny,
+            copyBtnConfirm: copy.itemsSelected.btnConfirm,
           })
         },
         render: (value, data) => {
@@ -229,12 +232,10 @@ function Contributors(props) {
                 <ConfirmationDelete
                   reverse
                   compact
-                  copy={{
-                    isConfirmOrDenyTitle: copy.isConfirmOrDenyTitle,
-                    btnInitiate: copy.btnInitiate,
-                    btnDeny: copy.btnDeny,
-                    btnConfirm: copy.btnConfirm,
-                  }}
+                  copyIsConfirmOrDenyTitle={copy.isConfirmOrDenyTitle}
+                  copyBtnInitiate={copy.btnInitiate}
+                  copyBtnDeny={copy.btnDeny}
+                  copyBtnConfirm={copy.btnConfirm}
                   confirmationAction={() => {
                     setDeleteItemUid(uid)
                   }}

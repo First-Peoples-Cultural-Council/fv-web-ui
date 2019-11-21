@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./Confirmation.css'
 import SpinnerBallFall from 'views/components/SpinnerBallFall'
-const { string, bool, func, object } = PropTypes
+const { string, bool, func } = PropTypes
 
 const STATE_INITIALIZING = 0
 const STATE_DEFAULT = 1
@@ -14,7 +14,10 @@ export class Confirmation extends React.Component {
     className: string,
     compact: bool,
     confirmationAction: func,
-    copy: object,
+    copyIsConfirmOrDenyTitle: string,
+    copyBtnInitiate: string,
+    copyBtnDeny: string,
+    copyBtnConfirm: string,
     disabled: bool,
     deleting: bool,
     reverse: bool,
@@ -24,12 +27,10 @@ export class Confirmation extends React.Component {
     className: '',
     compact: false,
     confirmationAction: () => {},
-    copy: {
-      isConfirmOrDenyTitle: '',
-      btnInitiate: '',
-      btnDeny: '',
-      btnConfirm: '',
-    },
+    copyIsConfirmOrDenyTitle: '',
+    copyBtnInitiate: '',
+    copyBtnDeny: '',
+    copyBtnConfirm: '',
     deleting: false,
     disabled: false,
     reverse: false,
@@ -44,13 +45,14 @@ export class Confirmation extends React.Component {
   btnDeny = React.createRef()
 
   async componentDidMount() {
+    // use copy from props or load up file
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ConfirmationInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
     // Flip to ready state...
     this.setState({
       componentState: STATE_DEFAULT,
@@ -59,7 +61,16 @@ export class Confirmation extends React.Component {
   }
 
   render() {
-    const { className, compact, copy, disabled, reverse } = this.props
+    const {
+      className,
+      compact,
+      copyIsConfirmOrDenyTitle,
+      copyBtnInitiate,
+      copyBtnDeny,
+      copyBtnConfirm,
+      disabled,
+      reverse,
+    } = this.props
     const { componentState } = this.state
 
     // Component state modifier classNames
@@ -97,11 +108,11 @@ export class Confirmation extends React.Component {
             onClick={this._initiate}
             type="button"
           >
-            {copy.btnInitiate}
+            {copyBtnInitiate}
           </button>
         </div>
         <div className="Confirmation__confirmOrDeny">
-          <h2 className="Confirmation__confirmOrDenyTitle">{copy.isConfirmOrDenyTitle}</h2>
+          <h2 className="Confirmation__confirmOrDenyTitle">{copyIsConfirmOrDenyTitle}</h2>
           <div className="Confirmation__confirmOrDenyInner">
             <button
               className={`Confirmation__btnDeny _btn _btn--secondary ${classNameBtnCompact}`}
@@ -110,7 +121,7 @@ export class Confirmation extends React.Component {
               onClick={this._deny}
               type="button"
             >
-              {copy.btnDeny}
+              {copyBtnDeny}
             </button>
             <button
               className={`Confirmation__btnConfirm _btn _btn--destructive ${classNameBtnCompact}`}
@@ -119,7 +130,7 @@ export class Confirmation extends React.Component {
               type="button"
             >
               <SpinnerBallFall className="Confirmation__busy" />
-              <div className="Confirmation__btnConfirmText">{copy.btnConfirm}</div>
+              <div className="Confirmation__btnConfirmText">{copyBtnConfirm}</div>
             </button>
           </div>
         </div>

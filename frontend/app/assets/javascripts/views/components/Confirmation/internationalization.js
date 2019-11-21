@@ -1,7 +1,7 @@
 const copy = {
-  isConfirmOrDenyTitle: 'Delete?',
-  btnInitiate: 'Delete',
-  btnDeny: 'Deny',
-  btnConfirm: 'Confirm',
+  copyIsConfirmOrDenyTitle: 'Delete?',
+  copyBtnInitiate: 'Delete',
+  copyBtnDeny: 'Deny',
+  copyBtnConfirm: 'Confirm',
 }
 export default copy

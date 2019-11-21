@@ -37,7 +37,15 @@ export const batchTitle = ({ computedData, deletedUids, selected, setSelected, c
 }
 // batchFooter
 // ============================================
-export const batchFooter = ({ colSpan, confirmationAction, selected, copyItemsSelected }) => {
+export const batchFooter = ({
+  colSpan,
+  confirmationAction,
+  copyBtnConfirm,
+  copyBtnDeny,
+  copyBtnInitiate,
+  copyIsConfirmOrDenyTitle,
+  selected,
+}) => {
   return {
     colSpan,
     element: (
@@ -45,7 +53,10 @@ export const batchFooter = ({ colSpan, confirmationAction, selected, copyItemsSe
         confirmationAction={confirmationAction}
         className="Contributor__delete"
         compact
-        copy={copyItemsSelected}
+        copyIsConfirmOrDenyTitle={copyIsConfirmOrDenyTitle}
+        copyBtnInitiate={copyBtnInitiate}
+        copyBtnDeny={copyBtnDeny}
+        copyBtnConfirm={copyBtnConfirm}
         disabled={selected.length === 0}
       />
     ),

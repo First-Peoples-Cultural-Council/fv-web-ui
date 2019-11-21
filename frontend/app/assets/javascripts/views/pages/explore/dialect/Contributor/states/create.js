@@ -103,12 +103,10 @@ export class ContributorStateCreate extends React.Component {
               confirmationAction={this.props.deleteItem}
               className="Contributor__delete"
               reverse
-              copy={{
-                isConfirmOrDenyTitle: _copy.isConfirmOrDenyTitle,
-                btnInitiate: _copy.btnInitiate,
-                btnDeny: _copy.btnDeny,
-                btnConfirm: _copy.btnConfirm,
-              }}
+              copyIsConfirmOrDenyTitle={_copy.isConfirmOrDenyTitle}
+              copyBtnInitiate={_copy.btnInitiate}
+              copyBtnDeny={_copy.btnDeny}
+              copyBtnConfirm={_copy.btnConfirm}
             />
           ) : null}
         </div>
