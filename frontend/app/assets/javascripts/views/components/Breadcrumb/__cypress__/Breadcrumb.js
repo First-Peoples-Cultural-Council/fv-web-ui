@@ -8,8 +8,9 @@ describe('Breadcrumb.js > Breadcrumb', () => {
     /*
       Temporary line to force the test to fail until it is updated.
      */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.visit('/explore/FV/sections/Data/Wakashan/Nuu%C4%8Daan%CC%93u%C9%AB/Ehattesaht%20Nuchatlaht/gallery')
     cy.getByTestId('pageContainer').within(() => {

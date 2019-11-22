@@ -15,34 +15,34 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
     //TODO: need a better hook to click the choose language arrow.
     cy.getByText('English').click()
     cy.getByText('Français').click()
-    cy.wait(500)
+    cy.wait(1000)
 
     /*
             Check that various parts of the website are now correctly translated to French.
          */
     cy.get('[id="pageNavigation"]').within(() => {
-      cy.getByText('Explorer Langues').should('exist')
+      cy.getByText('Explorer Langues', { exact: false }).should('exist')
       cy.get('[placeholder="Rechercher:"]').should('exist')
     })
     cy.get('div.PromiseWrapper').within(() => {
       cy.get('div.row').within(() => {
-        cy.getByText('Commencer!').should('exist')
+        cy.getByText('Commencer!', { exact: false }).should('exist')
       })
     })
 
     cy.get('div.container-fluid').within(() => {
-      cy.getByText('Avis de non-responsabilité').should('exist')
-      cy.getByText('Conditions d’utilisation').should('exist')
-      cy.getByText('Aide').should('exist')
-      cy.getByText('Faire un don').should('exist')
+      cy.getByText('Avis de non-responsabilité', { exact: false }).should('exist')
+      cy.getByText('Conditions d’utilisation', { exact: false }).should('exist')
+      cy.getByText('Aide', { exact: false }).should('exist')
+      cy.getByText('Faire un don', { exact: false }).should('exist')
     })
 
     cy.getByTestId('Navigation__open').click()
-    cy.getByText('Accueil').should('exist')
-    cy.getByText('Commencer').should('exist')
-    cy.getByText('Explorer langues').should('exist')
-    cy.getByText('Enfants').should('exist')
-    cy.getByText('Contribuer').should('exist')
+    cy.getByText('Accueil', { exact: false }).should('exist')
+    cy.getByText('Commencer', { exact: false }).should('exist')
+    cy.getByText('Explorer langues', { exact: false }).should('exist')
+    cy.getByText('Enfants', { exact: false }).should('exist')
+    cy.getByText('Contribuer', { exact: false }).should('exist')
 
     // TODO: Add check for sign in page. Currently it doesn't change to french.
   })

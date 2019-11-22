@@ -105,7 +105,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Check that the phrase is not visible for Site Member when not enabled
          */
     cy.login({
-      userName: 'SITE_MEMBER',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/phrases')
     cy.queryByText('TestPhrase').should('not.exist')

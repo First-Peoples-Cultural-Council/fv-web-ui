@@ -4,8 +4,9 @@ describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
     /*
       Temporary line to force the test to fail until it is updated.
    */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases')
 
@@ -22,9 +23,9 @@ describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.log('NOTE: Test expects to be run with `npm run startPreprod`')
     cy.login()

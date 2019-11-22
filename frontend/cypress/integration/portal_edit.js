@@ -3,8 +3,9 @@ describe('portal_edit.js > ExploreDialect', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     // Note: need to set environment variables in your bash_profile, eg:
     // export ADMIN_USERNAME='THE_USERNAME'

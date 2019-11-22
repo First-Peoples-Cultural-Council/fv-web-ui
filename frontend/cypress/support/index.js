@@ -31,5 +31,5 @@ cy.on('uncaught:exception', () => {
 // require('./commands')
 
 Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
+  screenshotOnRunFailure: true,
 })

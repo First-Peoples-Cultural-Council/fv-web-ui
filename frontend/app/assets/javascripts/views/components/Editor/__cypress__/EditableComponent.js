@@ -8,8 +8,9 @@ describe('EditableComponent.js > EditableComponent', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     const updateMessage = `EditableComponent.js > EditableComponent @ ${new Date()}`
     const updateMessage1 = `${updateMessage} 1`

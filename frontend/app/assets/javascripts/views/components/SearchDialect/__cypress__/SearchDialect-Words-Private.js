@@ -9,8 +9,9 @@ describe('SearchDialect-Words-Private.js > SearchDialect', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.log('Trying to access private section with anon user')
     cy.visit('/explore/FV/Workspaces/Data/Haisla/Haisla/Haisla/learn/words')

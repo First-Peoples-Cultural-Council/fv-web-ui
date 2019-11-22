@@ -65,8 +65,9 @@ describe('AlphabetListView-Words.js > AlphabetListView', () => {
     /*
       Temporary line to force the test to fail until it is updated.
      */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.log('Direct visit a url with a letter selected')
     cy.visit('/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words/alphabet/k%CC%93%C2%B0')

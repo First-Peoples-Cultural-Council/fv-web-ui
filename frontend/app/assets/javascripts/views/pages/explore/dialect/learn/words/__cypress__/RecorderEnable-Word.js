@@ -5,7 +5,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
   it('Test to check that when a recorder enables a word, the request to the language admin is received.', () => {
     cy.exec('bash ./scripts/ResetWordLangFive.sh', { env: { TARGET: Cypress.env('TARGET') } })
       .its('stdout')
-      .should('contain', 'Reset TestLanguageFive dictionary successfully.')
+      .should('contain', 'Reset TestLanguageFive dictionary successfully.', { log: false })
 
     cy.wait(500)
 
@@ -32,9 +32,8 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.26)')
+    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -44,7 +43,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
@@ -65,7 +64,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.26)')
+    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -76,7 +75,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: true }).click()
     cy.getByText('Approve', { exact: true }).click()
@@ -111,7 +110,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
     cy.wait(500)
-    cy.getByText('Enable (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.26)')
+    cy.getByText('Enable (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Enable (0)').should('have.css', 'cursor', 'default')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'pointer')
   })

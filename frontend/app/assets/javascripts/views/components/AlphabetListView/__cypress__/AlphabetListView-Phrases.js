@@ -4,8 +4,9 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
     /*
     Temporary line to force the test to fail until it is updated.
    */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases')
 
@@ -65,8 +66,9 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
     /*
       Temporary line to force the test to fail until it is updated.
      */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.log('Direct visit a url with a letter selected')
     cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases/alphabet/b')

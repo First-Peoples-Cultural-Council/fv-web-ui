@@ -8,8 +8,9 @@ describe('FW-301: Some buttons need to be clicked twice to submit', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     // Login
     cy.login({ url: 'https://dev.firstvoices.com/nuxeo/startup' })

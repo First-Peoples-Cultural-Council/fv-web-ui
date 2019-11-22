@@ -8,8 +8,9 @@ describe('UserTasks.js > UserTasks', () => {
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.log('Note: If FW-295 has regressed the following `visit()` will loop forever, hanging the test')
     cy.visit('/tasks/users/13e3f46d-72aa-4afc-8687-207926f644e5')
@@ -30,8 +31,9 @@ CyRecorderApproval	CyRecorderApproval	CyRecorderApproval
     /*
       Temporary line to force the test to fail until it is updated.
     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    cy.expect(true).to.equal(false)
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
 
     cy.login({
       userName: 'CY_RECOREDER_USERNAME',

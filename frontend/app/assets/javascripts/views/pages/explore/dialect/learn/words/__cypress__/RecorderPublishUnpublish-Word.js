@@ -37,7 +37,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
@@ -69,7 +69,6 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
     cy.wait(500)
     cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
@@ -111,7 +110,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
@@ -146,7 +145,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Approve', { exact: true }).click()

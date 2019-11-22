@@ -20,15 +20,11 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.getByText('Reports', { exact: true }).click()
 
     /*
-            Check that the 50 different reports appear.
+            Check that the 52 different reports appear.
          */
-    cy.get('div.row').within(() => {
-      cy.get('div.row').within(() => {
-        cy.get('div.row')
-          .children()
-          .should('have.length', 50)
-      })
-    })
+    cy.get('.FilteredGridList')
+      .queryAllByText('•')
+      .should('have.length', 52)
 
     /*
             Check to make sure that when a specific report type is clicked that it generates the proper reports for that type.
@@ -54,15 +50,11 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.getByText('Reports', { exact: true }).click()
 
     /*
-            Check that the 50 different reports appear.
+            Check that the 52 different reports appear.
          */
-    cy.get('div.row').within(() => {
-      cy.get('div.row').within(() => {
-        cy.get('div.row')
-          .children()
-          .should('have.length', 50)
-      })
-    })
+    cy.get('.FilteredGridList')
+      .queryAllByText('•')
+      .should('have.length', 52)
 
     /*
             Filter the report selection by "Audio".
@@ -74,15 +66,11 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.getByText('Filter').click()
 
     /*
-            Check that after filtering only the proper four exist.
+            Check that after filtering only the proper six exist.
          */
-    cy.get('div.row').within(() => {
-      cy.get('div.row').within(() => {
-        cy.get('div.row')
-          .children()
-          .should('have.length', 4)
-      })
-    })
+    cy.get('.FilteredGridList')
+      .queryAllByText('•')
+      .should('have.length', 6)
     cy.getByText('Words without Audio', { exact: true }).should('exist')
     cy.getByText('Phrases without Audio', { exact: true }).should('exist')
     cy.getByText('Songs without Audio', { exact: true }).should('exist')

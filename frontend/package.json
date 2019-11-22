@@ -9,9 +9,9 @@
     "build:production": "npm run production && npm run production:legacy",
     "cy:trashCopy": "npx trash cypress/integration/__cypress__/* !cypress/integration/__cypress__/__README__.js",
     "cy:copy": "npx copyfiles -e ./app/assets/javascripts/**/__cypress__/common/*.js ./app/assets/javascripts/**/__cypress__/*.js cypress/integration/__cypress__ -f",
-    "cy:open": "npm run cy:trashCopy && npm run cy:copy && cypress open --browser electron",
-    "cy:run": "npm run cy:trashCopy && npm run cy:copy && cypress run",
-    "cy:run:debug": "npm run cy:trashCopy && npm run cy:copy && DEBUG=cypress:* cypress run",
+    "cy:open": "npm run cy:trashCopy && npm run cy:copy && cypress open --browser chrome",
+    "cy:run": "npm run cy:trashCopy && npm run cy:copy && cypress run --browser chrome",
+    "cy:run:debug": "npm run cy:trashCopy && npm run cy:copy && DEBUG=cypress:* cypress run --browser chrome",
     "development": "webpack --color --progress --mode development --config build/webpack.development.js",
     "lint-staged:eslint": "npx eslint --config .eslintrc --fix",
     "lint-staged:prettier": "npx prettier --config .prettierrc --write",
@@ -21,7 +21,7 @@
     "start": "webpack-dev-server --color --progress --mode development --config build/webpack.development.js",
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
-    "startLocalDev": "npm run start -- --env.NUXEO_URL=\"http://localhost:8080/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
+    "startLocalDev": "npm run start -- --env.NUXEO_URL=\"http://127.0.0.1:8080/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
@@ -31,11 +31,12 @@
     "test:e2e": "start-server-and-test startPreprod http://127.0.0.1:3001 cy:open",
     "test:e2e:dev": "npm run test:databaseSetup:dev && start-server-and-test startDev http://127.0.0.1:3001 cy:open",
     "test:e2e:local": "npm run test:databaseSetup:local && start-server-and-test startLocalDev http://127.0.0.1:3001 cy:open",
+    "test:e2e:local:headless": "npm run test:databaseSetup:local && start-server-and-test startLocalDev http://127.0.0.1:3001 cy:run",
     "test:e2e:dev:headless": "npm run test:databaseSetup:dev && start-server-and-test startDev http://127.0.0.1:3001 cy:run",
     "test:e2e:dev:headless:debug": "npm run test:databaseSetup && start-server-and-test startDev http://127.0.0.1:3001 cy:run:debug",
     "test:e2e:ci": "start-server-and-test start http://127.0.0.1:3001 cy:run",
     "test:watch": "jest --watch",
-    "temp": "start-server-and-test startDev http://127.0.0.1:3001 cy:run"
+    "temp": "start-server-and-test startLocalDev http://127.0.0.1:3001 cy:open"
   },
   "lint-staged": {
     "linters": {

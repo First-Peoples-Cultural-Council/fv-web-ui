@@ -79,6 +79,7 @@ Cypress.Commands.add('login', (obj = {}) => {
   }
   // Login
   cy.log(`--- LOGGING IN: ${url} ---`)
+  cy.log(`--- USER IS: ${userName} ---`)
   cy.request({
     method: 'POST',
     url,
