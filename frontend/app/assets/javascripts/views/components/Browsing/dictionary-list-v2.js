@@ -15,13 +15,30 @@ limitations under the License.
 */
 
 // Libraries
-import React, { Suspense } from 'react'
+import React, { Suspense, useState } from 'react'
 import PropTypes, { bool } from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
 import Media from 'react-media'
+// REDUX
+import { connect } from 'react-redux'
+// REDUX: actions/dispatch/func
+import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 // Components
+import {
+  batchTitle,
+  batchFooter,
+  batchRender,
+  deleteSelected,
+  getIcon,
+  sortCol,
+  getUidsFromComputedData,
+  getUidsThatAreNotDeleted,
+  // useDeleteItem,
+  // useGetData,
+  // usePaginationRequest,
+} from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
@@ -78,9 +95,127 @@ const DictionaryListLargeScreen = React.lazy(() => import('views/components/Brow
   - Select a row:
 
   */
+
+/*
+PROPS:
+  withPagination
+  --------------------
+  appendControls
+  disablePageSize
+  fetcher
+  fetcherParams
+  metadata
+  (also withPagination `...props`)
+
+  Flashcards
+  --------------------
+  columns
+  filteredItems
+  flashcardTitle
+  items
+
+  List: large screen
+  --------------------
+  columns
+  cssModifier
+  filteredItems
+  items
+
+  List: small screen
+  --------------------
+  items
+  */
 const DictionaryListV2 = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
+
+  let propsColumns = props.columns
+  // ============= SORT
+  const { routeParams, search } = props
+  const { pageSize } = routeParams
+  const { sortOrder, sortBy } = search
+
+  // Add in sorting if needed:
+  propsColumns = props.columns.map((column) => {
+    if (column.sortBy) {
+      return Object.assign({}, column, {
+        title: () => {
+          return (
+            <button
+              type="button"
+              className="Contributors__colSort" // TODO: change class name
+              onClick={() => {
+                sortCol({
+                  newSortBy: column.sortBy,
+                  pageSize,
+                  pushWindowPath: props.pushWindowPath,
+                  sortOrder,
+                  sortHandler: props.sortHandler,
+                })
+              }}
+            >
+              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+              {column.title}
+            </button>
+          )
+        },
+      })
+    }
+    return column
+  })
+  // ============= SORT
+
+  // ============= BATCH
+  const [batchSelected, setBatchSelected] = useState([])
+  const [batchDeletedUids, setBatchDeletedUids] = useState([])
+
+  if (props.batchConfirmationAction) {
+    const uids = getUidsFromComputedData({ computedData: props.data })
+    const uidsNotDeleted = getUidsThatAreNotDeleted({ computedDataUids: uids, deletedUids: batchDeletedUids })
+    propsColumns = [
+      {
+        name: 'batch',
+        title: () => {
+          return batchTitle({
+            uidsNotDeleted,
+            selected: batchSelected,
+            setSelected: setBatchSelected,
+            copyDeselect: props.batchTitleSelect,
+            copySelect: props.batchTitleDeselect,
+          })
+        },
+        footer: () => {
+          return batchFooter({
+            colSpan: propsColumns.length,
+            // confirmationAction: props.batchConfirmationAction,
+            confirmationAction: () => {
+              deleteSelected({
+                batchConfirmationAction: props.batchConfirmationAction,
+                deletedUids: batchDeletedUids,
+                selected: batchSelected,
+                setDeletedUids: setBatchDeletedUids,
+                setSelected: setBatchSelected,
+              })
+            },
+            selected: batchSelected,
+            copyIsConfirmOrDenyTitle: props.batchFooterIsConfirmOrDenyTitle,
+            copyBtnInitiate: props.batchFooterBtnInitiate,
+            copyBtnDeny: props.batchFooterBtnDeny,
+            copyBtnConfirm: props.batchFooterBtnConfirm,
+          })
+        },
+        render: (value, cellData) => {
+          return batchRender({
+            dataUid: cellData.uid,
+            selected: batchSelected,
+            setSelected: setBatchSelected,
+          })
+        },
+      },
+      ...propsColumns,
+    ]
+  }
+  // ============= BATCH
 
   const items = props.filteredItems || props.items
   const noResults =
@@ -141,32 +276,61 @@ const DictionaryListV2 = (props) => {
             return content
           }
 
-          // Small screen
+          // Small screen: list view
           // -----------------------------------------
           if (matches.small) {
-            //  Small screen: list view
-            content = <DictionaryListSmallScreen {...props} />
+            const DictionaryListSmallScreenProps = {
+              // withPagination
+              // --------------------
+              appendControls: props.appendControls,
+              disablePageSize: props.disablePageSize,
+              fetcher: props.fetcher,
+              fetcherParams: props.fetcherParams,
+              metadata: props.metadata,
+              // List: small screen
+              // --------------------
+              items: props.items,
+            }
+
+            content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
+
             if (props.hasPagination) {
               const DictionaryListSmallScreenWithPagination = withPagination(
                 DictionaryListSmallScreen,
                 DefaultFetcherParams.pageSize
               )
-              content = <DictionaryListSmallScreenWithPagination {...props} />
+              content = <DictionaryListSmallScreenWithPagination {...DictionaryListSmallScreenProps} />
             }
             return content
           }
-          // Large screen
+          // Large screen: list view
           // -----------------------------------------
-          //  Large screen: no results
           if (matches.medium) {
-            //  Large screen: list view
-            content = <DictionaryListLargeScreen {...props} />
+            const DictionaryListLargeScreenProps = {
+              // withPagination
+              // --------------------
+              appendControls: props.appendControls,
+              disablePageSize: props.disablePageSize,
+              fetcher: props.fetcher,
+              fetcherParams: props.fetcherParams,
+              metadata: props.metadata,
+              // List: large screen
+              // --------------------
+              // columns: props.columns,
+              columns: propsColumns, // TODO
+              cssModifier: props.cssModifier,
+              filteredItems: props.filteredItems,
+              items: props.items,
+            }
+
+            content = <DictionaryListLargeScreen {...DictionaryListLargeScreenProps} />
+
             if (props.hasPagination) {
               const DictionaryListLargeScreenWithPagination = withPagination(
                 DictionaryListLargeScreen,
                 DefaultFetcherParams.pageSize
               )
-              content = <DictionaryListLargeScreenWithPagination {...props} />
+              content = <DictionaryListLargeScreenWithPagination {...DictionaryListLargeScreenProps} />
             }
           }
           return content
@@ -182,6 +346,7 @@ DictionaryListV2.propTypes = {
   action: func,
   cellHeight: number,
   cols: number,
+  data: object, // Compute data
   columns: array.isRequired,
   cssModifier: string,
   fields: instanceOf(Map),
@@ -194,10 +359,21 @@ DictionaryListV2.propTypes = {
   hasSearch: bool,
   handleSearch: func,
   resetSearch: func,
+  // REDUX: reducers/state
+  routeParams: object.isRequired,
+  search: object.isRequired,
+  // REDUX: actions/dispatch/func
+  pushWindowPath: func.isRequired,
 }
 
 DictionaryListV2.defaultProps = {
   // dictionary-list
+  batchTitleSelect: 'Deselect all',
+  batchTitleDeselect: 'Select all',
+  batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
+  batchFooterBtnInitiate: 'Delete',
+  batchFooterBtnDeny: 'No, do not delete the selected items',
+  batchFooterBtnConfirm: 'Yes, delete the selected items',
   cellHeight: 210,
   cols: 3,
   columns: [],
@@ -208,5 +384,28 @@ DictionaryListV2.defaultProps = {
   hasSearch: false,
   handleSearch: () => {},
   resetSearch: () => {},
+  // REDUX: actions/dispatch/func
+  pushWindowPath: () => {},
 }
-export default DictionaryListV2
+
+// REDUX: reducers/state
+const mapStateToProps = (state /*, ownProps*/) => {
+  const { navigation } = state
+
+  const { route } = navigation
+
+  return {
+    routeParams: route.routeParams,
+    search: route.search,
+  }
+}
+
+// REDUX: actions/dispatch/func
+const mapDispatchToProps = {
+  pushWindowPath,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DictionaryListV2)

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, {
+  windowLocationPathnameWithoutPagination,
+  getSearchObject,
+  getSearchObjectAsUrlQuery,
+} from 'common/NavigationHelpers'
 import Checkbox from 'views/components/Form/Common/Checkbox'
 import ConfirmationDelete from 'views/components/Confirmation'
 
 // batchTitle
 // ============================================
-export const batchTitle = ({ computedData, deletedUids, selected, setSelected, copyDeselect, copySelect }) => {
-  const allItems = getUidsThatAreNotDeleted({ computedData, deletedUids })
+export const batchTitle = ({ uidsNotDeleted = [], selected, setSelected, copyDeselect, copySelect }) => {
+  // uidsNotDeleted = getUidsThatAreNotDeleted({ computedData, deletedUids })
   // All items selected, show deselect
-  if (allItems.length === selected.length && allItems.length !== 0) {
+  if (uidsNotDeleted.length === selected.length && uidsNotDeleted.length !== 0) {
     return (
       <button
         className="_btn _btn--compact"
@@ -28,7 +32,7 @@ export const batchTitle = ({ computedData, deletedUids, selected, setSelected, c
       className="_btn _btn--compact"
       type="button"
       onClick={() => {
-        setSelected(getUidsThatAreNotDeleted({ computedData, deletedUids }))
+        setSelected(uidsNotDeleted)
       }}
     >
       {copySelect}
@@ -87,11 +91,28 @@ export const batchRender = ({ dataUid, selected, setSelected }) => {
 
 // deleteSelected
 // ============================================
+/*
 export const deleteSelected = ({ deleteApi, deletedUids, selected, setDeletedUids, setSelected }) => {
+  // Add to deleted
   setDeletedUids([...deletedUids, ...selected])
+
+  // Delete all items in selected
   selected.forEach(async (uid) => {
     await deleteApi(uid)
   })
+
+  // Clear out selected
+  setSelected([])
+}
+*/
+export const deleteSelected = ({ batchConfirmationAction, deletedUids, selected, setDeletedUids, setSelected }) => {
+  // Add to deleted
+  setDeletedUids([...deletedUids, ...selected])
+
+  // Call handler
+  batchConfirmationAction(selected)
+
+  // Clear out selected
   setSelected([])
 }
 
@@ -123,24 +144,29 @@ export const getIcon = ({ field, sortOrder, sortBy }) => {
 }
 
 // getUidsThatAreNotDeleted
+// Returns all available uids that are not deleted
+// Used to determine the state of the De/Select all button
 // ============================================
-export const getUidsThatAreNotDeleted = ({ computedData, deletedUids }) => {
-  let uidsNotDeleted = []
-  if (computedData && computedData.isFetching === false && computedData.success) {
-    const _entries = computedData.response.entries
-    const filtered = _entries.reduce((accumulator, entry) => {
-      const isDeleted = deletedUids.find((uid) => {
-        return uid === entry.uid
-      })
-      if (isDeleted === undefined) {
-        return [...accumulator, entry.uid]
-      }
-      return accumulator
-    }, [])
+export const getUidsThatAreNotDeleted = ({ computedDataUids = [], deletedUids = [] }) => {
+  return computedDataUids.reduce((accumulator, computedDataUid) => {
+    const isDeleted = deletedUids.find((deletedUid) => {
+      return deletedUid === computedDataUid
+    })
+    return isDeleted === undefined ? [...accumulator, computedDataUid] : accumulator
+  }, [])
+}
 
-    uidsNotDeleted = filtered
+// getUidsFromComputedData
+// Returns array of uids from computedData
+// Doesn't care about selected or deleted items
+// ============================================
+export const getUidsFromComputedData = ({ computedData = {} }) => {
+  if (computedData && computedData.isFetching === false && computedData.success) {
+    return computedData.response.entries.map((item) => {
+      return item.uid
+    })
   }
-  return uidsNotDeleted
+  return []
 }
 
 // isSelected
@@ -154,11 +180,35 @@ export const isSelected = ({ selected, uid }) => {
 
 // sortCol
 // ============================================
+/*
 export const sortCol = ({ dialect_path, urlItemType, newSortBy, pageSize, pushWindowPath, siteTheme, sortOrder }) => {
   const url = `/${siteTheme}${dialect_path}/${urlItemType}/${pageSize}/1?sortBy=${newSortBy}&sortOrder=${
     sortOrder === 'asc' ? 'desc' : 'asc'
   }`
   NavigationHelpers.navigate(url, pushWindowPath, false)
+}
+*/
+// sortCol
+// ============================================
+export const sortCol = ({ newSortBy, pageSize, pushWindowPath, sortOrder, sortHandler }) => {
+  const page = 1
+  const url = `${windowLocationPathnameWithoutPagination()}/${pageSize}/${page}`
+  // Get search object, add in new sortBy & sortOrder
+  const searchObj = Object.assign({}, getSearchObject(), {
+    sortBy: newSortBy,
+    sortOrder: sortOrder === 'asc' ? 'desc' : 'asc',
+  })
+  // Smash together & update url
+  NavigationHelpers.navigate(`/${url}?${getSearchObjectAsUrlQuery(searchObj)}`, pushWindowPath, false)
+
+  if (sortHandler) {
+    sortHandler({
+      page,
+      pageSize,
+      sortOrder: searchObj.sortOrder,
+      sortBy: searchObj.sortBy,
+    })
+  }
 }
 
 // toggleCheckbox

@@ -61,6 +61,23 @@ const DocumentListView = (props) => {
     return (
       <Suspense fallback={<div>Loading...</div>}>
         <DictionaryListV2
+          // Listview: Batch
+          batchConfirmationAction={props.batchConfirmationAction}
+          batchTitleSelect={props.batchTitleSelect}
+          batchTitleDeselect={props.batchTitleDeselect}
+          batchFooterIsConfirmOrDenyTitle={props.batchFooterIsConfirmOrDenyTitle}
+          batchFooterBtnInitiate={props.batchFooterBtnInitiate}
+          batchFooterBtnDeny={props.batchFooterBtnDeny}
+          batchFooterBtnConfirm={props.batchFooterBtnConfirm}
+          batchSelected={props.batchSelected}
+          setBatchSelected={props.setBatchSelected}
+          batchDeletedUids={props.batchDeletedUids}
+          setBatchDeletedUids={props.setBatchDeletedUids}
+          // Listview: Sort
+          sortHandler={props.sortHandler}
+          // Listview: computed data
+          data={props.data}
+          // ==================================================
           cellHeight={160}
           cols={props.gridCols}
           columns={props.columns}

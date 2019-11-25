@@ -301,6 +301,14 @@ export const getSearchObject = () => {
   )
 }
 
+export const getSearchObjectAsUrlQuery = (searchObject) => {
+  const urlQueryArray = []
+  for (const [key, value] of Object.entries(searchObject)) {
+    urlQueryArray.push(`${key}=${value}`)
+  }
+  return `${urlQueryArray.join('&')}`
+}
+
 // Analyzes splitWindowPath (array)
 // Determines if it has pagination values eg: ['learn', 'words', '10', '1'] // .../learn/words/10/1
 // Returns array if pagination found: [pageSize, page] or undefined if not
@@ -320,6 +328,17 @@ export const hasPagination = (arr = []) => {
   }
 
   return _arr
+}
+
+export const windowLocationPathnameWithoutPagination = () => {
+  const pathnameAsArray = window.location.pathname.replace(/^\//, '').split('/')
+  if (hasPagination(pathnameAsArray)) {
+    const _pathnameAsArray = [...pathnameAsArray]
+    _pathnameAsArray.pop()
+    _pathnameAsArray.pop()
+    return _pathnameAsArray.join('/')
+  }
+  return pathnameAsArray.join('/')
 }
 /*
 routeHasChanged({
