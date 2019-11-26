@@ -170,7 +170,7 @@ const DictionaryListV2 = (props) => {
   const [batchDeletedUids, setBatchDeletedUids] = useState([])
 
   if (props.batchConfirmationAction) {
-    const uids = getUidsFromComputedData({ computedData: props.data })
+    const uids = getUidsFromComputedData({ computedData: props.computedData })
     const uidsNotDeleted = getUidsThatAreNotDeleted({ computedDataUids: uids, deletedUids: batchDeletedUids })
     propsColumns = [
       {
@@ -346,7 +346,7 @@ DictionaryListV2.propTypes = {
   action: func,
   cellHeight: number,
   cols: number,
-  data: object, // Compute data
+  computedData: object,
   columns: array.isRequired,
   cssModifier: string,
   fields: instanceOf(Map),
