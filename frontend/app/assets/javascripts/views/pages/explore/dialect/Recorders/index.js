@@ -12,7 +12,7 @@ limitations under the License.
 */
 // LIBRARIES
 // ----------------------------------------
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
@@ -28,24 +28,15 @@ import NavigationCheck from '@material-ui/icons/Check'
 // CUSTOM
 // ----------------------------------------
 import { useGetCopy } from 'common'
-import {
-  batchTitle,
-  batchFooter,
-  batchRender,
-  deleteSelected,
-  getIcon,
-  sortCol,
-  useDeleteItem,
-  useGetData,
-  usePaginationRequest,
-} from 'common/ListView'
+import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
-import DictionaryList from 'views/components/Browsing/dictionary-list'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 
 import '!style-loader!css-loader!./styles.css'
+
+const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
 
 // Recorders
 //
@@ -64,30 +55,15 @@ function Recorders(props) {
   const { computeContributors, routeParams, search } = props
   const { dialect_path, pageSize, page, siteTheme } = routeParams
   const { sortOrder, sortBy } = search
-  const deleteApi = props.deleteContributor
 
   // HOOKS
   const [deletedUids, setDeletedUids] = useState([])
-  const [deleteItemUid, setDeleteItemUid] = useState()
   const [paginationRequest, setPaginationRequest] = useState()
-  const [selected, setSelected] = useState([])
-
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
-  // NOTE: when deleteItemUid is updated, this will run:
-  useDeleteItem({
-    deleteApi,
-    deletedUids,
-    deleteItemUid,
-    selected,
-    setDeletedUids,
-    setSelected,
-  })
-
   const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "RecordersInternationalization" */ './internationalization')
     return success.default
   })
-
   const computedData = useGetData({
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
@@ -113,66 +89,10 @@ function Recorders(props) {
   })
 
   const _getColumns = () => {
-    const urlItemType = 'recorders'
-
     return [
       {
-        name: 'batch',
-        title: () => {
-          return batchTitle({
-            computedData,
-            deletedUids,
-            selected,
-            setSelected,
-            copyDeselect: copy.batch.deselect,
-            copySelect: copy.batch.select,
-          })
-        },
-        footer: () => {
-          return batchFooter({
-            colSpan: 4,
-            confirmationAction: () => {
-              deleteSelected({ deleteApi, deletedUids, selected, setDeletedUids, setSelected })
-            },
-            selected,
-            copyIsConfirmOrDenyTitle: copy.itemsSelected.isConfirmOrDenyTitle,
-            copyBtnInitiate: copy.itemsSelected.btnInitiate,
-            copyBtnDeny: copy.itemsSelected.btnDeny,
-            copyBtnConfirm: copy.itemsSelected.btnConfirm,
-          })
-        },
-        render: (value, data) => {
-          return batchRender({
-            dataUid: data.uid,
-            selected,
-            setSelected,
-          })
-        },
-      },
-      {
         name: 'title',
-        title: () => {
-          return (
-            <button
-              type="button"
-              className="Contributors__colSort"
-              onClick={() => {
-                sortCol({
-                  dialect_path,
-                  newSortBy: 'dc:title',
-                  urlItemType,
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  siteTheme,
-                  sortOrder,
-                })
-              }}
-            >
-              {getIcon({ field: 'dc:title', sortOrder, sortBy })}
-              <span>{copy.title.th}</span>
-            </button>
-          )
-        },
+        title: copy.title.th,
         render: (value, data) => {
           const url = `/${siteTheme}${dialect_path}/recorder/${data.uid}`
 
@@ -189,30 +109,11 @@ function Recorders(props) {
             </a>
           )
         },
+        sortBy: 'dc:title',
       },
       {
         name: 'dc:description',
-        title: () => {
-          return (
-            <button
-              className="Contributors__colSort"
-              onClick={() => {
-                sortCol({
-                  dialect_path,
-                  newSortBy: 'dc:description',
-                  urlItemType,
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  siteTheme,
-                  sortOrder,
-                })
-              }}
-            >
-              {getIcon({ field: 'dc:description', sortOrder, sortBy })}
-              <span>{copy.description.th}</span>
-            </button>
-          )
-        },
+        title: copy.description.th,
         render: (v, data) => {
           const bio = selectn('properties.dc:description', data) ? (
             <div className="Contributors__biographyStatus">
@@ -227,6 +128,7 @@ function Recorders(props) {
           )
           return bio
         },
+        sortBy: 'dc:description',
       },
       {
         name: 'actions',
@@ -246,7 +148,8 @@ function Recorders(props) {
                   copyBtnDeny={copy.btnDeny}
                   copyBtnConfirm={copy.btnConfirm}
                   confirmationAction={() => {
-                    setDeleteItemUid(uid)
+                    props.deleteContributor(uid)
+                    setDeletedUids([...deletedUids, uid])
                   }}
                 />
               </li>
@@ -286,22 +189,40 @@ function Recorders(props) {
       >
         Create a new recorder
       </FVButton>
-
-      <DictionaryListWithPagination
-        columns={_getColumns()}
-        cssModifier="DictionaryList--contributors"
-        items={selectn('response.entries', computedData)}
-        // Pagination
-        fetcher={(fetcherParams) => {
-          setPaginationRequest(
-            `/${siteTheme}${dialect_path}/contributors/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
-              window.location.search
-            }`
-          )
-        }}
-        fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-        metadata={selectn('response', computedData)}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryListWithPagination
+          // Listview: Batch
+          batchTitleSelect="Deselect all"
+          batchTitleDeselect="Select all"
+          batchFooterIsConfirmOrDenyTitle="Delete Recorders?"
+          batchFooterBtnInitiate="Delete"
+          batchFooterBtnDeny="No, do not delete the selected recorders"
+          batchFooterBtnConfirm="Yes, delete the selected recorders"
+          batchConfirmationAction={(uids) => {
+            // Delete all items in selected
+            uids.forEach((uid) => {
+              props.deleteContributor(uid)
+            })
+            setDeletedUids([...deletedUids, ...uids])
+          }}
+          // Listview: computed data
+          computedData={computedData}
+          // ==================================================
+          columns={_getColumns()}
+          cssModifier="DictionaryList--contributors"
+          items={selectn('response.entries', computedData)}
+          // Pagination
+          fetcher={(fetcherParams) => {
+            setPaginationRequest(
+              `/${siteTheme}${dialect_path}/recorders/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
+                window.location.search
+              }`
+            )
+          }}
+          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+          metadata={selectn('response', computedData)}
+        />
+      </Suspense>
     </>
   ) : null
 }

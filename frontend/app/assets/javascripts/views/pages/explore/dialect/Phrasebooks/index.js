@@ -12,7 +12,7 @@ limitations under the License.
 */
 // LIBRARIES
 // ----------------------------------------
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
@@ -25,19 +25,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 // CUSTOM
 // ----------------------------------------
 import { useGetCopy } from 'common'
-import {
-  batchTitle,
-  batchFooter,
-  batchRender,
-  deleteSelected,
-  getIcon,
-  sortCol,
-  useDeleteItem,
-  useGetData,
-  usePaginationRequest,
-} from 'common/ListView'
+import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
-import DictionaryList from 'views/components/Browsing/dictionary-list'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -45,30 +34,20 @@ import withPagination from 'views/hoc/grid-list/with-pagination'
 
 import '!style-loader!css-loader!./styles.css'
 
+const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
+
 // Phrasebooks
 // ----------------------------------------
 export const Phrasebooks = (props) => {
   const { computeCategories, routeParams, search } = props
   const { dialect_path, pageSize, page, siteTheme } = routeParams
   const { sortOrder, sortBy } = search
-
-  const deleteApi = props.deleteCategory
   const dataPath = `${routeParams.dialect_path}/Phrase Books/`
 
   // HOOKS
   const [deletedUids, setDeletedUids] = useState([])
-  const [deleteItemUid, setDeleteItemUid] = useState()
   const [paginationRequest, setPaginationRequest] = useState()
-  const [selected, setSelected] = useState([])
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
-  useDeleteItem({
-    deleteApi,
-    deletedUids,
-    deleteItemUid,
-    selected,
-    setDeletedUids,
-    setSelected,
-  })
   const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "PhrasebooksInternationalization" */ './internationalization')
     return success.default
@@ -88,7 +67,6 @@ export const Phrasebooks = (props) => {
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
 
       await props.fetchCategories(
-        // `${routeParams.dialect_path}/Phrase Books/`,
         dataPath,
         `${currentAppliedFilter}&currentPageIndex=${page -
           1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
@@ -101,62 +79,8 @@ export const Phrasebooks = (props) => {
   const _getColumns = () => {
     return [
       {
-        name: 'batch',
-        title: () => {
-          return batchTitle({
-            computedData,
-            deletedUids,
-            selected,
-            setSelected,
-            copyDeselect: copy.batch.deselect,
-            copySelect: copy.batch.select,
-          })
-        },
-        footer: () => {
-          return batchFooter({
-            colSpan: 4,
-            confirmationAction: () => {
-              deleteSelected({ deleteApi, deletedUids, selected, setDeletedUids, setSelected })
-            },
-            selected,
-            copyIsConfirmOrDenyTitle: copy.itemsSelected.isConfirmOrDenyTitle,
-            copyBtnInitiate: copy.itemsSelected.btnInitiate,
-            copyBtnDeny: copy.itemsSelected.btnDeny,
-            copyBtnConfirm: copy.itemsSelected.btnConfirm,
-          })
-        },
-        render: (value, data) => {
-          return batchRender({
-            dataUid: data.uid,
-            selected,
-            setSelected,
-          })
-        },
-      },
-      {
         name: 'title',
-        title: () => {
-          return (
-            <button
-              type="button"
-              className="Phrasebooks__colSort"
-              onClick={() => {
-                sortCol({
-                  dialect_path,
-                  newSortBy: 'dc:title',
-                  urlItemType: 'phrasebooks',
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  siteTheme,
-                  sortOrder,
-                })
-              }}
-            >
-              {getIcon({ field: 'dc:title', sortOrder, sortBy })}
-              <span>{copy.title.th}</span>
-            </button>
-          )
-        },
+        title: copy.title.th,
         render: (v, data) => {
           const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${data.uid || ''}`
           return (
@@ -172,34 +96,16 @@ export const Phrasebooks = (props) => {
             </a>
           )
         },
+        sortBy: 'dc:title',
       },
       {
         name: 'dc:description',
-        title: () => {
-          return (
-            <button
-              className="Phrasebooks__colSort"
-              onClick={() => {
-                sortCol({
-                  dialect_path,
-                  newSortBy: 'dc:description',
-                  urlItemType: 'phrasebooks',
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  siteTheme,
-                  sortOrder,
-                })
-              }}
-            >
-              {getIcon({ field: 'dc:description', sortOrder, sortBy })}
-              <span>{copy.description.th}</span>
-            </button>
-          )
-        },
+        title: copy.description.th,
         render: (v, data) => {
           const bio = selectn('properties.dc:description', data) || '-'
           return <div dangerouslySetInnerHTML={{ __html: bio }} />
         },
+        sortBy: 'dc:description',
       },
       {
         name: 'actions',
@@ -219,7 +125,8 @@ export const Phrasebooks = (props) => {
                   copyBtnDeny={copy.btnDeny}
                   copyBtnConfirm={copy.btnConfirm}
                   confirmationAction={() => {
-                    setDeleteItemUid(uid)
+                    props.deleteCategory(uid)
+                    setDeletedUids([...deletedUids, uid])
                   }}
                 />
               </li>
@@ -258,21 +165,40 @@ export const Phrasebooks = (props) => {
       >
         Create a new phrase book
       </FVButton>
-      <DictionaryListWithPagination
-        columns={_getColumns()}
-        cssModifier="DictionaryList--contributors"
-        items={selectn('response.entries', computedData)}
-        // Pagination
-        fetcher={(fetcherParams) => {
-          setPaginationRequest(
-            `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
-              window.location.search
-            }`
-          )
-        }}
-        fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-        metadata={selectn('response', computedData)}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryListWithPagination
+          // Listview: Batch
+          batchTitleSelect="Deselect all"
+          batchTitleDeselect="Select all"
+          batchFooterIsConfirmOrDenyTitle="Delete selected phrase books?"
+          batchFooterBtnInitiate="Delete"
+          batchFooterBtnDeny="No, do not delete the selected phrase books"
+          batchFooterBtnConfirm="Yes, delete the selected phrase books"
+          batchConfirmationAction={(uids) => {
+            // Delete all items in selected
+            uids.forEach((uid) => {
+              props.deleteCategory(uid)
+            })
+            setDeletedUids([...deletedUids, ...uids])
+          }}
+          // Listview: computed data
+          computedData={computedData}
+          // ==================================================
+          columns={_getColumns()}
+          cssModifier="DictionaryList--contributors"
+          items={selectn('response.entries', computedData)}
+          // Pagination
+          fetcher={(fetcherParams) => {
+            setPaginationRequest(
+              `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
+                window.location.search
+              }`
+            )
+          }}
+          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+          metadata={selectn('response', computedData)}
+        />
+      </Suspense>
     </>
   ) : null
 }
