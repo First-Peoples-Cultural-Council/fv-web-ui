@@ -20,7 +20,7 @@
     "start": "webpack-dev-server --color --progress --mode development --config build/webpack.development.js",
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
-    "startLocalDev": "npm run start -- --env.NUXEO_URL=\"http://localhost:8080/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
+    "startLocal": "npm run start -- --env.NUXEO_URL=\"http://localhost:8080/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",

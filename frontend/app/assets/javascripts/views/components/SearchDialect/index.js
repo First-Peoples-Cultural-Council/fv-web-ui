@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { array } from 'prop-types'
 // import { is } from 'immutable'
 import {
   SEARCH_SORT_DEFAULT,
@@ -32,7 +32,8 @@ export class SearchDialect extends Component {
     handleSearch: func,
     isSearchingPhrases: bool,
     resetSearch: func,
-    searchingDialectFilter: string,
+    searchingDialectFilter: string, // Search by Categories
+    searchUi: array.isRequired,
 
     // REDUX: reducers/state
     computeDirectory: object.isRequired,
@@ -42,11 +43,42 @@ export class SearchDialect extends Component {
     fetchDirectory: func.isRequired,
   }
   static defaultProps = {
-    isSearchingPhrases: false,
-    searchDialectUpdate: () => {},
     handleSearch: () => {},
+    isSearchingPhrases: false,
     resetSearch: () => {},
+    searchDialectUpdate: () => {},
     searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+    searchUi: [
+      // {
+      //   defaultChecked: true,
+      //   idName: 'searchByTitle',
+      //   title: 'Word',
+      // },
+      // {
+      //   idName: 'searchByDefinitions',
+      //   title: 'Definitions',
+      // },
+      // {
+      //   idName: 'searchByCulturalNotes',
+      //   title: 'Cultural notes',
+      // },
+      // {
+      //   idName: 'searchByTranslations',
+      //   title: 'Literal translations',
+      // },
+      // {
+      //   type: 'select',
+      //   value: 'test',
+      //   idName: 'searchPartOfSpeech',
+      //   title: 'Parts of speech:',
+      //   options: [
+      //     {
+      //       value: 'test',
+      //       text: 'Test',
+      //     },
+      //   ],
+      // },
+    ],
   }
 
   constructor(props) {
@@ -75,12 +107,12 @@ export class SearchDialect extends Component {
   componentDidMount() {
     this.props.fetchDirectory('parts_of_speech')
 
-    // this._checkURL() // NOTE: query params on hold
+    // this.checkURL() // NOTE: query params on hold
   }
 
   componentDidUpdate(prevProps) {
-    const searchNxqlQuery = this._generateNxql()
-    const searchNxqlSort = this._getNxqlSearchSort()
+    const searchNxqlQuery = this.generateNxql()
+    const searchNxqlSort = this.getNxqlSearchSort()
 
     const prevSearchNxqlQuery = prevProps.computeSearchDialect.searchNxqlQuery
     const prevSearchNxqlSort = prevProps.computeSearchDialect.searchNxqlSort
@@ -141,18 +173,18 @@ export class SearchDialect extends Component {
       // Note: aware that we are triggering a new render
       // eslint-disable-next-line
       // this.setState({
-      //   searchInfoOutput: this._getSearchInfo(),
+      //   searchMessage: this.getSearchMessage(),
       // })
 
       const forSearchDialectUpdate = Object.assign({}, this.props.computeSearchDialect, {
-        searchInfoOutput: this._getSearchInfo(this.props.computeSearchDialect),
+        searchMessage: this.getSearchMessage(this.props.computeSearchDialect),
       })
       this.props.searchDialectUpdate(forSearchDialectUpdate)
     }
   }
 
   render() {
-    const { searchByMode, searchInfoOutput } = this.props.computeSearchDialect
+    const { searchByMode, searchMessage } = this.props.computeSearchDialect
 
     let searchBody = null
     if (
@@ -160,17 +192,84 @@ export class SearchDialect extends Component {
       searchByMode === SEARCH_BY_CATEGORY ||
       searchByMode === SEARCH_BY_PHRASE_BOOK
     ) {
-      searchBody = this._getBrowse()
+      searchBody = this.getBrowsing()
     } else {
-      searchBody = this._getSearchForm()
+      searchBody = this.getSearchForm()
     }
 
     return (
       <div data-testid="SearchDialect" className="SearchDialect">
-        {searchInfoOutput}
+        {searchMessage}
         {searchBody}
       </div>
     )
+  }
+  getSearchUi = () => {
+    const { searchUi } = this.props
+    const classesDefault = {
+      SearchDialectFormSecondaryGroup: 'SearchDialectFormSecondaryGroup',
+      SearchDialectOption: 'SearchDialectOption',
+      SearchDialectLabel: 'SearchDialectLabel',
+    }
+    return searchUi.map((searchUiData, key1) => {
+      const { type, defaultChecked = false, idName, title, classes = {} } = searchUiData
+      const _classes = Object.assign({}, classesDefault, classes)
+      let element = null
+      switch (type) {
+        case 'select': {
+          const { value, options = [] } = searchUiData
+          element = (
+            <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
+              <label className={_classes.SearchDialectLabel} htmlFor={idName}>
+                {title}
+              </label>
+              <select
+                className={_classes.SearchDialectOption}
+                id={idName}
+                name={idName}
+                onChange={this.handleChangeSearchOption}
+                value={value}
+              >
+                <option key="SEARCH_SORT_DEFAULT" value={SEARCH_SORT_DEFAULT}>
+                  Any
+                </option>
+                {options.map((option, key2) => {
+                  /* TODO
+                  Handle optionSrc and reference idName to use internal fn() to load options
+
+                  idName: 'searchPartOfSpeech',
+                  optionSrc: 'component',
+                  */
+                  return (
+                    <option key={key2} value={option.value}>
+                      {option.text}
+                    </option>
+                  )
+                })}
+              </select>
+            </span>
+          )
+          break
+        }
+        default:
+          element = (
+            <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
+              <input
+                defaultChecked={defaultChecked}
+                className={_classes.SearchDialectOption}
+                id={idName}
+                name={idName}
+                onChange={this.handleChangeSearchOption}
+                type="checkbox"
+              />
+              <label className={_classes.SearchDialectLabel} htmlFor={idName}>
+                {title}
+              </label>
+            </span>
+          )
+      }
+      return element
+    })
   }
   // NOTE: query params on hold
   // The current state of the codebase makes implementing url params difficult.
@@ -180,8 +279,8 @@ export class SearchDialect extends Component {
   // - URL/Navigation Helper functions have to be updated to support url params
   // - withPagination HOC
   /*
-  _checkURL = () => {
-    const { decoder } = this.props.computeSearchDialect
+  checkURL = () => {
+    const { searchQueryDecoder } = this.props.computeSearchDialect
     const searchObj = getSearchObject()
     const searchUpdate = {}
 
@@ -195,9 +294,9 @@ export class SearchDialect extends Component {
       // Now iterate through them to turn back on:
       const active = searchObj.active.split(',')
       active.forEach((activeItem) => {
-        const key = decoder[activeItem]
+        const key = searchQueryDecoder[activeItem]
         if (key) {
-          searchUpdate[decoder[activeItem]] = true
+          searchUpdate[searchQueryDecoder[activeItem]] = true
         }
       })
     }
@@ -218,7 +317,7 @@ export class SearchDialect extends Component {
   }
   */
 
-  _getBrowse = () => {
+  getBrowsing = () => {
     const { searchByMode } = this.props.computeSearchDialect
     let resetButtonText = ''
     switch (searchByMode) {
@@ -239,17 +338,17 @@ export class SearchDialect extends Component {
         <FVButton
           variant="contained"
           onClick={() => {
-            this._resetSearch()
+            this.resetSearch()
           }}
           color="primary"
         >
           {resetButtonText}
         </FVButton>
-        {this._getFlashcardMode()}
+        {this.getFlashcardButton()}
       </div>
     )
   }
-  _getFlashcardMode = () => {
+  getFlashcardButton = () => {
     const { flashcardMode } = this.props
 
     if (flashcardMode !== undefined) {
@@ -278,24 +377,24 @@ export class SearchDialect extends Component {
     }
     return null
   }
-  _getSearchForm = () => {
+  getSearchForm = () => {
     const { isSearchingPhrases } = this.props
     const {
       searchTerm,
-      searchByCulturalNotes,
-      searchByTitle,
-      searchByDefinitions,
-      searchByTranslations,
-      searchPartOfSpeech,
+      // searchByCulturalNotes,
+      // searchByTitle,
+      // searchByDefinitions,
+      // searchByTranslations,
+      // searchPartOfSpeech,
     } = this.state
     let searchButtonText = ''
     const resetButtonText = 'Reset search'
-    let searchByTitleText = ''
+    // let searchByTitleText = ''
     if (isSearchingPhrases) {
-      searchByTitleText = 'Phrase'
+      // searchByTitleText = 'Phrase'
       searchButtonText = 'Search Phrases'
     } else {
-      searchByTitleText = 'Word'
+      // searchByTitleText = 'Word'
       searchButtonText = intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
     }
 
@@ -306,108 +405,28 @@ export class SearchDialect extends Component {
             data-testid="SearchDialectFormPrimaryInput"
             className={`SearchDialectFormPrimaryInput ${getDialectClassname()}`}
             type="text"
-            onChange={this._updateSearchTerm}
-            onKeyPress={this._handleEnterSearch}
+            onChange={this.updateSearchTerm}
+            onKeyPress={this.handleEnterSearch}
             value={searchTerm || ''}
           />
 
-          <FVButton variant="contained" onClick={this._handleSearch} color="primary">
+          <FVButton variant="contained" onClick={this.handleSearch} color="primary">
             {searchButtonText}
           </FVButton>
 
-          <FVButton variant="contained" onClick={this._resetSearch} style={{ marginLeft: '20px' }}>
+          <FVButton variant="contained" onClick={this.resetSearch} style={{ marginLeft: '20px' }}>
             {resetButtonText}
           </FVButton>
 
-          {this._getFlashcardMode()}
+          {this.getFlashcardButton()}
         </div>
 
-        <div className="SearchDialectFormSecondary">
-          <span className="SearchDialectFormSecondaryGroup">
-            <input
-              defaultChecked={searchByTitle}
-              className="SearchDialectOption"
-              id="searchByTitle"
-              name="searchByTitle"
-              onChange={this._handleCustomSearch}
-              type="checkbox"
-            />
-            <label className="SearchDialectLabel" htmlFor="searchByTitle">
-              {searchByTitleText}
-            </label>
-          </span>
-
-          <span className="SearchDialectFormSecondaryGroup">
-            <input
-              defaultChecked={searchByDefinitions}
-              className="SearchDialectOption"
-              id="searchByDefinitions"
-              name="searchByDefinitions"
-              onChange={this._handleCustomSearch}
-              type="checkbox"
-            />
-            <label className="SearchDialectLabel" htmlFor="searchByDefinitions">
-              Definitions
-            </label>
-          </span>
-
-          {isSearchingPhrases && (
-            <span className="SearchDialectFormSecondaryGroup">
-              <input
-                defaultChecked={searchByCulturalNotes}
-                className="SearchDialectOption"
-                id="searchByCulturalNotes"
-                name="searchByCulturalNotes"
-                onChange={this._handleCustomSearch}
-                type="checkbox"
-              />
-              <label className="SearchDialectLabel" htmlFor="searchByCulturalNotes">
-                Cultural notes
-              </label>
-            </span>
-          )}
-
-          {isSearchingPhrases !== true && (
-            <span className="SearchDialectFormSecondaryGroup">
-              <input
-                defaultChecked={searchByTranslations}
-                className="SearchDialectOption"
-                id="searchByTranslations"
-                name="searchByTranslations"
-                onChange={this._handleCustomSearch}
-                type="checkbox"
-              />
-              <label className="SearchDialectLabel" htmlFor="searchByTranslations">
-                Literal translations
-              </label>
-            </span>
-          )}
-
-          {isSearchingPhrases !== true && (
-            <span className="SearchDialectFormSecondaryGroup">
-              <label className="SearchDialectLabel" htmlFor="searchPartOfSpeech">
-                Parts of speech:
-              </label>
-              <select
-                className="SearchDialectOption SearchDialectPartsOfSpeech"
-                id="searchPartOfSpeech"
-                name="searchPartOfSpeech"
-                onChange={this._handleCustomSearch}
-                value={searchPartOfSpeech}
-              >
-                <option key="SEARCH_SORT_DEFAULT" value={SEARCH_SORT_DEFAULT}>
-                  Any
-                </option>
-                {isSearchingPhrases === false && this.state.partsOfSpeechOptions}
-              </select>
-            </span>
-          )}
-        </div>
+        <div className="SearchDialectFormSecondary">{this.getSearchUi()}</div>
       </div>
     )
   }
 
-  _getSearchInfo = ({
+  getSearchMessage = ({
     searchByAlphabet,
     searchByCulturalNotes,
     searchByDefinitions,
@@ -546,17 +565,27 @@ export class SearchDialect extends Component {
     return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
   }
 
-  _getNxqlSearchSort = () => {
-    const { searchPartOfSpeech, searchTerm } = this.state
+  getNxqlSearchSort = () => {
+    const {
+      searchByCulturalNotes,
+      searchByDefinitions,
+      searchByTitle,
+      searchByTranslations,
+      searchPartOfSpeech,
+      searchTerm,
+    } = this.state
+
     // Default sort
     let searchSortBy = 'dc:title'
 
-    const boolCount = this._getNxqlBoolCount()
-    // if (boolCount > 0) {
-    //   searchSortBy = 'dc:title'
-    // }
-
-    if (boolCount === 1 && searchPartOfSpeech !== SEARCH_SORT_DEFAULT) {
+    // If only searching parts of speech
+    if (
+      searchByCulturalNotes === false &&
+      searchByDefinitions === false &&
+      searchByTitle === false &&
+      searchByTranslations === false &&
+      searchPartOfSpeech !== SEARCH_SORT_DEFAULT
+    ) {
       searchSortBy = 'fv-word:part_of_speech'
     }
 
@@ -569,32 +598,7 @@ export class SearchDialect extends Component {
     return {}
   }
 
-  _getNxqlBoolCount = () => {
-    const {
-      searchByCulturalNotes,
-      searchByDefinitions,
-      searchByTitle,
-      searchByTranslations,
-      searchPartOfSpeech,
-    } = this.props.computeSearchDialect
-
-    const check = {
-      searchByCulturalNotes,
-      searchByDefinitions,
-      searchByTranslations,
-      searchPartOfSpeech: searchPartOfSpeech !== SEARCH_SORT_DEFAULT,
-      searchByTitle,
-    }
-    const boolCount =
-      check.searchByTitle +
-      check.searchByDefinitions +
-      check.searchByTranslations +
-      check.searchPartOfSpeech +
-      check.searchByCulturalNotes
-    return boolCount
-  }
-
-  _generateNxql = () => {
+  generateNxql = () => {
     const {
       searchByAlphabet,
       searchByCulturalNotes,
@@ -683,7 +687,7 @@ export class SearchDialect extends Component {
     return `${nxqlQueryCollection}${nxqlQuerySpeech}`
   }
 
-  _handleCustomSearch = (evt) => {
+  handleChangeSearchOption = (evt) => {
     const { id, checked, value, type } = evt.target
 
     const updateState = {}
@@ -697,7 +701,7 @@ export class SearchDialect extends Component {
         updateState[id] = checked
         /*
         // Find in updateActive array
-        const urlName = this.decoder[id]
+        const urlName = this.searchQueryDecoder[id]
         const entryIndex = updateActive.findIndex((setName) => setName === urlName)
 
         // Add if checked and not present
@@ -716,19 +720,19 @@ export class SearchDialect extends Component {
       }
       default:
         updateState[id] = value
-      // searchObj[this.decoder[id]] = value
+      // searchObj[this.searchQueryDecoder[id]] = value
     }
     this.setState(updateState)
     // this.props.searchDialectUpdate(updateState)
   }
 
-  _handleEnterSearch = (evt) => {
+  handleEnterSearch = (evt) => {
     if (evt.key === 'Enter') {
-      this._handleSearch()
+      this.handleSearch()
     }
   }
 
-  _handleSearch = () => {
+  handleSearch = () => {
     const {
       searchByCulturalNotes,
       searchByDefinitions,
@@ -750,7 +754,7 @@ export class SearchDialect extends Component {
       searchTerm,
     }
     const forSearchDialectUpdate = Object.assign({}, forSearchInfo, {
-      searchInfoOutput: this._getSearchInfo(forSearchInfo),
+      searchMessage: this.getSearchMessage(forSearchInfo),
     })
     // Save to redux:
     this.props.searchDialectUpdate(forSearchDialectUpdate)
@@ -782,7 +786,7 @@ export class SearchDialect extends Component {
     // this.updatePushStateSearch()
   }
 
-  _resetSearch = async () => {
+  resetSearch = async () => {
     const updateState = {
       searchTerm: undefined,
       searchByMode: SEARCH_BY_DEFAULT,
@@ -792,12 +796,12 @@ export class SearchDialect extends Component {
       searchByDefinitions: true,
       searchByTranslations: false,
       searchPartOfSpeech: SEARCH_SORT_DEFAULT,
-      searchInfoOutput: null,
+      searchMessage: null,
     }
     await this.props.searchDialectUpdate(updateState)
 
     // this.setState({
-    //   searchInfoOutput: this._getSearchInfo(),
+    //   searchMessage: this.getSearchMessage(),
     // })
     this.props.resetSearch()
 
@@ -837,7 +841,7 @@ export class SearchDialect extends Component {
     )
   }
   */
-  _updateSearchTerm = (evt) => {
+  updateSearchTerm = (evt) => {
     this.setState({
       searchTerm: evt.target.value,
     })

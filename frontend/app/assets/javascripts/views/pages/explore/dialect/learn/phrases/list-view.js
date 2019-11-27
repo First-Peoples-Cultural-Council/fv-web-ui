@@ -287,47 +287,36 @@ export class ListView extends DataListView {
 
     const computePhrases = ProviderHelpers.getEntry(this.props.computePhrases, this._getPathOrParentID(this.props))
     const computeDialect2 = this.props.dialect || this.getDialect()
-
+    const listViewProps = {
+      className: 'browseDataGrid',
+      columns: this.state.columns,
+      data: computePhrases,
+      dialect: selectn('response', computeDialect2),
+      flashcard: this.props.flashcard,
+      flashcardTitle: this.props.flashcardTitle,
+      gridCols: this.props.gridCols,
+      gridListView: this.props.gridListView,
+      objectDescriptions: 'phrases',
+      onColumnOrderChange: this._handleColumnOrderChange,
+      onSelectionChange: this._onEntryNavigateRequest,
+      onSortChange: this._handleSortChange,
+      page: this.state.pageInfo.page,
+      pageSize: this.state.pageInfo.pageSize,
+      refetcher: this._handleRefetch,
+      sortInfo: this.state.sortInfo.uiSortOrder,
+      type: 'FVPhrase',
+      // SEARCH:
+      handleSearch: this.props.handleSearch,
+      hasSearch: this.props.hasSearch,
+      isSearchingPhrases: true,
+      resetSearch: this.props.resetSearch,
+      searchByMode: this.props.searchByMode,
+      searchUi: this.props.searchUi,
+    }
     const DocumentView = this.props.useDatatable ? (
-      <DocumentListViewDatatable
-        objectDescriptions="phrases"
-        type="FVPhrase"
-        data={computePhrases}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-        flashcard={this.props.flashcard}
-        flashcardTitle={this.props.flashcardTitle}
-      />
+      <DocumentListViewDatatable {...listViewProps} />
     ) : (
-      <DocumentListView
-        objectDescriptions="phrases"
-        type="FVPhrase"
-        data={computePhrases}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-        flashcard={this.props.flashcard}
-        flashcardTitle={this.props.flashcardTitle}
-      />
+      <DocumentListView {...listViewProps} />
     )
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>

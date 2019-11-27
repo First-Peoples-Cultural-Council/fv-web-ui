@@ -8,12 +8,12 @@ const initialState = {
   searchByMode: SEARCH_BY_DEFAULT,
   searchByTitle: true,
   searchByTranslations: false,
-  searchInfoOutput: null,
+  searchMessage: null,
   searchNxqlQuery: undefined,
   searchNxqlSort: {},
   searchPartOfSpeech: SEARCH_SORT_DEFAULT,
   searchTerm: undefined,
-  decoder: {
+  searchQueryDecoder: {
     cn: 'searchByCulturalNotes',
     searchByCulturalNotes: 'cn',
     d: 'searchByDefinitions',
@@ -54,11 +54,11 @@ const computeSearchDialect = (state = initialState, action) => {
       }
 
       if (searchByCulturalNotes) {
-        urlParamActive.push(newState.decoder.searchByCulturalNotes)
+        urlParamActive.push(newState.searchQueryDecoder.searchByCulturalNotes)
       }
 
       if (searchByDefinitions) {
-        urlParamActive.push(newState.decoder.searchByDefinitions)
+        urlParamActive.push(newState.searchQueryDecoder.searchByDefinitions)
       }
 
       if (searchByMode !== undefined) {
@@ -67,11 +67,11 @@ const computeSearchDialect = (state = initialState, action) => {
       }
 
       if (searchByTitle) {
-        urlParamActive.push(newState.decoder.searchByTitle)
+        urlParamActive.push(newState.searchQueryDecoder.searchByTitle)
       }
 
       if (searchByTranslations) {
-        urlParamActive.push(newState.decoder.searchByTranslations)
+        urlParamActive.push(newState.searchQueryDecoder.searchByTranslations)
       }
 
       if (searchNxqlSort !== undefined) {
@@ -80,18 +80,18 @@ const computeSearchDialect = (state = initialState, action) => {
       }
 
       if (searchPartOfSpeech !== undefined) {
-        urlParam.push(`${newState.decoder.searchPartOfSpeech}=${searchPartOfSpeech}`)
+        urlParam.push(`${newState.searchQueryDecoder.searchPartOfSpeech}=${searchPartOfSpeech}`)
       }
 
       if (searchTerm !== undefined) {
-        urlParam.push(`${newState.decoder.searchTerm}=${searchTerm}`)
+        urlParam.push(`${newState.searchQueryDecoder.searchTerm}=${searchTerm}`)
       }
 
       if (urlParamActive.length !== 0) {
         urlParam.push(`active=${urlParamActive.join(',')}`)
       }
 
-      newState.urlParam = urlParam.join('&')
+      newState.searchUrlParam = urlParam.join('&')
       return newState
     }
 

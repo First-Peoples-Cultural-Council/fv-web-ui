@@ -17,7 +17,6 @@ import selectn from 'selectn'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
-// const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list'))
 const DictionaryListV2 = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
 
 const DocumentListView = (props) => {
@@ -40,9 +39,11 @@ const DocumentListView = (props) => {
           pagination: props.pagination,
           style: { overflowY: 'auto', maxHeight: '50vh' },
           type: props.type,
+          // Search:
           handleSearch: props.handleSearch,
-          resetSearch: props.resetSearch,
           hasSearch: props.hasSearch,
+          resetSearch: props.resetSearch,
+          // searchUi: props.searchUi, // TODO ?
         },
         props.gridViewProps
       )
@@ -61,6 +62,10 @@ const DocumentListView = (props) => {
     return (
       <Suspense fallback={<div>Loading...</div>}>
         <DictionaryListV2
+          // Listview
+          hasFlashcard={props.flashcard}
+          hasPagination={props.pagination}
+          hasSearch={props.hasSearch}
           // Listview: Batch
           batchConfirmationAction={props.batchConfirmationAction}
           batchTitleSelect={props.batchTitleSelect}
@@ -76,7 +81,12 @@ const DocumentListView = (props) => {
           // Listview: Sort
           sortHandler={props.sortHandler}
           // Listview: computed data
-          data={props.data}
+          computedData={props.computedData}
+          // Search
+          handleSearch={props.handleSearch}
+          resetSearch={props.resetSearch}
+          searchUi={props.searchUi}
+          searchByMode={props.searchByMode}
           // ==================================================
           cellHeight={160}
           cols={props.gridCols}
@@ -88,13 +98,8 @@ const DocumentListView = (props) => {
           fetcherParams={{ currentPageIndex: props.page, pageSize: props.pageSize }}
           flashcardTitle={props.flashcardTitle}
           gridListTile={props.gridListTile}
-          handleSearch={props.handleSearch}
-          hasFlashcard={props.flashcard}
-          hasPagination={props.pagination}
-          hasSearch={props.hasSearch}
           items={selectn('response.entries', props.data)}
           metadata={selectn('response', props.data)}
-          resetSearch={props.resetSearch}
           style={{ overflowY: 'auto', maxHeight: '50vh' }}
           type={props.type}
         />

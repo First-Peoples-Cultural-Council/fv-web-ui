@@ -237,10 +237,8 @@ const DictionaryListV2 = (props) => {
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
           <SearchDialect
-            columns={props.columns}
             //   filterInfo={filterInfo}
-            handleSearch={props.handleSearch}
-            resetSearch={props.resetSearch}
+            //   flashcardMode={state.flashcardMode}
             //   searchByAlphabet={searchByAlphabet}
             //   searchByDefinitions={searchByDefinitions}
             //   searchByMode={searchByMode}
@@ -249,7 +247,10 @@ const DictionaryListV2 = (props) => {
             //   searchingDialectFilter={searchingDialectFilter}
             //   searchPartOfSpeech={searchPartOfSpeech}
             //   searchTerm={searchTerm}
-            //   flashcardMode={state.flashcardMode}
+            // columns={props.columns}
+            handleSearch={props.handleSearch}
+            resetSearch={props.resetSearch}
+            searchUi={props.searchUi}
           />
         </Suspense>
       )}

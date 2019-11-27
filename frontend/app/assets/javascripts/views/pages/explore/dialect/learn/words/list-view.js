@@ -346,16 +346,6 @@ class ListView extends DataListView {
     })
 
     this._handleRefetch()
-
-    /*props.fetchWords(props.routeParams.dialect_path + '/Dictionary',
-          ProviderHelpers.filtersToNXQL(fetcherParams.filters)  +
-          '&currentPageIndex=' + (fetcherParams.currentPageIndex - 1) +
-          '&pageSize=' + fetcherParams.pageSize +
-          '&sortOrder=' + fetcherParams.sortOrder +
-          '&sortBy=' + fetcherParams.sortBy
-      );*/
-
-    //this._fetchListViewData(props, fetcherParams.currentPageIndex, fetcherParams.pageSize, fetcherParams.sortOrder, fetcherParams.sortBy);
   }
 
   render() {
@@ -401,8 +391,9 @@ class ListView extends DataListView {
       type: 'FVWord',
       // SEARCH:
       handleSearch: this.props.handleSearch,
-      resetSearch: this.props.resetSearch,
       hasSearch: this.props.hasSearch,
+      resetSearch: this.props.resetSearch,
+      searchUi: this.props.searchUi,
     }
     const DocumentView = this.props.useDatatable ? (
       <DocumentListViewDatatable {...listViewProps} />

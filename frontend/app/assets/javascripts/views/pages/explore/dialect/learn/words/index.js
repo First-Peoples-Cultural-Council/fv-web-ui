@@ -45,7 +45,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
-// import WordListView from 'views/pages/explore/dialect/learn/words/list-view-v2'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 import AlphabetListView from 'views/components/AlphabetListView'
 
@@ -184,22 +183,43 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <WordListView
-        disableClickItem={false}
         controlViaURL
         DEFAULT_PAGE_SIZE={10}
+        disableClickItem={false}
         filter={filterInfo}
+        flashcard={this.state.flashcardMode}
+        flashcardTitle={pageTitle}
         parentID={selectn('response.uid', computeDocument)}
         renderSimpleTable
         routeParams={this.props.routeParams}
-        // NOTE: PageDialectLearnBase provides `_getURLPageProps`
-        {...this._getURLPageProps()}
-        {...searchNxqlSort}
-        flashcard={this.state.flashcardMode}
-        flashcardTitle={pageTitle}
         // Search:
         handleSearch={this.handleSearch}
         resetSearch={this.resetSearch}
         hasSearch
+        searchUi={[
+          {
+            defaultChecked: true,
+            idName: 'searchByTitle',
+            title: 'Word',
+          },
+          {
+            idName: 'searchByDefinitions',
+            title: 'Definitions',
+          },
+          {
+            idName: 'searchByTranslations',
+            title: 'Literal translations',
+          },
+          {
+            type: 'select',
+            idName: 'searchPartOfSpeech',
+            title: 'Parts of speech:',
+            optionSrc: 'component',
+          },
+        ]}
+        // NOTE: PageDialectLearnBase provides `_getURLPageProps`
+        {...this._getURLPageProps()}
+        {...searchNxqlSort}
       />
     ) : null
 
