@@ -28,7 +28,6 @@ const intl = IntlService.instance
 const { func, string, bool, object } = PropTypes
 export class SearchDialect extends Component {
   static propTypes = {
-    flashcardMode: bool,
     handleSearch: func,
     isSearchingPhrases: bool,
     resetSearch: func,
@@ -344,39 +343,10 @@ export class SearchDialect extends Component {
         >
           {resetButtonText}
         </FVButton>
-        {this.getFlashcardButton()}
       </div>
     )
   }
-  getFlashcardButton = () => {
-    const { flashcardMode } = this.props
 
-    if (flashcardMode !== undefined) {
-      return flashcardMode ? (
-        <FVButton
-          variant="contained"
-          style={{ marginLeft: 'auto' }}
-          color="primary"
-          onClick={() => {
-            this.props.searchDialectUpdate({ flashcardMode: false })
-          }}
-        >
-          {'Stop viewing Flashcards'}
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          style={{ marginLeft: 'auto' }}
-          onClick={() => {
-            this.props.searchDialectUpdate({ flashcardMode: true })
-          }}
-        >
-          {'Flashcards'}
-        </FVButton>
-      )
-    }
-    return null
-  }
   getSearchForm = () => {
     const { isSearchingPhrases } = this.props
     const {
@@ -417,8 +387,6 @@ export class SearchDialect extends Component {
           <FVButton variant="contained" onClick={this.resetSearch} style={{ marginLeft: '20px' }}>
             {resetButtonText}
           </FVButton>
-
-          {this.getFlashcardButton()}
         </div>
 
         <div className="SearchDialectFormSecondary">{this.getSearchUi()}</div>

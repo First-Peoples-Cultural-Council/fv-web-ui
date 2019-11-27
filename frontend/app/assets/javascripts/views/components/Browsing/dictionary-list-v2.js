@@ -41,6 +41,7 @@ import {
 } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
+import FVButton from 'views/components/FVButton'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
@@ -217,6 +218,16 @@ const DictionaryListV2 = (props) => {
   }
   // ============= BATCH
 
+  // ============= VIEW
+  const viewModeDecoder = {
+    default: 0,
+    flashcard: 1,
+    compact: 2,
+    print: 3,
+  }
+  const [viewMode, setViewMode] = useState(viewModeDecoder.default)
+  // ============= VIEW
+
   const items = props.filteredItems || props.items
   const noResults =
     selectn('length', items) === 0 ? (
@@ -229,16 +240,126 @@ const DictionaryListV2 = (props) => {
         })}
       </div>
     ) : null
+  // viewMode === viewModeDecoder.flashcard
+  const getViewButtons = () => {
+    return (
+      <>
+        {/* {viewMode === viewModeDecoder.default ? (
+          <FVButton variant="contained" color="primary">
+            Responsive mode
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            onClick={() => {
+              setViewMode(viewModeDecoder.default)
+            }}
+          >
+            Responsive mode
+          </FVButton>
+        )} */}
 
+        {viewMode === viewModeDecoder.compact ? (
+          <FVButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setViewMode(viewModeDecoder.default)
+            }}
+          >
+            Cancel compact view
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            onClick={() => {
+              setViewMode(viewModeDecoder.compact)
+            }}
+          >
+            Compact view
+          </FVButton>
+        )}
+
+        {viewMode === viewModeDecoder.flashcard ? (
+          <FVButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setViewMode(viewModeDecoder.default)
+            }}
+          >
+            Cancel flashcard view
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            onClick={() => {
+              setViewMode(viewModeDecoder.flashcard)
+            }}
+          >
+            Flashcard view
+          </FVButton>
+        )}
+
+        {/* {viewMode === viewModeDecoder.print ? (
+          <FVButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setViewMode(viewModeDecoder.default)
+            }}
+          >
+            Cancel print view
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            onClick={() => {
+              setViewMode(viewModeDecoder.print)
+            }}
+          >
+            Print view
+          </FVButton>
+        )} */}
+      </>
+    )
+  }
+  const getCompactList = () => {
+    let content = null
+    const DictionaryListSmallScreenProps = {
+      // withPagination
+      // --------------------
+      appendControls: props.appendControls,
+      disablePageSize: props.disablePageSize,
+      fetcher: props.fetcher,
+      fetcherParams: props.fetcherParams,
+      metadata: props.metadata,
+      // List: small screen
+      // --------------------
+      items: props.items,
+    }
+
+    content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
+
+    if (props.hasPagination) {
+      const DictionaryListSmallScreenWithPagination = withPagination(
+        DictionaryListSmallScreen,
+        DefaultFetcherParams.pageSize
+      )
+      content = <DictionaryListSmallScreenWithPagination {...DictionaryListSmallScreenProps} />
+    }
+    return content
+  }
   return (
     <>
       <h1>(DictionaryListV2)</h1>
+
+      {getViewButtons()}
 
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
           <SearchDialect
             //   filterInfo={filterInfo}
-            //   flashcardMode={state.flashcardMode}
             //   searchByAlphabet={searchByAlphabet}
             //   searchByDefinitions={searchByDefinitions}
             //   searchByMode={searchByMode}
@@ -262,13 +383,20 @@ const DictionaryListV2 = (props) => {
         }}
       >
         {(matches) => {
+          // =========================================
           //  All screens: no results
+          // =========================================
           if (noResults) {
             return noResults
           }
+
           let content = null
-          //  All screens: flashcard
-          if (props.hasFlashcard) {
+
+          // =========================================
+          // User specified view states
+          // =========================================
+          //  Flashcard mode
+          if (viewMode === viewModeDecoder.flashcard) {
             content = <FlashcardList {...props} />
             if (props.hasPagination) {
               const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
@@ -277,32 +405,19 @@ const DictionaryListV2 = (props) => {
             return content
           }
 
+          //  Compact mode
+          if (viewMode === viewModeDecoder.compact) {
+            return getCompactList()
+          }
+
+          // =========================================
+          // Responsive states
+          // =========================================
+
           // Small screen: list view
           // -----------------------------------------
           if (matches.small) {
-            const DictionaryListSmallScreenProps = {
-              // withPagination
-              // --------------------
-              appendControls: props.appendControls,
-              disablePageSize: props.disablePageSize,
-              fetcher: props.fetcher,
-              fetcherParams: props.fetcherParams,
-              metadata: props.metadata,
-              // List: small screen
-              // --------------------
-              items: props.items,
-            }
-
-            content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
-
-            if (props.hasPagination) {
-              const DictionaryListSmallScreenWithPagination = withPagination(
-                DictionaryListSmallScreen,
-                DefaultFetcherParams.pageSize
-              )
-              content = <DictionaryListSmallScreenWithPagination {...DictionaryListSmallScreenProps} />
-            }
-            return content
+            return getCompactList()
           }
           // Large screen: list view
           // -----------------------------------------
