@@ -15,31 +15,20 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { List, Map } from 'immutable'
+import { List } from 'immutable'
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
 
 export default class FlashcardList extends Component {
   static propTypes = {
-    items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
-    filteredItems: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
-    fields: PropTypes.instanceOf(Map),
     columns: PropTypes.array.isRequired,
-    type: PropTypes.string,
-    action: PropTypes.func,
-    cols: PropTypes.number,
-    cellHeight: PropTypes.number,
-    wrapperStyle: PropTypes.object,
-    style: PropTypes.object,
+    filteredItems: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
     flashcardTitle: PropTypes.string,
+    items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
   }
 
   static defaultProps = {
     columns: [],
-    cols: 3,
-    cellHeight: 210,
-    wrapperStyle: null,
-    style: null,
     flashcardTitle: '',
   }
 
