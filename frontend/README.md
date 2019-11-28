@@ -1,19 +1,4 @@
-# FirstVoices Web Applciation
-
-This is a responsive dictionary web-application for the FirstVoices language assets that uses [Nuxeo ECM](http://www.nuxeo.com/) as a back-end.
-
-## Stack
-
-This web app is built using the following:
-
-- [ReactJS](https://facebook.github.io/react/)
-- [Webpack](https://webpack.github.io/)
-- [Material-UI](https://github.com/callemall/material-ui)
-- [Nuxeo-js-client](https://github.com/nuxeo/nuxeo-js-client)
-
-And interfaces with a [Nuxeo](http://www.nuxeo.com) server, at the moment using custom schemas and configruation specific to FirstVoices.
-
-For additional dependencies see package.json.
+# FirstVoices Front-end
 
 ## Getting Started
 

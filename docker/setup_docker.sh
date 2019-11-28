@@ -37,7 +37,7 @@ echo
 # Build main project.
 echo 'Building fv-web-ui (this make take a few minutes)'
 cd ..
-mvn -s sample.settings.xml clean install
+mvn clean install
 if [[ "$?" -ne 0 ]]; then
     echo
     echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1

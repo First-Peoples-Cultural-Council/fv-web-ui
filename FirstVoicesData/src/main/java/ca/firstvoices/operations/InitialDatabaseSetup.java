@@ -196,8 +196,7 @@ public class InitialDatabaseSetup {
             /*
                 Create admin user.
              */
-            thisExists = userManager.getUserModel(username) != null;
-            if (!thisExists) {
+            if (userManager.getUserModel(username) == null) {
                 String[] groups ={"administrators"};
                 DocumentModel userDoc = userManager.getBareUserModel();
                 userDoc.setProperty(SCHEMA_NAME, USERNAME_COLUMN, username);
