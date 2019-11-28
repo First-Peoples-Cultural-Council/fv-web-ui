@@ -83,7 +83,7 @@ This will setup the proper data structure for FirstVoices, and create an admin a
 ### Step 6:
 
 * You can now access the FirstVoices backend by going to localhost:8080 and logging in.
-* You can also run the frontend, pointing to your Docker container instance, by navigating to fv-web-ui/frontend, and running ```npm run startLocalDev```
+* You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)
 
 ## Creating an archive to work in
 By default, your instance will not have any archives to work in.
