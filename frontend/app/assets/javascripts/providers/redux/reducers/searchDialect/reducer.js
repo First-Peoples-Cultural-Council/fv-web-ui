@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { SEARCH_DIALECT_UPDATE } from './actionTypes'
-import { SEARCH_SORT_DEFAULT, SEARCH_BY_DEFAULT } from 'views/components/SearchDialect/constants'
+import { SEARCH_PART_OF_SPEECH_ANY, SEARCH_BY_DEFAULT } from 'views/components/SearchDialect/constants'
 const initialState = {
   searchByAlphabet: '',
   searchByCulturalNotes: false,
@@ -11,7 +11,7 @@ const initialState = {
   searchMessage: null,
   searchNxqlQuery: undefined,
   searchNxqlSort: {},
-  searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+  searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
   searchTerm: undefined,
   searchQueryDecoder: {
     cn: 'searchByCulturalNotes',

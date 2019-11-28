@@ -47,7 +47,7 @@ import IntlService from 'views/services/intl'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 // import SearchDialect from 'views/components/SearchDialect'
 import {
-  SEARCH_SORT_DEFAULT,
+  SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_BY_ALPHABET,
   SEARCH_BY_DEFAULT,
   SEARCH_BY_PHRASE_BOOK,
@@ -132,7 +132,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       searchByTranslations: false,
       searchNxqlQuery: '',
       searchNxqlSort: {},
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
       computeEntities,
       isKidsTheme: props.routeParams.siteTheme === 'kids',
       flashcardMode: false,
@@ -385,7 +385,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       searchByTitle: true,
       searchByDefinitions: false,
       searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
     })
 
     this.changeFilter(href, updateHistory)
@@ -401,7 +401,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       searchByTitle: true,
       searchByDefinitions: false,
       searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
     })
 
     this.changeFilter(href, updateHistory)

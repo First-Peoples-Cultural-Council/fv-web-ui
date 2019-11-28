@@ -33,7 +33,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import {
-  SEARCH_SORT_DEFAULT,
+  SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_BY_DEFAULT,
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
@@ -133,7 +133,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       searchingDialectFilter: undefined,
       searchNxqlQuery: '',
       searchNxqlSort: {},
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
       searchTerm: '',
     }
 
@@ -214,7 +214,12 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             type: 'select',
             idName: 'searchPartOfSpeech',
             title: 'Parts of speech:',
-            optionSrc: 'component',
+            // options: [
+            //   {
+            //     value: 'test',
+            //     text: 'Test',
+            //   },
+            // ],
           },
         ]}
         // NOTE: PageDialectLearnBase provides `_getURLPageProps`
@@ -359,8 +364,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     })
   }
 
-  handleSearch = () => {
-    this.changeFilter()
+  handleSearch = (searchDialectData) => {
+    this.changeFilter({ searchDialectData })
   }
 
   resetSearch = () => {
@@ -411,8 +416,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
   }
 
-  changeFilter = (href, updateUrl = true) => {
-    const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
+  changeFilter = ({ href, updateUrl = true, searchDialectData }) => {
+    const { searchByMode, searchNxqlQuery } = searchDialectData || this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
 
@@ -477,15 +482,13 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       searchByTitle: true,
       searchByDefinitions: false,
       searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
     })
 
-    this.changeFilter(href, updateHistory)
+    this.changeFilter({ href, updateHistory })
   }
 
-  handleCategoryClick = (obj, updateHistory = true) => {
-    const { facetField, selected, unselected, href } = obj
-
+  handleCategoryClick = ({ facetField, selected, unselected, href }, updateHistory = true) => {
     this.props.searchDialectUpdate({
       searchTerm: '',
       searchByAlphabet: '',
@@ -494,10 +497,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       searchByTitle: true,
       searchByDefinitions: false,
       searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_SORT_DEFAULT,
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
     })
 
-    this.changeFilter(href, updateHistory)
+    this.changeFilter({ href, updateHistory })
 
     this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE)
   }
