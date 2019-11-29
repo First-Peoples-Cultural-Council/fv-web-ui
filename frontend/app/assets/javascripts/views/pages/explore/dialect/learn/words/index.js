@@ -364,8 +364,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     })
   }
 
-  handleSearch = (searchDialectData) => {
-    this.changeFilter({ searchDialectData })
+  handleSearch = () => {
+    this.changeFilter()
   }
 
   resetSearch = () => {
@@ -416,8 +416,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
   }
 
-  changeFilter = ({ href, updateUrl = true, searchDialectData }) => {
-    const { searchByMode, searchNxqlQuery } = searchDialectData || this.props.computeSearchDialect
+  changeFilter = ({ href, updateUrl = true } = {}) => {
+    const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
 
@@ -474,30 +474,34 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
   }
 
-  handleAlphabetClick = (letter, href, updateHistory = true) => {
-    this.props.searchDialectUpdate({
-      searchTerm: '',
+  handleAlphabetClick = async (letter, href, updateHistory = true) => {
+    await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
-      searchByTitle: true,
-      searchByDefinitions: false,
-      searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      searchBySettings: {
+        searchByTitle: true,
+        searchByDefinitions: false,
+        searchByTranslations: false,
+        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      },
+      searchTerm: '',
     })
 
     this.changeFilter({ href, updateHistory })
   }
 
-  handleCategoryClick = ({ facetField, selected, unselected, href }, updateHistory = true) => {
-    this.props.searchDialectUpdate({
-      searchTerm: '',
+  handleCategoryClick = async ({ facetField, selected, unselected, href }, updateHistory = true) => {
+    await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CATEGORY,
       searchingDialectFilter: selected.checkedFacetUid,
-      searchByTitle: true,
-      searchByDefinitions: false,
-      searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      searchBySettings: {
+        searchByTitle: true,
+        searchByDefinitions: false,
+        searchByTranslations: false,
+        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      },
+      searchTerm: '',
     })
 
     this.changeFilter({ href, updateHistory })

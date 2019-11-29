@@ -377,31 +377,35 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     this.changeFilter()
   }
 
-  handleAlphabetClick(letter, href, updateHistory = true) {
-    this.props.searchDialectUpdate({
-      searchTerm: '',
+  async handleAlphabetClick(letter, href, updateHistory = true) {
+    await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
-      searchByTitle: true,
-      searchByDefinitions: false,
-      searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      searchBySettings: {
+        searchByDefinitions: false,
+        searchByTitle: true,
+        searchByTranslations: false,
+        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      },
+      searchTerm: '',
     })
 
     this.changeFilter(href, updateHistory)
   }
 
-  handlePhraseBookClick(obj, updateHistory = true) {
+  async handlePhraseBookClick(obj, updateHistory = true) {
     const { facetField, selected, unselected, href } = obj
-    this.props.searchDialectUpdate({
+    await this.props.searchDialectUpdate({
       searchTerm: '',
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_PHRASE_BOOK,
       searchingDialectFilter: selected.checkedFacetUid,
-      searchByTitle: true,
-      searchByDefinitions: false,
-      searchByTranslations: false,
-      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      searchBySettings: {
+        searchByTitle: true,
+        searchByDefinitions: false,
+        searchByTranslations: false,
+        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      },
     })
 
     this.changeFilter(href, updateHistory)
