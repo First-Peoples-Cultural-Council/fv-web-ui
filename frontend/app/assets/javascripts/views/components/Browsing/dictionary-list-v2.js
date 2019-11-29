@@ -16,7 +16,7 @@ limitations under the License.
 
 // Libraries
 import React, { Suspense, useState } from 'react'
-import PropTypes, { bool } from 'prop-types'
+import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
 import Media from 'react-media'
@@ -77,21 +77,21 @@ const DictionaryListLargeScreen = React.lazy(() => import('views/components/Brow
 
     X url = .../learn/words/[perPage]/[page]?sB=dc:title&sO=asc&q=searchTermHere&w=1&d=1&lT=1&pS=adjective
 
-  - Sorting:
+  √ - Sorting:
     sB=[field] // sort by
     sO=[asc or desc] // sort order
 
-  - Pagination:
+  √ - Pagination:
     url = .../[perPage]/[page]
 
-  - View Buttons:
+  √ - View Buttons:
     v=[0,1,2,...]
 
     0 = small screen
     1 = large screen
     2 = flash cards
 
-  - Bulk operations:
+  √ - Bulk operations:
 
   - Select a row:
 
@@ -327,6 +327,7 @@ const DictionaryListV2 = (props) => {
   const getCompactList = () => {
     let content = null
     const DictionaryListSmallScreenProps = {
+      rowClickHandler: props.rowClickHandler,
       // withPagination
       // --------------------
       appendControls: props.appendControls,
@@ -396,6 +397,7 @@ const DictionaryListV2 = (props) => {
           // User specified view states
           // =========================================
           //  Flashcard mode
+          // -----------------------------------------
           if (viewMode === viewModeDecoder.flashcard) {
             content = <FlashcardList {...props} />
             if (props.hasPagination) {
@@ -406,6 +408,7 @@ const DictionaryListV2 = (props) => {
           }
 
           //  Compact mode
+          // -----------------------------------------
           if (viewMode === viewModeDecoder.compact) {
             return getCompactList()
           }
@@ -423,6 +426,7 @@ const DictionaryListV2 = (props) => {
           // -----------------------------------------
           if (matches.medium) {
             const DictionaryListLargeScreenProps = {
+              rowClickHandler: props.rowClickHandler,
               // withPagination
               // --------------------
               appendControls: props.appendControls,
@@ -456,7 +460,7 @@ const DictionaryListV2 = (props) => {
   )
 }
 
-const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 DictionaryListV2.propTypes = {
   // dictionary-list
   action: func,
@@ -471,6 +475,7 @@ DictionaryListV2.propTypes = {
   style: object,
   type: string,
   wrapperStyle: object,
+  rowClickHandler: func,
   // Search
   hasSearch: bool,
   handleSearch: func,

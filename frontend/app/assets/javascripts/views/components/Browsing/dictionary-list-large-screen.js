@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import selectn from 'selectn'
-
+import PropTypes from 'prop-types'
+import { List } from 'immutable'
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
   useEffect(() => {
@@ -78,29 +79,49 @@ const DictionaryListLargeScreen = (props) => {
       <tbody>
         {trHeader}
 
-        {items.map((item, i) => (
-          <tr
-            key={i}
-            data-testid="DictionaryList__row"
-            className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
-          >
-            {props.columns.map((column, j) => {
-              const cellValue = selectn(column.name, item)
-              const cellRender =
-                typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
-              const className = columnClassNames[j] || ''
-              return (
-                <td key={j} className={className}>
-                  {cellRender}
-                </td>
-              )
-            })}
-          </tr>
-        ))}
+        {items.map((item, i) => {
+          const _item = item
+          return (
+            <tr
+              key={i}
+              data-testid="DictionaryList__row"
+              className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
+              onClick={() => {
+                props.rowClickHandler(_item)
+              }}
+            >
+              {props.columns.map((column, j) => {
+                const cellValue = selectn(column.name, item)
+                const cellRender =
+                  typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+                const className = columnClassNames[j] || ''
+                return (
+                  <td key={j} className={className}>
+                    {cellRender}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
 
         {trFooter}
       </tbody>
     </table>
   )
 }
+
+const { array, func, instanceOf, oneOfType, string } = PropTypes
+DictionaryListLargeScreen.propTypes = {
+  columns: array,
+  cssModifier: string,
+  filteredItems: oneOfType([array, instanceOf(List)]),
+  items: oneOfType([array, instanceOf(List)]),
+  rowClickHandler: func,
+}
+
+DictionaryListLargeScreen.defaultProps = {
+  rowClickHandler: () => {},
+}
+
 export default DictionaryListLargeScreen

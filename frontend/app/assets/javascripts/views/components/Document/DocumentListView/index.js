@@ -66,6 +66,9 @@ const DocumentListView = (props) => {
           hasFlashcard={props.flashcard}
           hasPagination={props.pagination}
           hasSearch={props.hasSearch}
+          // rowClickHandler={(rowData) => {
+          //   console.log('rowClickHandler', rowData)
+          // }}
           // Listview: Batch
           batchConfirmationAction={props.batchConfirmationAction}
           batchTitleSelect={props.batchTitleSelect}

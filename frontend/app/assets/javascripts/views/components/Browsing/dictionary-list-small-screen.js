@@ -44,17 +44,19 @@ export default class DictionaryListSmallScreen extends Component {
     items: array,
     metadata: object,
     pagination: bool,
+    rowClickHandler: func,
     style: object,
     type: string,
   }
 
   static defaultProps = {
-    cssModifier: '',
-    columns: [],
-    cols: 3,
     cellHeight: 210,
-    wrapperStyle: null,
+    cols: 3,
+    columns: [],
+    cssModifier: '',
+    rowClickHandler: () => {},
     style: null,
+    wrapperStyle: null,
   }
 
   constructor(props, context) {
@@ -76,6 +78,7 @@ export default class DictionaryListSmallScreen extends Component {
       )
     }
     const renderItems = (items || []).map((item, i1) => {
+      const _item = item
       const title = item.title ? (
         <Typography variant="title" component="h2">
           {item.title}
@@ -160,6 +163,9 @@ export default class DictionaryListSmallScreen extends Component {
           className={`dictionaryListSmallScreen__listItem ${
             i1 % 2 !== 0 ? 'dictionaryListSmallScreen__listItem--alt' : ''
           }`}
+          onClick={() => {
+            this.props.rowClickHandler(_item)
+          }}
         >
           {title}
 
