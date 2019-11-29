@@ -43,7 +43,7 @@ const intl = IntlService.instance
  */
 
 const { array, bool, func, number, object, string } = PropTypes
-export class ListView extends DataListView {
+export class AlphabetListView extends DataListView {
   static propTypes = {
     data: string,
     DEFAULT_PAGE: number,
@@ -266,4 +266,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListView)
+)(AlphabetListView)

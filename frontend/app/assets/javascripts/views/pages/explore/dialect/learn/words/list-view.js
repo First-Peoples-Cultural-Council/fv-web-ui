@@ -48,7 +48,7 @@ const intl = IntlService.instance
  * List view for words
  */
 const { array, bool, func, number, object, string } = PropTypes
-class ListView extends DataListView {
+class WordsListView extends DataListView {
   static propTypes = {
     action: func,
     controlViaURL: bool,
@@ -438,4 +438,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListView)
+)(WordsListView)
