@@ -34,7 +34,6 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import {
   SEARCH_PART_OF_SPEECH_ANY,
-  SEARCH_BY_DEFAULT,
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
 } from 'views/components/SearchDialect/constants'
@@ -95,11 +94,11 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   constructor(props, context) {
     super(props, context)
 
-    let filterInfo = this._initialFilterInfo()
+    let filterInfo = this.initialFilterInfo()
 
     // If no filters are applied via URL, use props
     if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
-      const pagePropertiesFilterInfo = selectn([[this._getPageKey()], 'filterInfo'], props.properties.pageProperties)
+      const pagePropertiesFilterInfo = selectn([[this.getPageKey()], 'filterInfo'], props.properties.pageProperties)
       if (pagePropertiesFilterInfo) {
         filterInfo = pagePropertiesFilterInfo
       }
@@ -125,45 +124,23 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       filterInfo,
       flashcardMode: false,
       isKidsTheme: props.routeParams.siteTheme === 'kids',
-      searchByAlphabet: '',
-      searchByDefinitions: true,
-      searchByMode: SEARCH_BY_DEFAULT,
-      searchByTitle: true,
-      searchByTranslations: false,
-      searchingDialectFilter: undefined,
-      searchNxqlQuery: '',
-      searchNxqlSort: {},
-      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      searchTerm: '',
     }
 
     // Bind methods to 'this'
     ;[
-      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
       '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
       '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
       '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
       '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
       '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
       '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
+      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   render() {
-    const {
-      computeEntities,
-      filterInfo,
-      isKidsTheme,
-      searchNxqlSort,
-      // searchByMode,
-      // searchByAlphabet,
-      // searchingDialectFilter,
-      // searchByDefinitions,
-      // searchByTitle,
-      // searchByTranslations,
-      // searchTerm,
-      // searchPartOfSpeech,
-    } = this.state
+    const { computeEntities, filterInfo, isKidsTheme } = this.state
+
     const { routeParams } = this.props
     const computeDocument = ProviderHelpers.getEntry(
       this.props.computeDocument,
@@ -181,10 +158,17 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
       ''} ${intl.trans('words', 'Words', 'first')}`
 
+    const { searchNxqlSort = {} } = this.props.computeSearchDialect
+    const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
+
     const wordListView = selectn('response.uid', computeDocument) ? (
       <WordListView
         controlViaURL
-        DEFAULT_PAGE_SIZE={10}
+        DEFAULT_PAGE={DEFAULT_PAGE}
+        DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+        DEFAULT_SORT_COL={DEFAULT_SORT_COL}
+        DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
         disableClickItem={false}
         filter={filterInfo}
         flashcard={this.state.flashcardMode}
@@ -222,9 +206,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             // ],
           },
         ]}
-        // NOTE: PageDialectLearnBase provides `_getURLPageProps`
-        {...this._getURLPageProps()}
-        {...searchNxqlSort}
       />
     ) : null
 
@@ -292,7 +273,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
               <AlphabetListView
                 dialect={selectn('response', computePortal)}
                 handleClick={this.handleAlphabetClick}
-                letter={this.state.searchByAlphabet}
+                letter={selectn('routeParams.letter', this.props)}
               />
 
               <DialectFilterList
@@ -317,22 +298,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           </div>
           <div className={classNames('col-xs-12', computeCategoriesSize === 0 ? 'col-md-12' : 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
-
-            {/* <SearchDialect
-              // filterInfo={filterInfo}
-              handleSearch={this.handleSearch}
-              resetSearch={this.resetSearch}
-              // searchByAlphabet={searchByAlphabet}
-              // searchByDefinitions={searchByDefinitions}
-              // searchByMode={searchByMode}
-              // searchByTitle={searchByTitle}
-              // searchByTranslations={searchByTranslations}
-              searchingDialectFilter={searchingDialectFilter}
-              // searchPartOfSpeech={searchPartOfSpeech}
-              // searchTerm={searchTerm}
-              flashcardMode={this.state.flashcardMode}
-            /> */}
-
             <div className={dialectClassName}>{wordListView}</div>
           </div>
         </div>
@@ -340,81 +305,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     )
   }
   // END render
-
-  clearDialectFilter = () => {
-    this.setState({ filterInfo: this._initialFilterInfo() })
-  }
-
-  _initialFilterInfo = () => {
-    const routeParamsCategory = this.props.routeParams.category
-    const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
-    const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
-      'fv-word:categories',
-      this.props.routeParams.area
-    )
-    const currentAppliedFilterCategories = routeParamsCategory
-      ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
-      : ''
-
-    return new Map({
-      currentCategoryFilterIds: initialCategories,
-      currentAppliedFilter: new Map({
-        categories: currentAppliedFilterCategories,
-      }),
-    })
-  }
-
-  handleSearch = () => {
-    this.changeFilter()
-  }
-
-  resetSearch = () => {
-    let newFilter = this.state.filterInfo
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
-    newFilter = newFilter.set('currentAppliedFilter', new Map())
-
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'categories'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'contains'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'startsWith'], null)
-    newFilter = newFilter.set('currentAppliedFiltersDesc', new Map())
-
-    newFilter = newFilter.set('currentCategoryFilterIds', new Set())
-
-    this.setState(
-      {
-        filterInfo: newFilter,
-        searchNxqlSort: 'fv:custom_order',
-        //searchNxqlSort: 'dc:title',
-      },
-      () => {
-        // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination()
-
-        // Remove alphabet/category filter urls
-        if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
-          let resetUrl = `/${this.props.splitWindowPath.join('/')}`
-          const _splitWindowPath = [...this.props.splitWindowPath]
-          const learnIndex = _splitWindowPath.indexOf('learn')
-          if (learnIndex !== -1) {
-            _splitWindowPath.splice(learnIndex + 2)
-            resetUrl = `/${_splitWindowPath.join('/')}`
-          }
-
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
-        }
-      }
-    )
-  }
-
-  // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-    newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
-  }
 
   changeFilter = ({ href, updateUrl = true } = {}) => {
     const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
@@ -474,6 +364,21 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
   }
 
+  clearDialectFilter = () => {
+    this.setState({ filterInfo: this.initialFilterInfo() })
+  }
+
+  // NOTE: PageDialectLearnBase calls `fetchData`
+  fetchData(newProps) {
+    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
+    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
+    newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
+  }
+
+  getPageKey = () => {
+    return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
+  }
+
   handleAlphabetClick = async (letter, href, updateHistory = true) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
@@ -509,8 +414,67 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE)
   }
 
-  _getPageKey = () => {
-    return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
+  handleSearch = () => {
+    this.changeFilter()
+  }
+
+  initialFilterInfo = () => {
+    const routeParamsCategory = this.props.routeParams.category
+    const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
+    const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
+      'fv-word:categories',
+      this.props.routeParams.area
+    )
+    const currentAppliedFilterCategories = routeParamsCategory
+      ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
+      : ''
+
+    return new Map({
+      currentCategoryFilterIds: initialCategories,
+      currentAppliedFilter: new Map({
+        categories: currentAppliedFilterCategories,
+      }),
+    })
+  }
+
+  resetSearch = () => {
+    let newFilter = this.state.filterInfo
+    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
+    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
+    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
+    newFilter = newFilter.set('currentAppliedFilter', new Map())
+
+    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'categories'], null)
+    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'contains'], null)
+    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'startsWith'], null)
+    newFilter = newFilter.set('currentAppliedFiltersDesc', new Map())
+
+    newFilter = newFilter.set('currentCategoryFilterIds', new Set())
+
+    this.setState(
+      {
+        filterInfo: newFilter,
+        // searchNxqlSort: 'fv:custom_order', // TODO: IS THIS BREAKING SOMETHING?
+      },
+      () => {
+        // When facets change, pagination should be reset.
+        // In these pages (words/phrase), list views are controlled via URL
+        this._resetURLPagination()
+
+        // Remove alphabet/category filter urls
+        if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
+          let resetUrl = `/${this.props.splitWindowPath.join('/')}`
+          const _splitWindowPath = [...this.props.splitWindowPath]
+          const learnIndex = _splitWindowPath.indexOf('learn')
+          if (learnIndex !== -1) {
+            _splitWindowPath.splice(learnIndex + 2)
+            resetUrl = `/${_splitWindowPath.join('/')}`
+          }
+
+          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+        }
+      }
+    )
   }
 }
 
