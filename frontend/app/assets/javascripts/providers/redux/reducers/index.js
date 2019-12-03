@@ -40,6 +40,7 @@ import { fvResourcesReducer } from './fvResources'
 import { fvUserReducer } from './fvUser'
 import { fvVideoReducer } from './fvVideo'
 import { fvWordReducer } from './fvWord'
+import { listViewReducer } from './listView'
 import { navigationReducer } from './navigation'
 import { nuxeoReducer } from './nuxeo'
 import { reportsReducer } from './reports'
@@ -73,6 +74,7 @@ export default combineReducers({
   fvVideo: fvVideoReducer,
   fvWord: fvWordReducer,
   navigation: navigationReducer,
+  listView: listViewReducer,
   nuxeo: nuxeoReducer,
   reports: reportsReducer,
   // rest: restReducer,

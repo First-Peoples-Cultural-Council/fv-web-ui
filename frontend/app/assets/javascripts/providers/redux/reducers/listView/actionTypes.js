@@ -1,0 +1,1 @@
+export const LISTVIEW_UPDATE = 'LISTVIEW_UPDATE'

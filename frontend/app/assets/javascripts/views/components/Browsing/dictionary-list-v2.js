@@ -24,6 +24,7 @@ import Media from 'react-media'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { setListViewMode } from 'providers/redux/reducers/listView'
 
 // Components
 import {
@@ -32,6 +33,7 @@ import {
   batchRender,
   deleteSelected,
   getIcon,
+  getSortState,
   sortCol,
   getUidsFromComputedData,
   getUidsThatAreNotDeleted,
@@ -140,7 +142,7 @@ const DictionaryListV2 = (props) => {
   propsColumns = props.columns.map((column) => {
     if (column.sortBy) {
       return Object.assign({}, column, {
-        title: () => {
+        titleLarge: () => {
           return (
             <button
               type="button"
@@ -160,9 +162,39 @@ const DictionaryListV2 = (props) => {
             </button>
           )
         },
+        titleSmall: () => {
+          const sortState = getSortState({ field: column.sortBy, sortOrder, sortBy })
+          const color = sortState ? 'primary' : undefined
+          return (
+            <FVButton
+              type="button"
+              variant="outlined"
+              color={color}
+              size="small"
+              className={`dictionaryListSmallScreen__sortButton ${
+                sortState ? `dictionaryListSmallScreen__sortButton--${sortState}` : ''
+              }`}
+              onClick={() => {
+                sortCol({
+                  newSortBy: column.sortBy,
+                  pageSize,
+                  pushWindowPath: props.pushWindowPath,
+                  sortOrder,
+                  sortHandler: props.sortHandler,
+                })
+              }}
+            >
+              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+              {column.title}
+            </FVButton>
+          )
+        },
       })
     }
-    return column
+    return Object.assign({}, column, {
+      titleLarge: column.title,
+      titleSmall: column.title,
+    })
   })
   // ============= SORT
 
@@ -218,17 +250,11 @@ const DictionaryListV2 = (props) => {
   }
   // ============= BATCH
 
-  // ============= VIEW
-  const viewModeDecoder = {
-    default: 0,
-    flashcard: 1,
-    compact: 2,
-    print: 3,
-  }
-  const [viewMode, setViewMode] = useState(viewModeDecoder.default)
-  // ============= VIEW
+  const { listView } = props
+  const { mode: viewMode, decoder: viewModeDecoder } = listView
 
   const items = props.filteredItems || props.items
+
   const noResults =
     selectn('length', items) === 0 ? (
       <div className={`DictionaryList DictionaryList--noData  ${props.cssModifier}`}>
@@ -240,7 +266,7 @@ const DictionaryListV2 = (props) => {
         })}
       </div>
     ) : null
-  // viewMode === viewModeDecoder.flashcard
+
   const getViewButtons = () => {
     return (
       <>
@@ -252,7 +278,7 @@ const DictionaryListV2 = (props) => {
           <FVButton
             variant="contained"
             onClick={() => {
-              setViewMode(viewModeDecoder.default)
+              props.setListViewMode(viewModeDecoder.default)
             }}
           >
             Responsive mode
@@ -264,7 +290,7 @@ const DictionaryListV2 = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setViewMode(viewModeDecoder.default)
+              props.setListViewMode(viewModeDecoder.default)
             }}
           >
             Cancel compact view
@@ -273,7 +299,7 @@ const DictionaryListV2 = (props) => {
           <FVButton
             variant="contained"
             onClick={() => {
-              setViewMode(viewModeDecoder.compact)
+              props.setListViewMode(viewModeDecoder.compact)
             }}
           >
             Compact view
@@ -285,7 +311,7 @@ const DictionaryListV2 = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setViewMode(viewModeDecoder.default)
+              props.setListViewMode(viewModeDecoder.default)
             }}
           >
             Cancel flashcard view
@@ -294,7 +320,7 @@ const DictionaryListV2 = (props) => {
           <FVButton
             variant="contained"
             onClick={() => {
-              setViewMode(viewModeDecoder.flashcard)
+              props.setListViewMode(viewModeDecoder.flashcard)
             }}
           >
             Flashcard view
@@ -306,7 +332,7 @@ const DictionaryListV2 = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setViewMode(viewModeDecoder.default)
+              props.setListViewMode(viewModeDecoder.default)
             }}
           >
             Cancel print view
@@ -315,7 +341,7 @@ const DictionaryListV2 = (props) => {
           <FVButton
             variant="contained"
             onClick={() => {
-              setViewMode(viewModeDecoder.print)
+              props.setListViewMode(viewModeDecoder.print)
             }}
           >
             Print view
@@ -338,6 +364,7 @@ const DictionaryListV2 = (props) => {
       // List: small screen
       // --------------------
       items: props.items,
+      columns: propsColumns,
     }
 
     content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
@@ -359,21 +386,7 @@ const DictionaryListV2 = (props) => {
 
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
-          <SearchDialect
-            //   filterInfo={filterInfo}
-            //   searchByAlphabet={searchByAlphabet}
-            //   searchByDefinitions={searchByDefinitions}
-            //   searchByMode={searchByMode}
-            //   searchByTitle={searchByTitle}
-            //   searchByTranslations={searchByTranslations}
-            //   searchingDialectFilter={searchingDialectFilter}
-            //   searchPartOfSpeech={searchPartOfSpeech}
-            //   searchTerm={searchTerm}
-            // columns={props.columns}
-            handleSearch={props.handleSearch}
-            resetSearch={props.resetSearch}
-            searchUi={props.searchUi}
-          />
+          <SearchDialect handleSearch={props.handleSearch} resetSearch={props.resetSearch} searchUi={props.searchUi} />
         </Suspense>
       )}
 
@@ -466,16 +479,17 @@ DictionaryListV2.propTypes = {
   action: func,
   cellHeight: number,
   cols: number,
-  computedData: object,
   columns: array.isRequired,
+  computedData: object,
   cssModifier: string,
   fields: instanceOf(Map),
   filteredItems: oneOfType([array, instanceOf(List)]),
   items: oneOfType([array, instanceOf(List)]),
+  rowClickHandler: func,
+  sortHandler: func,
   style: object,
   type: string,
   wrapperStyle: object,
-  rowClickHandler: func,
   // Search
   hasSearch: bool,
   handleSearch: func,
@@ -483,22 +497,24 @@ DictionaryListV2.propTypes = {
   // REDUX: reducers/state
   routeParams: object.isRequired,
   search: object.isRequired,
+  listView: object.isRequired,
   // REDUX: actions/dispatch/func
   pushWindowPath: func.isRequired,
 }
 
 DictionaryListV2.defaultProps = {
   // dictionary-list
-  batchTitleSelect: 'Deselect all',
-  batchTitleDeselect: 'Select all',
-  batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
-  batchFooterBtnInitiate: 'Delete',
-  batchFooterBtnDeny: 'No, do not delete the selected items',
   batchFooterBtnConfirm: 'Yes, delete the selected items',
+  batchFooterBtnDeny: 'No, do not delete the selected items',
+  batchFooterBtnInitiate: 'Delete',
+  batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
+  batchTitleDeselect: 'Select all',
+  batchTitleSelect: 'Deselect all',
   cellHeight: 210,
   cols: 3,
   columns: [],
   cssModifier: '',
+  sortHandler: () => {},
   style: null,
   wrapperStyle: null,
   // search
@@ -507,23 +523,26 @@ DictionaryListV2.defaultProps = {
   resetSearch: () => {},
   // REDUX: actions/dispatch/func
   pushWindowPath: () => {},
+  setListViewMode: () => {},
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { navigation } = state
+  const { navigation, listView } = state
 
   const { route } = navigation
 
   return {
     routeParams: route.routeParams,
     search: route.search,
+    listView,
   }
 }
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   pushWindowPath,
+  setListViewMode,
 }
 
 export default connect(

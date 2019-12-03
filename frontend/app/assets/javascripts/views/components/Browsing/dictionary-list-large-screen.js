@@ -50,7 +50,7 @@ const DictionaryListLargeScreen = (props) => {
     // Header
     headerCells.push(
       <th key={`header${i}`} className={`${columnClassNames[i] || ''} DictionaryList__header`}>
-        {selectn('title', column)}
+        {selectn('titleLarge', column)}
       </th>
     )
 
