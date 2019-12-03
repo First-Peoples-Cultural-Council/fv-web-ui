@@ -1,37 +1,19 @@
 package ca.firstvoices.listeners;
 
-import org.nuxeo.ecm.core.api.model.Property;
+//import org.nuxeo.ecm.core.api.model.Property;
+//import org.nuxeo.ecm.core.api.model.impl.ScalarProperty;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-
-import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
-import org.nuxeo.ecm.automation.core.annotations.Operation;
-import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
-import org.nuxeo.ecm.automation.core.annotations.Param;
-import org.nuxeo.ecm.automation.core.collectors.DocumentModelCollector;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-
-import org.nuxeo.ecm.automation.core.annotations.Context;
-import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
-import org.nuxeo.ecm.automation.core.collectors.DocumentModelCollector;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.event.Event;
-import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.EventListener;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.schema.DocumentType;
-import org.nuxeo.ecm.automation.core.operations.document.GetDocumentParent;
-import org.nuxeo.ecm.core.schema.types.SimpleType;
-import org.nuxeo.ecm.core.schema.types.Type;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class FVDocumentListener implements EventListener {
   
@@ -57,7 +39,7 @@ public class FVDocumentListener implements EventListener {
     DocumentEventContext docCtx = (DocumentEventContext) ctx;
     
     DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
-    if (document == null) {
+    if (document == null || document.isImmutable()) {
       return;
     }
     DocumentRef testRef = session.getParentDocumentRef(document.getRef());
@@ -75,29 +57,32 @@ public class FVDocumentListener implements EventListener {
     dialect = parent;
   
     parent = session.getParentDocument(document.getRef());
-    currentType = "FVDialect";
+    currentType = "FVLanguage";
     while (parent != null && !currentType.equals(parent.getType())) {
       parent = session.getParentDocument(parent.getRef());
     }
     language = parent;
   
     parent = session.getParentDocument(document.getRef());
-    currentType = "FVDialect";
+    currentType = "FVLanguageFamily";
     while (parent != null && !currentType.equals(parent.getType())) {
       parent = session.getParentDocument(parent.getRef());
     }
     languageFamily = parent;
-    
+
     if (languageFamily != null) {
-//      document.setPropertyValue("fva:family", languageFamily.getId());
+      document.setPropertyValue("fva:family", languageFamily.getId());
+      document = session.saveDocument(document);
     }
 
     if (language != null) {
-//      document.setPropertyValue("fva:language", language.getId());
+      document.setPropertyValue("fva:language", language.getId());
+      document = session.saveDocument(document);
     }
 
     if (dialect != null) {
-//      document.setPropertyValue("fva:dialect", dialect.getId());
+      document.setPropertyValue("fva:dialect", dialect.getId());
+      document = session.saveDocument(document);
     }
     
   }
