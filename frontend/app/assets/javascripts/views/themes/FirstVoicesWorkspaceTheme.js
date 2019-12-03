@@ -84,5 +84,46 @@ export default {
         backgroundColor: '#e5e5e5',
       },
     },
+    outlinedPrimary: {
+      color: '#FF5790',
+      borderColor: '#FF5790',
+      fill: '#FF5790',
+      '&:hover': {
+        color: '#ff87b0',
+
+        borderColor: '#ff87b0',
+        // backgroundColor: '#fff',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: '#ff87b0',
+          fill: '#ff87b0',
+        },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        borderColor: '#e5e5e5',
+        fill: '#e5e5e5',
+      },
+    },
+    outlinedSecondary: {
+      color: '#26a69a',
+      borderColor: '#26a69a',
+      fill: '#26a69a',
+      '&:hover': {
+        color: '#89cac2',
+        borderColor: '#89cac2',
+        fill: '#89cac2',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          borderColor: 'pink',
+          fill: 'pink',
+        },
+      },
+      '&$disabled': {
+        color: '#a1a1a1',
+        borderColor: '#e5e5e5',
+        fill: '#e5e5e5',
+      },
+    },
   },
 }
