@@ -2,35 +2,9 @@
 <component name="ca.firstvoices.listeners.FVDocumentListener" version="1.0">
 
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener enabled="false" name="fvdocumentlistener" asynce="true" postCommit="true"
-                  class="ca.firstvoices.listeners.FVDocumentListener" priority="100">
+        <listener enabled="true" name="fvdocumentlistener" async="true" postCommit="true"
+                  class="ca.firstvoices.listeners.FVDocumentListener" priority="500">
             <event>documentCreated</event>
-            <filters>-->
-                <doctype>FVAlphabet</doctype>
-                <doctype>FVAudio</doctype>
-                <doctype>FVBook</doctype>
-                <doctype>FVBookEntry</doctype>
-                <doctype>FVBooks</doctype>
-                <doctype>FVCategories</doctype>
-                <doctype>FVCategory</doctype>
-                <doctype>FVCharacter</doctype>
-                <doctype>FVContributor</doctype>
-                <doctype>FVContributors</doctype>
-                <doctype>FVDialect</doctype>
-                <doctype>FVDictionary</doctype>
-                <doctype>FVGallery</doctype>
-                <doctype>FVLanguage</doctype>
-                <!--                    <doctype>FVLanguageFamily</doctype>-->
-                <doctype>FVLink</doctype>
-                <doctype>FVLinks</doctype>
-                <doctype>FVPhrase</doctype>
-                <doctype>FVPicture</doctype>
-                <doctype>FVPortal</doctype>
-                <doctype>FVResources</doctype>
-                <doctype>FVVideo</doctype>
-                <doctype>FVWord</doctype>
-                <attribute>Regular Document</attribute>
-            </filters>
         </listener>
     </extension>
 
