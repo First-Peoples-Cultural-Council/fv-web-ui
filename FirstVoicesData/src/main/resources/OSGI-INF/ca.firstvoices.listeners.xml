@@ -2,8 +2,8 @@
 <component name="ca.firstvoices.listeners.FVDocumentListener" version="1.0">
 
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener enabled="true" name="fvdocumentlistener" async="true" postCommit="true"
-                  class="ca.firstvoices.listeners.FVDocumentListener" priority="500">
+        <listener enabled="true" name="fvdocumentlistener" async="false" postCommit="false"
+                  class="ca.firstvoices.listeners.FVDocumentListener" priority="100">
             <event>documentCreated</event>
         </listener>
     </extension>
