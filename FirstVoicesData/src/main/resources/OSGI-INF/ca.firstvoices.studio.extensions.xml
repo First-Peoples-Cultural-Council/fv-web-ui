@@ -22680,35 +22680,6 @@
                 <attribute>Regular Document</attribute>
             </filters>
         </handler>
-<!--        <handler chainId="javascript.FVFillAncestors">-->
-<!--            <event>documentCreated</event>-->
-<!--            <filters>-->
-<!--                <doctype>FVAlphabet</doctype>-->
-<!--                <doctype>FVAudio</doctype>-->
-<!--                <doctype>FVBook</doctype>-->
-<!--                <doctype>FVBookEntry</doctype>-->
-<!--                <doctype>FVBooks</doctype>-->
-<!--                <doctype>FVCategories</doctype>-->
-<!--                <doctype>FVCategory</doctype>-->
-<!--                <doctype>FVCharacter</doctype>-->
-<!--                <doctype>FVContributor</doctype>-->
-<!--                <doctype>FVContributors</doctype>-->
-<!--                <doctype>FVDialect</doctype>-->
-<!--                <doctype>FVDictionary</doctype>-->
-<!--                <doctype>FVGallery</doctype>-->
-<!--                <doctype>FVLanguage</doctype>-->
-<!--                <doctype>FVLanguageFamily</doctype>-->
-<!--                <doctype>FVLink</doctype>-->
-<!--                <doctype>FVLinks</doctype>-->
-<!--                <doctype>FVPhrase</doctype>-->
-<!--                <doctype>FVPicture</doctype>-->
-<!--                <doctype>FVPortal</doctype>-->
-<!--                <doctype>FVResources</doctype>-->
-<!--                <doctype>FVVideo</doctype>-->
-<!--                <doctype>FVWord</doctype>-->
-<!--                <attribute>Regular Document</attribute>-->
-<!--            </filters>-->
-<!--        </handler>-->
         <handler chainId="javascript.INKQTAutoSync">
             <event>documentCreated</event>
             <filters>
@@ -23305,32 +23276,6 @@
             <param type="string" name="name"/>
             <param type="string" name="properties"/>
         </scriptedOperation>
-<!--        <scriptedOperation id="javascript.FVFillAncestors">-->
-<!--            <inputType>document</inputType>-->
-<!--            <outputType>document</outputType>-->
-<!--            <category>javascript</category>-->
-<!--            <description>Fill the ancestors of a document for easy access.</description>-->
-<!--            <script><![CDATA[function run(input, params) {-->
-
-<!--       Auth.LoginAs(null, {});-->
-<!--       var dialect = Document.GetParent(input, {'type': 'FVDialect'});-->
-<!--  	var language = Document.GetParent(input, {'type': 'FVLanguage'});-->
-<!--  	var languageFamily = Document.GetParent(input, {'type': 'FVLanguageFamily'});-->
-
-<!--  	if (languageFamily !== undefined && languageFamily !== null) {-->
-<!--    		input.setPropertyValue('fva:family', languageFamily.id);-->
-<!--  	}-->
-
-<!--  	if (language !== undefined && language !== null) {-->
-<!--    		input.setPropertyValue('fva:language', language.id);-->
-<!--  	}-->
-
-<!--  	if (dialect !== undefined && dialect !== null) {-->
-<!--    		input.setPropertyValue('fva:dialect', dialect.id);-->
-<!--  	}-->
-<!--      Auth.Logout(null, {});-->
-<!--}]]></script>-->
-<!--        </scriptedOperation>-->
         <scriptedOperation id="javascript.FVPublishOrRepublish">
             <inputType>document</inputType>
             <outputType>document</outputType>
