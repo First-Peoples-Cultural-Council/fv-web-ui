@@ -41,7 +41,7 @@ const intl = IntlService.instance
  */
 
 const { array, bool, func, number, object, string } = PropTypes
-class ListView extends DataListView {
+class ContributorsListView extends DataListView {
   static propTypes = {
     action: func,
     data: string,
@@ -210,6 +210,7 @@ class ListView extends DataListView {
         dialect={selectn('response', computeDialect2)}
       />
     )
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeContributors) && DocumentView}
@@ -248,4 +249,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListView)
+)(ContributorsListView)

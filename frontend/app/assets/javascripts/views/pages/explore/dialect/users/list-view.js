@@ -44,7 +44,7 @@ const FilteredPaginatedMediaList = withFilter(DocumentListView, DefaultFetcherPa
  */
 
 const { array, bool, func, number, object, string } = PropTypes
-export class ListView extends DataListView {
+export class UsersListView extends DataListView {
   static propTypes = {
     dialect: object,
     routeParams: object.isRequired,
@@ -122,7 +122,7 @@ export class ListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest',
       '_onUserSelected',
       '_handleRefetch',
@@ -303,4 +303,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListView)
+)(UsersListView)

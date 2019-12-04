@@ -24,7 +24,7 @@ import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
-export default class ListView extends Component {
+export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
   }

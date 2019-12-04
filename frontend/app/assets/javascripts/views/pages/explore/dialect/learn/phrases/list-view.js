@@ -48,7 +48,7 @@ const intl = IntlService.instance
  */
 
 const { array, bool, func, number, object, string } = PropTypes
-export class ListView extends DataListView {
+export class PhrasesListView extends DataListView {
   static propTypes = {
     action: func,
     data: string,
@@ -430,4 +430,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListView)
+)(PhrasesListView)
