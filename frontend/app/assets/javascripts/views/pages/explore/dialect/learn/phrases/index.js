@@ -170,7 +170,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         flashcard={this.state.flashcardMode}
         flashcardTitle={pageTitle}
         onPagePropertiesChange={this._handlePagePropertiesChange}
-        onPaginationReset={this._resetURLPagination}
         parentID={selectn('response.uid', computeDocument)}
         routeParams={this.props.routeParams}
         // Search:

@@ -261,21 +261,24 @@ export default class PageDialectLearnBase extends Component {
     this.props.updatePageProperties({ [this._getPageKey()]: changedProperties })
   }
 
-  _resetURLPagination(pageSize = null) {
+  _resetURLPagination({ pageSize = null, preserveSearch = false } = {}) {
     const urlPage = 1
     const urlPageSize = pageSize || this.props.routeParams.pageSize || 10
 
+    const navHelperCallback = (url) => {
+      this.props.pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
+    }
     const hasPaginationUrl = hasPagination(this.props.splitWindowPath)
     if (hasPaginationUrl) {
       // Replace them
       NavigationHelpers.navigateForwardReplaceMultiple(
         this.props.splitWindowPath,
         [urlPageSize, urlPage],
-        this.props.pushWindowPath
+        navHelperCallback
       )
     } else {
       // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
-      NavigationHelpers.navigateForward(this.props.splitWindowPath, [urlPageSize, urlPage], this.props.pushWindowPath)
+      NavigationHelpers.navigateForward(this.props.splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
     }
   }
 }

@@ -108,6 +108,7 @@ export default class DataListView extends Component {
           curRouteParams: this.props.routeParams,
         })
       ) {
+        // NOTE: fetchData also calls _fetchListViewData!
         this.fetchData(this.props)
       }
     }
@@ -184,6 +185,61 @@ export default class DataListView extends Component {
     }
   }
 
+  _handleRefetch2({ page = '1', pageSize = '10', preserveSearch = false } = {}) {
+    this.setState({
+      pageInfo: {
+        page: page,
+        pageSize: pageSize,
+      },
+    })
+
+    // Pull from window.location.search first, if not use state
+    const sortInfo = selectn('sortInfo.currentSortType', this.state) || null
+    const currentSortCols = selectn('sortInfo.currentSortCols', this.state) || null
+
+    if (!this.props.controlViaURL) {
+      this._fetchListViewData(this.props, page, pageSize, sortInfo, currentSortCols)
+    } else {
+      // TODO: Investigate why splitWindowPath could not be used (instead of this.props.routeParams)
+      // Note: routeParams is currently passed in via a parent component, not provided by Redux
+      const _urlPage = selectn('page', this.props.routeParams)
+      const _urlPageSize = selectn('pageSize', this.props.routeParams)
+      const urlPage = _urlPage !== undefined ? parseInt(_urlPage, 10) : _urlPage
+      const urlPageSize = _urlPageSize !== undefined ? parseInt(_urlPageSize, 10) : _urlPageSize
+
+      const navHelperCallback = (url) => {
+        this.props.pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
+      }
+
+      const hasPaginationUrl = hasPagination(this.props.splitWindowPath)
+      if (hasPaginationUrl) {
+        // Replace pagination in url if present (eg: .../learn/words/10/1) and the incoming `page` || `pageSize` is different
+        if (urlPage !== page || urlPageSize !== pageSize) {
+          // urlPageSize / page
+          NavigationHelpers.navigateForwardReplaceMultiple(
+            this.props.splitWindowPath,
+            [pageSize, page],
+            // this.props.pushWindowPath
+            navHelperCallback
+          )
+        }
+      } else {
+        // No pagination in url (eg: .../learn/words), append `page` & `pageSize`
+        NavigationHelpers.navigateForward(
+          this.props.splitWindowPath,
+          [pageSize, page],
+          // this.props.pushWindowPath
+          navHelperCallback
+        )
+      }
+
+      // If pageSize has changed, reset page
+      if (urlPageSize && pageSize !== urlPageSize && this.props.onPaginationReset) {
+        this.props.onPaginationReset(pageSize)
+      }
+    }
+  }
+
   _handleSortChange(sortInfo) {
     let colRequestSkipped = false
     let sortCol = []
@@ -225,6 +281,22 @@ export default class DataListView extends Component {
       uiSortOrder: sortInfo,
       currentSortCols: joinedSortCols,
       currentSortType: joinedSortType,
+    }
+
+    // Update page properties to use when navigating away
+    this.props.onPagePropertiesChange({ sortInfo: newSortInfo })
+
+    this.setState({
+      sortInfo: newSortInfo,
+    })
+  }
+
+  _handleSortChangeV2({ sortBy = 'fv:custom_order', sortOrder = 'asc' } = {}) {
+    this._fetchListViewData(this.props, this.props.DEFAULT_PAGE, this.props.DEFAULT_PAGE_SIZE, sortOrder, sortBy)
+
+    const newSortInfo = {
+      currentSortCols: sortBy,
+      currentSortType: sortOrder,
     }
 
     // Update page properties to use when navigating away

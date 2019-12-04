@@ -160,7 +160,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // via base > pulled from routeParams
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <WordListView
@@ -354,7 +354,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         //
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
-        this._resetURLPagination()
+        this._resetURLPagination({ preserveSearch: true })
 
         // See about updating url
         if (href && updateUrl) {

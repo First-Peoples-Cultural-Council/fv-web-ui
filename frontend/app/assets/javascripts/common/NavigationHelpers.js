@@ -294,7 +294,8 @@ export const getSearchObject = () => {
   })
   return Object.assign(
     {
-      sortBy: 'dc:title',
+      // sortBy: 'dc:title',
+      sortBy: 'fv:custom_order',
       sortOrder: 'asc',
     },
     search

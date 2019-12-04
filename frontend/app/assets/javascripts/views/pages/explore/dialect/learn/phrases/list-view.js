@@ -68,7 +68,6 @@ export class ListView extends DataListView {
     gridListView: bool,
     parentID: string,
     onPagePropertiesChange: func,
-    onPaginationReset: func,
     pageProperties: object,
     routeParams: object.isRequired,
     useDatatable: bool,
