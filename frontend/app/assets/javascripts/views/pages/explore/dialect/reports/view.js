@@ -110,7 +110,6 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       '_onNavigateRequest',
       '_handleFacetSelected',
       '_getURLPageProps',
-      '_resetURLPagination',
       '_handlePagePropertiesChange',
       '_getPageKey',
     ].forEach((method) => (this[method] = this[method].bind(this)))
@@ -147,14 +146,14 @@ export class PageDialectReportsView extends PageDialectLearnBase {
     )
 
     let listView = null
-
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
     switch (this.state.currentReport.get('type')) {
       case 'words':
         listView = (
           <WordListView
-            onPaginationReset={this._resetURLPagination}
             onPagePropertiesChange={this._handlePagePropertiesChange}
-            {...this._getURLPageProps()}
+            DEFAULT_PAGE={DEFAULT_PAGE}
+            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             controlViaURL
             ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
             filter={this.state.filterInfo}
@@ -169,15 +168,15 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       case 'phrases':
         listView = (
           <PhraseListView
-            onPaginationReset={this._resetURLPagination}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            {...this._getURLPageProps()}
             controlViaURL
-            ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
-            filter={this.state.filterInfo}
-            disableClickItem={false}
+            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+            DEFAULT_PAGE={DEFAULT_PAGE}
             DEFAULT_SORT_COL={this.state.currentReport.get('sortCol')}
             DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
+            disableClickItem={false}
+            ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
+            filter={this.state.filterInfo}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
           />
         )
@@ -186,12 +185,12 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       case 'songs':
         listView = (
           <SongsStoriesListViewAlt
-            onPaginationReset={this._resetURLPagination}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            {...this._getURLPageProps()}
             controlViaURL
-            filter={this.state.filterInfo}
+            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+            DEFAULT_PAGE={DEFAULT_PAGE}
             disableClickItem={false}
+            filter={this.state.filterInfo}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
           />
         )
@@ -200,12 +199,12 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       case 'stories':
         listView = (
           <SongsStoriesListViewAlt
-            onPaginationReset={this._resetURLPagination}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            {...this._getURLPageProps()}
             controlViaURL
-            filter={this.state.filterInfo}
+            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+            DEFAULT_PAGE={DEFAULT_PAGE}
             disableClickItem={false}
+            filter={this.state.filterInfo}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
           />
         )
