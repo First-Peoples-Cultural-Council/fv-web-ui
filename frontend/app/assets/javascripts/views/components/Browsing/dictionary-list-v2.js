@@ -268,7 +268,7 @@ const DictionaryListV2 = (props) => {
     ) : null
 
   const getViewButtons = () => {
-    return (
+    return props.hasViewModeButtons ? (
       <>
         {/* {viewMode === viewModeDecoder.default ? (
           <FVButton variant="contained" color="primary">
@@ -348,7 +348,7 @@ const DictionaryListV2 = (props) => {
           </FVButton>
         )} */}
       </>
-    )
+    ) : null
   }
   const getCompactList = () => {
     let content = null
@@ -380,8 +380,6 @@ const DictionaryListV2 = (props) => {
   }
   return (
     <>
-      <h1>(DictionaryListV2)</h1>
-
       {getViewButtons()}
 
       {props.hasSearch && (
@@ -494,6 +492,8 @@ DictionaryListV2.propTypes = {
   hasSearch: bool,
   handleSearch: func,
   resetSearch: func,
+  // List View
+  hasViewModeButtons: bool,
   // REDUX: reducers/state
   routeParams: object.isRequired,
   search: object.isRequired,
@@ -519,6 +519,8 @@ DictionaryListV2.defaultProps = {
   wrapperStyle: null,
   // search
   hasSearch: false,
+  // List View
+  hasViewModeButtons: true,
   handleSearch: () => {},
   resetSearch: () => {},
   // REDUX: actions/dispatch/func
