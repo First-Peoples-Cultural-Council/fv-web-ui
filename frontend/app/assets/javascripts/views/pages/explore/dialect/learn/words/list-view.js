@@ -395,8 +395,6 @@ class WordsListView extends DataListView {
           page,
           pageSize,
           preserveSearch: true,
-          sortBy: this.props.sortBy,
-          sortOrder: this.props.sortOrder,
         })
       },
       renderSimpleTable: this.props.renderSimpleTable,

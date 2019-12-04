@@ -35,7 +35,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -59,7 +59,7 @@ export class ListView extends DataListView {
     DEFAULT_SORT_TYPE: string,
     dialect: object,
     disableClickItem: bool,
-    DISABLED_SORT_COLS: array,
+    // DISABLED_SORT_COLS: array,
     ENABLED_COLS: array,
     filter: object,
     flashcard: bool,
@@ -86,7 +86,6 @@ export class ListView extends DataListView {
   }
   static defaultProps = {
     disableClickItem: true,
-    DISABLED_SORT_COLS: ['state', 'fv-phrase:phrase_books', 'related_audio', 'related_pictures', 'dc:modified'],
     DEFAULT_PAGE: 1,
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_LANGUAGE: 'english',
@@ -107,6 +106,9 @@ export class ListView extends DataListView {
     super(props, context)
 
     const currentTheme = this.props.routeParams.siteTheme
+
+    // NOTE: searchObj used below in setting state
+    const searchObj = getSearchObject()
 
     this.state = {
       columns: [
@@ -158,6 +160,7 @@ export class ListView extends DataListView {
             )
           },
           sortName: 'fv:custom_order',
+          sortBy: 'fv:custom_order',
         },
         {
           name: 'fv:definitions',
@@ -236,8 +239,8 @@ export class ListView extends DataListView {
       ],
       sortInfo: {
         uiSortOrder: [],
-        currentSortCols: this.props.DEFAULT_SORT_COL,
-        currentSortType: this.props.DEFAULT_SORT_TYPE,
+        currentSortCols: searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+        currentSortType: searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
       },
       pageInfo: {
         page: this.props.DEFAULT_PAGE,
@@ -301,8 +304,28 @@ export class ListView extends DataListView {
       onSortChange: this._handleSortChange,
       page: this.state.pageInfo.page,
       pageSize: this.state.pageInfo.pageSize,
-      refetcher: this._handleRefetch,
+      // refetcher: this._handleRefetch,
+      // NOTE: Pagination === refetcher
+      refetcher: (dataGridProps, page, pageSize) => {
+        this._handleRefetch2({
+          page,
+          pageSize,
+          preserveSearch: true,
+        })
+      },
       sortInfo: this.state.sortInfo.uiSortOrder,
+      sortHandler: async ({ page = '1', pageSize = '10', sortBy = 'fv:custom_order', sortOrder = 'asc' } = {}) => {
+        await this._fetchListViewData(this.props, page, pageSize, sortOrder, sortBy)
+
+        const newSortInfo = {
+          currentSortCols: sortBy,
+          currentSortType: sortOrder,
+        }
+
+        this.setState({
+          sortInfo: newSortInfo,
+        })
+      },
       type: 'FVPhrase',
       // SEARCH:
       handleSearch: this.props.handleSearch,
@@ -329,12 +352,13 @@ export class ListView extends DataListView {
     if (newProps.dialect === null && !this.getDialect(newProps)) {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
+    const searchObj = getSearchObject()
     this._fetchListViewData(
       newProps,
       newProps.DEFAULT_PAGE,
       newProps.DEFAULT_PAGE_SIZE,
-      newProps.DEFAULT_SORT_TYPE,
-      newProps.DEFAULT_SORT_COL
+      searchObj.sortOrder || newProps.DEFAULT_SORT_TYPE,
+      searchObj.sortBy || newProps.DEFAULT_SORT_COL
     )
   }
 

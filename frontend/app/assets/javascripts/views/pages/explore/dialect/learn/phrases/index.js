@@ -327,11 +327,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     // Add new search query
     newFilter = newFilter.updateIn(['currentAppliedFilter', searchType], () => ` AND ${searchNxqlQuery}`)
-
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
     this.setState({ filterInfo: newFilter }, () => {
-      this._resetURLPagination()
+      this._resetURLPagination({ preserveSearch: true })
       // See about updating url
       if (href && updateUrl) {
         NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
