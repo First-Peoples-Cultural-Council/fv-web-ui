@@ -75,6 +75,7 @@ class WordsListView extends DataListView {
     handleSearch: func,
     resetSearch: func,
     hasSearch: bool,
+    hasViewModeButtons: bool,
 
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
@@ -412,6 +413,8 @@ class WordsListView extends DataListView {
         })
       },
       type: 'FVWord',
+      // List View
+      hasViewModeButtons: this.props.hasViewModeButtons,
       // SEARCH:
       handleSearch: this.props.handleSearch,
       hasSearch: this.props.hasSearch,
