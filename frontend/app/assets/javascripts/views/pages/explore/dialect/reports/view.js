@@ -161,6 +161,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             DEFAULT_SORT_COL={this.state.currentReport.get('sortCol')}
             DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
             routeParams={this.props.routeParams}
+            hasViewModeButtons={false}
           />
         )
         break
