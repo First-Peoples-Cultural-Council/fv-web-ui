@@ -43,7 +43,7 @@ const DocumentListView = (props) => {
           handleSearch: props.handleSearch,
           hasSearch: props.hasSearch,
           resetSearch: props.resetSearch,
-          // searchUi: props.searchUi, // TODO ?
+          hasViewModeButtons: props.hasViewModeButtons,
         },
         props.gridViewProps
       )
@@ -66,9 +66,8 @@ const DocumentListView = (props) => {
           hasFlashcard={props.flashcard}
           hasPagination={props.pagination}
           hasSearch={props.hasSearch}
-          // rowClickHandler={(rowData) => {
-          //   console.log('rowClickHandler', rowData)
-          // }}
+          hasViewModeButtons={props.hasViewModeButtons}
+          rowClickHandler={props.rowClickHandler}
           // Listview: Batch
           batchConfirmationAction={props.batchConfirmationAction}
           batchTitleSelect={props.batchTitleSelect}
@@ -145,6 +144,9 @@ DocumentListView.propTypes = {
   handleSearch: func,
   resetSearch: func,
   hasSearch: bool,
+  // List View
+  hasViewModeButtons: bool,
+  rowClickHandler: func,
 }
 
 DocumentListView.defaultProps = {
