@@ -30,7 +30,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
-import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import IntlService from 'views/services/intl'
@@ -55,7 +54,6 @@ class ContributorsListView extends DataListView {
     gridCols: number,
     gridListView: bool,
     routeParams: object.isRequired,
-    useDatatable: bool,
     // REDUX: reducers/state
     properties: object.isRequired,
     windowPath: string.isRequired,
@@ -79,7 +77,6 @@ class ContributorsListView extends DataListView {
     filter: new Map(),
     gridListView: false,
     gridCols: 4,
-    useDatatable: false,
   }
 
   constructor(props, context) {
@@ -173,47 +170,30 @@ class ContributorsListView extends DataListView {
     const computeContributors = ProviderHelpers.getEntry(this.props.computeContributors, this.state.contributorsPath)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
-    const DocumentView = this.props.useDatatable ? (
-      <DocumentListViewDatatable
-        objectDescriptions="contributors"
-        type="FVContributor"
-        data={computeContributors}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-      />
-    ) : (
-      <DocumentListView
-        objectDescriptions="contributors"
-        type="FVContributor"
-        data={computeContributors}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-      />
-    )
-
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        {selectn('response.entries', computeContributors) && DocumentView}
+        {selectn('response.entries', computeContributors) && (
+          <DocumentListView
+            className="browseDataGrid"
+            columns={this.state.columns}
+            data={computeContributors}
+            dialect={selectn('response', computeDialect2)}
+            gridCols={this.props.gridCols}
+            gridListView={this.props.gridListView}
+            hasViewModeButtons={false}
+            objectDescriptions="contributors"
+            onColumnOrderChange={this._handleColumnOrderChange}
+            onSortChange={this._handleSortChange}
+            page={this.state.pageInfo.page}
+            pageSize={this.state.pageInfo.pageSize}
+            refetcher={this._handleRefetch}
+            rowClickHandler={(row) => {
+              this._onEntryNavigateRequest(row)
+            }}
+            sortInfo={this.state.sortInfo.uiSortOrder}
+            type="FVContributor"
+          />
+        )}
       </PromiseWrapper>
     )
   }

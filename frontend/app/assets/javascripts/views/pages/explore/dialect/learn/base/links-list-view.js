@@ -32,7 +32,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 import DocumentListView from 'views/components/Document/DocumentListView'
-import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import IntlService from 'views/services/intl'
@@ -57,7 +56,6 @@ class LinksListView extends DataListView {
     gridListView: bool,
     gridCols: number,
     routeParams: object.isRequired,
-    useDatatable: bool,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLinks: object.isRequired,
@@ -81,7 +79,6 @@ class LinksListView extends DataListView {
     filter: new Map(),
     gridListView: false,
     gridCols: 4,
-    useDatatable: false,
   }
 
   constructor(props, context) {
@@ -196,46 +193,32 @@ class LinksListView extends DataListView {
 
     const computeLinks = ProviderHelpers.getEntry(this.props.computeLinks, this.state.linksPath)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-    const DocumentView = this.props.useDatatable ? (
-      <DocumentListViewDatatable
-        objectDescriptions="links"
-        type="FVLink"
-        data={computeLinks}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-      />
-    ) : (
-      <DocumentListView
-        objectDescriptions="links"
-        type="FVLink"
-        data={computeLinks}
-        gridCols={this.props.gridCols}
-        gridListView={this.props.gridListView}
-        refetcher={this._handleRefetch}
-        onSortChange={this._handleSortChange}
-        onSelectionChange={this._onEntryNavigateRequest}
-        page={this.state.pageInfo.page}
-        pageSize={this.state.pageInfo.pageSize}
-        onColumnOrderChange={this._handleColumnOrderChange}
-        columns={this.state.columns}
-        sortInfo={this.state.sortInfo.uiSortOrder}
-        className="browseDataGrid"
-        dialect={selectn('response', computeDialect2)}
-      />
-    )
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        {selectn('response.entries', computeLinks) && DocumentView}
+        {selectn('response.entries', computeLinks) && (
+          <DocumentListView
+            objectDescriptions="links"
+            type="FVLink"
+            data={computeLinks}
+            gridCols={this.props.gridCols}
+            gridListView={this.props.gridListView}
+            refetcher={this._handleRefetch}
+            onSortChange={this._handleSortChange}
+            page={this.state.pageInfo.page}
+            pageSize={this.state.pageInfo.pageSize}
+            onColumnOrderChange={this._handleColumnOrderChange}
+            columns={this.state.columns}
+            sortInfo={this.state.sortInfo.uiSortOrder}
+            className="browseDataGrid"
+            dialect={selectn('response', computeDialect2)}
+            rowClickHandler={(row) => {
+              this._onEntryNavigateRequest(row)
+            }}
+            hasSorting={this.props.hasSorting}
+            hasViewModeButtons={this.props.hasViewModeButtons}
+          />
+        )}
       </PromiseWrapper>
     )
   }

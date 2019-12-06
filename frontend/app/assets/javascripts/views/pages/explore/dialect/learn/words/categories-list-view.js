@@ -54,7 +54,6 @@ class CategoriesListView extends DataListView {
     gridCols: number,
     gridListView: bool,
     routeParams: object.isRequired,
-    useDatatable: bool,
 
     // REDUX: reducers/state
     computeCategories: object.isRequired,
@@ -79,7 +78,6 @@ class CategoriesListView extends DataListView {
     filter: new Map(),
     gridListView: false,
     gridCols: 4,
-    useDatatable: false,
   }
 
   constructor(props, context) {
