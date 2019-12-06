@@ -114,7 +114,9 @@ export const deleteSelected = ({ batchConfirmationAction, deletedUids, selected,
   setDeletedUids([...deletedUids, ...selected])
 
   // Call handler
-  batchConfirmationAction(selected)
+  if (batchConfirmationAction) {
+    batchConfirmationAction(selected)
+  }
 
   // Clear out selected
   setSelected([])
