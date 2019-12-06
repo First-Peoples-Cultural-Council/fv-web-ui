@@ -14,6 +14,199 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
+=============================================================================
+Search
+=============================================================================
+
+`handleSearch` func
+------------------------------------
+  Callback called after search is initiated in <SearchDialect /> via:
+    // In SearchDialect
+    const handleSearch = async () => {
+      // ...
+      // Save to redux
+      await props.searchDialectUpdate(searchData)
+
+      // Notify ancestors
+      props.handleSearch()
+    }
+
+    TODO: Since SearchDialect is setting search data in Redux, we may be
+    TODO: able to drop this prop if the relevant ancestors are also using
+    TODO: redux to monitor changes to searchDialect.computeSearchDialect
+
+
+`hasSearch` bool
+------------------------------------
+  Toggles the <SearchDialect /> component
+
+
+`resetSearch` func
+------------------------------------
+  Callback called after search is reset in <SearchDialect /> via:
+    // In SearchDialect
+    const resetSearch = async () => {
+      // ...
+
+      // Save to redux
+      await props.searchDialectUpdate(searchData)
+
+      // Notify ancestors
+      props.resetSearch()
+    }
+
+    TODO: Since SearchDialect is setting search data in Redux, we may be
+    TODO: able to drop this prop if the relevant ancestors are also using
+    TODO: redux to monitor changes to searchDialect.computeSearchDialect
+
+
+`searchUi` array of objects
+------------------------------------
+  Generates the UI under the search field, eg: checkboxes & selects
+
+  searchUi={[
+    { // For a checkbox:
+      defaultChecked: true, // [Optional] boolean to select/deselect the checkbox
+      idName: 'searchByTitle', // Used for id & name attributes
+      labelText: 'Phrase', // Text used in <label>
+    },
+    { // For a select:
+      type: 'select',
+      value: 'test', // [Optional] to set the selected option
+      idName: 'searchPartOfSpeech', // Used for id & name attributes
+      labelText: 'Parts of speech:', // Text used in <label>
+      options: [ // Array of objs to generate <option>s
+        {
+          value: 'test',
+          text: 'Test',
+        },
+      ],
+    },
+  ]}
+
+
+Known issues
+-----------------------------------------------------------------------------
+- 1,2, & 3 char searches don't work with title
+- Url params is getting removed by ancestor
+
+
+=============================================================================
+Sorting
+=============================================================================
+Sorting updates the url and will call `sortHandler` (if defined)
+
+`columns[#].sortBy` array of obj
+------------------------------------
+Sorting is enabled when the props.columns data contains a `sortBy` property,
+eg: sortBy: 'dc:title'
+
+
+`hasSorting` bool [DEFAULT = TRUE]
+------------------------------------
+Sometimes the `columns` data will have a `sortBy` prop defined but you may
+need to disable sorting (eg: when displayed in a modal)
+
+hasSorting={false} lets you do that
+
+
+`sortHandler` func
+------------------------------------
+Called after the url was updated due to sort click:
+  sortHandler({
+    page,
+    pageSize,
+    sortOrder,
+    sortBy,
+  })
+
+You would use `sortHandler` if the ancestor component needs to
+update some state/var and/or fire off an api request
+
+
+=============================================================================
+Pagination
+=============================================================================
+
+`hasPagination` bool
+------------------------------------
+Will paginate if `props.hasPagination === true`
+
+If paginating, you also need to pass in any additional & relevant `withPagination` props, eg:
+  - `appendControls`
+  - `disablePageSize`
+  - `fetcher`
+  - `fetcherParams`
+  - `metadata`
+
+
+=============================================================================
+View modes
+=============================================================================
+
+`hasViewModeButtons` bool [DEFAULT = TRUE]
+------------------------------------
+Toggles the view mode buttons (eg: Compact, Flashcard)
+
+
+=============================================================================
+Bulk operations
+=============================================================================
+If `props.batchConfirmationAction` is defined, the `props.columns` array will
+be updated to insert a batch column at the start of the array/table and a footer
+will be generated.
+
+NOTE: Currently only supports deleting selected items. New code would be needed
+to support different types of actions.
+
+TODO: small view needs batch support
+
+`batchConfirmationAction` func
+------------------------------------
+Called after elements in the list are 'visually deleted',
+use this prop to make the api call required.
+
+`batchFooterBtnConfirm` string
+`batchFooterBtnDeny` string
+`batchFooterBtnInitiate` string
+`batchFooterIsConfirmOrDenyTitle` string
+`batchTitleDeselect` string
+`batchTitleSelect` string
+------------------------------------
+UI text
+
+
+=============================================================================
+Select a row
+=============================================================================
+
+`rowClickHandler`
+------------------------------------
+callback for when a row is clicked
+passes out the clicked item's data
+
+
+=============================================================================
+Miscellaneous
+=============================================================================
+The following props are also passed out to other components.
+
+List views: DictionaryListSmallScreen, DictionaryListLargeScreen
+--------------------
+- `columns`
+- `cssModifier`
+- `filteredItems`
+- `items`
+
+Flashcard
+--------------------
+- `columns`
+- `filteredItems`
+- `flashcardTitle`
+- `items`
+
+*/
 // Libraries
 import React, { Suspense, useState } from 'react'
 import PropTypes from 'prop-types'
@@ -37,9 +230,6 @@ import {
   sortCol,
   getUidsFromComputedData,
   getUidsThatAreNotDeleted,
-  // useDeleteItem,
-  // useGetData,
-  // usePaginationRequest,
 } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
@@ -49,85 +239,6 @@ const FlashcardList = React.lazy(() => import('views/components/Browsing/flashca
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
 const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-large-screen'))
 
-/*
-  FW-80
-  =============================================================================
-  - Search:
-    Known issues:
-    1) 1,2, & 3 char search doesn't work
-    2) Url params is getting removed by ancestor
-
-    UI:
-      √ Field: Input
-      √ Button: Search
-      √ Button: reset/clear search
-      Fields to search (related to columns?), eg: word, definitions, literal translations, parts of speech
-      √ Feedback:
-        "Showing words that contain the search term 'test' in the 'Word' and 'Definitions' columns"
-        "Showing all words in the dictionary listed alphabetically"
-
-    √ url = .../learn/words/[perPage]/[page]
-    X  &q=[term] // query
-
-    X  Section/Type related options (defined in columns prop array):
-      &active=W,D,LT,POS&POS=adjective
-      &W=1&D=1&LT=1&POS=1
-      &w=[1,0] // word
-      &d=[1,0] // definitions
-      &lT=[1,0] // literal translations
-      &pS=[option value] // parts of speech
-
-    X url = .../learn/words/[perPage]/[page]?sB=dc:title&sO=asc&q=searchTermHere&w=1&d=1&lT=1&pS=adjective
-
-  √ - Sorting:
-    sB=[field] // sort by
-    sO=[asc or desc] // sort order
-
-  √ - Pagination:
-    url = .../[perPage]/[page]
-
-  √ - View Buttons:
-    v=[0,1,2,...]
-
-    0 = small screen
-    1 = large screen
-    2 = flash cards
-
-  √ - Bulk operations:
-
-  - Select a row:
-
-  */
-
-/*
-PROPS:
-  withPagination
-  --------------------
-  appendControls
-  disablePageSize
-  fetcher
-  fetcherParams
-  metadata
-  (also withPagination `...props`)
-
-  Flashcards
-  --------------------
-  columns
-  filteredItems
-  flashcardTitle
-  items
-
-  List: large screen
-  --------------------
-  columns
-  cssModifier
-  filteredItems
-  items
-
-  List: small screen
-  --------------------
-  items
-  */
 const DictionaryListV2 = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
@@ -137,65 +248,66 @@ const DictionaryListV2 = (props) => {
   const { routeParams, search } = props
   const { pageSize } = routeParams
   const { sortOrder, sortBy } = search
-
-  // Add in sorting if needed:
-  propsColumns = props.columns.map((column) => {
-    if (column.sortBy) {
+  if (props.hasSorting) {
+    // Add in sorting if needed:
+    propsColumns = props.columns.map((column) => {
+      if (column.sortBy) {
+        return Object.assign({}, column, {
+          titleLarge: () => {
+            return (
+              <button
+                type="button"
+                className="Contributors__colSort" // TODO: change class name
+                onClick={() => {
+                  sortCol({
+                    newSortBy: column.sortBy,
+                    pageSize,
+                    pushWindowPath: props.pushWindowPath,
+                    sortOrder,
+                    sortHandler: props.sortHandler,
+                  })
+                }}
+              >
+                {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+                {column.title}
+              </button>
+            )
+          },
+          titleSmall: () => {
+            const sortState = getSortState({ field: column.sortBy, sortOrder, sortBy })
+            const color = sortState ? 'primary' : undefined
+            return (
+              <FVButton
+                type="button"
+                variant="outlined"
+                color={color}
+                size="small"
+                className={`dictionaryListSmallScreen__sortButton ${
+                  sortState ? `dictionaryListSmallScreen__sortButton--${sortState}` : ''
+                }`}
+                onClick={() => {
+                  sortCol({
+                    newSortBy: column.sortBy,
+                    pageSize,
+                    pushWindowPath: props.pushWindowPath,
+                    sortOrder,
+                    sortHandler: props.sortHandler,
+                  })
+                }}
+              >
+                {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+                {column.title}
+              </FVButton>
+            )
+          },
+        })
+      }
       return Object.assign({}, column, {
-        titleLarge: () => {
-          return (
-            <button
-              type="button"
-              className="Contributors__colSort" // TODO: change class name
-              onClick={() => {
-                sortCol({
-                  newSortBy: column.sortBy,
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  sortOrder,
-                  sortHandler: props.sortHandler,
-                })
-              }}
-            >
-              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
-              {column.title}
-            </button>
-          )
-        },
-        titleSmall: () => {
-          const sortState = getSortState({ field: column.sortBy, sortOrder, sortBy })
-          const color = sortState ? 'primary' : undefined
-          return (
-            <FVButton
-              type="button"
-              variant="outlined"
-              color={color}
-              size="small"
-              className={`dictionaryListSmallScreen__sortButton ${
-                sortState ? `dictionaryListSmallScreen__sortButton--${sortState}` : ''
-              }`}
-              onClick={() => {
-                sortCol({
-                  newSortBy: column.sortBy,
-                  pageSize,
-                  pushWindowPath: props.pushWindowPath,
-                  sortOrder,
-                  sortHandler: props.sortHandler,
-                })
-              }}
-            >
-              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
-              {column.title}
-            </FVButton>
-          )
-        },
+        titleLarge: column.title,
+        titleSmall: column.title,
       })
-    }
-    return Object.assign({}, column, {
-      titleLarge: column.title,
-      titleSmall: column.title,
     })
-  })
+  }
   // ============= SORT
 
   // ============= BATCH
@@ -220,7 +332,6 @@ const DictionaryListV2 = (props) => {
         footer: () => {
           return batchFooter({
             colSpan: propsColumns.length,
-            // confirmationAction: props.batchConfirmationAction,
             confirmationAction: () => {
               deleteSelected({
                 batchConfirmationAction: props.batchConfirmationAction,
@@ -268,7 +379,7 @@ const DictionaryListV2 = (props) => {
     ) : null
 
   const getViewButtons = () => {
-    return props.hasViewModeButtons ? (
+    return (
       <>
         {/* {viewMode === viewModeDecoder.default ? (
           <FVButton variant="contained" color="primary">
@@ -348,12 +459,13 @@ const DictionaryListV2 = (props) => {
           </FVButton>
         )} */}
       </>
-    ) : null
+    )
   }
   const getCompactList = () => {
     let content = null
     const DictionaryListSmallScreenProps = {
       rowClickHandler: props.rowClickHandler,
+      hasSorting: props.hasSorting,
       // withPagination
       // --------------------
       appendControls: props.appendControls,
@@ -380,7 +492,7 @@ const DictionaryListV2 = (props) => {
   }
   return (
     <>
-      {getViewButtons()}
+      {props.hasViewModeButtons && getViewButtons()}
 
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
@@ -438,6 +550,7 @@ const DictionaryListV2 = (props) => {
           if (matches.medium) {
             const DictionaryListLargeScreenProps = {
               rowClickHandler: props.rowClickHandler,
+              hasSorting: props.hasSorting,
               // withPagination
               // --------------------
               appendControls: props.appendControls,
@@ -447,8 +560,7 @@ const DictionaryListV2 = (props) => {
               metadata: props.metadata,
               // List: large screen
               // --------------------
-              // columns: props.columns,
-              columns: propsColumns, // TODO
+              columns: propsColumns,
               cssModifier: props.cssModifier,
               filteredItems: props.filteredItems,
               items: props.items,
@@ -473,6 +585,14 @@ const DictionaryListV2 = (props) => {
 
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 DictionaryListV2.propTypes = {
+  // Batch
+  batchConfirmationAction: func,
+  batchFooterBtnConfirm: string,
+  batchFooterBtnDeny: string,
+  batchFooterBtnInitiate: string,
+  batchFooterIsConfirmOrDenyTitle: string,
+  batchTitleDeselect: string,
+  batchTitleSelect: string,
   // dictionary-list
   action: func,
   cellHeight: number,
@@ -488,12 +608,13 @@ DictionaryListV2.propTypes = {
   style: object,
   type: string,
   wrapperStyle: object,
+  // General List
+  hasSorting: bool,
+  hasViewModeButtons: bool,
   // Search
   hasSearch: bool,
   handleSearch: func,
   resetSearch: func,
-  // List View
-  hasViewModeButtons: bool,
   // REDUX: reducers/state
   routeParams: object.isRequired,
   search: object.isRequired,
@@ -503,13 +624,14 @@ DictionaryListV2.propTypes = {
 }
 
 DictionaryListV2.defaultProps = {
-  // dictionary-list
+  // batch
   batchFooterBtnConfirm: 'Yes, delete the selected items',
   batchFooterBtnDeny: 'No, do not delete the selected items',
   batchFooterBtnInitiate: 'Delete',
   batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
   batchTitleDeselect: 'Select all',
   batchTitleSelect: 'Deselect all',
+  // dictionary-list
   cellHeight: 210,
   cols: 3,
   columns: [],
@@ -517,11 +639,12 @@ DictionaryListV2.defaultProps = {
   sortHandler: () => {},
   style: null,
   wrapperStyle: null,
-  // search
-  hasSearch: false,
-  // List View
+  // General List
+  hasSorting: true,
   hasViewModeButtons: true,
+  // Search
   handleSearch: () => {},
+  hasSearch: false,
   resetSearch: () => {},
   // REDUX: actions/dispatch/func
   pushWindowPath: () => {},
