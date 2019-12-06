@@ -82,6 +82,7 @@ const DocumentListView = (props) => {
           setBatchDeletedUids={props.setBatchDeletedUids}
           // Listview: Sort
           sortHandler={props.sortHandler}
+          hasSorting={props.hasSorting}
           // Listview: computed data
           computedData={props.computedData}
           // Search
