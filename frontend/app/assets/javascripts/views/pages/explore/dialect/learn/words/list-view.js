@@ -32,7 +32,6 @@ import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import DocumentListView from 'views/components/Document/DocumentListView'
-import DocumentListViewDatatable from 'views/components/Document/DocumentListViewDatatable'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
@@ -70,7 +69,6 @@ class WordsListView extends DataListView {
     parentID: string,
     renderSimpleTable: bool,
     routeParams: object.isRequired,
-    useDatatable: bool,
     // Search
     handleSearch: func,
     resetSearch: func,
@@ -114,7 +112,6 @@ class WordsListView extends DataListView {
     flashcardTitle: '',
     gridListView: false,
     renderSimpleTable: false,
-    useDatatable: false,
   }
 
   constructor(props, context) {
@@ -376,59 +373,62 @@ class WordsListView extends DataListView {
     const computeWords = ProviderHelpers.getEntry(this.props.computeWords, this._getPathOrParentID(this.props))
     const computeDialect2 = this.props.dialect || this.getDialect()
 
-    const listViewProps = {
-      className: 'browseDataGrid',
-      columns: this.state.columns,
-      data: computeWords,
-      dialect: selectn('response', computeDialect2),
-      disablePageSize: this.props.disablePageSize,
-      flashcard: this.props.flashcard,
-      flashcardTitle: this.props.flashcardTitle,
-      gridListView: this.props.gridListView,
-      objectDescriptions: 'words',
-      onColumnOrderChange: this._handleColumnOrderChange, // NOTE: comes from DataListView
-      onSelectionChange: this._onEntryNavigateRequest, // NOTE: may call this.props.action
-      page: this.state.pageInfo.page,
-      pageSize: this.state.pageInfo.pageSize,
-      // NOTE: Pagination === refetcher
-      refetcher: (dataGridProps, page, pageSize) => {
-        this._handleRefetch2({
-          page,
-          pageSize,
-          preserveSearch: true,
-        })
-      },
-      renderSimpleTable: this.props.renderSimpleTable,
-      sortInfo: this.state.sortInfo.uiSortOrder,
-      sortHandler: async ({ page = '1', pageSize = '10', sortBy = 'fv:custom_order', sortOrder = 'asc' } = {}) => {
-        await this._fetchListViewData(this.props, page, pageSize, sortOrder, sortBy)
-
-        const newSortInfo = {
-          currentSortCols: sortBy,
-          currentSortType: sortOrder,
-        }
-
-        this.setState({
-          sortInfo: newSortInfo,
-        })
-      },
-      type: 'FVWord',
-      // List View
-      hasViewModeButtons: this.props.hasViewModeButtons,
-      // SEARCH:
-      handleSearch: this.props.handleSearch,
-      hasSearch: this.props.hasSearch,
-      resetSearch: this.props.resetSearch,
-      searchUi: this.props.searchUi,
-    }
-    const DocumentView = this.props.useDatatable ? (
-      <DocumentListViewDatatable {...listViewProps} />
-    ) : (
-      <DocumentListView {...listViewProps} />
-    )
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        {selectn('response.entries', computeWords) && DocumentView}
+        {selectn('response.entries', computeWords) && (
+          <DocumentListView
+            className={'browseDataGrid'}
+            columns={this.state.columns}
+            data={computeWords}
+            dialect={selectn('response', computeDialect2)}
+            disablePageSize={this.props.disablePageSize}
+            flashcard={this.props.flashcard}
+            flashcardTitle={this.props.flashcardTitle}
+            gridListView={this.props.gridListView}
+            objectDescriptions={'words'}
+            onColumnOrderChange={this._handleColumnOrderChange} // NOTE: comes from DataListView
+            onSelectionChange={this._onEntryNavigateRequest} // NOTE: may call this.props.action
+            page={this.state.pageInfo.page}
+            pageSize={this.state.pageInfo.pageSize}
+            // NOTE: Pagination === refetcher
+            refetcher={(dataGridProps, page, pageSize) => {
+              this._handleRefetch2({
+                page,
+                pageSize,
+                preserveSearch: true,
+              })
+            }}
+            renderSimpleTable={this.props.renderSimpleTable}
+            sortInfo={this.state.sortInfo.uiSortOrder}
+            sortHandler={async ({
+              page = '1',
+              pageSize = '10',
+              sortBy = 'fv:custom_order',
+              sortOrder = 'asc',
+            } = {}) => {
+              await this._fetchListViewData(this.props, page, pageSize, sortOrder, sortBy)
+
+              const newSortInfo = {
+                currentSortCols: sortBy,
+                currentSortType: sortOrder,
+              }
+
+              this.setState({
+                sortInfo: newSortInfo,
+              })
+            }}
+            type={'FVWord'}
+            // List View
+            hasViewModeButtons={this.props.hasViewModeButtons}
+            rowClickHandler={this.props.rowClickHandler}
+            hasSorting={this.props.hasSorting}
+            // SEARCH:
+            handleSearch={this.props.handleSearch}
+            hasSearch={this.props.hasSearch}
+            resetSearch={this.props.resetSearch}
+            searchUi={this.props.searchUi}
+          />
+        )}
       </PromiseWrapper>
     )
   }
