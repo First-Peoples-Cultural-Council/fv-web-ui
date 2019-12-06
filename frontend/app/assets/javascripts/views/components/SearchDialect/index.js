@@ -367,7 +367,7 @@ export const SearchDialect = (props) => {
     }
 
     return searchUi.map((searchUiData, key1) => {
-      const { type, idName, title, classes = {} } = searchUiData
+      const { type, idName, labelText, classes = {} } = searchUiData
       const _classes = Object.assign({}, classesDefault, classes)
       let element = null
       switch (type) {
@@ -387,7 +387,7 @@ export const SearchDialect = (props) => {
           element = (
             <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
               <label className={_classes.SearchDialectLabel} htmlFor={idName}>
-                {title}
+                {labelText}
               </label>
               <select
                 className={_classes.SearchDialectOption}
@@ -418,7 +418,7 @@ export const SearchDialect = (props) => {
                 type="checkbox"
               />
               <label className={_classes.SearchDialectLabel} htmlFor={idName}>
-                {title}
+                {labelText}
               </label>
             </span>
           )
@@ -551,25 +551,25 @@ SearchDialect.defaultProps = {
     // {
     //   defaultChecked: true,
     //   idName: 'searchByTitle',
-    //   title: 'Word',
+    //   labelText: 'Word',
     // },
     // {
     //   idName: 'searchByDefinitions',
-    //   title: 'Definitions',
+    //   labelText: 'Definitions',
     // },
     // {
     //   idName: 'searchByCulturalNotes',
-    //   title: 'Cultural notes',
+    //   labelText: 'Cultural notes',
     // },
     // {
     //   idName: 'searchByTranslations',
-    //   title: 'Literal translations',
+    //   labelText: 'Literal translations',
     // },
     // {
     //   type: 'select',
     //   value: 'test',
     //   idName: 'searchPartOfSpeech',
-    //   title: 'Parts of speech:',
+    //   labelText: 'Parts of speech:',
     //   options: [
     //     {
     //       value: 'test',
