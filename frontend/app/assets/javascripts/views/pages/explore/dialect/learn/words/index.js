@@ -184,20 +184,20 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           {
             defaultChecked: true,
             idName: 'searchByTitle',
-            title: 'Word',
+            labelText: 'Word',
           },
           {
             idName: 'searchByDefinitions',
-            title: 'Definitions',
+            labelText: 'Definitions',
           },
           {
             idName: 'searchByTranslations',
-            title: 'Literal translations',
+            labelText: 'Literal translations',
           },
           {
             type: 'select',
             idName: 'searchPartOfSpeech',
-            title: 'Parts of speech:',
+            labelText: 'Parts of speech:',
             // options: [
             //   {
             //     value: 'test',

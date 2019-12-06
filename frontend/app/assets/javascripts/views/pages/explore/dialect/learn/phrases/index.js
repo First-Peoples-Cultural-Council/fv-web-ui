@@ -180,18 +180,20 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           {
             defaultChecked: true,
             idName: 'searchByTitle',
-            title: 'Phrase',
+            labelText: 'Phrase',
           },
           {
             idName: 'searchByDefinitions',
-            title: 'Definitions',
+            labelText: 'Definitions',
           },
           {
             idName: 'searchByCulturalNotes',
-            title: 'Cultural notes',
+            labelText: 'Cultural notes',
           },
         ]}
         searchByMode={searchByMode}
+        rowClickHandler={this.props.rowClickHandler}
+        hasSorting={this.props.hasSorting}
       />
     ) : (
       <div />
