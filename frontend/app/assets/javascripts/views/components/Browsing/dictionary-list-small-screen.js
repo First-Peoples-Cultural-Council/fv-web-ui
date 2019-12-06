@@ -162,7 +162,7 @@ const DictionaryListSmallScreen = (props) => {
 
   return (
     <div className="dictionaryListSmallScreen">
-      {getSortByHeader()}
+      {props.hasSorting && getSortByHeader()}
 
       <ul className="dictionaryListSmallScreen__list">{listItems}</ul>
     </div>
@@ -180,6 +180,7 @@ DictionaryListSmallScreen.propTypes = {
   fetcherParams: object,
   flashcardTitle: string,
   gridListTile: any, // TODO: set appropriate propType,
+  hasSorting: bool,
   items: array,
   metadata: object,
   pagination: bool,
@@ -193,6 +194,7 @@ DictionaryListSmallScreen.defaultProps = {
   cols: 3,
   columns: [],
   cssModifier: '',
+  hasSorting: true,
   rowClickHandler: () => {},
   style: null,
   wrapperStyle: null,

@@ -50,7 +50,7 @@ const DictionaryListLargeScreen = (props) => {
     // Header
     headerCells.push(
       <th key={`header${i}`} className={`${columnClassNames[i] || ''} DictionaryList__header`}>
-        {selectn('titleLarge', column)}
+        {props.hasSorting ? selectn('titleLarge', column) : selectn('title', column)}
       </th>
     )
 
@@ -111,17 +111,19 @@ const DictionaryListLargeScreen = (props) => {
   )
 }
 
-const { array, func, instanceOf, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, oneOfType, string } = PropTypes
 DictionaryListLargeScreen.propTypes = {
   columns: array,
   cssModifier: string,
   filteredItems: oneOfType([array, instanceOf(List)]),
   items: oneOfType([array, instanceOf(List)]),
   rowClickHandler: func,
+  hasSorting: bool,
 }
 
 DictionaryListLargeScreen.defaultProps = {
   rowClickHandler: () => {},
+  hasSorting: true,
 }
 
 export default DictionaryListLargeScreen
