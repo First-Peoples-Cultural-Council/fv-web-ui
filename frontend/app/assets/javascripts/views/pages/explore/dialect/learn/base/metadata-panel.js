@@ -148,7 +148,7 @@ export class MetadataPanel extends Component {
           className="card-header-custom"
           title={
             <Typography
-              variant="subtitle"
+              variant="subheading"
               style={{
                 color: themePalette.secondary.contrastText,
               }}

@@ -444,7 +444,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { words: !this.state.expandedCards.words } })}
                     title={
                       <Typography
-                        variant="subtitle"
+                        variant="subheading"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -534,7 +534,7 @@ export class DialectLearn extends Component {
                     className="card-header-custom"
                     title={
                       <Typography
-                        variant="subtitle"
+                        variant="subheading"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -622,7 +622,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { songs: !this.state.expandedCards.songs } })}
                     title={
                       <Typography
-                        variant="subtitle"
+                        variant="subheading"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -710,7 +710,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { stories: !this.state.expandedCards.stories } })}
                     title={
                       <Typography
-                        variant="subtitle"
+                        variant="subheading"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
