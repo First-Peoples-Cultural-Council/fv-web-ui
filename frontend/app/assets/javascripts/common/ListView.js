@@ -59,7 +59,7 @@ export const batchFooter = ({
     element: (
       <ConfirmationDelete
         confirmationAction={confirmationAction}
-        className="Contributor__delete"
+        className="DictionaryList__confirmationDelete"
         compact
         copyIsConfirmOrDenyTitle={copyIsConfirmOrDenyTitle}
         copyBtnInitiate={copyBtnInitiate}

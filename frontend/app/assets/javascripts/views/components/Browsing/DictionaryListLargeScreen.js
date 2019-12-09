@@ -48,9 +48,10 @@ const DictionaryListLargeScreen = (props) => {
 
   props.columns.forEach((column, i) => {
     // Header
+    // Note: With a batch column use the column.title data
     headerCells.push(
       <th key={`header${i}`} className={`${columnClassNames[i] || ''} DictionaryList__header`}>
-        {props.hasSorting ? selectn('titleLarge', column) : selectn('title', column)}
+        {props.hasSorting && column.name !== 'batch' ? selectn('titleLarge', column) : selectn('title', column)}
       </th>
     )
 

@@ -25,7 +25,7 @@ import Typography from '@material-ui/core/Typography'
 // import UIHelpers from 'common/UIHelpers'
 // import IntlService from 'views/services/intl'
 
-import '!style-loader!css-loader!./dictionaryListSmallScreen.css'
+import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
 
 export const dictionaryListSmallScreenTemplate = {
   category: 1,
@@ -43,7 +43,7 @@ const DictionaryListSmallScreen = (props) => {
   const getContent = () => {
     const itemRows = items.map((item, inc) => {
       let actions = null
-      const batch = null
+      let batch = null
       let audio = null
       let bio = null
       let categories = null
@@ -63,9 +63,9 @@ const DictionaryListSmallScreen = (props) => {
           case 'actions':
             actions = cellRender
             break
-          // case 'batch':
-          //   batch = cellRender
-          //   break
+          case 'batch':
+            batch = cellRender
+            break
           case 'dc:description':
             bio = (
               <div>
@@ -106,7 +106,7 @@ const DictionaryListSmallScreen = (props) => {
             definitions = cellRender
             break
           case 'related_audio':
-            audio = <div className="dictionaryListSmallScreen__audioGroup">{cellRender}</div>
+            audio = <div className="DictionaryListSmallScreen__audioGroup">{cellRender}</div>
             break
           case 'related_pictures':
             image = cellRender
@@ -134,17 +134,17 @@ const DictionaryListSmallScreen = (props) => {
       const { word, phrase, phrasebook, category, contributor /*, link*/ } = dictionaryListSmallScreenTemplate
       switch (props.dictionaryListSmallScreenTemplate) {
         // Word template
-        case word:
-          markup = (
+        case word: {
+          const wordMain = (
             <>
               {title}
-              <div className="dictionaryListSmallScreen__group">
+              <div className="DictionaryListSmallScreen__group">
                 {definitions}
                 {audio}
 
                 {image}
 
-                <div className="dictionaryListSmallScreen__miscGroup">
+                <div className="DictionaryListSmallScreen__miscGroup">
                   <Typography variant="body1" component="div">
                     {partOfSpeech}
                     {categories}
@@ -154,19 +154,28 @@ const DictionaryListSmallScreen = (props) => {
               </div>
             </>
           )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{wordMain}</div>
+            </div>
+          ) : (
+            wordMain
+          )
           break
+        }
         // Phrase template
-        case phrase:
-          markup = (
+        case phrase: {
+          const phraseMain = (
             <>
               {title}
-              <div className="dictionaryListSmallScreen__group">
+              <div className="DictionaryListSmallScreen__group">
                 {definitions}
                 {audio}
 
                 {image}
 
-                <div className="dictionaryListSmallScreen__miscGroup">
+                <div className="DictionaryListSmallScreen__miscGroup">
                   <Typography variant="body1" component="div">
                     {phraseBooks}
                     {state}
@@ -175,76 +184,79 @@ const DictionaryListSmallScreen = (props) => {
               </div>
             </>
           )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{phraseMain}</div>
+            </div>
+          ) : (
+            phraseMain
+          )
           break
+        }
         // Category template
-        case category:
-          markup = batch ? (
-            <div className="dictionaryListSmallScreen__groupContainer">
-              <div className="dictionaryListSmallScreen__batch">{batch}</div>
-              <div>
-                {title}
-                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
-                  {bio}
-                  {actions}
-                </div>
-              </div>
-            </div>
-          ) : (
+        case category: {
+          const categoryMain = (
             <>
               {title}
-              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+              <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
                 {bio}
                 {actions}
               </div>
             </>
           )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{categoryMain}</div>
+            </div>
+          ) : (
+            categoryMain
+          )
           break
+        }
         // Contributor template
-        case contributor:
-          markup = batch ? (
-            <div className="dictionaryListSmallScreen__groupContainer">
-              <div className="dictionaryListSmallScreen__batch">{batch}</div>
-              <div>
-                {title}
-                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
-                  {bio}
-                  {actions}
-                </div>
-              </div>
-            </div>
-          ) : (
+        case contributor: {
+          const contributorMain = (
             <>
               {title}
-              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+              <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
                 {bio}
                 {actions}
               </div>
             </>
           )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{contributorMain}</div>
+            </div>
+          ) : (
+            contributorMain
+          )
           break
+        }
         // Phrasebook template
-        case phrasebook:
-          markup = batch ? (
-            <div className="dictionaryListSmallScreen__groupContainer">
-              <div className="dictionaryListSmallScreen__batch">{batch}</div>
-              <div>
-                {title}
-                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
-                  {bio}
-                  {actions}
-                </div>
-              </div>
-            </div>
-          ) : (
+        case phrasebook: {
+          const phrasebookMain = (
             <>
               {title}
-              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+              <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
                 {bio}
                 {actions}
               </div>
             </>
           )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{phrasebookMain}</div>
+            </div>
+          ) : (
+            phrasebookMain
+          )
           break
+        }
 
         default:
         // NOTE: do nothing
@@ -252,8 +264,8 @@ const DictionaryListSmallScreen = (props) => {
       return markup ? (
         <li
           key={`content-${inc}`}
-          className={`dictionaryListSmallScreen__listItem ${
-            inc % 2 !== 0 ? 'dictionaryListSmallScreen__listItem--alt' : ''
+          className={`DictionaryListSmallScreen__listItem ${
+            inc % 2 !== 0 ? 'DictionaryListSmallScreen__listItem--alt' : ''
           }`}
           onClick={() => {
             props.rowClickHandler(_item)
@@ -263,28 +275,57 @@ const DictionaryListSmallScreen = (props) => {
         </li>
       ) : null
     })
-    return itemRows.length > 0 ? <ul className="dictionaryListSmallScreen__list">{itemRows}</ul> : null
+    return itemRows.length > 0 ? <ul className="DictionaryListSmallScreen__list">{itemRows}</ul> : null
   }
-  const getSortByHeader = () => {
+  const getSortBy = () => {
     const headerCells = []
     columns.forEach((column, i) => {
       // Header
       if (column.sortBy) {
-        headerCells.push(<span key={`getSortByHeader-${i}`}>{selectn('titleSmall', column)}</span>)
+        headerCells.push(<span key={`getSortBy-${i}`}>{selectn('titleSmall', column)}</span>)
       }
     })
     return (
-      <div className="dictionaryListSmallScreen__sortContainer">
-        <strong className="dictionaryListSmallScreen__sortHeading">Sort by:</strong>
+      <div className="DictionaryListSmallScreen__actions">
+        <strong className="DictionaryListSmallScreen__sortHeading">Sort by:</strong>
         {headerCells}
       </div>
     )
   }
+  const getBatch = () => {
+    let selectDeselectButton = null
+    let batchConfirmationElement = null
+    columns.forEach((column) => {
+      if (column.name === 'batch') {
+        // Select/Deselect
+        selectDeselectButton = selectn('title', column)
+
+        // Action
+        const footerData = selectn('footer', column) || {}
+        if (footerData.element) {
+          batchConfirmationElement = footerData.element
+        }
+      }
+    })
+
+    return selectDeselectButton && batchConfirmationElement ? (
+      <div className="DictionaryListSmallScreen__actions DictionaryListSmallScreen__actions--batch">
+        <Typography className="DictionaryListSmallScreen__batchHeading" variant="subheading" component="h2">
+          Batch Delete
+        </Typography>
+        <div className="DictionaryListSmallScreen__batchButtons">
+          <div>{selectDeselectButton}</div>
+          {batchConfirmationElement}
+        </div>
+      </div>
+    ) : null
+  }
 
   return (
     <div className="dictionaryListSmallScreen">
-      {props.hasSorting && getSortByHeader()}
+      {props.hasSorting && getSortBy()}
       {getContent()}
+      {getBatch()}
     </div>
   )
 }

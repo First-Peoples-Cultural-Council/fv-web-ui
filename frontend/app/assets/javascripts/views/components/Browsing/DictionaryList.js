@@ -160,8 +160,6 @@ will be generated.
 NOTE: Currently only supports deleting selected items. New code would be needed
 to support different types of actions.
 
-TODO: small view needs batch support
-
 `batchConfirmationAction` func
 ------------------------------------
 Called after elements in the list are 'visually deleted',
@@ -181,7 +179,7 @@ UI text
 Select a row
 =============================================================================
 
-`rowClickHandler`
+`rowClickHandler` func
 ------------------------------------
 callback for when a row is clicked
 passes out the clicked item's data
@@ -190,7 +188,17 @@ passes out the clicked item's data
 =============================================================================
 Miscellaneous
 =============================================================================
-The following props are also passed out to other components.
+
+`dictionaryListSmallScreenTemplate` number
+------------------------------------
+Specifies which template to use with the small screen view.
+If omitted DictionaryListSmallScreen.js uses the Word template.
+
+
+Pass through props
+------------------------------------
+The following props are passed out to other components but not exclusively,
+the props may be referenced in this file as well.
 
 List views: DictionaryListSmallScreen, DictionaryListLargeScreen
 --------------------
@@ -236,10 +244,12 @@ import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
-const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-small-screen'))
-const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/dictionary-list-large-screen'))
+const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/DictionaryListSmallScreen'))
+const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/DictionaryListLargeScreen'))
 
-const DictionaryListV2 = (props) => {
+import '!style-loader!css-loader!./DictionaryList.css'
+
+const DictionaryList = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
@@ -261,7 +271,7 @@ const DictionaryListV2 = (props) => {
             return (
               <button
                 type="button"
-                className="Contributors__colSort" // TODO: change class name
+                className="DictionaryList__colSort"
                 onClick={() => {
                   sortCol({
                     newSortBy: column.sortBy,
@@ -286,8 +296,8 @@ const DictionaryListV2 = (props) => {
                 variant="outlined"
                 color={color}
                 size="small"
-                className={`dictionaryListSmallScreen__sortButton ${
-                  sortState ? `dictionaryListSmallScreen__sortButton--${sortState}` : ''
+                className={`DictionaryListSmallScreen__sortButton ${
+                  sortState ? `DictionaryListSmallScreen__sortButton--${sortState}` : ''
                 }`}
                 onClick={() => {
                   sortCol({
@@ -599,7 +609,7 @@ const DictionaryListV2 = (props) => {
 }
 
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
-DictionaryListV2.propTypes = {
+DictionaryList.propTypes = {
   // Batch
   batchConfirmationAction: func,
   batchFooterBtnConfirm: string,
@@ -639,7 +649,7 @@ DictionaryListV2.propTypes = {
   pushWindowPath: func.isRequired,
 }
 
-DictionaryListV2.defaultProps = {
+DictionaryList.defaultProps = {
   // batch
   batchFooterBtnConfirm: 'Yes, delete the selected items',
   batchFooterBtnDeny: 'No, do not delete the selected items',
@@ -689,4 +699,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DictionaryListV2)
+)(DictionaryList)

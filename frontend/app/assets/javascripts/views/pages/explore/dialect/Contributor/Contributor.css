@@ -27,9 +27,6 @@
 .Contributor__btn-container {
   display: flex;
 }
-.Contributor__delete {
-  margin-left: auto;
-}
 
 .Contributor__content {
   display: flex;

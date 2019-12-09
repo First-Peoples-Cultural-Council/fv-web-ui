@@ -17,7 +17,7 @@ import selectn from 'selectn'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
-const DictionaryListV2 = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
+const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
 const DocumentListView = (props) => {
   const getContent = () => {
@@ -61,7 +61,7 @@ const DocumentListView = (props) => {
 
     return (
       <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryListV2
+        <DictionaryList
           // Listview
           hasFlashcard={props.flashcard}
           hasPagination={props.pagination}

@@ -40,7 +40,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/dictionary-list-small-screen'
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
  * List view for phrases

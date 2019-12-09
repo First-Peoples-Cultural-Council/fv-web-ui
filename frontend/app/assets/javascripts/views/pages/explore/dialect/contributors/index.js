@@ -34,11 +34,11 @@ import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/dictionary-list-small-screen'
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 
 import '!style-loader!css-loader!./Contributors.css'
 
-const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
+const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
 // Contributors
 // ----------------------------------------
