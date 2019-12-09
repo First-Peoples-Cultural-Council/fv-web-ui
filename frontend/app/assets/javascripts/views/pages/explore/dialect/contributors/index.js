@@ -34,6 +34,7 @@ import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/dictionary-list-small-screen'
 
 import '!style-loader!css-loader!./Contributors.css'
 
@@ -198,6 +199,7 @@ function Contributors(props) {
           }}
           // Listview: computed data
           computedData={computedData}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           // ==================================================
           columns={getColumns(copy)}
           cssModifier="DictionaryList--contributors"

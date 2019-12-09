@@ -10,6 +10,9 @@
   min-width: 225px;
   width: 100%;
 }
+.dictionaryListSmallScreen__batch {
+  padding: 0 10px 0 0;
+}
 .dictionaryListSmallScreen__sortHeading {
   margin: 5px;
 }
@@ -27,9 +30,12 @@
   padding: 20px 10px;
   margin: 0;
 }
+.dictionaryListSmallScreen__groupContainer {
+  display: flex;
+}
 .dictionaryListSmallScreen__group {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .dictionaryListSmallScreen__definitionsGroup {
   width: 25%;
@@ -47,6 +53,9 @@
 @media (max-width: 750px) {
   .dictionaryListSmallScreen__group {
     flex-direction: column;
+  }
+  .dictionaryListSmallScreen__group--contributor {
+    flex-direction: row;
   }
 
   .dictionaryListSmallScreen__definitionsGroup,

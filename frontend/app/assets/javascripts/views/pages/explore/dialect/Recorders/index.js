@@ -33,7 +33,7 @@ import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/dictionary-list-small-screen'
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/dictionary-list-v2'))
@@ -207,6 +207,7 @@ function Recorders(props) {
           }}
           // Listview: computed data
           computedData={computedData}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           // ==================================================
           columns={_getColumns()}
           cssModifier="DictionaryList--contributors"

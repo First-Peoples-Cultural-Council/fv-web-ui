@@ -244,6 +244,10 @@ const DictionaryListV2 = (props) => {
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
   let propsColumns = props.columns
+
+  // ============= MQ
+  const [mediaQuery, setMediaQuery] = useState({})
+
   // ============= SORT
   const { routeParams, search } = props
   const { pageSize } = routeParams
@@ -379,24 +383,12 @@ const DictionaryListV2 = (props) => {
     ) : null
 
   const getViewButtons = () => {
-    return (
-      <>
-        {/* {viewMode === viewModeDecoder.default ? (
-          <FVButton variant="contained" color="primary">
-            Responsive mode
-          </FVButton>
-        ) : (
-          <FVButton
-            variant="contained"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.default)
-            }}
-          >
-            Responsive mode
-          </FVButton>
-        )} */}
-
-        {viewMode === viewModeDecoder.compact ? (
+    // NOTE: hiding view mode button when on small screens
+    // NOTE: mediaQuery set in render
+    let compactView = null
+    if (mediaQuery.small === false) {
+      compactView =
+        viewMode === viewModeDecoder.compact ? (
           <FVButton
             variant="contained"
             color="primary"
@@ -415,7 +407,26 @@ const DictionaryListV2 = (props) => {
           >
             Compact view
           </FVButton>
-        )}
+        )
+    }
+    return (
+      <>
+        {/* {viewMode === viewModeDecoder.default ? (
+          <FVButton variant="contained" color="primary">
+            Responsive mode
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            onClick={() => {
+              props.setListViewMode(viewModeDecoder.default)
+            }}
+          >
+            Responsive mode
+          </FVButton>
+        )} */}
+
+        {compactView}
 
         {viewMode === viewModeDecoder.flashcard ? (
           <FVButton
@@ -477,6 +488,7 @@ const DictionaryListV2 = (props) => {
       // --------------------
       items: props.items,
       columns: propsColumns,
+      dictionaryListSmallScreenTemplate: props.dictionaryListSmallScreenTemplate,
     }
 
     content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
@@ -507,6 +519,9 @@ const DictionaryListV2 = (props) => {
         }}
       >
         {(matches) => {
+          // save data for getViewButtons
+          setMediaQuery(matches)
+
           // =========================================
           //  All screens: no results
           // =========================================
@@ -611,6 +626,7 @@ DictionaryListV2.propTypes = {
   // General List
   hasSorting: bool,
   hasViewModeButtons: bool,
+  dictionaryListSmallScreenTemplate: number,
   // Search
   hasSearch: bool,
   handleSearch: func,

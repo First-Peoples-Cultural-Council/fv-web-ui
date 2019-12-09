@@ -17,139 +17,260 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import Edit from '@material-ui/icons/Edit'
+// import Edit from '@material-ui/icons/Edit'
 import Typography from '@material-ui/core/Typography'
 
-import FVButton from 'views/components/FVButton'
-import Preview from 'views/components/Editor/Preview'
-import UIHelpers from 'common/UIHelpers'
-import IntlService from 'views/services/intl'
+// import FVButton from 'views/components/FVButton'
+// import Preview from 'views/components/Editor/Preview'
+// import UIHelpers from 'common/UIHelpers'
+// import IntlService from 'views/services/intl'
 
 import '!style-loader!css-loader!./dictionaryListSmallScreen.css'
 
-const intl = IntlService.instance
+export const dictionaryListSmallScreenTemplate = {
+  category: 1,
+  contributor: 2,
+  link: 3,
+  phrase: 4,
+  phrasebook: 5,
+  word: 6,
+}
+
+// const intl = IntlService.instance
 const DictionaryListSmallScreen = (props) => {
-  const { items } = props
+  const { items, columns } = props
 
-  const listItems = (items || []).map((item, i1) => {
-    const _item = item
-    const title = item.title ? (
-      <Typography variant="title" component="h2">
-        {item.title}
-        <FVButton type="button" variant="flat" size="small">
-          <Edit title={intl.trans('edit', 'Edit', 'first')} />
-        </FVButton>
-      </Typography>
-    ) : null
+  const getContent = () => {
+    const itemRows = items.map((item, inc) => {
+      let actions = null
+      const batch = null
+      let audio = null
+      let bio = null
+      let categories = null
+      let definitions = null
+      let partOfSpeech = null
+      let image = null
+      let state = null
+      let title = null
+      let phraseBooks = null
 
-    const _definitions = selectn(['properties', 'fv:definitions'], item) || []
-    const definitions =
-      _definitions.length > 0 ? (
-        <div className="dictionaryListSmallScreen__definitionsGroup">
-          <Typography variant="subheading" component="h3">
-            Definitions
-          </Typography>
-          <Typography variant="body1" component="div">
-            <ul>
-              {_definitions.map((definitionObj, i2) => {
-                const dfn = selectn('translation', definitionObj)
-                return dfn ? <li key={i2}>{dfn}</li> : null
-              })}
-            </ul>
-          </Typography>
-        </div>
-      ) : null
+      const _item = item
 
-    const firstAudio = selectn(['contextParameters', 'word', 'related_audio', '0'], item)
-    const audio = firstAudio ? (
-      <div className="dictionaryListSmallScreen__audioGroup">
-        <Preview
-          key={selectn('uid', firstAudio)}
-          minimal
-          tagProps={{ preload: 'none' }}
-          // className="dictionaryListSmallScreen__audio"
-          tagStyles={{ width: '250px', maxWidth: '100%' }}
-          expandedValue={firstAudio}
-          type="FVAudio"
-        />
-      </div>
-    ) : null
+      columns.forEach((column) => {
+        const cellValue = selectn(column.name, item)
+        const cellRender = typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+        switch (column.name) {
+          case 'actions':
+            actions = cellRender
+            break
+          // case 'batch':
+          //   batch = cellRender
+          //   break
+          case 'dc:description':
+            bio = (
+              <div>
+                <strong>
+                  {props.dictionaryListSmallScreenTemplate === dictionaryListSmallScreenTemplate.phrasebook
+                    ? 'Description'
+                    : 'Biography'}
+                  :
+                </strong>
+                {cellRender}
+              </div>
+            )
+            break
+          case 'fv-phrase:phrase_books':
+            phraseBooks = (
+              <div>
+                <strong>Phrase books:</strong>
+                {cellRender}
+              </div>
+            )
+            break
+          case 'fv-word:categories':
+            categories = (
+              <div>
+                <strong>Categories:</strong>
+                {cellRender}
+              </div>
+            )
+            break
+          case 'fv-word:part_of_speech':
+            partOfSpeech = (
+              <div>
+                <strong>Part of speech:</strong> {cellRender}
+              </div>
+            )
+            break
+          case 'fv:definitions':
+            definitions = cellRender
+            break
+          case 'related_audio':
+            audio = <div className="dictionaryListSmallScreen__audioGroup">{cellRender}</div>
+            break
+          case 'related_pictures':
+            image = cellRender
+            break
+          case 'state':
+            state = (
+              <div>
+                <strong>State:</strong> {cellRender}
+              </div>
+            )
+            break
+          case 'title':
+            title = (
+              <Typography variant="title" component="h2">
+                {cellRender}
+              </Typography>
+            )
+            break
 
-    const firstPicture = selectn(['contextParameters', 'word', 'related_pictures', '0'], item)
-    const image = (
-      <div className="dictionaryListSmallScreen__imageGroup">
-        <img
-          key={selectn('uid', firstPicture)}
-          style={{ maxWidth: '62px', maxHeight: '45px' }}
-          src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
-          alt=""
-        />
-      </div>
-    )
+          default: // NOTE: do nothing
+        }
+      })
 
-    const partOfSpeechValue = selectn('contextParameters.word.part_of_speech', item)
-    const partOfSpeech = partOfSpeechValue ? (
-      <li>
-        <strong>Part of speech:</strong> {partOfSpeechValue}
-      </li>
-    ) : null
+      let markup = null
+      const { word, phrase, phrasebook, category, contributor /*, link*/ } = dictionaryListSmallScreenTemplate
+      switch (props.dictionaryListSmallScreenTemplate) {
+        // Word template
+        case word:
+          markup = (
+            <>
+              {title}
+              <div className="dictionaryListSmallScreen__group">
+                {definitions}
+                {audio}
 
-    const categoryData = selectn('contextParameters.word.categories', item) || []
-    const categories =
-      categoryData.length > 0 ? (
-        <li>
-          <strong>Categories:</strong>
-          {UIHelpers.renderComplexArrayRow(categoryData, (entry, i) => (
-            <li key={i}>{selectn('dc:title', entry)}</li>
-          ))}
+                {image}
+
+                <div className="dictionaryListSmallScreen__miscGroup">
+                  <Typography variant="body1" component="div">
+                    {partOfSpeech}
+                    {categories}
+                    {state}
+                  </Typography>
+                </div>
+              </div>
+            </>
+          )
+          break
+        // Phrase template
+        case phrase:
+          markup = (
+            <>
+              {title}
+              <div className="dictionaryListSmallScreen__group">
+                {definitions}
+                {audio}
+
+                {image}
+
+                <div className="dictionaryListSmallScreen__miscGroup">
+                  <Typography variant="body1" component="div">
+                    {phraseBooks}
+                    {state}
+                  </Typography>
+                </div>
+              </div>
+            </>
+          )
+          break
+        // Category template
+        case category:
+          markup = batch ? (
+            <div className="dictionaryListSmallScreen__groupContainer">
+              <div className="dictionaryListSmallScreen__batch">{batch}</div>
+              <div>
+                {title}
+                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                  {bio}
+                  {actions}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {title}
+              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                {bio}
+                {actions}
+              </div>
+            </>
+          )
+          break
+        // Contributor template
+        case contributor:
+          markup = batch ? (
+            <div className="dictionaryListSmallScreen__groupContainer">
+              <div className="dictionaryListSmallScreen__batch">{batch}</div>
+              <div>
+                {title}
+                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                  {bio}
+                  {actions}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {title}
+              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                {bio}
+                {actions}
+              </div>
+            </>
+          )
+          break
+        // Phrasebook template
+        case phrasebook:
+          markup = batch ? (
+            <div className="dictionaryListSmallScreen__groupContainer">
+              <div className="dictionaryListSmallScreen__batch">{batch}</div>
+              <div>
+                {title}
+                <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                  {bio}
+                  {actions}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {title}
+              <div className="dictionaryListSmallScreen__group dictionaryListSmallScreen__group--contributor">
+                {bio}
+                {actions}
+              </div>
+            </>
+          )
+          break
+
+        default:
+        // NOTE: do nothing
+      }
+      return markup ? (
+        <li
+          key={`content-${inc}`}
+          className={`dictionaryListSmallScreen__listItem ${
+            inc % 2 !== 0 ? 'dictionaryListSmallScreen__listItem--alt' : ''
+          }`}
+          onClick={() => {
+            props.rowClickHandler(_item)
+          }}
+        >
+          {markup}
         </li>
       ) : null
-
-    const state = item.state ? (
-      <li>
-        <strong>State:</strong> {item.state}
-      </li>
-    ) : null
-
-    return (
-      <li
-        key={i1}
-        className={`dictionaryListSmallScreen__listItem ${
-          i1 % 2 !== 0 ? 'dictionaryListSmallScreen__listItem--alt' : ''
-        }`}
-        onClick={() => {
-          props.rowClickHandler(_item)
-        }}
-      >
-        {title}
-
-        <div className="dictionaryListSmallScreen__group">
-          {definitions}
-          {audio}
-
-          {image}
-
-          <div className="dictionaryListSmallScreen__miscGroup">
-            <Typography variant="body1" component="div">
-              <ul>
-                {partOfSpeech}
-                {categories}
-                {state}
-              </ul>
-            </Typography>
-          </div>
-        </div>
-      </li>
-    )
-  })
-
+    })
+    return itemRows.length > 0 ? <ul className="dictionaryListSmallScreen__list">{itemRows}</ul> : null
+  }
   const getSortByHeader = () => {
-    const { columns } = props
     const headerCells = []
-    columns.forEach((column) => {
+    columns.forEach((column, i) => {
       // Header
       if (column.sortBy) {
-        headerCells.push(selectn('titleSmall', column))
+        headerCells.push(<span key={`getSortByHeader-${i}`}>{selectn('titleSmall', column)}</span>)
       }
     })
     return (
@@ -163,41 +284,27 @@ const DictionaryListSmallScreen = (props) => {
   return (
     <div className="dictionaryListSmallScreen">
       {props.hasSorting && getSortByHeader()}
-
-      <ul className="dictionaryListSmallScreen__list">{listItems}</ul>
+      {getContent()}
     </div>
   )
 }
 
-const { any, array, bool, func, number, object, string } = PropTypes
+const { array, bool, func, number, string } = PropTypes
 DictionaryListSmallScreen.propTypes = {
-  cellHeight: number,
-  cols: any, // TODO: set appropriate propType
-  cssModifier: string,
-  dialect: object,
-  disablePageSize: bool,
-  fetcher: func,
-  fetcherParams: object,
-  flashcardTitle: string,
-  gridListTile: any, // TODO: set appropriate propType,
+  columns: array,
   hasSorting: bool,
   items: array,
-  metadata: object,
-  pagination: bool,
   rowClickHandler: func,
-  style: object,
   type: string,
+  dictionaryListSmallScreenTemplate: number,
 }
 
 DictionaryListSmallScreen.defaultProps = {
-  cellHeight: 210,
-  cols: 3,
   columns: [],
-  cssModifier: '',
   hasSorting: true,
+  items: [],
   rowClickHandler: () => {},
-  style: null,
-  wrapperStyle: null,
+  dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplate.word,
 }
 
 export default DictionaryListSmallScreen

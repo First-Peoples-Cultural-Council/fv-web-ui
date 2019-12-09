@@ -40,7 +40,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/dictionary-list-small-screen'
 const intl = IntlService.instance
 /**
  * List view for phrases
@@ -344,6 +344,7 @@ export class PhrasesListView extends DataListView {
             hasViewModeButtons={this.props.hasViewModeButtons}
             hasSorting={this.props.hasSorting}
             rowClickHandler={this.props.rowClickHandler}
+            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.phrase}
           />
         )}
       </PromiseWrapper>

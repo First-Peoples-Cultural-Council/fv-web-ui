@@ -68,6 +68,7 @@ const DocumentListView = (props) => {
           hasSearch={props.hasSearch}
           hasViewModeButtons={props.hasViewModeButtons}
           rowClickHandler={props.rowClickHandler}
+          dictionaryListSmallScreenTemplate={props.dictionaryListSmallScreenTemplate}
           // Listview: Batch
           batchConfirmationAction={props.batchConfirmationAction}
           batchTitleSelect={props.batchTitleSelect}
@@ -124,6 +125,7 @@ DocumentListView.propTypes = {
   columns: any, // TODO: set appropriate propType
   data: any, // TODO: set appropriate propType
   dialect: object,
+  dictionaryListSmallScreenTemplate: number,
   disablePageSize: any, // TODO: set appropriate propType
   gridCols: any, // TODO: set appropriate propType
   gridListTile: any, // TODO: set appropriate propType
