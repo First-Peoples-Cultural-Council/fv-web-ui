@@ -19,7 +19,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
     /*
             Check that edit button does not exist and go to reports page
         */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
     cy.queryByText('Edit Portal').should('not.exist')
     cy.get('[title="More Options"]').click()

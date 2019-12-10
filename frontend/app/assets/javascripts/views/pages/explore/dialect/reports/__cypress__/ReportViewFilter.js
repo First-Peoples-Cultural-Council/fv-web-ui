@@ -15,7 +15,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.login({
       userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.get('[title="More Options"]', { exact: true }).click()
     cy.getByText('Reports', { exact: true }).click()
 
@@ -45,7 +45,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.login({
       userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.get('[title="More Options"]', { exact: true }).click()
     cy.getByText('Reports', { exact: true }).click()
 

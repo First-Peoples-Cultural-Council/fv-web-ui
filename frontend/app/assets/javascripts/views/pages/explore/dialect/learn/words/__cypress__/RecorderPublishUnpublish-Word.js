@@ -13,7 +13,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -37,7 +37,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
@@ -52,7 +52,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Publish (0)', { exact: true }).click()
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
@@ -70,7 +70,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -80,7 +80,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Approve', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -96,7 +96,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Unpublish (0)', { exact: true }).click()
@@ -110,12 +110,12 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -131,7 +131,7 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.getByText('Unpublish (0)', { exact: true }).click()
@@ -145,12 +145,12 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.login({
       userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Approve', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
