@@ -36,7 +36,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 
 import IntlService from 'views/services/intl'
-
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
  * List view for words
@@ -102,9 +102,9 @@ export class ListViewAlt extends DataListView {
             const clickHandler = props.disableClickItem
               ? NavigationHelpers.disable
               : (/*e*/) => {
-                // e.preventDefault()
-                // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-              }
+                  // e.preventDefault()
+                  // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+                }
             return (
               <a onClick={clickHandler} href={href}>
                 {v}
@@ -246,6 +246,8 @@ export class ListViewAlt extends DataListView {
                 sortInfo={this.state.sortInfo.uiSortOrder}
                 className="browseDataGrid"
                 dialect={selectn('response', computeDialect2)}
+                dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.book}
+                hasViewModeButtons={false}
               />
             )
           }

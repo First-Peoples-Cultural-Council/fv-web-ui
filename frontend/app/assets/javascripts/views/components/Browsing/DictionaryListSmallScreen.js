@@ -28,12 +28,13 @@ import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
 
 export const dictionaryListSmallScreenTemplate = {
-  category: 1,
-  contributor: 2,
-  link: 3,
-  phrase: 4,
-  phrasebook: 5,
-  word: 6,
+  book: 1,
+  category: 2,
+  contributor: 3,
+  link: 4,
+  phrase: 5,
+  phrasebook: 6,
+  word: 7,
 }
 
 // const intl = IntlService.instance
@@ -43,28 +44,45 @@ const DictionaryListSmallScreen = (props) => {
   const getContent = () => {
     const itemRows = items.map((item, inc) => {
       let actions = null
-      let batch = null
       let audio = null
+      let batch = null
       let bio = null
       let categories = null
+      let dateModified = null
+      let dateCreated = null
       let definitions = null
-      let partOfSpeech = null
       let image = null
+      let partOfSpeech = null
+      let phraseBooks = null
       let state = null
       let title = null
-      let phraseBooks = null
 
       const _item = item
 
       columns.forEach((column) => {
         const cellValue = selectn(column.name, item)
         const cellRender = typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+
         switch (column.name) {
           case 'actions':
             actions = cellRender
             break
           case 'batch':
             batch = cellRender
+            break
+          case 'dc:modified':
+            dateModified = (
+              <div>
+                <strong>Date modified:</strong> {cellRender}
+              </div>
+            )
+            break
+          case 'dc:created':
+            dateCreated = (
+              <div>
+                <strong>Date created:</strong> {cellRender}
+              </div>
+            )
             break
           case 'dc:description':
             bio = (
@@ -131,26 +149,17 @@ const DictionaryListSmallScreen = (props) => {
       })
 
       let markup = null
-      const { word, phrase, phrasebook, category, contributor /*, link*/ } = dictionaryListSmallScreenTemplate
+      const { book, category, contributor, link, phrase, phrasebook, word } = dictionaryListSmallScreenTemplate
       switch (props.dictionaryListSmallScreenTemplate) {
-        // Word template
-        case word: {
+        // Book template, NOTE: book === song, story
+        case book: {
           const wordMain = (
             <>
               {title}
               <div className="DictionaryListSmallScreen__group">
-                {definitions}
-                {audio}
-
-                {image}
-
-                <div className="DictionaryListSmallScreen__miscGroup">
-                  <Typography variant="body1" component="div">
-                    {partOfSpeech}
-                    {categories}
-                    {state}
-                  </Typography>
-                </div>
+                {dateCreated}
+                {dateModified}
+                {state}
               </div>
             </>
           )
@@ -161,36 +170,6 @@ const DictionaryListSmallScreen = (props) => {
             </div>
           ) : (
             wordMain
-          )
-          break
-        }
-        // Phrase template
-        case phrase: {
-          const phraseMain = (
-            <>
-              {title}
-              <div className="DictionaryListSmallScreen__group">
-                {definitions}
-                {audio}
-
-                {image}
-
-                <div className="DictionaryListSmallScreen__miscGroup">
-                  <Typography variant="body1" component="div">
-                    {phraseBooks}
-                    {state}
-                  </Typography>
-                </div>
-              </div>
-            </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{phraseMain}</div>
-            </div>
-          ) : (
-            phraseMain
           )
           break
         }
@@ -236,6 +215,50 @@ const DictionaryListSmallScreen = (props) => {
           )
           break
         }
+        // TODO
+        // Link template
+        case link: {
+          const categoryMain = <>{title}</>
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{categoryMain}</div>
+            </div>
+          ) : (
+            categoryMain
+          )
+          break
+        }
+        // Phrase template
+        case phrase: {
+          const phraseMain = (
+            <>
+              {title}
+              <div className="DictionaryListSmallScreen__group">
+                {definitions}
+                {audio}
+
+                {image}
+
+                <div className="DictionaryListSmallScreen__miscGroup">
+                  <Typography variant="body1" component="div">
+                    {phraseBooks}
+                    {state}
+                  </Typography>
+                </div>
+              </div>
+            </>
+          )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{phraseMain}</div>
+            </div>
+          ) : (
+            phraseMain
+          )
+          break
+        }
         // Phrasebook template
         case phrasebook: {
           const phrasebookMain = (
@@ -254,6 +277,37 @@ const DictionaryListSmallScreen = (props) => {
             </div>
           ) : (
             phrasebookMain
+          )
+          break
+        }
+        // Word template
+        case word: {
+          const wordMain = (
+            <>
+              {title}
+              <div className="DictionaryListSmallScreen__group">
+                {definitions}
+                {audio}
+
+                {image}
+
+                <div className="DictionaryListSmallScreen__miscGroup">
+                  <Typography variant="body1" component="div">
+                    {partOfSpeech}
+                    {categories}
+                    {state}
+                  </Typography>
+                </div>
+              </div>
+            </>
+          )
+          markup = batch ? (
+            <div className="DictionaryListSmallScreen__groupContainer">
+              <div className="DictionaryListSmallScreen__batch">{batch}</div>
+              <div className="DictionaryListSmallScreen__batchSibling">{wordMain}</div>
+            </div>
+          ) : (
+            wordMain
           )
           break
         }
@@ -285,12 +339,12 @@ const DictionaryListSmallScreen = (props) => {
         headerCells.push(<span key={`getSortBy-${i}`}>{selectn('titleSmall', column)}</span>)
       }
     })
-    return (
+    return headerCells.length > 0 ? (
       <div className="DictionaryListSmallScreen__actions">
         <strong className="DictionaryListSmallScreen__sortHeading">Sort by:</strong>
         {headerCells}
       </div>
-    )
+    ) : null
   }
   const getBatch = () => {
     let selectDeselectButton = null
