@@ -68,6 +68,8 @@ class AlphabetGridListTile extends Component {
           borderRadius: '5px',
           textAlign: 'center',
           paddingTop: '15px',
+          width: '25%',
+          height: '164px',
         }}
       >
         <span style={{ fontSize: '2em' }}>
@@ -80,11 +82,13 @@ class AlphabetGridListTile extends Component {
           {selectn('contextParameters.character.related_words[0].dc:title', this.props.tile)}
         </strong>
         <br />
-        {selectn('contextParameters.character.related_words[0].fv:definitions[0].translation', this.props.tile) ||
-          selectn(
-            'contextParameters.character.related_words[0].fv:literal_translation[0].translation',
-            this.props.tile
-          )}
+        <>
+          {selectn('contextParameters.character.related_words[0].fv:definitions[0].translation', this.props.tile) ||
+            selectn(
+              'contextParameters.character.related_words[0].fv:literal_translation[0].translation',
+              this.props.tile
+            )}
+        </>
       </GridListTile>
     )
   }

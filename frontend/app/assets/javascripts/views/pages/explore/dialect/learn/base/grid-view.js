@@ -68,10 +68,10 @@ export default class GridView extends Component {
       nowPlaying: null,
     }
   }
-
   componentWillUnmount() {
     if (this.state.nowPlaying != null) {
       this.state.nowPlaying.pause()
+      // eslint-disable-next-line react/no-direct-mutation-state
       this.state.currentTime = 0
     }
   }
@@ -96,12 +96,14 @@ export default class GridView extends Component {
     return (
       <div className={classNames('grid-view', this.props.className)}>
         <GridList
+          // eslint-disable-next-line no-nested-ternary
           cols={UIHelpers.isViewSize('xs') ? (this.props.type === 'FVPhrase' ? 1 : 2) : this.props.cols}
           cellHeight={this.props.cellHeight}
           style={gridListStyle}
         >
           {items.map(
             function itemsMap(tile, i) {
+              // NOTE: Returns `props.gridListTile` if defined
               if (this.props.gridListTile) {
                 return React.createElement(this.props.gridListTile, { key: i, tile: tile, action: this.props.action })
               }
@@ -126,10 +128,10 @@ export default class GridView extends Component {
                 audioIcon =
                   decodeURIComponent(selectn('src', this.state.nowPlaying)) !==
                   NavigationHelpers.getBaseURL() + audio ? (
-                      <AVPlayArrow color="white" />
-                    ) : (
-                      <AVStop color="white" />
-                    )
+                    <AVPlayArrow color="white" />
+                  ) : (
+                    <AVStop color="white" />
+                  )
                 audioCallback =
                   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== NavigationHelpers.getBaseURL() + audio
                     ? UIHelpers.playAudio.bind(this, this.state, stateFunc, NavigationHelpers.getBaseURL() + audio)
