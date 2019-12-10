@@ -12,7 +12,6 @@ import FormRemoveButton from 'views/components/Form/FormRemoveButton'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
-// import DocumentListView from 'views/components/Document/DocumentListView'
 import Preview from 'views/components/Editor/Preview'
 // see about dropping:
 import selectn from 'selectn'

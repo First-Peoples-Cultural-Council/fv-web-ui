@@ -618,7 +618,7 @@ DictionaryList.propTypes = {
   batchFooterIsConfirmOrDenyTitle: string,
   batchTitleDeselect: string,
   batchTitleSelect: string,
-  // dictionary-list
+  // DictionaryList
   action: func,
   cellHeight: number,
   cols: number,
@@ -650,14 +650,14 @@ DictionaryList.propTypes = {
 }
 
 DictionaryList.defaultProps = {
-  // batch
+  // Batch
   batchFooterBtnConfirm: 'Yes, delete the selected items',
   batchFooterBtnDeny: 'No, do not delete the selected items',
   batchFooterBtnInitiate: 'Delete',
   batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
   batchTitleDeselect: 'Select all',
   batchTitleSelect: 'Deselect all',
-  // dictionary-list
+  // DictionaryList
   cellHeight: 210,
   cols: 3,
   columns: [],

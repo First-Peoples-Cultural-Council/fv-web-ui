@@ -14,7 +14,6 @@ import { createContributor, fetchContributors } from 'providers/redux/reducers/f
 import { fetchDialect } from 'providers/redux/reducers/fvDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-// import DocumentListView from 'views/components/Document/DocumentListView'
 const { array, func, object, number, string } = PropTypes
 
 export class FormContributor extends React.Component {
