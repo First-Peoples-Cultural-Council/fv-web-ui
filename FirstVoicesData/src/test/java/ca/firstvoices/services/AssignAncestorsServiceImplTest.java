@@ -22,10 +22,18 @@ import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 @Deploy( {
     "FirstVoicesData",
     "org.nuxeo.ecm.platform",
+    "org.nuxeo.ecm.platform.commandline.executor",
     "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.rendition.core",
     "org.nuxeo.ecm.platform.video.core",
     "org.nuxeo.ecm.platform.audio.core",
+    "org.nuxeo.ecm.automation.scripting",
+    "org.nuxeo.ecm.platform.web.common",
+    "FirstVoicesData:OSGI-INF/extensions/test.templates.factories.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
     "FirstVoicesData:OSGI-INF/extensions/fake-load-actions.xml",
     "FirstVoicesData:OSGI-INF/extensions/fake-load-es-provider.xml",
     "FirstVoicesData:OSGI-INF/extensions/fake-directory-sql-contrib.xml"
@@ -63,9 +71,7 @@ public class AssignAncestorsServiceImplTest {
     assertNotNull("Dialect cannot be null", dialect);
     
     // Create a new child document
-    DocumentModel TestWord = session.createDocumentModel("/FV/Family/Language/Dialect", "TestWord", "FVWord");
-    TestWord.setPropertyValue("dc:title", "TestWord");
-    session.createDocument(TestWord);
+    DocumentModel TestWord = testUtil.createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
     
     // Check that the child document does not have the parent document UUIDs in it's properties
     assertNull("Word should have no ID for parent family property", TestWord.getPropertyValue("fva:family"));

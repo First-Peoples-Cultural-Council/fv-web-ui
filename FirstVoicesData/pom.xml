@@ -106,5 +106,15 @@
       <artifactId>nuxeo-dam</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesPublisher</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesSecurity</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
