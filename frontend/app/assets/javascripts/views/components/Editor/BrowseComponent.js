@@ -169,6 +169,7 @@ export class BrowseComponent extends Component {
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
+            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           />
         )
         break

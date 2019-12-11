@@ -54,6 +54,7 @@ class ContributorsListView extends DataListView {
     gridCols: number,
     gridListView: bool,
     routeParams: object.isRequired,
+    dictionaryListSmallScreenTemplate: number,
     // REDUX: reducers/state
     properties: object.isRequired,
     windowPath: string.isRequired,
@@ -192,6 +193,7 @@ class ContributorsListView extends DataListView {
             }}
             sortInfo={this.state.sortInfo.uiSortOrder}
             type="FVContributor"
+            dictionaryListSmallScreenTemplate={this.props.dictionaryListSmallScreenTemplate}
           />
         )}
       </PromiseWrapper>

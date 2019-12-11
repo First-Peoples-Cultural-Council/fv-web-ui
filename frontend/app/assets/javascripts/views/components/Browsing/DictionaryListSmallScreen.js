@@ -43,10 +43,11 @@ const DictionaryListSmallScreen = (props) => {
 
   const getContent = () => {
     const itemRows = items.map((item, inc) => {
+      // Data relevant to all templates:
       let actions = null
       let audio = null
       let batch = null
-      let bio = null
+      let description = null
       let categories = null
       let dateModified = null
       let dateCreated = null
@@ -85,17 +86,12 @@ const DictionaryListSmallScreen = (props) => {
             )
             break
           case 'dc:description':
-            bio = (
+            description = cellRender ? (
               <div>
-                <strong>
-                  {props.dictionaryListSmallScreenTemplate === dictionaryListSmallScreenTemplate.phrasebook
-                    ? 'Description'
-                    : 'Biography'}
-                  :
-                </strong>
+                <strong>{column.title || 'Description'}:</strong>
                 {cellRender}
               </div>
-            )
+            ) : null
             break
           case 'fv-phrase:phrase_books':
             phraseBooks = (
@@ -179,7 +175,7 @@ const DictionaryListSmallScreen = (props) => {
             <>
               {title}
               <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {bio}
+                {description}
                 {actions}
               </div>
             </>
@@ -200,7 +196,8 @@ const DictionaryListSmallScreen = (props) => {
             <>
               {title}
               <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {bio}
+                {description}
+                {state}
                 {actions}
               </div>
             </>
@@ -265,7 +262,7 @@ const DictionaryListSmallScreen = (props) => {
             <>
               {title}
               <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {bio}
+                {description}
                 {actions}
               </div>
             </>
