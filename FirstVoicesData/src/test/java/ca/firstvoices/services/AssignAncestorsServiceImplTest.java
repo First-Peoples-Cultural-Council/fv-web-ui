@@ -30,7 +30,7 @@ import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
     "org.nuxeo.ecm.automation.scripting",
     "org.nuxeo.ecm.platform.web.common",
     "FirstVoicesData:OSGI-INF/extensions/test.templates.factories.xml",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesData:OSGI-INF/extensions/test.operations.xml",
     "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
     "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
     "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
