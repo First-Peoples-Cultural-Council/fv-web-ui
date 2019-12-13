@@ -40,6 +40,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
+import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
@@ -291,7 +292,11 @@ export class PhrasesListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computePhrases) && (
           <DocumentListView
-            className={'browseDataGrid'}
+            // className={'browseDataGrid'}
+            // objectDescriptions="phrases"
+            // onSelectionChange={this._onEntryNavigateRequest}
+            // onSortChange={this._handleSortChange}
+            // sortInfo={this.state.sortInfo.uiSortOrder}
             columns={this.state.columns}
             data={computePhrases}
             dialect={selectn('response', computeDialect2)}
@@ -299,10 +304,6 @@ export class PhrasesListView extends DataListView {
             flashcardTitle={this.props.flashcardTitle}
             gridCols={this.props.gridCols}
             gridListView={this.props.gridListView}
-            objectDescriptions={'phrases'}
-            onColumnOrderChange={this._handleColumnOrderChange}
-            onSelectionChange={this._onEntryNavigateRequest}
-            onSortChange={this._handleSortChange}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
             // refetcher: this._handleRefetch,
@@ -314,7 +315,6 @@ export class PhrasesListView extends DataListView {
                 preserveSearch: true,
               })
             }}
-            sortInfo={this.state.sortInfo.uiSortOrder}
             sortHandler={async ({
               page = '1',
               pageSize = '10',
@@ -336,7 +336,7 @@ export class PhrasesListView extends DataListView {
             // SEARCH:
             handleSearch={this.props.handleSearch}
             hasSearch={this.props.hasSearch}
-            isSearchingPhrases
+            searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
             resetSearch={this.props.resetSearch}
             searchByMode={this.props.searchByMode}
             searchUi={this.props.searchUi}

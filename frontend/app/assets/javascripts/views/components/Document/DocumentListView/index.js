@@ -27,7 +27,7 @@ const DocumentListView = (props) => {
         {
           cellHeight: 160,
           cols: props.gridCols,
-          cssModifier: props.cssModifier,
+          // cssModifier: props.cssModifier,
           dialect: props.dialect,
           disablePageSize: props.disablePageSize,
           fetcher: gridListFetcher,
@@ -63,6 +63,7 @@ const DocumentListView = (props) => {
       <Suspense fallback={<div>Loading...</div>}>
         <DictionaryList
           // Listview
+          data={props.data}
           hasFlashcard={props.flashcard}
           hasPagination={props.pagination}
           hasSearch={props.hasSearch}
@@ -91,11 +92,12 @@ const DocumentListView = (props) => {
           resetSearch={props.resetSearch}
           searchUi={props.searchUi}
           searchByMode={props.searchByMode}
+          searchDialectDataType={props.searchDialectDataType}
           // ==================================================
           cellHeight={160}
           cols={props.gridCols}
           columns={props.columns}
-          cssModifier={props.cssModifier}
+          // cssModifier={props.cssModifier}
           dialect={props.dialect}
           disablePageSize={props.disablePageSize}
           fetcher={gridListFetcher}
@@ -118,46 +120,39 @@ const DocumentListView = (props) => {
   return getContent()
 }
 
-const { any, bool, func, number, object, string } = PropTypes
+const { any, array, bool, func, number, object, string } = PropTypes
 
 DocumentListView.propTypes = {
-  cssModifier: string,
-  columns: any, // TODO: set appropriate propType
-  data: any, // TODO: set appropriate propType
+  // className,
+  columns: array,
+  // cssModifier: string,
+  data: object,
   dialect: object,
   dictionaryListSmallScreenTemplate: number,
-  disablePageSize: any, // TODO: set appropriate propType
+  disablePageSize: bool,
+  flashcard: bool,
+  flashcardTitle: string,
   gridCols: any, // TODO: set appropriate propType
   gridListTile: any, // TODO: set appropriate propType
   gridListView: bool,
-  gridViewProps: any, // TODO: set appropriate propType
-  onSelectionChange: func,
-  onSortChange: func,
+  gridViewProps: object,
+  handleSearch: func,
+  hasSearch: bool,
+  searchDialectDataType: number,
+  hasViewModeButtons: bool,
   page: number,
   pageSize: number,
   pagination: bool,
   refetcher: func,
-  renderSimpleTable: bool,
-  sortInfo: any, // TODO: set appropriate propType
-  type: string,
-  flashcard: bool,
-  flashcardTitle: string,
-  usePrevResponse: bool,
-  // Search
-  handleSearch: func,
   resetSearch: func,
-  hasSearch: bool,
-  // List View
-  hasViewModeButtons: bool,
   rowClickHandler: func,
+  type: string,
 }
 
 DocumentListView.defaultProps = {
-  cssModifier: '',
+  // cssModifier: '',
   data: {},
   pagination: true,
-  usePrevResponse: false,
-  onSelectionChange: () => {},
   flashcard: false,
   flashcardTitle: '',
 }

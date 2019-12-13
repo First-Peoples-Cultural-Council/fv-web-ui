@@ -175,25 +175,24 @@ class ContributorsListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeContributors) && (
           <DocumentListView
+            // objectDescriptions="contributors"
+            // onSortChange={this._handleSortChange}
+            // sortInfo={this.state.sortInfo.uiSortOrder}
             className="browseDataGrid"
             columns={this.state.columns}
             data={computeContributors}
             dialect={selectn('response', computeDialect2)}
+            dictionaryListSmallScreenTemplate={this.props.dictionaryListSmallScreenTemplate}
             gridCols={this.props.gridCols}
             gridListView={this.props.gridListView}
             hasViewModeButtons={false}
-            objectDescriptions="contributors"
-            onColumnOrderChange={this._handleColumnOrderChange}
-            onSortChange={this._handleSortChange}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
             refetcher={this._handleRefetch}
             rowClickHandler={(row) => {
               this._onEntryNavigateRequest(row)
             }}
-            sortInfo={this.state.sortInfo.uiSortOrder}
             type="FVContributor"
-            dictionaryListSmallScreenTemplate={this.props.dictionaryListSmallScreenTemplate}
           />
         )}
       </PromiseWrapper>

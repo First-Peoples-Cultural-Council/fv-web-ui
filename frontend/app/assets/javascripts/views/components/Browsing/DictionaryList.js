@@ -518,7 +518,12 @@ const DictionaryList = (props) => {
 
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
-          <SearchDialect handleSearch={props.handleSearch} resetSearch={props.resetSearch} searchUi={props.searchUi} />
+          <SearchDialect
+            handleSearch={props.handleSearch}
+            resetSearch={props.resetSearch}
+            searchUi={props.searchUi}
+            searchDialectDataType={props.searchDialectDataType}
+          />
         </Suspense>
       )}
 
@@ -622,7 +627,7 @@ DictionaryList.propTypes = {
   action: func,
   cellHeight: number,
   cols: number,
-  columns: array.isRequired,
+  columns: array.isRequired, // Col names for Data
   computedData: object,
   cssModifier: string,
   dictionaryListSmallScreenTemplate: number,
@@ -630,16 +635,18 @@ DictionaryList.propTypes = {
   filteredItems: oneOfType([array, instanceOf(List)]),
   hasSorting: bool,
   hasViewModeButtons: bool,
-  items: oneOfType([array, instanceOf(List)]),
+  items: oneOfType([array, instanceOf(List)]), // Data
   rowClickHandler: func,
   sortHandler: func,
   style: object,
   type: string,
   wrapperStyle: object,
   // Search
-  hasSearch: bool,
   handleSearch: func,
+  hasSearch: bool,
+  searchDialectDataType: number,
   resetSearch: func,
+  searchUi: array,
   // REDUX: reducers/state
   routeParams: object.isRequired,
   search: object.isRequired,

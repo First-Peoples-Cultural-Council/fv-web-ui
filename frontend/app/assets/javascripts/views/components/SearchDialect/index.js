@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes, { array } from 'prop-types'
+import PropTypes from 'prop-types'
 
 import {
   SEARCH_PART_OF_SPEECH_ANY,
@@ -8,6 +8,8 @@ import {
   SEARCH_BY_CATEGORY,
   SEARCH_BY_CUSTOM,
   SEARCH_BY_PHRASE_BOOK,
+  SEARCH_DATA_TYPE_PHRASE,
+  SEARCH_DATA_TYPE_WORD,
 } from './constants'
 
 // REDUX
@@ -23,7 +25,6 @@ import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
 const intl = IntlService.instance
-const { func, string, bool, object } = PropTypes
 
 /*
 SearchDialect
@@ -192,16 +193,18 @@ export const SearchDialect = (props) => {
   // Generates the markup for the search form
   // ------------------------------------------------------------
   const getSearchForm = () => {
-    const { isSearchingPhrases } = props
-    let searchButtonText = ''
     const resetButtonText = 'Reset search'
-    // let searchByTitleText = ''
-    if (isSearchingPhrases) {
-      // searchByTitleText = 'Phrase'
-      searchButtonText = 'Search Phrases'
-    } else {
-      // searchByTitleText = 'Word'
-      searchButtonText = intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
+
+    let searchButtonText = ''
+    switch (props.searchDialectDataType) {
+      case SEARCH_DATA_TYPE_WORD:
+        searchButtonText = intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
+        break
+      case SEARCH_DATA_TYPE_PHRASE:
+        searchButtonText = 'Search Phrases'
+        break
+
+      default: // NOTE: do nothing
     }
 
     return (
@@ -240,7 +243,6 @@ export const SearchDialect = (props) => {
     searchBySettings: _searchBySettings = {},
     searchTerm: _searchTerm,
   }) => {
-    const { isSearchingPhrases } = props
     const {
       searchPartOfSpeech,
       searchByTitle,
@@ -252,7 +254,16 @@ export const SearchDialect = (props) => {
     const cols = []
 
     if (searchByTitle) {
-      cols.push(isSearchingPhrases ? 'Phrase' : 'Word')
+      switch (props.searchDialectDataType) {
+        case SEARCH_DATA_TYPE_WORD:
+          cols.push('Word')
+          break
+        case SEARCH_DATA_TYPE_PHRASE:
+          cols.push('Phrase')
+          break
+        default:
+          cols.push('Item')
+      }
     }
     if (searchByDefinitions) {
       cols.push('Definitions')
@@ -264,7 +275,18 @@ export const SearchDialect = (props) => {
       cols.push('Literal translations')
     }
 
-    const wordsOrPhrases = isSearchingPhrases ? 'phrases' : 'words'
+    let dataType
+    switch (props.searchDialectDataType) {
+      case SEARCH_DATA_TYPE_WORD:
+        dataType = 'words'
+        break
+      case SEARCH_DATA_TYPE_PHRASE:
+        dataType = 'phrases'
+        break
+      default:
+        dataType = 'items'
+    }
+
     const searchTermTag = <strong className={getDialectClassname()}>{_searchTerm}</strong>
     const messagePartsOfSpeech =
       searchPartOfSpeech && searchPartOfSpeech !== SEARCH_PART_OF_SPEECH_ANY
@@ -272,48 +294,57 @@ export const SearchDialect = (props) => {
         : ''
 
     const messages = {
-      all: isSearchingPhrases ? (
-        <span>{`Showing all ${wordsOrPhrases} listed alphabetically${messagePartsOfSpeech}`}</span>
-      ) : (
-        <span>{`Showing all ${wordsOrPhrases} in the dictionary listed alphabetically${messagePartsOfSpeech}`}</span>
-      ),
-      byCategory: <span>{`Showing all ${wordsOrPhrases} in the selected category${messagePartsOfSpeech}`}</span>,
-      byPhraseBook: <span>{`Showing all ${wordsOrPhrases} from the selected Phrase Book${messagePartsOfSpeech}`}</span>,
+      // `all` is defined later
+      byCategory: <span>{`Showing all ${dataType} in the selected category${messagePartsOfSpeech}`}</span>,
+      byPhraseBook: <span>{`Showing all ${dataType} from the selected Phrase Book${messagePartsOfSpeech}`}</span>,
       startWith: (
         <span>
-          {`Showing ${wordsOrPhrases} that start with the letter '`}
+          {`Showing ${dataType} that start with the letter '`}
           <strong className={getDialectClassname()}>{searchByAlphabet}</strong>
           {`'${messagePartsOfSpeech}`}
         </span>
       ),
       contain: (
         <span>
-          {`Showing ${wordsOrPhrases} that contain the search term '`}
+          {`Showing ${dataType} that contain the search term '`}
           {searchTermTag}
           {`'${messagePartsOfSpeech}`}
         </span>
       ),
       containColOne: (
         <span>
-          {`Showing ${wordsOrPhrases} that contain the search term '`}
+          {`Showing ${dataType} that contain the search term '`}
           {searchTermTag}
           {`' in the '${cols[0]}' column${messagePartsOfSpeech}`}
         </span>
       ),
       containColsTwo: (
         <span>
-          {`Showing ${wordsOrPhrases} that contain the search term '`}
+          {`Showing ${dataType} that contain the search term '`}
           {searchTermTag}
           {`' in the '${cols[0]}' and '${cols[1]}' columns${messagePartsOfSpeech}`}
         </span>
       ),
       containColsThree: (
         <span>
-          {`Showing ${wordsOrPhrases} that contain the search term '`}
+          {`Showing ${dataType} that contain the search term '`}
           {searchTermTag}
           {`' in the '${cols[0]}', '${cols[1]}', and '${cols[2]}' columns${messagePartsOfSpeech}`}
         </span>
       ),
+    }
+
+    switch (props.searchDialectDataType) {
+      case SEARCH_DATA_TYPE_WORD:
+        messages.all = (
+          <span>{`Showing all ${dataType} in the dictionary listed alphabetically${messagePartsOfSpeech}`}</span>
+        )
+        break
+      case SEARCH_DATA_TYPE_PHRASE:
+        messages.all = <span>{`Showing all ${dataType} listed alphabetically${messagePartsOfSpeech}`}</span>
+        break
+      default:
+        messages.all = <span>{`Showing all ${dataType} listed alphabetically${messagePartsOfSpeech}`}</span>
     }
 
     let msg = ''
@@ -527,9 +558,10 @@ export const SearchDialect = (props) => {
 
 // Proptypes
 // ------------------------------------------------------------
+const { array, func, string, number, object } = PropTypes
 SearchDialect.propTypes = {
   handleSearch: func,
-  isSearchingPhrases: bool,
+  searchDialectDataType: number,
   resetSearch: func,
   searchingDialectFilter: string, // Search by Categories
   searchUi: array.isRequired,
@@ -543,7 +575,7 @@ SearchDialect.propTypes = {
 }
 SearchDialect.defaultProps = {
   handleSearch: () => {},
-  isSearchingPhrases: false,
+  searchDialectDataType: SEARCH_DATA_TYPE_WORD,
   resetSearch: () => {},
   searchDialectUpdate: () => {},
   searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
