@@ -185,23 +185,22 @@ export class AlphabetListView extends DataListView {
           if (selectn('response.entries', computeCharacters)) {
             return (
               <DocumentListView
-                objectDescriptions="characters"
-                type="FVCharacter"
+                // objectDescriptions="characters"
+                // onSelectionChange={this._onEntryNavigateRequest}
+                // onSortChange={this._handleSortChange}
+                // sortInfo={this.state.sortInfo.uiSortOrder}
+                className="browseDataGrid"
+                columns={this.state.columns}
                 data={computeCharacters}
+                dialect={selectn('response', computeDialect2)}
+                gridListTile={this.props.gridListTile}
                 gridListView={this.props.gridListView}
                 gridViewProps={this.props.gridViewProps}
-                refetcher={this._handleRefetch}
-                onSortChange={this._handleSortChange}
-                onSelectionChange={this._onEntryNavigateRequest}
                 page={this.state.pageInfo.page}
                 pageSize={this.state.pageInfo.pageSize}
-                onColumnOrderChange={this._handleColumnOrderChange}
                 pagination={this.props.pagination}
-                columns={this.state.columns}
-                sortInfo={this.state.sortInfo.uiSortOrder}
-                gridListTile={this.props.gridListTile}
-                className="browseDataGrid"
-                dialect={selectn('response', computeDialect2)}
+                refetcher={this._handleRefetch}
+                type="FVCharacter"
               />
             )
           }

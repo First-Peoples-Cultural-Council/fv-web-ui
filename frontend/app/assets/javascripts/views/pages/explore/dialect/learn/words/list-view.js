@@ -67,7 +67,6 @@ class WordsListView extends DataListView {
     gridListView: bool,
     pageProperties: object,
     parentID: string,
-    renderSimpleTable: bool,
     routeParams: object.isRequired,
     // Search
     handleSearch: func,
@@ -111,7 +110,6 @@ class WordsListView extends DataListView {
     flashcard: false,
     flashcardTitle: '',
     gridListView: false,
-    renderSimpleTable: false,
   }
 
   constructor(props, context) {
@@ -377,6 +375,9 @@ class WordsListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeWords) && (
           <DocumentListView
+            // objectDescriptions="words"
+            // onSelectionChange={this._onEntryNavigateRequest} // NOTE: may call this.props.action
+            // sortInfo={this.state.sortInfo.uiSortOrder}
             className={'browseDataGrid'}
             columns={this.state.columns}
             data={computeWords}
@@ -385,9 +386,6 @@ class WordsListView extends DataListView {
             flashcard={this.props.flashcard}
             flashcardTitle={this.props.flashcardTitle}
             gridListView={this.props.gridListView}
-            objectDescriptions={'words'}
-            onColumnOrderChange={this._handleColumnOrderChange} // NOTE: comes from DataListView
-            onSelectionChange={this._onEntryNavigateRequest} // NOTE: may call this.props.action
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
             // NOTE: Pagination === refetcher
@@ -398,8 +396,6 @@ class WordsListView extends DataListView {
                 preserveSearch: true,
               })
             }}
-            renderSimpleTable={this.props.renderSimpleTable}
-            sortInfo={this.state.sortInfo.uiSortOrder}
             sortHandler={async ({
               page = '1',
               pageSize = '10',

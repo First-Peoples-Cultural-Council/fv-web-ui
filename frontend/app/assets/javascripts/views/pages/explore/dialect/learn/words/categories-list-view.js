@@ -39,7 +39,7 @@ const intl = IntlService.instance
  */
 
 const { bool, array, func, number, object, string } = PropTypes
-class CategoriesListView extends DataListView {
+class WordsCategoriesListView extends DataListView {
   static propTypes = {
     action: func,
     categoriesPath: string.isRequired,
@@ -177,25 +177,24 @@ class CategoriesListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeCategories) && (
           <DocumentListView
-            objectDescriptions="categories"
-            type="FVCategory"
+            // objectDescriptions="categories"
+            // onSelectionChange={this._onEntryNavigateRequest}
+            // onSortChange={this._handleSortChange}
+            // sortInfo={this.state.sortInfo.uiSortOrder}
+            className="browseDataGrid"
+            columns={this.state.columns}
             data={computeCategories}
+            dialect={selectn('response', computeDialect2)}
             gridCols={this.props.gridCols}
             gridListView={this.props.gridListView}
-            refetcher={this._handleRefetch}
-            onSortChange={this._handleSortChange}
-            onSelectionChange={this._onEntryNavigateRequest}
+            hasViewModeButtons={false}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
-            onColumnOrderChange={this._handleColumnOrderChange}
-            columns={this.state.columns}
-            sortInfo={this.state.sortInfo.uiSortOrder}
-            className="browseDataGrid"
-            dialect={selectn('response', computeDialect2)}
+            refetcher={this._handleRefetch}
             rowClickHandler={(row) => {
               this._onEntryNavigateRequest(row)
             }}
-            hasViewModeButtons={false}
+            type="FVCategory"
           />
         )}
       </PromiseWrapper>
@@ -233,4 +232,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CategoriesListView)
+)(WordsCategoriesListView)

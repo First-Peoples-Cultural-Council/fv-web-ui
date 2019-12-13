@@ -198,25 +198,24 @@ class LinksListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeLinks) && (
           <DocumentListView
-            objectDescriptions="links"
-            type="FVLink"
+            // objectDescriptions="links"
+            // onSortChange={this._handleSortChange}
+            // sortInfo={this.state.sortInfo.uiSortOrder}
+            className="browseDataGrid"
+            columns={this.state.columns}
             data={computeLinks}
+            dialect={selectn('response', computeDialect2)}
             gridCols={this.props.gridCols}
             gridListView={this.props.gridListView}
-            refetcher={this._handleRefetch}
-            onSortChange={this._handleSortChange}
+            hasSorting={this.props.hasSorting}
+            hasViewModeButtons={this.props.hasViewModeButtons}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
-            onColumnOrderChange={this._handleColumnOrderChange}
-            columns={this.state.columns}
-            sortInfo={this.state.sortInfo.uiSortOrder}
-            className="browseDataGrid"
-            dialect={selectn('response', computeDialect2)}
+            refetcher={this._handleRefetch}
             rowClickHandler={(row) => {
               this._onEntryNavigateRequest(row)
             }}
-            hasSorting={this.props.hasSorting}
-            hasViewModeButtons={this.props.hasViewModeButtons}
+            type="FVLink"
           />
         )}
       </PromiseWrapper>

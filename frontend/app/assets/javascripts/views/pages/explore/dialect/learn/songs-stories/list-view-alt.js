@@ -43,7 +43,7 @@ const intl = IntlService.instance
  */
 
 const { array, bool, func, number, object, string } = PropTypes
-export class ListViewAlt extends DataListView {
+export class SongsStoriesListViewAlt extends DataListView {
   static propTypes = {
     action: func,
     data: string,
@@ -232,22 +232,21 @@ export class ListViewAlt extends DataListView {
           if (selectn('response.entries', computeBooks)) {
             return (
               <DocumentListView
-                objectDescriptions="books"
-                type="FVBook"
-                data={computeBooks}
-                gridListView={this.props.gridListView}
-                refetcher={this._handleRefetch}
-                onSortChange={this._handleSortChange}
-                onSelectionChange={this._onEntryNavigateRequest}
-                page={this.state.pageInfo.page}
-                pageSize={this.state.pageInfo.pageSize}
-                onColumnOrderChange={this._handleColumnOrderChange}
-                columns={this.state.columns}
-                sortInfo={this.state.sortInfo.uiSortOrder}
+                // objectDescriptions="books"
+                // onSelectionChange={this._onEntryNavigateRequest}
+                // onSortChange={this._handleSortChange}
+                // sortInfo={this.state.sortInfo.uiSortOrder}
                 className="browseDataGrid"
+                columns={this.state.columns}
+                data={computeBooks}
                 dialect={selectn('response', computeDialect2)}
                 dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.book}
+                gridListView={this.props.gridListView}
                 hasViewModeButtons={false}
+                page={this.state.pageInfo.page}
+                pageSize={this.state.pageInfo.pageSize}
+                refetcher={this._handleRefetch}
+                type="FVBook"
               />
             )
           }
@@ -287,4 +286,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListViewAlt)
+)(SongsStoriesListViewAlt)

@@ -174,7 +174,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         flashcard={this.state.flashcardMode}
         flashcardTitle={pageTitle}
         parentID={selectn('response.uid', computeDocument)}
-        renderSimpleTable
         routeParams={this.props.routeParams}
         // Search:
         handleSearch={this.handleSearch}
