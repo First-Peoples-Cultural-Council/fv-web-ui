@@ -249,129 +249,44 @@ const DictionaryListLargeScreen = React.lazy(() => import('views/components/Brow
 
 import '!style-loader!css-loader!./DictionaryList.css'
 
+// ===============================================================
+// DictionaryList
+// ===============================================================
 const DictionaryList = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
 
-  let propsColumns = props.columns
+  let columnsEnhancedWithSortBatch = props.columns
 
   // ============= MQ
   const [mediaQuery, setMediaQuery] = useState({})
 
   // ============= SORT
-  const { routeParams, search } = props
-  const { pageSize } = routeParams
-  const { sortOrder, sortBy } = search
   if (props.hasSorting) {
-    // Add in sorting if needed:
-    propsColumns = props.columns.map((column) => {
-      if (column.sortBy) {
-        return Object.assign({}, column, {
-          titleLarge: () => {
-            return (
-              <button
-                type="button"
-                className="DictionaryList__colSort"
-                onClick={() => {
-                  sortCol({
-                    newSortBy: column.sortBy,
-                    pageSize,
-                    pushWindowPath: props.pushWindowPath,
-                    sortOrder,
-                    sortHandler: props.sortHandler,
-                  })
-                }}
-              >
-                {getIcon({ field: column.sortBy, sortOrder, sortBy })}
-                {column.title}
-              </button>
-            )
-          },
-          titleSmall: () => {
-            const sortState = getSortState({ field: column.sortBy, sortOrder, sortBy })
-            const color = sortState ? 'primary' : undefined
-            return (
-              <FVButton
-                type="button"
-                variant="outlined"
-                color={color}
-                size="small"
-                className={`DictionaryListSmallScreen__sortButton ${
-                  sortState ? `DictionaryListSmallScreen__sortButton--${sortState}` : ''
-                }`}
-                onClick={() => {
-                  sortCol({
-                    newSortBy: column.sortBy,
-                    pageSize,
-                    pushWindowPath: props.pushWindowPath,
-                    sortOrder,
-                    sortHandler: props.sortHandler,
-                  })
-                }}
-              >
-                {getIcon({ field: column.sortBy, sortOrder, sortBy })}
-                {column.title}
-              </FVButton>
-            )
-          },
-        })
-      }
-      return Object.assign({}, column, {
-        titleLarge: column.title,
-        titleSmall: column.title,
-      })
+    columnsEnhancedWithSortBatch = generateSortTitleLargeSmall({
+      columns: props.columns,
+      pageSize: props.routeParams.pageSize,
+      sortOrder: props.search.sortOrder,
+      sortBy: props.search.sortBy,
+      navigationFunc: props.pushWindowPath,
+      sortHandler: props.sortHandler,
     })
   }
   // ============= SORT
 
   // ============= BATCH
-  const [batchSelected, setBatchSelected] = useState([])
-  const [batchDeletedUids, setBatchDeletedUids] = useState([])
-
   if (props.batchConfirmationAction) {
-    const uids = getUidsFromComputedData({ computedData: props.computedData })
-    const uidsNotDeleted = getUidsThatAreNotDeleted({ computedDataUids: uids, deletedUids: batchDeletedUids })
-    propsColumns = [
-      {
-        name: 'batch',
-        title: () => {
-          return batchTitle({
-            uidsNotDeleted,
-            selected: batchSelected,
-            setSelected: setBatchSelected,
-            copyDeselect: props.batchTitleSelect,
-            copySelect: props.batchTitleDeselect,
-          })
-        },
-        footer: () => {
-          return batchFooter({
-            colSpan: propsColumns.length,
-            confirmationAction: () => {
-              deleteSelected({
-                batchConfirmationAction: props.batchConfirmationAction,
-                deletedUids: batchDeletedUids,
-                selected: batchSelected,
-                setDeletedUids: setBatchDeletedUids,
-                setSelected: setBatchSelected,
-              })
-            },
-            selected: batchSelected,
-            copyIsConfirmOrDenyTitle: props.batchFooterIsConfirmOrDenyTitle,
-            copyBtnInitiate: props.batchFooterBtnInitiate,
-            copyBtnDeny: props.batchFooterBtnDeny,
-            copyBtnConfirm: props.batchFooterBtnConfirm,
-          })
-        },
-        render: (value, cellData) => {
-          return batchRender({
-            dataUid: cellData.uid,
-            selected: batchSelected,
-            setSelected: setBatchSelected,
-          })
-        },
-      },
-      ...propsColumns,
-    ]
+    columnsEnhancedWithSortBatch = generateBatchColumn({
+      batchConfirmationAction: props.batchConfirmationAction,
+      columnsEnhancedWithSortBatch,
+      computedData: props.computedData,
+      copyBtnConfirm: props.batchFooterBtnConfirm,
+      copyBtnDeny: props.batchFooterBtnDeny,
+      copyBtnInitiate: props.batchFooterBtnInitiate,
+      copyDeselect: props.batchTitleSelect,
+      copyIsConfirmOrDenyTitle: props.batchFooterIsConfirmOrDenyTitle,
+      copySelect: props.batchTitleDeselect,
+    })
   }
   // ============= BATCH
 
@@ -392,99 +307,8 @@ const DictionaryList = (props) => {
       </div>
     ) : null
 
-  const getViewButtons = () => {
-    // NOTE: hiding view mode button when on small screens
-    // NOTE: mediaQuery set in render
-    let compactView = null
-    if (mediaQuery.small === false) {
-      compactView =
-        viewMode === viewModeDecoder.compact ? (
-          <FVButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.default)
-            }}
-          >
-            Cancel compact view
-          </FVButton>
-        ) : (
-          <FVButton
-            variant="contained"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.compact)
-            }}
-          >
-            Compact view
-          </FVButton>
-        )
-    }
-    return (
-      <>
-        {/* {viewMode === viewModeDecoder.default ? (
-          <FVButton variant="contained" color="primary">
-            Responsive mode
-          </FVButton>
-        ) : (
-          <FVButton
-            variant="contained"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.default)
-            }}
-          >
-            Responsive mode
-          </FVButton>
-        )} */}
-
-        {compactView}
-
-        {viewMode === viewModeDecoder.flashcard ? (
-          <FVButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.default)
-            }}
-          >
-            Cancel flashcard view
-          </FVButton>
-        ) : (
-          <FVButton
-            variant="contained"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.flashcard)
-            }}
-          >
-            Flashcard view
-          </FVButton>
-        )}
-
-        {/* {viewMode === viewModeDecoder.print ? (
-          <FVButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.default)
-            }}
-          >
-            Cancel print view
-          </FVButton>
-        ) : (
-          <FVButton
-            variant="contained"
-            onClick={() => {
-              props.setListViewMode(viewModeDecoder.print)
-            }}
-          >
-            Print view
-          </FVButton>
-        )} */}
-      </>
-    )
-  }
-  const getCompactList = () => {
-    let content = null
-    const DictionaryListSmallScreenProps = {
+  const getCompactListArg = {
+    dictionaryListSmallScreenProps: {
       rowClickHandler: props.rowClickHandler,
       hasSorting: props.hasSorting,
       // withPagination
@@ -497,24 +321,22 @@ const DictionaryList = (props) => {
       // List: small screen
       // --------------------
       items: props.items,
-      columns: propsColumns,
+      columns: columnsEnhancedWithSortBatch,
       dictionaryListSmallScreenTemplate: props.dictionaryListSmallScreenTemplate,
-    }
-
-    content = <DictionaryListSmallScreen {...DictionaryListSmallScreenProps} />
-
-    if (props.hasPagination) {
-      const DictionaryListSmallScreenWithPagination = withPagination(
-        DictionaryListSmallScreen,
-        DefaultFetcherParams.pageSize
-      )
-      content = <DictionaryListSmallScreenWithPagination {...DictionaryListSmallScreenProps} />
-    }
-    return content
+    },
+    hasPagination: props.hasPagination,
+    pageSize: DefaultFetcherParams.pageSize,
   }
+
   return (
     <>
-      {props.hasViewModeButtons && getViewButtons()}
+      {props.hasViewModeButtons &&
+        getViewButtons({
+          mediaQueryIsSmall: mediaQuery.small,
+          viewMode,
+          viewModeDecoder,
+          clickHandler: props.setListViewMode,
+        })}
 
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
@@ -534,7 +356,7 @@ const DictionaryList = (props) => {
         }}
       >
         {(matches) => {
-          // save data for getViewButtons
+          // save MQ data
           setMediaQuery(matches)
 
           // =========================================
@@ -552,6 +374,7 @@ const DictionaryList = (props) => {
           //  Flashcard mode
           // -----------------------------------------
           if (viewMode === viewModeDecoder.flashcard) {
+            // TODO: SPECIFY FlashcardList PROPS
             content = <FlashcardList {...props} />
             if (props.hasPagination) {
               const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
@@ -563,7 +386,7 @@ const DictionaryList = (props) => {
           //  Compact mode
           // -----------------------------------------
           if (viewMode === viewModeDecoder.compact) {
-            return getCompactList()
+            return getCompactList(getCompactListArg)
           }
 
           // =========================================
@@ -573,7 +396,7 @@ const DictionaryList = (props) => {
           // Small screen: list view
           // -----------------------------------------
           if (matches.small) {
-            return getCompactList()
+            return getCompactList(getCompactListArg)
           }
           // Large screen: list view
           // -----------------------------------------
@@ -590,7 +413,7 @@ const DictionaryList = (props) => {
               metadata: props.metadata,
               // List: large screen
               // --------------------
-              columns: propsColumns,
+              columns: columnsEnhancedWithSortBatch,
               cssModifier: props.cssModifier,
               filteredItems: props.filteredItems,
               items: props.items,
@@ -612,6 +435,236 @@ const DictionaryList = (props) => {
     </>
   )
 }
+
+// generateSortTitleLargeSmall
+// ------------------------------------
+function generateSortTitleLargeSmall({ columns = [], pageSize, sortOrder, sortBy, navigationFunc, sortHandler }) {
+  const _columns = [...columns]
+  return _columns.map((column) => {
+    if (column.sortBy) {
+      return Object.assign({}, column, {
+        titleLarge: () => {
+          return (
+            <button
+              type="button"
+              className="DictionaryList__colSort"
+              onClick={() => {
+                sortCol({
+                  newSortBy: column.sortBy,
+                  pageSize,
+                  navigationFunc,
+                  sortOrder,
+                  sortHandler,
+                })
+              }}
+            >
+              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+              {column.title}
+            </button>
+          )
+        },
+        titleSmall: () => {
+          const sortState = getSortState({ field: column.sortBy, sortOrder, sortBy })
+          const color = sortState ? 'primary' : undefined
+          return (
+            <FVButton
+              type="button"
+              variant="outlined"
+              color={color}
+              size="small"
+              className={`DictionaryListSmallScreen__sortButton ${
+                sortState ? `DictionaryListSmallScreen__sortButton--${sortState}` : ''
+              }`}
+              onClick={() => {
+                sortCol({
+                  newSortBy: column.sortBy,
+                  pageSize,
+                  navigationFunc,
+                  sortOrder,
+                  sortHandler,
+                })
+              }}
+            >
+              {getIcon({ field: column.sortBy, sortOrder, sortBy })}
+              {column.title}
+            </FVButton>
+          )
+        },
+      })
+    }
+    return Object.assign({}, column, {
+      titleLarge: column.title,
+      titleSmall: column.title,
+    })
+  })
+}
+
+// generateBatchColumn
+// ------------------------------------
+function generateBatchColumn({
+  batchConfirmationAction,
+  columnsEnhancedWithSortBatch,
+  computedData,
+  copyBtnConfirm,
+  copyBtnDeny,
+  copyBtnInitiate,
+  copyDeselect,
+  copyIsConfirmOrDenyTitle,
+  copySelect,
+}) {
+  const [batchSelected, setBatchSelected] = useState([])
+  const [batchDeletedUids, setBatchDeletedUids] = useState([])
+  const uids = getUidsFromComputedData({ computedData })
+  const uidsNotDeleted = getUidsThatAreNotDeleted({ computedDataUids: uids, deletedUids: batchDeletedUids })
+  return [
+    {
+      name: 'batch',
+      title: () => {
+        return batchTitle({
+          uidsNotDeleted,
+          selected: batchSelected,
+          setSelected: setBatchSelected,
+          copyDeselect,
+          copySelect,
+        })
+      },
+      footer: () => {
+        return batchFooter({
+          colSpan: columnsEnhancedWithSortBatch.length + 1,
+          confirmationAction: () => {
+            deleteSelected({
+              batchConfirmationAction,
+              deletedUids: batchDeletedUids,
+              selected: batchSelected,
+              setDeletedUids: setBatchDeletedUids,
+              setSelected: setBatchSelected,
+            })
+          },
+          selected: batchSelected,
+          copyIsConfirmOrDenyTitle,
+          copyBtnInitiate,
+          copyBtnDeny,
+          copyBtnConfirm,
+        })
+      },
+      render: (value, cellData) => {
+        return batchRender({
+          dataUid: cellData.uid,
+          selected: batchSelected,
+          setSelected: setBatchSelected,
+        })
+      },
+    },
+    ...columnsEnhancedWithSortBatch,
+  ]
+}
+
+// getCompactList
+// ------------------------------------
+function getCompactList({ dictionaryListSmallScreenProps = {}, hasPagination = false, pageSize = 10 }) {
+  let content = null
+  content = <DictionaryListSmallScreen {...dictionaryListSmallScreenProps} />
+
+  if (hasPagination) {
+    const DictionaryListSmallScreenWithPagination = withPagination(DictionaryListSmallScreen, pageSize)
+    content = <DictionaryListSmallScreenWithPagination {...dictionaryListSmallScreenProps} />
+  }
+  return content
+}
+
+// getViewButtons
+// ------------------------------------
+function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHandler }) {
+  // NOTE: hiding view mode button when on small screens
+  // NOTE: mediaQuery set in render
+  let compactView = null
+  if (mediaQueryIsSmall === false) {
+    compactView =
+      viewMode === viewModeDecoder.compact ? (
+        <FVButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            clickHandler(viewModeDecoder.default)
+          }}
+        >
+          Cancel compact view
+        </FVButton>
+      ) : (
+        <FVButton
+          variant="contained"
+          onClick={() => {
+            clickHandler(viewModeDecoder.compact)
+          }}
+        >
+          Compact view
+        </FVButton>
+      )
+  }
+  return (
+    <>
+      {/* {viewMode === viewModeDecoder.default ? (
+        <FVButton variant="contained" color="primary">
+          Responsive mode
+        </FVButton>
+      ) : (
+        <FVButton
+          variant="contained"
+          onClick={() => {
+            clickHandler(viewModeDecoder.default)
+          }}
+        >
+          Responsive mode
+        </FVButton>
+      )} */}
+
+      {compactView}
+
+      {viewMode === viewModeDecoder.flashcard ? (
+        <FVButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            clickHandler(viewModeDecoder.default)
+          }}
+        >
+          Cancel flashcard view
+        </FVButton>
+      ) : (
+        <FVButton
+          variant="contained"
+          onClick={() => {
+            clickHandler(viewModeDecoder.flashcard)
+          }}
+        >
+          Flashcard view
+        </FVButton>
+      )}
+
+      {/* {viewMode === viewModeDecoder.print ? (
+        <FVButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            clickHandler(viewModeDecoder.default)
+          }}
+        >
+          Cancel print view
+        </FVButton>
+      ) : (
+        <FVButton
+          variant="contained"
+          onClick={() => {
+            clickHandler(viewModeDecoder.print)
+          }}
+        >
+          Print view
+        </FVButton>
+      )} */}
+    </>
+  )
+}
+// ===============================================================
 
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 DictionaryList.propTypes = {
