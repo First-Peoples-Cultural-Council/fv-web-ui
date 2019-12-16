@@ -186,17 +186,7 @@ export const isSelected = ({ selected, uid }) => {
 
 // sortCol
 // ============================================
-/*
-export const sortCol = ({ dialect_path, urlItemType, newSortBy, pageSize, pushWindowPath, siteTheme, sortOrder }) => {
-  const url = `/${siteTheme}${dialect_path}/${urlItemType}/${pageSize}/1?sortBy=${newSortBy}&sortOrder=${
-    sortOrder === 'asc' ? 'desc' : 'asc'
-  }`
-  NavigationHelpers.navigate(url, pushWindowPath, false)
-}
-*/
-// sortCol
-// ============================================
-export const sortCol = ({ newSortBy, pageSize, pushWindowPath, sortOrder, sortHandler }) => {
+export const sortCol = ({ newSortBy, pageSize, navigationFunc, sortOrder, sortHandler }) => {
   const page = 1
   const url = `${windowLocationPathnameWithoutPagination()}/${pageSize}/${page}`
   // Get search object, add in new sortBy & sortOrder
@@ -205,7 +195,7 @@ export const sortCol = ({ newSortBy, pageSize, pushWindowPath, sortOrder, sortHa
     sortOrder: sortOrder === 'asc' ? 'desc' : 'asc',
   })
   // Smash together & update url
-  NavigationHelpers.navigate(`/${url}?${getSearchObjectAsUrlQuery(searchObj)}`, pushWindowPath, false)
+  NavigationHelpers.navigate(`/${url}?${getSearchObjectAsUrlQuery(searchObj)}`, navigationFunc, false)
 
   if (sortHandler) {
     sortHandler({

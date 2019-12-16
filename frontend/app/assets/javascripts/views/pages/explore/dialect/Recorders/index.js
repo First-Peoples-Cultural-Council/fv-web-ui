@@ -88,7 +88,7 @@ function Recorders(props) {
     search,
   })
 
-  const _getColumns = () => {
+  const getColumns = () => {
     return [
       {
         name: 'title',
@@ -209,7 +209,7 @@ function Recorders(props) {
           computedData={computedData}
           dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           // ==================================================
-          columns={_getColumns()}
+          columns={getColumns()}
           cssModifier="DictionaryList--contributors"
           items={selectn('response.entries', computedData)}
           // Pagination

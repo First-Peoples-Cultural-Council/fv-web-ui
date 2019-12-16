@@ -31,10 +31,18 @@ export const dictionaryListSmallScreenTemplate = {
   book: 1,
   category: 2,
   contributor: 3,
-  link: 4,
-  phrase: 5,
-  phrasebook: 6,
-  word: 7,
+  custom: 4,
+  link: 5,
+  phrase: 6,
+  phrasebook: 7,
+  user: 8,
+  word: 9,
+}
+export const dictionaryListSmallScreenColumnDataTemplate = {
+  passthrough: 0,
+  heading: 1,
+  withName: 2,
+  custom: 3,
 }
 
 // const intl = IntlService.instance
@@ -43,275 +51,312 @@ const DictionaryListSmallScreen = (props) => {
 
   const getContent = () => {
     const itemRows = items.map((item, inc) => {
-      // Data relevant to all templates:
-      let actions = null
-      let audio = null
-      let batch = null
-      let description = null
-      let categories = null
-      let dateModified = null
-      let dateCreated = null
-      let definitions = null
-      let image = null
-      let partOfSpeech = null
-      let phraseBooks = null
-      let state = null
-      let title = null
+      const templateData = {}
+
+      const actions = 'actions'
+      const audio = 'related_audio'
+      const batch = 'batch'
+      const categories = 'fv-word:categories'
+      const dateCreated = 'dc:created'
+      const dateModified = 'dc:modified'
+      const definitions = 'fv:definitions'
+      const description = 'dc:description'
+      const email = 'email'
+      const firstLastName = 'firstLastName'
+      const firstName = 'firstName'
+      const image = 'related_pictures'
+      const lastName = 'lastName'
+      const linkUrl = 'fvlink:url'
+      const parentCategory = 'parent'
+      const partOfSpeech = 'fv-word:part_of_speech'
+      const phraseBooks = 'fv-phrase:phrase_books'
+      const state = 'state'
+      const thumbnail = 'thumb:thumbnail'
+      const title = 'title'
+      const type = 'type'
+      const username = 'username'
 
       const _item = item
 
       columns.forEach((column) => {
         const cellValue = selectn(column.name, item)
         const cellRender = typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+        const colName = column.name
 
-        switch (column.name) {
-          case 'actions':
-            actions = cellRender
+        // console.log({
+        //   columnName: column.name,
+        //   columnTitle: column.title,
+        //   cellRender,
+        //   cellValue,
+        //   column,
+        // })
+
+        // Extracting data
+        // ------------------------------------------------
+        // TEMPLATES: passthrough, heading, withName, custom
+        switch (colName) {
+          case actions:
+            templateData[colName] = cellRender
             break
-          case 'batch':
-            batch = cellRender
+          case audio:
+            templateData[colName] = cellRender ? (
+              <div className="DictionaryListSmallScreen__audioGroup">{cellRender}</div>
+            ) : null
             break
-          case 'dc:modified':
-            dateModified = (
-              <div>
-                <strong>Date modified:</strong> {cellRender}
-              </div>
-            )
+          case batch:
+            templateData[colName] = cellRender
             break
-          case 'dc:created':
-            dateCreated = (
-              <div>
-                <strong>Date created:</strong> {cellRender}
-              </div>
-            )
+          case definitions: {
+            const definitionChildren = selectn('props.children', cellRender) || []
+            templateData[colName] =
+              cellRender && cellRender !== '' && cellRender !== null && definitionChildren.length > 0 ? (
+                <div>
+                  <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
+                </div>
+              ) : null
             break
-          case 'dc:description':
-            description = cellRender ? (
+          }
+          case description:
+            templateData[colName] = cellRender ? (
               <div>
                 <strong>{column.title || 'Description'}:</strong>
                 {cellRender}
               </div>
             ) : null
             break
-          case 'fv-phrase:phrase_books':
-            phraseBooks = (
-              <div>
-                <strong>Phrase books:</strong>
-                {cellRender}
-              </div>
-            )
+          case firstName:
+            templateData[colName] = cellRender
             break
-          case 'fv-word:categories':
-            categories = (
-              <div>
-                <strong>Categories:</strong>
-                {cellRender}
-              </div>
-            )
+          case image:
+            templateData[colName] = cellRender
             break
-          case 'fv-word:part_of_speech':
-            partOfSpeech = (
-              <div>
-                <strong>Part of speech:</strong> {cellRender}
-              </div>
-            )
+          case lastName:
+            templateData[colName] = cellRender
             break
-          case 'fv:definitions':
-            definitions = cellRender
+          case thumbnail:
+            templateData[colName] = cellRender
             break
-          case 'related_audio':
-            audio = <div className="DictionaryListSmallScreen__audioGroup">{cellRender}</div>
-            break
-          case 'related_pictures':
-            image = cellRender
-            break
-          case 'state':
-            state = (
-              <div>
-                <strong>State:</strong> {cellRender}
-              </div>
-            )
-            break
-          case 'title':
-            title = (
+          case title:
+            templateData[colName] = (
               <Typography variant="title" component="h2">
                 {cellRender}
               </Typography>
             )
             break
-
-          default: // NOTE: do nothing
+          case type:
+            templateData[colName] = cellRender
+            break
+          case username:
+            templateData[colName] = (
+              <Typography variant="title" component="h2">
+                {cellRender}
+              </Typography>
+            )
+            break
+          case categories: // NOTE: Intentional fallthrough
+          case dateCreated: // NOTE: ibid
+          case dateModified: // NOTE: ibid
+          case email: // NOTE: ibid
+          case linkUrl: // NOTE: ibid
+          case parentCategory: // NOTE: ibid
+          case partOfSpeech: // NOTE: ibid
+          case phraseBooks: // NOTE: ibid
+          case state: // NOTE: ibid
+          default: {
+            // Note: insert data if exists and not an empty string
+            templateData[colName] =
+              cellRender && cellRender !== '' && cellRender !== null ? (
+                <div>
+                  <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
+                </div>
+              ) : null
+          }
         }
       })
 
+      templateData[firstLastName] =
+        templateData[firstName] || templateData[lastName] ? (
+          <div>
+            <strong>Name:</strong> {`${templateData[firstName] || ''} ${templateData[lastName] || ''}`}
+          </div>
+        ) : null
+
+      // Inserting data from above into templates
+      // ------------------------------------------------
+      /*
+      NOTE: The `default` case displays all available data but if it doesn't meet your needs:
+      - Add an entry to the `dictionaryListSmallScreenTemplate` object above, eg:
+          export const dictionaryListSmallScreenTemplate = {
+            // other templates
+            brandNewTemplate: 9999, // NOTE: ensure unique number!
+          }
+      - Add the `dictionaryListSmallScreenTemplate` prop to the components that need to use it, eg:
+          import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+          // code, code, code
+          <SpecialDictionaryListView
+            // other props
+            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.brandNewTemplate}
+            />
+      - Create the `brandNewTemplate` template in the switch statement below, eg:
+          const { brandNewTemplate } = dictionaryListSmallScreenTemplate
+          switch (props.dictionaryListSmallScreenTemplate) {
+            // ...
+            case brandNewTemplate: {
+              markup = (
+                <div>
+                  (╯°□°）╯︵ ┻━┻
+                </div>
+              )
+              break
+            }
+          // ...
+      */
       let markup = null
-      const { book, category, contributor, link, phrase, phrasebook, word } = dictionaryListSmallScreenTemplate
+      const {
+        // book,
+        category,
+        // contributor,
+        // custom,
+        link,
+        // phrase,
+        phrasebook,
+        // user,
+        word,
+      } = dictionaryListSmallScreenTemplate
+      let dataMain = null
+      // TEMPLATES: default, custom
       switch (props.dictionaryListSmallScreenTemplate) {
-        // Book template, NOTE: book === song, story
-        case book: {
-          const wordMain = (
-            <>
-              {title}
-              <div className="DictionaryListSmallScreen__group">
-                {dateCreated}
-                {dateModified}
-                {state}
-              </div>
-            </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{wordMain}</div>
-            </div>
-          ) : (
-            wordMain
-          )
-          break
-        }
         // Category template
         case category: {
-          const categoryMain = (
+          dataMain = (
             <>
-              {title}
+              {/* !!! Category TEMPLATE !!! */}
+              {templateData[title]}
               <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {description}
-                {actions}
+                {templateData[description]}
+                {templateData[actions]}
               </div>
             </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{categoryMain}</div>
-            </div>
-          ) : (
-            categoryMain
           )
           break
         }
         // Contributor template
-        case contributor: {
-          const contributorMain = (
-            <>
-              {title}
-              <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {description}
-                {state}
-                {actions}
-              </div>
-            </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{contributorMain}</div>
-            </div>
-          ) : (
-            contributorMain
-          )
-          break
-        }
+        // case contributor: {
+        //   dataMain = (
+        //     <>
+        //       {templateData[title]}
+        //       <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
+        //         {templateData[description]}
+        //         {templateData[state]}
+        //         {templateData[actions]}
+        //       </div>
+        //     </>
+        //   )
+        //   break
+        // }
         // TODO
         // Link template
         case link: {
-          const categoryMain = <>{title}</>
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{categoryMain}</div>
-            </div>
-          ) : (
-            categoryMain
-          )
-          break
-        }
-        // Phrase template
-        case phrase: {
-          const phraseMain = (
+          dataMain = (
             <>
-              {title}
-              <div className="DictionaryListSmallScreen__group">
-                {definitions}
-                {audio}
-
-                {image}
-
-                <div className="DictionaryListSmallScreen__miscGroup">
-                  <Typography variant="body1" component="div">
-                    {phraseBooks}
-                    {state}
-                  </Typography>
-                </div>
-              </div>
+              {/* !!! Link TEMPLATE !!! */}
+              {templateData[title]}
             </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{phraseMain}</div>
-            </div>
-          ) : (
-            phraseMain
           )
           break
         }
         // Phrasebook template
         case phrasebook: {
-          const phrasebookMain = (
+          dataMain = (
             <>
-              {title}
+              {/* !!! Phrasebook TEMPLATE !!! */}
+              {templateData[title]}
               <div className="DictionaryListSmallScreen__group DictionaryListSmallScreen__group--contributor">
-                {description}
-                {actions}
+                {templateData[description]}
+                {templateData[actions]}
               </div>
             </>
-          )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{phrasebookMain}</div>
-            </div>
-          ) : (
-            phrasebookMain
           )
           break
         }
         // Word template
         case word: {
-          const wordMain = (
+          dataMain = (
             <>
-              {title}
+              {/* !!! WORD TEMPLATE !!! */}
+              {templateData[title]}
               <div className="DictionaryListSmallScreen__group">
-                {definitions}
-                {audio}
+                {templateData[definitions]}
+                {templateData[audio]}
 
-                {image}
+                {templateData[image]}
 
                 <div className="DictionaryListSmallScreen__miscGroup">
                   <Typography variant="body1" component="div">
-                    {partOfSpeech}
-                    {categories}
-                    {state}
+                    {templateData[partOfSpeech]}
+                    {templateData[categories]}
+                    {templateData[state]}
                   </Typography>
                 </div>
               </div>
             </>
           )
-          markup = batch ? (
-            <div className="DictionaryListSmallScreen__groupContainer">
-              <div className="DictionaryListSmallScreen__batch">{batch}</div>
-              <div className="DictionaryListSmallScreen__batchSibling">{wordMain}</div>
-            </div>
-          ) : (
-            wordMain
+          break
+        }
+        // case custom: {
+        //   dataMain = props.dictionaryListSmallScreenTemplate(templateData)
+        //   break
+        // }
+        // NOTE: No template available, display all available data.
+        // Templates using default:
+        // - User
+        // - Book (aka Song or Story)
+        // - Contributor
+        default: {
+          dataMain = (
+            <>
+              {/* !!! default TEMPLATE !!! */}
+              {templateData[type]}
+              {templateData[title]}
+              <div className="DictionaryListSmallScreen__group">
+                {templateData[audio]}
+                {templateData[description]}
+                {templateData[definitions]}
+                {templateData[partOfSpeech]}
+
+                {templateData[image]}
+                {templateData[thumbnail]}
+
+                {templateData[categories]}
+                {templateData[parentCategory]}
+                {templateData[phraseBooks]}
+
+                {templateData[username]}
+                {templateData[firstLastName]}
+                {templateData[email]}
+
+                {templateData[linkUrl]}
+
+                {templateData[dateModified]}
+                {templateData[dateCreated]}
+                {templateData[state]}
+                {templateData[actions]}
+              </div>
+            </>
           )
           break
         }
-
-        default:
-        // NOTE: do nothing
       }
+
+      markup = templateData[batch] ? (
+        <div className="DictionaryListSmallScreen__groupContainer">
+          <div className="DictionaryListSmallScreen__batch">{templateData[batch]}</div>
+          <div className="DictionaryListSmallScreen__batchSibling">{dataMain}</div>
+        </div>
+      ) : (
+        dataMain
+      )
+
       return markup ? (
         <li
           key={`content-${inc}`}
@@ -396,7 +441,6 @@ DictionaryListSmallScreen.defaultProps = {
   hasSorting: true,
   items: [],
   rowClickHandler: () => {},
-  dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplate.word,
 }
 
 export default DictionaryListSmallScreen

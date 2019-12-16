@@ -561,7 +561,7 @@ function generateBatchColumn({
 
 // getCompactList
 // ------------------------------------
-function getCompactList({ dictionaryListSmallScreenProps = {}, hasPagination = false, pageSize = 10 }) {
+export function getCompactList({ dictionaryListSmallScreenProps = {}, hasPagination = false, pageSize = 10 }) {
   let content = null
   content = <DictionaryListSmallScreen {...dictionaryListSmallScreenProps} />
 

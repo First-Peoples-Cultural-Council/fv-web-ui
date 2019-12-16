@@ -76,7 +76,7 @@ export const Phrasebooks = (props) => {
     search,
   })
 
-  const _getColumns = () => {
+  const getColumns = () => {
     return [
       {
         name: 'title',
@@ -185,7 +185,7 @@ export const Phrasebooks = (props) => {
           computedData={computedData}
           dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.phrasebook}
           // ==================================================
-          columns={_getColumns()}
+          columns={getColumns()}
           cssModifier="DictionaryList--contributors"
           items={selectn('response.entries', computedData)}
           // Pagination

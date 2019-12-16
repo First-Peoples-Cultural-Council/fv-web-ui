@@ -36,7 +36,7 @@ import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '' } }
-
+import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const FilteredPaginatedMediaList = withFilter(DocumentListView, DefaultFetcherParams)
 
 /**
@@ -232,24 +232,25 @@ export class UsersListView extends DataListView {
     return (
       <PromiseWrapper hideFetch renderOnError computeEntities={computeEntities}>
         <FilteredPaginatedMediaList
-          objectDescriptions="users"
-          type="FVUser"
-          filterOptionsKey="User"
-          data={normalizedComputeUserSuggestion}
-          gridListView={this.props.gridListView}
-          refetcher={this._handleRefetch}
-          onSortChange={this._handleSortChange}
-          onSelectionChange={this._onUserSelected}
-          page={this.state.pageInfo.page}
-          pagination={false}
-          fetcher={this._fetcher}
-          pageSize={this.state.pageInfo.pageSize}
-          onColumnOrderChange={this._handleColumnOrderChange}
-          columns={this.state.columns}
-          fixedCols={this.state.fixedCols}
-          sortInfo={this.state.sortInfo.uiSortOrder}
+          // objectDescriptions="users"
+          // onSelectionChange={this._onUserSelected}
+          // onSortChange={this._handleSortChange}
+          // sortInfo={this.state.sortInfo.uiSortOrder}
           className="browseDataGrid"
+          columns={this.state.columns}
+          data={normalizedComputeUserSuggestion}
           dialect={selectn('response', computeDialect2)}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.user}
+          fetcher={this._fetcher}
+          filterOptionsKey="User"
+          fixedCols={this.state.fixedCols}
+          gridListView={this.props.gridListView}
+          hasViewModeButtons={false}
+          page={this.state.pageInfo.page}
+          pageSize={this.state.pageInfo.pageSize}
+          pagination={false}
+          refetcher={this._handleRefetch}
+          type="FVUser"
         />
 
         <GroupAssignmentDialog

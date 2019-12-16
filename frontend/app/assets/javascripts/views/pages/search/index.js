@@ -13,8 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { Map } from 'immutable'
 
@@ -26,7 +25,7 @@ import { connect } from 'react-redux'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDocuments } from 'providers/redux/reducers/search'
-
+import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
 
 import t from 'tcomb-form'
@@ -42,15 +41,20 @@ import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import FormHelpers from 'common/FormHelpers'
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
 
-import SearchResultTile from './tile'
+// import SearchResultTile from './tile'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import DocumentListView from 'views/components/Document/DocumentListView'
-
+// import DocumentListView from 'views/components/Document/DocumentListView'
+import { getCompactList } from 'views/components/Browsing/DictionaryList'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import withToggle from 'views/hoc/view/with-toggle'
 import IntlService from 'views/services/intl'
 import NavigationHelpers from 'common/NavigationHelpers'
-import { SECTIONS } from 'common/Constants'
+import Preview from 'views/components/Editor/Preview'
+import { SECTIONS, WORKSPACES } from 'common/Constants'
+import UIHelpers from 'common/UIHelpers'
+import FVButton from 'views/components/FVButton'
 import '!style-loader!css-loader!./Search.css'
 
 const FiltersWithToggle = withToggle()
@@ -234,7 +238,7 @@ export class Search extends DataListView {
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
 
     if (selectn('response.totalSize', computeSearchDocuments) !== undefined) {
@@ -277,20 +281,20 @@ export class Search extends DataListView {
     ])
 
     const computeSearchDocuments = ProviderHelpers.getEntry(this.props.computeSearchDocuments, this._getQueryPath())
-    const _onEntryNavigateRequest = this._onEntryNavigateRequest
-    const searchTerm = this.props.routeParams.searchTerm
-    const SearchResultTileWithProps = React.Component({
-      // Note: don't switch the render fn to a fat arrow, eg:
-      // render: () => {
-      // It breaks the search results display
-      render: function SearchResultTileWithPropsRender() {
-        return React.createElement(SearchResultTile, {
-          searchTerm: searchTerm,
-          action: _onEntryNavigateRequest,
-          ...this.props,
-        })
-      },
-    })
+    // const _onEntryNavigateRequest = this._onEntryNavigateRequest
+    // const searchTerm = this.props.routeParams.searchTerm
+    // const SearchResultTileWithProps = React.Component({
+    //   // Note: don't switch the render fn to a fat arrow, eg:
+    //   // render: () => {
+    //   // It breaks the search results display
+    //   render: function SearchResultTileWithPropsRender() {
+    //     return React.createElement(SearchResultTile, {
+    //       searchTerm: searchTerm,
+    //       action: _onEntryNavigateRequest,
+    //       ...this.props,
+    //     })
+    //   },
+    // })
 
     return (
       <div className="Search">
@@ -327,7 +331,7 @@ export class Search extends DataListView {
             </div>
           </div>
           <div
-            className={classNames('search-results', 'col-xs-12', 'col-md-6')}
+            className={classNames('search-results', 'col-xs-12', 'col-md-9')}
             style={{ borderLeft: '5px solid #f7f7f7' }}
           >
             <h1>
@@ -338,7 +342,6 @@ export class Search extends DataListView {
             <PromiseWrapper renderOnError computeEntities={computeEntities}>
               {(() => {
                 const entries = selectn('response.entries', computeSearchDocuments)
-
                 if (entries) {
                   if (entries.length === 0) {
                     const suggestDocumentTypes =
@@ -358,25 +361,404 @@ export class Search extends DataListView {
                       </div>
                     )
                   }
-                  return (
-                    <DocumentListView
-                      objectDescriptions="results"
-                      type="Document"
-                      data={computeSearchDocuments}
-                      gridCols={1}
-                      gridListView
-                      gridListTile={SearchResultTileWithProps}
-                      gridViewProps={{ cellHeight: 170, style: { overflowY: 'hidden', margin: '0 0 30px 0' } }}
-                      refetcher={this._handleRefetch}
-                      onSortChange={this._handleSortChange}
-                      onSelectionChange={this._onEntryNavigateRequest}
-                      page={this.state.pageInfo.page}
-                      pageSize={this.state.pageInfo.pageSize}
-                      onColumnOrderChange={this._handleColumnOrderChange}
-                      usePrevResponse
-                      className="browseDataGrid fontAboriginalSans"
-                    />
-                  )
+
+                  // entries.forEach((entry) => {
+                  //   console.log(entry)
+                  //   // fv-portal:about: "<p><span class="regular">The <b>Dene Sų́łiné</b> of <b>Łue Chok Tué</b> occupy the territory around present-day Cold Lake, Alberta in the northeast of the province close to the Saskatchewan border. They are the only Dene community who are signatory to Treaty Six and are somewhat isolated from other Dene. Their closest Dene neighbors are situated at Ejerésche or Dillon, Saskatchewan and K’ái K'oz Desé or Janvier, Alberta, both of which are approximately 5 hours away by motor vehicle.<br /><br />The Dene of Łue Chok Tué were traditionally a nomadic people who lived off the land by hunting and gathering. Wetlands, prairie and boreal forest made up their homelands in this eco-region and was indeed plentiful in food. During the fur-trade era, they trapped in and around Xah Tué (Primrose Lake) and Łue Chok Tué (Cold Lake) where there was an abundance in fur-bearing animals such as beaver &amp; muskrat. However things would soon change.<br /><br />In 1952, life changed drastically for the people of Łue Chok Tué. The Canadian government took over their traditional lands to set aside for military purposes. Today there are annual military flight exercises known as Maple Flag which brings military personnel from around the world to train over those traditional Dene homelands. The Dene were forced to become sedentary and assume a new lifestyle with the loss of their traditional territory. In recent years, a booming oil and gas industry in the area, much of which takes place in that traditional territory, provides employment and business opportunities for the people of Cold Lake First Nations.<br /><br /><b>Acknowledgements</b><br /><br />I would like to take this opportunity to acknowledge and thank all who have contributed to this Dene language archive. This project builds upon the Dene Language revitalization work that has taken place over the past few years at <b>Cold Lake First Nations</b> through the <b>Daghida Project. </b> The Daghida Project funding made it possible for individuals who were involved in the language work to attend conferences such as the annual Stabilizing Indigenous Languages Symposia where Shirley Cardinal first met Peter Brand &amp; John Elliot in the year 2000. It was the beginning of a relationship which eventually led to the initiation of this project and hopefully will continue for a long time to come as we forge ahead with new developments in technology and language preservation activity.<br /><br />First of all, I would like to acknowledge and thank <b>Peter Brand</b> of FirstVoices. His willingness to share his knowledge and skill demonstrates his commitment to supporting the efforts of First Nations language warriors. Thank you so much for your generosity and especially your patience during the many challenges we faced with our Dene project!<br /><br />I would also like to thank the rest of the staff of FirstVoices who have provided assistance in various capacities: <b>Ivy Shaughnessy</b> for her great sense of humor as well as assisting with the training in Hobbema, her hospitality during our stay in Victoria &amp; email and telephone support; <b>Pauline Edwards</b> for all the assistance both while we were in Victoria and the on-going email &amp; telephone support; <b>Alex Wadsworth</b> for all the technical expertise behind the scenes and <b>Helena Charleson</b> for administrative support. I would also like to take the opportunity to mention that it was indeed a pleasure to meet Tyrone and Deanna of First People's Cultural Foundation at the SILS conference in Buffalo. You are all doing fantastic work, keep it up!!!<br /><br />I would also like to thank everyone from Łue Chok Tué who have contributed to the on-going efforts of language preservation in our community:<br /><br />The language carriers who make time to participate in linguistic fieldwork even when our endless questions don’t seem to make any sense to them especially the following: <b>Ernest Ennow, Nora Matchatis, John Janvier, Alex Janvier, Evangeline Janvier, Lorraine Loth, Lionel Francois, Shirley Cardinal, Marlene Piche, &amp; Dennis Andrew.</b><br /><br />The past and present leadership: <b>Chief Francis Scanie</b> who endorsed our letter of intent in the early stages of the Daghida Project; <b>Chief Joyce Metchewais &amp; Council </b>during the two terms of office for on-going administrative support of the Daghida Project and endorsing this proposed FirstVoices project; and <b>Chief Dwayne Nest &amp; Council</b> for continued administrative support during this project.<br /><br />A special thanks to the Cold Lake First Nations staff who get the job done: <b>Shawna Janvier, Administrator; Maria Keating, Finance; &amp; Tom Piche, Communications.</b> The FCSS staff: <b>Cecilia Machatis &amp; Shirley Grandbois</b> who are always there when needed.<br /><br />To my technical assistant &amp; junior partner in this FirstVoices project, <b>Lucianne Crazyboy.</b> I hope this experience was all you hoped for and more. I’m sure you had no idea what you were getting into.<br /><br />I also want to express my heartfelt gratitude to a wonderful group of ladies who really make a difference. They are my peers, my friends, my ‘sisters’ and they share in the vision of reviving the ways of our ancestors, the language and culture of the Dene people: <b>Angie Grandbois, Maureena Loth, Margaret Martial, Noella Amable, Lynda Janvier, Alma Janvier, Mary Jane Sayazie, Jill Janvier, Gail Muskego, &amp; Tricia Janvier.</b> Thank you for your inspiration and encouragement.<br /><br />A special thank you to my friend, my colleage, my partner <b>Sally Rice</b> without whom there would not have been a Daghida Project. Thank you always for all your expertise, your mentorship, your support and encouragement.<br /><br /><b>Mąsi chok!! Horelyų́ nuhghąnighila! </b></span></p>"
+                  // })
+                  const z = getCompactList({
+                    dictionaryListSmallScreenProps: {
+                      // rowClickHandler: props.rowClickHandler,
+                      // hasSorting: props.hasSorting,
+                      // // withPagination
+                      // // --------------------
+                      // appendControls: props.appendControls,
+                      // disablePageSize: props.disablePageSize,
+                      // fetcher: props.fetcher,
+                      // fetcherParams: props.fetcherParams,
+                      // metadata: props.metadata,
+                      // List: small screen
+                      // --------------------
+                      items: entries,
+                      columns: [
+                        {
+                          name: 'type',
+                          title: 'Type',
+                          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.passthrough,
+                          render: (v, data) => {
+                            let itemType
+                            switch (data.type) {
+                              case 'FVPhrase':
+                                itemType = 'Phrase'
+                                break
+                              case 'FVWord':
+                                itemType = 'Word'
+                                break
+                              case 'FVBook':
+                                itemType = data.properties['fvbook:type']
+                                break
+                              case 'FVPortal':
+                                itemType = 'Dialect'
+                                break
+                              default:
+                                itemType = '-'
+                            }
+                            return itemType
+                          },
+                        },
+                        {
+                          name: 'title',
+                          title: 'Title',
+                          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.heading,
+                          render: (v, data) => {
+                            // console.log('render', data.type)
+                            // return v
+                            let href = null
+                            let hrefEdit = null
+                            const currentTheme = this.props.routeParams.siteTheme
+                            if (data.type === 'FVPhrase') {
+                              href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
+                              hrefEdit = NavigationHelpers.generateUIDEditPath(
+                                this.props.routeParams.siteTheme,
+                                data,
+                                'phrases'
+                              )
+                            }
+                            if (data.type === 'FVWord') {
+                              href = NavigationHelpers.generateUIDPath(currentTheme, data, 'words')
+                              hrefEdit = NavigationHelpers.generateUIDEditPath(
+                                this.props.routeParams.siteTheme,
+                                data,
+                                'words'
+                              )
+                            }
+                            if (data.type === 'FVBook') {
+                              let bookType = null
+                              switch (data.properties['fvbook:type']) {
+                                case 'song':
+                                  bookType = 'songs'
+                                  break
+                                case 'story':
+                                  bookType = 'stories'
+                                  break
+
+                                default:
+                                  break
+                              }
+                              href = NavigationHelpers.generateUIDPath(currentTheme, data, bookType)
+                              hrefEdit = NavigationHelpers.generateUIDEditPath(
+                                this.props.routeParams.siteTheme,
+                                data,
+                                bookType
+                              )
+                            }
+                            // return href ? (
+                            //   <a className="DictionaryList__link" href={href}>
+                            //     {v}
+                            //   </a>
+                            // ) : (
+                            //   v
+                            // )
+
+                            const isWorkspaces = this.props.routeParams.area === WORKSPACES
+
+                            const computeDialect2 = this.props.dialect /* || this.getDialect()*/
+
+                            const editButton =
+                              isWorkspaces && hrefEdit ? (
+                                <AuthorizationFilter
+                                  filter={{
+                                    entity: selectn('response', computeDialect2),
+                                    login: this.props.computeLogin,
+                                    role: ['Record', 'Approve', 'Everything'],
+                                  }}
+                                  hideFromSections
+                                  routeParams={this.props.routeParams}
+                                >
+                                  <FVButton
+                                    type="button"
+                                    variant="flat"
+                                    size="small"
+                                    component="a"
+                                    href={hrefEdit}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                                    }}
+                                  >
+                                    <Edit title={intl.trans('edit', 'Edit', 'first')} />
+                                  </FVButton>
+                                </AuthorizationFilter>
+                              ) : null
+                            return (
+                              <>
+                                <a className="DictionaryList__link" href={href}>
+                                  {v}
+                                </a>
+                                {editButton}
+                              </>
+                            )
+                          },
+                          // sortName: 'fv:custom_order',
+                          // sortBy: 'fv:custom_order',
+                        },
+                        {
+                          name: 'fv:definitions',
+                          title: intl.trans('definitions', 'Definitions', 'first'),
+                          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+                          columnDataTemplateCustom: ({ cellRender, column, templateData }) => {
+                            const definitionChildren = selectn('props.children', cellRender) || []
+                            templateData[column.name] =
+                              cellRender &&
+                              cellRender !== '' &&
+                              cellRender !== null &&
+                              definitionChildren.length > 0 ? (
+                                <div>
+                                  <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
+                                </div>
+                              ) : null
+                          },
+                          render: (v, data, cellProps) => {
+                            return UIHelpers.renderComplexArrayRow(
+                              selectn('properties.' + cellProps.name, data),
+                              (entry, i) => {
+                                if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
+                                  return <div key={i}>{entry.translation}</div>
+                                }
+                              }
+                            )
+                          },
+                          sortName: 'fv:definitions/0/translation',
+                        },
+                        {
+                          name: 'related_audio',
+                          title: intl.trans('audio', 'Audio', 'first'),
+                          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+                          columnDataTemplateCustom: ({ cellRender, column, templateData }) => {
+                            templateData[column.name] = cellRender ? (
+                              <div className="DictionaryListSmallScreen__audioGroup">{cellRender}</div>
+                            ) : null
+                          },
+                          render: (v, data, cellProps) => {
+                            let firstAudio = null
+                            if (data.type === 'FVPhrase') {
+                              firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
+                            }
+                            if (data.type === 'FVWord') {
+                              firstAudio = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
+                            }
+
+                            if (firstAudio) {
+                              return (
+                                <Preview
+                                  minimal
+                                  tagStyles={{ width: '300px', maxWidth: '100%' }}
+                                  key={selectn('uid', firstAudio)}
+                                  expandedValue={firstAudio}
+                                  type="FVAudio"
+                                />
+                              )
+                            }
+                          },
+                        },
+                      ],
+                      dictionaryListSmallScreenTemplate: (templateData) => {
+                        return (
+                          <>
+                            {templateData.type}
+                            {templateData.title}
+                            <div className="DictionaryListSmallScreen__group">
+                              {templateData.related_audio}
+                              {templateData['fv:definitions']}
+                            </div>
+                          </>
+                        )
+                      },
+                    },
+                    // hasPagination: props.hasPagination,
+                    // pageSize: DefaultFetcherParams.pageSize,
+                  })
+                  // console.log(z)
+                  return <Suspense fallback={<div>Loading...</div>}>{z}</Suspense>
+                  // return <div>Search</div>
+                  // <DocumentListView
+                  //   // objectDescriptions="results"
+                  //   // onSelectionChange={this._onEntryNavigateRequest}
+                  //   // onSortChange={this._handleSortChange}
+                  //   // usePrevResponse
+                  //   columns={[
+                  //     {
+                  //       name: 'type',
+                  //       title: 'Type',
+                  //       render: (v, data) => {
+                  //         let itemType = data.type
+                  //         switch (data.type) {
+                  //           case 'FVPhrase':
+                  //             itemType = 'Phrase'
+                  //             break
+                  //           case 'FVWord':
+                  //             itemType = 'Word'
+                  //             break
+                  //           case 'FVBook':
+                  //             itemType = data.properties['fvbook:type']
+                  //             break
+                  //           case 'FVPortal':
+                  //             itemType = 'Dialect'
+                  //             break
+                  //           default:
+                  //             break
+                  //         }
+                  //         return itemType ? itemType : '-'
+                  //       },
+                  //     },
+                  //     {
+                  //       name: 'title',
+                  //       title: 'Title',
+                  //       render: (v, data) => {
+                  //         // console.log('render', data.type)
+                  //         // return v
+                  //         let href = null
+                  //         let hrefEdit = null
+                  //         const currentTheme = this.props.routeParams.siteTheme
+                  //         if (data.type === 'FVPhrase') {
+                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
+                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
+                  //             this.props.routeParams.siteTheme,
+                  //             data,
+                  //             'phrases'
+                  //           )
+                  //         }
+                  //         if (data.type === 'FVWord') {
+                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, 'words')
+                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
+                  //             this.props.routeParams.siteTheme,
+                  //             data,
+                  //             'words'
+                  //           )
+                  //         }
+                  //         if (data.type === 'FVBook') {
+                  //           let bookType = null
+                  //           switch (data.properties['fvbook:type']) {
+                  //             case 'song':
+                  //               bookType = 'songs'
+                  //               break
+                  //             case 'story':
+                  //               bookType = 'stories'
+                  //               break
+
+                  //             default:
+                  //               break
+                  //           }
+                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, bookType)
+                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
+                  //             this.props.routeParams.siteTheme,
+                  //             data,
+                  //             bookType
+                  //           )
+                  //         }
+                  //         // return href ? (
+                  //         //   <a className="DictionaryList__link" href={href}>
+                  //         //     {v}
+                  //         //   </a>
+                  //         // ) : (
+                  //         //   v
+                  //         // )
+
+                  //         const isWorkspaces = this.props.routeParams.area === WORKSPACES
+
+                  //         const computeDialect2 = this.props.dialect /* || this.getDialect()*/
+
+                  //         const editButton =
+                  //           isWorkspaces && hrefEdit ? (
+                  //             <AuthorizationFilter
+                  //               filter={{
+                  //                 entity: selectn('response', computeDialect2),
+                  //                 login: this.props.computeLogin,
+                  //                 role: ['Record', 'Approve', 'Everything'],
+                  //               }}
+                  //               hideFromSections
+                  //               routeParams={this.props.routeParams}
+                  //             >
+                  //               <FVButton
+                  //                 type="button"
+                  //                 variant="flat"
+                  //                 size="small"
+                  //                 component="a"
+                  //                 href={hrefEdit}
+                  //                 onClick={(e) => {
+                  //                   e.preventDefault()
+                  //                   NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                  //                 }}
+                  //               >
+                  //                 <Edit title={intl.trans('edit', 'Edit', 'first')} />
+                  //               </FVButton>
+                  //             </AuthorizationFilter>
+                  //           ) : null
+                  //         return (
+                  //           <>
+                  //             <a className="DictionaryList__link" href={href}>
+                  //               {v}
+                  //             </a>
+                  //             {editButton}
+                  //           </>
+                  //         )
+                  //       },
+                  //       // sortName: 'fv:custom_order',
+                  //       // sortBy: 'fv:custom_order',
+                  //     },
+                  //     {
+                  //       name: 'fv:definitions',
+                  //       title: intl.trans('definitions', 'Definitions', 'first'),
+                  //       render: (v, data, cellProps) => {
+                  //         return UIHelpers.renderComplexArrayRow(
+                  //           selectn('properties.' + cellProps.name, data),
+                  //           (entry, i) => {
+                  //             if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
+                  //               return <div key={i}>{entry.translation}</div>
+                  //             }
+                  //           }
+                  //         )
+                  //       },
+                  //       sortName: 'fv:definitions/0/translation',
+                  //     },
+                  //     {
+                  //       name: 'related_audio',
+                  //       title: intl.trans('audio', 'Audio', 'first'),
+                  //       render: (v, data, cellProps) => {
+                  //         let firstAudio = null
+                  //         if (data.type === 'FVPhrase') {
+                  //           firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
+                  //         }
+                  //         if (data.type === 'FVWord') {
+                  //           firstAudio = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
+                  //         }
+
+                  //         if (firstAudio) {
+                  //           return (
+                  //             <Preview
+                  //               minimal
+                  //               tagStyles={{ width: '300px', maxWidth: '100%' }}
+                  //               key={selectn('uid', firstAudio)}
+                  //               expandedValue={firstAudio}
+                  //               type="FVAudio"
+                  //             />
+                  //           )
+                  //         }
+                  //       },
+                  //     },
+                  //   ]}
+                  //   className="browseDataGrid fontAboriginalSans"
+                  //   data={computeSearchDocuments}
+                  //   gridCols={1}
+                  //   gridListTile={SearchResultTileWithProps}
+                  //   gridListView={this.props.gridListView}
+                  //   gridViewProps={{ cellHeight: 170, style: { overflowY: 'hidden', margin: '0 0 30px 0' } }}
+                  //   hasViewModeButtons={false}
+                  //   page={this.state.pageInfo.page}
+                  //   pageSize={this.state.pageInfo.pageSize}
+                  //   refetcher={this._handleRefetch}
+                  //   type="Document"
+                  // />
                 }
               })()}
             </PromiseWrapper>
