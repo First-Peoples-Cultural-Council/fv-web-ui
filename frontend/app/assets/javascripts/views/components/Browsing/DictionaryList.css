@@ -44,6 +44,14 @@
   font-weight: 700;
 }
 
+.DictionaryList__viewModeGroup {
+  /* margin: 10px 0; */
+  text-align: right;
+}
+.DictionaryList__viewModeGroup .DictionaryList__viewModeButton {
+  margin: 5px;
+}
+
 /* MODIFIER */
 .DictionaryList--noData {
   margin: 20px 0;

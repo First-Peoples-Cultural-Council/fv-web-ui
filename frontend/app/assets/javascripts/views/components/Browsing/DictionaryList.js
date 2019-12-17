@@ -189,11 +189,6 @@ passes out the clicked item's data
 Miscellaneous
 =============================================================================
 
-`dictionaryListSmallScreenTemplate` number
-------------------------------------
-Specifies which template to use with the small screen view.
-If omitted DictionaryListSmallScreen.js uses the Word template.
-
 
 Pass through props
 ------------------------------------
@@ -331,14 +326,6 @@ const DictionaryList = (props) => {
 
   return (
     <>
-      {props.hasViewModeButtons &&
-        getViewButtons({
-          mediaQueryIsSmall: mediaQuery.small,
-          viewMode,
-          viewModeDecoder,
-          clickHandler: props.setListViewMode,
-        })}
-
       {props.hasSearch && (
         <Suspense fallback={<div>Loading...</div>}>
           <SearchDialect
@@ -349,6 +336,14 @@ const DictionaryList = (props) => {
           />
         </Suspense>
       )}
+
+      {props.hasViewModeButtons &&
+        getViewButtons({
+          mediaQueryIsSmall: mediaQuery.small,
+          viewMode,
+          viewModeDecoder,
+          clickHandler: props.setListViewMode,
+        })}
 
       <Media
         queries={{
@@ -585,6 +580,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
       viewMode === viewModeDecoder.compact ? (
         <FVButton
           variant="contained"
+          className="DictionaryList__viewModeButton"
           color="primary"
           onClick={() => {
             clickHandler(viewModeDecoder.default)
@@ -595,6 +591,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
       ) : (
         <FVButton
           variant="contained"
+          className="DictionaryList__viewModeButton"
           onClick={() => {
             clickHandler(viewModeDecoder.compact)
           }}
@@ -604,28 +601,14 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
       )
   }
   return (
-    <>
-      {/* {viewMode === viewModeDecoder.default ? (
-        <FVButton variant="contained" color="primary">
-          Responsive mode
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          onClick={() => {
-            clickHandler(viewModeDecoder.default)
-          }}
-        >
-          Responsive mode
-        </FVButton>
-      )} */}
-
+    <div className="DictionaryList__viewModeGroup">
       {compactView}
 
       {viewMode === viewModeDecoder.flashcard ? (
         <FVButton
           variant="contained"
           color="primary"
+          className="DictionaryList__viewModeButton"
           onClick={() => {
             clickHandler(viewModeDecoder.default)
           }}
@@ -635,6 +618,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
       ) : (
         <FVButton
           variant="contained"
+          className="DictionaryList__viewModeButton"
           onClick={() => {
             clickHandler(viewModeDecoder.flashcard)
           }}
@@ -642,28 +626,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
           Flashcard view
         </FVButton>
       )}
-
-      {/* {viewMode === viewModeDecoder.print ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            clickHandler(viewModeDecoder.default)
-          }}
-        >
-          Cancel print view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          onClick={() => {
-            clickHandler(viewModeDecoder.print)
-          }}
-        >
-          Print view
-        </FVButton>
-      )} */}
-    </>
+    </div>
   )
 }
 // ===============================================================
