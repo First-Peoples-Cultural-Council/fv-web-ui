@@ -121,7 +121,6 @@ function Contributors(props) {
           )
           return bio
         },
-        sortBy: 'dc:description',
       },
       {
         name: 'actions',
