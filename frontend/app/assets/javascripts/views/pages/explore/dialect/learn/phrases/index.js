@@ -99,7 +99,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     // If no filters are applied via URL, use props
     if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
-      const pagePropertiesFilterInfo = selectn([[this.getPageKey()], 'filterInfo'], props.properties.pageProperties)
+      const pagePropertiesFilterInfo = selectn([[this._getPageKey()], 'filterInfo'], props.properties.pageProperties)
       if (pagePropertiesFilterInfo) {
         filterInfo = pagePropertiesFilterInfo
       }
@@ -379,8 +379,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     this.changeFilter(href, updateHistory)
   }
 
-  handlePhraseBookClick = async (obj, updateHistory = true) => {
-    const { facetField, selected, unselected, href } = obj
+  handlePhraseBookClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_PHRASE_BOOK,
@@ -456,8 +455,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       }
     )
   }
-
-  getPageKey = () => {
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
+  _getPageKey = () => {
     return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_learn_phrases'
   }
 }

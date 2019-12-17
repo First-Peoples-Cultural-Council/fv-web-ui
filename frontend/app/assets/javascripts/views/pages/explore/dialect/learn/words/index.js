@@ -98,7 +98,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     // If no filters are applied via URL, use props
     if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
-      const pagePropertiesFilterInfo = selectn([[this.getPageKey()], 'filterInfo'], props.properties.pageProperties)
+      const pagePropertiesFilterInfo = selectn([[this._getPageKey()], 'filterInfo'], props.properties.pageProperties)
       if (pagePropertiesFilterInfo) {
         filterInfo = pagePropertiesFilterInfo
       }
@@ -374,7 +374,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
   }
 
-  getPageKey = () => {
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
+  _getPageKey = () => {
     return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
   }
 
