@@ -42,7 +42,6 @@ import IntlService from 'views/services/intl'
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 const DefaultFetcherParams = {
   currentPageIndex: 1,
@@ -145,7 +144,6 @@ export class BrowseComponent extends Component {
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
-            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.category}
           />
         )
         break
@@ -169,7 +167,6 @@ export class BrowseComponent extends Component {
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
-            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           />
         )
         break
@@ -193,7 +190,6 @@ export class BrowseComponent extends Component {
               area: WORKSPACES,
               dialect_path: dialectPath,
             }}
-            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.link}
           />
         )
         break

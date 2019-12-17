@@ -242,6 +242,7 @@ import {
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/DictionaryListSmallScreen'))
@@ -519,6 +520,7 @@ function generateBatchColumn({
   return [
     {
       name: 'batch',
+      columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
       title: () => {
         return batchTitle({
           uidsNotDeleted,

@@ -114,7 +114,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       '_getPageKey',
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
-
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
   _getPageKey() {
     return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_reports'
   }
@@ -162,6 +162,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
             routeParams={this.props.routeParams}
             hasViewModeButtons={false}
+            hasSorting={false}
           />
         )
         break
@@ -179,6 +180,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             filter={this.state.filterInfo}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
+            hasViewModeButtons={false}
+            hasSorting={false}
           />
         )
         break
@@ -193,6 +196,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             filter={this.state.filterInfo}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
+            hasViewModeButtons={false}
+            hasSorting={false}
           />
         )
         break
@@ -207,6 +212,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             filter={this.state.filterInfo}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             routeParams={this.props.routeParams}
+            hasViewModeButtons={false}
+            hasSorting={false}
           />
         )
         break

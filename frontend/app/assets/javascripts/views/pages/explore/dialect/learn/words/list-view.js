@@ -40,7 +40,11 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-
+import {
+  dictionaryListSmallScreenColumnDataTemplate,
+  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+  dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+} from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 
 /**
@@ -123,6 +127,7 @@ class WordsListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('word', 'Word', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
           render: (v, data) => {
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
 
@@ -178,6 +183,8 @@ class WordsListView extends DataListView {
         {
           name: 'fv:definitions',
           title: intl.trans('definitions', 'Definitions', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
           render: (v, data, cellProps) => {
             return UIHelpers.renderComplexArrayRow(selectn(`properties.${cellProps.name}`, data), (entry, i) => {
               if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
@@ -190,6 +197,8 @@ class WordsListView extends DataListView {
         {
           name: 'related_audio',
           title: intl.trans('audio', 'Audio', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
           render: (v, data, cellProps) => {
             const firstAudio = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
             if (firstAudio) {
@@ -211,6 +220,7 @@ class WordsListView extends DataListView {
           width: 72,
           textAlign: 'center',
           title: intl.trans('picture', 'Picture', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data, cellProps) => {
             const firstPicture = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
             if (firstPicture) {

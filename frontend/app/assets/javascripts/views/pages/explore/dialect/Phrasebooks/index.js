@@ -31,7 +31,7 @@ import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -81,6 +81,7 @@ export const Phrasebooks = (props) => {
       {
         name: 'title',
         title: copy.title.th,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
         render: (v, data) => {
           const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${data.uid || ''}`
           return (
@@ -110,6 +111,7 @@ export const Phrasebooks = (props) => {
       {
         name: 'actions',
         title: copy.actions.th,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
         render: (v, data) => {
           const uid = data.uid
           const url = `/${siteTheme}${dialect_path}/edit/phrasebook/${uid}`
@@ -183,7 +185,6 @@ export const Phrasebooks = (props) => {
           }}
           // Listview: computed data
           computedData={computedData}
-          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.phrasebook}
           // ==================================================
           columns={getColumns()}
           cssModifier="DictionaryList--contributors"

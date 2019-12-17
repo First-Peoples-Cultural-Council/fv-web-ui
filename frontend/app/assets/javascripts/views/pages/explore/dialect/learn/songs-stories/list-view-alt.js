@@ -34,9 +34,9 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 
 import IntlService from 'views/services/intl'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
  * List view for words
@@ -93,6 +93,7 @@ export class SongsStoriesListViewAlt extends DataListView {
         {
           name: 'title',
           title: intl.trans('title', 'Title', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
           render: (v, data /*, cellProps*/) => {
             const href = NavigationHelpers.generateUIDPath(
               currentTheme || 'explore',
@@ -240,7 +241,6 @@ export class SongsStoriesListViewAlt extends DataListView {
                 columns={this.state.columns}
                 data={computeBooks}
                 dialect={selectn('response', computeDialect2)}
-                dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.book}
                 gridListView={this.props.gridListView}
                 hasViewModeButtons={false}
                 page={this.state.pageInfo.page}

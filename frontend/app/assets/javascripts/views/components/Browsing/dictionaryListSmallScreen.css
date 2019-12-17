@@ -41,7 +41,10 @@
 }
 .DictionaryListSmallScreen__group {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+.DictionaryListSmallScreen__group .DictionaryListSmallScreen__dataItem {
+  padding: 10px 20px 10px 0;
 }
 .DictionaryListSmallScreen__definitionsGroup {
   width: 25%;
@@ -59,6 +62,9 @@
 @media (max-width: 750px) {
   .DictionaryListSmallScreen__group {
     flex-direction: column;
+  }
+  .DictionaryListSmallScreen__group .DictionaryListSmallScreen__dataItem .Phrasebooks__actions {
+    justify-content: space-between;
   }
   .DictionaryListSmallScreen__group--contributor {
     flex-direction: row;

@@ -23,7 +23,7 @@ import { connect } from 'react-redux'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { fetchUser, userSuggestion, updateUser } from 'providers/redux/reducers/fvUser'
-
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import selectn from 'selectn'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -36,7 +36,6 @@ import IntlService from 'views/services/intl'
 
 const intl = IntlService.instance
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '' } }
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const FilteredPaginatedMediaList = withFilter(DocumentListView, DefaultFetcherParams)
 
 /**
@@ -90,17 +89,24 @@ export class UsersListView extends DataListView {
       columns: [
         {
           name: 'username',
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
           title: intl.trans('views.pages.explore.dialect.users.username', 'Username', 'first'),
         },
         {
           name: 'firstName',
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           title: intl.trans('first_name', 'First Name', 'words'),
         },
         {
           name: 'lastName',
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           title: intl.trans('last_name', 'Last Name', 'words'),
         },
-        { name: 'email', title: intl.trans('email', 'Email', 'first') },
+        {
+          name: 'email',
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.columnTitleCellRender,
+          title: intl.trans('email', 'Email', 'first'),
+        },
       ],
       sortInfo: {
         uiSortOrder: [],
@@ -240,7 +246,6 @@ export class UsersListView extends DataListView {
           columns={this.state.columns}
           data={normalizedComputeUserSuggestion}
           dialect={selectn('response', computeDialect2)}
-          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.user}
           fetcher={this._fetcher}
           filterOptionsKey="User"
           fixedCols={this.state.fixedCols}

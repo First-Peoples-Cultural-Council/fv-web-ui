@@ -33,7 +33,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import IntlService from 'views/services/intl'
-
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
  * List view for contributors
@@ -88,6 +88,7 @@ class ContributorsListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('contributor', 'Contributor', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
           render: (v /*, data, cellProps*/) => v,
         },
         {

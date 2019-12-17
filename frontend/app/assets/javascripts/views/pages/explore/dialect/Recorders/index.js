@@ -33,7 +33,7 @@ import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -93,6 +93,7 @@ function Recorders(props) {
       {
         name: 'title',
         title: copy.title.th,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
         render: (value, data) => {
           const url = `/${siteTheme}${dialect_path}/recorder/${data.uid}`
 
@@ -133,6 +134,7 @@ function Recorders(props) {
       {
         name: 'actions',
         title: copy.actions.th,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
         render: (v, data) => {
           const uid = data.uid
           const url = `/${siteTheme}${dialect_path}/edit/recorder/${uid}`
@@ -207,7 +209,6 @@ function Recorders(props) {
           }}
           // Listview: computed data
           computedData={computedData}
-          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.contributor}
           // ==================================================
           columns={getColumns()}
           cssModifier="DictionaryList--contributors"

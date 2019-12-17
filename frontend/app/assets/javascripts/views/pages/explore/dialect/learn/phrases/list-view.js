@@ -41,7 +41,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
-import { dictionaryListSmallScreenTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import {
+  dictionaryListSmallScreenColumnDataTemplate,
+  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+  dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+} from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
  * List view for phrases
@@ -113,6 +117,7 @@ export class PhrasesListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('phrase', 'Phrase', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
           render: (v, data) => {
             const href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
             const clickHandler = props.disableClickItem ? NavigationHelpers.disable : null
@@ -163,6 +168,8 @@ export class PhrasesListView extends DataListView {
         {
           name: 'fv:definitions',
           title: intl.trans('definitions', 'Definitions', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
           render: (v, data, cellProps) => {
             return UIHelpers.renderComplexArrayRow(selectn('properties.' + cellProps.name, data), (entry, i) => {
               if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
@@ -175,6 +182,8 @@ export class PhrasesListView extends DataListView {
         {
           name: 'related_audio',
           title: intl.trans('audio', 'Audio', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
           render: (v, data, cellProps) => {
             const firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
             if (firstAudio) {
@@ -195,6 +204,7 @@ export class PhrasesListView extends DataListView {
           width: 72,
           textAlign: 'center',
           title: intl.trans('picture', 'Picture', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data, cellProps) => {
             const firstPicture = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
             if (firstPicture) {
@@ -211,6 +221,8 @@ export class PhrasesListView extends DataListView {
         {
           name: 'fv-phrase:phrase_books',
           title: intl.trans('phrase_books', 'Phrase Books', 'words'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
           render: (v, data) => {
             return UIHelpers.renderComplexArrayRow(
               selectn('contextParameters.phrase.phrase_books', data),
@@ -344,7 +356,6 @@ export class PhrasesListView extends DataListView {
             hasViewModeButtons={this.props.hasViewModeButtons}
             hasSorting={this.props.hasSorting}
             rowClickHandler={this.props.rowClickHandler}
-            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplate.phrase}
           />
         )}
       </PromiseWrapper>
@@ -379,7 +390,6 @@ export class PhrasesListView extends DataListView {
 
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
     const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-
     props.fetchPhrases(
       this._getPathOrParentID(props),
       `${currentAppliedFilter}&currentPageIndex=${pageIndex -
