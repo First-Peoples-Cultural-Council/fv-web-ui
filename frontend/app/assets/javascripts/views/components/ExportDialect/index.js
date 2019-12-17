@@ -1,291 +1,457 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-const { any, bool, func, string } = PropTypes
-
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import {
-  ExportDialectCheckPrevious,
-  ExportDialectRequest,
-  ExportDialectProgress,
+  exportDialectProgress,
+  exportDialectGetFormattedDocument,
+  exportDialectFVGenerateDocumentWithFormat,
+  exportDialectGenericError,
 } from 'providers/redux/reducers/exportDialect'
+import { fetchDocument } from 'providers/redux/reducers/document'
 
+import Typography from '@material-ui/core/Typography'
+
+import PropTypes from 'prop-types'
+import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
+import FVButton from 'views/components/FVButton'
 
+import '!style-loader!css-loader!./ExportDialect.css'
+
+const { any, string, func, object } = PropTypes
 export class ExportDialect extends Component {
   static propTypes = {
-    displayDebug: bool,
-    dialectId: string,
-    fileName: string,
-    fileUrl: string,
-    isReady: bool,
-    isProcessing: bool,
-    isErrored: bool,
+    exportElement: string,
+    exportLabel: string,
+    query: string,
+    columns: string,
     // REDUX: reducers/state
-    ExportDialectReducer: any.isRequired,
+    computeDocument: object.isRequired,
+    exportDialect: any.isRequired,
+    routeParams: object.isRequired,
     // REDUX: actions/dispatch/func
-    ExportDialectCheckPrevious: func.isRequired,
-    ExportDialectRequest: func.isRequired,
-    ExportDialectProgress: func.isRequired,
+    exportDialectFVGenerateDocumentWithFormat: func.isRequired,
+    exportDialectGetFormattedDocument: func.isRequired,
+    exportDialectProgress: func.isRequired,
+    exportDialectGenericError: func.isRequired,
+    fetchDocument: func.isRequired,
   }
   static defaultProps = {
-    displayDebug: false,
-    dialectId: undefined,
-    fileName: '',
-    fileUrl: '',
-    isReady: false,
-    isProcessing: false,
-    isErrored: false,
+    exportElement: 'FVWord',
+    columns: '*',
+    query: '*',
   }
 
-  polling = false
-  pollingInterval = 1000
-  pollingLimit = 2000000
+  isPolling = false
+  pollingInterval = 500
+  pollingLimit = 1000 * 60 * 5 // 5 minutes: Miliseconds * Minute * Minutes
 
   constructor(props) {
     super(props)
     this.state = {
-      _EXPORT_DIALECT_SCHEME_HOST_URL: null,
-      _dialectId: null,
+      dialectId: undefined,
+      isBrowsing: false,
     }
+  }
 
-    // Bind methods to 'this'
-    ;[
-      '_checkProgress',
-      '_exportDialectCheckPrevious',
-      '_exportDialectRequest',
-      '_exportDialectProgress',
-      '_getProgress',
-      '_pollServer',
-      '_stateIsNotStarted',
-      '_stateIsSuccess',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-  componentDidMount() {
-    this._exportDialectCheckPrevious()
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.dialectId && prevProps.dialectId === undefined) {
-      this._exportDialectCheckPrevious()
+  async componentDidMount() {
+    const { routeParams } = this.props
+    await this.props.fetchDocument(routeParams.dialect_path + '/Dictionary')
+    const computeDocument = ProviderHelpers.getEntry(
+      this.props.computeDocument,
+      `${routeParams.dialect_path}/Dictionary`
+    )
+    const dialectId = selectn(['response', 'properties', 'fva:dialect'], computeDocument)
+    if (dialectId) {
+      this.setState(
+        {
+          dialectId,
+        },
+        () => {
+          this.exportDialectCheckPrevious()
+        }
+      )
     }
   }
-  componentWillUnmount() {
-    this.polling = false
-  }
+
   render() {
-    if (this.props.dialectId === undefined) {
-      return null
-    }
-    const { CONSTANTS } = this.props.ExportDialectReducer
-    const { IN_PROGRESS, SUCCESS, ERROR } = CONSTANTS
-    const { dialectIdLifecycle } = this._getData()
+    const { exportDialect } = this.props
+    const { CONSTANTS } = exportDialect
+    const { EXPORT_IN_PROGRESS, EXPORT_SUCCESS, EXPORT_ERROR } = CONSTANTS
+    const { exportLast = {} } = this.getData()
 
-    let componentState = null
-    // check current state
-    switch (dialectIdLifecycle) {
-      case IN_PROGRESS:
-        componentState = this._stateIsInProgress()
+    const ComponentOuter = (props) => (
+      <div className="ExportDialect">
+        <Typography variant="title" component="h2">
+          Export
+        </Typography>
+        {props.children}
+      </div>
+    )
+
+    // Suppresses issue where previous dialect's export state is shown when navigating to a new dialect
+    // NOTE: fails if no export to begin with
+    // if (exportLast.lifecycle === undefined || exportLast.dialectId !== this.state.dialectId) {
+    //   console.log('!', {
+    //     exportLast,
+    //     exportLastLifecycle: exportLast.lifecycle,
+    //     exportLastDialectId: exportLast.dialectId,
+    //     stateDialectId: this.state.dialectId,
+    //   })
+    //   return null
+    // }
+
+    if (this.state.isBrowsing) {
+      return <ComponentOuter>{this.stateIsBrowsing()}</ComponentOuter>
+    }
+
+    let component = null
+    switch (exportLast.lifecycle) {
+      case EXPORT_IN_PROGRESS:
+        component = <ComponentOuter>{this.stateIsInProgress()}</ComponentOuter>
         break
-      case SUCCESS:
-        componentState = this._stateIsSuccess()
+      case EXPORT_SUCCESS:
+        component = <ComponentOuter>{this.stateIsSuccess()}</ComponentOuter>
         break
-      case ERROR:
-        componentState = this._stateIsError()
+      case EXPORT_ERROR:
+        component = <ComponentOuter>{this.stateIsError()}</ComponentOuter>
         break
       default:
-        componentState = this._stateIsNotStarted()
+        component = <ComponentOuter>{this.stateIsDefault()}</ComponentOuter>
     }
+    return component
+  }
 
+  exportDialectCheckPrevious = async () => {
+    const { dialectId } = this.state
+    if (dialectId) {
+      await this.props.exportDialectGetFormattedDocument(dialectId, { format: 'CSV' })
+    }
+  }
+  exportDialectProgress = async () => {
+    const { exportLast = {} } = this.getData()
+    if (exportLast.exportId) {
+      await this.props.exportDialectProgress(exportLast.exportId)
+    }
+  }
+
+  exportDialectRequest = async () => {
+    const { dialectId } = this.state
+    const { columns, exportElement, query } = this.props
+    await this.props.exportDialectFVGenerateDocumentWithFormat(dialectId, {
+      columns,
+      exportElement,
+      format: 'CSV',
+      query,
+    })
+  }
+
+  getButtons = () => {
+    const { exportLabel, exportDialect } = this.props
+    const { CONSTANTS } = exportDialect
+    const { EXPORT_IN_PROGRESS } = CONSTANTS
+
+    const { exportLast } = this.getData()
+
+    const isExporting = exportLast.lifecycle === EXPORT_IN_PROGRESS ? true : false
+
+    const exportButton = isExporting ? (
+      <FVButton
+        className="ExportDialect__button"
+        disabled={isExporting}
+        color="primary"
+        variant="outlined"
+        onClick={this.exportDialectRequest}
+      >
+        Exporting...
+      </FVButton>
+    ) : (
+      <FVButton
+        className="ExportDialect__button"
+        color="primary"
+        variant="outlined"
+        onClick={this.exportDialectRequest}
+      >
+        Export{`${exportLabel ? ` ${exportLabel}` : ''}`}
+      </FVButton>
+    )
+    const browseButton = (
+      <FVButton
+        className="ExportDialect__button"
+        color="secondary"
+        variant="outlined"
+        onClick={async () => {
+          await this.exportDialectCheckPrevious()
+          this.setState({
+            isBrowsing: true,
+          })
+        }}
+      >
+        {'Browse previous exports >'}
+      </FVButton>
+    )
     return (
-      <div>
-        <h2>Export</h2>
-        {componentState}
+      <div className="ExportDialect__buttonGroup">
+        {exportButton}
+        {browseButton}
       </div>
     )
   }
-  async _checkProgress() {
-    // Make request
-    await this._exportDialectProgress()
-    // Pull data from store
-    const { CONSTANTS } = this.props.ExportDialectReducer
-    const { SUCCESS, ERROR } = CONSTANTS
-    const { dialectIdLifecycle } = this._getData()
 
-    // Responses
-    if (dialectIdLifecycle === SUCCESS) {
-      // true: Stop polling
-      return true
-    }
-
-    if (dialectIdLifecycle === ERROR) {
-      // false: Stop polling
-      return false
-    }
-
-    // null: Continue polling
-    return null
-  }
-
-  async _exportDialectCheckPrevious() {
-    const { dialectId } = this.props
-    if (dialectId) {
-      await this.props.ExportDialectCheckPrevious(dialectId)
-    }
-  }
-  async _exportDialectProgress() {
-    const { dialectId } = this.props
-    let _documentUuid = this.props.ExportDialectReducer.dialectIdDocumentUuid[dialectId]
-    if (!_documentUuid) {
-      const { dialectExportedDocumentUuid } = this._getData()
-      _documentUuid = dialectExportedDocumentUuid
-    }
-    await this.props.ExportDialectProgress(dialectId, _documentUuid)
-  }
-
-  async _exportDialectRequest() {
-    const { dialectId } = this.props
-    await this.props.ExportDialectRequest(dialectId)
-  }
-
-  _getData() {
-    const { dialectId } = this.props
-
-    if (!dialectId) {
-      return {
-        dialectIdDocumentUuid,
-        dialectIdLifecycle,
-        dialectIdData,
-      }
-    }
+  getData = () => {
+    const { exportDialect } = this.props
     const {
-      dialectsExported,
-      dialectIdDocumentUuid,
-      dialectIdLifecycle,
-      dialectIdData,
-    } = this.props.ExportDialectReducer
-
-    const _dialectExported = (dialectsExported || []).filter((existingExport) => {
-      const exportedDialectId = selectn('properties.fvexport:dialect', existingExport)
-      return exportedDialectId === dialectId
-    })
-    const _dialectIdDocumentUuid = dialectIdDocumentUuid[dialectId]
-    const _dialectIdLifecycle = dialectIdLifecycle[dialectId]
-    const _dialectIdData = dialectIdData[dialectId]
+      exportData,
+      exportError = [],
+      exportInProgress = [],
+      exportInitializing = [],
+      exportSuccess = [],
+      exportLast = {},
+    } = exportDialect
 
     return {
-      dialectExportedDocumentUuid: _dialectExported.length > 0 ? _dialectExported[0].uid : undefined,
-      dialectIdDocumentUuid: _dialectIdDocumentUuid,
-      dialectIdLifecycle: _dialectIdLifecycle,
-      dialectIdData: _dialectIdData,
+      exportData,
+      exportError,
+      exportInProgress,
+      exportInitializing,
+      exportSuccess,
+      exportLast,
+      // TEMP
+      timestamp: undefined,
     }
   }
-  _getProgress() {
-    if (this.polling === false) {
-      this.polling = true
-      this._pollServer(this._checkProgress).finally(() => {
-        this.polling = false
-      })
-    }
+
+  getExportedFiles = () => {
+    const { exportSuccess } = this.getData()
+
+    return exportSuccess.map((file, index) => {
+      const url = selectn(['file:content', 'data'], file)
+      const fileName = selectn(['file:content', 'name'], file)
+
+      return url === undefined ? null : (
+        <FVButton
+          className="ExportDialect__button"
+          href={url}
+          color="primary"
+          variant="outlined"
+          component="a"
+          key={index}
+        >
+          <span style={{ wordBreak: 'break-word' }}>{fileName}</span>
+        </FVButton>
+      )
+    })
   }
   // Thanks: https://davidwalsh.name/javascript-polling
-  _pollServer(fn) {
+  pollServer = (_pollServerRegulator) => {
     // The polling function
     const timeout = this.pollingLimit
     const interval = this.pollingInterval
     const endTime = Number(new Date()) + timeout
-    // eslint-disable-next-line func-names
-    const checkCondition = async function(resolve, reject) {
-      // If the condition is met, we're done!
-      const result = await fn()
-      if (result === true) {
-        resolve(result)
-      }
-      if (result === false) {
-        reject(new Error('Network request error'))
-      }
-      if (Number(new Date()) < endTime && result === null) {
+    const checkCondition = async (resolve, reject) => {
+      const result = await _pollServerRegulator()
+
+      if (Number(new Date()) < endTime && result === 0) {
         // If the condition isn't met but the timeout hasn't elapsed, go again
         setTimeout(checkCondition, interval, resolve, reject)
       } else {
-        // Didn't match and too much time, reject!
-        reject(new Error('Timed out'))
+        switch (result) {
+          case 1: {
+            resolve(result)
+            break
+          }
+          case 2: {
+            reject(new Error('Error encountered'))
+            break
+          }
+          case 3: {
+            reject(new Error('Could not get export progress'))
+            break
+          }
+          default: {
+            reject(new Error('Took too long to generate export'))
+          }
+        }
       }
     }
 
     return new Promise(checkCondition)
   }
+  pollServerRegulator = async () => {
+    // Make request
+    await this.exportDialectProgress()
 
-  _stateIsError() {
-    // const { dialectIdData } = this._getData()
-    // const { message, percentage } = dialectIdData
-    return (
-      <div>
-        <p>There was a problem creating the export file.</p>
-        <p>We have been notified of the matter and will look into it shortly.</p>
-        {/* <p>{`${message || ''} ${percentage || ''}`}</p> */}
-      </div>
-    )
+    // Pull data from store
+    const { CONSTANTS } = this.props.exportDialect
+    const { EXPORT_SUCCESS, EXPORT_ERROR } = CONSTANTS
+
+    const { exportLast } = this.getData()
+
+    const lifecycle = exportLast.lifecycle
+    // Determine response...
+    if (lifecycle === EXPORT_SUCCESS) {
+      // Stops polling
+      return 1
+    }
+
+    if (lifecycle === EXPORT_ERROR) {
+      // Stops polling
+      return 2
+    }
+
+    if (this.isPolling === false) {
+      // Stops polling
+      return 3
+    }
+
+    // Continues polling
+    return 0
   }
 
-  _stateIsInProgress() {
-    const { dialectIdData } = this._getData()
-    const { percentage } = dialectIdData
+  stateIsBrowsing = () => {
+    return (
+      <>
+        <div className="ExportDialect__group">
+          <Typography variant="subheading" component="h3">
+            Browsing previous exports
+          </Typography>
+        </div>
 
-    this._getProgress()
+        <div className="ExportDialect__group">{this.getExportedFiles()}</div>
+
+        <div className="ExportDialect__buttonGroup">
+          <FVButton
+            className="ExportDialect__button"
+            color="secondary"
+            variant="outlined"
+            onClick={() => {
+              this.setState({
+                isBrowsing: false,
+              })
+            }}
+          >
+            {'< Back'}
+          </FVButton>
+        </div>
+      </>
+    )
+  }
+  stateIsError = () => {
+    const { exportLast } = this.getData()
+
+    const { message } = exportLast
+    return (
+      <>
+        <div className="ExportDialect__group">
+          <Typography variant="subheading" component="h2" gutterBottom>
+            The export failed.
+          </Typography>
+
+          <Typography variant="subheading" component="h3" gutterBottom>
+            Details
+          </Typography>
+          <Typography variant="body1">{message}</Typography>
+        </div>
+
+        {this.getButtons()}
+      </>
+    )
+  }
+  stateIsInProgress = () => {
+    const { exportLast, timestamp } = this.getData()
+
+    const { percentage = 0 } = exportLast
+
+    if (this.isPolling === false) {
+      this.isPolling = true
+
+      this.pollServer(this.pollServerRegulator).then(
+        () => {
+          // good
+          this.isPolling = false
+        },
+        (error) => {
+          // bad
+          this.isPolling = false
+          this.props.exportDialectGenericError(exportLast, error.message)
+        }
+      )
+    }
+
+    const progressValue = selectn(['fvexport:progressValue'], exportLast)
+    const progressString = selectn(['fvexport:progressString'], exportLast)
 
     return (
-      <div>
+      <>
         <div style={{ backgroundColor: 'green', width: `${percentage}%`, height: '2px' }} />
-        <p>The file is being created.</p>
-      </div>
+        <div className="ExportDialect__group">
+          <Typography variant="subheading">Export in progress...</Typography>
+        </div>
+
+        {this.getButtons()}
+
+        <div className="ExportDialect__group">
+          <Typography variant="subheading" component="h3" gutterBottom>
+            DEBUG
+          </Typography>
+          <Typography variant="caption">Status: {progressString}</Typography>
+          <Typography variant="caption">Progress: {progressValue}</Typography>
+          <Typography variant="caption">Timestamp: {timestamp}</Typography>
+        </div>
+      </>
     )
   }
 
-  _stateIsNotStarted() {
+  stateIsDefault = () => {
     return (
-      <div>
-        <p>Generate a file of this dialect for printing or use offline.</p>
-        <button type="button" onClick={this._exportDialectRequest}>
-          Generate export file
-        </button>
-      </div>
+      <>
+        <div className="ExportDialect__group">
+          <Typography variant="subheading">Create a file of this page for printing or use offline.</Typography>
+        </div>
+
+        {this.getButtons()}
+      </>
     )
   }
 
-  _stateIsSuccess() {
-    const { dialectIdData } = this._getData()
-    const { ExportDialectFileUrl, ExportDialectFileName } = dialectIdData
-    const content = (
-      <div>
-        <p>
-          The file is available for download:
-          <a href={ExportDialectFileUrl} style={{ display: 'block', wordBreak: 'break-word' }}>
-            {ExportDialectFileName}
-          </a>
-        </p>
-      </div>
+  stateIsSuccess = () => {
+    const exportedFiles = this.getExportedFiles()
+    return (
+      <>
+        <div className="ExportDialect__group">
+          <Typography variant="subheading" gutterBottom>
+            Last exported file for this dialect
+          </Typography>
+
+          {exportedFiles[exportedFiles.length - 1]}
+        </div>
+
+        {this.getButtons()}
+      </>
     )
-    return content
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { exportDialect } = state
-
-  const { ExportDialectReducer } = exportDialect
-
+  const { document, exportDialect, navigation } = state
+  const { computeDocument } = document
+  const { route } = navigation
   return {
-    ExportDialectReducer,
+    computeDocument,
+    exportDialect,
+    routeParams: route.routeParams,
   }
 }
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  ExportDialectCheckPrevious,
-  ExportDialectRequest,
-  ExportDialectProgress,
+  exportDialectProgress,
+  exportDialectGetFormattedDocument,
+  exportDialectFVGenerateDocumentWithFormat,
+  exportDialectGenericError,
+  fetchDocument,
 }
 
 export default connect(

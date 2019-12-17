@@ -1,0 +1,11 @@
+.ExportDialect__group {
+  margin: 10px 0;
+}
+.ExportDialect__buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.ExportDialect .ExportDialect__button {
+  margin: 5px 0;
+}
