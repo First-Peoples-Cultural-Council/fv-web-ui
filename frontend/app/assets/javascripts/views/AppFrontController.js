@@ -18,7 +18,7 @@ import { WORKSPACES } from 'common/Constants'
 import { withTheme } from '@material-ui/core/styles'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { routeHasChanged, getSearchObject } from 'common/NavigationHelpers'
+import { routeHasChanged /*, getSearchObject*/ } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -111,7 +111,7 @@ export class AppFrontController extends Component {
     // NOTE: added to respond to `window.history.back()` calls
     window.addEventListener('popstate', this._handleHistoryEvent)
     // NOTE: this used to be called in `componentWillMount`
-    this._route(this.props)
+    this._route({ props: this.props })
   }
 
   componentDidUpdate(prevProps) {
@@ -136,15 +136,28 @@ export class AppFrontController extends Component {
 
     const { sortOrder: newSortOrder, sortBy: newSortBy } = this.props.search
     const { sortOrder: prevSortOrder, sortBy: prevSortBy } = prevProps.search
-    const windowLocationSearch = getSearchObject()
-    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    const windowLocationSearchSortBy = windowLocationSearch.sortBy
 
-    const sortOrderChanged = newSortOrder !== prevSortOrder || windowLocationSearchSortOrder != newSortOrder
-    const sortByChanged = newSortBy !== prevSortBy || windowLocationSearchSortBy != newSortBy
+    // const windowLocationSearch = getSearchObject()
+    // const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
+    // const windowLocationSearchSortBy = windowLocationSearch.sortBy
+
+    const sortOrderChanged = newSortOrder !== prevSortOrder // || windowLocationSearchSortOrder != newSortOrder
+    const sortByChanged = newSortBy !== prevSortBy // || windowLocationSearchSortBy != newSortBy
 
     if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
-      this._route(this.props)
+      // console.log('AppFrontController', {
+      //   _routeHasChanged,
+      //   loggedIn,
+      //   sortOrderChanged,
+      //   sortByChanged,
+      //   routeChanged: {
+      //     prevWindowPath: encodeURI(prevProps.windowPath),
+      //     curWindowPath: encodeURI(this.props.windowPath),
+      //     prevRouteParams: prevProps.routeParams,
+      //     curRouteParams: this.props.routeParams,
+      //   },
+      // })
+      this._route({ props: this.props })
     }
   }
 
@@ -311,7 +324,7 @@ export class AppFrontController extends Component {
    * This could normally go into the render method to keep things simple,
    * however redirecting (i.e. updating state), cannot be done inside render.
    */
-  _route = (props, routesOverride = null) => {
+  _route = ({ props, routesOverride = null }) => {
     let matchedPage = null
     let _routeParams = {}
     const pathArray = props.splitWindowPath
@@ -364,6 +377,7 @@ export class AppFrontController extends Component {
     })
 
     // Match found
+    // ----------------------------------------------
     if (matchedPage !== null) {
       // Redirect if required
       if (matchedPage.has('redirects')) {
@@ -409,38 +423,35 @@ export class AppFrontController extends Component {
           props.changeSiteTheme(newTheme)
         }
       }
-      const matchReturn = {
-        matchedPage,
-        matchedRouteParams: _routeParams,
-      }
+
+      // const matchReturn = {
+      //   matchedPage,
+      //   matchedRouteParams: _routeParams,
+      // }
       // Load help
       //props.loadGuide(props.windowPath, matchReturn);
-
       // Load Navigation
       //props.loadNavigation();
 
-      // this.setState(matchReturn)
       this.props.setRouteParams({
-        ...matchReturn,
-        search: getSearchObject(),
+        matchedPage,
+        matchedRouteParams: _routeParams,
+        // search: getSearchObject(),
       })
       return
     }
+
     // No match found (i.e. 404)
+    // ----------------------------------------------
     const notFoundPage = Immutable.fromJS({
       title: PAGE_NOT_FOUND_TITLE,
       page: <PageError title={PAGE_NOT_FOUND_TITLE} body={PAGE_NOT_FOUND_BODY} />,
     })
 
-    const matchReturn = {
+    this.props.setRouteParams({
       matchedPage: notFoundPage,
       matchedRouteParams: _routeParams,
-    }
-
-    // this.setState(matchReturn)
-    this.props.setRouteParams({
-      ...matchReturn,
-      search: getSearchObject(),
+      // search: getSearchObject(),
     })
   }
 
