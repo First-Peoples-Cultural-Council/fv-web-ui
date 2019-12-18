@@ -188,14 +188,13 @@ export const isSelected = ({ selected, uid }) => {
 // ============================================
 export const sortCol = ({ newSortBy, pageSize, navigationFunc, sortOrder, sortHandler }) => {
   const page = 1
-  const url = `${windowLocationPathnameWithoutPagination()}/${pageSize}/${page}`
+  const url = `/${windowLocationPathnameWithoutPagination()}/${pageSize}/${page}`
   // Get search object, add in new sortBy & sortOrder
   const searchObj = Object.assign({}, getSearchObject(), {
     sortBy: newSortBy,
     sortOrder: sortOrder === 'asc' ? 'desc' : 'asc',
   })
-  // Smash together & update url
-  NavigationHelpers.navigate(`/${url}?${getSearchObjectAsUrlQuery(searchObj)}`, navigationFunc, false)
+  const urlWithQuery = `${url}?${getSearchObjectAsUrlQuery(searchObj)}`
 
   if (sortHandler) {
     sortHandler({
@@ -203,7 +202,12 @@ export const sortCol = ({ newSortBy, pageSize, navigationFunc, sortOrder, sortHa
       pageSize,
       sortOrder: searchObj.sortOrder,
       sortBy: searchObj.sortBy,
+      url,
+      urlWithQuery,
     })
+  } else {
+    // Update url
+    NavigationHelpers.navigate(urlWithQuery, navigationFunc, false)
   }
 }
 
