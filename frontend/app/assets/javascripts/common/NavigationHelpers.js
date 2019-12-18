@@ -282,24 +282,28 @@ export const appendPathArrayAfterLandmark = ({ pathArray, splitWindowPath, landm
 }
 
 export const getSearchObject = () => {
-  let searchParams = window.location.search || '?'
-  searchParams = searchParams.replace(/^\?/, '')
-  const searchSplit = searchParams.split('&')
+  if (window.location.search === '') {
+    return {}
+  }
+
   const search = {}
-  searchSplit.forEach((item) => {
+  const searchParams = (window.location.search || '?').replace(/^\?/, '')
+  searchParams.split('&').forEach((item) => {
     if (item !== '' && /=/.test(item)) {
       const propValue = item.split('=')
       search[propValue[0]] = propValue[1]
     }
   })
+  return search
+  /*
   return Object.assign(
     {
-      // sortBy: 'dc:title',
       sortBy: 'fv:custom_order',
       sortOrder: 'asc',
     },
     search
   )
+  */
 }
 
 export const getSearchObjectAsUrlQuery = (searchObject) => {
@@ -357,5 +361,8 @@ export const routeHasChanged = (obj = {}) => {
   }
   const immutablePrevRouteParams = Immutable.fromJS(prevRouteParams)
   const immutableCurRouteParams = Immutable.fromJS(curRouteParams)
-  return prevWindowPath !== curWindowPath || is(immutablePrevRouteParams, immutableCurRouteParams) === false
+  return (
+    encodeURI(prevWindowPath) !== encodeURI(curWindowPath) ||
+    is(immutablePrevRouteParams, immutableCurRouteParams) === false
+  )
 }
