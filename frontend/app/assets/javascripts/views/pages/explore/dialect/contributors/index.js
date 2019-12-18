@@ -273,8 +273,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   deleteContributor,
   fetchContributors,
-  setRouteParams,
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(

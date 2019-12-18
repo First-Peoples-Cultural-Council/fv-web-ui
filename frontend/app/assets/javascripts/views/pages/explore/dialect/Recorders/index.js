@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { deleteContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 import NavigationClose from '@material-ui/icons/Close'
 import NavigationCheck from '@material-ui/icons/Check'
@@ -58,12 +59,21 @@ function Recorders(props) {
 
   // HOOKS
   const [deletedUids, setDeletedUids] = useState([])
+  /*
+  NOTE: Pagination
+    The `DictionaryListWithPagination > fetcher` prop is called with pagination events.
+    `fetcher` updates `paginationRequest` via `setPaginationRequest` and the
+    `usePaginationRequest` hook below calls `NavigationHelpers.navigate` whenever
+    `paginationRequest` changes
+  */
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
+
   const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "RecordersInternationalization" */ './internationalization')
     return success.default
   })
+
   const computedData = useGetData({
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
@@ -209,6 +219,17 @@ function Recorders(props) {
           }}
           // Listview: computed data
           computedData={computedData}
+          sortHandler={async (sortData) => {
+            await props.setRouteParams({
+              search: {
+                page: sortData.page,
+                pageSize: sortData.pageSize,
+                sortOrder: sortData.sortOrder,
+                sortBy: sortData.sortBy,
+              },
+            })
+            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+          }}
           // ==================================================
           columns={getColumns()}
           cssModifier="DictionaryList--contributors"
@@ -264,6 +285,7 @@ const mapDispatchToProps = {
   deleteContributor,
   fetchContributors,
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(

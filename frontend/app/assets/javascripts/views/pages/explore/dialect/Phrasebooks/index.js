@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { deleteCategory, fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 // CUSTOM
 // ----------------------------------------
@@ -46,12 +47,21 @@ export const Phrasebooks = (props) => {
 
   // HOOKS
   const [deletedUids, setDeletedUids] = useState([])
+  /*
+  NOTE: Pagination
+    The `DictionaryListWithPagination > fetcher` prop is called with pagination events.
+    `fetcher` updates `paginationRequest` via `setPaginationRequest` and the
+    `usePaginationRequest` hook below calls `NavigationHelpers.navigate` whenever
+    `paginationRequest` changes
+  */
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
+
   const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "PhrasebooksInternationalization" */ './internationalization')
     return success.default
   })
+
   const computedData = useGetData({
     computeData: computeCategories,
     dataPath,
@@ -185,6 +195,17 @@ export const Phrasebooks = (props) => {
           }}
           // Listview: computed data
           computedData={computedData}
+          sortHandler={async (sortData) => {
+            await props.setRouteParams({
+              search: {
+                page: sortData.page,
+                pageSize: sortData.pageSize,
+                sortOrder: sortData.sortOrder,
+                sortBy: sortData.sortBy,
+              },
+            })
+            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+          }}
           // ==================================================
           columns={getColumns()}
           cssModifier="DictionaryList--contributors"
@@ -238,9 +259,10 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCategories,
   deleteCategory,
+  fetchCategories,
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(
