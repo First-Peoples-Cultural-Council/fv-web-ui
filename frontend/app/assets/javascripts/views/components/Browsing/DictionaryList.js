@@ -124,6 +124,7 @@ Called after the url was updated due to sort click:
 You would use `sortHandler` if the ancestor component needs to
 update some state/var and/or fire off an api request
 
+V2: If sortHandler is defined the url will not be updated and sortHandler will be called on sort events
 
 =============================================================================
 Pagination
@@ -261,9 +262,9 @@ const DictionaryList = (props) => {
   if (props.hasSorting) {
     columnsEnhancedWithSortBatch = generateSortTitleLargeSmall({
       columns: props.columns,
-      pageSize: props.routeParams.pageSize,
-      sortOrder: props.search.sortOrder,
-      sortBy: props.search.sortBy,
+      pageSize: props.navigationRouteRouteParams.pageSize,
+      sortOrder: props.navigationRouteSearch.sortOrder,
+      sortBy: props.navigationRouteSearch.sortBy,
       navigationFunc: props.pushWindowPath,
       sortHandler: props.sortHandler,
     })
@@ -666,8 +667,8 @@ DictionaryList.propTypes = {
   resetSearch: func,
   searchUi: array,
   // REDUX: reducers/state
-  routeParams: object.isRequired,
-  search: object.isRequired,
+  navigationRouteRouteParams: object.isRequired,
+  navigationRouteSearch: object.isRequired,
   listView: object.isRequired,
   // REDUX: actions/dispatch/func
   pushWindowPath: func.isRequired,
@@ -686,7 +687,7 @@ DictionaryList.defaultProps = {
   cols: 3,
   columns: [],
   cssModifier: '',
-  sortHandler: () => {},
+  // sortHandler: () => {},
   style: null,
   wrapperStyle: null,
   // General List
@@ -704,12 +705,9 @@ DictionaryList.defaultProps = {
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { navigation, listView } = state
-
-  const { route } = navigation
-
   return {
-    routeParams: route.routeParams,
-    search: route.search,
+    navigationRouteRouteParams: navigation.route.routeParams,
+    navigationRouteSearch: navigation.route.search,
     listView,
   }
 }
