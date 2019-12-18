@@ -9,7 +9,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
 
     /*
             Test that the default images are showing and not the new ones already.
@@ -20,7 +20,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.get('div.Header.row').should(
       'have.css',
       'background-image',
-      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
+      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/assets/images/cover.png")'
     )
 
     cy.getByText('Edit Portal').click()
@@ -59,7 +59,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
         cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
         cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
         cy.get('[name="fvlink:url"]').type(
-          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo'
+          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo'
         )
         cy.getByText('Save').click()
       })
@@ -144,13 +144,13 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.get('div.Header.row').should(
       'not.have.css',
       'background-image',
-      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
+      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/assets/images/cover.png")'
     )
 
     /*
         Test that if a user clicks cancel when editing, the changes don't save.
      */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.getByText('Edit Portal').click()
     cy.wait(500)
 
@@ -177,7 +177,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.get('div.Header.row').should(
       'not.have.css',
       'background-image',
-      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/TEst/Test/assets/images/cover.png")'
+      'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/assets/images/cover.png")'
     )
   })
 })

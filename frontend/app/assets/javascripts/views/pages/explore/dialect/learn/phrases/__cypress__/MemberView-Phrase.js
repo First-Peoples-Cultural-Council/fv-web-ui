@@ -16,7 +16,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
@@ -34,7 +34,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
             Check that the edit button does not exists
         */
     cy.queryByText('Edit phrase').should('not.exist')
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
 
     /*
             Check that the phrase does not exist in "Phrases in New Status" page.

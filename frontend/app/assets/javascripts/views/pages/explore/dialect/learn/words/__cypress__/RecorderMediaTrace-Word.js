@@ -12,13 +12,13 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.wait(500)
 
     /*
@@ -34,7 +34,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/media')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media')
     cy.wait(500)
     cy.getByText('TestWordImage').click()
     cy.getByText('Linked Words').click()
@@ -43,7 +43,7 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/media')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media')
     cy.wait(500)
     cy.getByText('TestWordVideo').click()
     cy.getByText('Linked Words').click()

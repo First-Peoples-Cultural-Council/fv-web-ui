@@ -15,13 +15,13 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.login({
       userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a word
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.getByText('Create New Word', { exact: false }).click()
@@ -97,7 +97,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     /*
                 Checking to see if the word now exists.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
     cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
@@ -133,7 +133,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Check that edit word button is visible and functional.
                 Check that the cancel button when editing word works.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
     cy.wait(500)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
