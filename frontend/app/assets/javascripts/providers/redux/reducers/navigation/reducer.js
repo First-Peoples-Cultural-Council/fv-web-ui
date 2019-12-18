@@ -158,7 +158,8 @@ export const navigationReducer = combineReducers({
         _matchedRouteParams.page = (_matchedRouteParams.page || '1').split('?')[0]
         const _routeParams = Object.assign({}, DEFAULT_ROUTE_PARAMS, _matchedRouteParams)
         // search defaults: sortBy, sortOrder
-        const _search = Object.assign({}, DEFAULT_SEARCH, search)
+        const _search = Object.assign({}, state.search, search)
+        // console.log('SET_ROUTE_PARAMS', _search)
 
         return {
           ...state,
