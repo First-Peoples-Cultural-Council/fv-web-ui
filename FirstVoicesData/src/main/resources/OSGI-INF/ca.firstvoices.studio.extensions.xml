@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <component name="ca.firstvoices.studio.extensions" version="1.0.0">
+
     <require>org.nuxeo.runtime.started</require>
+    <require>org.nuxeo.ecm.platform.actions</require>
+    <require>org.nuxeo.ecm.platform.picture.filemanager.contrib</require>
+    <require>org.nuxeo.ecm.platform.video.filemanager.contrib</require>
+    <require>org.nuxeo.ecm.platform.audio.filemanager.contrib</require>
+
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
         <schema name="folder_old" prefix="folder_old" override="true" src="data/schemas/folder_old.xsd"/>
         <schema name="domain_schema" prefix="domain_schema" override="true" src="data/schemas/domain_schema.xsd"/>
@@ -24198,7 +24204,7 @@ function run(input, params) {
     </userManager>
 
 </extension>
-    <require>org.nuxeo.ecm.platform.actions</require>
+
     <extension point="providers" target="org.nuxeo.ecm.platform.query.api.PageProviderService">
 
         <!-- List of portals with dialect and portal enrichers for "Explore Languages" view, excluding 'Versions' of the same doc-->
@@ -24442,9 +24448,7 @@ function run(input, params) {
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
-    </extension>  <require>org.nuxeo.ecm.platform.picture.filemanager.contrib</require>
-    <require>org.nuxeo.ecm.platform.video.filemanager.contrib</require>
-    <require>org.nuxeo.ecm.platform.audio.filemanager.contrib</require>
+    </extension>
     <extension target="org.nuxeo.ecm.platform.filemanager.service.FileManagerService" point="plugins">
 
         <plugin name="Imageplugin" merge="true" docType="FVPicture"/>
