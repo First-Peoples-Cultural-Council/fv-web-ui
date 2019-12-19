@@ -221,7 +221,6 @@ import Media from 'react-media'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setListViewMode } from 'providers/redux/reducers/listView'
 
 // Components
 import {
@@ -249,11 +248,16 @@ import '!style-loader!css-loader!./DictionaryList.css'
 // ===============================================================
 // DictionaryList
 // ===============================================================
+const VIEWMODE_DEFAULT = 0
+const VIEWMODE_FLASHCARD = 1
+const VIEWMODE_COMPACT = 2
+
 const DictionaryList = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
-
   let columnsEnhancedWithSortBatch = props.columns
+
+  const [viewMode, setViewMode] = useState(0)
 
   // ============= MQ
   const [mediaQuery, setMediaQuery] = useState({})
@@ -286,9 +290,6 @@ const DictionaryList = (props) => {
     })
   }
   // ============= BATCH
-
-  const { listView } = props
-  const { mode: viewMode, decoder: viewModeDecoder } = listView
 
   const items = props.filteredItems || props.items
 
@@ -342,8 +343,7 @@ const DictionaryList = (props) => {
         getViewButtons({
           mediaQueryIsSmall: mediaQuery.small,
           viewMode,
-          viewModeDecoder,
-          clickHandler: props.setListViewMode,
+          clickHandler: setViewMode,
         })}
 
       <Media
@@ -370,7 +370,7 @@ const DictionaryList = (props) => {
           // =========================================
           //  Flashcard mode
           // -----------------------------------------
-          if (viewMode === viewModeDecoder.flashcard) {
+          if (viewMode === VIEWMODE_FLASHCARD) {
             // TODO: SPECIFY FlashcardList PROPS
             content = <FlashcardList {...props} />
             if (props.hasPagination) {
@@ -382,7 +382,7 @@ const DictionaryList = (props) => {
 
           //  Compact mode
           // -----------------------------------------
-          if (viewMode === viewModeDecoder.compact) {
+          if (viewMode === VIEWMODE_COMPACT) {
             return getCompactList(getCompactListArg)
           }
 
@@ -572,19 +572,19 @@ export function getCompactList({ dictionaryListSmallScreenProps = {}, hasPaginat
 
 // getViewButtons
 // ------------------------------------
-function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHandler }) {
+function getViewButtons({ mediaQueryIsSmall, viewMode, clickHandler }) {
   // NOTE: hiding view mode button when on small screens
   // NOTE: mediaQuery set in render
   let compactView = null
   if (mediaQueryIsSmall === false) {
     compactView =
-      viewMode === viewModeDecoder.compact ? (
+      viewMode === VIEWMODE_COMPACT ? (
         <FVButton
           variant="contained"
           className="DictionaryList__viewModeButton"
           color="primary"
           onClick={() => {
-            clickHandler(viewModeDecoder.default)
+            clickHandler(VIEWMODE_DEFAULT)
           }}
         >
           Cancel compact view
@@ -594,7 +594,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
           variant="contained"
           className="DictionaryList__viewModeButton"
           onClick={() => {
-            clickHandler(viewModeDecoder.compact)
+            clickHandler(VIEWMODE_COMPACT)
           }}
         >
           Compact view
@@ -605,13 +605,13 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
     <div className="DictionaryList__viewModeGroup">
       {compactView}
 
-      {viewMode === viewModeDecoder.flashcard ? (
+      {viewMode === VIEWMODE_FLASHCARD ? (
         <FVButton
           variant="contained"
           color="primary"
           className="DictionaryList__viewModeButton"
           onClick={() => {
-            clickHandler(viewModeDecoder.default)
+            clickHandler(VIEWMODE_DEFAULT)
           }}
         >
           Cancel flashcard view
@@ -621,7 +621,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, viewModeDecoder, clickHan
           variant="contained"
           className="DictionaryList__viewModeButton"
           onClick={() => {
-            clickHandler(viewModeDecoder.flashcard)
+            clickHandler(VIEWMODE_FLASHCARD)
           }}
         >
           Flashcard view
@@ -649,7 +649,7 @@ DictionaryList.propTypes = {
   columns: array.isRequired, // Col names for Data
   computedData: object,
   cssModifier: string,
-  dictionaryListSmallScreenTemplate: number,
+  dictionaryListSmallScreenTemplate: func,
   fields: instanceOf(Map),
   filteredItems: oneOfType([array, instanceOf(List)]),
   hasSorting: bool,
@@ -715,7 +715,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   pushWindowPath,
-  setListViewMode,
 }
 
 export default connect(
