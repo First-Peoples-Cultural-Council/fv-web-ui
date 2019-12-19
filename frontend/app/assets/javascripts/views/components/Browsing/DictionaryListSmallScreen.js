@@ -41,6 +41,18 @@ export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren = 
     ) : null
   return toReturn
 }
+export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender = ({
+  cellRender,
+  // column,
+  className = '',
+}) => {
+  const children = selectn('props.children', cellRender) || []
+  const toReturn =
+    cellRender && cellRender !== '' && cellRender !== null && children.length > 0 ? (
+      <span className={className}>{cellRender}</span>
+    ) : null
+  return toReturn
+}
 
 export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRender, className = '' }) => {
   return cellRender ? <div className={`DictionaryListSmallScreen__audioGroup ${className}`}>{cellRender}</div> : null
@@ -66,6 +78,10 @@ const DictionaryListSmallScreen = (props) => {
         const cellRender = typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
         const colName = column.name
 
+        const classNameDataItemColumn = `${classNameDataItem} ${
+          column.classNameModifer ? `${classNameDataItem}--${column.classNameModifer}` : ''
+        }`
+
         if (colName === firstName) {
           _firstName = cellRender
         }
@@ -76,14 +92,14 @@ const DictionaryListSmallScreen = (props) => {
         // ------------------------------------------------
         switch (column.columnDataTemplate) {
           case dictionaryListSmallScreenColumnDataTemplate.cellRender:
-            templateData[colName] = <span className={classNameDataItem}>{cellRender}</span>
+            templateData[colName] = <span className={classNameDataItemColumn}>{cellRender}</span>
             break
           case dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography:
             templateData[colName] = (
               <Typography
                 variant={`${column.typographyVariant ? column.typographyVariant : 'title'}`}
                 component="h2"
-                className={classNameDataItem}
+                className={classNameDataItemColumn}
               >
                 {cellRender}
               </Typography>
@@ -97,13 +113,13 @@ const DictionaryListSmallScreen = (props) => {
                 tmplData = column.columnDataTemplateCustom({
                   cellRender,
                   column,
-                  className: classNameDataItem,
+                  className: classNameDataItemColumn,
                 })
               } else {
                 // Fallback to `columnTitleCellRender` template if `columnDataTemplateCustom` is missing
                 tmplData =
                   cellRender && cellRender !== '' && cellRender !== null ? (
-                    <div className={classNameDataItem}>
+                    <div className={classNameDataItemColumn}>
                       <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
                     </div>
                   ) : null
@@ -118,7 +134,7 @@ const DictionaryListSmallScreen = (props) => {
             // Note: insert data if exists and not an empty string
             templateData[colName] =
               cellRender && cellRender !== '' && cellRender !== null ? (
-                <div className={classNameDataItem}>
+                <div className={classNameDataItemColumn}>
                   <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
                 </div>
               ) : null
@@ -133,7 +149,7 @@ const DictionaryListSmallScreen = (props) => {
 
       templateData[firstLastName] =
         _firstName || _lastName ? (
-          <div className={classNameDataItem}>
+          <div className={`${classNameDataItem} ${classNameDataItem}--firstNameLastName`}>
             <strong>Name:</strong> {`${_firstName || ''} ${_lastName || ''}`}
           </div>
         ) : null
@@ -147,6 +163,7 @@ const DictionaryListSmallScreen = (props) => {
         props.dictionaryListSmallScreenTemplate({ templateData, item: _item })
       ) : (
         <>
+          {templateData.rowClick}
           {templateData.type}
           {templateData.title}
           <div className="DictionaryListSmallScreen__group">

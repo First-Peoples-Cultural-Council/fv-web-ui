@@ -48,12 +48,39 @@
 .DictionaryListSmallScreen__groupContainer {
   display: flex;
 }
-.DictionaryListSmallScreen__group {
+.DictionaryListSmallScreen__group,
+.DictionaryListSmallScreen__groupPrimary,
+.DictionaryListSmallScreen__groupSecondary {
   display: flex;
   justify-content: flex-start;
 }
+.DictionaryListSmallScreen__groupPrimary,
+.DictionaryListSmallScreen__groupSecondary {
+  flex-wrap: wrap;
+}
+.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__groupSecondary {
+  justify-content: space-between;
+}
+.DictionaryListSmallScreen__dataItem .DictionaryList__link.DictionaryList__link--indigenous {
+  padding: 5px;
+  font-size: 1.8rem;
+}
+.DictionaryListSmallScreen__dataItem .DictionaryList__linkEdit {
+  padding: 5px;
+  min-width: auto;
+  border-radius: 2px;
+}
+.DictionaryListSmallScreen__groupPrimary .DictionaryListSmallScreen__dataItem {
+  display: flex;
+  align-items: center;
+}
 .DictionaryListSmallScreen__group .DictionaryListSmallScreen__dataItem {
   padding: 10px 20px 10px 0;
+}
+.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__dataItem {
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
 }
 .DictionaryListSmallScreen__definitionsGroup {
   width: 25%;

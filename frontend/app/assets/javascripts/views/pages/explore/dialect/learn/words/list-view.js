@@ -43,7 +43,7 @@ import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
-  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
@@ -128,7 +128,7 @@ class WordsListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('word', 'Word', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data) => {
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
 
@@ -157,6 +157,7 @@ class WordsListView extends DataListView {
                     variant="flat"
                     size="small"
                     component="a"
+                    className="DictionaryList__linkEdit"
                     href={hrefEdit}
                     onClick={(e) => {
                       e.preventDefault()
@@ -171,7 +172,7 @@ class WordsListView extends DataListView {
 
             return (
               <>
-                <a className="DictionaryList__link" onClick={clickHandler} href={href}>
+                <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                   {v}
                 </a>
                 {editButton}
@@ -185,7 +186,7 @@ class WordsListView extends DataListView {
           name: 'fv:definitions',
           title: intl.trans('definitions', 'Definitions', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
           render: (v, data, cellProps) => {
             return UIHelpers.renderComplexArrayRow(selectn(`properties.${cellProps.name}`, data), (entry, i) => {
               if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
@@ -419,8 +420,8 @@ class WordsListView extends DataListView {
               which then calls `WordsListView's > fetchData()` which gets the new
               data via `this._fetchListViewData`
 
-              _handleRefetch2 is called to update the url
-              eg: A sort event happens on page 3, `_handleRefetch2` resets it to page 1
+              Also, _handleRefetch2 is called to update the url, eg: A sort event
+              happens when on page 3 and `_handleRefetch2` resets it to page 1
               */
               await this.props.setRouteParams({
                 search: {
@@ -439,6 +440,43 @@ class WordsListView extends DataListView {
               })
             }}
             type={'FVWord'}
+            dictionaryListSmallScreenTemplate={({ templateData }) => {
+              return (
+                <div className="DictionaryListSmallScreen__words">
+                  <div className="DictionaryListSmallScreen__groupPrimary">
+                    {templateData.related_pictures}
+                    {templateData.title}
+                  </div>
+
+                  <div className="DictionaryListSmallScreen__groupSecondary">
+                    {templateData['fv:definitions']}
+                    <div className="DictionaryListSmallScreen__groupSecondary">
+                      {templateData.related_audio}
+                      {templateData['dc:description']}
+
+                      {templateData['fv-word:part_of_speech']}
+
+                      {templateData['thumb:thumbnail']}
+
+                      {templateData['fv-word:categories']}
+                      {templateData.parent}
+                      {templateData['fv-phrase:phrase_books']}
+
+                      {templateData.username}
+
+                      {templateData.email}
+
+                      {templateData['fvlink:url']}
+
+                      {templateData['dc:modified']}
+                      {templateData['dc:created']}
+                      {templateData.state}
+                      {templateData.actions}
+                    </div>
+                  </div>
+                </div>
+              )
+            }}
             // List View
             hasViewModeButtons={this.props.hasViewModeButtons}
             rowClickHandler={this.props.rowClickHandler}

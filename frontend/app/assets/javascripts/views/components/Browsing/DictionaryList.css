@@ -70,7 +70,8 @@
 }
 
 /* Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter */
-.DictionaryList__data--title .DictionaryList__link {
+.DictionaryList__data--title .DictionaryList__link,
+.DictionaryList__link.DictionaryList__link--indigenous {
   border-bottom: none;
   text-align: center;
   text-decoration: none;
@@ -84,7 +85,8 @@
   font-size: 2rem;
   line-height: 1.3;
 }
-.DictionaryList__data--title .DictionaryList__link:hover {
+.DictionaryList__data--title .DictionaryList__link:hover,
+.DictionaryList__link.DictionaryList__link--indigenous:hover {
   background-color: #fbe8e8;
   color: #820000;
   border-color: #820000;
