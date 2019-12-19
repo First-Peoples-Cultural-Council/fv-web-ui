@@ -255,7 +255,7 @@ const VIEWMODE_COMPACT = 2
 const DictionaryList = (props) => {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
-  let columnsEnhancedWithSortBatch = props.columns
+  let columnsEnhanced = [...props.columns]
 
   const [viewMode, setViewMode] = useState(0)
 
@@ -264,8 +264,8 @@ const DictionaryList = (props) => {
 
   // ============= SORT
   if (props.hasSorting) {
-    columnsEnhancedWithSortBatch = generateSortTitleLargeSmall({
-      columns: props.columns,
+    columnsEnhanced = generateSortTitleLargeSmall({
+      columns: columnsEnhanced,
       pageSize: props.navigationRouteRouteParams.pageSize,
       sortOrder: props.navigationRouteSearch.sortOrder,
       sortBy: props.navigationRouteSearch.sortBy,
@@ -275,11 +275,20 @@ const DictionaryList = (props) => {
   }
   // ============= SORT
 
+  // ============= ROWCLICK
+  if (props.rowClickHandler) {
+    columnsEnhanced = generateRowClick({
+      rowClickHandler: props.rowClickHandler,
+      columns: columnsEnhanced,
+    })
+  }
+  // ============= ROWCLICK
+
   // ============= BATCH
   if (props.batchConfirmationAction) {
-    columnsEnhancedWithSortBatch = generateBatchColumn({
+    columnsEnhanced = generateBatchColumn({
       batchConfirmationAction: props.batchConfirmationAction,
-      columnsEnhancedWithSortBatch,
+      columns: columnsEnhanced,
       computedData: props.computedData,
       copyBtnConfirm: props.batchFooterBtnConfirm,
       copyBtnDeny: props.batchFooterBtnDeny,
@@ -319,7 +328,7 @@ const DictionaryList = (props) => {
       // List: small screen
       // --------------------
       items: props.items,
-      columns: columnsEnhancedWithSortBatch,
+      columns: columnsEnhanced,
       dictionaryListSmallScreenTemplate: props.dictionaryListSmallScreenTemplate,
     },
     hasPagination: props.hasPagination,
@@ -410,7 +419,7 @@ const DictionaryList = (props) => {
               metadata: props.metadata,
               // List: large screen
               // --------------------
-              columns: columnsEnhancedWithSortBatch,
+              columns: columnsEnhanced,
               cssModifier: props.cssModifier,
               filteredItems: props.filteredItems,
               items: props.items,
@@ -500,7 +509,7 @@ function generateSortTitleLargeSmall({ columns = [], pageSize, sortOrder, sortBy
 // ------------------------------------
 function generateBatchColumn({
   batchConfirmationAction,
-  columnsEnhancedWithSortBatch,
+  columns,
   computedData,
   copyBtnConfirm,
   copyBtnDeny,
@@ -528,7 +537,7 @@ function generateBatchColumn({
       },
       footer: () => {
         return batchFooter({
-          colSpan: columnsEnhancedWithSortBatch.length + 1,
+          colSpan: columns.length + 1,
           confirmationAction: () => {
             deleteSelected({
               batchConfirmationAction,
@@ -553,7 +562,35 @@ function generateBatchColumn({
         })
       },
     },
-    ...columnsEnhancedWithSortBatch,
+    ...columns,
+  ]
+}
+
+// generateRowClick
+// ------------------------------------
+function generateRowClick({ rowClickHandler, columns }) {
+  return [
+    {
+      name: 'rowClick',
+      columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
+      title: '',
+      render: (cellValue, item) => {
+        return (
+          <FVButton
+            type="button"
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={() => {
+              rowClickHandler(item)
+            }}
+          >
+            Select
+          </FVButton>
+        )
+      },
+    },
+    ...columns,
   ]
 }
 

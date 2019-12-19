@@ -81,15 +81,11 @@ const DictionaryListLargeScreen = (props) => {
         {trHeader}
 
         {items.map((item, i) => {
-          const _item = item
           return (
             <tr
               key={i}
               data-testid="DictionaryList__row"
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
-              onClick={() => {
-                props.rowClickHandler(_item)
-              }}
             >
               {props.columns.map((column, j) => {
                 const cellValue = selectn(column.name, item)

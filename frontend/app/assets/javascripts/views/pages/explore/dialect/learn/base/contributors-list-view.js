@@ -26,7 +26,6 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 import selectn from 'selectn'
-import FVButton from 'views/components/FVButton'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -187,20 +186,10 @@ class ContributorsListView extends DataListView {
             columns={this.state.columns}
             data={computeContributors}
             dialect={selectn('response', computeDialect2)}
-            dictionaryListSmallScreenTemplate={({ templateData, item }) => {
+            dictionaryListSmallScreenTemplate={({ templateData }) => {
               return (
                 <span className="DictionaryListSmallScreen__ContributorsListView">
-                  <FVButton
-                    type="button"
-                    variant="contained"
-                    size="small"
-                    color="primary"
-                    onClick={() => {
-                      this._onEntryNavigateRequest(item)
-                    }}
-                  >
-                    Select
-                  </FVButton>
+                  {templateData.rowClick}
                   {templateData.title}
                   {templateData['dc:description']}
                   {templateData.state}
