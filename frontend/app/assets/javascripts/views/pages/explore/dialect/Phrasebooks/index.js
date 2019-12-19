@@ -91,7 +91,7 @@ export const Phrasebooks = (props) => {
       {
         name: 'title',
         title: copy.title.th,
-        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
         render: (v, data) => {
           const phrasebookDetailUrl = `/${siteTheme}${dialect_path}/phrasebook/${data.uid || ''}`
           return (

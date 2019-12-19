@@ -92,7 +92,7 @@ function Contributors(props) {
       {
         name: 'title',
         title: copy.title.th,
-        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
         render: (value, data) => {
           const uid = data.uid
           const url = `/${siteTheme}${dialect_path}/contributor/${uid}`

@@ -128,7 +128,7 @@ DocumentListView.propTypes = {
   // cssModifier: string,
   data: object,
   dialect: object,
-  dictionaryListSmallScreenTemplate: number,
+  dictionaryListSmallScreenTemplate: func,
   disablePageSize: bool,
   flashcard: bool,
   flashcardTitle: string,

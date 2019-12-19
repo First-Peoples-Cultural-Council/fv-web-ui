@@ -155,13 +155,11 @@ export class BrowseComponent extends Component {
           'first',
           [selectn('properties.dc:title', dialect)]
         )}:`
-        // Note: ContributorsListView has a rowClickHandler that checks for a props.action fn()
+        // Note: ContributorsListView sets DictionaryList props (eg: hasSorting, rowClickhandler, etc)
         view = (
           <ContributorsListView
             action={this._handleSelectElement}
             dialect={dialect}
-            hasSorting={false}
-            hasViewModeButtons={false}
             routeParams={{
               siteTheme: 'explore',
               area: WORKSPACES,

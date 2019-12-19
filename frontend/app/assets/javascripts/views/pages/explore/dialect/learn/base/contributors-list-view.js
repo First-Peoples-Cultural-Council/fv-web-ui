@@ -23,9 +23,10 @@ import { connect } from 'react-redux'
 import { fetchContributors } from 'providers/redux/reducers/fvContributor'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 import selectn from 'selectn'
-
+import FVButton from 'views/components/FVButton'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -54,7 +55,7 @@ class ContributorsListView extends DataListView {
     gridCols: number,
     gridListView: bool,
     routeParams: object.isRequired,
-    dictionaryListSmallScreenTemplate: number,
+    dictionaryListSmallScreenTemplate: func,
     // REDUX: reducers/state
     properties: object.isRequired,
     windowPath: string.isRequired,
@@ -88,12 +89,14 @@ class ContributorsListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('contributor', 'Contributor', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
+          // sortBy: 'title',
           render: (v /*, data, cellProps*/) => v,
         },
         {
           name: 'dc:description',
           title: intl.trans('short_proflile', 'Short Profile', 'words'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data /*, cellProps*/) => selectn('properties.dc:description', data),
         },
       ],
@@ -111,12 +114,13 @@ class ContributorsListView extends DataListView {
 
     // Bind methods to 'this'
     ;[
-      '_onNavigateRequest',
+      '_onNavigateRequest', // NOTE: Comes from DataListView
       '_onEntryNavigateRequest',
-      '_handleRefetch',
-      '_handleSortChange',
-      '_handleColumnOrderChange',
-      '_resetColumns',
+      '_handleRefetch', // NOTE: Comes from DataListView
+      '_handleRefetch2', // NOTE: Comes from DataListView
+      '_handleSortChange', // NOTE: Comes from DataListView
+      '_handleColumnOrderChange', // NOTE: Comes from DataListView
+      '_resetColumns', // NOTE: Comes from DataListView
       '_fetchListViewData',
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
@@ -183,17 +187,82 @@ class ContributorsListView extends DataListView {
             columns={this.state.columns}
             data={computeContributors}
             dialect={selectn('response', computeDialect2)}
-            dictionaryListSmallScreenTemplate={this.props.dictionaryListSmallScreenTemplate}
+            dictionaryListSmallScreenTemplate={({ templateData, item }) => {
+              return (
+                <span className="DictionaryListSmallScreen__ContributorsListView">
+                  <FVButton
+                    type="button"
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                    onClick={() => {
+                      this._onEntryNavigateRequest(item)
+                    }}
+                  >
+                    Select
+                  </FVButton>
+                  {templateData.title}
+                  {templateData['dc:description']}
+                  {templateData.state}
+                </span>
+              )
+            }}
             gridCols={this.props.gridCols}
             gridListView={this.props.gridListView}
+            hasSorting={false}
             hasViewModeButtons={false}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
-            refetcher={this._handleRefetch}
+            refetcher={(dataGridProps, page, pageSize) => {
+              this._handleRefetch2({
+                page,
+                pageSize,
+                preserveSearch: true,
+              })
+            }}
             rowClickHandler={(row) => {
               this._onEntryNavigateRequest(row)
             }}
             type="FVContributor"
+            // TODO: Page rerenders on sort, cloasing the modal
+            // sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
+            //   /*
+            //   NOTE: TOWER OF INDIRECTION!
+
+            //   Since `ContributorsListView extends DataListView`...
+
+            //   `DataListView` detects the sort change via it's `componentDidUpdate`
+            //   which then calls `WordsListView's > fetchData()` which gets the new
+            //   data via `this._fetchListViewData`
+
+            //   _handleRefetch2 is called to update the url
+            //   eg: A sort event happens on page 3, `_handleRefetch2` resets it to page 1
+            //   */
+            //   this.props.setRouteParams({
+            //     search: {
+            //       pageSize,
+            //       page,
+            //       sortBy,
+            //       sortOrder,
+            //     },
+            //   })
+            //   this._handleRefetch2({
+            //     page,
+            //     pageSize,
+            //     preserveSearch: true,
+            //     sortBy,
+            //     sortOrder,
+            //   })
+            // }}
+            // TODO: Search
+            // handleSearch={(a, b, c, d, e, f) => {
+            //   console.log('handleSearch', { a, b, c, d, e, f })
+            // }}
+            // hasSearch
+            // resetSearch={(a, b, c, d, e, f) => {
+            //   console.log('resetSearch', { a, b, c, d, e, f })
+            // }}
+            // searchUi={this.props.searchUi}
           />
         )}
       </PromiseWrapper>
@@ -205,7 +274,7 @@ class ContributorsListView extends DataListView {
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvContributor, fvDialect, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeContributors } = fvContributor
   const { computeDialect2 } = fvDialect
@@ -215,6 +284,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeContributors,
     computeDialect2,
     computeLogin,
+    navigationRouteSearch: route.search,
     properties,
     splitWindowPath,
     windowPath: _windowPath,
@@ -226,6 +296,7 @@ const mapDispatchToProps = {
   fetchContributors,
   fetchDialect2,
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(

@@ -19,6 +19,14 @@
 .DictionaryListSmallScreen__batchSibling {
   flex-grow: 1;
 }
+.DictionaryListSmallScreen__ContributorsListView {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.DictionaryListSmallScreen__ContributorsListView .DictionaryListSmallScreen__dataItem {
+  padding: 5px;
+}
 .DictionaryListSmallScreen__sortHeading {
   margin: 5px;
 }
@@ -29,11 +37,12 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+  border-top: 1px dotted #a8a8a8;
 }
 .DictionaryListSmallScreen__listItem {
   background-color: #fff;
   border-bottom: 1px dotted #a8a8a8;
-  padding: 20px 10px;
+  padding: 5px;
   margin: 0;
 }
 .DictionaryListSmallScreen__groupContainer {

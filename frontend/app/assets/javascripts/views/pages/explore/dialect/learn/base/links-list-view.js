@@ -89,7 +89,7 @@ class LinksListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('link', 'Link', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v /*, data, cellProps*/) => v,
         },
         {

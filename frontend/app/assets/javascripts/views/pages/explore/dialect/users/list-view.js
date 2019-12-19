@@ -89,7 +89,7 @@ export class UsersListView extends DataListView {
       columns: [
         {
           name: 'username',
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           title: intl.trans('views.pages.explore.dialect.users.username', 'Username', 'first'),
         },
         {

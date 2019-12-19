@@ -22,7 +22,7 @@ import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
 
 export const dictionaryListSmallScreenColumnDataTemplate = {
   cellRender: 0,
-  cellRenderHeading: 1,
+  cellRenderTypography: 1,
   columnTitleCellRender: 2,
   custom: 3,
 }
@@ -78,9 +78,13 @@ const DictionaryListSmallScreen = (props) => {
           case dictionaryListSmallScreenColumnDataTemplate.cellRender:
             templateData[colName] = <span className={classNameDataItem}>{cellRender}</span>
             break
-          case dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading:
+          case dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography:
             templateData[colName] = (
-              <Typography variant="title" component="h2" className={classNameDataItem}>
+              <Typography
+                variant={`${column.typographyVariant ? column.typographyVariant : 'title'}`}
+                component="h2"
+                className={classNameDataItem}
+              >
                 {cellRender}
               </Typography>
             )
@@ -140,7 +144,7 @@ const DictionaryListSmallScreen = (props) => {
 
       // Use a provided template, or built-in
       const dataMain = props.dictionaryListSmallScreenTemplate ? (
-        props.dictionaryListSmallScreenTemplate(templateData)
+        props.dictionaryListSmallScreenTemplate({ templateData, item: _item })
       ) : (
         <>
           {templateData.type}
@@ -187,9 +191,6 @@ const DictionaryListSmallScreen = (props) => {
           className={`DictionaryListSmallScreen__listItem ${
             inc % 2 !== 0 ? 'DictionaryListSmallScreen__listItem--alt' : ''
           }`}
-          onClick={() => {
-            props.rowClickHandler(_item)
-          }}
         >
           {markup}
         </li>
@@ -255,7 +256,6 @@ DictionaryListSmallScreen.propTypes = {
   columns: array,
   hasSorting: bool,
   items: array,
-  rowClickHandler: func,
   type: string,
   dictionaryListSmallScreenTemplate: func,
 }
@@ -264,7 +264,6 @@ DictionaryListSmallScreen.defaultProps = {
   columns: [],
   hasSorting: true,
   items: [],
-  rowClickHandler: () => {},
 }
 
 export default DictionaryListSmallScreen

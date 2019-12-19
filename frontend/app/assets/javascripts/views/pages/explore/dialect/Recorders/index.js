@@ -103,7 +103,7 @@ function Recorders(props) {
       {
         name: 'title',
         title: copy.title.th,
-        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
         render: (value, data) => {
           const url = `/${siteTheme}${dialect_path}/recorder/${data.uid}`
 

@@ -23,6 +23,7 @@ import { connect } from 'react-redux'
 import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 import selectn from 'selectn'
 
@@ -127,7 +128,7 @@ class WordsListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('word', 'Word', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v, data) => {
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
 
@@ -309,12 +310,14 @@ class WordsListView extends DataListView {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
     const searchObj = getSearchObject()
+
     this._fetchListViewData(
       newProps,
       newProps.DEFAULT_PAGE,
       newProps.DEFAULT_PAGE_SIZE,
-      searchObj.sortOrder || newProps.DEFAULT_SORT_TYPE,
-      searchObj.sortBy || newProps.DEFAULT_SORT_COL
+      // 1st: redux values, 2nd: url search query, 3rd: defaults
+      this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || newProps.DEFAULT_SORT_TYPE,
+      this.props.navigationRouteSearch.sortBy || searchObj.sortBy || newProps.DEFAULT_SORT_COL
     )
   }
 
@@ -406,21 +409,33 @@ class WordsListView extends DataListView {
                 preserveSearch: true,
               })
             }}
-            sortHandler={async ({
-              page = '1',
-              pageSize = '10',
-              sortBy = 'fv:custom_order',
-              sortOrder = 'asc',
-            } = {}) => {
-              await this._fetchListViewData(this.props, page, pageSize, sortOrder, sortBy)
+            sortHandler={async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+              /*
+              NOTE: TOWER OF INDIRECTION!
 
-              const newSortInfo = {
-                currentSortCols: sortBy,
-                currentSortType: sortOrder,
-              }
+              Since `WordsListView extends DataListView`...
 
-              this.setState({
-                sortInfo: newSortInfo,
+              `DataListView` detects the sort change via it's `componentDidUpdate`
+              which then calls `WordsListView's > fetchData()` which gets the new
+              data via `this._fetchListViewData`
+
+              _handleRefetch2 is called to update the url
+              eg: A sort event happens on page 3, `_handleRefetch2` resets it to page 1
+              */
+              await this.props.setRouteParams({
+                search: {
+                  pageSize,
+                  page,
+                  sortBy,
+                  sortOrder,
+                },
+              })
+              this._handleRefetch2({
+                page,
+                pageSize,
+                preserveSearch: true,
+                sortBy,
+                sortOrder,
               })
             }}
             type={'FVWord'}
@@ -444,7 +459,7 @@ class WordsListView extends DataListView {
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
 
-  const { properties } = navigation
+  const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeWords } = fvWord
   const { computeDialect2 } = fvDialect
@@ -455,6 +470,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computeWords,
     properties,
+    navigationRouteSearch: route.search,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -465,6 +481,7 @@ const mapDispatchToProps = {
   fetchWords,
   fetchDialect2,
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(

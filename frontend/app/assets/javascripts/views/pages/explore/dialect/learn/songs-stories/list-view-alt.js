@@ -93,7 +93,7 @@ export class SongsStoriesListViewAlt extends DataListView {
         {
           name: 'title',
           title: intl.trans('title', 'Title', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v, data /*, cellProps*/) => {
             const href = NavigationHelpers.generateUIDPath(
               currentTheme || 'explore',

@@ -88,7 +88,7 @@ class WordsCategoriesListView extends DataListView {
         {
           name: 'title',
           title: intl.trans('category', 'Category', 'first'),
-          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v /*, data, cellProps*/) => v,
         },
         {

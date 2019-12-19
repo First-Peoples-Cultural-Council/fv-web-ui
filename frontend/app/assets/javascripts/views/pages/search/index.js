@@ -463,7 +463,7 @@ export class Search extends DataListView {
                             {
                               name: 'title',
                               title: 'Title',
-                              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderHeading,
+                              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
                               render: (v, data) => {
                                 let href = null
                                 let hrefEdit = null
@@ -590,7 +590,7 @@ export class Search extends DataListView {
                               },
                             },
                           ],
-                          dictionaryListSmallScreenTemplate: (templateData) => {
+                          dictionaryListSmallScreenTemplate: ({ templateData }) => {
                             return (
                               <>
                                 {templateData.type}
