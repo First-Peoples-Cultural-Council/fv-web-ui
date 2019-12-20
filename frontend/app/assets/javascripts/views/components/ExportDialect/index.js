@@ -45,7 +45,7 @@ export class ExportDialect extends Component {
 
   isPolling = false
   pollingInterval = 500
-  pollingLimit = 1000 * 60 * 5 // 5 minutes: Miliseconds * Minute * Minutes
+  pollingLimit = 1000 * 60 * 1 // Miliseconds * Seconds/Minute * Minutes
 
   constructor(props) {
     super(props)
@@ -69,10 +69,17 @@ export class ExportDialect extends Component {
           dialectId,
         },
         () => {
-          this.exportDialectCheckPrevious()
+          // this.exportDialectCheckPrevious()
         }
       )
     }
+  }
+
+  // TODO: Stops polling on unmount but how to handle:
+  // TODO: user triggers export, navigates elsewhere,
+  // TODO: and comes back to this page?
+  componentWillUnmount() {
+    this.isPolling = false
   }
 
   render() {
@@ -176,25 +183,25 @@ export class ExportDialect extends Component {
         Export{`${exportLabel ? ` ${exportLabel}` : ''}`}
       </FVButton>
     )
-    const browseButton = (
-      <FVButton
-        className="ExportDialect__button"
-        color="secondary"
-        variant="outlined"
-        onClick={async () => {
-          await this.exportDialectCheckPrevious()
-          this.setState({
-            isBrowsing: true,
-          })
-        }}
-      >
-        {'Browse previous exports >'}
-      </FVButton>
-    )
+    // const browseButton = (
+    //   <FVButton
+    //     className="ExportDialect__button"
+    //     color="secondary"
+    //     variant="outlined"
+    //     onClick={async () => {
+    //       await this.exportDialectCheckPrevious()
+    //       this.setState({
+    //         isBrowsing: true,
+    //       })
+    //     }}
+    //   >
+    //     {'Browse previous exports >'}
+    //   </FVButton>
+    // )
     return (
       <div className="ExportDialect__buttonGroup">
         {exportButton}
-        {browseButton}
+        {/* {browseButton} */}
       </div>
     )
   }

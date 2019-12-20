@@ -46,7 +46,7 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 import AlphabetListView from 'views/components/AlphabetListView'
-
+// import ExportDialect from 'views/components/ExportDialect'
 const intl = IntlService.instance
 
 const { array, bool, func, object, string } = PropTypes
@@ -267,7 +267,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             className={classNames('col-xs-12', 'col-md-3', computeCategoriesSize === 0 ? 'hidden' : null, 'PrintHide')}
           >
             <div>
-              {/* <ExportDialect dialectId={fvaDialectId} /> */}
+              {/* <ExportDialect exportElement="FVWord" /> */}
 
               <AlphabetListView
                 dialect={selectn('response', computePortal)}

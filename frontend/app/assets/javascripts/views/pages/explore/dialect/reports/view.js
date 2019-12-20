@@ -1,12 +1,9 @@
 /*
 Copyright 2016 First People's Cultural Council
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +43,7 @@ import ReportBrowser from './browse-view'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import IntlService from 'views/services/intl'
+// import ExportDialect from 'views/components/ExportDialect'
 const intl = IntlService.instance
 
 const { func, object, string } = PropTypes
@@ -107,13 +105,15 @@ export class PageDialectReportsView extends PageDialectLearnBase {
 
     // Bind methods to 'this'
     ;[
-      '_onNavigateRequest',
-      '_handleFacetSelected',
-      '_getURLPageProps',
-      '_handlePagePropertiesChange',
-      '_getPageKey',
+      '_getPageKey', // NOTE: PageDialectLearnBase calls `_getPageKey`
+      '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
+      '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
+      '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
+      '_onNavigateRequest', // NOTE: Also is defined in PageDialectLearnBase
+      '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
+
   // NOTE: PageDialectLearnBase calls `_getPageKey`
   _getPageKey() {
     return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_reports'
@@ -144,30 +144,41 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
 
     let listView = null
-    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
+    // let exportElement = undefined
+    // const extricateReportData = this.state.currentReport.toJS()
+    // const query = extricateReportData.query
+    // // const columns = extricateReportData.cols || ['*']
+    // let exportLabel = undefined
+
     switch (this.state.currentReport.get('type')) {
       case 'words':
+        // exportElement = 'FVWord'
+        // exportLabel = 'Word Report'
         listView = (
           <WordListView
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            DEFAULT_PAGE={DEFAULT_PAGE}
-            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             controlViaURL
-            ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
-            filter={this.state.filterInfo}
-            disableClickItem={false}
+            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+            DEFAULT_PAGE={DEFAULT_PAGE}
             DEFAULT_SORT_COL={this.state.currentReport.get('sortCol')}
             DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
-            routeParams={this.props.routeParams}
-            hasViewModeButtons={false}
+            disableClickItem={false}
+            ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
+            filter={this.state.filterInfo}
             hasSorting={false}
+            hasViewModeButtons={false}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
+            onPaginationReset={this._resetURLPagination}
+            routeParams={this.props.routeParams}
           />
         )
         break
 
       case 'phrases':
+        // exportElement = 'FVPhrase'
+        // exportLabel = 'Phrase Report'
         listView = (
           <PhraseListView
             controlViaURL
@@ -178,15 +189,18 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             disableClickItem={false}
             ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
             filter={this.state.filterInfo}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            routeParams={this.props.routeParams}
-            hasViewModeButtons={false}
             hasSorting={false}
+            hasViewModeButtons={false}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
+            onPaginationReset={this._resetURLPagination}
+            routeParams={this.props.routeParams}
           />
         )
         break
 
       case 'songs':
+        // exportElement = 'FVBook'
+        // exportLabel = 'Song Report'
         listView = (
           <SongsStoriesListViewAlt
             controlViaURL
@@ -194,15 +208,18 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             DEFAULT_PAGE={DEFAULT_PAGE}
             disableClickItem={false}
             filter={this.state.filterInfo}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            routeParams={this.props.routeParams}
-            hasViewModeButtons={false}
             hasSorting={false}
+            hasViewModeButtons={false}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
+            onPaginationReset={this._resetURLPagination}
+            routeParams={this.props.routeParams}
           />
         )
         break
 
       case 'stories':
+        // exportElement = 'FVBook'
+        // exportLabel = 'Story Report'
         listView = (
           <SongsStoriesListViewAlt
             controlViaURL
@@ -210,10 +227,11 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             DEFAULT_PAGE={DEFAULT_PAGE}
             disableClickItem={false}
             filter={this.state.filterInfo}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            routeParams={this.props.routeParams}
-            hasViewModeButtons={false}
             hasSorting={false}
+            hasViewModeButtons={false}
+            onPagePropertiesChange={this._handlePagePropertiesChange}
+            onPaginationReset={this._resetURLPagination}
+            routeParams={this.props.routeParams}
           />
         )
         break
@@ -231,6 +249,15 @@ export class PageDialectReportsView extends PageDialectLearnBase {
 
             <div className="row">
               <div className={classNames('col-xs-12', 'col-md-3')}>
+                {/* <ExportDialect
+                  exportElement={exportElement}
+                  exportLabel={exportLabel}
+                  query={`SELECT * FROM ${exportElement} WHERE ecm:path STARTSWITH '${
+                    this.props.routeParams.dialect_path
+                  }/Dictionary' ${query}`}
+                  // columns={columns.join(',').toUpperCase()}
+                  columns={'*'}
+                /> */}
                 <ReportBrowser
                   style={{ maxHeight: '400px', overflowY: 'scroll' }}
                   routeParams={this.props.routeParams}
