@@ -250,7 +250,8 @@ import '!style-loader!css-loader!./DictionaryList.css'
 // ===============================================================
 const VIEWMODE_DEFAULT = 0
 const VIEWMODE_FLASHCARD = 1
-const VIEWMODE_COMPACT = 2
+const VIEWMODE_SMALL_SCREEN = 2
+const VIEWMODE_LARGE_SCREEN = 3
 
 const DictionaryList = (props) => {
   const intl = IntlService.instance
@@ -314,7 +315,7 @@ const DictionaryList = (props) => {
       </div>
     ) : null
 
-  const getCompactListArg = {
+  const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
       rowClickHandler: props.rowClickHandler,
       hasSorting: props.hasSorting,
@@ -334,6 +335,28 @@ const DictionaryList = (props) => {
     hasPagination: props.hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
+  const getListLargeScreenArg = {
+    dictionaryListLargeScreenProps: {
+      rowClickHandler: props.rowClickHandler,
+      hasSorting: props.hasSorting,
+      // withPagination
+      // --------------------
+      appendControls: props.appendControls,
+      disablePageSize: props.disablePageSize,
+      fetcher: props.fetcher,
+      fetcherParams: props.fetcherParams,
+      metadata: props.metadata,
+      // List: large screen
+      // --------------------
+      columns: columnsEnhanced,
+      cssModifier: props.cssModifier,
+      filteredItems: props.filteredItems,
+      items: props.items,
+    },
+
+    hasPagination: props.hasPagination,
+    pageSize: DefaultFetcherParams.pageSize,
+  }
 
   return (
     <>
@@ -349,6 +372,7 @@ const DictionaryList = (props) => {
       )}
 
       {props.hasViewModeButtons &&
+        props.dictionaryListViewMode === undefined &&
         getViewButtons({
           mediaQueryIsSmall: mediaQuery.small,
           viewMode,
@@ -362,7 +386,9 @@ const DictionaryList = (props) => {
         }}
       >
         {(matches) => {
+          // =========================================
           // save MQ data
+          // =========================================
           setMediaQuery(matches)
 
           // =========================================
@@ -372,27 +398,32 @@ const DictionaryList = (props) => {
             return noResults
           }
 
-          let content = null
-
           // =========================================
           // User specified view states
           // =========================================
-          //  Flashcard mode
+
+          //  Flashcard Specified: by view mode button or prop
           // -----------------------------------------
-          if (viewMode === VIEWMODE_FLASHCARD) {
+          if (viewMode === VIEWMODE_FLASHCARD || props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
             // TODO: SPECIFY FlashcardList PROPS
-            content = <FlashcardList {...props} />
+            let flashCards = <FlashcardList {...props} />
             if (props.hasPagination) {
               const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
-              content = <FlashcardsWithPagination {...props} />
+              flashCards = <FlashcardsWithPagination {...props} />
             }
-            return content
+            return flashCards
           }
 
-          //  Compact mode
+          //  Small Screen Specified: by view mode button or prop
           // -----------------------------------------
-          if (viewMode === VIEWMODE_COMPACT) {
-            return getCompactList(getCompactListArg)
+          if (viewMode === VIEWMODE_SMALL_SCREEN || props.dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
+            return getListSmallScreen(getListSmallScreenArg)
+          }
+
+          //  Large Screen Specified: by prop
+          // -----------------------------------------
+          if (props.dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
+            return getListLargeScreen(getListLargeScreenArg)
           }
 
           // =========================================
@@ -402,40 +433,15 @@ const DictionaryList = (props) => {
           // Small screen: list view
           // -----------------------------------------
           if (matches.small) {
-            return getCompactList(getCompactListArg)
+            return getListSmallScreen(getListSmallScreenArg)
           }
           // Large screen: list view
           // -----------------------------------------
           if (matches.medium) {
-            const DictionaryListLargeScreenProps = {
-              rowClickHandler: props.rowClickHandler,
-              hasSorting: props.hasSorting,
-              // withPagination
-              // --------------------
-              appendControls: props.appendControls,
-              disablePageSize: props.disablePageSize,
-              fetcher: props.fetcher,
-              fetcherParams: props.fetcherParams,
-              metadata: props.metadata,
-              // List: large screen
-              // --------------------
-              columns: columnsEnhanced,
-              cssModifier: props.cssModifier,
-              filteredItems: props.filteredItems,
-              items: props.items,
-            }
-
-            content = <DictionaryListLargeScreen {...DictionaryListLargeScreenProps} />
-
-            if (props.hasPagination) {
-              const DictionaryListLargeScreenWithPagination = withPagination(
-                DictionaryListLargeScreen,
-                DefaultFetcherParams.pageSize
-              )
-              content = <DictionaryListLargeScreenWithPagination {...DictionaryListLargeScreenProps} />
-            }
+            return getListLargeScreen(getListLargeScreenArg)
           }
-          return content
+
+          return null
         }}
       </Media>
     </>
@@ -594,15 +600,27 @@ function generateRowClick({ rowClickHandler, columns }) {
   ]
 }
 
-// getCompactList
+// getListSmallScreen
+// Passing in arg (instead of defining them in the function) because
+// getListSmallScreen is being exported and can be called from other
+// components
 // ------------------------------------
-export function getCompactList({ dictionaryListSmallScreenProps = {}, hasPagination = false, pageSize = 10 }) {
-  let content = null
-  content = <DictionaryListSmallScreen {...dictionaryListSmallScreenProps} />
-
+export function getListSmallScreen({ dictionaryListSmallScreenProps = {}, hasPagination = false, pageSize = 10 }) {
+  let content = <DictionaryListSmallScreen {...dictionaryListSmallScreenProps} />
   if (hasPagination) {
     const DictionaryListSmallScreenWithPagination = withPagination(DictionaryListSmallScreen, pageSize)
     content = <DictionaryListSmallScreenWithPagination {...dictionaryListSmallScreenProps} />
+  }
+  return content
+}
+
+// getListLargeScreen
+// ------------------------------------
+function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination = false, pageSize = 10 }) {
+  let content = <DictionaryListLargeScreen {...dictionaryListLargeScreenProps} />
+  if (hasPagination) {
+    const DictionaryListLargeScreenWithPagination = withPagination(DictionaryListLargeScreen, pageSize)
+    content = <DictionaryListLargeScreenWithPagination {...dictionaryListLargeScreenProps} />
   }
   return content
 }
@@ -615,7 +633,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, clickHandler }) {
   let compactView = null
   if (mediaQueryIsSmall === false) {
     compactView =
-      viewMode === VIEWMODE_COMPACT ? (
+      viewMode === VIEWMODE_SMALL_SCREEN ? (
         <FVButton
           variant="contained"
           className="DictionaryList__viewModeButton"
@@ -631,7 +649,7 @@ function getViewButtons({ mediaQueryIsSmall, viewMode, clickHandler }) {
           variant="contained"
           className="DictionaryList__viewModeButton"
           onClick={() => {
-            clickHandler(VIEWMODE_COMPACT)
+            clickHandler(VIEWMODE_SMALL_SCREEN)
           }}
         >
           Compact view
@@ -696,6 +714,7 @@ DictionaryList.propTypes = {
   sortHandler: func,
   style: object,
   type: string,
+  dictionaryListViewMode: number,
   wrapperStyle: object,
   // Search
   handleSearch: func,
