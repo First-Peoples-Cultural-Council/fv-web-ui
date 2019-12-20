@@ -221,7 +221,7 @@ import Media from 'react-media'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 // Components
 import {
   batchTitle,
@@ -238,6 +238,7 @@ import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { getSearchObject } from 'common/NavigationHelpers'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/DictionaryListSmallScreen'))
@@ -265,6 +266,28 @@ const DictionaryList = (props) => {
 
   // ============= SORT
   if (props.hasSorting) {
+    // If window.location.search has sortOrder & sortBy,
+    // Ensure the same values are in redux
+    // before generating the sort markup
+    const windowLocationSearch = getSearchObject()
+    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
+    const windowLocationSearchSortBy = windowLocationSearch.sortBy
+    if (
+      windowLocationSearchSortOrder &&
+      windowLocationSearchSortBy &&
+      (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
+        props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+    ) {
+      props.setRouteParams({
+        search: {
+          page: props.navigationRouteRouteParams.page,
+          pageSize: props.navigationRouteRouteParams.pageSize,
+          sortOrder: windowLocationSearchSortOrder,
+          sortBy: windowLocationSearchSortBy,
+        },
+      })
+    }
+
     columnsEnhanced = generateSortTitleLargeSmall({
       columns: columnsEnhanced,
       pageSize: props.navigationRouteRouteParams.pageSize,
@@ -771,6 +794,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   pushWindowPath,
+  setRouteParams,
 }
 
 export default connect(
