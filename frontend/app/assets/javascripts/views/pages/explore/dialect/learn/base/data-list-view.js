@@ -185,7 +185,7 @@ export default class DataListView extends Component {
     }
   }
 
-  _handleRefetch2({ page = '1', pageSize = '10', preserveSearch = false } = {}) {
+  _handleRefetch2({ page = '1', pageSize = '10', preserveSearch = false, sortBy, sortOrder } = {}) {
     this.setState({
       pageInfo: {
         page: page,
@@ -193,15 +193,12 @@ export default class DataListView extends Component {
       },
     })
 
-    // Pull from window.location.search first, if not use state
-    const sortInfo = selectn('sortInfo.currentSortType', this.state) || null
-    const currentSortCols = selectn('sortInfo.currentSortCols', this.state) || null
-
     if (!this.props.controlViaURL) {
+      const sortInfo = sortOrder || selectn('sortInfo.currentSortType', this.state) || null
+      const currentSortCols = sortBy || selectn('sortInfo.currentSortCols', this.state) || null
       this._fetchListViewData(this.props, page, pageSize, sortInfo, currentSortCols)
     } else {
       // TODO: Investigate why splitWindowPath could not be used (instead of this.props.routeParams)
-      // Note: routeParams is currently passed in via a parent component, not provided by Redux
       const _urlPage = selectn('page', this.props.routeParams)
       const _urlPageSize = selectn('pageSize', this.props.routeParams)
       const urlPage = _urlPage !== undefined ? parseInt(_urlPage, 10) : _urlPage
@@ -219,18 +216,12 @@ export default class DataListView extends Component {
           NavigationHelpers.navigateForwardReplaceMultiple(
             this.props.splitWindowPath,
             [pageSize, page],
-            // this.props.pushWindowPath
             navHelperCallback
           )
         }
       } else {
         // No pagination in url (eg: .../learn/words), append `page` & `pageSize`
-        NavigationHelpers.navigateForward(
-          this.props.splitWindowPath,
-          [pageSize, page],
-          // this.props.pushWindowPath
-          navHelperCallback
-        )
+        NavigationHelpers.navigateForward(this.props.splitWindowPath, [pageSize, page], navHelperCallback)
       }
 
       // If pageSize has changed, reset page
