@@ -48,7 +48,7 @@ import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { getListSmallScreen } from 'views/components/Browsing/DictionaryList'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
-  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+  dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
@@ -438,7 +438,8 @@ export class Search extends DataListView {
                             {
                               name: 'type',
                               title: 'Type',
-                              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
+                              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
+                              typographyVariant: 'subheading',
                               render: (v, data) => {
                                 let itemType
                                 switch (data.type) {
@@ -451,9 +452,18 @@ export class Search extends DataListView {
                                   case 'FVBook':
                                     itemType = data.properties['fvbook:type']
                                     break
-                                  case 'FVPortal':
-                                    itemType = 'Dialect'
+                                  case 'FVPortal': {
+                                    const family = selectn(
+                                      ['contextParameters', 'ancestry', 'family', 'dc:title'],
+                                      data
+                                    )
+                                    const language = selectn(
+                                      ['contextParameters', 'ancestry', 'language', 'dc:title'],
+                                      data
+                                    )
+                                    itemType = `Dialect: ${family} » ${language}`
                                     break
+                                  }
                                   default:
                                     itemType = '-'
                                 }
@@ -465,6 +475,7 @@ export class Search extends DataListView {
                               title: 'Title',
                               columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
                               render: (v, data) => {
+                                let alternateContent
                                 let href = null
                                 let hrefEdit = null
                                 const currentTheme = this.props.routeParams.siteTheme
@@ -504,6 +515,29 @@ export class Search extends DataListView {
                                     bookType
                                   )
                                 }
+                                if (data.type === 'FVPortal') {
+                                  // Generate URL
+                                  const siteTheme = this.props.routeParams.siteTheme
+                                  const area = this.props.routeParams.area
+                                  const family = (
+                                    selectn(['contextParameters', 'ancestry', 'family', 'dc:title'], data) || ''
+                                  ).replace(/\//g, '_')
+
+                                  const language = (
+                                    selectn(['contextParameters', 'ancestry', 'language', 'dc:title'], data) || ''
+                                  ).replace(/\//g, '_')
+
+                                  const dialect = (
+                                    selectn(['contextParameters', 'ancestry', 'dialect', 'dc:title'], data) || ''
+                                  ).replace(/\//g, '_')
+
+                                  href = `/${siteTheme}/FV/${area}/Data/${family}/${language}/${dialect}`
+                                  // Pull title text from different location with Portal/Dialects
+                                  alternateContent = selectn(
+                                    ['contextParameters', 'ancestry', 'dialect', 'dc:title'],
+                                    data
+                                  )
+                                }
 
                                 const isWorkspaces = this.props.routeParams.area === WORKSPACES
 
@@ -537,8 +571,8 @@ export class Search extends DataListView {
                                   ) : null
                                 return (
                                   <>
-                                    <a className="DictionaryList__link" href={href}>
-                                      {v}
+                                    <a className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
+                                      {alternateContent || v}
                                     </a>
                                     {editButton}
                                   </>
@@ -549,7 +583,7 @@ export class Search extends DataListView {
                               name: 'fv:definitions',
                               title: intl.trans('definitions', 'Definitions', 'first'),
                               columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-                              columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+                              columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
                               render: (v, data, cellProps) => {
                                 return UIHelpers.renderComplexArrayRow(
                                   selectn('properties.' + cellProps.name, data),
@@ -581,6 +615,7 @@ export class Search extends DataListView {
                                     <Preview
                                       minimal
                                       tagStyles={{ width: '300px', maxWidth: '100%' }}
+                                      styles={{ padding: '0' }}
                                       key={selectn('uid', firstAudio)}
                                       expandedValue={firstAudio}
                                       type="FVAudio"
@@ -596,8 +631,8 @@ export class Search extends DataListView {
                                 {templateData.type}
                                 {templateData.title}
                                 <div className="DictionaryListSmallScreen__group">
-                                  {templateData.related_audio}
                                   {templateData['fv:definitions']}
+                                  {templateData.related_audio}
                                 </div>
                               </>
                             )
@@ -606,185 +641,6 @@ export class Search extends DataListView {
                       })}
                     </Suspense>
                   )
-                  // return <div>Search</div>
-                  // <DocumentListView
-                  //   // objectDescriptions="results"
-                  //   // onSelectionChange={this._onEntryNavigateRequest}
-                  //   // onSortChange={this._handleSortChange}
-                  //   // usePrevResponse
-                  //   columns={[
-                  //     {
-                  //       name: 'type',
-                  //       title: 'Type',
-                  //       render: (v, data) => {
-                  //         let itemType = data.type
-                  //         switch (data.type) {
-                  //           case 'FVPhrase':
-                  //             itemType = 'Phrase'
-                  //             break
-                  //           case 'FVWord':
-                  //             itemType = 'Word'
-                  //             break
-                  //           case 'FVBook':
-                  //             itemType = data.properties['fvbook:type']
-                  //             break
-                  //           case 'FVPortal':
-                  //             itemType = 'Dialect'
-                  //             break
-                  //           default:
-                  //             break
-                  //         }
-                  //         return itemType ? itemType : '-'
-                  //       },
-                  //     },
-                  //     {
-                  //       name: 'title',
-                  //       title: 'Title',
-                  //       render: (v, data) => {
-                  //         // console.log('render', data.type)
-                  //         // return v
-                  //         let href = null
-                  //         let hrefEdit = null
-                  //         const currentTheme = this.props.routeParams.siteTheme
-                  //         if (data.type === 'FVPhrase') {
-                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
-                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
-                  //             this.props.routeParams.siteTheme,
-                  //             data,
-                  //             'phrases'
-                  //           )
-                  //         }
-                  //         if (data.type === 'FVWord') {
-                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, 'words')
-                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
-                  //             this.props.routeParams.siteTheme,
-                  //             data,
-                  //             'words'
-                  //           )
-                  //         }
-                  //         if (data.type === 'FVBook') {
-                  //           let bookType = null
-                  //           switch (data.properties['fvbook:type']) {
-                  //             case 'song':
-                  //               bookType = 'songs'
-                  //               break
-                  //             case 'story':
-                  //               bookType = 'stories'
-                  //               break
-
-                  //             default:
-                  //               break
-                  //           }
-                  //           href = NavigationHelpers.generateUIDPath(currentTheme, data, bookType)
-                  //           hrefEdit = NavigationHelpers.generateUIDEditPath(
-                  //             this.props.routeParams.siteTheme,
-                  //             data,
-                  //             bookType
-                  //           )
-                  //         }
-                  //         // return href ? (
-                  //         //   <a className="DictionaryList__link" href={href}>
-                  //         //     {v}
-                  //         //   </a>
-                  //         // ) : (
-                  //         //   v
-                  //         // )
-
-                  //         const isWorkspaces = this.props.routeParams.area === WORKSPACES
-
-                  //         const computeDialect2 = this.props.dialect /* || this.getDialect()*/
-
-                  //         const editButton =
-                  //           isWorkspaces && hrefEdit ? (
-                  //             <AuthorizationFilter
-                  //               filter={{
-                  //                 entity: selectn('response', computeDialect2),
-                  //                 login: this.props.computeLogin,
-                  //                 role: ['Record', 'Approve', 'Everything'],
-                  //               }}
-                  //               hideFromSections
-                  //               routeParams={this.props.routeParams}
-                  //             >
-                  //               <FVButton
-                  //                 type="button"
-                  //                 variant="flat"
-                  //                 size="small"
-                  //                 component="a"
-                  //                 href={hrefEdit}
-                  //                 onClick={(e) => {
-                  //                   e.preventDefault()
-                  //                   NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
-                  //                 }}
-                  //               >
-                  //                 <Edit title={intl.trans('edit', 'Edit', 'first')} />
-                  //               </FVButton>
-                  //             </AuthorizationFilter>
-                  //           ) : null
-                  //         return (
-                  //           <>
-                  //             <a className="DictionaryList__link" href={href}>
-                  //               {v}
-                  //             </a>
-                  //             {editButton}
-                  //           </>
-                  //         )
-                  //       },
-                  //       // sortName: 'fv:custom_order',
-                  //       // sortBy: 'fv:custom_order',
-                  //     },
-                  //     {
-                  //       name: 'fv:definitions',
-                  //       title: intl.trans('definitions', 'Definitions', 'first'),
-                  //       render: (v, data, cellProps) => {
-                  //         return UIHelpers.renderComplexArrayRow(
-                  //           selectn('properties.' + cellProps.name, data),
-                  //           (entry, i) => {
-                  //             if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
-                  //               return <div key={i}>{entry.translation}</div>
-                  //             }
-                  //           }
-                  //         )
-                  //       },
-                  //       sortName: 'fv:definitions/0/translation',
-                  //     },
-                  //     {
-                  //       name: 'related_audio',
-                  //       title: intl.trans('audio', 'Audio', 'first'),
-                  //       render: (v, data, cellProps) => {
-                  //         let firstAudio = null
-                  //         if (data.type === 'FVPhrase') {
-                  //           firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
-                  //         }
-                  //         if (data.type === 'FVWord') {
-                  //           firstAudio = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
-                  //         }
-
-                  //         if (firstAudio) {
-                  //           return (
-                  //             <Preview
-                  //               minimal
-                  //               tagStyles={{ width: '300px', maxWidth: '100%' }}
-                  //               key={selectn('uid', firstAudio)}
-                  //               expandedValue={firstAudio}
-                  //               type="FVAudio"
-                  //             />
-                  //           )
-                  //         }
-                  //       },
-                  //     },
-                  //   ]}
-                  //   className="browseDataGrid fontAboriginalSans"
-                  //   data={computeSearchDocuments}
-                  //   gridCols={1}
-                  //   gridListTile={SearchResultTileWithProps}
-                  //   gridListView={this.props.gridListView}
-                  //   gridViewProps={{ cellHeight: 170, style: { overflowY: 'hidden', margin: '0 0 30px 0' } }}
-                  //   hasViewModeButtons={false}
-                  //   page={this.state.pageInfo.page}
-                  //   pageSize={this.state.pageInfo.pageSize}
-                  //   refetcher={this._handleRefetch}
-                  //   type="Document"
-                  // />
                 }
               })()}
             </PromiseWrapper>
