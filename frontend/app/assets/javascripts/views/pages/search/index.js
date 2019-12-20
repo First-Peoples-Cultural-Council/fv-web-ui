@@ -45,7 +45,7 @@ import AnalyticsHelpers from 'common/AnalyticsHelpers'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 // import DocumentListView from 'views/components/Document/DocumentListView'
-import { getCompactList } from 'views/components/Browsing/DictionaryList'
+import { getListSmallScreen } from 'views/components/Browsing/DictionaryList'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
@@ -395,7 +395,7 @@ export class Search extends DataListView {
 
                   return (
                     <Suspense fallback={<div>Loading...</div>}>
-                      {getCompactList({
+                      {getListSmallScreen({
                         hasPagination: true,
                         pageSize: 10,
                         dictionaryListSmallScreenProps: {
