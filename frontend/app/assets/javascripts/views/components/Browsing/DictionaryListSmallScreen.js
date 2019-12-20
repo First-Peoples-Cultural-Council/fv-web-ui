@@ -249,7 +249,7 @@ const DictionaryListSmallScreen = (props) => {
     return selectDeselectButton && batchConfirmationElement ? (
       <div className="DictionaryListSmallScreen__actions DictionaryListSmallScreen__actions--batch">
         <Typography className="DictionaryListSmallScreen__batchHeading" variant="subheading" component="h2">
-          Batch Delete
+          Batch delete
         </Typography>
         <div className="DictionaryListSmallScreen__batchButtons">
           <div>{selectDeselectButton}</div>
