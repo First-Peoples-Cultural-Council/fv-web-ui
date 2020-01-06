@@ -1,3 +1,8 @@
+/* Block 
+============================================ */
+
+/* Element
+============================================ */
 .DictionaryListSmallScreen__actions {
   background: linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%);
   padding: 10px;
@@ -10,6 +15,10 @@
   min-width: 225px;
   width: 100%;
 }
+.DictionaryListSmallScreen__audioGroup {
+  width: 35%;
+}
+
 .DictionaryListSmallScreen__batch {
   padding: 0 10px 0 0;
 }
@@ -19,6 +28,7 @@
 .DictionaryListSmallScreen__batchSibling {
   flex-grow: 1;
 }
+
 .DictionaryListSmallScreen__ContributorsListView {
   display: flex;
   justify-content: space-between;
@@ -27,12 +37,54 @@
 .DictionaryListSmallScreen__ContributorsListView .DictionaryListSmallScreen__dataItem {
   padding: 5px;
 }
-.DictionaryListSmallScreen__sortHeading {
-  margin: 5px;
+
+.DictionaryListSmallScreen__dataItem .DictionaryList__link.DictionaryList__link--indigenous {
+  padding: 5px;
+  font-size: 1.8rem;
 }
-.DictionaryListSmallScreen__sortButton {
-  margin: 5px;
+.DictionaryListSmallScreen__dataItem .DictionaryList__linkEdit {
+  padding: 5px;
+  min-width: auto;
+  border-radius: 2px;
 }
+.DictionaryListSmallScreen__definitionsGroup {
+  width: 25%;
+}
+
+.DictionaryListSmallScreen__group .DictionaryListSmallScreen__dataItem {
+  padding: 10px 20px 10px 0;
+}
+.DictionaryListSmallScreen__group,
+.DictionaryListSmallScreen__groupPrimary,
+.DictionaryListSmallScreen__groupSecondary {
+  display: flex;
+  justify-content: flex-start;
+}
+.DictionaryListSmallScreen__groupContainer {
+  display: flex;
+}
+.DictionaryListSmallScreen__groupPrimary,
+.DictionaryListSmallScreen__groupSecondary {
+  flex-wrap: wrap;
+}
+.DictionaryListSmallScreen__groupPrimary .DictionaryListSmallScreen__dataItem {
+  display: flex;
+  align-items: center;
+}
+.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__groupSecondary {
+  justify-content: space-between;
+}
+.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__dataItem {
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.DictionaryListSmallScreen__imageGroup {
+  width: 15%;
+  text-align: center;
+}
+
 .DictionaryListSmallScreen__list {
   list-style-type: none;
   margin: 0;
@@ -45,57 +97,38 @@
   padding: 5px;
   margin: 0;
 }
-.DictionaryListSmallScreen__groupContainer {
-  display: flex;
-}
-.DictionaryListSmallScreen__group,
-.DictionaryListSmallScreen__groupPrimary,
-.DictionaryListSmallScreen__groupSecondary {
-  display: flex;
-  justify-content: flex-start;
-}
-.DictionaryListSmallScreen__groupPrimary,
-.DictionaryListSmallScreen__groupSecondary {
-  flex-wrap: wrap;
-}
-.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__groupSecondary {
-  justify-content: space-between;
-}
-.DictionaryListSmallScreen__dataItem .DictionaryList__link.DictionaryList__link--indigenous {
-  padding: 5px;
-  font-size: 1.8rem;
-}
-.DictionaryListSmallScreen__dataItem .DictionaryList__linkEdit {
-  padding: 5px;
-  min-width: auto;
-  border-radius: 2px;
-}
-.DictionaryListSmallScreen__groupPrimary .DictionaryListSmallScreen__dataItem {
-  display: flex;
-  align-items: center;
-}
-.DictionaryListSmallScreen__group .DictionaryListSmallScreen__dataItem {
-  padding: 10px 20px 10px 0;
-}
-.DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__dataItem {
-  padding: 0 5px;
-  display: flex;
-  flex-direction: column;
-}
-.DictionaryListSmallScreen__definitionsGroup {
-  width: 25%;
-}
-.DictionaryListSmallScreen__audioGroup {
-  width: 35%;
-}
-.DictionaryListSmallScreen__imageGroup {
-  width: 15%;
-  text-align: center;
-}
+
 .DictionaryListSmallScreen__miscGroup {
   width: 25%;
 }
+
+.DictionaryListSmallScreen__sortHeading {
+  margin: 5px;
+}
+.DictionaryListSmallScreen__sortButton {
+  margin: 5px;
+}
+
+/* Modifiers
+============================================ */
+.DictionaryListSmallScreen__listItem--alt {
+  background: #f2f7ff;
+}
+
+.DictionaryListSmallScreen__actions--batch {
+  display: block;
+}
+
+/* Media Queries
+============================================ */
 @media (max-width: 750px) {
+  .DictionaryListSmallScreen__audioGroup,
+  .DictionaryListSmallScreen__definitionsGroup,
+  .DictionaryListSmallScreen__imageGroup,
+  .DictionaryListSmallScreen__miscGroup {
+    width: auto;
+  }
+
   .DictionaryListSmallScreen__group {
     flex-direction: column;
   }
@@ -106,20 +139,7 @@
     flex-direction: row;
   }
 
-  .DictionaryListSmallScreen__definitionsGroup,
-  .DictionaryListSmallScreen__audioGroup,
-  .DictionaryListSmallScreen__imageGroup,
-  .DictionaryListSmallScreen__miscGroup {
-    width: auto;
-  }
   .DictionaryListSmallScreen__imageGroup {
     text-align: left;
   }
-}
-
-.DictionaryListSmallScreen__listItem--alt {
-  background: #f2f7ff;
-}
-.DictionaryListSmallScreen__actions--batch {
-  display: block;
 }
