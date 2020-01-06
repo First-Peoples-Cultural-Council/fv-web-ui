@@ -16,6 +16,10 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// https://github.com/NicholasBoll/cypress-pipe
+import 'cypress-pipe'
+
 // NOTE: turn off all uncaught exception handling
 cy.on('uncaught:exception', () => {
   // returning false here prevents Cypress from
@@ -25,3 +29,7 @@ cy.on('uncaught:exception', () => {
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.Screenshot.defaults({
+  screenshotOnRunFailure: true,
+})

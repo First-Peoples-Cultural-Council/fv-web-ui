@@ -1,26 +1,27 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () => {
   it('Test to check that a language admin can create and delete phrases.', () => {
-    // TODO: Add database setup here.
-    // Requires no phrases exist in database for SENCOTEN
-
     /*
                 Login as Language Admin and check that no phrases currently exists.
             */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/phrases')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne')
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
@@ -101,7 +102,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     /*
                 Checking to see if the phrase now exists.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/phrases')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne/learn/phrases')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -122,10 +123,13 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.getByText('Definitions', { exact: true }).should('exist')
       cy.getByText('Phrase books', { exact: true }).should('exist')
     })
+    cy.get('[name="dc:title"]').type('ShouldNotShow')
     cy.wait(500)
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
+    cy.queryByText('TestPhraseShouldNotShow').should('not.exist')
 
     /*
                 Check that edit phrase saves properly.
@@ -146,7 +150,13 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByText('Delete phrase').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete phrase success').should('exist')
-    cy.getByText('Return To Previous Page').click()
+
+    // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+    cy.getByText('Return To Previous Page')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })

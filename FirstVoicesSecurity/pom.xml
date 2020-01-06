@@ -147,11 +147,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>nuxeo-studio</groupId>
-      <artifactId>First-Voices</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
       <artifactId>nuxeo-automation-test</artifactId>
       <scope>test</scope>
@@ -159,6 +154,11 @@
      <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesData</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

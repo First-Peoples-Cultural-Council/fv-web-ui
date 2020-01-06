@@ -23,7 +23,7 @@
       <artifact:set excludeRoots="true">
         <includes>
           <artifact groupId="ca.firstvoices*" scope="" type="!pom" />
-          <artifact groupId="nuxeo-studio" scope="" type="!pom" />
+<!--          <artifact groupId="nuxeo-studio" scope="" type="!pom" />-->
         </includes>
       </artifact:set>
     </copy>

@@ -27,7 +27,7 @@ import ca.firstvoices.nativeorder.operations.ComputeNativeOrderForDialect;
 @Features({ PlatformFeature.class, AutomationFeature.class })
 @Deploy({ "org.nuxeo.ecm.automation.jsf", "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
         "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
-        "org.nuxeo.ecm.automation.scripting", "studio.extensions.First-Voices", "FirstVoicesNuxeoPublisher",
+        "org.nuxeo.ecm.automation.scripting", "FirstVoicesData", "FirstVoicesNuxeoPublisher",
         "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
         "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml", })
 public class TestComputeNativeOrderForDialect {

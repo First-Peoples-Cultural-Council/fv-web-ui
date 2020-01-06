@@ -1,6 +1,12 @@
 import 'cypress-testing-library/add-commands'
 describe('AlphabetListView-Words.js > AlphabetListView', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+     */
+    cy.log('Forcing the test to fail until it is updated for dev.')
+    expect(true).to.equal(false)
+
     cy.visit('/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
 
     const letter = 'k̓'
@@ -56,6 +62,13 @@ describe('AlphabetListView-Words.js > AlphabetListView', () => {
   })
 
   it('Direct link: displays message, selected letter, & stop browsing buton', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+     */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     cy.log('Direct visit a url with a letter selected')
     cy.visit('/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words/alphabet/k%CC%93%C2%B0')
     // Message & "Stop Browsing" button displayed; a letter is selected

@@ -1,0 +1,24 @@
+version: '3'
+services:
+    db:
+        image: postgres
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=local_db_pass
+    nuxeo:
+        container_name: nuxeo-dev
+        volumes:
+            - '~/Dev/Dependencies/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp'
+            - '~/Dev/Dependencies/nuxeo_dev_docker/data:/opt/nuxeo/ext_data'
+            - '~/Dev/Dependencies/nuxeo_dev_docker/logs:/var/log/nuxeo'
+        ports:
+            - '8080:8080'
+            - '8787:8787'
+            - '3002:3001'
+        environment:
+            - NUXEO_PACKAGES=nuxeo-dam nuxeo-jsf-ui
+            - NUXEO_AUTOMATION_TRACE=true
+            - NUXEO_DEV_MODE=true
+            - NUXEO_DATA=/opt/nuxeo/ext_data
+            - NUXEO_CLID=CLID
+        image: me/nuxeo-dev

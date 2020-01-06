@@ -25,6 +25,11 @@
     "query": " AND ecm:primaryType='FVWord' AND fv:related_audio/* IS NULL"
   },
   {
+    "name": "Words with Audio",
+    "type": "words",
+    "query": " AND ecm:primaryType='FVWord' AND fv:related_audio/* IS NOT NULL"
+  },
+  {
     "name": "Words without Pictures",
     "type": "words",
     "query": " AND ecm:primaryType='FVWord' AND fv:related_pictures/* IS NULL"
@@ -109,6 +114,11 @@
     "name": "Phrases without Audio",
     "type": "phrases",
     "query": " AND ecm:primaryType='FVPhrase' AND fv:related_audio/* IS NULL"
+  },
+  {
+    "name": "Phrases with Audio",
+    "type": "phrases",
+    "query": " AND ecm:primaryType='FVPhrase' AND fv:related_audio/* IS NOT NULL"
   },
   {
     "name": "Phrases without Pictures",

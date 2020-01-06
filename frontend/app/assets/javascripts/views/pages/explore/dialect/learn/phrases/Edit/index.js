@@ -145,7 +145,7 @@ export class PhrasesEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

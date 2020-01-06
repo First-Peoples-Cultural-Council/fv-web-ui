@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesData
+Bundle-Name: FirstVoicesData
+Require-Bundle: org.nuxeo.runtime
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ManifestVersion: 2
+Bundle-Vendor: Nuxeo
+Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,OSGI-INF/ca.firstvoices.studio.extensions.xml

@@ -2,20 +2,22 @@
 // so imports paths will be based on that location!
 
 describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
-  it('Test to check that when a recorder enables a word the request to the language admin is received.', () => {
-    // TODO: Add database setup here.
-    // A test word that is not enabled or published must exist for SENCOTEN.
+  it('Test to check that when a recorder enables a word, the request to the language admin is received.', () => {
+    cy.exec('bash ./scripts/ResetWordLangFive.sh', { env: { TARGET: Cypress.env('TARGET') } })
+      .its('stdout')
+      .should('contain', 'Reset TestLanguageFive dictionary successfully.', { log: false })
+
+    cy.wait(500)
 
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
     /*
       Checking to make sure a word currently exists.
     */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -30,9 +32,8 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.3)')
+    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
 
@@ -40,11 +41,9 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Admin and verify task exists / reject task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
@@ -56,18 +55,16 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Recorder and click enable again.
     */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.3)')
+    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -76,11 +73,9 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Admin and verify task exists / approve task.
     */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_ADMIN',
     })
-    cy.reload()
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: true }).click()
     cy.getByText('Approve', { exact: true }).click()
@@ -92,11 +87,10 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Site Member and check that the word is visible once enabled.
      */
     cy.login({
-      userName: 'SITE_MEMBER_USERNAME',
-      userPassword: 'SITE_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -110,15 +104,13 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Login as Recorder and verify that publish is now clickable.
      */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFIVE_RECORDER',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFive/learn/words')
     cy.getByText('TestWord', { exact: false }).click()
     cy.wait(500)
-    cy.getByText('Enable (0)').should('have.css', 'color', 'rgba(0, 0, 0, 0.3)')
+    cy.getByText('Enable (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Enable (0)').should('have.css', 'cursor', 'default')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'pointer')
   })

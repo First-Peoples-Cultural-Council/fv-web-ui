@@ -5,6 +5,13 @@ import 'cypress-testing-library/add-commands'
 
 describe('FW-301: Some buttons need to be clicked twice to submit', () => {
   it('Publish button needs to be clicked twice on the confirmation modal for words that have media', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     // Login
     cy.login({ url: 'https://dev.firstvoices.com/nuxeo/startup' })
 

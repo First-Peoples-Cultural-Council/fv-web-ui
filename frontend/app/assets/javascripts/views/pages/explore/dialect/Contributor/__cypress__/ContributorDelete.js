@@ -9,6 +9,20 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Co
 
 describe('ContributorDelete.js > Contributor', () => {
   it('Delete', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
+    /*
+      Temporary line to force the test to fail until it is updated.
+     */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     cy.login()
     cy.createContributor().then((response) => {
       const uid = response.body.uid

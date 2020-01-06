@@ -5,6 +5,13 @@ import 'cypress-testing-library/add-commands'
 
 describe('EditableComponent.js > EditableComponent', () => {
   it('FW-212: Drop AlloyEditor for Quill', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     const updateMessage = `EditableComponent.js > EditableComponent @ ${new Date()}`
     const updateMessage1 = `${updateMessage} 1`
     const updateMessage2 = `${updateMessage} 2`

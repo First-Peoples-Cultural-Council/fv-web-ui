@@ -100,10 +100,10 @@ export class Phrasebook extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -136,8 +136,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -243,7 +243,7 @@ export class Phrasebook extends React.Component {
     )
   }
 
-  _handleCreateItemSubmit = async(formData) => {
+  _handleCreateItemSubmit = async (formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -286,7 +286,7 @@ export class Phrasebook extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })

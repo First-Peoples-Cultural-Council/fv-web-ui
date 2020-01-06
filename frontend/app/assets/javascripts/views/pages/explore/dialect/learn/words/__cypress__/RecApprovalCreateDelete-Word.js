@@ -1,30 +1,29 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
+// https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+// cypress-pipe does not retry any Cypress commands
+// so we need to click on the element using
+// jQuery method "$el.click()" and not "cy.click()"
+const click = ($el) => $el.click()
+
 describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () => {
   it('Test to check recorder with approval creation and deletion of words.', () => {
-    // TODO: Add database setup here.
-    // Requires no words exist in database for SENCOTEN
-
     /*
                 Login as Recorder with approval and check that no word currently exists.
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_APPROVER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_APPROVER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a word
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree')
     cy.getByText('Learn our Language', { exact: false }).click()
-    cy.wait(500)
     cy.getByText('Words', { exact: true }).click()
-    cy.wait(500)
     cy.getByText('Create New Word', { exact: false }).click()
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
@@ -98,7 +97,8 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     /*
                 Checking to see if the word now exists.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -112,16 +112,20 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
         */
     cy.wait(500)
     cy.getByText('TestWord').click()
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(0)
+          .click()
+      })
     })
     cy.wait(500)
-    cy.get('div.hidden-xs.isRecorderWithApproval.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
     })
     cy.getByTestId('ViewWithActions__buttonPublish').click()
 
@@ -129,7 +133,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Check that edit word button is visible and functional.
                 Check that the cancel button when editing word works.
             */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageThree/learn/words')
     cy.wait(500)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
@@ -144,6 +148,8 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
+    cy.getByText('Yes!').click()
+    cy.wait(500)
 
     /*
                 Check that edit word saves properly.
@@ -170,7 +176,12 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.getByText('Delete word').click()
     cy.getByTestId('ViewWithActions__buttonDelete').click()
     cy.getByText('Delete word success').should('exist')
-    cy.getByText('Return To Previous Page').click()
+    // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
+    cy.getByText('Return To Previous Page')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.getByText('No results found.', { exact: true }).should('be.visible')
   })
 })

@@ -31,7 +31,7 @@
 // @Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class } )
 // @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 // @Deploy( {
-//         "studio.extensions.First-Voices",
+//         "FirstVoicesData",
 //         "org.nuxeo.ecm.platform",
 //         "org.nuxeo.ecm.platform.commandline.executor",
 //         "org.nuxeo.ecm.automation.core",

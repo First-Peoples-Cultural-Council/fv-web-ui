@@ -38,7 +38,7 @@ import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 @Features({ PlatformFeature.class })
 @Deploy({ "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
         "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
-        "org.nuxeo.ecm.automation.scripting","studio.extensions.First-Voices",
+        "org.nuxeo.ecm.automation.scripting","FirstVoicesData",
         "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
         "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
         "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",

@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"
 })
-@PartialDeploy(bundle = "studio.extensions.First-Voices", extensions = { TargetExtensions.ContentModel.class })
+@PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentModel.class })
 public class TestSecurityPolicies extends AbstractFVTest {
 
     @Inject

@@ -1,19 +1,4 @@
-# FirstVoices Web Applciation
-
-This is a responsive dictionary web-application for the FirstVoices language assets that uses [Nuxeo ECM](http://www.nuxeo.com/) as a back-end.
-
-## Stack
-
-This web app is built using the following:
-
-- [ReactJS](https://facebook.github.io/react/)
-- [Webpack](https://webpack.github.io/)
-- [Material-UI](https://github.com/callemall/material-ui)
-- [Nuxeo-js-client](https://github.com/nuxeo/nuxeo-js-client)
-
-And interfaces with a [Nuxeo](http://www.nuxeo.com) server, at the moment using custom schemas and configruation specific to FirstVoices.
-
-For additional dependencies see package.json.
+# FirstVoices Front-end
 
 ## Getting Started
 
@@ -153,10 +138,33 @@ We use BroswerStack in order to ensure our UI functions in the latest version of
 
 Via [Cypress](https://www.cypress.io/)
 
-Launch the Cypress app:
+Launch the Cypress app (GUI) where you can run tests individually:
 
 ```
-$ npm run test:e2e
+$ npm run test:e2e:dev
+```
+
+Launch the full Cypress test suite headlessly:
+```
+$ npm run test:e2e:dev:headless
+```
+With debugging output enabled:
+```
+$ npm run test:e2e:dev:headless:debug
+```
+
+These Cypress tests require that you have java and maven installed as well as the correct environment variables set for the following:
+
+For the database setup scripts:
+```
+CYPRESS_FV_USERNAME
+CYPRESS_FV_PASSWORD
+```
+
+For recording runs (optional):
+```
+CYPRESS_PROJECT_ID
+CYPRESS_RECORD_KEY
 ```
 
 ### Frontend: Unit testing

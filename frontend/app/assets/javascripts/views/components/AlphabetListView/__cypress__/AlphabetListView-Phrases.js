@@ -1,6 +1,13 @@
 import 'cypress-testing-library/add-commands'
 describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
+    /*
+    Temporary line to force the test to fail until it is updated.
+   */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases')
 
     const letter = 'b'
@@ -56,6 +63,13 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
   })
 
   it('Direct link', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+     */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     cy.log('Direct visit a url with a letter selected')
     cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases/alphabet/b')
     // Message & "Stop Browsing" button displayed; a letter is selected

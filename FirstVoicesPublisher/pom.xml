@@ -107,10 +107,6 @@
       <artifactId>org.osgi.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>nuxeo-studio</groupId>
-      <artifactId>First-Voices</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jboss.seam</groupId>
       <artifactId>jboss-seam</artifactId>
     </dependency>
@@ -153,6 +149,11 @@
      <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesData</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

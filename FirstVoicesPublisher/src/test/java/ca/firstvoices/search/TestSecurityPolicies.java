@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNotNull;
         "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-finder-contrib-test.xml",
         "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml", "org.nuxeo.ecm.user.registration",
         "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml", "org.nuxeo.ecm.user.invite" })
-@PartialDeploy(bundle = "studio.extensions.First-Voices", extensions = { TargetExtensions.ContentTemplate.class })
+@PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentTemplate.class })
 public class TestSecurityPolicies extends AbstractFVTest {
 
     @Inject

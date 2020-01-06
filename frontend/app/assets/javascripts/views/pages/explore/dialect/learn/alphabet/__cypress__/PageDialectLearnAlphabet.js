@@ -5,6 +5,13 @@ import 'cypress-testing-library/add-commands'
 
 describe('PageDialectLearnAlphabet', () => {
   it('FW-333: Can\'t "Edit Character" from alphabet', () => {
+    /*
+      Temporary line to force the test to fail until it is updated.
+    */
+    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
+      cy.expect(true).to.equal(false)
+    })
+
     // Login
     cy.login({ url: 'https://dev.firstvoices.com/nuxeo/startup' })
 

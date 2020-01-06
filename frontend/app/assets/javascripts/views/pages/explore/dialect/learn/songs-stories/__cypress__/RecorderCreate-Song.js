@@ -3,18 +3,13 @@
 
 describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
   it('Test to check song creation for recorders.', () => {
-    // TODO: Add database setup here.
-    // Requires no songs exist in database for SENCOTEN.
-
     /*
             Login as Recorder and check that no songs exist.
         */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Songs', { exact: true }).click()
@@ -119,7 +114,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     /*
             Checking to see if the song now exists
          */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitle').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -137,11 +132,9 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
             Login as language member and check that the song is not visible.
          */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -150,11 +143,9 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
             Login as admin, check that the song is editable, and enable the song.
          */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitle')
       .should('exist')
       .click()
@@ -167,7 +158,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTranslation').should('exist')
       cy.getByText('Continue to song').should('exist')
@@ -176,10 +167,12 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
         .click()
     })
 
-    cy.get('div.hidden-xs.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(0)
+          .click()
+      })
     })
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -188,11 +181,9 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
             Login as language member and check that the song is now visible.
          */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitleEdited').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -205,28 +196,40 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
             Login as admin and publish the song.
          */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitleEdited')
       .should('exist')
       .click()
     cy.wait(500)
-    cy.get('div.hidden-xs.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
     })
     cy.wait(500)
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.wait(1000)
+    cy.reload()
+    cy.wait(300)
 
-    // TODO: Add test for public view here. Public view not currently working so can't implement test.
+    /*
+        Check that the published song is visible.
+     */
+    cy.getByText('Public View').click()
+    cy.wait(1500)
+    cy.get('[id="pageNavigation"]').within(() => {
+      cy.get('div.row.Navigation__dialectContainer')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(58, 104, 128)')
+    })
+    cy.getByText('TestSongTitleEdited').should('exist')
+    cy.getByText('TestSongTranslation').should('exist')
+    cy.getByText('TestSongBookIntroduction').should('exist')
   })
 })

@@ -1,4 +1,10 @@
 {
   "chromeWebSecurity": false,
-  "baseUrl": "http://127.0.0.1:3001"
+  "baseUrl": "http://127.0.0.1:3001",
+  "videoUploadOnPasses": false,
+  "projectId": "CYPRESS_PROJECT_ID",
+  "videoCompression": 15,
+  "env": {
+    "TARGET": "http://127.0.0.1:8080"
+  }
 }

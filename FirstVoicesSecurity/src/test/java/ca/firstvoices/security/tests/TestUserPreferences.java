@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @Features({ PlatformFeature.class })
 @Deploy({ "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.fvuserprofile.services.xml", "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml", "org.nuxeo.ecm.user.registration",
         "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml", "org.nuxeo.ecm.user.invite" })
-@PartialDeploy(bundle = "studio.extensions.First-Voices", extensions = { TargetExtensions.ContentModel.class })
+@PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentModel.class })
 public class TestUserPreferences extends AbstractFVTest {
 
     @Inject

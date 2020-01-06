@@ -6,12 +6,14 @@ import 'cypress-testing-library/add-commands'
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
 // import copy from '/views/pages/explore/dialect/Phrasebook/internationalization'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Phrasebook/internationalization.js'
-describe('PhrasebookCreateDelete.js > Phrasebook', () => {
+describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Create', () => {
     // Login
-    cy.login()
+    cy.login({
+      userName: 'TESTLANGUAGETWO_RECORDER',
+    })
 
-    cy.visit('/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/phrasebook')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/create/phrasebook')
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
@@ -30,7 +32,7 @@ describe('PhrasebookCreateDelete.js > Phrasebook', () => {
     cy.getByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.create.success.createAnother).click()
+    cy.getByText(copy.create.success.linkCreateAnother).click()
 
     // Confirm
     cy.queryByText(copy.create.title).should('exist')

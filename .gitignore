@@ -21,3 +21,8 @@ nashorn_code_cache
 /frontend/scripts/files/import.log
 /fontend/scripts/files/*_errors.csv
 *.iml
+/frontend/cypress/videos/
+/frontend/cypress/screenshots/
+/docker/First-Voices-LATEST.zip
+/docker/First-Voices-marketplace-package-LATEST.zip
+/docker/nuxeo_dev_docker/

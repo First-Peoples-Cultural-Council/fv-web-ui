@@ -3,18 +3,13 @@
 
 describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
   it('Test to check story creation for recorders.', () => {
-    // TODO: Add database setup here.
-    // Requires no stories exist in database for SENCOTEN.
-
     /*
                 Login as Recorder and check that no stories exist.
             */
     cy.login({
-      userName: 'SENCOTEN_RECORDER_USERNAME',
-      userPassword: 'SENCOTEN_RECORDER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Stories', { exact: true }).click()
@@ -119,7 +114,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     /*
                 Checking to see if the story now exists
              */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -137,11 +132,9 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is not visible.
              */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -150,11 +143,9 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin, check that the story is editable, and enable the story.
              */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitle')
       .should('exist')
       .click()
@@ -167,7 +158,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTranslation').should('exist')
       cy.getByText('Continue to story').should('exist')
@@ -176,10 +167,12 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
         .click()
     })
 
-    cy.get('div.hidden-xs.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(0)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(0)
+          .click()
+      })
     })
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -188,11 +181,9 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as language member and check that the story is now visible.
              */
     cy.login({
-      userName: 'SENCOTEN_MEMBER_USERNAME',
-      userPassword: 'SENCOTEN_MEMBER_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitleEdited').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -205,28 +196,40 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Login as admin and publish the story.
              */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten/learn/stories')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/stories')
     cy.queryByText('TestStoryTitleEdited')
       .should('exist')
       .click()
     cy.wait(500)
-    cy.get('div.hidden-xs.clearfix').within(() => {
-      cy.get('input[type=checkbox]')
-        .eq(1)
-        .click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('div.hidden-xs').within(() => {
+        cy.get('input[type=checkbox]')
+          .eq(1)
+          .click()
+      })
     })
     cy.wait(500)
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    cy.wait(500)
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.wait(1000)
+    cy.reload()
+    cy.wait(300)
 
-    // TODO: Add test for public view here. Public view not currently working so can't implement test.
+    /*
+        Check that the published story is visible.
+     */
+    cy.getByText('Public View').click()
+    cy.wait(1500)
+    cy.get('[id="pageNavigation"]').within(() => {
+      cy.get('div.row.Navigation__dialectContainer')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(58, 104, 128)')
+    })
+    cy.getByText('TestStoryTitleEdited').should('exist')
+    cy.getByText('TestStoryTranslation').should('exist')
+    cy.getByText('TestStoryBookIntroduction').should('exist')
   })
 })

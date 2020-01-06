@@ -1,20 +1,15 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
+describe('LangAdminPortal-Inline.js > LangAdminPortal-Inline', () => {
   it('Test to check that a language admin can edit the portal by using the inline pencil.', () => {
-    // TODO: Add database setup here.
-    // Requires the default portal information and media is all that exists for SENCOTEN.
-
     /*
             Login as Language Admin.
         */
     cy.login({
-      userName: 'SENCOTEN_ADMIN_USERNAME',
-      userPassword: 'SENCOTEN_ADMIN_PASSWORD',
-      url: 'https://dev.firstvoices.com/nuxeo/startup',
+      userName: 'TESTLANGUAGEONE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne')
     cy.wait(500)
 
     // Add to the greeting.
@@ -43,16 +38,20 @@ describe('LangAdminPortal.js > LangAdminCreatePortal', () => {
       .eq(3)
       .click()
     cy.getByText('+ Add new').click()
-    cy.getByText('Edit Link').click()
-    cy.getByText('Add New Link To Sencoten')
+    cy.getByText('Create Link').click()
+    cy.getByText('Add New Link To Testlanguageone')
       .parent()
       .within(() => {
         cy.get('[name="dc:title"]').type('TestPortalInlineRelatedLinkTitle')
         cy.get('[name="dc:description"]').type('TestPortalInlineRelatedLinkDescription')
-        cy.get('[name="fvlink:url"]').type('https://dev.firstvoices.com/explore/FV/Workspaces/Data/TEst/Test/Sencoten')
+        cy.get('[name="fvlink:url"]').type(
+          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne'
+        )
         cy.getByText('Save').click()
+        cy.wait(500)
       })
     cy.getByText('Save').click()
+    cy.wait(500)
 
     // Change country.
     cy.get('button[class="EditableComponent__btnEdit FlatButton FlatButton--compact"]')
