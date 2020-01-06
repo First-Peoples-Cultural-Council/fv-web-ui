@@ -9,7 +9,7 @@ describe('LangAdminPortal-Inline.js > LangAdminPortal-Inline', () => {
     cy.login({
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne')
     cy.wait(500)
 
     // Add to the greeting.
@@ -45,7 +45,7 @@ describe('LangAdminPortal-Inline.js > LangAdminPortal-Inline', () => {
         cy.get('[name="dc:title"]').type('TestPortalInlineRelatedLinkTitle')
         cy.get('[name="dc:description"]').type('TestPortalInlineRelatedLinkDescription')
         cy.get('[name="fvlink:url"]').type(
-          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/TEst/Test/TestLanguageOne'
+          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne'
         )
         cy.getByText('Save').click()
         cy.wait(500)

@@ -9,7 +9,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Songs', { exact: true }).click()
@@ -114,7 +114,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     /*
             Checking to see if the song now exists
          */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitle').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -134,7 +134,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.getByTestId('Navigation__open').click()
     cy.getByText('Sign Out').click()
@@ -145,7 +145,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitle')
       .should('exist')
       .click()
@@ -158,7 +158,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     })
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTranslation').should('exist')
       cy.getByText('Continue to song').should('exist')
@@ -183,7 +183,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitleEdited').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -198,7 +198,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageFour/learn/songs')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/songs')
     cy.queryByText('TestSongTitleEdited')
       .should('exist')
       .click()

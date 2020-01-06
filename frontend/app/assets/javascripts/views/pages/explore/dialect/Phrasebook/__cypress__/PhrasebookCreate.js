@@ -13,7 +13,7 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
       userName: 'TESTLANGUAGETWO_RECORDER',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/create/phrasebook')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data

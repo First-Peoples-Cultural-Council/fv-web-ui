@@ -15,7 +15,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
@@ -30,7 +30,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
@@ -47,7 +47,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     /*
             Check for edit word button and then enable the word.
          */
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord').click()
     cy.queryByText('Edit word', { exact: true }).should('exist')
@@ -66,7 +66,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
@@ -85,7 +85,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/TEst/Test/TestLanguageTwo/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord', { exact: true }).click()
     cy.get('div.hidden-xs').within(() => {
