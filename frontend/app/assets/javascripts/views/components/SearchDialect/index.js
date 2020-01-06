@@ -158,6 +158,7 @@ export const SearchDialect = (props) => {
   // }
 
   // Generates 'Stop browsing ...' button
+  // TODO: props.searchDialectResetButtonText
   // ------------------------------------------------------------
   const getBrowsing = () => {
     const { searchByMode } = csd
@@ -191,6 +192,8 @@ export const SearchDialect = (props) => {
   }
 
   // Generates the markup for the search form
+  // TODO: props.searchDialectSearchButtonText
+  // TODO: props.searchDialectResetButtonText
   // ------------------------------------------------------------
   const getSearchForm = () => {
     const resetButtonText = 'Reset search'
