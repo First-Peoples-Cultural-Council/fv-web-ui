@@ -43,7 +43,7 @@ import ReportBrowser from './browse-view'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import IntlService from 'views/services/intl'
-// import ExportDialect from 'views/components/ExportDialect'
+
 const intl = IntlService.instance
 
 const { func, object, string } = PropTypes
@@ -147,16 +147,16 @@ export class PageDialectReportsView extends PageDialectLearnBase {
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
 
     let listView = null
-    // let exportElement = undefined
-    // const extricateReportData = this.state.currentReport.toJS()
-    // const query = extricateReportData.query
-    // // const columns = extricateReportData.cols || ['*']
-    // let exportLabel = undefined
+    let exportDialectExportElement = undefined
+    const extricateReportData = this.state.currentReport.toJS()
+    const exportDialectQuery = extricateReportData.query
+    // // const exportDialectColumns = extricateReportData.cols || ['*']
+    let exportDialectLabel = undefined
 
     switch (this.state.currentReport.get('type')) {
       case 'words':
-        // exportElement = 'FVWord'
-        // exportLabel = 'Word Report'
+        exportDialectExportElement = 'FVWord'
+        exportDialectLabel = 'Word Report'
         listView = (
           <WordListView
             controlViaURL
@@ -172,13 +172,18 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={this.props.routeParams}
+            // Export Dialect
+            exportDialectExportElement={exportDialectExportElement}
+            exportDialectLabel={exportDialectLabel}
+            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            exportDialectColumns={'*'}
           />
         )
         break
 
       case 'phrases':
-        // exportElement = 'FVPhrase'
-        // exportLabel = 'Phrase Report'
+        exportDialectExportElement = 'FVPhrase'
+        exportDialectLabel = 'Phrase Report'
         listView = (
           <PhraseListView
             controlViaURL
@@ -194,13 +199,18 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={this.props.routeParams}
+            // Export Dialect
+            exportDialectExportElement={exportDialectExportElement}
+            exportDialectLabel={exportDialectLabel}
+            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            exportDialectColumns={'*'}
           />
         )
         break
 
       case 'songs':
-        // exportElement = 'FVBook'
-        // exportLabel = 'Song Report'
+        exportDialectExportElement = 'FVBook'
+        exportDialectLabel = 'Song Report'
         listView = (
           <SongsStoriesListViewAlt
             controlViaURL
@@ -213,13 +223,20 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={this.props.routeParams}
+            // Export Dialect
+            // TODO: endpdoint doesn't support FVBook exports
+            hasExportDialect={false}
+            // exportDialectExportElement={exportDialectExportElement}
+            // exportDialectLabel={exportDialectLabel}
+            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            // exportDialectColumns={'*'}
           />
         )
         break
 
       case 'stories':
-        // exportElement = 'FVBook'
-        // exportLabel = 'Story Report'
+        exportDialectExportElement = 'FVBook'
+        exportDialectLabel = 'Story Report'
         listView = (
           <SongsStoriesListViewAlt
             controlViaURL
@@ -232,6 +249,13 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={this.props.routeParams}
+            // Export Dialect
+            // TODO: endpdoint doesn't support FVBook exports
+            hasExportDialect={false}
+            // exportDialectExportElement={exportDialectExportElement}
+            // exportDialectLabel={exportDialectLabel}
+            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            // exportDialectColumns={'*'}
           />
         )
         break
@@ -249,15 +273,6 @@ export class PageDialectReportsView extends PageDialectLearnBase {
 
             <div className="row">
               <div className={classNames('col-xs-12', 'col-md-3')}>
-                {/* <ExportDialect
-                  exportElement={exportElement}
-                  exportLabel={exportLabel}
-                  query={`SELECT * FROM ${exportElement} WHERE ecm:path STARTSWITH '${
-                    this.props.routeParams.dialect_path
-                  }/Dictionary' ${query}`}
-                  // columns={columns.join(',').toUpperCase()}
-                  columns={'*'}
-                /> */}
                 <ReportBrowser
                   style={{ maxHeight: '400px', overflowY: 'scroll' }}
                   routeParams={this.props.routeParams}
@@ -301,7 +316,4 @@ const mapDispatchToProps = {
   updatePageProperties,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectReportsView)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectReportsView)

@@ -40,7 +40,6 @@ import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import DialectFilterList from 'views/components/DialectFilterList'
 import AlphabetListView from 'views/components/AlphabetListView'
-// import ExportDialect from 'views/components/ExportDialect'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { isMobile } from 'react-device-detect'
@@ -269,8 +268,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           <div
             className={classNames('col-xs-12', 'col-md-3', computePhraseBooksSize === 0 ? 'hidden' : null, 'PrintHide')}
           >
-            {/* <ExportDialect exportElement="FVPhrase" /> */}
-
             <AlphabetListView
               dialect={selectn('response', computePortal)}
               handleClick={this.handleAlphabetClick}

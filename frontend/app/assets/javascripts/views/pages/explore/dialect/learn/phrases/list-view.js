@@ -76,7 +76,12 @@ export class PhrasesListView extends DataListView {
     onPagePropertiesChange: func,
     pageProperties: object,
     routeParams: object.isRequired,
-
+    // Export
+    hasExportDialect: bool,
+    exportDialectExportElement: string,
+    exportDialectColumns: string,
+    exportDialectLabel: string,
+    exportDialectQuery: string,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
@@ -312,6 +317,14 @@ export class PhrasesListView extends DataListView {
             // onSelectionChange={this._onEntryNavigateRequest}
             // onSortChange={this._handleSortChange}
             // sortInfo={this.state.sortInfo.uiSortOrder}
+
+            // Export
+            hasExportDialect
+            exportDialectExportElement={this.props.exportDialectExportElement || 'FVPhrase'}
+            exportDialectLabel={this.props.exportDialectLabel}
+            exportDialectQuery={this.props.exportDialectQuery}
+            exportDialectColumns={this.props.exportDialectColumns}
+            //
             columns={this.state.columns}
             data={computePhrases}
             dialect={selectn('response', computeDialect2)}
@@ -496,7 +509,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasesListView)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesListView)

@@ -29,21 +29,19 @@ const rebuildAllData = (newState) => {
 
   return _newState
 }
-export const exportDialectReducer = (
-  state = {
-    CONSTANTS: {
-      EXPORT_DEFAULT,
-      EXPORT_ERROR,
-      EXPORT_IN_PROGRESS,
-      EXPORT_INITIALIZING,
-      EXPORT_SUCCESS,
-    },
-    exportData: undefined,
+const exportDialectDefaultState = {
+  CONSTANTS: {
+    EXPORT_DEFAULT,
+    EXPORT_ERROR,
+    EXPORT_IN_PROGRESS,
+    EXPORT_INITIALIZING,
+    EXPORT_SUCCESS,
   },
-  action
-) => {
+  exportData: undefined,
+}
+export const exportDialectReducer = (state = exportDialectDefaultState, action) => {
   // grab current state
-  const newState = rebuildAllData(Object.assign({}, state))
+  const newState = rebuildAllData(state)
 
   const itemId = action.pathOrId
 
@@ -132,7 +130,7 @@ export const exportDialectReducer = (
 
       // TODO: need exportId
       const exportId = 0
-      debugger
+      // debugger
 
       const updatedExportData = {
         dialectId,
@@ -165,10 +163,6 @@ export const exportDialectReducer = (
     // ==============================
     case 'EXPORT_DIALECT_PROGRESS_EXECUTE_SUCCESS': {
       // NOTE: Progress functions uses Export ID as the itemId
-
-      // IS THIS SUCCESS SPECIFIC TO A SINGLE EXPORT OR THE DIALECT IN GENERAL?
-      // MEANING: CAN THERE BE A MIX OF SUCCESS & IN PROGRESS ENTRIES?
-
       const dialectId = selectn(['response', 'properties', 'fvexport:dialect'], action)
       const exportId = itemId
 
@@ -217,7 +211,7 @@ export const exportDialectReducer = (
       const dialectId = 0
       // TODO: confirm correct exportId
       const exportId = itemId
-      debugger
+      // debugger
 
       const updatedExportData = {
         dialectId,
@@ -296,7 +290,7 @@ export const exportDialectReducer = (
 
       // TODO: need exportId
       const exportId = 0
-      debugger
+      // debugger
 
       const updatedExportData = {
         dialectId,
@@ -317,6 +311,13 @@ export const exportDialectReducer = (
 
       // Send it back out
       return rebuildAllData(newState)
+    }
+
+    // ==============================
+    // RESET DATA
+    // ==============================
+    case 'EXPORT_DIALECT_RESET_DATA': {
+      return exportDialectDefaultState
     }
 
     default:

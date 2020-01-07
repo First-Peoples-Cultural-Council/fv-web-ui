@@ -239,11 +239,12 @@ import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
+import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
 const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/DictionaryListSmallScreen'))
 const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/DictionaryListLargeScreen'))
-
+const ExportDialect = React.lazy(() => import('views/components/ExportDialect'))
 import '!style-loader!css-loader!./DictionaryList.css'
 
 // ===============================================================
@@ -394,13 +395,21 @@ const DictionaryList = (props) => {
         </Suspense>
       )}
 
-      {props.hasViewModeButtons &&
-        props.dictionaryListViewMode === undefined &&
-        getViewButtons({
-          mediaQueryIsSmall: mediaQuery.small,
-          viewMode,
-          clickHandler: setViewMode,
-        })}
+      {generateListButtons({
+        // Export
+        dialect: props.dialect,
+        exportDialectColumns: props.exportDialectColumns,
+        exportDialectExportElement: props.exportDialectExportElement,
+        exportDialectLabel: props.exportDialectLabel,
+        exportDialectQuery: props.exportDialectQuery,
+        hasExportDialect: props.hasExportDialect,
+        // View mode
+        clickHandlerViewMode: setViewMode,
+        dictionaryListViewMode: props.dictionaryListViewMode,
+        hasViewModeButtons: props.hasViewModeButtons,
+        mediaQueryIsSmall: mediaQuery.small,
+        viewMode,
+      })}
 
       <Media
         queries={{
@@ -468,6 +477,103 @@ const DictionaryList = (props) => {
         }}
       </Media>
     </>
+  )
+}
+
+// generateListButtons
+// ------------------------------------
+function generateListButtons({
+  // Export
+  dialect,
+  exportDialectColumns,
+  exportDialectExportElement,
+  exportDialectLabel,
+  exportDialectQuery,
+  hasExportDialect,
+  // View mode
+  clickHandlerViewMode = () => {},
+  dictionaryListViewMode,
+  hasViewModeButtons,
+  mediaQueryIsSmall,
+  viewMode,
+}) {
+  let buttonCompact = null
+  let buttonFlashcard = null
+  let exportDialect = null
+
+  if (hasViewModeButtons && dictionaryListViewMode === undefined) {
+    // NOTE: hiding view mode button when on small screens
+    if (mediaQueryIsSmall === false) {
+      buttonCompact =
+        viewMode === VIEWMODE_SMALL_SCREEN ? (
+          <FVButton
+            variant="contained"
+            className="DictionaryList__viewModeButton"
+            color="primary"
+            onClick={() => {
+              clickHandlerViewMode(VIEWMODE_DEFAULT)
+            }}
+          >
+            Cancel compact view
+          </FVButton>
+        ) : (
+          <FVButton
+            variant="contained"
+            className="DictionaryList__viewModeButton"
+            onClick={() => {
+              clickHandlerViewMode(VIEWMODE_SMALL_SCREEN)
+            }}
+          >
+            Compact view
+          </FVButton>
+        )
+    }
+
+    buttonFlashcard =
+      viewMode === VIEWMODE_FLASHCARD ? (
+        <FVButton
+          variant="contained"
+          color="primary"
+          className="DictionaryList__viewModeButton"
+          onClick={() => {
+            clickHandlerViewMode(VIEWMODE_DEFAULT)
+          }}
+        >
+          Cancel flashcard view
+        </FVButton>
+      ) : (
+        <FVButton
+          variant="contained"
+          className="DictionaryList__viewModeButton"
+          onClick={() => {
+            clickHandlerViewMode(VIEWMODE_FLASHCARD)
+          }}
+        >
+          Flashcard view
+        </FVButton>
+      )
+  }
+  if (hasExportDialect) {
+    exportDialect = (
+      <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ExportDialect
+            exportDialectColumns={exportDialectColumns}
+            exportDialectExportElement={exportDialectExportElement}
+            exportDialectLabel={exportDialectLabel}
+            exportDialectQuery={exportDialectQuery}
+          />
+        </Suspense>
+      </AuthorizationFilter>
+    )
+  }
+
+  return (
+    <div className="DictionaryList__ListButtonsGroup">
+      {buttonCompact}
+      {buttonFlashcard}
+      {exportDialect}
+    </div>
   )
 }
 
@@ -648,70 +754,16 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
   return content
 }
 
-// getViewButtons
-// ------------------------------------
-function getViewButtons({ mediaQueryIsSmall, viewMode, clickHandler }) {
-  // NOTE: hiding view mode button when on small screens
-  // NOTE: mediaQuery set in render
-  let compactView = null
-  if (mediaQueryIsSmall === false) {
-    compactView =
-      viewMode === VIEWMODE_SMALL_SCREEN ? (
-        <FVButton
-          variant="contained"
-          className="DictionaryList__viewModeButton"
-          color="primary"
-          onClick={() => {
-            clickHandler(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel compact view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandler(VIEWMODE_SMALL_SCREEN)
-          }}
-        >
-          Compact view
-        </FVButton>
-      )
-  }
-  return (
-    <div className="DictionaryList__viewModeGroup">
-      {compactView}
-
-      {viewMode === VIEWMODE_FLASHCARD ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandler(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel flashcard view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandler(VIEWMODE_FLASHCARD)
-          }}
-        >
-          Flashcard view
-        </FVButton>
-      )}
-    </div>
-  )
-}
 // ===============================================================
 
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 DictionaryList.propTypes = {
+  // Export
+  hasExportDialect: bool,
+  exportDialectExportElement: string,
+  exportDialectColumns: string,
+  exportDialectLabel: string,
+  exportDialectQuery: string,
   // Batch
   batchConfirmationAction: func,
   batchFooterBtnConfirm: string,
@@ -727,7 +779,9 @@ DictionaryList.propTypes = {
   columns: array.isRequired, // Col names for Data
   computedData: object,
   cssModifier: string,
+  dialect: object,
   dictionaryListSmallScreenTemplate: func,
+  dictionaryListViewMode: number,
   fields: instanceOf(Map),
   filteredItems: oneOfType([array, instanceOf(List)]),
   hasSorting: bool,
@@ -737,7 +791,6 @@ DictionaryList.propTypes = {
   sortHandler: func,
   style: object,
   type: string,
-  dictionaryListViewMode: number,
   wrapperStyle: object,
   // Search
   handleSearch: func,
@@ -754,6 +807,8 @@ DictionaryList.propTypes = {
 }
 
 DictionaryList.defaultProps = {
+  // Export
+  hasExportDialect: false,
   // Batch
   batchFooterBtnConfirm: 'Yes, delete the selected items',
   batchFooterBtnDeny: 'No, do not delete the selected items',
@@ -797,7 +852,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DictionaryList)
+export default connect(mapStateToProps, mapDispatchToProps)(DictionaryList)

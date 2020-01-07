@@ -44,11 +44,11 @@
   font-weight: 700;
 }
 
-.DictionaryList__viewModeGroup {
+.DictionaryList__ListButtonsGroup {
   /* margin: 10px 0; */
   text-align: right;
 }
-.DictionaryList__viewModeGroup .DictionaryList__viewModeButton {
+.DictionaryList__ListButtonsGroup .DictionaryList__viewModeButton {
   margin: 5px;
 }
 

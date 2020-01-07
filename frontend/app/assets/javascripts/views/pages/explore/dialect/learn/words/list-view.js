@@ -78,7 +78,12 @@ class WordsListView extends DataListView {
     resetSearch: func,
     hasSearch: bool,
     hasViewModeButtons: bool,
-
+    // Export
+    hasExportDialect: bool,
+    exportDialectExportElement: string,
+    exportDialectColumns: string,
+    exportDialectLabel: string,
+    exportDialectQuery: string,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
@@ -392,6 +397,14 @@ class WordsListView extends DataListView {
             // objectDescriptions="words"
             // onSelectionChange={this._onEntryNavigateRequest} // NOTE: may call this.props.action
             // sortInfo={this.state.sortInfo.uiSortOrder}
+
+            // Export
+            hasExportDialect
+            exportDialectExportElement={this.props.exportDialectExportElement || 'FVWord'}
+            exportDialectLabel={this.props.exportDialectLabel}
+            exportDialectQuery={this.props.exportDialectQuery}
+            exportDialectColumns={this.props.exportDialectColumns}
+            //
             className={'browseDataGrid'}
             columns={this.state.columns}
             data={computeWords}
@@ -522,7 +535,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WordsListView)
+export default connect(mapStateToProps, mapDispatchToProps)(WordsListView)

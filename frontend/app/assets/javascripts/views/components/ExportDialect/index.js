@@ -7,6 +7,7 @@ import {
   exportDialectGetFormattedDocument,
   exportDialectFVGenerateDocumentWithFormat,
   exportDialectGenericError,
+  exportDialectResetData,
 } from 'providers/redux/reducers/exportDialect'
 import { fetchDocument } from 'providers/redux/reducers/document'
 
@@ -17,32 +18,30 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
 import FVButton from 'views/components/FVButton'
 
-import '!style-loader!css-loader!./ExportDialect.css'
-
 const { any, string, func, object } = PropTypes
 export class ExportDialect extends Component {
   static propTypes = {
-    exportElement: string,
-    exportLabel: string,
-    query: string,
-    columns: string,
+    exportDialectExportElement: string,
+    exportDialectLabel: string,
+    exportDialectQuery: string,
+    exportDialectColumns: string,
     // REDUX: reducers/state
     computeDocument: object.isRequired,
     exportDialect: any.isRequired,
     routeParams: object.isRequired,
     // REDUX: actions/dispatch/func
     exportDialectFVGenerateDocumentWithFormat: func.isRequired,
+    exportDialectGenericError: func.isRequired,
     exportDialectGetFormattedDocument: func.isRequired,
     exportDialectProgress: func.isRequired,
-    exportDialectGenericError: func.isRequired,
+    exportDialectResetData: func.isRequired,
     fetchDocument: func.isRequired,
   }
   static defaultProps = {
-    exportElement: 'FVWord',
-    columns: '*',
-    query: '*',
+    exportDialectExportElement: 'FVWord',
+    exportDialectColumns: '*',
+    exportDialectQuery: '*',
   }
-
   isPolling = false
   pollingInterval = 500
   pollingLimit = 1000 * 60 * 1 // Miliseconds * Seconds/Minute * Minutes
@@ -51,19 +50,24 @@ export class ExportDialect extends Component {
     super(props)
     this.state = {
       dialectId: undefined,
-      isBrowsing: false,
+      exportClicked: false,
     }
   }
 
   async componentDidMount() {
     const { routeParams } = this.props
-    await this.props.fetchDocument(routeParams.dialect_path + '/Dictionary')
+
     const computeDocument = ProviderHelpers.getEntry(
       this.props.computeDocument,
       `${routeParams.dialect_path}/Dictionary`
     )
+
+    if (selectn('isFetching', computeDocument) === false && selectn('success', computeDocument) === false) {
+      await this.props.fetchDocument(routeParams.dialect_path + '/Dictionary')
+    }
+
     const dialectId = selectn(['response', 'properties', 'fva:dialect'], computeDocument)
-    if (dialectId) {
+    if (dialectId && this.state.dialectId !== dialectId) {
       this.setState(
         {
           dialectId,
@@ -75,11 +79,13 @@ export class ExportDialect extends Component {
     }
   }
 
-  // TODO: Stops polling on unmount but how to handle:
-  // TODO: user triggers export, navigates elsewhere,
-  // TODO: and comes back to this page?
+  // TODO: Stops polling on unmount but how to handle...
+  // TODO: 1) user triggers export
+  // TODO: 2) navigates elsewhere
+  // TODO: 3) comes back to this page
   componentWillUnmount() {
     this.isPolling = false
+    this.props.exportDialectResetData()
   }
 
   render() {
@@ -89,31 +95,16 @@ export class ExportDialect extends Component {
     const { exportLast = {} } = this.getData()
 
     const ComponentOuter = (props) => (
-      <div className="ExportDialect">
-        <Typography variant="title" component="h2">
-          Export
-        </Typography>
+      <span>
+        {this.generateExportButton()}
         {props.children}
-      </div>
+      </span>
     )
 
-    // Suppresses issue where previous dialect's export state is shown when navigating to a new dialect
-    // NOTE: fails if no export to begin with
-    // if (exportLast.lifecycle === undefined || exportLast.dialectId !== this.state.dialectId) {
-    //   console.log('!', {
-    //     exportLast,
-    //     exportLastLifecycle: exportLast.lifecycle,
-    //     exportLastDialectId: exportLast.dialectId,
-    //     stateDialectId: this.state.dialectId,
-    //   })
-    //   return null
-    // }
-
-    if (this.state.isBrowsing) {
-      return <ComponentOuter>{this.stateIsBrowsing()}</ComponentOuter>
-    }
-
     let component = null
+    if (this.state.exportClicked) {
+      return <ComponentOuter />
+    }
     switch (exportLast.lifecycle) {
       case EXPORT_IN_PROGRESS:
         component = <ComponentOuter>{this.stateIsInProgress()}</ComponentOuter>
@@ -125,17 +116,17 @@ export class ExportDialect extends Component {
         component = <ComponentOuter>{this.stateIsError()}</ComponentOuter>
         break
       default:
-        component = <ComponentOuter>{this.stateIsDefault()}</ComponentOuter>
+        component = <ComponentOuter />
     }
     return component
   }
 
-  exportDialectCheckPrevious = async () => {
-    const { dialectId } = this.state
-    if (dialectId) {
-      await this.props.exportDialectGetFormattedDocument(dialectId, { format: 'CSV' })
-    }
-  }
+  // exportDialectCheckPrevious = async () => {
+  //   const { dialectId } = this.state
+  //   if (dialectId) {
+  //     await this.props.exportDialectGetFormattedDocument(dialectId, { format: 'CSV' })
+  //   }
+  // }
   exportDialectProgress = async () => {
     const { exportLast = {} } = this.getData()
     if (exportLast.exportId) {
@@ -143,66 +134,40 @@ export class ExportDialect extends Component {
     }
   }
 
-  exportDialectRequest = async () => {
-    const { dialectId } = this.state
-    const { columns, exportElement, query } = this.props
-    await this.props.exportDialectFVGenerateDocumentWithFormat(dialectId, {
-      columns,
-      exportElement,
-      format: 'CSV',
-      query,
-    })
+  exportDialectRequest = () => {
+    this.setState(
+      {
+        exportClicked: true,
+      },
+      async () => {
+        const { dialectId } = this.state
+        const { exportDialectColumns, exportDialectExportElement, exportDialectQuery } = this.props
+        await this.props.exportDialectFVGenerateDocumentWithFormat(dialectId, {
+          columns: exportDialectColumns,
+          exportElement: exportDialectExportElement,
+          format: 'CSV',
+          query: exportDialectQuery,
+        })
+        this.setState({
+          exportClicked: false,
+        })
+      }
+    )
   }
 
-  getButtons = () => {
-    const { exportLabel, exportDialect } = this.props
+  generateExportButton = () => {
+    const { exportDialectLabel, exportDialect } = this.props
     const { CONSTANTS } = exportDialect
     const { EXPORT_IN_PROGRESS } = CONSTANTS
 
     const { exportLast } = this.getData()
 
-    const isExporting = exportLast.lifecycle === EXPORT_IN_PROGRESS ? true : false
+    const isExporting = this.state.exportClicked || exportLast.lifecycle === EXPORT_IN_PROGRESS
 
-    const exportButton = isExporting ? (
-      <FVButton
-        className="ExportDialect__button"
-        disabled={isExporting}
-        color="primary"
-        variant="outlined"
-        onClick={this.exportDialectRequest}
-      >
-        Exporting...
-      </FVButton>
-    ) : (
-      <FVButton
-        className="ExportDialect__button"
-        color="primary"
-        variant="outlined"
-        onClick={this.exportDialectRequest}
-      >
-        Export{`${exportLabel ? ` ${exportLabel}` : ''}`}
-      </FVButton>
-    )
-    // const browseButton = (
-    //   <FVButton
-    //     className="ExportDialect__button"
-    //     color="secondary"
-    //     variant="outlined"
-    //     onClick={async () => {
-    //       await this.exportDialectCheckPrevious()
-    //       this.setState({
-    //         isBrowsing: true,
-    //       })
-    //     }}
-    //   >
-    //     {'Browse previous exports >'}
-    //   </FVButton>
-    // )
     return (
-      <div className="ExportDialect__buttonGroup">
-        {exportButton}
-        {/* {browseButton} */}
-      </div>
+      <FVButton disabled={isExporting} variant="contained" onClick={this.exportDialectRequest}>
+        {isExporting ? 'Exporting...' : `Export${exportDialectLabel ? ` ${exportDialectLabel}` : ''}`}
+      </FVButton>
     )
   }
 
@@ -237,14 +202,7 @@ export class ExportDialect extends Component {
       const fileName = selectn(['file:content', 'name'], file)
 
       return url === undefined ? null : (
-        <FVButton
-          className="ExportDialect__button"
-          href={url}
-          color="primary"
-          variant="outlined"
-          component="a"
-          key={index}
-        >
+        <FVButton href={url} variant="text" component="a" key={index}>
           <span style={{ wordBreak: 'break-word' }}>{fileName}</span>
         </FVButton>
       )
@@ -316,59 +274,20 @@ export class ExportDialect extends Component {
     return 0
   }
 
-  stateIsBrowsing = () => {
-    return (
-      <>
-        <div className="ExportDialect__group">
-          <Typography variant="subheading" component="h3">
-            Browsing previous exports
-          </Typography>
-        </div>
-
-        <div className="ExportDialect__group">{this.getExportedFiles()}</div>
-
-        <div className="ExportDialect__buttonGroup">
-          <FVButton
-            className="ExportDialect__button"
-            color="secondary"
-            variant="outlined"
-            onClick={() => {
-              this.setState({
-                isBrowsing: false,
-              })
-            }}
-          >
-            {'< Back'}
-          </FVButton>
-        </div>
-      </>
-    )
-  }
   stateIsError = () => {
     const { exportLast } = this.getData()
 
     const { message } = exportLast
     return (
-      <>
-        <div className="ExportDialect__group">
-          <Typography variant="subheading" component="h2" gutterBottom>
-            The export failed.
-          </Typography>
-
-          <Typography variant="subheading" component="h3" gutterBottom>
-            Details
-          </Typography>
-          <Typography variant="body1">{message}</Typography>
-        </div>
-
-        {this.getButtons()}
-      </>
+      <div>
+        <Typography variant="body1">{message || "Couldn't export at this time"}</Typography>
+      </div>
     )
   }
   stateIsInProgress = () => {
-    const { exportLast, timestamp } = this.getData()
+    const { exportLast } = this.getData()
 
-    const { percentage = 0 } = exportLast
+    // const { percentage = 0 } = exportLast
 
     if (this.isPolling === false) {
       this.isPolling = true
@@ -386,57 +305,20 @@ export class ExportDialect extends Component {
       )
     }
 
-    const progressValue = selectn(['fvexport:progressValue'], exportLast)
+    // const progressValue = selectn(['fvexport:progressValue'], exportLast)
     const progressString = selectn(['fvexport:progressString'], exportLast)
 
     return (
-      <>
-        <div style={{ backgroundColor: 'green', width: `${percentage}%`, height: '2px' }} />
-        <div className="ExportDialect__group">
-          <Typography variant="subheading">Export in progress...</Typography>
-        </div>
-
-        {this.getButtons()}
-
-        <div className="ExportDialect__group">
-          <Typography variant="subheading" component="h3" gutterBottom>
-            DEBUG
-          </Typography>
-          <Typography variant="caption">Status: {progressString}</Typography>
-          <Typography variant="caption">Progress: {progressValue}</Typography>
-          <Typography variant="caption">Timestamp: {timestamp}</Typography>
-        </div>
-      </>
-    )
-  }
-
-  stateIsDefault = () => {
-    return (
-      <>
-        <div className="ExportDialect__group">
-          <Typography variant="subheading">Create a file of this page for printing or use offline.</Typography>
-        </div>
-
-        {this.getButtons()}
-      </>
+      <div>
+        {progressString}
+        {/* <div style={{ backgroundColor: 'green', width: `${50}%`, height: '2px' }} /> */}
+      </div>
     )
   }
 
   stateIsSuccess = () => {
     const exportedFiles = this.getExportedFiles()
-    return (
-      <>
-        <div className="ExportDialect__group">
-          <Typography variant="subheading" gutterBottom>
-            Last exported file for this dialect
-          </Typography>
-
-          {exportedFiles[exportedFiles.length - 1]}
-        </div>
-
-        {this.getButtons()}
-      </>
-    )
+    return <div>{exportedFiles[exportedFiles.length - 1]}</div>
   }
 }
 
@@ -458,10 +340,8 @@ const mapDispatchToProps = {
   exportDialectGetFormattedDocument,
   exportDialectFVGenerateDocumentWithFormat,
   exportDialectGenericError,
+  exportDialectResetData,
   fetchDocument,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExportDialect)
+export default connect(mapStateToProps, mapDispatchToProps)(ExportDialect)
