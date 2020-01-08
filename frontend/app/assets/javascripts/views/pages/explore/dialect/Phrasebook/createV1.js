@@ -183,7 +183,7 @@ export class PageDialectPhraseBooksCreate extends Component {
     }
 
     return (
-      <div>
+      <div data-testid="PageDialectPhraseBooksCreate">
         <h1>
           {intl.trans(
             'views.pages.explore.dialect.phrase_books.add_new_phrase_book_to',
@@ -251,7 +251,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectPhraseBooksCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectPhraseBooksCreate)
