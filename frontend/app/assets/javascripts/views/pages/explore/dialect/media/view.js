@@ -241,6 +241,7 @@ export class MediaView extends Component {
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
                                     )}
+                                    component="div"
                                   >
                                     {thumbnails.map((thumbnail, key) => {
                                       return (
@@ -558,7 +559,4 @@ const mapDispatchToProps = {
   unpublishResource,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MediaView)
+export default connect(mapStateToProps, mapDispatchToProps)(MediaView)

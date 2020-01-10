@@ -118,7 +118,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                 'col-md-12': this.props.fullWidth,
               })}
             >
-              <form onSubmit={this._onFilterSaveForm}>
+              <form>
                 <FiltersWithToggle
                   label={intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
                   mobileOnly
@@ -140,7 +140,11 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                     >
                       {intl.trans('reset', 'Reset', 'first')}
                     </button>
-                    <button type="submit" className="FilteredGridList__btn RaisedButton RaisedButton--primary">
+                    <button
+                      type="button"
+                      onClick={this._onFilterSaveForm}
+                      className="FilteredGridList__btn RaisedButton RaisedButton--primary"
+                    >
                       {intl.trans('filter', 'Filter', 'first')}
                     </button>
                   </div>
