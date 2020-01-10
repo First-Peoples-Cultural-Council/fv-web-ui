@@ -108,6 +108,7 @@ export class MediaView extends Component {
 
     this.state = {
       showThumbnailDialog: null,
+      tabValue: 0,
     }
   }
 
