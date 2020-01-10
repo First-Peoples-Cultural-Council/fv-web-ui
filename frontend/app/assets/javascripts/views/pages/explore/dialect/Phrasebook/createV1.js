@@ -179,7 +179,7 @@ export class PageDialectPhraseBooksCreate extends Component {
     const phrasebook = ProviderHelpers.getEntry(computeCategory, this.state.phrasebookPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress variant="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" />
     }
 
     return (
@@ -251,7 +251,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectPhraseBooksCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectPhraseBooksCreate)

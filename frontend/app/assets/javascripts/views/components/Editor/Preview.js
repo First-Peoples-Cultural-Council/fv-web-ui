@@ -156,7 +156,7 @@ export class Preview extends Component {
       this.props.styles
     )
 
-    let body = <CircularProgress variant="indeterminate" size={1} />
+    let body = <CircularProgress variant="indeterminate" />
 
     switch (this.props.type) {
       case 'FVWord': {
@@ -945,9 +945,4 @@ const mapDispatchToProps = {
   fetchWord,
 }
 
-export default withTheme()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Preview)
-)
+export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(Preview))

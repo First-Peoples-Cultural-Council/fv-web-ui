@@ -226,7 +226,7 @@ export class PageDialectReports extends React.Component {
       computeReportSongsAll.isFetching ||
       computeReportStoriesAll.isFetching
     ) {
-      return <CircularProgress mode="indeterminate" size={3} />
+      return <CircularProgress mode="indeterminate" />
     }
 
     if (
@@ -235,7 +235,7 @@ export class PageDialectReports extends React.Component {
       !computeReportSongsAll.success ||
       !computeReportStoriesAll.success
     ) {
-      return <CircularProgress mode="indeterminate" size={3} />
+      return <CircularProgress mode="indeterminate" />
     }
 
     const wordsCount = computeReportWordsAll.response.resultsCount
@@ -246,7 +246,7 @@ export class PageDialectReports extends React.Component {
     // If a report has been selected, display the query results
     if (this.state.queryName !== '') {
       if (computeReportDocuments.isFetching || !computeReportDocuments.success) {
-        return <CircularProgress mode="indeterminate" size={3} />
+        return <CircularProgress mode="indeterminate" />
       }
       let docTypeCount
       if (this.state.queryDocType === 'words') {
@@ -720,7 +720,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectReports)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectReports)

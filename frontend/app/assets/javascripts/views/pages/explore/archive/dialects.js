@@ -112,7 +112,7 @@ export class ExploreDialects extends Component {
 
     let content = (
       <div>
-        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} size={1} /> Loading
+        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} /> Loading
       </div>
     )
     if (this.props.computePortals && this.props.computePortals.success) {
@@ -187,7 +187,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExploreDialects)
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreDialects)
