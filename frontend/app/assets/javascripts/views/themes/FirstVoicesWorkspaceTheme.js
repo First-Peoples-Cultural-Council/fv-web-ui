@@ -76,7 +76,7 @@ export default {
         backgroundColor: '#89cac2',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'pink',
+          backgroundColor: '#89cac2',
         },
       },
       '&$disabled': {

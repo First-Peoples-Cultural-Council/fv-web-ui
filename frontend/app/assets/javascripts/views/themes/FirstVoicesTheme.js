@@ -82,19 +82,19 @@ export default {
       },
     },
     containedSecondary: {
-      color: 'blue',
-      backgroundColor: 'yellow',
+      color: '#fff',
+      backgroundColor: '#bc0000',
       '&:hover': {
-        color: 'yellow',
-        backgroundColor: 'blue',
+        color: '#360000',
+        backgroundColor: '#f18f8b',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'pink',
+          backgroundColor: '#f18f8b',
         },
       },
       '&$disabled': {
-        color: '#a1a1a1',
-        backgroundColor: '#e5e5e5',
+        color: '#fff',
+        backgroundColor: '#deb8b8',
       },
     },
     outlinedPrimary: {
