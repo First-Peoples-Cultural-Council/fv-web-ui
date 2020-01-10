@@ -325,7 +325,7 @@ export class Search extends DataListView {
     return (
       <div className="Search">
         <div className="row">
-          <div className={classNames('col-xs-12', 'col-md-3')}>
+          <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
             <div className="col-xs-12">
               <form onSubmit={this._onSearchSaveForm}>
                 <FiltersWithToggle
@@ -356,10 +356,7 @@ export class Search extends DataListView {
               </form>
             </div>
           </div>
-          <div
-            className={classNames('search-results', 'col-xs-12', 'col-md-9')}
-            style={{ borderLeft: '5px solid #f7f7f7' }}
-          >
+          <div className={classNames('search-results', 'col-xs-12', 'col-md-9')}>
             <h1>
               {intl.trans('search_results', 'Search results', 'first')} -{' '}
               <span className="fontAboriginalSans">{this.props.routeParams.searchTerm}</span>
@@ -559,6 +556,7 @@ export class Search extends DataListView {
                                         variant="flat"
                                         size="small"
                                         component="a"
+                                        className="PrintHide"
                                         href={hrefEdit}
                                         onClick={(e) => {
                                           e.preventDefault()
@@ -679,7 +677,4 @@ const mapDispatchToProps = {
   searchDocuments,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Search)
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

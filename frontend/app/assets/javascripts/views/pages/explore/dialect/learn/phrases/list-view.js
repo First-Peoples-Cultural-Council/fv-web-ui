@@ -149,7 +149,7 @@ export class PhrasesListView extends DataListView {
                     variant="flat"
                     size="small"
                     component="a"
-                    className="DictionaryList__linkEdit"
+                    className="DictionaryList__linkEdit PrintHide"
                     href={hrefEdit}
                     onClick={(e) => {
                       e.preventDefault()
@@ -218,7 +218,7 @@ export class PhrasesListView extends DataListView {
             if (firstPicture) {
               return (
                 <img
-                  style={{ maxWidth: '62px', maxHeight: '45px' }}
+                  className="PrintHide itemThumbnail"
                   key={selectn('uid', firstPicture)}
                   src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
                 />

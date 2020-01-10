@@ -25,19 +25,8 @@ export default {
     dataItems.map(function dataItemsMap(entry, i) {
       rows.push(render(entry, i))
     })
-
-    return (
-      <ol
-        style={{
-          fontSize: '0.9em',
-          margin: 0,
-          padding: rows.length == 1 ? '0' : '0 15px',
-          listStyle: rows.length == 1 ? 'none' : 'decimal',
-        }}
-      >
-        {rows}
-      </ol>
-    )
+    const classNameModifier = rows.length === 1 ? 'renderComplexArrayRow--rowSingle' : ''
+    return <ol className={`renderComplexArrayRow ${classNameModifier}`}>{rows}</ol>
   },
   getPreferenceVal(key, preferences) {
     return selectn('preferences.values.' + key + '.' + selectn(key, preferences), ConfGlobal)
