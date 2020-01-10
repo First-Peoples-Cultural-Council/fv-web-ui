@@ -112,7 +112,7 @@ export class SongsStoriesListViewAlt extends DataListView {
                   // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
                 }
             return (
-              <a onClick={clickHandler} href={href}>
+              <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}
               </a>
             )

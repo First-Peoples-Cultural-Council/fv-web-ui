@@ -185,7 +185,7 @@ export class AppFrontController extends Component {
         .get('print') === true
       : false
 
-    let footer = <Footer className={'footer-' + siteTheme + '-theme'} />
+    let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
 
     const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
 
@@ -522,9 +522,4 @@ const mapDispatchToProps = {
   updateWindowPath,
 }
 
-export default withTheme()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AppFrontController)
-)
+export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(AppFrontController))

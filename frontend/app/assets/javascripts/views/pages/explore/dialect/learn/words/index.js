@@ -254,7 +254,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                     this._onNavigateRequest('create')
                   }
                 }}
-                className="buttonRaised"
+                className="PrintHide buttonRaised"
               >
                 {intl.trans('views.pages.explore.dialect.learn.words.create_new_word', 'Create New Word', 'words')}
               </button>

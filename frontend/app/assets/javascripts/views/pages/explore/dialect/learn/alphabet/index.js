@@ -39,7 +39,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
-import Paper from '@material-ui/core/Paper'
 import FVButton from 'views/components/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
@@ -250,7 +249,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                 tag="h1"
                 properties={this.props.properties}
                 appendToTitle={
-                  <a href="alphabet/print" target="_blank">
+                  <a className="PrintHide" href="alphabet/print" target="_blank">
                     <i className="material-icons">print</i>
                   </a>
                 }
@@ -287,33 +286,20 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                       const audioFile = selectn('contextParameters.character.related_audio[0].path', char)
 
                       return (
-                        <Paper
+                        <FVButton
                           key={char.uid}
-                          style={{
-                            textAlign: 'center',
-                            margin: '5px',
-                            padding: '5px 10px',
-                            width: '100px',
-                            display: 'inline-block',
-                          }}
+                          variant="flat"
+                          onClick={_this._onCharAudioTouchTap.bind(this, char)}
+                          //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
+                          className="alphabet__character"
                         >
-                          <FVButton
-                            variant="flat"
-                            onClick={_this._onCharAudioTouchTap.bind(this, char)}
-                            //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
-                            style={{ minWidth: 'inherit', textTransform: 'initial' }}
-                          >
-                            {audioFile ? <PlayArrowIcon className="material-icons" /> : null}
-                            {text}
-                          </FVButton>
-                          {audioFile ? (
-                            <span>
-                              <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + audioFile} />
-                            </span>
-                          ) : (
-                            ''
+                          {audioFile ? <PlayArrowIcon className="material-icons PrintHide" /> : null}
+                          {text}
+
+                          {audioFile && (
+                            <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + audioFile} />
                           )}
-                        </Paper>
+                        </FVButton>
                       )
                     })}
                   </div>
@@ -371,7 +357,4 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectLearnAlphabet)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnAlphabet)
