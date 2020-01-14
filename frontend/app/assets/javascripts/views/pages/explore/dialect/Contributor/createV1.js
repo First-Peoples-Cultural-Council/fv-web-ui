@@ -173,7 +173,7 @@ export class PageDialectContributorsCreate extends Component {
     const contributor = ProviderHelpers.getEntry(computeContributor, this.state.contributorPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress variant="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" />
     }
 
     return (
@@ -237,7 +237,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectContributorsCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectContributorsCreate)
