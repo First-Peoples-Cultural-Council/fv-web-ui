@@ -27,7 +27,7 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
@@ -85,7 +85,8 @@ export class PhrasesEdit extends Component {
         return _module.default
       }
     )
-    this.fetchData({ copy })
+    const { redirect } = getSearchObject()
+    this.fetchData({ copy, redirect: redirect ? decodeURIComponent(redirect) : undefined })
   }
 
   componentDidUpdate(prevProps) {
@@ -112,15 +113,19 @@ export class PhrasesEdit extends Component {
       selectn('wasUpdated', previousPhrase) != selectn('wasUpdated', currentPhrase) &&
       selectn('wasUpdated', currentPhrase) === true
     ) {
-      NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(
-          this.props.routeParams.siteTheme,
-          selectn('response', currentPhrase),
-          'phrases'
-        ),
-        this.props.replaceWindowPath,
-        true
-      )
+      if (this.state.redirect) {
+        NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
+      } else {
+        NavigationHelpers.navigate(
+          NavigationHelpers.generateUIDPath(
+            this.props.routeParams.siteTheme,
+            selectn('response', currentPhrase),
+            'phrases'
+          ),
+          this.props.replaceWindowPath,
+          true
+        )
+      }
     }
   }
   shouldComponentUpdate(newProps, newState) {
@@ -226,7 +231,11 @@ export class PhrasesEdit extends Component {
   }
 
   _handleCancel = () => {
-    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+    if (this.state.redirect) {
+      NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
+    } else {
+      NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+    }
   }
   _stateGetDefault = () => {
     let context
@@ -332,7 +341,4 @@ const mapDispatchToProps = {
   updatePhrase,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasesEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesEdit)

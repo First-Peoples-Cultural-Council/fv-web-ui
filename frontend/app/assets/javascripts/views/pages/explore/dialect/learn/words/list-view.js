@@ -139,6 +139,9 @@ class WordsListView extends DataListView {
 
             const href = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, data, 'words')
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'words')
+            const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
+              `${window.location.pathname}${window.location.search}`
+            )}`
             // NOTE: FW-135: Using `onClick={()=>{}}` for unknown reasons causes the following error when on Words and clicking between categories:
             //`Uncaught Invariant Violation: findComponentRoot(..., .0.0.2.0.1.0.0:1.1.2.0.0.0.0.0.0.1:$0.$0.0): Unable to find element`
             // That's why `undefined` is used in `clickHandler`
@@ -163,10 +166,10 @@ class WordsListView extends DataListView {
                     size="small"
                     component="a"
                     className="DictionaryList__linkEdit PrintHide"
-                    href={hrefEdit}
+                    href={hrefEditRedirect}
                     onClick={(e) => {
                       e.preventDefault()
-                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                      NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
                     }}
                   >
                     <Edit title={intl.trans('edit', 'Edit', 'first')} />

@@ -131,6 +131,9 @@ export class PhrasesListView extends DataListView {
 
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
+            const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
+              `${window.location.pathname}${window.location.search}`
+            )}`
             const computeDialect2 = this.props.dialect || this.getDialect()
 
             const editButton =
@@ -150,10 +153,10 @@ export class PhrasesListView extends DataListView {
                     size="small"
                     component="a"
                     className="DictionaryList__linkEdit PrintHide"
-                    href={hrefEdit}
+                    href={hrefEditRedirect}
                     onClick={(e) => {
                       e.preventDefault()
-                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                      NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
                     }}
                   >
                     <Edit title={intl.trans('edit', 'Edit', 'first')} />
