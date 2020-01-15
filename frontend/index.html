@@ -65,6 +65,19 @@
     <div id="wrapper">
       <div class="container-fluid" id="page-wrapper">
         <div id="app-wrapper" class="app-wrapper">
+          <%
+            // NOTE: The markup below should match what's at:
+            // fv-web-ui/frontend/app/assets/javascripts/views/AppFrontController.js
+            // ------------------------------------------------------------------------------
+            // The loading screen below is shown while React is initializing.
+            //
+            // After React starts up, AppFrontController checks to see if a user is connected
+            // and may trigger a redirect if needed. While AppFrontController is waiting on
+            // the user's status a blank page is displayed (since no routing has occurred).
+            //
+            // If we duplicate the loading screen below over in AppFrontController, the user
+            // won't be shown the blank page.
+           %>
           <div id="app-loader" class="app-loader">
             <div style="width: 50%; margin: 50px auto; border: 1px #ccc solid; padding: 15px;font-size: 16pt;">
               <p><strong>FirstVoices</strong></p>
