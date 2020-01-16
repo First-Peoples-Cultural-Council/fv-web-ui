@@ -206,7 +206,7 @@ export class MediaView extends Component {
             <div>
               <Card>
                 <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-                  <Tab label={intl.trans('overview', 'Overview', 'first')} />
+                  <Tab data-testid="tabOverview" label={intl.trans('overview', 'Overview', 'first')} />
                   <Tab
                     label={
                       UIHelpers.isViewSize('xs')
