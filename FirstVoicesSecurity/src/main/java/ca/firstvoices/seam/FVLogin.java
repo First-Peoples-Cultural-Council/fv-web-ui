@@ -43,6 +43,10 @@ public class FVLogin extends StartupHelper {
     public String initDomainAndFindStartupPage(String domainTitle, String viewId) {
         String result_from_default_helper = "view_home";
 
+        if (fvContextPath == null) {
+            fvContextPath = "";
+        }
+
         try {
 
             if (documentManager == null) {
@@ -68,7 +72,7 @@ public class FVLogin extends StartupHelper {
                 else {
                     redirectTo = fvUserProfileService.getDefaultDialectRedirectPath(documentManager, currentUser, NUXEO_URL, true);
                 }
-            } else if (!fvDisableLoginRedirect.equals("true")) {
+            } else if (fvDisableLoginRedirect != null && !fvDisableLoginRedirect.equals("true")) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
             }
 
