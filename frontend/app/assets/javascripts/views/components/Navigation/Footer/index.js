@@ -19,6 +19,8 @@ import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
+import '!style-loader!css-loader!./Footer.css'
+
 export default class Footer extends React.Component {
   intl = IntlService.instance
 
@@ -38,11 +40,14 @@ export default class Footer extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className={classNames('col-xs-12', 'col-md-5', 'col-md-offset-1', 'Footer__group', 'PrintHide')}>
-                <img
-                  src="assets/images/logo-fpcc-white.png"
-                  alt="FirstVoices Logo"
-                  className={classNames('pull-left')}
-                />
+                <p className="Footer__caption">An initiative of</p>
+                <a href="http://www.fpcc.ca/" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="assets/images/logo-fpcc-white.png"
+                    alt="First Peoples' Cultural Council"
+                    className={classNames('pull-left')}
+                  />
+                </a>
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-5', 'col-md-offset-1', 'Footer__group')}>

@@ -96,7 +96,7 @@ export const SearchDialect = (props) => {
     }
     // wait
     if (props.computeDirectory.success && props.computeDirectory.success) {
-      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props)
+      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
       const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
         if (a.text < b.text) return -1
         if (a.text > b.text) return 1

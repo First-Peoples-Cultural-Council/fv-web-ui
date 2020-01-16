@@ -200,7 +200,9 @@ export class Navigation extends Component {
           <AppLeftNav menu={{ main: true }} open={false} docked={false} />
 
           {/* Logo */}
-          <img className="Navigation__logo" src="assets/images/logo.png" alt={this.props.properties.title} />
+          <a href="/home">
+            <img className="Navigation__logo" src="assets/images/logo.png" alt={this.props.properties.title} />
+          </a>
 
           <div className="Navigation__toolbarMainInner">
             <a
@@ -639,9 +641,4 @@ const styles = (theme) => {
     localePicker,
   }
 }
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Navigation)
-)
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Navigation))
