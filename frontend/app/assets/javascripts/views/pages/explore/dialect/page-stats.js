@@ -26,10 +26,10 @@ import Paper from '@material-ui/core/Paper'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
-
+import Close from '@material-ui/icons/Close'
 import Statistics from 'views/components/Dashboard/Statistics'
 import IntlService from 'views/services/intl'
-
+import '!style-loader!css-loader!./PageStats.css'
 const intl = IntlService.instance
 
 const { func, object, string } = PropTypes
@@ -37,9 +37,13 @@ export class PageStats extends Component {
   static propTypes = {
     handleNavigateRequest: func,
     dialectPath: string.isRequired,
+    handleShowStats: func,
     // REDUX: reducers/state
     computeDialectStats: object.isRequired,
     windowPath: string.isRequired,
+  }
+  static defaultProps = {
+    handleShowStats: () => {},
   }
   state = {
     tabValue: 0,
@@ -53,17 +57,28 @@ export class PageStats extends Component {
     const computeDialectStats = ProviderHelpers.getEntry(this.props.computeDialectStats, this.props.dialectPath)
 
     if (!selectn('response', computeDialectStats)) {
-      return <div>Loading...</div>
+      return <div className="PageStats hidden-xs">Loading...</div>
     }
 
     return (
-      <div>
+      <div className="PageStats hidden-xs">
+        <button
+          type="button"
+          className="PageStats__close"
+          data-testid="PageStats__close"
+          onClick={this.props.handleShowStats}
+        >
+          <Close className="PageStats__closeIcon" />
+          <span className="visually-hidden">Close Page Statistics</span>
+        </button>
+
         <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-          <Tab label="Words" id="statisticsWords" />
-          <Tab label="Phrases" id="statisticsPhrases" />
-          <Tab label="Songs" id="statisticsSongs" />
-          <Tab label="Stories" id="statisticsStories" />
+          <Tab className="PageStats__tab" label="Words" id="statisticsWords" />
+          <Tab className="PageStats__tab" label="Phrases" id="statisticsPhrases" />
+          <Tab className="PageStats__tab" label="Songs" id="statisticsSongs" />
+          <Tab className="PageStats__tab" label="Stories" id="statisticsStories" />
         </Tabs>
+
         {this.state.tabValue === 0 && (
           <Typography component="div" style={{ padding: 8 * 3 }}>
             <Paper style={{ padding: '15px' }}>
@@ -126,7 +141,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(PageStats)
+export default connect(mapStateToProps, null)(PageStats)

@@ -17,7 +17,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
 import selectn from 'selectn'
-import classNames from 'classnames'
 import PageStats from 'views/pages/explore/dialect/page-stats'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 // import { SECTIONS } from 'common/Constants'
@@ -31,12 +30,14 @@ export default class Header extends Component {
     portal: PropTypes.object,
     dialect: PropTypes.object,
     login: PropTypes.object,
-    showStats: PropTypes.bool,
+    shouldShowStats: PropTypes.bool,
+    handleShowStats: PropTypes.func,
     routeParams: PropTypes.object,
   }
 
   static defaultProps = {
-    showStats: false,
+    shouldShowStats: false,
+    handleShowStats: () => {},
   }
 
   constructor(props, context) {
@@ -48,7 +49,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { portal, login, routeParams, showStats } = this.props
+    const { portal, login, routeParams, shouldShowStats } = this.props
 
     const backgroundImage = selectn(
       'response.contextParameters.portal.fv-portal:background_top_image.path',
@@ -76,21 +77,9 @@ export default class Header extends Component {
     return (
       <div className="Header row" style={portalBackgroundStyles}>
         <AuthenticationFilter login={login} hideFromSections routeParams={routeParams}>
-          <div
-            className={classNames('hidden-xs', { invisible: !showStats })}
-            style={{
-              width: '50%',
-              background: 'rgba(255, 255, 255, 0.7)',
-              margin: '10px 25px',
-              borderRadius: '10px',
-              padding: '10px',
-              position: 'absolute',
-              top: '15px',
-              right: '0',
-            }}
-          >
-            <PageStats dialectPath={routeParams.dialect_path} />
-          </div>
+          {shouldShowStats && (
+            <PageStats handleShowStats={this.props.handleShowStats} dialectPath={routeParams.dialect_path} />
+          )}
         </AuthenticationFilter>
 
         {this.props.children}

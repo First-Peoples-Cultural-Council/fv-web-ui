@@ -145,15 +145,17 @@ export class ToolbarNavigation extends Component {
               </a>
             </div>
           </div>
-          <div className="col-xs-12 col-md-2">
+          {this.props.shouldShowStats !== true && (
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
-              <div className={classNames('hidden-xs', { hidden: !this.props.showStats })} float="right">
-                <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.showStats}>
-                  <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
-                </FVButton>
+              <div className="col-xs-12 col-md-2">
+                <div className={classNames('hidden-xs')} float="right">
+                  <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
+                    <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
+                  </FVButton>
+                </div>
               </div>
             </AuthenticationFilter>
-          </div>
+          )}
         </div>
       </div>
     )
@@ -183,7 +185,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolbarNavigation)
+export default connect(mapStateToProps, mapDispatchToProps)(ToolbarNavigation)
