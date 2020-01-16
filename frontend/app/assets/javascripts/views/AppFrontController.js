@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath, replaceWindowPath, updateWindowPath } from 'providers/redux/reducers/windowPath'
 import { changeSiteTheme, setRouteParams } from 'providers/redux/reducers/navigation'
+import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
 
 import selectn from 'selectn'
 
@@ -77,24 +78,22 @@ const PAGE_NOT_FOUND_BODY = (
 export class AppFrontController extends Component {
   static propTypes = {
     warnings: object.isRequired,
-
-    // loadGuide: func.isRequired,
-    // loadNavigation: func.isRequired
-
     // REDUX: reducers/state
     computeLogin: object.isRequired,
+    matchedPage: any,
     properties: object.isRequired,
     routeParams: object.isRequired,
     search: object.isRequired,
-    matchedPage: any,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    updateWindowPath: func.isRequired,
-    setRouteParams: func.isRequired,
     changeSiteTheme: func.isRequired,
+    getCurrentUser: func.isRequired,
+    nuxeoConnect: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
+    setRouteParams: func.isRequired,
+    updateWindowPath: func.isRequired,
   }
 
   static defaultProps = {
@@ -103,13 +102,17 @@ export class AppFrontController extends Component {
 
   constructor(props, context) {
     super(props, context)
-
     this.state = this._getInitialState()
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // NOTE: added to respond to `window.history.back()` calls
     window.addEventListener('popstate', this._handleHistoryEvent)
+
+    // Connect to Nuxeo
+    await this.props.nuxeoConnect()
+    await this.props.getCurrentUser()
+
     // NOTE: this used to be called in `componentWillMount`
     this._route({ props: this.props })
   }
@@ -137,37 +140,40 @@ export class AppFrontController extends Component {
     const { sortOrder: newSortOrder, sortBy: newSortBy } = this.props.search
     const { sortOrder: prevSortOrder, sortBy: prevSortBy } = prevProps.search
 
-    // const windowLocationSearch = getSearchObject()
-    // const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    // const windowLocationSearchSortBy = windowLocationSearch.sortBy
-
-    const sortOrderChanged = newSortOrder !== prevSortOrder // || windowLocationSearchSortOrder != newSortOrder
-    const sortByChanged = newSortBy !== prevSortBy // || windowLocationSearchSortBy != newSortBy
+    const sortOrderChanged = newSortOrder !== prevSortOrder
+    const sortByChanged = newSortBy !== prevSortBy
 
     if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
-      // console.log('AppFrontController', {
-      //   _routeHasChanged,
-      //   loggedIn,
-      //   sortOrderChanged,
-      //   sortByChanged,
-      //   routeChanged: {
-      //     prevWindowPath: encodeURI(prevProps.windowPath),
-      //     curWindowPath: encodeURI(this.props.windowPath),
-      //     prevRouteParams: prevProps.routeParams,
-      //     curRouteParams: this.props.routeParams,
-      //   },
-      // })
       this._route({ props: this.props })
     }
   }
 
   render() {
     const { matchedPage, routeParams } = this.props
-
-    // NOTE: Due to the switch from `componentWillMount` to `componentDidMount`
-    // `render` runs before we are ready, hence the empty div being returned
+    // View during user checking, pre routing
     if (matchedPage === undefined) {
-      return <div />
+      return (
+        <div id="app-loader" className="app-loader">
+          <div
+            style={{
+              width: '50%',
+              margin: '50px auto',
+              border: '1px #ccc solid',
+              padding: '15px',
+              fontSize: '16pt',
+            }}
+          >
+            <p>
+              <strong>FirstVoices</strong>
+            </p>
+            <p>
+              FirstVoices is a suite of web-based tools and services designed to support Indigenous people engaged in
+              language archiving, language teaching and culture revitalization.
+            </p>
+          </div>
+          <p>Loading / Chargement / Cargando...</p>
+        </div>
+      )
     }
 
     const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
@@ -520,6 +526,8 @@ const mapDispatchToProps = {
   changeSiteTheme,
   setRouteParams,
   updateWindowPath,
+  nuxeoConnect,
+  getCurrentUser,
 }
 
 export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(AppFrontController))

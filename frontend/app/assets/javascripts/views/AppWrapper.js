@@ -20,7 +20,6 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 import { changeSiteTheme } from 'providers/redux/reducers/navigation'
-import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
 
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
@@ -64,8 +63,6 @@ class AppWrapper extends Component {
     // REDUX: actions/dispatch/func
     changeSiteTheme: func.isRequired,
     fetchDialect2: func.isRequired,
-    getCurrentUser: func.isRequired,
-    nuxeoConnect: func.isRequired,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
@@ -75,10 +72,6 @@ class AppWrapper extends Component {
 
   constructor(props, context) {
     super(props, context)
-
-    // Connect to Nuxeo
-    this.props.nuxeoConnect()
-    this.props.getCurrentUser()
 
     this.state = {
       dialect: null,
@@ -96,8 +89,6 @@ class AppWrapper extends Component {
   render() {
     const { properties } = this.props
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.state.dialect)
-
-    const warnings = {}
 
     const preferences = getPreferences(this.props.computeLogin, selectn('response', _computeDialect2))
 
@@ -117,7 +108,7 @@ class AppWrapper extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div id="AppWrapper">
-          <AppFrontController preferences={preferences} warnings={warnings} />
+          <AppFrontController preferences={preferences} warnings={{}} />
         </div>
       </MuiThemeProvider>
     )
@@ -151,11 +142,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   changeSiteTheme,
   fetchDialect2,
-  nuxeoConnect,
-  getCurrentUser,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppWrapper)
+export default connect(mapStateToProps, mapDispatchToProps)(AppWrapper)

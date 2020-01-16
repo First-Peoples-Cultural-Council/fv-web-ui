@@ -45,11 +45,7 @@ describe('AppWrapper', () => {
       </Provider>,
       container)
 
-    expect(container.querySelector('#pageNavigation').textContent).toMatch('EXPLORE LANGUAGES')
-    expect(container.querySelector('#pageFooter').textContent).toMatch('support@fpcc.ca')
-
-    // Structure: Act
-    // Structure: Assert
+    expect(container.querySelector('#AppWrapper').textContent).toMatch('FirstVoices')
   })
 
   // test('Accessibility', async() => {
