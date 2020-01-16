@@ -150,16 +150,8 @@ export class AppFrontController extends Component {
 
   render() {
     const { matchedPage, routeParams } = this.props
+    // View during user checking, pre routing
     if (matchedPage === undefined) {
-      /*
-        NOTE: The markup below should match what's at fv-web-ui/frontend/index.html
-        ------------------------------------------------------------------------------
-        AppFrontController checks if a user is connected and while that's happening
-        a blank page is shown since we haven't routed.
-
-        So if the loading screen markup from index.html is copied here (with slight
-        modifications due to React), the user won't be aware of the delay.
-      */
       return (
         <div id="app-loader" className="app-loader">
           <div
