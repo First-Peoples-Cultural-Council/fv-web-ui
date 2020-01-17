@@ -275,7 +275,6 @@ export class PageDialectBookEdit extends Component {
       >
         <div>
           <Tabs
-            // style={{ backgroundColor: '#26a79a', color: '#fff' }}
             classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
             value={this.state.tabValue}
             onChange={(e, tabValue) => this.setState({ tabValue })}
