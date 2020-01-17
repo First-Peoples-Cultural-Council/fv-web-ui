@@ -36,6 +36,7 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 
+import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import Tab from '@material-ui/core/Tab'
@@ -66,6 +67,7 @@ const EditViewWithForm = withForm(PromiseWrapper, true)
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
+    classes: object.isRequired,
     book: object,
     typePlural: string,
     // REDUX: reducers/state
@@ -262,6 +264,7 @@ export class PageDialectBookEdit extends Component {
     }
 
     const title = selectn('response.properties.dc:title', _computeBook)
+    const { classes } = this.props
     return (
       <AuthenticationFilter
         is403={this.state.is403}
@@ -271,9 +274,20 @@ export class PageDialectBookEdit extends Component {
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-            <Tab label={intl.trans('book', 'Book', 'first')} />
-            <Tab label={intl.trans('pages', 'Pages', 'first')} />
+          <Tabs
+            // style={{ backgroundColor: '#26a79a', color: '#fff' }}
+            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+            value={this.state.tabValue}
+            onChange={(e, tabValue) => this.setState({ tabValue })}
+          >
+            <Tab
+              classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+              label={intl.trans('book', 'Book', 'first')}
+            />
+            <Tab
+              classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+              label={intl.trans('pages', 'Pages', 'first')}
+            />
           </Tabs>
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
@@ -381,7 +395,18 @@ const mapDispatchToProps = {
   updateBookEntry,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectBookEdit)
+const styles = () => ({
+  tabsRoot: {
+    backgroundColor: '#26a79a',
+    color: '#fff',
+  },
+  tabsIndicator: {
+    backgroundColor: '#e93d7c',
+  },
+  tabRoot: {
+    '&:focus': {
+      color: '#FFF',
+    },
+  },
+})
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit))
