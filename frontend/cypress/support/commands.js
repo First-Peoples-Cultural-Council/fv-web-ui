@@ -94,7 +94,8 @@ Cypress.Commands.add('login', (obj = {}) => {
 Cypress.Commands.add('logout', () => {
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
 })
-// Logs any user out using a GET request.
+
+
 Cypress.Commands.add('logger', ({type = 'header', text = ''}) => {
   const divider = '====================================='
   const subdivider = '-------------------------------------'
