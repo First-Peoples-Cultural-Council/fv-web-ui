@@ -17,7 +17,6 @@ import PropTypes from 'prop-types'
 import Immutable, { Set, Map, is } from 'immutable'
 
 import classNames from 'classnames'
-import { isMobile } from 'react-device-detect'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -208,10 +207,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     ) : null
 
     // Render kids or mobile view
-    if (isKidsTheme || isMobile) {
+    if (isKidsTheme) {
       const cloneWordListView = wordListView
         ? React.cloneElement(wordListView, {
-            DEFAULT_PAGE_SIZE: !isKidsTheme && isMobile ? 10 : 8,
+            DEFAULT_PAGE_SIZE: 8,
             disablePageSize: true,
             filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
             gridListView: true,

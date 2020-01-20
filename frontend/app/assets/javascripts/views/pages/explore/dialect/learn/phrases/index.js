@@ -42,7 +42,6 @@ import DialectFilterList from 'views/components/DialectFilterList'
 import AlphabetListView from 'views/components/AlphabetListView'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import { isMobile } from 'react-device-detect'
 import IntlService from 'views/services/intl'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 // import SearchDialect from 'views/components/SearchDialect'
@@ -200,14 +199,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     )
 
     // Render kids view
-    if (isKidsTheme || isMobile) {
-      let pageSize = 4 // Items per Kids page
-
-      // Mobile but not Kids
-      if (!isKidsTheme && isMobile) {
-        pageSize = 10 // Items per page for mobile, but not Kids
-      }
-
+    if (isKidsTheme) {
+      const pageSize = 4 // Items per Kids page
       const kidsFilter = this.state.filterInfo.setIn(
         ['currentAppliedFilter', 'kids'],
         ' AND fv:available_in_childrens_archive=1'
