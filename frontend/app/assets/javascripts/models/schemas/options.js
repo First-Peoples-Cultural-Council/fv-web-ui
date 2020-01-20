@@ -572,6 +572,9 @@ const options = {
       },
       'fv:cultural_note': {
         label: intl.trans('views.pages.explore.dialect.learn.words.cultural_notes', 'Cultural Notes', 'first'),
+        item: {
+          factory: VirtualKeyboardFactory,
+        },
         i18n: {
           ...i18nExt,
           add: `+ ${intl.trans('add_cultural_note', 'Add cultural note', 'first')}`,

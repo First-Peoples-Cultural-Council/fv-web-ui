@@ -290,9 +290,8 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
     cy.logger({text: 'DELETE'})
 
     cy.getByText('delete word', { exact: false }).click()
-    // cy.wait(waitShort)
 
-    // // TODO: need more reliable hook
+    // TODO: need more reliable hook
     cy.getByTestId('ViewWithActions__dialog').within(() => {
       cy.getByText('Delete').click()
     })
