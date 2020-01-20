@@ -162,6 +162,7 @@ export class PageDialectLearnStoriesAndSongs extends Component {
               <FVButton
                 color="primary"
                 variant="contained"
+                className="PrintHide"
                 onClick={(e) => {
                   e.preventDefault()
                   NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
@@ -267,7 +268,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectLearnStoriesAndSongs)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnStoriesAndSongs)

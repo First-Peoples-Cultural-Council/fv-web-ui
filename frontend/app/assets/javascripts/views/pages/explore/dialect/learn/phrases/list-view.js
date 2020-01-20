@@ -131,6 +131,9 @@ export class PhrasesListView extends DataListView {
 
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
+            const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
+              `${window.location.pathname}${window.location.search}`
+            )}`
             const computeDialect2 = this.props.dialect || this.getDialect()
 
             const editButton =
@@ -149,11 +152,11 @@ export class PhrasesListView extends DataListView {
                     variant="flat"
                     size="small"
                     component="a"
-                    className="DictionaryList__linkEdit"
-                    href={hrefEdit}
+                    className="DictionaryList__linkEdit PrintHide"
+                    href={hrefEditRedirect}
                     onClick={(e) => {
                       e.preventDefault()
-                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                      NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
                     }}
                   >
                     <Edit title={intl.trans('edit', 'Edit', 'first')} />
@@ -218,7 +221,7 @@ export class PhrasesListView extends DataListView {
             if (firstPicture) {
               return (
                 <img
-                  style={{ maxWidth: '62px', maxHeight: '45px' }}
+                  className="PrintHide itemThumbnail"
                   key={selectn('uid', firstPicture)}
                   src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
                 />

@@ -415,6 +415,7 @@ const DictionaryList = (props) => {
         queries={{
           small: '(max-width: 850px)',
           medium: '(min-width: 851px)',
+          print: 'print',
         }}
       >
         {(matches) => {
@@ -461,12 +462,25 @@ const DictionaryList = (props) => {
           // =========================================
           // Responsive states
           // =========================================
+          // Print: list view (uses large screen)
+          // -----------------------------------------
+          // NOTE: Chrome prints small screen on both small AND large views (not preferred)
+          // NOTE: `matches.print` forces Chrome to print the large view for both small & large views (slightly better)
+          // NOTE: But, with `matches.print` in place the only way to print the small view on Chrome is to click "Compact view"
+          // NOTE: ie: small view doesn't print if it's dynamically displayed via a small screen
+
+          // NOTE: Firefox behaves a bit better in that it dynamically chooses the view depending on the screen size
+          // NOTE: Firefox ignores `matches.print`
+          if (matches.print) {
+            return getListLargeScreen(getListLargeScreenArg)
+          }
 
           // Small screen: list view
           // -----------------------------------------
           if (matches.small) {
             return getListSmallScreen(getListSmallScreenArg)
           }
+
           // Large screen: list view
           // -----------------------------------------
           if (matches.medium) {

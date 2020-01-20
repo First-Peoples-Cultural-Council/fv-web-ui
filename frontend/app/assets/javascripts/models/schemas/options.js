@@ -1200,7 +1200,8 @@ const options = {
           label: 'Your FirstVoices community/language',
           fancy: false,
         },
-        error: 'Please choose a community portal/language to join.',
+        error:
+          'Please choose a community portal/language to join. If you are not a member of a community, please skip registration and go straight to the "EXPLORE LANGUAGES" page',
       },
       'fvuserinfo:role': {
         label: 'Why are you interested in FirstVoices?' + ' *',
@@ -1214,7 +1215,7 @@ const options = {
         type: 'textarea',
       },
       'fvuserinfo:language_team_member': {
-        label: 'I am a member of a FirstVoices language team',
+        label: 'I am an authorized member of a FirstVoices language team',
       },
     },
     template: FVUserRegistrationTemplate,

@@ -111,7 +111,7 @@ class EditableComponent extends Component {
     const entity = selectn('response', this.props.computeEntity)
 
     // If still computing, return spinner
-    if (entity.isFetching) return <CircularProgress mode="indeterminate" size={2} />
+    if (entity.isFetching) return <CircularProgress mode="indeterminate" size={20} />
 
     // Get current value for field from properties
     const currentValue = selectn(property, this.state.savedValue) || selectn('properties.' + property, entity)

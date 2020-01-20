@@ -237,7 +237,7 @@ export class PageHome extends Component {
                 <div key={i} className={classNames('col-xs-12')}>
                   <div className="body">
                     <h2 style={{ fontWeight: 500 }}>{intl.searchAndReplace(selectn('title', block))}</h2>
-                    <p dangerouslySetInnerHTML={{ __html: intl.searchAndReplace(selectn('text', block)) }} />
+                    <p dangerouslySetInnerHTML={{ __html: selectn('text', block) }} />
                   </div>
                 </div>
               )
@@ -353,9 +353,4 @@ const mapDispatchToProps = {
   queryPage,
 }
 
-export default withTheme()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(PageHome)
-)
+export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(PageHome))

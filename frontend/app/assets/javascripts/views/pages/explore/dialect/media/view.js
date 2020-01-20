@@ -108,6 +108,7 @@ export class MediaView extends Component {
 
     this.state = {
       showThumbnailDialog: null,
+      tabValue: 0,
     }
   }
 
@@ -205,7 +206,7 @@ export class MediaView extends Component {
             <div>
               <Card>
                 <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-                  <Tab label={intl.trans('overview', 'Overview', 'first')} />
+                  <Tab data-testid="tabOverview" label={intl.trans('overview', 'Overview', 'first')} />
                   <Tab
                     label={
                       UIHelpers.isViewSize('xs')
@@ -241,6 +242,7 @@ export class MediaView extends Component {
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
                                     )}
+                                    component="div"
                                   >
                                     {thumbnails.map((thumbnail, key) => {
                                       return (
@@ -558,7 +560,4 @@ const mapDispatchToProps = {
   unpublishResource,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MediaView)
+export default connect(mapStateToProps, mapDispatchToProps)(MediaView)

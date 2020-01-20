@@ -95,24 +95,24 @@ class LinksListView extends DataListView {
         {
           name: 'dc:description',
           title: intl.trans('description', 'Description', 'first'),
-          render: (v, data /*, cellProps*/) => selectn('properties.dc:description', data),
+          render: (v, data) => selectn('properties.dc:description', data),
         },
         {
           name: 'fvlink:url',
           title: intl.trans('url', 'URL', 'upper'),
-          render: (v, data /*, cellProps*/) => selectn('properties.fvlink:url', data),
+          render: (v, data) => selectn('properties.fvlink:url', data),
         },
         {
           name: 'thumb:thumbnail',
           width: 72,
           textAlign: 'center',
           title: intl.trans('file', 'File', 'first'),
-          render: (v, data /*, cellProps*/) => {
+          render: (v, data) => {
             const filePreview = selectn('properties.thumb:thumbnail.data', data)
             if (filePreview)
               return (
                 <img
-                  style={{ maxWidth: '62px', maxHeight: '45px' }}
+                  className="PrintHide itemThumbnail"
                   key={selectn('uid', filePreview)}
                   src={UIHelpers.getThumbnail(filePreview, 'Thumbnail')}
                 />
@@ -251,7 +251,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LinksListView)
+export default connect(mapStateToProps, mapDispatchToProps)(LinksListView)

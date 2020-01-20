@@ -68,16 +68,10 @@ body {
 .NotoSansCanadianAboriginal {
   font-family: "NotoSansCanadianAboriginal";
 }
-
-// FONTS
-
 .fontAboriginalSans {
   font-family: @font-family-aboriginal-sans;
 }
 
-/*.container-fluid{
-  padding:0;
-}*/
 
 .app-wrapper {
   background-color: #fff;
@@ -90,12 +84,6 @@ body {
     @media (max-width: @mobile-xs-width) {
       margin-right: 5px;
       margin-left: 5px;
-    }
-  }
-
-  .footer {
-    .row {
-      margin: 0;
     }
   }
 }
@@ -279,7 +267,29 @@ a:visited {
 }
 
 // Components
-
+#pageContainer .alphabet__character {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background-color: #fff;
+  margin: 5px;
+  min-width: 100px;
+  min-height: 50px;
+  display: inline-flex;
+}
+.itemThumbnail {
+  max-width: 62px;
+  max-height: 45px;
+}
+.renderComplexArrayRow {
+  font-size: 0.9em;
+  margin: 0;
+  padding: 0 15px;
+  list-style: decimal;
+}
+.renderComplexArrayRow--rowSingle {
+  padding: 0;
+  list-style: none;
+}
 // Editable component
 
 
@@ -323,6 +333,8 @@ a:visited {
 
 // Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter
 .search-results {
+  border-left: 5px solid #f7f7f7;
+
   a {
     text-decoration: none;
     border-bottom: 1px solid;
@@ -334,23 +346,6 @@ a:visited {
   padding: 0 !important;
 }
 
-.footer {
-  width: 100%;
-  min-height: 147px;
-  background-color: #0d6c80;//6492a8;
-  background-repeat: repeat-x;
-  background-position: top center;
-  background-size: cover;
-  background-image: url("assets/images/footer-background.png");
-  border: 0;
-  padding-top: 15px;
-  // margin-top: 30px;
-  color: #ffffff;
-
-  a {
-    color: #ffffff;
-  }
-}
 
 // Navigation
 .nav_link {
@@ -523,27 +518,6 @@ body.introduction {
 audio,
 video {
   width: 100%;
-}
-
-/**
-* Browse grid componenet
-*/
-.react-datagrid {
-  .label-spaced {
-    margin-right: 5px;
-    background-color: #303030;
-    font-size: 100%;
-    font-weight: normal;
-  }
-  .innerRowTable {
-    border: 1px solid #c3c3c3;
-
-    td,
-    th {
-      padding-right: 5px;
-      padding-left: 5px;
-    }
-  }
 }
 
 /**
@@ -731,10 +705,6 @@ video {
   }
 }
 
-.footer-kids-theme {
-  margin-top: 0;
-}
-
 .admin-guide-step {
   width: 300px;
 }
@@ -780,21 +750,13 @@ audio::-webkit-media-controls-enclosure {
 * Responsive design fixes
 */
 @media screen and (max-width: @mobile-xs-width) {
-  // Common
-
-  h1 {
-    // font-size: 1.4em;
-  }
-
   // Navigation
-
   .search-bar-seperator,
   .locale-seperator {
     margin-right: 0 !important;
   }
 
   // Kids Theme
-
   .kids-home {
     background-size: 46%, 39%;
   }
@@ -815,7 +777,6 @@ audio::-webkit-media-controls-enclosure {
   }
 
   // Dialect Page(s)
-
   .dialect-info-banner {
     width: 100%;
     margin: 0;
@@ -892,19 +853,6 @@ audio::-webkit-media-controls-enclosure {
       }
     }
   }
-
-  // Components -> react-datagrid
-  .react-datagrid {
-    .react-datagrid-pagination-toolbar {
-      > div {
-        min-width: 100% !important;
-      }
-    }
-
-    .z-row .z-cell .z-content {
-      white-space: initial !important;
-    }
-  }
 }
 
 @import "AlphabetGridTile";
@@ -917,6 +865,7 @@ audio::-webkit-media-controls-enclosure {
 @import "DialectViewWordPhrase";
 @import "Flashcard";
 @import "FlatButton";
+@import "Footer";
 @import "Form";
 @import "FormMoveButtons";
 @import "FormRelatedAudioItem";
