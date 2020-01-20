@@ -114,7 +114,7 @@ Cypress.Commands.add('logger', ({type = 'header', text = ''}) => {
   }
 })
 
-Cypress.Commands.add('eject', () => {
+Cypress.Commands.add('abort', () => {
   const subdivider = '-------------------------------------'
   cy.log(subdivider)
   cy.expect('STOP TEST').to.equal(true)
