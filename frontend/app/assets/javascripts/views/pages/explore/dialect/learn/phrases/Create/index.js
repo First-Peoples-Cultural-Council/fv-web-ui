@@ -84,11 +84,11 @@ export class PhrasesCreate extends Component {
   formPhraseCreate = React.createRef()
 
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "PhrasesCreateInternationalization" */ './internationalization').then(
-      (_module) => {
-        return _module.default
-      }
-    )
+    const copy = await import(
+      /* webpackChunkName: "PhrasesCreateInternationalization" */ './internationalization'
+    ).then((_module) => {
+      return _module.default
+    })
     // const ErrorBoundary = await import(/* webpackChunkName: "ErrorBoundary" */ 'views/components/ErrorBoundary').then(
     //   (_module) => {
     //     return _module.default
@@ -286,7 +286,7 @@ export class PhrasesCreate extends Component {
 
           <div className="row" style={{ marginTop: '15px' }}>
             <div className={classNames('col-xs-8', 'col-md-10')}>
-              <form onSubmit={this._onRequestSaveForm}>
+              <form data-testid="PhrasesCreate__form" onSubmit={this._onRequestSaveForm}>
                 <t.form.Form
                   ref={this.formPhraseCreate}
                   type={t.struct(selectn('FVPhrase', fields))}
@@ -339,7 +339,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasesCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesCreate)

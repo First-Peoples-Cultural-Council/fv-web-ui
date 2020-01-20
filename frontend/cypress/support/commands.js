@@ -94,6 +94,32 @@ Cypress.Commands.add('login', (obj = {}) => {
 Cypress.Commands.add('logout', () => {
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
 })
+// Logs any user out using a GET request.
+Cypress.Commands.add('logger', ({type = 'header', text = ''}) => {
+  const divider = '====================================='
+  const subdivider = '-------------------------------------'
+  switch (type) {
+    case 'header':
+      cy.log(divider)
+      cy.log(text)
+      cy.log(divider)
+      break
+    case 'subheader':
+      cy.log(subdivider)
+      cy.log(text)
+      cy.log(subdivider)
+      break
+    default:
+      break
+  }
+})
+
+Cypress.Commands.add('eject', () => {
+  const subdivider = '-------------------------------------'
+  cy.log(subdivider)
+  cy.expect('STOP TEST').to.equal(true)
+  cy.log(subdivider)
+})
 
 // AlphabetListView
 //

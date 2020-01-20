@@ -57,16 +57,15 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               }
             })()}
           </div>
-
           <div className="col-xs-12">
             <ComposedFilter {...this.props} {...this.state} />
           </div>
-
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <Dialog
               fullWidth
               maxWidth="md"
               className="ViewWithActions__dialog"
+              data-testid="ViewWithActions__dialog"
               open={this.state.prePublishDialogOpen}
               onClose={() =>
                 this.setState({
@@ -151,7 +150,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </DialogActions>
             </Dialog>
           </AuthorizationFilter>
-
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
             <div className="col-xs-12">
               <AppBar position="static" className="PageToolbar__secondary">
@@ -160,6 +158,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     variant="contained"
                     onClick={() => this.setState({ deleteDialogOpen: true })}
                     color="secondary"
+                    data-testid="ViewWithActions__buttonDelete"
                   >
                     <DeleteIcon />
                     {intl.trans(
@@ -171,7 +170,13 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   </FVButton>
                 </Toolbar>
               </AppBar>
-              <Dialog fullWidth maxWidth="md" open={this.state.deleteDialogOpen} onClose={this._handleCancelDelete}>
+              <Dialog
+                data-testid="ViewWithActions__dialog"
+                fullWidth
+                maxWidth="md"
+                open={this.state.deleteDialogOpen}
+                onClose={this._handleCancelDelete}
+              >
                 <DialogTitle>
                   {intl.trans(
                     'views.hoc.view.deleting_x',
@@ -230,7 +235,12 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 </DialogActions>
               </Dialog>
 
-              <Dialog fullWidth maxWidth="md" open={this.state.deleteSuccessDialogOpen}>
+              <Dialog
+                data-testid="ViewWithActions__dialog"
+                fullWidth
+                maxWidth="md"
+                open={this.state.deleteSuccessDialogOpen}
+              >
                 <DialogTitle>
                   {intl.trans(
                     'views.hoc.view.delete_x',
