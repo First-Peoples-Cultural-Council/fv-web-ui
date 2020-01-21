@@ -180,12 +180,18 @@ export default class DialogCreateForm extends React.Component {
     }
 
     return (
-      <div>
+      <div data-testid="DialogCreateForm">
         {createNewButton}
 
-        <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
-          <DialogContent>{createForm}</DialogContent>
-          <DialogActions>
+        <Dialog
+          data-testid="DialogCreateForm__Dialog"
+          fullWidth
+          maxWidth="md"
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <DialogContent data-testid="DialogCreateForm__DialogContent">{createForm}</DialogContent>
+          <DialogActions data-testid="DialogCreateForm__DialogActions">
             <FVButton variant="contained" color="secondary" onClick={this.handleClose}>
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>

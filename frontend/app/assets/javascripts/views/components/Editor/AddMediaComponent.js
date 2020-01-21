@@ -255,7 +255,7 @@ export class AddMediaComponent extends Component {
 
     //if (this.state.schema != undefined){
     form = (
-      <form onSubmit={this._save} id="AddMediaComponent" encType="multipart/form-data">
+      <form onSubmit={this._save} data-testid="AddMediaComponent" id="AddMediaComponent" encType="multipart/form-data">
         <t.form.Form
           ref={this.formMedia}
           options={selectn('FVResource', options)}
@@ -358,7 +358,4 @@ const mapDispatchToProps = {
   createVideo,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddMediaComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(AddMediaComponent)

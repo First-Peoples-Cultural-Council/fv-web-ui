@@ -95,6 +95,33 @@ Cypress.Commands.add('logout', () => {
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
 })
 
+
+Cypress.Commands.add('logger', ({type = 'header', text = ''}) => {
+  const divider = '====================================='
+  const subdivider = '-------------------------------------'
+  switch (type) {
+    case 'header':
+      cy.log(divider)
+      cy.log(text)
+      cy.log(divider)
+      break
+    case 'subheader':
+      cy.log(subdivider)
+      cy.log(text)
+      cy.log(subdivider)
+      break
+    default:
+      break
+  }
+})
+
+Cypress.Commands.add('abort', () => {
+  const subdivider = '-------------------------------------'
+  cy.log(subdivider)
+  cy.expect('STOP TEST').to.equal(true)
+  cy.log(subdivider)
+})
+
 // AlphabetListView
 //
 // obj = {

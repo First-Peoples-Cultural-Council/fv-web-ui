@@ -117,19 +117,23 @@ const RelatedMediaLayout = (locals) => (
             {item.buttons.map((button, j) => {
               let icon = ''
               let label = ''
+              let testId = ''
 
               switch (button.type) {
                 case 'remove':
+                  testId = 'IconButton__remove'
                   icon = <Clear />
                   label = intl.trans('remove_item', 'Remove Item', 'first')
                   break
 
                 case 'move-up':
+                  testId = 'IconButton__move-up'
                   icon = <ArrowBack />
                   label = intl.trans('move_left', 'Move left (appears first)', 'first')
                   break
 
                 case 'move-down':
+                  testId = 'IconButton__move-down'
                   icon = <ArrowForward />
                   label = intl.trans('move_right', 'Move right', 'first')
                   break
@@ -138,6 +142,7 @@ const RelatedMediaLayout = (locals) => (
 
               return (
                 <IconButton
+                  data-testid={testId}
                   tooltip={label}
                   // iconClassName="material-icons"
                   key={j}
@@ -567,6 +572,9 @@ const options = {
       },
       'fv:cultural_note': {
         label: intl.trans('views.pages.explore.dialect.learn.words.cultural_notes', 'Cultural Notes', 'first'),
+        item: {
+          factory: VirtualKeyboardFactory,
+        },
         i18n: {
           ...i18nExt,
           add: `+ ${intl.trans('add_cultural_note', 'Add cultural note', 'first')}`,
