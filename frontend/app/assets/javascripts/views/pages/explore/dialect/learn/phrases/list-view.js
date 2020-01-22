@@ -381,6 +381,8 @@ export class PhrasesListView extends DataListView {
               return (
                 <div className="DictionaryListSmallScreen__item">
                   <div className="DictionaryListSmallScreen__groupMain">
+                    {templateData.actions}
+                    {templateData.rowClick}
                     <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
                       {templateData.title}
                       <span className="DictionaryListSmallScreen__partOfSpeech">
