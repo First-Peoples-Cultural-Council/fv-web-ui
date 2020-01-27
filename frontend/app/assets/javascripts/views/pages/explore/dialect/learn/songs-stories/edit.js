@@ -291,15 +291,15 @@ export class PageDialectBookEdit extends Component {
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
-                <Typography variant="headline">
-                  <h1>
+                <Typography variant="display2">
+                  <>
                     {intl.trans(
                       'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
                       'Edit ' + title + ' Book',
                       'words',
                       [title]
                     )}
-                  </h1>
+                  </>
                 </Typography>
               )}
               <EditViewWithForm
