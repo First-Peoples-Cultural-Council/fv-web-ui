@@ -27,14 +27,14 @@ describe('PageDialectLearnAlphabet', () => {
       }
     })
 
-    cy.getByText('add audio', { exact: false }).click()
-    cy.wait(1000)
+    cy.getByText('+ Add audio', { exact: false }).click()
+    cy.wait(3000)
 
-    cy.getByText('add audio', { exact: false })
+    cy.getByText('+ Add audio', { exact: false })
       .parents('fieldset')
       .first()
       .within(() => {
-        cy.getByText('BROWSE EXISTING', { exact: false }).click()
+        cy.getByText('Browse Existing', { exact: false }).click()
       })
 
     cy.wait(500)

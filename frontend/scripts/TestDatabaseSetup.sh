@@ -259,7 +259,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo
 
-# Check for "FV/Workspaces/Site/Resources/Pages/Get Stated" and create it if it doesn't exist
+# Check for "FV/Workspaces/Site/Resources/Pages/Get Started" and create it if it doesn't exist
 echo "Checking if \"Get Started\" page exists"
 Test_exists=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Proxy.GetSourceDocument' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Site/Resources/Pages/Get Started","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "Test_exists" -eq 404 ]]; then

@@ -175,6 +175,7 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
     cy.log('--- AlphabetListView: Clear filter ---')
     cy.queryByText(/stop browsing alphabetically/i).click()
   }
+  cy.wait(3000)
 })
 
 // DialectFilterList
@@ -203,6 +204,7 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
+  cy.wait(1000)
   cy.getByTestId('DialectFilterList').within(() => {
     cy.getByText(_obj.category).click()
   })

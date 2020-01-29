@@ -31,18 +31,18 @@ describe('Navigation.js > Navigation', () => {
     })
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/')
     cy.getByText('Dog').click()
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByTestId('pageContainer').within(() => {
       // should not be color
-      cy.getByText('workspace', { exact: false })
+      cy.getByText('Workspace', { exact: false })
         .should('have.css', 'background-color')
         .and('not.eq', 'rgb(77, 148, 141)')
-      cy.getByText('workspace', { exact: false }).click()
+      cy.getByText('Workspace', { exact: false }).click()
     })
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByTestId('pageContainer').within(() => {
       // should be color
-      cy.getByText('workspace', { exact: false })
+      cy.getByText('Workspace', { exact: false })
         .should('have.css', 'background-color')
         .and('eq', 'rgb(77, 148, 141)')
     })

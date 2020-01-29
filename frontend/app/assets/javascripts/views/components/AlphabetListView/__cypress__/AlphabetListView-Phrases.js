@@ -2,7 +2,7 @@ import 'cypress-testing-library/add-commands'
 describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases')
-    cy.wait(500)
+    cy.wait(3000)
 
     const letter = 't'
     const unselectedColor = 'rgb(60, 52, 52)'

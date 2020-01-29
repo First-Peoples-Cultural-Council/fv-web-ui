@@ -17,7 +17,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Checking to make sure a word currently exists.
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -63,7 +63,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(1000)
+    cy.wait(1500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Enable (0)', { exact: true }).click()
@@ -99,7 +99,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -119,7 +119,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(1000)
+    cy.wait(1500)
     cy.getByText('TestWord', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Enable (0)').should('have.css', 'color', 'rgb(161, 161, 161)')

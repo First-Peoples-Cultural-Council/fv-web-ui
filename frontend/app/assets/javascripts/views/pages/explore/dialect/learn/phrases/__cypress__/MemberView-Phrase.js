@@ -22,7 +22,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(3000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')

@@ -23,6 +23,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
     cy.getByTestId('Navigation__open').click()
+    cy.wait(1500)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
@@ -61,6 +62,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
         .click()
     })
     cy.getByTestId('Navigation__open').click()
+    cy.wait(1500)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
@@ -84,6 +86,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       cy.getByText('Enabled').should('exist')
     })
     cy.getByTestId('Navigation__open').click()
+    cy.wait(1500)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
