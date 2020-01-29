@@ -30,7 +30,7 @@ export default class Statistics extends Component {
       color: '#46BFBD',
       highlight: '#5AD3D1',
       label: intl.trans('published', 'Published', 'first'),
-    }),
+    })
     doughnutData.push({
       value: data[docType].disabled,
       color: '#F7464A',
@@ -43,7 +43,7 @@ export default class Statistics extends Component {
   _generateTwoSliceDoughnutData(total, subset, labels) {
     const doughnutData = []
     const totalMinusSubset = total - subset
-    doughnutData.push({ value: totalMinusSubset, color: '#46BFBD', highlight: '#5AD3D1', label: labels[0] }),
+    doughnutData.push({ value: totalMinusSubset, color: '#46BFBD', highlight: '#5AD3D1', label: labels[0] })
     doughnutData.push({ value: subset, color: '#F7464A', highlight: '#FF5A5E', label: labels[1] })
     return doughnutData
   }
@@ -62,21 +62,21 @@ export default class Statistics extends Component {
     return (
       <div>
         <div className={'row'} style={{ margin: '0' }}>
-          <div className={'col-lg-4'} style={{ paddingLeft: '0' }}>
+          <div className={'col-sm-4'} style={{ paddingLeft: '0' }}>
             <Doughnut data={lifecycleStateDoughnutData} width="200" height="170" options={{ responsive: true }} />
           </div>
-          <div className={'col-lg-3'} style={{ paddingTop: '35px', paddingLeft: '35px' }}>
+          <div className={'col-sm-3'} style={{ paddingTop: '35px', paddingLeft: '35px' }}>
             <div style={{ paddingBottom: '10px' }}>
               <strong>{this.props.headerText}</strong>: {dataResponse[docType].total}
             </div>
 
-            {lifecycleStateDoughnutData.map((slice, i) => (
+            {lifecycleStateDoughnutData.map((slice) => (
               <div key={slice.label}>
                 <span style={{ color: slice.color }}>&#9632;</span> {slice.label}: {slice.value}
               </div>
             ))}
           </div>
-          <div className={'col-lg-5'} style={{ paddingTop: '65px' }}>
+          <div className={'col-sm-5'} style={{ paddingTop: '65px' }}>
             <ul>
               <li>
                 <strong>{intl.trans('views.components.dashboard.created_today', 'Created Today', 'first')}: </strong>

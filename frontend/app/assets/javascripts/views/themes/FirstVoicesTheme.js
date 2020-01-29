@@ -139,4 +139,33 @@ export default {
       },
     },
   },
+  tab: {
+    label: {
+      fontSize: '1.6rem',
+    },
+    tabsIndicator: {
+      backgroundColor: '#ee492d',
+      height: '3px',
+    },
+    tabRoot: {
+      opacity: 1,
+      '&:focus': {
+        color: '#FFF',
+      },
+      '&:hover': {
+        backgroundColor: '#920f0f',
+      },
+    },
+    tabsRoot: {
+      backgroundColor: '#b40000',
+      color: '#fff',
+    },
+    tabSelected: {
+      color: '#fff',
+      backgroundColor: '#5f0a0b',
+      '&:hover': {
+        backgroundColor: '#5f0a0b',
+      },
+    },
+  },
 }

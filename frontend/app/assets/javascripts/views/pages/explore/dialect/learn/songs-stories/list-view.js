@@ -32,10 +32,9 @@ import CardContent from '@material-ui/core/CardContent'
 // import GridListTile from '@material-ui/core/GridListTile'
 // import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
 
+import FVTab from 'views/components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
@@ -56,7 +55,6 @@ class _Introduction extends Component {
     tabValue: 0,
   }
   render() {
-    const backgroundColor = selectn('theme.palette.primary.main', this.props)
     const DEFAULT_LANGUAGE = this.props.defaultLanguage
     const item = this.props.item
     const introduction = selectn('properties.fvbook:introduction', item)
@@ -83,36 +81,20 @@ class _Introduction extends Component {
         </div>
       )
     }
-    const introTabStyle = {
-      width: '99%',
-      position: 'relative',
-      overflowY: 'scroll',
-      padding: '15px',
-      height: '100px',
-    }
 
     return (
       <div>
-        <Tabs
-          style={{ backgroundColor }}
-          value={this.state.tabValue}
-          onChange={(e, tabValue) => this.setState({ tabValue })}
-        >
-          <Tab
-            label={
-              <Typography variant="subheading" component="div">
-                {intl.trans('introduction', 'Introduction', 'first')}
-              </Typography>
-            }
-          />
-          <Tab
-            label={
-              <Typography variant="subheading" component="div">
-                {intl.searchAndReplace(DEFAULT_LANGUAGE)}
-              </Typography>
-            }
-          />
-        </Tabs>
+        <FVTab
+          tabItems={[
+            { label: intl.trans('introduction', 'Introduction', 'first') },
+            {
+              label: intl.searchAndReplace(DEFAULT_LANGUAGE),
+            },
+          ]}
+          tabsValue={this.state.tabValue}
+          tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+        />
+
         {this.state.tabValue === 0 && (
           <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
             {introductionDiv}
