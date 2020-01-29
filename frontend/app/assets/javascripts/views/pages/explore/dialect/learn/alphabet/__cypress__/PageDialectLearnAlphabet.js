@@ -26,6 +26,7 @@ describe('PageDialectLearnAlphabet', () => {
         })
       }
     })
+    cy.pause()
 
     cy.getByText('+ Add audio', { exact: false }).click()
     cy.wait(3000)

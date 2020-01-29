@@ -54,8 +54,8 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord').click()
+    cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
-    cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -100,7 +100,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord', { exact: true }).click()
-    cy.wait(500)
+    cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
