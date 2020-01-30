@@ -208,7 +208,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
-    cy.wait(500)
+    cy.wait(1500)
     cy.queryByText('TestStoryTitleTestStoryTitle1').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
   })

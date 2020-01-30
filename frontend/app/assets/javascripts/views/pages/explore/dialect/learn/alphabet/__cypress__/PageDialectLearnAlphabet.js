@@ -12,7 +12,7 @@ describe('PageDialectLearnAlphabet', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/alphabet/z/edit')
 
-    cy.wait(500)
+    cy.wait(3000)
 
     // deletes any pre-existing audio files
     cy.getByTestId('pageContainer').within(($el) => {
@@ -26,10 +26,13 @@ describe('PageDialectLearnAlphabet', () => {
         })
       }
     })
-    cy.pause()
+    cy.wait(500)
+    cy.getByText('Related audio').within(() => {
+      cy.queryByText('Replace').should('not.exist')
+    })
 
     cy.getByText('+ Add audio', { exact: false }).click()
-    cy.wait(3000)
+    cy.wait(1000)
 
     cy.getByText('+ Add audio', { exact: false })
       .parents('fieldset')
