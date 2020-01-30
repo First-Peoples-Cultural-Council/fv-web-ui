@@ -24,7 +24,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
+    cy.wait(3000)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
@@ -63,7 +63,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
         .click()
     })
     cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
+    cy.wait(3000)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
@@ -87,7 +87,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       cy.getByText('Enabled').should('exist')
     })
     cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
+    cy.wait(3000)
     cy.getByTestId('LeftNav').within(() => {
       cy.getByText('Sign Out').click()
     })
