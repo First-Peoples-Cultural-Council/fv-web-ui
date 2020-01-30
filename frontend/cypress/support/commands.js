@@ -92,7 +92,10 @@ Cypress.Commands.add('login', (obj = {}) => {
 
 // Logs any user out using a GET request.
 Cypress.Commands.add('logout', () => {
+  cy.log('--- LOGGING OUT ---')
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
+  cy.visit('')
+  cy.wait(1000)
 })
 
 
@@ -204,7 +207,7 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
-  cy.wait(1000)
+  cy.wait(2000)
   cy.getByTestId('DialectFilterList').within(() => {
     cy.getByText(_obj.category).click()
   })

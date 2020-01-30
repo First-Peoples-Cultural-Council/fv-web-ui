@@ -34,10 +34,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('Enable (1)', { exact: true }).should('exist')
     cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
       Login as Admin and verify task exists / reject task.
@@ -50,10 +47,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
 
-    cy.getByTestId('Navigation__open').click()
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
       Login as Recorder and click enable again.
@@ -71,10 +65,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('Enable (1)', { exact: true }).should('exist')
     cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
       Login as Admin and verify task exists / approve task.
@@ -87,10 +78,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('View My Tasks', { exact: true }).click()
     cy.getByText('Approve', { exact: true }).click()
 
-    cy.getByTestId('Navigation__open').click()
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
       Login as Site Member and check that the word is visible once enabled.
@@ -106,10 +94,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       cy.getByText('Noun').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
       Login as Recorder and verify that publish is now clickable.

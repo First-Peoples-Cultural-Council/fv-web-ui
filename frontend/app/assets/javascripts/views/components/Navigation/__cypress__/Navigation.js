@@ -3,7 +3,7 @@
 
 import 'cypress-testing-library/add-commands'
 
-describe('Navigation.js > Navigation', () => {
+describe('Navigation.js > Navigation side bar', () => {
   it('FW-266: Navigation: clicking between "Get Started", "Contribute", & "FirstVoices Apps" loads incorrect page content', () => {
     cy.visit('/home')
     cy.wait(1000)
@@ -47,6 +47,28 @@ describe('Navigation.js > Navigation', () => {
       cy.getByText('Workspace', { exact: false })
         .should('have.css', 'background-color')
         .and('eq', 'rgb(77, 148, 141)')
+    })
+  })
+  it('Testing "Sign Out" button', () => {
+    // Sign in and check that the user is actually signed in
+    cy.login({
+      userName: 'TESTLANGUAGESIX_ADMIN',
+    })
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix')
+    cy.wait(1000)
+    cy.get('[id="pageNavigation"]').within(() => {
+      cy.getByText('WELCOME', { exact: false }).should('exist')
+    })
+
+    // Sign out and check that the user is no longer signed out
+    cy.getByTestId('Navigation__open').click()
+    cy.wait(500)
+    cy.getByTestId('LeftNav').within(() => {
+      cy.getByText('Sign Out').click()
+    })
+    cy.wait(1000)
+    cy.get('[id="pageNavigation"]').within(() => {
+      cy.getByText('SIGN IN').should('exist')
     })
   })
 })

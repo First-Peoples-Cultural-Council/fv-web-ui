@@ -127,11 +127,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                     Test fonts.
                  */
     cy.get('div.CardViewCard').should('have.css', 'font-family', 'Arial, sans-serif')
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
                 Login as language member and check that the story is not visible.
@@ -142,11 +138,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
     cy.queryByText('TestStoryTitle').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
                 Login as admin, check that the story is editable, and enable the story.
@@ -185,11 +177,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
           .click()
       })
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
                 Login as language member and check that the story is now visible.
@@ -204,11 +192,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.getByText('TestStoryTranslation').should('exist')
       cy.getByText('Continue to story').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
                 Login as admin and publish the story.

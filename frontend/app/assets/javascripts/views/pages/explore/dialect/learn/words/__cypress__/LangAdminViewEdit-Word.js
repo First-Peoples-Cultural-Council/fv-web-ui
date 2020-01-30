@@ -22,11 +22,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.wait(500)
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
                 Login as Language Admin, navigate to words and check that a word exists.
@@ -61,11 +57,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
         .eq(0)
         .click()
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
             Login as member and check that the word is now visible and enabled.
@@ -85,11 +77,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
-    })
+    cy.logout()
 
     /*
             Login as Admin and publish the word.
