@@ -1,7 +1,7 @@
 describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
   it('Select category with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases')
-    cy.wait(4000)
+    cy.wait(2000)
 
     const category = 'TestPhraseBook'
     cy.DialectFilterList({
