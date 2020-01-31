@@ -1,6 +1,7 @@
 /* BLOCK */
 .PromiseWrapper {
-  margin-bottom: 7rem;
+  /* This margin creates extra space in the PromiseWrapper in registation */
+  /* margin-bottom: 7rem; */
 }
 
 /* ELEMENT */
