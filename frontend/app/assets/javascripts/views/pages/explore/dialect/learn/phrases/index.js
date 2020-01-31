@@ -27,6 +27,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
+import { setListViewMode } from 'providers/redux/reducers/listView'
 
 import selectn from 'selectn'
 
@@ -193,6 +194,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         searchByMode={searchByMode}
         rowClickHandler={this.props.rowClickHandler}
         hasSorting={this.props.hasSorting}
+        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+        dictionaryListViewMode={this.props.listView.mode}
       />
     ) : (
       <div />
@@ -458,7 +461,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCategory, fvPortal, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeCategories } = fvCategory
   const { computeDocument } = document
@@ -474,6 +477,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePortal,
     computeSearchDialect,
+    listView,
     properties,
     splitWindowPath,
     windowPath: _windowPath,
@@ -488,6 +492,7 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   searchDialectUpdate,
+  setListViewMode,
   updatePageProperties,
 }
 

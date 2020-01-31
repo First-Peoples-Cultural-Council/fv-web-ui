@@ -1,11 +1,7 @@
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_NAME_ARG;
-import static ca.firstvoices.utils.FVRegistrationConstants.INVITATION_VALIDATED;
-import static ca.firstvoices.utils.FVRegistrationConstants.LADMIN_APPROVED_GROUP_CHANGE;
-import static ca.firstvoices.utils.FVRegistrationConstants.SYSTEM_APPROVED_GROUP_CHANGE;
-import static ca.firstvoices.utils.FVRegistrationConstants.USER_NAME_ARG;
-
+import ca.firstvoices.services.FVMoveUserToDialectServiceImpl;
+import ca.firstvoices.utils.FVRegistrationUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -14,8 +10,7 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 
-import ca.firstvoices.services.FVMoveUserToDialectServiceImpl;
-import ca.firstvoices.utils.FVRegistrationUtilities;
+import static ca.firstvoices.utils.FVRegistrationConstants.*;
 
 /**
  *
@@ -70,6 +65,7 @@ public class FVRegistrationCompletionListener implements EventListener {
             // TODO: use it to make sure user name is not left in the system when registration is deleted on timeout
             break;
 
+        // This will be executed after a user has created a password.
         case INVITATION_VALIDATED:
             args = docCtx.getArguments();
 
