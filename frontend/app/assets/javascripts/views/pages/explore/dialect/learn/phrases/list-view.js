@@ -395,10 +395,12 @@ export class PhrasesListView extends DataListView {
                       {templateData.related_audio}
                     </div>
 
-                    <div className="DictionaryListSmallScreen__groupData">
-                      <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-                      {templateData['fv:definitions']}
-                    </div>
+                    {templateData['fv:definitions'] && (
+                      <div className="DictionaryListSmallScreen__groupData">
+                        <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+                        {templateData['fv:definitions']}
+                      </div>
+                    )}
 
                     <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
                       <div className="DictionaryListSmallScreen__groupData">
