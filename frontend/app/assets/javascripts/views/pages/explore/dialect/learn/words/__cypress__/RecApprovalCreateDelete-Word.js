@@ -27,7 +27,11 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('Create New Word', { exact: false }).click()
+    cy.getByText('Create New Word')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
     cy.wait(1500)
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
