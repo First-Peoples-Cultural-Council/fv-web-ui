@@ -67,7 +67,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     })
   }
 
-  const url = obj.url || (Cypress.env('TARGET') + '/nuxeo/startup')
+  const url = obj.url || (Cypress.env('FRONTEND') + '/nuxeo/startup')
   const body = obj.body || {
     user_name: userName,
     user_password: userPassword,
