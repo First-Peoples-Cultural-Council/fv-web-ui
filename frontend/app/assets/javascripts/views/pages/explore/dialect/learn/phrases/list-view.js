@@ -377,6 +377,8 @@ export class PhrasesListView extends DataListView {
               })
             }}
             type={'FVPhrase'}
+            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={this.props.dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={({ templateData }) => {
               return (
                 <div className="DictionaryListSmallScreen__item">
