@@ -107,3 +107,7 @@
 .DictionaryList--contributors .data-table td.DictionaryList__data--title {
   text-align: left;
 }
+.DictionaryList__definitionList--single {
+  list-style-type: none;
+  padding-left: 0;
+}
