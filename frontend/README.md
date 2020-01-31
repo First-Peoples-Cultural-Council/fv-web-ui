@@ -39,11 +39,11 @@ $ source ~/.bash_profile
 $ echo $NVM_DIR
 ```
 
-3. Clone this repository and navigate into the `fv-web-ui` directory:
+3. Clone this repository and navigate into the `fv-web-ui/frontend` directory:
 
 ```bash
 $ git clone https://github.com/First-Peoples-Cultural-Council/fv-web-ui.git
-$ cd fv-web-ui
+$ cd fv-web-ui/frontend
 ```
 
 4. Install NodeJS v8.10.0 and set it as the active version of NodeJS by running:

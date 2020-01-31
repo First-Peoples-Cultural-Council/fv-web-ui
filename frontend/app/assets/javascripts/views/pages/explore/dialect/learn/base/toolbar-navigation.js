@@ -39,11 +39,13 @@ const intl = IntlService.instance
  * Navigation for learning page
  */
 
-const { array, func, object, string } = PropTypes
+const { array, bool, func, object, string } = PropTypes
 export class ToolbarNavigation extends Component {
   static propTypes = {
     routeParams: object.isRequired,
-    showStats: func,
+    handleShowStats: func,
+    hideStatistics: bool,
+    isStatisticsVisible: bool,
     // REDUX: reducers/state
     computeLogin: object.isRequired,
     computeResultSet: object.isRequired,
@@ -145,7 +147,7 @@ export class ToolbarNavigation extends Component {
               </a>
             </div>
           </div>
-          {this.props.shouldShowStats !== true && (
+          {this.props.hideStatistics !== true && this.props.isStatisticsVisible !== true && (
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
               <div className="col-xs-12 col-md-2">
                 <div className={classNames('hidden-xs')} float="right">

@@ -395,13 +395,13 @@ export class DialectLearn extends Component {
           portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
           login={computeLogin}
-          shouldShowStats={this.state.showStats}
+          isStatisticsVisible={this.state.showStats}
           handleShowStats={this._showStats}
           routeParams={this.props.routeParams}
         >
           <ToolbarNavigation
             routeParams={this.props.routeParams}
-            shouldShowStats={this.state.showStats}
+            isStatisticsVisible={this.state.showStats}
             handleShowStats={this._showStats}
           />
         </Header>
