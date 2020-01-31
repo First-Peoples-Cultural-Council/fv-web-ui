@@ -30,13 +30,13 @@ export default class Header extends Component {
     portal: PropTypes.object,
     dialect: PropTypes.object,
     login: PropTypes.object,
-    shouldShowStats: PropTypes.bool,
+    isStatisticsVisible: PropTypes.bool,
     handleShowStats: PropTypes.func,
     routeParams: PropTypes.object,
   }
 
   static defaultProps = {
-    shouldShowStats: false,
+    isStatisticsVisible: false,
     handleShowStats: () => {},
   }
 
@@ -49,7 +49,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { portal, login, routeParams, shouldShowStats } = this.props
+    const { portal, login, routeParams, isStatisticsVisible } = this.props
 
     const backgroundImage = selectn(
       'response.contextParameters.portal.fv-portal:background_top_image.path',
@@ -77,7 +77,7 @@ export default class Header extends Component {
     return (
       <div className="Header row" style={portalBackgroundStyles}>
         <AuthenticationFilter login={login} hideFromSections routeParams={routeParams}>
-          {shouldShowStats && (
+          {isStatisticsVisible && (
             <PageStats handleShowStats={this.props.handleShowStats} dialectPath={routeParams.dialect_path} />
           )}
         </AuthenticationFilter>
