@@ -23,10 +23,11 @@ import { connect } from 'react-redux'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import Paper from '@material-ui/core/Paper'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
+
 import Typography from '@material-ui/core/Typography'
 import Close from '@material-ui/icons/Close'
+
+import FVTab from 'views/components/FVTab'
 import Statistics from 'views/components/Dashboard/Statistics'
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./PageStats.css'
@@ -72,12 +73,16 @@ export class PageStats extends Component {
           <span className="visually-hidden">Close Page Statistics</span>
         </button>
 
-        <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-          <Tab className="PageStats__tab" label="Words" id="statisticsWords" />
-          <Tab className="PageStats__tab" label="Phrases" id="statisticsPhrases" />
-          <Tab className="PageStats__tab" label="Songs" id="statisticsSongs" />
-          <Tab className="PageStats__tab" label="Stories" id="statisticsStories" />
-        </Tabs>
+        <FVTab
+          tabItems={[
+            { label: 'Words', id: 'statisticsWords' },
+            { label: 'Phrases', id: 'statisticsPhrases' },
+            { label: 'Songs', id: 'statisticsSongs' },
+            { label: 'Stories', id: 'statisticsStories' },
+          ]}
+          tabsValue={this.state.tabValue}
+          tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+        />
 
         {this.state.tabValue === 0 && (
           <Typography component="div" style={{ padding: 8 * 3 }}>

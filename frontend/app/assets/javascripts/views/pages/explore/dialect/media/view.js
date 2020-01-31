@@ -56,10 +56,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
 
+import FVTab from 'views/components/FVTab'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
@@ -205,25 +204,25 @@ export class MediaView extends Component {
           <div className="col-xs-12">
             <div>
               <Card>
-                <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-                  <Tab data-testid="tabOverview" label={intl.trans('overview', 'Overview', 'first')} />
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
+                <FVTab
+                  tabItems={[
+                    { label: intl.trans('overview', 'Overview', 'first'), dataTestId: 'tabOverview' },
+                    {
+                      label: UIHelpers.isViewSize('xs')
                         ? intl.trans('words', 'Words', 'first')
-                        : intl.trans('linked_words', 'Linked Words', 'words')
-                    }
-                    id="find_words"
-                  />
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
+                        : intl.trans('linked_words', 'Linked Words', 'words'),
+                      id: 'find_words',
+                    },
+                    {
+                      label: UIHelpers.isViewSize('xs')
                         ? intl.trans('phrases', 'Phrases', 'first')
-                        : intl.trans('linked_phrases', 'Linked Phrases', 'words')
-                    }
-                    id="find_phrases"
-                  />
-                </Tabs>
+                        : intl.trans('linked_phrases', 'Linked Phrases', 'words'),
+                      id: 'find_phrases',
+                    },
+                  ]}
+                  tabsValue={this.state.tabValue}
+                  tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+                />
                 {this.state.tabValue === 0 && (
                   <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>

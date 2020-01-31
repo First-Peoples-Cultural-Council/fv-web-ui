@@ -7,6 +7,9 @@ import { connect } from 'react-redux'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 
+import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -14,6 +17,10 @@ import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 const { any, func, object } = PropTypes
 const intl = IntlService.instance
 
+// TODO: REFACTOR
+// - drop the renderCycle system
+// - convert to hooks
+// - move component states to their own methods: loading, no results, results, endpoint down/xhr error
 export class AlphabetListView extends Component {
   static propTypes = {
     dialect: any,
@@ -41,9 +48,6 @@ export class AlphabetListView extends Component {
     this.state = {
       renderCycle: 0,
     }
-    ;['_generateTiles', '_generateDialectFilterUrl', '_handleHistoryEvent'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
   }
 
   async componentDidMount() {
@@ -73,18 +77,6 @@ export class AlphabetListView extends Component {
       entries,
       dialectClassName: getDialectClassname(computePortal),
     })
-  }
-  componentWillUnmount() {
-    this._isMounted = false
-    window.removeEventListener('popstate', this._handleHistoryEvent)
-  }
-  _handleHistoryEvent() {
-    if (this._isMounted) {
-      const _letter = selectn('letter', this.props.routeParams)
-      if (_letter) {
-        this.props.handleClick(_letter, false)
-      }
-    }
   }
 
   async componentDidUpdate(prevProps) {
@@ -122,17 +114,35 @@ export class AlphabetListView extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+    window.removeEventListener('popstate', this._handleHistoryEvent)
+  }
+
   render() {
     const { renderCycle } = this.state
-    const content = renderCycle !== 0 ? this._generateTiles() : null
+    const content =
+      renderCycle !== 0 ? (
+        this._generateTiles()
+      ) : (
+        <div className="AlphabetListView__loading">
+          <CircularProgress className="AlphabetListView__loadingSpinner" color="secondary" mode="indeterminate" />
+          <Typography className="AlphabetListView__loadingText" variant="caption">
+            Loading characters
+          </Typography>
+        </div>
+      )
     return (
       <div className="AlphabetListView" data-testid="AlphabetListView">
+        <h2>
+          {intl.trans('views.pages.explore.dialect.learn.words.find_by_alphabet', 'Browse Alphabetically', 'words')}
+        </h2>
         {content}
       </div>
     )
   }
 
-  _generateDialectFilterUrl(letter) {
+  _generateDialectFilterUrl = (letter) => {
     let href = undefined
     const _splitWindowPath = [...this.props.splitWindowPath]
     const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
@@ -145,10 +155,19 @@ export class AlphabetListView extends Component {
     return href
   }
 
-  _generateTiles() {
-    const { entries } = this.state
+  _generateTiles = () => {
+    const { entries = [] } = this.state
     const { letter } = this.props
-    const _entries = (entries || []).map((value, index) => {
+
+    if (entries.length === 0) {
+      return (
+        <Typography className="AlphabetListView__noCharacters" variant="caption">
+          Characters are unavailable at this time
+        </Typography>
+      )
+    }
+
+    const _entries = entries.map((value, index) => {
       const _letter = value.title
       const href = this._generateDialectFilterUrl(_letter)
       return (
@@ -167,16 +186,18 @@ export class AlphabetListView extends Component {
     })
     let content = null
     if (_entries.length > 0) {
-      content = (
-        <div>
-          <h2>
-            {intl.trans('views.pages.explore.dialect.learn.words.find_by_alphabet', 'Browse Alphabetically', 'words')}
-          </h2>
-          <div className={`AlphabetListViewTiles ${this.state.dialectClassName}`}>{_entries}</div>
-        </div>
-      )
+      content = <div className={`AlphabetListViewTiles ${this.state.dialectClassName}`}>{_entries}</div>
     }
     return content
+  }
+
+  _handleHistoryEvent = () => {
+    if (this._isMounted) {
+      const _letter = selectn('letter', this.props.routeParams)
+      if (_letter) {
+        this.props.handleClick(_letter, false)
+      }
+    }
   }
 }
 
@@ -203,7 +224,4 @@ const mapDispatchToProps = {
   fetchDialect2,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlphabetListView)
+export default connect(mapStateToProps, mapDispatchToProps)(AlphabetListView)

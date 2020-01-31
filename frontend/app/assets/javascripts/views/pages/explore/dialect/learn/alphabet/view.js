@@ -32,6 +32,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 
+import FVTab from 'views/components/FVTab'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
@@ -40,8 +41,6 @@ import SubViewTranslation from 'views/pages/explore/dialect/learn/base/subview-t
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
@@ -96,10 +95,6 @@ export class AlphabetView extends Component {
   }
 
   render() {
-    const tabItemStyles = {
-      userSelect: 'none',
-    }
-
     const computeEntities = Immutable.fromJS([
       {
         id: this._getCharacterPath(),
@@ -223,39 +218,35 @@ export class AlphabetView extends Component {
           <div className="col-xs-12">
             <div>
               <Card>
-                <Tabs
-                  value={this.state.tabValue}
-                  tabItemContainerStyle={tabItemStyles}
-                  onChange={(e, tabValue) => this.setState({ tabValue })}
-                >
-                  <Tab label={intl.trans('definition', 'Definition', 'first')} />
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
+                <FVTab
+                  tabItems={[
+                    { label: intl.trans('definition', 'Definition', 'first') },
+                    {
+                      label: UIHelpers.isViewSize('xs')
                         ? intl.trans('words', 'Words', 'first')
                         : intl.trans(
-                          'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
-                          'Words Starting with ' + selectn('response.title', computeCharacter),
-                          'words',
-                          [selectn('response.title', computeCharacter)]
-                        )
-                    }
-                    id="find_words"
-                  />
-                  <Tab
-                    label={
-                      UIHelpers.isViewSize('xs')
+                            'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
+                            'Words Starting with ' + selectn('response.title', computeCharacter),
+                            'words',
+                            [selectn('response.title', computeCharacter)]
+                          ),
+                      id: 'find_words',
+                    },
+                    {
+                      label: UIHelpers.isViewSize('xs')
                         ? intl.trans('phrases', 'Phrases', 'first')
                         : intl.trans(
-                          'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
-                          'Phrases Starting with ' + selectn('response.title', computeCharacter),
-                          'words',
-                          [selectn('response.title', computeCharacter)]
-                        )
-                    }
-                    id="find_phrases"
-                  />
-                </Tabs>
+                            'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
+                            'Phrases Starting with ' + selectn('response.title', computeCharacter),
+                            'words',
+                            [selectn('response.title', computeCharacter)]
+                          ),
+                      id: 'find_phrases',
+                    },
+                  ]}
+                  tabsValue={this.state.tabValue}
+                  tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+                />
 
                 {/* TAB: DEFINITION */}
                 {this.state.tabValue === 0 && (
@@ -346,7 +337,7 @@ export class AlphabetView extends Component {
     )
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchCharacter(this._getCharacterPath(this.props))
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
   }
@@ -437,7 +428,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlphabetView)
+export default connect(mapStateToProps, mapDispatchToProps)(AlphabetView)

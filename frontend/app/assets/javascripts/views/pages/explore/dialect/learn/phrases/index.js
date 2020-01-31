@@ -27,6 +27,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
+import { setListViewMode } from 'providers/redux/reducers/listView'
 
 import selectn from 'selectn'
 
@@ -193,6 +194,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         searchByMode={searchByMode}
         rowClickHandler={this.props.rowClickHandler}
         hasSorting={this.props.hasSorting}
+        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+        dictionaryListViewMode={this.props.listView.mode}
       />
     ) : (
       <div />
@@ -258,34 +261,34 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           </div>
         </div>
         <div className="row">
-          <div
-            className={classNames('col-xs-12', 'col-md-3', computePhraseBooksSize === 0 ? 'hidden' : null, 'PrintHide')}
-          >
+          <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
             <AlphabetListView
               dialect={selectn('response', computePortal)}
               handleClick={this.handleAlphabetClick}
               letter={selectn('routeParams.letter', this.props)}
             />
-            <DialectFilterList
-              type={this.DIALECT_FILTER_TYPE}
-              title={intl.trans(
-                'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
-                'Browse Phrase Books',
-                'words'
-              )}
-              appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
-              facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                'fv-phrase:phrase_books',
-                this.props.routeParams.area
-              )}
-              facets={selectn('response.entries', computePhraseBooks) || []}
-              routeParams={this.props.routeParams}
-              handleDialectFilterClick={this.handlePhraseBookClick}
-              handleDialectFilterList={this.handleDialectFilterList}
-              clearDialectFilter={this.clearDialectFilter}
-            />
+            {computePhraseBooksSize !== 0 && (
+              <DialectFilterList
+                type={this.DIALECT_FILTER_TYPE}
+                title={intl.trans(
+                  'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
+                  'Browse Phrase Books',
+                  'words'
+                )}
+                appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
+                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
+                  'fv-phrase:phrase_books',
+                  this.props.routeParams.area
+                )}
+                facets={selectn('response.entries', computePhraseBooks) || []}
+                routeParams={this.props.routeParams}
+                handleDialectFilterClick={this.handlePhraseBookClick}
+                handleDialectFilterList={this.handleDialectFilterList}
+                clearDialectFilter={this.clearDialectFilter}
+              />
+            )}
           </div>
-          <div className={classNames('col-xs-12', computePhraseBooksSize === 0 ? 'col-md-12' : 'col-md-9')}>
+          <div className={classNames('col-xs-12', 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
 
             <div className={dialectClassName}>{phraseListView}</div>
@@ -458,7 +461,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCategory, fvPortal, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeCategories } = fvCategory
   const { computeDocument } = document
@@ -474,6 +477,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePortal,
     computeSearchDialect,
+    listView,
     properties,
     splitWindowPath,
     windowPath: _windowPath,
@@ -488,6 +492,7 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   searchDialectUpdate,
+  setListViewMode,
   updatePageProperties,
 }
 

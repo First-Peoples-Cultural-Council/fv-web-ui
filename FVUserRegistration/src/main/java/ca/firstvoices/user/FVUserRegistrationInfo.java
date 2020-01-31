@@ -11,7 +11,11 @@ public class FVUserRegistrationInfo extends UserRegistrationInfo {
     protected String ageGroup;
 
     protected String role;
+
     protected Boolean language_team_member;
+
+    protected Boolean community_member;
+
     protected String comment;
 
     public FVUserRegistrationInfo() {
@@ -64,5 +68,13 @@ public class FVUserRegistrationInfo extends UserRegistrationInfo {
 
     public void setLanguageTeamMember(Boolean language_team_member) {
         this.language_team_member = language_team_member;
+    }
+
+    public Boolean getCommunityMember() {
+        return community_member;
+    }
+
+    public void setCommunityMember(Boolean community_member) {
+        this.community_member = community_member;
     }
 }

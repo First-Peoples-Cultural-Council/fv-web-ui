@@ -255,7 +255,6 @@ export const SearchDialect = (props) => {
     } = _searchBySettings
 
     const cols = []
-
     if (searchByTitle) {
       switch (props.searchDialectDataType) {
         case SEARCH_DATA_TYPE_WORD:
@@ -350,7 +349,18 @@ export const SearchDialect = (props) => {
         messages.all = <span>{`Showing all ${dataType} listed alphabetically${messagePartsOfSpeech}`}</span>
     }
 
-    let msg = ''
+    let msg = messages.all
+
+    if (
+      searchPartOfSpeech !== true &&
+      searchByTitle !== true &&
+      searchByDefinitions !== true &&
+      searchByCulturalNotes !== true &&
+      searchByTranslations !== true
+    ) {
+      return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
+    }
+
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         msg = messages.startWith
@@ -384,8 +394,7 @@ export const SearchDialect = (props) => {
         }
         break
       }
-      default:
-        msg = messages.all
+      default: // NOTE: do nothing
     }
     return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
   }
@@ -519,7 +528,7 @@ export const SearchDialect = (props) => {
     const searchData1 = {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_DEFAULT,
-      searchBySettings: undefined,
+      searchBySettings: {},
       searchTerm: undefined,
     }
 

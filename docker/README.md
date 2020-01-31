@@ -73,7 +73,7 @@ Notes:
 * To enable Dev mode: ```-e NUXEO_DEV_MODE="true"```\
 * To change the data folder: ```-e NUXEO_DATA="/opt/nuxeo/ext_data"```\
 
-### Step 5:
+### Step 4:
 
 Run the initial backend setup script in a new terminal once the backend server has started:
 
@@ -87,7 +87,7 @@ chmod +x initialsetup.sh
 
 This will setup the proper data structure for FirstVoices, and create an admin account based on your environment variables.
 
-### Step 6:
+### Step 5:
 
 * You can now access the FirstVoices backend by going to localhost:8080 and logging in.
 * You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)

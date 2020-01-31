@@ -101,7 +101,7 @@ class WordsListView extends DataListView {
     DEFAULT_LANGUAGE: 'english',
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_PAGE: 1,
-    DEFAULT_SORT_COL: 'fv:custom_order',
+    DEFAULT_SORT_COL: 'dc:title',
     DEFAULT_SORT_TYPE: 'asc',
     dialect: null,
     disableClickItem: true,
@@ -460,6 +460,8 @@ class WordsListView extends DataListView {
               })
             }}
             type={'FVWord'}
+            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={this.props.dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={({ templateData }) => {
               return (
                 <div className="DictionaryListSmallScreen__item">
@@ -476,10 +478,12 @@ class WordsListView extends DataListView {
                       {templateData.related_audio}
                     </div>
 
-                    <div className="DictionaryListSmallScreen__groupData">
-                      <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-                      {templateData['fv:definitions']}
-                    </div>
+                    {templateData['fv:definitions'] && (
+                      <div className="DictionaryListSmallScreen__groupData">
+                        <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+                        {templateData['fv:definitions']}
+                      </div>
+                    )}
 
                     <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
                       <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
@@ -530,8 +534,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchWords,
   fetchDialect2,
+  fetchWords,
   pushWindowPath,
   setRouteParams,
 }

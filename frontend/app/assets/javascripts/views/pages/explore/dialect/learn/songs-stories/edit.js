@@ -35,14 +35,11 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
+import FVTab from 'views/components/FVTab'
 
-import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
-
 // Models
 import { Document } from 'nuxeo'
 
@@ -67,7 +64,6 @@ const EditViewWithForm = withForm(PromiseWrapper, true)
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
-    classes: object.isRequired,
     book: object,
     typePlural: string,
     // REDUX: reducers/state
@@ -264,7 +260,6 @@ export class PageDialectBookEdit extends Component {
     }
 
     const title = selectn('response.properties.dc:title', _computeBook)
-    const { classes } = this.props
     return (
       <AuthenticationFilter
         is403={this.state.is403}
@@ -274,32 +269,26 @@ export class PageDialectBookEdit extends Component {
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <Tabs
-            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-            value={this.state.tabValue}
-            onChange={(e, tabValue) => this.setState({ tabValue })}
-          >
-            <Tab
-              classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-              label={intl.trans('book', 'Book', 'first')}
-            />
-            <Tab
-              classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-              label={intl.trans('pages', 'Pages', 'first')}
-            />
-          </Tabs>
+          <FVTab
+            tabItems={[
+              { label: intl.trans('book', 'Book', 'first') },
+              { label: intl.trans('pages', 'Pages', 'first') },
+            ]}
+            tabsValue={this.state.tabValue}
+            tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+          />
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
-                <Typography variant="headline">
-                  <h1>
+                <Typography variant="display2">
+                  <>
                     {intl.trans(
                       'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
                       'Edit ' + title + ' Book',
                       'words',
                       [title]
                     )}
-                  </h1>
+                  </>
                 </Typography>
               )}
               <EditViewWithForm
@@ -394,18 +383,4 @@ const mapDispatchToProps = {
   updateBookEntry,
 }
 
-const styles = () => ({
-  tabsRoot: {
-    backgroundColor: '#26a79a',
-    color: '#fff',
-  },
-  tabsIndicator: {
-    backgroundColor: '#e93d7c',
-  },
-  tabRoot: {
-    '&:focus': {
-      color: '#FFF',
-    },
-  },
-})
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit))
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit)

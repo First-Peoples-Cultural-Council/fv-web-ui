@@ -499,7 +499,4 @@ const mapDispatchToProps = {
   unpublishPhrase,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DialectViewPhrase)
+export default connect(mapStateToProps, mapDispatchToProps)(DialectViewPhrase)

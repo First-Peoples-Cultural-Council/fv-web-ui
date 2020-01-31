@@ -21,8 +21,7 @@ import selectn from 'selectn'
 
 import FVButton from 'views/components/FVButton'
 import Paper from '@material-ui/core/Paper'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
+import FVTab from 'views/components/FVTab'
 import Typography from '@material-ui/core/Typography'
 
 import ActionLaunch from '@material-ui/icons/Launch'
@@ -48,14 +47,17 @@ class MediaThumbnail extends Component {
     if (this.props.photos.length > 0 && this.props.videos.length > 0) {
       return (
         <div>
-          <Tabs
-            value={this.state.tabValue}
-            onChange={(e, tabValue) => this.setState({ tabValue })}
-            style={{ marginTop: '15px' }}
-          >
-            <Tab label="Photo(s)" />
-            <Tab label="Video(s)" />
-          </Tabs>
+          <FVTab
+            tabsStyle={{ marginTop: '15px' }}
+            tabItems={[
+              { label: 'Photo(s)' },
+              {
+                label: 'Video(s)',
+              },
+            ]}
+            tabsValue={this.state.tabValue}
+            tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+          />
           {this.state.tabValue === 0 && photoMediaPanel}
           {this.state.tabValue === 1 && videoMediaPanel}
         </div>
