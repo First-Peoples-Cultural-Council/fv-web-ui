@@ -216,7 +216,7 @@ if [[ "$response" -ne 200 ]]; then
 fi
 # Publish the phrasebook
 echo "Publishing TestLanguageSix phrasebook"
-response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/FVPublishParents' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"stopDocumentType":"FVCategories"},"input":"/FV/Workspaces/Data/Test/Test/TestLanguageSix/Phrase Books/TestPhraseBook","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/FVPublish' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"stopDocumentType":"FVCategories"},"input":"/FV/Workspaces/Data/Test/Test/TestLanguageSix/Phrase Books/TestPhraseBook","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
 if [[ "$response" -ne 200 ]]; then
     echo -e 'TestLanguageSix phrasebook publish failed: Error ' $response ' \n'; exit 1
     echo
