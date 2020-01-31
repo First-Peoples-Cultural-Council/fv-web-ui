@@ -12,6 +12,10 @@ public class FVRegistrationConstants {
 
     static final int NEW_USER_SELF_REGISTRATION_ACT = 5;
 
+    static final int NEW_MEMBER_SELF_REGISTRATION_ACT = 6;
+
+    static final int NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT = 7;
+
     // constants for validating registration attempt
     public static final int REGISTRATION_CAN_PROCEED = 0;
 

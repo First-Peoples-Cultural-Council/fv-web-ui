@@ -156,6 +156,7 @@ const fields = {
     'fvuserinfo:ageGroup': t.maybe(AgeRanges),
     'fvuserinfo:phone': t.maybe(t.String),
     'fvuserinfo:comment': t.maybe(t.String),
+    'fvuserinfo:community_member': t.maybe(t.Boolean),
     'fvuserinfo:language_team_member': t.maybe(t.Boolean),
   },
   FVUserProfile: {

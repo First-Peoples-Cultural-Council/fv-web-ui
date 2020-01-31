@@ -72,6 +72,9 @@ public class FVLogin extends StartupHelper {
                 else {
                     redirectTo = fvUserProfileService.getDefaultDialectRedirectPath(documentManager, currentUser, NUXEO_URL, true);
                 }
+
+                FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
+
             } else if (fvDisableLoginRedirect != null && !fvDisableLoginRedirect.equals("true")) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
             }

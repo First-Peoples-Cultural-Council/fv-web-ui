@@ -24,6 +24,7 @@
 
 	<xs:element name="preferences" type="xs:string"/>
 	<xs:element name="requestedSpace" type="xs:string"/>
+	<xs:element name="community_member" type="xs:boolean"/>
 	<xs:element name="language_team_member" type="xs:boolean"/>
 	<xs:element name="comment" type="xs:string"/>
 
