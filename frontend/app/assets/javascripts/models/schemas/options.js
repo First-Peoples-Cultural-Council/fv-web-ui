@@ -63,10 +63,13 @@ const FVUserRegistrationTemplate = function template(locals) {
 
     if (requestedSpaceElement !== null) {
       const selectBox = requestedSpaceElement.getElementsByTagName('select')[0]
-      selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
-      document.getElementById('language_team_member_name').innerHTML = document.getElementById(
-        'community_member_name'
-      ).innerHTML = selectedCommunityLanguageLabel
+
+      if (selectBox.selectedIndex !== 0) {
+        selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
+        document.getElementById('language_team_member_name').innerHTML = document.getElementById(
+          'community_member_name'
+        ).innerHTML = selectedCommunityLanguageLabel
+      }
     }
   })()
 

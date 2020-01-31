@@ -18,8 +18,10 @@ public class FVGetPendingUserRegistrations {
 
     public static final String IGNORE = "ignore";
 
+    // approved means they didn't create a password yet
     public static final String APPROVED = "approved";
 
+    // accepted means they created a password
     public static final String ACCEPTED = "accepted";
 
     @Context
@@ -29,7 +31,7 @@ public class FVGetPendingUserRegistrations {
     protected String dialectID;
 
     @Param(name = "pruneAction", required = false, values = { APPROVED, ACCEPTED, IGNORE })
-    protected String pruneAction = APPROVED;
+    protected String pruneAction;
 
     @OperationMethod
     public DocumentModelList run() {
@@ -38,19 +40,18 @@ public class FVGetPendingUserRegistrations {
         try {
             String query = "Select * from Document where ecm:mixinType = 'UserRegistration'";
 
-            // prune all items which are not part of the specific dialect
+            // If dialect id provided, filter based on dialect id
             if (!(dialectID.toLowerCase().equals("all") || dialectID.toLowerCase().equals("*"))) {
                 query = String.format("Select * from Document where ecm:mixinType = 'UserRegistration' and %s = '%s'",
                         "docinfo:documentId", dialectID);
-            } else if (!pruneAction.equals(IGNORE)) {
-                if (pruneAction.equals(APPROVED)) {
-                    query += " AND ecm:currentLifeCycleState = 'approved'";
-                } else if (pruneAction.equals(ACCEPTED)) {
-                    query += " AND ecm:currentLifeCycleState = 'accepted'";
-                }
             }
 
-            registrations = session.query(query + " ORDER BY dc:created DESC");
+            // If "approved" or "accepted" specified, filter based on state
+            if (pruneAction.equals(APPROVED) || pruneAction.equals(ACCEPTED)) {
+                query = String.format(query + "AND ecm:currentLifeCycleState = '%s' ORDER BY dc:created DESC", pruneAction);
+            }
+
+            registrations = session.query(query);
         } catch (Exception e) {
             log.warn(e);
         }
