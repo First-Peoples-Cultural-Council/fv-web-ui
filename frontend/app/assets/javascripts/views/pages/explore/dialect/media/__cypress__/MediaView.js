@@ -11,9 +11,11 @@ describe('MediaView', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media')
 
-    cy.wait(1200)
+    cy.wait(2000)
 
-    cy.queryAllByText('TestWordImage', {exact:false}).eq(0).click()
+    cy.queryAllByText('TestWordImage', { exact: false })
+      .eq(0)
+      .click()
 
     cy.wait(1200)
 
