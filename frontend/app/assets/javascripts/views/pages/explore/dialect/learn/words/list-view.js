@@ -460,6 +460,8 @@ class WordsListView extends DataListView {
               })
             }}
             type={'FVWord'}
+            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={this.props.dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={({ templateData }) => {
               return (
                 <div className="DictionaryListSmallScreen__item">
@@ -532,8 +534,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchWords,
   fetchDialect2,
+  fetchWords,
   pushWindowPath,
   setRouteParams,
 }
