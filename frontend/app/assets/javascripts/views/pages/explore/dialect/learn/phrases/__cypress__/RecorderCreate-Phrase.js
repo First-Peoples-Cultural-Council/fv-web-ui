@@ -15,7 +15,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(500)
     cy.getByText('Create New Phrase', { exact: true }).click()
+    cy.wait(2000)
 
     /*
             Enter data to create a new phrase

@@ -207,7 +207,7 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
-  cy.wait(1000)
+  cy.wait(5000)
   cy.getByTestId('DialectFilterList').scrollIntoView()
   cy.getByTestId('DialectFilterList').within(() => {
     cy.getByText(_obj.category).click()
