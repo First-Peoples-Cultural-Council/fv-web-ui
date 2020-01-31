@@ -184,7 +184,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
         Check that the published phrase is visible.
      */
     cy.getByText('Public View').click()
-    cy.wait(1500)
+    cy.wait(2000)
     cy.get('[id="pageNavigation"]').within(() => {
       cy.get('div.row.Navigation__dialectContainer')
         .should('have.css', 'background-color')
@@ -194,7 +194,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.getByText('TestTranslation').should('exist')
     cy.getByText('TestCulturalNote').should('exist')
     cy.getByText('TestImage').should('exist')
-    cy.getByText('TestVideo').should('exist')
+    cy.getByText('TestVideo')
+      .scrollIntoView()
+      .should('exist')
     cy.getByText('TestAcknowledgement').should('exist')
   })
 })

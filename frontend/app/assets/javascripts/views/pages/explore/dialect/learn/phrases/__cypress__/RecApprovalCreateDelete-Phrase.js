@@ -30,7 +30,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     })
     cy.wait(500)
     cy.getByText('Create New Phrase').click()
-    cy.wait(1500)
+    cy.wait(3000)
 
     /*
                 Enter data to create a new phrase
