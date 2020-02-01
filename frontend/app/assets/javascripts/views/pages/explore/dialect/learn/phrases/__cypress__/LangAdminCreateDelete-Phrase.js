@@ -30,6 +30,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
     cy.wait(500)
     cy.getByText('Create New Phrase', { exact: false }).click()
+    cy.wait(3000)
 
     /*
             Enter data to create a new phrase

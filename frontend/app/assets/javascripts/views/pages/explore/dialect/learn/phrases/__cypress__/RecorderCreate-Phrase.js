@@ -17,7 +17,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.wait(500)
     cy.getByText('Create New Phrase', { exact: true }).click()
-    cy.wait(2000)
+    cy.wait(3000)
 
     /*
             Enter data to create a new phrase
