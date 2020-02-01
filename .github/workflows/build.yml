@@ -58,8 +58,8 @@ jobs:
         run: npm run build:production
 
       - name: Build entire project with Maven
-          if: steps.changed-backend.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'true'
-          run: mvn clean install
+        if: steps.changed-backend.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'true'
+        run: mvn clean install
 
       - name: Install Node packages
         if: steps.changed-package.outputs.changed == 'true' && steps.changed-backend.outputs.changed == 'false' && steps.changed-frontend.outputs.changed == 'false'
