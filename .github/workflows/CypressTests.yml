@@ -44,6 +44,9 @@ jobs:
         run: |
           bash ./docker/initialsetup.sh
 
+      - name: Install environment dependencies
+        run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
       - name: Run Cypress tests
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
