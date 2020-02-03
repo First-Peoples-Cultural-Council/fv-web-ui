@@ -103,6 +103,28 @@
     </plugins>
   </build>
  </profile>
+
+ <!-- Development Profile for back-end -->
+ <!-- This profile skips building the frontend and installing node packages -->
+ <profile>
+   <id>backend</id>
+   <activation>
+     <activeByDefault>false</activeByDefault>
+   </activation>
+   <build>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-jar-plugin</artifactId>
+         <configuration>
+           <archive>
+             <manifestFile>nuxeo/META-INF/MANIFEST.MF</manifestFile>
+           </archive>
+         </configuration>
+       </plugin>
+     </plugins>
+   </build>
+ </profile>
     
 </profiles>
 </project>
