@@ -67,6 +67,11 @@ describe('Navigation.js > Navigation side bar', () => {
       cy.getByText('Sign Out').click()
     })
     cy.wait(1000)
+
+    // We need to visit the home page, due to fv.disableLoginRedirect when running Nuxeo standalone
+    cy.visit('/')
+    cy.wait(1000)
+
     cy.get('[id="pageNavigation"]').within(() => {
       cy.getByText('SIGN IN').should('exist')
     })
