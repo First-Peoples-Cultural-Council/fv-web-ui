@@ -57,12 +57,12 @@ jobs:
           node-version: '8.x'
 
       # Build only the backend if changes are made to the backend and not frontend
-      - name: Build only backend with Maven
+      - name: Build backend with Maven
         if: steps.changed-backend.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'false'
         run: mvn clean install -Pbackend
 
-      # Build only the frontend if changes are made to the fronend and not backend
-      - name: Build frontend
+      # Build only the frontend if changes are made to the fronend and not backend (this includes installing the Node packages)
+      - name: Build frontend (includes Node package install)
         if: steps.changed-backend.outputs.changed == 'false' && steps.changed-frontend.outputs.changed == 'true'
         run: |
           cd frontend
