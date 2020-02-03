@@ -1,9 +1,9 @@
 name: Cypress Tests
 
-on: 
-  pull_request:
-    branches: 
-      - master
+on:
+  # Every day at 8:00pm UTC / 12:00pm pst
+  schedule:
+    - cron: '0 20 * * *'
 
 jobs:
 
