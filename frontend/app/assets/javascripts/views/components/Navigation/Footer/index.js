@@ -59,6 +59,7 @@ export default class Footer extends React.Component {
                       case: 'first',
                     })}
                   </a>
+                  {' | '}
                   <a href={NavigationHelpers.generateStaticURL('/content/conditions/')}>
                     {this.intl.translate({
                       key: 'views.components.navigation.conditions_of_use',
@@ -66,6 +67,7 @@ export default class Footer extends React.Component {
                       case: 'first',
                     })}
                   </a>
+                  {' | '}
                   <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
                     {this.intl.translate({
                       key: 'general.help',
@@ -73,6 +75,7 @@ export default class Footer extends React.Component {
                       case: 'first',
                     })}
                   </a>
+                  {' | '}
                   <a href="http://fpcf.ca/donate-now/">
                     {this.intl.translate({
                       key: 'general.donate',
