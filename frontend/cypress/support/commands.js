@@ -67,7 +67,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     })
   }
 
-  const url = obj.url || (Cypress.env('TARGET') + '/nuxeo/startup')
+  const url = obj.url || (Cypress.env('FRONTEND') + '/nuxeo/startup')
   const body = obj.body || {
     user_name: userName,
     user_password: userPassword,
@@ -92,7 +92,10 @@ Cypress.Commands.add('login', (obj = {}) => {
 
 // Logs any user out using a GET request.
 Cypress.Commands.add('logout', () => {
+  cy.log('--- LOGGING OUT ---')
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
+  cy.visit('')
+  cy.wait(1000)
 })
 
 
@@ -149,6 +152,7 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
   cy.getByTestId('AlphabetListView').within(() => {
     cy.getByText(_obj.letter).click()
   })
+  cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- AlphabetListView: Confirm data  ---')
@@ -161,6 +165,7 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
     // Navigate to next page
     cy.wait(500)
     cy.getByTestId('pagination__next').click()
+    cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- AlphabetListView: Confirm data  ---')
@@ -173,6 +178,7 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
     cy.log('--- AlphabetListView: Clear filter ---')
     cy.queryByText(/stop browsing alphabetically/i).click()
   }
+  cy.wait(3000)
 })
 
 // DialectFilterList
@@ -201,9 +207,11 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
+  cy.wait(1500)
   cy.getByTestId('DialectFilterList').within(() => {
     cy.getByText(_obj.category).click()
   })
+  cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- DialectFilterList: Confirm data  ---')
@@ -216,6 +224,7 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
     // Navigate to next page
     cy.wait(500)
     cy.getByTestId('pagination__next').click()
+    cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- DialectFilterList: Confirm data  ---')
@@ -255,7 +264,8 @@ Cypress.Commands.add('FlashcardList', (obj) => {
   cy.getByTestId('DictionaryList__row')
 
   cy.log('--- FlashcardList: Enter flashcard mode  ---')
-  cy.queryByText(/flashcards/i).click()
+  cy.queryByText(/Flashcard view/i).click()
+  cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- FlashcardList: Confirm flashcard  ---')
@@ -275,7 +285,7 @@ Cypress.Commands.add('FlashcardList', (obj) => {
   }
   if (_obj.clearFilter) {
     cy.log('--- FlashcardList: Leave flashcard mode  ---')
-    cy.queryByText(/stop viewing flashcards/i).click()
+    cy.queryByText(/Cancel flashcard view/i).click()
 
     cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
     cy.getByTestId('DictionaryList__row').should('exist')
@@ -384,7 +394,7 @@ Cypress.Commands.add('createContributor', () => {
   cy.log('--- Running createContributor ---')
   return cy.request({
     method: 'POST',
-    url: 'https://preprod.firstvoices.com/nuxeo/api/v1/path/FV/Workspaces/Data/Athabascan/Dene/Dene/Contributors',
+    url: 'http://127.0.0.1:3001/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageTwo/Contributors',
     body: {
       'entity-type': 'document',
       'type': 'FVContributor',
@@ -398,7 +408,7 @@ Cypress.Commands.add('deleteContributor', (uid) => {
   cy.log('--- Running deleteContributor ---')
   return cy.request({
     method: 'POST',
-    url: 'https://preprod.firstvoices.com/nuxeo/api/v1/automation/Document.Trash',
+    url: 'http://127.0.0.1:3001/nuxeo/api/v1/automation/Document.Trash',
     body: {
       'params': {},
       'context': {},

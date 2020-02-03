@@ -262,7 +262,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlphabetListView)
+export default connect(mapStateToProps, mapDispatchToProps)(AlphabetListView)

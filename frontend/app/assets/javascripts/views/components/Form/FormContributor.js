@@ -448,7 +448,4 @@ const mapDispatchToProps = {
   fetchContributors,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormContributor)
+export default connect(mapStateToProps, mapDispatchToProps)(FormContributor)

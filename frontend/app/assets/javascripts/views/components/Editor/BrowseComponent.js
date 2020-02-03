@@ -284,7 +284,4 @@ const mapDispatchToProps = {
   fetchSharedVideos,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BrowseComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(BrowseComponent)

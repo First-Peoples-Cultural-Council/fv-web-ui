@@ -306,7 +306,4 @@ const mapDispatchToProps = {
   updateUser,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UsersListView)
+export default connect(mapStateToProps, mapDispatchToProps)(UsersListView)

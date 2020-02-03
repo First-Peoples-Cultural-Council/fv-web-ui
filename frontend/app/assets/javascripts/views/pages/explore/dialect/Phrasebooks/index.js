@@ -213,9 +213,7 @@ export const Phrasebooks = (props) => {
           // Pagination
           fetcher={(fetcherParams) => {
             setPaginationRequest(
-              `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
-                window.location.search
-              }`
+              `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
             )
           }}
           fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
@@ -265,7 +263,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Phrasebooks)
+export default connect(mapStateToProps, mapDispatchToProps)(Phrasebooks)

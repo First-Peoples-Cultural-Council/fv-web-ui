@@ -16,17 +16,21 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
       userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
+    cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.getByText('Create New Phrase', { exact: false }).click()
+    cy.wait(500)
+    cy.getByText('Create New Phrase').click()
+    cy.wait(3000)
 
     /*
                 Enter data to create a new phrase
@@ -92,7 +96,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                     Finishing the phrase creation form and save
                 */
     cy.getByText('+ Add cultural note', { exact: true }).click()
-    cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestCulturalNote')
+    cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.get('[name="fv:reference"]', { exact: true }).type('TestReference')
     cy.get('[name="fv-phrase:acknowledgement"]', { exact: true }).type('TestAcknowledgement')
     cy.getByText('Save', { exact: true }).click()
@@ -116,6 +120,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.wait(500)
     cy.getByText('TestPhrase').click()
     cy.getByTestId('pageContainer').within(() => {
+      cy.wait(500)
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(0)
@@ -175,7 +180,9 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                 Delete the phrase and check that it no longer exists.
             */
     cy.getByText('Delete phrase').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
     cy.getByText('Delete phrase success').should('exist')
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
     cy.getByText('Return To Previous Page')

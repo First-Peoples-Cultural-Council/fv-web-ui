@@ -7,6 +7,7 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
             Navigate to main page as a guest.
          */
     cy.visit('/home')
+    cy.wait(500)
     cy.get('[title="Settings"]').click()
 
     /*

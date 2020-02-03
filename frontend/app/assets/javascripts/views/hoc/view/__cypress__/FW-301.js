@@ -5,17 +5,14 @@ import 'cypress-testing-library/add-commands'
 
 describe('FW-301: Some buttons need to be clicked twice to submit', () => {
   it('Publish button needs to be clicked twice on the confirmation modal for words that have media', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-    */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
+    // Login
+    cy.login({
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
 
-    // Login
-    cy.login({ url: 'https://dev.firstvoices.com/nuxeo/startup' })
-
-    cy.visit('/explore/FV/Workspaces/Data/Cypress/Cypress/Cypress/learn/words/e96a4d91-030e-4d5f-9e69-5735e048995f')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
+    cy.getByText('Dog', { exact: false }).click()
+    cy.wait(500)
 
     // open
     cy.getByTestId('pageContainer').within(() => {

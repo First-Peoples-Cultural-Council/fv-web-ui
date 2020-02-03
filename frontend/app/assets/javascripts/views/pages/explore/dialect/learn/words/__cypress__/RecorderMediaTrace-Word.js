@@ -13,22 +13,25 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       userName: 'TESTLANGUAGETWO_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
+    cy.wait(800)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
-    cy.wait(500)
+    cy.wait(1000)
 
     /*
             Go to media browser and check that each media item has the
             proper word show up under linked words.
          */
     cy.get('[title="More Options"]', { exact: true }).click()
+    cy.wait(1000)
     cy.getByText('Media Browser', { exact: true }).click()
     cy.getByText('TestWordAudio').click()
     cy.getByText('Linked Words').click()
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -38,15 +41,17 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
     cy.wait(500)
     cy.getByText('TestWordImage').click()
     cy.getByText('Linked Words').click()
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media')
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('TestWordVideo').click()
     cy.getByText('Linked Words').click()
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')

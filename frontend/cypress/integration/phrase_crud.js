@@ -267,7 +267,7 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
     // UPDATE: save
     cy.getByText('save', { exact: false }).click()
 
-    cy.wait(waitMedium)
+    cy.wait(3000)
 
     // UPDATE: verify
     cy.getByText(updateTitle).should('exist')
