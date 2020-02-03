@@ -272,9 +272,17 @@ public class FVRegistrationMailUtilities {
         try {
             if (title != null && body != null) {
                 if (!toStr.isEmpty()) {
+
+                    // IF BCC equals toStr - a language admin does not exist
+                    // Remove BCC, and mention something in the title
+                    if (BCC.equals(toStr)) {
+                        BCC = "";
+                        title = "[NO-ADMIN] " + title;
+                    }
+
                     generateMail(toStr, "", title, body, BCC);
                 } else {
-                    generateMail(options.get("email"), "", title, body, "");
+                    generateMail(options.get("email"), "", title, body, BCC);
                 }
             }
         } catch (NamingException | MessagingException e) {
