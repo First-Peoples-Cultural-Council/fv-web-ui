@@ -56,11 +56,11 @@ public class FVRegistrationMailUtilities {
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destination, false));
 
         if (!StringUtils.isBlank(copy)) {
-            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(copy, false));
+            msg.addRecipients(Message.RecipientType.CC, InternetAddress.parse(copy, false));
         }
 
         if (!StringUtils.isBlank(BCC)) {
-            msg.addRecipient(Message.RecipientType.BCC, new InternetAddress(BCC, false));
+            msg.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(BCC, false));
         }
 
         msg.setSubject(title, "UTF-8");
