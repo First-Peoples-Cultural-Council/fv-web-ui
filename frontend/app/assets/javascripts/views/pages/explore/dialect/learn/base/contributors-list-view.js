@@ -288,7 +288,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ContributorsListView)
+export default connect(mapStateToProps, mapDispatchToProps)(ContributorsListView)

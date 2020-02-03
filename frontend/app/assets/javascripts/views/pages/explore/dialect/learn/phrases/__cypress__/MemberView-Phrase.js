@@ -19,15 +19,16 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.wait(500)
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')
-      cy.getByText('TestPhrase')
-        .should('exist')
-        .click()
+      cy.getByText('TestPhrase').should('exist')
+      cy.getByText('TestPhrase').click()
     })
 
     /*
@@ -41,7 +42,8 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
         */
     cy.wait(500)
     cy.get('[title="More Options"]').click()
-    cy.getByText('Reports', { exact: true }).click()
+    cy.wait(500)
+    cy.getByText('Reports', { exact: true }).click({ force: true })
     cy.getByText('Phrases in New Status', { exact: true }).click()
     cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('exist')

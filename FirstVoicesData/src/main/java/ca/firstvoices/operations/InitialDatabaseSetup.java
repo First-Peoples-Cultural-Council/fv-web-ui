@@ -92,6 +92,7 @@ public class InitialDatabaseSetup {
                 DocumentModel SharedCategories = session.createDocumentModel("/FV/Workspaces/SharedData", "Shared Categories", "FVCategories");
                 SharedCategories.setPropertyValue("dc:title", "Shared Categories");
                 SharedCategories = session.createDocument(SharedCategories);
+                session.publishDocument(SharedCategories, session.getDocument(new PathRef("/FV/sections/SharedData")));
             }
     
             thisExists = session.exists(new PathRef("/FV/Workspaces/SharedData/Shared Links"));
@@ -99,6 +100,7 @@ public class InitialDatabaseSetup {
                 DocumentModel SharedLinks = session.createDocumentModel("/FV/Workspaces/SharedData", "Shared Links", "FVLinks");
                 SharedLinks.setPropertyValue("dc:title", "Shared Links");
                 SharedLinks = session.createDocument(SharedLinks);
+                session.publishDocument(SharedLinks, session.getDocument(new PathRef("/FV/sections/SharedData")));
             }
     
             thisExists = session.exists(new PathRef("/FV/Workspaces/SharedData/Shared Resources"));
@@ -106,6 +108,7 @@ public class InitialDatabaseSetup {
                 DocumentModel SharedResources = session.createDocumentModel("/FV/Workspaces/SharedData", "Shared Resources", "FVResources");
                 SharedResources.setPropertyValue("dc:title", "Shared Resources");
                 SharedResources = session.createDocument(SharedResources);
+                session.publishDocument(SharedResources, session.getDocument(new PathRef("/FV/sections/SharedData")));
             }
             
 

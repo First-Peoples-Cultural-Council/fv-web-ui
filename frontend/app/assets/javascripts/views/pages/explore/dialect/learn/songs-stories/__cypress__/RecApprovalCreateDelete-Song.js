@@ -18,6 +18,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
                     Going through the steps to create a phrase
                 */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Songs', { exact: true }).click()
@@ -122,6 +123,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
                     Checking to see if the song now exists.
                 */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/songs')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitle').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -185,6 +187,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
       cy.getByText('Save').click()
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/songs')
+    cy.wait(500)
     cy.getByText('TestSongTitleTestSongTitle1', { exact: true })
       .should('exist')
       .click()
@@ -198,11 +201,15 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
                     Delete the song and check that it no longer exists.
                 */
     cy.getByText('Delete book').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
     cy.wait(500)
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
+    cy.wait(500)
+    cy.reload()
     cy.wait(500)
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')

@@ -16,18 +16,21 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
+    cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('Create New Phrase', { exact: false }).click()
+    cy.wait(3000)
 
     /*
             Enter data to create a new phrase
@@ -93,7 +96,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Finishing the phrase creation form and save
             */
     cy.getByText('+ Add cultural note', { exact: true }).click()
-    cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestCulturalNote')
+    cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.get('[name="fv:reference"]', { exact: true }).type('TestReference')
     cy.get('[name="fv-phrase:acknowledgement"]', { exact: true }).type('TestAcknowledgement')
     cy.getByText('Save', { exact: true }).click()
@@ -103,6 +106,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Checking to see if the phrase now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -148,7 +152,11 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Delete the phrase and check that it no longer exists.
             */
     cy.getByText('Delete phrase').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.wait(300)
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
+    cy.wait(500)
     cy.getByText('Delete phrase success').should('exist')
 
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/

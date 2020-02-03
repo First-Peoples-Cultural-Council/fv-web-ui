@@ -14,6 +14,7 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
+    cy.wait(500)
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data

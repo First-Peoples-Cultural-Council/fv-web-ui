@@ -9,9 +9,15 @@ describe('MediaView', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media/405ab9de-ce39-4c82-890e-18ce0ee8f49f')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/media')
 
-    cy.wait(500)
+    cy.wait(2000)
+
+    cy.queryAllByText('TestWordImage', { exact: false })
+      .eq(0)
+      .click()
+
+    cy.wait(1200)
 
     cy.get('[data-testid=tabOverview][aria-selected=true]')
   })

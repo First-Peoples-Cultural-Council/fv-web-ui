@@ -16,14 +16,14 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as Language Admin, navigate to phrases and check that a phrase exists.
@@ -32,16 +32,17 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('New').should('exist')
-      cy.getByText('TestPhrase')
-        .should('exist')
-        .click()
+      cy.getByText('TestPhrase').should('exist')
+      cy.getByText('TestPhrase').click()
     })
 
     /*
@@ -51,13 +52,13 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
     cy.queryByText('Edit phrase', { exact: true }).should('exist')
+    cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as member and check that the phrase is now visible and enabled.
@@ -66,17 +67,18 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as Language Admin and publish the phrase.
@@ -87,6 +89,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
     cy.wait(800)
     cy.getByText('TestPhrase', { exact: false }).click()
+    cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)

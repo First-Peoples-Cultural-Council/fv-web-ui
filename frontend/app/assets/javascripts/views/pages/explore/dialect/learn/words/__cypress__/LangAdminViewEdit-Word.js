@@ -16,13 +16,13 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as Language Admin, navigate to words and check that a word exists.
@@ -31,17 +31,17 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
-    cy.wait(500)
+    cy.wait(800)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('New').should('exist')
       cy.getByText('TestTranslation').should('exist')
-      cy.getByText('TestWord')
-        .should('exist')
-        .click()
+      cy.getByText('TestWord').should('exist')
+      cy.getByText('TestWord').click()
     })
 
     /*
@@ -50,15 +50,14 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord').click()
+    cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
-    cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as member and check that the word is now visible and enabled.
@@ -67,17 +66,18 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
+    cy.wait(800)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as Admin and publish the word.
@@ -88,6 +88,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
     cy.wait(800)
     cy.getByText('TestWord', { exact: true }).click()
+    cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)

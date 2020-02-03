@@ -102,6 +102,30 @@ if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFive teardown failed \n'; exit 1
   echo
 fi
+
+# Delete existing TestLanguageSix directory and all files
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageSix
+if [[ "$?" -ne 0 ]]; then
+  echo -e 'fv-utils TestLanguageSix teardown failed \n'; exit 1
+  echo
+fi
+
+# Delete existing TestLanguageSix directory and all files
+java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageSeven
+if [[ "$?" -ne 0 ]]; then
+  echo -e 'fv-utils TestLanguageSeven teardown failed \n'; exit 1
+  echo
+fi
+
+echo
+# Delete shared category
+echo "Deleting TestLanguageSix category"
+response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST 'http://127.0.0.1:8080/nuxeo/site/automation/Document.Delete' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/SharedData/Shared Categories/TestCategory","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+if [[ "$response" -ne 204 ]]; then
+    echo -e 'TestLanguageSix category removal failed: Error ' $response ' \n'; exit 1
+    echo
+fi
+
 echo
 
 # Check if the Test/Test directory is empty and if so then delete it
