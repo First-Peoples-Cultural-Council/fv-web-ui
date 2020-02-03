@@ -10,6 +10,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/songs')
+    cy.wait(500)
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
     cy.getByText('Create Song Book', { exact: true }).click()
@@ -111,6 +112,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
                     Checking to see if the song now exists.
                 */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/songs')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestSongTitle').should('exist')
       cy.getByText('TestSongTranslation').should('exist')
@@ -125,6 +127,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByText('Edit book')
       .should('exist')
       .click()
+    cy.wait(500)
     cy.get('fieldset.fieldset').within(() => {
       cy.getByText('Book title', { exact: true }).should('exist')
       cy.getByText('Book title translation', { exact: true }).should('exist')
@@ -149,6 +152,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
       cy.getByText('Save').click()
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/songs')
+    cy.wait(500)
     cy.getByText('TestSongTitleTestSongTitle1', { exact: true })
       .should('exist')
       .click()
@@ -157,7 +161,9 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
                     Delete the song and check that it no longer exists.
                 */
     cy.getByText('Delete book').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
     cy.wait(500)
     cy.getByText('Delete book success').should('exist')
 
@@ -165,6 +171,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.wait(500)
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/songs')
+    cy.wait(500)
 
     cy.queryByText('TestSongTitleTestSongTitle1').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')

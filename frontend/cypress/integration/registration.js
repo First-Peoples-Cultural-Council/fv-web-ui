@@ -1,6 +1,7 @@
 describe('registration.js > Register', () => {
   it('Should invalidate and revalidate', () => {
     cy.visit('/register')
+    cy.wait(500)
 
     // trigger validation
     cy.get('#pageContainer')

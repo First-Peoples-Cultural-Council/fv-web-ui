@@ -6,22 +6,17 @@ import testSearchWords from '../../../app/assets/javascripts/views/components/Se
 
 describe('SearchDialect-Words-Private.js > SearchDialect', () => {
   it('Should redirect with anon user, no redirect with member', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-    */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     cy.log('Trying to access private section with anon user')
-    cy.visit('/explore/FV/Workspaces/Data/Haisla/Haisla/Haisla/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(500)
-    cy.location('pathname').should('eq', '/nuxeo/app/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
+    cy.location('pathname').should('eq', '/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
     cy.log('Trying to access private section with registered user')
-    cy.login()
-    cy.visit('/explore/FV/Workspaces/Data/Haisla/Haisla/Haisla/learn/words')
+    cy.login({
+      userName: 'TESTLANGUAGESIX_ADMIN',
+    })
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(500)
-    cy.location('pathname').should('eq', '/nuxeo/app/explore/FV/Workspaces/Data/Haisla/Haisla/Haisla/learn/words')
+    cy.location('pathname').should('eq', '/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
 
     testSearch()
     testSearchWords()

@@ -3,40 +3,20 @@
 
 describe('PageDialectLearnStoriesAndSongs.js > PageDialectLearnStoriesAndSongs', () => {
   it('FW-257: On the Browse > Songs page, the user can click a button to get to Create Song page', () => {
-    /*
-    Temporary line to force the test to fail until it is updated.
-   */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     cy.login({
-      userName: 'SENCOTEN_USERNAME',
-      userPassword: 'SENCOTEN_PASSWORD',
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
-    cy.visit(
-      '/explore/FV/Workspaces/Data/THE%20SEN%C4%86O%C5%A6EN%20LANGUAGE/SEN%C4%86O%C5%A6EN/SEN%C4%86O%C5%A6EN/learn/songs'
-    )
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/songs')
 
     cy.getByText('create song book', { exact: false }).click()
     cy.getByText('Add new song book to', { exact: false }).should('exist')
   })
 
   it('FW-257: On the Browse > Stories page, the user can click a button to get to Create Story page', () => {
-    /*
-    Temporary line to force the test to fail until it is updated.
-   */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     cy.login({
-      userName: 'SENCOTEN_USERNAME',
-      userPassword: 'SENCOTEN_PASSWORD',
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
-    cy.visit(
-      '/explore/FV/Workspaces/Data/THE%20SEN%C4%86O%C5%A6EN%20LANGUAGE/SEN%C4%86O%C5%A6EN/SEN%C4%86O%C5%A6EN/learn/stories'
-    )
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/stories')
 
     cy.getByText('create story book', { exact: false }).click()
     cy.getByText('Add new story book to', { exact: false }).should('exist')

@@ -555,7 +555,4 @@ const mapDispatchToProps = {
   createVideo,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRelatedVideo)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRelatedVideo)

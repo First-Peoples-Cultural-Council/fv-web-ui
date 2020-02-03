@@ -9,24 +9,13 @@ import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Re
 
 describe('RecorderCreate.js > RecorderCreate', () => {
   it('Create', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-    */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
-    /*
-      Temporary line to force the test to fail until it is updated.
-    */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     // Login
-    cy.login()
+    cy.login({
+      userName: 'TESTLANGUAGESIX_ADMIN',
+    })
 
-    cy.visit('/explore/FV/Workspaces/Data/Athabascan/Dene/Dene/create/recorder')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/create/recorder')
+    cy.wait(500)
     cy.queryByText(copy.create.title).should('exist')
 
     // Submit w/no data
@@ -45,7 +34,7 @@ describe('RecorderCreate.js > RecorderCreate', () => {
     cy.getByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.create.success.createAnother).click()
+    cy.getByText(copy.create.success.linkCreateAnother).click()
 
     // Confirm
     cy.queryByText(copy.create.title).should('exist')

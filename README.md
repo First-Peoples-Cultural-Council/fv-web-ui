@@ -1,5 +1,5 @@
 [![](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/workflows/Build/badge.svg?branch=master)](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/actions)
-
+[![](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/workflows/Cypress%20Tests/badge.svg?branch=master)](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/actions)
 # FirstVoices
 [FirstVoices](https://www.firstvoices.com/) is a responsive, web-based language revitalization platform that uses [Nuxeo ECM](https://www.nuxeo.com/) as a back-end with a front-end built in [ReactJS](https://facebook.github.io/react/).
 
