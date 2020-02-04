@@ -15,68 +15,83 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the current working code base
-      - name: Checkout working branch
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 100
+    # Checkout the current working code base
+    - name: Checkout working branch
+      uses: actions/checkout@v1
 
-      # Checks if any changes are made in the frontend paths listed
-      - name: Check for frontend changes
-        uses: marceloprado/has-changed-path@master
-        id: changed-frontend
-        with:
-          paths: frontend/*/ frontend/index.html
+    # Checks if any changes are made in the frontend paths listed
+    - name: Check for frontend changes
+      uses: softprops/diffset@v1
+      id: changed-frontend
+      with:
+        frontend_files: |
+          frontend/app/**
+          frontend/build/**
+          frontend/gulpfile.js/**
+          frontend/nuxeo/**
+          frontend/index.html
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Checks if any changes are made to the Node package files
-      - name: Check for Node changes
-        uses: marceloprado/has-changed-path@master
-        id: changed-package
-        with:
-          paths: frontend/package.json frontend/package-lock.json package-lock.json
+    # Checks if any changes are made to the Node package files
+    - name: Check for Node changes
+      uses: softprops/diffset@v1
+      id: changed-package
+      with:
+        package_files: |
+          frontend/package.json
+          frontend/package-lock.json
+          package-lock.json
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Checks if any changes are made in the backend paths listed
-      - name: Check for backend changes
-        uses: marceloprado/has-changed-path@master
-        id: changed-backend
-        with:
-          paths: FirstVoices* FV* pom.xml
+    # Checks if any changes are made in the backend paths listed
+    - name: Check for backend changes
+      uses: softprops/diffset@v1
+      id: changed-backend
+      with:
+        backend_files: |
+          FirstVoices*/**
+          FV*/**
+          pom.xml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Installs the correct version of java for the project
-      - name: Set up JDK 1.8
-        if: steps.changed-backend.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
+    # Installs the correct version of java for the project
+    - name: Set up JDK 1.8
+      if: steps.changed-backend.outputs.backend_files
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
 
-      # Installs the correct Node version for the project
-      - name: Setup Node.js for use with actions
-        if: steps.changed-backend.outputs.changed == 'true' || steps.changed-frontend.outputs.changed == 'true' || steps.changed-package.outputs.changed == 'true'
-        uses: actions/setup-node@v1.1.0
-        with:
-          node-version: '8.x'
+    # Installs the correct Node version for the project
+    - name: Setup Node.js for use with actions
+      if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
+      uses: actions/setup-node@v1.1.0
+      with:
+        node-version: '8.x'
 
-      # Build only the backend if changes are made to the backend and not frontend
-      - name: Build backend with Maven
-        if: steps.changed-backend.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'false'
-        run: mvn clean install -Pbackend
+    # Build only the backend if changes are made to the backend and not frontend
+    - name: Build backend with Maven
+      if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files == ''
+      run: mvn clean install -Pbackend
 
-      # Build only the frontend if changes are made to the fronend and not backend (this includes installing the Node packages)
-      - name: Build frontend (includes Node package install)
-        if: steps.changed-backend.outputs.changed == 'false' && steps.changed-frontend.outputs.changed == 'true'
-        run: |
-          cd frontend
-          npm install
-          npm run build:production
+    # Build only the frontend if changes are made to the frontend and not backend (this includes installing the Node packages)
+    - name: Build frontend (includes Node package install)
+      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
+      run: |
+        cd frontend
+        npm install
+        npm run build:production
 
-      # Build the entire project if changes are made to both the backend and frontend
-      - name: Build entire project with Maven
-        if: steps.changed-backend.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'true'
-        run: mvn clean install
+    # Build the entire project if changes are made to both the backend and frontend
+    - name: Build entire project with Maven
+      if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files
+      run: mvn clean install
 
-      # Install Node packages if any changes are made to the package files and the install has not already been done by the backend or frontend builds
-      - name: Install Node packages
-        if: steps.changed-package.outputs.changed == 'true' && steps.changed-frontend.outputs.changed == 'false' && steps.changed-backend.outputs.changed == 'false'
-        run: |
-          cd frontend
-          npm install
+    # Install Node packages if any changes are made to the package files and the install has not already been done by the backend or frontend builds
+    - name: Install Node packages
+      if: steps.changed-package.outputs.package_files && steps.changed-frontend.outputs.frontend_files == '' && steps.changed-backend.outputs.backend_files == ''
+      run: |
+        cd frontend
+        npm install
