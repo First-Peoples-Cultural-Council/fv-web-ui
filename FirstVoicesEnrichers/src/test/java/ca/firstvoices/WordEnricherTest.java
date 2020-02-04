@@ -53,9 +53,8 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-@Deploy("FirstVoicesEnrichers:OSGI-INF/ca.firstvoices.enrichers.operations.xml")
-@PartialDeploy(bundle = "FirstVoicesEnrichers", extensions = {TargetExtensions.ContentModel.class})
-
+@Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
+@PartialDeploy(bundle = "FirstVoicesNuxeo", extensions = {TargetExtensions.ContentModel.class})
 public class WordEnricherTest{
 
   @Inject
