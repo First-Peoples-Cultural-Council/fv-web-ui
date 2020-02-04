@@ -56,11 +56,11 @@ public class FVRegistrationMailUtilities {
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destination, false));
 
         if (!StringUtils.isBlank(copy)) {
-            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(copy, false));
+            msg.addRecipients(Message.RecipientType.CC, InternetAddress.parse(copy, false));
         }
 
         if (!StringUtils.isBlank(BCC)) {
-            msg.addRecipient(Message.RecipientType.BCC, new InternetAddress(BCC, false));
+            msg.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(BCC, false));
         }
 
         msg.setSubject(title, "UTF-8");
@@ -273,11 +273,11 @@ public class FVRegistrationMailUtilities {
             if (title != null && body != null) {
                 if (!toStr.isEmpty()) {
 
-                    // IF BCC equals toStr - a language admin does not exist
+                    // IF BCC equals toStr - a language admin does not exist, and we are sending directly to super admins.
                     // Remove BCC, and mention something in the title
                     if (BCC.equals(toStr)) {
                         BCC = "";
-                        title = "[NO-ADMIN] " + title;
+                        title = "[NO-LANG-ADMIN] " + title;
                     }
 
                     generateMail(toStr, "", title, body, BCC);
