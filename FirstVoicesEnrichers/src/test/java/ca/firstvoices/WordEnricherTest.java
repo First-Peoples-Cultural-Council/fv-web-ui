@@ -54,22 +54,22 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
 @Deploy("FirstVoicesEnrichers:OSGI-INF/ca.firstvoices.enrichers.operations.xml")
-@PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
+@PartialDeploy(bundle = "FirstVoicesEnrichers", extensions = {TargetExtensions.ContentModel.class})
 
 public class WordEnricherTest{
 
   @Inject
-  protected CoreSession session;
+  private EnricherTestUtil testUtil;
 
   @Inject
-  protected EnricherTestUtil testUtil;
+  protected CoreSession session;
 
   @Before
   public void setUpTest(){
     testUtil = new EnricherTestUtil();
 
-    assertNotNull("Should have a valid session", session);
-    assertNotNull("Should have a valid test utilities obj", testUtil);
+    //assertNotNull("Should have a valid session", session);
+    //assertNotNull("Should have a valid test utilities obj", testUtil);
 
     testUtil.createSetup(session);
   }
