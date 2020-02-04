@@ -235,7 +235,6 @@ public class FVRegistrationUtilities {
         // If language does not have an administrator - send directly to super admin
         if (adminTO.isEmpty()) {
             adminTO = superAdminBCC;
-            superAdminBCC = "";
         }
 
         mailUtil.registrationAdminMailSender(variant, options, adminTO, superAdminBCC);

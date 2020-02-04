@@ -273,11 +273,11 @@ public class FVRegistrationMailUtilities {
             if (title != null && body != null) {
                 if (!toStr.isEmpty()) {
 
-                    // IF BCC equals toStr - a language admin does not exist
+                    // IF BCC equals toStr - a language admin does not exist, and we are sending directly to super admins.
                     // Remove BCC, and mention something in the title
                     if (BCC.equals(toStr)) {
                         BCC = "";
-                        title = "[NO-ADMIN] " + title;
+                        title = "[NO-LANG-ADMIN] " + title;
                     }
 
                     generateMail(toStr, "", title, body, BCC);
