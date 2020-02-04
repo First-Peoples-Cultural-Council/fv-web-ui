@@ -55,6 +55,7 @@ import static org.junit.Assert.*;
 
 @Deploy("FirstVoicesEnrichers:OSGI-INF/ca.firstvoices.enrichers.operations.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
+
 public class WordEnricherTest{
 
   @Inject
