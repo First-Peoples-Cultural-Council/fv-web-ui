@@ -1,9 +1,11 @@
 name: Cypress Tests
 
 on:
-  # Every day at 8:00pm UTC / 12:00pm pst
+  # Every day at 12:00pm pst and 1:30am pst
+  # (utc at 8:00pm and 9:30am)
   schedule:
     - cron: '0 20 * * *'
+    - cron: '30 9 * * *'
 
 jobs:
 
