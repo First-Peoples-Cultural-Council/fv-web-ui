@@ -15,7 +15,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByText('Create New Phrase', { exact: true }).click()
     cy.wait(3000)
 

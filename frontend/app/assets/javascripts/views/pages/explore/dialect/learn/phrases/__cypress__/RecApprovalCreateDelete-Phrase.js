@@ -28,7 +28,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(1500)
     cy.getByText('Create New Phrase')
       .pipe(click)
       .should(($el) => {
