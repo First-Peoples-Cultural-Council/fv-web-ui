@@ -11,7 +11,8 @@ jobs:
     steps:
     - name: Update versions to next snapshot
       run: 
-        mvn release:update-versions -DautoVersionSubmodules=true -DdevelopmentVersion=${{github.ref}}
+        mvn versions:set -DnewVersion=${{github.ref}} -DgenerateBackupPoms=false
+        mvn versions:commit
     - name: Create a pull request for updating version
       uses: peter-evans/create-pull-request@v2
       with:
