@@ -104,15 +104,15 @@ jobs:
           npm run test:e2e:ci:pr
           echo "Testing Completed"
 
-        # Startup the frontend and run the Cypress tests
-        - name: Run Cypress tests (tag schedule)
-          if: github.event_name == 'schedule'
-          env:
-            CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
-            CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
-            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-            CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          run: |
-            cd frontend
-            npm run test:e2e:ci:schedule
-            echo "Testing Completed"
+      # Startup the frontend and run the Cypress tests
+      - name: Run Cypress tests (tag schedule)
+        if: github.event_name == 'schedule'
+        env:
+          CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
+          CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+        run: |
+          cd frontend
+          npm run test:e2e:ci:schedule
+          echo "Testing Completed"
