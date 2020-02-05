@@ -179,7 +179,7 @@
     "react-testing-library": "^6.0.0",
     "redux-devtools": "~3.1.1",
     "script-loader": "^0.7.2",
-    "start-server-and-test": "^1.10.7",
+    "start-server-and-test": "1.10.7",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.2",
     "trash-cli": "^3.0.0",

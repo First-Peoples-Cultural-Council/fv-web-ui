@@ -13,24 +13,56 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 200
     steps:
+      # Checkout the current branch
       - name: Checkout
         uses: actions/checkout@v1
 
+      # Setup the correct Java version
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
+      # Setup the correct node version
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
         with:
           node-version: '8.x'
 
-      - name: Build project and setup directories
+      # Build the docker image and create the volume directories
+      - name: Build Docker image and create volume directories
         run: |
           cd docker
-          bash ./setup_docker.sh
+          docker build -t me/nuxeo-dev
+          mkdir ./nuxeo_dev_docker ./nuxeo_dev_docker/data ./nuxeo_dev_docker/logs
 
+      # Setup the maven build caching to restore from or save to
+      - name: Cache project build
+        id: cache-build
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # If the build has changed since the cache then rebuild
+      - name: Build entire project
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: mvn clean install
+
+      # If using cached build then install node packages (will be done if rebuilding new cache)
+      - name: Install packages if using maven cache
+        if: steps.cache-build.outputs.cache-hit == 'true'
+        run: |
+          cd frontend
+          npm install
+
+      # Copy the build zipfile to the docker volume
+      - name: Copy project build zipfile to docker volume
+        run: cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker/
+
+      # Startup the docker backend
       - name: Startup backend
         run: |
           docker run --name nuxeo-dev -t --rm -p 8080:8080 -v ${PWD}/docker/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/docker/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/docker/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam " -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD -d me/nuxeo-dev
@@ -39,6 +71,7 @@ jobs:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
           CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
 
+      # Run the initial backend setup script
       - name: Initial backend setup
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
@@ -46,9 +79,11 @@ jobs:
         run: |
           bash ./docker/initialsetup.sh
 
+      # Install any dependencies Cypress may need as shown in the Cypress docs
       - name: Install environment dependencies
         run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
+      # Startup the frontend and run the Cypress tests
       - name: Run Cypress tests
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
