@@ -33,7 +33,7 @@ jobs:
       - name: Build Docker image and create volume directories
         run: |
           cd docker
-          docker build -t me/nuxeo-dev
+          docker build -t me/nuxeo-dev .
           mkdir ./nuxeo_dev_docker ./nuxeo_dev_docker/data ./nuxeo_dev_docker/logs
 
       # Setup the maven build caching to restore from or save to
