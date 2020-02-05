@@ -36,7 +36,7 @@ jobs:
           docker build -t me/nuxeo-dev .
           mkdir ./nuxeo_dev_docker ./nuxeo_dev_docker/data ./nuxeo_dev_docker/logs
 
-      # Setup the maven build caching to restore from or save to
+      # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
       - name: Cache project build
         id: cache-build
         uses: actions/cache@v1
@@ -46,17 +46,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # If the build has changed since the cache then rebuild
+      # Built the project and install Node packages
       - name: Build entire project
-        if: steps.cache-build.outputs.cache-hit != 'true'
         run: mvn clean install
-
-      # If using cached build then install node packages (will be done if rebuilding new cache)
-      - name: Install packages if using maven cache
-        if: steps.cache-build.outputs.cache-hit == 'true'
-        run: |
-          cd frontend
-          npm install
 
       # Copy the build zipfile to the docker volume
       - name: Copy project build zipfile to docker volume

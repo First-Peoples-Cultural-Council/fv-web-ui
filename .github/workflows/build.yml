@@ -71,6 +71,17 @@ jobs:
       with:
         node-version: '8.x'
 
+    # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
+    - name: Cache project build
+      if: steps.changed-backend.outputs.backend_files
+      id: cache-build
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
     # Build only the backend if changes are made to the backend and not frontend
     - name: Build backend with Maven
       if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files == ''
