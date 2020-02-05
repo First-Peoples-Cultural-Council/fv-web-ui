@@ -6,6 +6,22 @@ on:
   schedule:
     - cron: '0 20 * * *'
     - cron: '30 9 * * *'
+  # On pull requests when any files in the paths listed are changed
+  pull_request:
+    paths:
+    - 'frontend/app/**'
+    - 'frontend/build/**'
+    - 'frontend/gulpfile.js/**'
+    - 'frontend/nuxeo/**'
+    - 'frontend/index.html'
+    - '**/package.json'
+    - '**/package-lock.json'
+    - 'FirstVoices*/**'
+    - 'FV*/**'
+    - '**/pom.xml'
+    - '!**/README.md'
+    branches:
+      master
 
 jobs:
 
@@ -76,7 +92,8 @@ jobs:
         run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
       # Startup the frontend and run the Cypress tests
-      - name: Run Cypress tests
+      - name: Run Cypress tests (tag pull request)
+        if: github.event_name == 'pull_request'
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
           CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
@@ -84,5 +101,18 @@ jobs:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
         run: |
           cd frontend
-          npm run test:e2e:ci
+          npm run test:e2e:ci:pr
           echo "Testing Completed"
+
+        # Startup the frontend and run the Cypress tests
+        - name: Run Cypress tests (tag schedule)
+          if: github.event_name == 'schedule'
+          env:
+            CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
+            CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
+            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          run: |
+            cd frontend
+            npm run test:e2e:ci:schedule
+            echo "Testing Completed"
