@@ -1,6 +1,9 @@
 name: Jira Transition
 
 on:
+  pull_request:
+    branches:
+      master
   push:
     branches:
       master
@@ -8,3 +11,49 @@ on:
     types: [published]
 
 jobs:
+
+  Transition:
+    runs-on: ubuntu-latest
+    steps:
+      # Wait for checks to finish
+      - name: "Wait for status checks'
+        if: github.event.name == 'pull_request'
+        id: status-checks
+        uses: WyriHaximus/github-action-wait-for-status@0.1.0
+        with:
+          ignoreActions: Jira Transition
+          checkInterval: 60
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Login to Jira
+      - name: Jira Login
+        uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      # Find issue key from the commit messages
+      - name: Find issue key from commits
+        id: issue-key
+        uses: atlassian/gajira-find-issue-key@master
+        with:
+          from: commits
+
+      # Get the current code review status for pull request
+      - name: Check review status
+        if: github.event.name == 'pull_request'
+        uses: buildsville/review-summary@v1
+        id: review-summary
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # If this event was triggered on a pull request, the checks have passed, and there
+      # are no pending reviews then transition the issue to dev done
+      - name: Transistion issue to \"dev done\"
+        if: github.event.name == 'pull_request' && steps.status-checks.outputs.status == 'success' && steps.review-summary.outputs.pending == 0
+        uses: atlassian/gajira-transition@master
+        with:
+          issue: ${{ steps.issue-key.outputs.issue }}
+          transition: dev done
