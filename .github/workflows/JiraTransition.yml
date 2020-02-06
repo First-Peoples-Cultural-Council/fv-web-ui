@@ -51,9 +51,16 @@ jobs:
 
       # If this event was triggered on a pull request, the checks have passed, and there
       # are no pending reviews then transition the issue to dev done
-      - name: Transistion issue to \"dev done\"
+      - name: Transistion issue to "DEV DONE"
         if: github.event.name == 'pull_request' && steps.status-checks.outputs.status == 'success' && steps.review-summary.outputs.pending == 0
         uses: atlassian/gajira-transition@master
         with:
           issue: ${{ steps.issue-key.outputs.issue }}
-          transition: "dev done"
+          transition: "DEV DONE"
+
+      - name: Transistion issue to "QA TO DO"
+        if: github.event.name == 'push'
+        uses: atlassian/gajira-transition@master
+        with:
+          issue: ${{ steps.issue-key.outputs.issue }}
+          transition: "QA TO DO"
