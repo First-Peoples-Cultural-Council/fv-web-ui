@@ -62,7 +62,11 @@ function renderInput(locals) {
         {locals.attrs.hideCreate ? (
           ''
         ) : (
-          <DialogCreateForm context={locals.context} onChange={onChange} fieldAttributes={locals.attrs} />
+          // NOTE: For some odd reason when the react fragment is missing a newly created or inserted
+          // item has a 'Create New *' button below it.
+          <>
+            <DialogCreateForm context={locals.context} onChange={onChange} fieldAttributes={locals.attrs} />
+          </>
         )}
         <BrowseComponent
           type={locals.type}
