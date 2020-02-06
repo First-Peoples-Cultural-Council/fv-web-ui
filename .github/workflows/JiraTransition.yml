@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Wait for checks to finish
-      - name: "Wait for status checks'
+      - name: Wait for status checks
         if: github.event.name == 'pull_request'
         id: status-checks
         uses: WyriHaximus/github-action-wait-for-status@0.1.0
