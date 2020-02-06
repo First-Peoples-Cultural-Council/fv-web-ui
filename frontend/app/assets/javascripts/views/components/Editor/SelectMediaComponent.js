@@ -106,6 +106,7 @@ class SharedResourceGridTile extends Component {
         onClick={this.props.action ? this.props.action.bind(this, this.props.tile) : null}
         key={selectn('uid', tile)}
         style={{ height: '154px', width: '20%', padding: '2px' }}
+        aria-label={tile.title}
       >
         {this.props.preview}
         <GridListTileBar
@@ -340,7 +341,4 @@ const mapDispatchToProps = {
   fetchSharedVideos,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectMediaComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(SelectMediaComponent)

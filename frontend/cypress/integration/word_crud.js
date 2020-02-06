@@ -1,33 +1,29 @@
 
 const waitMedium = 2000
 const waitShort = 50
-function clearWordForm() {
-  const prefix = '[RESET]'
 
-  // Clear input texts
+// ===============================================
+// clearWordForm
+// ===============================================
+function clearWordForm() {
+  cy.logger({type: 'subheader', text: 'clearWordForm'})
   cy.getByTestId('pageContainer').within(() => {
-    cy.logger({type: 'header', text: `${prefix} clear inputs`})
+    // Clear input texts
     cy.getByTestId('dc-title').clear()
     cy.getByTestId('fv-word-pronunciation').clear()
     cy.getByTestId('fv-reference').clear()
     cy.getByTestId('fv-word-acknowledgement').clear()
 
-    // Remove a x's
-    cy.logger({type: 'header', text: `${prefix} Batch click all .btn-remove`})
-    cy.get('.btn-remove').each(($el, index, $list) => {
-      const reversedIndex = $list.length - 1 - index
-      cy.wrap($list[reversedIndex]).click()
-    })
-    cy.get('[data-testid=IconButton__remove]').each(($el, index, $list) => {
-      const reversedIndex = $list.length - 1 - index
-      cy.wrap($list[reversedIndex]).click()
-    })
+    // Remove x's
+    cy.formClickAllXs()
   })
-
-  // UPDATE > Part of speech
-  cy.logger({type: 'subheader', text: `${prefix} Part of Speech`})
+  // reset select
   cy.getByTestId('fv-word-part_of_speech').select('true')
 }
+
+// ===============================================
+// populateWordForm
+// ===============================================
 function populateWordForm({
   prefix,
   title,
@@ -53,10 +49,7 @@ function populateWordForm({
 
   // [POPULATE] Definition
   cy.logger({type: 'subheader', text: `${prefix} Definition`})
-  cy.getByText('+ Add definition', { exact: false }).click()
-  cy.getByTestId('fv-definitions0translation').type(definition)
-  cy.getByText('+ Add definition', { exact: false }).click()
-  cy.getByTestId('fv-definitions1translation').type(definition)
+  cy.formPopulateDefinitions({definition})
 
   // [POPULATE] Literal Translation
   cy.logger({type: 'subheader', text: `${prefix} Literal Translation`})
@@ -65,82 +58,29 @@ function populateWordForm({
 
   // [POPULATE] Audio
   cy.logger({type: 'subheader', text: `${prefix} Audio`})
-  cy.getByText('+ Add related audio', { exact: false })
-    .parents('button')
-    .click()
-
-  cy.getByText('upload audio', { exact: false }).click()
-  cy.wait(waitShort)
-
-  cy.getByTestId('AddMediaComponent')
-    .parent()
-    .parent()
-    .parent()
-    .within(() => {
-      cy.getByLabelText('name', { exact: false }).type(`${prefix} AUDIO > NAME`)
-      cy.getByLabelText('description', { exact: false }).type(`${prefix} AUDIO > DESCRIPTION`)
-      cy.getByLabelText('Shared accross dialects', { exact: false }).check()
-      cy.getByLabelText('Child focused', { exact: false }).check()
-
-      const fileName = 'TestRelatedAudio.wav'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
-      })
-      cy.getByText('Upload Media', { exact: true }).click()
-    })
+  cy.formPopulateRelatedAudio({
+    name: `${prefix} AUDIO > NAME`,
+    description: `${prefix} AUDIO > DESCRIPTION`,
+  })
   cy.wait(waitMedium)
   cy.getByText('Insert into entry').click()
 
 
   // [POPULATE] picture
   cy.logger({type: 'subheader', text: `${prefix} Picture`})
-  cy.getByText('+ Add related pictures', { exact: false })
-    .parents('button')
-    .click()
-
-  cy.getByText('upload picture', { exact: false }).click()
-
-  cy.getByTestId('AddMediaComponent')
-    .parent()
-    .parent()
-    .parent()
-    .within(() => {
-      cy.getByLabelText('name', { exact: false }).type(`${prefix} PICTURE > NAME`)
-      cy.getByLabelText('description', { exact: false }).type(`${prefix} PICTURE > DESCRIPTION`)
-      cy.getByLabelText('Shared accross dialects', { exact: false }).check()
-      cy.getByLabelText('Child focused', { exact: false }).check()
-      const fileName = 'TestRelatedImage.png'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
-      })
-      cy.getByText('Upload Media', { exact: true }).click()
-    })
+  cy.formPopulateRelatedPictures({
+    name: `${prefix} Related pictures > Name`,
+    description: `${prefix} Related pictures > Description`,
+  })
   cy.wait(waitMedium)
   cy.getByText('Insert into entry').click()
 
   // [POPULATE] video
   cy.logger({type: 'subheader', text: `${prefix} Video`})
-  cy.getByText('+ Add related videos', { exact: false })
-    .parents('button')
-    .click()
-
-  cy.getByText('upload video', { exact: false }).click()
-
-  cy.getByTestId('AddMediaComponent')
-    .parent()
-    .parent()
-    .parent()
-    .within(() => {
-      cy.getByLabelText('name', { exact: false }).type(`${prefix} VIDEO > NAME`)
-      cy.getByLabelText('description', { exact: false }).type(`${prefix} VIDEO > DESCRIPTION`)
-      cy.getByLabelText('Shared accross dialects', { exact: false }).check()
-      cy.getByLabelText('Child focused', { exact: false }).check()
-      const fileName = 'TestRelatedVideo.mp4'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
-      })
-      cy.getByText('Upload Media', { exact: true }).click()
-    })
+  cy.formPopulateRelatedVideos({
+    name: `${prefix} Related videos > Name`,
+    description: `${prefix} Related videos > Description`,
+  })
   cy.wait(waitMedium)
   cy.getByText('Insert into entry').click()
 
@@ -157,32 +97,7 @@ function populateWordForm({
 
   // [POPULATE] Cultural Note
   cy.logger({type: 'subheader', text: `${prefix} Cultural Note`})
-  cy.getByText('Cultural note', { exact: false })
-    .parent('fieldset')
-    .within(() => {
-      cy.getByText('+ Add cultural note', { exact: false }).click()
-      cy.logger({type: 'subheader', text: 'Create 2 cultural notes'})
-      cy.getByTestId('fv-cultural_note0').type(`${prefix} cultural note 0`)
-      cy.getByText('+ Add cultural note', { exact: false }).click()
-      cy.logger({type: 'subheader', text: 'Change order'})
-      cy.getByTestId('fv-cultural_note1').type(`${prefix} cultural note 1`)
-      cy.getByTestId('fv-cultural_note1')
-        .parent()
-        .parent()
-        .parent()
-        .parent()
-        .within(() => {
-          cy.getByText('▲').click()
-        })
-    })
-  cy.logger({type: 'subheader', text: 'Confirm order'})
-  cy.getByText('Cultural note', { exact: false })
-    .parent('fieldset')
-    .within(() => {
-      cy.get('input.form-control[type=text]:first')
-        .invoke('val')
-        .should('be.eq', `${prefix} cultural note 1`)
-    })
+  cy.formPopulateCulturalNotes({prefix})
 
   // [POPULATE] Reference
   cy.logger({type: 'subheader', text: `${prefix} Reference`})
@@ -190,18 +105,88 @@ function populateWordForm({
 
   // [POPULATE] Source
   cy.logger({type: 'subheader', text: `${prefix} Source`})
-  cy.getByText('Source', { exact: false })
-    .parent('fieldset')
-    .within(() => {
-      cy.getByText('+ Add source', { exact: false }).click()
-      cy.getByText('create new contributor', { exact: false }).click()
-    })
-  cy.getByTestId('DialogCreateForm__DialogContent').within(() => {
-    cy.getByLabelText('Contributor name', { exact: false }).type(`${prefix} New Contributor > Contributor Name`)
-    cy.getByText('save', { exact: false }).click()
-  })
+  cy.formPopulateSource({name: `${prefix} New Contributor > Contributor Name`})
 }
 
+
+// ===============================================
+// populateWordFormBrowse
+// ===============================================
+function populateWordFormBrowse({
+  browseTitleAudio,
+  browseDescriptionAudio,
+  browseTitlePicture,
+  browseTitleVideo,
+  browseTitleSource,
+  timestamp,
+}) {
+  // BROWSE CREATING
+  // ------------------------------------------
+  cy.formPopulateRelatedAudio({
+    name: browseTitleAudio,
+    description: browseDescriptionAudio,
+  })
+  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+
+  cy.formPopulateRelatedPictures({
+    name: browseTitlePicture,
+    description: `${timestamp} Related pictures > Description`,
+  })
+  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+
+  cy.formPopulateRelatedVideos({
+    name: browseTitleVideo,
+    description: `${timestamp} Related videos > Description`,
+  })
+  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+
+  cy.formPopulateSource({name: browseTitleSource})
+
+  // BROWSE CLEARING
+  // ------------------------------------------
+  cy.logger({type: 'subheader', text: 'CREATE > BROWSE: clearing form'})
+  clearWordForm()
+
+  // BROWSE SELECTING
+  // ------------------------------------------
+  cy.logger({type: 'subheader', text: 'CREATE > BROWSE: selecting browse data'})
+
+  // BROWSE > AUDIO
+  cy.formBrowseMediaSelectItem({
+    sectionTitle: 'Related audio',
+    sectionTitleExact: true,
+    addButtonText: '+ Add Related Audio',
+    browseButtonText: 'browse audio',
+    mediaTitle: timestamp,
+  })
+
+  // BROWSE > PICTURES
+  cy.formBrowseMediaSelectItem({
+    sectionTitle: 'Related pictures',
+    addButtonText: '+ Add Related pictures',
+    browseButtonText: 'browse pictures',
+    mediaTitle: timestamp,
+  })
+
+  // BROWSE > VIDEOS
+  cy.formBrowseMediaSelectItem({
+    sectionTitle: 'Related videos',
+    addButtonText: '+ Add Related videos',
+    browseButtonText: 'browse videos',
+    mediaTitle: timestamp,
+  })
+
+  // BROWSE > SOURCE
+  cy.formBrowseTableSelectItem({
+    sectionTitle: 'Source',
+    addButtonText: '+ Add source',
+    browseButtonText: 'browse contributors',
+    itemTitle: timestamp,
+  })
+}
+// ===============================================
+// word_crud
+// ===============================================
 describe('word_crud.js > PageDialectWordsCreate', () => {
   it('CRUD', () => {
     // Note: need to set environment variables in your bash_profile, eg:
@@ -215,10 +200,17 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
     const pronounciation = `${prefix} Pronounciation`
 
     const updatePrefix = '[UPDATE]'
-    const updateTitle = '[UPDATE] Word'
-    const updateDefinition = '[UPDATE] Definition'
-    const updateLiteralTranslation = '[UPDATE] Literal Translation'
-    const updatePronounciation = '[UPDATE] Pronounciation'
+    const updateTitle = `${updatePrefix} Word`
+    const updateDefinition = `${updatePrefix} Definition`
+    const updateLiteralTranslation = `${updatePrefix} Literal Translation`
+    const updatePronounciation = `${updatePrefix} Pronounciation`
+
+    const timestamp = `${Date.now()}`
+    const browseTitleAudio = `${timestamp} AUDIO > NAME`
+    const browseDescriptionAudio = `${timestamp} AUDIO > DESCRIPTION`
+    const browseTitlePicture = `${timestamp} PICTURE > NAME`
+    const browseTitleVideo = `${timestamp} VIDEO > NAME`
+    const browseTitleSource = `${timestamp} SOURCE > NAME`
 
     // Login
     cy.login({
@@ -226,11 +218,25 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
-    cy.wait(waitMedium)
+    // cy.wait(waitMedium)
+    cy.getByText('TestLanguageOne Words', { exact: false }).should('exist')
+    cy.getByText('Create New Word', { exact: false }).click()
+    cy.getByText('Add New Word to TestLanguageOne').should('exist')
+
+    // Browse
+    cy.logger({type: 'header', text: 'CREATE > BROWSE'})
+    populateWordFormBrowse({
+      browseTitleAudio,
+      browseDescriptionAudio,
+      browseTitlePicture,
+      browseTitleVideo,
+      browseTitleSource,
+      timestamp,
+    })
 
     // CREATE
     cy.logger({text: 'Create'})
-    cy.getByText('Create New Word', { exact: false }).click()
+
     populateWordForm({
       prefix,
       title,
@@ -238,9 +244,11 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
       literalTranslation,
       pronounciation,
     })
+
     // CREATE children's archive
     cy.logger({type: 'subheader', text: `${prefix} Childrens\'s archive`})
     cy.getByLabelText("Available in children's archive", { exact: false }).check()
+
     // CREATE games
     cy.logger({type: 'subheader', text: `${prefix} Available in games`})
     cy.getByLabelText('Available in games', { exact: false }).check()
@@ -257,6 +265,21 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
     cy.getByText(definition).should('exist')
     cy.getByText(literalTranslation).should('exist')
     cy.getByText(pronounciation).should('exist')
+
+    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.getByLabelText('Show Audio Information', {exact: false}).each(($el) => {
+        cy.wrap($el)
+          .click()
+      })
+    })
+    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.getByText(browseDescriptionAudio).should('exist')
+    })
+    cy.getByText(browseTitlePicture).should('exist')
+    cy.getByText(browseTitleVideo).should('exist')
+
+    cy.getByText('metadata', { exact: false }).click()
+    cy.getByText(browseTitleSource).should('exist')
 
     // Update
     cy.logger({text: 'UPDATE'})

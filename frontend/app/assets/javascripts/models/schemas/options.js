@@ -279,7 +279,6 @@ const options = {
           fields: {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
-              factory: VirtualKeyboardFactory,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),

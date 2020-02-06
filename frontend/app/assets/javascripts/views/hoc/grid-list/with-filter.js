@@ -110,7 +110,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       }
 
       return (
-        <div className="FilteredGridList PrintHide">
+        <div data-testid="withFilter" className="FilteredGridList PrintHide">
           <div className="row">
             <div
               className={classNames('col-xs-12', {
