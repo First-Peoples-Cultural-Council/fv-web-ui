@@ -97,7 +97,10 @@ export class MetadataPanel extends Component {
      * Sources
      */
     const sources = []
-    const sourcesMap = selectn('response.contextParameters.word.sources', computeEntity) || []
+    const sourcesMap =
+      selectn('response.contextParameters.word.sources', computeEntity) ||
+      selectn('response.contextParameters.phrase.sources', computeEntity) ||
+      []
 
     sourcesMap.map((source, key) => {
       sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
