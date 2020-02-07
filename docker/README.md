@@ -128,6 +128,16 @@ docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/
 
 ```docker exec -it nuxeo-dev /bin/bash```
 
+## Testing
+
+### Tips & Tricks
+
+When setting up unit tests:
+* Ensure that all the necessary imports are at the top
+* Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
+* Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
+
+
 ## TODO
 1. Use `docker-compose` to optionally setup Apache2, Elasticsearch, and Postgresql
 2. Add additional requirements such as FFMPEG and CCExtractor to image.

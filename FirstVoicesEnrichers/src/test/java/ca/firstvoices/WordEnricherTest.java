@@ -1,6 +1,7 @@
 package ca.firstvoices;
 
 import ca.firstvoices.EnricherTestUtil;
+import ca.firstvoices.nuxeo.enrichers.WordEnricher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +17,19 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 import org.nuxeo.runtime.test.runner.*;
 
+import org.nuxeo.ecm.core.io.marshallers.json.document.DocumentModelJsonWriter;
+import org.nuxeo.ecm.core.io.marshallers.json.AbstractJsonWriterTest;
+import org.nuxeo.ecm.core.io.marshallers.json.JsonAssert;
+import org.nuxeo.ecm.core.io.registry.context.RenderingContext;
+import org.nuxeo.ecm.core.io.registry.context.RenderingContext.CtxBuilder;
+
 import javax.inject.Inject;
 
 import static org.junit.Assert.*;
 
 @RunWith(FeaturesRunner.class)
-@Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class, RepositoryElasticSearchFeature.class})
+@Features({ AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class,
+    RepositoryElasticSearchFeature.class })
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 
 @Deploy("org.nuxeo.binary.metadata")
@@ -54,8 +62,12 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
-@PartialDeploy(bundle = "FirstVoicesNuxeo", extensions = {TargetExtensions.ContentModel.class})
-public class WordEnricherTest{
+@PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentModel.class })
+public class WordEnricherTest extends AbstractJsonWriterTest.Local<DocumentModelJsonWriter, DocumentModel>{
+
+  public WordEnricherTest(){
+    super(DocumentModelJsonWriter.class, DocumentModel.class);
+  }
 
   @Inject
   private EnricherTestUtil testUtil;
@@ -64,19 +76,71 @@ public class WordEnricherTest{
   protected CoreSession session;
 
   @Before
-  public void setUpTest(){
+  public void setUpTest() {
     testUtil = new EnricherTestUtil();
 
-    //assertNotNull("Should have a valid session", session);
-    //assertNotNull("Should have a valid test utilities obj", testUtil);
+    assertNotNull("Should have a valid session", session);
+    assertNotNull("Should have a valid test utilities obj", testUtil);
 
     testUtil.createSetup(session);
   }
 
   @Test
-  public void enricherTest() {
-      
-    int dummy = 1;
-    assertNotNull(dummy);
+  public void enricherTest() throws Exception {
+
+    // Get the DocumentModels for each of the parent documents
+    DocumentModel languageFamily = testUtil.getCurrentLanguageFamily();
+    assertNotNull("Language family cannot be null", languageFamily);
+    DocumentModel language = testUtil.getCurrentLanguage();
+    assertNotNull("Language cannot be null", language);
+    DocumentModel dialect = testUtil.getCurrentDialect();
+    assertNotNull("Dialect cannot be null", dialect);
+    DocumentModel dictionary = testUtil.getCurrentDictionary();
+    assertNotNull("Dictionary cannot be null", dictionary);
+
+    // Create a new child document
+    DocumentModel TestWord = testUtil.createDocument(session,
+        session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "TestWord", "FVWord"));
+    assertNotNull("Word cannot be null", TestWord);
+    // Commit to sesrver: session.save?
+    session.save();
+    String TestWordID = TestWord.getId();
+    System.out.println(TestWordID);
+    System.out.println(TestWord.getProperty("title"));
+
+    DocumentModel TestPhrase = testUtil.createDocument(session,
+        session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "TestPhrase", "FVPhrase"));
+    assertNotNull("Word cannot be null", TestPhrase);
+    // Commit to sesrver: session.save?
+    session.save();
+    String TestPhraseID = TestPhrase.getId();
+    System.out.println(TestPhraseID);
+    String arr[] = { TestPhraseID };
+
+    TestWord.setPropertyValue("fv-word:related_phrases", arr);
+    TestWord.setPropertyValue("dc:creator", "dummy");
+    TestWord.setPropertyValue("fv-word:part_of_speech", "noun");
+
+    TestPhrase.setPropertyValue("dc:creator", "dummy2");
+    System.out.println(TestWord.getProperty("fv-word:related_phrases"));
+    System.out.println(TestWord.getProperty("dc:creator"));
+    System.out.println(TestWord.getProperty("fv-word:part_of_speech"));
+    System.out.println(TestPhrase.getProperty("dc:creator"));
+    session.save();
+
+    // DocumentModel obj = session.getDocument(new PathRef("/"));
+    RenderingContext ctx = CtxBuilder.enrichDoc( WordEnricher.NAME ).get();
+    JsonAssert json = jsonAssert(TestWord, ctx);
+    System.out.println(json.toString());
+    //json = json.has("contextParameters").isObject();
+    //json.properties(1);
+    //json.has(WordEnricher.NAME).isObject();
+
+    // EX. Create phrase X, give title & props, get ID, add to 'fv:relatedphrases',
+    // call word w/ enricher (look up how to query w/ enrichers - want word
+    // enricher)
+    // session.
+    // TestWord.setPropertyValue("uid", "c2");
+    // System.out.println(TestWord.getPropertyValue("uid"));
   }
 }
