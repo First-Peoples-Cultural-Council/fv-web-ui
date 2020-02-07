@@ -3,30 +3,25 @@ import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import selectn from 'selectn'
 import IntlService from 'views/services/intl'
-const { func, object } = PropTypes
 const intl = IntlService.instance
 
-// TODO: REFACTOR
-// - drop the renderCycle system
-// - convert to hooks
-// - move component states to their own methods: loading, no results, results, endpoint down/xhr error
+const { array, func, object, string } = PropTypes
+// TODO: REFACTOR - convert to hooks
 export class AlphabetListView extends Component {
   static propTypes = {
+    characters: array,
+    dialectClassName: string,
     handleClick: func,
-    letter: PropTypes.string,
+    letter: string,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    splitWindowPath: PropTypes.array.isRequired,
-    // REDUX: actions/dispatch/func
-    fetchDialect2: PropTypes.func.isRequired,
+    splitWindowPath: array.isRequired,
   }
   static defaultProps = {
     handleClick: () => {},
@@ -37,34 +32,29 @@ export class AlphabetListView extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      renderCycle: 0,
-    }
   }
 
   async componentDidMount() {
     this._isMounted = true
-    window.addEventListener('popstate', this._handleHistoryEvent)
+    window.addEventListener('popstate', this.handleHistoryEvent)
   }
 
   componentWillUnmount() {
     this._isMounted = false
-    window.removeEventListener('popstate', this._handleHistoryEvent)
+    window.removeEventListener('popstate', this.handleHistoryEvent)
   }
 
   render() {
-    const content =
-      this.props.characters === undefined ? (
-        <div className="AlphabetListView__loading">
-          <CircularProgress className="AlphabetListView__loadingSpinner" color="secondary" mode="indeterminate" />
-          <Typography className="AlphabetListView__loadingText" variant="caption">
-            Loading characters
-          </Typography>
-        </div>
-      ) : (
-        this._generateTiles()
-      )
+    let content = null
+    if (this.props.characters === undefined) {
+      content = this.stateIsLoading()
+    } else {
+      if (this.props.characters.length === 0) {
+        this.stateHasNoContent()
+      } else {
+        this.stateHasContent()
+      }
+    }
     return (
       <div className="AlphabetListView" data-testid="AlphabetListView">
         <h2>
@@ -75,7 +65,7 @@ export class AlphabetListView extends Component {
     )
   }
 
-  _generateDialectFilterUrl = (letter) => {
+  generateDialectFilterUrl = (letter) => {
     let href = undefined
     const _splitWindowPath = [...this.props.splitWindowPath]
     const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
@@ -88,21 +78,40 @@ export class AlphabetListView extends Component {
     return href
   }
 
-  _generateTiles = () => {
+  handleHistoryEvent = () => {
+    if (this._isMounted) {
+      const _letter = selectn('letter', this.props.routeParams)
+      if (_letter) {
+        this.props.handleClick(_letter, false)
+      }
+    }
+  }
+
+  stateIsLoading = () => {
+    return (
+      <div className="AlphabetListView__loading">
+        <CircularProgress className="AlphabetListView__loadingSpinner" color="secondary" mode="indeterminate" />
+        <Typography className="AlphabetListView__loadingText" variant="caption">
+          Loading characters
+        </Typography>
+      </div>
+    )
+  }
+
+  stateHasNoContent = () => {
+    return (
+      <Typography className="AlphabetListView__noCharacters" variant="caption">
+        Characters are unavailable at this time
+      </Typography>
+    )
+  }
+
+  stateHasContent = () => {
     const { characters = [] } = this.props
     const { letter } = this.props
-
-    if (characters.length === 0) {
-      return (
-        <Typography className="AlphabetListView__noCharacters" variant="caption">
-          Characters are unavailable at this time
-        </Typography>
-      )
-    }
-
     const _characters = characters.map((value, index) => {
       const _letter = value.title
-      const href = this._generateDialectFilterUrl(_letter)
+      const href = this.generateDialectFilterUrl(_letter)
       return (
         <a
           href={href}
@@ -123,15 +132,6 @@ export class AlphabetListView extends Component {
     }
     return content
   }
-
-  _handleHistoryEvent = () => {
-    if (this._isMounted) {
-      const _letter = selectn('letter', this.props.routeParams)
-      if (_letter) {
-        this.props.handleClick(_letter, false)
-      }
-    }
-  }
 }
 
 // REDUX: reducers/state
@@ -146,10 +146,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
     splitWindowPath,
   }
 }
-
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchDialect2,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AlphabetListView)
+export default connect(mapStateToProps, null)(AlphabetListView)
