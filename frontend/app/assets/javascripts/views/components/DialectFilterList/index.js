@@ -37,7 +37,7 @@ export class DialectFilterList extends Component {
 
   clickParams = {}
   filtersSorted = []
-  isMounted = false
+  _isMounted = false
   selectedDialectFilter = undefined
   title = ''
   uidUrl = {}
@@ -57,7 +57,7 @@ export class DialectFilterList extends Component {
   }
 
   componentDidMount() {
-    this.isMounted = true
+    this._isMounted = true
     window.addEventListener('popstate', this.handleHistoryEvent)
 
     const selectedDialectFilter =
@@ -76,7 +76,7 @@ export class DialectFilterList extends Component {
   }
 
   componentWillUnmount() {
-    this.isMounted = false
+    this._isMounted = false
     window.removeEventListener('popstate', this.handleHistoryEvent)
     const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
     // 'uncheck' previous
@@ -144,7 +144,7 @@ export class DialectFilterList extends Component {
   }
 
   handleHistoryEvent = () => {
-    if (this.isMounted) {
+    if (this._isMounted) {
       const _filterId =
         this.props.type === 'words'
           ? selectn('routeParams.category', this.props)
