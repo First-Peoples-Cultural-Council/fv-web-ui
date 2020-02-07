@@ -22,6 +22,7 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
+import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
@@ -85,11 +86,32 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
   DIALECT_FILTER_TYPE = 'phrases'
 
-  componentDidMountViaPageDialectLearnBase() {
-    const letter = selectn('routeParams.letter', this.props)
-    if (letter) {
-      this.handleAlphabetClick(letter)
-    }
+  async componentDidMountViaPageDialectLearnBase() {
+    const { routeParams } = this.props
+    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, this.props.fetchDialect2)
+    const _pageIndex = 0
+    const _pageSize = 100
+    await this.props.fetchCharacters(
+      `${routeParams.dialect_path}/Alphabet`,
+      `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
+    )
+
+    const computedCharacters = await ProviderHelpers.getEntry(
+      this.props.computeCharacters,
+      `${routeParams.dialect_path}/Alphabet`
+    )
+
+    this.setState(
+      {
+        characters: selectn('response.entries', computedCharacters),
+      },
+      () => {
+        const letter = selectn('routeParams.letter', this.props)
+        if (letter) {
+          this.handleAlphabetClick(letter)
+        }
+      }
+    )
   }
 
   constructor(props, context) {
@@ -263,7 +285,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
             <AlphabetListView
-              dialect={selectn('response', computePortal)}
+              characters={this.state.characters}
+              dialectClassName={dialectClassName}
               handleClick={this.handleAlphabetClick}
               letter={selectn('routeParams.letter', this.props)}
             />
@@ -461,9 +484,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvCategory, fvCharacter, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeCategories } = fvCategory
+  const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
   const { computePortal } = fvPortal
@@ -473,6 +497,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeCategories,
+    computeCharacters,
     computeDocument,
     computeLogin,
     computePortal,
@@ -487,6 +512,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
+  fetchCharacters,
   fetchDocument,
   fetchPortal,
   overrideBreadcrumbs,
