@@ -50,9 +50,9 @@ export class AlphabetListView extends Component {
       content = this.stateIsLoading()
     } else {
       if (this.props.characters.length === 0) {
-        this.stateHasNoContent()
+        content = this.stateHasNoContent()
       } else {
-        this.stateHasContent()
+        content = this.stateHasContent()
       }
     }
     return (
