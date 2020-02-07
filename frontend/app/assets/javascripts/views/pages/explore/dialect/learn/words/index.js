@@ -21,6 +21,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
+// import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
@@ -64,6 +65,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     fetchCategories: func.isRequired,
+    // fetchDialect2: func.isRequired,
     fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
@@ -77,7 +79,14 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   }
   async componentDidMountViaPageDialectLearnBase() {
     const { routeParams } = this.props
-    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, this.props.fetchDialect2)
+    // Words
+    // ---------------------------------------------
+    this.props.fetchPortal(routeParams.dialect_path + '/Portal')
+    this.props.fetchDocument(routeParams.dialect_path + '/Dictionary')
+    this.props.fetchCategories('/api/v1/path/FV/' + routeParams.area + '/SharedData/Shared Categories/@children')
+    // Alphabet
+    // ---------------------------------------------
+    // await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, this.props.fetchDialect2)
     const _pageIndex = 0
     const _pageSize = 100
     await this.props.fetchCharacters(
@@ -139,17 +148,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       flashcardMode: false,
       isKidsTheme: props.routeParams.siteTheme === 'kids',
     }
-
-    // Bind methods to 'this'
-    ;[
-      '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
-      '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
-      '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
-      '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
-      '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
-      '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
-      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
-    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   render() {
@@ -174,7 +172,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // via base > pulled from routeParams
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <WordListView
@@ -267,8 +265,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                   if (url) {
                     NavigationHelpers.navigate(`/${url}`, this.props.pushWindowPath, false)
                   } else {
-                    // fallback, fn() from PageDialectLearnBase
-                    this._onNavigateRequest('create')
+                    this._onNavigateRequest('create') // NOTE: This function is in PageDialectLearnBase
                   }
                 }}
                 className="PrintHide buttonRaised"
@@ -303,7 +300,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                   this.props.routeParams.area
                 )}
                 handleDialectFilterClick={this.handleCategoryClick}
-                handleDialectFilterList={this.handleDialectFilterList} // NOTE: Comes from PageDialectLearnBase
+                handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
                 facets={selectn('response.entries', computeCategories) || []}
                 clearDialectFilter={this.clearDialectFilter}
                 routeParams={this.props.routeParams}
@@ -370,7 +367,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         //
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
-        this._resetURLPagination({ preserveSearch: true })
+        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
 
         // See about updating url
         if (href && updateUrl) {
@@ -385,11 +382,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   }
 
   // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-    newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
-  }
+  // NOTE: Providing an empty fn() so that PageDialectLearnBase doesn't complain.
+  fetchData() {}
 
   // NOTE: PageDialectLearnBase calls `_getPageKey`
   _getPageKey = () => {
@@ -428,7 +422,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     this.changeFilter({ href, updateHistory })
 
-    this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE)
+    this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE) // NOTE: This function is in PageDialectLearnBase
   }
 
   handleSearch = () => {
@@ -476,7 +470,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       () => {
         // When facets change, pagination should be reset.
         // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination()
+        this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
 
         // Remove alphabet/category filter urls
         if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
@@ -524,6 +518,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
+  // fetchDialect2,
   fetchCharacters,
   fetchDocument,
   fetchPortal,
