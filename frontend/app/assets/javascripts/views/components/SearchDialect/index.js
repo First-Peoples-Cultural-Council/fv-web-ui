@@ -87,75 +87,43 @@ export const SearchDialect = (props) => {
     }
   }, [csd.searchBySettings])
 
-  // Sets `partsOfSpeechOptions`
+  // Sets `partsOfSpeechOptions` when on a Word page
   // ------------------------------------------------------------
   useEffect(() => {
-    // initiate
-    if (props.computeDirectory.isFetching !== true && props.computeDirectory.success !== true) {
-      props.fetchDirectory('parts_of_speech')
-    }
-    // wait
-    if (props.computeDirectory.success && props.computeDirectory.success) {
-      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
-      const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
-        if (a.text < b.text) return -1
-        if (a.text > b.text) return 1
-        return 0
-      })
+    if (props.searchDialectDataType === SEARCH_DATA_TYPE_WORD) {
+      // initiate
+      if (props.computeDirectory.isFetching !== true && props.computeDirectory.success !== true) {
+        props.fetchDirectory('parts_of_speech')
+      }
+      // wait
+      if (props.computeDirectory.success && props.computeDirectory.success) {
+        const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
+        const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
+          if (a.text < b.text) return -1
+          if (a.text > b.text) return 1
+          return 0
+        })
 
-      const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
-        return (
-          <option key={index} value={part.value}>
-            {part.text}
-          </option>
-        )
-      })
+        const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
+          return (
+            <option key={index} value={part.value}>
+              {part.text}
+            </option>
+          )
+        })
 
-      // set
-      if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
-        setPartsOfSpeechOptions([
-          <option key="SEARCH_SORT_DIVIDER" disabled>
-            ─────────────
-          </option>,
-          ...partsOfSpeechSortedOptionTags,
-        ])
+        // set
+        if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
+          setPartsOfSpeechOptions([
+            <option key="SEARCH_SORT_DIVIDER" disabled>
+              ─────────────
+            </option>,
+            ...partsOfSpeechSortedOptionTags,
+          ])
+        }
       }
     }
-  })
-
-  // const _componentDidUpdate = (prevProps) => {
-  //   const searchNxqlQuery = generateNxql()
-  //   const searchNxqlSort = generateNxqlSearchSort()
-
-  //   const prevSearchNxqlQuery = prevProps.computeSearchDialect.searchNxqlQuery
-  //   const prevSearchNxqlSort = prevProps.computeSearchDialect.searchNxqlSort
-
-  //   if (
-  //     searchNxqlQuery !== prevSearchNxqlQuery ||
-  //     searchNxqlSort.DEFAULT_SORT_COL !== prevSearchNxqlSort.DEFAULT_SORT_COL ||
-  //     searchNxqlSort.DEFAULT_SORT_TYPE !== prevSearchNxqlSort.DEFAULT_SORT_TYPE
-  //   ) {
-  //     props.searchDialectUpdate({ searchNxqlQuery, searchNxqlSort })
-  //   }
-
-  //   const updatedAlphabet =
-  //     props.computeSearchDialect.searchByMode === SEARCH_BY_ALPHABET &&
-  //     prevProps.computeSearchDialect.searchByAlphabet !== props.computeSearchDialect.searchByAlphabet
-
-  //   const updatedDialectFilter =
-  //     (props.computeSearchDialect.searchByMode === SEARCH_BY_CATEGORY ||
-  //       props.computeSearchDialect.searchByMode === SEARCH_BY_PHRASE_BOOK) &&
-  //     prevProps.searchingDialectFilter !== props.searchingDialectFilter
-
-  //   const updatedMode = prevProps.computeSearchDialect.searchByMode !== props.computeSearchDialect.searchByMode
-
-  //   if (updatedAlphabet || updatedDialectFilter || updatedMode) {
-  //     const forSearchDialectUpdate = Object.assign({}, props.computeSearchDialect, {
-  //       searchMessage: getSearchMessage(props.computeSearchDialect),
-  //     })
-  //     props.searchDialectUpdate(forSearchDialectUpdate)
-  //   }
-  // }
+  }, [])
 
   // Generates 'Stop browsing ...' button
   // TODO: props.searchDialectResetButtonText
