@@ -79,29 +79,48 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   }
   async componentDidMountViaPageDialectLearnBase() {
     const { routeParams } = this.props
-    // Words
-    // ---------------------------------------------
-    this.props.fetchPortal(routeParams.dialect_path + '/Portal')
-    this.props.fetchDocument(routeParams.dialect_path + '/Dictionary')
-    this.props.fetchCategories('/api/v1/path/FV/' + routeParams.area + '/SharedData/Shared Categories/@children')
-    // Alphabet
-    // ---------------------------------------------
-    // await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, this.props.fetchDialect2)
-    const _pageIndex = 0
-    const _pageSize = 100
-    await this.props.fetchCharacters(
-      `${routeParams.dialect_path}/Alphabet`,
-      `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
+
+    // Portal
+    ProviderHelpers.fetchIfMissing(
+      routeParams.dialect_path + '/Portal',
+      this.props.fetchPortal,
+      this.props.computePortal
+    )
+    // Document
+    ProviderHelpers.fetchIfMissing(
+      routeParams.dialect_path + '/Dictionary',
+      this.props.fetchDocument,
+      this.props.computeDocument
     )
 
-    const computedCharacters = await ProviderHelpers.getEntry(
-      this.props.computeCharacters,
-      `${routeParams.dialect_path}/Alphabet`
-    )
+    // Category
+    let categories = this.getCategories()
+    if (categories === undefined) {
+      await this.props.fetchCategories(
+        '/api/v1/path/FV/' + routeParams.area + '/SharedData/Shared Categories/@children'
+      )
+      categories = this.getCategories()
+    }
+
+    // Alphabet
+    // ---------------------------------------------
+    let characters = this.getCharacters()
+
+    if (characters === undefined) {
+      const _pageIndex = 0
+      const _pageSize = 100
+
+      await this.props.fetchCharacters(
+        `${routeParams.dialect_path}/Alphabet`,
+        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
+      )
+      characters = this.getCharacters()
+    }
 
     this.setState(
       {
-        characters: selectn('response.entries', computedCharacters),
+        characters,
+        categories,
       },
       () => {
         const letter = selectn('routeParams.letter', this.props)
@@ -160,12 +179,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     )
 
     const computePortal = ProviderHelpers.getEntry(this.props.computePortal, `${routeParams.dialect_path}/Portal`)
-
-    const computeCategories = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
-    )
-    const computeCategoriesSize = selectn('response.entries.length', computeCategories) || 0
 
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
       ''} ${intl.trans('words', 'Words', 'first')}`
@@ -242,6 +255,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
 
     const dialectClassName = getDialectClassname(computePortal)
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper')}>
@@ -276,38 +290,31 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           </div>
         </div>
         <div className="row">
-          <div
-            className={classNames('col-xs-12', 'col-md-3', computeCategoriesSize === 0 ? 'hidden' : null, 'PrintHide')}
-          >
-            <div>
-              <AlphabetListView
-                characters={this.state.characters}
-                dialectClassName={dialectClassName}
-                handleClick={this.handleAlphabetClick}
-                letter={selectn('routeParams.letter', this.props)}
-              />
+          <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
+            <AlphabetListView
+              characters={this.state.characters}
+              dialectClassName={dialectClassName}
+              handleClick={this.handleAlphabetClick}
+              letter={selectn('routeParams.letter', this.props)}
+            />
 
-              <DialectFilterList
-                type={this.DIALECT_FILTER_TYPE}
-                title={intl.trans(
-                  'views.pages.explore.dialect.learn.words.browse_by_category',
-                  'Browse Categories',
-                  'words'
-                )}
-                appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                  'fv-word:categories',
-                  this.props.routeParams.area
-                )}
-                handleDialectFilterClick={this.handleCategoryClick}
-                handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-                facets={selectn('response.entries', computeCategories) || []}
-                clearDialectFilter={this.clearDialectFilter}
-                routeParams={this.props.routeParams}
-              />
-            </div>
+            <DialectFilterList
+              type={this.DIALECT_FILTER_TYPE}
+              title={intl.trans(
+                'views.pages.explore.dialect.learn.words.browse_by_category',
+                'Browse Categories',
+                'words'
+              )}
+              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
+              handleDialectFilterClick={this.handleCategoryClick}
+              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              facets={this.state.categories}
+              clearDialectFilter={this.clearDialectFilter}
+              routeParams={this.props.routeParams}
+            />
           </div>
-          <div className={classNames('col-xs-12', computeCategoriesSize === 0 ? 'col-md-12' : 'col-md-9')}>
+          <div className={classNames('col-xs-12', 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
             <div className={dialectClassName}>{wordListView}</div>
           </div>
@@ -446,6 +453,23 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         categories: currentAppliedFilterCategories,
       }),
     })
+  }
+
+  getCharacters = () => {
+    const { routeParams } = this.props
+    const computedCharacters = ProviderHelpers.getEntry(
+      this.props.computeCharacters,
+      `${routeParams.dialect_path}/Alphabet`
+    )
+    return selectn('response.entries', computedCharacters)
+  }
+  getCategories = () => {
+    const { routeParams } = this.props
+    const computeCategories = ProviderHelpers.getEntry(
+      this.props.computeCategories,
+      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
+    )
+    return selectn('response.entries', computeCategories)
   }
 
   resetSearch = () => {
