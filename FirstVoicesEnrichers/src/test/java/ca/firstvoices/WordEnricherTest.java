@@ -61,6 +61,8 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
+//@Deploy("FirstVoicesData")
+@Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentModel.class })
 public class WordEnricherTest extends AbstractJsonWriterTest.Local<DocumentModelJsonWriter, DocumentModel>{
@@ -128,8 +130,8 @@ public class WordEnricherTest extends AbstractJsonWriterTest.Local<DocumentModel
     System.out.println(TestPhrase.getProperty("dc:creator"));
     session.save();
 
-    // DocumentModel obj = session.getDocument(new PathRef("/"));
-    RenderingContext ctx = CtxBuilder.enrichDoc( WordEnricher.NAME ).get();
+    // DocumentModel obj = session.getDocument(new PathRef("/")); WordEnricher.NAME
+    RenderingContext ctx = CtxBuilder.enrichDoc("acl").get();
     JsonAssert json = jsonAssert(TestWord, ctx);
     System.out.println(json.toString());
     //json = json.has("contextParameters").isObject();
