@@ -58,9 +58,22 @@ jobs:
           issue: ${{ steps.issue-key.outputs.issue }}
           transition: "DEV DONE"
 
+      #
       - name: Transistion issue to "QA TO DO"
         if: github.event.name == 'push'
         uses: atlassian/gajira-transition@master
         with:
           issue: ${{ steps.issue-key.outputs.issue }}
           transition: "QA TO DO"
+
+      - name: Setup Jira CLI
+        if: github.event.name == 'push'
+        uses: atlassian/gajira-cli@master
+        with:
+          version:
+            1.0.20
+
+      - name: DEV DONE -> QA TO DO tasks
+        if: github.event.name == 'push'
+        run: |
+          echo ${{ steps.issue-key.outputs.issue }}
