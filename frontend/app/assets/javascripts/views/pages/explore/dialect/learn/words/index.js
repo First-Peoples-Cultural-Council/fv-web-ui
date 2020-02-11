@@ -167,6 +167,19 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       flashcardMode: false,
       isKidsTheme: props.routeParams.siteTheme === 'kids',
     }
+
+    // NOTE: Removing the following `this` binding can create subtle and hard to detect bugs
+    // For example: After filtering by category, clicking through to an item detail triggers an error
+    // due to `handleDialectFilterList` not being able to access `this.state.filterInfo`
+    ;[
+      '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
+      '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
+      '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
+      '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
+      '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
+      '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
+      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
+    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   render() {
@@ -305,6 +318,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                 'Browse Categories',
                 'words'
               )}
+              filterInfo={filterInfo}
               appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
               facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
               handleDialectFilterClick={this.handleCategoryClick}
