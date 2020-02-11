@@ -17,7 +17,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Checking to make sure a word currently exists.
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(2000)
+    cy.wait(2500)
     cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')

@@ -86,7 +86,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     form: true, // we are submitting a regular form body
     body,
   })
-  cy.wait(500)
+  cy.wait(1000)
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
 

@@ -25,6 +25,7 @@ describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
     cy.getByText('Words', { exact: true }).click()
     cy.wait(1500)
     cy.getByText('Create New Word', { exact: true }).click()
+    cy.wait(3000)
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
     cy.getByTestId('fv-word-pronunciation').type('TestPronunciation')

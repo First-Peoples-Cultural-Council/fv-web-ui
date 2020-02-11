@@ -15,7 +15,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByText('Create New Phrase', { exact: true }).click()
     cy.wait(3000)
 
@@ -128,9 +128,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(800)
+    cy.wait(1000)
     cy.getByText('TestPhrase', { exact: false }).click()
-    cy.wait(1500)
+    cy.wait(2000)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -165,7 +165,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.queryByText('TestPhrase')
       .should('exist')
       .click()
-    cy.wait(1500)
+    cy.wait(2000)
     cy.getByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')

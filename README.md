@@ -24,3 +24,6 @@ server is intended to run behind a reverse proxy, hiding the "/nuxeo/app" contex
 ## Build for development
 To build the entire project (without downloading new dependencies), use the Dev profile:
 ```mvn clean install -Pdev```
+
+## New backend modules
+When creating a new backend module ensure it follows the naming convention by starting with FirstVoices or FV to ensure it is picked up by build CI.

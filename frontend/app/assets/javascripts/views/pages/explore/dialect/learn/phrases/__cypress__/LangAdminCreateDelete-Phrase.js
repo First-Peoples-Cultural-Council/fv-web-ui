@@ -28,7 +28,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(1500)
     cy.getByText('Create New Phrase', { exact: false }).click()
     cy.wait(3000)
 

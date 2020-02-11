@@ -3,7 +3,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.1.3-SNAPSHOT</version>
+    <version>3.2.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -102,6 +102,28 @@
       </plugin>
     </plugins>
   </build>
+ </profile>
+
+ <!-- Development Profile for back-end -->
+ <!-- This profile skips building the frontend and installing node packages -->
+ <profile>
+   <id>backend</id>
+   <activation>
+     <activeByDefault>false</activeByDefault>
+   </activation>
+   <build>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-jar-plugin</artifactId>
+         <configuration>
+           <archive>
+             <manifestFile>nuxeo/META-INF/MANIFEST.MF</manifestFile>
+           </archive>
+         </configuration>
+       </plugin>
+     </plugins>
+   </build>
  </profile>
     
 </profiles>
