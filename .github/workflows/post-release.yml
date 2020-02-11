@@ -1,0 +1,23 @@
+name: Post Release
+
+on:
+  push:
+    tags:    
+      - 'release-[0-9].[0-9]+.[0-9]+-SNAPSHOT'
+jobs:
+  postReleaseActions:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Update versions to next snapshot
+      run: 
+        mvn versions:set -DnewVersion=${{github.ref}} -DgenerateBackupPoms=false
+        mvn versions:commit
+    - name: Create a pull request for updating version
+      uses: peter-evans/create-pull-request@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: Update POM.xml to next snapshot version ${{github.ref}}
+        title: '[Bump Release] Ready to start working on ${{github.ref}}'
+        labels: automated pr
+        assignees: dy2288

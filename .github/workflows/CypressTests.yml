@@ -1,9 +1,27 @@
 name: Cypress Tests
 
 on:
-  # Every day at 8:00pm UTC / 12:00pm pst
+  # Every day at 12:00pm pst and 1:30am pst
+  # (utc at 8:00pm and 9:30am)
   schedule:
     - cron: '0 20 * * *'
+    - cron: '30 9 * * *'
+  # On pull requests when any files in the paths listed are changed
+  pull_request:
+    paths:
+    - 'frontend/app/**'
+    - 'frontend/build/**'
+    - 'frontend/gulpfile.js/**'
+    - 'frontend/nuxeo/**'
+    - 'frontend/index.html'
+    - '**/package.json'
+    - '**/package-lock.json'
+    - 'FirstVoices*/**'
+    - 'FV*/**'
+    - '**/pom.xml'
+    - '!**/README.md'
+    branches:
+      master
 
 jobs:
 
@@ -11,24 +29,48 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 200
     steps:
+      # Checkout the current branch
       - name: Checkout
         uses: actions/checkout@v1
 
+      # Setup the correct Java version
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
+      # Setup the correct node version
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
         with:
           node-version: '8.x'
 
-      - name: Build project and setup directories
+      # Build the docker image and create the volume directories
+      - name: Build Docker image and create volume directories
         run: |
           cd docker
-          bash ./setup_docker.sh
+          docker build -t me/nuxeo-dev .
+          mkdir ./nuxeo_dev_docker ./nuxeo_dev_docker/data ./nuxeo_dev_docker/logs
 
+      # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
+      - name: Cache project build
+        id: cache-build
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Built the project and install Node packages
+      - name: Build entire project
+        run: mvn clean install
+
+      # Copy the build zipfile to the docker volume
+      - name: Copy project build zipfile to docker volume
+        run: cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker/
+
+      # Startup the docker backend
       - name: Startup backend
         run: |
           docker run --name nuxeo-dev -t --rm -p 8080:8080 -v ${PWD}/docker/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/docker/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/docker/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam " -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD -d me/nuxeo-dev
@@ -37,6 +79,7 @@ jobs:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
           CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
 
+      # Run the initial backend setup script
       - name: Initial backend setup
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
@@ -44,10 +87,13 @@ jobs:
         run: |
           bash ./docker/initialsetup.sh
 
+      # Install any dependencies Cypress may need as shown in the Cypress docs
       - name: Install environment dependencies
         run: sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
-      - name: Run Cypress tests
+      # Startup the frontend and run the Cypress tests
+      - name: Run Cypress tests (tag pull request)
+        if: github.event_name == 'pull_request'
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
           CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
@@ -55,5 +101,18 @@ jobs:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
         run: |
           cd frontend
-          npm run test:e2e:ci
+          npm run test:e2e:ci:pr
+          echo "Testing Completed"
+
+      # Startup the frontend and run the Cypress tests
+      - name: Run Cypress tests (tag schedule)
+        if: github.event_name == 'schedule'
+        env:
+          CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}
+          CYPRESS_FV_PASSWORD: ${{ secrets.CYPRESS_FV_PASSWORD }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+        run: |
+          cd frontend
+          npm run test:e2e:ci:schedule
           echo "Testing Completed"
