@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
-
+import Link from 'views/components/Link'
 // REDUX
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
@@ -86,7 +86,7 @@ export class PhrasebookStateSuccessCreate extends React.Component {
 
               {/* BROWSE ------------- */}
               <li>
-                <a href={phrasebookBrowseUrl}>{copy.create.success.browseView}</a>
+                <Link href={phrasebookBrowseUrl}>{copy.create.success.browseView}</Link>
               </li>
             </ul>
           </div>
@@ -112,7 +112,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasebookStateSuccessCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasebookStateSuccessCreate)

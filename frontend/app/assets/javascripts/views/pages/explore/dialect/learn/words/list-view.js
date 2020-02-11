@@ -38,6 +38,7 @@ import IntlService from 'views/services/intl'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import Link from 'views/components/Link'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
@@ -142,11 +143,6 @@ class WordsListView extends DataListView {
             const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
               `${window.location.pathname}${window.location.search}`
             )}`
-            // NOTE: FW-135: Using `onClick={()=>{}}` for unknown reasons causes the following error when on Words and clicking between categories:
-            //`Uncaught Invariant Violation: findComponentRoot(..., .0.0.2.0.1.0.0:1.1.2.0.0.0.0.0.0.1:$0.$0.0): Unable to find element`
-            // That's why `undefined` is used in `clickHandler`
-            const clickHandler = props.disableClickItem ? NavigationHelpers.disable : undefined
-
             const computeDialect2 = this.props.dialect || this.getDialect()
 
             const editButton =
@@ -180,9 +176,9 @@ class WordsListView extends DataListView {
 
             return (
               <>
-                <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
+                <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
                   {v}
-                </a>
+                </Link>
                 {editButton}
               </>
             )

@@ -46,7 +46,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-
+import Link from 'views/components/Link'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./Tasks.css'
@@ -198,10 +198,10 @@ export class Tasks extends React.Component {
 
       const tableRow = (
         <li key={i}>
-          <a href={'/tasks/users/' + uid}>
+          <Link href={'/tasks/users/' + uid}>
             Click here to view user registration requests to join{' '}
             <strong>{selectn('properties.dc:title', dialect)}</strong>
-          </a>
+          </Link>
         </li>
       )
 
@@ -407,7 +407,4 @@ const mapDispatchToProps = {
   rejectTask,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Tasks)
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)
