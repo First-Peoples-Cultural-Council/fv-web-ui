@@ -66,6 +66,13 @@ jobs:
     if: github.event_name == 'push'
     steps:
 
+      - name: Check user access
+        uses: lannonbr/repo-permission-check-action@2.0.0
+        with:
+          permission: write
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout repo
         uses: actions/checkout@v1
 
