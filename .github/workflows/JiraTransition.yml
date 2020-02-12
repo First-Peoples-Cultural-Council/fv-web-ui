@@ -104,15 +104,7 @@ jobs:
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-      # Find issue key from the commit messages
-      - name: Find issue key from commits
-        if: steps.issue-key-check.outputs.value == 'true'
-        id: issue-key-commit
-        uses: atlassian/gajira-find-issue-key@master
-        with:
-          from: commits
-
-      # When an issue is merged into master
+      # If an issue key is found in commit messages and on Jira perform transition
       - name: DEV DONE -> QA TO DO tasks
         if: steps.issue-key-check.outputs.value == 'true'
         run: |
