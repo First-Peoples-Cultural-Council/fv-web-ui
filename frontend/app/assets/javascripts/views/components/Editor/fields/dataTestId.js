@@ -10,6 +10,7 @@ function renderInput(locals) {
     <input
       className="form-control"
       data-testid={StringHelpers.clean(locals.attrs.name, CLEAN_ID)}
+      id={locals.attrs.id}
       label={locals.label}
       name={locals.attrs.name}
       onChange={onChange}
