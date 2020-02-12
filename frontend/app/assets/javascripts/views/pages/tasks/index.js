@@ -101,12 +101,12 @@ export class Tasks extends React.Component {
       updatedUserRegistrationApprove ||
       updatedUserRegistrationReject
     ) {
-      this._fetchData(this.props)
+      this.fetchData(this.props)
     }
   }
 
   componentDidMount() {
-    this._fetchData(this.props)
+    this.fetchData(this.props)
   }
 
   render() {
@@ -147,7 +147,7 @@ export class Tasks extends React.Component {
             <button
               type="button"
               className="FlatButton FlatButton--secondary Tasks__taskTitle"
-              onClick={this._handleOpen.bind(this, task.docref)}
+              onClick={this.handleOpen.bind(this, task.docref)}
             >
               {task.documentTitle}
             </button>
@@ -163,7 +163,7 @@ export class Tasks extends React.Component {
                 // className="RaisedButton RaisedButton--primary"
                 onClick={(e) => {
                   e.preventDefault()
-                  this._handleTaskActions(task.id, 'approve')
+                  this.handleTaskActions(task.id, 'approve')
                 }}
               >
                 {intl.trans('approve', 'Approve', 'first')}
@@ -175,7 +175,7 @@ export class Tasks extends React.Component {
                 // className="RaisedButton RaisedButton--primary Tasks__reject"
                 onClick={(e) => {
                   e.preventDefault()
-                  this._handleTaskActions(task.id, 'reject')
+                  this.handleTaskActions(task.id, 'reject')
                 }}
               >
                 {intl.trans('reject', 'Reject', 'first')}
@@ -250,7 +250,7 @@ export class Tasks extends React.Component {
 
           {userTasksTable}
 
-          <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this._handleClose}>
+          <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
             <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
           </Dialog>
 
@@ -261,8 +261,8 @@ export class Tasks extends React.Component {
               title: 'properties.dc:title',
             }}
             open={this.state.preApprovalDialogOpen}
-            saveMethod={this._saveMethod}
-            closeMethod={this._handleClose}
+            saveMethod={this.saveMethod}
+            closeMethod={this.handleClose}
             selectedItem={this.state.selectedPreapprovalTask}
             dialect={computeDialect}
           />
@@ -271,26 +271,28 @@ export class Tasks extends React.Component {
     )
   }
 
-  _fetchData = (newProps) => {
+  fetchData = (newProps) => {
     const userId = selectn('response.id', newProps.computeLogin)
     newProps.fetchUserTasks(userId)
     ProviderHelpers.fetchIfMissing(userId, newProps.fetchUserDialects, newProps.computeUserDialects)
   }
 
-  _handleClose = () => {
+  handleClose = () => {
     this.setState({ open: false, preApprovalDialogOpen: false, selectedPreapprovalTask: null, selectedTask: null })
   }
 
-  _handleOpen = (id) => {
+  handleOpen = (id) => {
     this.setState({ open: true, selectedTask: id })
   }
 
-  _handlePreApprovalOpen = (task) => {
+  // TODO: CONFIRM IF THIS FN EVER GETS CALLED
+  handlePreApprovalOpen = (task) => {
     this.props.fetchDialect2(selectn('properties.docinfo:documentId', task))
     this.setState({ preApprovalDialogOpen: true, selectedPreapprovalTask: task })
   }
 
-  _handleRegistrationActions = (id, action) => {
+  // TODO: CONFIRM IF THIS FN EVER GETS CALLED
+  handleRegistrationActions = (id, action) => {
     switch (action) {
       case 'approve':
         this.props.approveRegistration(
@@ -319,7 +321,7 @@ export class Tasks extends React.Component {
     this.setState({ lastActionedTaskId: id })
   }
 
-  _handleTaskActions = (id, action) => {
+  handleTaskActions = (id, action) => {
     switch (action) {
       case 'approve':
         this.props.approveTask(
@@ -350,7 +352,7 @@ export class Tasks extends React.Component {
     this.setState({ lastActionedTaskId: id })
   }
 
-  _saveMethod = (properties) => {
+  saveMethod = (properties) => {
     this.props.approveRegistration(
       properties.id,
       {
@@ -407,7 +409,4 @@ const mapDispatchToProps = {
   rejectTask,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Tasks)
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)
