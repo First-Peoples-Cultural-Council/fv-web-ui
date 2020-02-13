@@ -250,7 +250,12 @@ class SelectMediaComponent extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this._handleClose}>
+            <FVButton
+              data-testid="Dialog__SelectMediaComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this._handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
