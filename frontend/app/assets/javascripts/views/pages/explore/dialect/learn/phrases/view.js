@@ -247,7 +247,11 @@ export class DialectViewPhrase extends Component {
         />
       )
     })
-    return audios.length > 0 ? <div className="DialectViewWordPhraseAudio">{audios}</div> : null
+    return audios.length > 0 ? (
+      <div data-testid="DialectViewWordPhraseAudio" className="DialectViewWordPhraseAudio">
+        {audios}
+      </div>
+    ) : null
   }
 
   _getCulturalNotes = (computePhrase) => {

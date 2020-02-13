@@ -4,6 +4,7 @@ import t from 'tcomb-form'
 import classNames from 'classnames'
 
 import VirtualKeyboardFactory from 'views/components/Editor/fields/virtualKeyboard'
+import dataTestId from 'views/components/Editor/fields/dataTestId'
 
 import WysiwygFactory from 'views/components/Editor/fields/wysiwyg'
 import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
@@ -279,7 +280,7 @@ const options = {
           fields: {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
-              factory: VirtualKeyboardFactory,
+              factory: dataTestId,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),

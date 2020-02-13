@@ -4,8 +4,8 @@
 
 There are several version dependency requirements to properly build and run the project:
 
-- NodeJS>=v8.10 (10.15.3)
-- NPM v5.6.0
+- NodeJS>=v10.13.0 (10.15.3)
+- NPM v6.4.1
 
 Instructions to install specific project dependencies and running the application are described in the _Setting Up and Running_ section.
 
