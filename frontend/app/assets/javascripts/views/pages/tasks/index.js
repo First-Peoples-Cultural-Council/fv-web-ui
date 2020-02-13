@@ -134,86 +134,8 @@ export class Tasks extends React.Component {
       this.props.computeDialect2,
       selectn('properties.docinfo:documentId', this.state.selectedPreapprovalTask)
     )
-
-    const userTasks = []
-    const userRegistrationTasks = []
-
-    // Compute General Tasks
-    const computeUserTasksMap = selectn('response', _computeUserTasks) || []
-    computeUserTasksMap.map((task, i) => {
-      const tableRow = (
-        <TableRow key={i}>
-          <TableCell>
-            <button
-              type="button"
-              className="FlatButton FlatButton--secondary Tasks__taskTitle"
-              onClick={this.handleOpen.bind(this, task.docref)}
-            >
-              {task.documentTitle}
-            </button>
-          </TableCell>
-          <TableCell className="Tasks__taskTypeContainer">
-            <span className="Tasks__taskType">{intl.searchAndReplace(task.name)}</span>
-          </TableCell>
-          <TableCell>
-            <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
-              <FVButton
-                variant="contained"
-                color="secondary"
-                // className="RaisedButton RaisedButton--primary"
-                onClick={(e) => {
-                  e.preventDefault()
-                  this.handleTaskActions(task.id, 'approve')
-                }}
-              >
-                {intl.trans('approve', 'Approve', 'first')}
-              </FVButton>
-
-              <FVButton
-                variant="contained"
-                color="secondary"
-                // className="RaisedButton RaisedButton--primary Tasks__reject"
-                onClick={(e) => {
-                  e.preventDefault()
-                  this.handleTaskActions(task.id, 'reject')
-                }}
-              >
-                {intl.trans('reject', 'Reject', 'first')}
-              </FVButton>
-            </div>
-          </TableCell>
-          <TableCell className="Tasks__taskDueDateContainer">
-            <span className="Tasks__taskDueDate">{task.dueDate}</span>
-          </TableCell>
-        </TableRow>
-      )
-
-      userTasks.push(tableRow)
-    })
-
-    // Compute User Registration Tasks
-    const computeUserDialectsMap = selectn('response.entries', computeUserDialects) || []
-    computeUserDialectsMap.map((dialect, i) => {
-      const uid = selectn('uid', dialect)
-
-      const tableRow = (
-        <li key={i}>
-          <a href={'/tasks/users/' + uid}>
-            Click here to view user registration requests to join{' '}
-            <strong>{selectn('properties.dc:title', dialect)}</strong>
-          </a>
-        </li>
-      )
-
-      userRegistrationTasks.push(tableRow)
-    })
-
-    const noUserTasks =
-      userTasks.length === 0 && userRegistrationTasks.length === 0 ? (
-        <h2>{intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')}</h2>
-      ) : null
-
-    const userRegistrationTaskList = userRegistrationTasks.length > 0 ? <ul>{userRegistrationTasks}</ul> : null
+    // Tasks: General
+    const userTasks = this.generateUserTasks(selectn('response', _computeUserTasks))
     const userTasksTable =
       userTasks.length > 0 ? (
         <Table>
@@ -239,34 +161,43 @@ export class Tasks extends React.Component {
         </Table>
       ) : null
 
+    // Tasks: Registration
+    const userRegistrationTasks = this.generateUserRegistrationTasks(selectn('response.entries', computeUserDialects))
+    const userRegistrationTaskList = userRegistrationTasks.length > 0 ? <ul>{userRegistrationTasks}</ul> : null
+
+    const hasTasks = userTasks.length > 0 || userRegistrationTasks.length > 0
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div>
+        <>
           <h1>{intl.trans('tasks', 'Tasks', 'first')}</h1>
 
-          {noUserTasks}
+          {hasTasks === false && <h2>{intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')}</h2>}
 
           {userRegistrationTaskList}
-
           {userTasksTable}
 
-          <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
-            <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
-          </Dialog>
+          {hasTasks && (
+            <Dialog fullWidth maxWidth="md" open={this.state.open} onClose={this.handleClose}>
+              <DialogContent>{this.state.selectedTask && <DocumentView id={this.state.selectedTask} />}</DialogContent>
+            </Dialog>
+          )}
 
-          <GroupAssignmentDialog
-            title={intl.trans('approve', 'Approve', 'first')}
-            fieldMapping={{
-              id: 'uid',
-              title: 'properties.dc:title',
-            }}
-            open={this.state.preApprovalDialogOpen}
-            saveMethod={this.saveMethod}
-            closeMethod={this.handleClose}
-            selectedItem={this.state.selectedPreapprovalTask}
-            dialect={computeDialect}
-          />
-        </div>
+          {hasTasks && (
+            <GroupAssignmentDialog
+              title={intl.trans('approve', 'Approve', 'first')}
+              fieldMapping={{
+                id: 'uid',
+                title: 'properties.dc:title',
+              }}
+              open={this.state.preApprovalDialogOpen}
+              saveMethod={this.saveMethod}
+              closeMethod={this.handleClose}
+              selectedItem={this.state.selectedPreapprovalTask}
+              dialect={computeDialect}
+            />
+          )}
+        </>
       </PromiseWrapper>
     )
   }
@@ -277,48 +208,74 @@ export class Tasks extends React.Component {
     ProviderHelpers.fetchIfMissing(userId, newProps.fetchUserDialects, newProps.computeUserDialects)
   }
 
+  generateUserTasks = (computeUserTasksResponse = []) => {
+    return computeUserTasksResponse.map((task, i) => {
+      return (
+        <TableRow key={i}>
+          <TableCell>
+            <button
+              type="button"
+              className="FlatButton FlatButton--secondary Tasks__taskTitle"
+              onClick={this.handleOpen.bind(this, task.docref)}
+            >
+              {task.documentTitle}
+            </button>
+          </TableCell>
+          <TableCell className="Tasks__taskTypeContainer">
+            <span className="Tasks__taskType">{intl.searchAndReplace(task.name)}</span>
+          </TableCell>
+          <TableCell>
+            <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
+              <FVButton
+                variant="contained"
+                color="secondary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  this.handleTaskActions(task.id, 'approve')
+                }}
+              >
+                {intl.trans('approve', 'Approve', 'first')}
+              </FVButton>
+
+              <FVButton
+                variant="contained"
+                color="secondary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  this.handleTaskActions(task.id, 'reject')
+                }}
+              >
+                {intl.trans('reject', 'Reject', 'first')}
+              </FVButton>
+            </div>
+          </TableCell>
+          <TableCell className="Tasks__taskDueDateContainer">
+            <span className="Tasks__taskDueDate">{task.dueDate}</span>
+          </TableCell>
+        </TableRow>
+      )
+    })
+  }
+
+  generateUserRegistrationTasks = (computeUserDialectsResponseEntries = []) => {
+    return computeUserDialectsResponseEntries.map((dialect, i) => {
+      return (
+        <li key={i}>
+          <a href={`/tasks/users/${selectn('uid', dialect)}`}>
+            Click here to view user registration requests to join{' '}
+            <strong>{selectn('properties.dc:title', dialect)}</strong>
+          </a>
+        </li>
+      )
+    })
+  }
+
   handleClose = () => {
     this.setState({ open: false, preApprovalDialogOpen: false, selectedPreapprovalTask: null, selectedTask: null })
   }
 
   handleOpen = (id) => {
     this.setState({ open: true, selectedTask: id })
-  }
-
-  // TODO: CONFIRM IF THIS FN EVER GETS CALLED
-  handlePreApprovalOpen = (task) => {
-    this.props.fetchDialect2(selectn('properties.docinfo:documentId', task))
-    this.setState({ preApprovalDialogOpen: true, selectedPreapprovalTask: task })
-  }
-
-  // TODO: CONFIRM IF THIS FN EVER GETS CALLED
-  handleRegistrationActions = (id, action) => {
-    switch (action) {
-      case 'approve':
-        this.props.approveRegistration(
-          id,
-          {
-            value: 'approve',
-          },
-          null,
-          intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
-        )
-        break
-
-      case 'reject':
-        this.props.rejectRegistration(
-          id,
-          {
-            value: 'reject',
-          },
-          null,
-          intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
-        )
-        break
-      default: // NOTE: do nothing
-    }
-
-    this.setState({ lastActionedTaskId: id })
   }
 
   handleTaskActions = (id, action) => {
