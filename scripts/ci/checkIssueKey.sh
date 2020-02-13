@@ -49,10 +49,9 @@ done
 if [[ $RETURNVALUE == "true" && $NUMISSUES != 0 && $MISSINGISSUECOUNT == 0 ]]; then
     echo "true"
 elif [ $NUMISSUES == 0 ]; then
-    echo "No issue key matching the pattern FW-XXXXX could be found in the commit messages."
+    echo "No issue key matching the pattern FW-XXXXX could be found in the commit messages or pull request title."
 elif [ $MISSINGISSUECOUNT > 0 ]; then
-    echo $MISSINGISSUECOUNT " of the matching issue keys in the commit messages could not be found on Jira."
-    exit 1
+    echo "Error: " $MISSINGISSUECOUNT " of the matching issue keys in the commit messages could not be found on Jira."
 else
     echo "false"
 fi
