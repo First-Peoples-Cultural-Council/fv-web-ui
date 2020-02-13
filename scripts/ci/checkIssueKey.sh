@@ -9,6 +9,18 @@ COMMITMESSAGES=$1
 # Replace commas with spaces for pattern matching
 COMMITMESSAGES=${COMMITMESSAGES//,/ }
 
+# Remove all items matching the patter from the list and append them to FILTEREDLIST
+FILTEREDLIST=""
+for f in $COMMITMESSAGES
+do
+    if [[ $f =~ FW-[0-9]{1,5} ]]; then
+        FILTEREDLIST="$FILTEREDLIST ${BASH_REMATCH}"
+    fi
+done
+
+# Filter out any duplicates
+FILTEREDLIST="$(echo $FILTEREDLIST | tr ' ' '\n' | sort | uniq | xargs)"
+
 # Variable which change to true if everything goes well
 RETURNVALUE="false"
 
@@ -19,7 +31,7 @@ NUMISSUES=0
 MISSINGISSUECOUNT=0
 
 # Iterate through each item found in the commit messages with a space as a delimiter
-for f in $COMMITMESSAGES
+for f in $FILTEREDLIST
 do
     # If an item matches the issue key pattern FW-XXXXX then check if it exists on Jira
     if [[ $f =~ FW-[0-9]{1,5} ]]; then
@@ -40,6 +52,7 @@ elif [ $NUMISSUES == 0 ]; then
     echo "No issue key matching the pattern FW-XXXXX could be found in the commit messages."
 elif [ $MISSINGISSUECOUNT > 0 ]; then
     echo $MISSINGISSUECOUNT " of the matching issue keys in the commit messages could not be found on Jira."
+    exit 1
 else
     echo "false"
 fi
