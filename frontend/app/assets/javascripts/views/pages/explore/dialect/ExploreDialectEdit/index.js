@@ -71,11 +71,11 @@ export class ExploreDialectEdit extends Component {
   }
   // Fetch data on initial render
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "ExploreDialectEditInternationalization" */ './internationalization').then(
-      (_module) => {
-        return _module.default
-      }
-    )
+    const copy = await import(
+      /* webpackChunkName: "ExploreDialectEditInternationalization" */ './internationalization'
+    ).then((_module) => {
+      return _module.default
+    })
     this.fetchData({ copy })
   }
 
@@ -287,7 +287,4 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExploreDialectEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreDialectEdit)

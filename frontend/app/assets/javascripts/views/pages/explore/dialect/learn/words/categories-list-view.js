@@ -230,7 +230,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WordsCategoriesListView)
+export default connect(mapStateToProps, mapDispatchToProps)(WordsCategoriesListView)

@@ -1,15 +1,9 @@
 import 'cypress-testing-library/add-commands'
 describe('AlphabetListView-Words.js > AlphabetListView', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-     */
-    cy.log('Forcing the test to fail until it is updated for dev.')
-    expect(true).to.equal(false)
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
 
-    cy.visit('/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words')
-
-    const letter = 'k̓'
+    const letter = 't'
     const unselectedColor = 'rgb(60, 52, 52)'
 
     // No message, button, or selected letters
@@ -62,23 +56,54 @@ describe('AlphabetListView-Words.js > AlphabetListView', () => {
   })
 
   it('Direct link: displays message, selected letter, & stop browsing buton', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-     */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     cy.log('Direct visit a url with a letter selected')
-    cy.visit('/explore/FV/sections/Data/Haisla/Haisla/Haisla/learn/words/alphabet/k%CC%93%C2%B0')
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/alphabet/t')
+    cy.wait(500)
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
     cy.getByText(/showing words that start with the letter/i).should('exist')
     cy.getByTestId('AlphabetListView').within(() => {
-      cy.getByText('k̓°')
+      cy.getByText('t')
         .should('have.css', 'color')
         .and('eq', 'rgb(130, 0, 0)')
     })
     cy.getByText(/stop browsing alphabetically/i).should('exist')
+  })
+
+  it('Clicking on a letter should filter out the words that start with that letter', () => {
+    // Visit words page
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
+
+    // Filter by the letter r
+    cy.wait(500)
+    cy.getByTestId('AlphabetListView').within(() => {
+      cy.getByText('r').click()
+    })
+    cy.wait(500)
+    // Check that only words starting with r are shown
+    cy.queryByText('Dog').should('not.exist')
+    cy.queryByText('Pig').should('not.exist')
+    cy.queryByText('Rabbit').should('exist')
+    cy.queryByText('Rat').should('exist')
+    cy.queryByText('Rooster').should('exist')
+    cy.queryByText('Snake').should('not.exist')
+
+    // Filter by the letter t
+    cy.getByTestId('AlphabetListView').within(() => {
+      cy.getByText('t').click()
+    })
+    cy.wait(500)
+    // Check that only words starting with t are shown
+    cy.queryByText('Dog').should('not.exist')
+    cy.queryByText('Rabbit').should('not.exist')
+    cy.queryByText('Tiger').should('exist')
+
+    // Stop filtering and check that different words are now shown
+    cy.getByText(/stop browsing alphabetically/i).click()
+    cy.queryByText('Dog').should('exist')
+    cy.queryByText('Pig').should('exist')
+    cy.queryByText('Rabbit').should('exist')
+    cy.queryByText('Rat').should('exist')
+    cy.queryByText('Rooster').should('exist')
   })
 })

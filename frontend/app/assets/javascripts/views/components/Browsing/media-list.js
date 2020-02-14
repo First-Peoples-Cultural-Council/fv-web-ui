@@ -117,7 +117,11 @@ export class MediaList extends Component {
     }
 
     return (
-      <div className="media-list" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+      <div
+        data-testid="MediaList"
+        className="media-list"
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}
+      >
         <GridList
           cols={UIHelpers.isViewSize('xs') ? 2 : this.props.cols}
           cellHeight={this.props.cellHeight}
@@ -143,7 +147,7 @@ export class MediaList extends Component {
 
             const href = NavigationHelpers.generateUIDPath(this.props.siteTheme, tile, 'media')
             return (
-              <GridListTile onClick={action.bind(this, tile)} key={tile.uid}>
+              <GridListTile onClick={action.bind(this, tile)} key={tile.uid} aria-label={tile.title}>
                 {this._getMediaPreview(tile)}
                 <GridListTileBar
                   title={
@@ -184,7 +188,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(MediaList)
+export default connect(null, mapDispatchToProps)(MediaList)

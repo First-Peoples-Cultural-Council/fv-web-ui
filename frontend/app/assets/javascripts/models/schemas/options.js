@@ -4,6 +4,7 @@ import t from 'tcomb-form'
 import classNames from 'classnames'
 
 import VirtualKeyboardFactory from 'views/components/Editor/fields/virtualKeyboard'
+import dataTestId from 'views/components/Editor/fields/dataTestId'
 
 import WysiwygFactory from 'views/components/Editor/fields/wysiwyg'
 import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
@@ -56,6 +57,23 @@ const FVPortalTemplate = function template(locals) {
 }
 
 const FVUserRegistrationTemplate = function template(locals) {
+  let selectedCommunityLanguageLabel = null
+
+  locals.onChange = new (function() {
+    const requestedSpaceElement = document.getElementById('registration-requested-space')
+
+    if (requestedSpaceElement !== null) {
+      const selectBox = requestedSpaceElement.getElementsByTagName('select')[0]
+
+      if (selectBox.selectedIndex !== 0) {
+        selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
+        document.getElementById('language_team_member_name').innerHTML = document.getElementById(
+          'community_member_name'
+        ).innerHTML = selectedCommunityLanguageLabel
+      }
+    }
+  })()
+
   return (
     <div>
       <fieldset>
@@ -64,8 +82,17 @@ const FVUserRegistrationTemplate = function template(locals) {
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:requestedSpace']}</div>
-        <div className="col-md-12">{locals.inputs['fvuserinfo:language_team_member']}</div>
+        <div className="col-md-6" id="registration-requested-space">
+          {locals.inputs['fvuserinfo:requestedSpace']}
+        </div>
+
+        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
+          {locals.inputs['fvuserinfo:community_member']}
+        </div>
+        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
+          {locals.inputs['fvuserinfo:language_team_member']}
+        </div>
+
         <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>
       </fieldset>
     </div>
@@ -173,6 +200,8 @@ t.String.getValidationErrorMessage = (value, path, context) => {
       case: 'first',
     })
   }
+
+  return ''
 }
 
 const FVMedia = {
@@ -251,7 +280,7 @@ const options = {
           fields: {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
-              factory: VirtualKeyboardFactory,
+              factory: dataTestId,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),
@@ -1214,8 +1243,19 @@ const options = {
         label: 'Other Comments',
         type: 'textarea',
       },
+      'fvuserinfo:community_member': {
+        label: (
+          <span>
+            I am a member of the <strong id="community_member_name" /> community.
+          </span>
+        ),
+      },
       'fvuserinfo:language_team_member': {
-        label: 'I am an authorized member of a FirstVoices language team',
+        label: (
+          <span>
+            I am an authorized member of the <strong id="language_team_member_name" /> language team
+          </span>
+        ),
       },
     },
     template: FVUserRegistrationTemplate,

@@ -5,19 +5,14 @@ import 'cypress-testing-library/add-commands'
 
 describe('PageDialectLearnAlphabet', () => {
   it('FW-333: Can\'t "Edit Character" from alphabet', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-    */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
+    // Login
+    cy.login({
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
 
-    // Login
-    cy.login({ url: 'https://dev.firstvoices.com/nuxeo/startup' })
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/alphabet/z/edit')
 
-    cy.visit('/explore/FV/Workspaces/Data/Cypress/Cypress/Cypress/learn/alphabet/FW-333/edit')
-
-    cy.wait(500)
+    cy.wait(3000)
 
     // deletes any pre-existing audio files
     cy.getByTestId('pageContainer').within(($el) => {
@@ -31,27 +26,31 @@ describe('PageDialectLearnAlphabet', () => {
         })
       }
     })
+    cy.wait(500)
+    cy.getByText('Related audio').within(() => {
+      cy.queryByText('Replace').should('not.exist')
+    })
 
-    cy.getByText('add audio', { exact: false }).click()
+    cy.getByText('+ Add audio', { exact: false }).click()
+    cy.wait(1000)
 
-    cy.getByText('add audio', { exact: false })
+    cy.getByText('+ Add audio', { exact: false })
       .parents('fieldset')
       .first()
       .within(() => {
-        cy.getByText('BROWSE EXISTING', { exact: false }).click()
+        cy.getByText('Browse Existing', { exact: false }).click()
       })
 
     cy.wait(500)
 
-    cy.getByText('Select existing audio', { exact: false })
-      .parent()
-      .within(() => {
-        cy.getByText('Audio 1', { exact: false }).click()
-      })
+    cy.get('.media-list').within(() => {
+      cy.getByText('Audio 1', { exact: false }).click()
+    })
 
     cy.getByText('save', { exact: false }).click()
 
-    cy.visit('/explore/FV/Workspaces/Data/Cypress/Cypress/Cypress/learn/alphabet/FW-333')
-    cy.getByText('audio 1', { exact: false }).should('exist')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/alphabet/z')
+    cy.wait(500)
+    cy.getByText('Audio 1', { exact: false }).should('exist')
   })
 })

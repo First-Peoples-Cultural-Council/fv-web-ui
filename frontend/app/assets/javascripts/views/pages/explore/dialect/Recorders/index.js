@@ -237,9 +237,7 @@ function Recorders(props) {
           // Pagination
           fetcher={(fetcherParams) => {
             setPaginationRequest(
-              `/${siteTheme}${dialect_path}/recorders/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${
-                window.location.search
-              }`
+              `/${siteTheme}${dialect_path}/recorders/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
             )
           }}
           fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
@@ -288,7 +286,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Recorders)
+export default connect(mapStateToProps, mapDispatchToProps)(Recorders)

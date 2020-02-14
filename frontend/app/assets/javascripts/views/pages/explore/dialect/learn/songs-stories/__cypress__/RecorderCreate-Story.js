@@ -10,6 +10,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Stories', { exact: true }).click()
@@ -115,6 +116,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                 Checking to see if the story now exists
              */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -125,8 +127,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
                     Test fonts.
                  */
     cy.get('div.CardViewCard').should('have.css', 'font-family', 'Arial, sans-serif')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as language member and check that the story is not visible.
@@ -135,9 +136,9 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.queryByText('TestStoryTitle').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as admin, check that the story is editable, and enable the story.
@@ -146,6 +147,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.queryByText('TestStoryTitle')
       .should('exist')
       .click()
@@ -159,6 +161,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     cy.getByText('Save', { exact: true }).click()
     cy.wait(500)
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTranslation').should('exist')
       cy.getByText('Continue to story').should('exist')
@@ -174,8 +177,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
           .click()
       })
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as language member and check that the story is now visible.
@@ -184,13 +186,13 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitleEdited').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
       cy.getByText('Continue to story').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as admin and publish the story.
@@ -199,6 +201,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
+    cy.wait(500)
     cy.queryByText('TestStoryTitleEdited')
       .should('exist')
       .click()

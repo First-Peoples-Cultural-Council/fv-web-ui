@@ -12,17 +12,20 @@ describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
       Database should be reset prior to test
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/words')
+    cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
       Going through the steps to create a word
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.wait(500)
     cy.getByText('Words', { exact: true }).click()
-    cy.wait(500)
+    cy.wait(1500)
     cy.getByText('Create New Word', { exact: true }).click()
+    cy.wait(3000)
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
     cy.getByTestId('fv-word-pronunciation').type('TestPronunciation')
@@ -96,6 +99,7 @@ describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
       Checking to see if the word now exists
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/words')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')

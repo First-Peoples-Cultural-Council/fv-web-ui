@@ -105,8 +105,8 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
         String finalPath = null;
 
         if (primary_dialect_short_url != null && !primary_dialect_short_url.isEmpty()) {
-            // Users who are global 'members' should just go to the Sections URL
-            if (currentUser.getGroups().contains("members")) {
+            // Users who are ONLY global 'members' should just go to the Sections URL
+            if (currentUser.getGroups().contains("members") && currentUser.getGroups().size() == 1) {
                 finalPath = fvContextPath + "/sections/" + primary_dialect_short_url;
             }
             // Other users can go to Workspaces

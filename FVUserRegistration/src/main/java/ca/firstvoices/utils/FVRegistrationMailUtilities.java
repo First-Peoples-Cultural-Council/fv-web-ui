@@ -1,27 +1,5 @@
 package ca.firstvoices.utils;
 
-import static ca.firstvoices.utils.FVRegistrationConstants.MID_REGISTRATION_PERIOD_ACT;
-import static ca.firstvoices.utils.FVRegistrationConstants.NEW_USER_SELF_REGISTRATION_ACT;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_DELETION_ACT;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXPIRATION_ACT;
-
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.security.auth.login.LoginException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,6 +12,24 @@ import org.nuxeo.ecm.platform.rendering.api.RenderingException;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.user.invite.RenderingHelper;
 import org.nuxeo.runtime.api.Framework;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.security.auth.login.LoginException;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static ca.firstvoices.utils.FVRegistrationConstants.*;
 
 public class FVRegistrationMailUtilities {
 
@@ -50,7 +46,7 @@ public class FVRegistrationMailUtilities {
      * @param content
      * @throws Exception
      */
-    private void generateMail(String destination, String copy, String title, String content) throws Exception {
+    private void generateMail(String destination, String copy, String title, String content, String BCC) throws Exception {
 
         InitialContext ic = new InitialContext();
         Session session = (Session) ic.lookup(getJavaMailJndiName());
@@ -60,7 +56,11 @@ public class FVRegistrationMailUtilities {
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destination, false));
 
         if (!StringUtils.isBlank(copy)) {
-            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(copy, false));
+            msg.addRecipients(Message.RecipientType.CC, InternetAddress.parse(copy, false));
+        }
+
+        if (!StringUtils.isBlank(BCC)) {
+            msg.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(BCC, false));
         }
 
         msg.setSubject(title, "UTF-8");
@@ -108,7 +108,25 @@ public class FVRegistrationMailUtilities {
 
         PrincipalHelper ph = new PrincipalHelper(umgr, permissionProvider);
         Set<String> result = ph.getEmailsForPermission(dialect, "Everything", false);
+        Set<String> super_admins = ph.getEmailsFromGroup(umgr.getAdministratorsGroups().get(0),false);
+
+        // Remove super admins from list of emails
+        result.removeAll(super_admins);
+
         return composeEmailString(result);
+    }
+
+    /**
+     * @return
+     */
+    public String getSuperAdministratorEmail() throws LoginException {
+        UserManager umgr = Framework.getService(UserManager.class);
+        PermissionProvider permissionProvider = Framework.getService(PermissionProvider.class);
+
+        PrincipalHelper ph = new PrincipalHelper(umgr, permissionProvider);
+        Set<String> super_admins = ph.getEmailsFromGroup(umgr.getAdministratorsGroups().get(0),false);
+
+        return composeEmailString(super_admins);
     }
 
     private interface EmailContentAssembler {
@@ -132,6 +150,12 @@ public class FVRegistrationMailUtilities {
             case NEW_USER_SELF_REGISTRATION_ACT:
                 title = "FirstVoices: New User Registration (action may be required)";
                 break;
+            case NEW_MEMBER_SELF_REGISTRATION_ACT:
+                title = options.get("fName") + " wants to join " + options.get("dialect") + " on FirstVoices";
+                break;
+            case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
+                title = options.get("fName") + " wants to join the " + options.get("dialect") + " language team on FirstVoices";
+                break;
             }
 
             return title;
@@ -150,6 +174,12 @@ public class FVRegistrationMailUtilities {
                 break;
             case NEW_USER_SELF_REGISTRATION_ACT:
                 bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewUserRegistered.ftl";
+                break;
+            case NEW_MEMBER_SELF_REGISTRATION_ACT:
+                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewMemberRegistered.ftl";
+                break;
+            case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
+                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewTeamMemberRegistered.ftl";
                 break;
             }
 
@@ -235,16 +265,24 @@ public class FVRegistrationMailUtilities {
      * @throws Exception
      */
     private void registrationMailSender(int variant, EmailContentAssembler prep, Map<String, String> options,
-            String toStr) throws Exception {
+            String toStr, String BCC) throws Exception {
         String title = prep.getEmailTitle(variant, options);
         String body = prep.getEmailBody(variant, options);
 
         try {
             if (title != null && body != null) {
                 if (!toStr.isEmpty()) {
-                    generateMail(toStr, "", title, body);
+
+                    // IF BCC equals toStr - a language admin does not exist, and we are sending directly to super admins.
+                    // Remove BCC, and mention something in the title
+                    if (BCC.equals(toStr)) {
+                        BCC = "";
+                        title = "[NO-LANG-ADMIN] " + title;
+                    }
+
+                    generateMail(toStr, "", title, body, BCC);
                 } else {
-                    generateMail(options.get("email"), "", title, body);
+                    generateMail(options.get("email"), "", title, body, BCC);
                 }
             }
         } catch (NamingException | MessagingException e) {
@@ -259,8 +297,8 @@ public class FVRegistrationMailUtilities {
      * @param toStr
      * @throws Exception
      */
-    public void registrationAdminMailSender(int variant, Map<String, String> options, String toStr) throws Exception {
-        registrationMailSender(variant, new AdminMailContent(), options, toStr);
+    public void registrationAdminMailSender(int variant, Map<String, String> options, String toStr, String BCC) throws Exception {
+        registrationMailSender(variant, new AdminMailContent(), options, toStr, BCC);
     }
 
     /**
@@ -288,7 +326,7 @@ public class FVRegistrationMailUtilities {
         options.put("comment", (String) registrationRequest.getPropertyValue("fvuserinfo:comment"));
         options.put("dialect", dialectTitle);
 
-        registrationMailSender(variant, new UserReminderMailContent(), options, "");
+        registrationMailSender(variant, new UserReminderMailContent(), options, "", "");
 
         // TODO Decide if we need to send reminders to admins
         // String toStr = getLanguageAdministratorEmail(dialect);

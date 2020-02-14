@@ -112,8 +112,9 @@ docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accep
 
 ### Method 2 (deploy a single module):
 
-* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it
-* Execute the following command to copy the JAR into the server, and restart the server:
+* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it with the command: ```mvn clean install```
+This will generate a jarfile for the module in the target directory (e.g. FirstVoicesSecurity/target/FirstVoicesSecurity-*.jar).
+* Execute the following command to copy the JAR into the running backend docker container, and restart the server to apply the changes:
 ```
 docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
 ```

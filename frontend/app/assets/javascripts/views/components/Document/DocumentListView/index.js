@@ -75,6 +75,8 @@ const DocumentListView = (props) => {
           hasSearch={props.hasSearch}
           hasViewModeButtons={props.hasViewModeButtons}
           rowClickHandler={props.rowClickHandler}
+          dictionaryListClickHandlerViewMode={props.dictionaryListClickHandlerViewMode}
+          dictionaryListViewMode={props.dictionaryListViewMode}
           dictionaryListSmallScreenTemplate={props.dictionaryListSmallScreenTemplate}
           // Listview: Batch
           batchConfirmationAction={props.batchConfirmationAction}
