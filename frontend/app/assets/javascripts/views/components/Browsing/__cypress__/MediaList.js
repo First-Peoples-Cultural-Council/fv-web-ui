@@ -8,6 +8,7 @@ function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonTex
 
       cy.getByText(browseButtonText, { exact: false }).click()
     })
+  cy.getByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter').within(() => {
     cy.getByText('Name/Description', { exact: false })
       .parent()

@@ -548,9 +548,9 @@ Cypress.Commands.add('formBrowseMediaSelectItem', ({
 
       cy.getByText(browseButtonText, { exact: false }).click()
     })
+  cy.getByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter')
     .within(() => {
-      cy.wait(500) // CI fails here, attempting to fix
       cy.getByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
       cy.getByText('Filter').click()
     })
