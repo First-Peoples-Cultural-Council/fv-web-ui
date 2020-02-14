@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       master
+    types: [opened, synchronize, reopened, edited, review_requested, review_request_removed]
   push:
     branches:
       master
@@ -30,7 +31,7 @@ jobs:
         uses: WyriHaximus/github-action-wait-for-status@0.1.0
         with:
           ignoreActions: Transition_DEV-IN-PROGRESS_to_DEV-DONE
-          checkInterval: 60
+          checkInterval: 30
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -50,7 +51,7 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
       # Filter pull request payloads down to just the pull request title
-      - name: Filter payload
+      - name: Get pull request title
         uses: Dovyski/payload-info-action@master
         id: pr-title
         with:
@@ -72,16 +73,45 @@ jobs:
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-      # Get the current code review status for pull request
-      - name: Check review status
-        uses: buildsville/review-summary@v1
-        id: review-summary
+      # Filter pull request payloads down to just the pull request title
+      - name: Get pull request number
+        uses: Dovyski/payload-info-action@master
+        id: pr-number
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          filter_pull_request: '.pull_request.number'
+
+      # Filter pull request payloads down to just the pull request title
+      - name: Get pull request repo url and owner
+        uses: Dovyski/payload-info-action@master
+        id: repo-url
+        with:
+          filter_pull_request: '.repository.full_name'
+
+      # Check that all reviews have been approved.
+      - name: Check for approved reviews
+        id: reviews-approved-check
+        run: |
+          CHECK=$(./scripts/ci/checkReviewStatus.sh ${{ steps.pr-number.outputs.value }} ${{ steps.repo-url.outputs.value }})
+          echo $CHECK
+          echo "::set-output name=value::$CHECK"
+
+      - name: Print useful info gathered by workflow
+        run: |
+          echo ""
+          echo "Issue key check: ${{ steps.issue-key-check.outputs.value }}"
+          echo ""
+          echo "Build/Test checks status: ${{ steps.status-checks.outputs.status }}"
+          echo ""
+          echo "Pull request number: ${{ steps.pr-number.outputs.value }}"
+          echo ""
+          echo "Repo URL: ${{ steps.repo-url.outputs.value }}"
+          echo ""
+          echo "Review status: ${{ steps.reviews-approved-check.outputs.value }}"
+          echo ""
 
       # If the checks have passed, and there are no pending reviews or changes requested then transition the issue to dev done
       - name: Transistion issue(s) to "DEV DONE"
-        if: steps.issue-key-check.outputs.value == 'true' && steps.status-checks.outputs.status == 'success' && steps.review-summary.outputs.pending == 0 && steps.review-summary.outputs.changes_requested == 0
+        if: steps.issue-key-check.outputs.value == 'Issue key found and exists on Jira.' && steps.status-checks.outputs.status == 'success' && steps.reviews-approved-check.outputs.value == 'All reviews approved (or no reviews requested).'
         run: |
           ./scripts/ci/Transition-DevInProgress-DevDone.sh ${{ steps.pr-title.outputs.value }}
         env:

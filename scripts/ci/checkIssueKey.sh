@@ -47,11 +47,11 @@ done
 
 # If all issue keys found are also on Jira and at least one issue key is found then return true otherwise output an error.
 if [[ $RETURNVALUE == "true" && $NUMISSUES != 0 && $MISSINGISSUECOUNT == 0 ]]; then
-    echo "true"
+    echo "Issue key found and exists on Jira."
 elif [ $NUMISSUES == 0 ]; then
     echo "No issue key matching the pattern FW-XXXXX could be found in the commit messages or pull request title."
 elif [ $MISSINGISSUECOUNT > 0 ]; then
-    echo "Error: " $MISSINGISSUECOUNT " of the matching issue keys in the commit messages could not be found on Jira."
+    echo "Error: " $MISSINGISSUECOUNT " of the matching issue keys in the commit messages or pull request title could not be found on Jira."
 else
     echo "false"
 fi
