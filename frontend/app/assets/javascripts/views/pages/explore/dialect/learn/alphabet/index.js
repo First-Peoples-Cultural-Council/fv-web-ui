@@ -266,7 +266,13 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                       this,
                       this.state.current_char.path.split('/')[this.state.current_char.path.split('/').length - 1]
                     )}
-                    style={{ minWidth: 'inherit', textTransform: 'initial', margin: '10px 0' }}
+                    style={{
+                      minWidth: 'inherit',
+                      textTransform: 'initial',
+                      margin: '10px 0',
+                      fontFamily:
+                        '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
+                    }}
                   >
                     {'View Words and Phrases that start with ' + this.state.current_char.title}
                   </FVButton>

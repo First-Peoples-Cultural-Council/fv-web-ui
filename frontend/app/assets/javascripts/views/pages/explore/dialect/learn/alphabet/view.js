@@ -219,6 +219,10 @@ export class AlphabetView extends Component {
             <div>
               <Card>
                 <FVTab
+                  tabsStyle={{
+                    fontFamily:
+                      '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
+                  }}
                   tabItems={[
                     { label: intl.trans('definition', 'Definition', 'first') },
                     {
@@ -253,7 +257,7 @@ export class AlphabetView extends Component {
                   <Typography component="div" style={{ padding: 8 * 3 }}>
                     <div>
                       <CardContent>
-                        <div className="col-xs-8">
+                        <div className="col-xs-8 fontAboriginalSans">
                           <h2>{selectn('response.title', computeCharacter)}</h2>
 
                           <div className="row">
@@ -283,7 +287,7 @@ export class AlphabetView extends Component {
                 {/* TAB: WORDS */}
                 {this.state.tabValue === 1 && (
                   <Typography component="div" style={{ padding: 8 * 3 }}>
-                    <div>
+                    <div className="fontAboriginalSans">
                       <CardContent>
                         <h2>
                           {intl.trans(
@@ -307,7 +311,7 @@ export class AlphabetView extends Component {
 
                 {this.state.tabValue === 2 && (
                   <Typography component="div" style={{ padding: 8 * 3 }}>
-                    <div>
+                    <div className="fontAboriginalSans">
                       <CardContent>
                         <h2>
                           {intl.trans(
