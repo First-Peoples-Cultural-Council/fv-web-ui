@@ -31,6 +31,7 @@
     "test:e2e": "start-server-and-test startPreprod http://127.0.0.1:3001 cy:open",
     "test:e2e:local": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:open",
     "test:e2e:local:headless": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run",
+    "test:e2e:local:headless:debug": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:debug",
     "test:e2e:ci:schedule": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:schedule",
     "test:e2e:ci:pr": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:pr",
     "test:watch": "jest --watch",
