@@ -4,7 +4,7 @@ import SearchDocumentTypesTemplate from 'views/components/SearchDocumentTypesTem
 
 import RangeSelector from 'views/components/Editor/fields/range'
 // import SelectFactory from 'views/components/Editor/fields/select'
-
+import dataTestId from 'views/components/Editor/fields/dataTestId'
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'views/services/intl'
 
@@ -28,6 +28,7 @@ const ResourcesFields = {
         case: 'words',
       }),
       nxql: " (dc:title ILIKE '%${value}%' OR dc:description ILIKE '%${value}%')",
+      factory: dataTestId,
     },
     'properties.type': {
       label: intl.translate({

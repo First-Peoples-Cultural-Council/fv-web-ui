@@ -106,6 +106,7 @@ class SharedResourceGridTile extends Component {
         onClick={this.props.action ? this.props.action.bind(this, this.props.tile) : null}
         key={selectn('uid', tile)}
         style={{ height: '154px', width: '20%', padding: '2px' }}
+        aria-label={tile.title}
       >
         {this.props.preview}
         <GridListTileBar
@@ -164,10 +165,6 @@ class SelectMediaComponent extends Component {
     ;['_handleOpen', '_handleClose', '_handleSelectElement', 'fetchData'].forEach(
       (method) => (this[method] = this[method].bind(this))
     )
-  }
-
-  componentDidMount() {
-    this.fetchData(this.state.fetcherParams)
   }
 
   render() {
@@ -235,6 +232,7 @@ class SelectMediaComponent extends Component {
               {/* <LinearProgress variant="indeterminate" /> */}
             </div>
             <FilteredPaginatedMediaList
+              isFetching={selectn('isFetching', computeResources)}
               action={this._handleSelectElement}
               cols={5}
               cellHeight={150}
@@ -252,7 +250,12 @@ class SelectMediaComponent extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this._handleClose}>
+            <FVButton
+              data-testid="Dialog__SelectMediaComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this._handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
@@ -304,7 +307,8 @@ class SelectMediaComponent extends Component {
     this.setState({ open: false })
   }
 
-  _handleOpen() {
+  async _handleOpen() {
+    await this.fetchData(this.state.fetcherParams)
     this.setState({ open: true })
   }
 
@@ -340,7 +344,4 @@ const mapDispatchToProps = {
   fetchSharedVideos,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectMediaComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(SelectMediaComponent)

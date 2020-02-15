@@ -225,15 +225,20 @@ export class BrowseComponent extends Component {
         {/* Dialog */}
         <Dialog actions={actions} fullWidth maxWidth="md" open={this.state.open}>
           <DialogTitle>{title}</DialogTitle>
-          <DialogContent>
+          <DialogContent data-testid="BrowseComponent__dialogContent">
             {(() => {
               if (dialectPath) {
                 return view
               }
             })()}
           </DialogContent>
-          <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this._handleClose}>
+          <DialogActions data-testid="BrowseComponent__dialogActions">
+            <FVButton
+              data-testid="Dialog__BrowseComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this._handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
