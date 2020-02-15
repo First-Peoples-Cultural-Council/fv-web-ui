@@ -30,7 +30,7 @@ import {
 } from 'providers/redux/reducers/tasks'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchUserDialects } from 'providers/redux/reducers/fvUser'
-
+import Link from 'views/components/Link'
 import selectn from 'selectn'
 import FVButton from 'views/components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
@@ -223,10 +223,10 @@ export class Tasks extends Component {
     return computeUserDialectsResponseEntries.map((dialect, i) => {
       return (
         <li key={i}>
-          <a href={`/tasks/users/${selectn('uid', dialect)}`}>
+          <Link href={`/tasks/users/${selectn('uid', dialect)}`}>
             Click here to view user registration requests to join{' '}
             <strong>{selectn('properties.dc:title', dialect)}</strong>
-          </a>
+          </Link>
         </li>
       )
     })
