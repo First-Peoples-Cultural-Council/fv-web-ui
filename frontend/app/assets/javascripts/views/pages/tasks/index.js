@@ -180,7 +180,7 @@ export class Tasks extends Component {
                         {templateData.taskName}
                         {templateData.dueDate}
                       </div>
-                      {templateData.actions}
+                      {templateData.taskActions}
                     </span>
                   )
                 }}
