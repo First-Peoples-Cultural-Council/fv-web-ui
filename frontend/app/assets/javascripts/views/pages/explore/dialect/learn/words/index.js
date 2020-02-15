@@ -21,7 +21,9 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
+// import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
+import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
@@ -63,6 +65,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     fetchCategories: func.isRequired,
+    // fetchDialect2: func.isRequired,
     fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
@@ -74,18 +77,58 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   static defaultProps = {
     searchDialectUpdate: () => {},
   }
+  async componentDidMountViaPageDialectLearnBase() {
+    const { routeParams } = this.props
 
-  componentDidMountViaPageDialectLearnBase() {
-    // const category = selectn('routeParams.category', this.props)
-    // if (category) {
-    //   this.setState({
-    //     selectedCategory: category,
-    //   })
-    // }
-    const letter = selectn('routeParams.letter', this.props)
-    if (letter) {
-      this.handleAlphabetClick(letter)
+    // Portal
+    ProviderHelpers.fetchIfMissing(
+      routeParams.dialect_path + '/Portal',
+      this.props.fetchPortal,
+      this.props.computePortal
+    )
+    // Document
+    ProviderHelpers.fetchIfMissing(
+      routeParams.dialect_path + '/Dictionary',
+      this.props.fetchDocument,
+      this.props.computeDocument
+    )
+
+    // Category
+    let categories = this.getCategories()
+    if (categories === undefined) {
+      await this.props.fetchCategories(
+        '/api/v1/path/FV/' + routeParams.area + '/SharedData/Shared Categories/@children'
+      )
+      categories = this.getCategories()
     }
+
+    // Alphabet
+    // ---------------------------------------------
+    let characters = this.getCharacters()
+
+    if (characters === undefined) {
+      const _pageIndex = 0
+      const _pageSize = 100
+
+      await this.props.fetchCharacters(
+        `${routeParams.dialect_path}/Alphabet`,
+        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
+      )
+      characters = this.getCharacters()
+    }
+
+    this.setState(
+      {
+        characters,
+        categories,
+      },
+      () => {
+        const letter = selectn('routeParams.letter', this.props)
+        if (letter) {
+          this.handleAlphabetClick(letter)
+        }
+      }
+    )
   }
 
   DIALECT_FILTER_TYPE = 'words'
@@ -125,7 +168,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       isKidsTheme: props.routeParams.siteTheme === 'kids',
     }
 
-    // Bind methods to 'this'
+    // NOTE: Removing the following `this` binding can create subtle and hard to detect bugs
+    // For example: After filtering by category, clicking through to an item detail triggers an error
+    // due to `handleDialectFilterList` not being able to access `this.state.filterInfo`
     ;[
       '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
       '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
@@ -148,18 +193,12 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const computePortal = ProviderHelpers.getEntry(this.props.computePortal, `${routeParams.dialect_path}/Portal`)
 
-    const computeCategories = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
-    )
-    const computeCategoriesSize = selectn('response.entries.length', computeCategories) || 0
-
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
       ''} ${intl.trans('words', 'Words', 'first')}`
 
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // via base > pulled from routeParams
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <WordListView
@@ -229,6 +268,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
 
     const dialectClassName = getDialectClassname(computePortal)
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper')}>
@@ -252,8 +292,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                   if (url) {
                     NavigationHelpers.navigate(`/${url}`, this.props.pushWindowPath, false)
                   } else {
-                    // fallback, fn() from PageDialectLearnBase
-                    this._onNavigateRequest('create')
+                    this._onNavigateRequest('create') // NOTE: This function is in PageDialectLearnBase
                   }
                 }}
                 className="PrintHide buttonRaised"
@@ -264,37 +303,32 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           </div>
         </div>
         <div className="row">
-          <div
-            className={classNames('col-xs-12', 'col-md-3', computeCategoriesSize === 0 ? 'hidden' : null, 'PrintHide')}
-          >
-            <div>
-              <AlphabetListView
-                dialect={selectn('response', computePortal)}
-                handleClick={this.handleAlphabetClick}
-                letter={selectn('routeParams.letter', this.props)}
-              />
+          <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
+            <AlphabetListView
+              characters={this.state.characters}
+              dialectClassName={dialectClassName}
+              handleClick={this.handleAlphabetClick}
+              letter={selectn('routeParams.letter', this.props)}
+            />
 
-              <DialectFilterList
-                type={this.DIALECT_FILTER_TYPE}
-                title={intl.trans(
-                  'views.pages.explore.dialect.learn.words.browse_by_category',
-                  'Browse Categories',
-                  'words'
-                )}
-                appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                  'fv-word:categories',
-                  this.props.routeParams.area
-                )}
-                handleDialectFilterClick={this.handleCategoryClick}
-                handleDialectFilterList={this.handleDialectFilterList} // NOTE: Comes from PageDialectLearnBase
-                facets={selectn('response.entries', computeCategories) || []}
-                clearDialectFilter={this.clearDialectFilter}
-                routeParams={this.props.routeParams}
-              />
-            </div>
+            <DialectFilterList
+              type={this.DIALECT_FILTER_TYPE}
+              title={intl.trans(
+                'views.pages.explore.dialect.learn.words.browse_by_category',
+                'Browse Categories',
+                'words'
+              )}
+              filterInfo={filterInfo}
+              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
+              handleDialectFilterClick={this.handleCategoryClick}
+              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              facets={this.state.categories}
+              clearDialectFilter={this.clearDialectFilter}
+              routeParams={this.props.routeParams}
+            />
           </div>
-          <div className={classNames('col-xs-12', computeCategoriesSize === 0 ? 'col-md-12' : 'col-md-9')}>
+          <div className={classNames('col-xs-12', 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
             <div className={dialectClassName}>{wordListView}</div>
           </div>
@@ -354,7 +388,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         //
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
-        this._resetURLPagination({ preserveSearch: true })
+        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
 
         // See about updating url
         if (href && updateUrl) {
@@ -369,11 +403,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   }
 
   // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-    newProps.fetchCategories('/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children')
-  }
+  // NOTE: Providing an empty fn() so that PageDialectLearnBase doesn't complain.
+  fetchData() {}
 
   // NOTE: PageDialectLearnBase calls `_getPageKey`
   _getPageKey = () => {
@@ -412,7 +443,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     this.changeFilter({ href, updateHistory })
 
-    this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE)
+    this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE) // NOTE: This function is in PageDialectLearnBase
   }
 
   handleSearch = () => {
@@ -438,6 +469,23 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     })
   }
 
+  getCharacters = () => {
+    const { routeParams } = this.props
+    const computedCharacters = ProviderHelpers.getEntry(
+      this.props.computeCharacters,
+      `${routeParams.dialect_path}/Alphabet`
+    )
+    return selectn('response.entries', computedCharacters)
+  }
+  getCategories = () => {
+    const { routeParams } = this.props
+    const computeCategories = ProviderHelpers.getEntry(
+      this.props.computeCategories,
+      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
+    )
+    return selectn('response.entries', computeCategories)
+  }
+
   resetSearch = () => {
     let newFilter = this.state.filterInfo
     // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
@@ -460,7 +508,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       () => {
         // When facets change, pagination should be reset.
         // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination()
+        this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
 
         // Remove alphabet/category filter urls
         if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
@@ -481,9 +529,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvCharacter, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeCategories } = fvCategory
+  const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
   const { computePortal } = fvPortal
@@ -492,6 +541,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { splitWindowPath, _windowPath } = windowPath
   return {
     computeCategories,
+    computeCharacters,
     computeDocument,
     computeLogin,
     computePortal,
@@ -506,6 +556,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
+  // fetchDialect2,
+  fetchCharacters,
   fetchDocument,
   fetchPortal,
   overrideBreadcrumbs,

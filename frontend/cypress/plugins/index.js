@@ -11,15 +11,18 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-module.exports = (on, config) => {
+module.exports = (on/*, config*/) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  on('before:browser:launch', (browser = {}, args) => {
+
+  // https://docs.cypress.io/guides/references/migration-guide.html#Plugin-Event-before-browser-launch
+  on('before:browser:launch', (browser = {}, launchOptions) => {
+    launchOptions.args.push('--another-arg')
     if (browser.name === 'chrome') {
-      args.push('--disable-site-isolation-trials')
+      launchOptions.args.push('--disable-site-isolation-trials')
 
       // whatever you return here becomes the new args
-      return args
+      return launchOptions
     }
   })
 }

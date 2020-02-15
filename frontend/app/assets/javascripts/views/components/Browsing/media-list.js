@@ -31,7 +31,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 const defaultStyle = { width: '100%', overflowY: 'auto', marginBottom: 24 }
 
-const { array, func, instanceOf, number, object, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 export class MediaList extends Component {
   static propTypes = {
     action: func,
@@ -40,6 +40,7 @@ export class MediaList extends Component {
     filteredItems: oneOfType([array, instanceOf(List)]),
     gridListTile: func,
     items: oneOfType([array, instanceOf(List)]),
+    isFetching: bool,
     style: object,
     siteTheme: string,
     type: string,
@@ -52,6 +53,7 @@ export class MediaList extends Component {
     cols: 3,
     cellHeight: 210,
     style: null,
+    isFetching: false,
   }
 
   constructor(props, context) {
@@ -116,8 +118,15 @@ export class MediaList extends Component {
       action = () => {}
     }
 
+    if (this.props.isFetching === true) {
+      return <div className="media-list" />
+    }
     return (
-      <div className="media-list" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+      <div
+        data-testid="MediaList"
+        className="media-list"
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}
+      >
         <GridList
           cols={UIHelpers.isViewSize('xs') ? 2 : this.props.cols}
           cellHeight={this.props.cellHeight}
@@ -143,7 +152,7 @@ export class MediaList extends Component {
 
             const href = NavigationHelpers.generateUIDPath(this.props.siteTheme, tile, 'media')
             return (
-              <GridListTile onClick={action.bind(this, tile)} key={tile.uid}>
+              <GridListTile onClick={action.bind(this, tile)} key={tile.uid} aria-label={tile.title}>
                 {this._getMediaPreview(tile)}
                 <GridListTileBar
                   title={
@@ -184,7 +193,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(MediaList)
+export default connect(null, mapDispatchToProps)(MediaList)

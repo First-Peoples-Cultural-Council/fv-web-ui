@@ -28,7 +28,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-
+import Link from 'views/components/Link'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import FVButton from 'views/components/FVButton'
@@ -227,8 +227,8 @@ export class Register extends Component {
                   us for support.
                 </p>
                 <p>
-                  Go to our <a href="/">home page</a> or{' '}
-                  <a href="/explore/FV/sections/Data/">explore our community portals</a>.
+                  Go to our <Link href="/">home page</Link> or{' '}
+                  <Link href="/explore/FV/sections/Data/">explore our community portals</Link>.
                 </p>
               </div>
             </div>
@@ -247,8 +247,8 @@ export class Register extends Component {
             <div>
               <h2>Are you a member of a language community?</h2>
               <p>
-                Most content is available <a href="/explore/FV/sections/Data">here</a> for everyone to access without
-                registration.
+                Most content is available <Link href="/explore/FV/sections/Data">here</Link> for everyone to access
+                without registration.
               </p>
               <p>
                 If you are a member of a language community that is represented on FirstVoices, please register in order
