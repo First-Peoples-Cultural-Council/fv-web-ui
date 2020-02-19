@@ -549,7 +549,8 @@ Cypress.Commands.add('formBrowseMediaSelectItem', ({
 
       cy.getByText(browseButtonText, { exact: false }).click()
     })
-  cy.getByText('select existing', { exact: false }).should('exist')
+  cy.wait(1000)
+  cy.queryByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter')
     .within(() => {
       cy.getByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
@@ -650,4 +651,19 @@ Cypress.Commands.add('formPopulateCulturalNotes', ({prefix}) => {
         .invoke('val')
         .should('be.eq', `${prefix} cultural note 1`)
     })
+})
+
+Cypress.Commands.add('clickandwait', {
+  prevSubject: true,
+}, (subject, amount) => {
+  cy.wrap(subject).click()
+  if (RegExp('[0-9]{1,4}').test(amount)) {
+    cy.wait(amount)
+  } else if (amount === 'long') {
+    cy.wait(2000)
+  } else if (amount === 'medium') {
+    cy.wait(1000)
+  } else {
+    cy.wait(500)
+  }
 })
