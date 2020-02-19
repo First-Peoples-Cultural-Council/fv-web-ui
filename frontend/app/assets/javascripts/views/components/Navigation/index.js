@@ -55,7 +55,7 @@ import Settings from '@material-ui/icons/Settings'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import Login from 'views/components/Navigation/Login'
 import AppLeftNav from 'views/components/Navigation/AppLeftNav/index.v2'
-
+import Link from 'views/components/Link'
 import IntlService from 'views/services/intl'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -200,21 +200,14 @@ export class Navigation extends Component {
           <AppLeftNav menu={{ main: true }} open={false} docked={false} />
 
           {/* Logo */}
-          <a href="/home">
+          <Link href="/home">
             <img className="Navigation__logo" src="assets/images/logo.png" alt={this.props.properties.title} />
-          </a>
+          </Link>
 
           <div className="Navigation__toolbarMainInner">
-            <a
-              href={hrefPath}
-              className={`${appBar} Navigation__link hideSmall`}
-              onClick={(e) => {
-                e.preventDefault()
-                NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-              }}
-            >
+            <Link href={hrefPath} className={`${appBar} Navigation__link hideSmall`}>
               {this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'upper' })}
-            </a>
+            </Link>
 
             <Login
               routeParams={this.props.routeParams}
@@ -234,9 +227,9 @@ export class Navigation extends Component {
               routeParams={this.props.routeParams}
               containerStyle={{ display: 'inline' }}
             >
-              <a href={NavigationHelpers.generateStaticURL('/tasks')} className={`${appBar} Navigation__link`}>
+              <Link href={NavigationHelpers.generateStaticURL('/tasks')} className={`${appBar} Navigation__link`}>
                 View My Tasks
-              </a>
+              </Link>
             </AuthenticationFilter>
             <div className="Navigation__separator" />
 
@@ -404,19 +397,15 @@ export class Navigation extends Component {
         {isDialect && (
           <div className={`row Navigation__dialectContainer ${dialectContainer}`}>
             <h2 className="Navigation__dialectHeader">
-              <a
+              <Link
                 href={NavigationHelpers.generateStaticURL(dialectLink)}
                 className={`${dialectContainer} Navigation__dialectLink`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  NavigationHelpers.navigate(dialectLink, this.props.pushWindowPath, false)
-                }}
               >
                 <Avatar src={avatarSrc} size={50} />
                 <span className="Navigation__dialectName fontAboriginalSans">
                   {this.intl.searchAndReplace(portalTitle)}
                 </span>
-              </a>
+              </Link>
             </h2>
           </div>
         )}

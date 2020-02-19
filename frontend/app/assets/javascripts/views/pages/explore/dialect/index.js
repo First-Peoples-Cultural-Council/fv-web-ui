@@ -88,31 +88,27 @@ export class ExploreDialect extends Component {
 
   constructor(props, context) {
     super(props, context)
-
-    // Bind methods to 'this'
-    ;[
-      '_onNavigateRequest',
-      '_onSwitchAreaRequest',
-      '_enableToggleAction',
-      '_publishToggleAction',
-      '_publishChangesAction',
-      '_handleGalleryDropDownChange',
-      '_handleSelectionChange',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   fetchData(newProps) {
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
-    newProps.fetchPortal(
-      newProps.routeParams.dialect_path + '/Portal',
-      intl.trans('views.pages.explore.dialect.fetching_community_portal', 'Fetching community portal.', 'first'),
-      null,
-      intl.trans(
-        'views.pages.explore.dialect.problem_fetching_portal',
-        'Problem fetching community portal it may be unpublished or offline.',
-        'first'
+
+    // NOTE: this is functionally similar to `ProviderHelpers.fetchIfMissing`
+    // fetchIfMissing` doesn't support passing in other params
+    // to be used with the `action` function
+    const path = newProps.routeParams.dialect_path + '/Portal'
+    if (!selectn('success', ProviderHelpers.getEntry(this.props.computePortal, path))) {
+      newProps.fetchPortal(
+        path,
+        intl.trans('views.pages.explore.dialect.fetching_community_portal', 'Fetching community portal.', 'first'),
+        null,
+        intl.trans(
+          'views.pages.explore.dialect.problem_fetching_portal',
+          'Problem fetching community portal it may be unpublished or offline.',
+          'first'
+        )
       )
-    )
+    }
   }
 
   // Fetch data on initial render
@@ -134,19 +130,19 @@ export class ExploreDialect extends Component {
     }
   }
 
-  _onNavigateRequest(path, e) {
+  _onNavigateRequest = (path, e) => {
     this.props.pushWindowPath(path)
     e.preventDefault()
   }
 
-  _onSwitchAreaRequest(e, index, value) {
+  _onSwitchAreaRequest = (e, index, value) => {
     this._onNavigateRequest(this.props.windowPath.replace(value === SECTIONS ? WORKSPACES : SECTIONS, value))
   }
 
   /**
    * Toggle dialect (enabled/disabled)
    */
-  _enableToggleAction(toggled) {
+  _enableToggleAction = (toggled) => {
     if (toggled) {
       this.props.enableDialect(
         this.props.routeParams.dialect_path,
@@ -167,7 +163,7 @@ export class ExploreDialect extends Component {
   /**
    * Toggle published dialect
    */
-  _publishChangesAction() {
+  _publishChangesAction = () => {
     this.props.publishPortal(
       this.props.routeParams.dialect_path + '/Portal',
       null,
@@ -192,7 +188,7 @@ export class ExploreDialect extends Component {
   /**
    * Toggle published dialect
    */
-  _publishToggleAction(toggled) {
+  _publishToggleAction = (toggled) => {
     if (toggled) {
       this.props.publishDialect(
         this.props.routeParams.dialect_path,
@@ -224,14 +220,14 @@ export class ExploreDialect extends Component {
     }
   }
 
-  _handleGalleryDropDownChange(event, key, payload) {
+  _handleGalleryDropDownChange = (event, key, payload) => {
     //console.log(payload);
     if (payload !== 'dropDownLabel') {
       this.props.pushWindowPath(payload)
     }
   }
 
-  _handleSelectionChange(itemId, item) {
+  _handleSelectionChange = (itemId, item) => {
     NavigationHelpers.navigate(
       NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('properties', item), 'words'),
       this.props.pushWindowPath,
@@ -628,7 +624,4 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExploreDialect)
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreDialect)

@@ -86,7 +86,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     form: true, // we are submitting a regular form body
     body,
   })
-  cy.wait(1000)
+  cy.wait(2000)
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
 
@@ -95,7 +95,8 @@ Cypress.Commands.add('logout', () => {
   cy.log('--- LOGGING OUT ---')
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
   cy.visit('')
-  cy.wait(1000)
+  cy.wait(2000)
+  cy.log('--- SHOULD BE LOGGED OUT ---')
 })
 
 
@@ -548,11 +549,10 @@ Cypress.Commands.add('formBrowseMediaSelectItem', ({
 
       cy.getByText(browseButtonText, { exact: false }).click()
     })
+  cy.getByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter')
     .within(() => {
-      cy.getByText('Name/Description', {exact: false}).parent().within(()=>{
-        cy.get('input[type=text]').type(mediaTitle)
-      })
+      cy.getByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
       cy.getByText('Filter').click()
     })
   cy.wait(500)

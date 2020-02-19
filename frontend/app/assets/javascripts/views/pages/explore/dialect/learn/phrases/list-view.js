@@ -41,6 +41,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
+import Link from 'views/components/Link'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -127,7 +128,6 @@ export class PhrasesListView extends DataListView {
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data) => {
             const href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
-            const clickHandler = props.disableClickItem ? NavigationHelpers.disable : null
 
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
@@ -166,9 +166,9 @@ export class PhrasesListView extends DataListView {
               ) : null
             return (
               <>
-                <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
+                <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
                   {v}
-                </a>
+                </Link>
                 {editButton}
               </>
             )
