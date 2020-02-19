@@ -197,14 +197,8 @@ export default class PageDialectLearnBase extends Component {
     }
 
     if (selected) {
-      const { checkedFacetUid: selectedCheckedFacetUid /*, childrenIds: selectedChildrenIds */ } = selected
-      // const selectedChildrenIdsList = new Set(selectedChildrenIds)
+      const { checkedFacetUid: selectedCheckedFacetUid } = selected
       newList = newList.add(selectedCheckedFacetUid)
-
-      // Note: This is now handled by the operation("Document.EnrichedQuery") and enrichment=category_children - on back-end
-      // if (selectedChildrenIdsList.size > 0) {
-      //   newList = newList.merge(selectedChildrenIdsList)
-      // }
     }
 
     // Category filter

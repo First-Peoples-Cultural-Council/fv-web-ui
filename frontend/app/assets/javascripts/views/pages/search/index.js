@@ -36,7 +36,7 @@ import options from 'models/schemas/filter-options'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-
+import Link from 'views/components/Link'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import FormHelpers from 'common/FormHelpers'
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
@@ -565,9 +565,9 @@ export class Search extends DataListView {
                                   ) : null
                                 return (
                                   <>
-                                    <a className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
+                                    <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
                                       {alternateContent || v}
-                                    </a>
+                                    </Link>
                                     {editButton}
                                   </>
                                 )

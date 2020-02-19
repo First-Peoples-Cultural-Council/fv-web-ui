@@ -167,6 +167,13 @@ export const execute = (key, operationName, properties = {}) => {
 
 /*
  * fetch
+ *
+ * Initial call:
+ *  fetch(key, type, properties)
+ *
+ * Subsequent calls:
+ *  fetch(pathOrId, messageStart, messageSuccess, messageError, propertiesOverride)
+ *
  * --------------------------------------
  */
 export const fetch = (key, type, properties = {}) => {

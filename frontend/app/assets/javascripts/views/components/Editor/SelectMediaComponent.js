@@ -167,10 +167,6 @@ class SelectMediaComponent extends Component {
     )
   }
 
-  componentDidMount() {
-    this.fetchData(this.state.fetcherParams)
-  }
-
   render() {
     let fileTypeLabel = intl.trans('file', 'file', 'lower')
     // let fileTypeCellHeight = 210
@@ -236,6 +232,7 @@ class SelectMediaComponent extends Component {
               {/* <LinearProgress variant="indeterminate" /> */}
             </div>
             <FilteredPaginatedMediaList
+              isFetching={selectn('isFetching', computeResources)}
               action={this._handleSelectElement}
               cols={5}
               cellHeight={150}
@@ -253,7 +250,12 @@ class SelectMediaComponent extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this._handleClose}>
+            <FVButton
+              data-testid="Dialog__SelectMediaComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this._handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
@@ -305,7 +307,8 @@ class SelectMediaComponent extends Component {
     this.setState({ open: false })
   }
 
-  _handleOpen() {
+  async _handleOpen() {
+    await this.fetchData(this.state.fetcherParams)
     this.setState({ open: true })
   }
 

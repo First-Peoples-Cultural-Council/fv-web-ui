@@ -41,7 +41,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('New').should('exist')
       cy.getByText('TestTranslation').should('exist')
-      cy.getByText('TestWord').should('exist')
+      cy.queryByText('TestWord').should('exist')
       cy.getByText('TestWord').click()
     })
 
@@ -49,8 +49,8 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
             Check for edit word button and then enable the word.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(800)
-    cy.getByText('TestWord').click()
+    cy.wait(1500)
+    cy.queryByText('TestWord').click()
     cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
     cy.get('div.hidden-xs').within(() => {
@@ -87,7 +87,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(800)
+    cy.wait(1500)
     cy.getByText('TestWord', { exact: true }).click()
     cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
@@ -108,17 +108,17 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.wait(1000)
+    cy.wait(1500)
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')
       .and('eq', 'rgb(58, 104, 128)')
-    cy.getByText('TestWord').should('exist')
-    cy.getByText('TestTranslation').should('exist')
-    cy.getByText('TestCulturalNote').should('exist')
-    cy.getByText('TestLiteralTranslation').should('exist')
-    cy.getByText('TestPronunciation').should('exist')
-    cy.getByText('TestWordImage').should('exist')
-    cy.getByText('TestWordVideo').should('exist')
-    cy.getByText('TestAcknowledgement').should('exist')
+    cy.queryByText('TestWord').should('exist')
+    cy.queryByText('TestTranslation').should('exist')
+    cy.queryByText('TestCulturalNote').should('exist')
+    cy.queryByText('TestLiteralTranslation').should('exist')
+    cy.queryByText('TestPronunciation').should('exist')
+    cy.queryByText('TestWordImage').should('exist')
+    cy.queryByText('TestWordVideo').should('exist')
+    cy.queryByText('TestAcknowledgement').should('exist')
   })
 })
