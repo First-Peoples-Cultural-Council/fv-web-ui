@@ -106,7 +106,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Checking to see if the word now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -118,7 +118,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
             Make sure that the enabled toggle is available and click it.
             Make sure that the published toggle becomes available and click it.
         */
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('TestWord').click()
     cy.getByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
@@ -142,7 +142,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Check that the cancel button when editing word works.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')
@@ -157,12 +157,12 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
       cy.getByText('Cancel').click()
     })
     cy.getByText('Yes!').click()
-    cy.wait(500)
+    cy.wait(1000)
 
     /*
                 Check that edit word saves properly.
             */
-    cy.getByText('TestWord').click()
+    cy.queryByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')
       .click()
@@ -171,7 +171,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
     })
-    cy.getByText('TestWordTestWord1', { exact: true }).should('exist')
+    cy.queryByText('TestWordTestWord1', { exact: true }).should('exist')
 
     /*
             Test fonts.
