@@ -260,6 +260,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
               if (this.state.current_char !== null) {
                 return (
                   <FVButton
+                    className="fontAboriginalSans"
                     variant="contained"
                     color="primary"
                     onClick={this._onNavigateRequest.bind(
@@ -270,8 +271,6 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                       minWidth: 'inherit',
                       textTransform: 'initial',
                       margin: '10px 0',
-                      fontFamily:
-                        '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
                     }}
                   >
                     {'View Words and Phrases that start with ' + this.state.current_char.title}

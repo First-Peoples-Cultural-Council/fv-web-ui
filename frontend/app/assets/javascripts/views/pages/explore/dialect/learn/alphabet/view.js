@@ -219,10 +219,6 @@ export class AlphabetView extends Component {
             <div>
               <Card>
                 <FVTab
-                  tabsStyle={{
-                    fontFamily:
-                      '"Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001',
-                  }}
                   tabItems={[
                     { label: intl.trans('definition', 'Definition', 'first') },
                     {
@@ -235,6 +231,7 @@ export class AlphabetView extends Component {
                             [selectn('response.title', computeCharacter)]
                           ),
                       id: 'find_words',
+                      className: 'fontAboriginalSans',
                     },
                     {
                       label: UIHelpers.isViewSize('xs')
@@ -246,6 +243,7 @@ export class AlphabetView extends Component {
                             [selectn('response.title', computeCharacter)]
                           ),
                       id: 'find_phrases',
+                      className: 'fontAboriginalSans',
                     },
                   ]}
                   tabsValue={this.state.tabValue}
