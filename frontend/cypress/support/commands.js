@@ -25,6 +25,10 @@ import 'cypress-file-upload'
 beforeEach(function() {
   cy.log('NOTE: Tests are typically run with `npm run startPreprod`')
   cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
+  Cypress.on('window:before:load', (win) => {
+    delete win.fetch
+  })
+  cy.server()
 })
 afterEach(function() {
   // Logout to fix issue with user being logged in between tests.
@@ -93,9 +97,10 @@ Cypress.Commands.add('login', (obj = {}) => {
 // Logs any user out using a GET request.
 Cypress.Commands.add('logout', () => {
   cy.log('--- LOGGING OUT ---')
+  cy.route('POST', '/nuxeo/api/v1/automation/FVGetUserStartPage').as('logoutXHR')
   cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
   cy.visit('')
-  cy.wait(2000)
+  cy.wait('@logoutXHR')
   cy.log('--- SHOULD BE LOGGED OUT ---')
 })
 
