@@ -49,7 +49,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
             Check for edit word button and then enable the word.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(1500)
+    cy.wait(2500)
     cy.queryByText('TestWord').click()
     cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
@@ -87,7 +87,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(1500)
+    cy.wait(2500)
     cy.getByText('TestWord', { exact: true }).click()
     cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
