@@ -45,6 +45,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       cy.getByText('Words', { exact: true }).click()
     })
     cy.wait('@partsOfSpeechTwoXHR')
+    cy.wait(1000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('New').should('exist')
       cy.queryByText('TestTranslation').should('exist')
@@ -87,6 +88,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       cy.getByText('Words', { exact: true }).click()
     })
     cy.wait('@partsOfSpeechFourXHR')
+    cy.wait(1000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('TestWord').should('exist')
       cy.queryByText('TestTranslation').should('exist')

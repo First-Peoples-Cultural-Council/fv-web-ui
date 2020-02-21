@@ -148,6 +148,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.wait('@pathFourXHR')
 
     cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathFiveXHR')
+    cy.wait(1000)
     cy.getByText('TestPhrase', { exact: false }).click()
     cy.wait('@pathFiveXHR')
     cy.get('div.hidden-xs').within(() => {

@@ -6,7 +6,9 @@ function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonTex
         .parents('button:first')
         .click()
 
+      cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryXHR')
       cy.getByText(browseButtonText, { exact: false }).click()
+      cy.wait('@enrichedQueryXHR')
     })
   cy.getByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter').within(() => {
@@ -16,6 +18,7 @@ function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonTex
         cy.get('input[type=text]').type(mediaTitle)
       })
     cy.getByText('Filter').click()
+    cy.wait('@enrichedQueryXHR')
   })
 }
 

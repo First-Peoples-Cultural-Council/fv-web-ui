@@ -92,7 +92,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       cy.getByText('Phrases', { exact: true }).click()
     })
     cy.wait(['@enrichedQueryThreeXHR', '@enrichedQueryThreeXHR'])
-
+    cy.wait('1000')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
