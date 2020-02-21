@@ -5,8 +5,10 @@ function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonTex
       cy.getByText(addButtonText, { exact: false })
         .parents('button:first')
         .click()
+      cy.wait(500)
 
       cy.getByText(browseButtonText, { exact: false }).click()
+      cy.wait(1000)
     })
   cy.getByText('select existing', { exact: false }).should('exist')
   cy.getByTestId('withFilter').within(() => {
@@ -16,6 +18,7 @@ function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonTex
         cy.get('input[type=text]').type(mediaTitle)
       })
     cy.getByText('Filter').click()
+    cy.wait(1000)
   })
 }
 

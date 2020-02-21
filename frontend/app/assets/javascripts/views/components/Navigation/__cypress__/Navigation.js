@@ -32,7 +32,7 @@ describe('Navigation.js > Navigation side bar', () => {
       userName: 'TESTLANGUAGESIX_ADMIN',
     })
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/')
-    cy.wait(2000)
+    cy.wait(3500)
     cy.getByText('Dog').click()
     cy.wait(1500)
     cy.getByTestId('pageContainer').within(() => {
