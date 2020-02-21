@@ -13,7 +13,6 @@ describe('FW-301: Some buttons need to be clicked twice to submit', () => {
     cy.route('/nuxeo/api/v1/directory/*').as('directoryXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait('@directoryXHR')
-    cy.log('test')
     cy.getByText('Dog', { exact: false }).clickandwait(500)
 
     // open

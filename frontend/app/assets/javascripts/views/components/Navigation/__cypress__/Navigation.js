@@ -34,6 +34,7 @@ describe('Navigation.js > Navigation side bar', () => {
     cy.route('/nuxeo/api/v1/directory/*').as('directoryXHR')
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/')
     cy.wait('@directoryXHR')
+
     cy.getByText('Dog').click()
     cy.wait(1500)
     cy.getByTestId('pageContainer').within(() => {

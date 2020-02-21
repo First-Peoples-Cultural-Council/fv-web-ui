@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ca.firstvoices.enrichers.operations.contrib">
 
 	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >
