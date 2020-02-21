@@ -49,7 +49,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Check for edit phrase button and then enable the phrase.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
-    cy.wait(1000)
+    cy.wait(2000)
     cy.queryByText('TestPhrase', { exact: false }).clickandwait()
     cy.queryByText('Edit phrase', { exact: true }).should('exist')
     cy.wait(500)
