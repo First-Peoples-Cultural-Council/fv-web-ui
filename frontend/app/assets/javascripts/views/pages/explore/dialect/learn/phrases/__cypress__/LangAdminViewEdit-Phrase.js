@@ -15,12 +15,18 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageTwo/Portal').as('pathOneXHR')
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow.GetOpenTasks').as('getOpenTasksXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
-    cy.wait(1000)
+    cy.wait(['@pathOneXHR', '@getOpenTasksXHR'])
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.wait('@getOpenTasksXHR')
+
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryXHR')
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(['@enrichedQueryXHR', '@enrichedQueryXHR'])
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.logout()
@@ -31,33 +37,42 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow.GetOpenTasks').as('getOpenTasksTwoXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
-    cy.wait(500)
+    cy.wait('@getOpenTasksTwoXHR')
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryTwoXHR')
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
+    cy.wait(['@enrichedQueryTwoXHR', '@enrichedQueryTwoXHR'])
+
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageTwo').as('pathTwoXHR')
     cy.wait(1000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('New').should('exist')
       cy.queryByText('TestPhrase').should('exist')
-      cy.getByText('TestPhrase').click()
     })
+    cy.getByText('TestPhrase').click()
+    cy.wait('@pathTwoXHR')
 
     /*
             Check for edit phrase button and then enable the phrase.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
-    cy.wait(1000)
-    cy.queryByText('TestPhrase', { exact: false }).clickandwait()
-    cy.queryByText('Edit phrase', { exact: true }).should('exist')
+    cy.wait(['@enrichedQueryTwoXHR', '@enrichedQueryTwoXHR', '@enrichedQueryTwoXHR', '@pathTwoXHR'])
     cy.wait(500)
+    cy.queryByText('TestPhrase', { exact: false }).click()
+    cy.wait('@pathTwoXHR')
+    cy.queryByText('Edit phrase', { exact: true }).should('exist')
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow.GetOpenTasks').as('getOpenTasksTwoXHR')
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
     })
+    cy.wait('@getOpenTasksTwoXHR')
     cy.logout()
 
     /*
@@ -67,12 +82,17 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
-    cy.wait(500)
+    cy.wait('@getOpenTasksTwoXHR')
+
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.wait('@getOpenTasksTwoXHR')
+
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryThreeXHR')
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(['@enrichedQueryThreeXHR', '@enrichedQueryThreeXHR'])
+
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -86,29 +106,36 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryFourXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
-    cy.wait(1000)
+    cy.wait(['@enrichedQueryFourXHR', '@enrichedQueryFourXHR', '@enrichedQueryFourXHR', '@pathTwoXHR'])
+    cy.wait(500)
+
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageTwo').as('pathThreeXHR')
     cy.queryByText('TestPhrase', { exact: false }).click()
-    cy.wait(1500)
+    cy.wait('@pathThreeXHR')
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
         .click()
     })
+
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow.GetOpenTasks').as('getOpenTasksThreeXHR')
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait('@getOpenTasksThreeXHR')
 
     /*
     Check that the phrase is now visible to the public.
    */
+    cy.route('/nuxeo/api/v1/path/FV/sections/Data/Test/Test/TestLanguageTwo').as('pathFourXHR')
     cy.getByText('Public View')
       .pipe(click)
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.wait(1000)
+    cy.wait('@pathFourXHR')
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')
       .and('eq', 'rgb(58, 104, 128)')

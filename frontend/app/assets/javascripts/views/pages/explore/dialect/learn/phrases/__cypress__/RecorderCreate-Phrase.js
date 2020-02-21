@@ -9,15 +9,23 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_RECORDER',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow*').as('workflowXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
-    cy.wait(500)
+    cy.wait('@workflowXHR')
+
+    cy.route('POST', '/nuxeo/api/v1/automation/Workflow*').as('workflowXHR')
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.wait('@workflowXHR')
+
+    cy.route('POST', '/nuxeo/api/v1/automation/*').as('automationXHR')
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1500)
+    cy.wait(['@automationXHR', '@automationXHR'])
+
+    cy.route('GET', '/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathXHR')
     cy.getByText('Create New Phrase', { exact: true }).click()
-    cy.wait(3000)
+    cy.wait('@pathXHR')
 
     /*
             Enter data to create a new phrase
@@ -33,6 +41,8 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
         */
     cy.getByText('+ Add related audio', { exact: true }).click()
     cy.getByText('Upload audio', { exact: true }).click()
+    cy.route('/nuxeo/api/v1/')
+    cy.route('POST', '/nuxeo/api/v1/upload/**').as('mediaUploadXHR')
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestAudio')
       cy.get('[name="dc:description"]').type('TestAudioDescription')
@@ -42,7 +52,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(2000)
+    cy.wait(['@mediaUploadXHR', '@mediaUploadXHR', '@mediaUploadXHR'])
     cy.getByText('Insert into entry').click()
 
     /*
@@ -59,7 +69,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(2000)
+    cy.wait(['@mediaUploadXHR', '@mediaUploadXHR', '@mediaUploadXHR'])
     cy.getByText('Insert into entry').click()
 
     /*
@@ -76,7 +86,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       })
       cy.getByText('Upload Media', { exact: true }).click()
     })
-    cy.wait(2000)
+    cy.wait(['@mediaUploadXHR', '@mediaUploadXHR', '@mediaUploadXHR'])
     cy.getByText('Insert into entry').click()
 
     /*
@@ -92,14 +102,17 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
             Check that the phrase now exists
          */
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryXHR')
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathTwoXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait(['@enrichedQueryXHR', '@enrichedQueryXHR', '@enrichedQueryXHR'])
+    cy.wait('@pathTwoXHR')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('New').should('exist')
     })
-
     /*
             Logout
          */
@@ -111,8 +124,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathThreeXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait('@pathThreeXHR')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.getByText('No results found.').should('exist')
 
@@ -127,10 +141,15 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('enrichedQueryXHRTwo')
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathFourXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(2000)
+    cy.wait(['@enrichedQueryXHRTwo', '@enrichedQueryXHRTwo', '@enrichedQueryXHRTwo'])
+    cy.wait('@pathFourXHR')
+
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathFiveXHR')
     cy.getByText('TestPhrase', { exact: false }).click()
-    cy.wait(2000)
+    cy.wait('@pathFiveXHR')
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -144,8 +163,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/*').as('phrasesOneXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait(['@phrasesOneXHR', '@phrasesOneXHR', '@phrasesOneXHR', '@phrasesOneXHR'])
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -160,12 +180,14 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.login({
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
+    cy.route('POST', '/nuxeo/api/v1/automation/Document.EnrichedQuery').as('phrasesThreeXHR')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait(['@phrasesThreeXHR', '@phrasesThreeXHR', '@phrasesThreeXHR'])
+    cy.route('/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageFour').as('pathSixXHR')
     cy.queryByText('TestPhrase')
       .should('exist')
       .click()
-    cy.wait(2000)
+    cy.wait('@pathSixXHR')
     cy.getByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
@@ -178,25 +200,26 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.getByText('Publish', { exact: true }).click()
     })
     cy.reload()
-    cy.wait(1000)
+    cy.wait('@pathSixXHR')
 
     /*
         Check that the published phrase is visible.
      */
+    cy.route('/nuxeo/api/v1/path/FV/sections/Data/Test/Test/TestLanguageFour').as('pathSevenXHR')
     cy.getByText('Public View').click()
-    cy.wait(2000)
+    cy.wait('@pathSevenXHR')
     cy.get('[id="pageNavigation"]').within(() => {
       cy.get('div.row.Navigation__dialectContainer')
         .should('have.css', 'background-color')
         .and('eq', 'rgb(58, 104, 128)')
     })
-    cy.getByText('TestPhrase').should('exist')
-    cy.getByText('TestTranslation').should('exist')
-    cy.getByText('TestCulturalNote').should('exist')
-    cy.getByText('TestImage').should('exist')
-    cy.getByText('TestVideo')
+    cy.queryByText('TestPhrase').should('exist')
+    cy.queryByText('TestTranslation').should('exist')
+    cy.queryByText('TestCulturalNote').should('exist')
+    cy.queryByText('TestImage').should('exist')
+    cy.queryByText('TestVideo')
       .scrollIntoView()
       .should('exist')
-    cy.getByText('TestAcknowledgement').should('exist')
+    cy.queryByText('TestAcknowledgement').should('exist')
   })
 })
