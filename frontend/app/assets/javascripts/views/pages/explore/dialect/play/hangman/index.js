@@ -64,7 +64,7 @@ export class Hangman extends Component {
   }
 
   fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
-    if(initialIndex == null) initialIndex = StringHelpers.randomIntBetween(0, 10);
+    //if(initialIndex == null) initialIndex = StringHelpers.randomIntBetween(0, 0);
 
     props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
@@ -80,8 +80,8 @@ export class Hangman extends Component {
         '/* IS NOT NULL' +
         //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
-        //StringHelpers.randomIntBetween(0, 0) +
-        initialIndex +
+        StringHelpers.randomIntBetween(0, 10) +
+        //initialIndex +
         '&pageSize=' +
         PUZZLES
     )
@@ -166,7 +166,6 @@ export class Hangman extends Component {
     // const word_obj_array = selectn('response.entries', computeWords)
     function shuffle(array){
       //Based on Fisher-Yates shuffle
-      console.log('in')
       for(let i = (array.length -1); i > 0; i--){
         let rand = Math.floor(Math.random() * (1 + i))
         let temp = array[i]
