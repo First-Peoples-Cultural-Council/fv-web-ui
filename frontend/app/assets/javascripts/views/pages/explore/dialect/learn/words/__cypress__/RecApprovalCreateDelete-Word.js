@@ -142,7 +142,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Check that the cancel button when editing word works.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
-    cy.wait(2500)
+    cy.wait(3500)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')

@@ -14,6 +14,7 @@ const createPhraseBooks = (start, max) => {
   cy.wait(2000)
   cy.getByLabelText(copy.create.name).type(phraseBookName)
   cy.getByText(copy.create.submit).click()
+  cy.wait(1000)
 
   const count = start + 1
 
