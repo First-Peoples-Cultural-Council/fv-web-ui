@@ -103,7 +103,7 @@ export default class HangmanGame extends Component {
     return {
       puzzle: this.preparePuzzle(props),
       guessesLeft: 7,
-      alphabet: this.props.alphabet,
+      alphabet: props.alphabet,
       guessedLetters: [],
       succeeded: false,
       failed: false,
@@ -299,7 +299,7 @@ export default class HangmanGame extends Component {
               <div style={wordStyle} key={index}>
                 {word.map((letter, index2) => {
                   return (
-                    <div key={index2} className="spot" style={{ ...spotStyle, ...borderStyle }}>
+                    <div key={index2} className="spot" style={{ ...spotStyle, ...borderStyle}}>
                       <div className="letter">{letter.found ? letter.letter : false}</div>
                     </div>
                   )
