@@ -37,7 +37,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
-    cy.wait(3000)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('New').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -49,7 +49,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
             Check for edit word button and then enable the word.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(1500)
+    cy.wait(2500)
     cy.queryByText('TestWord').click()
     cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
@@ -72,11 +72,11 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
-    cy.wait(3000)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
+      cy.queryByText('TestWord').should('exist')
+      cy.queryByText('TestTranslation').should('exist')
+      cy.queryByText('Enabled').should('exist')
     })
     cy.logout()
 
@@ -87,7 +87,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(1500)
+    cy.wait(2500)
     cy.getByText('TestWord', { exact: true }).click()
     cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {

@@ -99,7 +99,7 @@ describe('RecorderCreate-Word.js > RecorderCreate-Word', () => {
       Checking to see if the word now exists
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/words')
-    cy.wait(500)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')

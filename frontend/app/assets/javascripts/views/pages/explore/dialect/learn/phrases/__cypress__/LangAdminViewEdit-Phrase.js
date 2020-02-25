@@ -37,7 +37,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(2000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('New').should('exist')
@@ -49,7 +49,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
             Check for edit phrase button and then enable the phrase.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
-    cy.wait(1000)
+    cy.wait(2000)
     cy.queryByText('TestPhrase', { exact: false }).clickandwait()
     cy.queryByText('Edit phrase', { exact: true }).should('exist')
     cy.wait(500)
@@ -72,7 +72,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(2000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -87,7 +87,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
-    cy.wait(1000)
+    cy.wait(2500)
     cy.queryByText('TestPhrase', { exact: false }).click()
     cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
