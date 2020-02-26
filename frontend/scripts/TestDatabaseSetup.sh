@@ -258,6 +258,20 @@ if [[ "$?" -ne 0 ]]; then
   echo
 fi
 echo
+# Import Alphabet using fv-batch-import
+cd $DIRECTORY/scripts/batch_jarfiles/
+java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSevenAlphabet.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
+if [[ "$?" -ne 0 ]]; then
+  echo -e 'fv-batch-import TestLanguageSeven Alphabet batch failed \n'; exit 1
+  echo
+fi
+# Import Words using fv-batch-import
+cd $DIRECTORY/fv-batch-import/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSevenWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
+if [[ "$?" -ne 0 ]]; then
+  echo -e 'fv-batch-import TestLanguageSeven Words batch failed \n'; exit 1
+  echo
+fi
 
 # Publishing FV/Workspaces/Site/Resources for pages use
 echo "Publishing Resources folder for pages use"
