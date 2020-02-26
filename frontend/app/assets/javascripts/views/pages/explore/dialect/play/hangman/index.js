@@ -35,7 +35,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 const PUZZLES = 25
 const MIN_REQ_WORDS = 5
-var initialIndex
 
 const { func, object } = PropTypes
 export class Hangman extends Component {
@@ -64,7 +63,6 @@ export class Hangman extends Component {
   }
 
   fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
-    //if(initialIndex == null) initialIndex = StringHelpers.randomIntBetween(0, 0);
 
     props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
@@ -81,7 +79,6 @@ export class Hangman extends Component {
         //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
         StringHelpers.randomIntBetween(0, 10) +
-        //initialIndex +
         '&pageSize=' +
         PUZZLES
     )
@@ -140,7 +137,7 @@ export class Hangman extends Component {
     if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
       return (
         <div>
-          Game not available: At least 5 child-friendly words with photos and audio are required for this game... Found{' '}
+          Game not available: At least 5 child-friendly words with audio are required for this game... Found{' '}
           <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
         </div>
       )
