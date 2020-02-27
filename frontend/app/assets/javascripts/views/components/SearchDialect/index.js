@@ -493,22 +493,27 @@ export const SearchDialect = (props) => {
   // Resets search
   // ------------------------------------------------------------
   const resetSearch = async () => {
-    const searchData1 = {
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_DEFAULT,
-      searchBySettings: {},
-      searchTerm: undefined,
-    }
-
-    const searchData2 = {
-      searchingDialectFilter: '',
-      searchMessage: null,
-    }
-
-    const searchData = Object.assign({}, searchData1, searchData2)
+    // Generate default UI settings from props.searchUi
+    const resetSearchBySettings = {}
+    props.searchUi.forEach((element) => {
+      if (element.idName === 'searchPartOfSpeech') {
+        resetSearchBySettings[element.idName] = SEARCH_PART_OF_SPEECH_ANY
+      } else {
+        if (element.defaultChecked) {
+          resetSearchBySettings[element.idName] = element.defaultChecked
+        }
+      }
+    })
 
     // Save to redux
-    await props.searchDialectUpdate(searchData)
+    await props.searchDialectUpdate({
+      searchByAlphabet: '',
+      searchByMode: SEARCH_BY_DEFAULT,
+      searchBySettings: resetSearchBySettings,
+      searchingDialectFilter: '',
+      searchMessage: null,
+      searchTerm: undefined,
+    })
 
     // Notify ancestors
     props.resetSearch()

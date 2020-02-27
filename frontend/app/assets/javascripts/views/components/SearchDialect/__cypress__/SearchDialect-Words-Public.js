@@ -10,3 +10,41 @@ describe('SearchDialect-Words-Public.js > SearchDialect', () => {
     testSearchWords()
   })
 })
+function verifyDefaults() {
+  cy.getByLabelText('Word').should('be.checked')
+  cy.getByLabelText('Definitions').should('not.be.checked')
+  cy.getByLabelText('Literal translations').should('not.be.checked')
+  cy.getByLabelText('Parts of speech', { exact: false }).should('have.value', 'Any')
+}
+describe('SearchDialect-Words-Public.js > FW-936', () => {
+  it('Resetting search should set to initial settings', () => {
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageTwo/learn/words')
+
+    cy.getByText('Showing all words in the dictionary listed alphabetically').should('exist')
+
+    // Verify Load
+    verifyDefaults()
+
+    // Change & verify
+    cy.getByLabelText('Word')
+      .uncheck()
+      .should('not.be.checked')
+    cy.getByLabelText('Definitions')
+      .check()
+      .should('be.checked')
+    cy.getByLabelText('Literal translations')
+      .check()
+      .should('be.checked')
+    cy.getByLabelText('Parts of speech', { exact: false })
+      .select('adjective')
+      .should('have.value', 'adjective')
+
+    // Reset
+    cy.getByText('reset search', { exact: false }).click()
+
+    cy.wait(1000)
+
+    // Verify Reset
+    verifyDefaults()
+  })
+})
