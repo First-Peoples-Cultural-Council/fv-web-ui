@@ -110,7 +110,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                 Checking to see if the phrase now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
-    cy.wait(500)
+    cy.wait(2000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -146,7 +146,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
                 Check that the cancel button when editing phrase works.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
-    cy.wait(800)
+    cy.wait(2000)
     cy.getByText('TestPhrase').click()
     cy.getByText('Edit phrase')
       .should('exist')
