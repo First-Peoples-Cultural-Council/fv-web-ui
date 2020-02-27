@@ -1,16 +1,10 @@
 import 'cypress-testing-library/add-commands'
 describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
-    /*
-    Temporary line to force the test to fail until it is updated.
-   */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases')
+    cy.wait(3000)
 
-    cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases')
-
-    const letter = 'b'
+    const letter = 't'
     const unselectedColor = 'rgb(60, 52, 52)'
 
     // No message, button, or selected letters
@@ -63,20 +57,14 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
   })
 
   it('Direct link', () => {
-    /*
-      Temporary line to force the test to fail until it is updated.
-     */
-    cy.log('Forcing the test to fail until it is updated for dev.').then(() => {
-      cy.expect(true).to.equal(false)
-    })
-
     cy.log('Direct visit a url with a letter selected')
-    cy.visit('/explore/FV/sections/Data/Athabascan/Dene/Dene/learn/phrases/alphabet/b')
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases/alphabet/t')
+    cy.wait(500)
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
     cy.getByText(/showing phrases that start with the letter/i).should('exist')
     cy.getByTestId('AlphabetListView').within(() => {
-      cy.getByText('b')
+      cy.getByText('t')
         .should('have.css', 'color')
         .and('eq', 'rgb(130, 0, 0)')
     })

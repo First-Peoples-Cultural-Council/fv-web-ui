@@ -41,6 +41,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
+import Link from 'views/components/Link'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -76,7 +77,12 @@ export class PhrasesListView extends DataListView {
     onPagePropertiesChange: func,
     pageProperties: object,
     routeParams: object.isRequired,
-
+    // Export
+    hasExportDialect: bool,
+    exportDialectExportElement: string,
+    exportDialectColumns: string,
+    exportDialectLabel: string,
+    exportDialectQuery: string,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
@@ -94,7 +100,7 @@ export class PhrasesListView extends DataListView {
     DEFAULT_PAGE: 1,
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_LANGUAGE: 'english',
-    DEFAULT_SORT_COL: 'fv:custom_order',
+    DEFAULT_SORT_COL: 'dc:title',
     DEFAULT_SORT_TYPE: 'asc',
     ENABLED_COLS: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
     dialect: null,
@@ -122,10 +128,12 @@ export class PhrasesListView extends DataListView {
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data) => {
             const href = NavigationHelpers.generateUIDPath(currentTheme, data, 'phrases')
-            const clickHandler = props.disableClickItem ? NavigationHelpers.disable : null
 
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
+            const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
+              `${window.location.pathname}${window.location.search}`
+            )}`
             const computeDialect2 = this.props.dialect || this.getDialect()
 
             const editButton =
@@ -144,11 +152,11 @@ export class PhrasesListView extends DataListView {
                     variant="flat"
                     size="small"
                     component="a"
-                    className="DictionaryList__linkEdit"
-                    href={hrefEdit}
+                    className="DictionaryList__linkEdit PrintHide"
+                    href={hrefEditRedirect}
                     onClick={(e) => {
                       e.preventDefault()
-                      NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
+                      NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
                     }}
                   >
                     <Edit title={intl.trans('edit', 'Edit', 'first')} />
@@ -158,9 +166,9 @@ export class PhrasesListView extends DataListView {
               ) : null
             return (
               <>
-                <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
+                <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
                   {v}
-                </a>
+                </Link>
                 {editButton}
               </>
             )
@@ -174,10 +182,16 @@ export class PhrasesListView extends DataListView {
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
           columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
           render: (v, data, cellProps) => {
-            return UIHelpers.renderComplexArrayRow(selectn('properties.' + cellProps.name, data), (entry, i) => {
-              if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
-                return <li key={i}>{entry.translation}</li>
-              }
+            return UIHelpers.generateOrderedListFromDataset({
+              dataSet: selectn(`properties.${cellProps.name}`, data),
+              extractDatum: (entry, i) => {
+                if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
+                  return entry.translation
+                }
+                return null
+              },
+              classNameList: 'DictionaryList__definitionList',
+              classNameListItem: 'DictionaryList__definitionListItem',
             })
           },
           sortName: 'fv:definitions/0/translation',
@@ -193,7 +207,8 @@ export class PhrasesListView extends DataListView {
               return (
                 <Preview
                   minimal
-                  tagStyles={{ width: '300px', maxWidth: '100%' }}
+                  styles={{ padding: 0 }}
+                  tagStyles={{ width: '100%', minWidth: '230px' }}
                   key={selectn('uid', firstAudio)}
                   expandedValue={firstAudio}
                   type="FVAudio"
@@ -213,7 +228,7 @@ export class PhrasesListView extends DataListView {
             if (firstPicture) {
               return (
                 <img
-                  style={{ maxWidth: '62px', maxHeight: '45px' }}
+                  className="PrintHide itemThumbnail"
                   key={selectn('uid', firstPicture)}
                   src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
                 />
@@ -227,10 +242,10 @@ export class PhrasesListView extends DataListView {
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
           columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
           render: (v, data) => {
-            return UIHelpers.renderComplexArrayRow(
-              selectn('contextParameters.phrase.phrase_books', data),
-              (entry, i) => <li key={i}>{selectn('dc:title', entry)}</li>
-            )
+            return UIHelpers.generateDelimitedDatumFromDataset({
+              dataSet: selectn('contextParameters.phrase.phrase_books', data),
+              extractDatum: (entry) => selectn('dc:title', entry),
+            })
           },
         },
         {
@@ -259,12 +274,6 @@ export class PhrasesListView extends DataListView {
         page: this.props.DEFAULT_PAGE,
         pageSize: this.props.DEFAULT_PAGE_SIZE,
       },
-    }
-
-    // Reduce the number of columns displayed for mobile
-    if (UIHelpers.isViewSize('xs')) {
-      this.state.columns = this.state.columns.filter((v) => ['title', 'fv:definitions'].indexOf(v.name) !== -1)
-      this.state.hideStateColumn = true
     }
 
     // Only show enabled cols if specified
@@ -312,6 +321,14 @@ export class PhrasesListView extends DataListView {
             // onSelectionChange={this._onEntryNavigateRequest}
             // onSortChange={this._handleSortChange}
             // sortInfo={this.state.sortInfo.uiSortOrder}
+
+            // Export
+            hasExportDialect
+            exportDialectExportElement={this.props.exportDialectExportElement || 'FVPhrase'}
+            exportDialectLabel={this.props.exportDialectLabel}
+            exportDialectQuery={this.props.exportDialectQuery}
+            exportDialectColumns={this.props.exportDialectColumns}
+            //
             columns={this.state.columns}
             data={computePhrases}
             dialect={selectn('response', computeDialect2)}
@@ -360,40 +377,40 @@ export class PhrasesListView extends DataListView {
               })
             }}
             type={'FVPhrase'}
+            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={this.props.dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={({ templateData }) => {
               return (
-                <div className="DictionaryListSmallScreen__words">
-                  <div className="DictionaryListSmallScreen__groupPrimary">
-                    {templateData.related_pictures}
-                    {templateData.title}
-                  </div>
-
-                  <div className="DictionaryListSmallScreen__groupSecondary">
-                    {templateData['fv:definitions']}
-                    <div className="DictionaryListSmallScreen__groupSecondary">
+                <div className="DictionaryListSmallScreen__item">
+                  <div className="DictionaryListSmallScreen__groupMain">
+                    {templateData.actions}
+                    {templateData.rowClick}
+                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+                      {templateData.title}
+                      <span className="DictionaryListSmallScreen__partOfSpeech">
+                        {templateData['fv-word:part_of_speech']}
+                      </span>
+                    </div>
+                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
                       {templateData.related_audio}
-                      {templateData['dc:description']}
+                    </div>
 
-                      {templateData['fv-word:part_of_speech']}
+                    {templateData['fv:definitions'] && (
+                      <div className="DictionaryListSmallScreen__groupData">
+                        <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+                        {templateData['fv:definitions']}
+                      </div>
+                    )}
 
-                      {templateData['thumb:thumbnail']}
-
-                      {templateData['fv-word:categories']}
-                      {templateData.parent}
-                      {templateData['fv-phrase:phrase_books']}
-
-                      {templateData.username}
-
-                      {templateData.email}
-
-                      {templateData['fvlink:url']}
-
-                      {templateData['dc:modified']}
-                      {templateData['dc:created']}
-                      {templateData.state}
-                      {templateData.actions}
+                    <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
+                      <div className="DictionaryListSmallScreen__groupData">
+                        {templateData['fv-phrase:phrase_books']}
+                      </div>
+                      <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
                     </div>
                   </div>
+
+                  <div className="DictionaryListSmallScreen__groupData">{templateData.related_pictures}</div>
                 </div>
               )
             }}
@@ -496,7 +513,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasesListView)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesListView)

@@ -43,6 +43,10 @@ public class FVLogin extends StartupHelper {
     public String initDomainAndFindStartupPage(String domainTitle, String viewId) {
         String result_from_default_helper = "view_home";
 
+        if (fvContextPath == null) {
+            fvContextPath = "";
+        }
+
         try {
 
             if (documentManager == null) {
@@ -56,10 +60,12 @@ public class FVLogin extends StartupHelper {
             String backToPath = RestHelper.getHttpServletRequest().getParameter("backTo");
 
             NuxeoPrincipal currentUser = documentManager.getPrincipal();
-            if (currentUser.isAdministrator()) {
 
+            if (currentUser.isAdministrator()) {
                 return "view_home";
             }
+
+            // User is not anonymous
             if (!currentUser.isAnonymous()) {
                 if (validatePath(backToPath)) {
                     redirectTo = NUXEO_URL + backToPath;
@@ -68,7 +74,17 @@ public class FVLogin extends StartupHelper {
                 else {
                     redirectTo = fvUserProfileService.getDefaultDialectRedirectPath(documentManager, currentUser, NUXEO_URL, true);
                 }
-            } else if (!fvDisableLoginRedirect.equals("true")) {
+
+                FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
+
+            }
+            // User is anonymous (or logging out)
+            else {
+                // If redirects disabled, send to Nuxeo back-end.
+                if (fvDisableLoginRedirect != null && fvDisableLoginRedirect.equals("true")) {
+                    return "view_home";
+                }
+
                 FacesContext.getCurrentInstance().getExternalContext().redirect(getURIFromPath(redirectTo));
             }
 

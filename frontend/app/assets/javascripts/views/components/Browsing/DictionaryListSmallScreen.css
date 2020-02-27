@@ -15,10 +15,6 @@
   min-width: 225px;
   width: 100%;
 }
-.DictionaryListSmallScreen__audioGroup {
-  width: 35%;
-}
-
 .DictionaryListSmallScreen__batch {
   padding: 0 10px 0 0;
 }
@@ -101,12 +97,42 @@
 .DictionaryListSmallScreen__miscGroup {
   width: 25%;
 }
-
+.DictionaryListSmallScreen__searchType {
+  font-size: 1rem;
+  padding: 5px;
+}
 .DictionaryListSmallScreen__sortHeading {
   margin: 5px;
 }
 .DictionaryListSmallScreen__sortButton {
   margin: 5px;
+}
+
+.DictionaryListSmallScreen__item {
+  display: flex;
+}
+.DictionaryListSmallScreen__groupMain {
+  flex-grow: 1;
+}
+.DictionaryListSmallScreen__groupData {
+  padding: 0 5px 5px;
+}
+.DictionaryListSmallScreen__groupData--noHorizPad {
+  padding: 0 0 5px 0;
+}
+.DictionaryListSmallScreen__partOfSpeech {
+  font-size: 1.2rem;
+}
+.DictionaryListSmallScreen__definitionsHeading {
+  font-size: 1.4rem;
+  font-weight: 100;
+  margin: 0;
+  padding: 0 0 5px;
+}
+.DictionaryListSmallScreen__groupMainMiscellaneous {
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: row;
 }
 
 /* Modifiers

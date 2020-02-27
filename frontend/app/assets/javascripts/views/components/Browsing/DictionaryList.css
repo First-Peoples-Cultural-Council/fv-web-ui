@@ -1,3 +1,6 @@
+/* -------------------- */
+/* ELEMENT */
+/* -------------------- */
 .DictionaryList__colSort {
   background-color: transparent;
   border: none;
@@ -24,9 +27,6 @@
 .DictionaryList__confirmationDelete {
   margin-left: auto;
 }
-
-/* -------------------- */
-/* ELEMENT */
 .DictionaryList__data,
 .data-table td.DictionaryList__data {
   font-size: 1.6rem;
@@ -44,15 +44,20 @@
   font-weight: 700;
 }
 
-.DictionaryList__viewModeGroup {
+.DictionaryList__ListButtonsGroup {
   /* margin: 10px 0; */
   text-align: right;
 }
-.DictionaryList__viewModeGroup .DictionaryList__viewModeButton {
+.DictionaryList__ListButtonsGroup .DictionaryList__viewModeButton {
   margin: 5px;
 }
 
+.DictionaryList__definitionList {
+  padding-left: 25px;
+}
+/* -------------------- */
 /* MODIFIER */
+/* -------------------- */
 .DictionaryList--noData {
   margin: 20px 0;
 }
@@ -101,4 +106,8 @@
 .DictionaryList--contributors .DictionaryList__data.DictionaryList__data--title,
 .DictionaryList--contributors .data-table td.DictionaryList__data--title {
   text-align: left;
+}
+.DictionaryList__definitionList--single {
+  list-style-type: none;
+  padding-left: 0;
 }

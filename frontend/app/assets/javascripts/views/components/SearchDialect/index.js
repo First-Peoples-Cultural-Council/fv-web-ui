@@ -87,75 +87,43 @@ export const SearchDialect = (props) => {
     }
   }, [csd.searchBySettings])
 
-  // Sets `partsOfSpeechOptions`
+  // Sets `partsOfSpeechOptions` when on a Word page
   // ------------------------------------------------------------
   useEffect(() => {
-    // initiate
-    if (props.computeDirectory.isFetching !== true && props.computeDirectory.success !== true) {
-      props.fetchDirectory('parts_of_speech')
-    }
-    // wait
-    if (props.computeDirectory.success && props.computeDirectory.success) {
-      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props)
-      const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
-        if (a.text < b.text) return -1
-        if (a.text > b.text) return 1
-        return 0
-      })
+    if (props.searchDialectDataType === SEARCH_DATA_TYPE_WORD) {
+      // initiate
+      if (props.computeDirectory.isFetching !== true && props.computeDirectory.success !== true) {
+        props.fetchDirectory('parts_of_speech')
+      }
+      // wait
+      if (props.computeDirectory.success && props.computeDirectory.success) {
+        const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
+        const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
+          if (a.text < b.text) return -1
+          if (a.text > b.text) return 1
+          return 0
+        })
 
-      const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
-        return (
-          <option key={index} value={part.value}>
-            {part.text}
-          </option>
-        )
-      })
+        const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
+          return (
+            <option key={index} value={part.value}>
+              {part.text}
+            </option>
+          )
+        })
 
-      // set
-      if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
-        setPartsOfSpeechOptions([
-          <option key="SEARCH_SORT_DIVIDER" disabled>
-            ─────────────
-          </option>,
-          ...partsOfSpeechSortedOptionTags,
-        ])
+        // set
+        if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
+          setPartsOfSpeechOptions([
+            <option key="SEARCH_SORT_DIVIDER" disabled>
+              ─────────────
+            </option>,
+            ...partsOfSpeechSortedOptionTags,
+          ])
+        }
       }
     }
-  })
-
-  // const _componentDidUpdate = (prevProps) => {
-  //   const searchNxqlQuery = generateNxql()
-  //   const searchNxqlSort = generateNxqlSearchSort()
-
-  //   const prevSearchNxqlQuery = prevProps.computeSearchDialect.searchNxqlQuery
-  //   const prevSearchNxqlSort = prevProps.computeSearchDialect.searchNxqlSort
-
-  //   if (
-  //     searchNxqlQuery !== prevSearchNxqlQuery ||
-  //     searchNxqlSort.DEFAULT_SORT_COL !== prevSearchNxqlSort.DEFAULT_SORT_COL ||
-  //     searchNxqlSort.DEFAULT_SORT_TYPE !== prevSearchNxqlSort.DEFAULT_SORT_TYPE
-  //   ) {
-  //     props.searchDialectUpdate({ searchNxqlQuery, searchNxqlSort })
-  //   }
-
-  //   const updatedAlphabet =
-  //     props.computeSearchDialect.searchByMode === SEARCH_BY_ALPHABET &&
-  //     prevProps.computeSearchDialect.searchByAlphabet !== props.computeSearchDialect.searchByAlphabet
-
-  //   const updatedDialectFilter =
-  //     (props.computeSearchDialect.searchByMode === SEARCH_BY_CATEGORY ||
-  //       props.computeSearchDialect.searchByMode === SEARCH_BY_PHRASE_BOOK) &&
-  //     prevProps.searchingDialectFilter !== props.searchingDialectFilter
-
-  //   const updatedMode = prevProps.computeSearchDialect.searchByMode !== props.computeSearchDialect.searchByMode
-
-  //   if (updatedAlphabet || updatedDialectFilter || updatedMode) {
-  //     const forSearchDialectUpdate = Object.assign({}, props.computeSearchDialect, {
-  //       searchMessage: getSearchMessage(props.computeSearchDialect),
-  //     })
-  //     props.searchDialectUpdate(forSearchDialectUpdate)
-  //   }
-  // }
+  }, [])
 
   // Generates 'Stop browsing ...' button
   // TODO: props.searchDialectResetButtonText
@@ -255,7 +223,6 @@ export const SearchDialect = (props) => {
     } = _searchBySettings
 
     const cols = []
-
     if (searchByTitle) {
       switch (props.searchDialectDataType) {
         case SEARCH_DATA_TYPE_WORD:
@@ -350,7 +317,18 @@ export const SearchDialect = (props) => {
         messages.all = <span>{`Showing all ${dataType} listed alphabetically${messagePartsOfSpeech}`}</span>
     }
 
-    let msg = ''
+    let msg = messages.all
+
+    if (
+      searchPartOfSpeech !== true &&
+      searchByTitle !== true &&
+      searchByDefinitions !== true &&
+      searchByCulturalNotes !== true &&
+      searchByTranslations !== true
+    ) {
+      return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
+    }
+
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         msg = messages.startWith
@@ -384,8 +362,7 @@ export const SearchDialect = (props) => {
         }
         break
       }
-      default:
-        msg = messages.all
+      default: // NOTE: do nothing
     }
     return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
   }
@@ -444,7 +421,7 @@ export const SearchDialect = (props) => {
           element = (
             <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
               <input
-                checked={searchBySettings[idName]}
+                checked={searchBySettings[idName] || false}
                 className={_classes.SearchDialectOption}
                 id={idName}
                 name={idName}
@@ -519,7 +496,7 @@ export const SearchDialect = (props) => {
     const searchData1 = {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_DEFAULT,
-      searchBySettings: undefined,
+      searchBySettings: {},
       searchTerm: undefined,
     }
 
@@ -636,7 +613,4 @@ const mapDispatchToProps = {
   searchDialectUpdate,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SearchDialect)
+export default connect(mapStateToProps, mapDispatchToProps)(SearchDialect)

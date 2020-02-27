@@ -28,7 +28,7 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -79,42 +79,15 @@ export class WordsEdit extends Component {
     is403: false,
   }
 
-  // Fetch data on initial render
   async componentDidMount() {
     const copy = await import(/* webpackChunkName: "WordsEditInternationalization" */ './internationalization').then(
       (_module) => {
         return _module.default
       }
     )
-    this.fetchData({ copy })
+    const { redirect } = getSearchObject()
+    this.fetchData({ copy, redirect: redirect ? decodeURIComponent(redirect) : undefined })
   }
-
-  // shouldComponentUpdate(newProps, newState) {
-  //   const previousWord = this.props.computeWord
-  //   const nextWord = newProps.computeWord
-
-  //   const previousDialect = this.props.computeDialect2
-  //   const nextDialect = newProps.computeDialect2
-
-  //   switch (true) {
-  //     case this.state.componentState != newState.componentState:
-  //       return true
-
-  //     case newProps.routeParams.word != this.props.routeParams.word:
-  //       return true
-
-  //     case newProps.routeParams.dialect_path !== this.props.routeParams.dialect_path:
-  //       return true
-
-  //     case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
-  //       return true
-
-  //     case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-  //       return true
-  //     default:
-  //       return false
-  //   }
-  // }
 
   shouldComponentUpdate(newProps, newState) {
     const previousWord = this.props.computeWord
@@ -178,11 +151,19 @@ export class WordsEdit extends Component {
       selectn('wasUpdated', prevWord) != selectn('wasUpdated', currentWord) &&
       selectn('wasUpdated', currentWord) === true
     ) {
-      NavigationHelpers.navigate(
-        NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, selectn('response', currentWord), 'words'),
-        this.props.replaceWindowPath,
-        true
-      )
+      if (this.state.redirect) {
+        NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
+      } else {
+        NavigationHelpers.navigate(
+          NavigationHelpers.generateUIDPath(
+            this.props.routeParams.siteTheme,
+            selectn('response', currentWord),
+            'words'
+          ),
+          this.props.replaceWindowPath,
+          true
+        )
+      }
     }
   }
 
@@ -271,7 +252,11 @@ export class WordsEdit extends Component {
   }
 
   _handleCancel = () => {
-    NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+    if (this.state.redirect) {
+      NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
+    } else {
+      NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
+    }
   }
   _stateGetEdit = () => {
     let context
@@ -389,7 +374,4 @@ const mapDispatchToProps = {
   updateWord,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WordsEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(WordsEdit)

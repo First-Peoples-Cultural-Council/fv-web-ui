@@ -82,19 +82,19 @@ export default {
       },
     },
     containedSecondary: {
-      color: 'blue',
-      backgroundColor: 'yellow',
+      color: '#fff',
+      backgroundColor: '#bc0000',
       '&:hover': {
-        color: 'yellow',
-        backgroundColor: 'blue',
+        color: '#360000',
+        backgroundColor: '#f18f8b',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'pink',
+          backgroundColor: '#f18f8b',
         },
       },
       '&$disabled': {
-        color: '#a1a1a1',
-        backgroundColor: '#e5e5e5',
+        color: '#fff',
+        backgroundColor: '#deb8b8',
       },
     },
     outlinedPrimary: {
@@ -136,6 +136,35 @@ export default {
         color: '#a1a1a1',
         borderColor: '#e5e5e5',
         fill: '#e5e5e5',
+      },
+    },
+  },
+  tab: {
+    label: {
+      fontSize: '1.6rem',
+    },
+    tabsIndicator: {
+      backgroundColor: '#ee492d',
+      height: '3px',
+    },
+    tabRoot: {
+      opacity: 1,
+      '&:focus': {
+        color: '#FFF',
+      },
+      '&:hover': {
+        backgroundColor: '#920f0f',
+      },
+    },
+    tabsRoot: {
+      backgroundColor: '#b40000',
+      color: '#fff',
+    },
+    tabSelected: {
+      color: '#fff',
+      backgroundColor: '#5f0a0b',
+      '&:hover': {
+        backgroundColor: '#5f0a0b',
       },
     },
   },

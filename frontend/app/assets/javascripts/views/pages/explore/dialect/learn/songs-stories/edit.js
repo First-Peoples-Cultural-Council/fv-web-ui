@@ -35,13 +35,11 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
+import FVTab from 'views/components/FVTab'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
-
 // Models
 import { Document } from 'nuxeo'
 
@@ -271,22 +269,26 @@ export class PageDialectBookEdit extends Component {
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <Tabs value={this.state.tabValue} onChange={(e, tabValue) => this.setState({ tabValue })}>
-            <Tab label={intl.trans('book', 'Book', 'first')} />
-            <Tab label={intl.trans('pages', 'Pages', 'first')} />
-          </Tabs>
+          <FVTab
+            tabItems={[
+              { label: intl.trans('book', 'Book', 'first') },
+              { label: intl.trans('pages', 'Pages', 'first') },
+            ]}
+            tabsValue={this.state.tabValue}
+            tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
+          />
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
-                <Typography variant="headline">
-                  <h1>
+                <Typography variant="display2">
+                  <>
                     {intl.trans(
                       'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
                       'Edit ' + title + ' Book',
                       'words',
                       [title]
                     )}
-                  </h1>
+                  </>
                 </Typography>
               )}
               <EditViewWithForm
@@ -381,7 +383,4 @@ const mapDispatchToProps = {
   updateBookEntry,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectBookEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit)

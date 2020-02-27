@@ -76,6 +76,7 @@ export class PageDialectGalleryEdit extends Component {
     gallery: null,
     formValue: null,
     componentState: STATE_LOADING,
+    is403: false,
   }
 
   formGallery = React.createRef()
@@ -147,7 +148,7 @@ export class PageDialectGalleryEdit extends Component {
     return content
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     await this.props.fetchGallery(this._getGalleryPath())
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -155,6 +156,8 @@ export class PageDialectGalleryEdit extends Component {
     if (_computeDialect2.isError) {
       this.setState({
         componentState: STATE_DEFAULT,
+        // Note: Intentional == comparison
+        is403: _computeDialect2.message == '403',
         errorMessage: _computeDialect2.message,
       })
       return
@@ -263,6 +266,7 @@ export class PageDialectGalleryEdit extends Component {
 
     return (
       <AuthenticationFilter
+        is403={this.state.is403}
         login={this.props.computeLogin}
         anon={false}
         routeParams={this.props.routeParams}
@@ -376,7 +380,4 @@ const mapDispatchToProps = {
   updateGallery,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectGalleryEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectGalleryEdit)

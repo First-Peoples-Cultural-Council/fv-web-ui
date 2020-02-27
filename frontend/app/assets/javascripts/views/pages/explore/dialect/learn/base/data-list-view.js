@@ -317,7 +317,10 @@ export default class DataListView extends Component {
 
         this.state.columns.splice(stateCol, 1)
       } else {
-        this.state.columns.push({ name: 'state', title: intl.trans('state', 'State', 'first') })
+        this.state.columns.push({
+          name: 'state',
+          title: intl.trans('state', 'State', 'first'),
+        })
       }
     }
   }

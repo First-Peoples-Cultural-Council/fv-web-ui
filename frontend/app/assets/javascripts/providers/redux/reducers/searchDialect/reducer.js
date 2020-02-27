@@ -85,39 +85,29 @@ const generateNxql = ({
       break
     }
     default: {
-      if (searchByCulturalNotes) {
-        nxqlQueryJoin(nxqlQueries)
-        nxqlQueries.push(nxqlTmpl.searchByCulturalNotes)
-      }
-      if (searchByTitle) {
-        nxqlQueryJoin(nxqlQueries)
-        nxqlQueries.push(nxqlTmpl.searchByTitle)
-      }
-      if (searchByTranslations) {
-        nxqlQueryJoin(nxqlQueries)
-        nxqlQueries.push(nxqlTmpl.searchByTranslations)
-      }
-      if (searchByDefinitions) {
-        nxqlQueryJoin(nxqlQueries)
-        nxqlQueries.push(nxqlTmpl.searchByDefinitions)
-      }
-      if (searchPartOfSpeech && searchPartOfSpeech !== SEARCH_PART_OF_SPEECH_ANY) {
-        if (!searchByTitle && searchValue) {
+      if (searchValue) {
+        if (searchByCulturalNotes) {
+          nxqlQueryJoin(nxqlQueries)
+          nxqlQueries.push(nxqlTmpl.searchByCulturalNotes)
+        }
+        if (searchByTitle) {
           nxqlQueryJoin(nxqlQueries)
           nxqlQueries.push(nxqlTmpl.searchByTitle)
         }
-        // Note: fixes searching only for part of speech 1/2
+        if (searchByTranslations) {
+          nxqlQueryJoin(nxqlQueries)
+          nxqlQueries.push(nxqlTmpl.searchByTranslations)
+        }
+        if (searchByDefinitions) {
+          nxqlQueryJoin(nxqlQueries)
+          nxqlQueries.push(nxqlTmpl.searchByDefinitions)
+        }
+      }
+      if (searchPartOfSpeech && searchPartOfSpeech !== SEARCH_PART_OF_SPEECH_ANY) {
         nxqlQuerySpeech = `${nxqlQueries.length === 0 ? '' : ' AND '}${nxqlTmpl.searchPartOfSpeech}`
-        // nxqlQuerySpeech = ` AND ${nxqlTmpl.searchPartOfSpeech}`
       }
     }
   }
-
-  // Note: fixes searching only for part of speech 2/2
-  // Safety
-  // if (nxqlQueries.length === 0) {
-  //   nxqlQueries.push(nxqlTmpl.searchByTitle)
-  // }
 
   let nxqlQueryCollection = ''
   if (nxqlQueries.length > 0) {

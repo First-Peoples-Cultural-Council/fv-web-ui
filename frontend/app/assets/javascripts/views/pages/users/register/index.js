@@ -28,8 +28,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
-
+import Link from 'views/components/Link'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import FVButton from 'views/components/FVButton'
@@ -228,8 +227,8 @@ export class Register extends Component {
                   us for support.
                 </p>
                 <p>
-                  Go to our <a href="/">home page</a> or{' '}
-                  <a href="/explore/FV/sections/Data/">explore our community portals</a>.
+                  Go to our <Link href="/">home page</Link> or{' '}
+                  <Link href="/explore/FV/sections/Data/">explore our community portals</Link>.
                 </p>
               </div>
             </div>
@@ -243,9 +242,19 @@ export class Register extends Component {
         <h1>
           {selectn('response.title', computeDialect2)} {intl.trans('register', 'Register', 'first')}
         </h1>
-
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-8')}>
+            <div>
+              <h2>Are you a member of a language community?</h2>
+              <p>
+                Most content is available <Link href="/explore/FV/sections/Data">here</Link> for everyone to access
+                without registration.
+              </p>
+              <p>
+                If you are a member of a language community that is represented on FirstVoices, please register in order
+                to access any additional content intended solely for members of your community.
+              </p>
+            </div>
             <form onSubmit={this._onRequestSaveForm.bind(this, this.props.computeLogin)}>
               <t.form.Form
                 ref={this.formUserCreate}
@@ -272,27 +281,6 @@ export class Register extends Component {
                 </FVButton>
               </div>
             </form>
-          </div>
-          <div className={classNames('col-xs-12', 'col-md-4')}>
-            <h2>Did you know?</h2>
-            <p>
-              Becoming a member allows us to present you with content that is personalized to you, however most content
-              is available to the public without registration, at the discretion of communities.
-            </p>
-            <p>
-              {'You can get started by clicking "'}
-              <strong>
-                <a href="/explore/FV/sections/Data">Choose a Language</a>
-              </strong>
-              {'", and then picking your language/community.'}
-            </p>
-            <FVButton
-              variant="contained"
-              color="primary"
-              onClick={() => NavigationHelpers.navigate('/explore/FV/sections/Data', this.props.pushWindowPath)}
-            >
-              {intl.translate('choose_lang', 'Choose a Language', 'first')}
-            </FVButton>
           </div>
         </div>
       </PromiseWrapper>
@@ -327,7 +315,4 @@ const mapDispatchToProps = {
   selfregisterUser,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Register)
+export default connect(mapStateToProps, mapDispatchToProps)(Register)

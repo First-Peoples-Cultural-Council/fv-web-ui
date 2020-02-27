@@ -16,15 +16,23 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
       userName: 'TESTLANGUAGETHREE_RECORDER_APPROVER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
+    cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
                 Going through the steps to create a word
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
     cy.getByText('Words', { exact: true }).click()
-    cy.getByText('Create New Word', { exact: false }).click()
+    cy.wait(500)
+    cy.getByText('Create New Word')
+      .pipe(click)
+      .should(($el) => {
+        expect($el).to.not.be.visible
+      })
+    cy.wait(1500)
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
     cy.getByTestId('fv-word-pronunciation').type('TestPronunciation')
@@ -98,19 +106,19 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Checking to see if the word now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
-    cy.wait(500)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
-      cy.getByText('New').should('exist')
+      cy.queryByText('TestWord').should('exist')
+      cy.queryByText('TestTranslation').should('exist')
+      cy.queryByText('Noun').should('exist')
+      cy.queryByText('New').should('exist')
     })
 
     /*
             Make sure that the enabled toggle is available and click it.
             Make sure that the published toggle becomes available and click it.
         */
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('TestWord').click()
     cy.getByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
@@ -134,7 +142,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Check that the cancel button when editing word works.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
-    cy.wait(500)
+    cy.wait(3500)
     cy.getByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')
@@ -149,12 +157,12 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
       cy.getByText('Cancel').click()
     })
     cy.getByText('Yes!').click()
-    cy.wait(500)
+    cy.wait(1000)
 
     /*
                 Check that edit word saves properly.
             */
-    cy.getByText('TestWord').click()
+    cy.queryByText('TestWord').click()
     cy.getByText('Edit word')
       .should('exist')
       .click()
@@ -163,7 +171,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Save').click()
     })
-    cy.getByText('TestWordTestWord1', { exact: true }).should('exist')
+    cy.queryByText('TestWordTestWord1', { exact: true }).should('exist')
 
     /*
             Test fonts.
@@ -174,7 +182,9 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
                 Delete the word and check that it no longer exists.
             */
     cy.getByText('Delete word').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
     cy.getByText('Delete word success').should('exist')
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
     cy.getByText('Return To Previous Page')

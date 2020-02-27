@@ -27,17 +27,46 @@ export default {
     })
 
     return (
-      <ol
-        style={{
-          fontSize: '0.9em',
-          margin: 0,
-          padding: rows.length == 1 ? '0' : '0 15px',
-          listStyle: rows.length == 1 ? 'none' : 'decimal',
-        }}
-      >
-        {rows}
-      </ol>
+      <ol className={`renderComplexArrayRow ${rows.length === 1 ? 'renderComplexArrayRow--rowSingle' : ''}`}>{rows}</ol>
     )
+  },
+  generateOrderedListFromDataset({
+    dataSet = [],
+    extractDatum = () => {},
+    classNameList = 'generateOrderedListFromDataset',
+    classNameListItem = 'generateOrderedListFromDataset__listItem',
+  }) {
+    const rows = []
+
+    dataSet.forEach((entry, i) => {
+      rows.push(
+        <li className={classNameListItem} key={i}>
+          {extractDatum(entry, i)}
+        </li>
+      )
+    })
+
+    return <ol className={`${classNameList} ${rows.length === 1 ? `${classNameList}--single` : ''}`}>{rows}</ol>
+  },
+  generateDelimitedDatumFromDataset({
+    dataSet = [],
+    extractDatum = () => {},
+    classNameContainer = '',
+    classNameText = '',
+    delimiter = ', ',
+  }) {
+    const rows = []
+
+    dataSet.forEach((entry, i) => {
+      rows.push(
+        <>
+          {i > 0 ? delimiter : ''}
+          <span className={classNameText}>{extractDatum(entry, i)}</span>
+        </>
+      )
+    })
+
+    return <span className={classNameContainer}>{rows}</span>
   },
   getPreferenceVal(key, preferences) {
     return selectn('preferences.values.' + key + '.' + selectn(key, preferences), ConfGlobal)

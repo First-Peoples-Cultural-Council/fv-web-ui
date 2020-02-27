@@ -13,4 +13,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends nano
 
 # No need to start Nuxeo here - will happen automatically.
 
-USER 1000
+#USER 1000

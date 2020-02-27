@@ -4,26 +4,17 @@ body {
   line-height: 1.2 !important;
 }
 
-audio {
-  display: none;
+.AppFrontController__inner {
+  // Note: `display: flex` prevents pagination with lists
+  display: inline !important;
 }
-
-.PrintHide {
-  display: none !important;
-}
-
-.AppFrontControllerBreadcrumb,
-.AppFrontControllerHeader,
-.AppFrontControllerFooter,
-.Header,
-.SearchDialect {
-  display: none !important;
-}
-
 .DictionaryList {
-  font-size: 1.5em;
+  font-size: 10pt;
 }
-.DictionaryList a[href]:after {
+.Breadcrumb a[href]:after,
+.DictionaryList a[href]:after,
+.DictionaryList__link:after,
+.Navigation__dialectLink[href]:after {
   content: none !important;
 }
 .DictionaryList th,
@@ -34,11 +25,88 @@ audio {
 .DictionaryList__data--title .DictionaryList__link {
   text-decoration: none;
 }
+.Footer {
+  padding-top: 40px;
+  min-height: 0;
+}
+.Footer__group {
+  padding: 0;
+}
+.search-results {
+  border-left: none;
+}
+// Higher Specificity via: #PageContainer
+// -------------------------
+#pageContainer {
+  .PromiseWrapper {
+    margin-bottom: 0;
+  }
+  .alphabet__character {
+    font-size: 20pt;
+    margin: 4px;
+    min-width: auto;
+    min-height: auto;
+  }
+  .DictionaryList__data,
+  .data-table td.DictionaryList__data,
+  .DictionaryList__data .renderComplexArrayRow,
+  .DictionaryList__data--title .DictionaryList__link,
+  .DictionaryList__link.DictionaryList__link--indigenous,
+  .DictionaryListSmallScreen__dataItem .DictionaryList__link.DictionaryList__link--indigenous {
+    font-size: 10pt;
+  }
+  .DictionaryList__data--title, 
+  .DictionaryList__data.DictionaryList__data--title,
+  .data-table td.DictionaryList__data--title {
+    padding: 5px;
+  }
 
+  .DictionaryList__data--title,
+  .DictionaryList__data.DictionaryList__data--title,
+  .data-table td.DictionaryList__data--title {
+    text-align: left;
+  }
+  .DictionaryList__link {
+    padding: 0;
+  }
+  .DictionaryListSmallScreen__groupSecondary {
+    justify-content: space-between;
+  }
+  .DictionaryListSmallScreen__groupSecondary .DictionaryListSmallScreen__dataItem {
+    padding: 0 5px 0 0;
+  }
+  .DictionaryList__data--title .DictionaryList__link,
+  .DictionaryList__link.DictionaryList__link--indigenous,
+  .DictionaryListSmallScreen__dataItem .DictionaryList__link.DictionaryList__link--indigenous {
+    text-align: left;
+    padding: 0;
+  }
+}
 .PrintPageBreak {
   break-before: page;
 }
 
-#page-absolute-footer {
+// Display None
+// -------------------------
+.DictionaryList__ListButtonsGroup,
+#page-absolute-footer,
+audio,
+.fakeLastEntry {
   display: none;
+}
+// Display None w/!important
+// -------------------------
+.AppFrontController__workspaceSwitcher,
+.AppFrontControllerBreadcrumb,
+.AppFrontControllerFooter,
+.AppFrontControllerHeader,
+.DictionaryListSmallScreen__actions,
+.DictionaryListSmallScreen__audioGroup,
+.EditableComponent__btnEdit,
+.Header,
+.Navigation__toolbarMain,
+.PrintHide,
+.SearchDialect,
+.fakeLastEntry {
+  display: none !important;
 }

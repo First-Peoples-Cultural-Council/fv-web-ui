@@ -13,7 +13,7 @@ export const testSearchPhrases = () => {
       searchingText,
       searchPhrase: true,
       shouldPaginate: true,
-      term: 'a',
+      term: 'TestPhrase',
     },
     search2: {
       btnSearch,
@@ -25,7 +25,7 @@ export const testSearchPhrases = () => {
       searchingText,
       searchPhrase: false,
       shouldPaginate: false,
-      term: 'Lidí sa deyenenił.',
+      term: 'TestPhraseOne',
     },
     search3: {
       btnSearch,
@@ -36,7 +36,7 @@ export const testSearchPhrases = () => {
       searchingText,
       searchPhrase: true,
       shouldPaginate: false,
-      term: 'Lidí sa deyenenił.',
+      term: 'TestPhraseOne',
     },
     // Item only in Definitions
     search4: {
@@ -49,7 +49,7 @@ export const testSearchPhrases = () => {
       searchingText,
       searchPhrase: true,
       shouldPaginate: false,
-      term: 'pour',
+      term: 'TestTranslation',
     },
     search5: {
       btnSearch,
@@ -60,7 +60,7 @@ export const testSearchPhrases = () => {
       searchingText,
       searchPhrase: true,
       shouldPaginate: false,
-      term: 'pour',
+      term: 'TestTranslation',
     },
     // Item only in Cultural Notes
     search6: {
@@ -73,7 +73,7 @@ export const testSearchPhrases = () => {
       searchDefinitions: true,
       searchingText,
       shouldPaginate: false,
-      term: 'language has a classificatory verb system',
+      term: 'TestCulturalNote',
     },
     search7: {
       btnSearch,
@@ -85,7 +85,7 @@ export const testSearchPhrases = () => {
       searchPhrase: false,
       searchCulturalNotes: true,
       shouldPaginate: false,
-      term: 'language has a classificatory verb system',
+      term: 'TestCulturalNote',
     },
   }
 

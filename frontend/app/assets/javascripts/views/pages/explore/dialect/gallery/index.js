@@ -135,6 +135,7 @@ export class PageDialectGalleries extends Component {
             >
               <FVButton
                 variant="contained"
+                className="PrintHide"
                 onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/create')}
                 color="primary"
               >
@@ -229,7 +230,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectGalleries)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectGalleries)

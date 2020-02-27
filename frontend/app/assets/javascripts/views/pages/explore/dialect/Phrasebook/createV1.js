@@ -179,11 +179,11 @@ export class PageDialectPhraseBooksCreate extends Component {
     const phrasebook = ProviderHelpers.getEntry(computeCategory, this.state.phrasebookPath)
 
     if (computeDialect.isFetching || !computeDialect.success) {
-      return <CircularProgress variant="indeterminate" size={2} />
+      return <CircularProgress variant="indeterminate" />
     }
 
     return (
-      <div>
+      <div data-testid="PageDialectPhraseBooksCreate">
         <h1>
           {intl.trans(
             'views.pages.explore.dialect.phrase_books.add_new_phrase_book_to',
@@ -251,7 +251,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectPhraseBooksCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectPhraseBooksCreate)

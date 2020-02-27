@@ -57,7 +57,12 @@ export class SongsStoriesListViewAlt extends DataListView {
     filter: object,
     gridListView: bool,
     routeParams: object.isRequired,
-
+    // Export
+    hasExportDialect: bool,
+    exportDialectExportElement: string,
+    exportDialectColumns: string,
+    exportDialectLabel: string,
+    exportDialectQuery: string,
     // REDUX: reducers/state
     computeBooks: object.isRequired,
     computeDialect2: object.isRequired,
@@ -107,7 +112,7 @@ export class SongsStoriesListViewAlt extends DataListView {
                   // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
                 }
             return (
-              <a onClick={clickHandler} href={href}>
+              <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}
               </a>
             )
@@ -247,6 +252,13 @@ export class SongsStoriesListViewAlt extends DataListView {
                 pageSize={this.state.pageInfo.pageSize}
                 refetcher={this._handleRefetch}
                 type="FVBook"
+                // Export
+                hasExportDialect={this.props.hasExportDialect}
+                exportDialectExportElement={this.props.exportDialectExportElement || 'FVBook'}
+                exportDialectLabel={this.props.exportDialectLabel}
+                exportDialectQuery={this.props.exportDialectQuery}
+                exportDialectColumns={this.props.exportDialectColumns}
+                //
               />
             )
           }
@@ -283,7 +295,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SongsStoriesListViewAlt)
+export default connect(mapStateToProps, mapDispatchToProps)(SongsStoriesListViewAlt)

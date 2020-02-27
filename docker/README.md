@@ -4,9 +4,16 @@ This environment is setup for localhost work. It includes an embedded database (
 
 ## Prerequisites
 
-1. You must have Docker installed and running, as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads).
+1. You must have Docker installed and running, as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
+- Java 8
+- [Apache Maven](https://maven.apache.org/)
+- Node v8.10.0
+- NPM v5.6.0.
 2. Basic knowledge of Docker, Nuxeo and bash.
-3. Ensure you have the two environment variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD which will be passed into the container and used to create an admin account during the initial setup.
+3. Ensure you have the two environment variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD which will be passed into the container and used to create an admin account during the initial setup. After setting environment variables they can be checked by running the following in your terminal window:
+```
+printenv
+```
 
 ## Initial Setup
 
@@ -66,7 +73,7 @@ Notes:
 * To enable Dev mode: ```-e NUXEO_DEV_MODE="true"```\
 * To change the data folder: ```-e NUXEO_DATA="/opt/nuxeo/ext_data"```\
 
-### Step 5:
+### Step 4:
 
 Run the initial backend setup script in a new terminal once the backend server has started:
 
@@ -80,7 +87,7 @@ chmod +x initialsetup.sh
 
 This will setup the proper data structure for FirstVoices, and create an admin account based on your environment variables.
 
-### Step 6:
+### Step 5:
 
 * You can now access the FirstVoices backend by going to localhost:8080 and logging in.
 * You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)
@@ -105,8 +112,9 @@ docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accep
 
 ### Method 2 (deploy a single module):
 
-* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it
-* Execute the following command to copy the JAR into the server, and restart the server:
+* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it with the command: ```mvn clean install```
+This will generate a jarfile for the module in the target directory (e.g. FirstVoicesSecurity/target/FirstVoicesSecurity-*.jar).
+* Execute the following command to copy the JAR into the running backend docker container, and restart the server to apply the changes:
 ```
 docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
 ```
@@ -120,6 +128,16 @@ docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/
 ### Log into container called 'nuxeo-dev':
 
 ```docker exec -it nuxeo-dev /bin/bash```
+
+## Testing
+
+### Tips & Tricks
+
+When setting up unit tests:
+* Ensure that all the necessary imports are at the top
+* Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
+* Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
+
 
 ## TODO
 1. Use `docker-compose` to optionally setup Apache2, Elasticsearch, and Postgresql

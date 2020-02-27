@@ -17,7 +17,8 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       Checking to make sure a word currently exists.
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(500)
+    cy.wait(3500)
+    cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -28,14 +29,15 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     /*
       Click enable as Recorder and check that publish is not clickable.
     */
-    cy.getByText('TestWord', { exact: false }).click()
+    cy.getByText('TestWord', { exact: false }).scrollIntoView()
+    cy.getByText('TestWord').click()
+    cy.wait(500)
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
     cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
       Login as Admin and verify task exists / reject task.
@@ -48,8 +50,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('View My Tasks', { exact: false }).click()
     cy.getByText('Reject', { exact: true }).click()
 
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
       Login as Recorder and click enable again.
@@ -59,15 +60,19 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.getByText('TestWord', { exact: false }).click()
+    cy.wait(3500)
+    cy.getByTestId('DictionaryList__row').scrollIntoView()
+    cy.wait(1000)
+    cy.getByTestId('DictionaryList__row').within(() => {
+      cy.getByText('TestWord').click()
+    })
     cy.wait(500)
     cy.getByText('Enable (0)', { exact: true }).click()
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
     cy.getByText('Enable (1)', { exact: true }).should('exist')
     cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
       Login as Admin and verify task exists / approve task.
@@ -80,8 +85,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('View My Tasks', { exact: true }).click()
     cy.getByText('Approve', { exact: true }).click()
 
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
       Login as Site Member and check that the word is visible once enabled.
@@ -90,15 +94,15 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       userName: 'TESTLANGUAGEFIVE_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.wait(500)
+    cy.wait(3500)
+    cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Noun').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
       Login as Recorder and verify that publish is now clickable.
@@ -108,7 +112,12 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
-    cy.getByText('TestWord', { exact: false }).click()
+    cy.wait(3500)
+    cy.getByTestId('DictionaryList__row').scrollIntoView()
+    cy.wait(1000)
+    cy.getByTestId('DictionaryList__row').within(() => {
+      cy.getByText('TestWord').click()
+    })
     cy.wait(500)
     cy.getByText('Enable (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
     cy.getByText('Enable (0)').should('have.css', 'cursor', 'default')

@@ -7,9 +7,10 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
                         Login as Language Admin and navigate to the edit portal page.
                     */
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN',
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
+    cy.wait(500)
 
     /*
             Test that the default images are showing and not the new ones already.
@@ -43,7 +44,12 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
         })
     })
     cy.wait(500)
-    cy.getByText('TestWord').click()
+    cy.getByText('Dragon')
+      .parent()
+      .parent()
+      .within(() => {
+        cy.getByText('Select').click()
+      })
     cy.wait(500)
     cy.get('div.form-horizontal').within(() => {
       cy.getByText('Related links')
@@ -53,14 +59,12 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
           cy.getByText('Create Link').click()
         })
     })
-    cy.getByText('Add New Link To Testlanguagetwo')
+    cy.getByText('Add New Link To Testlanguagesix')
       .parent()
       .within(() => {
         cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
         cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
-        cy.get('[name="fvlink:url"]').type(
-          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo'
-        )
+        cy.get('[name="fvlink:url"]').type('http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
         cy.getByText('Save').click()
       })
 
@@ -70,7 +74,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new audio in the testlanguagetwo dialect')
+    cy.getByText('Create new audio in the testlanguagesix dialect')
       .parent()
       .parent()
       .within(() => {
@@ -91,7 +95,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new picture in the testlanguagetwo dialect')
+    cy.getByText('Create new picture in the testlanguagesix dialect')
       .parent()
       .parent()
       .within(() => {
@@ -112,7 +116,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new picture in the testlanguagetwo dialect')
+    cy.getByText('Create new picture in the testlanguagesix dialect')
       .parent()
       .parent()
       .within(() => {
@@ -150,7 +154,8 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     /*
         Test that if a user clicks cancel when editing, the changes don't save.
      */
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
+    cy.wait(500)
     cy.getByText('Edit Portal').click()
     cy.wait(500)
 
@@ -166,6 +171,8 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     /*
         Check that the information is visible on the public view
      */
+    cy.getByText('Publish Changes').click()
+    cy.queryByText('Portal Published Successfully!').should('exist')
     cy.getByText('Public View').click()
     cy.wait(1000)
     cy.get('#portalFeaturedAudio').should('exist')

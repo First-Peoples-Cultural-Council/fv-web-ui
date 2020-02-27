@@ -255,7 +255,7 @@ export class AddMediaComponent extends Component {
 
     //if (this.state.schema != undefined){
     form = (
-      <form onSubmit={this._save} id="AddMediaComponent" encType="multipart/form-data">
+      <form onSubmit={this._save} data-testid="AddMediaComponent" id="AddMediaComponent" encType="multipart/form-data">
         <t.form.Form
           ref={this.formMedia}
           options={selectn('FVResource', options)}
@@ -326,7 +326,12 @@ export class AddMediaComponent extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this.handleClose}>
+            <FVButton
+              data-testid="Dialog__AddMediaComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this.handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
@@ -358,7 +363,4 @@ const mapDispatchToProps = {
   createVideo,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddMediaComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(AddMediaComponent)

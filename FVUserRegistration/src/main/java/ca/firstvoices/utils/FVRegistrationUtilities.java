@@ -4,41 +4,14 @@
  */
 package ca.firstvoices.utils;
 
-import static ca.firstvoices.utils.FVRegistrationConstants.EMAIL_EXISTS_ERROR;
-import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_NAME_ARG;
-import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_AND_EMAIL_EXIST_ERROR;
-import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_EXISTS_ERROR;
-import static ca.firstvoices.utils.FVRegistrationConstants.NEW_USER_SELF_REGISTRATION_ACT;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_CAN_PROCEED;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXISTS_ERROR;
-import static ca.firstvoices.utils.FVRegistrationConstants.SYSTEM_APPROVED_GROUP_CHANGE;
-import static ca.firstvoices.utils.FVRegistrationConstants.USER_NAME_ARG;
-
-import java.io.Serializable;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ca.firstvoices.user.FVUserRegistrationInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.automation.server.jaxrs.RestOperationException;
-import org.nuxeo.ecm.core.api.CoreInstance;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.core.api.NuxeoGroup;
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
@@ -54,7 +27,11 @@ import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.user.FVUserRegistrationInfo;
+import java.io.Serializable;
+import java.time.Year;
+import java.util.*;
+
+import static ca.firstvoices.utils.FVRegistrationConstants.*;
 
 public class FVRegistrationUtilities {
     private static final Log log = LogFactory.getLog(FVRegistrationUtilities.class);
@@ -136,7 +113,7 @@ public class FVRegistrationUtilities {
 
     /**
      * @param registrationRequest
-     * @param s
+     * @param session
      * @param uM
      */
     public void registrationCommonSetup(DocumentModel registrationRequest, CoreSession session, UserManager uM) {
@@ -192,8 +169,8 @@ public class FVRegistrationUtilities {
         userInfo.setFirstName((String) registrationRequest.getPropertyValue("userinfo:firstName"));
         userInfo.setLastName((String) registrationRequest.getPropertyValue("userinfo:lastName"));
         userInfo.setComment((String) registrationRequest.getPropertyValue("fvuserinfo:comment"));
-        userInfo.setLanguageTeamMember(
-                (Boolean) registrationRequest.getPropertyValue("fvuserinfo:language_team_member"));
+        userInfo.setCommunityMember((Boolean) registrationRequest.getPropertyValue("fvuserinfo:community_member"));
+        userInfo.setLanguageTeamMember((Boolean) registrationRequest.getPropertyValue("fvuserinfo:language_team_member"));
 
         userInfo.setLogin(userInfo.getEmail());
 
@@ -242,7 +219,7 @@ public class FVRegistrationUtilities {
     /**
      * @throws Exception
      */
-    private void notificationEmailsAndReminderTasks(DocumentModel dialect, DocumentModel ureg) throws Exception {
+    private void notificationEmailsAndReminderTasks(DocumentModel dialect, DocumentModel ureg, int variant) throws Exception {
         Map<String, String> options = new HashMap<>();
         options.put("fName", (String) ureg.getPropertyValue("userinfo:firstName"));
         options.put("lName", (String) ureg.getPropertyValue("userinfo:lastName"));
@@ -253,7 +230,14 @@ public class FVRegistrationUtilities {
         options.put("dialectState", dialect.getCurrentLifeCycleState());
 
         String adminTO = mailUtil.getLanguageAdministratorEmail(dialect);
-        mailUtil.registrationAdminMailSender(NEW_USER_SELF_REGISTRATION_ACT, options, adminTO);
+        String superAdminBCC = mailUtil.getSuperAdministratorEmail();
+
+        // If language does not have an administrator - send directly to super admin
+        if (adminTO.isEmpty()) {
+            adminTO = superAdminBCC;
+        }
+
+        mailUtil.registrationAdminMailSender(variant, options, adminTO, superAdminBCC);
     }
 
     /**
@@ -345,6 +329,7 @@ public class FVRegistrationUtilities {
         info.put("fvuserinfo:requestedSpace", userInfo.getRequestedSpace());
         info.put("fvuserinfo:comment", userInfo.getComment());
         info.put("fvuserinfo:language_team_member", userInfo.getLanguageTeamMember());
+        info.put("fvuserinfo:community_member", userInfo.getCommunityMember());
         info.put(UserInvitationComponent.PARAM_ORIGINATING_USER, session.getPrincipal().getName());
 
         // Add status of dialect for email
@@ -504,7 +489,7 @@ public class FVRegistrationUtilities {
     }
 
     /**
-     * @param ureg
+     * @param uregRef
      */
     public void registrationValidationHandler(DocumentRef uregRef, CoreSession s) {
         UserManager userManager = Framework.getService(UserManager.class);
@@ -525,6 +510,8 @@ public class FVRegistrationUtilities {
 
                 // String defaultUserPrefs = up.createDefaultUserPreferencesWithRegistration( ureg );
 
+                // Update user properties
+
                 // If user requested access to a private (i.e. Enabled) dialect; do not set user preferences
                 // so that the user is not redirected to the private dialect and gets a 404.
                 // Next step would be for Language Administrator to add them to a group directly.
@@ -539,23 +526,8 @@ public class FVRegistrationUtilities {
                 userDoc.setPropertyValue("user:referer", ureg.getPropertyValue("fvuserinfo:referer"));
                 userDoc.setPropertyValue("user:created", cEventDate);
                 userManager.updateUser(userDoc);
-            } catch (Exception e) {
-                log.warn("Exception while updating user preferences " + e);
-            }
 
-            // check if dialect is private ie. Enabled
-            // In this case we always notify Language Administrator regardless of the user's role
-            if (dialectLifeCycleState.equals("Enabled")) {
-                // user membership does not change until action of the language admin
-                // until than user belongs only to global 'members' group
-                try {
-                    notificationEmailsAndReminderTasks(dialect, ureg);
-                } catch (Exception e) {
-                    log.error(e);
-                    throw new NuxeoException(e);
-                }
-            } else if (dialectLifeCycleState.equals("Published")) {
-                // send system authorized group change event
+                // Add user to 'members' group
                 String newUserGroup = "members";
                 EventProducer eventProducer = Framework.getService(EventProducer.class);
                 DocumentEventContext group_ctx = new DocumentEventContext(session, session.getPrincipal(), dialect);
@@ -565,18 +537,25 @@ public class FVRegistrationUtilities {
                 event = group_ctx.newEvent(SYSTEM_APPROVED_GROUP_CHANGE);
                 eventProducer.fireEvent(event);
 
-                // Only email language admins if user stated they are part of an FV language team
-                if (ureg.getPropertyValue("fvuserinfo:language_team_member") != null
-                        && (boolean) ureg.getPropertyValue("fvuserinfo:language_team_member")) {
-                    try {
-                        notificationEmailsAndReminderTasks(dialect, ureg);
-                    } catch (Exception e) {
-                        log.error(e);
-                        throw new NuxeoException(e);
-                    }
+                // Send appropriate email templates
+
+                // User indicated they are a language team member
+                if (ureg.getPropertyValue("fvuserinfo:language_team_member") != null &&
+                        (boolean) ureg.getPropertyValue("fvuserinfo:language_team_member")) {
+                    notificationEmailsAndReminderTasks(dialect, ureg, NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT);
                 }
+                // User indicated they are a community team member
+                else if (ureg.getPropertyValue("fvuserinfo:community_member") != null &&
+                        (boolean) ureg.getPropertyValue("fvuserinfo:community_member")) {
+                    notificationEmailsAndReminderTasks(dialect, ureg, NEW_MEMBER_SELF_REGISTRATION_ACT);
+                }
+
+                // Note: If user is neither, no email is send to administrators.
+
+            } catch (Exception e) {
+                log.error("Exception while updating user and completing registration " + e);
+                throw new NuxeoException(e);
             }
         });
-
     }
 }

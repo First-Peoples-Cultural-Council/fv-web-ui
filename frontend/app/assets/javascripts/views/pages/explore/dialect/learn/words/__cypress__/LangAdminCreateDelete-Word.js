@@ -16,16 +16,18 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
+    cy.wait(500)
     cy.getByText('No results found.', { exact: true }).should('be.visible')
 
     /*
             Going through the steps to create a word
         */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: false }).click()
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('Words', { exact: true }).click()
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('Create New Word', { exact: false }).click()
     cy.getByTestId('dc-title').type('TestWord')
     cy.getByTestId('fv-word-part_of_speech').select('Noun', { exact: true })
@@ -100,6 +102,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
             Checking to see if the word now exists.
         */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
+    cy.wait(500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -147,7 +150,10 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
             Delete the word and check that it no longer exists.
         */
     cy.getByText('Delete word').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
+    cy.wait(500)
     cy.getByText('Delete word success').should('exist')
 
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/

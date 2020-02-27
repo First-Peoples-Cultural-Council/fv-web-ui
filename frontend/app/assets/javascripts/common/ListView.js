@@ -125,17 +125,21 @@ export const deleteSelected = ({ batchConfirmationAction, deletedUids, selected,
 // getIcon
 // ============================================
 export const getIcon = ({ field, sortOrder, sortBy, color = 'inherit' }) => {
+  let icon
   if (sortBy === field) {
-    return sortOrder === 'asc' ? (
-      // SORTED ASCENDING
-      <KeyboardArrowUp color={color} />
-    ) : (
-      // SORTED DESCENDING
-      <KeyboardArrowDown color={color} />
-    )
+    icon =
+      sortOrder === 'asc' ? (
+        // SORTED ASCENDING
+        <KeyboardArrowUp color={color} />
+      ) : (
+        // SORTED DESCENDING
+        <KeyboardArrowDown color={color} />
+      )
+  } else {
+    // UNSORTED
+    icon = <UnfoldMore color={color} />
   }
-  // UNSORTED
-  return <UnfoldMore color={color} />
+  return <span className="PrintHide">{icon}</span>
 }
 
 // getSortState

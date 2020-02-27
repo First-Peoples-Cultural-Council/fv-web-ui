@@ -177,8 +177,16 @@ export class DialectLearn extends Component {
   }
 
   fetchData(newProps) {
-    newProps.fetchDialect2(newProps.routeParams.dialect_path)
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
+    ProviderHelpers.fetchIfMissing(
+      newProps.routeParams.dialect_path,
+      this.props.fetchDialect2,
+      this.props.computeDialect2
+    )
+    ProviderHelpers.fetchIfMissing(
+      newProps.routeParams.dialect_path + '/Portal',
+      this.props.fetchPortal,
+      this.props.computePortal
+    )
   }
 
   // Fetch data on initial render
@@ -395,10 +403,15 @@ export class DialectLearn extends Component {
           portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
           login={computeLogin}
-          showStats={this.state.showStats}
+          isStatisticsVisible={this.state.showStats}
+          handleShowStats={this._showStats}
           routeParams={this.props.routeParams}
         >
-          <ToolbarNavigation showStats={this._showStats} routeParams={this.props.routeParams} />
+          <ToolbarNavigation
+            routeParams={this.props.routeParams}
+            isStatisticsVisible={this.state.showStats}
+            handleShowStats={this._showStats}
+          />
         </Header>
 
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
@@ -885,9 +898,4 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default withTheme()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(DialectLearn)
-)
+export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(DialectLearn))

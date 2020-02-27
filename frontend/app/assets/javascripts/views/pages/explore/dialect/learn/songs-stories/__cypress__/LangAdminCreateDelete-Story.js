@@ -10,6 +10,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/stories')
+    cy.wait(500)
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
     cy.getByText('Create Story Book', { exact: true }).click()
@@ -111,6 +112,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
                         Checking to see if the story now exists.
                     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/stories')
+    cy.wait(500)
     cy.getByTestId('pageContainer').within(() => {
       cy.getByText('TestStoryTitle').should('exist')
       cy.getByText('TestStoryTranslation').should('exist')
@@ -149,6 +151,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
       cy.getByText('Save').click()
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/stories')
+    cy.wait(500)
     cy.getByText('TestStoryTitleTestStoryTitle1', { exact: true })
       .should('exist')
       .click()
@@ -157,13 +160,16 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
                         Delete the story and check that it no longer exists.
                     */
     cy.getByText('Delete book').click()
-    cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.getByTestId('ViewWithActions__dialog').within(() => {
+      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    })
     cy.wait(500)
     cy.getByText('Delete book success').should('exist')
 
     cy.getByText('Return To Previous Page').click()
     cy.wait(500)
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/stories')
+    cy.wait(500)
 
     cy.queryByText('TestStoryTitleTestStoryTitle1').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')

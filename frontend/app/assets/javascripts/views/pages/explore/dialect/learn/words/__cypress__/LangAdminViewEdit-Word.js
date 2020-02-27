@@ -16,13 +16,13 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
     cy.getByText('No results found.').should('exist')
     cy.queryByText('TestWord').should('not.exist')
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
                 Login as Language Admin, navigate to words and check that a word exists.
@@ -31,34 +31,34 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
+    cy.wait(500)
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
-    cy.wait(500)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('New').should('exist')
       cy.getByText('TestTranslation').should('exist')
-      cy.getByText('TestWord')
-        .should('exist')
-        .click()
+      cy.queryByText('TestWord').should('exist')
+      cy.getByText('TestWord').click()
     })
 
     /*
             Check for edit word button and then enable the word.
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(800)
-    cy.getByText('TestWord').click()
+    cy.wait(2500)
+    cy.queryByText('TestWord').click()
+    cy.wait(1500)
     cy.queryByText('Edit word', { exact: true }).should('exist')
-    cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
         .click()
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as member and check that the word is now visible and enabled.
@@ -67,17 +67,18 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
+    cy.wait(500)
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
       cy.getByText('Words', { exact: true }).click()
     })
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
+      cy.queryByText('TestWord').should('exist')
+      cy.queryByText('TestTranslation').should('exist')
+      cy.queryByText('Enabled').should('exist')
     })
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Sign Out').click()
+    cy.logout()
 
     /*
             Login as Admin and publish the word.
@@ -86,8 +87,9 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       userName: 'TESTLANGUAGETWO_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(800)
+    cy.wait(2500)
     cy.getByText('TestWord', { exact: true }).click()
+    cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
@@ -106,17 +108,17 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.wait(1000)
+    cy.wait(1500)
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')
       .and('eq', 'rgb(58, 104, 128)')
-    cy.getByText('TestWord').should('exist')
-    cy.getByText('TestTranslation').should('exist')
-    cy.getByText('TestCulturalNote').should('exist')
-    cy.getByText('TestLiteralTranslation').should('exist')
-    cy.getByText('TestPronunciation').should('exist')
-    cy.getByText('TestWordImage').should('exist')
-    cy.getByText('TestWordVideo').should('exist')
-    cy.getByText('TestAcknowledgement').should('exist')
+    cy.queryByText('TestWord').should('exist')
+    cy.queryByText('TestTranslation').should('exist')
+    cy.queryByText('TestCulturalNote').should('exist')
+    cy.queryByText('TestLiteralTranslation').should('exist')
+    cy.queryByText('TestPronunciation').should('exist')
+    cy.queryByText('TestWordImage').should('exist')
+    cy.queryByText('TestWordVideo').should('exist')
+    cy.queryByText('TestAcknowledgement').should('exist')
   })
 })

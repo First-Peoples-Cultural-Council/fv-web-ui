@@ -85,4 +85,18 @@ export default {
       },
     },
   },
+  tab: {
+    tabsRoot: {
+      backgroundColor: '#26a79a',
+      color: '#fff',
+    },
+    tabsIndicator: {
+      backgroundColor: '#e93d7c',
+    },
+    tabRoot: {
+      '&:focus': {
+        color: '#FFF',
+      },
+    },
+  },
 }

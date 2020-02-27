@@ -76,7 +76,7 @@ export default {
         backgroundColor: '#89cac2',
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
-          backgroundColor: 'pink',
+          backgroundColor: '#89cac2',
         },
       },
       '&$disabled': {
@@ -123,6 +123,35 @@ export default {
         color: '#a1a1a1',
         borderColor: '#e5e5e5',
         fill: '#e5e5e5',
+      },
+    },
+  },
+  tab: {
+    label: {
+      fontSize: '1.6rem',
+    },
+    tabsIndicator: {
+      backgroundColor: '#e93d7c',
+      height: '4px',
+    },
+    tabRoot: {
+      opacity: 1,
+      '&:focus': {
+        color: '#FFF',
+      },
+      '&:hover': {
+        backgroundColor: '#37b9ab',
+      },
+    },
+    tabsRoot: {
+      backgroundColor: '#26a79a',
+      color: '#fff',
+    },
+    tabSelected: {
+      color: '#000',
+      backgroundColor: '#34caba',
+      '&:hover': {
+        backgroundColor: '#34caba',
       },
     },
   },

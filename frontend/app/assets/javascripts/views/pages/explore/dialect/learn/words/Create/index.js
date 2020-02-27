@@ -279,7 +279,7 @@ export class PageDialectWordsCreate extends Component {
             </h1>
             <div className="row" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-8', 'col-md-10')}>
-                <form onSubmit={this._onRequestSaveForm}>
+                <form onSubmit={this._onRequestSaveForm} data-testid="PageDialectWordsCreate__form">
                   <t.form.Form
                     ref={this.formWordCreate}
                     type={t.struct(selectn('FVWord', fields))}
@@ -337,7 +337,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectWordsCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectWordsCreate)

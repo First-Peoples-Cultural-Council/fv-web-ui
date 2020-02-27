@@ -1,4 +1,4 @@
-import { execute /*, fetch, query, update*/ } from 'providers/redux/reducers/rest'
+import { execute } from 'providers/redux/reducers/rest'
 
 // GET PROGRESS
 // ==============================
@@ -20,8 +20,18 @@ export const exportDialectFVGenerateDocumentWithFormat = execute(
   {}
 )
 
+// RESET DATA
+// ==============================
+export const exportDialectResetData = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'EXPORT_DIALECT_RESET_DATA',
+    })
+  }
+}
+
 export const exportDialectGenericError = (dialectIdData, message) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'EXPORT_ERROR_GENERIC',
       dialectIdData,
