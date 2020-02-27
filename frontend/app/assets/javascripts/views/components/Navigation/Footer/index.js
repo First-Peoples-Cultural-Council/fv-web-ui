@@ -20,7 +20,7 @@ import classNames from 'classnames'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./Footer.css'
-
+import Link from 'views/components/Link'
 export default class Footer extends React.Component {
   intl = IntlService.instance
 
@@ -52,21 +52,21 @@ export default class Footer extends React.Component {
 
               <div className={classNames('col-xs-12', 'col-md-5', 'col-md-offset-1', 'Footer__group')}>
                 <p className="PrintHide">
-                  <a href={NavigationHelpers.generateStaticURL('/content/disclaimer/')}>
+                  <Link href={NavigationHelpers.generateStaticURL('/content/disclaimer/')}>
                     {this.intl.translate({
                       key: 'general.disclaimer',
                       default: 'Disclaimer',
                       case: 'first',
                     })}
-                  </a>
+                  </Link>
                   {' | '}
-                  <a href={NavigationHelpers.generateStaticURL('/content/conditions/')}>
+                  <Link href={NavigationHelpers.generateStaticURL('/content/conditions/')}>
                     {this.intl.translate({
                       key: 'views.components.navigation.conditions_of_use',
                       default: 'Conditions of Use',
                       case: 'first',
                     })}
-                  </a>
+                  </Link>
                   {' | '}
                   <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
                     {this.intl.translate({

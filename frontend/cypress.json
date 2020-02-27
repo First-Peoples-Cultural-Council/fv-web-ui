@@ -10,5 +10,6 @@
     "FRONTEND": "http://127.0.0.1:3001"
   },
   "viewportHeight": 660,
-  "viewportWidth": 1000
+  "viewportWidth": 1000,
+  "defaultCommandTimeout": 10000
 }

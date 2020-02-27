@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ca.firstvoices.nuxeo.enrichers.contrib">
-
 	<extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
 		<register class="ca.firstvoices.nuxeo.enrichers.AncestryEnricher" enable="true" />
 		<register class="ca.firstvoices.nuxeo.enrichers.CharacterEnricher" enable="true" />

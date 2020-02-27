@@ -13,11 +13,11 @@ describe('RecorderMediaTrace-Word.js > RecorderMediaTrace-Word', () => {
       userName: 'TESTLANGUAGETWO_RECORDER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/words')
-    cy.wait(800)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
+      cy.queryByText('TestWord').should('exist')
+      cy.queryByText('TestTranslation').should('exist')
+      cy.queryByText('Noun').should('exist')
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.wait(1000)

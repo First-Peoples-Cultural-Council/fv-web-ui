@@ -326,7 +326,12 @@ export class AddMediaComponent extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <FVButton variant="contained" color="secondary" onClick={this.handleClose}>
+            <FVButton
+              data-testid="Dialog__AddMediaComponentCancel"
+              variant="contained"
+              color="secondary"
+              onClick={this.handleClose}
+            >
               {intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>

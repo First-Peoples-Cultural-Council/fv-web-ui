@@ -24,7 +24,6 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchBooks } from 'providers/redux/reducers/fvBook'
 import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
@@ -50,7 +49,6 @@ export class PageDialectReports extends Component {
     // REDUX: actions/dispatch/func
     fetchBooks: func.isRequired,
     fetchDialect2: func.isRequired,
-    fetchPortal: func.isRequired,
     pushWindowPath: func.isRequired,
   }
 
@@ -130,11 +128,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   fetchBooks,
   fetchDialect2,
-  fetchPortal,
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectReports)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectReports)

@@ -10,9 +10,6 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-// import StringHelpers from 'common/StringHelpers'
-// const FiltersWithToggle = withToggle()
-
 const { instanceOf, any, array, func, object, string } = PropTypes
 
 export class DialectFilterList extends Component {
@@ -20,12 +17,12 @@ export class DialectFilterList extends Component {
     appliedFilterIds: instanceOf(Set),
     facetField: string.isRequired,
     facets: array.isRequired,
-    type: string.isRequired,
-    title: string.isRequired,
-    routeParams: any,
-    styles: object,
     handleDialectFilterClick: func,
     handleDialectFilterList: func.isRequired,
+    routeParams: any,
+    styles: object,
+    title: string.isRequired,
+    type: string.isRequired,
     // REDUX: reducers/state
     splitWindowPath: array,
     // REDUX: actions/dispatch/func
@@ -38,43 +35,12 @@ export class DialectFilterList extends Component {
     handleDialectFilterClick: () => {},
   }
 
-  filtersSorted = []
-  // intl = IntlService.instance
-  title = ''
-
-  styleListItemParent = {
-    fontSize: '13px',
-    fontWeight: 'normal',
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: '10px',
-    marginBottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-  }
-
-  styleListItemCheckbox = {
-    position: 'relative',
-    top: 0,
-    left: 0,
-  }
-
-  styleListItemChild = {
-    fontSize: '13px',
-    fontWeight: 'normal',
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    marginBottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-  }
-
-  uidUrl = {}
   clickParams = {}
-  selectedDialectFilter = undefined
-
+  filtersSorted = []
   _isMounted = false
+  selectedDialectFilter = undefined
+  title = ''
+  uidUrl = {}
 
   constructor(props, context) {
     super(props, context)
@@ -88,20 +54,11 @@ export class DialectFilterList extends Component {
     }
 
     this.title = props.title
-    ;[
-      '_generateUidUrlPaths',
-      '_generateDialectFilterUrl',
-      '_handleClick',
-      '_handleHistoryEvent',
-      '_sortDialectFilters',
-      '_setUidUrlPath',
-      '_sortByTitle',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   componentDidMount() {
     this._isMounted = true
-    window.addEventListener('popstate', this._handleHistoryEvent)
+    window.addEventListener('popstate', this.handleHistoryEvent)
 
     const selectedDialectFilter =
       this.props.type === 'words'
@@ -112,15 +69,15 @@ export class DialectFilterList extends Component {
     }
 
     if (this.props.facets && this.props.facets.length > 0) {
-      this.filtersSorted = this._sortDialectFilters(this.props.facets)
-      this._generateUidUrlPaths(this.filtersSorted)
-      this._generateListItems(this.filtersSorted, true)
+      this.filtersSorted = this.sortDialectFilters(this.props.facets)
+      this.generateUidUrlPaths(this.filtersSorted)
+      this.generateListItems(this.filtersSorted, true)
     }
   }
 
   componentWillUnmount() {
     this._isMounted = false
-    window.removeEventListener('popstate', this._handleHistoryEvent)
+    window.removeEventListener('popstate', this.handleHistoryEvent)
     const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
     // 'uncheck' previous
     if (lastCheckedUid) {
@@ -138,15 +95,15 @@ export class DialectFilterList extends Component {
     const currentAppliedFilterIds = this.props.appliedFilterIds
 
     if (prevProps.facets.length !== this.props.facets.length) {
-      this.filtersSorted = this._sortDialectFilters(this.props.facets)
-      this._generateUidUrlPaths(this.filtersSorted)
+      this.filtersSorted = this.sortDialectFilters(this.props.facets)
+      this.generateUidUrlPaths(this.filtersSorted)
     }
 
     if (
       prevProps.facets.length !== this.props.facets.length ||
       prevAppliedFilterIds.equals(currentAppliedFilterIds) === false
     ) {
-      this._generateListItems(this.filtersSorted, true)
+      this.generateListItems(this.filtersSorted, true)
     }
 
     if (prevProps.title !== this.props.title) {
@@ -163,7 +120,7 @@ export class DialectFilterList extends Component {
     )
   }
 
-  _generateUidUrlPaths(filters) {
+  generateUidUrlPaths = (filters) => {
     const _splitWindowPath = [...this.props.splitWindowPath]
     const lastPath = _splitWindowPath.pop()
 
@@ -175,18 +132,18 @@ export class DialectFilterList extends Component {
     const path = ('/' + _splitWindowPath.join('/')).replace(NavigationHelpers.getContextPath(), '')
 
     filters.forEach((filter) => {
-      this._setUidUrlPath(filter, path)
+      this.setUidUrlPath(filter, path)
       const children = selectn('contextParameters.children.entries', filter)
       if (children.length > 0) {
         children.forEach((filterChild) => {
-          this._setUidUrlPath(filterChild, path)
+          this.setUidUrlPath(filterChild, path)
         })
       }
     })
     return this.uidUrl
   }
 
-  _handleHistoryEvent() {
+  handleHistoryEvent = () => {
     if (this._isMounted) {
       const _filterId =
         this.props.type === 'words'
@@ -197,7 +154,7 @@ export class DialectFilterList extends Component {
         const selectedParams = this.clickParams[_filterId]
         if (selectedParams) {
           const { href, checkedFacetUid, childrenIds, parentFacetUid } = selectedParams
-          // this._handleClick(selectedParams)
+          // this.handleClick(selectedParams)
           this.setState(
             {
               lastCheckedUid: checkedFacetUid,
@@ -225,7 +182,7 @@ export class DialectFilterList extends Component {
     }
   }
 
-  _setUidUrlPath(filter, path) {
+  setUidUrlPath = (filter, path) => {
     // TODO: map encodeUri title to uid for friendly urls
     // this.uidUrl[category.uid] = encodeURI(category.title)
 
@@ -233,7 +190,7 @@ export class DialectFilterList extends Component {
     this.uidUrl[filter.uid] = `${path}/${encodeURI(filter.uid)}`
   }
 
-  _generateDialectFilterUrl(filterId) {
+  generateDialectFilterUrl = (filterId) => {
     let href = `/${this.props.splitWindowPath.join('/')}`
     const _splitWindowPath = [...this.props.splitWindowPath]
     const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
@@ -247,7 +204,7 @@ export class DialectFilterList extends Component {
     return href
   }
 
-  _generateListItems = (filters, updateState = false) => {
+  generateListItems = (filters, updateState = false) => {
     const { appliedFilterIds } = this.props
 
     let lastCheckedUid = undefined
@@ -286,7 +243,7 @@ export class DialectFilterList extends Component {
           }
 
           // const childHref = `/${this.uidUrl[uidChild]}`
-          const childHref = this._generateDialectFilterUrl(uidChild)
+          const childHref = this.generateDialectFilterUrl(uidChild)
           const childClickParams = {
             href: childHref,
             checkedFacetUid: uidChild,
@@ -302,7 +259,7 @@ export class DialectFilterList extends Component {
                 href={childHref}
                 onClick={(e) => {
                   e.preventDefault()
-                  this._handleClick(childClickParams)
+                  this.handleClick(childClickParams)
                 }}
                 title={filterChild.title}
               >
@@ -315,7 +272,7 @@ export class DialectFilterList extends Component {
       }
 
       // const parentHref = `/${this.uidUrl[uidParent]}`
-      const parentHref = this._generateDialectFilterUrl(uidParent)
+      const parentHref = this.generateDialectFilterUrl(uidParent)
 
       if (parentIsActive) {
         lastCheckedUid = uidParent
@@ -339,7 +296,7 @@ export class DialectFilterList extends Component {
               href={parentHref}
               onClick={(e) => {
                 e.preventDefault()
-                this._handleClick(parentClickParams)
+                this.handleClick(parentClickParams)
               }}
               title={filter.title}
             >
@@ -367,7 +324,7 @@ export class DialectFilterList extends Component {
           if (this.selectedDialectFilter) {
             const selectedParams = this.clickParams[this.selectedDialectFilter]
             if (selectedParams) {
-              this._handleClick(selectedParams)
+              this.handleClick(selectedParams)
               this.selectedDialectFilter = undefined
             }
           }
@@ -376,7 +333,7 @@ export class DialectFilterList extends Component {
     }
   }
 
-  _handleClick(obj) {
+  handleClick = (obj) => {
     const { href, checkedFacetUid, childrenIds, parentFacetUid } = obj
 
     const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
@@ -414,21 +371,21 @@ export class DialectFilterList extends Component {
     )
   }
 
-  _sortByTitle(a, b) {
+  sortByTitle = (a, b) => {
     if (a.title < b.title) return -1
     if (a.title > b.title) return 1
     return 0
   }
 
-  _sortDialectFilters(filters) {
+  sortDialectFilters = (filters) => {
     const _filters = [...filters]
     // Sort root level
-    _filters.sort(this._sortByTitle)
+    _filters.sort(this.sortByTitle)
     const _filtersSorted = _filters.map((filter) => {
       // Sort children
       const children = selectn('contextParameters.children.entries', filter)
       if (children.length > 0) {
-        children.sort(this._sortByTitle)
+        children.sort(this.sortByTitle)
       }
       return filter
     })

@@ -93,7 +93,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Check that the phrase now exists
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(500)
+    cy.wait(2500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -112,7 +112,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(500)
+    cy.wait(1000)
     cy.queryByText('TestPhrase').should('not.exist')
     cy.getByText('No results found.').should('exist')
 
@@ -128,9 +128,9 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(800)
+    cy.wait(2000)
     cy.getByText('TestPhrase', { exact: false }).click()
-    cy.wait(1500)
+    cy.wait(2000)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)
@@ -145,7 +145,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(500)
+    cy.wait(2500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -161,11 +161,11 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(500)
+    cy.wait(1000)
     cy.queryByText('TestPhrase')
       .should('exist')
       .click()
-    cy.wait(1500)
+    cy.wait(2000)
     cy.getByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
