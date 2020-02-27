@@ -3,7 +3,6 @@ package ca.firstvoices.operations;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -27,7 +26,7 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
  *
  */
 @Operation(id=InitialDatabaseSetup.ID, category= Constants.CAT_DOCUMENT, label="FVInitialDatabaseSetup",
-    description="This operation is used to setup the inital FirstVoices backend for development.  " +
+    description="This operation is used to setup the initial FirstVoices backend for development.  " +
         "It can be run multiple times without issues. Please ensure you have your environment " +
         "variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD as these will create an admin " +
         "account for you.")
@@ -49,92 +48,89 @@ public class InitialDatabaseSetup {
     @Context
     protected UserManager userManager;
     
-    @Param(name = "path", required = false)
-    protected String path;
-    
     @OperationMethod
-    public DocumentModel run() throws OperationException {
-        if (StringUtils.isBlank(path)) {
+    public void run() {
             /*
                 Create the proper folder structure.
              */
-            createNewDocument("Site", "Workspace", "/FV/Workspaces");
-            createNewDocument("Site", "Section", "/FV/sections");
-            createNewDocument("Resources", "FVResources", "/FV/Workspaces/Site");
-            createNewDocument("Pages", "Folder", "/FV/Workspaces/Site/Resources");
-            createNewDocument("Shared Categories", "FVCategories", "/FV/Workspaces/SharedData");
-            createNewDocument("Shared Links", "FVLinks", "/FV/Workspaces/SharedData");
-            createNewDocument("Shared Resources", "FVResources", "/FV/Workspaces/SharedData");
+        createNewDocument("Site", "Workspace", "/FV/Workspaces");
+        createNewDocument("Site", "Section", "/FV/sections");
+        createNewDocument("Resources", "FVResources", "/FV/Workspaces/Site");
+        createNewDocument("Pages", "Folder", "/FV/Workspaces/Site/Resources");
+        createNewDocument("Shared Categories", "FVCategories", "/FV/Workspaces/SharedData");
+        createNewDocument("Shared Links", "FVLinks", "/FV/Workspaces/SharedData");
+        createNewDocument("Shared Resources", "FVResources", "/FV/Workspaces/SharedData");
 
             /*
                 Create the user groups.
              */
-            createNewGroup("language_administrators", "Language Administrators");
-            createNewGroup("recorders", "Recorders");
-            createNewGroup("recorders_with_approval", "Recorders With Approval");
+        createNewGroup("language_administrators", "Language Administrators");
+        createNewGroup("recorders", "Recorders");
+        createNewGroup("recorders_with_approval", "Recorders With Approval");
             
             /*
                 Add new user groups as subgroups of group "members" and keep any existing subgroups.
              */
-            DocumentModel members = userManager.getGroupModel("members");
-            Object existingSubGroups = members.getProperty("group", "subGroups");
-            String existingSubGroupsString = existingSubGroups.toString();
-            existingSubGroupsString = existingSubGroupsString.substring(1, existingSubGroupsString.length()-1);
-            List<String> newSubGroups;
-            if (existingSubGroupsString.length() == 0) {
-                newSubGroups = new ArrayList<>();
-            } else {
-                newSubGroups = new ArrayList<>(Arrays.asList(existingSubGroupsString.split(", ")));
-            }
-            newSubGroups.add("language_administrators");
-            newSubGroups.add("recorders");
-            newSubGroups.add("recorders_with_approval");
-            List<String> noDuplicates = newSubGroups.stream().distinct().collect(Collectors.toList());
-            members.setProperty("group", "subGroups", noDuplicates);
-            userManager.updateGroup(members);
+        DocumentModel members = userManager.getGroupModel("members");
+        Object existingSubGroups = members.getProperty("group", "subGroups");
+        String existingSubGroupsString = existingSubGroups.toString();
+        existingSubGroupsString = existingSubGroupsString.substring(1, existingSubGroupsString.length() - 1);
+        List<String> newSubGroups;
+        if (existingSubGroupsString.length() == 0) {
+            newSubGroups = new ArrayList<>();
+        } else {
+            newSubGroups = new ArrayList<>(Arrays.asList(existingSubGroupsString.split(", ")));
+        }
+        newSubGroups.add("language_administrators");
+        newSubGroups.add("recorders");
+        newSubGroups.add("recorders_with_approval");
+        List<String> noDuplicates = newSubGroups.stream().distinct().collect(Collectors.toList());
+        members.setProperty("group", "subGroups", noDuplicates);
+        userManager.updateGroup(members);
             
             /*
                 Setup permissions.
              */
-            DocumentModel root = session.getDocument(new PathRef("/"));
-            ACPImpl acp = new ACPImpl();
-            ACLImpl acl = new ACLImpl("ACL.LOCAL_ACL");
-            acp.addACL(acl);
-            ACE ace = new ACE("members", "Read", true);
-            acl.add(ace);
-            root.setACP(acp, false);
-            
-            DocumentModel sections = session.getDocument(new PathRef("/FV/sections"));
-            ACPImpl acpTwo = new ACPImpl();
-            ACLImpl aclTwo = new ACLImpl("ACL.LOCAL_ACL");
-            acpTwo.addACL(aclTwo);
-            ACE aceTwo = new ACE("Guest", "Read", true);
-            aclTwo.add(aceTwo);
-            sections.setACP(acpTwo, false);
+        DocumentModel root = session.getDocument(new PathRef("/"));
+        ACPImpl acp = new ACPImpl();
+        ACLImpl acl = new ACLImpl("ACL.LOCAL_ACL");
+        acp.addACL(acl);
+        ACE ace = new ACE("members", "Read", true);
+        acl.add(ace);
+        root.setACP(acp, false);
+
+        DocumentModel sections = session.getDocument(new PathRef("/FV/sections"));
+        ACPImpl acpTwo = new ACPImpl();
+        ACLImpl aclTwo = new ACLImpl("ACL.LOCAL_ACL");
+        acpTwo.addACL(aclTwo);
+        ACE aceTwo = new ACE("Guest", "Read", true);
+        aclTwo.add(aceTwo);
+        sections.setACP(acpTwo, false);
             
             /*
                 Setup publication targets.
              */
-            DocumentModel target = session.getDocument(new PathRef("/FV/sections/Data"));
-            String targetSectionId = target.getId();
-            DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
-            addSection(targetSectionId, sourceDoc);
-            
-            target = session.getDocument(new PathRef("/FV/sections/SharedData"));
-            targetSectionId = target.getId();
-            sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
-            addSection(targetSectionId, sourceDoc);
-            
-            target = session.getDocument(new PathRef("/FV/sections/Site"));
-            targetSectionId = target.getId();
-            sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
-            addSection(targetSectionId, sourceDoc);
+        DocumentModel target = session.getDocument(new PathRef("/FV/sections/Data"));
+        String targetSectionId = target.getId();
+        DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
+        addSection(targetSectionId, sourceDoc);
+
+        target = session.getDocument(new PathRef("/FV/sections/SharedData"));
+        targetSectionId = target.getId();
+        sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
+        addSection(targetSectionId, sourceDoc);
+
+        target = session.getDocument(new PathRef("/FV/sections/Site"));
+        targetSectionId = target.getId();
+        sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
+        addSection(targetSectionId, sourceDoc);
 
             /*
                 Create admin user.
              */
+        if (username != null || password != null) {
             if (userManager.getUserModel(username) == null) {
-                String[] groups ={"administrators"};
+                String[] groups = {"administrators"};
                 DocumentModel userDoc = userManager.getBareUserModel();
                 userDoc.setProperty(SCHEMA_NAME, USERNAME_COLUMN, username);
                 userDoc.setProperty(SCHEMA_NAME, PASSWORD_COLUMN, password);
@@ -142,10 +138,6 @@ public class InitialDatabaseSetup {
                 userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
                 userDoc = userManager.createUser(userDoc);
             }
-            
-            return session.getRootDocument();
-        } else {
-            return session.getDocument(new PathRef(path));
         }
     }
     
