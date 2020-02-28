@@ -37,7 +37,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(2000)
+    cy.wait(3000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('New').should('exist')
@@ -72,7 +72,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(2000)
+    cy.wait(3000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.queryByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')

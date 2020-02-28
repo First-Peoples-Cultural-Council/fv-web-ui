@@ -23,6 +23,7 @@ function FVTab(props) {
     const { label, id, dataTestId, className } = item
     return (
       <Tab
+        style={tabsStyle}
         key={i}
         classes={{ root: classes.tabRoot, selected: classes.tabSelected, label: classes.label }}
         label={label}

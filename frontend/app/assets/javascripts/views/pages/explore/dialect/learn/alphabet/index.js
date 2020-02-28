@@ -260,13 +260,18 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
               if (this.state.current_char !== null) {
                 return (
                   <FVButton
+                    className="fontAboriginalSans"
                     variant="contained"
                     color="primary"
                     onClick={this._onNavigateRequest.bind(
                       this,
                       this.state.current_char.path.split('/')[this.state.current_char.path.split('/').length - 1]
                     )}
-                    style={{ minWidth: 'inherit', textTransform: 'initial', margin: '10px 0' }}
+                    style={{
+                      minWidth: 'inherit',
+                      textTransform: 'initial',
+                      margin: '10px 0',
+                    }}
                   >
                     {'View Words and Phrases that start with ' + this.state.current_char.title}
                   </FVButton>
