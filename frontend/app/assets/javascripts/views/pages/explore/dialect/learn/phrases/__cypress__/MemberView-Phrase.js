@@ -54,7 +54,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
         */
     cy.getByText('reports', { exact: true }).click()
     cy.getByText('Phrases in Enabled Status', { exact: true }).click()
-    cy.wait(500)
+    cy.wait(3000)
     cy.queryByText('No results found').should('not.exist')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')

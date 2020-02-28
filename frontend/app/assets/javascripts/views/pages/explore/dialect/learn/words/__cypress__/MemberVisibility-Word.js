@@ -35,7 +35,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
         */
     cy.getByText('reports', { exact: true }).click()
     cy.getByText('Words in Enabled Status', { exact: true }).click()
-    cy.wait(500)
+    cy.wait(3000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestWord').should('exist')
       cy.getByText('TestTranslation').should('exist')

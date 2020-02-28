@@ -87,6 +87,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     body,
   })
   cy.wait(2000)
+  cy.reload(true)
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
 
