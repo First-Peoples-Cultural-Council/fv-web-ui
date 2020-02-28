@@ -3,12 +3,10 @@ package ca.firstvoices.operations;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
-import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
@@ -87,7 +85,7 @@ public class InitialDatabaseSetup {
         List<String> noDuplicates = newSubGroups.stream().distinct().collect(Collectors.toList());
         members.setProperty("group", "subGroups", noDuplicates);
         userManager.updateGroup(members);
-            
+
             /*
                 Setup permissions.
              */
@@ -106,7 +104,7 @@ public class InitialDatabaseSetup {
         ACE aceTwo = new ACE("Guest", "Read", true);
         aclTwo.add(aceTwo);
         sections.setACP(acpTwo, false);
-            
+
             /*
                 Setup publication targets.
              */
