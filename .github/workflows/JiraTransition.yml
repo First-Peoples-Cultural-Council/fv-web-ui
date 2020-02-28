@@ -11,7 +11,7 @@ on:
   release:
     types: [published]
   pull_request_review:
-    types: [edited, dismissed, submitted]
+    types: [dismissed, submitted]
     branches:
       master
 
