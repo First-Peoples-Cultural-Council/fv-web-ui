@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # This script will perform the transition for items in QA Done when a release is performed.
 

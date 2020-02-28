@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # This script will add a comment to the any issues found in the pull request title and commits
 # stating who reviewed the pull request.

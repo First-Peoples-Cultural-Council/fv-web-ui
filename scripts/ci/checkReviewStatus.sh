@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # This script uses the github API to check that there are no pending reviews on a PR
 # and that any completed reviews are APPROVED.
