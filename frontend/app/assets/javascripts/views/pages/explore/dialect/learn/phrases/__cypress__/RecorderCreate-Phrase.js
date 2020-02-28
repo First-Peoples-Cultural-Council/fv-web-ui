@@ -93,7 +93,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
             Check that the phrase now exists
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(2500)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -112,7 +112,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait(3500)
     cy.queryByText('TestPhrase').should('not.exist')
     cy.getByText('No results found.').should('exist')
 
@@ -128,7 +128,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(2000)
+    cy.wait(3500)
     cy.getByText('TestPhrase', { exact: false }).click()
     cy.wait(2000)
     cy.get('div.hidden-xs').within(() => {
@@ -145,7 +145,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_MEMBER',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(2500)
+    cy.wait(3500)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')
@@ -161,7 +161,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       userName: 'TESTLANGUAGEFOUR_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
-    cy.wait(1000)
+    cy.wait(3500)
     cy.queryByText('TestPhrase')
       .should('exist')
       .click()
@@ -184,7 +184,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
         Check that the published phrase is visible.
      */
     cy.getByText('Public View').click()
-    cy.wait(2000)
+    cy.wait(3000)
     cy.get('[id="pageNavigation"]').within(() => {
       cy.get('div.row.Navigation__dialectContainer')
         .should('have.css', 'background-color')
