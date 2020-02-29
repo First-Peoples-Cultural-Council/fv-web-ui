@@ -11,6 +11,7 @@ describe('SearchStrategy.js', () => {
     cy.get('.SearchDialectFormSelectSearchType').select('approx')
     cy.getByTestId('SearchDialectFormPrimaryInput').type('Dob')
     cy.getByText('Search Words').click()
+    cy.wait(2000)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
@@ -26,6 +27,7 @@ describe('SearchStrategy.js', () => {
     cy.get('.SearchDialectFormSelectSearchType').select('exact')
     cy.getByTestId('SearchDialectFormPrimaryInput').type('Ox')
     cy.getByText('Search Words').click()
+    cy.wait(2000)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
@@ -39,14 +41,9 @@ describe('SearchStrategy.js', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words/')
     cy.wait(1000)
     cy.get('.SearchDialectFormSelectSearchType').select('contains')
-    cy.getByTestId('SearchDialectFormPrimaryInput').type('o')
+    cy.getByTestId('SearchDialectFormPrimaryInput').type('rago')
     cy.getByText('Search Words').click()
-    cy.queryByText('Dog').should('exist')
     cy.queryByText('Dragon').should('exist')
-    cy.queryByText('Goat').should('exist')
-    cy.queryByText('Horse').should('exist')
-    cy.queryByText('Monkey').should('exist')
-    cy.queryByText('Rooster').should('exist')
   })
   it('Starts with search', () => {
     cy.login({
@@ -57,6 +54,7 @@ describe('SearchStrategy.js', () => {
     cy.get('.SearchDialectFormSelectSearchType').select('starts_with')
     cy.getByTestId('SearchDialectFormPrimaryInput').type('Ra')
     cy.getByText('Search Words').click()
+    cy.wait(2000)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
@@ -77,6 +75,7 @@ describe('SearchStrategy.js', () => {
     cy.get('.SearchDialectFormSelectSearchType').select('ends_with')
     cy.getByTestId('SearchDialectFormPrimaryInput').type('er')
     cy.getByText('Search Words').click()
+    cy.wait(2000)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
@@ -97,6 +96,7 @@ describe('SearchStrategy.js', () => {
     cy.get('.SearchDialectFormSelectSearchType').select('wildcard')
     cy.getByTestId('SearchDialectFormPrimaryInput').type('R*t')
     cy.getByText('Search Words').click()
+    cy.wait(2000)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
