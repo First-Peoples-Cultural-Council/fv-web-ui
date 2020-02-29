@@ -103,7 +103,7 @@ export default class HangmanGame extends Component {
     return {
       puzzle: this.preparePuzzle(props),
       guessesLeft: 7,
-      alphabet: this.props.alphabet,
+      alphabet: props.alphabet,
       guessedLetters: [],
       succeeded: false,
       failed: false,

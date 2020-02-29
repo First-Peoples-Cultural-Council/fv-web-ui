@@ -566,6 +566,7 @@
     "no_phrase_sel": "No phrase is selected!",
     "no_records": "No Records",
     "no_results_found": "No Results Found",
+    "no_results_found_dictionary": "<p>No Results Found.</p><p>Try expanding your search to include additional fields or changing your search method.</p>",
     "no_shared_media": "No Shared Media Found.",
     "no_word_sel": "No word is selected!",
     "none": "none",
