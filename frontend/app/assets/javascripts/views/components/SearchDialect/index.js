@@ -568,11 +568,6 @@ export const SearchDialect = (props) => {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_DEFAULT,
       searchBySettings: resetSearchBySettings,
-      searchTerm: undefined,
-      searchType: SEARCH_TYPE_DEFAULT,
-    }
-
-    const searchData2 = {
       searchingDialectFilter: '',
       searchMessage: null,
       searchTerm: undefined,
