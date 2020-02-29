@@ -9,3 +9,11 @@ export const SEARCH_BY_PHRASE_BOOK = 4 // PHRASES CATEGORY?
 // GENERATES DIFFERENT UI TEXT
 export const SEARCH_DATA_TYPE_PHRASE = 5
 export const SEARCH_DATA_TYPE_WORD = 6
+
+export const SEARCH_TYPE_APPROXIMATE_SEARCH = 'approx'
+export const SEARCH_TYPE_EXACT_SEARCH = 'exact'
+export const SEARCH_TYPE_CONTAINS_SEARCH = 'contains'
+export const SEARCH_TYPE_STARTS_WITH_SEARCH = 'starts_with'
+export const SEARCH_TYPE_ENDS_WITH_SEARCH = 'ends_with'
+export const SEARCH_TYPE_WILDCARD_SEARCH = 'wildcard'
+export const SEARCH_TYPE_DEFAULT = SEARCH_TYPE_APPROXIMATE_SEARCH
