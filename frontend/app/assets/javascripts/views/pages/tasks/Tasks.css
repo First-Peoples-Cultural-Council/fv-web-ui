@@ -1,16 +1,9 @@
 .Tasks__approveRejectContainer {
   display: flex;
-  justify-content: space-around;
 }
-@media (max-width: 1000px) {
-  .Tasks__approveRejectContainer {
-    flex-direction: column;
-    padding: 5px;
-    justify-content: space-between;
-  }
-  .Tasks__reject {
-    margin-top: 5px;
-  }
+.Tasks__approveRejectContainer .Tasks__approve,
+.Tasks__approveRejectContainer .Tasks__reject {
+  margin: 5px;
 }
 .Tasks__colHeader {
   font-size: 2rem;
@@ -23,14 +16,13 @@
   width: 100%;
 }
 .Tasks__taskTitle {
-  white-space: normal;
   font-size: 1.8rem;
   line-height: 1.2;
-  width: 100%;
-  justify-content: left;
-  text-align: left;
-  text-transform: none;
   margin: 5px;
+  background-color: #fff;
+}
+.DictionaryList__data .Tasks__taskTitle {
+  background-color: #fff;
 }
 .Tasks__taskType {
   font-size: 1.8rem;
@@ -45,4 +37,21 @@
 .Tasks__taskDueDateContainer {
   white-space: normal !important;
   text-overflow: initial !important;
+}
+
+@media (max-width: 1000px) {
+  .Tasks__approveRejectContainer {
+    flex-direction: column;
+    padding: 5px;
+    justify-content: space-between;
+  }
+  .Tasks__reject {
+    margin-top: 5px;
+  }
+}
+@media (max-width: 650px) {
+  .Tasks__approveRejectContainer .Tasks__approve,
+  .Tasks__approveRejectContainer .Tasks__reject {
+    margin: 0 0 5px;
+  }
 }

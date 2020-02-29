@@ -4,8 +4,8 @@
 
 There are several version dependency requirements to properly build and run the project:
 
-- NodeJS>=v8.10 (10.15.3)
-- NPM v5.6.0
+- NodeJS>=v10.13.0 (10.15.3)
+- NPM v6.4.1
 
 Instructions to install specific project dependencies and running the application are described in the _Setting Up and Running_ section.
 
@@ -134,38 +134,90 @@ We use BroswerStack in order to ensure our UI functions in the latest version of
 
 <a href="https://www.browserstack.com" target="_blank"><img src="app/assets/images/browserstack-logo-600x315.png?raw=true" width="160" alt="BrowserStack" /></a>
 
-### Frontend: End to end testing
-
-Via [Cypress](https://www.cypress.io/)
-
-Launch the Cypress app (GUI) where you can run tests individually:
-
-```
-$ npm run test:e2e:dev
-```
-
-Launch the full Cypress test suite headlessly:
-```
-$ npm run test:e2e:dev:headless
-```
-With debugging output enabled:
-```
-$ npm run test:e2e:dev:headless:debug
-```
+### Frontend: End to end testing (Via [Cypress](https://www.cypress.io/))
 
 These Cypress tests require that you have java and maven installed as well as the correct environment variables set for the following:
 
-For the database setup scripts:
+For the database setup scripts and for local backend user login:
 ```
 CYPRESS_FV_USERNAME
 CYPRESS_FV_PASSWORD
 ```
 
-For recording runs (optional):
+For recording runs to [the Cypress dashboard](https://dashboard.cypress.io/projects/gdqzxg/runs) (optional and not recommended when creating new tests):
 ```
 CYPRESS_PROJECT_ID
 CYPRESS_RECORD_KEY
 ```
+
+To run tests locally startup a local backend (see [this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/docker) for details).
+
+Launch the Cypress app (GUI) where you can run tests individually (recommended for creating new tests):
+
+```
+$ npm run test:e2e:local
+```
+
+Launch the full Cypress test suite headlessly (will record the runs to [the dashboard](https://dashboard.cypress.io/projects/gdqzxg/runs) if the environment variables are set):
+```
+$ npm run test:e2e:local:headless
+```
+With debugging output enabled:
+```
+$ npm run test:e2e:local:headless:debug
+```
+
+#### Creating Cypress tests
+The first thing to do when creating Cypress tests is to figure out if your test will need to create or change any backend data. If it does then you will need to use an existing test language or create a new one.
+
+The following table shows the tests languages and how the current tests use them. If you can fit your new test in without disrupting existing tests please do so, otherwise use a new test language.
+
+| Items in use ->   |   Words  |  Phrases |   Songs  |  Stories |  Portal  | Books       | Other              | Language starts as: | Any item state change |
+|-------------------|:--------:|:--------:|:--------:|:--------:|:--------:|-------------|--------------------|---------------------|:---------------------:|
+| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder           | Enabled             |        &#x2713;       |
+| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media | Published           |        &#x2713;       |
+| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder           | Enabled             |        &#x2713;       |
+| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                    | Published           |        &#x2713;       |
+| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports            | Published           |        &#x2713;       |
+| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet           | Published           |        &#x2713;       |
+| TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                    | Enabled             |                       |
+
+When you create a new test please update this table.
+
+##### Creating new data:
+To create new data for use in tests you will have to add to the script located at [/frontend/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
+The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/scripts/files).
+
+For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseTeardown.sh) script.
+
+##### Writing the Cypress tests:
+Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/explore/dialect/learn/phrases/__cypress__/MemberView-Phrase.js). 
+On startup tests will be copied from the project and placed in the [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration__cypress__) where they will be run from.
+
+A list of Cypress commands can be found on their website [at this link](https://docs.cypress.io/api/api/table-of-contents.html).
+
+We are also using a few libraries to extend the functionality of Cypress. The documentation for those libraries can be found at: [Cypress Testing Library](https://testing-library.com/docs/cypress-testing-library/intro) and [Cypress DOM Testing Library](https://testing-library.com/docs/dom-testing-library/api-queries).
+
+Custom Cypress commands can be created in the [/frontend/cypress/support/commands.js](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/support/commands.js) file.
+
+Resources for use in testing should be placed in the [/frontend/cypress/fixtures](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/fixtures) directory.
+
+The [/frontend/cypress/plugins](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/plugins) folder holds plugins which are a “seam” for you to write your own custom code that executes during particular stages of the Cypress lifecycle.
+
+Videos and screenshots created by the tests will be placed in the corresponding screenshots and videos directories inside of the [/frontend/cypress/](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress) directory which will be created as needed automatically.
+
+The Cypress tests are copied through the ```npm run cy:copy``` command (which is automatically run with ```npm run test:e2e:local``` and ```npm run test:e2e:local:headless```). \
+Note: changes to tests aren’t watched so if you have the Test Runner launched and you edit a test, you will need to run npm run cy:copy to move the tests to [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration/__cypress__).
+
+##### Additional tips:
+Testing for something that doesn’t exist is slow as it will keep checking until it times out (timeout can be customised): 
+eg:```cy.queryByText(/stop browsing alphabetically/i).should(‘not.exist’)```
+
+If your tests are failing randomly, a wait command usually fixes things:
+```cy.wait(500)```
+
+Some tests will pass locally with no problems, but will fail on slower CI machines. 
+The best way to fix this is by adding more ```cy.wait()``` commands to the tests (especially after loading a new page).
 
 ### Frontend: Unit testing
 

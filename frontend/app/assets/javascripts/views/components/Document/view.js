@@ -25,7 +25,7 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import Typography from '@material-ui/core/Typography'
 
 import selectn from 'selectn'
-
+import Link from 'views/components/Link'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -107,17 +107,17 @@ export class DocumentView extends Component {
       switch (selectn('response.type', computeDocument)) {
         case 'FVWord':
           actionButton = (
-            <a href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'words')}>
+            <Link href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'words')}>
               {intl.trans('view_word', 'View Word', 'words')}
-            </a>
+            </Link>
           )
           break
 
         case 'FVPhrase':
           actionButton = (
-            <a href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'phrases')}>
+            <Link href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'phrases')}>
               {intl.trans('view_phrase', 'View Phrase', 'phrases')}
-            </a>
+            </Link>
           )
           break
         default: // NOTE: do nothing
@@ -170,7 +170,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DocumentView)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentView)

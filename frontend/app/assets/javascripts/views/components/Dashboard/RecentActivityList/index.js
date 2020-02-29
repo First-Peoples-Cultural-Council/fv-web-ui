@@ -18,6 +18,7 @@ import selectn from 'selectn'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'views/services/intl'
+import Link from 'views/components/Link'
 
 const intl = IntlService.instance
 
@@ -38,19 +39,18 @@ export default class RecentActivityList extends Component {
     switch (docType) {
       case 'word':
         return NavigationHelpers.generateUIDPath(this.props.siteTheme, object, 'words')
-        break
 
       case 'phrase':
         return NavigationHelpers.generateUIDPath(this.props.siteTheme, object, 'phrases')
-        break
 
       case 'song':
         return NavigationHelpers.generateUIDPath(this.props.siteTheme, object, 'songs')
-        break
 
       case 'stories':
         return NavigationHelpers.generateUIDPath(this.props.siteTheme, object, 'stories')
-        break
+
+      default:
+        return '#'
     }
   }
 
@@ -72,18 +72,19 @@ export default class RecentActivityList extends Component {
       <div>
         <h3 style={{ margin: '0', padding: '10px 0', fontSize: '1.2em' }}>{this.props.title}</h3>
         <ul>
-          {this.props.data.entries.map((document, i) => (
+          {this.props.data.entries.map((document) => (
             <li style={{ padding: '0 0 5px 0' }} key={document.uid}>
-              <a href={this._formatLink(document, this.props.docType)}>{document.title}</a> <br />
+              <Link href={this._formatLink(document, this.props.docType)}>{document.title}</Link>
+              <br />
               {this._formatDate(document.properties['dc:modified'])}{' '}
               {document.properties['dc:lastContributor'].indexOf('Administrator') != -1 ||
               document.properties['dc:lastContributor'].indexOf('dyona') != -1 ? (
-                  ''
-                ) : (
-                  <span>
-                    {intl.trans('by', 'by', 'lower')} <strong>{document.properties['dc:lastContributor']}</strong>
-                  </span>
-                )}
+                ''
+              ) : (
+                <span>
+                  {intl.trans('by', 'by', 'lower')} <strong>{document.properties['dc:lastContributor']}</strong>
+                </span>
+              )}
             </li>
           ))}
         </ul>

@@ -33,7 +33,7 @@ import CardContent from '@material-ui/core/CardContent'
 // import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-
+import Link from 'views/components/Link'
 import FVTab from 'views/components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -267,9 +267,9 @@ class SongsStoriesCardView extends Component {
               </h3>
             </div>
             <div className="CardViewCardActions">
-              <a className="FlatButton" href={href}>
+              <Link className="FlatButton" href={href}>
                 {translatedContinueLabel}
-              </a>
+              </Link>
               {selectn('properties.fvbook:introduction', item) && (
                 <IconButton
                   style={{

@@ -28,7 +28,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.wait(1000)
+    cy.wait(1500)
     cy.getByText('Create New Phrase', { exact: false }).click()
     cy.wait(3000)
 
@@ -106,7 +106,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Checking to see if the phrase now exists.
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
-    cy.wait(500)
+    cy.wait(3000)
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')

@@ -193,8 +193,7 @@ Miscellaneous
 
 Pass through props
 ------------------------------------
-The following props are passed out to other components but not exclusively,
-the props may be referenced in this file as well.
+The following props are typically passed out to other descendant components
 
 List views: DictionaryListSmallScreen, DictionaryListLargeScreen
 --------------------
