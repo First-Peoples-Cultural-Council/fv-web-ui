@@ -164,6 +164,9 @@ module.exports = env => ({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
       templateParameters: {
         VERSION: gitRevisionPlugin.version(),
+        COMMIT: gitRevisionPlugin.commithash(),
+        BRANCH: gitRevisionPlugin.branch(),
+        DATE: new Date().toLocaleString('en-CA', {timeZone: 'America/Vancouver'}),
         IS_LEGACY: env && env.legacy ? true : false,
       },
     }),
