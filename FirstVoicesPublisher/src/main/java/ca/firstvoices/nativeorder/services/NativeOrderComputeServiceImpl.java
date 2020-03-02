@@ -9,6 +9,9 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 import ca.firstvoices.services.AbstractService;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author loopingz
@@ -103,16 +106,22 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
             int i;
 
+            List<String> fvChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title")).collect(Collectors.toList());
+            List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character")).collect(Collectors.toList());
+
             for (i = chars.length - 1; i >= 0; --i) {
                 DocumentModel charDoc = chars[i];
                 String charValue = (String) charDoc.getPropertyValue("dc:title");
                 String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
-                if ((charValue != null && title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
-                    nativeTitle += new Character((char) (33 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order"))).toString();
-                    title = title.substring(charValue.length());
-                    found = true;
-                    break;
-                }
+
+                if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
+                    if ((charValue != null && title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
+                        nativeTitle += new Character((char) (33 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order"))).toString();
+                        title = title.substring(charValue.length());
+                        found = true;
+                        break;
+                    }
+                };
             }
             if (!found) {
                 if (" ".equals(title.substring(0, 1))) {
@@ -134,5 +143,18 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
         for (DocumentModel doc : elements) {
             computeNativeOrderTranslation(chars, doc);
         }
+    }
+
+    private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars, String charValue, String ucCharValue) {
+        boolean isIncorrect;
+        List<String> charsStartingWithCurrentCharLower = fvChars.stream().filter(character -> character.startsWith(charValue)).collect(Collectors.toList());
+        isIncorrect = charsStartingWithCurrentCharLower.stream().anyMatch(character -> character != charValue && title.startsWith(character));
+
+        if (ucCharValue != null && !isIncorrect) {
+            List<String> charsStartingWithCurrentCharUpper = upperChars.stream().filter(character -> character.startsWith(ucCharValue)).collect(Collectors.toList());
+            isIncorrect = charsStartingWithCurrentCharUpper.stream().anyMatch(uCharacter -> uCharacter != ucCharValue && title.startsWith(uCharacter));
+        }
+
+        return !isIncorrect;
     }
 }
