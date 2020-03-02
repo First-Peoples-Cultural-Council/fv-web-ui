@@ -8,7 +8,11 @@ GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
 cd $DIRECTORY/../$1
-ls
+
+if [[ -z $1 ]]; then
+    echo -e "${RED}No input module found. Please run this command with the name of the module you want to update (eg: \"./UpdateModule.sh FirstVoicesData\" \n${ENDCOLOR}"; exit 1
+fi
+
 # Build main project.
 echo 'Building module: ' $1
 mvn clean install
