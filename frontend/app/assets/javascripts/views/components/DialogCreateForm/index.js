@@ -39,8 +39,10 @@ export default class DialogCreateForm extends React.Component {
     this.setState({ open: false })
   }
 
+  // NOTE: The shouldComponentUpdate check was added to suppress an issue where clicking on the Browse buttons would not open a modal.
+  // The additional props.value check ensures the correct button label text is displayed after an item is selected.
   shouldComponentUpdate(newProps, newState) {
-    if (newState != this.state) return true
+    if (newState !== this.state || newProps.value !== this.props.value) return true
 
     return false
   }
