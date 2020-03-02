@@ -398,7 +398,10 @@ const DictionaryList = (props) => {
         exportDialectExportElement: props.exportDialectExportElement,
         exportDialectLabel: props.exportDialectLabel,
         exportDialectQuery: props.exportDialectQuery,
+        /*
+        // Commented out until export is fixed
         hasExportDialect: props.hasExportDialect,
+         */
         // View mode
         clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
         dictionaryListViewMode: props.dictionaryListViewMode,
