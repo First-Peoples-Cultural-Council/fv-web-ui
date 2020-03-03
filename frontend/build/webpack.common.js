@@ -37,7 +37,10 @@ const CopyPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 
-const gitRevisionPlugin = new GitRevisionPlugin()
+const gitRevisionPlugin = new GitRevisionPlugin({
+  lightweightTags: true,
+  branch: true,
+})
 
 // Phaser webpack config , requried by fv-games
 // TODO : Move this as a peer dependency of games and have games to import them
@@ -164,6 +167,9 @@ module.exports = env => ({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
       templateParameters: {
         VERSION: gitRevisionPlugin.version(),
+        COMMIT: gitRevisionPlugin.commithash(),
+        BRANCH: gitRevisionPlugin.branch(),
+        DATE: new Date().toLocaleString('en-CA', {timeZone: 'America/Vancouver'}),
         IS_LEGACY: env && env.legacy ? true : false,
       },
     }),

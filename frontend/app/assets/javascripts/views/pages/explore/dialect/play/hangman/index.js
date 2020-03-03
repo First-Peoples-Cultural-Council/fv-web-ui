@@ -34,6 +34,7 @@ import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 const PUZZLES = 25
+const MIN_REQ_WORDS = 5
 
 const { func, object } = PropTypes
 export class Hangman extends Component {
@@ -62,6 +63,7 @@ export class Hangman extends Component {
   }
 
   fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
+
     props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
       '&currentPageIndex=0' + '&pageSize=100' + '&sortOrder=asc' + '&sortBy=fvcharacter:alphabet_order'
@@ -80,6 +82,8 @@ export class Hangman extends Component {
         '&pageSize=' +
         PUZZLES
     )
+
+    
   }
 
   newPuzzle() {
@@ -130,6 +134,14 @@ export class Hangman extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
+    if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
+      return (
+        <div>
+          Game not available: At least 5 child-friendly words with audio are required for this game... Found{' '}
+          <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+        </div>
+      )
+    } 
     // For now, don't use built in alphabets as most are incomplete
     /*const alphabet_array = (selectn('response.entries', computeCharacters) || []).map(function(char) {
           return selectn('properties.dc:title', char);
@@ -149,13 +161,22 @@ export class Hangman extends Component {
     })
 
     // const word_obj_array = selectn('response.entries', computeWords)
+    function shuffle(array){
+      //Based on Fisher-Yates shuffle
+      for(let i = (array.length -1); i > 0; i--){
+        let rand = Math.floor(Math.random() * (1 + i))
+        let temp = array[i]
+        array[i] = array[rand]
+        array[rand] = temp
+      }
+    }
 
     if (word_array.length > 0) {
       //Since the alphabet isn't complete, we need fill in the rest
       const character_string = word_array.map((word) => word.puzzle).join('')
       const unique_characters = Array.from(new Set(character_string.split(/(?!$)/u))).filter((v) => v != ' ')
-
-      word_array[this.state.currentPuzzleIndex].alphabet = unique_characters // (alphabet_array.length > 0) ? alphabet_array :
+      shuffle(unique_characters)
+      word_array[this.state.currentPuzzleIndex].alphabet = unique_characters// (alphabet_array.length > 0) ? alphabet_array :
       game = <HangManGame newPuzzle={this.newPuzzle} {...word_array[this.state.currentPuzzleIndex]} />
     }
 

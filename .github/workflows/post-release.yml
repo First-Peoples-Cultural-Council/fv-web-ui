@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout working branch
+      uses: actions/checkout@v1
     - name: Update versions to next snapshot
       run: 
         mvn versions:set -DnewVersion=${{github.ref}} -DgenerateBackupPoms=false
