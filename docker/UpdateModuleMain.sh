@@ -13,7 +13,7 @@ cd $DIRECTORY/../$MODULE
 
 # Check to make sure a module name is passed in
 if [[ -z $MODULE ]]; then
-    echo -e "${RED}No input module found. Please run this command with the name of the module you want to update (eg: \"./UpdateModule.sh FirstVoicesData\" \n${ENDCOLOR}"; exit 1
+    echo -e "${RED}No input module found. Please run this command with the name of the module you want to update (eg: \"./UpdateModuleMain.sh FirstVoicesData\" \n${ENDCOLOR}"; exit 1
 fi
 
 # Build main module.

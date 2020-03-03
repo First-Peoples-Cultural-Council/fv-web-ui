@@ -112,8 +112,12 @@ docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accep
 
 ### Method 2 (deploy a single module):
 #### Easy Way:
-*  navigate to ```docker/``` and run the command ```./UpdateModule.sh <ModuleName>``` where ```<ModuleName>``` is the name of the module you have created/made changes to (eg: ```./UpdateModule.sh FirstVoicesData```).
-  This will build that module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
+* From the root of your module run the command ```./UpdateModule.sh```. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
+(eg: copy ```/FirstVoicesData/UpdateModule.sh``` into ```/YourNewModule```).
+
+* Alternatively navigate to ```docker/``` and run the command ```./UpdateModuleMain.sh <ModuleName>``` where ```<ModuleName>``` is the name of the module you have created/made changes to (eg: ```./UpdateModuleMain.sh FirstVoicesData```).
+  
+  Both of the above will build the module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
 #### Manual method:
 * Ensure you remove any old versions of the module inside of the docker container that match the module you want to deploy.
 To do this you can run the command ```docker exec nuxeo-dev sh -c 'rm /opt/nuxeo/server/nxserver/bundles/<ModuleName>-*.jar'``` 

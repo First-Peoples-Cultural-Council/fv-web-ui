@@ -8,4 +8,4 @@ MODULE=${DIRECTORY##*/}
 
 # Run the main UpdateModule script in the docker directory
 cd $DIRECTORY
-../docker/UpdateModule.sh $MODULE
+../docker/UpdateModuleMain.sh $MODULE
