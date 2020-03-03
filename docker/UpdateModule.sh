@@ -7,14 +7,14 @@ RED="\e[31m"
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
-cd $DIRECTORY/../$1
+cd $DIRECTORY/../$MODULE
 
-if [[ -z $1 ]]; then
+if [[ -z $MODULE ]]; then
     echo -e "${RED}No input module found. Please run this command with the name of the module you want to update (eg: \"./UpdateModule.sh FirstVoicesData\" \n${ENDCOLOR}"; exit 1
 fi
 
 # Build main project.
-echo 'Building module: ' $1
+echo 'Building module: ' $MODULE
 mvn clean install
 if [[ "$?" -ne 0 ]]; then
     echo
@@ -24,11 +24,11 @@ fi
 echo ''
 
 echo 'Removing old bundle from docker container if it exists.'
-docker exec nuxeo-dev sh -c 'rm /opt/nuxeo/server/nxserver/bundles/$1-*.jar'
+docker exec nuxeo-dev sh -c "rm /opt/nuxeo/server/nxserver/bundles/$MODULE-*.jar"
 echo ''
 
 echo 'Copying new bundle into docker container and restarting nuxeo backend.'
-docker cp target/$1-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
+docker cp target/$MODULE-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
 if [[ "$?" -ne 0 ]]; then
     echo
     echo -e "${RED}Copy new bundle build into docker failed. \n${ENDCOLOR}"; exit 1
