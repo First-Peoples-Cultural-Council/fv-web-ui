@@ -323,14 +323,16 @@ const DictionaryList = (props) => {
 
   const noResults =
     selectn('length', items) === 0 ? (
-      <div className={`DictionaryList DictionaryList--noData  ${props.cssModifier}`}>
-        {intl.translate({
-          key: 'no_results_found',
-          default: 'No Results Found',
-          case: 'first',
-          append: '.',
-        })}
-      </div>
+      <div
+        className={`DictionaryList DictionaryList--noData  ${props.cssModifier}`}
+        dangerouslySetInnerHTML={{
+          __html: intl.translate({
+            key: 'no_results_found_dictionary',
+            default: 'No Results Found',
+            case: 'title',
+          }),
+        }}
+      />
     ) : null
 
   const getListSmallScreenArg = {
@@ -396,7 +398,10 @@ const DictionaryList = (props) => {
         exportDialectExportElement: props.exportDialectExportElement,
         exportDialectLabel: props.exportDialectLabel,
         exportDialectQuery: props.exportDialectQuery,
+        /*
+        // Commented out until export is fixed
         hasExportDialect: props.hasExportDialect,
+         */
         // View mode
         clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
         dictionaryListViewMode: props.dictionaryListViewMode,

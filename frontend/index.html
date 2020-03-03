@@ -72,9 +72,10 @@
       <div
         class="container-fluid"
         id="page-absolute-footer"
-        style="background-color: #0d6c80;color: #fff;text-align:right;"
+        style="background-color: #0d6c80;color:#fff;text-align:right;font-size:0.9em;"
       >
-        Version: <%= VERSION %>
+        <strong>Version:</strong> <%= VERSION %> (<%= DATE %>)<br/>
+        <span style="color: #0d6c80;"><strong>Commit</strong>: <%= COMMIT %> | <strong>Branch</strong>: <%= BRANCH %></span>
       </div>
     </div>
 

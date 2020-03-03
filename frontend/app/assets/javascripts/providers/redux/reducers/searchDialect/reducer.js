@@ -7,6 +7,12 @@ import {
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
   SEARCH_BY_PHRASE_BOOK,
+  SEARCH_TYPE_APPROXIMATE_SEARCH,
+  SEARCH_TYPE_EXACT_SEARCH,
+  SEARCH_TYPE_CONTAINS_SEARCH,
+  SEARCH_TYPE_STARTS_WITH_SEARCH,
+  SEARCH_TYPE_ENDS_WITH_SEARCH,
+  SEARCH_TYPE_WILDCARD_SEARCH,
 } from 'views/components/SearchDialect/constants'
 
 const initialState = {
@@ -35,11 +41,46 @@ const initialState = {
   searchTerm: undefined,
 }
 
+const switchSearchModes = (searchField, searchValue, searchType) => {
+  const fuzzySearchDefault = `/*+ES: OPERATOR(fuzzy) */ ${searchField} ILIKE '${searchValue}'`
+
+  switch (searchType) {
+    // Will return a result that is close (based on Levenstien distance) to the search term
+    case SEARCH_TYPE_APPROXIMATE_SEARCH:
+      return fuzzySearchDefault
+
+    // Will return an exact match to the word giving no leniency to unicode difference (i.e. chars that look similar but ARE different unicode)
+    case SEARCH_TYPE_EXACT_SEARCH:
+      return `${searchField} LIKE '${searchValue}'`
+
+    // Will return results where search term is contained in text
+    case SEARCH_TYPE_CONTAINS_SEARCH:
+      return `( /*+ES: OPERATOR(wildcard) */ ${searchField} ILIKE '*${searchValue}*' )`
+
+    // Will return results starting with search term
+    case SEARCH_TYPE_STARTS_WITH_SEARCH:
+      return `( /*+ES: OPERATOR(wildcard) */ ${searchField} ILIKE '${searchValue}*' )`
+
+    // Will return results ending with search term
+    case SEARCH_TYPE_ENDS_WITH_SEARCH:
+      return `( /*+ES: OPERATOR(wildcard) */ ${searchField} ILIKE '*${searchValue}' )`
+
+    // Allows the use of * or ? in queries for advanced users
+    case SEARCH_TYPE_WILDCARD_SEARCH:
+      return `( /*+ES: OPERATOR(wildcard) */ ${searchField} ILIKE '${searchValue}' )`
+
+    // Use fuzzy search matching as default
+    default:
+      return fuzzySearchDefault
+  }
+}
+
 const generateNxql = ({
   searchByAlphabet: _searchByAlphabet,
   searchByMode: _searchByMode,
   searchBySettings: _searchBySettings = {},
   searchTerm: _searchTerm,
+  searchType: _searchType,
 } = {}) => {
   const {
     searchByCulturalNotes,
@@ -53,12 +94,12 @@ const generateNxql = ({
   const searchByAlphabetValue = StringHelpers.clean(_searchByAlphabet, CLEAN_NXQL) || ''
   const nxqlTmpl = {
     // allFields: `ecm:fulltext = '*${StringHelpers.clean(searchValue, CLEAN_FULLTEXT)}*'`,
-    searchByTitle: `/*+ES: INDEX(dc:title.fulltext) OPERATOR(match_phrase_prefix) */ ecm:fulltext.dc:title ILIKE '%${searchValue}%'`,
+    searchByTitle: switchSearchModes('dc:title', searchValue, _searchType),
     searchByAlphabet: `dc:title ILIKE '${searchByAlphabetValue}%'`,
     searchByCategory: `dc:title ILIKE '%${searchValue}%'`,
     searchByPhraseBook: `dc:title ILIKE '%${searchValue}%'`,
     searchByCulturalNotes: `fv:cultural_note ILIKE '%${searchValue}%'`,
-    searchByDefinitions: `fv:definitions/*/translation ILIKE '%${searchValue}%'`,
+    searchByDefinitions: switchSearchModes('fv:definitions/*/translation', searchValue, _searchType),
     searchByTranslations: `fv:literal_translation/*/translation ILIKE '%${searchValue}%'`,
     searchPartOfSpeech: `fv-word:part_of_speech = '${searchPartOfSpeech}'`,
   }
@@ -116,7 +157,11 @@ const generateNxql = ({
   return `${nxqlQueryCollection}${nxqlQuerySpeech}`
 }
 
-const generateNxqlSearchSort = ({ searchBySettings: _searchBySettings = {}, searchTerm: _searchTerm } = {}) => {
+const generateNxqlSearchSort = ({
+  searchBySettings: _searchBySettings = {},
+  searchTerm: _searchTerm,
+  searchType: _searchType,
+} = {}) => {
   const {
     searchByCulturalNotes,
     searchByDefinitions,
@@ -140,9 +185,22 @@ const generateNxqlSearchSort = ({ searchBySettings: _searchBySettings = {}, sear
   }
 
   if (_searchTerm) {
+    let sortOrder
+
+    switch (_searchType) {
+      // Sort by score (i.e. return most relevant results)
+      case SEARCH_TYPE_APPROXIMATE_SEARCH:
+        searchSortBy = 'ecm:fulltextScore'
+        sortOrder = 'desc'
+        break
+      default:
+        sortOrder = 'asc'
+        break
+    }
+
     return {
       DEFAULT_SORT_COL: searchSortBy,
-      DEFAULT_SORT_TYPE: 'asc',
+      DEFAULT_SORT_TYPE: sortOrder,
     }
   }
   return {}
@@ -154,7 +212,7 @@ const computeSearchDialect = (state = initialState, action) => {
       // Update state
       // ------------------------------------------------------------
       const newState = Object.assign({}, state, action.payload || {})
-      const { searchByAlphabet, searchByMode, searchBySettings = {}, searchNxqlSort, searchTerm } = newState
+      const { searchByAlphabet, searchByMode, searchBySettings = {}, searchNxqlSort, searchTerm, searchType } = newState
 
       // Generate NXQL related data
       // ------------------------------------------------------
@@ -163,10 +221,12 @@ const computeSearchDialect = (state = initialState, action) => {
         searchByMode,
         searchBySettings,
         searchTerm,
+        searchType,
       })
       newState.searchNxqlSort = generateNxqlSearchSort({
         searchBySettings,
         searchTerm,
+        searchType,
       })
 
       // Generate url search param
