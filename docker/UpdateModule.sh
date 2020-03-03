@@ -1,19 +1,22 @@
 #!/bin/bash
 
-DIRECTORY=$PWD
+# Get the path to this script and the module to be updated
+DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 MODULE=$1
 
+# Set some colors for text formatting
 RED="\e[31m"
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
 cd $DIRECTORY/../$MODULE
 
+# Check to make sure a module name is passed in
 if [[ -z $MODULE ]]; then
     echo -e "${RED}No input module found. Please run this command with the name of the module you want to update (eg: \"./UpdateModule.sh FirstVoicesData\" \n${ENDCOLOR}"; exit 1
 fi
 
-# Build main project.
+# Build main module.
 echo 'Building module: ' $MODULE
 mvn clean install
 if [[ "$?" -ne 0 ]]; then
@@ -23,11 +26,13 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo ''
 
-echo 'Removing old bundle from docker container if it exists.'
-docker exec nuxeo-dev sh -c "rm /opt/nuxeo/server/nxserver/bundles/$MODULE-*.jar"
+# Remove any old modules from the docker container if they exists
+echo 'Removing old module from docker container if it exists.'
+docker exec nuxeo-dev sh -c "rm /opt/nuxeo/server/nxserver/bundles/$MODULE-*.jar" > /dev/null 2>&1
 echo ''
 
-echo 'Copying new bundle into docker container and restarting nuxeo backend.'
+# Copy the new/updated module into the docker container and restart the nuxeo backend
+echo 'Copying new module into docker container and restarting nuxeo backend.'
 docker cp target/$MODULE-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
 if [[ "$?" -ne 0 ]]; then
     echo
