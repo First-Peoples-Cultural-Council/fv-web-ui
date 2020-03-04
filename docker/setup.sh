@@ -13,7 +13,7 @@ touch /opt/nuxeo/server/nxserver/tmp/this.folder.is.mounted.in.docker.container
         if [[ $(nuxeoctl status) =~ Server[[:space:]]is[[:space:]]running[[:space:]]with[[:space:]]process[[:space:]]ID ]]; then
             STARTED=1
         fi
-        sleep 10
+        sleep 20
     done
     /opt/nuxeo/server/tmp/initialsetup.sh; exit 0
 ) & disown

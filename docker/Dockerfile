@@ -15,4 +15,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends nano
 
 #USER 1000
 COPY initialsetup.sh /opt/nuxeo/server/tmp/
-RUN ["chmod", "+x", "/opt/nuxeo/server/tmp/initialsetup.sh"]git
+RUN ["chmod", "+x", "/opt/nuxeo/server/tmp/initialsetup.sh"]
