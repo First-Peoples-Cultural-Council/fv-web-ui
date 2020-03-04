@@ -8,7 +8,6 @@ touch /opt/nuxeo/server/nxserver/tmp/this.folder.is.mounted.in.docker.container
  # every ten seconds and runs the initial setup script if it has started.
 (
     STARTED=0
-    echo $STARTED
     while [[ $STARTED -ne 1 ]]
     do
         if [[ $(nuxeoctl status) =~ Server[[:space:]]is[[:space:]]running[[:space:]]with[[:space:]]process[[:space:]]ID ]]; then
