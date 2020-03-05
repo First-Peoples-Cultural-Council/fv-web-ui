@@ -66,6 +66,13 @@ docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ~/Dev/Dependencies/nuxeo_de
 ```
 
 This may take a few minutes as Nuxeo starts up.
+The initial backend setup script should automatically run, which will create the proper data structure and an admin account using the environment variables.
+
+If you want to rerun the initial setup script for any reason, you can do so by running the following command from the docker directory:
+
+```
+./initialsetup.sh
+```
 
 Notes:
 * To expose remote debugging via port 8787: ```-p 8787:8787```\
@@ -74,20 +81,6 @@ Notes:
 * To change the data folder: ```-e NUXEO_DATA="/opt/nuxeo/ext_data"```\
 
 ### Step 4:
-
-Run the initial backend setup script in a new terminal once the backend server has started:
-
-```
-./initialsetup.sh
-```
-You may have to give the script execute permission first:
-```
-chmod +x initialsetup.sh
-```
-
-This will setup the proper data structure for FirstVoices, and create an admin account based on your environment variables.
-
-### Step 5:
 
 * You can now access the FirstVoices backend by going to localhost:8080 and logging in.
 * You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)
