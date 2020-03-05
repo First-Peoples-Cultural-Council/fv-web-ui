@@ -17,7 +17,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
     cy.wait(500)
-    cy.getByText('No results found.', { exact: true }).should('be.visible')
+    cy.getByText('No results found.', { exact: false }).should('be.visible')
 
     /*
             Going through the steps to create a word
@@ -162,6 +162,6 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No results found.', { exact: true }).should('be.visible')
+    cy.getByText('No results found.', { exact: false }).should('be.visible')
   })
 })

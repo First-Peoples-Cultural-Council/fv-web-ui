@@ -25,7 +25,6 @@ function renderInput(locals) {
   }
 
   const previewProps = selectn('attrs.previewProps', locals) || {}
-
   let content = (
     <div>
       <Preview
@@ -35,19 +34,13 @@ function renderInput(locals) {
         {...previewProps}
       />
       {locals.attrs.allowEdit ? (
-        // NOTE: For some odd reason the React Fragment suppresses a
-        // bug when using the `Browse *` button to insert an item (eg: a contributor),
-        // the newly inserted item will have a `Create new *` button below it,
-        // however the correct behaviout is to have an `Edit *` button
-        <>
-          <DialogCreateForm
-            context={locals.context}
-            value={locals.value}
-            expandedValue={selectn('attrs.expandedValue', locals)}
-            onChange={onChange}
-            fieldAttributes={locals.attrs}
-          />
-        </>
+        <DialogCreateForm
+          context={locals.context}
+          value={locals.value}
+          expandedValue={selectn('attrs.expandedValue', locals)}
+          onChange={onChange}
+          fieldAttributes={locals.attrs}
+        />
       ) : (
         ''
       )}
@@ -68,11 +61,7 @@ function renderInput(locals) {
         {locals.attrs.hideCreate ? (
           ''
         ) : (
-          // NOTE: For some odd reason when the react fragment is missing a newly created or inserted
-          // item has a 'Create New *' button below it.
-          <>
-            <DialogCreateForm context={locals.context} onChange={onChange} fieldAttributes={locals.attrs} />
-          </>
+          <DialogCreateForm context={locals.context} onChange={onChange} fieldAttributes={locals.attrs} />
         )}
         <BrowseComponent
           type={locals.type}

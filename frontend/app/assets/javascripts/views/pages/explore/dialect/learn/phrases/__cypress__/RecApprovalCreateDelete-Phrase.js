@@ -17,7 +17,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
     cy.wait(500)
-    cy.getByText('No results found.', { exact: true }).should('be.visible')
+    cy.getByText('No results found.', { exact: false }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
@@ -194,6 +194,6 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No results found.', { exact: true }).should('be.visible')
+    cy.getByText('No results found.', { exact: false }).should('be.visible')
   })
 })

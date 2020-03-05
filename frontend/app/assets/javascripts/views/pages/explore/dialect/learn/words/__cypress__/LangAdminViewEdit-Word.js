@@ -20,7 +20,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('No results found.').should('exist')
+    cy.getByText('No results found.', { exact: false }).should('exist')
     cy.queryByText('TestWord').should('not.exist')
     cy.logout()
 

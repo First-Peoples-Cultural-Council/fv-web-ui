@@ -297,6 +297,7 @@ Cypress.Commands.add('FlashcardList', (obj) => {
 // browseSearch
 //
 Cypress.Commands.add('browseSearch', (obj) => {
+  const searchTypeString = ['Approximate', 'Exact', 'Contains', 'Starts with', 'Ends with', 'Wildcard']
   const _obj = Object.assign(
     {
       btnSearch: 'search words',
@@ -308,10 +309,11 @@ Cypress.Commands.add('browseSearch', (obj) => {
       searchPartsOfSpeech: undefined,
       confirmData: true,
       confirmNoData: false,
-      searchingText: 'Showing words that contain the search',
+      searchingText: 'Showing words that',
       postClearFilterText: 'Showing all words in the',
       shouldPaginate: false,
       clearFilter: true,
+      searchType: 2,
     },
     obj
   )
@@ -333,6 +335,9 @@ Cypress.Commands.add('browseSearch', (obj) => {
 
   // set all search options:
   cy.getByTestId('SearchDialect').within(() => {
+    cy.getByTestId('SearchDialectFormSelectSearchType').select(searchTypeString[_obj.searchType])
+
+
     if (_obj.searchWord !== undefined) {
       _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
     }
