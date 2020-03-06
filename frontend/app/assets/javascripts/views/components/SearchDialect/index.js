@@ -132,7 +132,7 @@ export const SearchDialect = (props) => {
         }
       }
     }
-  }, [])
+  }, [props.computeDirectory])
 
   // Generates 'Stop browsing ...' button
   // TODO: props.searchDialectResetButtonText
