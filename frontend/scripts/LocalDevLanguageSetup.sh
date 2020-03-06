@@ -7,24 +7,36 @@ TARGET="http://127.0.0.1:8080"
 
 # If "-skip-clone" parameter is supplied then don't do a fresh clone of fv-batch-import and fv-utils
 # and skip building the jars.
-if [ "$2" != "-skip-clone" ]; then
+if [ "$1" != "-skip-clone" ]; then
 
     # Delete old copies of fv-utils and fv-batch-import and clone fresh ones
-    if [ -d "$DIRECTORY/fv-utils" ]; then
+    if [ -d "$DIRECTORY/temp/fv-utils-temp" ]; then
       echo "Removing old fv-utils"
-      rm -rf $DIRECTORY/fv-utils
+      rm -rf $DIRECTORY/temp/fv-utils-temp
     fi
-    if [ -d "$DIRECTORY/fv-batch-import" ]; then
+    if [ -d "$DIRECTORY/temp/fv-batch-import-temp" ]; then
       echo "Removing old fv-batch-import"
-      rm -rf $DIRECTORY/fv-batch-import
+      rm -rf $DIRECTORY/temp/fv-batch-import-temp
     fi
 
-    git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git
-    git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git
+    mkdir temp
+
+    git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
+    if [[ "$?" -ne 0 ]]; then
+      echo
+      echo -e 'git clone fv-batch-import failed \n'; exit 1
+      echo
+    fi
+    git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
+    if [[ "$?" -ne 0 ]]; then
+      echo
+      echo -e 'git clone fv-utils failed \n'; exit 1
+      echo
+    fi
 
     # Compile jar files from fv-utils and fv-batch-upload
     echo
-    cd $DIRECTORY/fv-utils
+    cd $DIRECTORY/temp/fv-utils-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -33,7 +45,7 @@ if [ "$2" != "-skip-clone" ]; then
       echo
     fi
     echo
-    cd $DIRECTORY/fv-batch-import
+    cd $DIRECTORY/temp/fv-batch-import-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -62,7 +74,7 @@ fi
 echo
 
 
-cd $DIRECTORY/fv-utils/target/
+cd $DIRECTORY/temp/fv-utils-temp/target/
 # Check for FV/Workspaces/Data/Test/Test directory and create it if it doesn't exist
 echo "Checking if Test/Test directory exists"
 Test_exists=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Proxy.GetSourceDocument' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
@@ -90,7 +102,7 @@ echo
 
 
 # Import Word using fv-batch-import
-cd $DIRECTORY/fv-batch-import/target
+cd $DIRECTORY/temp/fv-batch-import-temp/target
 java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/DevLangOneWords.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import DevLangOne Words batch failed \n'; exit 1

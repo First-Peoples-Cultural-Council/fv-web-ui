@@ -8,7 +8,7 @@ DIRECTORY=$PWD
 echo $DIRECTORY 1>/dev/null
 
 # Delete existing Dictionary directory and all files
-cd $DIRECTORY/fv-utils/target
+cd $DIRECTORY/temp/fv-utils-temp/target
 java -jar fv-nuxeo-utils-*.jar clear-words -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url "$TARGET/nuxeo" -language-directory Test/Test/ -language-name TestLanguageFive 1>/dev/null
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFive dictionary clear failed \n'; exit 1
@@ -21,7 +21,7 @@ if [[ "$response" -ne 200 ]]; then
 fi
 
 # Import Word using fv-batch-import
-cd $DIRECTORY/fv-batch-import/target
+cd $DIRECTORY/temp/fv-batch-import-temp/target
 java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive 1>/dev/null
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit 1
