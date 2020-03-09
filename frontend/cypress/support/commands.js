@@ -459,7 +459,7 @@ Cypress.Commands.add('formPopulateRelatedAudio', ({name, description}) => {
       // So we can't use getByLabelText. Have to getByText and move up the dom
       cy.getByText('name', { exact: false }).parent().find('input[type=text]').type(name)
       cy.getByText('description', { exact: false }).parent().find('textarea').type(description)
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
 
       const fileName = 'TestRelatedAudio.wav'
@@ -492,7 +492,7 @@ Cypress.Commands.add('formPopulateRelatedPictures', ({name, description}) => {
       cy.getByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedImage.png'
       cy.fixture(fileName, 'base64').then((fileContent) => {
@@ -524,7 +524,7 @@ Cypress.Commands.add('formPopulateRelatedVideos', ({name, description}) => {
       cy.getByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedVideo.mp4'
       cy.fixture(fileName, 'base64').then((fileContent) => {
