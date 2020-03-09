@@ -34,7 +34,6 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
             "FirstVoicesData",
             "org.nuxeo.ecm.platform",
             "org.nuxeo.ecm.platform.commandline.executor",
-//            "org.nuxeo.ecm.platform.preview.adapter.contrib",
             "org.nuxeo.ecm.platform.picture.core",
             "org.nuxeo.ecm.platform.rendition.core",
             "org.nuxeo.ecm.platform.video.core",
@@ -52,44 +51,40 @@ public class FirstVoicesNativeOrderTest {
     @Inject
     protected NativeOrderComputeService nativeOrderComputeService;
 
-    @Inject
-    protected EventService nxEvent;
-
-    private DocumentModel dialectDoc;
+    private DocumentModel dialectDoc1;
+    private DocumentModel dialectDoc2;
 
     private DocumentModel word;
 
-    // private String[] orderedWords = {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai", "ʔaaʔaƛkʷin",
-    // "ʕaanus", "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt", "cuwit",
-    // "cuxʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim", "hayuxsyuučiƛ", "hayu ʔiš muučiiłał", "k̕uʔihta",
-    // "ƛułčakup", "ƛ̕uu-čiƛ", "ma", "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi", "nunuukma", "piišpiš", "qacc̕a",
-    // "qiicqiica", "qiišʔaqƛi", "sasin", "saasin","suč’a","šuuwis", "t̓iqʷas", "uksuukł", "ʔukłaa", "ʕuupqšiƛ",
-    // "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł", "y̕eʔisi"};
-    // String[] alphabet =
-    // {"a","ʔa","ʕa","aa","ʔaa","ʕaa","e","ʔe","ʕe","ee","ʔee","ʕee","c","c̕","č","č’","h","ḥ","i","ʔi","ʕi","ii","ʔii","ʕii","k","k̕","kʷ","k̕ʷ","ł","ƛ","ƛ̕","m","m̕","n","n̕","p","p̕","q","qʷ","s","š","t","t̕","u","ʔu","ʕu","uu","ʔuu","ʕuu","w","w̕","x","x̣","xʷ","x̣ʷ","y","y̕","ʕ","ʔ"};
-
     // Nisg'a
-    private String[] orderedWords = { "adoḵs", "agwii-gin̓am", "aada gadaalee", "la'oo'a'a", "lag̱am-bax̱",
-            "laahitkw" };
+    private String[] orderedWords1 = {"adoḵs", "agwii-gin̓am", "aada gadaalee", "lag̱am-bax̱", "la'oo'a'a",
+            "laahitkw"};
 
-    private String[] alphabet = { "a", "aa", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
+    private String[] alphabet1 = {"a", "aa", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
             "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'", "tl'", "ts",
-            "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "’" };
+            "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
-    private String alphaArr;
+    // Nuu-chah-nulth
+    private String[] orderedWords2 = {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai", "ʔaaʔaƛkʷin",
+            "ʕaanus", "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt", "cuwit",
+            "cuxʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim", "hayuxsyuučiƛ", "hayu ʔiš muučiiłał", "k̕uʔihta",
+            "ƛułčakup", "ƛ̕uu-čiƛ", "ma", "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi", "nunuukma", "piišpiš", "qacc̕a",
+            "qiicqiica", "qiišʔaqƛi", "sasin", "saasin", "suč’a", "šuuwis", "t̓iqʷas", "uksuukł", "ʔukłaa", "ʕuupqšiƛ",
+            "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł", "y̕eʔisi"};
+    String[] alphabet2 =
+            {"a", "ʔa", "ʕa", "aa", "ʔaa", "ʕaa", "e", "ʔe", "ʕe", "ee", "ʔee", "ʕee", "c", "c̕", "č", "č’", "h", "ḥ", "i", "ʔi", "ʕi", "ii", "ʔii", "ʕii", "k", "k̕", "kʷ", "k̕ʷ", "ł", "ƛ", "ƛ̕", "m", "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t", "t̕", "u", "ʔu", "ʕu", "uu", "ʔuu", "ʕuu", "w", "w̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕", "ʕ", "ʔ"};
 
     @Before
     public void setUp() throws Exception {
         DocumentModel domain = createDocument(session.createDocumentModel("/", "FV", "Domain"));
-        createDialectTree();
-        createAlphabet();
-        createWords();
-    }
-
-    protected void createDialectTree() throws Exception {
         createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
         createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
-        dialectDoc = createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        dialectDoc1 = createDocument(session.createDocumentModel("/Family/Language", "Dialect1", "FVDialect"));
+        dialectDoc2 = createDocument(session.createDocumentModel("/Family/Language", "Dialect2", "FVDialect"));
+        createAlphabet(alphabet1, "/Family/Language/Dialect1/Alphabet");
+        createAlphabet(alphabet2, "/Family/Language/Dialect2/Alphabet");
+        createWords(orderedWords1, "/Family/Language/Dialect1/Dictionary");
+        createWords(orderedWords2, "/Family/Language/Dialect2/Dictionary");
     }
 
     private DocumentModel createDocument(DocumentModel model) {
@@ -97,10 +92,10 @@ public class FirstVoicesNativeOrderTest {
         return session.createDocument(model);
     }
 
-    private void createAlphabet() {
+    private void createAlphabet(String[] alphabet, String path) {
         Integer i = 0;
         for (String letter : alphabet) {
-            DocumentModel letterDoc = session.createDocumentModel("/Family/Language/Dialect/Alphabet", letter,
+            DocumentModel letterDoc = session.createDocumentModel(path, letter,
                     "FVCharacter");
             letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
             createDocument(letterDoc);
@@ -108,8 +103,8 @@ public class FirstVoicesNativeOrderTest {
         }
     }
 
-    private DocumentModel createWord(String wordValue, String pv, String v) {
-        word = session.createDocumentModel("/Family/Language/Dialect/Dictionary", wordValue, "FVWord");
+    private DocumentModel createWord(String dictionaryPath, String wordValue, String pv, String v) {
+        word = session.createDocumentModel(dictionaryPath, wordValue, "FVWord");
         if (pv != null) {
             word.setPropertyValue(pv, v);
         }
@@ -119,10 +114,10 @@ public class FirstVoicesNativeOrderTest {
         return word;
     }
 
-    private void createWords() {
+    private void createWords(String[] orderedWords, String dictionaryPath) {
         Integer i = 0;
         for (String wordValue : orderedWords) {
-            createWord(wordValue, "fv:reference", String.valueOf(i));
+            createWord(dictionaryPath, wordValue, "fv:reference", String.valueOf(i));
             i++;
         }
 
@@ -135,16 +130,31 @@ public class FirstVoicesNativeOrderTest {
 
     @Test
     public void testDialectOrdering() throws Exception {
-        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc);
-        Integer i = orderedWords.length - 1;
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc1);
+        Integer i = orderedWords1.length - 1;
 
         DocumentModelList docs = session.query(
-                "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialectDoc.getId() + "' ORDER BY fv:custom_order DESC");
+                "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialectDoc1.getId() + "' ORDER BY fv:custom_order DESC");
 
         for (DocumentModel doc : docs) {
             String reference = (String) doc.getPropertyValue("fv:reference");
             assertEquals(i, Integer.valueOf(reference));
             i--;
         }
+
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc2);
+        Integer j = orderedWords2.length - 1;
+
+        docs = session.query(
+                "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialectDoc2.getId() + "' ORDER BY fv:custom_order DESC");
+
+        for (DocumentModel doc : docs) {
+            String reference = (String) doc.getPropertyValue("fv:reference");
+            assertEquals(j, Integer.valueOf(reference));
+            j--;
+        }
     }
+
+//    TODO: CREATE A UNIT TEST WITH RANDOM LATIN CHARACTER ORDERING
+
 }

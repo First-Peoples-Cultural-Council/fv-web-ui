@@ -100,21 +100,22 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
     	}
         String title = (String) element.getPropertyValue("dc:title");
         String nativeTitle = "";
+        List<String> fvChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title")).collect(Collectors.toList());
+        List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character")).collect(Collectors.toList());
+
         while (title.length() > 0) {
             boolean found = false;
-
             // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
             int i;
-
-            List<String> fvChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title")).collect(Collectors.toList());
-            List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character")).collect(Collectors.toList());
 
             for (i = chars.length - 1; i >= 0; --i) {
                 DocumentModel charDoc = chars[i];
                 String charValue = (String) charDoc.getPropertyValue("dc:title");
                 String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
 
-                if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
+                Long charAt = (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order");
+
+                if (matchChar(title, fvChars, upperChars, charValue, ucCharValue)) {
                     if ((charValue != null && title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
                         nativeTitle += new Character((char) (33 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order"))).toString();
                         title = title.substring(charValue.length());
@@ -125,9 +126,9 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             }
             if (!found) {
                 if (" ".equals(title.substring(0, 1))) {
-                    nativeTitle += new Character((char) (33 + chars.length + 1)).toString();
+                nativeTitle += "~";
                 } else {
-                    nativeTitle += title.substring(0,1);
+                    nativeTitle += "}" + title.substring(0,1);
                 }
                 title = title.substring(1);
             }
@@ -145,7 +146,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
         }
     }
 
-    private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars, String charValue, String ucCharValue) {
+    private boolean matchChar(String title, List<String> fvChars, List<String> upperChars, String charValue, String ucCharValue) {
         boolean isIncorrect;
         List<String> charsStartingWithCurrentCharLower = fvChars.stream().filter(character -> character.startsWith(charValue)).collect(Collectors.toList());
         isIncorrect = charsStartingWithCurrentCharLower.stream().anyMatch(character -> character != charValue && title.startsWith(character));
