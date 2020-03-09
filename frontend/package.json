@@ -15,9 +15,12 @@
     "cy:run:ci:schedule": "npm run cy:trashCopy && npm run cy:copy && cypress run --headless --browser chrome --record true --tag \"master, schedule\"",
     "cy:run:ci:pr": "npm run cy:trashCopy && npm run cy:copy && cypress run --headless --browser chrome --record true --tag \"pull request\"",
     "development": "webpack --color --progress --mode development --config build/webpack.development.js",
+    "initialSetup": "bash ../docker/initialsetup.sh",
     "lint-staged:eslint": "npx eslint --config .eslintrc --fix",
     "lint-staged:prettier": "npx prettier --config .prettierrc --write",
     "lint-staged:test": "jest --bail --findRelatedTests",
+    "local:language:setup": "bash ./scripts/LocalDevLanguageSetup.sh",
+    "local:language:teardown": "bash ./scripts/LocalDevLanguageTeardown.sh",
     "production": "webpack --color --progress --display-error-details --mode production --config build/webpack.production.js",
     "production:legacy": "webpack --color --progress --mode production --env.legacy --config build/webpack.production.js",
     "start": "webpack-dev-server --color --progress --mode development --config build/webpack.development.js",
@@ -35,8 +38,7 @@
     "test:e2e:ci:schedule": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:schedule",
     "test:e2e:ci:pr": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:pr",
     "test:watch": "jest --watch",
-    "temp": "start-server-and-test start http://127.0.0.1:3001 cy:open",
-    "initialSetup": "bash ../docker/initialsetup.sh"
+    "temp": "start-server-and-test start http://127.0.0.1:3001 cy:open"
   },
   "lint-staged": {
     "linters": {

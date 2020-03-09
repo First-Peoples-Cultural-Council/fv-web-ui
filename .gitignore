@@ -26,3 +26,4 @@ nashorn_code_cache
 /docker/First-Voices-LATEST.zip
 /docker/First-Voices-marketplace-package-LATEST.zip
 /docker/nuxeo_dev_docker/
+/frontend/temp/*

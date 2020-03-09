@@ -89,6 +89,11 @@ Notes:
 By default, your instance will not have any archives to work in.
 You will need to create a language family, language and dialect (i.e. archive).
 
+##### Premade dev language:
+From the frontend directory run the command ```npm run local:language:setup``` to create a premade DevLangOne language which contains some words, phrases, and an alphabet.
+You can remove this premade language by running the command ```npm run local:language:teardown```.
+
+##### Manually:
 Log into the backend, navigate to Workspace (top menu) -> FV -> Workspaces -> Data and create a Language Family, a Language and a Dialect (by clicking "New" in each view). You will then be able to work within that archive via the front end.
 
 ## Pushing Changes
