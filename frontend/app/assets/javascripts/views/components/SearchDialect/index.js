@@ -206,6 +206,7 @@ export const SearchDialect = (props) => {
             onChange={(evt) => {
               setSearchType(evt.target.value)
             }}
+            data-testid="SearchDialectFormSelectSearchType"
             className={`SearchDialectFormSelectSearchType ${getDialectClassname()}`}
           >
             <option value={SEARCH_TYPE_APPROXIMATE_SEARCH}>Approximate</option>

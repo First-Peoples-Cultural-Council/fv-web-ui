@@ -297,6 +297,7 @@ Cypress.Commands.add('FlashcardList', (obj) => {
 // browseSearch
 //
 Cypress.Commands.add('browseSearch', (obj) => {
+  const searchTypeString = ['Approximate', 'Exact', 'Contains', 'Starts with', 'Ends with', 'Wildcard']
   const _obj = Object.assign(
     {
       btnSearch: 'search words',
@@ -308,10 +309,11 @@ Cypress.Commands.add('browseSearch', (obj) => {
       searchPartsOfSpeech: undefined,
       confirmData: true,
       confirmNoData: false,
-      searchingText: 'Showing words that contain the search',
+      searchingText: 'Showing words that',
       postClearFilterText: 'Showing all words in the',
       shouldPaginate: false,
       clearFilter: true,
+      searchType: 2,
     },
     obj
   )
@@ -333,6 +335,9 @@ Cypress.Commands.add('browseSearch', (obj) => {
 
   // set all search options:
   cy.getByTestId('SearchDialect').within(() => {
+    cy.getByTestId('SearchDialectFormSelectSearchType').select(searchTypeString[_obj.searchType])
+
+
     if (_obj.searchWord !== undefined) {
       _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
     }
@@ -454,7 +459,7 @@ Cypress.Commands.add('formPopulateRelatedAudio', ({name, description}) => {
       // So we can't use getByLabelText. Have to getByText and move up the dom
       cy.getByText('name', { exact: false }).parent().find('input[type=text]').type(name)
       cy.getByText('description', { exact: false }).parent().find('textarea').type(description)
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
 
       const fileName = 'TestRelatedAudio.wav'
@@ -487,7 +492,7 @@ Cypress.Commands.add('formPopulateRelatedPictures', ({name, description}) => {
       cy.getByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedImage.png'
       cy.fixture(fileName, 'base64').then((fileContent) => {
@@ -519,7 +524,7 @@ Cypress.Commands.add('formPopulateRelatedVideos', ({name, description}) => {
       cy.getByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared accross dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
       cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedVideo.mp4'
       cy.fixture(fileName, 'base64').then((fileContent) => {
