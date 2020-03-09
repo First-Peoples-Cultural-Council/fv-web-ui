@@ -80,7 +80,7 @@ export class Hangman extends Component {
         //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
         //currentPageIndex +
-        StringHelpers.randomIntBetween(0, 10)+
+        StringHelpers.randomIntBetween(0, Math.ceil((this.state.resultCount / PUZZLES)) || 10)+
         '&pageSize=' +
         PUZZLES
     )
@@ -88,10 +88,12 @@ export class Hangman extends Component {
       const queryResult = ProviderHelpers.getEntry(this.props.computeWords,
         this.props.routeParams.dialect_path + '/Dictionary')
 
-      this.setState({resultCount: selectn(['response', 'resultsCount'], queryResult)})
-      if(10 > (this.state.resultCount / PUZZLES)){
+      let resultCount = selectn(['response', 'resultsCount'], queryResult)
+      
+      if(10 > (resultCount / PUZZLES) && this.state.resultCount == undefined){
         //We refine our intial query/guess based on the first one
         //This should only happen once
+        this.setState({resultCount: resultCount})
         await props.fetchWords(
           props.routeParams.dialect_path + '/Dictionary',
           //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +'/* IS NOT NULL' +
@@ -102,7 +104,7 @@ export class Hangman extends Component {
             //' AND fv-word:available_in_games = 1' +
             '&currentPageIndex=' +
             //currentPageIndex +
-            StringHelpers.randomIntBetween(0, Math.ceil((this.state.resultCount / PUZZLES))) +
+            StringHelpers.randomIntBetween(0, Math.ceil((resultCount / PUZZLES))) +
             '&pageSize=' +
             PUZZLES
         )
