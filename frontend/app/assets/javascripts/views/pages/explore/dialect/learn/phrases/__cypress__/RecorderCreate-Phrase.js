@@ -114,7 +114,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
     cy.queryByText('TestPhrase').should('not.exist')
-    cy.getByText('No results found.').should('exist')
+    cy.getByText('No results found.', { exact: false }).should('exist')
 
     /*
             Logout
@@ -151,7 +151,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.getByText('TestTranslation').should('exist')
       cy.getByText('Enabled').should('exist')
     })
-    cy.queryByText('No results found.').should('not.exist')
+    cy.queryByText('No results found.', { exact: false }).should('not.exist')
     cy.logout()
 
     /*

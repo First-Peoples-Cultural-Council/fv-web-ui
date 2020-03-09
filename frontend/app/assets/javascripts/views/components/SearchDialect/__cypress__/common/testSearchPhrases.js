@@ -1,6 +1,6 @@
 export const testSearchPhrases = () => {
   const btnSearch = 'Search Phrases'
-  const searchingText = 'Showing phrases that contain'
+  const searchingText = 'Showing phrases that'
   const postClearFilterText = 'Showing all phrases listed'
 
   const _searchConfig = {
