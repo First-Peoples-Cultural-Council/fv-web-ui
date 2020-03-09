@@ -220,7 +220,7 @@ const FVMedia = {
       type: 'file',
     },
     'fvm:shared': {
-      label: intl.trans('models.shared_accross_dialects', 'Shared Accross Dialects?', 'first'),
+      label: intl.trans('models.shared_across_dialects', 'Shared Across Dialects?', 'first'),
     },
     'fvm:child_focused': {
       label: intl.trans('models.child_focused', 'Child Focused', 'first'),
