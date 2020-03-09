@@ -32,7 +32,8 @@ const DEFAULT_ROUTE_PARAMS = {
 const DEFAULT_SEARCH = {
   pageSize: '10', // using strings since these values are pulled from the url bar
   page: '1', // using strings since these values are pulled from the url bar
-  sortBy: 'dc:title',
+  // sortBy: 'dc:title', // <- causes FW-1042, left in place in case of unintended consequences
+  sortBy: 'fv:custom_order',
   sortOrder: 'asc',
 }
 export const navigationReducer = combineReducers({
