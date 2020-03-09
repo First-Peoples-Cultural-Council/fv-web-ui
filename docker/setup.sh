@@ -10,12 +10,12 @@ touch /opt/nuxeo/server/nxserver/tmp/this.folder.is.mounted.in.docker.container
     STARTED=0
     while [[ $STARTED -ne 1 ]]
     do
+        sleep 5
         if [[ $(nuxeoctl status) =~ Server[[:space:]]is[[:space:]]running[[:space:]]with[[:space:]]process[[:space:]]ID ]]; then
             STARTED=1
         fi
-        sleep 20
     done
-    /opt/nuxeo/server/tmp/initialsetup.sh; exit 0
+    sleep 15; /opt/nuxeo/server/tmp/initialsetup.sh; exit 0
 ) & disown
 
 # Startup the backend
