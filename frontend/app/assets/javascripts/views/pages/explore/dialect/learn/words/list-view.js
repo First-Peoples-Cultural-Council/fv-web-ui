@@ -102,7 +102,7 @@ class WordsListView extends DataListView {
     DEFAULT_LANGUAGE: 'english',
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_PAGE: 1,
-    DEFAULT_SORT_COL: 'dc:title',
+    DEFAULT_SORT_COL: 'fv:custom_order',
     DEFAULT_SORT_TYPE: 'asc',
     dialect: null,
     disableClickItem: true,
