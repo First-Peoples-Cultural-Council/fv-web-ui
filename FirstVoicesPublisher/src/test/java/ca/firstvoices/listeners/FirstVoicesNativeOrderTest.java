@@ -38,21 +38,13 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
  * @author loopingz
  */
 @RunWith(FeaturesRunner.class)
-@Features({ RuntimeFeature.class, CoreFeature.class, PlatformFeature.class })
-@Deploy({
-            "FirstVoicesData",
-            "org.nuxeo.ecm.platform",
-            "org.nuxeo.ecm.platform.commandline.executor",
-            "org.nuxeo.ecm.platform.picture.core",
-            "org.nuxeo.ecm.platform.rendition.core",
-            "org.nuxeo.ecm.platform.video.core",
-            "org.nuxeo.ecm.platform.audio.core",
-            "org.nuxeo.ecm.automation.scripting",
-            "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
-            "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
-            "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-            "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"
-})
+@Features({RuntimeFeature.class, CoreFeature.class, PlatformFeature.class})
+@Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor", "org.nuxeo.ecm" +
+        ".platform.picture.core", "org.nuxeo.ecm.platform.rendition.core", "org.nuxeo.ecm.platform" + ".video.core",
+        "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting", "FirstVoicesNuxeoPublisher" +
+        ".tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml", "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca" +
+        ".firstvoices.templates.factories.xml", "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations" +
+        ".xml", "FirstVoicesNuxeoPublisher:OSGI" + "-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
 public class FirstVoicesNativeOrderTest {
     @Inject
     protected CoreSession session;
@@ -81,13 +73,13 @@ public class FirstVoicesNativeOrderTest {
 
     @Test
     public void testDialectOrderingNisgaa() throws Exception {
-        String[] orderedWords = {"adoḵs", "agwii-gin̓am", "aada gadaalee", "lag̱am-bax̱", "la'oo'a'a", "laahitkw"};
+        String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a",};
 
-        String[] alphabet = {"a", "aa", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
-                "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'", "tl'",
-                "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
+        String[] orderedAlphabet = {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k",
+                "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
+                "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
-        createAlphabet(alphabet, "/Family/Language/Dialect/Alphabet");
+        createAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWords(orderedWords, "/Family/Language/Dialect/Dictionary");
 
         nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
@@ -107,19 +99,18 @@ public class FirstVoicesNativeOrderTest {
     @Test
     public void testDialectOrderingNuuChahNulth() throws Exception {
         String[] orderedWords = {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai", "ʔaaʔaƛkʷin", "ʕaanus"
-                , "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt", "cuwit", "cux" +
-                "ʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim", "hayuxsyuučiƛ", "hayu ʔiš muučiiłał", "k" +
-                "̕u" + "ʔihta", "ƛułčakup", "ƛ̕uu-čiƛ", "ma", "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi",
-                "nunuukma", "piis" + "̌piš", "qacc̕a", "qiicqiica", "qiišʔaqƛi", "sasin", "saasin", "suč’a", "šuuwis"
-                , "t̓iqʷas", "uksuukł", "ʔukłaa", "ʕuupqšiƛ", "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł",
-                "y̕eʔisi"};
+                , "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt", "cuwit", "cux"
+                + "ʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim", "hayuxsyuučiƛ", "hayu ʔiš muučiiłał",
+                "k̕uʔihta", "ƛułčakup", "ƛ̕uu-čiƛ", "ma", "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi", "nunuukma",
+                "piišpiš", "qacc̕a", "qiicqiica", "qiišʔaqƛi", "sasin", "saasin", "suč’a", "šuuwis", "t̓iqʷas",
+                "uksuukł", "ʔukłaa", "ʕuupqšiƛ", "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł", "y̕eʔisi"};
 
-        String[] alphabet = {"a", "ʔa", "ʕa", "aa", "ʔaa", "ʕaa", "e", "ʔe", "ʕe", "ee", "ʔee", "ʕee", "c", "c̕", "č"
-                , "č’", "h", "ḥ", "i", "ʔi", "ʕi", "ii", "ʔii", "ʕii", "k", "k̕", "kʷ", "k̕ʷ", "ł", "ƛ", "ƛ̕", "m",
-                "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t", "t̕", "u", "ʔu", "ʕu", "uu", "ʔuu", "ʕuu", "w",
-                "w" + "̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕", "ʕ", "ʔ"};
+        String[] orderedAlphabet = {"a", "ʔa", "ʕa", "aa", "ʔaa", "ʕaa", "e", "ʔe", "ʕe", "ee", "ʔee", "ʕee", "c", "c" +
+                "̕", "č", "č’", "h", "ḥ", "i", "ʔi", "ʕi", "ii", "ʔii", "ʕii", "k", "k̕", "kʷ", "k̕ʷ", "ł", "ƛ",
+                "ƛ̕", "m", "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t", "t̕", "u", "ʔu", "ʕu", "uu", "ʔuu",
+                "ʕuu", "w", "w̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕", "ʕ", "ʔ"};
 
-        createAlphabet(alphabet, "/Family/Language/Dialect/Alphabet");
+        createAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWords(orderedWords, "/Family/Language/Dialect/Dictionary");
 
         nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
@@ -137,7 +128,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingNonAlphabetGraphemesAndSpacesAtEnd() throws Exception {
+    public void testDialectOrderingNonAlphabetGraphemesAndSpacesAtEndByLatinOrder() throws Exception {
         String[] orderedWords = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð",
                 "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã", "ä",
                 "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø",
@@ -174,14 +165,13 @@ public class FirstVoicesNativeOrderTest {
                 "window", "wine", "wing", "winter", "wire", "wise", "with", "woman", "wood", "wool", "word", "work",
                 "worm", "wound", "writing", "wrong", "year", "yellow", "yes", "yesterday", "you", "young", " "};
 
-        String[] alphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ"
-                , "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã", "ä", "å",
-                "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù",
-                "ú", "û", "ü", "ý", "þ", "ÿ"};
+        String[] orderedAlphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
+                "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
+                "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
+                "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
-        createAlphabet(alphabet, "/Family/Language/Dialect/Alphabet");
+        createAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWords(orderedWords, "/Family/Language/Dialect/Dictionary");
-
 
         nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
@@ -192,6 +182,44 @@ public class FirstVoicesNativeOrderTest {
         for (DocumentModel doc : docs) {
             String reference = (String) doc.getPropertyValue("fv:reference");
             assertEquals(orderedWords[i], doc.getPropertyValue("dc:title"));
+            assertEquals(i, Integer.valueOf(reference));
+            i--;
+        }
+    }
+
+    @Test
+    public void testDialectOrderingPhrases() throws Exception {
+        String[] orderedPhrases = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
+                "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
+                "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
+                "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ", "A bad excuse is better than none", "Better safe than sorry",
+                "Curiosity killed the cat", "Do not make a mountain out of a mole " + "hill", "Easy come, easy go",
+                "Fine feathers make fine birds", "Give credit where credit is due", "Home is where the heart is", "If" +
+                " you play with fire, you will get burned", "Judge not, that " + "ye be not judged", "Kill two birds " +
+                "with one stone.", "Learn a language, and you will avoid a " + "war", "Memory is the treasure of the " +
+                "mind", "No man is an island", "Oil and water do not mix", "Penny, Penny. Makes many.", "Respect is " +
+                "not given, it is earned.", "Sticks and stones may break" + " my bones, but words will never hurt me" +
+                ".", "There is no smoke without fire.", "Use it or lose it", "Virtue is its own reward", "When it " +
+                "rains it pours.", "You cannot teach an old dog new tricks", "Zeal without knowledge is fire without " +
+                "light.", " "};
+
+        String[] orderedAlphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
+                "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
+                "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
+                "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
+
+        createAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
+        createPhrases(orderedPhrases, "/Family/Language/Dialect/Dictionary");
+
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+        Integer i = orderedPhrases.length - 1;
+
+        DocumentModelList docs = session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'" +
+                " ORDER BY fv:custom_order DESC");
+
+        for (DocumentModel doc : docs) {
+            String reference = (String) doc.getPropertyValue("fv:reference");
+            assertEquals(orderedPhrases[i], doc.getPropertyValue("dc:title"));
             assertEquals(i, Integer.valueOf(reference));
             i--;
         }
@@ -223,10 +251,31 @@ public class FirstVoicesNativeOrderTest {
         return word;
     }
 
+    private DocumentModel createPhrase(String dictionaryPath, String phraseValue, String pv, String v) {
+        DocumentModel phrase = session.createDocumentModel(dictionaryPath, phraseValue, "FVPhrase");
+        if (pv != null) {
+            phrase.setPropertyValue(pv, v);
+        }
+
+        phrase = createDocument(phrase);
+
+        return phrase;
+    }
+
     private void createWords(String[] orderedWords, String dictionaryPath) {
         Integer i = 0;
         for (String wordValue : orderedWords) {
             createWord(dictionaryPath, wordValue, "fv:reference", String.valueOf(i));
+            i++;
+        }
+
+        session.save();
+    }
+
+    private void createPhrases(String[] orderedPhrases, String dictionaryPath) {
+        Integer i = 0;
+        for (String wordValue : orderedPhrases) {
+            createPhrase(dictionaryPath, wordValue, "fv:reference", String.valueOf(i));
             i++;
         }
 
