@@ -31,6 +31,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
+import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 
 import FVTab from 'views/components/FVTab'
 import Preview from 'views/components/Editor/Preview'
@@ -139,10 +140,13 @@ export class AlphabetView extends Component {
       videos.push(vid)
     })
 
+    // Clean character to make it NXQL friendly
+    const searchByAlphabetValue = StringHelpers.clean(selectn('response.title', computeCharacter), CLEAN_NXQL) || ''
+
+    // Set filter
     const currentAppliedFilter = new Map({
       currentAppliedFilter: new Map({
-        // startsWith: " AND dc:title LIKE '" + selectn('response.title', computeCharacter) + "%'",
-        startsWith: " AND ( dc:title ILIKE '" + selectn('response.title', computeCharacter) + "%' )",
+        startsWith: " AND ( dc:title ILIKE '" + searchByAlphabetValue + "%' )",
       }),
     })
 
