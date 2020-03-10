@@ -129,7 +129,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                 String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
 
                 if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
-                    nativeTitle += new Character((char) (33 + (Long) charDoc.getPropertyValue("fvcharacter" +
+                    nativeTitle += new Character((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter" +
                             ":alphabet_order"))).toString();
                     title = title.substring(charValue.length());
                     found = true;
@@ -138,9 +138,9 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             }
             if (!found) {
                 if (" ".equals(title.substring(0, 1))) {
-                    nativeTitle += "~";
+                    nativeTitle += "!";
                 } else {
-                    nativeTitle += "}" + title.substring(0, 1);
+                    nativeTitle += "~" + title.substring(0, 1);
                 }
                 title = title.substring(1);
             }
