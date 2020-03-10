@@ -9,9 +9,9 @@ import java.util.Arrays;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
 
-    public boolean checkUnpublishedChanges(DocumentModel document) {
+    public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
 
-        CoreSession session = document.getCoreSession();
+//        session = document.getCoreSession();
 
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
