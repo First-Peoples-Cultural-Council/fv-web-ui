@@ -118,6 +118,8 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
         List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue(
                 "fvcharacter:upper_case_character")).collect(Collectors.toList());
 
+        String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
+
         while (title.length() > 0) {
             boolean found = false;
             // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
@@ -146,10 +148,16 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             }
         }
 
-        if (!element.isImmutable()) {
-            element.setPropertyValue("fv:custom_order", nativeTitle);
+
+        // In the case that the sorting methods are the same,
+        // we don't want to trigger subsequent events that are listening for a save.
+        // Just keep the sorting order on the document as it was. No need to save.
+        if (originalCustomSort == null || !nativeTitle.equals(originalCustomSort)) {
+            if (!element.isImmutable()) {
+                element.setPropertyValue("fv:custom_order", nativeTitle);
+            }
+            element.getCoreSession().saveDocument(element);
         }
-        element.getCoreSession().saveDocument(element);
     }
 
     protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
@@ -171,15 +179,15 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             // Go through the characters that begin with the "current character", and ensure that the title does not
             // start with any character in that list (save for the "current character" that we're iterating on).
             incorrect =
-                    charsStartingWithCurrentCharLower.stream().anyMatch(character -> character != charValue && title.startsWith(character));
+                    charsStartingWithCurrentCharLower.stream().anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
 
             // If there is no match and the character has an uppercase equivalent, we want to repeat the process
-            // above with uppercase character
+            // above with uppercase character. We also check the lowercase in an example of yZ is the "uppercase" of yz.
             if (ucCharValue != null && !incorrect) {
                 List<String> charsStartingWithCurrentCharUpper =
-                        upperChars.stream().filter(character -> character.startsWith(ucCharValue)).collect(Collectors.toList());
+                        upperChars.stream().filter(character -> character.startsWith(ucCharValue) || character.startsWith(charValue)).collect(Collectors.toList());
                 incorrect =
-                        charsStartingWithCurrentCharUpper.stream().anyMatch(uCharacter -> uCharacter != ucCharValue && title.startsWith(uCharacter));
+                        charsStartingWithCurrentCharUpper.stream().anyMatch(uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
             }
 
             // If it is the right character this value, "incorrect" will be false.
