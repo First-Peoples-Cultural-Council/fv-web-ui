@@ -20,7 +20,12 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         // Get the Workspaces document
         String path = document.getPathAsString();
         String[] splitDocPath = path.split("/");
-        splitDocPath[2] = "Workspaces";
+        for (int i=0; i<splitDocPath.length; i++) {
+            if (splitDocPath[i].equals("sections")) {
+                splitDocPath[i] = "Workspaces";
+            }
+        }
+//        splitDocPath[2] = "Workspaces";
         path = String.join("/", splitDocPath);
         DocumentModel workspacesDocument = session.getDocument((new PathRef(path)));
 
@@ -36,7 +41,12 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
 
         // Get the sections document
         String[] splitPath = path.split("/");
-        splitPath[2] = "sections";
+        for (int i=0; i<splitDocPath.length; i++) {
+            if (splitDocPath[i].equals("Workspaces")) {
+                splitDocPath[i] = "sections";
+            }
+        }
+//        splitPath[2] = "sections";
         String sectionsPath = String.join("/", splitPath);
         DocumentModel sectionsDocument = session.getDocument(new PathRef(sectionsPath));
 

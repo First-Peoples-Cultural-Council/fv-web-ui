@@ -12,10 +12,7 @@ import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertNotNull;
@@ -27,6 +24,8 @@ public class MockStructureTestUtil {
     private DocumentModel dialectDoc;
     private DocumentModel[] wordArray = null;
     private static int numMapsInTestList = 4;
+    public static final String SCHEMA_PUBLISHING = "publishing";
+    public static final String SECTIONS_PROPERTY_NAME = "publish:sections";
 
     public DocumentModel getCurrentDialect()
     {
@@ -137,6 +136,32 @@ public class MockStructureTestUtil {
             word = createDocument(session, word );
             assertNotNull("Should have a valid FVWord", word);
             i++;
+        }
+    }
+
+    /*
+        Helper method to set a publication target for a document.
+     */
+    private void addSection(String targetSectionId, DocumentModel sourceDocument, CoreSession session) {
+
+        if (targetSectionId != null && sourceDocument.hasSchema(SCHEMA_PUBLISHING)) {
+            String[] sectionIdsArray = (String[]) sourceDocument.getPropertyValue(SECTIONS_PROPERTY_NAME);
+
+            List<String> sectionIdsList = new ArrayList<String>();
+
+            if (sectionIdsArray != null && sectionIdsArray.length > 0) {
+                sectionIdsList = Arrays.asList(sectionIdsArray);
+                // make it resizable
+                sectionIdsList = new ArrayList<String>(sectionIdsList);
+            }
+
+            sectionIdsList.add(targetSectionId);
+            String[] sectionIdsListIn = new String[sectionIdsList.size()];
+            sectionIdsList.toArray(sectionIdsListIn);
+
+            sourceDocument.setPropertyValue(SECTIONS_PROPERTY_NAME, sectionIdsListIn);
+            session.saveDocument(sourceDocument);
+            session.save();
         }
     }
 
