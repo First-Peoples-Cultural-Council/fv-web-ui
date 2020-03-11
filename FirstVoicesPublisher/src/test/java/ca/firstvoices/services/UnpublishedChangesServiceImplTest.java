@@ -12,14 +12,13 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 import org.nuxeo.runtime.test.runner.*;
 import javax.inject.Inject;
 import static org.junit.Assert.*;
 import org.junit.After;
 
 @RunWith(FeaturesRunner.class)
-@Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class, RepositoryElasticSearchFeature.class})
+@Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy( {"FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
         "FirstVoicesData",
@@ -61,8 +60,6 @@ public class UnpublishedChangesServiceImplTest {
     private DocumentModel familyDoc;
     
     private DocumentModel languageDoc;
-    
-//    private DocumentModel sectionRoot;
 
     @Before
     public void setUp() throws Exception {
@@ -70,13 +67,11 @@ public class UnpublishedChangesServiceImplTest {
         unpublishedChangesServiceInstance = new UnpublishedChangesServiceImpl();
 
         assertNotNull("Should have a valid session", session);
-        assertNotNull("Should have a valid UnpublishedChangesServiceImpl", unpublishedChangesServiceInstance);
 
         session.removeChildren(session.getRootDocument().getRef());
         session.save();
         
         createDialectTree();
-//        sectionRoot = publisherService.getRootSectionFinder(session).getDefaultSectionRoots(true, true).get(0);
 
     }
 
