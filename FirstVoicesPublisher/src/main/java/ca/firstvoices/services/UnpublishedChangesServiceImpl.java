@@ -12,11 +12,11 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
 
 //        session = document.getCoreSession();
-
+        
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
             return false;
-
+        
         // Get the Workspaces document
         String path = document.getPathAsString();
         String[] splitDocPath = path.split("/");
@@ -41,9 +41,9 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
 
         // Get the sections document
         String[] splitPath = path.split("/");
-        for (int i=0; i<splitDocPath.length; i++) {
-            if (splitDocPath[i].equals("Workspaces")) {
-                splitDocPath[i] = "sections";
+        for (int i=0; i<splitPath.length; i++) {
+            if (splitPath[i].equals("Workspaces")) {
+                splitPath[i] = "sections";
             }
         }
 //        splitPath[2] = "sections";
