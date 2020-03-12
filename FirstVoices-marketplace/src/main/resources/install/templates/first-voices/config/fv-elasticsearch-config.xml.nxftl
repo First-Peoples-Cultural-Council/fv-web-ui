@@ -6,6 +6,8 @@
 <!-- this is coming from https://github.com/nuxeo/nuxeo/blob/10.10/nuxeo-distribution/nuxeo-nxr-server/src/
 main/resources/templates/common-base/nxserver/config/elasticsearch-config.xml.nxftl -->
   
+<!-- read more about manageAlias here: https://doc.nuxeo.com/nxdoc/elasticsearch-setup/#index-aliases --> 
+<!--  manageAlias="true" -->
 <extension target="org.nuxeo.elasticsearch.ElasticSearchComponent"
     point="elasticSearchIndex">
     <elasticSearchIndex name="${elasticsearch.indexName}" type="doc" repository="default">
