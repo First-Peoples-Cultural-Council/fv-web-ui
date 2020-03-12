@@ -11,7 +11,6 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.runtime.api.Framework;
 
 import java.util.Arrays;
@@ -49,56 +48,58 @@ public class DocumentListener implements EventListener {
             "FVWord",
     };
 
-    // TODO: THE IDEA HERE IS THAT WE'LL PULL A LIST OF CONFUSABLES FROM THE DIALECT IN THE FUTURE
-    private Map<String, String> confusables = ImmutableMap.of(
-            // k == confusable value & v == correct value
-            "a", "a",
-            "b", "b"
-    );
+    //  List of property names this service is applied to:
+    private String[] propertyNames = {
+        "dc:title"
+    };
 
     @Override
     public void handleEvent(Event event) {
-        // Get event context and return if not DocumentEventContext
-        EventContext ctx;
-        ctx = event.getContext();
+        EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext))
             return;
 
-        // Get document from context and return if it is not mutable
         DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
         if (document == null || document.isImmutable()) {
             return;
         }
 
-        DocumentType currentType = document.getDocumentType();
+        String currentType = document.getDocumentType().toString();
+        if (!Arrays.stream(types).anyMatch(currentType::contains)) {
+            return;
+        }
 
-        if (Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains)) {
-            CoreSession session = ctx.getCoreSession();
+        CoreSession session = ctx.getCoreSession();
 
-            // TODO: We're only doing this on dc:title. Update this later to do any property?
-            if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-                Boolean titleModified = false;
+        // TODO: THE IDEA HERE IS THAT WE'LL PULL A LIST OF CONFUSABLES FROM THE DIALECT IN THE FUTURE
+        // TODO: Make sure that none of the values are keys (to avoid endless looping on save)
+        Map<String, String> confusables = ImmutableMap.of(
+                // k == confusable value & v == correct value
+                "a", "b",
+                "b", "d"
+        );
 
-                DocumentPart[] docParts = document.getParts();
-                for (DocumentPart docPart : docParts) {
-                    Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
+        // TODO: We're only doing this on dc:title. Update this later to do any property?
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+            DocumentPart[] docParts = document.getParts();
+            for (DocumentPart docPart : docParts) {
+                Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
 
-                    while (dirtyChildrenIterator.hasNext()) {
-                        Property property = dirtyChildrenIterator.next();
-                        String propertyName = property.getField().getName().toString();
-
-                        if (propertyName.equals("dc:title") && property.isDirty()) {
-                            titleModified = true;
-                        }
+                while (dirtyChildrenIterator.hasNext()) {
+                    Property property = dirtyChildrenIterator.next();
+                    String propertyName = property.getField().getName().toString();
+                    if (property.isDirty() && Arrays.stream(propertyNames).anyMatch(s-> propertyName.equals(s))) {
+                        cleanupCharactersService.cleanUnicodeCharacters(session, document, confusables, propertyName);
                     }
                 }
-
-                if (titleModified) {
-                    cleanupCharactersService.cleanUnicodeCharacters(session, document, confusables, "dc:title");
-                }
-            } else {
-                cleanupCharactersService.cleanUnicodeCharacters(session, document, confusables, "dc:title");
             }
+        } else {
+            Arrays.stream(propertyNames).forEach(propertyName -> {
+                if (document.getProperty(propertyName) != null) {
+                    cleanupCharactersService.cleanUnicodeCharacters(session, document, confusables, propertyName);
+                }
+            });
         }
+
     }
 }
