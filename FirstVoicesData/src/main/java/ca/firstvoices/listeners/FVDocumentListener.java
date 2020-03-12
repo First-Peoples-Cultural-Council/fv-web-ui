@@ -1,10 +1,6 @@
 package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.AssignAncestorsService;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
-import com.ibm.icu.text.UnicodeSet;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
@@ -45,14 +41,6 @@ public class FVDocumentListener implements EventListener {
     
     CoreSession session = ctx.getCoreSession();
 
-    String docTitle = document.getProperty("dc:title").toString();
-    // Check that the document title doesn't have confusing unicode
-    if (getNumberRepresentatives(docTitle)) {
-      System.out.println("here!");
-    } else {
-      System.out.println("here!");
-    }
-
     // If the document is mutable and is the proper type then assign its ancestors.
     service.assignAncestors(session, document);
     
@@ -89,26 +77,6 @@ public class FVDocumentListener implements EventListener {
     };
   
     return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
-  }
-
-  private boolean getNumberRepresentatives(String identifier) {
-    int cp;
-    UnicodeSet numerics = new UnicodeSet();
-    for (int i = 0; i < identifier.length(); i += Character.charCount(i)) {
-      cp = Character.codePointAt(identifier, i);
-      // Store a representative character for each kind of decimal digit
-      switch (UCharacter.getType(cp)) {
-        case UCharacterCategory.DECIMAL_DIGIT_NUMBER:
-          // Just store the zero character as a representative for comparison.
-          // Unicode guarantees it is cp - value.
-          numerics.add(cp - UCharacter.getNumericValue(cp));
-          break;
-        case UCharacterCategory.OTHER_NUMBER:
-        case UCharacterCategory.LETTER_NUMBER:
-          throw new IllegalArgumentException("Should not be in identifiers.");
-      }
-    }
-    return (numerics.size() == 1);
   }
 
 }

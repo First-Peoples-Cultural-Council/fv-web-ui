@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.document.listeners.DocumentListener" version="1.0">
+    <require>ca.firstvoices.services.AssignAncestorsService</require>
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener enabled="true" name="documentListener" async="false" postCommit="false"
+                  class="ca.firstvoices.document.listeners.DocumentListener" priority="100">
+            <event>documentCreated</event>
+            <event>documentModified</event>
+        </listener>
+    </extension>
+</component>

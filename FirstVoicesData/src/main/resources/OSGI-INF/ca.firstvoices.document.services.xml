@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.document.services.CleanupCharactersService" version="1.0">
+    <implementation class="ca.firstvoices.document.services.CleanupCharactersServiceImpl"/>
+    <service>
+        <provide interface="ca.firstvoices.document.services.CleanupCharactersService"/>
+    </service>
+</component>
