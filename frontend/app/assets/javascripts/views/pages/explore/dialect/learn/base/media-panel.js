@@ -21,9 +21,7 @@ import selectn from 'selectn'
 
 import ImageGallery from 'react-image-gallery'
 import Preview from 'views/components/Editor/Preview'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * Media panel for word or phrase views.
  */

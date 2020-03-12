@@ -35,8 +35,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 
 import NavigationClose from '@material-ui/icons/Close'
 
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
+import FVLabel from '../../FVLabel/index'
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {
   static propTypes = {
@@ -48,6 +48,7 @@ export class AppLeftNav extends Component {
     // REDUX: actions/dispatch/func
     toggleMenuAction: func.isRequired,
     pushWindowPath: func.isRequired,
+    intlService: object.isRequired,
   }
 
   /**
@@ -57,27 +58,27 @@ export class AppLeftNav extends Component {
     const routes = Immutable.fromJS([
       {
         id: 'home',
-        label: this.intl.translate({ key: 'home', default: 'Home', case: 'first' }),
+        label: this.props.intlService.translate({ key: 'home', default: 'Home', case: 'first' }),
         path: NavigationHelpers.generateStaticURL('/home'),
       },
       {
         id: 'get-started',
-        label: this.intl.translate({ key: 'get_started', default: 'Get Started', case: 'first' }),
+        label: this.props.intlService.translate({ key: 'get_started', default: 'Get Started', case: 'first' }),
         path: NavigationHelpers.generateStaticURL('/content/get-started'),
       },
       {
         id: 'explore',
-        label: this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' }),
+        label: this.props.intlService.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' }),
         path: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data'),
       },
       {
         id: 'kids',
-        label: this.intl.translate({ key: 'kids', default: 'Kids', case: 'first' }),
+        label: this.props.intlService.translate({ key: 'kids', default: 'Kids', case: 'first' }),
         path: NavigationHelpers.generateStaticURL('/kids'),
       },
       {
         id: 'contribute',
-        label: this.intl.translate({ key: 'contribute', default: 'Contribute', case: 'first' }),
+        label: this.props.intlService.translate({ key: 'contribute', default: 'Contribute', case: 'first' }),
         path: NavigationHelpers.generateStaticURL('/content/contribute'),
       },
     ])
@@ -87,7 +88,6 @@ export class AppLeftNav extends Component {
     }
   }
 
-  intl = IntlService.instance
   state = this._getInitialState()
 
   componentDidUpdate() {
@@ -105,16 +105,13 @@ export class AppLeftNav extends Component {
           key="Workspaces"
         >
           <ListItemText
-            primary={this.intl.translate({
+            primary={this.props.intlService.translate({
               key: 'views.components.navigation.workspace_dialects',
               default: 'Workspace Dialects',
             })}
             secondary={
               <p>
-                {this.intl.translate({
-                  key: 'views.components.navigation.view_work_in_progress',
-                  default: 'View work in progress or unpublished content',
-                })}
+                <FVLabel transKey="views.components.navigation.view_work_in_progress" defaultStr="View work in progress or unpublished content" />
                 .
               </p>
             }
@@ -130,16 +127,13 @@ export class AppLeftNav extends Component {
           key="sections"
         >
           <ListItemText
-            primary={this.intl.translate({
+            primary={this.props.intlService.translate({
               key: 'views.components.navigation.published_dialects',
               default: 'Published Dialects',
             })}
             secondary={
               <p>
-                {this.intl.translate({
-                  key: 'views.components.navigation.view_dialects_as_end_user',
-                  default: 'View dialects as an end user would view them',
-                })}
+                <FVLabel transKey="views.components.navigation.view_dialects_as_end_user" defaultStr="View dialects as an end user would view them" />
                 .
               </p>
             }
@@ -164,7 +158,7 @@ export class AppLeftNav extends Component {
           exploreEntry[0],
           new Map({
             id: 'tasks',
-            label: this.intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
+            label: this.props.intlService.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
             path: '/tasks/',
           })
         )
@@ -199,19 +193,19 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-          <ListItem
-            button
-            onClick={this._onListItemClick(
-              NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
-            )}
-            key={selectn('uid', d)}
-          >
-            <ListItemText
-              primary={selectn('properties.dc:title', d)}
-              primaryTypographyProps={{ style: { fontSize: '16px' } }}
-            />
-          </ListItem>
-        ))
+        <ListItem
+          button
+          onClick={this._onListItemClick(
+            NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
+          )}
+          key={selectn('uid', d)}
+        >
+          <ListItemText
+            primary={selectn('properties.dc:title', d)}
+            primaryTypographyProps={{ style: { fontSize: '16px' } }}
+          />
+        </ListItem>
+      ))
       : null
 
     return (
@@ -251,7 +245,7 @@ export class AppLeftNav extends Component {
                 <List value={location.pathname} onChange={this._onNavigateRequest}>
                   {/* <ListItem button onClick={this._onListItemClick('/profile/')} key="profile">
                     <ListItemText
-                      primary={this.intl.translate({
+                      primary={this.props.intlService.translate({
                         key: 'views.pages.users.profile.my_profile',
                         default: 'My Profile',
                         case: 'words',
@@ -262,7 +256,7 @@ export class AppLeftNav extends Component {
 
                   <ListItem button onClick={this._onListItemClick('/logout/')} key="sign-out">
                     <ListItemText
-                      primary={this.intl.translate({
+                      primary={this.props.intlService.translate({
                         key: 'sign_out',
                         default: 'Sign Out',
                         case: 'words',
@@ -307,16 +301,18 @@ export class AppLeftNav extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { navigation, nuxeo } = state
+  const { navigation, nuxeo, locale } = state
 
   const { computeLogin } = nuxeo
   const { computeLoadNavigation, computeToggleMenuAction, properties } = navigation
+  const { intlService } = locale
 
   return {
     computeLogin,
     computeLoadNavigation,
     computeToggleMenuAction,
     properties,
+    intlService,
   }
 }
 

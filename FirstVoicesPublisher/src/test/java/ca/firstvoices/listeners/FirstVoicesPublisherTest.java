@@ -174,7 +174,7 @@ public class FirstVoicesPublisherTest {
         assertEquals(1, session.getChildren(section.getRef()).size());
         section = session.getChild(section.getRef(), dialectDoc.getName());
         assertNotNull(section);
-        assertEquals(session.getChildren(section.getRef()).size(), 9);
+        assertEquals(session.getChildren(section.getRef()).size(), 10);
 
         // Check that none is duplicated if we publish again
         dialectPublisherService.publishDialect(dialectDoc);
@@ -185,7 +185,7 @@ public class FirstVoicesPublisherTest {
         section = session.getChild(section.getRef(), languageDoc.getName());
         assertEquals(1, session.getChildren(section.getRef()).size());
         section = session.getChild(section.getRef(), dialectDoc.getName());
-        assertEquals(session.getChildren(section.getRef()).size(), 9);
+        assertEquals(session.getChildren(section.getRef()).size(), 10);
 
         // Check that none is duplicated if we publish again
         session.followTransition(dialect2Doc, "Publish");
@@ -196,7 +196,7 @@ public class FirstVoicesPublisherTest {
         section = session.getChild(section.getRef(), languageDoc.getName());
         assertEquals(2, session.getChildren(section.getRef()).size());
         section = session.getChild(section.getRef(), dialect2Doc.getName());
-        assertEquals(session.getChildren(section.getRef()).size(), 9);
+        assertEquals(session.getChildren(section.getRef()).size(), 10);
 
         // Check that none is duplicated if we publish again
         session.followTransition(dialect3Doc, "Publish");
@@ -207,7 +207,7 @@ public class FirstVoicesPublisherTest {
         section = session.getChild(section.getRef(), language2Doc.getName());
         assertEquals(1, session.getChildren(section.getRef()).size());
         section = session.getChild(section.getRef(), dialect3Doc.getName());
-        assertEquals(session.getChildren(section.getRef()).size(), 9);
+        assertEquals(session.getChildren(section.getRef()).size(), 10);
 
         // Test unpublish
         session.followTransition(dialect2Doc, "Unpublish");
@@ -218,7 +218,7 @@ public class FirstVoicesPublisherTest {
         section = session.getChild(section.getRef(), languageDoc.getName());
         assertEquals(1, session.getChildren(section.getRef()).size());
         section = session.getChild(section.getRef(), dialectDoc.getName());
-        assertEquals(session.getChildren(section.getRef()).size(), 9);
+        assertEquals(session.getChildren(section.getRef()).size(), 10);
 
         // Test unpublish
         session.followTransition(dialectDoc, "Unpublish");

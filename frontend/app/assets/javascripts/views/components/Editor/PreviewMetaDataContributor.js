@@ -17,9 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./PreviewMetaDataContributor.css'
-const intl = IntlService.instance
+import FVLabel from '../FVLabel/index'
 
 const { object } = PropTypes
 
@@ -70,11 +69,12 @@ export default class PreviewMetaDataContributor extends Component {
       )
     } else if (contributor && contributor.isError) {
       body = (
-        <li className="PreviewMetaDataContributor__entry PreviewMetaDataContributor__entry--error">{`${intl.trans(
-          'error',
-          'Error',
-          'first'
-        )}: ${selectn('message', contributor)}`}</li>
+        <li className="PreviewMetaDataContributor__entry PreviewMetaDataContributor__entry--error">
+          <FVLabel
+            transKey="error"
+            defaultStr="Error"
+            transform="first"
+          />: {`${selectn('message', contributor)}`}</li>
       )
     }
 

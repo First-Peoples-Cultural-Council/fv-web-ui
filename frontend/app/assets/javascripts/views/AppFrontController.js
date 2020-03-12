@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath, replaceWindowPath, updateWindowPath } from 'providers/redux/reducers/windowPath'
 import { changeSiteTheme, setRouteParams } from 'providers/redux/reducers/navigation'
+import { setIntlWorkspace } from 'providers/redux/reducers/locale'
 import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
 
 import selectn from 'selectn'
@@ -30,50 +31,13 @@ import KidsNavigation from 'views/components/Kids/navigation'
 import Footer from 'views/components/Navigation/Footer'
 import Breadcrumb from 'views/components/Breadcrumb'
 
-import IntlService from 'views/services/intl'
-
 import { PageError } from 'views/pages'
 
 import '!style-loader!css-loader!./AppFrontController.css'
+import FVLabel from './components/FVLabel/index'
+import HelperModeToggle from 'views/components/HelperModeToggle/index'
 
 const { any, array, func, object, string } = PropTypes
-
-const intl = IntlService.instance
-
-const PAGE_NOT_FOUND_TITLE =
-  '404 - ' +
-  intl.translate({
-    key: 'errors.page_not_found',
-    default: 'Page Not Found',
-    case: 'first',
-  })
-
-const PAGE_NOT_FOUND_BODY = (
-  <div>
-    <p>
-      {intl.translate({
-        key: 'errors.report_via_feedback',
-        default: 'Please report this error so that we can fix it',
-        case: 'first',
-      })}
-      .
-    </p>
-    <p>
-      {intl.translate({
-        key: 'errors.feedback_include_link',
-        default: 'Include what link or action you took to get to this page',
-      })}
-      .
-    </p>
-    <p>
-      {intl.translate({
-        key: 'thank_you!',
-        default: 'Thank You!',
-        case: 'words',
-      })}
-    </p>
-  </div>
-)
 
 export class AppFrontController extends Component {
   static propTypes = {
@@ -99,6 +63,41 @@ export class AppFrontController extends Component {
   static defaultProps = {
     matchedPage: undefined,
   }
+
+  PAGE_NOT_FOUND_TITLE =
+    '404 - ' +
+    this.props.intl.translate({
+      key: 'errors.page_not_found',
+      default: 'Page Not Found',
+      case: 'first',
+    })
+
+  PAGE_NOT_FOUND_BODY = (
+    <div>
+      <p>
+        {this.props.intl.translate({
+          key: 'errors.report_via_feedback',
+          default: 'Please report this error so that we can fix it',
+          case: 'first',
+        })}
+        .
+      </p>
+      <p>
+        {this.props.intl.translate({
+          key: 'errors.feedback_include_link',
+          default: 'Include what link or action you took to get to this page',
+        })}
+        .
+      </p>
+      <p>
+        {this.props.intl.translate({
+          key: 'thank_you!',
+          default: 'Thank You!',
+          case: 'words',
+        })}
+      </p>
+    </div>
+  )
 
   constructor(props, context) {
     super(props, context)
@@ -146,12 +145,15 @@ export class AppFrontController extends Component {
     if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
       this._route({ props: this.props })
     }
+    if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
+      this.props.setIntlWorkspace(this.props.routeParams.dialect_path)
+    }
   }
 
   render() {
-    const { matchedPage, routeParams } = this.props
+    const { matchedPage, routeParams, localeLoading } = this.props
     // View during user checking, pre routing
-    if (matchedPage === undefined) {
+    if (matchedPage === undefined || localeLoading) {
       return (
         <div id="app-loader" className="app-loader">
           <div
@@ -231,11 +233,7 @@ export class AppFrontController extends Component {
               >
                 {selectn(warning, this.props.warnings)}
                 <FVButton onClick={() => this.setState({ warningsDismissed: true })}>
-                  {intl.translate({
-                    key: 'dismiss',
-                    default: 'Dismiss',
-                    case: 'words',
-                  })}
+                  <FVLabel transKey="dismiss" defaultStr="Dismiss" transform="words" />
                 </FVButton>
               </div>
             )
@@ -252,6 +250,7 @@ export class AppFrontController extends Component {
             {footer}
           </div>
         </div>
+        <HelperModeToggle />
       </div>
     )
   }
@@ -450,8 +449,8 @@ export class AppFrontController extends Component {
     // No match found (i.e. 404)
     // ----------------------------------------------
     const notFoundPage = Immutable.fromJS({
-      title: PAGE_NOT_FOUND_TITLE,
-      page: <PageError title={PAGE_NOT_FOUND_TITLE} body={PAGE_NOT_FOUND_BODY} />,
+      title: this.PAGE_NOT_FOUND_TITLE,
+      page: <PageError title={this.PAGE_NOT_FOUND_TITLE} body={this.PAGE_NOT_FOUND_BODY} />,
     })
 
     this.props.setRouteParams({
@@ -493,7 +492,7 @@ export class AppFrontController extends Component {
 
       let i
       for (i in parts) {
-        newTitle.push(intl.searchAndReplace(parts[i].trim()))
+        newTitle.push(this.props.intl.searchAndReplace(parts[i].trim()))
       }
       title = newTitle.join(' | ')
     }
@@ -503,11 +502,12 @@ export class AppFrontController extends Component {
 }
 // REDUX: reducers/state
 const mapStateToProps = (state) => {
-  const { navigation, nuxeo, windowPath } = state
+  const { navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { splitWindowPath, _windowPath } = windowPath
+
   return {
     computeLogin,
     properties,
@@ -516,6 +516,8 @@ const mapStateToProps = (state) => {
     search: route.search,
     splitWindowPath,
     windowPath: _windowPath,
+    localeLoading: selectn('fvlabelsFetch.isFetching', locale),
+    intl: locale.intlService,
   }
 }
 
@@ -528,6 +530,7 @@ const mapDispatchToProps = {
   updateWindowPath,
   nuxeoConnect,
   getCurrentUser,
+  setIntlWorkspace,
 }
 
 export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(AppFrontController))

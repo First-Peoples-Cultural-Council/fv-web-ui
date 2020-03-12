@@ -44,6 +44,9 @@ export default {
     color: '#fff',
     backgroundColor: '#ab0000',
   },
+  immersionSwitch: {
+    color: '#fff!important',
+  },
   dialectContainer: {
     color: '#fff',
     backgroundColor: '#3a6880',

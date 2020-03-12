@@ -29,8 +29,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import AppFrontController from './AppFrontController'
 
-import IntlService from 'views/services/intl'
-
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
@@ -56,7 +54,6 @@ const getPreferences = function getPreferences(login, dialect) {
 
 const { func, object, string } = PropTypes
 class AppWrapper extends Component {
-  intl = IntlService.instance
   intlBaseKey = 'views'
 
   static propTypes = {

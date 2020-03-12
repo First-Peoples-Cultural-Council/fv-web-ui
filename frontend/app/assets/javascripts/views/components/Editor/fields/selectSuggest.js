@@ -6,9 +6,7 @@ import AutoSuggestComponent from 'views/components/Editor/AutoSuggestComponent'
 import BrowseComponent from 'views/components/Editor/BrowseComponent'
 import Preview from 'views/components/Editor/Preview'
 import DialogCreateForm from 'views/components/DialogCreateForm'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from '../../FVLabel/index'
 
 /**
  * Define auto-suggest factory
@@ -67,7 +65,7 @@ function renderInput(locals) {
           type={locals.type}
           label={
             locals.labelBrowseComponent ||
-            intl.trans('views.components.editor.browse_existing', 'Browse Existing', 'words')
+            <FVLabel transKey="views.components.editor.browse_existing" defaultStr="Browse Existing" transform="words" />
           }
           onComplete={onComplete}
           dialect={locals.context}

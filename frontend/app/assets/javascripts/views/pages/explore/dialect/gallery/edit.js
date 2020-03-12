@@ -37,6 +37,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
+import FVLabel from 'views/components/FVLabel/index'
 
 // Models
 import { Document } from 'nuxeo'
@@ -45,9 +46,6 @@ import { Document } from 'nuxeo'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
@@ -148,7 +146,7 @@ export class PageDialectGalleryEdit extends Component {
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     await this.props.fetchGallery(this._getGalleryPath())
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -275,12 +273,12 @@ export class PageDialectGalleryEdit extends Component {
         <PromiseWrapper computeEntities={computeEntities}>
           <div>
             <h1>
-              {intl.trans(
-                'views.pages.explore.dialect.gallery.edit_x_gallery',
-                'Edit ' + selectn('response.properties.dc:title', _computeGallery) + ' Gallery',
-                'first',
-                [selectn('response.properties.dc:title', _computeGallery)]
-              )}
+              <FVLabel
+                transKey="views.pages.explore.dialect.gallery.edit_x_gallery"
+                defaultStr={'Edit ' + selectn('response.properties.dc:title', _computeGallery) + ' Gallery'}
+                transform="first"
+                params={[selectn('response.properties.dc:title', _computeGallery)]}
+              />
             </h1>
 
             <EditViewWithForm

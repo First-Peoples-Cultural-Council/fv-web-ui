@@ -36,14 +36,13 @@ import NavigationHelpers from 'common/NavigationHelpers'
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./PhrasesCreate.css'
 
-const intl = IntlService.instance
 /**
  * Create phrase entry
  */
@@ -149,7 +148,7 @@ export class PhrasesCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     // Call fetchDialect2 if not already called:
@@ -279,9 +278,13 @@ export class PhrasesCreate extends Component {
       >
         <PromiseWrapper computeEntities={computeEntities}>
           <h1 className="PhrasesCreate__heading">
-            {intl.trans('', 'Add New Phrase to ' + selectn('response.title', computeDialect2), null, [
-              selectn('response.title', computeDialect2),
-            ])}
+            <FVLabel
+              transKey=""
+              defaultStr={'Add New Phrase to ' + selectn('response.title', computeDialect2)}
+              params={[
+                selectn('response.title', computeDialect2),
+              ]}
+            />
           </h1>
 
           <div className="row" style={{ marginTop: '15px' }}>
@@ -296,7 +299,11 @@ export class PhrasesCreate extends Component {
                 />
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
-                    {intl.trans('save', 'Save', 'first')}
+                    <FVLabel
+                      transKey="save"
+                      defaultStr="Save"
+                      transform="first"
+                    />
                   </button>
                 </div>
               </form>

@@ -51,6 +51,8 @@ import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
 import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
 import PageDialectLearnPhrasesCategories from './explore/dialect/learn/phrases/categories'
 
+import PageDialectImmersionList from './explore/dialect/immersion'
+
 import PageTest from './test.js'
 import PageDebugAPI from './debug-api.js'
 import PageDebugTypography from './debug-typography.js'
@@ -150,6 +152,7 @@ export {
   PageUsersRegister,
   PageUsersForgotPassword,
   PageUsersProfile,
+  PageDialectImmersionList,
   //GAMES
   PageJigsawGame,
   PageColouringBook,

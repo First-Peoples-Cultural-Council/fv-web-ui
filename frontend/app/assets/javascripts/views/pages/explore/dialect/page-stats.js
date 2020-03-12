@@ -29,9 +29,7 @@ import Close from '@material-ui/icons/Close'
 
 import FVTab from 'views/components/FVTab'
 import Statistics from 'views/components/Dashboard/Statistics'
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./PageStats.css'
-const intl = IntlService.instance
 
 const { func, object, string } = PropTypes
 export class PageStats extends Component {
@@ -90,7 +88,7 @@ export class PageStats extends Component {
               <Statistics
                 data={selectn('response', computeDialectStats)}
                 docType="words"
-                headerText={intl.trans('words', 'Words', 'first')}
+                headerText={this.props.intl.trans('words', 'Words', 'first')}
               />
             </Paper>
           </Typography>
@@ -101,7 +99,7 @@ export class PageStats extends Component {
               <Statistics
                 data={selectn('response', computeDialectStats)}
                 docType="phrases"
-                headerText={intl.trans('phrases', 'Phrases', 'first')}
+                headerText={this.props.intl.trans('phrases', 'Phrases', 'first')}
               />
             </Paper>
           </Typography>
@@ -112,7 +110,7 @@ export class PageStats extends Component {
               <Statistics
                 data={selectn('response', computeDialectStats)}
                 docType="songs"
-                headerText={intl.trans('songs', 'Songs', 'first')}
+                headerText={this.props.intl.trans('songs', 'Songs', 'first')}
               />
             </Paper>
           </Typography>
@@ -123,7 +121,7 @@ export class PageStats extends Component {
               <Statistics
                 data={selectn('response', computeDialectStats)}
                 docType="stories"
-                headerText={intl.trans('stories', 'Stories', 'first')}
+                headerText={this.props.intl.trans('stories', 'Stories', 'first')}
               />
             </Paper>
           </Typography>
@@ -135,14 +133,16 @@ export class PageStats extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, windowPath } = state
+  const { fvDialect, windowPath, locale } = state
 
   const { computeDialectStats } = fvDialect
   const { _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialectStats,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

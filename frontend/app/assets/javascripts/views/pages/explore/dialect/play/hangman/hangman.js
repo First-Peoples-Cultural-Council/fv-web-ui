@@ -17,9 +17,7 @@ import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
 // import ReactDOM from 'react-dom'
 import FVButton from 'views/components/FVButton'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from 'views/components/FVLabel/index'
 
 const borderStyle = {
   border: '1px solid #CCC',
@@ -249,7 +247,11 @@ export default class HangmanGame extends Component {
     return (
       <div className="success">
         <h3>
-          {intl.trans('views.pages.explore.dialect.play.hangman.you_win', 'You win!, You solved it in')} {timeToSolve}
+          <FVLabel
+            transKey="views.pages.explore.dialect.play.hangman.you_win"
+            defaultStr="You win!, You solved it in"
+          />
+          {timeToSolve}
         </h3>
       </div>
     )
@@ -259,10 +261,10 @@ export default class HangmanGame extends Component {
     return (
       <div className="failure">
         <h4>
-          {intl.trans(
-            'views.pages.explore.dialect.play.hangman.oh_no',
-            "Oh no! You're out of guesses. Don't quit now! Try again!"
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.play.hangman.oh_no"
+            defaultStr="Oh no! You're out of guesses. Don't quit now! Try again!"
+          />
         </h4>
       </div>
     )
@@ -274,14 +276,20 @@ export default class HangmanGame extends Component {
   render() {
     return (
       <div className="hangman-game" style={{ textAlign: 'center' }}>
-        <h1>{intl.trans('views.pages.explore.dialect.play.hangman.parachute', 'Parachute', 'first')}</h1>
+        <h1>
+          <FVLabel
+            transKey="views.pages.explore.dialect.play.hangman.parachute"
+            defaultStr="Parachute"
+            transform="first"
+          />
+        </h1>
 
         <div>
-          {intl.trans(
-            'views.pages.explore.dialect.play.hangman.guess_puzzle_to_make_it_to_the_beach',
-            'Guess the puzzle to make it to the beach',
-            'first'
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.play.hangman.guess_puzzle_to_make_it_to_the_beach"
+            defaultStr="Guess the puzzle to make it to the beach"
+            transform="first"
+          />
         </div>
 
         <img
@@ -326,10 +334,18 @@ export default class HangmanGame extends Component {
             onClick={this.props.newPuzzle}
             style={{ marginRight: '10px' }}
           >
-            {intl.trans('views.pages.explore.dialect.play.hangman.new_puzzle', 'New Puzzle', 'words')}
+            <FVLabel
+              transKey="views.pages.explore.dialect.play.hangman.new_puzzle"
+              defaultStr="New Puzzle"
+              transform="words"
+            />
           </FVButton>
           <FVButton variant="contained" color="primary" onMouseDown={this.restart}>
-            {intl.trans('views.pages.explore.dialect.play.hangman.restart', 'Restart', 'words')}
+            <FVLabel
+              transKey="views.pages.explore.dialect.play.hangman.restart"
+              defaultStr="Restart"
+              transform="words"
+            />
           </FVButton>
         </div>
       </div>

@@ -31,14 +31,12 @@ import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
+import FVLabel from 'views/components/FVLabel/index'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 /**
  * Create category
  */
@@ -189,12 +187,11 @@ export class PageDialectCategoryCreate extends Component {
     return (
       <div>
         <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.category.add_new_category_to_x',
-            'Add New Category to ' + dialect.get('dc:title'),
-            null,
-            [dialect.get('dc:title')]
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.category.add_new_category_to_x"
+            defaultStr={'Add New Category to ' + dialect.get('dc:title')}
+            params={[dialect.get('dc:title')]}
+          />
         </h1>
 
         {category && category.message && category.action.includes('CREATE') ? (
@@ -215,7 +212,11 @@ export class PageDialectCategoryCreate extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </button>
               </div>
             </form>
@@ -223,7 +224,13 @@ export class PageDialectCategoryCreate extends Component {
 
           <div className={classNames('col-xs-4', 'col-md-2')}>
             <Paper style={{ padding: '15px', margin: '20px 0' }}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+              <div className="subheader">
+                <FVLabel
+                  transKey="metadata"
+                  defaultStr="Metadata"
+                  transform="first"
+                />
+              </div>
             </Paper>
           </div>
         </div>

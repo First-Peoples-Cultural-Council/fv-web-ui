@@ -37,9 +37,9 @@ import Link from 'views/components/Link'
 import FVTab from 'views/components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
 import { Cover } from 'components/svg/cover'
-const intl = IntlService.instance
+import FVLabel from 'views/components/FVLabel/index'
+import { connect } from 'react-redux'
 
 class _Introduction extends Component {
   static propTypes = {
@@ -74,7 +74,12 @@ class _Introduction extends Component {
         <div className="IntroductionTranslations">
           <div>
             <h1 className="IntroductionTitle">
-              {intl.trans('introduction', 'Introduction', 'first')} {this.props.audio}
+              <FVLabel
+                transKey="introduction"
+                defaultStr="Introduction"
+                transform="first"
+              />
+              {this.props.audio}
             </h1>
           </div>
           {introductionDiv}
@@ -86,9 +91,9 @@ class _Introduction extends Component {
       <div>
         <FVTab
           tabItems={[
-            { label: intl.trans('introduction', 'Introduction', 'first') },
+            { label: this.props.intl.trans('introduction', 'Introduction', 'first') },
             {
-              label: intl.searchAndReplace(DEFAULT_LANGUAGE),
+              label: this.props.intl.searchAndReplace(DEFAULT_LANGUAGE),
             },
           ]}
           tabsValue={this.state.tabValue}
@@ -117,9 +122,19 @@ class _Introduction extends Component {
     )
   }
 }
-const Introduction = withTheme()(_Introduction)
 
-class SongsStoriesCardView extends Component {
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+const Introduction = connect(mapStateToProps)(withTheme()(_Introduction))
+
+class _SongsStoriesCardView extends Component {
   static propTypes = {
     action: PropTypes.func,
     item: PropTypes.any, // TODO: set correct type
@@ -129,7 +144,7 @@ class SongsStoriesCardView extends Component {
     siteTheme: PropTypes.any, // TODO: set correct type
   }
   static defaultProps = {
-    action: () => {},
+    action: () => { },
     style: {},
     siteTheme: 'explore',
   }
@@ -186,11 +201,11 @@ class SongsStoriesCardView extends Component {
     const translatedContinueLabelKey =
       'views.pages.explore.dialect.learn.songs_stories.continue_to_' + (entryType ? entryType : 'x')
 
-    const translatedContinueLabel = intl.trans(
+    const translatedContinueLabel = this.props.intl.trans(
       translatedContinueLabelKey,
-      'Continue to ' + (entryType ? intl.searchAndReplace(entryType) : 'Entry'),
+      'Continue to ' + (entryType ? this.props.intl.searchAndReplace(entryType) : 'Entry'),
       'first',
-      [entryType ? intl.searchAndReplace(entryType) : intl.trans('entry', 'Entry', 'first')]
+      [entryType ? this.props.intl.searchAndReplace(entryType) : this.props.intl.trans('entry', 'Entry', 'first')]
     )
     const title = <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.title) }} />
     const subtitle = (selectn('properties.fvbook:title_literal_translation', item) || []).map((translation, i) => {
@@ -290,4 +305,9 @@ class SongsStoriesCardView extends Component {
   }
 }
 
-export { Introduction, SongsStoriesCardView }
+const SongsStoriesCardView = connect(mapStateToProps)(_SongsStoriesCardView)
+
+export {
+  Introduction,
+  SongsStoriesCardView,
+}

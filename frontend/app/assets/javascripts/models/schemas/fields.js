@@ -170,6 +170,12 @@ const fields = {
     'fvlink:url': t.maybe(t.String) /*,
     'file:content': t.maybe(t.form.File)*/,
   }),
+  FVLabel: Object.assign(
+    {},
+    {
+      'fv:related_audio': t.list(t.maybe(t.String)),
+    }
+  ),
 }
 
 export default fields

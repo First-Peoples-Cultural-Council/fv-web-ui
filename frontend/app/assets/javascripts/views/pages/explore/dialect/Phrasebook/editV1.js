@@ -38,9 +38,8 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object, string } = PropTypes
@@ -194,7 +193,11 @@ export class Edit extends Component {
       <div>
         <h1>
           {selectn('response.properties.dc:title', computeCategory)}:{' '}
-          {intl.trans('views.pages.explore.dialect.phrases.edit_phrase_book', 'Edit PhraseBook', 'words')}
+          <FVLabel
+            transKey="views.pages.explore.dialect.phrases.edit_phrase_book"
+            defaultStr="Edit PhraseBook"
+            transform="words"
+          />
         </h1>
 
         <EditViewWithForm

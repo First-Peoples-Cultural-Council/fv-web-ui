@@ -48,9 +48,7 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { routeHasChanged } from 'common/NavigationHelpers'
 import Kids from './kids'
-
-import IntlService from 'views/services/intl'
-const intl = IntlService.instance
+import FVLabel from '../../../components/FVLabel/index'
 
 /**
  * Dialect portal page showing all the various components of this dialect.
@@ -100,9 +98,13 @@ export class ExploreDialect extends Component {
     if (!selectn('success', ProviderHelpers.getEntry(this.props.computePortal, path))) {
       newProps.fetchPortal(
         path,
-        intl.trans('views.pages.explore.dialect.fetching_community_portal', 'Fetching community portal.', 'first'),
+        this.props.intl.trans(
+          'views.pages.explore.dialect.fetching_community_portal',
+          'Fetching community portal.',
+          'first'
+        ),
         null,
-        intl.trans(
+        this.props.intl.trans(
           'views.pages.explore.dialect.problem_fetching_portal',
           'Problem fetching community portal it may be unpublished or offline.',
           'first'
@@ -148,14 +150,21 @@ export class ExploreDialect extends Component {
         this.props.routeParams.dialect_path,
         null,
         null,
-        intl.trans('views.pages.explore.dialect.dialect_enabled', 'Dialect enabled!', 'first', [], null, '!')
+        this.props.intl.trans('views.pages.explore.dialect.dialect_enabled', 'Dialect enabled!', 'first', [], null, '!')
       )
     } else {
       this.props.disableDialect(
         this.props.routeParams.dialect_path,
         null,
         null,
-        intl.trans('views.pages.explore.dialect.dialect_disabled', 'Dialect disabled!', 'first', [], null, '!')
+        this.props.intl.trans(
+          'views.pages.explore.dialect.dialect_disabled',
+          'Dialect disabled!',
+          'first',
+          [],
+          null,
+          '!'
+        )
       )
     }
   }
@@ -168,7 +177,7 @@ export class ExploreDialect extends Component {
       this.props.routeParams.dialect_path + '/Portal',
       null,
       null,
-      intl.trans(
+      this.props.intl.trans(
         'views.pages.explore.dialect.portal_published_successfully',
         'Portal published successfully!',
         'first',
@@ -194,7 +203,7 @@ export class ExploreDialect extends Component {
         this.props.routeParams.dialect_path,
         null,
         null,
-        intl.trans(
+        this.props.intl.trans(
           'views.pages.explore.dialect.dialect_published_successfully',
           'Dialect published successfully!',
           'first',
@@ -208,7 +217,7 @@ export class ExploreDialect extends Component {
         this.props.routeParams.dialect_path,
         null,
         null,
-        intl.trans(
+        this.props.intl.trans(
           'views.pages.explore.dialect.dialect_unpublished_successfully',
           'Dialect unpublished successfully',
           'first',
@@ -304,7 +313,7 @@ export class ExploreDialect extends Component {
       if (selectn('response', computeDialect2)) {
         toolbar = (
           <PageToolbar
-            label={intl.trans('portal', 'Portal', 'first')}
+            label={this.props.intl.trans('portal', 'Portal', 'first')}
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             showPublish={false}
@@ -364,7 +373,9 @@ export class ExploreDialect extends Component {
           renderPartial
         >
           <div>
-            <h3>{intl.trans('news', 'News', 'first')}</h3>
+            <h3>
+              <FVLabel transKey="news" defaultStr="News" transform="first" />
+            </h3>
             <EditableComponentHelper
               dataTestid="EditableComponent__fv-portal-news"
               isSection={isSection}
@@ -395,25 +406,25 @@ export class ExploreDialect extends Component {
                     href={this.props.windowPath + '/learn'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/learn')}
                   >
-                    {intl.trans('learn_our_lang', 'Learn our Language')}
+                    <FVLabel transKey="learn_our_lang" defaultStr="Learn our Language" />
                   </a>
                   <a
                     href={this.props.windowPath + '/play'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/play')}
                   >
-                    {intl.trans('views.pages.explore.dialect.play_game', 'Play a Game')}
+                    <FVLabel transKey="views.pages.explore.dialect.play_game" defaultStr="Play a Game" />
                   </a>
                   <a
                     href={this.props.windowPath + '/gallery'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/gallery')}
                   >
-                    {intl.trans('views.pages.explore.dialect.photo_gallery', 'Photo Gallery')}
+                    <FVLabel transKey="views.pages.explore.dialect.photo_gallery" defaultStr="Photo Gallery" />
                   </a>
                   <a
                     href={this.props.windowPath + '/kids'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath.replace('explore', 'kids'))}
                   >
-                    {intl.trans('views.pages.explore.dialect.kids_portal', 'Kids Portal')}
+                    <FVLabel transKey="views.pages.explore.dialect.kids_portal" defaultStr="Kids Portal" />
                   </a>
                 </div>
               </div>
@@ -427,7 +438,7 @@ export class ExploreDialect extends Component {
 
             <div className={dialectClassName}>
               <TextHeader
-                title={intl.trans('views.pages.explore.dialect.about_us', 'ABOUT US', 'upper')}
+                title={this.props.intl.trans('views.pages.explore.dialect.about_us', 'ABOUT US', 'upper')}
                 tag="h2"
                 properties={this.props.properties}
               />
@@ -456,7 +467,7 @@ export class ExploreDialect extends Component {
                 {featuredWords.length > 0 ? (
                   <TextHeader
                     tag="h2"
-                    title={intl.trans('first_words', 'FIRST WORDS', 'upper')}
+                    title={this.props.intl.trans('first_words', 'FIRST WORDS', 'upper')}
                     properties={this.props.properties}
                   />
                 ) : (
@@ -493,7 +504,7 @@ export class ExploreDialect extends Component {
                       <div>
                         <TextHeader
                           tag="h2"
-                          title={intl.trans('related_links', 'RELATED LINKS', 'upper')}
+                          title={this.props.intl.trans('related_links', 'RELATED LINKS', 'upper')}
                           properties={this.props.properties}
                         />
                         <EditableComponentHelper
@@ -517,14 +528,14 @@ export class ExploreDialect extends Component {
               <div className={classNames('col-xs-12')}>
                 <TextHeader
                   tag="h2"
-                  title={intl.trans('views.pages.explore.dialect.about', 'REGION DATA', 'upper')}
+                  title={this.props.intl.trans('views.pages.explore.dialect.about', 'REGION DATA', 'upper')}
                   properties={this.props.properties}
                 />
 
                 <div className={classNames('dialect-info-banner')}>
                   <div>
                     {/* <div className="dib-body-row">
-                  <strong>{intl.trans("name_of_archive", "Name of Archive")}: </strong>
+                  <strong>{this.props.intl.trans("name_of_archive", "Name of Archive")}: </strong>
                   <AuthorizationFilter
                     filter={{ permission: "Write", entity: selectn("response", computeDialect2) }}
                     renderPartial
@@ -540,7 +551,9 @@ export class ExploreDialect extends Component {
                   </AuthorizationFilter>
                 </div> */}
                     <div className="dib-body-row">
-                      <strong>{intl.trans('country', 'Country')}: </strong>
+                      <strong>
+                        <FVLabel transKey="country" defaultStr="Country" />:{' '}
+                      </strong>
                       <AuthorizationFilter
                         filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
                         renderPartial
@@ -557,7 +570,9 @@ export class ExploreDialect extends Component {
                       </AuthorizationFilter>
                     </div>
                     <div className="dib-body-row">
-                      <strong>{intl.trans('region', 'Region', 'first')}: </strong>
+                      <strong>
+                        <FVLabel transKey="region" defaultStr="Region" transform="first" />:{' '}
+                      </strong>
                       <AuthorizationFilter
                         filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
                         renderPartial
@@ -586,7 +601,7 @@ export class ExploreDialect extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPortal, navigation, nuxeo, windowPath } = state
+  const { document, fvDialect, fvPortal, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
@@ -594,6 +609,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computePublish } = document
   const { computeDialect2, computeDialectUnpublish } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -604,6 +620,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

@@ -59,7 +59,7 @@ function Contributors(props) {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async () => {
+  const copy = useGetCopy(async() => {
     const success = await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization')
     return success.default
   })
@@ -68,7 +68,7 @@ function Contributors(props) {
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
     deletedUids,
-    getData: async () => {
+    getData: async() => {
       // const { pageSize, page } = routeParams
       // const { sortBy, sortOrder } = search
 
@@ -208,7 +208,7 @@ function Contributors(props) {
           }}
           // Listview: computed data
           computedData={computedData}
-          sortHandler={async (sortData) => {
+          sortHandler={async(sortData) => {
             await props.setRouteParams({
               search: {
                 page: sortData.page,

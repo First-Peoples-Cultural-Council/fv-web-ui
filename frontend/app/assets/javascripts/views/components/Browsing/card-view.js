@@ -26,12 +26,12 @@ import Typography from '@material-ui/core/Typography'
 
 import ClearIcon from '@material-ui/icons/Clear'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
-
-import IntlService from 'views/services/intl'
+import FVLabel from '../FVLabel/index'
+import { connect } from 'react-redux'
 
 const defaultStyle = { marginBottom: '20px' }
 
-export default class BrowsingCardView extends Component {
+class BrowsingCardView extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -39,8 +39,6 @@ export default class BrowsingCardView extends Component {
       showIntro: false,
     }
   }
-
-  intl = IntlService.instance
 
   render() {
     // NOTE: `action` not being used,
@@ -93,10 +91,11 @@ export default class BrowsingCardView extends Component {
             <div className="CardViewCopy">
               <div className="CardViewTitles">
                 <Typography className="CardViewTitle" variant="headline" component="h2">
-                  <span>{this.intl.searchAndReplace(this.props.item.title)}</span>
+                  <span>
+                    {this.props.intl.searchAndReplace(this.props.item.title)}</span>
                 </Typography>
                 <Typography className="CardViewSubtitle" variant="subheading" component="h3">
-                  {this.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
+                  {this.props.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
                 </Typography>
               </div>
 
@@ -122,15 +121,15 @@ export default class BrowsingCardView extends Component {
                   <ClearIcon />
                 </IconButton>
 
-                {this.intl.searchAndReplace(introduction)}
+                {this.props.intl.searchAndReplace(introduction)}
               </div>
               <div className="CardViewCardActions">
                 <button className="FlatButton" onClick={this.props.action.bind(this, this.props.item)} type="button">
-                  {this.intl.translate({
-                    key: 'views.pages.dialect.learn.songs_stories.continue_to_entry',
-                    default: 'Continue to Entry',
-                    case: 'words',
-                  })}
+                  <FVLabel
+                    transKey="views.pages.dialect.learn.songs_stories.continue_to_entry"
+                    defaultStr="Continue to Entry"
+                    transform="words"
+                  />
                 </button>
 
                 {(() => {
@@ -159,3 +158,14 @@ export default class BrowsingCardView extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(BrowsingCardView)

@@ -25,11 +25,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
+import { connect } from 'react-redux'
 
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
-export default class SubViewTranslation extends Component {
+class SubViewTranslation extends Component {
   static defaultProps = {}
   static propTypes = {
     group: PropTypes.any, // TODO: set appropriate propType
@@ -95,7 +94,7 @@ export default class SubViewTranslation extends Component {
               return (
                 <Tab
                   style={SubViewTranslation.tabStyles.headline}
-                  label={intl.searchAndReplace(key) + ':'}
+                  label={this.props.intl.searchAndReplace(key) + ':'}
                   key={key}
                   value={key}
                 />
@@ -125,3 +124,15 @@ export default class SubViewTranslation extends Component {
     )
   }
 }
+
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(SubViewTranslation)

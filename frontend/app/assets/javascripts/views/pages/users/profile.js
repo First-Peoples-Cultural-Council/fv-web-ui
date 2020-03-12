@@ -32,15 +32,13 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
+import FVLabel from '../../components/FVLabel/index'
 
 /**
  * Create user entry
  */
 const { array, func, object, string } = PropTypes
 class Profile extends Component {
-  intl = IntlService.instance
-
   static propTypes = {
     routeParams: object.isRequired,
     updateUser: func.isRequired,
@@ -184,7 +182,7 @@ class Profile extends Component {
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>{this.intl.searchAndReplace('My Profile', { case: 'words' })}</h1>
+        <h1>{this.props.intl.searchAndReplace('My Profile', { case: 'words' })}</h1>
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
@@ -197,7 +195,11 @@ class Profile extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  {this.intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </button>
               </div>
             </form>
@@ -210,12 +212,13 @@ class Profile extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvUser, navigation, nuxeo, windowPath } = state
+  const { fvUser, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeUser } = fvUser
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeUser,
@@ -223,6 +226,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

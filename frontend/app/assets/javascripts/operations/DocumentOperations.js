@@ -350,9 +350,7 @@ export default class DocumentOperations {
       // reject the promise
       (resolve, reject) => {
         const defaultParams = {
-          query: `SELECT * FROM ${
-            documentType.prototype.entityTypeName
-          } WHERE (ecm:uuid='${_id}' AND ${selectDefault})`,
+          query: `SELECT * FROM ${documentType.prototype.entityTypeName} WHERE (ecm:uuid='${_id}' AND ${selectDefault})`,
         }
 
         const defaultHeaders = {}

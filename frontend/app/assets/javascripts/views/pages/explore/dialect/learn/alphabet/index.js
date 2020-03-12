@@ -38,6 +38,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
+import FVLabel from 'views/components/FVLabel/index'
 
 import FVButton from 'views/components/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'
@@ -46,9 +47,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import Header from 'views/pages/explore/dialect/header'
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'
-import IntlService from 'views/services/intl'
 import { SECTIONS } from 'common/Constants'
-const intl = IntlService.instance
+
 const { any, array, bool, func, object, string } = PropTypes
 class AlphabetGridListTile extends Component {
   static propTypes = {
@@ -206,12 +206,12 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
           <div className="row">
             <div className={classNames('col-xs-8', 'col-xs-offset-2')}>
               <h1>
-                {intl.trans(
-                  'views.pages.explore.dialect.learn.alphabet.x_alphabet',
-                  selectn('response.title', _computeDialect2) + ' Alphabet',
-                  'words',
-                  [selectn('response.title', _computeDialect2)]
-                )}
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.alphabet.x_alphabet"
+                  defaultStr={selectn('response.title', _computeDialect2) + ' Alphabet'}
+                  transform="words"
+                  params={[selectn('response.title', _computeDialect2)]}
+                />
               </h1>
               {React.cloneElement(alphabetListView, {
                 gridListView: true,
@@ -240,7 +240,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <div className="fontAboriginalSans">
               <TextHeader
-                title={intl.trans(
+                title={this.props.intl.trans(
                   'views.pages.explore.dialect.learn.alphabet.x_alphabet',
                   selectn('response.title', _computeDialect2) + ' Alphabet',
                   null,
@@ -328,7 +328,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCharacter, fvDialect, fvPortal, navigation, nuxeo, windowPath } = state
+  const { document, fvCharacter, fvDialect, fvPortal, navigation, nuxeo, windowPath, locale } = state
 
   const { computeCharacters } = fvCharacter
   const { computeDocument } = document
@@ -337,6 +337,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeCharacters,
@@ -347,6 +348,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

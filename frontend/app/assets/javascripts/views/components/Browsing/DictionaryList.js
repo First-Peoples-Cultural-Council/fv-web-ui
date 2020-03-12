@@ -234,7 +234,6 @@ import {
   getUidsThatAreNotDeleted,
 } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
@@ -255,7 +254,6 @@ const VIEWMODE_SMALL_SCREEN = 2
 const VIEWMODE_LARGE_SCREEN = 3
 
 const DictionaryList = (props) => {
-  const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...props.columns]
 
@@ -326,11 +324,7 @@ const DictionaryList = (props) => {
       <div
         className={`DictionaryList DictionaryList--noData  ${props.cssModifier}`}
         dangerouslySetInnerHTML={{
-          __html: intl.translate({
-            key: 'no_results_found_dictionary',
-            default: 'No Results Found',
-            case: 'title',
-          }),
+          __html: props.intl.translate('no_results_found_dictionary', 'No Results Found', 'title')[0],
         }}
       />
     ) : null
@@ -406,6 +400,8 @@ const DictionaryList = (props) => {
         clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
         dictionaryListViewMode: props.dictionaryListViewMode,
         hasViewModeButtons: props.hasViewModeButtons,
+        // viewMode,
+        hasFlashcard: props.hasFlashcard,
       })}
 
       <Media
@@ -500,11 +496,13 @@ function generateListButtons({
   clickHandlerViewMode = () => {},
   dictionaryListViewMode,
   hasViewModeButtons,
+  viewMode,
+  hasFlashcard,
 }) {
   let buttonFlashcard = null
   let exportDialect = null
 
-  if (hasViewModeButtons) {
+  if (hasViewModeButtons && dictionaryListViewMode === undefined && hasFlashcard) {
     buttonFlashcard =
       dictionaryListViewMode === VIEWMODE_FLASHCARD ? (
         <FVButton
@@ -762,6 +760,7 @@ DictionaryList.propTypes = {
   filteredItems: oneOfType([array, instanceOf(List)]),
   hasSorting: bool,
   hasViewModeButtons: bool,
+  hasFlashcard: bool,
   items: oneOfType([array, instanceOf(List)]), // Data
   rowClickHandler: func,
   sortHandler: func,
@@ -814,11 +813,12 @@ DictionaryList.defaultProps = {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { navigation, listView } = state
+  const { navigation, listView, locale } = state
   return {
     navigationRouteRouteParams: navigation.route.routeParams,
     navigationRouteSearch: navigation.route.search,
     listView,
+    intl: locale.intlService,
   }
 }
 

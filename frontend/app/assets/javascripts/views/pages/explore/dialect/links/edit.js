@@ -37,9 +37,8 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object, string } = PropTypes
@@ -194,12 +193,12 @@ export class Edit extends Component {
     return (
       <div>
         <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.links.edit_x_link',
-            'Edit ' + selectn('response.properties.dc:title', computeLink) + ' Link',
-            'first',
-            [selectn('response.properties.dc:title', computeLink)]
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.links.edit_x_link"
+            defaultStr={'Edit ' + selectn('response.properties.dc:title', computeLink) + ' Link'}
+            transform="first"
+            params={[selectn('response.properties.dc:title', computeLink)]}
+          />
         </h1>
 
         <EditViewWithForm

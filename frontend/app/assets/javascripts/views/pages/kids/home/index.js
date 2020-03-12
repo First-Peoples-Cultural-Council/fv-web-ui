@@ -24,9 +24,8 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import classNames from 'classnames'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Explore Archive page shows all the families in the archive
  */
@@ -81,7 +80,11 @@ export class PageKidsHome extends Component {
                   }}
                   style={{ marginTop: '20vh' }}
                 >
-                  {intl.trans('views.pages.kids.enter', 'Enter Kids Area', 'words')}
+                  <FVLabel
+                    transKey="views.pages.kids.enter"
+                    defaultStr="Enter Kids Area"
+                    transform="words"
+                  />
                 </FVButton>
               </span>
             </div>

@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 import selectn from 'selectn'
 import BrowsingCardView from './card-view'
-import IntlService from 'views/services/intl'
+import FVLabel from '../FVLabel/index'
 
 export default class GeneralList extends Component {
   static propTypes = {
@@ -41,8 +41,6 @@ export default class GeneralList extends Component {
     style: null,
   }
 
-  intl = IntlService.instance
-
   constructor(props, context) {
     super(props, context)
   }
@@ -53,12 +51,12 @@ export default class GeneralList extends Component {
     if (selectn('length', items) == 0) {
       return (
         <div style={{ margin: '20px 0' }}>
-          {this.intl.translate({
-            key: 'no_results_found',
-            default: 'No Results Found',
-            case: 'first',
-            append: '.',
-          })}
+          <FVLabel
+            transKey="no_results_found"
+            defaultStr="No Results Found"
+            transform="first"
+            append="."
+          />
         </div>
       )
     }

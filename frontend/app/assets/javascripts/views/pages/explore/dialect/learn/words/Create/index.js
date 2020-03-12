@@ -39,9 +39,8 @@ import '!style-loader!css-loader!./WordsCreate.css'
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Create word entry
  */
@@ -139,7 +138,7 @@ export class PageDialectWordsCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -270,12 +269,11 @@ export class PageDialectWordsCreate extends Component {
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <div className="WordsCreate">
             <h1 className="WordsCreate__heading">
-              {intl.trans(
-                'views.pages.explore.dialect.learn.words.add_new_word_to_x',
-                'Add New Word to ' + selectn('response.title', _computeDialect2),
-                null,
-                [selectn('response.title', _computeDialect2)]
-              )}
+              <FVLabel
+                transKey="views.pages.explore.dialect.learn.words.add_new_word_to_x"
+                defaultStr={'Add New Word to ' + selectn('response.title', _computeDialect2)}
+                params={[selectn('response.title', _computeDialect2)]}
+              />
             </h1>
             <div className="row" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-8', 'col-md-10')}>
@@ -289,7 +287,11 @@ export class PageDialectWordsCreate extends Component {
                   />
                   <div className="form-group">
                     <button type="submit" className="btn btn-primary">
-                      {intl.trans('save', 'Save', 'first')}
+                      <FVLabel
+                        transKey="save"
+                        defaultStr="Save"
+                        transform="first"
+                      />
                     </button>
                   </div>
                 </form>

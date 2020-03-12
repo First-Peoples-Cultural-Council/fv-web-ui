@@ -28,7 +28,6 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
 
 const { oneOfType, instanceOf, array, func, object, string } = PropTypes
 
@@ -70,9 +69,9 @@ export class PortalListDialects extends Component {
       const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
       const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
       const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
-      const dialectTitle = IntlService.instance.searchAndReplace(title)
+      const dialectTitle = this.props.intl.searchAndReplace(title)
       const dialectDescription = tile.description ? (
-        <span className="DialectDescription">{IntlService.instance.searchAndReplace(tile.description)}</span>
+        <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
       ) : null
       // const dialectTitle = title
       // const dialectDescription = tile.description ? (
@@ -105,20 +104,22 @@ export class PortalListDialects extends Component {
 }
 
 // REDUX: reducers/state
-// const mapStateToProps = (state /*, ownProps*/) => {
-//   const { navigation } = state
-//   const { siteTheme } = navigation
-//   return {
-//     siteTheme,
-//   }
-// }
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   pushWindowPath,
 }
 
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(PortalListDialects)

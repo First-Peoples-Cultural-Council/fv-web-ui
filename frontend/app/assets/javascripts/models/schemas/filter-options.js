@@ -140,7 +140,7 @@ const options = {
 
           return !(
             propertyToSearch.findIndex((value) => {
-              if (filterValue == 'Anything') {
+              if (filterValue === 'Anything') {
                 return ProviderHelpers.isActiveRole(value)
               }
               return value.search(new RegExp(filterValue, 'i')) === -1 ? false : true

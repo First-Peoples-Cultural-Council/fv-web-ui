@@ -36,6 +36,7 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import FVTab from 'views/components/FVTab'
+import FVLabel from 'views/components/FVLabel/index'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -51,10 +52,8 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
 import { string } from 'prop-types'
 
-const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
 
 const DEFAULT_SORT_ORDER = '&sortOrder=asc,asc&sortBy=fvbookentry:sort_map,dc:created'
@@ -152,7 +151,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -271,8 +270,8 @@ export class PageDialectBookEdit extends Component {
         <div>
           <FVTab
             tabItems={[
-              { label: intl.trans('book', 'Book', 'first') },
-              { label: intl.trans('pages', 'Pages', 'first') },
+              { label: this.props.intl.trans('book', 'Book', 'first') },
+              { label: this.props.intl.trans('pages', 'Pages', 'first') },
             ]}
             tabsValue={this.state.tabValue}
             tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
@@ -282,12 +281,12 @@ export class PageDialectBookEdit extends Component {
               {title && (
                 <Typography variant="display2">
                   <>
-                    {intl.trans(
-                      'views.pages.explore.dialect.learn.songs_stories.edit_x_book',
-                      'Edit ' + title + ' Book',
-                      'words',
-                      [title]
-                    )}
+                  <FVLabel
+                    transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
+                    defaultStr={'Edit ' + title + ' Book'}
+                    transform="words"
+                    params={[title]}
+                  />
                   </>
                 </Typography>
               )}
@@ -310,7 +309,12 @@ export class PageDialectBookEdit extends Component {
             <div style={{ padding: 8 * 3 }}>
               {title && (
                 <Typography variant="headline">
-                  {intl.trans('', 'Edit ' + title + ' pages', 'first', [title])}
+                  <FVLabel
+                    transKey=""
+                    defaultStr={'Edit ' + title + ' pages'}
+                    transform="first"
+                    params={[title]}
+                  />
                 </Typography>
               )}
               <BookEntryList
@@ -352,13 +356,14 @@ export class PageDialectBookEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvBook, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
   const { computeBook, computeBookEntries } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { properties } = navigation
   const { computeLogin } = nuxeo
+  const { intlService } = locale
 
   return {
     computeBook,
@@ -367,6 +372,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     properties,
     splitWindowPath,
+    intl: intlService,
   }
 }
 

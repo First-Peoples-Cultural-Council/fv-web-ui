@@ -30,9 +30,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from '../FVLabel/index'
 
 const { bool, func, object, string } = PropTypes
 export class DialectList extends Component {
@@ -81,7 +79,12 @@ export class DialectList extends Component {
         {this.props.fancy ? (
           <Select autoWidth value={this.props.value} onChange={this._handleChange}>
             <MenuItem value>
-              {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
+              <FVLabel
+                transKey="select"
+                defaultStr="Select"
+                transform="first"
+              />
+              {' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}
             </MenuItem>
             {entries.map((entry) => (
               <MenuItem key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
@@ -92,7 +95,12 @@ export class DialectList extends Component {
         ) : (
           <select className="form-control" value={this.props.value} onChange={this._handleChange}>
             <option value>
-              {intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'}
+              <FVLabel
+                transKey="select"
+                defaultStr="Select"
+                transform="first"
+              />
+              {' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}
             </option>
             {entries.map((entry) => (
               <option key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
@@ -112,12 +120,14 @@ export class DialectList extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect } = state
+  const { fvDialect, locale } = state
 
   const { computeDialectList } = fvDialect
+  const { intlService } = locale
 
   return {
     computeDialectList,
+    intl: intlService,
   }
 }
 

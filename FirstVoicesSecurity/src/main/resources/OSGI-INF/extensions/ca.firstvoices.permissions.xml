@@ -41,6 +41,7 @@
 		    <permission>Record</permission>
 		    <facet>Folderish</facet>
 		    <type>FVDictionary</type>
+		    <type>FVLabelDictionary</type>
 		    <type>FVCategories</type>
 		    <type>FVContributors</type>
 		    <type>FVPhraseBooks</type>

@@ -25,8 +25,6 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { EditableComponentHelper } from 'views/components/Editor/EditableComponent'
 
-import IntlService from 'views/services/intl'
-const intl = IntlService.instance
 /**
  * Sidebar for learning page
  */
@@ -62,7 +60,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <TextHeader
-                      title={intl.trans('language_resources', 'Language Resources', 'upper')}
+                      title={this.props.intl.trans('language_resources', 'Language Resources', 'upper')}
                       tag="h2"
                       properties={properties}
                     />
@@ -94,7 +92,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <TextHeader
-                      title={intl.trans('our_keyboards', 'OUR KEYBOARDS', 'upper')}
+                      title={this.props.intl.trans('our_keyboards', 'OUR KEYBOARDS', 'upper')}
                       tag="h2"
                       properties={properties}
                     />
@@ -126,7 +124,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <TextHeader
-                      title={intl.trans('contact_information', 'CONTACT INFORMATION', 'upper')}
+                      title={this.props.intl.trans('contact_information', 'CONTACT INFORMATION', 'upper')}
                       tag="h2"
                       properties={properties}
                     />
@@ -151,12 +149,14 @@ export class LearningSidebar extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { navigation } = state
+  const { navigation, locale } = state
 
   const { properties } = navigation
+  const { intlService } = locale
 
   return {
     properties,
+    intl: intlService,
   }
 }
 

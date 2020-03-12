@@ -147,7 +147,7 @@
     "space-before-function-paren": [2, "never"], // http://eslint.org/docs/rules/space-before-function-paren
     "space-infix-ops": 2, // http://eslint.org/docs/rules/space-infix-ops
     "space-unary-ops": 0,
-    "strict": 0,
+    "strict": 1,
     "use-isnan": 2, // http://eslint.org/docs/rules/use-isnan
     "vars-on-top": 2, // http://eslint.org/docs/rules/vars-on-top
     "wrap-iife": [2, "any"], // http://eslint.org/docs/rules/wrap-iife

@@ -144,3 +144,9 @@
   align-items: center;
   padding: 10px 0;
 }
+.Navigation__immersionSwitch {
+  color: #fff !important;
+}
+.Navigation__immersionSwitch label {
+  margin-bottom: 0px;
+}

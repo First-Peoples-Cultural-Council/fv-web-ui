@@ -37,10 +37,8 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
+import FVLabel from '../FVLabel/index'
 
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 const { array, func, object, bool } = PropTypes
 export class KidsNavigation extends Component {
@@ -58,9 +56,14 @@ export class KidsNavigation extends Component {
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
     toggleMenuAction: func.isRequired,
+    intl: object.isRequired,
   }
-  state = {
-    hintTextSearch: intl.trans('search_site', 'Search Site', 'words') + ':',
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      hintTextSearch: this.props.intl.trans('search_site', 'Search Site', 'words') + ':',
+    }
   }
 
   _onNavigateRequest(path) {
@@ -102,27 +105,28 @@ export class KidsNavigation extends Component {
                 <span className="hidden-xs">
                   {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
                     this.props.properties.title) +
-                    ' ' +
-                    intl.trans('views.pages.explore.dialect.for_kids', 'for Kids')}
+                    ' '
+                  }
+                  <FVLabel transKey="views.pages.explore.dialect.for_kids" defaultStr="for Kids" />
                 </span>
               </a>
             </Typography>
             {this.props.frontpage !== true && (
-              <Tooltip title={intl.trans('back', 'Back', 'first')} placement="bottom-end">
+              <Tooltip title={this.props.intl.trans('back', 'Back', 'first')} placement="bottom-end">
                 <IconButton onClick={() => NavigationHelpers.navigateBack()}>
                   <KeyboardBackspaceIcon />
                 </IconButton>
               </Tooltip>
             )}
             {showHome && (
-              <Tooltip title={intl.trans('home', 'Home', 'first')} placement="bottom-end">
+              <Tooltip title={this.props.intl.trans('home', 'Home', 'first')} placement="bottom-end">
                 <IconButton onClick={this._onNavigateRequest.bind(this, homeURL)}>
                   <HomeIcon />
                 </IconButton>
               </Tooltip>
             )}
 
-            <Tooltip title={intl.trans('choose_lang', 'Choose a Language', 'first')} placement="bottom-end">
+            <Tooltip title={this.props.intl.trans('choose_lang', 'Choose a Language', 'first')} placement="bottom-end">
               <IconButton
                 onClick={this._onNavigateRequest.bind(
                   this,
@@ -133,7 +137,7 @@ export class KidsNavigation extends Component {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title={intl.trans('back_to_main_site', 'Back to Main Site', 'words')} placement="bottom-end">
+            <Tooltip title={this.props.intl.trans('back_to_main_site', 'Back to Main Site', 'words')} placement="bottom-end">
               <IconButton onClick={this._onNavigateRequest.bind(this, NavigationHelpers.generateStaticURL('/'))}>
                 <ClearIcon />
               </IconButton>
@@ -147,13 +151,14 @@ export class KidsNavigation extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPortal, /* tasks,*/ navigation, nuxeo, windowPath } = state
+  const { fvPortal, /* tasks,*/ navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   // const { computeUserTasks } = tasks
   const { splitWindowPath } = windowPath
   const { computePortal } = fvPortal
+  const { intlService } = locale
 
   return {
     splitWindowPath,
@@ -161,6 +166,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     // computeUserTasks,
     computePortal,
+    intl: intlService,
   }
 }
 

@@ -36,12 +36,11 @@ import AuthenticationFilter from 'views/components/Document/AuthenticationFilter
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-const intl = IntlService.instance
 /**
  * Create book entry
  */
@@ -123,7 +122,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -226,12 +225,11 @@ export class PageDialectGalleryCreate extends Component {
       >
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.gallery.add_new_gallery_to_x',
-              'Add New Gallery to ' + selectn('response.title', computeDialect2),
-              null,
-              [selectn('response.title', computeDialect2)]
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.gallery.add_new_gallery_to_x"
+              defaultStr={'Add New Gallery to ' + selectn('response.title', computeDialect2)}
+              params={[selectn('response.title', computeDialect2)]}
+            />
           </h1>
 
           <div className="row" style={{ marginTop: '15px' }}>
@@ -246,7 +244,11 @@ export class PageDialectGalleryCreate extends Component {
                 />
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
-                    {intl.trans('save', 'Save', 'first')}
+                    <FVLabel
+                      transKey="save"
+                      defaultStr="Save"
+                      transform="first"
+                    />
                   </button>
                 </div>
               </form>
@@ -254,7 +256,13 @@ export class PageDialectGalleryCreate extends Component {
 
             <div className={classNames('col-xs-4', 'col-md-2')}>
               <Paper style={{ padding: '15px', margin: '20px 0' }}>
-                <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+                <div className="subheader">
+                  <FVLabel
+                    transKey="metadata"
+                    defaultStr="Metadata"
+                    transform="first"
+                  />
+                </div>
               </Paper>
             </div>
           </div>

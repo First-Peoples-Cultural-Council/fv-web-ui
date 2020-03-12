@@ -27,9 +27,9 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import IntlService from 'views/services/intl'
+import FVLabel from '../../components/FVLabel/index'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
 
 /**
  * Custom select form field
@@ -80,7 +80,7 @@ const list = t.form.Form.templates.list.clone({
   renderRow: conditionalRenderRow,
 })
 
-export default class GroupAssignmentDialog extends Component {
+class GroupAssignmentDialog extends Component {
   static propTypes = {
     saveMethod: PropTypes.func.isRequired,
     closeMethod: PropTypes.func.isRequired,
@@ -163,10 +163,10 @@ export default class GroupAssignmentDialog extends Component {
         },
         group: {
           label: this.isUserRegistration
-            ? intl.trans('views.pages.users.group.group_to_add_user_to', 'Group to add user to', 'first') + ':'
-            : intl.trans('groups', 'Groups', 'first') + ':',
-          // help: (this.isUserRegistration) ? intl.trans('views.pages.users.group.only_one_per_user', 'Note: Only one group per user (for each dialect) is required due to permission inheritance.', 'first')
-          //     : intl.trans('views.pages.users.group.group_permissions', 'Note: Groups with more permissions will inherit permissions from groups with less permissions. Example: \'Recorders with Approval\' get permissions that both \'Recorders\' and a \'Members\' have.)'),
+            ? this.props.intl.trans('views.pages.users.group.group_to_add_user_to', 'Group to add user to', 'first') + ':'
+            : this.props.intl.trans('groups', 'Groups', 'first') + ':',
+          // help: (this.isUserRegistration) ? this.props.intl.trans('views.pages.users.group.only_one_per_user', 'Note: Only one group per user (for each dialect) is required due to permission inheritance.', 'first')
+          //     : this.props.intl.trans('views.pages.users.group.group_permissions', 'Note: Groups with more permissions will inherit permissions from groups with less permissions. Example: \'Recorders with Approval\' get permissions that both \'Recorders\' and a \'Members\' have.)'),
           disableOrder: true,
           item: {
             factory: SelectGroupFactory,
@@ -178,8 +178,8 @@ export default class GroupAssignmentDialog extends Component {
           template: this.isUserRegistration ? null : list,
         }, //,
         // 'comment': {
-        //     label: intl.trans('views.pages.users.group.comment_optional', 'Comment (Optional)'),
-        //     help: intl.trans('views.pages.users.group.comment_attached', 'Note: Your comment will be attached to the welcome email sent to the user.'),
+        //     label: this.props.intl.trans('views.pages.users.group.comment_optional', 'Comment (Optional)'),
+        //     help: this.props.intl.trans('views.pages.users.group.comment_attached', 'Note: Your comment will be attached to the welcome email sent to the user.'),
         //     type: (this.isUserRegistration) ? 'textarea' : 'hidden'
         // }
       },
@@ -207,13 +207,32 @@ export default class GroupAssignmentDialog extends Component {
         </DialogContent>
         <DialogActions>
           <FVButton variant="contained" color="secondary" onClick={this.props.closeMethod}>
-            {intl.trans('cancel', 'Cancel', 'first')}
+            <FVLabel
+              transKey="cancel"
+              defaultStr="Cancel"
+              transform="first"
+            />
           </FVButton>
           <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
-            {intl.trans('submit', 'Submit', 'first')}
+            <FVLabel
+              transKey="submit"
+              defaultStr="Submit"
+              transform="first"
+            />
           </FVButton>
         </DialogActions>
       </Dialog>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService} = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(GroupAssignmentDialog)

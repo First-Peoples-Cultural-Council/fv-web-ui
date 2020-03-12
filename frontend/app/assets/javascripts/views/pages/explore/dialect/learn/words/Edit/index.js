@@ -32,14 +32,13 @@ import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import IntlService from 'views/services/intl'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./WordsEdit.css'
 
-const intl = IntlService.instance
 // Models
 import { Document } from 'nuxeo'
 
@@ -105,9 +104,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-      //   console.log(4)
-      //   return true
+        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+        //   console.log(4)
+        //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -115,9 +114,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-      //   console.log(7)
-      //   return true
+        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        //   console.log(7)
+        //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -172,7 +171,7 @@ export class WordsEdit extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
@@ -310,12 +309,12 @@ export class WordsEdit extends Component {
         >
           <div className="WordsEdit WordsEdit--default">
             <h1 className="WordsEdit__heading">
-              {intl.trans(
-                'edit_x_word',
-                'Edit ' + selectn('response.properties.dc:title', computeWord) + ' word',
-                'first',
-                [selectn('response.properties.dc:title', computeWord)]
-              )}
+              <FVLabel
+                transKey="edit_x_word"
+                defaultStr={'Edit ' + selectn('response.properties.dc:title', computeWord) + ' word'}
+                transform="first"
+                params={[selectn('response.properties.dc:title', computeWord)]}
+              />
             </h1>
 
             <EditViewWithForm

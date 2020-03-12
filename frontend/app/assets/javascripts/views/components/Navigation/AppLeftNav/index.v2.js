@@ -30,8 +30,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore'
 import Close from '@material-ui/icons/Close'
 import { withTheme } from '@material-ui/core/styles'
 
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./AppLeftNav.css'
+import FVLabel from '../../FVLabel/index'
 
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {
@@ -44,11 +44,11 @@ export class AppLeftNav extends Component {
     // REDUX: actions/dispatch/func
     toggleMenuAction: func.isRequired,
     pushWindowPath: func.isRequired,
+    intlService: object.isRequired,
   }
   state = {
     navExploreOpen: false,
   }
-  intl = IntlService.instance
   navCommon = {
     home: (
       <ListItem
@@ -62,7 +62,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'home', default: 'Home', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'home', default: 'Home', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>
@@ -79,7 +79,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'get_started', default: 'Get Started', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'get_started', default: 'Get Started', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>
@@ -96,7 +96,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'kids', default: 'Kids', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'kids', default: 'Kids', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>
@@ -113,7 +113,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'contribute', default: 'Contribute', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'contribute', default: 'Contribute', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>
@@ -185,7 +185,7 @@ export class AppLeftNav extends Component {
       this.navCommon.getStarted,
       <ListItem key="navExploreLoggedIn" button onClick={this.handleNestedClick}>
         <ListItemText
-          primary={this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
         {this.state.navExploreOpen ? <ExpandLess /> : <ExpandMore />}
@@ -203,17 +203,14 @@ export class AppLeftNav extends Component {
             }}
           >
             <ListItemText
-              primary={this.intl.translate({
+              primary={this.props.intlService.translate({
                 key: 'views.components.navigation.workspace_dialects',
                 default: 'Workspace Dialects',
               })}
               primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
               secondary={
                 <span>
-                  {this.intl.translate({
-                    key: 'views.components.navigation.view_work_in_progress',
-                    default: 'View work in progress or unpublished content',
-                  })}
+                  <FVLabel transKey="views.components.navigation.view_work_in_progress" defaultStr="View work in progress or unpublished content"  />
                   .
                 </span>
               }
@@ -231,17 +228,14 @@ export class AppLeftNav extends Component {
             }}
           >
             <ListItemText
-              primary={this.intl.translate({
+              primary={this.props.intlService.translate({
                 key: 'views.components.navigation.published_dialects',
                 default: 'Published Dialects',
               })}
               primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
               secondary={
                 <span>
-                  {this.intl.translate({
-                    key: 'views.components.navigation.view_dialects_as_end_user',
-                    default: 'View dialects as an end user would view them',
-                  })}
+                  <FVLabel transKey="views.components.navigation.view_dialects_as_end_user" defaultStr="View dialects as an end user would view them"  />
                   .
                 </span>
               }
@@ -261,7 +255,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'tasks', default: 'Tasks', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>,
@@ -271,7 +265,7 @@ export class AppLeftNav extends Component {
       <Divider key="navDivider" />,
       <ListItem key="navSignOut" button component="a" href={NavigationHelpers.getBaseURL() + 'logout'}>
         <ListItemText
-          primary={this.intl.translate({
+          primary={this.props.intlService.translate({
             key: 'sign_out',
             default: 'Sign Out',
             case: 'words',
@@ -294,7 +288,7 @@ export class AppLeftNav extends Component {
         }}
       >
         <ListItemText
-          primary={this.intl.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
+          primary={this.props.intlService.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' })}
           primaryTypographyProps={{ style: { fontSize: '1.6rem' } }}
         />
       </ListItem>,
@@ -314,16 +308,18 @@ export class AppLeftNav extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { navigation, nuxeo } = state
+  const { navigation, nuxeo, locale } = state
 
   const { computeLogin } = nuxeo
   const { computeLoadNavigation, computeToggleMenuAction, properties } = navigation
+  const { intlService } = locale
 
   return {
     computeLogin,
     computeLoadNavigation,
     computeToggleMenuAction,
     properties,
+    intlService,
   }
 }
 

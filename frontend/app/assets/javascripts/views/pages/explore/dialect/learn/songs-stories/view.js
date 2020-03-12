@@ -51,9 +51,8 @@ import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry
 
 import withActions from 'views/hoc/view/with-actions'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 1 }
@@ -223,7 +222,11 @@ export class SongsStoriesView extends Component {
                   this.setState({ bookOpen: false })
                 }}
               >
-                {intl.trans('views.pages.explore.dialect.learn.songs_stories.close_book', 'Close Book', 'first')}
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.songs_stories.close_book"
+                  defaultStr="Close Book"
+                  transform="first"
+                />
               </FVButton>
             ) : (
               ''

@@ -32,5 +32,6 @@
   <!-- To avoid creating additional tables, use strings for now (should store JSON) -->
   <xs:element name="preferences" type="xs:string" />
   <xs:element name="tenantId" type="xs:string"/>
+  <xs:element name="languagePreference" type="xs:string"/>
 
 </xs:schema>

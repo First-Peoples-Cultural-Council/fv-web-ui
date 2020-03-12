@@ -65,6 +65,7 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import FVLabel from 'views/components/FVLabel/index'
 
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'
@@ -79,10 +80,8 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import Typography from '@material-ui/core/Typography'
 
-import IntlService from 'views/services/intl'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-const intl = IntlService.instance
 /**
  * Learn portion of the dialect portal
  * TODO: Reduce the amount of queries this page runs.
@@ -389,7 +388,11 @@ export class DialectLearn extends Component {
             if (selectn('response', computeDialect2))
               return (
                 <PageToolbar
-                  label={intl.trans('views.pages.explore.dialect.learn.language_portal', 'Language Portal', 'words')}
+                  label={this.props.intl.trans(
+                    'views.pages.explore.dialect.learn.language_portal',
+                    'Language Portal',
+                    'words'
+                  )}
                   computeEntity={computeDialect2}
                   actions={['publish']}
                   publishChangesAction={this._publishChangesAction}
@@ -418,7 +421,7 @@ export class DialectLearn extends Component {
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <div className={dialectClassName}>
               <TextHeader
-                title={intl.trans(
+                title={this.props.intl.trans(
                   'views.pages.explore.dialect.learn.about_our_language',
                   'About Our Language',
                   'upper'
@@ -444,7 +447,11 @@ export class DialectLearn extends Component {
             <div className="row PrintHide" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-12')}>
                 <TextHeader
-                  title={intl.trans('views.pages.explore.dialect.learn.recent_activity', 'Recent Activity', 'upper')}
+                  title={this.props.intl.trans(
+                    'views.pages.explore.dialect.learn.recent_activity',
+                    'Recent Activity',
+                    'upper'
+                  )}
                   tag="h2"
                   properties={this.props.properties}
                 />
@@ -462,7 +469,7 @@ export class DialectLearn extends Component {
                           color: themePalette.secondary.contrastText,
                         }}
                       >
-                        {intl.trans('words', 'WORDS', 'upper')}
+                        <FVLabel transKey="words" defaultStr="WORDS" transform="upper" />
                       </Typography>
                     }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
@@ -486,7 +493,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedWords)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
                               'Recently Modified',
                               'words'
@@ -498,7 +505,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedWords)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
                               'Recently Created',
                               'words'
@@ -512,7 +519,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedWords)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
                                 'My Recently Modified',
                                 'words'
@@ -525,7 +532,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedWords)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
                                 'My Recently Created',
                                 'words'
@@ -552,7 +559,7 @@ export class DialectLearn extends Component {
                           color: themePalette.secondary.contrastText,
                         }}
                       >
-                        {intl.trans('phrases', 'PHRASES', 'upper')}
+                        <FVLabel transKey="phrases" defaultStr="PHRASES" transform="upper" />
                       </Typography>
                     }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
@@ -576,7 +583,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedPhrases)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
                               'Recently Modified',
                               'words'
@@ -588,7 +595,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedPhrases)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
                               'Recently Created',
                               'words'
@@ -601,7 +608,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedPhrases)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
                                 'My Recently Modified',
                                 'words'
@@ -613,7 +620,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedPhrases)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
                                 'My Recently Created',
                                 'words'
@@ -640,7 +647,7 @@ export class DialectLearn extends Component {
                           color: themePalette.secondary.contrastText,
                         }}
                       >
-                        {intl.trans('songs', 'SONGS', 'upper')}
+                        <FVLabel transKey="songs" defaultStr="SONGS" transform="upper" />
                       </Typography>
                     }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
@@ -664,7 +671,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedSongs)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
                               'Recently Modified',
                               'words'
@@ -676,7 +683,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedSongs)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
                               'Recently Created',
                               'words'
@@ -689,7 +696,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedSongs)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
                                 'My Recently Modified',
                                 'words'
@@ -701,7 +708,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedSongs)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
                                 'My Recently Created',
                                 'words'
@@ -728,7 +735,7 @@ export class DialectLearn extends Component {
                           color: themePalette.secondary.contrastText,
                         }}
                       >
-                        {intl.trans('stories', 'STORIES', 'upper')}
+                        <FVLabel transKey="stories" defaultStr="STORIES" transform="upper" />
                       </Typography>
                     }
                     style={{ backgroundColor: themePalette.primary2Color, height: 'initial' }}
@@ -752,7 +759,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeModifiedStories)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_modified',
                               'Recently Modified',
                               'words'
@@ -764,7 +771,7 @@ export class DialectLearn extends Component {
                           <RecentActivityList
                             siteTheme={this.props.routeParams.siteTheme}
                             data={selectn('response', computeCreatedStories)}
-                            title={intl.trans(
+                            title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.recently_created',
                               'Recently Created',
                               'words'
@@ -777,7 +784,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserModifiedStories)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_modified',
                                 'My Recently Modified',
                                 'words'
@@ -789,7 +796,7 @@ export class DialectLearn extends Component {
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
                               data={selectn('response', computeUserCreatedStories)}
-                              title={intl.trans(
+                              title={this.props.intl.trans(
                                 'views.pages.explore.dialect.learn.my_recently_created',
                                 'My Recently Created',
                                 'words'
@@ -821,7 +828,7 @@ export class DialectLearn extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, fvPhrase, fvPortal, fvWord, nuxeo, navigation, windowPath } = state
+  const { fvBook, fvDialect, fvPhrase, fvPortal, fvWord, nuxeo, navigation, windowPath, locale } = state
 
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
@@ -844,6 +851,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   } = fvBook
 
   const { computeCreatedWords, computeModifiedWords, computeUserCreatedWords, computeUserModifiedWords } = fvWord
+  const { intlService } = locale
 
   const { computePortal } = fvPortal
   const { properties } = navigation
@@ -869,6 +877,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeUserModifiedWords,
     properties,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

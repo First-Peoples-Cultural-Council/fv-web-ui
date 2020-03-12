@@ -36,9 +36,8 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import FVButton from 'views/components/FVButton'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Browse users
  */
@@ -116,7 +115,11 @@ export class Index extends Component {
                 onClick={this._onNavigateRequest.bind(this, ['register'])}
                 color="primary"
               >
-                {intl.trans('views.pages.explore.dialect.users.create_new_user', 'Create New User', 'words')}
+                <FVLabel
+                  transKey="views.pages.explore.dialect.users.create_new_user"
+                  defaultStr="Create New User"
+                  transform="words"
+                />
               </FVButton>
             </AuthorizationFilter>
           </div>

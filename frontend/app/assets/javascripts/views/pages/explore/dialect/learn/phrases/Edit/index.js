@@ -41,14 +41,13 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./PhrasesEdit.css'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object, string } = PropTypes
@@ -150,7 +149,7 @@ export class PhrasesEdit extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
@@ -277,12 +276,12 @@ export class PhrasesEdit extends Component {
       >
         <div>
           <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.phrases.edit_x_phrase',
-              'Edit ' + selectn('response.properties.dc:title', computePhrase) + ' phrase',
-              'first',
-              [selectn('response.properties.dc:title', computePhrase)]
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.phrases.edit_x_phrase"
+              defaultStr={'Edit ' + selectn('response.properties.dc:title', computePhrase) + ' phrase'}
+              transform="first"
+              params={[selectn('response.properties.dc:title', computePhrase)]}
+            />
           </h1>
 
           <EditViewWithForm

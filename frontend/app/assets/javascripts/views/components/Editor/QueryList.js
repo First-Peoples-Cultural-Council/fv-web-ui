@@ -30,9 +30,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 const { bool, func, object, string } = PropTypes
 
@@ -98,7 +95,7 @@ export class QueryList extends Component {
             value={this.props.value}
             onChange={this._handleChange}
             floatingLabelText={
-              intl.trans('select', 'Select', 'first') + ' ' + intl.searchAndReplace(this.props.label) + ':'
+              this.props.intl.trans('select', 'Select', 'first') + ' ' + this.props.intl.searchAndReplace(this.props.label) + ':'
             }
           >
             {entries.map((entry) => (
@@ -124,12 +121,14 @@ export class QueryList extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document } = state
+  const { document, locale } = state
 
   const { computeResultSet } = document
+  const { intlService } = locale
 
   return {
     computeResultSet,
+    intl: intlService,
   }
 }
 

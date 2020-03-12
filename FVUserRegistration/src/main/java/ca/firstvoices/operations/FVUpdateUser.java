@@ -30,6 +30,8 @@ import org.nuxeo.ecm.core.io.registry.MarshallerHelper;
 import org.nuxeo.ecm.platform.usermanager.NuxeoPrincipalImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.platform.usermanager.io.NuxeoPrincipalJsonWriter;
+import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 import static ca.firstvoices.utils.FVOperationCredentialsVerification.terminateOnInvalidCredentials_UserUpdate;
 
@@ -41,9 +43,6 @@ import static ca.firstvoices.utils.FVOperationCredentialsVerification.terminateO
 public class FVUpdateUser {
 
     public static final String ID = "FVUpdateUser";
-
-    @Context
-    protected UserManager userManager;
 
     @Context
     protected CoreSession session;
@@ -75,19 +74,23 @@ public class FVUpdateUser {
     @Param(name = "properties", required = false)
     protected Properties properties = new Properties();
 
+    @Param(name = "languagePreference", required = false)
+    protected String languagePreference;
+
     private ObjectMapper mapper = new ObjectMapper();
 
     @OperationMethod
     public DocumentModel run() throws OperationException {
+        NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
+        UserManager userManager = Framework.getService(UserManager.class);
         DocumentModel userDoc = userManager.getUserModel(username);
 
         if (userDoc == null) {
             throw new DocumentNotFoundException("Cannot update non-existent user: " + username);
         }
 
-        // Invalid credentials
-        if (terminateOnInvalidCredentials_UserUpdate(session, userManager, username)) {
-            throw new DocumentSecurityException("You do not have permission to change " + userDoc.getId());
+        if (!userManager.getPrincipal(username).equals(currentUser)) {
+            throw new DocumentSecurityException("You can only edit yourself");
         }
 
         if (groups != null) {
@@ -104,7 +107,8 @@ public class FVUpdateUser {
                 new SimpleEntry<>(EMAIL_COLUMN, email), //
                 new SimpleEntry<>(FIRSTNAME_COLUMN, firstName), //
                 new SimpleEntry<>(LASTNAME_COLUMN, lastName), //
-                new SimpleEntry<>(COMPANY_COLUMN, company))) {
+                new SimpleEntry<>(COMPANY_COLUMN, company),
+                new SimpleEntry<>("languagePreference", languagePreference))) {
             String key = entry.getKey();
             String value = entry.getValue();
             if (StringUtils.isNotBlank(value)) {
@@ -120,7 +124,7 @@ public class FVUpdateUser {
             userDoc.setProperty(SCHEMA_NAME, key, value);
         }
 
-        userManager.updateUser(userDoc);
+        Framework.doPrivileged(() -> userManager.updateUser(userDoc));
 
         // Before returning JSON, blank out password
         userDoc.setProperty(SCHEMA_NAME, "password", null);

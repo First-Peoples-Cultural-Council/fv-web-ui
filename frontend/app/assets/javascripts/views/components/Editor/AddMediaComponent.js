@@ -40,9 +40,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from '../FVLabel/index'
 
 // TODO: Cleanup class
 
@@ -64,8 +62,8 @@ export class AddMediaComponent extends Component {
   }
 
   getDefaultValues() {
-    // intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
-    label: intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    // this.props.intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
+    label: this.props.intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')
   }
 
   handleOpen() {
@@ -218,28 +216,28 @@ export class AddMediaComponent extends Component {
     let computeCreate
     let uploadText = ''
     let form = ''
-    let fileTypeLabel = intl.trans('file', 'File', 'first')
+    let fileTypeLabel = this.props.intl.trans('file', 'File', 'first')
 
     const actions = [
       <FVButton key="fb0" color="secondary" onClick={this.handleClose}>
-        {intl.trans('cancel', 'Cancel', 'first')}
+        <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
       </FVButton>,
     ]
 
     switch (this.props.type) {
       case 'FVAudio':
         computeCreate = ProviderHelpers.getEntry(this.props.computeAudio, this.state.pathOrId)
-        fileTypeLabel = intl.trans('audio', 'Audio', 'first')
+        fileTypeLabel = this.props.intl.trans('audio', 'Audio', 'first')
         break
 
       case 'FVPicture':
         computeCreate = ProviderHelpers.getEntry(this.props.computePicture, this.state.pathOrId)
-        fileTypeLabel = intl.trans('picture', 'Picture', 'first')
+        fileTypeLabel = this.props.intl.trans('picture', 'Picture', 'first')
         break
 
       case 'FVVideo':
         computeCreate = ProviderHelpers.getEntry(this.props.computeVideo, this.state.pathOrId)
-        fileTypeLabel = intl.trans('video', 'Video', 'first')
+        fileTypeLabel = this.props.intl.trans('video', 'Video', 'first')
         break
 
       default: // NOTE: do nothing
@@ -248,7 +246,11 @@ export class AddMediaComponent extends Component {
     if (computeCreate && computeCreate.isFetching) {
       uploadText = (
         <div className={classNames('alert', 'alert-info')} role="alert">
-          {intl.trans('views.components.editor.uploading_message', 'Uploading... Please be patient...', 'first')}
+          <FVLabel
+            transKey="views.components.editor.uploading_message"
+            defaultStr="Uploading... Please be patient..."
+            transform="first"
+          />
         </div>
       )
     }
@@ -266,7 +268,7 @@ export class AddMediaComponent extends Component {
         />
         {uploadText}
         <button type="button" onClick={this._save} className={classNames('btn', 'btn-primary')}>
-          {intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
+          <FVLabel transKey="views.components.editor.upload_media" defaultStr="Upload Media" transform="words" />
         </button>
       </form>
     )
@@ -287,13 +289,13 @@ export class AddMediaComponent extends Component {
               this._handleSelectElement(computeCreate.response)
             }}
           >
-            {intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
+            <FVLabel transKey="insert_into_entry" defaultStr="Insert into Entry" transform="first" />
           </button>
         </div>
       )
       // actions.push(
       //   <FlatButton
-      //     label={intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
+      //     label={this.props.intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
       //     primary
       //     onClick={this._handleSelectElement.bind(this, computeCreate.response)}
       //   />
@@ -308,16 +310,18 @@ export class AddMediaComponent extends Component {
         </FVButton>
         <Dialog fullWidth maxWidth="md" actions={actions} open={this.state.open}>
           <DialogTitle>
-            {intl.trans(
-              'views.components.editor.create_new_x_in_the_x_dialect',
-              'Create New ' +
+            <FVLabel
+              transKey="views.components.editor.create_new_x_in_the_x_dialect"
+              defaultStr={
+                'Create New ' +
                 fileTypeLabel +
                 ' in the ' +
                 selectn('properties.dc:title', this.props.dialect) +
-                ' dialect.',
-              'first',
-              [fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]
-            )}
+                ' dialect.'
+              }
+              transform="first"
+              params={[fileTypeLabel, selectn('properties.dc:title', this.props.dialect)]}
+            />
           </DialogTitle>
           <DialogContent>
             <div className="form-horizontal">
@@ -332,7 +336,7 @@ export class AddMediaComponent extends Component {
               color="secondary"
               onClick={this.handleClose}
             >
-              {intl.trans('cancel', 'Cancel', 'first')}
+              <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
             </FVButton>
           </DialogActions>
         </Dialog>
@@ -343,16 +347,18 @@ export class AddMediaComponent extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvAudio, fvPicture, fvVideo } = state
+  const { fvAudio, fvPicture, fvVideo, locale } = state
 
   const { computeAudio } = fvAudio
   const { computePicture } = fvPicture
   const { computeVideo } = fvVideo
+  const { intlService } = locale
 
   return {
     computeAudio,
     computePicture,
     computeVideo,
+    intl: intlService,
   }
 }
 

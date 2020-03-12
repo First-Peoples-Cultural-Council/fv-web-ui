@@ -13,10 +13,9 @@ import withToggle from 'views/hoc/view/with-toggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./FilteredGridList.css'
+import FVLabel from '../../components/FVLabel/index'
 
-const intl = IntlService.instance
 const FiltersWithToggle = withToggle()
 
 /**
@@ -120,7 +119,11 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
             >
               <form>
                 <FiltersWithToggle
-                  label={intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
+                  label={<FVLabel
+                    transKey="views.pages.search.filter_items"
+                    defaultStr="Filter items"
+                    transform="first"
+                  />}
                   mobileOnly
                 >
                   <t.form.Form
@@ -138,14 +141,22 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                         this._onReset(e, this.props)
                       }}
                     >
-                      {intl.trans('reset', 'Reset', 'first')}
+                      <FVLabel
+                        transKey="reset"
+                        defaultStr="Reset"
+                        transform="first"
+                      />
                     </button>
                     <button
                       type="button"
                       onClick={this._onFilterSaveForm}
                       className="FilteredGridList__btn RaisedButton RaisedButton--primary"
                     >
-                      {intl.trans('filter', 'Filter', 'first')}
+                      <FVLabel
+                        transKey="filter"
+                        defaultStr="Filter"
+                        transform="first"
+                      />
                     </button>
                   </div>
                 </FiltersWithToggle>

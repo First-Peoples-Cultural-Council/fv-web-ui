@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 import FVButton from 'views/components/FVButton'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import FVLabel from '../../components/FVLabel/index'
 
 export default function withToggle() {
   class ViewwithToggle extends Component {
@@ -42,7 +40,15 @@ export default function withToggle() {
       ) : (
         <ExpandMoreIcon className="material-icons" style={fontStyle} />
       )
-      const labelText = this.state.open ? intl.trans('hide', 'Hide', 'first') : intl.trans('show', 'Show', 'first')
+      const labelText = this.state.open ? <FVLabel
+        transKey="hide"
+        defaultStr="Hide"
+        transform="first"
+      /> : <FVLabel
+        transKey="show"
+        defaultStr="Show"
+        transform="first"
+      />
       return (
         <div className={classNames(...this.rootClassNames)}>
           <div className="panel-heading">

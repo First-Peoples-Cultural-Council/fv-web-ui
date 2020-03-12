@@ -15,14 +15,12 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import Immutable from 'immutable'
-import IntlService from 'views/services/intl'
 import { matchPath } from 'conf/routes'
 import { SECTIONS } from 'common/Constants'
 import '!style-loader!css-loader!./styles.css'
 
 const { array, func, string, object } = PropTypes
 
-const intl = IntlService.instance
 const REMOVE_FROM_BREADCRUMBS = ['FV', 'sections', 'Data', 'Workspaces', 'search', 'nuxeo', 'app', 'explore']
 
 export class Breadcrumb extends Component {
@@ -37,6 +35,7 @@ export class Breadcrumb extends Component {
     routeParams: object.isRequired,
     computeDialect2: object.isRequired,
     splitWindowPath: array.isRequired, // NOTE: Parent component is passing in `splitWindowPath` as a prop, see if that breaks anything
+    intl: object.isRequired,
   }
   static defaultProps = {
     className: '',
@@ -97,7 +96,7 @@ export class Breadcrumb extends Component {
           pathTitle = splitPathItem.replace(findReplace.find, findReplace.replace)
         }
 
-        const DialectHomePage = splitPathIndex === indexDialect ? intl.trans('home_page', 'Home Page') : ''
+        const DialectHomePage = splitPathIndex === indexDialect ? this.props.intl.trans('home_page', 'Home Page') : ''
         let hrefPath = '/' + splitPath.slice(0, splitPathIndex + 1).join('/')
 
         // First breadcrumb item
@@ -191,7 +190,7 @@ export class Breadcrumb extends Component {
                 NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
               }}
             >
-              {`${intl.searchAndReplace(decodeURIComponent(pathTitle).replace('&amp;', '&'), { case: 'lower' })}`}
+              {`${this.props.intl.searchAndReplace(decodeURIComponent(pathTitle).replace('&amp;', '&'), { case: 'lower' })}`}
             </a>
           </li>
         )
@@ -203,15 +202,17 @@ export class Breadcrumb extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, navigation, windowPath } = state
+  const { fvDialect, navigation, windowPath, locale } = state
 
   const { computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
+  const { intlService } = locale
   return {
     computeDialect2,
     routeParams: route.routeParams,
     splitWindowPath,
+    intl: intlService,
   }
 }
 

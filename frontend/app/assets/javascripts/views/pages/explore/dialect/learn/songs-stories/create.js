@@ -35,12 +35,10 @@ import AuthenticationFilter from 'views/components/Document/AuthenticationFilter
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 /**
@@ -146,7 +144,7 @@ export class PageDialectStoriesAndSongsCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -262,12 +260,12 @@ export class PageDialectStoriesAndSongsCreate extends Component {
       >
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.learn.songs_stories.add_new_x_book_to_x',
-              'Add New ' + this.props.typeFilter + ' Book to ' + selectn('response.title', _computeDialect2),
-              'first',
-              [this.props.typeFilter, selectn('response.title', _computeDialect2)]
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.learn.songs_stories.add_new_x_book_to_x"
+              defaultStr={'Add New ' + this.props.typeFilter + ' Book to ' + selectn('response.title', _computeDialect2)}
+              transform="first"
+              params={[this.props.typeFilter, selectn('response.title', _computeDialect2)]}
+            />
           </h1>
 
           <div className="row" style={{ marginTop: '15px' }}>
@@ -282,7 +280,11 @@ export class PageDialectStoriesAndSongsCreate extends Component {
                 />
                 <div data-testid="PageDialectStoriesAndSongsCreate__btnGroup" className="form-group">
                   <button type="submit" className="RaisedButton RaisedButton--primary">
-                    {intl.trans('save', 'Save', 'first')}
+                    <FVLabel
+                      transKey="save"
+                      defaultStr="Save"
+                      transform="first"
+                    />
                   </button>
                 </div>
               </form>

@@ -34,9 +34,7 @@ import UIHelpers from 'common/UIHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import IntlService from 'views/services/intl'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-const intl = IntlService.instance
 /**
  * List view for links
  */
@@ -88,25 +86,25 @@ class LinksListView extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('link', 'Link', 'first'),
+          title: props.intl.trans('link', 'Link', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v /*, data, cellProps*/) => v,
         },
         {
           name: 'dc:description',
-          title: intl.trans('description', 'Description', 'first'),
+          title: props.intl.trans('description', 'Description', 'first'),
           render: (v, data) => selectn('properties.dc:description', data),
         },
         {
           name: 'fvlink:url',
-          title: intl.trans('url', 'URL', 'upper'),
+          title: props.intl.trans('url', 'URL', 'upper'),
           render: (v, data) => selectn('properties.fvlink:url', data),
         },
         {
           name: 'thumb:thumbnail',
           width: 72,
           textAlign: 'center',
-          title: intl.trans('file', 'File', 'first'),
+          title: props.intl.trans('file', 'File', 'first'),
           render: (v, data) => {
             const filePreview = selectn('properties.thumb:thumbnail.data', data)
             if (filePreview)
@@ -226,13 +224,14 @@ class LinksListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvLink, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvLink, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeLinks } = fvLink
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -241,6 +240,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

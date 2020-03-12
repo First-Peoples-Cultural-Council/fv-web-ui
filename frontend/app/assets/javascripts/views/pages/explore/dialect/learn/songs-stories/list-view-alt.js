@@ -36,8 +36,6 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 
-import IntlService from 'views/services/intl'
-const intl = IntlService.instance
 /**
  * List view for words
  */
@@ -97,7 +95,7 @@ export class SongsStoriesListViewAlt extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('title', 'Title', 'first'),
+          title: props.intl.trans('title', 'Title', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v, data /*, cellProps*/) => {
             const href = NavigationHelpers.generateUIDPath(
@@ -108,9 +106,9 @@ export class SongsStoriesListViewAlt extends DataListView {
             const clickHandler = props.disableClickItem
               ? NavigationHelpers.disable
               : (/*e*/) => {
-                  // e.preventDefault()
-                  // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-                }
+                // e.preventDefault()
+                // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+              }
             return (
               <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}
@@ -121,7 +119,7 @@ export class SongsStoriesListViewAlt extends DataListView {
         {
           name: 'dc:modified',
           width: 250,
-          title: intl.trans('date_modified', 'Date Modified'),
+          title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data /*, cellProps*/) => {
             return StringHelpers.formatUTCDateString(selectn('lastModified', data))
           },
@@ -129,7 +127,7 @@ export class SongsStoriesListViewAlt extends DataListView {
         {
           name: 'dc:created',
           width: 210,
-          title: intl.trans('date_created', 'Date Created'),
+          title: props.intl.trans('date_created', 'Date Created'),
           render: (v, data /*, cellProps*/) => {
             return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
           },
@@ -270,13 +268,14 @@ export class SongsStoriesListViewAlt extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvBook, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeBooks } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeBooks,
@@ -285,6 +284,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

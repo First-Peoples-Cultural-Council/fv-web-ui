@@ -27,12 +27,11 @@ import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'
 
 import { Introduction } from '../list-view'
-import IntlService from 'views/services/intl'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }
 
@@ -197,7 +196,13 @@ class Page extends Component {
                 if (translation.language == DEFAULT_LANGUAGE) {
                   return (
                     <span key={i}>
-                      <strong>{intl.trans('literal_translation', 'Literal Translation', 'first')}</strong>:{' '}
+                      <strong>
+                        <FVLabel
+                          transKey="literal_translation"
+                          defaultStr="Literal Translation"
+                          transform="first"
+                        />
+                      </strong>:{' '}
                       <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} />
                     </span>
                   )
@@ -211,7 +216,11 @@ class Page extends Component {
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
               <FVButton variant="contained" onClick={this.props.editAction.bind(this, this.props.entry)}>
-                {intl.trans('edit', 'Edit', 'first')}
+                <FVLabel
+                  transKey="edit"
+                  defaultStr="Edit"
+                  transform="first"
+                />
               </FVButton>
             ) : (
               ''

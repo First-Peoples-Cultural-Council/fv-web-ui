@@ -246,6 +246,33 @@ export default class DirectoryOperations {
     })
   }
 
+  static getDirectoryEntries(name = '', headers = {}, params = {}) {
+    const properties = BaseOperations.getProperties()
+
+    return new Promise((resolve, reject) => {
+      const defaultParams = {
+        directoryName: name,
+      }
+      const _params = Object.assign(defaultParams, params)
+      properties.client
+        .operation('Directory.Entries')
+        .params(_params)
+        .execute(headers)
+        .then((directory) => {
+          resolve(directory)
+        })
+        .catch(() => {
+          reject(
+            IntlService.instance.translate({
+              key: 'operations.could_not_retrieve_directory_entries',
+              default: 'Could not retrieve directory entries',
+              case: 'first',
+            })
+          )
+        })
+    })
+  }
+
   // Unused methods below (needs refactoring or removing soon)
   getSubjects(client) {
     return new Promise((resolve, reject) => {
@@ -362,9 +389,7 @@ export default class DirectoryOperations {
       // reject the promise
       (resolve, reject) => {
         const defaultParams = {
-          query: `SELECT * FROM ${
-            documentList.model.prototype.entityTypeName
-          } WHERE (ecm:path STARTSWITH '/${domain}${_path}' AND ${selectDefault}) ORDER BY dc:title`,
+          query: `SELECT * FROM ${documentList.model.prototype.entityTypeName} WHERE (ecm:path STARTSWITH '/${domain}${_path}' AND ${selectDefault}) ORDER BY dc:title`,
         }
 
         const defaultHeaders = {}
@@ -399,5 +424,64 @@ export default class DirectoryOperations {
           })
       }
     )
+  }
+
+  static getDocumentsViaResultSetQuery(path = '', type = 'Document', select = '*', queryAppend = ' ORDER BY dc:title', headers = null, params = null) {
+    const defaultHeaders = {}
+    const defaultParams = {}
+
+    const _headers = Object.assign(defaultHeaders, headers)
+
+    const properties = BaseOperations.getProperties()
+
+    const endPointToUse = 'Repository.ResultSetQuery'
+    const _params = Object.assign(defaultParams, params)
+
+    const where = StringHelpers.isUUID(path)
+      ? `ecm:parentId = '${path}'`
+      : `ecm:path STARTSWITH '${StringHelpers.clean(path)}'`
+
+    const _queryAppend = queryAppend
+
+    const nxqlQueryParams = Object.assign(
+      _params,
+      {
+        language: 'NXQL',
+      },
+      StringHelpers.queryStringToObject(
+        `?query=SELECT ${select} FROM ${type} WHERE ${where} AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ${_queryAppend}`,
+        true
+      )
+    )
+
+    return new Promise((resolve, reject) => {
+      properties.client
+        .operation(endPointToUse)
+        .params(nxqlQueryParams)
+        .execute(_headers)
+        .then((docs) => {
+          resolve(docs)
+        })
+        .catch((error) => {
+          if (error.hasOwnProperty('response')) {
+            error.response.json().then((jsonError) => {
+              reject(StringHelpers.extractErrorMessage(jsonError))
+            })
+          } else {
+            return reject(
+              error ||
+                IntlService.instance.translate({
+                  key: 'operations.could_not_access_server',
+                  default: 'Could not access server',
+                  case: 'first',
+                })
+            )
+          }
+        })
+
+      setTimeout(() => {
+        reject('Server timeout while attempting to get documents.')
+      }, TIMEOUT)
+    })
   }
 }

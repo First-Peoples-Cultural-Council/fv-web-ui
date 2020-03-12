@@ -38,8 +38,8 @@ import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
 
 import { isMobile } from 'react-device-detect'
-import IntlService from 'views/services/intl'
 import NavigationHelpers from '../../../common/NavigationHelpers'
+import FVLabel from 'views/components/FVLabel/index'
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -60,11 +60,9 @@ export class PageHome extends Component {
     queryPage: func.isRequired,
   }
 
-  intl = IntlService.instance
 
   constructor(props, context) {
     super(props, context)
-    window.intl = this.intl
 
     this.state = {
       pagePath: '/' + this.props.properties.domain + '/sections/Site/Resources/',
@@ -155,7 +153,6 @@ export class PageHome extends Component {
 
     const primary1Color = selectn('theme.palette.primary1Color', this.props)
     const primary2Color = selectn('theme.palette.primary2Color', this.props)
-    const intl = this.intl
 
     const accessButtons = []
 
@@ -193,11 +190,11 @@ export class PageHome extends Component {
           )}
           style={{ marginRight: '10px', height: '50px' }}
         >
-          {this.intl.translate({
-            key: 'get_started!',
-            default: 'Get Started!',
-            case: 'words',
-          }) + '!'}
+          <FVLabel
+            transKey="get_started!"
+            defaultStr="Get Started!"
+            transform="words"
+          />!
         </FVButton>
       )
     }
@@ -215,12 +212,12 @@ export class PageHome extends Component {
                     fontWeight: 500,
                   }}
                 >
-                  {this.intl.searchAndReplace(selectn('fvpage:blocks[0].title', page), {})}
+                  {this.props.intl.searchAndReplace(selectn('fvpage:blocks[0].title', page), {})}
                 </h1>
                 <div className={classNames('home-intro-p-cont', 'body')}>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: this.intl.searchAndReplace(selectn('fvpage:blocks[0].text', page), {}),
+                      __html: this.props.intl.searchAndReplace(selectn('fvpage:blocks[0].text', page), {}),
                     }}
                   />
                 </div>
@@ -249,7 +246,7 @@ export class PageHome extends Component {
           {this._getBlockByArea(page, 2).length > 0 ? (
             <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
               <TextHeader
-                title={this.intl.translate({
+                title={this.props.intl.translate({
                   key: ['views', 'pages', 'home', 'tools_and_resources'],
                   default: 'TOOLS &amp; RESOURCES',
                   case: 'words',
@@ -274,7 +271,7 @@ export class PageHome extends Component {
           {this._getBlockByArea(page, 3).length > 0 ? (
             <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
               <TextHeader
-                title={this.intl.translate({
+                title={this.props.intl.translate({
                   key: ['views', 'pages', 'home', 'news_and_updates'],
                   default: 'NEWS &amp; UPDATES',
                   case: 'words',
@@ -299,7 +296,7 @@ export class PageHome extends Component {
           {this._getBlockByArea(page, 4).length > 0 ? (
             <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
               <TextHeader
-                title={this.intl.translate({
+                title={this.props.intl.translate({
                   key: ['views', 'pages', 'home', 'compatibility'],
                   default: 'COMBATIBILITY',
                   case: 'words',
@@ -314,8 +311,8 @@ export class PageHome extends Component {
               return (
                 <div key={i} className={classNames('col-xs-12')}>
                   <div className="body">
-                    <h2 style={{ fontWeight: 500 }}>{this.intl.searchAndReplace(selectn('title', block))}</h2>
-                    <p dangerouslySetInnerHTML={{ __html: this.intl.searchAndReplace(selectn('text', block)) }} />
+                    <h2 style={{ fontWeight: 500 }}>{this.props.intl.searchAndReplace(selectn('title', block))}</h2>
+                    <p dangerouslySetInnerHTML={{ __html: this.props.intl.searchAndReplace(selectn('text', block)) }} />
                   </div>
                 </div>
               )
@@ -329,13 +326,14 @@ export class PageHome extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, fvUser, navigation, nuxeo, windowPath } = state
+  const { fvPage, fvUser, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computePage } = fvPage
   const { computeUserStartpage } = fvUser
   const { _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeLogin,
@@ -343,6 +341,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeUserStartpage,
     properties,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

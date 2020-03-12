@@ -4,27 +4,25 @@ on:
   # Every day at 12:00pm pst and 1:30am pst
   # (utc at 8:00pm and 9:30am)
   schedule:
-    - cron: '0 20 * * *'
-    - cron: '30 9 * * *'
+    - cron: "0 20 * * *"
+    - cron: "30 9 * * *"
   # On pull requests when any files in the paths listed are changed
   pull_request:
     paths:
-    - 'frontend/app/**'
-    - 'frontend/build/**'
-    - 'frontend/gulpfile.js/**'
-    - 'frontend/nuxeo/**'
-    - 'frontend/index.html'
-    - '**/package.json'
-    - '**/package-lock.json'
-    - 'FirstVoices*/**'
-    - 'FV*/**'
-    - '**/pom.xml'
-    - '!**/README.md'
-    branches:
-      master
+      - "frontend/app/**"
+      - "frontend/build/**"
+      - "frontend/gulpfile.js/**"
+      - "frontend/nuxeo/**"
+      - "frontend/index.html"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "FirstVoices*/**"
+      - "FV*/**"
+      - "**/pom.xml"
+      - "!**/README.md"
+    branches: master
 
 jobs:
-
   Run-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 200
@@ -43,7 +41,7 @@ jobs:
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
         with:
-          node-version: '8.x'
+          node-version: "8.x"
 
       # Build the docker image and create the volume directories
       - name: Build Docker image and create volume directories

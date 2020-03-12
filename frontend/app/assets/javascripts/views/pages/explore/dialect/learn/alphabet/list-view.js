@@ -35,9 +35,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 
 import Preview from 'views/components/Editor/Preview'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * List view for alphabet
  */
@@ -90,13 +88,13 @@ export class AlphabetListView extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('character', 'Character', 'first'),
+          title: props.intl.trans('character', 'Character', 'first'),
           render: (v /*, data, cellProps*/) => v,
           sortName: 'fvcharacter:alphabet_order',
         },
         {
           name: 'fvcharacter:upper_case_character',
-          title: intl.trans(
+          title: props.intl.trans(
             'views.pages.explore.dialect.learn.alphabet.uppercase_character',
             'Uppercase Character',
             'words'
@@ -106,7 +104,7 @@ export class AlphabetListView extends DataListView {
         },
         {
           name: 'related_words',
-          title: intl.trans('related_words', 'Related Words', 'words'),
+          title: props.intl.trans('related_words', 'Related Words', 'words'),
           render: (v, data, cellProps) =>
             UIHelpers.renderComplexArrayRow(selectn('contextParameters.character.' + cellProps.name, data), (entry) => (
               <li key={selectn('uid', entry)}>{selectn('dc:title', entry)}</li>
@@ -115,7 +113,7 @@ export class AlphabetListView extends DataListView {
         },
         {
           name: 'related_audio',
-          title: intl.trans('audio', 'Audio', 'words'),
+          title: props.intl.trans('audio', 'Audio', 'words'),
           render: (v, data, cellProps) => {
             const firstAudio = selectn('contextParameters.character.' + cellProps.name + '[0]', data)
             if (firstAudio)
@@ -236,13 +234,14 @@ export class AlphabetListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCharacter, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvCharacter, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeCharacters,
@@ -252,6 +251,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

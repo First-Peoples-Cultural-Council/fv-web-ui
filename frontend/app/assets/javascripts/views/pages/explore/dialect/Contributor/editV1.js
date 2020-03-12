@@ -29,6 +29,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 
 // Models
 import { Document } from 'nuxeo'
@@ -38,9 +39,7 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object, string } = PropTypes
@@ -196,12 +195,12 @@ export class EditContributors extends Component {
     return (
       <div>
         <h1>
-          {intl.trans(
-            'views.components.dialog_create_form.edit_x_contributor',
-            'Edit ' + selectn('response.properties.dc:title', computeContributor) + ' Contributor',
-            'words',
-            [selectn('response.properties.dc:title', computeContributor)]
-          )}
+          <FVLabel
+            transKey="views.components.dialog_create_form.edit_x_contributor"
+            defaultStr={'Edit ' + selectn('response.properties.dc:title', computeContributor) + ' Contributor'}
+            transform="words"
+            params={[selectn('response.properties.dc:title', computeContributor)]}
+          />
         </h1>
 
         <EditViewWithForm

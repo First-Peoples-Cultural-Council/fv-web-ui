@@ -34,13 +34,12 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 
 import Paper from '@material-ui/core/Paper'
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * Create book entry
  */
@@ -82,7 +81,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     ;['_onNavigateRequest', '_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
-  fetchData = async (newProps) => {
+  fetchData = async(newProps) => {
     const parentBookPath = newProps.routeParams.parentBookName
 
     await newProps.fetchDialect2(newProps.routeParams.dialect_path)
@@ -263,12 +262,12 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
       >
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.learn.songs_stories.add_new_entry_to_x_book',
-              'Add New Entry to ' + selectn('response.properties.dc:title', computeBook) + ' Book',
-              'words',
-              [selectn('response.properties.dc:title', computeBook)]
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.learn.songs_stories.add_new_entry_to_x_book"
+              defaultStr={'Add New Entry to ' + selectn('response.properties.dc:title', computeBook) + ' Book'}
+              transform="words"
+              params={[selectn('response.properties.dc:title', computeBook)]}
+            />
           </h1>
 
           <div className="row" style={{ marginTop: '15px' }}>
@@ -283,7 +282,11 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
                 />
                 <div className="form-group" data-testid="PageDialectStoriesAndSongsBookEntryCreate__btnGroup">
                   <button type="submit" className="RaisedButton RaisedButton--primary">
-                    {intl.trans('save', 'Save', 'first')}
+                    <FVLabel
+                      transKey="save"
+                      defaultStr="Save"
+                      transform="first"
+                    />
                   </button>
                 </div>
               </form>
@@ -291,7 +294,13 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
 
             <div className={classNames('col-xs-4', 'col-md-2')}>
               <Paper style={{ padding: '15px', margin: '20px 0' }}>
-                <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+                <div className="subheader">
+                  <FVLabel
+                    transKey="metadata"
+                    defaultStr="Metadata"
+                    transform="first"
+                  />
+                </div>
               </Paper>
             </div>
           </div>

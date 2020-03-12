@@ -34,7 +34,6 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import DocumentListView from 'views/components/Document/DocumentListView'
 import FVButton from 'views/components/FVButton'
-import IntlService from 'views/services/intl'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -47,7 +46,6 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
-const intl = IntlService.instance
 
 /**
  * List view for words
@@ -133,7 +131,7 @@ class WordsListView extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('word', 'Word', 'first'),
+          title: props.intl.trans('word', 'Word', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data) => {
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
@@ -168,8 +166,8 @@ class WordsListView extends DataListView {
                       NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
                     }}
                   >
-                    <Edit title={intl.trans('edit', 'Edit', 'first')} />
-                    {/* <span>{intl.trans('edit', 'Edit', 'first')}</span> */}
+                    <Edit title={props.intl.trans('edit', 'Edit', 'first')} />
+                    {/* <span>{props.intl.trans('edit', 'Edit', 'first')}</span> */}
                   </FVButton>
                 </AuthorizationFilter>
               ) : null
@@ -188,7 +186,7 @@ class WordsListView extends DataListView {
         },
         {
           name: 'fv:definitions',
-          title: intl.trans('definitions', 'Definitions', 'first'),
+          title: props.intl.trans('definitions', 'Definitions', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
           columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
           render: (v, data, cellProps) => {
@@ -208,7 +206,7 @@ class WordsListView extends DataListView {
         },
         {
           name: 'related_audio',
-          title: intl.trans('audio', 'Audio', 'first'),
+          title: props.intl.trans('audio', 'Audio', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
           columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
           render: (v, data, cellProps) => {
@@ -232,7 +230,7 @@ class WordsListView extends DataListView {
           name: 'related_pictures',
           width: 72,
           textAlign: 'center',
-          title: intl.trans('picture', 'Picture', 'first'),
+          title: props.intl.trans('picture', 'Picture', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data, cellProps) => {
             const firstPicture = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
@@ -250,7 +248,7 @@ class WordsListView extends DataListView {
         },
         {
           name: 'fv-word:part_of_speech',
-          title: intl.trans('part_of_speech', 'Part of Speech', 'first'),
+          title: props.intl.trans('part_of_speech', 'Part of Speech', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data) => selectn('contextParameters.word.part_of_speech', data),
           sortBy: 'fv-word:part_of_speech',
@@ -258,7 +256,7 @@ class WordsListView extends DataListView {
         {
           name: 'dc:modified',
           width: 210,
-          title: intl.trans('date_modified', 'Date Modified'),
+          title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data) => {
             return StringHelpers.formatUTCDateString(selectn('lastModified', data))
           },
@@ -266,14 +264,14 @@ class WordsListView extends DataListView {
         {
           name: 'dc:created',
           width: 210,
-          title: intl.trans('date_created', 'Date Created'),
+          title: props.intl.trans('date_created', 'Date Created'),
           render: (v, data) => {
             return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
           },
         },
         {
           name: 'fv-word:categories',
-          title: intl.trans('categories', 'Categories', 'first'),
+          title: props.intl.trans('categories', 'Categories', 'first'),
           render: (v, data) => {
             return UIHelpers.generateDelimitedDatumFromDataset({
               dataSet: selectn('contextParameters.word.categories', data),
@@ -299,7 +297,7 @@ class WordsListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
+    [
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView
@@ -426,7 +424,7 @@ class WordsListView extends DataListView {
                 preserveSearch: true,
               })
             }}
-            sortHandler={async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+            sortHandler={async({ page, pageSize, sortBy, sortOrder } = {}) => {
               /*
               NOTE: TOWER OF INDIRECTION!
 
@@ -509,13 +507,14 @@ class WordsListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeWords } = fvWord
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -525,6 +524,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     navigationRouteSearch: route.search,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

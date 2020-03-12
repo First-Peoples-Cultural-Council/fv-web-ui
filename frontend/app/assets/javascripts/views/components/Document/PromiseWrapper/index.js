@@ -20,17 +20,15 @@ import selectn from 'selectn'
 import StatusBar from 'views/components/StatusBar'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ProviderHelpers from 'common/ProviderHelpers'
-import IntlService from 'views/services/intl'
 import Error403 from 'views/components/Error403'
 
 import '!style-loader!css-loader!./PromiseWrapper.css'
+import FVLabel from '../../FVLabel/index'
 
 /**
  * Simple component to handle loading of promises.
  */
 export default class PromiseWrapper extends Component {
-  intl = IntlService.instance
-
   static propTypes = {
     children: PropTypes.node,
     computeEntities: PropTypes.instanceOf(List),
@@ -75,34 +73,19 @@ export default class PromiseWrapper extends Component {
               <div>
                 <h1 className="PromiseWrapper__heading">
                   404 -{' '}
-                  {this.intl.translate({
-                    key: 'errors.page_not_found',
-                    default: 'Page Not Found',
-                    case: 'first',
-                  })}
+                  <FVLabel transKey="errors.page_not_found" defaultStr="Page Not Found" transform="first" />
                 </h1>
                 <p>
-                  {this.intl.translate({
-                    key: 'errors.report_via_feedback',
-                    default: 'Please report this error by emailing support@fpcc.ca so that we can fix it',
-                    case: 'first',
-                  })}
+                  <FVLabel transKey="errors.report_via_feedback" defaultStr="Please report this error by emailing support@fpcc.ca so that we can fix it" transform="first" />
                   .
                 </p>
                 <p>
-                  {this.intl.translate({
-                    key: 'errors.feedback_include_link',
-                    default: 'Include the link or action you took to get to this page',
-                  })}
+                  <FVLabel transKey="errors.feedback_include_link" defaultStr="Include the link or action you took to get to this page" />)
                   .
                 </p>
                 {ErrorMessageMarkup}
                 <p>
-                  {this.intl.translate({
-                    key: 'thank_you!',
-                    default: 'Thank You!',
-                    case: 'words',
-                  })}
+                  <FVLabel transKey="thank_you!" defaultStr="Thank You!" transform="words" />
                 </p>
               </div>
             )

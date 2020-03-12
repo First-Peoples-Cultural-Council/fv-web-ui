@@ -11,9 +11,9 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import { Popover } from '@material-ui/core'
 import FVButton from 'views/components/FVButton'
-import IntlService from 'views/services/intl'
+import FVLabel from '../../components/FVLabel/index'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
 export default function withForm(ComposedFilter /*, publishWarningEnabled = false*/) {
@@ -144,7 +144,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                 >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
                     <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      {intl.trans('cancel', 'Cancel', 'first')}
+                      {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
                     <button
                       type="submit"
@@ -153,7 +153,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                       }}
                       className="RaisedButton RaisedButton--primary"
                     >
-                      {intl.trans('save', 'Save', 'first')}
+                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                     </button>
                   </div>
 
@@ -173,7 +173,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
                     <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      {intl.trans('cancel', 'Cancel', 'first')}
+                      <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
                     </FVButton>
                     <button
                       type="submit"
@@ -182,7 +182,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                       }}
                       className="RaisedButton RaisedButton--primary"
                     >
-                      {intl.trans('save', 'Save', 'first')}
+                      <FVLabel transKey="save" defaultStr="Save" transform="first" />
                     </button>
 
                     <Popover
@@ -195,7 +195,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                       <div style={{ padding: '10px', margin: '0 15px', borderRadius: '5px' }}>
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: intl.trans(
+                            __html: this.props.intl.trans(
                               'views.hoc.view.discard_warning',
                               'Are you sure you want to <strong>discard your changes</strong>?',
                               'first'
@@ -210,7 +210,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                             this._onRequestCancelForm(e, true)
                           }}
                         >
-                          {intl.trans('yes', 'Yes', 'first') + '!'}
+                          <FVLabel transKey="yes" defaultStr="Yes" transform="first" />!
                         </FVButton>
                         <FVButton
                           variant="flat"
@@ -218,7 +218,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}
                         >
-                          {intl.trans('no', 'No', 'first') + '!'}
+                          <FVLabel transKey="no" defaultStr="No" transform="first" />!
                         </FVButton>
                       </div>
                     </Popover>
@@ -235,7 +235,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
               <ul className="list-group">
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('last_modified', 'Last Modified', 'first')}
+                    <FVLabel transKey="last_modified" defaultStr="Last Modified" transform="first" />
                   </span>
                   <br />
                   {selectn('response.lastModified', computeItem)}
@@ -243,7 +243,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('last_contributor', 'Last Contributor', 'first')}
+                    <FVLabel transKey="last_contributor" defaultStr="Last Contributor" transform="first" />
                   </span>
                   <br />
                   {selectn('response.properties.dc:lastContributor', computeItem)}
@@ -251,7 +251,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('date_created', 'Date Created', 'first')}
+                    <FVLabel transKey="date_created" defaultStr="Date Created" transform="first" />
                   </span>
                   <br />
                   {selectn('response.properties.dc:created', computeItem)}
@@ -259,7 +259,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('contributors', 'Contributors', 'first')}
+                    <FVLabel transKey="contributors" defaultStr="Contributors" transform="first" />
                   </span>
                   <br />
                   {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
@@ -267,7 +267,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('version', 'Version', 'first')}
+                    <FVLabel transKey="version" defaultStr="Version" transform="first" />
                   </span>
                   <br />
                   {selectn('response.properties.uid:major_version', computeItem)}.
@@ -281,5 +281,14 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     }
   }
 
-  return ViewWithForm
+  const mapStateToProps = (state) => {
+    const { locale } = state
+    const { intlService } = locale
+
+    return {
+      intl: intlService,
+    }
+  }
+
+  return connect(mapStateToProps)(ViewWithForm)
 }

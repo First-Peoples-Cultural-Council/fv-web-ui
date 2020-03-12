@@ -61,13 +61,12 @@ import Typography from '@material-ui/core/Typography'
 import FVTab from 'views/components/FVTab'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
+import FVLabel from 'views/components/FVLabel/index'
 
 import { WORKSPACES } from 'common/Constants'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * View word entry
  */
@@ -186,7 +185,7 @@ export class MediaView extends Component {
             if (selectn('response', computeResource))
               return (
                 <PageToolbar
-                  label={intl.trans('media', 'Media', 'first')}
+                  label={this.props.intl('media', 'Media', 'first')}
                   handleNavigateRequest={this.onNavigateRequest}
                   actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
                   computeEntity={computeResource}
@@ -206,17 +205,17 @@ export class MediaView extends Component {
               <Card>
                 <FVTab
                   tabItems={[
-                    { label: intl.trans('overview', 'Overview', 'first'), dataTestId: 'tabOverview' },
+                    { label: this.props.intl('overview', 'Overview', 'first'), dataTestId: 'tabOverview' },
                     {
                       label: UIHelpers.isViewSize('xs')
-                        ? intl.trans('words', 'Words', 'first')
-                        : intl.trans('linked_words', 'Linked Words', 'words'),
+                        ? this.props.intl('words', 'Words', 'first')
+                        : this.props.intl('linked_words', 'Linked Words', 'words'),
                       id: 'find_words',
                     },
                     {
                       label: UIHelpers.isViewSize('xs')
-                        ? intl.trans('phrases', 'Phrases', 'first')
-                        : intl.trans('linked_phrases', 'Linked Phrases', 'words'),
+                        ? this.props.intl('phrases', 'Phrases', 'first')
+                        : this.props.intl('linked_phrases', 'Linked Phrases', 'words'),
                       id: 'find_phrases',
                     },
                   ]}
@@ -237,7 +236,7 @@ export class MediaView extends Component {
                               return (
                                 <div>
                                   <List
-                                    subheader={intl.trans(
+                                    subheader={this.props.intl(
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
                                     )}
@@ -294,7 +293,11 @@ export class MediaView extends Component {
                                         color="secondary"
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
                                       >
-                                        {intl.trans('close', 'Close', 'first')}
+                                        <FVLabel
+                                          transKey="close"
+                                          defaultStr="Close"
+                                          transform="first"
+                                        />
                                       </FVButton>
                                     </DialogActions>
                                   </Dialog>
@@ -312,7 +315,10 @@ export class MediaView extends Component {
                     <div>
                       <CardContent>
                         <h2>
-                          {intl.trans('views.pages.explore.dialect.media.words_featuring', 'Words Featuring')}
+                          <FVLabel
+                            transKey="views.pages.explore.dialect.media.words_featuring"
+                            defaultStr="Words Featuring"
+                          />
                           <strong>{selectn('response.title', computeResource)}</strong>
                         </h2>
                         <div className="row">
@@ -327,7 +333,10 @@ export class MediaView extends Component {
                     <div>
                       <CardContent>
                         <h2>
-                          {intl.trans('views.pages.explore.dialect.media.words_featuring_with', 'Words Featuring with')}
+                          <FVLabel
+                            transKey="views.pages.explore.dialect.media.words_featuring_with"
+                            defaultStr="Words Featuring with"
+                          />
                           <strong>{selectn('response.title', computeResource)}</strong>
                         </h2>
                         <div className="row">
@@ -358,7 +367,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          intl.trans(
+          this.props.intl(
             'views.pages.explore.dialect.media.request_to_enable_success',
             'Request to enable resource successfully submitted!'
           ),
@@ -369,7 +378,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          intl.trans('views.pages.explore.dialect.media.resource_enabled', 'Resource enabled!')
+          this.props.intl('views.pages.explore.dialect.media.resource_enabled', 'Resource enabled!')
         )
       }
     } else {
@@ -381,7 +390,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          intl.trans(
+          this.props.intl(
             'views.pages.explore.dialect.media.request_to_disable_success',
             'Request to disable resource successfully submitted!'
           ),
@@ -392,7 +401,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          intl.trans('views.pages.explore.dialect.media.resource_disabled', 'Resource disabled!')
+          this.props.intl('views.pages.explore.dialect.media.resource_disabled', 'Resource disabled!')
         )
       }
     }
@@ -413,7 +422,7 @@ export class MediaView extends Component {
       this._getMediaPath(),
       null,
       null,
-      intl.trans('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
+      this.props.intl('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
     )
   }
 
@@ -430,7 +439,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          intl.trans(
+          this.props.intl(
             'views.pages.explore.dialect.media.request_to_publish_success',
             'Request to publish resource successfully submitted!'
           ),
@@ -441,7 +450,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          intl.trans('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
+          this.props.intl('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
         )
       }
     } else {
@@ -453,7 +462,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          intl.trans(
+          this.props.intl(
             'views.pages.explore.dialect.media.request_to_unpublic_success',
             'Request to unpublish resource successfully submitted!'
           ),
@@ -464,7 +473,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          intl.trans(
+          this.props.intl(
             'views.pages.explore.dialect.media.resource_unpublished_success',
             'Resource unpublished successfully!'
           )
@@ -524,13 +533,14 @@ export class MediaView extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvResources, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvResources, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { computeResource } = fvResources
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -539,6 +549,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

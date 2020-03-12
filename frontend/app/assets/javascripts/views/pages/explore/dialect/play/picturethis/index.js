@@ -27,14 +27,13 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * Play games
  */
@@ -302,10 +301,10 @@ export class Picturethis extends Component {
         //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +'/* IS NOT NULL' +
         //' AND fv-word:available_in_games = 1' +
         " AND fv:literal_translation/*/translation IN ('" +
-          translationsJoin +
-          "')" +
-          '&sortBy=dc:title' +
-          '&sortOrder=ASC'
+        translationsJoin +
+        "')" +
+        '&sortBy=dc:title' +
+        '&sortOrder=ASC'
       )
     }
   }
@@ -400,8 +399,8 @@ export class Picturethis extends Component {
     let warning = ''
     let remoteWords = new Map()
 
-    // Merge remote words with state words
-    ;(selectn('response.entries', words) || []).map(
+      // Merge remote words with state words
+      ; (selectn('response.entries', words) || []).map(
       function wordsData(word /*, wordKey*/) {
         const literal_translation = selectn('properties.fv:literal_translation', word)
 
@@ -427,7 +426,7 @@ export class Picturethis extends Component {
     )
 
     if (remoteWords.size != this.state.selectedTheme.words.size) {
-      warning = intl.trans(
+      warning = this.props.intl.trans(
         'views.pages.explore.dialect.play.picture_this.warning',
         'Note: This archive does not contain all of the words required for this game. Placeholders will be used.'
       )
@@ -549,10 +548,30 @@ export class Picturethis extends Component {
         </div>
         <div style={tableStyle}>
           <div style={tableHeader}>
-            <div style={tableCellStyle}>{intl.trans('location', 'Location', 'first')}</div>
-            <div style={tableCellStyle}>{intl.trans('word', 'Word', 'first')}</div>
-            <div style={tableCellStyle}>{intl.trans('translation', 'Translation', 'first')}</div>
-            <div style={tableCellStyle}>{intl.trans('audio', 'Audio', 'first')}</div>
+            <div style={tableCellStyle}>
+              <FVLabel
+                transKey="location"
+                defaultStr="Location"
+                transform="first"
+              /></div>
+            <div style={tableCellStyle}>
+              <FVLabel
+                transKey="word"
+                defaultStr="Word"
+                transform="first"
+              /></div>
+            <div style={tableCellStyle}>
+              <FVLabel
+                transKey="translation"
+                defaultStr="Translation"
+                transform="first"
+              /></div>
+            <div style={tableCellStyle}>
+              <FVLabel
+                transKey="audio"
+                defaultStr="Audio"
+                transform="first"
+              /></div>
           </div>
           {remoteWords.map((word, key) => {
             let dotStyle = locationNumberStyle
@@ -637,12 +656,14 @@ export class Picturethis extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvWord } = state
+  const { fvWord, locale } = state
 
   const { computeWords } = fvWord
+  const { intlService } = locale
 
   return {
     computeWords,
+    intl: intlService,
   }
 }
 

@@ -18,9 +18,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from '../../components/FVLabel/index'
 
 /**
  * Reset your password page
@@ -35,13 +33,19 @@ export default class ForgotPassword extends Component {
   render() {
     return (
       <div>
-        <h1>{intl.trans('forgot_password', 'Forgot your password', 'first')}</h1>
+        <h1>
+          <FVLabel
+            transKey="forgot_password"
+            defaultStr="Forgot your password"
+            transform="first"
+          />
+        </h1>
 
         <p>
-          {intl.trans(
-            'views.pages.users.forgot.forgot_copy',
-            'If you forgot your password enter your email address in the form below to begin the process of resetting it.'
-          )}
+          <FVLabel
+            transKey="views.pages.users.forgot.forgot_copy"
+            defaultStr="If you forgot your password enter your email address in the form below to begin the process of resetting it."
+          />
         </p>
 
         <div className="row" style={{ marginTop: '15px' }}>

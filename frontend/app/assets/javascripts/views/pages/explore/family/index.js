@@ -29,11 +29,10 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PortalList from 'views/components/Browsing/portal-list'
+import FVLabel from 'views/components/FVLabel/index'
 
 import withFilter from 'views/hoc/grid-list/with-filter'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const FilteredPortalList = withFilter(PortalList)
 
 /**
@@ -126,7 +125,11 @@ export class ExploreFamily extends Component {
           <div className="col-xs-12">
             <h1>
               {selectn('response.properties.dc:title', computeLanguageFamily)} &raquo;{' '}
-              {intl.trans('languages', 'Languages', 'words')}
+              <FVLabel
+                transKey="languages"
+                defaultStr="Languages"
+                transform="words"
+              />
             </h1>
             <FilteredPortalList {...portalListProps} />
           </div>

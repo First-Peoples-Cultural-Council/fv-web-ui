@@ -36,9 +36,7 @@ import { Document } from 'nuxeo'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from 'views/components/FVLabel/index'
 
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
@@ -142,7 +140,13 @@ export class PageDialectBookEdit extends Component {
 
     return (
       <div>
-        <h1>{intl.trans('edit_page', 'Edit Page', 'words')}</h1>
+        <h1>
+          <FVLabel
+            transKey="edit_page"
+            defaultStr="Edit Page"
+            transform="words"
+          />
+        </h1>
 
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-8', 'col-md-10')}>
@@ -156,7 +160,12 @@ export class PageDialectBookEdit extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
+
                 </button>
               </div>
             </form>

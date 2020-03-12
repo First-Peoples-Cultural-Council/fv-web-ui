@@ -16,7 +16,6 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import IntlService from 'views/services/intl'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -24,8 +23,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-
-const intl = IntlService.instance
+import FVLabel from 'views/components/FVLabel/index'
 
 /**
  * Play games
@@ -60,7 +58,13 @@ export class Play extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h1 className={classNames({ hidden: isKidsTheme })}>{intl.trans('games', 'Games', 'first')}</h1>
+            <h1 className={classNames({ hidden: isKidsTheme })}>
+              <FVLabel
+                transKey="games"
+                defaultStr="Games"
+                transform="first"
+              />
+            </h1>
             <div className="flex-container">
               <div className="grid">
                 <div className="cell" style={cellStyle}>

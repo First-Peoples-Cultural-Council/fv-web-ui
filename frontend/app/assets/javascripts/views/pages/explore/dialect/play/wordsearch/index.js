@@ -26,14 +26,13 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import Game from './wrapper'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 /**
  * Play games
  */
@@ -178,12 +177,16 @@ export class Wordsearch extends Component {
             </a>
             {game}
             <small>
-              {intl.trans('views.pages.explore.dialect.play.archive_contains', 'Archive contains', 'first')}
+              <FVLabel
+                transKey="views.pages.explore.dialect.play.archive_contains"
+                defaultStr="Archive contains"
+                transform="first"
+              />
               &nbsp; {selectn('response.resultsCount', computeWords)} &nbsp;
-              {intl.trans(
-                'views.pages.explore.dialect.play.words_that_met_game_requirements',
-                'words that met game requirements.'
-              )}
+              <FVLabel
+                transKey="views.pages.explore.dialect.play.words_that_met_game_requirements"
+                defaultStr="words that met game requirements."
+              />
             </small>
           </div>
         </div>

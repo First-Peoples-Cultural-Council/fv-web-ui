@@ -36,9 +36,8 @@ import FVButton from 'views/components/FVButton'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import GeneralList from 'views/components/Browsing/general-list'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
 
 const FilteredList = withFilter(GeneralList)
@@ -146,12 +145,12 @@ export class PageDialectGalleries extends Component {
 
           <div className="col-xs-12">
             <h1>
-              {intl.trans(
-                'views.pages.explore.dialect.gallery.x_galleries',
-                selectn('response.title', computeDialect2) + ' Galleries',
-                'first',
-                [selectn('response.title', computeDialect2)]
-              )}
+              <FVLabel
+                transKey="views.pages.explore.dialect.gallery.x_galleries"
+                defaultStr={selectn('response.title', computeDialect2) + ' Galleries'}
+                transform="first"
+                params={[selectn('response.title', computeDialect2)]}
+              />
             </h1>
           </div>
         </div>

@@ -9,7 +9,6 @@ import FormMoveButtons from 'views/components/Form/FormMoveButtons'
 import FormRemoveButton from 'views/components/Form/FormRemoveButton'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import IntlService from 'views/services/intl'
 import Preview from 'views/components/Editor/Preview'
 // see about dropping:
 import selectn from 'selectn'
@@ -18,8 +17,8 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createPicture } from 'providers/redux/reducers/fvPicture'
+import FVLabel from '../FVLabel/index'
 
-const intl = IntlService.instance
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedPicture extends React.Component {
   STATE_LOADING = 0
@@ -141,7 +140,11 @@ export class FormRelatedPicture extends React.Component {
         if (isFetching) {
           formStatus = (
             <div className="alert alert-info">
-              {intl.trans('views.components.editor.uploading_message', 'Uploading... Please be patient...', 'first')}
+              <FVLabel
+                transKey="views.components.editor.uploading_message"
+                defaultStr="Uploading... Please be patient..."
+                transform="first"
+              />
             </div>
           )
         }

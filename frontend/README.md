@@ -139,12 +139,14 @@ We use BroswerStack in order to ensure our UI functions in the latest version of
 These Cypress tests require that you have java and maven installed as well as the correct environment variables set for the following:
 
 For the database setup scripts and for local backend user login:
+
 ```
 CYPRESS_FV_USERNAME
 CYPRESS_FV_PASSWORD
 ```
 
 For recording runs to [the Cypress dashboard](https://dashboard.cypress.io/projects/gdqzxg/runs) (optional and not recommended when creating new tests):
+
 ```
 CYPRESS_PROJECT_ID
 CYPRESS_RECORD_KEY
@@ -159,39 +161,45 @@ $ npm run test:e2e:local
 ```
 
 Launch the full Cypress test suite headlessly (will record the runs to [the dashboard](https://dashboard.cypress.io/projects/gdqzxg/runs) if the environment variables are set):
+
 ```
 $ npm run test:e2e:local:headless
 ```
+
 With debugging output enabled:
+
 ```
 $ npm run test:e2e:local:headless:debug
 ```
 
 #### Creating Cypress tests
+
 The first thing to do when creating Cypress tests is to figure out if your test will need to create or change any backend data. If it does then you will need to use an existing test language or create a new one.
 
 The following table shows the tests languages and how the current tests use them. If you can fit your new test in without disrupting existing tests please do so, otherwise use a new test language.
 
-| Items in use ->   |   Words  |  Phrases |   Songs  |  Stories |  Portal  | Books       | Other              | Language starts as: | Any item state change |
-|-------------------|:--------:|:--------:|:--------:|:--------:|:--------:|-------------|--------------------|---------------------|:---------------------:|
-| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder           | Enabled             |        &#x2713;       |
-| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media | Published           |        &#x2713;       |
-| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder           | Enabled             |        &#x2713;       |
-| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                    | Published           |        &#x2713;       |
-| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports            | Published           |        &#x2713;       |
-| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet           | Published           |        &#x2713;       |
+| Items in use ->   |  Words   | Phrases  |  Songs   | Stories  |  Portal  | Books       | Other              | Language starts as: | Any item state change |
+| ----------------- | :------: | :------: | :------: | :------: | :------: | ----------- | ------------------ | ------------------- | :-------------------: |
+| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder           | Enabled             |       &#x2713;        |
+| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media | Published           |       &#x2713;        |
+| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder           | Enabled             |       &#x2713;        |
+| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                    | Published           |       &#x2713;        |
+| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports            | Published           |       &#x2713;        |
+| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet           | Published           |       &#x2713;        |
 | TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                    | Enabled             |                       |
 
 When you create a new test please update this table.
 
 ##### Creating new data:
+
 To create new data for use in tests you will have to add to the script located at [/frontend/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
 The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/scripts/files).
 
 For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseTeardown.sh) script.
 
 ##### Writing the Cypress tests:
-Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/explore/dialect/learn/phrases/__cypress__/MemberView-Phrase.js). 
+
+Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/explore/dialect/learn/phrases/__cypress__/MemberView-Phrase.js).
 On startup tests will be copied from the project and placed in the [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration__cypress__) where they will be run from.
 
 A list of Cypress commands can be found on their website [at this link](https://docs.cypress.io/api/api/table-of-contents.html).
@@ -206,18 +214,19 @@ The [/frontend/cypress/plugins](https://github.com/First-Peoples-Cultural-Counci
 
 Videos and screenshots created by the tests will be placed in the corresponding screenshots and videos directories inside of the [/frontend/cypress/](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress) directory which will be created as needed automatically.
 
-The Cypress tests are copied through the ```npm run cy:copy``` command (which is automatically run with ```npm run test:e2e:local``` and ```npm run test:e2e:local:headless```). \
+The Cypress tests are copied through the `npm run cy:copy` command (which is automatically run with `npm run test:e2e:local` and `npm run test:e2e:local:headless`). \
 Note: changes to tests aren’t watched so if you have the Test Runner launched and you edit a test, you will need to run npm run cy:copy to move the tests to [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration/__cypress__).
 
 ##### Additional tips:
-Testing for something that doesn’t exist is slow as it will keep checking until it times out (timeout can be customised): 
-eg:```cy.queryByText(/stop browsing alphabetically/i).should(‘not.exist’)```
+
+Testing for something that doesn’t exist is slow as it will keep checking until it times out (timeout can be customised):
+eg:`cy.queryByText(/stop browsing alphabetically/i).should(‘not.exist’)`
 
 If your tests are failing randomly, a wait command usually fixes things:
-```cy.wait(500)```
+`cy.wait(500)`
 
-Some tests will pass locally with no problems, but will fail on slower CI machines. 
-The best way to fix this is by adding more ```cy.wait()``` commands to the tests (especially after loading a new page).
+Some tests will pass locally with no problems, but will fail on slower CI machines.
+The best way to fix this is by adding more `cy.wait()` commands to the tests (especially after loading a new page).
 
 ### Frontend: Unit testing
 
@@ -306,9 +315,9 @@ A standardized structure should make it easier to work on other people's compone
 ```
 // 1) Group imports first
 
-import React, { Component, PropTypes } from 'react' 
+import React, { Component, PropTypes } from 'react'
 
-// 1a) ^ Using old version of React/PropTypes. 
+// 1a) ^ Using old version of React/PropTypes.
 // Newer releases have standalone PropTypes lib/import
 
 // REDUX
@@ -325,7 +334,7 @@ const { func, object } = PropTypes
 
 export class ExampleComponent extends Component {
 
-    // 4) propTypes before defaultProps. 
+    // 4) propTypes before defaultProps.
     // Seeing propTypes first gives an overview of all that is in play.
 
     static propTypes = {
@@ -338,13 +347,13 @@ export class ExampleComponent extends Component {
         // REDUX: actions/dispatch/func
         someActionForRedux: func.isRequired,
     }
-    
+
     // 6) defaultProps should be added only as needed, no need for 1:1 mapping between propTypes & defaultProps
 
     static defaultProps = {
         somethingFromParent: {},
     }
-    
+
     state = {}
 
     // 7) ^ If using a function to set initial state it will need to be defined before, eg:
@@ -356,9 +365,9 @@ export class ExampleComponent extends Component {
     render() {}
 
     // 9) All remaining component functions after render()
-    
+
     // 10) If 'fat arrow' syntax is used for function definitions, we won't need to bind `this` in the constructor
-    
+
     anotherFunction = () => {return this._getInitialState()}
 
 }

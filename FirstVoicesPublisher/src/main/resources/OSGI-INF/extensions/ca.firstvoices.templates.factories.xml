@@ -10,6 +10,7 @@
     <factoryBinding name="FVDialectFactoryBinding" factoryName="FVDialectFactory" targetType="FVDialect">
       <template>
         <templateItem typeName="FVDictionary" id="Dictionary" title="Dictionary" description=""/>
+        <templateItem typeName="FVLabelDictionary" id="Label Dictionary" title="Label Dictionary" description=""/>
         <templateItem typeName="FVAlphabet" id="Alphabet" title="Alphabet" description=""/>
         <!--<templateItem typeName="Forum" id="Forum" title="Forum" description=""/>-->
         <templateItem typeName="FVPortal" id="Portal" title="Portal" description=""/>

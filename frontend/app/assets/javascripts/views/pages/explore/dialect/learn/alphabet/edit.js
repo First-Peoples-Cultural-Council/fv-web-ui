@@ -30,6 +30,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
+
 // Models
 import { Document } from 'nuxeo'
 
@@ -38,9 +40,7 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object } = PropTypes
@@ -131,12 +131,12 @@ export class PageDialectAlphabetCharacterEdit extends Component {
       >
         <div>
           <h1>
-            {intl.trans(
-              'views.pages.explore.dialect.learn.alphabet.edit_x_character',
-              'Edit ' + selectn('response.properties.dc:title', computeCharacter) + ' character',
-              'first',
-              [selectn('response.properties.dc:title', computeCharacter)]
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.learn.alphabet.edit_x_character"
+              defaultStr={'Edit ' + selectn('response.properties.dc:title', computeCharacter) + ' character'}
+              transform="first"
+              params={[selectn('response.properties.dc:title', computeCharacter)]}
+            />
           </h1>
 
           <EditViewWithForm
@@ -157,7 +157,7 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     )
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     if (_computeDialect2.isError) {

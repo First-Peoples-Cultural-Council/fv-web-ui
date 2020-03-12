@@ -16,12 +16,12 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
-import IntlService from 'views/services/intl'
 import Edit from '@material-ui/icons/Edit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
+import FVLabel from '../FVLabel/index'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
 
 const RenderRegular = (currentValue, preview, previewType, returnWrapper = 'span') => {
   let output = []
@@ -51,7 +51,7 @@ const RenderRegular = (currentValue, preview, previewType, returnWrapper = 'span
 
 const { array, bool, func, object, string } = PropTypes
 
-class EditableComponent extends Component {
+class EditableComponentUnwrapped extends Component {
   static propTypes = {
     className: string,
     dataTestid: string,
@@ -162,7 +162,11 @@ class EditableComponent extends Component {
                 options={fieldFormOptions}
               />
               <button type="submit" className="EditableComponent__btnSave FlatButton FlatButton--primary">
-                {intl.trans('save', 'Save', 'first')}
+                <FVLabel
+                  transKey="save"
+                  defaultStr="Save"
+                  transform="first"
+                />
               </button>
             </form>
           )
@@ -198,8 +202,8 @@ class EditableComponent extends Component {
             this._onEditRequest()
           }}
         >
-          <Edit className="FlatButton__icon" title={intl.trans('edit', 'Edit', 'first')} />
-          <span className="FlatButton__label">{intl.trans('edit', 'Edit', 'first')}</span>
+          <Edit className="FlatButton__icon" title={this.props.intl.trans('edit', 'Edit', 'first')} />
+          <span className="FlatButton__label"><FVLabel transKey="edit" defaultStr="Edit" transform="first" /></span>
         </button>
       )
       toReturn = (
@@ -234,8 +238,8 @@ class EditableComponent extends Component {
       newDocument,
       null,
       "'" +
-        selectn('props.options.fields' + '.' + property + '.label', this['form_' + property]) +
-        "' updated successfully!"
+      selectn('props.options.fields' + '.' + property + '.label', this['form_' + property]) +
+      "' updated successfully!"
     )
 
     this.setState({
@@ -286,5 +290,18 @@ export class EditableComponentHelper extends Component {
     )
   }
 }
+
+const mapStateToProps = (state /*, ownProps*/) => {
+  const { locale } = state
+
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+const EditableComponent = connect(mapStateToProps)(EditableComponentUnwrapped)
+
 
 export default EditableComponent

@@ -13,11 +13,11 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import withToggle from 'views/hoc/view/with-toggle'
-import IntlService from 'views/services/intl'
+import { connect } from 'react-redux'
 
 const FiltersWithToggle = withToggle()
 
-export default class FacetFilterList extends Component {
+class FacetFilterList extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     facets: PropTypes.array.isRequired,
@@ -27,10 +27,8 @@ export default class FacetFilterList extends Component {
     styles: PropTypes.object,
   }
 
-  intl = IntlService.instance
-
   title = ''
-  titleUpdate = memoize(() => this.intl.searchAndReplace(this.props.title))
+  titleUpdate = memoize(() => this.props.intl.searchAndReplace(this.props.title))
 
   facetTitle = {}
   facetTitleUpdate = memoize((facets) => {
@@ -47,8 +45,8 @@ export default class FacetFilterList extends Component {
         })
 
         childrenSort.map((facetChild) => {
-          // NOTE: this.intl.searchAndReplace is a bit slow
-          this.facetTitle[facetChild.uid] = this.intl.searchAndReplace(facetChild.title)
+          // NOTE: this.props.intl.searchAndReplace is a bit slow
+          this.facetTitle[facetChild.uid] = this.props.intl.searchAndReplace(facetChild.title)
         })
       }
     })
@@ -150,3 +148,14 @@ export default class FacetFilterList extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapDispatchToProps)(FacetFilterList)

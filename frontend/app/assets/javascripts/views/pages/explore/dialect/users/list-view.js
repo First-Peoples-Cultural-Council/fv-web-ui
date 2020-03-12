@@ -32,9 +32,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '' } }
 const FilteredPaginatedMediaList = withFilter(DocumentListView, DefaultFetcherParams)
 
@@ -90,22 +88,22 @@ export class UsersListView extends DataListView {
         {
           name: 'username',
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
-          title: intl.trans('views.pages.explore.dialect.users.username', 'Username', 'first'),
+          title: props.intl.trans('views.pages.explore.dialect.users.username', 'Username', 'first'),
         },
         {
           name: 'firstName',
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-          title: intl.trans('first_name', 'First Name', 'words'),
+          title: props.intl.trans('first_name', 'First Name', 'words'),
         },
         {
           name: 'lastName',
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-          title: intl.trans('last_name', 'Last Name', 'words'),
+          title: props.intl.trans('last_name', 'Last Name', 'words'),
         },
         {
           name: 'email',
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.columnTitleCellRender,
-          title: intl.trans('email', 'Email', 'first'),
+          title: props.intl.trans('email', 'Email', 'first'),
         },
       ],
       sortInfo: {
@@ -128,7 +126,7 @@ export class UsersListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
+    [
       '_onNavigateRequest',
       '_onUserSelected',
       '_handleRefetch',
@@ -180,7 +178,11 @@ export class UsersListView extends DataListView {
         },
       },
       null,
-      intl.trans('views.pages.explore.dialect.users.user_updated_successfully', 'User updated successfully.', 'first')
+      this.props.intl.trans(
+        'views.pages.explore.dialect.users.user_updated_successfully',
+        'User updated successfully.',
+        'first'
+      )
     )
 
     this.setState({
@@ -259,7 +261,7 @@ export class UsersListView extends DataListView {
         />
 
         <GroupAssignmentDialog
-          title={intl.trans('assign', 'Assign', 'first')}
+          title={this.props.intl.trans('assign', 'Assign', 'first')}
           open={this.state.userDialogOpen}
           saveMethod={this._saveMethod}
           closeMethod={this._handleClose}
@@ -278,13 +280,14 @@ export class UsersListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvUser, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvUser, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { computeUser, computeUserSuggestion } = fvUser
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -294,6 +297,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

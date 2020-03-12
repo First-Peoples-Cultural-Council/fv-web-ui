@@ -36,9 +36,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Create phrasebook
  */
@@ -185,11 +184,11 @@ export class PageDialectPhraseBooksCreate extends Component {
     return (
       <div data-testid="PageDialectPhraseBooksCreate">
         <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.phrase_books.add_new_phrase_book_to',
-            'Add New Phrase Book to',
-            'first'
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.phrase_books.add_new_phrase_book_to"
+            defaultStr="Add New Phrase Book to"
+            transform="first"
+          />
           <i>{dialect.get('dc:title')}</i>
         </h1>
 
@@ -211,7 +210,11 @@ export class PageDialectPhraseBooksCreate extends Component {
               />
               <div className="form-group">
                 <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </button>
               </div>
             </form>
@@ -219,7 +222,13 @@ export class PageDialectPhraseBooksCreate extends Component {
 
           <div className={classNames('col-xs-4', 'col-md-2')}>
             <Paper style={{ padding: '15px', margin: '20px 0' }}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
+              <div className="subheader">
+                <FVLabel
+                  transKey="metadata"
+                  defaultStr="Metadata"
+                  transform="first"
+                />
+              </div>
             </Paper>
           </div>
         </div>

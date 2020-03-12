@@ -14,11 +14,11 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import IntlService from 'views/services/intl'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWithActions.css'
+import FVLabel from '../../components/FVLabel/index'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
 export default function withActions(ComposedFilter, publishWarningEnabled = false) {
   class ViewWithActions extends Component {
     state = {
@@ -76,12 +76,12 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               }
             >
               <DialogTitle>
-                {intl.trans(
-                  'views.hoc.view.publish_x',
-                  'Publish ' + StringHelpers.toTitleCase(this.props.labels.single),
-                  'first',
-                  [StringHelpers.toTitleCase(this.props.labels.single)]
-                )}
+                <FVLabel
+                  transKey="views.hoc.view.publish_x"
+                  defaultStr={'Publish ' + StringHelpers.toTitleCase(this.props.labels.single)}
+                  transform="first"
+                  params={[StringHelpers.toTitleCase(this.props.labels.single)]}
+                />
               </DialogTitle>
               <DialogContent>
                 {(() => {
@@ -89,14 +89,14 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     return (
                       <div>
                         <p>
-                          {intl.trans(
-                            'views.hoc.view.warning1_x',
-                            'Publishing this ' +
-                              this.props.labels.single +
-                              ' will also publish (or republish) the following related items',
-                            'first',
-                            [this.props.labels.single]
-                          )}
+                          <FVLabel
+                            transKey="views.hoc.view.warning1_x"
+                            defaultStr={'Publishing this ' +
+                            this.props.labels.single +
+                            ' will also publish (or republish) the following related items'}
+                            transform="first"
+                            params={[this.props.labels.single]}
+                          />
                           :
                         </p>
                         <Tabs>{this.props.tabs}</Tabs>
@@ -106,14 +106,14 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   return (
                     <div>
                       <p>
-                        {intl.trans(
-                          'views.hoc.view.warning2_x',
-                          'Publishing this ' +
-                            this.props.labels.single +
-                            ' all the media and child items associated with it',
-                          'first',
-                          [this.props.labels.single]
-                        )}
+                        <FVLabel
+                          transKey="views.hoc.view.warning2_x"
+                          defaultStr={'Publishing this ' +
+                          this.props.labels.single +
+                          ' all the media and child items associated with it'}
+                          transform="first"
+                          params={[this.props.labels.single]}
+                        />
                       </p>
                     </div>
                   )
@@ -134,7 +134,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     })
                   }}
                 >
-                  {intl.trans('cancel', 'Cancel', 'first')}
+                  <FVLabel
+                    transKey="cancel"
+                    defaultStr="Cancel"
+                    transform="first"
+                  />
                 </FVButton>
                 <FVButton
                   data-testid="ViewWithActions__buttonPublish"
@@ -145,7 +149,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     this.state.prePublishCompleteAction()
                   }}
                 >
-                  {intl.trans('publish', 'Publish', 'first')}
+                  <FVLabel
+                    transKey="publish"
+                    defaultStr="Publish"
+                    transform="first"
+                  />
                 </FVButton>
               </DialogActions>
             </Dialog>
@@ -161,12 +169,12 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     data-testid="ViewWithActions__buttonDelete"
                   >
                     <DeleteIcon />
-                    {intl.trans(
-                      'views.hoc.view.delete_x',
-                      'Delete ' + StringHelpers.toTitleCase(this.props.labels.single),
-                      'first',
-                      [StringHelpers.toTitleCase(this.props.labels.single)]
-                    )}
+                    <FVLabel
+                      transKey="views.hoc.view.delete_x"
+                      defaultStr={'Delete ' + StringHelpers.toTitleCase(this.props.labels.single)}
+                      transform="first"
+                      params={[StringHelpers.toTitleCase(this.props.labels.single)]}
+                    />
                   </FVButton>
                 </Toolbar>
               </AppBar>
@@ -178,17 +186,17 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 onClose={this._handleCancelDelete}
               >
                 <DialogTitle>
-                  {intl.trans(
-                    'views.hoc.view.deleting_x',
-                    'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single),
-                    'first',
-                    [StringHelpers.toTitleCase(this.props.labels.single)]
-                  )}
+                  <FVLabel
+                    transKey="views.hoc.view.deleting_x"
+                    defaultStr={'Deleting ' + StringHelpers.toTitleCase(this.props.labels.single)}
+                    transform="first"
+                    params={[StringHelpers.toTitleCase(this.props.labels.single)]}
+                  />
                 </DialogTitle>
                 <DialogContent>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: intl.trans(
+                      __html: this.props.intl.trans(
                         'views.hoc.delete_confirm_x_x_x',
                         'Are you sure you would like to delete the ' +
                           this.props.labels.single +
@@ -218,7 +226,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       this.setState({ deleteDialogOpen: false })
                     }}
                   >
-                    {intl.trans('cancel', 'Cancel', 'first')}
+                    <FVLabel
+                      transKey="cancel"
+                      defaultStr="Cancel"
+                      transform="first"
+                    />
                   </FVButton>
                   <FVButton
                     data-testid="ViewWithActions__buttonDelete"
@@ -230,7 +242,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       this._delete(selectn('response', this.props.computeItem))
                     }}
                   >
-                    {intl.trans('delete', 'Delete', 'first')}
+                    <FVLabel
+                      transKey="delete"
+                      defaultStr="Delete"
+                      transform="first"
+                    />
                   </FVButton>
                 </DialogActions>
               </Dialog>
@@ -242,24 +258,24 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 open={this.state.deleteSuccessDialogOpen}
               >
                 <DialogTitle>
-                  {intl.trans(
-                    'views.hoc.view.delete_x',
-                    'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success',
-                    'words',
-                    [StringHelpers.toTitleCase(this.props.labels.single)]
-                  )}
+                  <FVLabel
+                    transKey="views.hoc.view.delete_x"
+                    defaultStr={'Delete ' + StringHelpers.toTitleCase(this.props.labels.single) + ' Success'}
+                    transform="words"
+                    params={[StringHelpers.toTitleCase(this.props.labels.single)]}
+                  />
                 </DialogTitle>
                 <DialogContent>
-                  {intl.trans(
-                    'views.hoc.view.delete_x_success',
-                    'The ' +
-                      this.props.labels.single +
-                      ' <strong>' +
-                      selectn('response.title', this.props.computeItem) +
-                      '</strong> has been successfully deleted.',
-                    'first',
-                    [this.props.labels.single, selectn('response.title', this.props.computeItem)]
-                  )}
+                  <FVLabel
+                    transKey="views.hoc.view.delete_x_success"
+                    defaultStr={'The ' +
+                    this.props.labels.single +
+                    ' <strong>' +
+                    selectn('response.title', this.props.computeItem) +
+                    '</strong> has been successfully deleted.'}
+                    transform="first"
+                    params={[this.props.labels.single, selectn('response.title', this.props.computeItem)]}
+                  />
                 </DialogContent>
                 <DialogActions>
                   <FVButton
@@ -269,7 +285,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     color="secondary"
                     onClick={() => window.history.back()}
                   >
-                    {intl.trans('views.hoc.view.return_to_previous_page', 'Return to Previous Page', 'words')}
+                    <FVLabel
+                      transKey="views.hoc.view.return_to_previous_page"
+                      defaultStr="Return to Previous Page"
+                      transform="words"
+                    />
                   </FVButton>
                   <FVButton
                     data-testid="ViewWithActions__buttonHome"
@@ -281,7 +301,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       '/' + this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2).join('/')
                     )}
                   >
-                    {intl.trans('views.hoc.view.go_to_dialect_language_home', 'Go to Dialect Language Home', 'words')}
+                    <FVLabel
+                      transKey="views.hoc.view.go_to_dialect_language_home"
+                      defaultStr="Go to Dialect Language Home"
+                      transform="words"
+                    />
                   </FVButton>
                 </DialogActions>
               </Dialog>
@@ -307,7 +331,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               start: 'true',
             },
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.request_to_enable_x_successfully_submitted',
               'Request to enable ' + this.props.labels.single + ' successfully submitted!',
               'first',
@@ -320,7 +344,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             this.props.itemPath,
             null,
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.x_enabled',
               StringHelpers.toTitleCase(this.props.labels.single) + ' Enabled!',
               'first',
@@ -337,7 +361,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               start: 'true',
             },
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.request_to_disable_x_successfully_submitted',
               'Request to disable ' + this.props.labels.single + ' successfully submitted!',
               'first',
@@ -350,7 +374,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             this.props.itemPath,
             null,
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.x_disabled',
               StringHelpers.toTitleCase(this.props.labels.single) + ' Disabled!',
               'first',
@@ -368,7 +392,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
           this.props.itemPath,
           null,
           null,
-          intl.trans(
+          this.props.intl.trans(
             'views.hoc.view.x_published_successfully',
             StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
             'first',
@@ -400,7 +424,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 start: 'true',
               },
               null,
-              intl.trans(
+              this.props.intl.trans(
                 'views.hoc.view.request_to_publish_x_successfully_submitted',
                 'Request to publish ' + this.props.labels.single + ' successfully submitted!',
                 'first',
@@ -426,7 +450,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               this.props.itemPath,
               null,
               null,
-              intl.trans(
+              this.props.intl.trans(
                 'views.hoc.view.x_published_successfully',
                 StringHelpers.toTitleCase(this.props.labels.single) + ' Published Successfully!',
                 'first',
@@ -454,7 +478,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               start: 'true',
             },
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.request_to_unpublish_x_successfully_submitted',
               'Request to unpublish ' + this.props.labels.single + ' successfully submitted!',
               'first',
@@ -467,7 +491,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             this.props.itemPath,
             null,
             null,
-            intl.trans(
+            this.props.intl.trans(
               'views.hoc.view.x_unpublished_successfully',
               StringHelpers.toTitleCase(this.props.labels.single) + ' Unpublished Successfully!',
               'first',
@@ -479,5 +503,14 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
     }
   }
 
-  return ViewWithActions
+  const mapStateToProps = (state) => {
+    const { locale } = state
+    const { intlService } = locale
+
+    return {
+      intl: intlService,
+    }
+  }
+
+  return connect(mapStateToProps)(ViewWithActions)
 }

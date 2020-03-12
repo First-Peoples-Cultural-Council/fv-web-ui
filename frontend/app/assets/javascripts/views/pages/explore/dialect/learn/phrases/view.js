@@ -47,14 +47,13 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import FVLabel from 'views/components/FVLabel/index'
 import Tab from '@material-ui/core/Tab'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
@@ -223,7 +222,11 @@ export class DialectViewPhrase extends Component {
       return (
         <div className="DialectViewWordPhraseContentItem">
           <h4 className="DialectViewWordPhraseContentItemTitle">
-            {intl.trans('acknowledgement', 'Acknowledgement', 'first')}
+            <FVLabel
+              transKey="acknowledgement"
+              defaultStr="Acknowledgement"
+              transform="first"
+            />
           </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
             <div>{acknowledgement}</div>
@@ -236,7 +239,7 @@ export class DialectViewPhrase extends Component {
 
   _getAudio = (computePhrase) => {
     const audios = []
-    ;(selectn('response.contextParameters.phrase.related_audio', computePhrase) || []).map((audio) => {
+      ; (selectn('response.contextParameters.phrase.related_audio', computePhrase) || []).map((audio) => {
       audios.push(
         <Preview
           key={selectn('uid', audio)}
@@ -257,12 +260,16 @@ export class DialectViewPhrase extends Component {
   _getCulturalNotes = (computePhrase) => {
     const _cultNote = selectn('response.properties.fv:cultural_note', computePhrase) || []
     const culturalNotes = _cultNote.map((culturalNote, key) => {
-      return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
+      return <div key={key}>{this.props.intl.searchAndReplace(culturalNote)}</div>
     })
     return culturalNotes.length > 0 ? (
       <div className="DialectViewPhraseContentItem DialectViewWordPhraseCulturalNote">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          {intl.trans('views.pages.explore.dialect.learn.phrases.cultural_notes', 'Cultural Notes', 'first')}
+          <FVLabel
+            transKey="views.pages.explore.dialect.learn.phrases.cultural_notes"
+            defaultStr="Cultural Notes"
+            transform="first"
+          />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{culturalNotes}</div>
       </div>
@@ -320,11 +327,11 @@ export class DialectViewPhrase extends Component {
     return _literalTranslations.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseLiteralTranslation">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          {intl.trans(
-            'views.pages.explore.dialect.learn.phrases.literal_translations',
-            'Literal Translations',
-            'first'
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.learn.phrases.literal_translations"
+            defaultStr="Literal Translations"
+            transform="first"
+          />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{_literalTranslations}</div>
       </div>
@@ -333,7 +340,7 @@ export class DialectViewPhrase extends Component {
 
   _getPhotos = (computePhrase) => {
     const photos = []
-    ;(selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []).map((picture, key) => {
+      ; (selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []).map((picture, key) => {
       const image = {
         original: selectn('views[2].url', picture),
         thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
@@ -347,7 +354,13 @@ export class DialectViewPhrase extends Component {
 
     return photos.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhoto">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('photo_s', 'PHOTO(S)', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel
+            transKey="photo_s"
+            defaultStr="PHOTO(S)"
+            transform="first"
+          />
+        </h4>
         <MediaPanel type="FVPicture" items={photos} />
       </div>
     ) : null
@@ -360,7 +373,13 @@ export class DialectViewPhrase extends Component {
     })
     return phraseBooks.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCategory">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('phrase books', 'Phrase Books', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel
+            transKey="phrase books"
+            defaultStr="Phrase Books"
+            transform="first"
+          />
+        </h4>
         <ul>{phraseBooks}</ul>
       </div>
     ) : null
@@ -371,7 +390,7 @@ export class DialectViewPhrase extends Component {
 
     // Photos
     const photosThumbnails = []
-    ;(selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []).map((picture) => {
+      ; (selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []).map((picture) => {
       photosThumbnails.push(
         <img
           key={picture.uid}
@@ -383,7 +402,7 @@ export class DialectViewPhrase extends Component {
     })
     if (photosThumbnails.length > 0) {
       tabs.push(
-        <Tab key="pictures" label={intl.trans('pictures', 'Pictures', 'first')}>
+        <Tab key="pictures" label={this.props.intl.trans('pictures', 'Pictures', 'first')}>
           <div style={{ maxHeight: '400px' }}>{photosThumbnails}</div>
         </Tab>
       )
@@ -391,7 +410,7 @@ export class DialectViewPhrase extends Component {
 
     // Videos
     const videoThumbnails = []
-    ;(selectn('response.contextParameters.phrase.related_videos', computePhrase) || []).map((video) => {
+      ; (selectn('response.contextParameters.phrase.related_videos', computePhrase) || []).map((video) => {
       videoThumbnails.push(
         <video
           key={video.uid}
@@ -403,7 +422,7 @@ export class DialectViewPhrase extends Component {
     })
     if (videoThumbnails.length > 0) {
       tabs.push(
-        <Tab key="videos" label={intl.trans('videos', 'Videos', 'first')}>
+        <Tab key="videos" label={this.props.intl.trans('videos', 'Videos', 'first')}>
           <div>{videoThumbnails}</div>
         </Tab>
       )
@@ -411,12 +430,12 @@ export class DialectViewPhrase extends Component {
 
     // Audio
     const audios = []
-    ;(selectn('response.contextParameters.phrase.related_audio', computePhrase) || []).map((audio) => {
+      ; (selectn('response.contextParameters.phrase.related_audio', computePhrase) || []).map((audio) => {
       audios.push(<Preview key={selectn('uid', audio)} expandedValue={audio} minimal type="FVAudio" />)
     })
     if (audios.length > 0) {
       tabs.push(
-        <Tab key="audio" label={intl.trans('audio', 'Audio', 'first')}>
+        <Tab key="audio" label={this.props.intl.trans('audio', 'Audio', 'first')}>
           <div>{audios}</div>
         </Tab>
       )
@@ -427,7 +446,7 @@ export class DialectViewPhrase extends Component {
 
   _getVideos = (computePhrase) => {
     const videos = []
-    ;(selectn('response.contextParameters.phrase.related_videos', computePhrase) || []).map((video, key) => {
+      ; (selectn('response.contextParameters.phrase.related_videos', computePhrase) || []).map((video, key) => {
       const vid = {
         original: NavigationHelpers.getBaseURL() + video.path,
         thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
@@ -440,7 +459,7 @@ export class DialectViewPhrase extends Component {
     })
     return videos.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseVideo">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('video_s', 'VIDEO(S)', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">{this.props.intl.trans('video_s', 'VIDEO(S)', 'first')}</h4>
         <MediaPanel type="FVVideo" items={videos} />
       </div>
     ) : null
@@ -467,13 +486,14 @@ export class DialectViewPhrase extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -482,6 +502,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

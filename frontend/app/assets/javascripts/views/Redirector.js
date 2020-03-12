@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import IntlService from 'views/services/intl'
-const intl = IntlService.instance
+import FVLabel from './components/FVLabel/index'
 const { func } = PropTypes
 export class Redirector extends Component {
   static propTypes = {
@@ -21,11 +20,11 @@ export class Redirector extends Component {
   render() {
     return (
       <div style={{ backgroundColor: '#fff', height: '100vh' }}>
-        {intl.translate({
-          key: 'redirecting',
-          default: 'Redirecting',
-          case: 'first',
-        })}
+        <FVLabel
+          transKey="redirecting"
+          defaultStr="Redirecting"
+          transform="first"
+        />
         ...
       </div>
     )

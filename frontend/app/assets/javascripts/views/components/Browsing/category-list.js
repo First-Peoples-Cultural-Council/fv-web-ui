@@ -23,11 +23,12 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 
 import UIHelpers from 'common/UIHelpers'
-import IntlService from 'views/services/intl'
+import FVLabel from '../FVLabel/index'
+import { connect } from 'react-redux'
 
 const defaultStyle = { width: '100%', overflowY: 'auto', marginBottom: 24 }
 
-export default class CategoryList extends Component {
+class CategoryList extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
     filteredItems: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
@@ -44,7 +45,6 @@ export default class CategoryList extends Component {
     style: null,
   }
 
-  intl = IntlService.instance
 
   constructor(props, context) {
     super(props, context)
@@ -56,11 +56,11 @@ export default class CategoryList extends Component {
     if (!items || selectn('length', items) === 0) {
       return (
         <div style={{ margin: '20px 0' }}>
-          {this.intl.translate({
-            key: 'no_results_found',
-            default: 'No Results Found',
-            append: '.',
-          })}
+          <FVLabel
+            transKey="no_results_found"
+            defaultStr="No Results Found"
+            append="."
+          />
         </div>
       )
     }
@@ -86,7 +86,7 @@ export default class CategoryList extends Component {
               return (
                 <GridListTile onClick={action.bind(this, tile)} key={tile.uid} className="category-grid-tile">
                   <img src={selectn('properties.file:content.data', tile) || '/assets/images/cover.png'} />
-                  <GridListTileBar title={this.intl.searchAndReplace(tile.title)} titlePosition="bottom" />
+                  <GridListTileBar title={this.props.intl.searchAndReplace(tile.title)} titlePosition="bottom" />
                 </GridListTile>
               )
             }.bind(this)
@@ -96,3 +96,14 @@ export default class CategoryList extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(CategoryList)

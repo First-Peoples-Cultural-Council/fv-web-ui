@@ -31,9 +31,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import IntlService from 'views/services/intl'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-const intl = IntlService.instance
 /**
  * List view for categories
  */
@@ -87,13 +85,17 @@ class WordsCategoriesListView extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('category', 'Category', 'first'),
+          title: props.intl.trans('category', 'Category', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
           render: (v /*, data, cellProps*/) => v,
         },
         {
           name: 'parent',
-          title: intl.trans('views.pages.explore.dialect.learn.words.parent_category', 'Parent Category', 'words'),
+          title: props.intl.trans(
+            'views.pages.explore.dialect.learn.words.parent_category',
+            'Parent Category',
+            'words'
+          ),
           render: (v, data /*, cellProps*/) => {
             const parentCategory = selectn('contextParameters.parentDoc.title', data)
             return parentCategory === 'Shared Categories' ? '' : parentCategory
@@ -205,13 +207,14 @@ class WordsCategoriesListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvCategory, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeCategories } = fvCategory
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeCategories,
@@ -220,6 +223,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

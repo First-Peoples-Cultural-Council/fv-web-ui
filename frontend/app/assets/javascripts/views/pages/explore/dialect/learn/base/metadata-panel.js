@@ -19,10 +19,10 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import StringHelpers from 'common/StringHelpers'
-import IntlService from 'views/services/intl'
 
 import Preview from 'views/components/Editor/Preview'
 import MetadataList from 'views/components/Browsing/metadata-list'
+import FVLabel from 'views/components/FVLabel/index'
 
 import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -34,8 +34,8 @@ import Typography from '@material-ui/core/Typography'
 
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
 /**
  * Metadata panel for word or phrase views.
  */
@@ -66,7 +66,7 @@ export class MetadataPanel extends Component {
       categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
     })
     metadata.push({
-      label: intl.trans('categories', 'Categories', 'first'),
+      label: this.props.intl.trans('categories', 'Categories', 'first'),
       value: categories,
     })
 
@@ -81,7 +81,7 @@ export class MetadataPanel extends Component {
     })
 
     metadata.push({
-      label: intl.trans('phrase_books', 'Phrase Books', 'first'),
+      label: this.props.intl.trans('phrase_books', 'Phrase Books', 'first'),
       value: phrase_books,
     })
 
@@ -89,7 +89,7 @@ export class MetadataPanel extends Component {
      * Reference
      */
     metadata.push({
-      label: intl.trans('reference', 'Reference', 'first'),
+      label: this.props.intl.trans('reference', 'Reference', 'first'),
       value: selectn('response.properties.fv:reference', computeEntity),
     })
 
@@ -107,7 +107,7 @@ export class MetadataPanel extends Component {
     })
 
     metadata.push({
-      label: intl.trans('sources', 'Sources', 'first'),
+      label: this.props.intl.trans('sources', 'Sources', 'first'),
       value: sources,
     })
 
@@ -115,7 +115,7 @@ export class MetadataPanel extends Component {
      * Date created
      */
     metadata.push({
-      label: intl.trans('date_created', 'Date Created', 'first'),
+      label: this.props.intl.trans('date_created', 'Date Created', 'first'),
       value: StringHelpers.formatUTCDateString(selectn('response.properties.dc:created', computeEntity)),
     })
 
@@ -123,7 +123,7 @@ export class MetadataPanel extends Component {
      * Status
      */
     metadata.push({
-      label: intl.trans('status', 'Status', 'first'),
+      label: this.props.intl.trans('status', 'Status', 'first'),
       value: selectn('response.state', computeEntity),
     })
 
@@ -131,7 +131,7 @@ export class MetadataPanel extends Component {
      * Version
      */
     metadata.push({
-      label: intl.trans('version', 'Version', 'first'),
+      label: this.props.intl.trans('version', 'Version', 'first'),
       value:
         selectn('response.properties.uid:major_version', computeEntity) +
         '.' +
@@ -156,7 +156,11 @@ export class MetadataPanel extends Component {
                 color: themePalette.secondary.contrastText,
               }}
             >
-              {intl.trans('metadata', 'METADATA', 'upper')}
+              <FVLabel
+                transKey="metadata"
+                defaultStr="METADATA"
+                transform="upper"
+              />
               <IconButton
                 onClick={() => {
                   this.setState({
@@ -183,4 +187,14 @@ export class MetadataPanel extends Component {
     )
   }
 }
-export default withTheme()(MetadataPanel)
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(withTheme()(MetadataPanel))

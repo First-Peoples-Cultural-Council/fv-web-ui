@@ -49,7 +49,7 @@ const ResourcesFields = {
   'fvm:shared': t.Boolean,
 }
 
-let ResourcesSelectorFields = Object.assign({}, ResourcesFields, {
+const ResourcesSelectorFields = Object.assign({}, ResourcesFields, {
   shared_fv: t.Boolean,
   shared_dialects: t.Boolean,
 })

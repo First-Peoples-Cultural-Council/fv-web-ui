@@ -27,10 +27,9 @@ import IconButton from '@material-ui/core/IconButton'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import IntlService from 'views/services/intl'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
-export default class PortalList extends Component {
+class PortalList extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
     filteredItems: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
@@ -81,12 +80,12 @@ export default class PortalList extends Component {
                 <GridListTile onClick={this.props.action.bind(this, tile.path.replace('/Portal', ''))} key={tile.uid}>
                   <img
                     src={UIHelpers.getThumbnail(logo, 'Medium')}
-                    alt={title + ' ' + intl.trans('logo', 'Logo', 'first')}
+                    alt={title + ' ' + this.props.intl.trans('logo', 'Logo', 'first')}
                   />
                   <GridListTileBar
-                    title={IntlService.instance.searchAndReplace(title)}
+                    title={this.props.intl.searchAndReplace(title)}
                     actionIcon={<IconButton>{actionIcon}</IconButton>}
-                    subtitle={IntlService.instance.searchAndReplace(tile.description) || ''}
+                    subtitle={this.props.intl.searchAndReplace(tile.description) || ''}
                   />
                 </GridListTile>
               )
@@ -97,3 +96,14 @@ export default class PortalList extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(PortalList)

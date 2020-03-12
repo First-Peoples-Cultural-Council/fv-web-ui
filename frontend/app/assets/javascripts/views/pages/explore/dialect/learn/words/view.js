@@ -48,13 +48,12 @@ import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import Tab from '@material-ui/core/Tab'
+import FVLabel from 'views/components/FVLabel/index'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
@@ -233,7 +232,7 @@ export class DialectViewWord extends Component {
       return (
         <div className="DialectViewWordPhraseContentItem">
           <h4 className="DialectViewWordPhraseContentItemTitle">
-            {intl.trans('acknowledgement', 'Acknowledgement', 'first')}
+            <FVLabel transKey="acknowledgement" defaultStr="Acknowledgement" transform="first" />
           </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
             <div>{acknowledgement}</div>
@@ -271,7 +270,9 @@ export class DialectViewWord extends Component {
     })
     return categories.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCategory">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('categories', 'Categories', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="categories" defaultStr="Categories" transform="first" />
+        </h4>
         <ul>{categories}</ul>
       </div>
     ) : null
@@ -280,12 +281,16 @@ export class DialectViewWord extends Component {
   _getCulturalNotes = (computeWord) => {
     const _cultNote = selectn('response.properties.fv:cultural_note', computeWord) || []
     const culturalNotes = _cultNote.map((culturalNote, key) => {
-      return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
+      return <div key={key}>{this.props.intl.searchAndReplace(culturalNote)}</div>
     })
     return culturalNotes.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCulturalNote">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          {intl.trans('views.pages.explore.dialect.learn.words.cultural_notes', 'Cultural Notes', 'first')}
+          <FVLabel
+            transKey="views.pages.explore.dialect.learn.words.cultural_notes"
+            defaultStr="Cultural Notes"
+            transform="first"
+          />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{culturalNotes}</div>
       </div>
@@ -343,7 +348,11 @@ export class DialectViewWord extends Component {
     return _literalTranslations.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseLiteralTranslation">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          {intl.trans('views.pages.explore.dialect.learn.words.literal_translations', 'Literal Translations', 'first')}
+          <FVLabel
+            transKey="views.pages.explore.dialect.learn.words.literal_translations"
+            defaultStr="Literal Translations"
+            transform="first"
+          />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{_literalTranslations}</div>
       </div>
@@ -357,7 +366,7 @@ export class DialectViewWord extends Component {
       return (
         <div className="DialectViewWordPhraseContentItem">
           <h4 className="DialectViewWordPhraseContentItemTitle">
-            {intl.trans('part_of_speech', 'Part of Speech', 'first')}
+            <FVLabel transKey="part_of_speech" defaultStr="Part of Speech" transform="first" />
           </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
             <div>{partOfSpeech}</div>
@@ -383,7 +392,9 @@ export class DialectViewWord extends Component {
 
     return photos.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhoto">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('photo_s', 'PHOTO(S)', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="photo_s" defaultStr="PHOTO(S)" transform="first" />
+        </h4>
         <MediaPanel type="FVPicture" items={photos} />
       </div>
     ) : null
@@ -430,7 +441,7 @@ export class DialectViewWord extends Component {
     return phrases.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          {intl.trans('related_phrases', 'Related Phrases', 'first')}
+          <FVLabel transKey="related_phrases" defaultStr="Related Phrases" transform="first" />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{phrases}</div>
       </div>
@@ -444,7 +455,7 @@ export class DialectViewWord extends Component {
       return (
         <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePronounciation">
           <h3 className="DialectViewWordPhraseContentItemTitle">
-            {intl.trans('pronunciation', 'Pronunciation', 'first')}
+            <FVLabel transKey="pronunciation" defaultStr="Pronunciation" transform="first" />
           </h3>
           <div className="DialectViewWordPhraseContentItemGroup">
             <div className={dialectClassName}>{pronunciation}</div>
@@ -472,7 +483,7 @@ export class DialectViewWord extends Component {
     })
     if (photosThumbnails.length > 0) {
       tabs.push(
-        <Tab key="pictures" label={intl.trans('pictures', 'Pictures', 'first')}>
+        <Tab key="pictures" label={this.props.intl.trans('pictures', 'Pictures', 'first')}>
           <div style={{ maxHeight: '400px' }}>{photosThumbnails}</div>
         </Tab>
       )
@@ -492,7 +503,7 @@ export class DialectViewWord extends Component {
     })
     if (videoThumbnails.length > 0) {
       tabs.push(
-        <Tab key="videos" label={intl.trans('videos', 'Videos', 'first')}>
+        <Tab key="videos" label={this.props.intl.trans('videos', 'Videos', 'first')}>
           <div>{videoThumbnails}</div>
         </Tab>
       )
@@ -505,7 +516,7 @@ export class DialectViewWord extends Component {
     })
     if (audios.length > 0) {
       tabs.push(
-        <Tab key="audio" label={intl.trans('audio', 'Audio', 'first')}>
+        <Tab key="audio" label={this.props.intl.trans('audio', 'Audio', 'first')}>
           <div>{audios}</div>
         </Tab>
       )
@@ -553,7 +564,7 @@ export class DialectViewWord extends Component {
     })
     if (phrases.length > 0) {
       tabs.push(
-        <Tab key="phrases" label={intl.trans('phrases', 'Phrases', 'first')}>
+        <Tab key="phrases" label={this.props.intl.trans('phrases', 'Phrases', 'first')}>
           <div>{phrases}</div>
         </Tab>
       )
@@ -577,7 +588,9 @@ export class DialectViewWord extends Component {
     })
     return videos.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseVideo">
-        <h4 className="DialectViewWordPhraseContentItemTitle">{intl.trans('video_s', 'VIDEO(S)', 'first')}</h4>
+        <h4 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="video_s" defaultStr="VIDEO(S)" transform="first" />
+        </h4>
         <MediaPanel type="FVVideo" items={videos} />
       </div>
     ) : null
@@ -604,13 +617,14 @@ export class DialectViewWord extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeDeleteWord, computeWord } = fvWord
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -620,6 +634,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

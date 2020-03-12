@@ -38,14 +38,13 @@ import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 
 import GeneralList from 'views/components/Browsing/general-list'
 import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 const DEFAULT_LANGUAGE = 'english'
 
 let FilteredCardList = null
@@ -168,12 +167,12 @@ export class PageDialectLearnStoriesAndSongs extends Component {
                   NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
                 }}
               >
-                {intl.trans(
-                  'views.pages.explore.dialect.learn.songs_stories.create_x_book',
-                  'Create ' + this.props.typeFilter + ' Book',
-                  'words',
-                  [this.props.typeFilter]
-                )}
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.songs_stories.create_x_book"
+                  defaultStr={'Create ' + this.props.typeFilter + ' Book'}
+                  transform="words"
+                  params={[this.props.typeFilter]}
+                />
               </FVButton>
               {/* <a
                 className="_btn _btn--primary"

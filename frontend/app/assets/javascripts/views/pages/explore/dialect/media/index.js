@@ -35,9 +35,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MediaList from 'views/components/Browsing/media-list'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from 'views/components/FVLabel/index'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 20, filters: { 'properties.dc:title': '', dialect: '' } }
 
@@ -120,7 +118,11 @@ export class DialectMedia extends Component {
       <PromiseWrapper hideFetch computeEntities={computeEntities}>
         <h1>
           {selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal)}{' '}
-          {intl.trans('media', 'Media', 'first')}
+          <FVLabel
+            transKey="media"
+            defaultStr="Media"
+            transform="first"
+          />
         </h1>
 
         <hr />

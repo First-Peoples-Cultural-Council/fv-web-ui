@@ -38,11 +38,10 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 
 import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
 import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
-import IntlService from 'views/services/intl'
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
-const intl = IntlService.instance
+import FVLabel from '../FVLabel/index'
 const DefaultFetcherParams = {
   currentPageIndex: 1,
   pageSize: 10,
@@ -81,8 +80,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {
@@ -97,7 +96,7 @@ export class BrowseComponent extends Component {
 
     const actions = [
       <button className="FlatButton" key="action1" onClick={this._handleClose} type="button">
-        {intl.trans('cancel', 'Cancel', 'first')}
+        <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
       </button>,
     ]
 
@@ -122,10 +121,10 @@ export class BrowseComponent extends Component {
         break
 
       case 'FVCategory':
-        title = `${intl.trans('select', 'Select', 'first')} ${
+        title = `${this.props.intl.trans('select', 'Select', 'first')} ${
           this.props.containerType === 'FVWord'
-            ? intl.trans('categories', 'Categories', 'first')
-            : intl.trans('phrase_books', 'Phrase Books', 'words')
+            ? this.props.intl.trans('categories', 'Categories', 'first')
+            : this.props.intl.trans('phrase_books', 'Phrase Books', 'words')
         }`
         // Note: CategoriesListView has a rowClickHandler that checks for a props.action fn()
         view = (
@@ -149,7 +148,7 @@ export class BrowseComponent extends Component {
         break
 
       case 'FVContributor':
-        title = `${intl.trans(
+        title = `${this.props.intl.trans(
           'select_contributors_from_x_dialect',
           'Select contributors from ' + selectn('properties.dc:title', dialect) + ' dialect',
           'first',
@@ -170,7 +169,7 @@ export class BrowseComponent extends Component {
         break
 
       case 'FVLink':
-        title = `${intl.trans(
+        title = `${this.props.intl.trans(
           'select_links_from_x_dialect',
           'Select links from ' + selectn('properties.dc:title', dialect) + ' dialect',
           'first',
@@ -193,7 +192,7 @@ export class BrowseComponent extends Component {
         break
 
       case 'FVWord':
-        title = `${intl.trans(
+        title = `${this.props.intl.trans(
           'select_existing_words_from_x_dialect',
           'Select existing words from ' + selectn('properties.dc:title', dialect) + ' dialect',
           'first',
@@ -239,7 +238,7 @@ export class BrowseComponent extends Component {
               color="secondary"
               onClick={this._handleClose}
             >
-              {intl.trans('cancel', 'Cancel', 'first')}
+              <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
             </FVButton>
           </DialogActions>
         </Dialog>
@@ -264,13 +263,14 @@ export class BrowseComponent extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPicture, fvResources, fvAudio, fvVideo, nuxeo } = state
+  const { fvPicture, fvResources, fvAudio, fvVideo, nuxeo, locale } = state
 
   const { computeSharedPictures } = fvPicture
   const { computeResources } = fvResources
   const { computeSharedAudios } = fvAudio
   const { computeSharedVideos } = fvVideo
   const { computeLogin } = nuxeo
+  const { intlService } = locale
 
   return {
     computeSharedPictures,
@@ -278,6 +278,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeSharedAudios,
     computeSharedVideos,
     computeLogin,
+    intl: intlService,
   }
 }
 

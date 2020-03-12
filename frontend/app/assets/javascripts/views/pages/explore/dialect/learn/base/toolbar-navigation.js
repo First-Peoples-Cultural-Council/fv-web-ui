@@ -32,9 +32,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
 import FVButton from 'views/components/FVButton'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Navigation for learning page
  */
@@ -131,19 +130,19 @@ export class ToolbarNavigation extends Component {
           <div className="col-xs-12 col-md-10">
             <div float="left">
               <a href={this._getNavigationURL('words')} onClick={this._onNavigateRequest.bind(this, 'words')}>
-                {intl.trans('words', 'Words', 'first') + ''}
+                <FVLabel transKey="words" defaultStr="Words" transform="first" />
               </a>
               <a href={this._getNavigationURL('phrases')} onClick={this._onNavigateRequest.bind(this, 'phrases')}>
-                {intl.trans('phrases', 'Phrases', 'first') + ''}
+                <FVLabel transKey="phrases" defaultStr="Phrases" transform="first" />
               </a>
               <a href={this._getNavigationURL('songs')} onClick={this._onNavigateRequest.bind(this, 'songs')}>
-                {intl.trans('songs', 'Songs', 'first') + ''}
+                <FVLabel transKey="songs" defaultStr="Songs" transform="first" />
               </a>
               <a href={this._getNavigationURL('stories')} onClick={this._onNavigateRequest.bind(this, 'stories')}>
-                {intl.trans('stories', 'Stories', 'first') + ''}
+                <FVLabel transKey="stories" defaultStr="Stories" transform="first" />
               </a>
               <a href={this._getNavigationURL('alphabet')} onClick={this._onNavigateRequest.bind(this, 'alphabet')}>
-                {intl.trans('alphabet', 'Alphabet', 'first')}
+                <FVLabel transKey="alphabet" defaultStr="Alphabet" transform="first" />
               </a>
             </div>
           </div>
@@ -152,7 +151,8 @@ export class ToolbarNavigation extends Component {
               <div className="col-xs-12 col-md-2">
                 <div className={classNames('hidden-xs')} float="right">
                   <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
-                    <EditorInsertChart /> {intl.trans('language_statistics', 'Language Statistics')}
+                    <EditorInsertChart />
+                    <FVLabel transKey="language_statistics" defaultStr="Language Statistics" />
                   </FVButton>
                 </div>
               </div>

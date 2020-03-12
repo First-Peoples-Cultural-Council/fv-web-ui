@@ -160,4 +160,14 @@ export default class UserOperations {
         })
     })
   }
+
+  static fvUpdateUser(username = '', languagePreference) {
+    const properties = BaseOperations.getProperties()
+
+    return properties.client.operation('FVUpdateUser').params({
+      username,
+      languagePreference,
+      groupsAction: 'update',
+    }).execute()
+  }
 }

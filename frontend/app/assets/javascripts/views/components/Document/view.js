@@ -32,10 +32,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import '!style-loader!css-loader!./DocumentView.css'
-
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import FVLabel from '../FVLabel/index'
 
 const { array, func, object, string } = PropTypes
 
@@ -108,7 +105,7 @@ export class DocumentView extends Component {
         case 'FVWord':
           actionButton = (
             <Link href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'words')}>
-              {intl.trans('view_word', 'View Word', 'words')}
+              <FVLabel transKey="view_word" defaultStr="View Word" transform="words" />
             </Link>
           )
           break
@@ -116,7 +113,7 @@ export class DocumentView extends Component {
         case 'FVPhrase':
           actionButton = (
             <Link href={NavigationHelpers.generateUIDPath('explore', selectn('response', computeDocument), 'phrases')}>
-              {intl.trans('view_phrase', 'View Phrase', 'phrases')}
+              <FVLabel transKey="view_phrase" defaultStr="View Phrase" transform="phrases" />
             </Link>
           )
           break
@@ -128,7 +125,8 @@ export class DocumentView extends Component {
           <Typography variant="display1">{selectn('response.title', computeDocument)}</Typography>
 
           <Typography variant="headline">
-            {intl.trans('type', 'Type', 'first')}: {selectn('response.type', computeDocument).replace('FV', '')}
+            <FVLabel transKey="type" defaultStr="Type" transform="first" />:{' '}
+            {selectn('response.type', computeDocument).replace('FV', '')}
           </Typography>
 
           {actionButton && (

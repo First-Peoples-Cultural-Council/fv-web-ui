@@ -12,10 +12,10 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Checkbox from '@material-ui/core/Checkbox'
 import withToggle from 'views/hoc/view/with-toggle'
-import IntlService from 'views/services/intl'
+import { connect } from 'react-redux'
 const FiltersWithToggle = withToggle()
 
-export default class FacetFilterListCategory extends Component {
+class FacetFilterListCategory extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     facets: PropTypes.array.isRequired,
@@ -29,12 +29,11 @@ export default class FacetFilterListCategory extends Component {
     facets: [],
   }
 
-  intl = IntlService.instance
 
   checkedCount = 0
 
   title = ''
-  titleUpdate = memoize(() => this.intl.searchAndReplace(this.props.title))
+  titleUpdate = memoize(() => this.props.intl.searchAndReplace(this.props.title))
 
   facetTitle = {}
   facetTitleUpdate = memoize((facets) => {
@@ -51,8 +50,8 @@ export default class FacetFilterListCategory extends Component {
         })
 
         childrenSort.map((facetChild) => {
-          // NOTE: this.intl.searchAndReplace is a bit slow
-          this.facetTitle[facetChild.uid] = this.intl.searchAndReplace(facetChild.title)
+          // NOTE: this.props.intl.searchAndReplace is a bit slow
+          this.facetTitle[facetChild.uid] = this.props.intl.searchAndReplace(facetChild.title)
         })
       }
     })
@@ -84,7 +83,7 @@ export default class FacetFilterListCategory extends Component {
           variant="contained"
           disabled={this.checkedCount === 0}
           style={{ margin: '0 0 10px 0' }}
-          // label={this.intl.trans('views.pages.explore.dialect.learn.words.find_by_category', 'Show All Words', 'words')}
+          // label={this.props.intl.trans('views.pages.explore.dialect.learn.words.find_by_category', 'Show All Words', 'words')}
           onClick={this._clearCategoryFilter}
         >
           {this.checkedCount > 1 ? 'Clear Category Filters' : 'Clear Category Filter'}
@@ -222,3 +221,14 @@ export default class FacetFilterListCategory extends Component {
     this.props.onFacetSelected(this.props.facetField, checkedFacetUid, childrenIds, isChecked, facetUidParent)
   }, 200)
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(FacetFilterListCategory)

@@ -32,14 +32,12 @@ import FVButton from 'views/components/FVButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
+import FVLabel from 'views/components/FVLabel/index'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 /**
  * Create contributor
  */
@@ -179,12 +177,11 @@ export class PageDialectContributorsCreate extends Component {
     return (
       <div>
         <h1 style={{ lineHeight: '1.2', margin: '0 0 10px' }}>
-          {intl.trans(
-            'views.pages.explore.dialect.contributors.add_new_contributor_to_x',
-            'Add New Contributor to ' + dialect.get('dc:title'),
-            null,
-            [dialect.get('dc:title')]
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.contributors.add_new_contributor_to_x"
+            defaultStr={'Add New Contributor to ' + dialect.get('dc:title')}
+            params={[dialect.get('dc:title')]}
+          />
         </h1>
 
         {contributor && contributor.message && contributor.action.includes('CREATE') ? (
@@ -203,7 +200,11 @@ export class PageDialectContributorsCreate extends Component {
               />
               <div className="form-group" style={{ marginTop: '20px' }}>
                 <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
-                  {intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </FVButton>
               </div>
             </form>

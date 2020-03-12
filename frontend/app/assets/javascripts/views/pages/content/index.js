@@ -35,9 +35,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Typography from '@material-ui/core/Typography'
 
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -125,7 +122,7 @@ export class PageContent extends Component {
           <div>
             {pageTitle && (
               <Typography variant="headline" gutterBottom>
-                {intl.searchAndReplace(pageTitle, { case: 'first' })}
+                {this.props.intl.searchAndReplace(pageTitle, { case: 'first' })}
               </Typography>
             )}
 
@@ -133,7 +130,7 @@ export class PageContent extends Component {
 
             {contentTitle && (
               <Typography variant="title" gutterBottom>
-                {intl.searchAndReplace(contentTitle, { case: 'first' })}
+                {this.props.intl.searchAndReplace(contentTitle, { case: 'first' })}
               </Typography>
             )}
 
@@ -186,12 +183,13 @@ export class PageContent extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, navigation, nuxeo, windowPath } = state
+  const { fvPage, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computePage } = fvPage
   const { _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeLogin,
@@ -199,6 +197,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     routeParams: route.routeParams,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

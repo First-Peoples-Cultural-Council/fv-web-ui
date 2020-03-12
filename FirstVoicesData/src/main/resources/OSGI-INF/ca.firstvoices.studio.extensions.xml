@@ -48,6 +48,8 @@
         <schema name="innounending" prefix="innounending" override="true" src="data/schemas/innounending.xsd"/>
         <schema name="inpersonalpronounce" prefix="inpersonalpronounce" override="true" src="data/schemas/inpersonalpronounce.xsd"/>
         <schema name="inphrase" prefix="inphrase" override="true" src="data/schemas/inphrase.xsd"/>
+        <schema name="fvlabel" prefix="fvlabel" override="true" src="data/schemas/fvlabel.xsd"/>
+        <schema name="fvlabeldictionary" prefix="fvlabeldictionary" override="true" src="data/schemas/fvlabeldictionary.xsd"/>
         <schema name="inplacelocation" prefix="inplacelocation" override="true" src="data/schemas/inplacelocation.xsd"/>
         <schema name="inroot" prefix="inroot" override="true" src="data/schemas/inroot.xsd"/>
         <schema name="inverbending" prefix="inverbending" override="true" src="data/schemas/inverbending.xsd"/>
@@ -86,6 +88,7 @@
         <schema name="var_Task11b1" prefix="var_Task11b1" override="true" src="data/schemas/var_Task11b1.xsd"/>
         <schema name="var_Task11b2" prefix="var_Task11b2" override="true" src="data/schemas/var_Task11b2.xsd"/>
         <schema name="var_FVUnpublishLanguageAsset" prefix="var_FVUnpublishLanguageAsset" override="true" src="data/schemas/var_FVUnpublishLanguageAsset.xsd"/>
+        <schema name="fv_label_vocabulary" prefix="fv_label_vocabulary" override="true" src="data/schemas/fv_label_vocabulary.xsd"/>
     </extension>
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
         <doctype name="Folder" extends="Document">
@@ -219,6 +222,7 @@
             <facet name="PublishSpace"/>
             <subtypes>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
             </subtypes>
         </doctype>
         <doctype name="FVDialect" append="true">
@@ -301,6 +305,8 @@
                 <type>FVAlphabet</type>
                 <type>FVContributors</type>
                 <type>FVDictionary</type>
+                <type>FVLabelDictionary</type>
+                <type>FVLabel</type>
                 <type>FVDraftFolder</type>
                 <type>FVPortal</type>
                 <type>FVResources</type>
@@ -322,6 +328,15 @@
                 <type>FVWord</type>
             </subtypes>
         </doctype>
+        <doctype name="FVLabelDictionary" extends="Folder">
+            <schema name="fvlabeldictionary"/>
+            <schema name="fvancestry"/>
+            <facet name="Publishable"/>
+            <facet name="PublishSpace"/>
+            <subtypes>
+                <type>FVLabel</type>
+            </subtypes>
+        </doctype>
         <doctype name="FVDialect" append="true">
             <subtypes>
                 <type>FVDictionary</type>
@@ -338,6 +353,7 @@
                 <type>FVBooks</type>
                 <type>FVCategories</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVCharacter</type>
                 <type>FVLink</type>
                 <type>FVPage</type>
@@ -345,6 +361,7 @@
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
+                <type>FVLabel</type>
             </subtypes>
         </doctype>
         <doctype name="FVDialect" append="true">
@@ -766,6 +783,33 @@
         <doctype name="first_as" extends="DefaultSearch">
             <schema name="first_as"/>
         </doctype>
+        <doctype name="FVLabel" extends="Document">
+            <schema name="fvlabel"/>
+            <schema name="dublincore"/>
+            <schema name="common"/>
+            <schema name="uid"/>
+            <schema name="fvancestry"/>
+            <schema name="fvcore"/>
+            <schema name="fvlegacy"/>
+            <facet name="NXTag"/>
+            <facet name="Publishable"/>
+            <facet name="Commentable"/>
+            <facet name="HasRelatedText"/>
+        </doctype>
+        <doctype name="FVLabelCategory" extends="Document">
+            <schema name="fvcategory"/>
+            <schema name="dublincore"/>
+            <schema name="common"/>
+            <schema name="uid"/>
+            <schema name="fvancestry"/>
+            <schema name="fvlegacy"/>
+            <schema name="file"/>
+            <facet name="Folderish"/>
+            <facet name="Publishable"/>
+            <subtypes>
+                <type>FVLabelCategory</type>
+            </subtypes>
+        </doctype>
         <facet name="facet-var_Task2979">
             <schema name="var_Task2979"/>
         </facet>
@@ -856,6 +900,9 @@
             <type name="FVCategory">fv-lifecycle</type>
         </types>
         <types>
+            <type name="FVLabelCategory">fv-lifecycle</type>
+        </types>
+        <types>
             <type name="FVCharacter">fv-lifecycle</type>
         </types>
         <types>
@@ -869,6 +916,12 @@
         </types>
         <types>
             <type name="FVDictionary">fv-lifecycle</type>
+        </types>
+        <types>
+            <type name="FVLabel">fv-lifecycle</type>
+        </types>
+        <types>
+            <type name="FVLabelDictionary">fv-lifecycle</type>
         </types>
         <types>
             <type name="FVDraftFolder">default</type>
@@ -1120,6 +1173,27 @@
         </type>
         <type id="FVCategory">
             <label>Category</label>
+            <category>LanguageAssets</category>
+            <description></description>
+            <default-view>view_documents</default-view>
+            <layouts mode="create">
+                <layout>layout@FVCategory-create</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>layout@FVCategory-edit</layout>
+            </layouts>
+            <layouts mode="view">
+                <layout>layout@FVCategory-view</layout>
+            </layouts>
+            <contentViews category="content">
+                <contentView showInExportView="false">document_content</contentView>
+            </contentViews>
+            <contentViews category="trash_content">
+                <contentView showInExportView="false">document_trash_content</contentView>
+            </contentViews>
+        </type>
+        <type id="FVLabelCategory">
+            <label>Label Category</label>
             <category>LanguageAssets</category>
             <description></description>
             <default-view>view_documents</default-view>
@@ -1831,6 +1905,46 @@
             </layouts>
 
         </type>
+        
+        <type id="FVLabel">
+            <label>Label</label>
+            <category>SimpleDocument</category>
+            <icon>/img/file.png</icon>
+            <bigIcon>/img/file_100.png</bigIcon>
+            <description>A UI label translation</description>
+            <default-view>view_documents</default-view>
+            <layouts mode="create">
+                <layout>layout@FVLabel-create</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>layout@FVPhrase-edit</layout>
+            </layouts>
+            <layouts mode="view">
+                <layout>layout@FVLabel-view</layout>
+            </layouts>
+        </type>
+        
+        <type id="FVLabelDictionary">
+            <label>FVLabelDictionary</label>
+            <category>LanguageAssets</category>
+            <description>TODO: fill in</description>
+            <default-view>view_documents</default-view>
+            <layouts mode="create">
+                <layout>layout@FVLabelDictionary-create</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>layout@FVDictionary-edit</layout>
+            </layouts>
+            <layouts mode="view">
+                <layout>layout@FVDictionary-view</layout>
+            </layouts>
+            <contentViews category="content">
+                <contentView showInExportView="false">FVWordListing</contentView>
+            </contentViews>
+            <contentViews category="trash_content">
+                <contentView showInExportView="false">document_trash_content</contentView>
+            </contentViews>
+        </type>
     </extension>  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">    <action id="TAB_CONTENT_JBPM">      <filter id="folder.deny.tab_content_jbpm">        <rule grant="false">          <type>Folder</type>
 </rule>
 </filter>
@@ -1998,6 +2112,7 @@
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
                 <type>FVPhrase</type>
@@ -2022,12 +2137,14 @@
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
                 <type>FVPhrase</type>
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
+                <type>FVLabel</type>
                 <condition>#{(currentDocument.currentLifeCycleState == 'New' || currentDocument.currentLifeCycleState == 'Disabled') &amp;&amp; (documentManager.hasPermission(currentDocument.ref, 'Everything') || documentManager.hasPermission(currentDocument.ref, 'Approve') ) }</condition>
             </rule>
             <rule grant="false">
@@ -22029,6 +22146,270 @@
                 </fields>
             </widget>
         </layout>
+        <layout name="layout@FVLabel-create">
+            <templates>
+                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>title</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>labelKey</widget>
+                </row>
+            </rows>
+            <widget name="title" type="text">
+                <labels>
+                    <label mode="any">Phrase</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>dc:title</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="labelKey" type="text">
+                <labels>
+                    <label mode="any">Label Key</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvlabel:labelKey</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+        </layout>
+        
+        <layout name="layout@FVPhrase-edit">
+            <templates>
+                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>title</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>labelKey</widget>
+                </row>
+            </rows>
+            <widget name="title" type="text">
+                <labels>
+                    <label mode="any">Phrase</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>dc:title</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="labelKey" type="text">
+                <labels>
+                    <label mode="any">Label Key</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvlabel:labelKey</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+        </layout>
+        <layout name="layout@FVLabel-view">
+            <templates>
+                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>title</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>labelKey</widget>
+                </row>
+            </rows>
+            <widget name="title" type="text">
+                <labels>
+                    <label mode="any">Phrase</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>dc:title</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="labelKey" type="text">
+                <labels>
+                    <label mode="any">Label Key</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvlabel:labelKey</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+        </layout>
+        
+        <layout name="layout@FVLabelDictionary-create">
+            <templates>
+                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>title</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>isPrivate</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>type</widget>
+                </row>
+            </rows>
+            <widget name="title" type="text">
+                <labels>
+                    <label mode="any">Title</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>dc:title</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="isPrivate" type="checkbox">
+                <labels>
+                    <label mode="any">Is Private?</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvdictionary:private</field>
+                </fields>
+            </widget>
+            <widget name="type" type="text">
+                            <labels>
+                    <label mode="any">Document Type</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>type</field>
+                </fields>
+                <widgetModes>
+                    <mode value="create">view</mode>
+                </widgetModes>
+            </widget>
+        </layout>
+        <layout name="vocabulary-fv_labels">
+            <templates>
+                <template mode="any">/directory/directory_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <widget>parent</widget>
+                </row>
+                <row>
+                    <widget>template_strings</widget>
+                </row>
+                <row>
+                    <widget>xvocabulary_id</widget>
+                </row>
+                <row>
+                    <widget>xvocabulary_label</widget>
+                </row>
+                <row>
+                    <widget>xvocabulary_obsolete</widget>
+                </row>
+                <row>
+                    <widget>xvocabulary_order</widget>
+                </row>
+            </rows>
+            <widget name="parent" type="selectOneDirectory">
+                <labels>
+                    <label mode="any">label.vocabulary.entry.parent</label>
+                </labels>
+                <translated>true</translated>
+                <fields>
+                    <field>xvocabulary:parent</field>
+                </fields>
+                <properties mode="any">
+                    <property name="directoryName">fv_labels</property>
+                    <property name="localize">true</property>
+                </properties>
+                <properties widgetMode="edit">
+                    <property name="required">false</property>
+                    <property name="displayObsoleteEntries">true</property>
+                </properties>
+            </widget>
+            <widget name="template_strings" type="text">
+                <labels>
+                    <label mode="any">Template Variables (Separate by commas)</label>
+                </labels>
+                <translated>true</translated>
+                <fields>
+                    <field>fv_labels:template_strings</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+        </layout>
     </extension>
     <extension target="org.nuxeo.theme.styling.service" point="flavors">
         <flavor name="logo" extends="default">
@@ -23564,6 +23945,7 @@ function run(input, params) {
                 <templateItem typeName="FVResources" id="Resources" title="Resources" description=""/>
                 <templateItem typeName="FVContributors" id="Contributors" title="Contributors" description=""/>
                 <templateItem typeName="INDictionary" id="Dictionary" title="Dictionary" description=""/>
+                <templateItem typeName="FVLabelDictionary" id="Label Dictionary" title="Label Dictionary" description=""/>
                 <templateItem typeName="Forum" id="Forum" title="Forum" description=""/>
                 <templateItem typeName="FVPortal" id="Portal" title="Portal" description=""/>
                 <templateItem typeName="FVCategories" id="Categories" title="Categories" description=""/>
@@ -23740,6 +24122,23 @@ function run(input, params) {
             <dataFile>data/vocabularies/reference.csv</dataFile>
             <cacheEntryName>vocab-reference-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-reference-cache-without-references</cacheEntryWithoutReferencesName>
+        </directory>
+        <directory name="fv_labels" extends="template-xvocabulary">
+            <schema>fv_label_vocabulary</schema>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>always</createTablePolicy>
+            <table>studio_vocabulary_fv_labels</table>
+            <dataFile>data/vocabularies/fv_labels.csv</dataFile>
+            <cacheEntryName>fv_labels-cache</cacheEntryName>
+            <cacheEntryWithoutReferencesName>vocab-labels-cache-without-references</cacheEntryWithoutReferencesName>
+        </directory>
+        <directory name="fv_label_categories" extends="template-xvocabulary">
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>always</createTablePolicy>
+            <table>studio_vocabulary_fv_label_categories</table>
+            <dataFile>data/vocabularies/fv_label_categories.csv</dataFile>
+            <cacheEntryName>fv_label_categories-cache</cacheEntryName>
+            <cacheEntryWithoutReferencesName>vocab-label-categories-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
     </extension>
     <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
@@ -23923,6 +24322,26 @@ function run(input, params) {
             <option name="concurrencyLevel">500</option>
             <ttl>60</ttl>
         </cache>
+        <cache name="fv_labels-cache">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
+        <cache name="vocab-labels-cache-without-references">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
+        <cache name="fv_label_categories-cache">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
+        <cache name="vocab-label-categories-cache-without-references">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
     </extension>
     <extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager" point="directories">
         <directory name="WorkflowType" layout="vocabulary" sortField="label"/>
@@ -23946,6 +24365,18 @@ function run(input, params) {
         <directory name="in_possession" layout="vocabulary" sortField="label"/>
         <directory name="in_transitivity" layout="vocabulary" sortField="label"/>
         <directory name="in_word_classes" layout="vocabulary" sortField="label"/>
+        <directory name="fv_labels" layout="vocabulary-fv_labels" sortField="label">
+            <deleteConstraint class="org.nuxeo.ecm.directory.HierarchicalDirectoryDeleteConstraint">
+                <property name="targetDirectory">fv_labels</property>
+                <property name="targetDirectoryField">parent</property>
+            </deleteConstraint>
+        </directory>
+        <directory name="fv_label_categories" layout="vocabulary" sortField="label">
+            <deleteConstraint class="org.nuxeo.ecm.directory.HierarchicalDirectoryDeleteConstraint">
+                <property name="targetDirectory">fv_categories</property>
+                <property name="targetDirectoryField">parent</property>
+            </deleteConstraint>
+        </directory>
         <directory name="parts_of_speech" layout="vocabulary-parts_of_speech" sortField="label">
             <deleteConstraint class="org.nuxeo.ecm.directory.HierarchicalDirectoryDeleteConstraint">
                 <property name="targetDirectory">parts_of_speech</property>
@@ -23968,6 +24399,7 @@ function run(input, params) {
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVCharacter</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
@@ -23989,6 +24421,7 @@ function run(input, params) {
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVCharacter</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
@@ -23997,6 +24430,7 @@ function run(input, params) {
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
+                <type>FVLabel</type>
                 <condition>#{ (currentDocument.currentLifeCycleState == 'New' || currentDocument.currentLifeCycleState == 'Disabled') &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }</condition>
             </rule>
             <rule grant="false">
@@ -24010,6 +24444,7 @@ function run(input, params) {
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVCharacter</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
@@ -24032,6 +24467,7 @@ function run(input, params) {
                 <type>FVAudio</type>
                 <type>FVBook</type>
                 <type>FVCategory</type>
+                <type>FVLabelCategory</type>
                 <type>FVCharacter</type>
                 <type>FVContributor</type>
                 <type>FVDialect</type>
@@ -24075,9 +24511,12 @@ function run(input, params) {
             <type>FVBooks</type>
             <type>FVCategories</type>
             <type>FVCategory</type>
+            <type>FVLabelCategory</type>
             <type>FVContributors</type>
             <type>FVDialect</type>
-            <type>FVDictionary</type>
+            <type>FVDictionary</type> 
+            <type>FVLabel</type> 
+            <type>FVLabelDictionary</type> 
             <type>FVGallery</type>
             <type>FVLanguage</type>
             <type>FVLanguageFamily</type>

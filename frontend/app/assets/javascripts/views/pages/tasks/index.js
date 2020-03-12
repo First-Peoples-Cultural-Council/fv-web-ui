@@ -43,11 +43,10 @@ import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./Tasks.css'
+import FVLabel from '../../components/FVLabel/index'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
-const intl = IntlService.instance
 
 const { func, object } = PropTypes
 export class Tasks extends Component {
@@ -140,9 +139,11 @@ export class Tasks extends Component {
         ])}
       >
         <>
-          <h1>{intl.trans('tasks', 'Tasks', 'first')}</h1>
+          <h1>{this.props.intl.trans('tasks', 'Tasks', 'first')}</h1>
 
-          {hasTasks === false && <h2>{intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')}</h2>}
+          {hasTasks === false && (
+            <h2>{this.props.intl.trans('views.pages.tasks.no_tasks', 'There are currently No tasks.')}</h2>
+          )}
 
           {userRegistrationTaskList}
 
@@ -196,7 +197,7 @@ export class Tasks extends Component {
 
           {hasTasks && (
             <GroupAssignmentDialog
-              title={intl.trans('approve', 'Approve', 'first')}
+              title={this.props.intl.trans('approve', 'Approve', 'first')}
               fieldMapping={{
                 id: 'uid',
                 title: 'properties.dc:title',
@@ -248,7 +249,7 @@ expired: true
     return [
       {
         name: 'documentTitle',
-        title: intl.trans('document_title', 'Document Title', 'words'),
+        title: this.props.intl.trans('document_title', 'Document Title', 'words'),
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
         render: (v, data) => {
           return (
@@ -266,15 +267,15 @@ expired: true
       },
       {
         name: 'taskName',
-        title: intl.trans('task_type', 'Task Type', 'words'),
+        title: this.props.intl.trans('task_type', 'Task Type', 'words'),
         render: (v) => {
-          return <span className="Tasks__taskType">{intl.searchAndReplace(v)}</span>
+          return <span className="Tasks__taskType">{this.props.intl.searchAndReplace(v)}</span>
         },
         // sortBy: 'taskName',
       },
       {
         name: 'taskActions',
-        title: intl.trans('actions', 'Actions', 'words'),
+        title: this.props.intl.trans('actions', 'Actions', 'words'),
         render: (v, data) => {
           return (
             <div data-testid="Tasks__approveRejectContainer" className="Tasks__approveRejectContainer">
@@ -287,7 +288,7 @@ expired: true
                   this.handleTaskActions(data.id, 'approve')
                 }}
               >
-                {intl.trans('approve', 'Approve', 'first')}
+                <FVLabel transKey="approve" defaultStr="Approve" transform="first" />
               </FVButton>
 
               <FVButton
@@ -299,7 +300,7 @@ expired: true
                   this.handleTaskActions(data.id, 'reject')
                 }}
               >
-                {intl.trans('reject', 'Reject', 'first')}
+                <FVLabel transKey="reject" defaultStr="Reject" transform="first" />
               </FVButton>
             </div>
           )
@@ -307,7 +308,7 @@ expired: true
       },
       {
         name: 'dueDate',
-        title: intl.trans('task_due_date', 'Task Due Date', 'words'),
+        title: this.props.intl.trans('task_due_date', 'Task Due Date', 'words'),
         render: (v) => {
           return StringHelpers.formatUTCDateString(v)
         },
@@ -373,7 +374,7 @@ expired: true
             status: 'validate',
           },
           null,
-          intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
+          this.props.intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
         )
         break
 
@@ -385,7 +386,7 @@ expired: true
             status: 'reject',
           },
           null,
-          intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
+          this.props.intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
         )
         break
       default: // NOTE: do nothing
@@ -403,7 +404,7 @@ expired: true
         appurl: NavigationHelpers.getBaseWebUIURL(),
       },
       null,
-      intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
+      this.props.intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
     )
 
     this.setState({
@@ -415,7 +416,7 @@ expired: true
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvUser, tasks, nuxeo } = state
+  const { fvDialect, fvUser, tasks, nuxeo, locale } = state
 
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
@@ -427,6 +428,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeUserTasksApprove,
     computeUserTasksReject,
   } = tasks
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -437,6 +439,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeUserTasks,
     computeUserTasksApprove,
     computeUserTasksReject,
+    intl: intlService,
   }
 }
 

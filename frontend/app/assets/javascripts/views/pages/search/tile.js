@@ -9,11 +9,9 @@ import GridListTile from '@material-ui/core/GridListTile'
 
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
+import { connect } from 'react-redux'
 
-const intl = IntlService.instance
-
-export default class SearchResultTile extends Component {
+class SearchResultTile extends Component {
   static defaultProps = {}
   static propTypes = {
     tile: PropTypes.any.isRequired, // TODO: set appropriate propType
@@ -31,8 +29,8 @@ export default class SearchResultTile extends Component {
     const tile = this.props.tile
 
     let type = selectn('type', tile) || ''
-    let desc = intl.searchAndReplace(selectn('properties.dc:description', tile))
-    let title = intl.searchAndReplace(selectn('properties.dc:title', tile))
+    let desc = this.props.intl.searchAndReplace(selectn('properties.dc:description', tile))
+    let title = this.props.intl.searchAndReplace(selectn('properties.dc:title', tile))
     let subtitle = ''
     const path = [
       selectn('contextParameters.ancestry.family.dc:title', tile),
@@ -49,7 +47,7 @@ export default class SearchResultTile extends Component {
         const literal_translations = selectn('properties.fv:literal_translation', tile) || []
         const lt_s =
           selectn('length', literal_translations) > 0
-            ? intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
+            ? this.props.intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
             : ''
 
         subtitle = lt_s + literal_translations.map((v) => v.translation).join(', ')
@@ -60,7 +58,7 @@ export default class SearchResultTile extends Component {
         definitions.length > 0
           ? output.push(
             '<em>' +
-                intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
+                this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 definitions.map((v) => v.translation).join(', ')
           )
@@ -70,7 +68,7 @@ export default class SearchResultTile extends Component {
         part_of_speech
           ? output.push(
             '<em>' +
-                intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
+                this.props.intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
                 '</em>: ' +
                 part_of_speech
           )
@@ -78,14 +76,14 @@ export default class SearchResultTile extends Component {
 
         const pronunciation = selectn('properties.fv-word:pronunciation', tile)
         pronunciation
-          ? output.push('<em>' + intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation)
+          ? output.push('<em>' + this.props.intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation)
           : null
 
         const categories = selectn('contextParameters.word.categories', tile) || []
         categories.length > 0
           ? output.push(
             '<em>' +
-                intl.trans('categories', 'Categories', 'first') +
+                this.props.intl.trans('categories', 'Categories', 'first') +
                 '</em>: ' +
                 categories.map((v) => selectn('dc:title', v)).join(', ')
           )
@@ -102,7 +100,7 @@ export default class SearchResultTile extends Component {
         const p_literal_translations = selectn('properties.fv:literal_translation', tile) || []
         const p_lt_s =
           selectn('length', p_literal_translations) > 0
-            ? intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
+            ? this.props.intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
             : ''
 
         subtitle = p_lt_s + p_literal_translations.map((v) => v.translation).join(', ')
@@ -113,7 +111,7 @@ export default class SearchResultTile extends Component {
         p_definitions.length > 0
           ? p_output.push(
             '<em>' +
-                intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
+                this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 p_definitions.map((v) => v.translation).join(', ')
           )
@@ -123,7 +121,7 @@ export default class SearchResultTile extends Component {
         p_categories.length > 0
           ? p_output.push(
             '<em>' +
-                intl.trans('phrase_bookes', 'Phrase Books', 'words') +
+                this.props.intl.trans('phrase_bookes', 'Phrase Books', 'words') +
                 '</em>: ' +
                 p_categories.map((v) => selectn('dc:title', v)).join(', ')
           )
@@ -216,3 +214,14 @@ export default class SearchResultTile extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(SearchResultTile)

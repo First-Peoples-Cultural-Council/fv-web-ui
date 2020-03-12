@@ -20,9 +20,10 @@ import selectn from 'selectn'
 import classNames from 'classnames'
 
 import ConfGlobal from 'conf/local.js'
-import IntlService from 'views/services/intl'
+import FVLabel from '../FVLabel/index'
+import { connect } from 'react-redux'
 
-export default class IntroCardView extends Component {
+class IntroCardView extends Component {
   static propTypes = {
     primary1Color: PropTypes.string.isRequired,
     primary2Color: PropTypes.string.isRequired,
@@ -66,7 +67,10 @@ export default class IntroCardView extends Component {
             fontWeight: 500,
           }}
         >
-          {IntlService.instance.searchAndReplace(selectn('title', this.props.block))}
+          <FVLabel
+
+          />
+          {this.props.intl.searchAndReplace(selectn('title', this.props.block))}
         </h2>
         <p
           className={classNames('body')}
@@ -83,9 +87,26 @@ export default class IntroCardView extends Component {
             fontSize: '0.9em',
           }}
         >
-          {IntlService.instance.translate({ key: 'read_more', default: 'READ MORE', case: 'upper', append: ' +' })}
+          <FVLabel
+            transKey="read_more"
+            defaultStr="READ MORE"
+            transform="upper"
+            append=" +"
+          />
         </div>
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(IntroCardView)
+

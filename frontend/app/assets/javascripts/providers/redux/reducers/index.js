@@ -29,6 +29,7 @@ import { fvCharacterReducer } from './fvCharacter'
 import { fvContributorReducer } from './fvContributor'
 import { fvDialectReducer } from './fvDialect'
 import { fvGalleryReducer } from './fvGallery'
+import { fvLabelReducer } from './fvLabel'
 import { fvLanguageReducer } from './fvLanguage'
 import { fvLanguageFamilyReducer } from './fvLanguageFamily'
 import { fvLinkReducer } from './fvLink'
@@ -41,6 +42,7 @@ import { fvUserReducer } from './fvUser'
 import { fvVideoReducer } from './fvVideo'
 import { fvWordReducer } from './fvWord'
 import { listViewReducer } from './listView'
+import { localeReducer } from './locale'
 import { navigationReducer } from './navigation'
 import { nuxeoReducer } from './nuxeo'
 import { reportsReducer } from './reports'
@@ -62,6 +64,7 @@ export default combineReducers({
   fvContributor: fvContributorReducer,
   fvDialect: fvDialectReducer,
   fvGallery: fvGalleryReducer,
+  fvLabel: fvLabelReducer,
   fvLanguage: fvLanguageReducer,
   fvLanguageFamily: fvLanguageFamilyReducer,
   fvLink: fvLinkReducer,
@@ -73,6 +76,7 @@ export default combineReducers({
   fvUser: fvUserReducer,
   fvVideo: fvVideoReducer,
   fvWord: fvWordReducer,
+  locale: localeReducer,
   listView: listViewReducer,
   navigation: navigationReducer,
   nuxeo: nuxeoReducer,

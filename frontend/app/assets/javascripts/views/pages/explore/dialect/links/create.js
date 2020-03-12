@@ -36,9 +36,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Create links
  */
@@ -176,12 +175,12 @@ export class PageDialectLinksCreate extends Component {
     return (
       <div>
         <Typography variant="headline" component="h2">
-          {intl.trans(
-            'views.pages.explore.dialect.links.add_new_link_to_x',
-            'Add New Link to ' + dialect.get('dc:title'),
-            'words',
-            [dialect.get('dc:title')]
-          )}
+          <FVLabel
+            transKey="views.pages.explore.dialect.links.add_new_link_to_x"
+            defaultStr={'Add New Link to ' + dialect.get('dc:title')}
+            transform="words"
+            params={[dialect.get('dc:title')]}
+          />
         </Typography>
 
         {link && link.message && link.action.includes('CREATE') ? <StatusBar message={link.message} /> : ''}
@@ -198,7 +197,11 @@ export class PageDialectLinksCreate extends Component {
               />
               <div className="form-group">
                 <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </button>
               </div>
             </form>

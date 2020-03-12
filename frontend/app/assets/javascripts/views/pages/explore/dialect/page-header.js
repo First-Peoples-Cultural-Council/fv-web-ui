@@ -19,14 +19,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import NavigationHelpers from 'common/NavigationHelpers'
 import selectn from 'selectn'
-import IntlService from 'views/services/intl'
-
-const intl = IntlService.instance
+import { connect } from 'react-redux'
 
 /**
  * Header for dialect pages
  */
-export default class PageHeader extends Component {
+class PageHeader extends Component {
   static propTypes = {
     portalLogo: PropTypes.string,
     dialectName: PropTypes.string,
@@ -52,7 +50,7 @@ export default class PageHeader extends Component {
           ''
         )}
         <h1 style={{ fontSize: '2em' }}>
-          {dialectName} {intl.searchAndReplace(title)}
+          {dialectName} {this.props.intl.searchAndReplace(title)}
         </h1>
         {/*<div>
                 <span className={classNames('label', 'label-primary')}><strong>543</strong> Words</span> <span className={classNames('label', 'label-primary')}><strong>143</strong> Phrases</span> <span className={classNames('label', 'label-primary')}><strong>243</strong> Songs</span> <span className={classNames('label', 'label-primary')}><strong>43</strong> Stories</span>
@@ -61,3 +59,14 @@ export default class PageHeader extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+export default connect(mapStateToProps)(PageHeader)

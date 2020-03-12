@@ -18,12 +18,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
 import '!style-loader!css-loader!./Footer.css'
 import Link from 'views/components/Link'
+import FVLabel from '../../FVLabel/index'
 export default class Footer extends React.Component {
-  intl = IntlService.instance
-
   static propTypes = {
     className: PropTypes.string,
   }
@@ -53,50 +51,28 @@ export default class Footer extends React.Component {
               <div className={classNames('col-xs-12', 'col-md-5', 'col-md-offset-1', 'Footer__group')}>
                 <p className="PrintHide">
                   <Link href={NavigationHelpers.generateStaticURL('/content/disclaimer/')}>
-                    {this.intl.translate({
-                      key: 'general.disclaimer',
-                      default: 'Disclaimer',
-                      case: 'first',
-                    })}
+                    <FVLabel transKey="general.disclaimer" defaultStr="Disclaimer" transform="first" />
                   </Link>
                   {' | '}
                   <Link href={NavigationHelpers.generateStaticURL('/content/conditions/')}>
-                    {this.intl.translate({
-                      key: 'views.components.navigation.conditions_of_use',
-                      default: 'Conditions of Use',
-                      case: 'first',
-                    })}
+                    <FVLabel
+                      transKey="views.components.navigation.conditions_of_use"
+                      defaultStr="Conditions of Use"
+                      transform="first"
+                    />
                   </Link>
                   {' | '}
                   <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
-                    {this.intl.translate({
-                      key: 'general.help',
-                      default: 'Help',
-                      case: 'first',
-                    })}
+                    <FVLabel transKey="general.help" defaultStr="Help" transform="first" />
                   </a>
                   {' | '}
                   <a href="http://fpcf.ca/donate-now/">
-                    {this.intl.translate({
-                      key: 'general.donate',
-                      default: 'Donate',
-                      case: 'first',
-                    })}
+                    <FVLabel transKey="general.donate" defaultStr="Donate" transform="first" />
                   </a>
                 </p>
                 <p>
-                  {this.intl.translate({
-                    key: 'general.phone',
-                    default: 'Phone',
-                    case: 'first',
-                  })}{' '}
-                  : +1-250-882-8919 ·{' '}
-                  {this.intl.translate({
-                    key: 'general.email',
-                    default: 'Email',
-                    case: 'first',
-                  })}{' '}
-                  : support@fpcc.ca
+                  <FVLabel transKey="general.phone" defaultStr="Phone" transform="first" /> : +1-250-882-8919 ·{' '}
+                  <FVLabel transKey="general.email" defaultStr="Email" transform="first" /> : support@fpcc.ca
                 </p>
                 <p>
                   &copy; 2000-
@@ -109,17 +85,18 @@ export default class Footer extends React.Component {
 
         <div className="Footer__disclaimerGroup">
           &copy;{' '}
-          {this.intl.translate({
-            key: 'views.components.navigation.copyright_copy',
-            default:
+          <FVLabel
+            transKey="views.components.navigation.copyright_copy"
+            defaultStr={
               'This database is protected by copyright laws and is owned by the First Peoples’ ' +
               'Cultural Foundation. All materials on this site are protected by copyright laws and are ' +
               'owned by the individual Indigenous language communities who created the archival ' +
               'content. Language and multimedia data available on this site is intended for private, ' +
               'non-commercial use by individuals. Any commercial use of the language data or multimedia ' +
               'data in whole or in part, directly or indirectly, is specifically forbidden except with ' +
-              'the prior written authority of the owner of the copyright',
-          })}
+              'the prior written authority of the owner of the copyright'
+            }
+          />
         </div>
       </>
     )

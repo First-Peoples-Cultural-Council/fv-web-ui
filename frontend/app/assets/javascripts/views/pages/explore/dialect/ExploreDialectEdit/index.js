@@ -33,6 +33,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
+import FVLabel from 'views/components/FVLabel/index'
 
 // Models
 import { Document } from 'nuxeo'
@@ -41,13 +42,11 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
 import '!style-loader!css-loader!./ExploreDialectEdit.css'
 
-const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object } = PropTypes
@@ -104,7 +103,7 @@ export class ExploreDialectEdit extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
@@ -225,12 +224,11 @@ export class ExploreDialectEdit extends Component {
         >
           <div className="ExploreDialectEdit">
             <h1 className="ExploreDialectEdit__heading">
-              {intl.trans(
-                'views.pages.explore.dialect.edit_x_community_portal',
-                'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal',
-                null,
-                [selectn('response.title', computeDialect2)]
-              )}
+              <FVLabel
+                transKey="views.pages.explore.dialect.edit_x_community_portal"
+                defaultStr={'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal'}
+                params={[selectn('response.title', computeDialect2)]}
+              />
             </h1>
 
             <EditViewWithForm

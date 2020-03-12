@@ -26,9 +26,7 @@ import Words from 'models/Words'
 
 // Operations
 import DocumentOperations from 'operations/DocumentOperations'
-import IntlService from 'views/services/intl'
 
-const intl = IntlService.instance
 class EditForm extends React.Component {
   constructor(props) {
     super(props)

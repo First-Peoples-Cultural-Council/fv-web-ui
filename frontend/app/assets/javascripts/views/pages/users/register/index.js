@@ -35,9 +35,8 @@ import FVButton from 'views/components/FVButton'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import IntlService from 'views/services/intl'
+import FVLabel from '../../../components/FVLabel/index'
 
-const intl = IntlService.instance
 /**
  * Create user entry
  */
@@ -158,7 +157,7 @@ export class Register extends Component {
         userRequest,
         null,
         null,
-        intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
+        this.props.intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
       )
       this.setState({ userRequest })
     } else {
@@ -198,7 +197,7 @@ export class Register extends Component {
     if (dialectGroups.all !== null) {
       FVUserFields['userinfo:groups'] = t.enums(dialectGroups.all)
       FVUserOptions.fields['userinfo:groups'] = {
-        label: intl.trans('group', 'Group', 'first'),
+        label: this.props.intl.trans('group', 'Group', 'first'),
       }
     }
 
@@ -240,7 +239,12 @@ export class Register extends Component {
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <h1>
-          {selectn('response.title', computeDialect2)} {intl.trans('register', 'Register', 'first')}
+          {selectn('response.title', computeDialect2)}
+          <FVLabel
+            transKey="register"
+            defaultStr="Register"
+            transform="first"
+          />
         </h1>
         <div className="row" style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-8')}>
@@ -277,7 +281,11 @@ export class Register extends Component {
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
                   color="primary"
                 >
-                  {intl.trans('register', 'Register', 'first')}
+                  <FVLabel
+                    transKey="register"
+                    defaultStr="Register"
+                    transform="first"
+                  />
                 </FVButton>
               </div>
             </form>
@@ -290,12 +298,13 @@ export class Register extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvUser, nuxeo, windowPath } = state
+  const { fvDialect, fvUser, nuxeo, windowPath, locale } = state
 
   const { computeUser, computeUserSelfregister } = fvUser
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -304,6 +313,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeUserSelfregister,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

@@ -21,9 +21,8 @@ import classNames from 'classnames'
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
 import FVButton from 'views/components/FVButton'
-import IntlService from 'views/services/intl'
+import FVLabel from 'views/components/FVLabel/index'
 
-const intl = IntlService.instance
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
@@ -96,13 +95,17 @@ export default class SongsStoriesEntryListView extends Component {
       <div>
         {this.state.reorderWarning ? (
           <div className={classNames('alert', 'alert-warning')} role="alert">
-            {intl.trans(
-              'views.pages.explore.dialect.learn.songs_stories.edit_x_pages',
-              "Note: This new sort order will be saved once the book is saved in the 'Book' tab.",
-              'first'
-            )}
+            <FVLabel
+              transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_pages"
+              defaultStr="Note: This new sort order will be saved once the book is saved in the 'Book' tab."
+              transform="first"
+            />
             <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
-              {intl.trans('reset_order', 'Reset Order', 'words')}
+              <FVLabel
+                transKey="reset_order"
+                defaultStr="Reset Order"
+                transform="words"
+              />
             </FVButton>
           </div>
         ) : (
@@ -115,7 +118,11 @@ export default class SongsStoriesEntryListView extends Component {
             if (this.props.reorder) {
               entryControls.push(
                 <FVButton variant="contained" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
-                  {intl.trans('move_up', 'move up', 'words')}
+                  <FVLabel
+                    transKey="move_up"
+                    defaultStr="move up"
+                    transform="words"
+                  />
                 </FVButton>
               )
               entryControls.push(
@@ -125,7 +132,11 @@ export default class SongsStoriesEntryListView extends Component {
                   disabled={i == this.state.items.size - 1}
                   onClick={this._moveDown.bind(this, entry)}
                 >
-                  {intl.trans('move_down', 'move down', 'words')}
+                  <FVLabel
+                    transKey="move_down"
+                    defaultStr="move down"
+                    transform="words"
+                  />
                 </FVButton>
               )
             }

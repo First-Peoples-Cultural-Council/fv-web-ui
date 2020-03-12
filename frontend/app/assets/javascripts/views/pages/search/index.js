@@ -53,16 +53,15 @@ import {
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import withToggle from 'views/hoc/view/with-toggle'
-import IntlService from 'views/services/intl'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import { SECTIONS, WORKSPACES } from 'common/Constants'
 import UIHelpers from 'common/UIHelpers'
 import FVButton from 'views/components/FVButton'
 import '!style-loader!css-loader!./Search.css'
+import FVLabel from '../../components/FVLabel/index'
 
 const FiltersWithToggle = withToggle()
-const intl = IntlService.instance
 
 const { array, bool, func, number, object, string } = PropTypes
 export class Search extends DataListView {
@@ -329,7 +328,7 @@ export class Search extends DataListView {
             <div className="col-xs-12">
               <form onSubmit={this._onSearchSaveForm}>
                 <FiltersWithToggle
-                  label={intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
+                  label={this.props.intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
                   mobileOnly
                 >
                   <div className="fontAboriginalSans">
@@ -346,10 +345,18 @@ export class Search extends DataListView {
                       className="Search__btn RaisedButton RaisedButton--primary"
                       onClick={this._onReset}
                     >
-                      {intl.trans('reset', 'Reset', 'first')}
+                      <FVLabel
+                        transKey="reset"
+                        defaultStr="Reset"
+                        transform="first"
+                      />
                     </button>
                     <button type="submit" className="Search__btn RaisedButton RaisedButton--primary">
-                      {intl.trans('search', 'Search', 'first')}
+                      <FVLabel
+                        transKey="search"
+                        defaultStr="Search"
+                        transform="first"
+                      />
                     </button>
                   </div>
                 </FiltersWithToggle>
@@ -358,7 +365,12 @@ export class Search extends DataListView {
           </div>
           <div className={classNames('search-results', 'col-xs-12', 'col-md-9')}>
             <h1>
-              {intl.trans('search_results', 'Search results', 'first')} -{' '}
+              <FVLabel
+                transKey="search_results"
+                defaultStr="Search results"
+                transform="first"
+              />
+               -{' '}
               <span className="fontAboriginalSans">{this.props.routeParams.searchTerm}</span>
             </h1>
 
@@ -559,7 +571,7 @@ export class Search extends DataListView {
                                           NavigationHelpers.navigate(hrefEdit, this.props.pushWindowPath, false)
                                         }}
                                       >
-                                        <Edit title={intl.trans('edit', 'Edit', 'first')} />
+                                        <Edit title={this.props.intl.trans('edit', 'Edit', 'first')} />
                                       </FVButton>
                                     </AuthorizationFilter>
                                   ) : null
@@ -575,7 +587,7 @@ export class Search extends DataListView {
                             },
                             {
                               name: 'fv:definitions',
-                              title: intl.trans('definitions', 'Definitions', 'first'),
+                              title: this.props.intl.trans('definitions', 'Definitions', 'first'),
                               columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
                               columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
                               render: (v, data, cellProps) => {
@@ -595,7 +607,7 @@ export class Search extends DataListView {
                             },
                             {
                               name: 'related_audio',
-                              title: intl.trans('audio', 'Audio', 'first'),
+                              title: this.props.intl.trans('audio', 'Audio', 'first'),
                               columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
                               columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
                               render: (v, data, cellProps) => {
@@ -663,13 +675,14 @@ export class Search extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, navigation, nuxeo, search, windowPath } = state
+  const { fvDialect, navigation, nuxeo, search, windowPath, locale } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { computeSearchDocuments } = search
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeDialect2,
@@ -678,6 +691,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

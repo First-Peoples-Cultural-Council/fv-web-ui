@@ -32,9 +32,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import IntlService from 'views/services/intl'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-const intl = IntlService.instance
 /**
  * List view for contributors
  */
@@ -87,14 +85,14 @@ class ContributorsListView extends DataListView {
       columns: [
         {
           name: 'title',
-          title: intl.trans('contributor', 'Contributor', 'first'),
+          title: props.intl.trans('contributor', 'Contributor', 'first'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           // sortBy: 'title',
           render: (v /*, data, cellProps*/) => v,
         },
         {
           name: 'dc:description',
-          title: intl.trans('short_proflile', 'Short Profile', 'words'),
+          title: props.intl.trans('short_proflile', 'Short Profile', 'words'),
           columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
           render: (v, data /*, cellProps*/) => selectn('properties.dc:description', data),
         },
@@ -261,13 +259,14 @@ class ContributorsListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvContributor, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvContributor, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   const { computeContributors } = fvContributor
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeContributors,
@@ -277,6 +276,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

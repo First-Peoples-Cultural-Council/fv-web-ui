@@ -42,9 +42,9 @@ import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import DialectFilterList from 'views/components/DialectFilterList'
 import AlphabetListView from 'views/components/AlphabetListView'
+import FVLabel from 'views/components/FVLabel/index'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import IntlService from 'views/services/intl'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
 import {
@@ -52,8 +52,6 @@ import {
   SEARCH_BY_ALPHABET,
   SEARCH_BY_PHRASE_BOOK,
 } from 'views/components/SearchDialect/constants'
-
-const intl = IntlService.instance
 
 const { array, bool, func, object, string } = PropTypes
 /**
@@ -203,7 +201,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     const computePhraseBooksSize = selectn('response.entries.length', computePhraseBooks) || 0
     const dialect = selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || ''
-    const pageTitle = intl.trans('views.pages.explore.dialect.phrases.x_phrases', `${dialect} Phrases`, null, [dialect])
+    const pageTitle = this.props.intl.trans(
+      'views.pages.explore.dialect.phrases.x_phrases',
+      `${dialect} Phrases`,
+      null,
+      [dialect]
+    )
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
     const phraseListView = selectn('response.uid', computeDocument) ? (
       <PhraseListView
@@ -297,7 +300,11 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
                 }}
                 className="PrintHide buttonRaised"
               >
-                {intl.trans('views.pages.explore.dialect.phrases.create_new_phrase', 'Create New Phrase', 'words')}
+                <FVLabel
+                  transKey="views.pages.explore.dialect.phrases.create_new_phrase"
+                  defaultStr="Create New Phrase"
+                  transform="words"
+                />
               </button>
             </AuthorizationFilter>
           </div>
@@ -313,7 +320,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             {computePhraseBooksSize !== 0 && (
               <DialectFilterList
                 type={this.DIALECT_FILTER_TYPE}
-                title={intl.trans(
+                title={this.props.intl.trans(
                   'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                   'Browse Phrase Books',
                   'words'
@@ -404,7 +411,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     )
     return selectn('response.entries', computeCategories)
   }
-  handleAlphabetClick = async (letter, href, updateHistory = true) => {
+  handleAlphabetClick = async(letter, href, updateHistory = true) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
@@ -420,7 +427,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     this.changeFilter(href, updateHistory)
   }
 
-  handlePhraseBookClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
+  handlePhraseBookClick = async({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_PHRASE_BOOK,
@@ -504,7 +511,18 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCategory, fvCharacter, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const {
+    document,
+    fvCategory,
+    fvPortal,
+    fvCharacter,
+    listView,
+    navigation,
+    nuxeo,
+    searchDialect,
+    windowPath,
+    locale,
+  } = state
 
   const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
@@ -514,6 +532,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computeSearchDialect } = searchDialect
   const { properties } = navigation
   const { splitWindowPath, _windowPath } = windowPath
+  const { intlService } = locale
 
   return {
     computeCategories,
@@ -526,6 +545,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
+    intl: intlService,
   }
 }
 

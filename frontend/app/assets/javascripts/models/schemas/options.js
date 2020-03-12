@@ -187,6 +187,59 @@ const RelatedMediaLayout = (locals) => (
   </div>
 )
 
+const SingleRelatedMediaLayout = (locals) => {
+  const { label, add, items } = locals
+  const hasItems = items.length !== 0
+  const item = hasItems ? items[0] : null
+  const button = item ? item.buttons.find((b) => b.type === 'remove') : null
+  return (
+    <div className="row" style={{ margin: '15px 0' }}>
+      <fieldset>
+        <legend>
+          {label}{' '}
+          <FVButton
+            style={{
+              border: '1px solid rgb(204, 204, 204)',
+              borderRadius: '4px',
+              fontSize: '1.4rem',
+              color: 'rgb(51, 51, 51)',
+              textTransform: 'none',
+              opacity: hasItems ? '0.5' : '1',
+            }}
+            onClick={add.click}
+            disabled={hasItems}
+          >
+            {add.label}
+          </FVButton>
+        </legend>
+        {item && (
+          <div style={{ display: 'flex' }}>
+            <div style={{ flexGrow: 1, maxWidth: 'calc(100% - 50px)' }}>{item.input}</div>
+            <div
+              style={{
+                textAlign: 'center',
+                marginBottom: '15px',
+                backgroundColor: 'rgba(234, 234, 234, 0.6)',
+                borderRadius: '0 10px 10px 0',
+              }}
+            >
+              <IconButton
+                data-testid={'IconButton__remove'}
+                tooltip={intl.trans('remove_item', 'Remove Item', 'first')}
+                // iconClassName="material-icons"
+                onClick={button.click}
+                style={{ verticalAlign: '-8px' }}
+              >
+                <Clear />
+              </IconButton>
+            </div>
+          </div>
+        )}
+      </fieldset>
+    </div>
+  )
+}
+
 t.String.getValidationErrorMessage = (value, path, context) => {
   if (!value) {
     let text = ''
@@ -1335,6 +1388,28 @@ const options = {
         type: 'file'
       },*/,
     },
+  },
+  FVLabel: {
+    order: ['fv:related_audio'],
+    fields: {
+      'fv:related_audio': {
+        label: intl.trans('related_audio', 'Related Audio', 'first'),
+        item: {
+          factory: MediaFactory,
+          type: 'FVAudio',
+          locals: {
+            labelAddMediaComponent: intl.trans('audio_upload', 'Upload audio', 'first'),
+            labelSelectMediaComponent: intl.trans('audio_browse', 'Browse audio', 'first'),
+          },
+        },
+        template: SingleRelatedMediaLayout,
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add_related_audio', 'Add related audio', 'first')}`,
+        },
+      },
+    },
+    i18nExt: i18nExt,
   },
 }
 
