@@ -50,11 +50,6 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-io</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
-    </dependency>
-
     <!-- test dependencies -->
     <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
