@@ -102,7 +102,7 @@ class WordsListView extends DataListView {
     DEFAULT_LANGUAGE: 'english',
     DEFAULT_PAGE_SIZE: 10,
     DEFAULT_PAGE: 1,
-    DEFAULT_SORT_COL: 'dc:title',
+    DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
     DEFAULT_SORT_TYPE: 'asc',
     dialect: null,
     disableClickItem: true,
@@ -420,25 +420,18 @@ class WordsListView extends DataListView {
             pageSize={this.state.pageInfo.pageSize}
             // NOTE: Pagination === refetcher
             refetcher={(dataGridProps, page, pageSize) => {
+              const searchObj = getSearchObject()
               this._handleRefetch2({
                 page,
                 pageSize,
                 preserveSearch: true,
+                // 1st: redux values, 2nd: url search query, 3rd: defaults
+                sortOrder:
+                  this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
+                sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
               })
             }}
             sortHandler={async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-              /*
-              NOTE: TOWER OF INDIRECTION!
-
-              Since `WordsListView extends DataListView`...
-
-              `DataListView` detects the sort change via it's `componentDidUpdate`
-              which then calls `WordsListView's > fetchData()` which gets the new
-              data via `this._fetchListViewData`
-
-              Also, _handleRefetch2 is called to update the url, eg: A sort event
-              happens when on page 3 and `_handleRefetch2` resets it to page 1
-              */
               await this.props.setRouteParams({
                 search: {
                   pageSize,
@@ -447,6 +440,9 @@ class WordsListView extends DataListView {
                   sortOrder,
                 },
               })
+
+              // _handleRefetch2 is called to update the url, eg:
+              // A sort event happened on page 3, `_handleRefetch2` will reset to page 1
               this._handleRefetch2({
                 page,
                 pageSize,

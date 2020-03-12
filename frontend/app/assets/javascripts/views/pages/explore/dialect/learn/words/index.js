@@ -224,6 +224,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             labelText: 'Word',
           },
           {
+            defaultChecked: true,
             idName: 'searchByDefinitions',
             labelText: 'Definitions',
           },
