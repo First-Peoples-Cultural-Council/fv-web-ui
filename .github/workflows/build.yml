@@ -35,7 +35,7 @@ jobs:
 
     # Checks if any changes are made to the Node package files
     - name: Check for Node changes
-      uses: softprops/diffset@v1
+      uses: softprops/diffset@v0.1.1
       id: changed-package
       with:
         package_files: |
