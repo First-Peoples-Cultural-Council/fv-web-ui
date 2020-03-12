@@ -170,31 +170,39 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                                        String ucCharValue) {
 
         if ((charValue != null && title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
-            boolean incorrect;
+            boolean incorrect = false;
 
-            // Grab all the characters that begin with the current character (for example, if "current character" is
-            // iterating on "a", it will return "aa" if it is also in the alphabet)
-            List<String> charsStartingWithCurrentCharLower =
-                    fvChars.stream().filter(character -> character.startsWith(charValue)).collect(Collectors.toList());
-            // Go through the characters that begin with the "current character", and ensure that the title does not
-            // start with any character in that list (save for the "current character" that we're iterating on).
-            incorrect =
-                    charsStartingWithCurrentCharLower.stream().anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
-
+            if (charValue != null) {
+                // Grab all the characters that begin with the current character (for example, if "current character" is
+                // iterating on "a", it will return "aa" if it is also in the alphabet)
+                List<String> charsStartingWithCurrentCharLower =
+                        fvChars.stream().filter(character -> character != null ? character.startsWith(charValue) : false).collect(Collectors.toList());
+                // Go through the characters that begin with the "current character", and ensure that the title does not
+                // start with any character in that list (save for the "current character" that we're iterating on).
+                incorrect =
+                        charsStartingWithCurrentCharLower.stream().anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
+            }
             // If there is no match and the character has an uppercase equivalent, we want to repeat the process
             // above with uppercase character. We also check the lowercase in an example of yZ is the "uppercase" of yz.
             if (ucCharValue != null && !incorrect) {
                 List<String> charsStartingWithCurrentCharUpper =
-                        upperChars.stream().filter(character -> character.startsWith(ucCharValue) || character.startsWith(charValue)).collect(Collectors.toList());
+                        upperChars.stream().filter(character -> {
+                            if (character == null) {
+                                return false;
+                            } else if (charValue != null) {
+                                return character.startsWith(ucCharValue) || character.startsWith(charValue);
+                            } else if (charValue == null) {
+                                return character.startsWith(ucCharValue);
+                            }
+                            return false;
+                        }).collect(Collectors.toList());
                 incorrect =
                         charsStartingWithCurrentCharUpper.stream().anyMatch(uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
             }
 
             // If it is the right character this value, "incorrect" will be false.
             return !incorrect;
-        } else {
-            return false;
         }
-
+        return false;
     }
 }
