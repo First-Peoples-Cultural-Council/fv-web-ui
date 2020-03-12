@@ -19,8 +19,8 @@ import org.nuxeo.ecm.automation.OperationContext;
 @Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class})
 
 @Deploy({"FirstVoicesData",
-    "FirstVoicesNuxeoPublisher:OSGI-inf/extensions/ca.firstvoices.operations.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-inf/extensions/ca.firstvoices.services.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesData",
     "org.nuxeo.ecm.platform",
     "org.nuxeo.ecm.platform.types.core",
