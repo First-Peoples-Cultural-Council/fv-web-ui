@@ -12,7 +12,7 @@ describe('SearchDialect-Phrases-Public.js > SearchDialect', () => {
 
 function verifyDefaults() {
   cy.getByLabelText('Phrase').should('be.checked')
-  cy.getByLabelText('Definitions').should('not.be.checked')
+  cy.getByLabelText('Definitions').should('be.checked')
   cy.getByLabelText('Cultural notes').should('not.be.checked')
 }
 describe('SearchDialect-Phrases-Public.js > FW-936', () => {
