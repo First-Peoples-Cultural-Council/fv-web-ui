@@ -21,7 +21,6 @@ import org.nuxeo.ecm.automation.OperationContext;
 @Deploy({"FirstVoicesData",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
-    "FirstVoicesData",
     "org.nuxeo.ecm.platform",
     "org.nuxeo.ecm.platform.types.core",
     "org.nuxeo.ecm.platform.publisher.core",
@@ -49,14 +48,6 @@ public class CheckUnpublishedChangesTest {
   protected AutomationService automationService;
 
   private DocumentModel dialectDoc;
-
-  private DocumentModel domain;
-
-  private DocumentModel workspaceDoc;
-
-  private DocumentModel familyDoc;
-
-  private DocumentModel languageDoc;
 
   @Before
   public void setUp() throws Exception {
@@ -116,6 +107,9 @@ public class CheckUnpublishedChangesTest {
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
   }
 
+  /*
+        Helper method to create a dialect tree.
+     */
   protected void createDialectTree() throws Exception {
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
     session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));

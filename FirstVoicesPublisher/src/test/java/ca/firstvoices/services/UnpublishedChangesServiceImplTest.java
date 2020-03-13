@@ -10,7 +10,6 @@ import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.*;
 import javax.inject.Inject;
@@ -48,18 +47,8 @@ public class UnpublishedChangesServiceImplTest {
     @Inject
     private UnpublishedChangesService unpublishedChangesServiceInstance;
 
-    @Inject
-    protected PublisherService publisherService;
-
     private DocumentModel dialectDoc;
 
-    private DocumentModel domain;
-
-    private DocumentModel workspaceDoc;
-
-    private DocumentModel familyDoc;
-
-    private DocumentModel languageDoc;
 
     @Before
     public void setUp() throws Exception {
@@ -120,10 +109,10 @@ public class UnpublishedChangesServiceImplTest {
     }
 
     protected void createDialectTree() throws Exception {
-        domain = session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-        workspaceDoc = session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-        familyDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily"));
-        languageDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage"));
+        session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
+        session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
+        session.createDocument(session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily"));
+        session.createDocument(session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage"));
         dialectDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
         dialectDoc.followTransition("Enable");
     }
