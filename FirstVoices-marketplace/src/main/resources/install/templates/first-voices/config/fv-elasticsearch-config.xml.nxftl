@@ -5,11 +5,10 @@
 
 <!-- this is coming from https://github.com/nuxeo/nuxeo/blob/10.10/nuxeo-distribution/nuxeo-nxr-server/src/
 main/resources/templates/common-base/nxserver/config/elasticsearch-config.xml.nxftl -->
-  
-<!-- read more about manageAlias here: https://doc.nuxeo.com/nxdoc/elasticsearch-setup/#index-aliases --> 
 <extension target="org.nuxeo.elasticsearch.ElasticSearchComponent"
-    point="elasticSearchIndex" manageAlias="true">
-    <elasticSearchIndex name="${elasticsearch.indexName}" type="doc" repository="default">
+    point="elasticSearchIndex">
+    <!-- read more about manageAlias here: https://doc.nuxeo.com/nxdoc/elasticsearch-setup/#index-aliases --> 
+    <elasticSearchIndex name="${elasticsearch.indexName}" type="doc" repository="default" manageAlias="true">
       <fetchFromSource>
         <include>ecm:*</include>
         <include>dc:*</include>
