@@ -23373,6 +23373,20 @@ function run(input, params) {
                 case '30': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "event_activity_verb_like_word_reciprocal" }); break;
                 case '31': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "question_word" }); break;
                 case '32': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "suffix_prefix" }); break;
+                case '33': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "connective" }); break;
+                case '34': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "negation" }); break;
+                case '35': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "number" }); break;
+                case '36': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "plural_marker" }); break;
+                case '37': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "affirmation" }); break;
+                case '38': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "connective_irrealis" }); break;
+                case '39': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "demonstrative" }); break;
+                case '40': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "interrogative" }); break;
+                case '41': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "modifier_noun" }); break;
+                case '42': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "modifier_verb" }); break;
+                case '43': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "question_marker" }); break;
+                case '44': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "tense_aspect" }); break;
+                case '45': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "transitive_verb" }); break;
+                case '46': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "intransitive_verb" }); break;
         	/* TODO: add the rest... */
       		default: Log(input, { 'level': 'error', 'message': 'Could not retrieve part of speech for ' + input.getPropertyValue('dc:title') }); break;
 	}

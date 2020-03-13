@@ -62,14 +62,14 @@ export class Hangman extends Component {
     this.fetchData(this.props)
   }
 
-  fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
-
-    props.fetchCharacters(
+  //TO DO: Improve the fetch data such that the PageIndex can no longer be the same twice in a row if there are multiple possiblities
+  async fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
+    await props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
       '&currentPageIndex=0' + '&pageSize=100' + '&sortOrder=asc' + '&sortBy=fvcharacter:alphabet_order'
     )
-
-    props.fetchWords(
+    //First we make a guess about the word results
+    await props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
       //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +'/* IS NOT NULL' +
       ' AND fv:available_in_childrens_archive = 1' +
@@ -78,12 +78,39 @@ export class Hangman extends Component {
         '/* IS NOT NULL' +
         //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
-        StringHelpers.randomIntBetween(0, 10) +
+        //currentPageIndex +
+        StringHelpers.randomIntBetween(0, Math.ceil(this.state.resultCount / PUZZLES) || 10) +
         '&pageSize=' +
         PUZZLES
     )
 
-    
+    const queryResult = ProviderHelpers.getEntry(
+      this.props.computeWords,
+      this.props.routeParams.dialect_path + '/Dictionary'
+    )
+
+    const resultCount = selectn(['response', 'resultsCount'], queryResult)
+
+    if (resultCount / PUZZLES < 10 && this.state.resultCount == undefined) {
+      //We refine our intial query/guess based on the first one
+      //This should only happen once
+      this.setState({ resultCount: resultCount })
+      await props.fetchWords(
+        props.routeParams.dialect_path + '/Dictionary',
+        //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +'/* IS NOT NULL' +
+        ' AND fv:available_in_childrens_archive = 1' +
+          ' AND ' +
+          ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
+          '/* IS NOT NULL' +
+          //' AND fv-word:available_in_games = 1' +
+          '&currentPageIndex=' +
+          //currentPageIndex +
+          StringHelpers.randomIntBetween(0, Math.ceil(resultCount / PUZZLES)) +
+          '&pageSize=' +
+          PUZZLES
+      )
+    }
+    //Will trigger re-render
   }
 
   newPuzzle() {
@@ -92,18 +119,29 @@ export class Hangman extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
-    if (
-      this.state.currentPuzzleIndex < PUZZLES &&
-      this.state.currentPuzzleIndex < selectn('response.resultsCount', computeWords) - 1
-    ) {
+    if (this.state.currentPuzzleIndex < (this.state.resultCount % PUZZLES) - 1) {
       this.setState({
         currentPuzzleIndex: this.state.currentPuzzleIndex + 1,
       })
+      //This is for when we could potentially run out of words, but we are not sure
+    } else if (this.state.currentPuzzleIndex < PUZZLES - 1) {
+      if (this.state.resultCount < PUZZLES * (selectn('response.pageIndex', computeWords) + 1)) {
+        this.fetchData(this.props)
+        this.setState({
+          currentPuzzleIndex: 0,
+        })
+      } else {
+        this.setState({
+          currentPuzzleIndex: this.state.currentPuzzleIndex + 1,
+        })
+      }
     } else {
       this.fetchData(this.props)
       this.setState({
         currentPuzzleIndex: 0,
       })
+      //,await () => {this.fetchData(this.props)}
+      //, () => {} Add fetchData here if puzzle index needs to be updated first
     }
   }
 
@@ -141,7 +179,7 @@ export class Hangman extends Component {
           <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
         </div>
       )
-    } 
+    }
     // For now, don't use built in alphabets as most are incomplete
     /*const alphabet_array = (selectn('response.entries', computeCharacters) || []).map(function(char) {
           return selectn('properties.dc:title', char);
@@ -161,11 +199,11 @@ export class Hangman extends Component {
     })
 
     // const word_obj_array = selectn('response.entries', computeWords)
-    function shuffle(array){
+    function shuffle(array) {
       //Based on Fisher-Yates shuffle
-      for(let i = (array.length -1); i > 0; i--){
-        let rand = Math.floor(Math.random() * (1 + i))
-        let temp = array[i]
+      for (let i = array.length - 1; i > 0; i--) {
+        const rand = Math.floor(Math.random() * (1 + i))
+        const temp = array[i]
         array[i] = array[rand]
         array[rand] = temp
       }
@@ -176,7 +214,7 @@ export class Hangman extends Component {
       const character_string = word_array.map((word) => word.puzzle).join('')
       const unique_characters = Array.from(new Set(character_string.split(/(?!$)/u))).filter((v) => v != ' ')
       shuffle(unique_characters)
-      word_array[this.state.currentPuzzleIndex].alphabet = unique_characters// (alphabet_array.length > 0) ? alphabet_array :
+      word_array[this.state.currentPuzzleIndex].alphabet = unique_characters // (alphabet_array.length > 0) ? alphabet_array :
       game = <HangManGame newPuzzle={this.newPuzzle} {...word_array[this.state.currentPuzzleIndex]} />
     }
 
@@ -207,7 +245,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Hangman)
+export default connect(mapStateToProps, mapDispatchToProps)(Hangman)
