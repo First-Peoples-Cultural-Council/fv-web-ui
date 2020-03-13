@@ -49,7 +49,10 @@ public class FVDocumentListener implements EventListener {
     if(event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED))
       service.assignAncestors(session, document);
     if(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
-      sanitize.sanitizeDocument(session, document);
+      if((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) 
+            && !document.isProxy()){
+        sanitize.sanitizeDocument(session, document);
+      }
     }
   }
   

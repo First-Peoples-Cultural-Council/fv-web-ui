@@ -76,7 +76,7 @@ public class SanitizeDocumentServiceImplTest {
   }
   
   @Test
-  public void sanitizeDocument() {
+  public void trimWhitespaceTest() {
     
     // Get the DocumentModels for each of the parent documents
     DocumentModel languageFamily = session.getDocument(new PathRef("/FV/Family"));
@@ -104,5 +104,7 @@ public class SanitizeDocumentServiceImplTest {
 
     assertEquals(TestWord.getTitle(), "Test Word");
     assertEquals(TestPhrase.getTitle(), "Test Phrase");
+
   }
+
 }
