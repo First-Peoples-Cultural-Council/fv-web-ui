@@ -50,6 +50,8 @@ import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'
 import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
 import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
 import PageDialectLearnPhrasesCategories from './explore/dialect/learn/phrases/categories'
+import PageDialectLearnWordsFilteredByCategory from './explore/dialect/learn/words/wordsFilteredByCategory'
+import PageDialectLearnPhrasesFilteredByCategory from './explore/dialect/learn/phrases/phrasesFilteredByCategory'
 
 import PageTest from './test.js'
 import PageDebugAPI from './debug-api.js'
@@ -127,8 +129,10 @@ export {
   PageDialectLearn,
   PageDialectMedia,
   PageDialectLearnWords,
+  PageDialectLearnWordsFilteredByCategory,
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
+  PageDialectLearnPhrasesFilteredByCategory,
   PageDialectLearnPhrasesCategories,
   PageDialectLearnStoriesAndSongs,
   PageDialectViewWord,
