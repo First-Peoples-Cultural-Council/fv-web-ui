@@ -228,6 +228,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             labelText: 'Phrase',
           },
           {
+            defaultChecked: true,
             idName: 'searchByDefinitions',
             labelText: 'Definitions',
           },

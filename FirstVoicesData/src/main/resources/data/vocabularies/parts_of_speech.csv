@@ -1,5 +1,4 @@
 "id","label","parent","obsolete"
-"basic","Basic","","0"
 "verb","Verb","basic","0"
 "noun","Noun","basic","0"
 "pronoun","Pronoun","basic","0"
@@ -9,7 +8,12 @@
 "conjunction","Conjunction","basic","0"
 "interjection","Interjection","basic","0"
 "particle","Particle","basic","0"
-"advanced","Advanced","","0"
+"connective","Connective","basic",0
+"negation","Negation","basic",0
+"number","Number","basic",0
+"plural_marker","Plural Marker","basic",0
+"transitive_verb","Transitive Verb","advanced",0
+"intransitive_verb","Intransitive Verb","advanced",0
 "pronoun_personal","Pronoun - Personal","advanced","0"
 "pronoun_reflexive","Pronoun - Reflexive","advanced","0"
 "pronoun_reciprocal","Pronoun - Reciprocal","advanced","0"
@@ -32,3 +36,11 @@
 "event_activity_verb_like_word_reciprocal","Event/Activity (Verb-like word) - reciprocal","advanced","0"
 "suffix_prefix","Suffix / Prefix","advanced","0"
 "question_word","Question word","advanced","0"
+"affirmation","Affirmation","advanced",0
+"connective_irrealis","Connective Irrealis","advanced",0
+"demonstrative","Demonstrative","advanced",0
+"interrogative","Interrogative","advanced",0
+"modifier_noun","Modifier Noun","advanced",0
+"modifier_verb","Modifier Verb","advanced",0
+"question_marker","Question Marker","advanced",0
+"tense_aspect","Tense Aspect","advanced",0
