@@ -16,4 +16,5 @@ export const SEARCH_TYPE_CONTAINS_SEARCH = 'contains'
 export const SEARCH_TYPE_STARTS_WITH_SEARCH = 'starts_with'
 export const SEARCH_TYPE_ENDS_WITH_SEARCH = 'ends_with'
 export const SEARCH_TYPE_WILDCARD_SEARCH = 'wildcard'
-export const SEARCH_TYPE_DEFAULT = SEARCH_TYPE_APPROXIMATE_SEARCH
+export const SEARCH_TYPE_DEFAULT_SEARCH = 'match'
+export const SEARCH_TYPE_DEFAULT = SEARCH_TYPE_DEFAULT_SEARCH

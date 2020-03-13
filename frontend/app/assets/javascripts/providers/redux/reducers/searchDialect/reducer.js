@@ -92,15 +92,17 @@ const generateNxql = ({
     searchPartOfSpeech,
   } = _searchBySettings
 
-  const searchValue = StringHelpers.clean(_searchTerm, CLEAN_NXQL) || ''
+  let searchValue = StringHelpers.clean(_searchTerm, CLEAN_NXQL) || ''
+  searchValue = searchValue.trim()
+
   const searchByAlphabetValue = StringHelpers.clean(_searchByAlphabet, CLEAN_NXQL) || ''
   const nxqlTmpl = {
-    // Use full text seach (for most matches - and approximate search for exact/approximate matches); until we fine tune analyzers
-    allFields: `dictionary_all_field = '${searchValue}' OR ${switchSearchModes(
-      'fv:definitions/*/translation',
-      searchValue,
-      _searchType
-    )} OR ${switchSearchModes('dc:title', searchValue, _searchType)}`,
+    // Use full text seach on dictionary for broad matches;
+    // And approximate search as a fall back for close matches
+    allFields:
+      `ecm:fulltext_dictionary_all_field = '${searchValue}' OR ` +
+      `${switchSearchModes('fv:definitions/*/translation', searchValue, _searchType)} OR ` +
+      `${switchSearchModes('dc:title', searchValue, _searchType)}`,
     searchByTitle: switchSearchModes('dc:title', searchValue, _searchType),
     searchByAlphabet: `dc:title ILIKE '${searchByAlphabetValue}%'`,
     searchByCategory: `dc:title ILIKE '%${searchValue}%'`,
