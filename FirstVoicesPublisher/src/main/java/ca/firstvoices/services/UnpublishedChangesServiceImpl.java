@@ -1,5 +1,6 @@
 package ca.firstvoices.services;
 
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -10,8 +11,6 @@ import java.util.Arrays;
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
 
     public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
-
-//        session = document.getCoreSession();
         
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
@@ -25,14 +24,25 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
                 splitDocPath[i] = "Workspaces";
             }
         }
-//        splitDocPath[2] = "Workspaces";
         path = String.join("/", splitDocPath);
-        DocumentModel workspacesDocument = session.getDocument((new PathRef(path)));
+        String workspacePath = path;
 
-        // Get the workspaces version and status of the document
-        int majorVerDoc = Integer.parseInt(workspacesDocument.getPropertyValue("uid:major_version").toString());
-        int minorVerDoc = Integer.parseInt(workspacesDocument.getPropertyValue("uid:minor_version").toString());
-        String status = workspacesDocument.getCurrentLifeCycleState();
+        /*
+            Get the workspaces version and status of the document using a privileged session
+            in case the service is being called from a place that does not have access to the
+            sections document.
+        */
+        String[] workspaceInfo = CoreInstance.doPrivileged(session, s -> {
+            DocumentModel workspacesDocument = s.getDocument((new PathRef(workspacePath)));
+            String majorVerDoc = workspacesDocument.getPropertyValue("uid:major_version").toString();
+            String minorVerDoc = workspacesDocument.getPropertyValue("uid:minor_version").toString();
+            String status = workspacesDocument.getCurrentLifeCycleState();
+            return new String[] {majorVerDoc, minorVerDoc, status};
+        });
+
+        int majorVerDoc = Integer.parseInt(workspaceInfo[0]);
+        int minorVerDoc = Integer.parseInt(workspaceInfo[1]);
+        String status = workspaceInfo[2];
 
         // Check that the document is currently published
         if (! status.equals("Published")) {
@@ -46,7 +56,6 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
                 splitPath[i] = "sections";
             }
         }
-//        splitPath[2] = "sections";
         String sectionsPath = String.join("/", splitPath);
         DocumentModel sectionsDocument = session.getDocument(new PathRef(sectionsPath));
 

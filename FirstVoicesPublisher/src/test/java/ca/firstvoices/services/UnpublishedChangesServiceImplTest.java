@@ -52,13 +52,13 @@ public class UnpublishedChangesServiceImplTest {
     protected PublisherService publisherService;
 
     private DocumentModel dialectDoc;
-    
+
     private DocumentModel domain;
-    
+
     private DocumentModel workspaceDoc;
-    
+
     private DocumentModel familyDoc;
-    
+
     private DocumentModel languageDoc;
 
     @Before
@@ -70,7 +70,7 @@ public class UnpublishedChangesServiceImplTest {
 
         session.removeChildren(session.getRootDocument().getRef());
         session.save();
-        
+
         createDialectTree();
 
     }
@@ -83,33 +83,33 @@ public class UnpublishedChangesServiceImplTest {
 
     @Test
     public void unpublishedChanges() {
-        
+
         /*
             Should return false as doc is not published yet.
          */
         assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
-        
+
         /*
             Should still return false because the doc is not published.
          */
         dialectDoc.setPropertyValue("dc:title", "WordOneTest");
         dialectDoc = session.saveDocument(dialectDoc);
         assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
-        
+
         /*
             Should return false because there are no changes since the publish.
          */
         dialectDoc.followTransition("Publish");
         dialectDoc = session.saveDocument(dialectDoc);
         assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
-        
+
         /*
             Should return true because there are changes that have not been published.
          */
         dialectDoc.setPropertyValue("dc:title", "WordOneTestTwo");
         dialectDoc = session.saveDocument(dialectDoc);
         assertTrue(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
-        
+
         /*
             Should now return false because the changes have been published.
          */
