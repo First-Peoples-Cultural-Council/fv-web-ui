@@ -356,7 +356,17 @@ class WordsListView extends DataListView {
     const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
 
-    props.fetchWords(this._getPathOrParentID(props), nql)
+    // NOTE: this prevents double requests due to DataListView re-calling _fetchListViewData
+    if (this.state.nql !== nql) {
+      this.setState(
+        {
+          nql,
+        },
+        () => {
+          props.fetchWords(this._getPathOrParentID(props), nql)
+        }
+      )
+    }
   }
 
   getDialect(props = this.props) {
