@@ -324,7 +324,6 @@ export const getURLPageProps = ({ routeParams }) => {
 // TODO: this doesn't seem useful for composition
 // ---------------------------------------------------------
 export const handleFilterChange = ({ visibleFilter, setState }) => {
-  // console.log('PageDialectLearnBase > handleFilterChange !')
   setState({ visibleFilter })
 }
 
@@ -350,8 +349,6 @@ export const handleFacetSelected = ({
   parentFacetUid,
   routeParams, // Redux
 }) => {
-  // console.log('PageDialectLearnBase > handleFacetSelected !')
-  // debugger
   const currentCategoryFilterIds = filterInfo.get('currentCategoryFilterIds')
   let categoryFilter = ''
   let newList
@@ -529,5 +526,46 @@ export const resetURLPagination = ({
   } else {
     // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
     NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
+  }
+}
+
+export const updateUrlIfPageOrPageSizeIsDifferent = ({
+  page = 1,
+  pageSize = 10,
+  pushWindowPath = () => {},
+  routeParamsPage = 1,
+  routeParamsPageSize = 10,
+  splitWindowPath,
+  windowLocationSearch,
+  onPaginationReset = () => {},
+} = {}) => {
+  // Function that will update the url, possibly appending `windowLocationSearch`
+  const navigationFunc = (url) => {
+    pushWindowPath(`${url}${windowLocationSearch ? windowLocationSearch : ''}`)
+  }
+
+  // Cast to numbers
+  let pageNum = parseInt(page, 10)
+  const pageSizeNum = parseInt(pageSize, 10)
+  const routeParamsPageNum = parseInt(routeParamsPage, 10)
+  const routeParamsPageSizeNum = parseInt(routeParamsPageSize, 10)
+
+  if (pageNum !== routeParamsPageNum || pageSizeNum !== routeParamsPageSizeNum) {
+    if (pageSizeNum !== routeParamsPageSizeNum && pageNum !== 1) {
+      pageNum = 1
+    }
+    // With pagination, replace end part of url
+    if (hasPagination(splitWindowPath)) {
+      NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [pageSizeNum, pageNum], navigationFunc)
+    } else {
+      // When no pagination, append to url
+      NavigationHelpers.navigateForward(splitWindowPath, [pageSizeNum, pageNum], navigationFunc)
+    }
+  }
+
+  // TODO: Drop the following?
+  // If `pageSize` has changed, reset `page`
+  if (pageSizeNum !== routeParamsPageSizeNum) {
+    onPaginationReset(pageNum, pageSizeNum)
   }
 }
