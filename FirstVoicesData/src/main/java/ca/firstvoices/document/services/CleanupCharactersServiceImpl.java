@@ -1,5 +1,6 @@
 package ca.firstvoices.document.services;
 
+import ca.firstvoices.services.AbstractService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.*;
@@ -7,7 +8,7 @@ import org.nuxeo.ecm.core.api.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CleanupCharactersServiceImpl implements CleanupCharactersService {
+public class CleanupCharactersServiceImpl extends AbstractService implements CleanupCharactersService {
 
     private static final Log log = LogFactory.getLog(CleanupCharactersService.class);
 
@@ -16,11 +17,11 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
         String currentType = document.getDocumentType().toString();
         if (Arrays.stream(types).noneMatch(currentType::contains)) return;
 
-        DocumentModel alphabet = session.getDocument(document.getParentRef());
-        if (alphabet == null) return;
-
-        DocumentModel dialect = session.getDocument(alphabet.getParentRef());
+        DocumentModel dialect = getDialect(document);
         if (dialect == null) return;
+
+        DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        if (alphabet == null) return;
 
         DocumentModelList characters = session.getChildren(alphabet.getRef());
         if (characters.size() == 0) return;
