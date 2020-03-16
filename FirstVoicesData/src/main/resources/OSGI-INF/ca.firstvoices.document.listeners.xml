@@ -5,7 +5,7 @@
         <listener enabled="true" name="documentListener" async="false" postCommit="false"
                   class="ca.firstvoices.document.listeners.DocumentListener" priority="100">
             <event>documentCreated</event>
-            <event>documentModified</event>
+            <event>beforeDocumentModification</event>
         </listener>
     </extension>
 </component>
