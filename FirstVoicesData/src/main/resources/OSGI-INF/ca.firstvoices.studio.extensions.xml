@@ -4941,6 +4941,32 @@
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
             </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any unique characters that might be confused with this character.
+                        Note: This confusable character cannot exist in your alphabet.</label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
+            </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
                     <label mode="any">Alphabet Order</label>
@@ -4991,6 +5017,12 @@
                         <property name="nxl_colspan_0">1</property>
                     </properties>
                     <widget>upper_case_character</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>confusable_characters</widget>
                 </row>
                 <row>
                     <properties mode="any">
@@ -5056,6 +5088,32 @@
                 <fields>
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
+            </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any unique characters that might be confused with this character.
+                        Note: This confusable character cannot exist in your alphabet.</label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
             </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
@@ -5160,6 +5218,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>alphabet_order</widget>
                 </row>
                 <row>
@@ -5199,6 +5263,28 @@
                 <fields>
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
+            </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
             </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
