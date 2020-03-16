@@ -28,7 +28,9 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+// import { setRouteParams } from 'providers/redux/reducers/navigation'
 import { updatePageProperties } from 'providers/redux/reducers/navigation'
+
 // MISC
 import Immutable, { is, Map, Set } from 'immutable'
 import selectn from 'selectn'
@@ -60,7 +62,7 @@ import {
   onNavigateRequest,
   // getURLPageProps,
   handleDialectFilterList,
-  resetURLPagination,
+  updateUrlIfPageOrPageSizeIsDifferent,
 } from 'views/pages/explore/dialect/learn/base'
 import {
   SEARCH_BY_ALPHABET,
@@ -70,6 +72,8 @@ import {
 import { WORKSPACES } from 'common/Constants'
 const intl = IntlService.instance
 
+// WordsFilteredByCategory
+// ====================================================
 class WordsFilteredByCategory extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
@@ -269,9 +273,6 @@ class WordsFilteredByCategory extends Component {
           //   setBatchSelected={props.setBatchSelected}
           //   batchDeletedUids={props.batchDeletedUids}
           //   setBatchDeletedUids={props.setBatchDeletedUids}
-          //   // Listview: Sort
-          //   sortHandler={props.sortHandler}
-          //   hasSorting={props.hasSorting}
           //   // Listview: computed data
           //   computedData={props.computedData}
           // Search
@@ -343,7 +344,6 @@ class WordsFilteredByCategory extends Component {
                       </FVButton>
                     </AuthorizationFilter>
                   ) : null
-
                 return (
                   <>
                     <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
@@ -475,6 +475,13 @@ class WordsFilteredByCategory extends Component {
           items={selectn('response.entries', computeWords)}
           //   style={{ overflowY: 'auto', maxHeight: '50vh' }}
           //   type={props.type}
+          //
+          // ===============================================
+          // Sort
+          // -----------------------------------------------
+          sortHandler={this.sortHandler}
+          //   hasSorting={props.hasSorting}
+          // ===============================================
         />
       </Suspense>
     ) : null
@@ -556,10 +563,11 @@ class WordsFilteredByCategory extends Component {
                 'words'
               )}
               filterInfo={filterInfo}
-              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              // appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              appliedFilterIds={new Set([this.props.routeParams.category])}
               facetField={facetField}
               handleDialectFilterClick={this.handleCategoryClick}
-              handleDialectFilterList={(facetFieldParam, selected, unselected, type, resetUrlPagination) => {
+              handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
                 this.handleDialectFilterChange({
                   facetField: facetFieldParam,
                   selected,
@@ -567,7 +575,7 @@ class WordsFilteredByCategory extends Component {
                   unselected,
                   routeParams: this.props.routeParams,
                   filterInfo: this.state.filterInfo,
-                  resetUrlPagination,
+                  shouldResetUrlPagination,
                 })
               }}
               facets={this.state.categories}
@@ -585,7 +593,7 @@ class WordsFilteredByCategory extends Component {
   }
   // END render
 
-  changeFilter = ({ href, updateUrl = true } = {}) => {
+  changeFilter = () => {
     const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
@@ -617,25 +625,20 @@ class WordsFilteredByCategory extends Component {
     // In these pages (words/phrase), list views are controlled via URL
     if (is(this.state.filterInfo, newFilter) === false) {
       this.setState({ filterInfo: newFilter }, () => {
-        // NOTE: `_resetURLPagination` below can trigger FW-256:
+        // NOTE: `updateUrlIfPageOrPageSizeIsDifferent` below can trigger FW-256:
         // "Back button is not working properly when paginating within alphabet chars
         // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
         // You will be sent to the first page)"
         //
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
-        // this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
-        resetURLPagination({
+        updateUrlIfPageOrPageSizeIsDifferent({
           // pageSize, // TODO?
           preserveSearch: true,
           pushWindowPath: this.props.pushWindowPath,
           routeParams: this.props.routeParams,
           splitWindowPath: this.props.splitWindowPath,
         })
-        // See about updating url
-        if (href && updateUrl) {
-          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-        }
       })
     }
   }
@@ -706,13 +709,7 @@ class WordsFilteredByCategory extends Component {
     })
   }
 
-  handleDialectFilterChange = ({
-    facetField,
-    selected,
-    type,
-    unselected,
-    resetUrlPagination: resetUrlPaginationParam,
-  }) => {
+  handleDialectFilterChange = ({ facetField, selected, type, unselected, shouldResetUrlPagination }) => {
     const { filterInfo } = this.state
     const { routeParams, splitWindowPath } = this.props
 
@@ -724,13 +721,11 @@ class WordsFilteredByCategory extends Component {
       routeParams,
       filterInfo,
     })
-    // Update page properties to use when navigating away
-    this.props.updatePageProperties({ [this.getPageKey()]: { filterInfo: newFilter } })
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    if (resetUrlPaginationParam === true) {
-      resetURLPagination({
+    if (shouldResetUrlPagination === true) {
+      updateUrlIfPageOrPageSizeIsDifferent({
         // pageSize, // TODO?
         // preserveSearch, // TODO?
         pushWindowPath: this.props.pushWindowPath,
@@ -774,41 +769,63 @@ class WordsFilteredByCategory extends Component {
     this.setState(
       {
         filterInfo: newFilter,
-        // searchNxqlSort: 'fv:custom_order', // TODO: IS THIS BREAKING SOMETHING?
       },
       () => {
         // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        // this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
-        resetURLPagination({
-          // pageSize, // TODO?
-          // preserveSearch, // TODO?
-          pushWindowPath: this.props.pushWindowPath,
-          routeParams: this.props.routeParams,
-          splitWindowPath: this.props.splitWindowPath,
-        })
-
-        // Remove alphabet/category filter urls
+        // See about removing alphabet/category filter urls
         if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
-          let resetUrl = `/${this.props.splitWindowPath.join('/')}`
+          let resetUrl = window.location.pathname + ''
           const _splitWindowPath = [...this.props.splitWindowPath]
           const learnIndex = _splitWindowPath.indexOf('learn')
           if (learnIndex !== -1) {
             _splitWindowPath.splice(learnIndex + 2)
             resetUrl = `/${_splitWindowPath.join('/')}`
           }
-
           NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+        } else {
+          // In these pages (words/phrase), list views are controlled via URL
+          updateUrlIfPageOrPageSizeIsDifferent({
+            // pageSize, // TODO?
+            // preserveSearch, // TODO?
+            pushWindowPath: this.props.pushWindowPath,
+            routeParams: this.props.routeParams,
+            splitWindowPath: this.props.splitWindowPath,
+          })
         }
       }
     )
   }
+  sortHandler = async ({ page, pageSize /*, sortBy, sortOrder*/ } = {}) => {
+    // await this.props.setRouteParams({
+    //   search: {
+    //     pageSize,
+    //     page,
+    //     sortBy,
+    //     sortOrder,
+    //   },
+    // })
+
+    // Conditionally update the url after a sort event
+    updateUrlIfPageOrPageSizeIsDifferent({
+      // onPaginationReset: (_pageNum, _pageSizeNum) => {console.log('WordsFilteredByCategory > sortHandler > updateUrlIfPageOrPageSizeIsDifferent > onPaginationReset', _pageNum, _pageSizeNum)}, // If you need to reset pagination after sort event
+      page,
+      pageSize,
+      pushWindowPath: this.props.pushWindowPath,
+      routeParamsPage: this.props.routeParams.page,
+      routeParamsPageSize: this.props.routeParams.pageSized,
+      // sortBy,
+      // sortOrder,
+      splitWindowPath: this.props.splitWindowPath,
+      windowLocationSearch: window.location.search, // Set only if you want to append the search
+    })
+  }
 }
 
 // PROPTYPES
-const { array, bool, func, object, string } = PropTypes
+const { any, array, bool, func, object, string } = PropTypes
 WordsFilteredByCategory.propTypes = {
   hasPagination: bool,
+  DEFAULT_LANGUAGE: any, // TODO
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeCharacters: object.isRequired,
@@ -833,6 +850,7 @@ WordsFilteredByCategory.propTypes = {
   pushWindowPath: func.isRequired,
   searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
+  // setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
 }
 
@@ -890,6 +908,7 @@ const mapDispatchToProps = {
   pushWindowPath,
   searchDialectUpdate,
   setListViewMode,
+  // setRouteParams,
   updatePageProperties,
 }
 
