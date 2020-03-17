@@ -59,6 +59,11 @@ import {
   onNavigateRequest,
   handleDialectFilterList,
   updateUrlIfPageOrPageSizeIsDifferent,
+  sortHandler,
+  updateUrlAfterResetSearch,
+  getCharacters,
+  getCategoriesOrPhrasebooks,
+  updateFilter,
 } from 'views/pages/explore/dialect/learn/base'
 import {
   SEARCH_BY_ALPHABET,
@@ -99,15 +104,25 @@ class WordsFilteredByCategory extends Component {
     ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Dictionary`, this.props.fetchDocument, computeDocument)
 
     // Category
-    let categories = this.getCategories()
+    const pathOrId = `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
+    let categories = getCategoriesOrPhrasebooks({
+      getEntryId: pathOrId,
+      computeCategories: this.props.computeCategories,
+    })
     if (categories === undefined) {
-      await this.props.fetchCategories(`/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`)
-      categories = this.getCategories()
+      await this.props.fetchCategories(pathOrId)
+      categories = getCategoriesOrPhrasebooks({
+        getEntryId: pathOrId,
+        computeCategories: this.props.computeCategories,
+      })
     }
 
     // Alphabet
     // ---------------------------------------------
-    let characters = this.getCharacters()
+    let characters = getCharacters({
+      computeCharacters: this.props.computeCharacters,
+      routeParamsDialectPath: routeParams.dialect_path,
+    })
 
     if (characters === undefined) {
       const _pageIndex = 0
@@ -117,7 +132,10 @@ class WordsFilteredByCategory extends Component {
         `${routeParams.dialect_path}/Alphabet`,
         `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
       )
-      characters = this.getCharacters()
+      characters = getCharacters({
+        computeCharacters: this.props.computeCharacters,
+        routeParamsDialectPath: routeParams.dialect_path,
+      })
     }
 
     // WORDS
@@ -136,30 +154,6 @@ class WordsFilteredByCategory extends Component {
         }
       }
     )
-  }
-
-  fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const searchObj = getSearchObject()
-
-    // 1st: redux values, 2nd: url search query, 3rd: defaults
-    const sortOrder = this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
-    const sortBy = this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
-
-    const { routeParams } = this.props
-    const currentAppliedFilter = routeParams.category ? ` AND fv-word:categories/* IN ("${routeParams.category}")` : ''
-    /*
-    let currentAppliedFilter = ''
-    if (this.state.filterInfo.has('currentAppliedFilter')) {
-      currentAppliedFilter = Object.values(this.state.filterInfo.get('currentAppliedFilter').toJS()).join('')
-    }
-
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    */
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
-
-    this.props.fetchWords(`${this.props.routeParams.dialect_path}/Dictionary`, nql)
   }
 
   constructor(props, context) {
@@ -432,7 +426,7 @@ class WordsFilteredByCategory extends Component {
           // ===============================================
           // Sort
           // -----------------------------------------------
-          sortHandler={this.sortHandler}
+          sortHandler={this._sortHandler}
           // ===============================================
         />
       </Suspense>
@@ -544,37 +538,19 @@ class WordsFilteredByCategory extends Component {
   // END render
 
   changeFilter = () => {
+    const { filterInfo } = this.state
     const { computeSearchDialect, routeParams, splitWindowPath } = this.props
     const { searchByMode, searchNxqlQuery } = computeSearchDialect
-    let searchType
-    let newFilter = this.state.filterInfo
 
-    switch (searchByMode) {
-      case SEARCH_BY_ALPHABET: {
-        searchType = 'startsWith'
-        break
-      }
-      case SEARCH_BY_CATEGORY: {
-        searchType = 'categories'
-        break
-      }
-      default: {
-        searchType = 'contains'
-      }
-    }
-
-    // Remove all old settings...
-    newFilter = newFilter.set('currentAppliedFilter', new Map())
-    newFilter = newFilter.set('currentCategoryFilterIds', new Set())
-
-    // Add new search query
-    newFilter = newFilter.updateIn(['currentAppliedFilter', searchType], () => {
-      return searchNxqlQuery && searchNxqlQuery !== '' ? ` AND ${searchNxqlQuery}` : ''
+    const newFilter = updateFilter({
+      filterInfo,
+      searchByMode,
+      searchNxqlQuery,
     })
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    if (is(this.state.filterInfo, newFilter) === false) {
+    if (is(filterInfo, newFilter) === false) {
       this.setState({ filterInfo: newFilter }, () => {
         // NOTE: `updateUrlIfPageOrPageSizeIsDifferent` below can trigger FW-256:
         // "Back button is not working properly when paginating within alphabet chars
@@ -584,7 +560,7 @@ class WordsFilteredByCategory extends Component {
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
         updateUrlIfPageOrPageSizeIsDifferent({
-          // pageSize, // TODO?
+          // pageSize, // TODO ?
           preserveSearch: true,
           pushWindowPath: this.props.pushWindowPath,
           routeParams,
@@ -598,19 +574,27 @@ class WordsFilteredByCategory extends Component {
     this.setState({ filterInfo: this.initialFilterInfo() })
   }
 
-  getCategories = () => {
-    const { routeParams } = this.props
-    const computeCategories = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
-    )
-    return selectn('response.entries', computeCategories)
-  }
+  fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
+    const { navigationRouteSearch, routeParams } = this.props
+    const searchObj = getSearchObject()
 
-  getCharacters = () => {
-    const { computeCharacters, routeParams } = this.props
-    const computedCharacters = ProviderHelpers.getEntry(computeCharacters, `${routeParams.dialect_path}/Alphabet`)
-    return selectn('response.entries', computedCharacters)
+    // 1st: redux values, 2nd: url search query, 3rd: defaults
+    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
+    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
+    const currentAppliedFilter = routeParams.category ? ` AND fv-word:categories/* IN ("${routeParams.category}")` : ''
+    /*
+    let currentAppliedFilter = ''
+    if (this.state.filterInfo.has('currentAppliedFilter')) {
+      currentAppliedFilter = Object.values(this.state.filterInfo.get('currentAppliedFilter').toJS()).join('')
+    }
+
+    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+    */
+    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
+
+    this.props.fetchWords(`${routeParams.dialect_path}/Dictionary`, nql)
   }
 
   handleAlphabetClick = async (letter, href, updateHistory = true) => {
@@ -633,13 +617,13 @@ class WordsFilteredByCategory extends Component {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CATEGORY,
-      searchingDialectFilter: selected.checkedFacetUid,
       searchBySettings: {
         searchByTitle: true,
         searchByDefinitions: false,
         searchByTranslations: false,
         searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
       },
+      searchingDialectFilter: selected.checkedFacetUid,
       searchTerm: '',
     })
 
@@ -670,8 +654,8 @@ class WordsFilteredByCategory extends Component {
     // In these pages (words/phrase), list views are controlled via URL
     if (shouldResetUrlPagination === true) {
       updateUrlIfPageOrPageSizeIsDifferent({
-        // pageSize, // TODO?
-        // preserveSearch, // TODO?
+        // pageSize, // TODO ?
+        // preserveSearch, // TODO ?
         pushWindowPath: this.props.pushWindowPath,
         routeParams: routeParams,
         splitWindowPath: splitWindowPath,
@@ -716,54 +700,24 @@ class WordsFilteredByCategory extends Component {
         filterInfo: newFilter,
       },
       () => {
-        const { routeParams, splitWindowPath } = this.props
-        // When facets change, pagination should be reset.
-        // See about removing alphabet/category filter urls
-        if (selectn('category', routeParams) || selectn('letter', routeParams)) {
-          let resetUrl = window.location.pathname + ''
-          const _splitWindowPath = [...splitWindowPath]
-          const learnIndex = _splitWindowPath.indexOf('learn')
-          if (learnIndex !== -1) {
-            _splitWindowPath.splice(learnIndex + 2)
-            resetUrl = `/${_splitWindowPath.join('/')}`
-          }
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
-        } else {
-          // In these pages (words/phrase), list views are controlled via URL
-          updateUrlIfPageOrPageSizeIsDifferent({
-            // pageSize, // TODO?
-            // preserveSearch, // TODO?
-            pushWindowPath: this.props.pushWindowPath,
-            routeParams,
-            splitWindowPath,
-          })
-        }
+        updateUrlAfterResetSearch({
+          routeParams: this.props.routeParams,
+          splitWindowPath: this.props.splitWindowPath,
+          pushWindowPath: this.props.pushWindowPath,
+        })
       }
     )
   }
-  sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    const { routeParams, splitWindowPath } = this.props
-    await this.props.setRouteParams({
-      search: {
-        pageSize,
-        page,
-        sortBy,
-        sortOrder,
-      },
-    })
-
-    // Conditionally update the url after a sort event
-    updateUrlIfPageOrPageSizeIsDifferent({
-      // onPaginationReset: (_pageNum, _pageSizeNum) => {console.log('WordsFilteredByCategory > sortHandler > updateUrlIfPageOrPageSizeIsDifferent > onPaginationReset', _pageNum, _pageSizeNum)}, // If you need to reset pagination after sort event
+  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+    sortHandler({
       page,
       pageSize,
+      sortBy,
+      sortOrder,
+      setRouteParams: this.props.setRouteParams,
+      routeParams: this.props.routeParams,
+      splitWindowPath: this.props.splitWindowPath,
       pushWindowPath: this.props.pushWindowPath,
-      routeParamsPage: routeParams.page,
-      routeParamsPageSize: routeParams.pageSize,
-      // sortBy,
-      // sortOrder,
-      splitWindowPath: splitWindowPath,
-      windowLocationSearch: window.location.search, // Set only if you want to append the search
     })
   }
 }
@@ -773,7 +727,7 @@ class WordsFilteredByCategory extends Component {
 const { any, array, bool, func, object, string } = PropTypes
 WordsFilteredByCategory.propTypes = {
   hasPagination: bool,
-  DEFAULT_LANGUAGE: any, // TODO
+  DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeCharacters: object.isRequired,
@@ -798,7 +752,7 @@ WordsFilteredByCategory.propTypes = {
   pushWindowPath: func.isRequired,
   searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
-  // setRouteParams: func.isRequired,
+  setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
 }
 

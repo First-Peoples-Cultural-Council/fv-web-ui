@@ -12,10 +12,13 @@ limitations under the License.
 */
 import React, { Component } from 'react' // eslint-disable-line
 import PropTypes from 'prop-types'
-import Immutable, { Set } from 'immutable' // eslint-disable-line
+import Immutable, { Map, Set } from 'immutable' // eslint-disable-line
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
+
+import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'views/components/SearchDialect/constants'
+
 /**
  * Learn Base Page
  * TODO: Convert to composition vs. inheritance https://facebook.github.io/react/docs/composition-vs-inheritance.html
@@ -568,4 +571,102 @@ export const updateUrlIfPageOrPageSizeIsDifferent = ({
   if (pageSizeNum !== routeParamsPageSizeNum) {
     onPaginationReset(pageNum, pageSizeNum)
   }
+}
+
+// sortHandler
+export const sortHandler = async ({
+  page,
+  pageSize,
+  sortBy,
+  sortOrder,
+  setRouteParams = () => {},
+  routeParams,
+  splitWindowPath,
+  pushWindowPath,
+} = {}) => {
+  await setRouteParams({
+    search: {
+      pageSize,
+      page,
+      sortBy,
+      sortOrder,
+    },
+  })
+
+  // Conditionally update the url after a sort event
+  updateUrlIfPageOrPageSizeIsDifferent({
+    page,
+    pageSize,
+    pushWindowPath: pushWindowPath,
+    routeParamsPage: routeParams.page,
+    routeParamsPageSize: routeParams.pageSize,
+    splitWindowPath: splitWindowPath,
+    windowLocationSearch: window.location.search, // Set only if you want to append the search
+  })
+}
+
+export const updateUrlAfterResetSearch = ({ routeParams, splitWindowPath, pushWindowPath }) => {
+  // When facets change, pagination should be reset.
+  if (selectn('category', routeParams) || selectn('letter', routeParams) || selectn('phraseBook', routeParams)) {
+    let resetUrl = window.location.pathname + ''
+    const _splitWindowPath = [...splitWindowPath]
+    const learnIndex = _splitWindowPath.indexOf('learn')
+    if (learnIndex !== -1) {
+      _splitWindowPath.splice(learnIndex + 2)
+      resetUrl = `/${_splitWindowPath.join('/')}`
+    }
+    NavigationHelpers.navigate(resetUrl, pushWindowPath, false)
+  } else {
+    // In these pages (words/phrase), list views are controlled via URL
+    updateUrlIfPageOrPageSizeIsDifferent({
+      // pageSize, // TODO?
+      // preserveSearch, // TODO?
+      pushWindowPath,
+      routeParams,
+      splitWindowPath,
+    })
+  }
+}
+
+export const getCharacters = ({ computeCharacters, routeParamsDialectPath }) => {
+  const computedCharacters = ProviderHelpers.getEntry(computeCharacters, `${routeParamsDialectPath}/Alphabet`)
+  return selectn('response.entries', computedCharacters)
+}
+
+export const getCategoriesOrPhrasebooks = ({ getEntryId, computeCategories }) => {
+  const computedCategories = ProviderHelpers.getEntry(computeCategories, getEntryId)
+  return selectn('response.entries', computedCategories)
+}
+
+export const updateFilter = ({ filterInfo, searchByMode, searchNxqlQuery }) => {
+  let searchType
+  let newFilter = filterInfo
+
+  switch (searchByMode) {
+    case SEARCH_BY_ALPHABET: {
+      searchType = 'startsWith'
+      break
+    }
+    case SEARCH_BY_CATEGORY: {
+      searchType = 'categories'
+      break
+    }
+    case SEARCH_BY_PHRASE_BOOK: {
+      searchType = 'phraseBook'
+      break
+    }
+    default: {
+      searchType = 'contains'
+    }
+  }
+
+  // Remove all old settings...
+  newFilter = newFilter.set('currentAppliedFilter', new Map())
+  newFilter = newFilter.set('currentCategoryFilterIds', new Set())
+
+  // Add new search query
+  newFilter = newFilter.updateIn(['currentAppliedFilter', searchType], () => {
+    return searchNxqlQuery && searchNxqlQuery !== '' ? ` AND ${searchNxqlQuery}` : ''
+  })
+  return newFilter
 }

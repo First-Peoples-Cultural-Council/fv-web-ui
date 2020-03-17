@@ -62,6 +62,11 @@ import {
   onNavigateRequest,
   handleDialectFilterList,
   updateUrlIfPageOrPageSizeIsDifferent,
+  sortHandler,
+  updateUrlAfterResetSearch,
+  getCharacters,
+  getCategoriesOrPhrasebooks,
+  updateFilter,
 } from 'views/pages/explore/dialect/learn/base'
 import {
   SEARCH_BY_ALPHABET,
@@ -69,7 +74,7 @@ import {
   SEARCH_PART_OF_SPEECH_ANY,
 } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
-// import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
+
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
@@ -102,16 +107,25 @@ export class PhrasesFilteredByCategory extends Component {
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path + '/Dictionary', this.props.fetchDocument, computeDocument)
 
     // Phrasebooks (Category)
-    let phraseBook = this.getPhraseBooks()
+    const pathOrId = `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`
+    let phraseBook = getCategoriesOrPhrasebooks({
+      getEntryId: pathOrId,
+      computeCategories: this.props.computeCategories,
+    })
     if (phraseBook === undefined) {
-      await this.props.fetchCategories(`/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`)
-      phraseBook = this.getPhraseBooks()
+      await this.props.fetchCategories(pathOrId)
+      phraseBook = getCategoriesOrPhrasebooks({
+        getEntryId: pathOrId,
+        computeCategories: this.props.computeCategories,
+      })
     }
 
     // Alphabet
     // ---------------------------------------------
-    let characters = this.getCharacters()
-
+    let characters = getCharacters({
+      computeCharacters: this.props.computeCharacters,
+      routeParamsDialectPath: routeParams.dialect_path,
+    })
     if (characters === undefined) {
       const _pageIndex = 0
       const _pageSize = 100
@@ -119,7 +133,10 @@ export class PhrasesFilteredByCategory extends Component {
         `${routeParams.dialect_path}/Alphabet`,
         `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
       )
-      characters = this.getCharacters()
+      characters = getCharacters({
+        computeCharacters: this.props.computeCharacters,
+        routeParamsDialectPath: routeParams.dialect_path,
+      })
     }
 
     // PHRASES
@@ -176,7 +193,7 @@ export class PhrasesFilteredByCategory extends Component {
     this.state = {
       computeEntities,
       filterInfo,
-      // flashcardMode: false, // TODO
+      // flashcardMode: false, // TODO ?
       isKidsTheme: routeParams.siteTheme === 'kids',
     }
   }
@@ -186,7 +203,7 @@ export class PhrasesFilteredByCategory extends Component {
       characters,
       computeEntities,
       filterInfo,
-      // flashcardMode, // TODO
+      // flashcardMode, // TODO ?
       isKidsTheme,
       phraseBook,
     } = this.state
@@ -198,6 +215,7 @@ export class PhrasesFilteredByCategory extends Component {
       computeLogin,
       computePhrases,
       computePortal,
+      DEFAULT_LANGUAGE,
       hasPagination,
       // hasSorting,
       listView,
@@ -209,8 +227,6 @@ export class PhrasesFilteredByCategory extends Component {
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const computedPortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
     const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    // const uid = `${routeParams.dialect_path}/Dictionary`
-    // const computedWords = ProviderHelpers.getEntry(computeWords, uid)
 
     const computedDialect2Response = selectn('response', computedDialect2)
     const computedPhraseBooks = ProviderHelpers.getEntry(
@@ -325,7 +341,7 @@ export class PhrasesFilteredByCategory extends Component {
                 return UIHelpers.generateOrderedListFromDataset({
                   dataSet: selectn(`properties.${cellProps.name}`, data),
                   extractDatum: (entry, i) => {
-                    if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
+                    if (entry.language === DEFAULT_LANGUAGE && i < 2) {
                       return entry.translation
                     }
                     return null
@@ -422,7 +438,7 @@ export class PhrasesFilteredByCategory extends Component {
           // ===============================================
           // Sort
           // -----------------------------------------------
-          sortHandler={this.sortHandler}
+          sortHandler={this._sortHandler}
           // ===============================================
         />
       </Suspense>
@@ -499,14 +515,12 @@ export class PhrasesFilteredByCategory extends Component {
 
             {computedPhraseBooksSize !== 0 && (
               <DialectFilterList
-                // appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                 appliedFilterIds={new Set([routeParams.phraseBook])}
                 clearDialectFilter={this.clearDialectFilter}
                 facets={phraseBook}
                 facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-phrase:phrase_books', routeParams.area)}
-                // filterInfo={filterInfo} // TODO
+                // filterInfo={filterInfo} // TODO ?
                 handleDialectFilterClick={this.handleCategoryClick}
-                // handleDialectFilterList={this.handleDialectFilterList}
                 handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
                   this.handleDialectFilterChange({
                     facetField: facetFieldParam,
@@ -538,38 +552,20 @@ export class PhrasesFilteredByCategory extends Component {
   }
   // END render
 
-  changeFilter = (/*href, updateUrl = true*/) => {
+  changeFilter = () => {
+    const { filterInfo } = this.state
     const { computeSearchDialect, routeParams, splitWindowPath } = this.props
     const { searchByMode, searchNxqlQuery } = computeSearchDialect
-    let searchType
-    let newFilter = this.state.filterInfo
 
-    switch (searchByMode) {
-      case SEARCH_BY_ALPHABET: {
-        searchType = 'startsWith'
-        break
-      }
-      case SEARCH_BY_PHRASE_BOOK: {
-        searchType = 'phraseBook'
-        break
-      }
-      default: {
-        searchType = 'contains'
-      }
-    }
-
-    // Remove all old settings...
-    newFilter = newFilter.set('currentAppliedFilter', new Map())
-    newFilter = newFilter.set('currentCategoryFilterIds', new Set())
-
-    // Add new search query
-    newFilter = newFilter.updateIn(['currentAppliedFilter', searchType], () => {
-      return searchNxqlQuery && searchNxqlQuery !== '' ? ` AND ${searchNxqlQuery}` : ''
+    const newFilter = updateFilter({
+      filterInfo,
+      searchByMode,
+      searchNxqlQuery,
     })
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    if (is(this.state.filterInfo, newFilter) === false) {
+    if (is(filterInfo, newFilter) === false) {
       this.setState({ filterInfo: newFilter }, () => {
         // this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
         // // See about updating url
@@ -577,7 +573,7 @@ export class PhrasesFilteredByCategory extends Component {
         //   NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
         // }
         updateUrlIfPageOrPageSizeIsDifferent({
-          // pageSize, // TODO?
+          // pageSize, // TODO ?
           preserveSearch: true,
           pushWindowPath: this.props.pushWindowPath,
           routeParams,
@@ -592,12 +588,12 @@ export class PhrasesFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeDocument, routeParams } = this.props
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
     const searchObj = getSearchObject()
 
     // 1st: redux values, 2nd: url search query, 3rd: defaults
-    const sortOrder = this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
-    const sortBy = this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
+    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
+    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
     const currentAppliedFilter = routeParams.phraseBook
       ? ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
       : ''
@@ -613,22 +609,7 @@ export class PhrasesFilteredByCategory extends Component {
     )
   }
 
-  getCharacters = () => {
-    const { computeCharacters, routeParams } = this.props
-    const computedCharacters = ProviderHelpers.getEntry(computeCharacters, `${routeParams.dialect_path}/Alphabet`)
-    return selectn('response.entries', computedCharacters)
-  }
-
-  getPhraseBooks = () => {
-    const { computeCategories, routeParams } = this.props
-    const computedCategories = ProviderHelpers.getEntry(
-      computeCategories,
-      `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`
-    )
-    return selectn('response.entries', computedCategories)
-  }
-
-  handleAlphabetClick = async (letter, href, updateHistory = true) => {
+  handleAlphabetClick = async (letter) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
@@ -641,10 +622,10 @@ export class PhrasesFilteredByCategory extends Component {
       searchTerm: '',
     })
 
-    this.changeFilter(href, updateHistory)
+    this.changeFilter()
   }
 
-  handleCategoryClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
+  handleCategoryClick = async ({ facetField, selected, unselected } = {}) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_PHRASE_BOOK,
@@ -658,7 +639,7 @@ export class PhrasesFilteredByCategory extends Component {
       searchTerm: '',
     })
 
-    this.changeFilter(href, updateHistory)
+    this.changeFilter()
 
     this.handleDialectFilterChange({
       facetField,
@@ -685,8 +666,8 @@ export class PhrasesFilteredByCategory extends Component {
     // In these pages (words/phrase), list views are controlled via URL
     if (shouldResetUrlPagination === true) {
       updateUrlIfPageOrPageSizeIsDifferent({
-        // pageSize, // TODO?
-        // preserveSearch, // TODO?
+        // pageSize, // TODO ?
+        // preserveSearch, // TODO ?
         pushWindowPath: this.props.pushWindowPath,
         routeParams: routeParams,
         splitWindowPath: splitWindowPath,
@@ -731,54 +712,24 @@ export class PhrasesFilteredByCategory extends Component {
         filterInfo: newFilter,
       },
       () => {
-        const { routeParams, splitWindowPath } = this.props
-        // When facets change, pagination should be reset.
-        // See about removing alphabet/category filter urls
-        if (selectn('phraseBook', routeParams) || selectn('letter', routeParams)) {
-          let resetUrl = `/${splitWindowPath.join('/')}`
-          const _splitWindowPath = [...splitWindowPath]
-          const learnIndex = _splitWindowPath.indexOf('learn')
-          if (learnIndex !== -1) {
-            _splitWindowPath.splice(learnIndex + 2)
-            resetUrl = `/${_splitWindowPath.join('/')}`
-          }
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
-        } else {
-          // In these pages (words/phrase), list views are controlled via URL
-          updateUrlIfPageOrPageSizeIsDifferent({
-            // pageSize, // TODO?
-            // preserveSearch, // TODO?
-            pushWindowPath: this.props.pushWindowPath,
-            routeParams,
-            splitWindowPath,
-          })
-        }
+        updateUrlAfterResetSearch({
+          routeParams: this.props.routeParams,
+          splitWindowPath: this.props.splitWindowPath,
+          pushWindowPath: this.props.pushWindowPath,
+        })
       }
     )
   }
-  sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    const { routeParams, splitWindowPath } = this.props
-    await this.props.setRouteParams({
-      search: {
-        pageSize,
-        page,
-        sortBy,
-        sortOrder,
-      },
-    })
-
-    // Conditionally update the url after a sort event
-    updateUrlIfPageOrPageSizeIsDifferent({
-      // onPaginationReset: (_pageNum, _pageSizeNum) => {console.log('WordsFilteredByCategory > sortHandler > updateUrlIfPageOrPageSizeIsDifferent > onPaginationReset', _pageNum, _pageSizeNum)}, // If you need to reset pagination after sort event
+  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+    sortHandler({
       page,
       pageSize,
+      sortBy,
+      sortOrder,
+      setRouteParams: this.props.setRouteParams,
+      routeParams: this.props.routeParams,
+      splitWindowPath: this.props.splitWindowPath,
       pushWindowPath: this.props.pushWindowPath,
-      routeParamsPage: routeParams.page,
-      routeParamsPageSize: routeParams.pageSize,
-      // sortBy,
-      // sortOrder,
-      splitWindowPath: splitWindowPath,
-      windowLocationSearch: window.location.search, // Set only if you want to append the search
     })
   }
 }
@@ -788,13 +739,14 @@ export class PhrasesFilteredByCategory extends Component {
 const { any, array, bool, func, object, string } = PropTypes
 PhrasesFilteredByCategory.propTypes = {
   hasPagination: bool,
-  DEFAULT_LANGUAGE: any, // TODO
+  DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeCharacters: object.isRequired,
   computeDialect2: object.isRequired,
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
+  computePhrases: object.isRequired,
   computePortal: object.isRequired,
   computeSearchDialect: object.isRequired,
   listView: object.isRequired,
