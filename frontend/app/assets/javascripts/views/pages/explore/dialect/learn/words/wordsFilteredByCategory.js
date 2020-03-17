@@ -28,7 +28,7 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
-// import { setRouteParams } from 'providers/redux/reducers/navigation'
+import { setRouteParams } from 'providers/redux/reducers/navigation'
 import { updatePageProperties } from 'providers/redux/reducers/navigation'
 
 // MISC
@@ -40,27 +40,25 @@ import selectn from 'selectn'
 import AlphabetListView from 'views/components/AlphabetListView'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DialectFilterList from 'views/components/DialectFilterList'
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import Edit from '@material-ui/icons/Edit'
+import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
+import Link from 'views/components/Link'
 import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from 'common/NavigationHelpers'
+import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-import Edit from '@material-ui/icons/Edit'
-import FVButton from 'views/components/FVButton'
-import Preview from 'views/components/Editor/Preview'
-import Link from 'views/components/Link'
+
+import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
-// import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
-const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 import {
   onNavigateRequest,
-  // getURLPageProps,
   handleDialectFilterList,
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'views/pages/explore/dialect/learn/base'
@@ -70,6 +68,8 @@ import {
   SEARCH_PART_OF_SPEECH_ANY,
 } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
+
+const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
 // WordsFilteredByCategory
@@ -149,6 +149,7 @@ class WordsFilteredByCategory extends Component {
       }
     )
   }
+
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     const searchObj = getSearchObject()
 
@@ -211,40 +212,30 @@ class WordsFilteredByCategory extends Component {
 
   render() {
     const { computeEntities, filterInfo, isKidsTheme } = this.state
+    const {
+      computeDialect2,
+      computeDocument,
+      computeLogin,
+      computePortal,
+      computeWords,
+      DEFAULT_LANGUAGE,
+      hasPagination,
+      listView,
+      routeParams,
+      splitWindowPath,
+    } = this.props
 
-    const { routeParams, splitWindowPath } = this.props
-    const computeDocument = ProviderHelpers.getEntry(
-      this.props.computeDocument,
-      `${routeParams.dialect_path}/Dictionary`
-    )
-    const uid = `${this.props.routeParams.dialect_path}/Dictionary` // selectn('response.uid', computeDocument)
-    const computeWords = ProviderHelpers.getEntry(this.props.computeWords, uid)
+    const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+    const computedPortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
+    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+    const uid = `${routeParams.dialect_path}/Dictionary`
+    const computedWords = ProviderHelpers.getEntry(computeWords, uid)
 
-    const computePortal = ProviderHelpers.getEntry(this.props.computePortal, `${routeParams.dialect_path}/Portal`)
-
-    const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
+    const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computedPortal) ||
       ''} ${intl.trans('words', 'Words', 'first')}`
 
-    // const { searchNxqlSort = {} } = this.props.computeSearchDialect
-    // const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-    // const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = getURLPageProps({routeParams}) // NOTE: This function is in PageDialectLearnBase
-
-    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-    const computeDialect2Response = selectn('response', computeDialect2)
-
-    const wordListView = selectn('response.uid', computeDocument) ? (
-      //   <WordListView
-      //     controlViaURL
-      //     DEFAULT_PAGE={DEFAULT_PAGE}
-      //     DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
-      //     DEFAULT_SORT_COL={DEFAULT_SORT_COL}
-      //     DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
-      //     disableClickItem={false}
-      //     filter={filterInfo}
-      //     flashcard={this.state.flashcardMode}
-      //     parentID={selectn('response.uid', computeDocument)}
-      //     routeParams={routeParams}
-      //   />
+    const computedDialect2Response = selectn('response', computedDialect2)
+    const wordListView = selectn('response.uid', computedDocument) ? (
       <Suspense fallback={<div>Loading...</div>}>
         <DictionaryList
           //   // Export
@@ -259,7 +250,7 @@ class WordsFilteredByCategory extends Component {
           //   hasViewModeButtons={props.hasViewModeButtons}
           //   rowClickHandler={props.rowClickHandler}
           dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-          dictionaryListViewMode={this.props.listView.mode}
+          dictionaryListViewMode={listView.mode}
           //   dictionaryListSmallScreenTemplate={props.dictionaryListSmallScreenTemplate}
           //   // Listview: Batch
           //   batchConfirmationAction={props.batchConfirmationAction}
@@ -311,9 +302,9 @@ class WordsFilteredByCategory extends Component {
               title: intl.trans('word', 'Word', 'first'),
               columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
               render: (v, data) => {
-                const isWorkspaces = this.props.routeParams.area === WORKSPACES
-                const href = NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, data, 'words')
-                const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'words')
+                const isWorkspaces = routeParams.area === WORKSPACES
+                const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'words')
+                const hrefEdit = NavigationHelpers.generateUIDEditPath(routeParams.siteTheme, data, 'words')
                 const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
                   `${window.location.pathname}${window.location.search}`
                 )}`
@@ -321,12 +312,12 @@ class WordsFilteredByCategory extends Component {
                   isWorkspaces && hrefEdit ? (
                     <AuthorizationFilter
                       filter={{
-                        entity: computeDialect2Response,
-                        login: this.props.computeLogin,
+                        entity: computedDialect2Response,
+                        login: computeLogin,
                         role: ['Record', 'Approve', 'Everything'],
                       }}
                       hideFromSections
-                      routeParams={this.props.routeParams}
+                      routeParams={routeParams}
                     >
                       <FVButton
                         type="button"
@@ -365,7 +356,7 @@ class WordsFilteredByCategory extends Component {
                 return UIHelpers.generateOrderedListFromDataset({
                   dataSet: selectn(`properties.${cellProps.name}`, data),
                   extractDatum: (entry, i) => {
-                    if (entry.language === this.props.DEFAULT_LANGUAGE && i < 2) {
+                    if (entry.language === DEFAULT_LANGUAGE && i < 2) {
                       return entry.translation
                     }
                     return null
@@ -453,7 +444,7 @@ class WordsFilteredByCategory extends Component {
             },
           ]}
           //   // cssModifier={props.cssModifier}
-          dialect={computeDialect2Response}
+          dialect={computedDialect2Response}
           // ===============================================
           // Pagination
           // -----------------------------------------------
@@ -463,16 +454,16 @@ class WordsFilteredByCategory extends Component {
             const newUrl = appendPathArrayAfterLandmark({
               pathArray: [pageSize, currentPageIndex],
               splitWindowPath,
-              landmarkArray: [this.props.routeParams.category],
+              landmarkArray: [routeParams.category],
             })
             NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
           }}
-          fetcherParams={{ currentPageIndex: this.props.routeParams.page, pageSize: this.props.routeParams.pageSize }}
-          metadata={selectn('response', computeWords)}
+          fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
+          metadata={selectn('response', computedWords)}
           // ===============================================
           flashcardTitle={pageTitle}
           //   gridListTile={props.gridListTile}
-          items={selectn('response.entries', computeWords)}
+          items={selectn('response.entries', computedWords)}
           //   style={{ overflowY: 'auto', maxHeight: '50vh' }}
           //   type={props.type}
           //
@@ -505,7 +496,7 @@ class WordsFilteredByCategory extends Component {
       )
     }
 
-    const dialectClassName = getDialectClassname(computePortal)
+    const dialectClassName = getDialectClassname(computedPortal)
     const facetField = ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', routeParams.area)
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -513,12 +504,12 @@ class WordsFilteredByCategory extends Component {
           <div className="col-xs-12 col-md-4 col-md-offset-8 text-right">
             <AuthorizationFilter
               filter={{
-                entity: selectn('response', computeDocument),
-                login: this.props.computeLogin,
+                entity: selectn('response', computedDocument),
+                login: computeLogin,
                 role: ['Record', 'Approve', 'Everything'],
               }}
               hideFromSections
-              routeParams={this.props.routeParams}
+              routeParams={routeParams}
             >
               <button
                 type="button"
@@ -532,7 +523,7 @@ class WordsFilteredByCategory extends Component {
                   } else {
                     // this._onNavigateRequest('create') // NOTE: This function is in PageDialectLearnBase
                     onNavigateRequest({
-                      hasPagination: this.props.hasPagination,
+                      hasPagination: hasPagination,
                       path: 'create',
                       pushWindowPath: this.props.pushWindowPath,
                       splitWindowPath: splitWindowPath,
@@ -552,7 +543,7 @@ class WordsFilteredByCategory extends Component {
               characters={this.state.characters}
               dialectClassName={dialectClassName}
               handleClick={this.handleAlphabetClick}
-              letter={selectn('routeParams.letter', this.props)}
+              letter={selectn('letter', routeParams)}
             />
 
             <DialectFilterList
@@ -564,7 +555,7 @@ class WordsFilteredByCategory extends Component {
               )}
               filterInfo={filterInfo}
               // appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-              appliedFilterIds={new Set([this.props.routeParams.category])}
+              appliedFilterIds={new Set([routeParams.category])}
               facetField={facetField}
               handleDialectFilterClick={this.handleCategoryClick}
               handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
@@ -573,14 +564,14 @@ class WordsFilteredByCategory extends Component {
                   selected,
                   type,
                   unselected,
-                  routeParams: this.props.routeParams,
+                  routeParams: routeParams,
                   filterInfo: this.state.filterInfo,
                   shouldResetUrlPagination,
                 })
               }}
               facets={this.state.categories}
               clearDialectFilter={this.clearDialectFilter}
-              routeParams={this.props.routeParams}
+              routeParams={routeParams}
             />
           </div>
           <div className="col-xs-12 col-md-9">
@@ -594,7 +585,8 @@ class WordsFilteredByCategory extends Component {
   // END render
 
   changeFilter = () => {
-    const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
+    const { computeSearchDialect, routeParams, splitWindowPath } = this.props
+    const { searchByMode, searchNxqlQuery } = computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
 
@@ -636,8 +628,8 @@ class WordsFilteredByCategory extends Component {
           // pageSize, // TODO?
           preserveSearch: true,
           pushWindowPath: this.props.pushWindowPath,
-          routeParams: this.props.routeParams,
-          splitWindowPath: this.props.splitWindowPath,
+          routeParams,
+          splitWindowPath,
         })
       })
     }
@@ -657,16 +649,14 @@ class WordsFilteredByCategory extends Component {
   }
 
   getCharacters = () => {
-    const { routeParams } = this.props
-    const computedCharacters = ProviderHelpers.getEntry(
-      this.props.computeCharacters,
-      `${routeParams.dialect_path}/Alphabet`
-    )
+    const { computeCharacters, routeParams } = this.props
+    const computedCharacters = ProviderHelpers.getEntry(computeCharacters, `${routeParams.dialect_path}/Alphabet`)
     return selectn('response.entries', computedCharacters)
   }
 
   getPageKey = () => {
-    return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
+    const { routeParams } = this.props
+    return `${routeParams.area}_${routeParams.dialect_name}_learn_words`
   }
 
   handleAlphabetClick = async (letter, href, updateHistory = true) => {
@@ -742,11 +732,12 @@ class WordsFilteredByCategory extends Component {
   }
 
   initialFilterInfo = () => {
-    const routeParamsCategory = this.props.routeParams.category
+    const { routeParams } = this.props
+    const routeParamsCategory = routeParams.category
     const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
     const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
       'fv-word:categories',
-      this.props.routeParams.area
+      routeParams.area
     )
     const currentAppliedFilterCategories = routeParamsCategory
       ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
@@ -771,11 +762,12 @@ class WordsFilteredByCategory extends Component {
         filterInfo: newFilter,
       },
       () => {
+        const { routeParams, splitWindowPath } = this.props
         // When facets change, pagination should be reset.
         // See about removing alphabet/category filter urls
-        if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
+        if (selectn('category', routeParams) || selectn('letter', routeParams)) {
           let resetUrl = window.location.pathname + ''
-          const _splitWindowPath = [...this.props.splitWindowPath]
+          const _splitWindowPath = [...splitWindowPath]
           const learnIndex = _splitWindowPath.indexOf('learn')
           if (learnIndex !== -1) {
             _splitWindowPath.splice(learnIndex + 2)
@@ -788,22 +780,23 @@ class WordsFilteredByCategory extends Component {
             // pageSize, // TODO?
             // preserveSearch, // TODO?
             pushWindowPath: this.props.pushWindowPath,
-            routeParams: this.props.routeParams,
-            splitWindowPath: this.props.splitWindowPath,
+            routeParams,
+            splitWindowPath,
           })
         }
       }
     )
   }
-  sortHandler = async ({ page, pageSize /*, sortBy, sortOrder*/ } = {}) => {
-    // await this.props.setRouteParams({
-    //   search: {
-    //     pageSize,
-    //     page,
-    //     sortBy,
-    //     sortOrder,
-    //   },
-    // })
+  sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+    const { routeParams, splitWindowPath } = this.props
+    await this.props.setRouteParams({
+      search: {
+        pageSize,
+        page,
+        sortBy,
+        sortOrder,
+      },
+    })
 
     // Conditionally update the url after a sort event
     updateUrlIfPageOrPageSizeIsDifferent({
@@ -811,17 +804,18 @@ class WordsFilteredByCategory extends Component {
       page,
       pageSize,
       pushWindowPath: this.props.pushWindowPath,
-      routeParamsPage: this.props.routeParams.page,
-      routeParamsPageSize: this.props.routeParams.pageSized,
+      routeParamsPage: routeParams.page,
+      routeParamsPageSize: routeParams.pageSize,
       // sortBy,
       // sortOrder,
-      splitWindowPath: this.props.splitWindowPath,
+      splitWindowPath: splitWindowPath,
       windowLocationSearch: window.location.search, // Set only if you want to append the search
     })
   }
 }
 
 // PROPTYPES
+// -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
 WordsFilteredByCategory.propTypes = {
   hasPagination: bool,
@@ -855,6 +849,7 @@ WordsFilteredByCategory.propTypes = {
 }
 
 // REDUX: reducers/state
+// -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
   const {
     document,
@@ -908,7 +903,7 @@ const mapDispatchToProps = {
   pushWindowPath,
   searchDialectUpdate,
   setListViewMode,
-  // setRouteParams,
+  setRouteParams,
   updatePageProperties,
 }
 
