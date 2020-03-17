@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.services.AssignAncestorsService" version="1.0">
-
     <implementation class="ca.firstvoices.services.AssignAncestorsServiceImpl"/>
     <service>
         <provide interface="ca.firstvoices.services.AssignAncestorsService"/>
     </service>
-
 </component>

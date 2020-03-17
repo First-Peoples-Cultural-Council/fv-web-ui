@@ -1,6 +1,5 @@
-package ca.firstvoices.document.services;
+package ca.firstvoices.services;
 
-import ca.firstvoices.services.AbstractService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.*;
@@ -11,35 +10,37 @@ import java.util.stream.Collectors;
 public class CleanupCharactersServiceImpl extends AbstractService implements CleanupCharactersService {
 
     private static final Log log = LogFactory.getLog(CleanupCharactersService.class);
+    private CoreSession session;
+    private String[] types = {
+            "FVPhrase",
+            "FVWord",
+    };
 
     @Override
-    public void cleanUnicodeCharacters(CoreSession session, DocumentModel document, String[] types, String propertyName) {
-        String currentType = document.getDocumentType().toString();
-        if (Arrays.stream(types).noneMatch(currentType::contains)) return;
+    public void cleanConfusables(DocumentModel document) {
+        session = document.getCoreSession();
+        if (Arrays.stream(types).parallel().noneMatch(document.getDocumentType().toString()::contains)) return;
 
-        DocumentModel dialect = getDialect(document);
-        if (dialect == null) return;
-
+        DocumentModel dictionary = session.getDocument(document.getParentRef());
+        DocumentModel dialect = session.getDocument(dictionary.getParentRef());
         DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-        if (alphabet == null) return;
-
         DocumentModelList characters = session.getChildren(alphabet.getRef());
+
         if (characters.size() == 0) return;
 
-        String propertyValue = (String) document.getPropertyValue(propertyName);
+        String propertyValue = (String) document.getPropertyValue("dc:title");
 
         if (propertyValue != null) {
             try {
                 Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
                 String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
                 if (!updatedPropertyValue.equals(propertyValue)) {
-                    document.setPropertyValue(propertyName, updatedPropertyValue);
-                    session.saveDocument(document);
+                    document.setPropertyValue("dc:title", updatedPropertyValue);
                 }
 
             } catch (NuxeoException e) {
-                log.error("Error for dialect " + dialect + ": " + e);
-                session.cancel();
+                // TODO: HAVE BETTER ERROR HANDLING
+                log.error("Error for dialect " + dialect.getPropertyValue("dc:title") + ": " + e);
             }
         }
     }
@@ -54,7 +55,6 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
             if (confusableList != null) {
                 for (String confusableCharacter : confusableList) {
                     String characterTitle = (String) d.getPropertyValue("dc:title");
-                    // TODO: HAVE BETTER ERROR HANDLING
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
                         throw new NuxeoException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }

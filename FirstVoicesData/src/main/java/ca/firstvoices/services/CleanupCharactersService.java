@@ -1,12 +1,11 @@
-package ca.firstvoices.document.services;
+package ca.firstvoices.services;
 
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 
 import java.util.Map;
 
 public interface CleanupCharactersService {
-        void cleanUnicodeCharacters(CoreSession session, DocumentModel document, String[] types, String propertyName);
+        void cleanConfusables(DocumentModel document);
         Map<String, String> mapAndValidateConfusableCharacters(DocumentModelList characters);
 }
