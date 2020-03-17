@@ -15,6 +15,9 @@ import org.nuxeo.runtime.api.Framework;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class FVDocumentListener extends AbstractListener {
 
@@ -114,12 +117,20 @@ public class FVDocumentListener extends AbstractListener {
     }
 
     public void validateCharacter() {
-        if ((e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)
-                || e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE))
-                && document.getDocumentType().getName().equals("FVCharacter")) {
+        if (document.getDocumentType().getName().equals("FVCharacter")) {
             try {
                 DocumentModelList characters = getCharacters(document);
-                cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+
+                if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+                    List<DocumentModel> results = characters.stream().map(
+                            c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
+                    cleanupCharactersService.mapAndValidateConfusableCharacters(results);
+                }
+
+                if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+                    cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+                }
+
             } catch (Exception exception) {
                 rollBackEvent(e);
                 throw exception;

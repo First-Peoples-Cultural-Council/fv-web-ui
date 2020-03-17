@@ -1,8 +1,6 @@
 package ca.firstvoices.services;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.*;
 
 import java.util.*;
@@ -10,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class CleanupCharactersServiceImpl extends AbstractService implements CleanupCharactersService {
 
-    private static final Log log = LogFactory.getLog(CleanupCharactersService.class);
     private CoreSession session;
     private String[] types = {
             "FVPhrase",
@@ -44,7 +41,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     }
 
     @Override
-    public Map<String, String> mapAndValidateConfusableCharacters(DocumentModelList characters) throws FVCharacterInvalidException {
+    public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
         List<String> characterValues = characters.stream().map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
 

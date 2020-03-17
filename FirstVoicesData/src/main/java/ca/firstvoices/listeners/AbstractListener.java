@@ -1,5 +1,6 @@
 package ca.firstvoices.listeners;
 
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -8,12 +9,13 @@ import org.nuxeo.ecm.core.event.EventListener;
 
 public abstract class AbstractListener implements EventListener {
     protected DocumentModel getDialect(DocumentModel doc) {
+        CoreSession session = doc.getCoreSession();
         if ("FVDialect".equals(doc.getType())) {
             return doc; // doc is dialect
         }
-        DocumentModel parent = doc.getCoreSession().getParentDocument(doc.getRef());
+        DocumentModel parent = session.getDocument(doc.getParentRef());
         while (parent != null && !"FVDialect".equals(parent.getType())) {
-            parent = doc.getCoreSession().getParentDocument(parent.getRef());
+            parent = session.getDocument(parent.getParentRef());
         }
         if (parent == null) {
             return null;
