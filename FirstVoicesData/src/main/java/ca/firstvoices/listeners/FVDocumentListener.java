@@ -2,14 +2,13 @@ package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.AssignAncestorsService;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.runtime.api.Framework;
@@ -17,7 +16,7 @@ import org.nuxeo.runtime.api.Framework;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class FVDocumentListener implements EventListener {
+public class FVDocumentListener extends AbstractListener {
 
     private CoreSession session;
     private AssignAncestorsService assignAncestorsService = Framework.getService(AssignAncestorsService.class);
@@ -46,10 +45,12 @@ public class FVDocumentListener implements EventListener {
 
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
             cleanupWordsAndPhrases();
+            validateCharacter();
         }
 
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
             cleanupWordsAndPhrases();
+            validateCharacter();
         }
 
 
@@ -88,24 +89,41 @@ public class FVDocumentListener implements EventListener {
     }
 
     public void cleanupWordsAndPhrases() {
-        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-            DocumentPart[] docParts = document.getParts();
-            for (DocumentPart docPart : docParts) {
-                Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
+        try {
+            if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+                DocumentPart[] docParts = document.getParts();
+                for (DocumentPart docPart : docParts) {
+                    Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
 
-                while (dirtyChildrenIterator.hasNext()) {
-                    Property property = dirtyChildrenIterator.next();
-                    String propertyName = property.getField().getName().toString();
-                    if (property.isDirty() && propertyName.equals("dc:title")) {
-                        cleanupCharactersService.cleanConfusables(document);
+                    while (dirtyChildrenIterator.hasNext()) {
+                        Property property = dirtyChildrenIterator.next();
+                        String propertyName = property.getField().getName().toString();
+                        if (property.isDirty() && propertyName.equals("dc:title")) {
+                            cleanupCharactersService.cleanConfusables(document);
+                        }
                     }
                 }
             }
-
+            if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+                cleanupCharactersService.cleanConfusables(document);
+            }
+        } catch (Exception exception) {
+            rollBackEvent(e);
+            throw exception;
         }
+    }
 
-        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-            cleanupCharactersService.cleanConfusables(document);
+    public void validateCharacter() {
+        if ((e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)
+                || e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE))
+                && document.getDocumentType().getName().equals("FVCharacter")) {
+            try {
+                DocumentModelList characters = getCharacters(document);
+                cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+            } catch (Exception exception) {
+                rollBackEvent(e);
+                throw exception;
+            }
         }
     }
 }

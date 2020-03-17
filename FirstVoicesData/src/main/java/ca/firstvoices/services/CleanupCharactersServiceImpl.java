@@ -1,5 +1,6 @@
 package ca.firstvoices.services;
 
+import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.*;
@@ -31,18 +32,11 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
         String propertyValue = (String) document.getPropertyValue("dc:title");
 
         if (propertyValue != null) {
-            try {
-                Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
-                String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
-                if (!updatedPropertyValue.equals(propertyValue)) {
-                     document.setPropertyValue("dc:title", updatedPropertyValue);
-                    return document;
-                }
-
-            } catch (NuxeoException e) {
-                // TODO: HAVE BETTER ERROR HANDLING.
-                //  WE SHOULD NOT GET TO THESE ERROR STATES AND SHOULD VALIDATE THE CONFUSABLE CHARACTERS BEFORE SAVE.
-                log.error("Error for dialect " + dialect.getPropertyValue("dc:title") + ": " + e);
+            Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
+            String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
+            if (!updatedPropertyValue.equals(propertyValue)) {
+                 document.setPropertyValue("dc:title", updatedPropertyValue);
+                return document;
             }
         }
 
@@ -50,7 +44,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     }
 
     @Override
-    public Map<String, String> mapAndValidateConfusableCharacters(DocumentModelList characters) throws NuxeoException {
+    public Map<String, String> mapAndValidateConfusableCharacters(DocumentModelList characters) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
         List<String> characterValues = characters.stream().map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
 
@@ -60,13 +54,13 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
                 for (String confusableCharacter : confusableList) {
                     String characterTitle = (String) d.getPropertyValue("dc:title");
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
-                        throw new NuxeoException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }
                     if (confusables.containsKey(characterTitle)) {
-                        throw new NuxeoException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }
                     if (characterValues.contains(confusableCharacter)) {
-                        throw new NuxeoException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
                     }
                 }
             }
