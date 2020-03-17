@@ -251,7 +251,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    {intl.trans('date_created', 'Date Created', 'first')}
+                    {intl.trans('date_created', 'Date Added to FirstVoices', 'first')}
                   </span>
                   <br />
                   {selectn('response.properties.dc:created', computeItem)}

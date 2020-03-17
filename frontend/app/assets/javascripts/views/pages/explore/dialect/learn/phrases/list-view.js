@@ -259,7 +259,7 @@ export class PhrasesListView extends DataListView {
         {
           name: 'dc:created',
           width: 210,
-          title: intl.trans('date_created', 'Date Created'),
+          title: intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data) => {
             return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
           },
