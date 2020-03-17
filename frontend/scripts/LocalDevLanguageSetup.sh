@@ -8,30 +8,39 @@ TARGET="http://127.0.0.1:8080"
 # If "-skip-clone" parameter is supplied then don't do a fresh clone of fv-batch-import and fv-utils
 # and skip building the jars.
 if [ "$1" != "-skip-clone" ]; then
-
-    # Delete old copies of fv-utils and fv-batch-import and clone fresh ones
-    if [ -d "$DIRECTORY/temp/fv-utils-temp" ]; then
-      echo "Removing old fv-utils"
-      rm -rf $DIRECTORY/temp/fv-utils-temp
-    fi
-    if [ -d "$DIRECTORY/temp/fv-batch-import-temp" ]; then
-      echo "Removing old fv-batch-import"
-      rm -rf $DIRECTORY/temp/fv-batch-import-temp
-    fi
-
     mkdir temp
 
-    git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
-    if [[ "$?" -ne 0 ]]; then
-      echo
-      echo -e 'git clone fv-batch-import failed \n'; exit 1
-      echo
+    FVUTILS=$DIRECTORY/temp/fv-utils-temp
+    FVBATCH=$DIRECTORY/temp/fv-batch-import-temp
+
+    if [ -d "$FVBATCH" ]; then
+      echo "pulling fv-batch-import"
+      cd $FVUTILS
+      git pull
+      cd $DIRECTORY
+    else
+        echo "cloning fv-batch-import"
+        git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
+        if [[ "$?" -ne 0 ]]; then
+          echo
+          echo -e 'git clone fv-batch-import failed \n'; exit 1
+          echo
+        fi
     fi
-    git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
-    if [[ "$?" -ne 0 ]]; then
-      echo
-      echo -e 'git clone fv-utils failed \n'; exit 1
-      echo
+
+    if [ -d "$FVUTILS" ]; then
+      echo "pulling fv-utils"
+      cd $FVBATCH
+      git pull
+      cd $DIRECTORY
+    else
+      echo "cloning fv-utils"
+      git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
+      if [[ "$?" -ne 0 ]]; then
+        echo
+        echo -e 'git clone fv-utils failed \n'; exit 1
+        echo
+      fi
     fi
 
     # Compile jar files from fv-utils and fv-batch-upload
