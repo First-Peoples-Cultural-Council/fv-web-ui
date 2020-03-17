@@ -46,6 +46,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+  dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 
@@ -464,39 +465,7 @@ class WordsListView extends DataListView {
             type={'FVWord'}
             dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
             dictionaryListViewMode={this.props.dictionaryListViewMode}
-            dictionaryListSmallScreenTemplate={({ templateData }) => {
-              return (
-                <div className="DictionaryListSmallScreen__item">
-                  <div className="DictionaryListSmallScreen__groupMain">
-                    {templateData.actions}
-                    {templateData.rowClick}
-                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-                      {templateData.title}
-                      <span className="DictionaryListSmallScreen__partOfSpeech">
-                        {templateData['fv-word:part_of_speech']}
-                      </span>
-                    </div>
-                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-                      {templateData.related_audio}
-                    </div>
-
-                    {templateData['fv:definitions'] && (
-                      <div className="DictionaryListSmallScreen__groupData">
-                        <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-                        {templateData['fv:definitions']}
-                      </div>
-                    )}
-
-                    <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-                      <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
-                      <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
-                    </div>
-                  </div>
-
-                  <div className="DictionaryListSmallScreen__groupData">{templateData.related_pictures}</div>
-                </div>
-              )
-            }}
+            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplateWords}
             // List View
             hasViewModeButtons={this.props.hasViewModeButtons}
             rowClickHandler={this.props.rowClickHandler}

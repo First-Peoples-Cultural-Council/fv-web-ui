@@ -17,6 +17,8 @@ limitations under the License.
 // -------------------------------------------
 import React, { Component, Suspense } from 'react'
 import PropTypes from 'prop-types'
+import Immutable, { is, Map, Set } from 'immutable'
+import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -28,12 +30,7 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
-import { updatePageProperties } from 'providers/redux/reducers/navigation'
-
-// MISC
-import Immutable, { is, Map, Set } from 'immutable'
-import selectn from 'selectn'
+import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
 
 // FPCC
 // -------------------------------------------
@@ -56,6 +53,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+  dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
@@ -93,27 +91,17 @@ class WordsFilteredByCategory extends Component {
   }
 
   async componentDidMount() {
-    const { routeParams } = this.props
+    const { computeDocument, computePortal, routeParams } = this.props
 
     // Portal
-    ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
+    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
     // Document
-    ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Dictionary',
-      this.props.fetchDocument,
-      this.props.computeDocument
-    )
+    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Dictionary`, this.props.fetchDocument, computeDocument)
 
     // Category
     let categories = this.getCategories()
     if (categories === undefined) {
-      await this.props.fetchCategories(
-        '/api/v1/path/FV/' + routeParams.area + '/SharedData/Shared Categories/@children'
-      )
+      await this.props.fetchCategories(`/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`)
       categories = this.getCategories()
     }
 
@@ -177,11 +165,16 @@ class WordsFilteredByCategory extends Component {
   constructor(props, context) {
     super(props, context)
 
+    const { computeCategories, computeDocument, computePortal, properties, routeParams } = props
+
     let filterInfo = this.initialFilterInfo()
 
     // If no filters are applied via URL, use props
     if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
-      const pagePropertiesFilterInfo = selectn([[this.getPageKey()], 'filterInfo'], props.properties.pageProperties)
+      const pagePropertiesFilterInfo = selectn(
+        [[`${routeParams.area}_${routeParams.dialect_name}_learn_words`], 'filterInfo'],
+        properties.pageProperties
+      )
       if (pagePropertiesFilterInfo) {
         filterInfo = pagePropertiesFilterInfo
       }
@@ -189,16 +182,16 @@ class WordsFilteredByCategory extends Component {
 
     const computeEntities = Immutable.fromJS([
       {
-        id: props.routeParams.dialect_path,
-        entity: props.computePortal,
+        id: routeParams.dialect_path,
+        entity: computePortal,
       },
       {
-        id: `${props.routeParams.dialect_path}/Dictionary`,
-        entity: props.computeDocument,
+        id: `${routeParams.dialect_path}/Dictionary`,
+        entity: computeDocument,
       },
       {
-        id: `/api/v1/path/FV/${props.routeParams.area}/SharedData/Shared Categories/@children`,
-        entity: props.computeCategories,
+        id: `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`,
+        entity: computeCategories,
       },
     ])
 
@@ -206,12 +199,13 @@ class WordsFilteredByCategory extends Component {
       computeEntities,
       filterInfo,
       flashcardMode: false,
-      isKidsTheme: props.routeParams.siteTheme === 'kids',
+      isKidsTheme: routeParams.siteTheme === 'kids',
     }
   }
 
   render() {
-    const { computeEntities, filterInfo, isKidsTheme } = this.state
+    const { categories, characters, computeEntities, filterInfo, isKidsTheme } = this.state
+
     const {
       computeDialect2,
       computeDocument,
@@ -238,35 +232,14 @@ class WordsFilteredByCategory extends Component {
     const wordListView = selectn('response.uid', computedDocument) ? (
       <Suspense fallback={<div>Loading...</div>}>
         <DictionaryList
-          //   // Export
-          //   exportDialectColumns={props.exportDialectColumns}
-          //   exportDialectExportElement={props.exportDialectExportElement}
-          //   exportDialectLabel={props.exportDialectLabel}
-          //   exportDialectQuery={props.exportDialectQuery}
-          //   hasExportDialect={props.hasExportDialect}
-          //   // Listview
-          //   data={props.data}
-          //   hasFlashcard={props.flashcard}
-          //   hasViewModeButtons={props.hasViewModeButtons}
-          //   rowClickHandler={props.rowClickHandler}
           dictionaryListClickHandlerViewMode={this.props.setListViewMode}
           dictionaryListViewMode={listView.mode}
-          //   dictionaryListSmallScreenTemplate={props.dictionaryListSmallScreenTemplate}
-          //   // Listview: Batch
-          //   batchConfirmationAction={props.batchConfirmationAction}
-          //   batchTitleSelect={props.batchTitleSelect}
-          //   batchTitleDeselect={props.batchTitleDeselect}
-          //   batchFooterIsConfirmOrDenyTitle={props.batchFooterIsConfirmOrDenyTitle}
-          //   batchFooterBtnInitiate={props.batchFooterBtnInitiate}
-          //   batchFooterBtnDeny={props.batchFooterBtnDeny}
-          //   batchFooterBtnConfirm={props.batchFooterBtnConfirm}
-          //   batchSelected={props.batchSelected}
-          //   setBatchSelected={props.setBatchSelected}
-          //   batchDeletedUids={props.batchDeletedUids}
-          //   setBatchDeletedUids={props.setBatchDeletedUids}
-          //   // Listview: computed data
-          //   computedData={props.computedData}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplateWords}
+          flashcardTitle={pageTitle}
+          dialect={computedDialect2Response}
+          // ==================================================
           // Search
+          // --------------------------------------------------
           handleSearch={this.handleSearch}
           resetSearch={this.resetSearch}
           hasSearch
@@ -291,11 +264,10 @@ class WordsFilteredByCategory extends Component {
               labelText: 'Parts of speech:',
             },
           ]}
-          //   searchByMode={props.searchByMode}
-          //   searchDialectDataType={props.searchDialectDataType}
-          //   // ==================================================
-          //   cellHeight={160}
-          //   cols={props.gridCols}
+          // ==================================================
+          // Table data
+          // --------------------------------------------------
+          items={selectn('response.entries', computedWords)}
           columns={[
             {
               name: 'title',
@@ -443,12 +415,9 @@ class WordsFilteredByCategory extends Component {
               },
             },
           ]}
-          //   // cssModifier={props.cssModifier}
-          dialect={computedDialect2Response}
           // ===============================================
           // Pagination
           // -----------------------------------------------
-          // disablePageSize={props.disablePageSize}
           hasPagination
           fetcher={({ currentPageIndex, pageSize }) => {
             const newUrl = appendPathArrayAfterLandmark({
@@ -461,17 +430,9 @@ class WordsFilteredByCategory extends Component {
           fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
           metadata={selectn('response', computedWords)}
           // ===============================================
-          flashcardTitle={pageTitle}
-          //   gridListTile={props.gridListTile}
-          items={selectn('response.entries', computedWords)}
-          //   style={{ overflowY: 'auto', maxHeight: '50vh' }}
-          //   type={props.type}
-          //
-          // ===============================================
           // Sort
           // -----------------------------------------------
           sortHandler={this.sortHandler}
-          //   hasSorting={props.hasSorting}
           // ===============================================
         />
       </Suspense>
@@ -521,12 +482,11 @@ class WordsFilteredByCategory extends Component {
                   if (url) {
                     NavigationHelpers.navigate(`/${url}`, this.props.pushWindowPath, false)
                   } else {
-                    // this._onNavigateRequest('create') // NOTE: This function is in PageDialectLearnBase
                     onNavigateRequest({
-                      hasPagination: hasPagination,
+                      hasPagination,
                       path: 'create',
                       pushWindowPath: this.props.pushWindowPath,
-                      splitWindowPath: splitWindowPath,
+                      splitWindowPath,
                     })
                   }
                 }}
@@ -540,23 +500,18 @@ class WordsFilteredByCategory extends Component {
         <div className="row">
           <div className="col-xs-12 col-md-3 PrintHide">
             <AlphabetListView
-              characters={this.state.characters}
+              characters={characters}
               dialectClassName={dialectClassName}
               handleClick={this.handleAlphabetClick}
               letter={selectn('letter', routeParams)}
             />
 
             <DialectFilterList
-              type={this.DIALECT_FILTER_TYPE}
-              title={intl.trans(
-                'views.pages.explore.dialect.learn.words.browse_by_category',
-                'Browse Categories',
-                'words'
-              )}
-              filterInfo={filterInfo}
-              // appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
               appliedFilterIds={new Set([routeParams.category])}
+              clearDialectFilter={this.clearDialectFilter}
+              facets={categories}
               facetField={facetField}
+              filterInfo={filterInfo}
               handleDialectFilterClick={this.handleCategoryClick}
               handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
                 this.handleDialectFilterChange({
@@ -565,13 +520,17 @@ class WordsFilteredByCategory extends Component {
                   type,
                   unselected,
                   routeParams: routeParams,
-                  filterInfo: this.state.filterInfo,
+                  filterInfo: filterInfo,
                   shouldResetUrlPagination,
                 })
               }}
-              facets={this.state.categories}
-              clearDialectFilter={this.clearDialectFilter}
               routeParams={routeParams}
+              title={intl.trans(
+                'views.pages.explore.dialect.learn.words.browse_by_category',
+                'Browse Categories',
+                'words'
+              )}
+              type={this.DIALECT_FILTER_TYPE}
             />
           </div>
           <div className="col-xs-12 col-md-9">
@@ -652,11 +611,6 @@ class WordsFilteredByCategory extends Component {
     const { computeCharacters, routeParams } = this.props
     const computedCharacters = ProviderHelpers.getEntry(computeCharacters, `${routeParams.dialect_path}/Alphabet`)
     return selectn('response.entries', computedCharacters)
-  }
-
-  getPageKey = () => {
-    const { routeParams } = this.props
-    return `${routeParams.area}_${routeParams.dialect_name}_learn_words`
   }
 
   handleAlphabetClick = async (letter, href, updateHistory = true) => {

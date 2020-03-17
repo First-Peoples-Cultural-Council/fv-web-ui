@@ -85,6 +85,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       this.props.fetchPortal,
       this.props.computePortal
     )
+
     // Document
     ProviderHelpers.fetchIfMissing(
       routeParams.dialect_path + '/Dictionary',
@@ -310,18 +311,18 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             />
 
             <DialectFilterList
-              type={this.DIALECT_FILTER_TYPE}
+              // appliedFilterIds={new Set([this.props.routeParams.category])}
+              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
+              facets={this.state.categories}
+              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              routeParams={this.props.routeParams}
               title={intl.trans(
                 'views.pages.explore.dialect.learn.words.browse_by_category',
                 'Browse Categories',
                 'words'
               )}
-              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-              // appliedFilterIds={new Set([this.props.routeParams.category])}
-              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
-              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-              facets={this.state.categories}
-              routeParams={this.props.routeParams}
+              type={this.DIALECT_FILTER_TYPE}
             />
           </div>
           <div className={classNames('col-xs-12', 'col-md-9')}>
