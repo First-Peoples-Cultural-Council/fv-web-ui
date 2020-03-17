@@ -1,27 +1,23 @@
 package ca.firstvoices.testUtil;
 
-import org.junit.runner.RunWith;
-import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.test.CoreFeature;
-import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
-import org.nuxeo.ecm.core.test.annotations.Granularity;
-import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
-import org.nuxeo.runtime.test.runner.*;
 
 import static org.junit.Assert.assertNotNull;
 
 public abstract class AbstractTest {
   
   private DocumentModel dialectDoc;
+  private DocumentModel alphabetDoc;
   
   public DocumentModel getCurrentDialect()
   {
     return dialectDoc;
+  }
+
+  public DocumentModel getAlphabetDoc() {
+    return alphabetDoc;
   }
   
   public void createSetup(CoreSession session) {
@@ -75,8 +71,8 @@ public abstract class AbstractTest {
         createDocument(session, session.createDocumentModel("/FV/Family", "Language", "FVLanguage")));
     dialectDoc = createDocument(session, session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
     assertNotNull("Should have a valid FVDialect", dialectDoc);
-    assertNotNull("Should have a valid FVAlphabet",
-            createDocument(session, session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet")));
+    alphabetDoc = createDocument(session, session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));
+    assertNotNull("Should have a valid FVAlphabet", alphabetDoc);
     assertNotNull("Should have a valid FVDictionary",
             createDocument(session, session.createDocumentModel(dialectDoc.getPathAsString(), "Dictionary", "FVDictionary")));
   }
