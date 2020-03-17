@@ -1,7 +1,7 @@
 package ca.firstvoices.services;
 
 
-import ca.firstvoices.testUtil.AbstractTestUtil;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
@@ -60,7 +59,7 @@ import static org.junit.Assert.assertNotNull;
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class CleanupCharactersServiceImplTest extends AbstractTestUtil {
+public class CleanupCharactersServiceImplTest extends AbstractTest {
 
     @Inject
     private CoreSession session;

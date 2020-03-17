@@ -1,6 +1,6 @@
 package ca.firstvoices.services;
 
-import ca.firstvoices.testUtil.AbstractTestUtil;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +56,7 @@ import static org.junit.Assert.*;
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class AssignAncestorsServiceImplTest extends AbstractTestUtil {
+public class AssignAncestorsServiceImplTest extends AbstractTest {
 
   @Inject
   private CoreSession session;

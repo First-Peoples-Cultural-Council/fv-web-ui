@@ -1,6 +1,6 @@
 package ca.firstvoices.operations;
 
-import ca.firstvoices.testUtil.AbstractTestUtil;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +64,7 @@ import static org.junit.Assert.*;
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
-public class InitialDatabaseSetupTest extends AbstractTestUtil {
+public class InitialDatabaseSetupTest extends AbstractTest {
 
     DocumentModel sectionsRoot;
 
