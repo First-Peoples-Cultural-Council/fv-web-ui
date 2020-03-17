@@ -75,7 +75,10 @@
         style="background-color: #0d6c80;color:#fff;text-align:right;font-size:0.9em;"
       >
         <strong>Version:</strong> <%= VERSION %> (<%= DATE %>)<br/>
-        <span style="color: #0d6c80;"><strong>Commit</strong>: <%= COMMIT %> | <strong>Branch</strong>: <%= BRANCH %></span>
+        <span style="color: #0d6c80;">
+          <strong>Commit</strong>: 
+          <a style="color: #0d6c80;" href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>"><%= COMMIT %></a> | <strong>Branch</strong>: <%= BRANCH %>
+        </span>
       </div>
     </div>
 
