@@ -273,7 +273,7 @@ const addBrowsePhraseBook = (route) => {
       }) +
       ' | ' +
       selectn('title', route),
-    // page: <Pages.PageDialectLearnPhrasesFilteredByCategory />,
+    page: <Pages.PageDialectLearnPhrasesFilteredByCategory />,
   })
 }
 

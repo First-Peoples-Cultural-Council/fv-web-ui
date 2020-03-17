@@ -20,44 +20,6 @@ import selectn from 'selectn'
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
 
-export const dictionaryListSmallScreenColumnDataTemplate = {
-  cellRender: 0,
-  cellRenderTypography: 1,
-  columnTitleCellRender: 2,
-  custom: 3,
-}
-
-export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren = ({
-  cellRender,
-  column,
-  className = '',
-}) => {
-  const children = selectn('props.children', cellRender) || []
-  const toReturn =
-    cellRender && cellRender !== '' && cellRender !== null && children.length > 0 ? (
-      <div className={className}>
-        <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
-      </div>
-    ) : null
-  return toReturn
-}
-export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender = ({
-  cellRender,
-  // column,
-  className = '',
-}) => {
-  const children = selectn('props.children', cellRender) || []
-  const toReturn =
-    cellRender && cellRender !== '' && cellRender !== null && children.length > 0 ? (
-      <span className={className}>{cellRender}</span>
-    ) : null
-  return toReturn
-}
-
-export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRender, className = '' }) => {
-  return cellRender ? <div className={`DictionaryListSmallScreen__audioGroup ${className}`}>{cellRender}</div> : null
-}
-
 const DictionaryListSmallScreen = (props) => {
   const { items, columns } = props
 
@@ -284,3 +246,119 @@ DictionaryListSmallScreen.defaultProps = {
 }
 
 export default DictionaryListSmallScreen
+
+// dictionaryListSmallScreenColumnDataTemplate
+// Constants
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenColumnDataTemplate = {
+  cellRender: 0,
+  cellRenderTypography: 1,
+  columnTitleCellRender: 2,
+  custom: 3,
+}
+
+// dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren = ({
+  cellRender,
+  column,
+  className = '',
+}) => {
+  const children = selectn('props.children', cellRender) || []
+  const toReturn =
+    cellRender && cellRender !== '' && cellRender !== null && children.length > 0 ? (
+      <div className={className}>
+        <strong>{column.title ? `${column.title}:` : ''}</strong> {cellRender}
+      </div>
+    ) : null
+  return toReturn
+}
+
+// dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender = ({
+  cellRender,
+  // column,
+  className = '',
+}) => {
+  const children = selectn('props.children', cellRender) || []
+  const toReturn =
+    cellRender && cellRender !== '' && cellRender !== null && children.length > 0 ? (
+      <span className={className}>{cellRender}</span>
+    ) : null
+  return toReturn
+}
+
+// dictionaryListSmallScreenColumnDataTemplateCustomAudio
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRender, className = '' }) => {
+  return cellRender ? <div className={`DictionaryListSmallScreen__audioGroup ${className}`}>{cellRender}</div> : null
+}
+
+// dictionaryListSmallScreenTemplateWords
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
+  return (
+    <div className="DictionaryListSmallScreen__item">
+      <div className="DictionaryListSmallScreen__groupMain">
+        {templateData.actions}
+        {templateData.rowClick}
+        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+          {templateData.title}
+          <span className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
+        </div>
+        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+          {templateData.related_audio}
+        </div>
+
+        {templateData['fv:definitions'] && (
+          <div className="DictionaryListSmallScreen__groupData">
+            <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+            {templateData['fv:definitions']}
+          </div>
+        )}
+
+        <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
+          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
+          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+        </div>
+      </div>
+
+      <div className="DictionaryListSmallScreen__groupData">{templateData.related_pictures}</div>
+    </div>
+  )
+}
+
+// dictionaryListSmallScreenTemplatePhrases
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenTemplatePhrases = ({ templateData }) => {
+  return (
+    <div className="DictionaryListSmallScreen__item">
+      <div className="DictionaryListSmallScreen__groupMain">
+        {templateData.actions}
+        {templateData.rowClick}
+        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+          {templateData.title}
+          <span className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
+        </div>
+        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+          {templateData.related_audio}
+        </div>
+
+        {templateData['fv:definitions'] && (
+          <div className="DictionaryListSmallScreen__groupData">
+            <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+            {templateData['fv:definitions']}
+          </div>
+        )}
+
+        <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
+          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
+          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+        </div>
+      </div>
+
+      <div className="DictionaryListSmallScreen__groupData">{templateData.related_pictures}</div>
+    </div>
+  )
+}

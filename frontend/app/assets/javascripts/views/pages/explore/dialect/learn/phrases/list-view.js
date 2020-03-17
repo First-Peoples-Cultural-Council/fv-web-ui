@@ -48,6 +48,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+  dictionaryListSmallScreenTemplatePhrases,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 const intl = IntlService.instance
 /**
@@ -375,41 +376,7 @@ export class PhrasesListView extends DataListView {
             type={'FVPhrase'}
             dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
             dictionaryListViewMode={this.props.dictionaryListViewMode}
-            dictionaryListSmallScreenTemplate={({ templateData }) => {
-              return (
-                <div className="DictionaryListSmallScreen__item">
-                  <div className="DictionaryListSmallScreen__groupMain">
-                    {templateData.actions}
-                    {templateData.rowClick}
-                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-                      {templateData.title}
-                      <span className="DictionaryListSmallScreen__partOfSpeech">
-                        {templateData['fv-word:part_of_speech']}
-                      </span>
-                    </div>
-                    <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-                      {templateData.related_audio}
-                    </div>
-
-                    {templateData['fv:definitions'] && (
-                      <div className="DictionaryListSmallScreen__groupData">
-                        <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-                        {templateData['fv:definitions']}
-                      </div>
-                    )}
-
-                    <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-                      <div className="DictionaryListSmallScreen__groupData">
-                        {templateData['fv-phrase:phrase_books']}
-                      </div>
-                      <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
-                    </div>
-                  </div>
-
-                  <div className="DictionaryListSmallScreen__groupData">{templateData.related_pictures}</div>
-                </div>
-              )
-            }}
+            dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
             // SEARCH:
             handleSearch={this.props.handleSearch}
             hasSearch={this.props.hasSearch}
@@ -456,11 +423,10 @@ export class PhrasesListView extends DataListView {
 
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
     const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    props.fetchPhrases(
-      this._getPathOrParentID(props),
-      `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-        1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
-    )
+    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
+
+    props.fetchPhrases(this._getPathOrParentID(props), nql)
   }
 
   _getPathOrParentID(newProps) {
