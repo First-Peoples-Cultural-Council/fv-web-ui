@@ -6,6 +6,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import java.util.Map;
 
 public interface CleanupCharactersService {
-        void cleanConfusables(DocumentModel document);
+        DocumentModel cleanConfusables(DocumentModel document);
         Map<String, String> mapAndValidateConfusableCharacters(DocumentModelList characters);
 }

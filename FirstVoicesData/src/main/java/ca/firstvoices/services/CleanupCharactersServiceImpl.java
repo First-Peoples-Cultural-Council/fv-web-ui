@@ -17,16 +17,16 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     };
 
     @Override
-    public void cleanConfusables(DocumentModel document) {
+    public DocumentModel cleanConfusables(DocumentModel document) {
         session = document.getCoreSession();
-        if (Arrays.stream(types).parallel().noneMatch(document.getDocumentType().toString()::contains)) return;
+        if (Arrays.stream(types).parallel().noneMatch(document.getDocumentType().toString()::contains)) return document;
 
         DocumentModel dictionary = session.getDocument(document.getParentRef());
         DocumentModel dialect = session.getDocument(dictionary.getParentRef());
         DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         DocumentModelList characters = session.getChildren(alphabet.getRef());
 
-        if (characters.size() == 0) return;
+        if (characters.size() == 0) return document;
 
         String propertyValue = (String) document.getPropertyValue("dc:title");
 
@@ -35,14 +35,18 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
                 Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
                 String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
                 if (!updatedPropertyValue.equals(propertyValue)) {
-                    document.setPropertyValue("dc:title", updatedPropertyValue);
+                     document.setPropertyValue("dc:title", updatedPropertyValue);
+                    return document;
                 }
 
             } catch (NuxeoException e) {
-                // TODO: HAVE BETTER ERROR HANDLING
+                // TODO: HAVE BETTER ERROR HANDLING.
+                //  WE SHOULD NOT GET TO THESE ERROR STATES AND SHOULD VALIDATE THE CONFUSABLE CHARACTERS BEFORE SAVE.
                 log.error("Error for dialect " + dialect.getPropertyValue("dc:title") + ": " + e);
             }
         }
+
+        return document;
     }
 
     @Override
