@@ -59,7 +59,7 @@ import static org.junit.Assert.*;
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
 
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class FVDocumentListenerTest extends AbstractTestUtil{
+public class FVDocumentListenerTest extends AbstractTest{
 
   @Inject
   private CoreSession session;

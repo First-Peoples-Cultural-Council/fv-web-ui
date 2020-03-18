@@ -64,7 +64,7 @@ import static org.junit.Assert.*;
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
-public class InitialDatabaseSetupTest extends AbstractTestUtil{
+public class InitialDatabaseSetupTest extends AbstractTest{
 
     DocumentModel sectionsRoot;
 

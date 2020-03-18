@@ -55,7 +55,7 @@ import static org.junit.Assert.*;
 
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class AssignAncestorsServiceImplTest extends AbstractTestUtil{
+public class AssignAncestorsServiceImplTest extends AbstractTest{
 
   @Inject
   private CoreSession session;

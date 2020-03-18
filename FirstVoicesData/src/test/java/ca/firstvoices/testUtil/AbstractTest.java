@@ -5,7 +5,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.CoreSession;
 import static org.junit.Assert.assertNotNull;
 
-public abstract class AbstractTestUtil{
+public abstract class AbstractTest{
 
     private DocumentModel langFamilyDoc;
     private DocumentModel languageDoc;

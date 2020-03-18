@@ -55,7 +55,7 @@ import static org.junit.Assert.*;
 
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.sanitize.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class SanitizeDocumentServiceImplTest extends AbstractTestUtil{
+public class SanitizeDocumentServiceImplTest extends AbstractTest{
 
   @Inject
   private CoreSession session;
