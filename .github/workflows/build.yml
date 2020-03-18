@@ -21,7 +21,7 @@ jobs:
 
     # Checks if any changes are made in the frontend paths listed
     - name: Check for frontend changes
-      uses: softprops/diffset@v0.1.1
+      uses: softprops/diffset@v0.1.0
       id: changed-frontend
       with:
         frontend_files: |
@@ -35,7 +35,7 @@ jobs:
 
     # Checks if any changes are made to the Node package files
     - name: Check for Node changes
-      uses: softprops/diffset@v0.1.1
+      uses: softprops/diffset@v0.1.0
       id: changed-package
       with:
         package_files: |
@@ -47,7 +47,7 @@ jobs:
 
     # Checks if any changes are made in the backend paths listed
     - name: Check for backend changes
-      uses: softprops/diffset@v0.1.1
+      uses: softprops/diffset@v0.1.0
       id: changed-backend
       with:
         backend_files: |
