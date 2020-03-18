@@ -12,7 +12,7 @@ describe('SearchDialect-Words-Public.js > SearchDialect', () => {
 })
 function verifyDefaults() {
   cy.getByLabelText('Word').should('be.checked')
-  cy.getByLabelText('Definitions').should('not.be.checked')
+  cy.getByLabelText('Definitions').should('be.checked')
   cy.getByLabelText('Literal translations').should('not.be.checked')
   cy.getByLabelText('Parts of speech', { exact: false }).should('have.value', 'Any')
 }
