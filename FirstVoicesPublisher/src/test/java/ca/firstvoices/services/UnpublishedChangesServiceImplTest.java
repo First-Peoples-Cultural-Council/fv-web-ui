@@ -1,5 +1,6 @@
 package ca.firstvoices.services;
 
+import ca.firstvoices.testUtil.MockStructureTestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ import org.junit.After;
 } )
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
-public class UnpublishedChangesServiceImplTest {
+public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
 
     @Inject
     private CoreSession session;
@@ -60,7 +61,7 @@ public class UnpublishedChangesServiceImplTest {
         session.removeChildren(session.getRootDocument().getRef());
         session.save();
 
-        createDialectTree();
+        dialectDoc = createDialectTree(session);
 
     }
 
@@ -106,15 +107,6 @@ public class UnpublishedChangesServiceImplTest {
         dialectDoc = session.saveDocument(dialectDoc);
         assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
 
-    }
-
-    protected void createDialectTree() throws Exception {
-        session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-        session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-        session.createDocument(session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily"));
-        session.createDocument(session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage"));
-        dialectDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
-        dialectDoc.followTransition("Enable");
     }
 
 }

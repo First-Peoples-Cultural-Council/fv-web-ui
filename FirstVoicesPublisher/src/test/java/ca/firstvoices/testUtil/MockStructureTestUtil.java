@@ -103,11 +103,15 @@ public class MockStructureTestUtil {
 
     public DocumentModel createDialectTree(CoreSession session)
     {
-        assertNotNull("Should have a valid FVLanguageFamiliy",
-                createDocument(session, session.createDocumentModel("/FV", "Workspaces", "FVLanguageFamily")));
+        assertNotNull("Should have a valid Domain",
+            createDocument(session, session.createDocumentModel("/", "FV", "Domain")));
+        assertNotNull("Should have a valid Workspace",
+            createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
+        assertNotNull( "Should have a valid FVLanguageFamily",
+            createDocument(session, session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily")));
         assertNotNull( "Should have a valid FVLanguage",
-                createDocument(session, session.createDocumentModel("/FV/Workspaces", "Language", "FVLanguage")));
-        dialectDoc = createDocument(session, session.createDocumentModel("/FV/Workspaces/Language", "Dialect", "FVDialect"));
+            createDocument(session, session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage")));
+        dialectDoc = createDocument(session, session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
         assertNotNull("Should have a valid FVDialect", dialectDoc);
         session.save();
 

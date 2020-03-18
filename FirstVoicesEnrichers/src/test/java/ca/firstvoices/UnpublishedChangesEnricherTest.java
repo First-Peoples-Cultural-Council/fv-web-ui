@@ -1,6 +1,7 @@
 package ca.firstvoices;
 
 import ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher;
+import ca.firstvoices.EnricherTestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,10 @@ public class UnpublishedChangesEnricherTest extends AbstractJsonWriterTest .Loca
     public UnpublishedChangesEnricherTest() {
         super(DocumentModelJsonWriter.class, DocumentModel.class);
     }
-
+    
+    @Inject
+    private EnricherTestUtil testUtil;
+    
     @Inject
     protected CoreSession session;
 
@@ -70,8 +74,9 @@ public class UnpublishedChangesEnricherTest extends AbstractJsonWriterTest .Loca
         assertNotNull("Should have a valid session", session);
         session.removeChildren(session.getRootDocument().getRef());
         session.save();
-
-        createDialectTree();
+        
+        dialectDoc = testUtil.createDialectTree(session);
+        dialectDoc.followTransition("Enable");
     }
 
     @After
@@ -129,17 +134,5 @@ public class UnpublishedChangesEnricherTest extends AbstractJsonWriterTest .Loca
         json.properties(1);
         json = json.has(UnpublishedChangesEnricher.NAME).isObject();
         json.has("unpublished_changes_exist").isEquals(false);
-    }
-
-    /*
-        Helper method to create a dialect tree.
-     */
-    protected void createDialectTree() throws Exception {
-        session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-        session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-        session.createDocument(session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily"));
-        session.createDocument(session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage"));
-        dialectDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
-        dialectDoc.followTransition("Enable");
     }
 }

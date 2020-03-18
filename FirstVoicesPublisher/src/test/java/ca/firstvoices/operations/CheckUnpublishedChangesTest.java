@@ -1,5 +1,6 @@
 package ca.firstvoices.operations;
 
+import ca.firstvoices.testUtil.MockStructureTestUtil;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.junit.Before;
@@ -39,7 +40,7 @@ import org.nuxeo.ecm.automation.OperationContext;
 })
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
-public class CheckUnpublishedChangesTest {
+public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
 
   @Inject
   private CoreSession session;
@@ -55,7 +56,8 @@ public class CheckUnpublishedChangesTest {
     session.removeChildren(session.getRootDocument().getRef());
     session.save();
 
-    createDialectTree();
+    dialectDoc = createDialectTree(session);
+    dialectDoc.followTransition("Enable");
   }
 
   @After
@@ -105,18 +107,6 @@ public class CheckUnpublishedChangesTest {
     dialectDoc = session.saveDocument(dialectDoc);
     ctx.setInput(dialectDoc);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
-  }
-
-  /*
-        Helper method to create a dialect tree.
-     */
-  protected void createDialectTree() throws Exception {
-    session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    session.createDocument(session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-    session.createDocument(session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily"));
-    session.createDocument(session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage"));
-    dialectDoc = session.createDocument(session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
-    dialectDoc.followTransition("Enable");
   }
 
 }
