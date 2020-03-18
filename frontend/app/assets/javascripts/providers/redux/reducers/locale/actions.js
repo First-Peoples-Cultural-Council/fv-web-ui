@@ -49,7 +49,15 @@ export const setIntlWorkspace = (workspace = '') => {
  */
 export const addNewLabelToIntl = (label, labelKey, uuid) => {
   return (dispatch, getState) => {
-    const output = updateLabels(uuid, label, labelKey, {...getState().locale.localeLists}[getState().locale.workspace], {...getState().locale.labelIds})
+    const output = updateLabels(
+      uuid,
+      label,
+      labelKey,
+      { ...getState().locale.localeLists }[getState().locale.workspace],
+      {
+        ...getState().locale.labelIds,
+      }
+    )
 
     const newLocales = {
       ...getState().locale.localeLists,
@@ -76,7 +84,7 @@ function getWorkspaceLabels(locale, workspace, immersionMode, dispatch) {
       let translations = {}
       let ids = {}
       result.entries.forEach((entry) => {
-        const output = updateLabels(entry['ecm:uuid'], entry['dc:title'],  entry['fvlabel:labelKey'], translations, ids)
+        const output = updateLabels(entry['ecm:uuid'], entry['dc:title'], entry['fvlabel:labelKey'], translations, ids)
         translations = output.locales
         ids = output.ids
       })
@@ -117,7 +125,7 @@ export const toggleHelpMode = () => {
 }
 
 function updateLabels(id, label, labelPath, locales, ids) {
-  let translationTargetRef = locales
+  let translationTargetRef = locales || {}
   let idsTargetRef = ids
   const path = labelPath.split('.')
 

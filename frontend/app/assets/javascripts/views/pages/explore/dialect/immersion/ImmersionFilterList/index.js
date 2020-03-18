@@ -6,15 +6,15 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { FormControl, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core'
+import { FormControl, FormGroup } from '@material-ui/core'
 
-const { any, array, func, string } = PropTypes
+const { any, array, func, string, object } = PropTypes
 import '!style-loader!css-loader!./immersionFilter.css'
 
 export class ImmersionFilterList extends Component {
   static propTypes = {
     categories: array.isRequired,
-    title: string.isRequired,
+    title: PropTypes.oneOfType([string, object]).isRequired,
     routeParams: any,
     selectedCategory: string,
     changeCategory: func.isRequired,

@@ -38,7 +38,7 @@ import SearchFields from './Search'
 /**
  * List view for words in immersion
  */
-const { array, func, number, object, string } = PropTypes
+const { array, func, object, string } = PropTypes
 
 class ImmersionListView extends Component {
   static propTypes = {

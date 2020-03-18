@@ -25,6 +25,7 @@ import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } fr
 import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { addNewLabelToIntl } from 'providers/redux/reducers/locale'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 import { Document } from 'nuxeo'
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -85,7 +86,7 @@ class LabelModal extends Component {
 
   handleCreateSave = (translation, isPublishing = false) => {
     const { label, createLabel, handleClose, addNewLabelToIntl: updateIntl } = this.props
-    this.this.setState({ loading: true })
+    this.setState({ loading: true })
 
     const now = Date.now()
 
@@ -245,7 +246,9 @@ class LabelModal extends Component {
           ) : (
             <div className="PromiseWrapper__spinnerContainer">
               <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" />
-              <div className="PromiseWrapper__spinnerMessage">Loading...</div>
+              <div className="PromiseWrapper__spinnerMessage">
+                <FVLabel transKey="loading" defaultStr="Loading..." transform="first" />
+              </div>
             </div>
           )}
         </Dialog>

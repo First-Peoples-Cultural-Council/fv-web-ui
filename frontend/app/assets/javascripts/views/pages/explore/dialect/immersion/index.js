@@ -33,6 +33,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVLabel from 'views/components/FVLabel/index'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
@@ -203,7 +204,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     const allLabels = selectn('directoryEntries.fv_labels', this.props.computeDirectory) || []
 
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-      ''} Immersion Portal`
+      ''} Immersion Portal` // need locale key
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <ImmersionListView
@@ -224,7 +225,9 @@ class PageDialectImmersionList extends PageDialectLearnBase {
           <div className={classNames('col-xs-12', 'col-md-2', categoriesSize === 0 ? 'hidden' : null, 'PrintHide')}>
             <div>
               <FormControl>
-                <h2>Translation</h2>
+                <h2>
+                  <FVLabel transKey="translation" defaultStr="Translation" transform="words" />
+                </h2>
                 <RadioGroup
                   name="translated"
                   value={translateFilter}
@@ -235,19 +238,19 @@ class PageDialectImmersionList extends PageDialectLearnBase {
                   <FormControlLabel
                     value="either"
                     control={<Radio color="primary" />}
-                    label="All Labels"
+                    label="All Labels" // need locale key
                     classes={{ label: classes.label, root: classes.labelRoot }}
                   />
                   <FormControlLabel
                     value="translated"
                     control={<Radio color="primary" />}
-                    label="Translated Labels"
+                    label="Translated Labels" // need locale key
                     classes={{ label: classes.label, root: classes.labelRoot }}
                   />
                   <FormControlLabel
                     value="untranslated"
                     control={<Radio color="primary" />}
-                    label="Untranslated Labels"
+                    label="Untranslated Labels" // need locale key
                     classes={{ label: classes.label, root: classes.labelRoot }}
                   />
                 </RadioGroup>
@@ -255,7 +258,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
             </div>
             <div>
               <ImmersionFilterList
-                title={'Browse Categories'}
+                title={<FVLabel transKey="categories_browse" defaultStr="Browse Categories" transform="words" />}
                 categories={mappedCategories}
                 routeParams={this.props.routeParams}
                 selectedCategory={selectedCategory}

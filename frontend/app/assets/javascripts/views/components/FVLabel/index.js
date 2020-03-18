@@ -4,14 +4,15 @@ import proptypes from 'prop-types'
 import { connect } from 'react-redux'
 import Menu from '@material-ui/core/Menu'
 import ListItem from '@material-ui/core/ListItem'
+import Typography from '@material-ui/core/Typography'
 import { setEditingLabel } from 'providers/redux/reducers/locale'
 
 import DocumentOperations from 'operations/DocumentOperations'
-import Typography from '@material-ui/core/Typography'
 import Preview from 'views/components/Editor/Preview'
 import ProviderHelpers from 'common/ProviderHelpers'
-import '!style-loader!css-loader!./FVLabel.css'
+import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from '../Document/AuthorizationFilter/index'
+import '!style-loader!css-loader!./FVLabel.css'
 
 function FVLabel({
   transKey,
@@ -140,11 +141,13 @@ function FVLabel({
                 <div style={audioContainerStyles} />
               </ListItem>
             )}
-            <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
-              <ListItem button onClick={openEdit}>
-                Edit Translation
-              </ListItem>
-            </AuthorizationFilter>
+            {routeParams.area === WORKSPACES && (
+              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
+                <ListItem button onClick={openEdit}>
+                  Edit Translation
+                </ListItem>
+              </AuthorizationFilter>
+            )}
           </Menu>
         </span>
       )}

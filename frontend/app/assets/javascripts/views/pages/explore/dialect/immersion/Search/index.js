@@ -79,11 +79,11 @@ class SearchFields extends React.Component {
           />
 
           <FVButton variant="contained" onClick={this.submitSearch} color="primary">
-            Search Labels
+            Search Labels {/* need locale key*/}
           </FVButton>
 
           <FVButton variant="contained" onClick={this.resetSearch} style={{ marginLeft: '20px' }}>
-            Reset Search
+            Reset Search {/* need locale key */}
           </FVButton>
         </div>
       </div>

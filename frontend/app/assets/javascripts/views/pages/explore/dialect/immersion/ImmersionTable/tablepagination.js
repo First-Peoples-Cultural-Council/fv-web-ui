@@ -6,6 +6,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import LastPageIcon from '@material-ui/icons/LastPage'
 import { withStyles } from '@material-ui/core/styles'
+import FVLabel from 'views/components/FVLabel/index'
 
 const styles = (theme) => ({
   select: {
@@ -52,7 +53,7 @@ class TablePaginationActions extends React.Component {
     return (
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', fontSize: '1.6rem', fontWeight: '700' }}>
         <div style={{ marginLeft: '15px', marginTop: '3px' }}>
-          Page:
+          <FVLabel transKey="page_num" defaultStr="Page:" transform="first" />
           <Select
             classes={{ root: classes.root, select: classes.select, icon: classes.icon }}
             style={{ paddingLeft: '5px', marginLeft: '5px' }}

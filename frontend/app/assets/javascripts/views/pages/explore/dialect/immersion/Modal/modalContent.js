@@ -205,7 +205,7 @@ class ModalContent extends Component {
             paddingRight: '24px',
           }}
         >
-          <DialogTitle id="responsive-dialog-title">Edit label</DialogTitle>
+          <DialogTitle id="responsive-dialog-title">Edit label</DialogTitle> {/* need locale key */}
           <IconButton key="close" aria-label="Close" onClick={() => handleClose()}>
             <CloseIcon />
           </IconButton>
@@ -213,26 +213,41 @@ class ModalContent extends Component {
         <DialogContent>
           <fieldset>
             <legend>Label Information</legend>
-            <label className="control-label">Base Phrase</label>
+            {/* need locale key */}
+            <label className="control-label">
+              <FVLabel
+                transKey="original_associated_word_phrase"
+                defaultStr="Original Associated Word/Phrase"
+                transform="words"
+              />
+            </label>
             <div style={{ padding: '15px' }}>{this.renderTranslation(label)}</div>
             <div style={{ display: 'flex' }}>
               <div style={{ width: '50%' }}>
-                <label className="control-label">Category</label>{' '}
+                <label className="control-label">
+                  <FVLabel transKey="category" defaultStr="Category" transform="words" />
+                </label>{' '}
                 <div style={{ padding: '15px' }}>{label.category}</div>
               </div>
               <div style={{ width: '50%' }}>
-                <label className="control-label">State</label>
+                <label className="control-label">
+                  <FVLabel transKey="state" defaultStr="State" transform="words" />
+                </label>
                 <div style={{ padding: '15px' }}>{label.state}</div>
               </div>
             </div>
           </fieldset>
           <fieldset>
             <legend>Immersive Information</legend>
+            {/* need locale key */}
             <div className="alert alert-info">
               <i>This will show for the site's 'Immersion' experience.</i>
+              {/* need locale key */}
             </div>
             <div className={error || hadError ? 'has-error' : ''}>
-              <label className="control-label">Translation *</label>
+              <label className="control-label">
+                <FVLabel transKey="translation" defaultStr="Translation" transform="words" /> *
+              </label>
               {label.type === 'phrase' ? (
                 <TextField
                   id="translation"
@@ -263,7 +278,16 @@ class ModalContent extends Component {
                   />
                 </div>
               )}
-              {error && <span className="help-block error-block">Value in field "translation" cannot be empty.</span>}
+              {error && (
+                <span className="help-block error-block">
+                  <FVLabel
+                    transKey="models.value_in_field_x_cannot_be_empty"
+                    defaultStr="Value in field 'translation' cannot be empty"
+                    transform="first"
+                    params={['"Translation"']}
+                  />
+                </span>
+              )}
             </div>
 
             <div className="related-audio">
