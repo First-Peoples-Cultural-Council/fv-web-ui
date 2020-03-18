@@ -203,7 +203,15 @@ Cypress.Commands.add('AlphabetListView', (obj) => {
 // })
 Cypress.Commands.add('DialectFilterList', (obj) => {
   const _obj = Object.assign(
-    {category: undefined, confirmData: true, shouldPaginate: false, clearFilter: true, clearFilterText: 'stop browsing by category'},
+    {
+      category: undefined,
+      confirmData: true,
+      shouldPaginate: false,
+      clearFilter: true,
+      clearFilterText: 'stop browsing by category',
+      confirmActiveClass: false,
+      activeClassName: '',
+    },
     obj
   )
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
@@ -214,6 +222,11 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
     cy.getByText(_obj.category).click()
   })
   cy.wait(500)
+  if (_obj.confirmActiveClass) {
+    cy.getByTestId('DialectFilterList').within(() => {
+      cy.getByText(_obj.category).should('have.class', _obj.activeClassName)
+    })
+  }
 
   if (_obj.confirmData) {
     cy.log('--- DialectFilterList: Confirm data  ---')
@@ -238,6 +251,11 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   if (_obj.clearFilter) {
     cy.log('--- DialectFilterList: Clear filter ---')
     cy.queryByText(new RegExp(_obj.clearFilterText, 'i')).click()
+    if (_obj.confirmActiveClass) {
+      cy.getByTestId('DialectFilterList').within(() => {
+        cy.getByText(_obj.category).should('not.have.class', _obj.activeClassName)
+      })
+    }
   }
 })
 
