@@ -111,6 +111,10 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             // We cannot update this element, no point in going any further
             return;
         }
+
+        // Check to see that the character isn't in trash.
+        chars = Arrays.stream(chars).filter(c -> !c.isTrashed()).toArray(DocumentModel[]::new);
+
         String title = (String) element.getPropertyValue("dc:title");
         String nativeTitle = "";
         List<String> fvChars =

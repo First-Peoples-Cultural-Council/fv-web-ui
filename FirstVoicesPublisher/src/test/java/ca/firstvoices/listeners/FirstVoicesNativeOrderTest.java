@@ -25,6 +25,8 @@ import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.trash.TrashService;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -57,6 +59,9 @@ public class FirstVoicesNativeOrderTest {
     @Inject
     protected NativeOrderComputeService nativeOrderComputeService;
 
+    @Inject
+    protected TrashService trashService;
+
     private DocumentModel domain;
     private DocumentModel dialect;
 
@@ -77,7 +82,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingNisgaa() throws Exception {
+    public void testDialectOrderingNisgaa() {
         String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a",};
 
         String[] orderedAlphabet = {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k",
@@ -102,7 +107,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingNuuChahNulth() throws Exception {
+    public void testDialectOrderingNuuChahNulth() {
         String[] orderedWords = {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai", "ʔaaʔaƛkʷin", "ʕaanus"
                 , "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt", "cuwit", "cux" +
                 "ʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim", "hayu ʔiš muučiiłał", "hayuxsyuučiƛ", "k" +
@@ -133,7 +138,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() throws Exception {
+    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() {
         String[] orderedWords = {" ", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
                 "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
                 "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
@@ -180,7 +185,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingPhrases() throws Exception {
+    public void testDialectOrderingPhrases() {
         String[] orderedPhrases = {" ", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î",
                 "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
                 "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö",
@@ -212,6 +217,39 @@ public class FirstVoicesNativeOrderTest {
         for (DocumentModel doc : docs) {
             String reference = (String) doc.getPropertyValue("fv:reference");
             assertEquals(orderedPhrases[i], doc.getPropertyValue("dc:title"));
+            assertEquals(i, Integer.valueOf(reference));
+            i--;
+        }
+    }
+
+    @Test
+    public void testTrashedCharacterNotIncludedInOrdering() {
+        String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a", "zaa"};
+
+        String[] orderedAlphabet = {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k",
+                "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
+                "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
+
+        createAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
+        createWordsorPhrases(orderedWords, "FVWord");
+
+        DocumentModelList characters = session.getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+
+        DocumentModel z = characters.get(0);
+
+        trashService.trashDocument(z);
+        session.saveDocument(z);
+        session.save();
+
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+        Integer i = orderedWords.length - 1;
+
+        DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
+                "ORDER BY " + "fv:custom_order DESC");
+
+        for (DocumentModel doc : docs) {
+            String reference = (String) doc.getPropertyValue("fv:reference");
+            assertEquals(orderedWords[i], doc.getPropertyValue("dc:title"));
             assertEquals(i, Integer.valueOf(reference));
             i--;
         }

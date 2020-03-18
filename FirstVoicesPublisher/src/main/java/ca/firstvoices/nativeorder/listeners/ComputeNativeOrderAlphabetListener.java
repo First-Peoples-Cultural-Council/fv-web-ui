@@ -32,7 +32,9 @@ public class ComputeNativeOrderAlphabetListener implements EventListener {
     public void handleEvent(Event event) {
 
         if (!(event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED))
-                && !(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED))) {
+                && !(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED))
+                && !(event.getName().equals("documentTrashed"))
+                && !(event.getName().equals("documentUntrashed"))) {
             return;
         }
 
