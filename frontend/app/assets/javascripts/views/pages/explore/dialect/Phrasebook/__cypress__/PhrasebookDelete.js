@@ -117,9 +117,15 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
       .parent()
       .contains(browseCopy.btnInitiate)
       .click()
-    cy.getByText(browseCopy.btnDeny)
-      .should('exist')
-      .click()
+    cy.wait(1000)
+    cy.getByText(phraseBookName)
+      .parent()
+      .parent()
+      .within(() => {
+        cy.getByText(browseCopy.btnDeny)
+          .should('exist')
+          .click()
+      })
     cy.wait(2000)
     cy.getByText(phraseBookName)
       .should('exist')
@@ -129,9 +135,14 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
       .click()
 
     // Test Delete
-    cy.getByText(browseCopy.btnConfirm)
-      .should('exist')
-      .click()
+    cy.getByText(phraseBookName)
+      .parent()
+      .parent()
+      .within(() => {
+        cy.getByText(browseCopy.btnConfirm)
+          .should('exist')
+          .click()
+      })
     cy.wait(2000)
   })
 
