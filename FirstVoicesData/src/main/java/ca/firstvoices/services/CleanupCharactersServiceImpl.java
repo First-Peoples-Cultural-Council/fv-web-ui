@@ -43,7 +43,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     @Override
     public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
-        List<String> characterValues = characters.stream().map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
+        List<String> characterValues = characters.stream().filter(c-> !c.isTrashed()).map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
 
         for (DocumentModel d : characters) {
             String[] confusableList = (String[]) d.getPropertyValue("confusable_characters");
