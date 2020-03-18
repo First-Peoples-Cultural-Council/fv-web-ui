@@ -589,24 +589,34 @@ export class PhrasesFilteredByCategory extends Component {
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     const { computeDocument, navigationRouteSearch, routeParams } = this.props
-    const searchObj = getSearchObject()
 
+    let currentAppliedFilter = ''
+    if (routeParams.phraseBook) {
+      // Private
+      if (routeParams.area === 'Workspaces') {
+        currentAppliedFilter = ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
+      }
+      // Public
+      if (routeParams.area === 'sections') {
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.phraseBook}")`
+      }
+    }
+
+    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+
+    const searchObj = getSearchObject()
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
-    const currentAppliedFilter = routeParams.phraseBook
-      ? ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
-      : ''
 
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const uid = selectn('response.uid', computedDocument)
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    this.props.fetchPhrases(
-      uid,
-      `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-        1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
-    )
+
+    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
+
+    this.props.fetchPhrases(uid, nql)
   }
 
   handleAlphabetClick = async (letter) => {

@@ -216,7 +216,7 @@ class WordsFilteredByCategory extends Component {
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const computedPortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
     const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    const uid = `${routeParams.dialect_path}/Dictionary`
+    const uid = selectn('response.uid', computedDocument)
     const computedWords = ProviderHelpers.getEntry(computeWords, uid)
 
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computedPortal) ||
@@ -575,26 +575,35 @@ class WordsFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { navigationRouteSearch, routeParams } = this.props
-    const searchObj = getSearchObject()
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
 
-    // 1st: redux values, 2nd: url search query, 3rd: defaults
-    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
-    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
-    const currentAppliedFilter = routeParams.category ? ` AND fv-word:categories/* IN ("${routeParams.category}")` : ''
-    /*
     let currentAppliedFilter = ''
-    if (this.state.filterInfo.has('currentAppliedFilter')) {
-      currentAppliedFilter = Object.values(this.state.filterInfo.get('currentAppliedFilter').toJS()).join('')
+    if (routeParams.category) {
+      // Private
+      if (routeParams.area === 'Workspaces') {
+        currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}")`
+      }
+      // Public
+      if (routeParams.area === 'sections') {
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}")`
+      }
     }
 
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    */
     const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+
+    const searchObj = getSearchObject()
+    // 1st: redux values, 2nd: url search query, 3rd: defaults
+    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
+    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
+
+    const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+    const uid = selectn('response.uid', computedDocument)
+
     const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
 
-    this.props.fetchWords(`${routeParams.dialect_path}/Dictionary`, nql)
+    this.props.fetchWords(uid, nql)
   }
 
   handleAlphabetClick = async (letter, href, updateHistory = true) => {
