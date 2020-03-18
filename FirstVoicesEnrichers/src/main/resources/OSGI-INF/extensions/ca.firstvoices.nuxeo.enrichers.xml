@@ -12,7 +12,8 @@
 		<register class="ca.firstvoices.nuxeo.enrichers.BookEnricher" enable="true" />	
 		<register class="ca.firstvoices.nuxeo.enrichers.WordEnricher" enable="true" />
 		<register class="ca.firstvoices.nuxeo.enrichers.MediaEnricher" enable="true" />
-		<register class="ca.firstvoices.nuxeo.enrichers.GalleryEnricher" enable="true" />		
+		<register class="ca.firstvoices.nuxeo.enrichers.GalleryEnricher" enable="true" />
+		<register class="ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher" enable="true" />
 	</extension>   
 	
 </component>
