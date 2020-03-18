@@ -138,8 +138,8 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() {
-        String[] orderedWords = {" ", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
+    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() throws Exception {
+        String[] orderedWords = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
                 "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
                 "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
                 "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ", "a", "able", "about", "account", "across", "act", "addition",
@@ -185,8 +185,8 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingPhrases() {
-        String[] orderedPhrases = {" ", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î",
+    public void testDialectOrderingPhrases() throws Exception {
+        String[] orderedPhrases = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î",
                 "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
                 "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö",
                 "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ", "A bad excuse is better than none", "A bit", "A bit " +
