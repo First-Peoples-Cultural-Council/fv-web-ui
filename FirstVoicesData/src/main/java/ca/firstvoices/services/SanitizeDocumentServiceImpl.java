@@ -29,8 +29,11 @@ public class SanitizeDocumentServiceImpl implements SanitizeDocumentService {
 
     //This method is what actually trims the whitespace of a specific property of a given document
     private boolean trimWhitespace(DocumentModel currentDoc, String propertyName){
+        if (currentDoc == null || propertyName == null) return false;
 
         Object property = currentDoc.getPropertyValue(propertyName);
+        if (property == null) return false;
+
         if(property.getClass().equals(String.class) ){
             String val = (String) property;
 

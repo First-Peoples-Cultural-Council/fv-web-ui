@@ -22,11 +22,17 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
         DocumentModel dictionary = session.getDocument(document.getParentRef());
         DocumentModel dialect = session.getDocument(dictionary.getParentRef());
         DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-        DocumentModelList characters = session.getChildren(alphabet.getRef());
+        List<DocumentModel> characters = session.getChildren(alphabet.getRef());
 
         if (characters.size() == 0) return document;
 
         String propertyValue = (String) document.getPropertyValue("dc:title");
+
+        characters = characters
+                .stream()
+                .filter(c-> !c.isTrashed())
+                .map(c -> c.getId().equals(document.getId()) ? document : c)
+                .collect(Collectors.toList());
 
         if (propertyValue != null) {
             Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
