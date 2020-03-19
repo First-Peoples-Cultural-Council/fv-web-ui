@@ -24112,6 +24112,7 @@ function run(input, params) {
             <table>studio_vocabulary_parts_of_speech</table>
             <dataFile>data/vocabularies/parts_of_speech.csv</dataFile>
             <parentDirectory>parts_of_speech</parentDirectory>
+            <querySizeLimit>100</querySizeLimit>
             <cacheEntryName>vocab-parts_of_speech-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-parts_of_speech-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
@@ -24129,6 +24130,7 @@ function run(input, params) {
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_fv_labels</table>
             <dataFile>data/vocabularies/fv_labels.csv</dataFile>
+            <querySizeLimit>5000</querySizeLimit>
             <cacheEntryName>fv_labels-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-labels-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
@@ -24137,6 +24139,7 @@ function run(input, params) {
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_fv_label_categories</table>
             <dataFile>data/vocabularies/fv_label_categories.csv</dataFile>
+            <querySizeLimit>100</querySizeLimit>
             <cacheEntryName>fv_label_categories-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-label-categories-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>

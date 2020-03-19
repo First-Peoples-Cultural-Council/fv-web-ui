@@ -16,8 +16,8 @@ Components importing `fetchDirectory`:
   1) javascripts/views/components/Editor/DirectoryList.js
   2) javascripts/views/components/SearchDialect/index.js
 */
-// import { directoryReducer } from './directory' // triggers undef error
-import { directoryReducer } from './_directory'
+import { directoryReducer } from './directory' // triggers undef error
+// import { directoryReducer } from './_directory'
 
 import { documentReducer } from './document'
 import { errorReducer } from './error'

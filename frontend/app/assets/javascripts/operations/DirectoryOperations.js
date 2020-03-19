@@ -246,18 +246,13 @@ export default class DirectoryOperations {
     })
   }
 
-  static getDirectoryEntries(name = '', headers = {}, params = {}) {
+  static getDirectoryEntries(name = '') {
     const properties = BaseOperations.getProperties()
 
     return new Promise((resolve, reject) => {
-      const defaultParams = {
-        directoryName: name,
-      }
-      const _params = Object.assign(defaultParams, params)
       properties.client
-        .operation('Directory.Entries')
-        .params(_params)
-        .execute(headers)
+        .directory(name)
+        .fetchAll()
         .then((directory) => {
           resolve(directory)
         })

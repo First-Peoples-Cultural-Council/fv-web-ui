@@ -153,11 +153,10 @@ class PageDialectImmersionList extends PageDialectLearnBase {
           if (mappedArr[mappedElem.parent]) {
             mappedArr[mappedElem.parent].children.push(mappedElem)
           } else {
-            console.log(mappedElem, ' is wrong parent')
+            // console.log(mappedElem, ' is wrong parent')
           }
-        }
-        // If the element is at the root level, add it to first level elements array.
-        else {
+        } else {
+          // If the element is at the root level, add it to first level elements array.
           tree.push(mappedElem)
         }
       }
