@@ -8,7 +8,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import Link from 'views/components/Link'
-import NavigationHelpers from 'common/NavigationHelpers'
+import URLHelpers from '../../../common/URLHelpers'
 
 const { instanceOf, any, array, func, object, string } = PropTypes
 
@@ -129,7 +129,7 @@ export class DialectFilterList extends Component {
       const urlFragment = this.props.type === 'words' ? 'categories' : 'book'
       _splitWindowPath.push(urlFragment)
     }
-    const path = ('/' + _splitWindowPath.join('/')).replace(NavigationHelpers.getContextPath(), '')
+    const path = ('/' + _splitWindowPath.join('/')).replace(URLHelpers.getContextPath(), '')
 
     filters.forEach((filter) => {
       this.setUidUrlPath(filter, path)

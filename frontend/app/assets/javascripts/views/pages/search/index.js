@@ -40,6 +40,9 @@ import Link from 'views/components/Link'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import FormHelpers from 'common/FormHelpers'
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
+import URLHelpers from 'common/URLHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
+import UIHelpers from 'common/UIHelpers'
 
 // import SearchResultTile from './tile'
 
@@ -53,10 +56,8 @@ import {
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import withToggle from 'views/hoc/view/with-toggle'
-import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import { SECTIONS, WORKSPACES } from 'common/Constants'
-import UIHelpers from 'common/UIHelpers'
 import FVButton from 'views/components/FVButton'
 import '!style-loader!css-loader!./Search.css'
 import FVLabel from '../../components/FVLabel/index'
@@ -170,7 +171,7 @@ export class Search extends DataListView {
       )
 
       // Update url
-      const href = `${NavigationHelpers.getContextPath()}/explore${this._getQueryPath()}/search/${
+      const href = `${URLHelpers.getContextPath()}/explore${this._getQueryPath()}/search/${
         this.props.routeParams.searchTerm
       }/${pageSize}/${pageIndex}`
       NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
@@ -345,18 +346,10 @@ export class Search extends DataListView {
                       className="Search__btn RaisedButton RaisedButton--primary"
                       onClick={this._onReset}
                     >
-                      <FVLabel
-                        transKey="reset"
-                        defaultStr="Reset"
-                        transform="first"
-                      />
+                      <FVLabel transKey="reset" defaultStr="Reset" transform="first" />
                     </button>
                     <button type="submit" className="Search__btn RaisedButton RaisedButton--primary">
-                      <FVLabel
-                        transKey="search"
-                        defaultStr="Search"
-                        transform="first"
-                      />
+                      <FVLabel transKey="search" defaultStr="Search" transform="first" />
                     </button>
                   </div>
                 </FiltersWithToggle>
@@ -365,12 +358,7 @@ export class Search extends DataListView {
           </div>
           <div className={classNames('search-results', 'col-xs-12', 'col-md-9')}>
             <h1>
-              <FVLabel
-                transKey="search_results"
-                defaultStr="Search results"
-                transform="first"
-              />
-               -{' '}
+              <FVLabel transKey="search_results" defaultStr="Search results" transform="first" />-{' '}
               <span className="fontAboriginalSans">{this.props.routeParams.searchTerm}</span>
             </h1>
 
@@ -691,7 +679,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 

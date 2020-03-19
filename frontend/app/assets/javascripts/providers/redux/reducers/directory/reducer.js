@@ -1,4 +1,3 @@
-// NOTE: see `.../javascripts/providers/redux/reducers/index.js` about `_directory` vs `directory`
 import { combineReducers } from 'redux'
 import {
   DIRECTORY_FETCH_START,

@@ -28,10 +28,10 @@ import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/wind
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
-import NavigationHelpers from 'common/NavigationHelpers'
 import Paper from '@material-ui/core/Paper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
+import URLHelpers from 'common/URLHelpers'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import StateLoading from 'views/components/Loading'
@@ -91,7 +91,7 @@ export class PageDialectGalleryCreate extends Component {
       selectn('success', nextGallery) === true
     ) {
       this.props.replaceWindowPath(
-        `${NavigationHelpers.getContextPath()}/${this.props.routeParams.siteTheme}${selectn(
+        `${URLHelpers.getContextPath()}/${this.props.routeParams.siteTheme}${selectn(
           'response.path',
           nextGallery
         ).replace('Portal', 'gallery')}`
@@ -122,7 +122,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -244,11 +244,7 @@ export class PageDialectGalleryCreate extends Component {
                 />
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
-                    <FVLabel
-                      transKey="save"
-                      defaultStr="Save"
-                      transform="first"
-                    />
+                    <FVLabel transKey="save" defaultStr="Save" transform="first" />
                   </button>
                 </div>
               </form>
@@ -257,11 +253,7 @@ export class PageDialectGalleryCreate extends Component {
             <div className={classNames('col-xs-4', 'col-md-2')}>
               <Paper style={{ padding: '15px', margin: '20px 0' }}>
                 <div className="subheader">
-                  <FVLabel
-                    transKey="metadata"
-                    defaultStr="Metadata"
-                    transform="first"
-                  />
+                  <FVLabel transKey="metadata" defaultStr="Metadata" transform="first" />
                 </div>
               </Paper>
             </div>
@@ -308,7 +300,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectGalleryCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectGalleryCreate)

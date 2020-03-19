@@ -18,7 +18,6 @@
     "initialSetup": "bash ../docker/initialsetup.sh",
     "lint-staged:eslint": "npx eslint --config .eslintrc --fix",
     "lint-staged:prettier": "npx prettier --config .prettierrc --write",
-    "lint-staged:test": "jest --bail --findRelatedTests",
     "local:language:setup": "bash ./scripts/LocalDevLanguageSetup.sh",
     "local:language:teardown": "bash ./scripts/LocalDevLanguageTeardown.sh",
     "production": "webpack --color --progress --display-error-details --mode production --config build/webpack.production.js",
@@ -49,7 +48,6 @@
       "*.js": [
         "npm run lint-staged:eslint",
         "npm run lint-staged:prettier",
-        "npm run lint-staged:test",
         "git add"
       ]
     },

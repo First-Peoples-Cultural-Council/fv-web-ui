@@ -1,4 +1,3 @@
-// NOTE: see `.../javascripts/providers/redux/reducers/index.js` about `_directory` vs `directory`
 import selectn from 'selectn'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import {

@@ -1,12 +1,11 @@
-import NavigationHelpers from 'common/NavigationHelpers'
 import Nuxeo from 'nuxeo'
 import IntlService from 'views/services/intl'
-
+import URLHelpers from '../common/URLHelpers'
 export default class BaseOperations {
   static properties = {
     condition: 'ecm:isTrashed = 0 ',
     client: new Nuxeo({
-      baseURL: NavigationHelpers.getBaseURL(),
+      baseURL: URLHelpers.getBaseURL(),
       restPath: 'site/api/v1',
       automationPath: 'site/automation',
       timeout: 60000,
