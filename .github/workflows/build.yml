@@ -17,7 +17,7 @@ jobs:
     steps:
     # Checkout the current working code base
     - name: Checkout working branch
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     # Checks if any changes are made in the frontend paths listed
     - name: Check for frontend changes

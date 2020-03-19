@@ -144,7 +144,7 @@
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
     "css-loader": "~0.14.5",
-    "cypress": "^4.0.2",
+    "cypress": "^4.2.0",
     "cypress-file-upload": "^3.5.3",
     "cypress-pipe": "^1.6.0",
     "cypress-testing-library": "^2.3.6",

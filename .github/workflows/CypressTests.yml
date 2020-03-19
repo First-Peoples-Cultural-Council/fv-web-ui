@@ -31,7 +31,7 @@ jobs:
     steps:
       # Checkout the current branch
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       # Setup the correct Java version
       - name: Set up JDK 1.8
