@@ -23,6 +23,7 @@ public class FVDocumentListener extends AbstractListener {
 
     private CoreSession session;
     private AssignAncestorsService assignAncestorsService = Framework.getService(AssignAncestorsService.class);
+    protected SanitizeDocumentService sanitize = Framework.getService(SanitizeDocumentService.class);
     private CleanupCharactersService cleanupCharactersService = Framework.getService(CleanupCharactersService.class);
     private EventContext ctx;
     private Event e;
@@ -49,6 +50,10 @@ public class FVDocumentListener extends AbstractListener {
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
             cleanupWordsAndPhrases();
             validateCharacter();
+            if((document.getType().equals("FVWord") || document.getType().equals("FVPhrase"))
+                    && !document.isProxy()){
+              sanitize.sanitizeDocument(session, document);
+            }
         }
 
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
