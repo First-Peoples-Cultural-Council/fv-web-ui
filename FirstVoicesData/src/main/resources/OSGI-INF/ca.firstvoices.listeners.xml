@@ -2,10 +2,13 @@
 <component name="ca.firstvoices.listeners.FVDocumentListener" version="1.0">
     <require>ca.firstvoices.services.AssignAncestorsService</require>
     <require>ca.firstvoices.services.SanitizeDocumentService</require>
+    <require>ca.firstvoices.services.CleanupCharactersService</require>
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
         <listener enabled="true" name="fvdocumentlistener" async="false" postCommit="false"
                   class="ca.firstvoices.listeners.FVDocumentListener" priority="100">
             <event>documentCreated</event>
+            <event>beforeDocumentModification</event>
+            <event>aboutToCreate</event>
             <event>documentModified</event>
         </listener>
     </extension>
