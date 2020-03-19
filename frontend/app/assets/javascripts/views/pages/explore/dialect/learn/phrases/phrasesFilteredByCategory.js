@@ -46,7 +46,6 @@ import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -215,12 +214,9 @@ export class PhrasesFilteredByCategory extends Component {
       computeLogin,
       computePhrases,
       computePortal,
-      DEFAULT_LANGUAGE,
       hasPagination,
-      // hasSorting,
       listView,
       routeParams,
-      // rowClickHandler,
       splitWindowPath,
     } = this.props
 
@@ -274,153 +270,7 @@ export class PhrasesFilteredByCategory extends Component {
           // Table data
           // --------------------------------------------------
           items={selectn('response.entries', computedPhrases)}
-          columns={[
-            {
-              name: 'title',
-              title: intl.trans('phrase', 'Phrase', 'first'),
-              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-              render: (v, data) => {
-                const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'phrases')
-
-                const isWorkspaces = this.props.routeParams.area === WORKSPACES
-                const hrefEdit = NavigationHelpers.generateUIDEditPath(
-                  this.props.routeParams.siteTheme,
-                  data,
-                  'phrases'
-                )
-                const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
-                  `${window.location.pathname}${window.location.search}`
-                )}`
-
-                const editButton =
-                  isWorkspaces && hrefEdit ? (
-                    <AuthorizationFilter
-                      filter={{
-                        entity: computedDialect2Response,
-                        login: this.props.computeLogin,
-                        role: ['Record', 'Approve', 'Everything'],
-                      }}
-                      hideFromSections
-                      routeParams={this.props.routeParams}
-                    >
-                      <FVButton
-                        type="button"
-                        variant="flat"
-                        size="small"
-                        component="a"
-                        className="DictionaryList__linkEdit PrintHide"
-                        href={hrefEditRedirect}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
-                        }}
-                      >
-                        <Edit title={intl.trans('edit', 'Edit', 'first')} />
-                        {/* <span>{intl.trans('edit', 'Edit', 'first')}</span> */}
-                      </FVButton>
-                    </AuthorizationFilter>
-                  ) : null
-                return (
-                  <>
-                    <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
-                      {v}
-                    </Link>
-                    {editButton}
-                  </>
-                )
-              },
-              sortName: 'fv:custom_order',
-              sortBy: 'fv:custom_order',
-            },
-            {
-              name: 'fv:definitions',
-              title: intl.trans('definitions', 'Definitions', 'first'),
-              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-              columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
-              render: (v, data, cellProps) => {
-                return UIHelpers.generateOrderedListFromDataset({
-                  dataSet: selectn(`properties.${cellProps.name}`, data),
-                  extractDatum: (entry, i) => {
-                    if (entry.language === DEFAULT_LANGUAGE && i < 2) {
-                      return entry.translation
-                    }
-                    return null
-                  },
-                  classNameList: 'DictionaryList__definitionList',
-                  classNameListItem: 'DictionaryList__definitionListItem',
-                })
-              },
-              sortName: 'fv:definitions/0/translation',
-            },
-            {
-              name: 'related_audio',
-              title: intl.trans('audio', 'Audio', 'first'),
-              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-              columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
-              render: (v, data, cellProps) => {
-                const firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
-                if (firstAudio) {
-                  return (
-                    <Preview
-                      minimal
-                      styles={{ padding: 0 }}
-                      tagStyles={{ width: '100%', minWidth: '230px' }}
-                      key={selectn('uid', firstAudio)}
-                      expandedValue={firstAudio}
-                      type="FVAudio"
-                    />
-                  )
-                }
-              },
-            },
-            {
-              name: 'related_pictures',
-              width: 72,
-              textAlign: 'center',
-              title: intl.trans('picture', 'Picture', 'first'),
-              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-              render: (v, data, cellProps) => {
-                const firstPicture = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
-                if (firstPicture) {
-                  return (
-                    <img
-                      className="PrintHide itemThumbnail"
-                      key={selectn('uid', firstPicture)}
-                      src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
-                    />
-                  )
-                }
-              },
-            },
-            {
-              name: 'fv-phrase:phrase_books',
-              title: intl.trans('phrase_books', 'Phrase Books', 'words'),
-              columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-              columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
-              render: (v, data) => {
-                return UIHelpers.generateDelimitedDatumFromDataset({
-                  dataSet: selectn('contextParameters.phrase.phrase_books', data),
-                  extractDatum: (entry) => selectn('dc:title', entry),
-                })
-              },
-            },
-            {
-              name: 'dc:modified',
-              width: 210,
-              title: intl.trans('date_modified', 'Date Modified'),
-              render: (v, data) => {
-                return StringHelpers.formatUTCDateString(selectn('lastModified', data))
-              },
-            },
-            {
-              name: 'dc:created',
-              width: 210,
-              title: intl.trans('date_created', 'Date Created'),
-              render: (v, data) => {
-                return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
-              },
-            },
-          ]}
+          columns={this.getColumns()}
           // ===============================================
           // Pagination
           // -----------------------------------------------
@@ -619,6 +469,167 @@ export class PhrasesFilteredByCategory extends Component {
     this.props.fetchPhrases(uid, nql)
   }
 
+  getColumns = () => {
+    const { computeDialect2, DEFAULT_LANGUAGE, routeParams } = this.props
+
+    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+    const computedDialect2Response = selectn('response', computedDialect2)
+    const columns = [
+      {
+        name: 'title',
+        title: intl.trans('phrase', 'Phrase', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
+        render: (v, data) => {
+          const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'phrases')
+
+          const isWorkspaces = this.props.routeParams.area === WORKSPACES
+          const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
+          const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
+            `${window.location.pathname}${window.location.search}`
+          )}`
+
+          const editButton =
+            isWorkspaces && hrefEdit ? (
+              <AuthorizationFilter
+                filter={{
+                  entity: computedDialect2Response,
+                  login: this.props.computeLogin,
+                  role: ['Record', 'Approve', 'Everything'],
+                }}
+                hideFromSections
+                routeParams={this.props.routeParams}
+              >
+                <FVButton
+                  type="button"
+                  variant="flat"
+                  size="small"
+                  component="a"
+                  className="DictionaryList__linkEdit PrintHide"
+                  href={hrefEditRedirect}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
+                  }}
+                >
+                  <Edit title={intl.trans('edit', 'Edit', 'first')} />
+                  {/* <span>{intl.trans('edit', 'Edit', 'first')}</span> */}
+                </FVButton>
+              </AuthorizationFilter>
+            ) : null
+          return (
+            <>
+              <Link className="DictionaryList__link DictionaryList__link--indigenous" href={href}>
+                {v}
+              </Link>
+              {editButton}
+            </>
+          )
+        },
+        sortName: 'fv:custom_order',
+        sortBy: 'fv:custom_order',
+      },
+      {
+        name: 'fv:definitions',
+        title: intl.trans('definitions', 'Definitions', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
+        render: (v, data, cellProps) => {
+          return UIHelpers.generateOrderedListFromDataset({
+            dataSet: selectn(`properties.${cellProps.name}`, data),
+            extractDatum: (entry, i) => {
+              if (entry.language === DEFAULT_LANGUAGE && i < 2) {
+                return entry.translation
+              }
+              return null
+            },
+            classNameList: 'DictionaryList__definitionList',
+            classNameListItem: 'DictionaryList__definitionListItem',
+          })
+        },
+        sortName: 'fv:definitions/0/translation',
+      },
+      {
+        name: 'related_audio',
+        title: intl.trans('audio', 'Audio', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+        render: (v, data, cellProps) => {
+          const firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
+          if (firstAudio) {
+            return (
+              <Preview
+                minimal
+                styles={{ padding: 0 }}
+                tagStyles={{ width: '100%', minWidth: '230px' }}
+                key={selectn('uid', firstAudio)}
+                expandedValue={firstAudio}
+                type="FVAudio"
+              />
+            )
+          }
+        },
+      },
+      {
+        name: 'related_pictures',
+        width: 72,
+        textAlign: 'center',
+        title: intl.trans('picture', 'Picture', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
+        render: (v, data, cellProps) => {
+          const firstPicture = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
+          if (firstPicture) {
+            return (
+              <img
+                className="PrintHide itemThumbnail"
+                key={selectn('uid', firstPicture)}
+                src={UIHelpers.getThumbnail(firstPicture, 'Thumbnail')}
+              />
+            )
+          }
+        },
+      },
+      // {
+      //   name: 'dc:modified',
+      //   width: 210,
+      //   title: intl.trans('date_modified', 'Date Modified'),
+      //   render: (v, data) => {
+      //     return StringHelpers.formatUTCDateString(selectn('lastModified', data))
+      //   },
+      // },
+      // {
+      //   name: 'dc:created',
+      //   width: 210,
+      //   title: intl.trans('date_created', 'Date Created'),
+      //   render: (v, data) => {
+      //     return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
+      //   },
+      // },
+    ]
+
+    // NOTE: Append `phrase book` & `state` columns if on Workspaces
+    if (routeParams.area === WORKSPACES) {
+      columns.push({
+        name: 'fv-phrase:phrase_books',
+        title: intl.trans('phrase_books', 'Phrase Books', 'words'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
+        render: (v, data) => {
+          return UIHelpers.generateDelimitedDatumFromDataset({
+            dataSet: selectn('contextParameters.phrase.phrase_books', data),
+            extractDatum: (entry) => selectn('dc:title', entry),
+          })
+        },
+      })
+
+      columns.push({
+        name: 'state',
+        title: intl.trans('state', 'State', 'first'),
+      })
+    }
+
+    return columns
+  }
+
   handleAlphabetClick = async (letter) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
@@ -778,6 +789,7 @@ PhrasesFilteredByCategory.propTypes = {
 }
 PhrasesFilteredByCategory.defaultProps = {
   searchDialectUpdate: () => {},
+  DEFAULT_LANGUAGE: 'english',
 }
 
 // REDUX: reducers/state
