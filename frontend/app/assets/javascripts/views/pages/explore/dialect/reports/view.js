@@ -49,10 +49,10 @@ const intl = IntlService.instance
 const { func, object, string } = PropTypes
 export class PageDialectReportsView extends PageDialectLearnBase {
   static propTypes = {
-    routeParams: object.isRequired,
     // REDUX: reducers/state
+    routeParams: object.isRequired,
     computeCategories: object.isRequired,
-    computeDocument: object.isRequired,
+    computeDocument: object,
     computeLogin: object.isRequired,
     computePortal: object.isRequired,
     windowPath: string.isRequired,
@@ -64,44 +64,15 @@ export class PageDialectReportsView extends PageDialectLearnBase {
     updatePageProperties: func.isRequired,
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.routeParams.reportName !== this.props.routeParams.reportName) {
+      this.setState(this.getReports())
+    }
+  }
   constructor(props, context) {
     super(props, context)
 
-    const reports = Immutable.fromJS(ReportsJson)
-
-    let report = reports.find(
-      function findFn(entry) {
-        return entry.get('name').toLowerCase() === decodeURI(this.props.routeParams.reportName).toLowerCase()
-      }.bind(this)
-    )
-
-    if (!report.has('cols')) {
-      let defaultCols = null
-
-      switch (report.get('type')) {
-        case 'words':
-          defaultCols = ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech']
-          break
-
-        case 'phrases':
-          defaultCols = ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books']
-          break
-        default: // NOTE: do nothing
-      }
-
-      report = report.set('cols', defaultCols)
-    } else {
-      report = report.set('cols', report.get('cols').toJS())
-    }
-
-    this.state = {
-      currentReport: report,
-      filterInfo: new Map({
-        currentAppliedFilter: new Map({
-          reports: report.get('query'),
-        }),
-      }),
-    }
+    this.state = this.getReports()
 
     // Bind methods to 'this'
     ;[
@@ -114,36 +85,20 @@ export class PageDialectReportsView extends PageDialectLearnBase {
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
-  // NOTE: PageDialectLearnBase calls `_getPageKey`
-  _getPageKey() {
-    return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_reports'
-  }
-
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/' + path)
-  }
-  // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-  }
-
   render() {
+    const { routeParams } = this.props
     const computeEntities = Immutable.fromJS([
       {
-        id: this.props.routeParams.dialect_path,
+        id: routeParams.dialect_path,
         entity: this.props.computePortal,
       },
     ])
 
     // const computeDocument = ProviderHelpers.getEntry(
     //   this.props.computeDocument,
-    //   this.props.routeParams.dialect_path + '/Dictionary'
+    //   routeParams.dialect_path + '/Dictionary'
     // )
-    const computePortal = ProviderHelpers.getEntry(
-      this.props.computePortal,
-      this.props.routeParams.dialect_path + '/Portal'
-    )
+    const computePortal = ProviderHelpers.getEntry(this.props.computePortal, routeParams.dialect_path + '/Portal')
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
 
     let listView = null
@@ -171,11 +126,11 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             hasViewModeButtons={false}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
-            routeParams={this.props.routeParams}
+            routeParams={routeParams}
             // Export Dialect
             exportDialectExportElement={exportDialectExportElement}
             exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
             exportDialectColumns={'*'}
           />
         )
@@ -198,11 +153,11 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             hasViewModeButtons={false}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
-            routeParams={this.props.routeParams}
+            routeParams={routeParams}
             // Export Dialect
             exportDialectExportElement={exportDialectExportElement}
             exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
             exportDialectColumns={'*'}
           />
         )
@@ -222,13 +177,13 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             hasViewModeButtons={false}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
-            routeParams={this.props.routeParams}
+            routeParams={routeParams}
             // Export Dialect
             // TODO: endpdoint doesn't support FVBook exports
             hasExportDialect={false}
             // exportDialectExportElement={exportDialectExportElement}
             // exportDialectLabel={exportDialectLabel}
-            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
             // exportDialectColumns={'*'}
           />
         )
@@ -248,13 +203,13 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             hasViewModeButtons={false}
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
-            routeParams={this.props.routeParams}
+            routeParams={routeParams}
             // Export Dialect
             // TODO: endpdoint doesn't support FVBook exports
             hasExportDialect={false}
             // exportDialectExportElement={exportDialectExportElement}
             // exportDialectLabel={exportDialectLabel}
-            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${this.props.routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
+            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
             // exportDialectColumns={'*'}
           />
         )
@@ -275,7 +230,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
               <div className={classNames('col-xs-12', 'col-md-3')}>
                 <ReportBrowser
                   style={{ maxHeight: '400px', overflowY: 'scroll' }}
-                  routeParams={this.props.routeParams}
+                  routeParams={routeParams}
                   fullWidth
                 />
               </div>
@@ -286,14 +241,67 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       </PromiseWrapper>
     )
   }
+
+  // NOTE: PageDialectLearnBase calls `fetchData`
+  fetchData(newProps) {
+    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
+    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
+  }
+
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
+  _getPageKey() {
+    const { routeParams } = this.props
+    return routeParams.area + '_' + routeParams.dialect_name + '_reports'
+  }
+
+  getReports() {
+    const { routeParams } = this.props
+    const reports = Immutable.fromJS(ReportsJson)
+
+    let report = reports.find((entry) => {
+      return entry.get('name').toLowerCase() === decodeURI(routeParams.reportName).toLowerCase()
+    })
+
+    if (!report.has('cols')) {
+      let defaultCols = null
+
+      switch (report.get('type')) {
+        case 'words':
+          defaultCols = ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech']
+          break
+
+        case 'phrases':
+          defaultCols = ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books']
+          break
+        default: // NOTE: do nothing
+      }
+
+      report = report.set('cols', defaultCols)
+    } else {
+      report = report.set('cols', report.get('cols').toJS())
+    }
+    return {
+      currentReport: report,
+      filterInfo: new Map({
+        currentAppliedFilter: new Map({
+          reports: report.get('query'),
+        }),
+      }),
+    }
+  }
+
+  _onNavigateRequest(path) {
+    this.props.pushWindowPath(this.props.windowPath.replace(SECTIONS, WORKSPACES) + '/' + path)
+  }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvPortal, nuxeo, windowPath } = state
+  const { fvCategory, fvPortal, navigation, nuxeo, windowPath } = state
 
   const { computeCategories } = fvCategory
   const { computePortal } = fvPortal
+  const { route } = navigation
   const { computeLogin } = nuxeo
   const { computeDocument } = document
   const { _windowPath } = windowPath
@@ -302,6 +310,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeCategories,
     computeDocument,
     computeLogin,
+    routeParams: route.routeParams,
     computePortal,
     windowPath: _windowPath,
   }
