@@ -1,6 +1,6 @@
 package ca.firstvoices.services;
 
-import ca.firstvoices.testUtil.*;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,9 +53,9 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class AssignAncestorsServiceImplTest extends AbstractTest{
+@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
+public class AssignAncestorsServiceImplTest extends AbstractTest {
 
   @Inject
   private CoreSession session;
@@ -65,7 +65,6 @@ public class AssignAncestorsServiceImplTest extends AbstractTest{
 
   @Before
   public void setUp() throws Exception {
-    
     assertNotNull("Should have a valid session", session);
     createSetup(session);
   }

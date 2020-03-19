@@ -53,8 +53,9 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.sanitize.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.xml")
+@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.sanitize.xml")
+@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
+@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
 
@@ -87,7 +88,7 @@ public class FVDocumentListenerTest extends AbstractTest{
     // Create a new word & phrase document
     DocumentModel TestWord = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", "FVWord"));
     DocumentModel TestPhrase = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "  Test Phrase  ", "FVPhrase"));
-    
+
     assertNotNull(TestWord);
     assertNotNull(TestPhrase);
 
