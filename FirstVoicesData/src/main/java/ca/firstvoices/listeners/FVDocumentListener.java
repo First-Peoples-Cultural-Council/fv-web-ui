@@ -1,6 +1,7 @@
 package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.services.SanitizeDocumentService;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
@@ -11,6 +12,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.runtime.api.Framework;
 
+import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
+
 import java.util.Arrays;
 
 public class FVDocumentListener implements EventListener {
@@ -19,7 +22,8 @@ public class FVDocumentListener implements EventListener {
   protected CoreSession session;
   
   protected AssignAncestorsService service = Framework.getService(AssignAncestorsService.class);
-  
+  protected SanitizeDocumentService sanitize = Framework.getService(SanitizeDocumentService.class);
+
   @Override
   public void handleEvent(Event event) {
     
@@ -42,8 +46,14 @@ public class FVDocumentListener implements EventListener {
     CoreSession session = ctx.getCoreSession();
     
     // If the document is mutable and is the proper type then assign its ancestors.
-    service.assignAncestors(session, document);
-    
+    if(event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED))
+      service.assignAncestors(session, document);
+    if(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
+      if((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) 
+            && !document.isProxy()){
+        sanitize.sanitizeDocument(session, document);
+      }
+    }
   }
   
   // Helper method to check that the new document is one of the types below

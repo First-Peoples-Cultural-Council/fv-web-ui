@@ -1,4 +1,4 @@
-package ca.firstvoices.services;
+package ca.firstvoices.listeners;
 
 import ca.firstvoices.testUtil.*;
 import org.junit.Before;
@@ -53,25 +53,26 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
+@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.sanitize.xml")
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.xml")
+@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
+@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
+
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class AssignAncestorsServiceImplTest extends AbstractTest{
+public class FVDocumentListenerTest extends AbstractTest{
 
   @Inject
   private CoreSession session;
-  
-  @Inject
-  private AssignAncestorsService assignAncestorsServiceInstance;
 
   @Before
   public void setUp() throws Exception {
-    
+
     assertNotNull("Should have a valid session", session);
     createSetup(session);
   }
-  
+    
   @Test
-  public void assignAncestors() {
+  public void testListener() {
     
     // Get the DocumentModels for each of the parent documents
     DocumentModel languageFamily = session.getDocument(new PathRef("/FV/Family"));
@@ -80,21 +81,29 @@ public class AssignAncestorsServiceImplTest extends AbstractTest{
     assertNotNull("Language cannot be null", language);
     DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
+    DocumentModel dictionary = getCurrentDictionary();
+    assertNotNull("Dictionary cannot be null", dictionary);
     
-    // Create a new child document
-    DocumentModel TestWord = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
+    // Create a new word & phrase document
+    DocumentModel TestWord = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", "FVWord"));
+    DocumentModel TestPhrase = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "  Test Phrase  ", "FVPhrase"));
     
-    // Check that the child document does not have the parent document UUIDs in it's properties
-    assertNull("Word should have no ID for parent family property", TestWord.getPropertyValue("fva:family"));
-    assertNull("Word should have no ID for parent language property", TestWord.getPropertyValue("fva:language"));
-    assertNull("Word should have no ID for parent dialect property", TestWord.getPropertyValue("fva:dialect"));
+    assertNotNull(TestWord);
+    assertNotNull(TestPhrase);
+
+    assertEquals(TestWord.getTitle(), " Test Word ");
+    assertEquals(TestPhrase.getTitle(), "  Test Phrase  ");
+
+    TestWord = session.getDocument(TestWord.getRef());
+    TestPhrase = session.getDocument(TestPhrase.getRef());
     
-    // Run the service against the new child document
-    assignAncestorsServiceInstance.assignAncestors(session, TestWord);
-    
-    // Check that the child now has the correct UUIDs of the parent documents in it's properties
     assertEquals("Word should have ID of parent family property", languageFamily.getId(), TestWord.getPropertyValue("fva:family"));
     assertEquals("Word should have ID of parent language property", language.getId(), TestWord.getPropertyValue("fva:language"));
     assertEquals("Word should have ID of parent dialect property", dialect.getId(), TestWord.getPropertyValue("fva:dialect"));
+
+    assertEquals("Test Word", TestWord.getTitle());
+    assertEquals("Test Phrase", TestPhrase.getTitle());
+
   }
+
 }

@@ -13,5 +13,6 @@ Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.templates.factorie
  tensions/ca.firstvoices.publisher.services.xml,OSGI-INF/extensions/ca
  .firstvoices.publisher.listeners.ProxyPublisherListener.xml,OSGI-INF/
  extensions/ca.firstvoices.nativeorder.services.xml,OSGI-INF/extension
- s/ca.firstvoices.nativeorder.listeners.xml,OSGI-INF/extensions/ca.firstvoice
- s.nativeorder.actions.xml
+ s/ca.firstvoices.nativeorder.listeners.xml,OSGI-INF/extensions/ca.fir
+ stvoices.nativeorder.actions.xml,OSGI-INF/extensions/ca.firstvoices.s
+ ervices.xml,OSGI-INF/extensions/ca.firstvoices.operations.xml

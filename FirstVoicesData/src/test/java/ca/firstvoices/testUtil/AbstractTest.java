@@ -1,11 +1,11 @@
-package ca.firstvoices;
+package ca.firstvoices.testUtil;
 
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.CoreSession;
 import static org.junit.Assert.assertNotNull;
 
-public class EnricherTestUtil{
+public abstract class AbstractTest{
 
     private DocumentModel langFamilyDoc;
     private DocumentModel languageDoc;
@@ -71,20 +71,15 @@ public class EnricherTestUtil{
         session.save();
       }
       
-      public DocumentModel createDialectTree(CoreSession session)
+      public void createDialectTree(CoreSession session)
       {
-        assertNotNull("Should have a valid Domain",
-            createDocument(session, session.createDocumentModel("/", "FV", "Domain")));
-        assertNotNull("Should have a valid Workspace",
-            createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
-        assertNotNull( "Should have a valid FVLanguageFamily",
-            createDocument(session, session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily")));
-        assertNotNull( "Should have a valid FVLanguage",
-            createDocument(session, session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage")));
-        dialectDoc = createDocument(session, session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
+        langFamilyDoc = createDocument(session, session.createDocumentModel("/FV", "Family", "FVLanguageFamily"));
+        assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
+        languageDoc = createDocument(session, session.createDocumentModel("/FV/Family", "Language", "FVLanguage"));
+        assertNotNull( "Should have a valid FVLanguage",languageDoc);
+        dialectDoc = createDocument(session, session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
         assertNotNull("Should have a valid FVDialect", dialectDoc);
-        session.save();
-  
-        return dialectDoc;
+        dictionaryDoc = createDocument(session,  session.createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+        assertNotNull("Should have a valid FVDictionary", dictionaryDoc);
       }
     }
