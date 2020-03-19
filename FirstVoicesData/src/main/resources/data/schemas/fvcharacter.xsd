@@ -31,7 +31,10 @@
     <xs:sequence> 
       <xs:element name="item" type="nxs:content" minOccurs="0" maxOccurs="unbounded"/> 
     </xs:sequence> 
-  </xs:complexType>  
+  </xs:complexType>
+  <xs:simpleType name="confusableCharacters">
+    <xs:list itemType="xs:string"/>
+  </xs:simpleType>
   <xs:element name="alphabet_order" type="xs:integer"/>
   <xs:element name="classification" type="xs:string"/>
   <xs:element name="extended" type="xs:boolean"/>
@@ -40,4 +43,5 @@
   <xs:element name="sub_classification" type="xs:string"/>
   <xs:element name="sub_classification_2" type="xs:string"/>
   <xs:element name="upper_case_character" type="xs:string"/>
+  <xs:element name="confusable_characters" type="nxs:confusableCharacters"/>
 </xs:schema>
