@@ -2,6 +2,7 @@ package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.services.SanitizeDocumentService;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
@@ -23,7 +24,7 @@ public class FVDocumentListener extends AbstractListener {
 
     private CoreSession session;
     private AssignAncestorsService assignAncestorsService = Framework.getService(AssignAncestorsService.class);
-    protected SanitizeDocumentService sanitize = Framework.getService(SanitizeDocumentService.class);
+    protected SanitizeDocumentService sanitizeDocumentService = Framework.getService(SanitizeDocumentService.class);
     private CleanupCharactersService cleanupCharactersService = Framework.getService(CleanupCharactersService.class);
     private EventContext ctx;
     private Event e;
@@ -43,6 +44,11 @@ public class FVDocumentListener extends AbstractListener {
             return;
         }
 
+        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+            cleanupWordsAndPhrases();
+            validateCharacter();
+        }
+
         if (event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED)) {
             assignAncestors();
         }
@@ -50,17 +56,11 @@ public class FVDocumentListener extends AbstractListener {
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
             cleanupWordsAndPhrases();
             validateCharacter();
-            if((document.getType().equals("FVWord") || document.getType().equals("FVPhrase"))
-                    && !document.isProxy()){
-              sanitize.sanitizeDocument(session, document);
-            }
         }
 
-        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-            cleanupWordsAndPhrases();
-            validateCharacter();
+        if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
+            sanitizeWord();
         }
-
 
     }
 
@@ -118,6 +118,13 @@ public class FVDocumentListener extends AbstractListener {
         } catch (Exception exception) {
             rollBackEvent(e);
             throw exception;
+        }
+    }
+
+    public void sanitizeWord() {
+        if((document.getType().equals("FVWord") || document.getType().equals("FVPhrase"))
+                && !document.isProxy()){
+            sanitizeDocumentService.sanitizeDocument(session, document);
         }
     }
 
