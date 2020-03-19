@@ -17,8 +17,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 
 import ca.firstvoices.services.AbstractService;
+import org.nuxeo.ecm.core.api.PathRef;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,48 +29,13 @@ import java.util.stream.Collectors;
  */
 public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
 
-    private DocumentModel[] loadAlphabet(CoreSession session, DocumentModel dialect) {
-        DocumentModelList chars =
-                session.query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId() + "' AND " + "ecm" + ":currentLifeCycleState <> 'deleted' ORDER BY fvcharacter:alphabet_order");
-        DocumentModel[] models = new DocumentModel[chars.size()];
-
-        models = chars.toArray(models);
-
-        DocumentModel[] sortedModels = new DocumentModel[chars.size()];
-        int i, j;
-        for (i = 0; i < models.length; i++) {
-            DocumentModel item = models[i];
-            DocumentModel toAdd = item;
-            String title = (String) item.getPropertyValue("dc:title");
-            Long order = (Long) item.getPropertyValue("fvcharacter:alphabet_order");
-            for (j = i + 1; j < models.length; j++) {
-                DocumentModel item2 = models[j];
-                String title2 = (String) item2.getPropertyValue("dc:title");
-                Long order2 = (Long) item2.getPropertyValue("fvcharacter:alphabet_order");
-
-                if (order != null || order2 != null) {
-                    // use the orders to sort by
-                    if (order == null) {
-                        // use item2
-                        toAdd = item2;
-                    } else if (order != null && order2 != null) {
-                        if (order2 < order) {
-                            // use item2
-                            toAdd = item2;
-                        }
-                    }
-                } else if (title == null || (title.length() < title2.length())) {
-                    toAdd = item2;
-                }
-
-                title = (String) toAdd.getPropertyValue("dc:title");
-                order = (Long) toAdd.getPropertyValue("fvcharacter:alphabet_order");
-            }
-
-            sortedModels[i] = toAdd;
-        }
-
-        return sortedModels;
+    private DocumentModel[] loadAlphabet(DocumentModel dialect) {
+        DocumentModelList chars = dialect.getCoreSession().getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        return chars
+                .stream()
+                .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+                .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+                .toArray(DocumentModel[]::new);
     }
 
     /* (non-Javadoc)
@@ -85,7 +52,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             DocumentModel dialect = getDialect(asset);
             CoreSession session = asset.getCoreSession();
             // First get the native alphabet
-            DocumentModel[] chars = loadAlphabet(session, dialect);
+            DocumentModel[] chars = loadAlphabet(dialect);
             computeNativeOrderTranslation(chars, asset);
         }
     }
@@ -98,7 +65,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
     public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
         CoreSession session = dialect.getCoreSession();
         // First get the native alphabet
-        DocumentModel[] chars = loadAlphabet(session, dialect);
+        DocumentModel[] chars = loadAlphabet(dialect);
         computeNativeOrderTranslation(chars,
                 session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'"));
         computeNativeOrderTranslation(chars,
@@ -111,6 +78,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             // We cannot update this element, no point in going any further
             return;
         }
+
         String title = (String) element.getPropertyValue("dc:title");
         String nativeTitle = "";
         List<String> fvChars =
@@ -131,8 +99,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                 String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
 
                 if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
-                    nativeTitle += new Character((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter" +
-                            ":alphabet_order"))).toString();
+                    nativeTitle += new Character((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order"))).toString();
                     title = title.substring(charValue.length());
                     found = true;
                     break;

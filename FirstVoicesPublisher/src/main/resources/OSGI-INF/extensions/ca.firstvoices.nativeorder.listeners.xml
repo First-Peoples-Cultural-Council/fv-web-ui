@@ -12,6 +12,8 @@
       class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderAlphabetListener" priority="250">
       <event>beforeDocumentModification</event>
       <event>documentModified</event>
+      <event>documentTrashed</event>
+      <event>documentUntrashed</event>
     </listener>
     
   </extension>

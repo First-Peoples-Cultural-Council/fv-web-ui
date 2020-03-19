@@ -3,15 +3,9 @@
  */
 package ca.firstvoices.nativeorder.listeners;
 
-import java.util.Iterator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
-import org.nuxeo.ecm.core.api.model.DocumentPart;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.event.EventListener;
@@ -24,15 +18,15 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
  */
 public class ComputeNativeOrderAlphabetListener implements EventListener {
 
-    private static final Log log = LogFactory.getLog(ComputeNativeOrderAlphabetListener.class);
-
     protected NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
 
     @Override
     public void handleEvent(Event event) {
 
         if (!(event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED))
-                && !(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED))) {
+                && !(event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED))
+                && !(event.getName().equals("documentTrashed"))
+                && !(event.getName().equals("documentUntrashed"))) {
             return;
         }
 
