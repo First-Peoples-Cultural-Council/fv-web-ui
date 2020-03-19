@@ -1,24 +1,5 @@
 import { combineReducers } from 'redux'
-
-/*
-NOTE: ODD MYSTERY
-
-For some reason, when this file imports:
-`import { directoryReducer } from './directory'`
-
-Any component that imports `fetchDirectory` will get `undefined`, eg:
-`import { fetchDirectory } from 'providers/redux/reducers/directory'`
-
-To sidestep this issue I duplicated `./directory` > `./_directory`
-and it seems to work (but both files need to be in place!)
-
-Components importing `fetchDirectory`:
-  1) javascripts/views/components/Editor/DirectoryList.js
-  2) javascripts/views/components/SearchDialect/index.js
-*/
-import { directoryReducer } from './directory' // triggers undef error
-// import { directoryReducer } from './_directory'
-
+import { directoryReducer } from './directory'
 import { documentReducer } from './document'
 import { errorReducer } from './error'
 import { exportDialectReducer } from './exportDialect'

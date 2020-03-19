@@ -1,4 +1,3 @@
-/* globals ENV_CONTEXT_PATH, ENV_WEB_URL, ENV_NUXEO_URL */
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -15,25 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import selectn from 'selectn'
-import ConfGlobal from 'conf/local.js'
 import ConfRoutes, { paramMatch } from 'conf/routes'
 import Immutable, { is } from 'immutable'
 import { SECTIONS } from 'common/Constants'
+import URLHelpers from './URLHelpers'
+
 const arrayPopImmutable = (array, sizeToPop = 1) => {
   return array.slice(0, array.length - sizeToPop)
-}
-
-/**
- * Returns the context path (as an array) from local.js, or empty array.
- */
-const ContextPath = () => {
-  if (ENV_CONTEXT_PATH !== null && typeof ENV_CONTEXT_PATH !== 'undefined') {
-    return ENV_CONTEXT_PATH
-  } else if (!ConfGlobal.contextPath || ConfGlobal.contextPath.length === 0) {
-    return ''
-  }
-
-  return ConfGlobal.contextPath
 }
 
 /**
@@ -71,7 +58,9 @@ export default {
 
     // Only add context path if it doesn't exist
     const transformedPath =
-      path.indexOf(ContextPath()) === 0 ? pathArray.join('/') : ContextPath() + pathArray.join('/')
+      path.indexOf(URLHelpers.getContextPath()) === 0
+        ? pathArray.join('/')
+        : URLHelpers.getContextPath() + pathArray.join('/')
 
     if (!navigationFunc) {
       return transformedPath
@@ -110,7 +99,7 @@ export default {
   },
   // Method will append given path (/path/to/) to context path
   generateStaticURL: (path) => {
-    return ContextPath() + AddForwardSlash(path)
+    return URLHelpers.getContextPath() + AddForwardSlash(path)
   },
   // Method will lookup a path, based on id, in routes, and generate the correct path
   generateDynamicURL: (routeId, routeParams, moreParams) => {
@@ -132,7 +121,7 @@ export default {
         }
       })
 
-      return ContextPath() + '/' + matchedRoute.path.join('/')
+      return URLHelpers.getContextPath() + '/' + matchedRoute.path.join('/')
     }
     // TODO: How do we fall back gracefully when no path is found?
   },
@@ -165,7 +154,7 @@ export default {
       default: // Note: do nothing
     }
 
-    return (path = ContextPath() + path.substring(0, path.lastIndexOf('/') + 1) + selectn('uid', item))
+    return (path = URLHelpers.getContextPath() + path.substring(0, path.lastIndexOf('/') + 1) + selectn('uid', item))
   },
   // Generate an edit href from a Nuxeo document path
   // Differs from generateUIDPath in that it:
@@ -201,43 +190,22 @@ export default {
         shouldReturnPath = false
       }
     }
-    path = `${ContextPath()}${path.substring(0, path.lastIndexOf('/') + 1)}${selectn('uid', item)}/edit`
+    path = `${URLHelpers.getContextPath()}${path.substring(0, path.lastIndexOf('/') + 1)}${selectn('uid', item)}/edit`
     return shouldReturnPath ? path : undefined
   },
   // Disable link
   disable: (event) => {
     event.preventDefault()
   },
-  getContextPath: () => {
-    return ContextPath()
-  },
   // Checks whether a page being accessed is a Workspace
   isWorkspace: (props) => {
     return props.windowPath && props.windowPath.indexOf('/Workspaces/') !== -1
   },
   getBaseWebUIURL: () => {
-    if (ENV_WEB_URL !== null && typeof ENV_WEB_URL !== 'undefined') {
-      return ENV_WEB_URL
-    }
-    return (
-      window.location.protocol +
-      '//' +
-      window.location.hostname +
-      (window.location.port ? ':' + window.location.port : '') +
-      ContextPath()
-    )
+    return URLHelpers.getBaseWebUIURL()
   },
   getBaseURL: () => {
-    if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
-      return ENV_NUXEO_URL
-    }
-    return (
-      window.location.protocol +
-      '//' +
-      window.location.hostname +
-      (window.location.port ? ':' + window.location.port : '') +
-      '/nuxeo/'
-    )
+    return URLHelpers.getBaseURL()
   },
 }
 
