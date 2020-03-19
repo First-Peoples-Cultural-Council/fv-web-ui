@@ -607,7 +607,7 @@ class WordsFilteredByCategory extends Component {
     return columns
   }
 
-  handleAlphabetClick = async (letter, href, updateHistory = true) => {
+  handleAlphabetClick = async (letter, href) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
@@ -620,10 +620,12 @@ class WordsFilteredByCategory extends Component {
       searchTerm: '',
     })
 
-    this.changeFilter({ href, updateHistory })
+    this.changeFilter()
+
+    NavigationHelpers.navigate(href, this.props.pushWindowPath)
   }
 
-  handleCategoryClick = async ({ facetField, selected, unselected, href }, updateHistory = true) => {
+  handleCategoryClick = async ({ facetField, selected, unselected }) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CATEGORY,
@@ -637,7 +639,7 @@ class WordsFilteredByCategory extends Component {
       searchTerm: '',
     })
 
-    this.changeFilter({ href, updateHistory })
+    this.changeFilter()
 
     this.handleDialectFilterChange({
       facetField,

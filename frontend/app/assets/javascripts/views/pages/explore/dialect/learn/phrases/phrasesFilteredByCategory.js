@@ -630,7 +630,7 @@ export class PhrasesFilteredByCategory extends Component {
     return columns
   }
 
-  handleAlphabetClick = async (letter) => {
+  handleAlphabetClick = async (letter, href) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
       searchByMode: SEARCH_BY_ALPHABET,
@@ -644,6 +644,8 @@ export class PhrasesFilteredByCategory extends Component {
     })
 
     this.changeFilter()
+
+    NavigationHelpers.navigate(href, this.props.pushWindowPath)
   }
 
   handleCategoryClick = async ({ facetField, selected, unselected } = {}) => {
