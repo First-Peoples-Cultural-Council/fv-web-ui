@@ -7,21 +7,21 @@ on:
     - cron: '0 20 * * *'
     - cron: '30 9 * * *'
   # On pull requests when any files in the paths listed are changed
-  pull_request:
-    paths:
-    - 'frontend/app/**'
-    - 'frontend/build/**'
-    - 'frontend/gulpfile.js/**'
-    - 'frontend/nuxeo/**'
-    - 'frontend/index.html'
-    - '**/package.json'
-    - '**/package-lock.json'
-    - 'FirstVoices*/**'
-    - 'FV*/**'
-    - '**/pom.xml'
-    - '!**/README.md'
-    branches:
-      master
+#  pull_request:
+#    paths:
+#    - 'frontend/app/**'
+#    - 'frontend/build/**'
+#    - 'frontend/gulpfile.js/**'
+#    - 'frontend/nuxeo/**'
+#    - 'frontend/index.html'
+#    - '**/package.json'
+#    - '**/package-lock.json'
+#    - 'FirstVoices*/**'
+#    - 'FV*/**'
+#    - '**/pom.xml'
+#    - '!**/README.md'
+#    branches:
+#      master
 
 jobs:
 
