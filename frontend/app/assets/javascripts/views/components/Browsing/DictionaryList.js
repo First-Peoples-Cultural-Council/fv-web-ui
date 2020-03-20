@@ -733,12 +733,20 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
 
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 DictionaryList.propTypes = {
+  // Pagination
+  appendControls: array, // NOTE: array of elements to append just after the paging controls
+  disablePageSize: bool, // NOTE: removes the "Page #/# Per page: <select> Results #" part of pagination
+  fetcher: func, // TODO
+  fetcherParams: object, // NOTE: object of paging data: currentPageIndex, pageSize, filters
+  hasPagination: bool,
+  metadata: object, // TODO
   // Export
   hasExportDialect: bool,
   exportDialectExportElement: string,
   exportDialectColumns: string,
   exportDialectLabel: string,
   exportDialectQuery: string,
+  dialect: object, // NOTE: used to determine permissions with export dialect
   // Batch
   batchConfirmationAction: func,
   batchFooterBtnConfirm: string,
@@ -748,38 +756,35 @@ DictionaryList.propTypes = {
   batchTitleDeselect: string,
   batchTitleSelect: string,
   // Misc DictionaryList
-  action: func,
-  cellHeight: number,
-  cols: number,
-  columns: array.isRequired, // Col names for Data
-  computedData: object,
-  cssModifier: string,
-  dialect: object,
-  dictionaryListSmallScreenTemplate: func,
-  dictionaryListClickHandlerViewMode: func,
-  dictionaryListViewMode: number,
-  fields: instanceOf(Map),
-  filteredItems: oneOfType([array, instanceOf(List)]),
-  hasSorting: bool,
-  hasViewModeButtons: bool,
-  items: oneOfType([array, instanceOf(List)]), // Data
-  rowClickHandler: func,
-  sortHandler: func,
-  style: object,
-  type: string,
-  wrapperStyle: object,
-  // Search
-  handleSearch: func,
-  hasSearch: bool,
-  searchDialectDataType: number,
-  resetSearch: func,
-  searchUi: array,
+  columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
+  computedData: object, // TODO: Define how this is used
+  cssModifier: string, // TODO: DROP?
+  dictionaryListSmallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
+  dictionaryListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
+  dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
+  fields: instanceOf(Map), // TODO: DROP?
+  filteredItems: oneOfType([array, instanceOf(List)]), // TODO: Confusing, DROP?. Alternate source of data for list.
+  hasSorting: bool, // NOTE: can explicitly disable sorting if needed. EG: since we are reusing components, sometimes the `columns` prop will have a sort property within the data but where you are reusing the component it doesn't make sense to sort, `hasSorting={false}` would help you.
+  hasViewModeButtons: bool, // NOTE: Toggles all of the view mode buttons (currently there is only Flashcard but there used to be more options)
+  items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
+  rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
+  sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
+  style: object, // TODO: DROP?
+  type: string, // TODO: DROP?
+  wrapperStyle: object, // TODO: DROP?
+  // <SearchDialect />
+  handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
+  hasSearch: bool, // NOTE: Toggles the <SearchDialect /> component
+  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: SEARCH_DATA_TYPE_WORD, SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
+  resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
+  searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
   // REDUX: reducers/state
-  navigationRouteRouteParams: object.isRequired,
-  navigationRouteSearch: object.isRequired,
+  navigationRouteRouteParams: object.isRequired, // NOTE: redux saved route params, using page & pageSize
+  navigationRouteSearch: object.isRequired, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
   listView: object.isRequired,
   // REDUX: actions/dispatch/func
   pushWindowPath: func.isRequired,
+  setRouteParams: func.isRequired,
 }
 
 DictionaryList.defaultProps = {
@@ -793,8 +798,6 @@ DictionaryList.defaultProps = {
   batchTitleDeselect: 'Select all',
   batchTitleSelect: 'Deselect all',
   // DictionaryList
-  cellHeight: 210,
-  cols: 3,
   columns: [],
   cssModifier: '',
   dictionaryListClickHandlerViewMode: () => {},

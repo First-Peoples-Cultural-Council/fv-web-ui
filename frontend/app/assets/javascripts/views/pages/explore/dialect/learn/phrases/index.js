@@ -25,7 +25,7 @@ import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
@@ -78,7 +78,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     overrideBreadcrumbs: func.isRequired,
     pushWindowPath: func.isRequired,
     searchDialectUpdate: func,
-    updatePageProperties: func.isRequired,
   }
   static defaultProps = {
     searchDialectUpdate: () => {},
@@ -88,19 +87,22 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
   async componentDidMountViaPageDialectLearnBase() {
     const { routeParams } = this.props
+
     // Portal
     ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Portal',
       this.props.fetchPortal,
       this.props.computePortal
     )
+
     // Document
     ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Dictionary',
       this.props.fetchDocument,
       this.props.computeDocument
     )
-    // Phrasebooks
+
+    // Phrasebooks (Category)
     let phraseBooks = this.getPhraseBooks()
     if (phraseBooks === undefined) {
       await this.props.fetchCategories(
@@ -108,6 +110,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       )
       phraseBooks = this.getPhraseBooks()
     }
+
     // Alphabet
     // ---------------------------------------------
     let characters = this.getCharacters()
@@ -122,18 +125,22 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       characters = this.getCharacters()
     }
 
-    this.setState(
-      {
-        characters,
-        phraseBooks,
-      },
-      () => {
-        const letter = selectn('routeParams.letter', this.props)
-        if (letter) {
-          this.handleAlphabetClick(letter)
-        }
+    const newState = {
+      characters,
+      phraseBooks,
+    }
+
+    // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
+    if (this.props.routeParams.phraseBook === undefined) {
+      newState.filterInfo = this.initialFilterInfo()
+    }
+
+    this.setState(newState, () => {
+      const letter = selectn('routeParams.letter', this.props)
+      if (letter) {
+        this.handleAlphabetClick(letter)
       }
-    )
+    })
   }
 
   constructor(props, context) {
@@ -313,22 +320,22 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             />
             {computePhraseBooksSize !== 0 && (
               <DialectFilterList
-                type={this.DIALECT_FILTER_TYPE}
+                appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
+                // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
+                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
+                  'fv-phrase:phrase_books',
+                  this.props.routeParams.area
+                )}
+                facets={this.state.phraseBooks} // TODO: NOT IN WORDS
+                handleDialectFilterClick={this.handlePhraseBookClick} // TODO: NOT IN WORDS
+                handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+                routeParams={this.props.routeParams}
                 title={intl.trans(
                   'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                   'Browse Phrase Books',
                   'words'
                 )}
-                appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
-                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                  'fv-phrase:phrase_books',
-                  this.props.routeParams.area
-                )}
-                facets={this.state.phraseBooks}
-                routeParams={this.props.routeParams}
-                handleDialectFilterClick={this.handlePhraseBookClick}
-                handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-                clearDialectFilter={this.clearDialectFilter}
+                type={this.DIALECT_FILTER_TYPE}
               />
             )}
           </div>
@@ -540,7 +547,6 @@ const mapDispatchToProps = {
   pushWindowPath,
   searchDialectUpdate,
   setListViewMode,
-  updatePageProperties,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnPhrases)

@@ -59,10 +59,10 @@ export default {
 
     dataSet.forEach((entry, i) => {
       rows.push(
-        <>
+        <span key={`generateDelimitedDatumFromDataset${i}`}>
           {i > 0 ? delimiter : ''}
           <span className={classNameText}>{extractDatum(entry, i)}</span>
-        </>
+        </span>
       )
     })
 
