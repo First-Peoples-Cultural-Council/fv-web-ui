@@ -95,11 +95,6 @@ export class DialectList extends Component {
         ) : (
           <select className="form-control" value={this.props.value} onChange={this._handleChange}>
             <option value>
-              <FVLabel
-                transKey="select"
-                defaultStr="Select"
-                transform="first"
-              />
               {' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}
             </option>
             {entries.map((entry) => (

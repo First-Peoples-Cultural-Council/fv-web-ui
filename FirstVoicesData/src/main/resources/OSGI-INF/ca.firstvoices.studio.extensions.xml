@@ -8,6 +8,14 @@
     <require>org.nuxeo.ecm.platform.video.filemanager.contrib</require>
     <require>org.nuxeo.ecm.platform.audio.filemanager.contrib</require>
 
+    <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService" point="providers">
+        <genericPageProvider name="nuxeo_directory_entry_listing" class="org.nuxeo.ecm.directory.providers.DirectoryEntryPageProvider">
+            <property name="maxResults">PAGE_SIZE</property>
+            <maxPageSize>2000</maxPageSize>
+            <pageSize>100</pageSize>
+        </genericPageProvider>
+    </extension>
+
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
         <schema name="folder_old" prefix="folder_old" override="true" src="data/schemas/folder_old.xsd"/>
         <schema name="domain_schema" prefix="domain_schema" override="true" src="data/schemas/domain_schema.xsd"/>
@@ -24371,7 +24379,6 @@ function run(input, params) {
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_fv_labels</table>
             <dataFile>data/vocabularies/fv_labels.csv</dataFile>
-            <querySizeLimit>5000</querySizeLimit>
             <cacheEntryName>fv_labels-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-labels-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
@@ -24380,7 +24387,6 @@ function run(input, params) {
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_fv_label_categories</table>
             <dataFile>data/vocabularies/fv_label_categories.csv</dataFile>
-            <querySizeLimit>100</querySizeLimit>
             <cacheEntryName>fv_label_categories-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-label-categories-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>

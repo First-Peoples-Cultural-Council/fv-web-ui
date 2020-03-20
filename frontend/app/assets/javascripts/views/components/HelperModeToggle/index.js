@@ -8,7 +8,7 @@ import LiveHelpIcon from '@material-ui/icons/LiveHelp'
 import CloseIcon from '@material-ui/icons/Close'
 
 import { toggleHelpMode, setEditingLabel } from 'providers/redux/reducers/locale'
-import { fetchDirectoryEntries } from 'providers/redux/reducers/directory'
+import { fetchDirectory } from 'providers/redux/reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'views/pages/explore/dialect/immersion/Modal'
@@ -22,7 +22,7 @@ const HelperModeToggle = ({
   editingLabel,
   labelIds,
   computeDirectory,
-  fetchDirectoryEntries,
+  fetchDirectory,
   intl,
   locale,
   routeParams,
@@ -36,8 +36,8 @@ const HelperModeToggle = ({
 
   useEffect(() => {
     if (!fetched) {
-      fetchDirectoryEntries('fv_labels', ['type', 'template_strings', 'category'])
-      fetchDirectoryEntries('fv_label_categories', ['parent'])
+      fetchDirectory('fv_labels', 2000, true)
+      fetchDirectory('fv_label_categories', 100, true)
       setFetched(true)
     }
     if (editingLabel) {
@@ -176,7 +176,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   handleToggleHelpMode: toggleHelpMode,
-  fetchDirectoryEntries,
+  fetchDirectory,
   setEditingLabel,
 }
 
@@ -186,7 +186,7 @@ HelperModeToggle.propTypes = {
   isInHelpMode: bool.isRequired,
   isImmersionModeOn: bool.isRequired,
   handleToggleHelpMode: func.isRequired,
-  fetchDirectoryEntries: func.isRequired,
+  fetchDirectory: func.isRequired,
   setEditingLabel: func.isRequired,
   labelIds: object.isRequired,
   editingLabel: string,
