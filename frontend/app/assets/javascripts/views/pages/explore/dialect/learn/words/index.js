@@ -26,7 +26,7 @@ import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { overrideBreadcrumbs, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
@@ -72,7 +72,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
     searchDialectUpdate: func,
-    updatePageProperties: func.isRequired,
   }
   static defaultProps = {
     searchDialectUpdate: () => {},
@@ -86,6 +85,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       this.props.fetchPortal,
       this.props.computePortal
     )
+
     // Document
     ProviderHelpers.fetchIfMissing(
       routeParams.dialect_path + '/Dictionary',
@@ -117,18 +117,22 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       characters = this.getCharacters()
     }
 
-    this.setState(
-      {
-        characters,
-        categories,
-      },
-      () => {
-        const letter = selectn('routeParams.letter', this.props)
-        if (letter) {
-          this.handleAlphabetClick(letter)
-        }
+    const newState = {
+      characters,
+      categories,
+    }
+
+    // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
+    if (this.props.routeParams.category === undefined) {
+      newState.filterInfo = this.initialFilterInfo()
+    }
+
+    this.setState(newState, () => {
+      const letter = selectn('routeParams.letter', this.props)
+      if (letter) {
+        this.handleAlphabetClick(letter)
       }
-    )
+    })
   }
 
   DIALECT_FILTER_TYPE = 'words'
@@ -236,12 +240,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             type: 'select',
             idName: 'searchPartOfSpeech',
             labelText: 'Parts of speech:',
-            // options: [
-            //   {
-            //     value: 'test',
-            //     text: 'Test',
-            //   },
-            // ],
           },
         ]}
         dictionaryListClickHandlerViewMode={this.props.setListViewMode}
@@ -313,20 +311,18 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             />
 
             <DialectFilterList
-              type={this.DIALECT_FILTER_TYPE}
+              // appliedFilterIds={new Set([this.props.routeParams.category])}
+              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
+              facets={this.state.categories}
+              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              routeParams={this.props.routeParams}
               title={intl.trans(
                 'views.pages.explore.dialect.learn.words.browse_by_category',
                 'Browse Categories',
                 'words'
               )}
-              filterInfo={filterInfo}
-              appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-              facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', this.props.routeParams.area)}
-              handleDialectFilterClick={this.handleCategoryClick}
-              handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-              facets={this.state.categories}
-              clearDialectFilter={this.clearDialectFilter}
-              routeParams={this.props.routeParams}
+              type={this.DIALECT_FILTER_TYPE}
             />
           </div>
           <div className={classNames('col-xs-12', 'col-md-9')}>
@@ -426,25 +422,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     })
 
     this.changeFilter({ href, updateHistory })
-  }
-
-  handleCategoryClick = async ({ facetField, selected, unselected, href }, updateHistory = true) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CATEGORY,
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
-    this.changeFilter({ href, updateHistory })
-
-    this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE) // NOTE: This function is in PageDialectLearnBase
   }
 
   handleSearch = () => {
@@ -566,7 +543,6 @@ const mapDispatchToProps = {
   replaceWindowPath,
   searchDialectUpdate,
   setListViewMode,
-  updatePageProperties,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnWords)

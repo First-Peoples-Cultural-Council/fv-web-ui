@@ -115,7 +115,7 @@ export class MetadataPanel extends Component {
      * Date created
      */
     metadata.push({
-      label: intl.trans('date_created', 'Date Created', 'first'),
+      label: intl.trans('date_created', 'Date Added to FirstVoices', 'first'),
       value: StringHelpers.formatUTCDateString(selectn('response.properties.dc:created', computeEntity)),
     })
 

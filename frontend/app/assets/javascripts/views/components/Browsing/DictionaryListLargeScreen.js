@@ -71,9 +71,17 @@ const DictionaryListLargeScreen = (props) => {
   })
 
   const trHeader =
-    headerCells.length > 0 ? <tr className="DictionaryList__row DictionaryList__row--header">{headerCells}</tr> : null
+    headerCells.length > 0 ? (
+      <tr key="headerCells" className="DictionaryList__row DictionaryList__row--header">
+        {headerCells}
+      </tr>
+    ) : null
   const trFooter =
-    footerCells.length > 0 ? <tr className="DictionaryList__row DictionaryList__row--footer">{footerCells}</tr> : null
+    footerCells.length > 0 ? (
+      <tr key="footerCells" className="DictionaryList__row DictionaryList__row--footer">
+        {footerCells}
+      </tr>
+    ) : null
 
   return (
     <table className={`DictionaryList data-table fontAboriginalSans ${props.cssModifier}`}>

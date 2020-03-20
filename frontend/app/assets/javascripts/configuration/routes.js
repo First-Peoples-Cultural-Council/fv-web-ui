@@ -246,6 +246,7 @@ const addPagination = (route) => {
   })
 }
 
+// Category page
 const addCategory = (route) => {
   return Object.assign({}, route, {
     path: route.path.concat(['categories', new paramMatch('category', ANYTHING_BUT_SLASH)]),
@@ -257,15 +258,10 @@ const addCategory = (route) => {
       }) +
       ' | ' +
       selectn('title', route),
+    page: <Pages.PageDialectLearnWordsFilteredByCategory />,
   })
 }
-
-const addBrowseAlphabet = (route) => {
-  return Object.assign({}, route, {
-    path: route.path.concat(['alphabet', new paramMatch('letter', ANYTHING_BUT_SLASH)]),
-    title: '{$letter}' + ` | ${selectn('title', route)}`,
-  })
-}
+// Category page (Phrases)
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
     path: route.path.concat(['book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)]),
@@ -277,6 +273,14 @@ const addBrowsePhraseBook = (route) => {
       }) +
       ' | ' +
       selectn('title', route),
+    page: <Pages.PageDialectLearnPhrasesFilteredByCategory />,
+  })
+}
+
+const addBrowseAlphabet = (route) => {
+  return Object.assign({}, route, {
+    path: route.path.concat(['alphabet', new paramMatch('letter', ANYTHING_BUT_SLASH)]),
+    title: '{$letter}' + ` | ${selectn('title', route)}`,
   })
 }
 // eg: learn/phrases/alphabet/b
@@ -1673,8 +1677,8 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  addBrowsePhraseBook(DIALECT_LEARN_PHRASES),
-  addPagination(addBrowsePhraseBook(DIALECT_LEARN_PHRASES)),
+  addBrowsePhraseBook(DIALECT_LEARN_PHRASES), // NOTE: THIS IS PHRASE'S BROWSE BY CATEGORY
+  addPagination(addBrowsePhraseBook(DIALECT_LEARN_PHRASES)), // NOTE: THIS IS PHRASE'S BROWSE BY CATEGORY
   addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES),
   addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)),
   {
@@ -1700,8 +1704,8 @@ const routes = [
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
-  addCategory(DIALECT_LEARN_PHRASES),
-  addPagination(addCategory(DIALECT_LEARN_PHRASES)),
+  addCategory(DIALECT_LEARN_PHRASES), // NOTE: This creates `.../learn/phrases/categories/[catId]` but it's not being used! `addBrowsePhraseBook` above is phrase's category view
+  addPagination(addCategory(DIALECT_LEARN_PHRASES)), // NOTE: This creates `.../learn/phrases/categories/[catId]` but it's not being used! `addBrowsePhraseBook` above is phrase's category view
   {
     path: [
       KIDS_OR_DEFAULT,

@@ -293,7 +293,7 @@ export class UserTasks extends React.Component {
                     <th>{intl.trans('email', 'Email', 'words')}</th>
                     <th style={{ minWidth: '100px' }}>{intl.trans('role', 'Role', 'words')}</th>
                     <th style={{ minWidth: '120px' }}>{intl.trans('comments', 'Comments', 'words')}</th>
-                    <th>{intl.trans('date_created', 'Date Created', 'words')}</th>
+                    <th>{intl.trans('date_created', 'Date Added to FirstVoices', 'words')}</th>
                     <th style={{ minWidth: '150px' }}>{intl.trans('actions', 'Actions', 'words')}</th>
                   </tr>
                 </thead>
