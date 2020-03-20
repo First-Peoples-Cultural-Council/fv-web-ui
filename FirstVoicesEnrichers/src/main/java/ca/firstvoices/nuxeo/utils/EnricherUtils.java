@@ -175,7 +175,7 @@ public class EnricherUtils {
         ObjectNode jsonObj = mapper.createObjectNode();
 
         try {
-            if (!session.hasPermission(ref, SecurityConstants.READ)) {
+            if (!session.exists(ref) || !session.hasPermission(ref, SecurityConstants.READ)) {
                 return null;
             }
             doc = session.getDocument(ref);

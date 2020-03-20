@@ -62,6 +62,7 @@ public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
         session.save();
 
         dialectDoc = createDialectTree(session);
+        session.saveDocument(dialectDoc);
 
     }
 

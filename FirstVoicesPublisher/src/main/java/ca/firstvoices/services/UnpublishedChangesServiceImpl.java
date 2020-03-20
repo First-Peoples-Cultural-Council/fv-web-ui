@@ -1,74 +1,54 @@
 package ca.firstvoices.services;
 
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.schema.DocumentType;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.runtime.api.Framework;
 
 import java.util.Arrays;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
-
+    
+    protected static FirstVoicesPublisherService FVPublisherService = Framework.getService(
+        FirstVoicesPublisherService.class);
+    
     public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
         
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
             return false;
-        
-        // Get the Workspaces document
-        String path = document.getPathAsString();
-        String[] splitDocPath = path.split("/");
-        for (int i=0; i<splitDocPath.length; i++) {
-            if (splitDocPath[i].equals("sections")) {
-                splitDocPath[i] = "Workspaces";
-            }
-        }
-        path = String.join("/", splitDocPath);
-        String workspacePath = path;
 
         /*
-            Get the workspaces version and status of the document using a privileged session
-            in case the service is being called from a place that does not have access to the
-            sections document.
+             A privileged session is used in case the service is being called from a place that
+             does not have access to the sections document.
         */
-        String[] workspaceInfo = CoreInstance.doPrivileged(session, s -> {
-            DocumentModel workspacesDocument = s.getDocument((new PathRef(workspacePath)));
-            String majorVerDoc = workspacesDocument.getPropertyValue("uid:major_version").toString();
-            String minorVerDoc = workspacesDocument.getPropertyValue("uid:minor_version").toString();
-            String status = workspacesDocument.getCurrentLifeCycleState();
-            return new String[] {majorVerDoc, minorVerDoc, status};
-        });
-
-        int majorVerDoc = Integer.parseInt(workspaceInfo[0]);
-        int minorVerDoc = Integer.parseInt(workspaceInfo[1]);
-        String status = workspaceInfo[2];
-
-        // Check that the document is currently published
-        if (! status.equals("Published")) {
-            return false;
-        }
-
-        // Get the sections document
-        String[] splitPath = path.split("/");
-        for (int i=0; i<splitPath.length; i++) {
-            if (splitPath[i].equals("Workspaces")) {
-                splitPath[i] = "sections";
+        return CoreInstance.doPrivileged(session, s -> {
+            
+            // Get the workspaces document, versions, and published status
+            DocumentModel workspacesDocument = s.getSourceDocument(document.getRef());
+            int majorVerDoc =  Integer.parseInt(workspacesDocument.getPropertyValue("uid:major_version").toString());
+            int minorVerDoc =  Integer.parseInt(workspacesDocument.getPropertyValue("uid:minor_version").toString());
+//            String status = workspacesDocument.getCurrentLifeCycleState();
+            String status = s.getCurrentLifeCycleState(workspacesDocument.getRef());
+            
+            // Check that the document is currently published
+            if (! status.equals("Published")) {
+                return false;
             }
-        }
-        String sectionsPath = String.join("/", splitPath);
-        DocumentModel sectionsDocument = session.getDocument(new PathRef(sectionsPath));
-
-        // Get the sections version
-        int majorVerSections = Integer.parseInt(sectionsDocument.getPropertyValue("uid:major_version").toString());
-        int minorVerSections = Integer.parseInt(sectionsDocument.getPropertyValue("uid:minor_version").toString());
-
-        /*
-            Use the helper method to compare versions of the document and return true if the sections
-            version is older then the workspaces version.
-         */
-        return compareVersions(majorVerDoc, minorVerDoc, majorVerSections, minorVerSections);
-
+    
+            // Get the sections document and versions
+            DocumentModel sectionsDoc = FVPublisherService.getPublication(s, workspacesDocument.getRef());
+            int majorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:major_version").toString());
+            int minorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:minor_version").toString());
+            
+            /*
+                Use the helper method to compare versions of the document and return true if the sections
+                version is older then the workspaces version.
+            */
+            return compareVersions(majorVerDoc, minorVerDoc, majorVerSections, minorVerSections);
+        });
     }
 
     // Helper method to check if the workspaces document version is greater then then sections document version

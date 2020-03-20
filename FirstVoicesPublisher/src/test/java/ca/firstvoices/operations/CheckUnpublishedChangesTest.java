@@ -58,6 +58,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
 
     dialectDoc = createDialectTree(session);
     dialectDoc.followTransition("Enable");
+    session.saveDocument(dialectDoc);
   }
 
   @After
@@ -67,7 +68,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
   }
 
   @Test
-  public void checkUnpublishedChanges() throws OperationException {
+  public void checkUnpublishedChangesTest() throws OperationException {
     OperationContext ctx = new OperationContext(session);
 
     /*
