@@ -224,13 +224,15 @@ export default class DirectoryOperations {
     })
   }
 
-  static getDirectory(name = '') {
+  static getDirectory(name = '', pageSize = 100) {
     const properties = BaseOperations.getProperties()
 
     return new Promise((resolve, reject) => {
       properties.client
         .directory(name)
-        .fetchAll()
+        .fetchAll(
+          {queryParams : {'pageSize': pageSize}}
+        )
         .then((directory) => {
           resolve(directory)
         })
@@ -246,54 +248,7 @@ export default class DirectoryOperations {
     })
   }
 
-  static getDirectoryEntries(name = '') {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .directory(name)
-        .fetchAll()
-        .then((directory) => {
-          resolve(directory)
-        })
-        .catch(() => {
-          reject(
-            IntlService.instance.translate({
-              key: 'operations.could_not_retrieve_directory_entries',
-              default: 'Could not retrieve directory entries',
-              case: 'first',
-            })
-          )
-        })
-    })
-  }
-
-  // Unused methods below (needs refactoring or removing soon)
-  getSubjects(client) {
-    return new Promise((resolve, reject) => {
-      client.request('directory/subtopic').get((error, data) => {
-        if (error) {
-          // something went wrong
-          throw error
-        }
-
-        if (data.entries.length > 0) {
-          //entry.properties.label
-          const subtopics = _.object(_.map(data.entries, (entry) => [entry.properties.id, entry.properties.id]))
-          resolve(subtopics)
-        } else {
-          reject(
-            IntlService.instance.translate({
-              key: 'operations.workspace_not_found',
-              default: 'Workspace not found',
-              case: 'first',
-            })
-          )
-        }
-      })
-    })
-  }
-
+  // Unused method. Remove.
   getPartsOfSpeech(client) {
     return new Promise((resolve, reject) => {
       client.request('directory/parts_speech').get((error, data) => {

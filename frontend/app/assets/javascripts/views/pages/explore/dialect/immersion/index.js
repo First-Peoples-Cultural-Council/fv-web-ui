@@ -25,7 +25,6 @@ import { connect } from 'react-redux'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { fetchDirectory } from 'providers/redux/reducers/directory'
-import { fetchDirectoryEntries } from 'providers/redux/reducers/directory'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 
@@ -127,8 +126,8 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
     newProps.fetchDocument(newProps.routeParams.dialect_path + '/Label Dictionary')
     if (newProps.computeDirectory.isFetching !== true && newProps.computeDirectory.success !== true) {
-      newProps.fetchDirectoryEntries('fv_label_categories', ['parent'])
-      newProps.fetchDirectoryEntries('fv_labels', ['type', 'template_strings', 'category'])
+      newProps.fetchDirectory('fv_label_categories', 100, true)
+      newProps.fetchDirectory('fv_labels', 2000, true)
     }
   }
 
@@ -300,7 +299,6 @@ const mapDispatchToProps = {
   fetchDocument,
   fetchPortal,
   fetchDirectory,
-  fetchDirectoryEntries,
   pushWindowPath,
   searchDialectUpdate,
 }
