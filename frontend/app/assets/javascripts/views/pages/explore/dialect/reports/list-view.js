@@ -15,11 +15,19 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import NavigationHelpers from 'common/NavigationHelpers'
-
-const defaultStyle = { marginBottom: '20px' }
-
+import Link from 'views/components/Link'
+import PropTypes from 'prop-types'
+const { bool, object, string } = PropTypes
 class ReportsCardView extends Component {
+  static propTypes = {
+    dialectPath: string,
+    fullWidth: bool,
+    item: object,
+    style: object,
+  }
+  static defaultProps = {
+    item: {},
+  }
   constructor(props, context) {
     super(props, context)
 
@@ -29,7 +37,7 @@ class ReportsCardView extends Component {
   }
 
   render() {
-    const _style = Object.assign({}, defaultStyle, this.props.style)
+    const _style = Object.assign({}, { marginBottom: '20px' }, this.props.style)
     return (
       <div
         style={_style}
@@ -37,17 +45,9 @@ class ReportsCardView extends Component {
         className={classNames('col-xs-12', 'col-md-12', { 'col-md-4': !this.props.fullWidth })}
       >
         &#8226;{' '}
-        <a
-          href={
-            NavigationHelpers.getBaseWebUIURL() +
-            '/explore' +
-            this.props.dialectPath +
-            '/reports/' +
-            encodeURI(this.props.item.name)
-          }
-        >
+        <Link href={`/explore${this.props.dialectPath}/reports/${encodeURI(this.props.item.name)}`}>
           {this.props.item.name}
-        </a>
+        </Link>
       </div>
     )
   }
