@@ -19,36 +19,31 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
             return false;
+    
+        // Check that the document is currently published
+        if (! document.getCurrentLifeCycleState().equals("Published")) {
+            return false;
+        }
 
         /*
              A privileged session is used in case the service is being called from a place that
-             does not have access to the sections document.
+             does not have access to the workspaces document.
         */
-        return CoreInstance.doPrivileged(session, s -> {
-            
-            // Get the workspaces document, versions, and published status
-            DocumentModel workspacesDocument = s.getSourceDocument(document.getRef());
-            int majorVerDoc =  Integer.parseInt(workspacesDocument.getPropertyValue("uid:major_version").toString());
-            int minorVerDoc =  Integer.parseInt(workspacesDocument.getPropertyValue("uid:minor_version").toString());
-//            String status = workspacesDocument.getCurrentLifeCycleState();
-            String status = s.getCurrentLifeCycleState(workspacesDocument.getRef());
-            
-            // Check that the document is currently published
-            if (! status.equals("Published")) {
-                return false;
-            }
+        DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> { return s.getSourceDocument(document.getRef());});
     
-            // Get the sections document and versions
-            DocumentModel sectionsDoc = FVPublisherService.getPublication(s, workspacesDocument.getRef());
-            int majorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:major_version").toString());
-            int minorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:minor_version").toString());
-            
-            /*
+        int majorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:major_version").toString());
+        int minorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:minor_version").toString());
+        
+        // Get the sections document and versions
+        DocumentModel sectionsDoc = FVPublisherService.getPublication(session, workspacesDoc.getRef());
+        int majorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:major_version").toString());
+        int minorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:minor_version").toString());
+        
+        /*
                 Use the helper method to compare versions of the document and return true if the sections
                 version is older then the workspaces version.
             */
-            return compareVersions(majorVerDoc, minorVerDoc, majorVerSections, minorVerSections);
-        });
+        return compareVersions(majorVerDoc, minorVerDoc, majorVerSections, minorVerSections);
     }
 
     // Helper method to check if the workspaces document version is greater then then sections document version
