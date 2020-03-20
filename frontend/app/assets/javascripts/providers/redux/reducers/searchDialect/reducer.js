@@ -7,6 +7,7 @@ import {
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
   SEARCH_BY_PHRASE_BOOK,
+  SEARCH_TYPE_DEFAULT_SEARCH,
   SEARCH_TYPE_APPROXIMATE_SEARCH,
   SEARCH_TYPE_EXACT_SEARCH,
   SEARCH_TYPE_CONTAINS_SEARCH,
@@ -46,6 +47,7 @@ const switchSearchModes = (searchField, searchValue, searchType) => {
 
   switch (searchType) {
     // Will return a result that is close (based on Levenstien distance) to the search term
+    case SEARCH_TYPE_DEFAULT_SEARCH:
     case SEARCH_TYPE_APPROXIMATE_SEARCH:
       return fuzzySearchDefault
 
@@ -90,10 +92,17 @@ const generateNxql = ({
     searchPartOfSpeech,
   } = _searchBySettings
 
-  const searchValue = StringHelpers.clean(_searchTerm, CLEAN_NXQL) || ''
+  let searchValue = StringHelpers.clean(_searchTerm, CLEAN_NXQL) || ''
+  searchValue = searchValue.trim()
+
   const searchByAlphabetValue = StringHelpers.clean(_searchByAlphabet, CLEAN_NXQL) || ''
   const nxqlTmpl = {
-    // allFields: `ecm:fulltext = '*${StringHelpers.clean(searchValue, CLEAN_FULLTEXT)}*'`,
+    // Use full text seach on dictionary for broad matches;
+    // And approximate search as a fall back for close matches
+    allFields:
+      `ecm:fulltext_dictionary_all_field = '${searchValue}' OR ` +
+      `${switchSearchModes('fv:definitions/*/translation', searchValue, _searchType)} OR ` +
+      `${switchSearchModes('dc:title', searchValue, _searchType)}`,
     searchByTitle: switchSearchModes('dc:title', searchValue, _searchType),
     searchByAlphabet: `dc:title ILIKE '${searchByAlphabetValue}%'`,
     searchByCategory: `dc:title ILIKE '%${searchValue}%'`,
@@ -127,21 +136,27 @@ const generateNxql = ({
     }
     default: {
       if (searchValue) {
-        if (searchByCulturalNotes) {
+        // Handle definitions and title together as a space case - full-text search on entire dictionary
+        if (searchByDefinitions && searchByTitle) {
           nxqlQueryJoin(nxqlQueries)
-          nxqlQueries.push(nxqlTmpl.searchByCulturalNotes)
-        }
-        if (searchByTitle) {
-          nxqlQueryJoin(nxqlQueries)
-          nxqlQueries.push(nxqlTmpl.searchByTitle)
-        }
-        if (searchByTranslations) {
-          nxqlQueryJoin(nxqlQueries)
-          nxqlQueries.push(nxqlTmpl.searchByTranslations)
-        }
-        if (searchByDefinitions) {
-          nxqlQueryJoin(nxqlQueries)
-          nxqlQueries.push(nxqlTmpl.searchByDefinitions)
+          nxqlQueries.push(nxqlTmpl.allFields)
+        } else {
+          if (searchByCulturalNotes) {
+            nxqlQueryJoin(nxqlQueries)
+            nxqlQueries.push(nxqlTmpl.searchByCulturalNotes)
+          }
+          if (searchByTitle) {
+            nxqlQueryJoin(nxqlQueries)
+            nxqlQueries.push(nxqlTmpl.searchByTitle)
+          }
+          if (searchByTranslations) {
+            nxqlQueryJoin(nxqlQueries)
+            nxqlQueries.push(nxqlTmpl.searchByTranslations)
+          }
+          if (searchByDefinitions) {
+            nxqlQueryJoin(nxqlQueries)
+            nxqlQueries.push(nxqlTmpl.searchByDefinitions)
+          }
         }
       }
       if (searchPartOfSpeech && searchPartOfSpeech !== SEARCH_PART_OF_SPEECH_ANY) {
@@ -190,6 +205,7 @@ const generateNxqlSearchSort = ({
     switch (_searchType) {
       // Sort by score (i.e. return most relevant results)
       case SEARCH_TYPE_APPROXIMATE_SEARCH:
+      case SEARCH_TYPE_DEFAULT_SEARCH:
         searchSortBy = 'ecm:fulltextScore'
         sortOrder = 'desc'
         break
