@@ -11,10 +11,9 @@ import java.util.Arrays;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
     
-    protected static FirstVoicesPublisherService FVPublisherService = Framework.getService(
-        FirstVoicesPublisherService.class);
-    
     public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
+    
+        FirstVoicesPublisherService FVPublisherService = Framework.getService(FirstVoicesPublisherService.class);
         
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
@@ -30,7 +29,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
              does not have access to the workspaces document.
         */
         DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> { return s.getSourceDocument(document.getRef());});
-    
+        
         int majorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:major_version").toString());
         int minorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:minor_version").toString());
         

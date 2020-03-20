@@ -46,7 +46,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
   private CoreSession session;
 
   @Inject
-  protected AutomationService automationService;
+  private AutomationService automationService;
 
   private DocumentModel dialectDoc;
 
