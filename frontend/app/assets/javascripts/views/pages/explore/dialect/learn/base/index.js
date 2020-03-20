@@ -670,3 +670,8 @@ export const updateFilter = ({ filterInfo, searchByMode, searchNxqlQuery }) => {
   })
   return newFilter
 }
+
+// NOTE: New version of `_getPathOrParentID`
+export const useIdOrPathFallback = ({ id, routeParams } = {}) => {
+  return id || `${routeParams.dialect_path}/Dictionary`
+}
