@@ -55,14 +55,15 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
-  onNavigateRequest,
-  handleDialectFilterList,
-  updateUrlIfPageOrPageSizeIsDifferent,
-  sortHandler,
-  updateUrlAfterResetSearch,
-  getCharacters,
   getCategoriesOrPhrasebooks,
+  getCharacters,
+  handleDialectFilterList,
+  onNavigateRequest,
+  sortHandler,
   updateFilter,
+  updateUrlAfterResetSearch,
+  updateUrlIfPageOrPageSizeIsDifferent,
+  useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
 import {
   SEARCH_BY_ALPHABET,
@@ -450,11 +451,9 @@ class WordsFilteredByCategory extends Component {
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
 
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const uid = selectn('response.uid', computedDocument)
-
+    const uid = useIdOrPathFallback({ id: selectn('response.uid', computedDocument), routeParams })
     const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
-
     this.props.fetchWords(uid, nql)
   }
 
