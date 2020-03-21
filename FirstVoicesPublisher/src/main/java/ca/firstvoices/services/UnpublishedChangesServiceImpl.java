@@ -3,6 +3,7 @@ package ca.firstvoices.services;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.runtime.api.Framework;
@@ -25,16 +26,22 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         }
 
         /*
-             A privileged session is used in case the service is being called from a place that
-             does not have access to the workspaces document.
+             A privileged session is used to get the workspaces doc ref and versions in case the
+             service is being called from a place that does not have access to the workspaces document.
         */
-        DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> { return s.getSourceDocument(document.getRef());});
+        DocumentRef workspacesDocRef = CoreInstance.doPrivileged(session, s -> {
+            return s.getSourceDocument(document.getRef()).getRef();
+        });
         
-        int majorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:major_version").toString());
-        int minorVerDoc = Integer.parseInt(workspacesDoc.getPropertyValue("uid:minor_version").toString());
+        int majorVerDoc = CoreInstance.doPrivileged(session, s -> {
+            return Integer.parseInt(s.getWorkingCopy(document.getRef()).getPropertyValue("uid:major_version").toString());
+        });
+        int minorVerDoc = CoreInstance.doPrivileged(session, s -> {
+            return Integer.parseInt(s.getWorkingCopy(document.getRef()).getPropertyValue("uid:minor_version").toString());
+        });
         
         // Get the sections document and versions
-        DocumentModel sectionsDoc = FVPublisherService.getPublication(session, workspacesDoc.getRef());
+        DocumentModel sectionsDoc = FVPublisherService.getPublication(session, workspacesDocRef);
         int majorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:major_version").toString());
         int minorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:minor_version").toString());
         
