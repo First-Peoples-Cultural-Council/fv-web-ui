@@ -80,15 +80,15 @@ class LabelModal extends Component {
   // We should refactor the various modals and forms to avoid needing to do this
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      this.state !== nextState || 
-      this.props.fullScreen !== nextProps.fullScreen || 
-      this.props.open !== nextProps.open || 
-      this.props.label !== nextProps.label || 
-      this.props.computeLabel !== nextProps.computeLabel || 
+      this.state !== nextState ||
+      this.props.fullScreen !== nextProps.fullScreen ||
+      this.props.open !== nextProps.open ||
+      this.props.label !== nextProps.label ||
+      this.props.computeLabel !== nextProps.computeLabel ||
       this.props.computeDialect2 !== nextProps.computeDialect2) {
-      return true;
+      return true
     }
-    return false;
+    return false
   }
 
   componentDidUpdate(prevProps) {
