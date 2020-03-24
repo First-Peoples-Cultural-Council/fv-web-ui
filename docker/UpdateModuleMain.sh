@@ -18,13 +18,23 @@ fi
 
 # Build main module.
 echo 'Building module: ' $MODULE
-mvn clean install
-if [[ "$?" -ne 0 ]]; then
-    echo
-    echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
-    echo
+if [ "$2" == "-skip-tests" ]; then
+    mvn -Dmaven.test.skip=true install
+    if [[ "$?" -ne 0 ]]; then
+        echo
+        echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
+        echo
+    fi
+    echo ''
+else
+    mvn clean install
+    if [[ "$?" -ne 0 ]]; then
+        echo
+        echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
+        echo
+    fi
+    echo ''
 fi
-echo ''
 
 # Remove any old modules from the docker container if they exists
 echo 'Removing old module from docker container if it exists.'

@@ -8,4 +8,8 @@ MODULE=${DIRECTORY##*/}
 
 # Run the main UpdateModule script in the docker directory
 cd $DIRECTORY
-../docker/UpdateModuleMain.sh $MODULE
+if [[ "$1" == "-skip-tests" ]]; then
+    ../docker/UpdateModuleMain.sh $MODULE $1
+else
+    ../docker/UpdateModuleMain.sh $MODULE
+fi
