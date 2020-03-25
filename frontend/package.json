@@ -138,6 +138,7 @@
     "bootstrap-webpack": "0.0.3",
     "browser-sync": "~2.9.6",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
+    "circular-dependency-plugin": "^5.2.0",
     "clean-webpack-plugin": "^1.0.1",
     "compression": "~1.4.1",
     "copy-webpack-plugin": "^4.6.0",
