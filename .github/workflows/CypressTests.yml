@@ -7,20 +7,21 @@ on:
     - cron: "0 20 * * *"
     - cron: "30 9 * * *"
   # On pull requests when any files in the paths listed are changed
-  pull_request:
-    paths:
-      - "frontend/app/**"
-      - "frontend/build/**"
-      - "frontend/gulpfile.js/**"
-      - "frontend/nuxeo/**"
-      - "frontend/index.html"
-      - "**/package.json"
-      - "**/package-lock.json"
-      - "FirstVoices*/**"
-      - "FV*/**"
-      - "**/pom.xml"
-      - "!**/README.md"
-    branches: master
+#  pull_request:
+#    paths:
+#    - 'frontend/app/**'
+#    - 'frontend/build/**'
+#    - 'frontend/gulpfile.js/**'
+#    - 'frontend/nuxeo/**'
+#    - 'frontend/index.html'
+#    - '**/package.json'
+#    - '**/package-lock.json'
+#    - 'FirstVoices*/**'
+#    - 'FV*/**'
+#    - '**/pom.xml'
+#    - '!**/README.md'
+#    branches:
+#      master
 
 jobs:
   Run-tests:
@@ -29,7 +30,7 @@ jobs:
     steps:
       # Checkout the current branch
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       # Setup the correct Java version
       - name: Set up JDK 1.8
@@ -71,7 +72,7 @@ jobs:
       # Startup the docker backend
       - name: Startup backend
         run: |
-          docker run --name nuxeo-dev -t --rm -p 8080:8080 -v ${PWD}/docker/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/docker/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/docker/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam " -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD -d me/nuxeo-dev
+          docker run --name nuxeo-dev -t --rm -p 8080:8080 -v ${PWD}/docker/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/docker/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/docker/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam " -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD -d me/nuxeo-dev
           sleep 120
         env:
           CYPRESS_FV_USERNAME: ${{ secrets.CYPRESS_FV_USERNAME }}

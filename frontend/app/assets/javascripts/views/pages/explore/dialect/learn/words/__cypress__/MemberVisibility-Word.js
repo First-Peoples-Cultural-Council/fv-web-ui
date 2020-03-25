@@ -29,7 +29,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
             Check that no results exist in "Words in New Status" page
         */
     cy.getByText('Words in New Status', { exact: true }).click()
-    cy.getByText('No results found.', { exact: true }).should('exist')
+    cy.getByText('No results found.', { exact: false }).should('exist')
     /*
             Check that the word exists in "Words in Enabled Status" page and make sure it has "Enabled" status
         */

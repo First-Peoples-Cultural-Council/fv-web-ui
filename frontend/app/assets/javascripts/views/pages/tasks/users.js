@@ -328,7 +328,7 @@ export class UserTasks extends React.Component {
                     <th>
                       <FVLabel
                         transKey="date_created"
-                        defaultStr="Date Created"
+                        defaultStr="Date Added to FirstVoices"
                         transform="words"
                       />
                     </th>

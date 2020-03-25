@@ -44,6 +44,7 @@ done
 KEYLIST="$(echo $KEYLIST | tr ' ' '\n' | sort | uniq | xargs)"
 
 # Iterate through each issue found in the commit messages and perform Jira actions on each
+# Also check for existing comments on the issue to ensure no duplicates are created
 for f in $KEYLIST
 do
     if [[ $f =~ FW-[0-9]{1,5} ]]; then
@@ -53,10 +54,16 @@ do
             FOUND=true
         fi
         if [[ $FOUND = true ]]; then
-            echo ${BASH_REMATCH} ": Adding pull request reviewer info to issue."
-            jira comment --noedit --comment="The pull request for this issue was reviewed by https://github.com/$REVIEWER" ${BASH_REMATCH}
+            issue_info=$(jira view ${BASH_REMATCH})
+            ISSUE=${BASH_REMATCH}
+            if [[ ! $(echo $issue_info | grep -o 'comments:[[:space:]].*') =~ The[[:space:]]pull[[:space:]]request[[:space:]]for[[:space:]]this[[:space:]]issue[[:space:]]was[[:space:]]reviewed[[:space:]]by[[:space:]]https:\/\/github\.com\/${REVIEWER} ]]; then
+                echo ${ISSUE} ": Adding pull request reviewer info to issue:" ${REVIEWER}
+                jira comment --noedit --comment="The pull request for this issue was reviewed by https://github.com/$REVIEWER" ${ISSUE}
+            else
+                echo ${ISSUE} ": Issue already reviewed by" ${REVIEWER}
+            fi
         else
-            echo ${BASH_REMATCH} ": Issue not found on jira. No comment added."
+            echo ${ISSUE} ": Issue not found on jira. No comment added."
         fi
     fi
     echo ''

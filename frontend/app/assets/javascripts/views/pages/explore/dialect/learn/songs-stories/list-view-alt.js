@@ -127,7 +127,7 @@ export class SongsStoriesListViewAlt extends DataListView {
         {
           name: 'dc:created',
           width: 210,
-          title: props.intl.trans('date_created', 'Date Created'),
+          title: props.intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data /*, cellProps*/) => {
             return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
           },

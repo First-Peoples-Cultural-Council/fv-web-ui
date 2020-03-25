@@ -251,7 +251,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    <FVLabel transKey="date_created" defaultStr="Date Created" transform="first" />
+                    <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" transform="first" />
                   </span>
                   <br />
                   {selectn('response.properties.dc:created', computeItem)}

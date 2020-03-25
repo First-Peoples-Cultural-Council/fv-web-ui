@@ -27,7 +27,8 @@
         <schema name="fvgallery" prefix="fvgallery" override="true" src="data/schemas/fvgallery.xsd"/>
         <schema name="fvguide" prefix="fvguide" override="true" src="data/schemas/fvguide.xsd"/>
         <schema name="fv-lang-family" prefix="fv-lang-family" override="true" src="data/schemas/fv-lang-family.xsd"/>
-        <schema name="fvlanguagefamily" prefix="fvlanguagefamily" override="true" src="data/schemas/fvlanguagefamily.xsd"/>
+        <schema name="fvlanguagefamily" prefix="fvlanguagefamily" override="true"
+                src="data/schemas/fvlanguagefamily.xsd"/>
         <schema name="fvlink" prefix="fvlink" override="true" src="data/schemas/fvlink.xsd"/>
         <schema name="fvlinks" prefix="fvlinks" override="true" src="data/schemas/fvlinks.xsd"/>
         <schema name="file_schema" prefix="file_schema" override="true" src="data/schemas/file_schema.xsd"/>
@@ -46,22 +47,32 @@
         <schema name="indictionary" prefix="indictionary" override="true" src="data/schemas/indictionary.xsd"/>
         <schema name="ininfix" prefix="ininfix" override="true" src="data/schemas/ininfix.xsd"/>
         <schema name="innounending" prefix="innounending" override="true" src="data/schemas/innounending.xsd"/>
-        <schema name="inpersonalpronounce" prefix="inpersonalpronounce" override="true" src="data/schemas/inpersonalpronounce.xsd"/>
+        <schema name="inpersonalpronounce" prefix="inpersonalpronounce" override="true"
+                src="data/schemas/inpersonalpronounce.xsd"/>
         <schema name="inphrase" prefix="inphrase" override="true" src="data/schemas/inphrase.xsd"/>
         <schema name="fvlabel" prefix="fvlabel" override="true" src="data/schemas/fvlabel.xsd"/>
         <schema name="fvlabeldictionary" prefix="fvlabeldictionary" override="true" src="data/schemas/fvlabeldictionary.xsd"/>
         <schema name="inplacelocation" prefix="inplacelocation" override="true" src="data/schemas/inplacelocation.xsd"/>
         <schema name="inroot" prefix="inroot" override="true" src="data/schemas/inroot.xsd"/>
         <schema name="inverbending" prefix="inverbending" override="true" src="data/schemas/inverbending.xsd"/>
-        <schema name="workspace_schema" prefix="workspace_schema" override="true" src="data/schemas/workspace_schema.xsd"/>
-        <schema name="DefaultContentListingInNavigation_cv" prefix="DefaultContentListingInNavigation_cv" override="true" src="data/schemas/DefaultContentListingInNavigation_cv.xsd"/>
-        <schema name="FVAlphabetListing_cv" prefix="FVAlphabetListing_cv" override="true" src="data/schemas/FVAlphabetListing_cv.xsd"/>
-        <schema name="FVMediaListing_cv" prefix="FVMediaListing_cv" override="true" src="data/schemas/FVMediaListing_cv.xsd"/>
-        <schema name="FVPhraseListing_cv" prefix="FVPhraseListing_cv" override="true" src="data/schemas/FVPhraseListing_cv.xsd"/>
-        <schema name="FVThumbnailView_cv" prefix="FVThumbnailView_cv" override="true" src="data/schemas/FVThumbnailView_cv.xsd"/>
-        <schema name="FVWordListing_cv" prefix="FVWordListing_cv" override="true" src="data/schemas/FVWordListing_cv.xsd"/>
-        <schema name="INNounEndingListing_cv" prefix="INNounEndingListing_cv" override="true" src="data/schemas/INNounEndingListing_cv.xsd"/>
-        <schema name="INVerbEndingListing_cv" prefix="INVerbEndingListing_cv" override="true" src="data/schemas/INVerbEndingListing_cv.xsd"/>
+        <schema name="workspace_schema" prefix="workspace_schema" override="true"
+                src="data/schemas/workspace_schema.xsd"/>
+        <schema name="DefaultContentListingInNavigation_cv" prefix="DefaultContentListingInNavigation_cv"
+                override="true" src="data/schemas/DefaultContentListingInNavigation_cv.xsd"/>
+        <schema name="FVAlphabetListing_cv" prefix="FVAlphabetListing_cv" override="true"
+                src="data/schemas/FVAlphabetListing_cv.xsd"/>
+        <schema name="FVMediaListing_cv" prefix="FVMediaListing_cv" override="true"
+                src="data/schemas/FVMediaListing_cv.xsd"/>
+        <schema name="FVPhraseListing_cv" prefix="FVPhraseListing_cv" override="true"
+                src="data/schemas/FVPhraseListing_cv.xsd"/>
+        <schema name="FVThumbnailView_cv" prefix="FVThumbnailView_cv" override="true"
+                src="data/schemas/FVThumbnailView_cv.xsd"/>
+        <schema name="FVWordListing_cv" prefix="FVWordListing_cv" override="true"
+                src="data/schemas/FVWordListing_cv.xsd"/>
+        <schema name="INNounEndingListing_cv" prefix="INNounEndingListing_cv" override="true"
+                src="data/schemas/INNounEndingListing_cv.xsd"/>
+        <schema name="INVerbEndingListing_cv" prefix="INVerbEndingListing_cv" override="true"
+                src="data/schemas/INVerbEndingListing_cv.xsd"/>
         <schema name="fvancestry" prefix="fva" override="true" src="data/schemas/fvancestry.xsd"/>
         <schema name="fvcore" prefix="fv" override="true" src="data/schemas/fvcore.xsd"/>
         <schema name="fvlegacy" prefix="fvl" override="true" src="data/schemas/fvlegacy.xsd"/>
@@ -72,17 +83,20 @@
         <schema name="var_Task297a" prefix="var_Task297a" override="true" src="data/schemas/var_Task297a.xsd"/>
         <schema name="var_Task297b" prefix="var_Task297b" override="true" src="data/schemas/var_Task297b.xsd"/>
         <schema name="var_Task297c" prefix="var_Task297c" override="true" src="data/schemas/var_Task297c.xsd"/>
-        <schema name="var_FVDisableLanguageAsset" prefix="var_FVDisableLanguageAsset" override="true" src="data/schemas/var_FVDisableLanguageAsset.xsd"/>
+        <schema name="var_FVDisableLanguageAsset" prefix="var_FVDisableLanguageAsset" override="true"
+                src="data/schemas/var_FVDisableLanguageAsset.xsd"/>
         <schema name="var_Task1164" prefix="var_Task1164" override="true" src="data/schemas/var_Task1164.xsd"/>
         <schema name="var_Task2274" prefix="var_Task2274" override="true" src="data/schemas/var_Task2274.xsd"/>
         <schema name="var_Task2300" prefix="var_Task2300" override="true" src="data/schemas/var_Task2300.xsd"/>
         <schema name="var_Task2537" prefix="var_Task2537" override="true" src="data/schemas/var_Task2537.xsd"/>
-        <schema name="var_FVEnableLanguageAsset" prefix="var_FVEnableLanguageAsset" override="true" src="data/schemas/var_FVEnableLanguageAsset.xsd"/>
+        <schema name="var_FVEnableLanguageAsset" prefix="var_FVEnableLanguageAsset" override="true"
+                src="data/schemas/var_FVEnableLanguageAsset.xsd"/>
         <schema name="var_Task6b6" prefix="var_Task6b6" override="true" src="data/schemas/var_Task6b6.xsd"/>
         <schema name="var_Task6b7" prefix="var_Task6b7" override="true" src="data/schemas/var_Task6b7.xsd"/>
         <schema name="var_Task6b8" prefix="var_Task6b8" override="true" src="data/schemas/var_Task6b8.xsd"/>
         <schema name="var_Task6b9" prefix="var_Task6b9" override="true" src="data/schemas/var_Task6b9.xsd"/>
-        <schema name="var_FVPublishLanguageAsset" prefix="var_FVPublishLanguageAsset" override="true" src="data/schemas/var_FVPublishLanguageAsset.xsd"/>
+        <schema name="var_FVPublishLanguageAsset" prefix="var_FVPublishLanguageAsset" override="true"
+                src="data/schemas/var_FVPublishLanguageAsset.xsd"/>
         <schema name="var_Task11af" prefix="var_Task11af" override="true" src="data/schemas/var_Task11af.xsd"/>
         <schema name="var_Task11b0" prefix="var_Task11b0" override="true" src="data/schemas/var_Task11b0.xsd"/>
         <schema name="var_Task11b1" prefix="var_Task11b1" override="true" src="data/schemas/var_Task11b1.xsd"/>
@@ -1059,7 +1073,8 @@
         <type id="FVAlphabet">
             <label>Alphabet</label>
             <category>LanguageAssets</category>
-            <description>A container for symbols (letters) that represent the distinctive sounds of a language.</description>
+            <description>A container for symbols (letters) that represent the distinctive sounds of a language.
+            </description>
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVAlphabet-create</layout>
@@ -1334,7 +1349,8 @@
         <type id="FVGallery">
             <label>Media Gallery</label>
             <category>LanguageTools</category>
-            <description>This is a container for images that appear as part of a slideshow inside a Language Portal.</description>
+            <description>This is a container for images that appear as part of a slideshow inside a Language Portal.
+            </description>
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVGallery-create</layout>
@@ -1557,7 +1573,9 @@
         <type id="FVPortal">
             <label>Language Portal</label>
             <category>LanguageTools</category>
-            <description>A Portal to contain general information and resources related to the language, generally for public consumption via the web.</description>
+            <description>A Portal to contain general information and resources related to the language, generally for
+                public consumption via the web.
+            </description>
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVPortal-create</layout>
@@ -1580,7 +1598,9 @@
             <label>Resources</label>
             <icon>/img/folder_orange.png</icon>
             <bigIcon>/img/folder_orange_100.png</bigIcon>
-            <description>A folder type to store images, audio and video that are shared within the language family, language, or dialect.</description>
+            <description>A folder type to store images, audio and video that are shared within the language family,
+                language, or dialect.
+            </description>
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVResources-create</layout>
@@ -2382,7 +2402,9 @@
             </widget>
             <widget name="studio_header" type="studio_header">
                 <labels>
-                    <label mode="any">You can customize this form from Studio: Content Model&gt; Documents &gt; Folder &gt; Creation Layout</label>
+                    <label mode="any">You can customize this form from Studio: Content Model&gt; Documents &gt; Folder
+                        &gt; Creation Layout
+                    </label>
                 </labels>
                 <translated>false</translated>
                 <widgetModes>
@@ -2642,7 +2664,9 @@
                     <mode value="create">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Create Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Create Layout" tab of this document
+                        type in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -2704,7 +2728,9 @@
                     <mode value="edit">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -2756,7 +2782,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -5021,6 +5049,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>alphabet_order</widget>
                 </row>
                 <row>
@@ -5057,6 +5091,34 @@
                 <fields>
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
+            </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
+                        be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
+                        cannot already exist in your alphabet)
+                    </label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
             </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
@@ -5108,6 +5170,12 @@
                         <property name="nxl_colspan_0">1</property>
                     </properties>
                     <widget>upper_case_character</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>confusable_characters</widget>
                 </row>
                 <row>
                     <properties mode="any">
@@ -5173,6 +5241,34 @@
                 <fields>
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
+            </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
+                        be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
+                        cannot already exist in your alphabet)
+                    </label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
             </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
@@ -5277,6 +5373,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>alphabet_order</widget>
                 </row>
                 <row>
@@ -5316,6 +5418,28 @@
                 <fields>
                     <field>fvcharacter:upper_case_character</field>
                 </fields>
+            </widget>
+            <widget name="confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
             </widget>
             <widget name="alphabet_order" type="int">
                 <labels>
@@ -6886,7 +7010,9 @@
                     <mode value="create">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Create Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Create Layout" tab of this document
+                        type in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -6948,7 +7074,9 @@
                     <mode value="edit">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -7000,7 +7128,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -7286,7 +7416,8 @@
                             <label mode="any">Attach To</label>
                         </labels>
                         <helpLabels>
-                            <label mode="any">The DOM selector to attach to, ending with top,bottom,left or right</label>
+                            <label mode="any">The DOM selector to attach to, ending with top,bottom,left or right
+                            </label>
                         </helpLabels>
                         <translated>false</translated>
                         <fields>
@@ -7410,7 +7541,8 @@
                             <label mode="any">Attach To</label>
                         </labels>
                         <helpLabels>
-                            <label mode="any">The DOM selector to attach to, ending with top,bottom,left or right</label>
+                            <label mode="any">The DOM selector to attach to, ending with top,bottom,left or right
+                            </label>
                         </helpLabels>
                         <translated>false</translated>
                         <fields>
@@ -8367,7 +8499,9 @@
             </rows>
             <widget name="studio_header" type="studio_header">
                 <labels>
-                    <label mode="any">To delete me and add a field here: Studio&gt;Content Model&gt;Documents&gt;File&gt;Edit Layout</label>
+                    <label mode="any">To delete me and add a field here: Studio&gt;Content Model&gt;Documents&gt;File&gt;Edit
+                        Layout
+                    </label>
                 </labels>
                 <translated>false</translated>
                 <widgetModes>
@@ -9259,7 +9393,8 @@
 
                         temp.searchTerm = [query.term + "%", PhraseBookPath];
                         return temp;
-                        }</property>
+                        }
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -9312,7 +9447,8 @@
 
                         temp.searchTerm = [query.term + "%", PhraseBookPath];
                         return temp;
-                        }</property>
+                        }
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -9487,7 +9623,8 @@
 
                         temp.searchTerm = [query.term + "%", PhraseBookPath];
                         return temp;
-                        }</property>
+                        }
+                    </property>
                 </properties>
             </widget>
             <widget name="related_phrases" type="multipleDocumentsSuggestion">
@@ -9589,7 +9726,8 @@
 
                         temp.searchTerm = [query.term + "%", PhraseBookPath];
                         return temp;
-                        }</property>
+                        }
+                    </property>
                 </properties>
             </widget>
             <widget name="related_phrases" type="multipleDocumentsSuggestion">
@@ -11293,7 +11431,9 @@
                     <mode value="create">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Create Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Create Layout" tab of this document
+                        type in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11355,7 +11495,9 @@
                     <mode value="edit">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11407,7 +11549,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11661,7 +11805,9 @@
                     <mode value="create">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Create Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Create Layout" tab of this document
+                        type in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11723,7 +11869,9 @@
                     <mode value="edit">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11775,7 +11923,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11837,7 +11987,9 @@
                     <mode value="create">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Create Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Create Layout" tab of this document
+                        type in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11899,7 +12051,9 @@
                     <mode value="edit">view</mode>
                 </widgetModes>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "Edit Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -11951,7 +12105,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -13759,7 +13915,9 @@
                 </labels>
                 <translated>false</translated>
                 <properties widgetMode="view">
-                    <property name="value">This layout can be configured on the "View Layout" tab of this document type in Studio</property>
+                    <property name="value">This layout can be configured on the "View Layout" tab of this document type
+                        in Studio
+                    </property>
                 </properties>
             </widget>
         </layout>
@@ -19796,7 +19954,9 @@
                     <label mode="any">Shared</label>
                 </labels>
                 <helpLabels>
-                    <label mode="any">Would you like this media to be available to other Languages in the First Voices database?</label>
+                    <label mode="any">Would you like this media to be available to other Languages in the First Voices
+                        database?
+                    </label>
                 </helpLabels>
                 <translated>false</translated>
                 <fields>
@@ -19955,7 +20115,9 @@
                     <label mode="any">Shared</label>
                 </labels>
                 <helpLabels>
-                    <label mode="any">Would you like this media to be available to other Languages in the First Voices database?</label>
+                    <label mode="any">Would you like this media to be available to other Languages in the First Voices
+                        database?
+                    </label>
                 </helpLabels>
                 <translated>false</translated>
                 <fields>
@@ -20120,7 +20282,9 @@
                     <label mode="any">Shared</label>
                 </labels>
                 <helpLabels>
-                    <label mode="any">Would you like this media to be available to other Languages in the First Voices database?</label>
+                    <label mode="any">Would you like this media to be available to other Languages in the First Voices
+                        database?
+                    </label>
                 </helpLabels>
                 <translated>false</translated>
                 <fields>
@@ -22462,7 +22626,9 @@
     </extension>
     <extension target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService" point="loginScreen">
         <loginScreenConfig>
-            <bodyBackgroundStyle>url("${org.nuxeo.ecm.contextPath}/img/login_bg.jpg") no-repeat center center fixed #333</bodyBackgroundStyle>
+            <bodyBackgroundStyle>url("${org.nuxeo.ecm.contextPath}/img/login_bg.jpg") no-repeat center center fixed
+                #333
+            </bodyBackgroundStyle>
             <disableBackgroundSizeCover>false</disableBackgroundSizeCover>
             <removeNews>true</removeNews>
             <footerStyle></footerStyle>
@@ -22487,7 +22653,9 @@
                         <field schema="DefaultContentListingInNavigation_cv" name="dublincore_modified_min"/>
                         <field schema="DefaultContentListingInNavigation_cv" name="dublincore_modified_max"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0  and ecm:parentId= ?</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =
+                        0 and ecm:parentId= ?
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>DefaultContentListingInNavigation_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22510,7 +22678,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@DefaultContentListingInNavigation"/>
             <resultLayouts>
-                <layout name="DefaultContentListingInNavigation@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="DefaultContentListingInNavigation@cvListingLayout" title="document_listing"
+                        translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true"
+                        showEditColumns="true" showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22540,7 +22710,9 @@
                     <predicate parameter="ecm:versionLabel" operator="=">
                         <field schema="FVAlphabetListing_cv" name="system_versionLabel"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed= 0 and ecm:parentId= ? AND ecm:primaryType = "FVCharacter" </fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed= 0
+                        and ecm:parentId= ? AND ecm:primaryType = "FVCharacter"
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>FVAlphabetListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22563,7 +22735,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@FVAlphabetListing"/>
             <resultLayouts>
-                <layout name="FVAlphabetListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="FVAlphabetListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22582,7 +22756,9 @@
                     <predicate parameter="ecm:primaryType" operator="=">
                         <field schema="FVMediaListing_cv" name="system_primaryType"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ?</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ?
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>FVMediaListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22605,7 +22781,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@FVMediaListing"/>
             <resultLayouts>
-                <layout name="FVMediaListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="FVMediaListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22639,7 +22817,9 @@
                         <field schema="FVPhraseListing_cv" name="dublincore_modified_min"/>
                         <field schema="FVPhraseListing_cv" name="dublincore_modified_max"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ? AND ecm:primaryType = "FVPhrase"</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ? AND ecm:primaryType = "FVPhrase"
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>FVPhraseListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22662,7 +22842,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@FVPhraseListing"/>
             <resultLayouts>
-                <layout name="FVPhraseListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="FVPhraseListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22683,7 +22865,9 @@
                     <predicate parameter="fvm:shared" operator="=">
                         <field schema="FVThumbnailView_cv" name="fvmedia_shared"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ?</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ?
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>FVThumbnailView_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22706,7 +22890,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@FVThumbnailView"/>
             <resultLayouts>
-                <layout name="FVThumbnailView@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="FVThumbnailView@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22749,7 +22935,9 @@
                         <field schema="FVWordListing_cv" name="dublincore_modified_min"/>
                         <field schema="FVWordListing_cv" name="dublincore_modified_max"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ? AND ecm:primaryType = "FVWord"</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ? AND ecm:primaryType = "FVWord"
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>FVWordListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22772,7 +22960,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@FVWordListing"/>
             <resultLayouts>
-                <layout name="FVWordListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="FVWordListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22815,7 +23005,9 @@
                         <field schema="INNounEndingListing_cv" name="dublincore_modified_min"/>
                         <field schema="INNounEndingListing_cv" name="dublincore_modified_max"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ? AND ecm:primaryType = "INNounEnding"</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ? AND ecm:primaryType = "INNounEnding"
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>INNounEndingListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22838,7 +23030,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@INNounEndingListing"/>
             <resultLayouts>
-                <layout name="INNounEndingListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="INNounEndingListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22851,7 +23045,9 @@
                 <trackUsage>false</trackUsage>
                 <property name="coreSession">#{documentManager}</property>
                 <searchDocumentType>INPhraseListing_cv</searchDocumentType>
-                <pattern>SELECT * FROM Document WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ? AND ecm:primaryType = "INPhrase")</pattern>
+                <pattern>SELECT * FROM Document WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion
+                    = 0 AND ecm:isTrashed =0 and ecm:parentId= ? AND ecm:primaryType = "INPhrase")
+                </pattern>
                 <parameter>#{currentDocument.id}</parameter>
                 <sort column="dc:title" ascending="true"/>
                 <pageSize>10</pageSize>
@@ -22871,7 +23067,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@INPhraseListing"/>
             <resultLayouts>
-                <layout name="INPhraseListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="INPhraseListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22911,7 +23109,9 @@
                         <field schema="INVerbEndingListing_cv" name="dublincore_modified_min"/>
                         <field schema="INVerbEndingListing_cv" name="dublincore_modified_max"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  and ecm:parentId= ? AND ecm:primaryType = "INVerbEnding"</fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0
+                        and ecm:parentId= ? AND ecm:primaryType = "INVerbEnding"
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>INVerbEndingListing_cv</searchDocumentType>
                 <parameter>#{currentDocument.id}</parameter>
@@ -22934,7 +23134,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@INVerbEndingListing"/>
             <resultLayouts>
-                <layout name="INVerbEndingListing@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="INVerbEndingListing@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22946,7 +23148,10 @@
             <coreQueryPageProvider>
                 <property name="coreSession">#{documentManager}</property>
                 <searchDocumentType>RelatedPhrases_cv</searchDocumentType>
-                <pattern quoteParameters="false" escapeParameters="false">SELECT * FROM Document WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '%?%' AND ecm:primaryType = 'FVPhrase')</pattern>
+                <pattern quoteParameters="false" escapeParameters="false">SELECT * FROM Document WHERE (ecm:mixinType !=
+                    'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%'
+                    AND ecm:primaryType = 'FVPhrase')
+                </pattern>
                 <parameter>#{currentDocument.dc.title}</parameter>
                 <sort column="dc:title" ascending="true"/>
                 <pageSize>10</pageSize>
@@ -22966,7 +23171,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@RelatedPhrases"/>
             <resultLayouts>
-                <layout name="RelatedPhrases@cvListingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="RelatedPhrases@cvListingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <resultLayout>#{searchDocument.cvd.resultLayoutName}</resultLayout>
@@ -22999,7 +23206,9 @@
                     <predicate parameter="ecm:currentLifeCycleState" operator="!=">
                         <field schema="first_as" name="system_currentLifeCycleState"/>
                     </predicate>
-                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0 </fixedPart>
+                    <fixedPart>ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =
+                        0
+                    </fixedPart>
                 </whereClause>
                 <searchDocumentType>first_as</searchDocumentType>
                 <sort column="dc:modified" ascending="true"/>
@@ -23022,7 +23231,9 @@
             <actions category="CURRENT_SELECTION_LIST"/>
             <actions category="cv_actions@advanced_search"/>
             <resultLayouts>
-                <layout name="advancedSearch@listingLayout" title="document_listing" translateTitle="true" iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true" showSpreadsheet="true"/>
+                <layout name="advancedSearch@listingLayout" title="document_listing" translateTitle="true"
+                        iconPath="/icons/document_listing_icon.png" showCSVExport="true" showEditColumns="true"
+                        showSpreadsheet="true"/>
             </resultLayouts>
             <resultColumns>#{searchDocument.cvd.selectedLayoutColumns}</resultColumns>
             <flags>
@@ -23035,15 +23246,21 @@
 
             <resultLayouts>
 
-                <layout iconPath="/icons/document_listing_icon_2_columns_icon.png" name="document_listing_thumbnail" showEditRows="true" showSpreadsheet="true" title="document_thumbnail_listing" translateTitle="true"/>
+                <layout iconPath="/icons/document_listing_icon_2_columns_icon.png" name="document_listing_thumbnail"
+                        showEditRows="true" showSpreadsheet="true" title="document_thumbnail_listing"
+                        translateTitle="true"/>
 
-                <layout iconPath="/icons/document_listing_icon.png" name="DefaultContentListingInNavigation@cvListingLayout" showCSVExport="true" showEditColumns="true" showSpreadsheet="true" title="document_listing" translateTitle="true"/>
+                <layout iconPath="/icons/document_listing_icon.png"
+                        name="DefaultContentListingInNavigation@cvListingLayout" showCSVExport="true"
+                        showEditColumns="true" showSpreadsheet="true" title="document_listing" translateTitle="true"/>
 
             </resultLayouts>
 
         </contentView>
-    </extension>  <extension target="org.nuxeo.runtime.services.resource.ResourceService" point="resources">    <resource name="NRD-PR-TasksInfo">data/templates/NRD-PR-TasksInfo</resource>
-</extension>
+    </extension>
+    <extension target="org.nuxeo.runtime.services.resource.ResourceService" point="resources">
+        <resource name="NRD-PR-TasksInfo">data/templates/NRD-PR-TasksInfo</resource>
+    </extension>
     <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="event-handlers">
         <handler chainId="FVCreateDefaultDialectGroups">
             <event>documentCreated</event>
@@ -23385,7 +23602,8 @@
                         <transition>Publish</transition>
                     </transitions>
                 </state>
-                <state name="Disabled" description="Document is only available to language administrators or recorders.">
+                <state name="Disabled"
+                       description="Document is only available to language administrators or recorders.">
                     <transitions>
                         <transition>Enable</transition>
                     </transitions>
@@ -23403,7 +23621,8 @@
                         <transition>Publish</transition>
                     </transitions>
                 </state>
-                <state name="Republish" description="Intermediate state before publishing again (a state can't do back to itself).">
+                <state name="Republish"
+                       description="Intermediate state before publishing again (a state can't do back to itself).">
                     <transitions>
                         <transition>Publish</transition>
                     </transitions>
@@ -23558,7 +23777,9 @@
                 <param type="string" name="value">Disable</param>
             </operation>
             <operation id="Audit.LogEvent">
-                <param type="string" name="event">expr:Document disabled by @{CurrentUser.firstName} @{CurrentUser.lastName} (@{CurrentUser.name})</param>
+                <param type="string" name="event">expr:Document disabled by @{CurrentUser.firstName}
+                    @{CurrentUser.lastName} (@{CurrentUser.name})
+                </param>
                 <param type="string" name="category">Automation</param>
             </operation>
         </chain>
@@ -23568,7 +23789,9 @@
                 <param type="string" name="value">Enable</param>
             </operation>
             <operation id="Audit.LogEvent">
-                <param type="string" name="event">expr:Document enabled by @{CurrentUser.firstName} @{CurrentUser.lastName} (@{CurrentUser.name})</param>
+                <param type="string" name="event">expr:Document enabled by @{CurrentUser.firstName}
+                    @{CurrentUser.lastName} (@{CurrentUser.name})
+                </param>
                 <param type="string" name="category">Automation</param>
             </operation>
         </chain>
@@ -23684,7 +23907,8 @@
             <inputType>document</inputType>
             <outputType>document</outputType>
             <category>javascript</category>
-            <description>Automation script that ensures that pictures and words relations are kept in sync.</description>
+            <description>Automation script that ensures that pictures and words relations are kept in sync.
+            </description>
             <script><![CDATA[
 function run(input, params) {
 	var attached_words = input.getPropertyValue('fvm:attached_words');
@@ -23754,6 +23978,20 @@ function run(input, params) {
                 case '30': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "event_activity_verb_like_word_reciprocal" }); break;
                 case '31': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "question_word" }); break;
                 case '32': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "suffix_prefix" }); break;
+                case '33': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "connective" }); break;
+                case '34': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "negation" }); break;
+                case '35': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "number" }); break;
+                case '36': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "plural_marker" }); break;
+                case '37': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "affirmation" }); break;
+                case '38': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "connective_irrealis" }); break;
+                case '39': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "demonstrative" }); break;
+                case '40': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "interrogative" }); break;
+                case '41': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "modifier_noun" }); break;
+                case '42': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "modifier_verb" }); break;
+                case '43': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "question_marker" }); break;
+                case '44': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "tense_aspect" }); break;
+                case '45': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "transitive_verb" }); break;
+                case '46': Document.SetProperty(input, { 'xpath': "fv-word:part_of_speech", 'save': true, 'value': "intransitive_verb" }); break;
         	/* TODO: add the rest... */
       		default: Log(input, { 'level': 'error', 'message': 'Could not retrieve part of speech for ' + input.getPropertyValue('dc:title') }); break;
 	}
@@ -23937,7 +24175,8 @@ function run(input, params) {
                 <templateItem typeName="FVCategories" id="Categories" title="Categories" description=""/>
                 <templateItem typeName="FVCategories" id="Phrase Books" title="Phrase Books" description=""/>
                 <templateItem typeName="FVBooks" id="Stories &amp; Songs" title="Stories &amp; Songs" description=""/>
-                <templateItem typeName="FVDraftFolder" id="* Draft Documents" title="* Draft Documents" description="Location of drafts for the documents being edited"/>
+                <templateItem typeName="FVDraftFolder" id="* Draft Documents" title="* Draft Documents"
+                              description="Location of drafts for the documents being edited"/>
             </template>
         </factoryBinding>
         <factoryBinding name="RootFactory" factoryName="SimpleTemplateRootFactory" targetType="Root">
@@ -23969,7 +24208,8 @@ function run(input, params) {
             <table>studio_vocabulary_WorkflowType</table>
             <dataFile>data/vocabularies/WorkflowType.csv</dataFile>
             <cacheEntryName>vocab-WorkflowType-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-WorkflowType-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-WorkflowType-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="categories" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -23986,7 +24226,8 @@ function run(input, params) {
             <table>studio_vocabulary_fv_book_type</table>
             <dataFile>data/vocabularies/fv_book_type.csv</dataFile>
             <cacheEntryName>vocab-fv_book_type-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-fv_book_type-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-fv_book_type-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="fv_communities" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -23994,7 +24235,8 @@ function run(input, params) {
             <table>studio_vocabulary_fv_communities</table>
             <dataFile>data/vocabularies/fv_communities.csv</dataFile>
             <cacheEntryName>vocab-fv_communities-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-fv_communities-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-fv_communities-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="fv_countries" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24002,7 +24244,8 @@ function run(input, params) {
             <table>studio_vocabulary_fv_countries</table>
             <dataFile>data/vocabularies/fv_countries.csv</dataFile>
             <cacheEntryName>vocab-fv_countries-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-fv_countries-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-fv_countries-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="fv_language" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24010,7 +24253,8 @@ function run(input, params) {
             <table>studio_vocabulary_fv_language</table>
             <dataFile>data/vocabularies/fv_language.csv</dataFile>
             <cacheEntryName>vocab-fv_language-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-fv_language-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-fv_language-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_behaviors" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24018,7 +24262,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_behaviors</table>
             <dataFile>data/vocabularies/in_behaviors.csv</dataFile>
             <cacheEntryName>vocab-in_behaviors-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_behaviors-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_behaviors-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_change_of_subject" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24026,7 +24271,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_change_of_subject</table>
             <dataFile>data/vocabularies/in_change_of_subject.csv</dataFile>
             <cacheEntryName>vocab-in_change_of_subject-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_change_of_subject-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_change_of_subject-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_grammatical_case" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24034,7 +24280,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_grammatical_case</table>
             <dataFile>data/vocabularies/in_grammatical_case.csv</dataFile>
             <cacheEntryName>vocab-in_grammatical_case-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_grammatical_case-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_grammatical_case-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_grammatical_mood" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24042,7 +24289,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_grammatical_mood</table>
             <dataFile>data/vocabularies/in_grammatical_mood.csv</dataFile>
             <cacheEntryName>vocab-in_grammatical_mood-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_grammatical_mood-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_grammatical_mood-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_grammatical_number" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24050,7 +24298,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_grammatical_number</table>
             <dataFile>data/vocabularies/in_grammatical_number.csv</dataFile>
             <cacheEntryName>vocab-in_grammatical_number-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_grammatical_number-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_grammatical_number-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_grammatical_person" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24058,7 +24307,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_grammatical_person</table>
             <dataFile>data/vocabularies/in_grammatical_person.csv</dataFile>
             <cacheEntryName>vocab-in_grammatical_person-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_grammatical_person-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_grammatical_person-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_morphology" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24066,7 +24316,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_morphology</table>
             <dataFile>data/vocabularies/in_morphology.csv</dataFile>
             <cacheEntryName>vocab-in_morphology-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_morphology-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_morphology-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_possession" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24074,7 +24325,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_possession</table>
             <dataFile>data/vocabularies/in_possession.csv</dataFile>
             <cacheEntryName>vocab-in_possession-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_possession-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_possession-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_transitivity" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24082,7 +24334,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_transitivity</table>
             <dataFile>data/vocabularies/in_transitivity.csv</dataFile>
             <cacheEntryName>vocab-in_transitivity-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_transitivity-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_transitivity-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="in_word_classes" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24090,7 +24343,8 @@ function run(input, params) {
             <table>studio_vocabulary_in_word_classes</table>
             <dataFile>data/vocabularies/in_word_classes.csv</dataFile>
             <cacheEntryName>vocab-in_word_classes-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-in_word_classes-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-in_word_classes-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="parts_of_speech" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24099,7 +24353,8 @@ function run(input, params) {
             <dataFile>data/vocabularies/parts_of_speech.csv</dataFile>
             <parentDirectory>parts_of_speech</parentDirectory>
             <cacheEntryName>vocab-parts_of_speech-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-parts_of_speech-cache-without-references</cacheEntryWithoutReferencesName>
+            <cacheEntryWithoutReferencesName>vocab-parts_of_speech-cache-without-references
+            </cacheEntryWithoutReferencesName>
         </directory>
         <directory name="reference" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
@@ -24394,7 +24649,9 @@ function run(input, params) {
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
-                <condition>#{currentDocument.currentLifeCycleState == 'Enabled' &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }</condition>
+                <condition>
+                    #{currentDocument.currentLifeCycleState == 'Enabled' &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }
+                </condition>
             </rule>
             <rule grant="false">
                 <condition>document.isImmutable() || document.isProxy()</condition>
@@ -24440,7 +24697,9 @@ function run(input, params) {
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
-                <condition>#{ (currentDocument.currentLifeCycleState == 'Enabled') &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }</condition>
+                <condition>
+                    #{ (currentDocument.currentLifeCycleState == 'Enabled') &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }
+                </condition>
             </rule>
             <rule grant="false">
                 <condition>document.isImmutable() || document.isProxy()</condition>
@@ -24463,7 +24722,9 @@ function run(input, params) {
                 <type>FVPicture</type>
                 <type>FVVideo</type>
                 <type>FVWord</type>
-                <condition>#{ (currentDocument.currentLifeCycleState == 'Published') &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }</condition>
+                <condition>
+                    #{ (currentDocument.currentLifeCycleState == 'Published') &amp;&amp; ( documentManager.hasPermission(currentDocument.ref, 'Record') || documentManager.hasPermission(currentDocument.ref, 'Approve') || documentManager.hasPermission(currentDocument.ref, 'Everything')) }
+                </condition>
             </rule>
             <rule grant="false">
                 <condition>document.isImmutable() || document.isProxy()</condition>
@@ -24489,31 +24750,30 @@ function run(input, params) {
             </rule>
 
         </filter>
-        <filter id="create" append="true">      <rule grant="true">        <permission>AddChildren</permission>
-            <type>Folder</type>
-            <type>Domain</type>
-            <type>FVAlphabet</type>
-            <type>FVBook</type>
-            <type>FVBooks</type>
-            <type>FVCategories</type>
-            <type>FVCategory</type>
-            <type>FVLabelCategory</type>
-            <type>FVContributors</type>
-            <type>FVDialect</type>
-            <type>FVDictionary</type> 
-            <type>FVLabel</type> 
-            <type>FVLabelDictionary</type> 
-            <type>FVGallery</type>
-            <type>FVLanguage</type>
-            <type>FVLanguageFamily</type>
-            <type>FVLinks</type>
-            <type>FVPortal</type>
-            <type>FVResources</type>
-            <type>INDictionary</type>
-            <type>Workspace</type>
-            <condition>!document.isImmutable()</condition>
-            <condition>#{typeManager.getAllowedSubTypes(document.getType(), document).size() &gt; 0}</condition>
-        </rule>
+        <filter id="create" append="true">
+            <rule grant="true">
+                <permission>AddChildren</permission>
+                <type>Folder</type>
+                <type>Domain</type>
+                <type>FVAlphabet</type>
+                <type>FVBook</type>
+                <type>FVBooks</type>
+                <type>FVCategories</type>
+                <type>FVCategory</type>
+                <type>FVContributors</type>
+                <type>FVDialect</type>
+                <type>FVDictionary</type>
+                <type>FVGallery</type>
+                <type>FVLanguage</type>
+                <type>FVLanguageFamily</type>
+                <type>FVLinks</type>
+                <type>FVPortal</type>
+                <type>FVResources</type>
+                <type>INDictionary</type>
+                <type>Workspace</type>
+                <condition>!document.isImmutable()</condition>
+                <condition>#{typeManager.getAllowedSubTypes(document.getType(), document).size() &gt; 0}</condition>
+            </rule>
         </filter>
         <filter id="create" append="true">
             <rule grant="false">
@@ -24575,74 +24835,78 @@ function run(input, params) {
 
         </filter>
 
-    </extension>  <extension point="policies" target="org.nuxeo.ecm.core.versioning.VersioningService">
+    </extension>
+    <extension point="policies" target="org.nuxeo.ecm.core.versioning.VersioningService">
 
 
-    <policy id="FVWord-policy" increment="MAJOR" order="1">
+        <policy id="FVWord-policy" increment="MAJOR" order="1">
 
-        <initialState major="0" minor="0"/>
+            <initialState major="0" minor="0"/>
 
-        <filter-id>is-FVWord</filter-id>
+            <filter-id>is-FVWord</filter-id>
 
-    </policy>
-
-
-    <policy id="FVPhrase-policy" increment="MAJOR" order="1">
-
-        <initialState major="0" minor="0"/>
-
-        <filter-id>is-FVPhrase</filter-id>
-
-    </policy>
+        </policy>
 
 
-    <policy id="FVPortal-policy" increment="MAJOR" order="1">
+        <policy id="FVPhrase-policy" increment="MAJOR" order="1">
 
-        <initialState major="0" minor="0"/>
+            <initialState major="0" minor="0"/>
 
-        <filter-id>is-FVPortal</filter-id>
+            <filter-id>is-FVPhrase</filter-id>
 
-    </policy>
+        </policy>
 
 
-    <policy id="FVDialect-policy" increment="MAJOR" order="1">
+        <policy id="FVPortal-policy" increment="MAJOR" order="1">
 
-        <initialState major="0" minor="0"/>
+            <initialState major="0" minor="0"/>
 
-        <filter-id>is-FVDialect</filter-id>
+            <filter-id>is-FVPortal</filter-id>
 
-    </policy>
+        </policy>
 
-</extension>  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
 
-    <!-- allowOrigin="http://127.0.0.1:9010 http://localhost:9010 http://localhost http://localhost:3000 http://localhost:8080" -->
+        <policy id="FVDialect-policy" increment="MAJOR" order="1">
 
-    <!-- Note: ENSURE THIS IS LIMITED BEFORE GOING TO PROD -->
+            <initialState major="0" minor="0"/>
 
-    <corsConfig allowOrigin="*" name="firstVoicesCors" supportedMethods="GET, POST, HEAD, OPTIONS, PUT, DELETE">
+            <filter-id>is-FVDialect</filter-id>
 
-        <pattern>/nuxeo/.*</pattern>
+        </policy>
 
-    </corsConfig>
-</extension>  <extension target="org.nuxeo.ecm.platform.usermanager.UserService" point="userManager">
+    </extension>
+    <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService"
+               point="corsConfig">
 
-    <userManager>
+        <!-- allowOrigin="http://127.0.0.1:9010 http://localhost:9010 http://localhost http://localhost:3000 http://localhost:8080" -->
 
-        <users>
+        <!-- Note: ENSURE THIS IS LIMITED BEFORE GOING TO PROD -->
 
-            <anonymousUser id="Guest">
+        <corsConfig allowOrigin="*" name="firstVoicesCors" supportedMethods="GET, POST, HEAD, OPTIONS, PUT, DELETE">
 
-                <property name="firstName">Guest</property>
+            <pattern>/nuxeo/.*</pattern>
 
-                <property name="lastName">User</property>
+        </corsConfig>
+    </extension>
+    <extension target="org.nuxeo.ecm.platform.usermanager.UserService" point="userManager">
 
-            </anonymousUser>
+        <userManager>
 
-        </users>
+            <users>
 
-    </userManager>
+                <anonymousUser id="Guest">
 
-</extension>
+                    <property name="firstName">Guest</property>
+
+                    <property name="lastName">User</property>
+
+                </anonymousUser>
+
+            </users>
+
+        </userManager>
+
+    </extension>
 
     <extension point="providers" target="org.nuxeo.ecm.platform.query.api.PageProviderService">
 
@@ -24654,7 +24918,9 @@ function run(input, params) {
 
             <property name="checkQueryCache">true</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/?/' AND ecm:isTrashed =0  AND ecm:isVersion = 0</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/?/' AND ecm:isTrashed
+                =0 AND ecm:isVersion = 0
+            </pattern>
 
             <!--<sort column="dc:title" ascending="true" />-->
 
@@ -24669,7 +24935,9 @@ function run(input, params) {
 
             <property name="checkQueryCache">true</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE ecm:path STARTSWITH '/FV/?/' AND ecm:isTrashed =0  AND ecm:isCheckedInVersion = 0</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE ecm:path STARTSWITH '/FV/?/' AND ecm:isTrashed
+                =0 AND ecm:isCheckedInVersion = 0
+            </pattern>
 
             <currentPageIndex>0</currentPageIndex>
 
@@ -24684,11 +24952,15 @@ function run(input, params) {
         </genericPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="featured_word_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="featured_word_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND ecm:ancestorId =  '?')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType !=
+                'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND ecm:currentLifeCycleState
+                != 'Disabled' AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND ecm:ancestorId = '?')
+            </pattern>
 
             <parameter>#{currentDocument.getParentRef().toString()}</parameter>
 
@@ -24697,59 +24969,84 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="contributor_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="contributor_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVContributor WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND ecm:ancestorId =  '?')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVContributor WHERE (ecm:path STARTSWITH '/FV/Workspaces/'
+                AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND
+                ecm:currentLifeCycleState != 'Disabled' AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%'
+                AND ecm:ancestorId = '?')
+            </pattern>
 
-            <parameter>#{currentDocument.fva.dialect ==null ? currentDocument.id : currentDocument.fva.dialect }</parameter>
+            <parameter>#{currentDocument.fva.dialect ==null ? currentDocument.id : currentDocument.fva.dialect }
+            </parameter>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="category_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="category_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVCategory WHERE ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND (ecm:path STARTSWITH '?' OR ecm:path STARTSWITH '/FV/Workspaces/SharedData') ORDER BY dc:title ASC</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVCategory WHERE ecm:mixinType != 'HiddenInNavigation' AND
+                ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND ecm:currentLifeCycleState != 'Disabled' AND
+                ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND (ecm:path STARTSWITH '?' OR ecm:path
+                STARTSWITH '/FV/Workspaces/SharedData') ORDER BY dc:title ASC
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="phrasebook_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="phrasebook_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVCategory WHERE ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND ecm:path STARTSWITH '?' ORDER BY dc:title ASC</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVCategory WHERE ecm:mixinType != 'HiddenInNavigation' AND
+                ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND ecm:currentLifeCycleState != 'Disabled' AND
+                ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%' AND ecm:path STARTSWITH '?' ORDER BY dc:title
+                ASC
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="link_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="link_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVLink WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '?%' AND (ecm:ancestorId =  '?' OR fva:dialect IS NULL))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVLink WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND
+                ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title
+                ILIKE '?%' AND (ecm:ancestorId = '?' OR fva:dialect IS NULL))
+            </pattern>
 
-            <parameter>#{currentDocument.fva.dialect == null ? currentDocument.id :  currentDocument.fva.dialect}</parameter>
+            <parameter>#{currentDocument.fva.dialect == null ? currentDocument.id :  currentDocument.fva.dialect}
+            </parameter>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="link_suggestion_dialect">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="link_suggestion_dialect">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVLink WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '?%' AND (ecm:ancestorId =  '?' OR fva:dialect IS NULL))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVLink WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType !=
+                'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '?%' AND
+                (ecm:ancestorId = '?' OR fva:dialect IS NULL))
+            </pattern>
 
             <parameter>#{currentDocument.id}</parameter>
 
@@ -24758,33 +25055,45 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_word_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_word_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType !=
+                'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND ecm:currentLifeCycleState
+                != 'Disabled' AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%')
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_phrase_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_phrase_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVPhrase WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled'  AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVPhrase WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType
+                != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND
+                ecm:currentLifeCycleState != 'Disabled' AND ecm:currentLifeCycleState != 'New' AND dc:title ILIKE '?%')
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="dialect_word_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="dialect_word_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '%?%' AND ecm:ancestorId =  '?')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVWord WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType !=
+                'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%' AND
+                ecm:ancestorId = '?')
+            </pattern>
 
             <parameter>#{currentDocument.fva.dialect}</parameter>
 
@@ -24793,11 +25102,15 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="dialect_phrase_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="dialect_phrase_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVPhrase WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '%?%' AND ecm:ancestorId =  '?')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVPhrase WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType
+                != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%' AND
+                ecm:ancestorId = '?')
+            </pattern>
 
             <parameter>#{currentDocument.fva.dialect}</parameter>
 
@@ -24806,22 +25119,31 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_phrases_and_words_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_phrases_and_words_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM Document WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '%?%' AND ecm:primaryType IN ('FVWord', 'FVPhrase'))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM Document WHERE (ecm:path STARTSWITH '/FV/' AND ecm:mixinType
+                != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%' AND
+                ecm:primaryType IN ('FVWord', 'FVPhrase'))
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_shared_videos">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_shared_videos">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVVideo WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared = 1 AND ecm:currentLifeCycleState != 'New'))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVVideo WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND
+                ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND
+                ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared =
+                1 AND ecm:currentLifeCycleState != 'New'))
+            </pattern>
 
             <parameter>#{currentDocument.fva.dialect}</parameter>
 
@@ -24830,11 +25152,16 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_shared_pictures">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_shared_pictures">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVPicture WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared = 1 AND ecm:currentLifeCycleState != 'New'))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVPicture WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND
+                ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND
+                ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared =
+                1 AND ecm:currentLifeCycleState != 'New'))
+            </pattern>
 
             <parameter>#{currentDocument.fva.dialect}</parameter>
 
@@ -24843,11 +25170,16 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_shared_audio">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="all_shared_audio">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM FVAudio WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared = 1 AND ecm:currentLifeCycleState != 'New'))</pattern>
+            <pattern quoteParameters="false">SELECT * FROM FVAudio WHERE (ecm:path STARTSWITH '/FV/Workspaces/' AND
+                ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND
+                ecm:currentLifeCycleState != 'Disabled' AND dc:title ILIKE '%?%') AND (fva:dialect='?' OR (fvm:shared =
+                1 AND ecm:currentLifeCycleState != 'New'))
+            </pattern>
 
             <parameter>#{currentDocument.fva.dialect}</parameter>
 
@@ -24856,33 +25188,42 @@ function run(input, params) {
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="in_verbending_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="in_verbending_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM INVerbEnding WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '?%')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM INVerbEnding WHERE (ecm:mixinType != 'HiddenInNavigation' AND
+                ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '?%')
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="in_morpheme_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="in_morpheme_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM INMorpheme WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0  AND dc:title ILIKE '?%')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM INMorpheme WHERE (ecm:mixinType != 'HiddenInNavigation' AND
+                ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '?%')
+            </pattern>
 
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
 
 
-        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="in_phrase_suggestion">
+        <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+                               name="in_phrase_suggestion">
 
             <property name="coreSession">#{documentManager}</property>
 
-            <pattern quoteParameters="false">SELECT * FROM INPhrase WHERE (ecm:mixinType != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0   AND dc:title ILIKE '?%')</pattern>
+            <pattern quoteParameters="false">SELECT * FROM INPhrase WHERE (ecm:mixinType != 'HiddenInNavigation' AND
+                ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '?%')
+            </pattern>
 
             <pageSize>10</pageSize>
 
@@ -24897,258 +25238,259 @@ function run(input, params) {
 
 
         <plugin name="AudioImporter" merge="true" docType="FVAudio"/>
-    </extension>  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="widgettypes">
+    </extension>
+    <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager" point="widgettypes">
 
 
-    <documentation>Widget types declared in studio</documentation>
+        <documentation>Widget types declared in studio</documentation>
 
 
-    <widgetType name="studio_header">
+        <widgetType name="studio_header">
 
-        <configuration>
+            <configuration>
 
-            <title>Header</title>
+                <title>Header</title>
 
-            <description>
-                The header widget just displays the widget label.
-            </description>
+                <description>
+                    The header widget just displays the widget label.
+                </description>
 
-            <supportedModes>
+                <supportedModes>
 
-                <mode>edit</mode>
+                    <mode>edit</mode>
 
-                <mode>view</mode>
+                    <mode>view</mode>
 
-            </supportedModes>
+                </supportedModes>
 
-            <fields>
+                <fields>
 
-                <list>false</list>
+                    <list>false</list>
 
-                <complex>false</complex>
+                    <complex>false</complex>
 
-                <supportedTypes/>
+                    <supportedTypes/>
 
-                <defaultTypes/>
+                    <defaultTypes/>
 
-            </fields>
+                </fields>
 
-            <handlingLabels>true</handlingLabels>
+                <handlingLabels>true</handlingLabels>
 
-            <categories>
+                <categories>
 
-                <category>document</category>
+                    <category>document</category>
 
-                <category>studio</category>
+                    <category>studio</category>
 
-            </categories>
+                </categories>
 
-            <properties>
+                <properties>
 
-                <layouts mode="any">
+                    <layouts mode="any">
 
-                    <layout name="studio_header_widget_type_properties_any">
+                        <layout name="studio_header_widget_type_properties_any">
 
-                        <rows>
+                            <rows>
 
-                            <row>
+                                <row>
 
-                                <widget>styleClass</widget>
+                                    <widget>styleClass</widget>
 
-                            </row>
+                                </row>
 
-                            <row>
+                                <row>
 
-                                <widget>style</widget>
+                                    <widget>style</widget>
 
-                            </row>
+                                </row>
 
-                        </rows>
+                            </rows>
 
-                        <widget name="styleClass" type="text">
+                            <widget name="styleClass" type="text">
 
-                            <labels>
+                                <labels>
 
-                                <label mode="any">Style class</label>
+                                    <label mode="any">Style class</label>
 
-                            </labels>
+                                </labels>
 
-                            <fields>
+                                <fields>
 
-                                <field>styleClass</field>
+                                    <field>styleClass</field>
 
-                            </fields>
+                                </fields>
 
-                        </widget>
+                            </widget>
 
-                        <widget name="style" type="text">
+                            <widget name="style" type="text">
 
-                            <labels>
+                                <labels>
 
-                                <label mode="any">Style</label>
+                                    <label mode="any">Style</label>
 
-                            </labels>
+                                </labels>
 
-                            <fields>
+                                <fields>
 
-                                <field>style</field>
+                                    <field>style</field>
 
-                            </fields>
+                                </fields>
 
-                        </widget>
+                            </widget>
 
-                    </layout>
+                        </layout>
 
-                </layouts>
+                    </layouts>
 
-            </properties>
+                </properties>
 
-        </configuration>
+            </configuration>
 
-        <handler-class>
-            org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
-        </handler-class>
+            <handler-class>
+                org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+            </handler-class>
 
-        <property name="template">
-            /widgets/studio_header_widget.xhtml
-        </property>
+            <property name="template">
+                /widgets/studio_header_widget.xhtml
+            </property>
 
-    </widgetType>
+        </widgetType>
 
 
-    <widgetType name="filesList">
+        <widgetType name="filesList">
 
-        <configuration>
+            <configuration>
 
-            <title>Files</title>
+                <title>Files</title>
 
-            <description>
+                <description>
 
-                <p>
-                    The Files displays an editable list of files, using javascript to
-                    keep the uploaded file path when adding several files in a row.
-                </p>
+                    <p>
+                        The Files displays an editable list of files, using javascript to
+                        keep the uploaded file path when adding several files in a row.
+                    </p>
 
-                <p>Items are defined using sub wigdets configuration.</p>
+                    <p>Items are defined using sub wigdets configuration.</p>
 
-                <p>
-                    This is actually a template widget type whose template uses a
-                    &lt;nxu:inputList /&gt; tag in edit or create mode, and a table
-                    iterating over items in other modes.
-                </p>
+                    <p>
+                        This is actually a template widget type whose template uses a
+                        &lt;nxu:inputList /&gt; tag in edit or create mode, and a table
+                        iterating over items in other modes.
+                    </p>
 
-            </description>
+                </description>
 
-            <categories>
+                <categories>
 
-                <category>document</category>
+                    <category>document</category>
 
-                <category>studio</category>
+                    <category>studio</category>
 
-            </categories>
+                </categories>
 
-            <supportedModes>
+                <supportedModes>
 
-                <mode>edit</mode>
+                    <mode>edit</mode>
 
-                <mode>view</mode>
+                    <mode>view</mode>
 
-            </supportedModes>
+                </supportedModes>
 
-            <acceptingSubWidgets>true</acceptingSubWidgets>
+                <acceptingSubWidgets>true</acceptingSubWidgets>
 
-            <fields>
+                <fields>
 
-                <list>true</list>
+                    <list>true</list>
 
-                <complex>false</complex>
+                    <complex>false</complex>
 
-                <supportedTypes>
+                    <supportedTypes>
 
-                    <type>blob</type>
+                        <type>blob</type>
 
-                </supportedTypes>
+                    </supportedTypes>
 
-                <defaultTypes>
+                    <defaultTypes>
 
-                    <type>blob</type>
+                        <type>blob</type>
 
-                </defaultTypes>
+                    </defaultTypes>
 
-            </fields>
+                </fields>
 
-            <properties>
+                <properties>
 
-                <layouts mode="edit">
+                    <layouts mode="edit">
 
-                    <layout name="list_widget_type_properties_edit">
+                        <layout name="list_widget_type_properties_edit">
 
-                        <rows>
+                            <rows>
 
-                            <row>
+                                <row>
 
-                                <widget>required</widget>
+                                    <widget>required</widget>
 
-                            </row>
+                                </row>
 
-                            <row>
+                                <row>
 
-                                <widget>diff</widget>
+                                    <widget>diff</widget>
 
-                            </row>
+                                </row>
 
-                        </rows>
+                            </rows>
 
-                        <widget name="required" type="checkbox">
+                            <widget name="required" type="checkbox">
 
-                            <labels>
+                                <labels>
 
-                                <label mode="any">Required</label>
+                                    <label mode="any">Required</label>
 
-                            </labels>
+                                </labels>
 
-                            <fields>
+                                <fields>
 
-                                <field>required</field>
+                                    <field>required</field>
 
-                            </fields>
+                                </fields>
 
-                        </widget>
+                            </widget>
 
-                        <widget name="diff" type="checkbox">
+                            <widget name="diff" type="checkbox">
 
-                            <labels>
+                                <labels>
 
-                                <label mode="any">Diff</label>
+                                    <label mode="any">Diff</label>
 
-                            </labels>
+                                </labels>
 
-                            <fields>
+                                <fields>
 
-                                <field>diff</field>
+                                    <field>diff</field>
 
-                            </fields>
+                                </fields>
 
-                        </widget>
+                            </widget>
 
-                    </layout>
+                        </layout>
 
-                </layouts>
+                    </layouts>
 
-            </properties>
+                </properties>
 
-        </configuration>
+            </configuration>
 
-        <handler-class>
-            org.nuxeo.ecm.platform.forms.layout.facelets.plugins.ListWidgetTypeHandler
-        </handler-class>
+            <handler-class>
+                org.nuxeo.ecm.platform.forms.layout.facelets.plugins.ListWidgetTypeHandler
+            </handler-class>
 
-        <property name="template">/widgets/js_files_list_widget_template.xhtml</property>
+            <property name="template">/widgets/js_files_list_widget_template.xhtml</property>
 
-        <property name="compatTemplate">/widgets/files_list_widget_template.xhtml</property>
+            <property name="compatTemplate">/widgets/files_list_widget_template.xhtml</property>
 
-    </widgetType>
+        </widgetType>
 
 
-</extension>
+    </extension>
 </component>

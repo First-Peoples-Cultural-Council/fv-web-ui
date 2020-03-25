@@ -37,6 +37,10 @@
     }
   ],
   "properties": {
+    "dictionary_all_field": {
+      "type": "text",
+      "analyzer": "fulltext"
+    },
     "all_field": {
       "type": "text",
       "analyzer": "fulltext"
@@ -91,13 +95,13 @@
     },
     "dc:title": {
       "type": "text",
-      "copy_to": "all_field",
+      "copy_to": [ "all_field", "dictionary_all_field" ],
       "fielddata": true,
       "fields": {
         "fulltext": {
           "analyzer": "fulltext",
           "type": "text",
-          "boost": 2
+          "boost": 3
         },
         "lowercase" : {
             "type": "text",
@@ -173,8 +177,13 @@
       "properties": {
          "translation":{
           "type": "text",
-             "copy_to": "all_field",
+             "copy_to": [ "all_field", "dictionary_all_field" ],
              "fields" : {
+                "fulltext": {
+                  "analyzer": "fulltext",
+                  "type": "text",
+                  "boost": 2
+                },
                 "lowercase" : {
                 "type": "text",
                 "analyzer" : "lowercase_analyzer",
@@ -193,7 +202,7 @@
                   "lowercase" : {
                   "type": "text",
                   "analyzer" : "lowercase_analyzer",
-                  "boost": 2
+                  "boost": 1.25
                 }
               }
             }
@@ -206,7 +215,7 @@
             "lowercase" : {
               "type": "text",
               "analyzer" : "lowercase_analyzer",
-              "boost": 2
+              "boost": 1
             }
           }
        },

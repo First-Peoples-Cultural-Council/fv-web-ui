@@ -1,0 +1,12 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*/nashorn_code_cache/* binary
+*.zip binary
+*.mp4 binary
+*.wav binary
+*.csv binary
+*.jar binary

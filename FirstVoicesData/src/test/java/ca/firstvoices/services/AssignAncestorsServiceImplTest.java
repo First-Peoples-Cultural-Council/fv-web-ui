@@ -1,6 +1,6 @@
 package ca.firstvoices.services;
 
-import ca.firstvoices.testUtil.AssignAncestorsTestUtil;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,11 +53,9 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.services.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class AssignAncestorsServiceImplTest {
-
-  private AssignAncestorsTestUtil testUtil;
+@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
+public class AssignAncestorsServiceImplTest extends AbstractTest {
 
   @Inject
   private CoreSession session;
@@ -67,12 +65,8 @@ public class AssignAncestorsServiceImplTest {
 
   @Before
   public void setUp() throws Exception {
-    testUtil = new AssignAncestorsTestUtil();
-    
     assertNotNull("Should have a valid session", session);
-    assertNotNull("Should have a valid test utilities obj", testUtil);
-    
-    testUtil.createSetup(session);
+    createSetup(session);
   }
   
   @Test
@@ -83,11 +77,11 @@ public class AssignAncestorsServiceImplTest {
     assertNotNull("Language family cannot be null", languageFamily);
     DocumentModel language = session.getDocument(new PathRef("/FV/Family/Language"));
     assertNotNull("Language cannot be null", language);
-    DocumentModel dialect = testUtil.getCurrentDialect();
+    DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
     
     // Create a new child document
-    DocumentModel TestWord = testUtil.createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
+    DocumentModel TestWord = createDocument(session, session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
     
     // Check that the child document does not have the parent document UUIDs in it's properties
     assertNull("Word should have no ID for parent family property", TestWord.getPropertyValue("fva:family"));

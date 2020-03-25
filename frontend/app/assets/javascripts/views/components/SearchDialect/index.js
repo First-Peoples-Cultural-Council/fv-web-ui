@@ -11,6 +11,7 @@ import {
   SEARCH_BY_PHRASE_BOOK,
   SEARCH_DATA_TYPE_PHRASE,
   SEARCH_DATA_TYPE_WORD,
+  SEARCH_TYPE_DEFAULT_SEARCH,
   SEARCH_TYPE_APPROXIMATE_SEARCH,
   SEARCH_TYPE_EXACT_SEARCH,
   SEARCH_TYPE_CONTAINS_SEARCH,
@@ -43,6 +44,7 @@ but some internal data is sent out to ancestors via props: props.handleSearch & 
 export const SearchDialect = (props) => {
   const csd = props.computeSearchDialect
   const [partsOfSpeechOptions, setPartsOfSpeechOptions] = useState(null)
+  const [partsOfSpeechRequested, setPartsOfSpeechRequested] = useState(false)
   const [searchBySettings, setSearchBySettings] = useState({})
   const [searchTerm, setSearchTerm] = useState(csd.searchTerm || undefined)
   const [searchType, setSearchType] = useState(csd.searchType || SEARCH_TYPE_DEFAULT)
@@ -96,40 +98,48 @@ export const SearchDialect = (props) => {
   // Sets `partsOfSpeechOptions` when on a Word page
   // ------------------------------------------------------------
   useEffect(() => {
-    if (props.searchDialectDataType === SEARCH_DATA_TYPE_WORD) {
-      // initiate
-      if (props.computeDirectory.isFetching !== true && props.computeDirectory.success !== true) {
-        props.fetchDirectory('parts_of_speech')
-      }
-      // wait
-      if (props.computeDirectory.success && props.computeDirectory.success) {
-        const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
-        const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
-          if (a.text < b.text) return -1
-          if (a.text > b.text) return 1
-          return 0
-        })
+    const partsOfSpeech = selectn('directories.parts_of_speech', props.computeDirectory) || []
+    // initiate
+    // NOTE: used to rely on Redux booleans (isFetching, success) to determine if we should make a request
+    // React would rerender before Redux could set the flag and so we'd initiate duplicate requests
+    // That's why we are using a local `partsOfSpeechRequested` flag
+    if (
+      props.searchDialectDataType === SEARCH_DATA_TYPE_WORD &&
+      partsOfSpeech.length === 0 &&
+      partsOfSpeechRequested !== true
+    ) {
+      setPartsOfSpeechRequested(true)
+      props.fetchDirectory('parts_of_speech')
+    }
 
-        const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
-          return (
-            <option key={index} value={part.value}>
-              {part.text}
-            </option>
-          )
-        })
+    // wait
+    if (props.computeDirectory.success) {
+      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
+      const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
+        if (a.text < b.text) return -1
+        if (a.text > b.text) return 1
+        return 0
+      })
 
-        // set
-        if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
-          setPartsOfSpeechOptions([
-            <option key="SEARCH_SORT_DIVIDER" disabled>
-              ─────────────
-            </option>,
-            ...partsOfSpeechSortedOptionTags,
-          ])
-        }
+      const partsOfSpeechSortedOptionTags = partsOfSpeechSorted.map((part, index) => {
+        return (
+          <option key={index} value={part.value}>
+            {part.text}
+          </option>
+        )
+      })
+
+      // set
+      if (partsOfSpeechSortedOptionTags.length > 0 && partsOfSpeechOptions === null) {
+        setPartsOfSpeechOptions([
+          <option key="SEARCH_SORT_DIVIDER" disabled>
+            ─────────────
+          </option>,
+          ...partsOfSpeechSortedOptionTags,
+        ])
       }
     }
-  }, [])
+  }, [props.computeDirectory])
 
   // Generates 'Stop browsing ...' button
   // TODO: props.searchDialectResetButtonText
@@ -207,8 +217,10 @@ export const SearchDialect = (props) => {
             onChange={(evt) => {
               setSearchType(evt.target.value)
             }}
+            data-testid="SearchDialectFormSelectSearchType"
             className={`SearchDialectFormSelectSearchType ${getDialectClassname()}`}
           >
+            <option value={SEARCH_TYPE_DEFAULT_SEARCH}>Default</option>
             <option value={SEARCH_TYPE_APPROXIMATE_SEARCH}>Approximate</option>
             <option value={SEARCH_TYPE_EXACT_SEARCH}>Exact</option>
             <option value={SEARCH_TYPE_CONTAINS_SEARCH}>Contains</option>
@@ -286,6 +298,9 @@ export const SearchDialect = (props) => {
     let searchTypeLabel
 
     switch (_searchType) {
+      case SEARCH_TYPE_DEFAULT_SEARCH:
+        searchTypeLabel = ' match '
+        break
       case SEARCH_TYPE_APPROXIMATE_SEARCH:
         searchTypeLabel = ' approximately match '
         break

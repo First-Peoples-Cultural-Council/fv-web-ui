@@ -85,18 +85,14 @@ export default class DataListView extends Component {
   // Refetch data on URL change
   // TODO: At minimum, migrate to `getDerivedStateFromProps()` or https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
   componentDidUpdate(prevProps) {
+    const _sortOrder = selectn(['navigationRouteSearch', 'sortOrder'], this.props) || this.props.DEFAULT_SORT_TYPE
+    const _sortBy = selectn(['navigationRouteSearch', 'sortBy'], this.props) || this.props.DEFAULT_SORT_COL
     if (this.props.controlViaURL) {
       if (
         this.props.routeParams.page !== prevProps.routeParams.page ||
         this.props.routeParams.pageSize !== prevProps.routeParams.pageSize
       ) {
-        this._fetchListViewData(
-          this.props,
-          this.props.DEFAULT_PAGE,
-          this.props.DEFAULT_PAGE_SIZE,
-          this.props.DEFAULT_SORT_TYPE,
-          this.props.DEFAULT_SORT_COL
-        )
+        this._fetchListViewData(this.props, this.props.DEFAULT_PAGE, this.props.DEFAULT_PAGE_SIZE, _sortOrder, _sortBy)
         this._resetPagination(this.props)
       }
     } else {
@@ -122,6 +118,7 @@ export default class DataListView extends Component {
       prevProps.filter.has('currentAppliedFilter') &&
       !prevProps.filter.get('currentAppliedFilter').equals(this.props.filter.get('currentAppliedFilter'))
     ) {
+      // TODO: should we use _sortOrder & _sortBy here as well?
       this._fetchListViewData(
         this.props,
         this.props.DEFAULT_PAGE,
@@ -259,7 +256,6 @@ export default class DataListView extends Component {
 
     // Skip updating if last sort addition is disabled
     if (colRequestSkipped) return
-
     this._fetchListViewData(
       this.props,
       this.props.DEFAULT_PAGE,

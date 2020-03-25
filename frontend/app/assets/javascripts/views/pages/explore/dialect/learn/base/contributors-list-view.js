@@ -261,7 +261,7 @@ class ContributorsListView extends DataListView {
 const mapStateToProps = (state /*, ownProps*/) => {
   const { fvContributor, fvDialect, navigation, nuxeo, windowPath, locale } = state
 
-  const { properties, route } = navigation
+  const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computeContributors } = fvContributor
   const { computeDialect2 } = fvDialect
@@ -272,7 +272,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeContributors,
     computeDialect2,
     computeLogin,
-    navigationRouteSearch: route.search,
     properties,
     splitWindowPath,
     windowPath: _windowPath,

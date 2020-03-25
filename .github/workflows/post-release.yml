@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout working branch
-        uses: actions/checkout@v1
-      - name: Update versions to next snapshot
-        run:
-          mvn versions:set -DnewVersion=${{github.ref}} -DgenerateBackupPoms=false
-          mvn versions:commit
-      - name: Create a pull request for updating version
-        uses: peter-evans/create-pull-request@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update POM.xml to next snapshot version ${{github.ref}}
-          title: "[Bump Release] Ready to start working on ${{github.ref}}"
-          labels: automated pr
-          assignees: dy2288
+    - name: Checkout working branch
+      uses: actions/checkout@v2
+    - name: Update versions to next snapshot
+      run: 
+        mvn versions:set -DnewVersion=${{github.ref}} -DgenerateBackupPoms=false
+        mvn versions:commit
+    - name: Create a pull request for updating version
+      uses: peter-evans/create-pull-request@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: Update POM.xml to next snapshot version ${{github.ref}}
+        title: '[Bump Release] Ready to start working on ${{github.ref}}'
+        labels: automated pr
+        assignees: dy2288

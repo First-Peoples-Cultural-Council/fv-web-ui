@@ -944,7 +944,7 @@ export class Preview extends Component {
      * Date created
      */
     metadata.push({
-      label: this.props.intl.trans('date_created', 'Date Created', 'first'),
+      label: this.props.intl.trans('date_created', 'Date Added to FirstVoices', 'first'),
       value: selectn('properties.dc:created', response)
         ? StringHelpers.formatUTCDateString(selectn('properties.dc:created', response))
         : '-',

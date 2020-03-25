@@ -1,6 +1,6 @@
 package ca.firstvoices.operations;
 
-import ca.firstvoices.testUtil.AssignAncestorsTestUtil;
+import ca.firstvoices.testUtil.AbstractTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,17 +9,17 @@ import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 import org.nuxeo.runtime.test.runner.*;
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
 
 import javax.inject.Inject;
 
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
-
 @RunWith(FeaturesRunner.class)
 @Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class, RepositoryElasticSearchFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
@@ -61,12 +60,9 @@ import static org.junit.Assert.*;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-
-public class InitialDatabaseSetupTest {
-
-    private AssignAncestorsTestUtil testUtil;
+@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
+public class InitialDatabaseSetupTest extends AbstractTest {
 
     DocumentModel sectionsRoot;
 
@@ -85,30 +81,27 @@ public class InitialDatabaseSetupTest {
 
     @Before
     public void setUp() throws Exception {
-        testUtil = new AssignAncestorsTestUtil();
-
         assertNotNull("Should have a valid session", session);
-        assertNotNull("Should have a valid test utilities obj", testUtil);
 
-        testUtil.createSetup(session);
+        createSetup(session);
 
         assertNotNull("Should have a valid Workspaces Directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
+                createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
         assertNotNull("Should have a valid SharedData directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
+                createDocument(session, session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
 
         DocumentModelList docs = session.query("SELECT * FROM Document WHERE ecm:path = '/FV/sections'");
         sectionsRoot = docs.get(0);
 
         assertNotNull("Should have a valid Workspaces/Data directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV/Workspaces", "Data", "Workspace")));
+                createDocument(session, session.createDocumentModel("/FV/Workspaces", "Data", "Workspace")));
         assertNotNull("Should have a valid sections/Data directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV/sections", "Data", "Section")));
+                createDocument(session, session.createDocumentModel("/FV/sections", "Data", "Section")));
 
         assertNotNull("Should have a valid Workspaces/SharedData directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
+                createDocument(session, session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
         assertNotNull("Should have a valid sections/SharedData directory",
-                testUtil.createDocument(session, session.createDocumentModel("/FV/sections", "SharedData", "Section")));
+                createDocument(session, session.createDocumentModel("/FV/sections", "SharedData", "Section")));
     }
 
     @Test

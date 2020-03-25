@@ -18,7 +18,7 @@ import {
 
 export const fetchWord = fetch('FV_WORD', 'FVWord', {
   headers: {
-    'enrichers.document': 'ancestry,word,permissions',
+    'enrichers.document': 'ancestry,word,permissions,unpublished_changes',
   },
 })
 

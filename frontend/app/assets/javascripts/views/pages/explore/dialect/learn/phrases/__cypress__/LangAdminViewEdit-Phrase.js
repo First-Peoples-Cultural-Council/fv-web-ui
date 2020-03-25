@@ -21,7 +21,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.getByText('No results found.').should('exist')
+    cy.getByText('No results found.', { exact: false }).should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.logout()
 
