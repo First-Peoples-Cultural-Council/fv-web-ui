@@ -1,11 +1,26 @@
 package ca.firstvoices.testUtil;
 
+import ca.firstvoices.runner.FirstVoicesDataFeature;
+import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.services.CleanupCharactersService;
+import ca.firstvoices.services.SanitizeDocumentService;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
+
+import javax.inject.Inject;
+
 import static org.junit.Assert.assertNotNull;
 
-public abstract class AbstractTest {
+@RunWith(FeaturesRunner.class)
+@Features({FirstVoicesDataFeature.class})
+public abstract class AbstractFirstVoicesDataTest {
 
     private DocumentModel langFamilyDoc;
     private DocumentModel languageDoc;
@@ -13,15 +28,40 @@ public abstract class AbstractTest {
     private DocumentModel dictionaryDoc;
     private DocumentModel alphabetDoc;
 
-    public DocumentModel getCurrentLanguageFamily(){
+    @Inject
+    protected CoreSession session;
+
+    @Inject
+    protected UserManager userManager;
+
+    @Inject
+    protected AutomationService automationService;
+
+    @Inject
+    protected AssignAncestorsService assignAncestorsService;
+
+    @Inject
+    protected SanitizeDocumentService sanitizeDocumentService;
+
+    @Inject
+    protected CleanupCharactersService cleanupCharactersService;
+
+
+    @Before
+    public void setUp() throws Exception {
+        assertNotNull("Should have a valid session", session);
+        createSetup(session);
+    }
+
+    public DocumentModel getCurrentLanguageFamily() {
         return langFamilyDoc;
     }
 
-    public DocumentModel getCurrentLanguage(){
+    public DocumentModel getCurrentLanguage() {
         return languageDoc;
     }
 
-    public DocumentModel getCurrentDialect(){
+    public DocumentModel getCurrentDialect() {
         return dialectDoc;
     }
 
