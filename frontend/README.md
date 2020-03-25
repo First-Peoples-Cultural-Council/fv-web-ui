@@ -4,8 +4,8 @@
 
 There are several version dependency requirements to properly build and run the project:
 
-- NodeJS>=v10.13.0 (10.15.3)
-- NPM v6.4.1
+- NodeJS v10.19.0
+- NPM v6.13.4
 
 Instructions to install specific project dependencies and running the application are described in the _Setting Up and Running_ section.
 
@@ -46,11 +46,11 @@ $ git clone https://github.com/First-Peoples-Cultural-Council/fv-web-ui.git
 $ cd fv-web-ui/frontend
 ```
 
-4. Install NodeJS v8.10.0 and set it as the active version of NodeJS by running:
+4. Install NodeJS v10.19.0 and set it as the active version of NodeJS by running:
 
 ```bash
-$ nvm install 8.10.0
-$ nvm use 8.10.0
+$ nvm install 10.19.0
+$ nvm use 10.19.0
 ```
 
 5. To successfully run NPM, you need to configure your `~/.ssh/config` file so that NPM knows which RSA Key to use when cloning GitHub repositories. If you don't have an RSA Key [generate](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/) one and [add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) it to your GitHub account. Create a `~/.ssh/config` file if it does not already exist. Add the following entry to your `~/.ssh/config` file while replacing `<mykey>` as needed:
@@ -66,10 +66,10 @@ Host github.com
 6. Run npm to download `node_modules` dependencies by running:
 
 ```bash
-$ npm install
+$ npm ci
 ```
 
-Important Note: when running 'npm install' for the first time you will be silently prompted to enter the Key Phrase for the RSA Key you added to the `~/.ssh/config` file. If progress halts and a small `lock icon` appears, enter your RSA Key Phrase to proceed. If you recieve an error when running 'npm install' you may need to close your terminal and try running it again.
+Important Note: when running 'npm ci' for the first time you will be silently prompted to enter the Key Phrase for the RSA Key you added to the `~/.ssh/config` file. If progress halts and a small `lock icon` appears, enter your RSA Key Phrase to proceed. If you recieve an error when running 'npm install' you may need to close your terminal and try running it again.
 
 7. Assuming you have a local instance of a Nuxeo server running on localhost:8080, you can start the dev server:
 
