@@ -11,13 +11,13 @@ export default function withToggle() {
   class ViewwithToggle extends Component {
     static defaultProps = {
       mobileOnly: false,
-      label: 'Toggle Panel',
+      label: <FVLabel transKey="general.toggle_panel" defaultStr="Toggle Panel" transform="first" />,
       className: '',
     }
 
     static propTypes = {
       mobileOnly: PropTypes.bool,
-      label: PropTypes.string,
+      label: PropTypes.object,
       className: PropTypes.string,
       children: PropTypes.any, // TODO: set to correct proptype
     }
@@ -40,15 +40,11 @@ export default function withToggle() {
       ) : (
         <ExpandMoreIcon className="material-icons" style={fontStyle} />
       )
-      const labelText = this.state.open ? <FVLabel
-        transKey="hide"
-        defaultStr="Hide"
-        transform="first"
-      /> : <FVLabel
-        transKey="show"
-        defaultStr="Show"
-        transform="first"
-      />
+      const labelText = this.state.open ? (
+        <FVLabel transKey="hide" defaultStr="Hide" transform="first" />
+      ) : (
+        <FVLabel transKey="show" defaultStr="Show" transform="first" />
+      )
       return (
         <div className={classNames(...this.rootClassNames)}>
           <div className="panel-heading">

@@ -329,7 +329,9 @@ export class Search extends DataListView {
             <div className="col-xs-12">
               <form onSubmit={this._onSearchSaveForm}>
                 <FiltersWithToggle
-                  label={this.props.intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
+                  label={
+                    <FVLabel transKey="views.pages.search.filter_items" defaultStr="Filter items" transform="first" />
+                  }
                   mobileOnly
                 >
                   <div className="fontAboriginalSans">

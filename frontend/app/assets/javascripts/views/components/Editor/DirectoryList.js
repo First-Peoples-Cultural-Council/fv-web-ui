@@ -76,7 +76,7 @@ export class DirectoryList extends Component {
   render() {
     const { computeDirectory } = this.props
 
-    const entries = selectn('directories.' + this.props.dir, computeDirectory) || []
+    const entries = selectn('directoryEntries.' + this.props.dir, computeDirectory) || []
     const dataTestId = StringHelpers.clean(this.props.dataTestId, CLEAN_ID)
     return (
       <div>
@@ -137,7 +137,4 @@ const mapDispatchToProps = {
   fetchDirectory,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DirectoryList)
+export default connect(mapStateToProps, mapDispatchToProps)(DirectoryList)

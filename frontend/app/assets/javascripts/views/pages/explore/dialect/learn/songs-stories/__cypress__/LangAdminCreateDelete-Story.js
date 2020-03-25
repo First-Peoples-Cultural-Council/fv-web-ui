@@ -10,7 +10,7 @@ describe('LangAdminCreateDelete-Story.js > LangAdminCreateDelete-Story', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/stories')
-    cy.wait(500)
+    cy.wait(1000)
     cy.queryByText('TestStoryTitle').should('not.exist')
     cy.queryByText('Continue to story').should('not.exist')
     cy.getByText('Create Story Book', { exact: true }).click()

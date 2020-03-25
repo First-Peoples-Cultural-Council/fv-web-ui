@@ -58,7 +58,7 @@ describe('AlphabetListView-Words.js > AlphabetListView', () => {
   it('Direct link: displays message, selected letter, & stop browsing buton', () => {
     cy.log('Direct visit a url with a letter selected')
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/alphabet/t')
-    cy.wait(500)
+    cy.wait(2000)
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
     cy.getByText(/showing words that start with the letter/i).should('exist')

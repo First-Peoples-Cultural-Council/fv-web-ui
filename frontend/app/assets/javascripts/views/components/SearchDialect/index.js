@@ -98,7 +98,7 @@ export const SearchDialect = (props) => {
   // Sets `partsOfSpeechOptions` when on a Word page
   // ------------------------------------------------------------
   useEffect(() => {
-    const partsOfSpeech = selectn('directories.parts_of_speech', props.computeDirectory) || []
+    const partsOfSpeech = selectn('directoryEntries.parts_of_speech', props.computeDirectory) || []
     // initiate
     // NOTE: used to rely on Redux booleans (isFetching, success) to determine if we should make a request
     // React would rerender before Redux could set the flag and so we'd initiate duplicate requests
@@ -114,7 +114,7 @@ export const SearchDialect = (props) => {
 
     // wait
     if (props.computeDirectory.success) {
-      const partsOfSpeechUnsorted = selectn('computeDirectory.directories.parts_of_speech', props) || []
+      const partsOfSpeechUnsorted = selectn('computeDirectory.directoryEntries.parts_of_speech', props) || []
       const partsOfSpeechSorted = partsOfSpeechUnsorted.sort((a, b) => {
         if (a.text < b.text) return -1
         if (a.text > b.text) return 1

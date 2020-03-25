@@ -16,7 +16,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
-    cy.wait(500)
+    cy.wait(1000)
     cy.getByText('No results found.', { exact: false }).should('be.visible')
 
     /*

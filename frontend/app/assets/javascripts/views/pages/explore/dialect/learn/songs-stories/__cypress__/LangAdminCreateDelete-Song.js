@@ -10,7 +10,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
       userName: 'TESTLANGUAGEONE_ADMIN',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/songs')
-    cy.wait(500)
+    cy.wait(1000)
     cy.queryByText('TestSongTitle').should('not.exist')
     cy.queryByText('Continue to song').should('not.exist')
     cy.getByText('Create Song Book', { exact: true }).click()
