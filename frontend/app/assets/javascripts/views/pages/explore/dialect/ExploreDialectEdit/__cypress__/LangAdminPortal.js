@@ -24,7 +24,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
       'url("http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/assets/images/cover.png")'
     )
 
-    cy.getByText('Edit Portal').click()
+    cy.getByText('Edit').click()
     cy.wait(500)
 
     /*
@@ -156,14 +156,14 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
      */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
     cy.wait(500)
-    cy.getByText('Edit Portal').click()
+    cy.getByText('Edit').click()
     cy.wait(500)
 
     cy.get('input.form-control').type('ThisShouldNotSave')
     cy.getByTestId('withForm__btnGroup2').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
 
     cy.queryByText('ThisShouldNotSave').should('not.exist')
     cy.queryByText('TestPortalGreetingThisShouldNotSave').should('not.exist')

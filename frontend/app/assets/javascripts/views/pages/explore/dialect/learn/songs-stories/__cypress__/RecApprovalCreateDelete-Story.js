@@ -160,7 +160,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
     cy.wait(800)
     cy.getByText('TestStoryTitle').click()
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {
@@ -172,12 +172,12 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
 
     /*
                         Check that edit book saves properly.
                     */
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {

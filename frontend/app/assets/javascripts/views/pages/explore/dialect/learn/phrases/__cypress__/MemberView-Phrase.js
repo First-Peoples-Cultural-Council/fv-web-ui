@@ -34,7 +34,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     /*
             Check that the edit button does not exists
         */
-    cy.queryByText('Edit phrase').should('not.exist')
+    cy.queryByText('Edit').should('not.exist')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
 
     /*
@@ -46,7 +46,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.getByText('Reports', { exact: true }).click({ force: true })
     cy.getByText('Phrases in New Status', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('No results found.', { exact: false }).should('exist')
+    cy.getByText('No Results Found', { exact: false }).should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
 
     /*
@@ -55,7 +55,7 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.getByText('reports', { exact: true }).click()
     cy.getByText('Phrases in Enabled Status', { exact: true }).click()
     cy.wait(3000)
-    cy.queryByText('No results found').should('not.exist')
+    cy.queryByText('No Results Found').should('not.exist')
     cy.getByTestId('DictionaryList__row').within(() => {
       cy.getByText('TestPhrase').should('exist')
       cy.getByText('TestTranslation').should('exist')

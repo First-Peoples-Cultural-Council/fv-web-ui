@@ -39,17 +39,15 @@ describe('LangAdminPortal-Inline.js > LangAdminPortal-Inline', () => {
       .click()
     cy.getByText('+ Add new').click()
     cy.getByText('Create Link').click()
-    cy.getByText('Add New Link To Testlanguageone')
-      .parent()
-      .within(() => {
-        cy.get('[name="dc:title"]').type('TestPortalInlineRelatedLinkTitle')
-        cy.get('[name="dc:description"]').type('TestPortalInlineRelatedLinkDescription')
-        cy.get('[name="fvlink:url"]').type(
-          'https://dev.firstvoices.com/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne'
-        )
-        cy.getByText('Save').click()
-        cy.wait(500)
-      })
+    cy.getByTestId('DialogCreateForm__DialogContent').within(() => {
+      cy.get('[name="dc:title"]').type('TestPortalInlineRelatedLinkTitle')
+      cy.get('[name="dc:description"]').type('TestPortalInlineRelatedLinkDescription')
+      cy.get('[name="fvlink:url"]').type(
+        'https://dev.firstvoices.com/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne'
+      )
+      cy.getByText('Save').click()
+      cy.wait(500)
+    })
     cy.getByText('Save').click()
     cy.wait(500)
 

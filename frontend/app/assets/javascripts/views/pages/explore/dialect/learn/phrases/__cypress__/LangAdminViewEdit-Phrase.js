@@ -21,7 +21,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.Header.row').within(() => {
       cy.getByText('Phrases', { exact: true }).click()
     })
-    cy.getByText('No results found.', { exact: false }).should('exist')
+    cy.getByText('No Results Found', { exact: false }).should('exist')
     cy.queryByText('TestPhrase').should('not.exist')
     cy.logout()
 
@@ -51,7 +51,7 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
     cy.wait(2000)
     cy.queryByText('TestPhrase', { exact: false }).clickandwait()
-    cy.queryByText('Edit phrase', { exact: true }).should('exist')
+    cy.queryByText('Edit', { exact: true }).should('exist')
     cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')

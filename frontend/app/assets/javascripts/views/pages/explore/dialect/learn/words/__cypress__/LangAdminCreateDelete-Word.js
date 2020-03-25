@@ -17,7 +17,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
     cy.wait(1000)
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
 
     /*
             Going through the steps to create a word
@@ -116,7 +116,7 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
         */
     cy.wait(500)
     cy.getByText('TestWord').click()
-    cy.getByText('Edit word')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('div.form-horizontal').within(() => {
@@ -129,14 +129,14 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
     cy.queryByText('TestWordShouldNotShow').should('not.exist')
 
     /*
             Check that edit word saves properly.
         */
     cy.getByText('TestWord').click()
-    cy.getByText('Edit word')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.getByTestId('dc-title').type('TestWord1')
@@ -162,6 +162,6 @@ describe('LangAdminCreateDelete-Word.js > LangAdminCreateDelete-Word', () => {
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
   })
 })

@@ -17,7 +17,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
     cy.wait(1000)
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
@@ -119,7 +119,7 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
             */
     cy.wait(500)
     cy.getByText('TestPhrase').click()
-    cy.getByText('Edit phrase')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('div.form-horizontal').within(() => {
@@ -132,13 +132,13 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
     cy.queryByText('TestPhraseShouldNotShow').should('not.exist')
 
     /*
                 Check that edit phrase saves properly.
             */
-    cy.getByText('Edit phrase')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('[name="dc:title"]').type('TestPhrase1')
@@ -165,6 +165,6 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
   })
 })

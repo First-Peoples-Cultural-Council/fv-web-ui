@@ -21,7 +21,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
         */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
-    cy.queryByText('Edit Portal').should('not.exist')
+    cy.queryByText('Edit').should('not.exist')
     cy.get('[title="More Options"]').click()
     cy.wait(500)
     cy.getByText('Reports', { exact: true }).click({ force: true })
@@ -29,7 +29,7 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
             Check that no results exist in "Words in New Status" page
         */
     cy.getByText('Words in New Status', { exact: true }).click()
-    cy.getByText('No results found.', { exact: false }).should('exist')
+    cy.getByText('No Results Found', { exact: false }).should('exist')
     /*
             Check that the word exists in "Words in Enabled Status" page and make sure it has "Enabled" status
         */

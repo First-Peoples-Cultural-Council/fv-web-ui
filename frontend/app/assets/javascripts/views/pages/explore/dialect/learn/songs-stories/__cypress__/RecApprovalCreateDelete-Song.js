@@ -160,7 +160,7 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/songs')
     cy.wait(800)
     cy.getByText('TestSongTitle').click()
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {
@@ -172,12 +172,12 @@ describe('RecApprovalCreateDelete-Song.js > RecApprovalCreateDelete-Song', () =>
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
 
     /*
                     Check that edit book saves properly.
                 */
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {

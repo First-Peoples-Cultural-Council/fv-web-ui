@@ -151,7 +151,7 @@ describe('RecorderCreate-Song.js > RecorderCreate-Song', () => {
     cy.queryByText('TestSongTitle')
       .should('exist')
       .click()
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
 

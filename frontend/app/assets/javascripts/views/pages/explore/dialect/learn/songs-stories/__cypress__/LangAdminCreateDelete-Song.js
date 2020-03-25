@@ -124,7 +124,7 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
                     Check that the cancel button when editing song works.
                 */
     cy.getByText('TestSongTitle').click()
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.wait(500)
@@ -137,12 +137,12 @@ describe('LangAdminCreateDelete-Song.js > LangAdminCreateDelete-Song', () => {
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
 
     /*
                     Check that edit song saves properly.
                 */
-    cy.getByText('Edit book')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {

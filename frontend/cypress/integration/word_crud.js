@@ -283,7 +283,7 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
 
     // Update
     cy.logger({text: 'UPDATE'})
-    cy.getByText('Edit word', { exact: false }).click()
+    cy.getByText('Edit', { exact: false }).click()
     cy.wait(waitMedium)
     clearWordForm()
     populateWordForm({

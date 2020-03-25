@@ -20,7 +20,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.getByText('Learn our Language', { exact: true }).click()
     cy.getByText('Words', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('No results found.', { exact: false }).should('exist')
+    cy.getByText('No Results Found', { exact: false }).should('exist')
     cy.queryByText('TestWord').should('not.exist')
     cy.logout()
 
@@ -52,7 +52,7 @@ describe('LangAdminViewEdit-Word.js > LangAdminViewEdit-Word', () => {
     cy.wait(2500)
     cy.queryByText('TestWord').click()
     cy.wait(1500)
-    cy.queryByText('Edit word', { exact: true }).should('exist')
+    cy.queryByText('Edit', { exact: true }).should('exist')
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(0)

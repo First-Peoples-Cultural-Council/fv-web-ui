@@ -17,7 +17,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
     cy.wait(500)
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
@@ -148,7 +148,7 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/phrases')
     cy.wait(3500)
     cy.getByText('TestPhrase').click()
-    cy.getByText('Edit phrase')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('div.form-horizontal').within(() => {
@@ -160,12 +160,12 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
     cy.getByTestId('withForm__btnGroup1').within(() => {
       cy.getByText('Cancel').click()
     })
-    cy.getByText('Yes!').click()
+    cy.getByText('Yes').click()
 
     /*
         Check that edit phrase saves properly.
         */
-    cy.getByText('Edit phrase')
+    cy.getByText('Edit')
       .should('exist')
       .click()
     cy.get('[name="dc:title"]').type('TestPhrase1')
@@ -194,6 +194,6 @@ describe('RecApprovalCreateDelete-Phrase.js > RecApprovalCreateDelete-Phrase', (
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No results found.', { exact: false }).should('be.visible')
+    cy.getByText('No Results Found', { exact: false }).should('be.visible')
   })
 })
