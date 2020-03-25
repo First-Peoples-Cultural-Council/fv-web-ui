@@ -32,9 +32,9 @@ limitations under the License.
     </delete>
   </target>
 
-  <target name="npmInstall" description="Install npm depedencies" unless="skipInstall">
+  <target name="npmInstall" description="Install npm depedencies from package-lock.json" unless="skipInstall">
     <exec executable="${cmd.npm}" failonerror="true">
-      <arg value="install" />
+      <arg value="ci" />
     </exec>
   </target>
 
