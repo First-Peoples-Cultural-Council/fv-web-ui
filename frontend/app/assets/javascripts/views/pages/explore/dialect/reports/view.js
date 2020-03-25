@@ -294,7 +294,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvPortal, locale, navigation, nuxeo, windowPath, locale } = state
+  const { fvCategory, fvPortal, locale, navigation, nuxeo, windowPath } = state
 
   const { computeCategories } = fvCategory
   const { computePortal } = fvPortal

@@ -278,12 +278,6 @@ const addImmersionCategory = (route) => {
   })
 }
 
-const addBrowseAlphabet = (route) => {
-  return Object.assign({}, route, {
-    path: route.path.concat(['alphabet', new paramMatch('letter', ANYTHING_BUT_SLASH)]),
-    title: '{$letter}' + ` | ${selectn('title', route)}`,
-  })
-}
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
     path: route.path.concat(['book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)]),
@@ -305,6 +299,7 @@ const addBrowseAlphabet = (route) => {
     title: '{$letter}' + ` | ${selectn('title', route)}`,
   })
 }
+
 // eg: learn/phrases/alphabet/b
 const addBrowsePhraseBookByAlphabet = (route) => {
   return Object.assign({}, route, {
