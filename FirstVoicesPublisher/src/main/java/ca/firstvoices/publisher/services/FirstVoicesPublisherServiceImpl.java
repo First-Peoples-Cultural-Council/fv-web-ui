@@ -197,7 +197,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle exception property value as string
-            if (dependency == "fvmedia:origin") {
+            if (dependency.equals("fvmedia:origin")) {
                 dependencyPropertyValue = PublisherUtils.extractDependencyPropertyValueAsString(input, dependency);
             }
             // Handle as array
@@ -219,7 +219,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 if (publishedDep == null) {
 
                     // Origin shouldn't be automatically published
-                    if (dependencyEntry.getKey() == "fvmedia:origin") {
+                    if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                         continue;
                     }
 
@@ -239,7 +239,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as string
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
                 }
                 // Handle as array
@@ -289,7 +289,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle exception property value as string
-            if (dependency == "fvmedia:origin") {
+            if (dependency.equals("fvmedia:origin")) {
                 dependencyPropertyValue = PublisherUtils.extractDependencyPropertyValueAsString(input, dependency);
             }
             // Handle as array
@@ -309,7 +309,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 IdRef dependencyRef = new IdRef(relatedDocUUID);
 
                 // Origin shouldn't be automatically published
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     continue;
                 }
 
@@ -337,7 +337,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as string
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
                 }
                 // Handle as array
@@ -442,8 +442,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             ArrayList<String> dependencyPublishedPropertyValues = new ArrayList<String>();
 
             // Handle values as arrays
-            if (dependencyEntry.getKey() == "fvdialect:keyboards"
-                    || dependencyEntry.getKey() == "fvdialect:language_resources") {
+            if (dependencyEntry.getKey().equals("fvdialect:keyboards")
+                    || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
                 dependencyPropertyValue = (String[]) dialectProxy.getPropertyValue(dependency);
             }
             // Handle as string
@@ -489,8 +489,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             }
 
             // Handle property values as arrays
-            if (dependencyEntry.getKey() == "fvdialect:keyboards"
-                    || dependencyEntry.getKey() == "fvdialect:language_resources") {
+            if (dependencyEntry.getKey().equals("fvdialect:keyboards")
+                    || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
                 dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.toArray(
                         new String[dependencyPublishedPropertyValues.size()]));
             }
@@ -548,8 +548,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle expection property values as arrays
-            if (dependencyEntry.getKey() == "fv-portal:featured_words"
-                    || dependencyEntry.getKey() == "fv-portal:related_links") {
+            if (dependencyEntry.getKey().equals("fv-portal:featured_words")
+                    || dependencyEntry.getKey().equals("fv-portal:related_links")) {
                 dependencyPropertyValue = (String[]) input.getPropertyValue(dependency);
             }
             // Handle as string
@@ -585,8 +585,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as arrays
-                if (dependencyEntry.getKey() == "fv-portal:featured_words"
-                        || dependencyEntry.getKey() == "fv-portal:related_links") {
+                if (dependencyEntry.getKey().equals("fv-portal:featured_words")
+                        || dependencyEntry.getKey().equals("fv-portal:related_links")) {
                     String[] property = (String[]) input.getPropertyValue(dependencyEntry.getValue());
 
                     if (property == null) {

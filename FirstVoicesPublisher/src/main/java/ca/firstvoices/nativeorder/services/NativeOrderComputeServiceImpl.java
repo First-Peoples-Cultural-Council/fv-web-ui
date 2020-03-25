@@ -136,7 +136,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
     private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars, String charValue,
                                        String ucCharValue) {
 
-        if ((charValue != null && title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
+        if ((title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
             boolean incorrect = false;
 
             if (charValue != null) {

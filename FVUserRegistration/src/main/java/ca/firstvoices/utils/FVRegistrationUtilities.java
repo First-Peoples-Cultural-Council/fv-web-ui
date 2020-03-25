@@ -51,6 +51,7 @@ public class FVRegistrationUtilities {
     private UserManager userManager;
 
     private FVRegistrationMailUtilities mailUtil = new FVRegistrationMailUtilities();
+    private OperationContext ctx;
 
     public DocumentModel getDialect() {
         return dialect;
@@ -150,7 +151,7 @@ public class FVRegistrationUtilities {
 
                 ageGroup = String.valueOf(today - 101);
             } else {
-                String tokens[] = ageGroup.split("-");
+                String[] tokens = ageGroup.split("-");
                 if (tokens.length == 2) {
                     int lAge = Integer.valueOf(tokens[0]);
                     int uAge = Integer.valueOf(tokens[1]);
@@ -243,10 +244,10 @@ public class FVRegistrationUtilities {
     /**
      * @param registrationRequest
      * @param session
-     * @param autoAccept
      * @return
      */
-    public boolean UserInviteCondition(DocumentModel registrationRequest, CoreSession session, boolean autoAccept) {
+    public boolean UserInviteCondition(DocumentModel registrationRequest, CoreSession session) {
+        boolean autoAccept;
         NuxeoPrincipal currentUser = session.getPrincipal();
 
         ugdr = new UnrestrictedGroupResolver(session, dialect);
@@ -290,20 +291,21 @@ public class FVRegistrationUtilities {
     public String registrationCommonFinish(UserRegistrationService registrationService,
             DocumentModel registrationRequest, Map<String, Serializable> info, String comment,
             ValidationMethod validationMethod, boolean autoAccept, CoreSession session)
-            throws RestOperationException, Exception {
+            throws Exception {
         int validationStatus;
 
         try {
             AutomationService automationService = Framework.getService(AutomationService.class);
-            OperationContext ctx = new OperationContext(session);
+            ctx = new OperationContext(session);
             Map<String, Object> params = new HashMap<>();
             params.put("Login:", userInfo.getEmail());
             params.put("email:", userInfo.getEmail());
-
             validationStatus = (int) automationService.run(ctx, "FVValidateRegistrationAttempt", params);
         } catch (Exception e) {
             log.warn("Exception while validating registration.");
             throw new Exception("Exception while invoking registration validation. " + e);
+        } finally {
+            ctx.close();
         }
 
         if (validationStatus != REGISTRATION_CAN_PROCEED) {
