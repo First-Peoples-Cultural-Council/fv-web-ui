@@ -69,7 +69,7 @@ jobs:
       if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
       uses: actions/setup-node@v1.1.0
       with:
-        node-version: '8.x'
+        node-version: '10.19.0'
 
     # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
     - name: Cache project build
@@ -89,17 +89,17 @@ jobs:
 
     # Setup the Node modules caching (~/.npm directory) to restore from or save to
     - name: Cache node modules
-        if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
-        uses: actions/cache@v1.1.2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
+      uses: actions/cache@v1.1.2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
 
     # Build only the frontend if changes are made to the frontend and not backend (this includes installing the Node packages)
     - name: Build frontend (includes Node package install)

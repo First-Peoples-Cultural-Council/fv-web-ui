@@ -43,7 +43,7 @@ jobs:
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
         with:
-          node-version: '8.x'
+          node-version: '10.19.0'
 
       # Build the docker image and create the volume directories
       - name: Build Docker image and create volume directories
