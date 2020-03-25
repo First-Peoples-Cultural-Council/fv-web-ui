@@ -42,7 +42,6 @@ import ReportBrowser from './browse-view'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
-
 const { func, object, string } = PropTypes
 export class PageDialectReportsView extends PageDialectLearnBase {
   static propTypes = {
@@ -311,7 +310,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     routeParams: route.routeParams,
     computePortal,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 
