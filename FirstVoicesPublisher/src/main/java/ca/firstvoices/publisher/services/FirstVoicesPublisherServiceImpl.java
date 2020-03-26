@@ -1,7 +1,11 @@
-/**
- *
- */
 package ca.firstvoices.publisher.services;
+
+import ca.firstvoices.publisher.utils.PublisherUtils;
+import ca.firstvoices.services.AbstractService;
+import org.nuxeo.ecm.core.api.*;
+import org.nuxeo.ecm.core.schema.FacetNames;
+import org.nuxeo.ecm.platform.publisher.api.PublisherService;
+import org.nuxeo.runtime.api.Framework;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -9,19 +13,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.DocumentNotFoundException;
-import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.schema.FacetNames;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
-import org.nuxeo.runtime.api.Framework;
-
-import ca.firstvoices.publisher.utils.PublisherUtils;
-import ca.firstvoices.services.AbstractService;
 
 /**
  * @author loopingz
@@ -32,7 +23,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
         if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
             throw new InvalidParameterException("Document must be a FVDialect type");
         }
-        Map<String, DocumentModel> map = new HashMap<String, DocumentModel>();
+        Map<String, DocumentModel> map = new HashMap<>();
         CoreSession session = model.getCoreSession();
         DocumentModel language = session.getDocument(model.getParentRef());
         if (language == null || !language.getDocumentType().getName().equals("FVLanguage")) {
@@ -58,17 +49,17 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
         DocumentModel section = getRootSection(dialect);
         // Publish grand parent
-        if (!isPublished(languageFamily, section)) {
+        if (Boolean.FALSE.equals(isPublished(languageFamily, section))) {
             session.publishDocument(languageFamily, section);
         }
         // Publish parent
         section = session.getChild(section.getRef(), languageFamily.getName());
-        if (!isPublished(language, section)) {
+        if (Boolean.FALSE.equals(isPublished(language, section))) {
             session.publishDocument(language, section);
         }
         // Publish dialect
         section = session.getChild(section.getRef(), language.getName());
-        if (!isPublished(dialect, section)) {
+        if (Boolean.FALSE.equals(isPublished(dialect, section))) {
             session.publishDocument(dialect, section);
         }
         // Now publish all the children
@@ -78,7 +69,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             if (!child.hasFacet(FacetNames.PUBLISHABLE)) {
                 continue;
             }
-            if (!isPublished(child, section)) {
+            if (Boolean.FALSE.equals(isPublished(child, section))) {
                 session.publishDocument(child, section);
             }
         }
@@ -92,7 +83,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     }
 
     private Boolean isPublished(DocumentModel doc, DocumentModel section) {
-        return doc.getCoreSession().getProxies(doc.getRef(), section.getRef()).size() != 0;
+        return Boolean.FALSE.equals(doc.getCoreSession().getProxies(doc.getRef(), section.getRef()).isEmpty());
     }
 
     private DocumentModel getRootSection(DocumentModel doc) {
@@ -103,15 +94,15 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
         }
         DocumentModelList roots = null;
         if (workspace != null) {
-            PublisherService publisherService = Framework.getLocalService(PublisherService.class);
+            PublisherService publisherService = Framework.getService(PublisherService.class);
             roots = publisherService.getRootSectionFinder(session).getSectionRootsForWorkspace(workspace);
         }
-        if (roots == null || roots.size() == 0) {
-            PublisherService publisherService = Framework.getLocalService(PublisherService.class);
+        if (roots == null || roots.isEmpty()) {
+            PublisherService publisherService = Framework.getService(PublisherService.class);
             roots = publisherService.getRootSectionFinder(session).getDefaultSectionRoots(true, true);
         }
-        if (roots.size() == 0) {
-            throw new RuntimeException("Can't publish, no section available");
+        if (roots.isEmpty()) {
+            throw new NuxeoException("Can't publish, no section available");
         }
         return roots.get(0);
     }
@@ -141,10 +132,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             throw new InvalidParameterException("Dialect is not published");
         }
         session.removeDocument(section.getRef());
-        if (session.getChildren(languageSection.getRef()).size() == 0) {
+        if (session.getChildren(languageSection.getRef()).isEmpty()) {
             session.removeDocument(languageSection.getRef());
         }
-        if (session.getChildren(languageFamilySection.getRef()).size() == 0) {
+        if (session.getChildren(languageFamilySection.getRef()).isEmpty()) {
             session.removeDocument(languageFamilySection.getRef());
         }
     }
@@ -167,10 +158,9 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
         DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-        if (proxies.size() == 0) {
+        if (proxies.isEmpty()) {
             throw new InvalidParameterException("Dialect should be published");
         }
-        DocumentModel dialectSection = proxies.get(0);
         DocumentModel input = getPublication(session, asset.getRef());
         if (input != null && input.getCurrentLifeCycleState().equals("Published")) {
             // Already published
@@ -179,9 +169,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
         input = publishDocument(session, asset, getPublication(session, asset.getParentRef()));
 
-        Map<String, String> dependencies = new HashMap<String, String>();
-
-        dependencies = PublisherUtils.addAssetDependencies(asset);
+        Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
 
         for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
 
@@ -197,7 +185,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle exception property value as string
-            if (dependency == "fvmedia:origin") {
+            if (dependency.equals("fvmedia:origin")) {
                 dependencyPropertyValue = PublisherUtils.extractDependencyPropertyValueAsString(input, dependency);
             }
             // Handle as array
@@ -219,14 +207,14 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 if (publishedDep == null) {
 
                     // Origin shouldn't be automatically published
-                    if (dependencyEntry.getKey() == "fvmedia:origin") {
+                    if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                         continue;
                     }
 
                     DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
                     DocumentModel parentDependencySection;
                     if ("FVCategory".equals(dependencyDocModel.getType())) {
-                        PublisherService publisherService = Framework.getLocalService(PublisherService.class);
+                        PublisherService publisherService = Framework.getService(PublisherService.class);
                         publishedDep = PublisherUtils.publishAncestors(session, "FVCategory", dependencyDocModel,
                                 publisherService);
                     } else {
@@ -239,7 +227,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as string
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
                 }
                 // Handle as array
@@ -262,18 +250,14 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
         DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-        if (proxies.size() == 0) {
+        if (proxies.isEmpty()) {
             throw new InvalidParameterException("Dialect should be published");
         }
-        DocumentModel dialectSection = proxies.get(0);
-        DocumentModel input = getPublication(session, asset.getRef());
 
         // Always publish changes
-        input = publishDocument(session, asset, getPublication(session, asset.getParentRef()));
+        DocumentModel input = publishDocument(session, asset, getPublication(session, asset.getParentRef()));
 
-        Map<String, String> dependencies = new HashMap<String, String>();
-
-        dependencies = PublisherUtils.addAssetDependencies(asset);
+        Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
 
         for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
 
@@ -289,7 +273,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle exception property value as string
-            if (dependency == "fvmedia:origin") {
+            if (dependency.equals("fvmedia:origin")) {
                 dependencyPropertyValue = PublisherUtils.extractDependencyPropertyValueAsString(input, dependency);
             }
             // Handle as array
@@ -309,7 +293,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 IdRef dependencyRef = new IdRef(relatedDocUUID);
 
                 // Origin shouldn't be automatically published
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     continue;
                 }
 
@@ -327,7 +311,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                     DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
                     DocumentModel parentDependencySection;
                     if ("FVCategory".equals(dependencyDocModel.getType())) {
-                        PublisherService publisherService = Framework.getLocalService(PublisherService.class);
+                        PublisherService publisherService = Framework.getService(PublisherService.class);
                         publishedDep = PublisherUtils.publishAncestors(session, "FVCategory", dependencyDocModel,
                                 publisherService);
                     } else {
@@ -337,7 +321,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as string
-                if (dependencyEntry.getKey() == "fvmedia:origin") {
+                if (dependencyEntry.getKey().equals("fvmedia:origin")) {
                     input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
                 }
                 // Handle as array
@@ -430,7 +414,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     public DocumentModel setDialectProxies(DocumentModel dialectProxy) {
         CoreSession session = dialectProxy.getCoreSession();
 
-        Map<String, String> dependencies = new HashMap<String, String>();
+        Map<String, String> dependencies = new HashMap<>();
 
         dependencies.put("fvdialect:keyboards", "fvproxy:proxied_keyboards");
         dependencies.put("fvdialect:language_resources", "fvproxy:proxied_language_resources");
@@ -439,11 +423,11 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
             String dependency = dependencyEntry.getKey();
             String[] dependencyPropertyValue;
-            ArrayList<String> dependencyPublishedPropertyValues = new ArrayList<String>();
+            ArrayList<String> dependencyPublishedPropertyValues = new ArrayList<>();
 
             // Handle values as arrays
-            if (dependencyEntry.getKey() == "fvdialect:keyboards"
-                    || dependencyEntry.getKey() == "fvdialect:language_resources") {
+            if (dependencyEntry.getKey().equals("fvdialect:keyboards")
+                    || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
                 dependencyPropertyValue = (String[]) dialectProxy.getPropertyValue(dependency);
             }
             // Handle as string
@@ -489,8 +473,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             }
 
             // Handle property values as arrays
-            if (dependencyEntry.getKey() == "fvdialect:keyboards"
-                    || dependencyEntry.getKey() == "fvdialect:language_resources") {
+            if (dependencyEntry.getKey().equals("fvdialect:keyboards")
+                    || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
                 dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.toArray(
                         new String[dependencyPublishedPropertyValues.size()]));
             }
@@ -513,7 +497,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
         DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-        if (proxies.size() == 0) {
+        if (proxies.isEmpty()) {
             throw new InvalidParameterException("Dialect should be published");
         }
         DocumentModel dialectSection = proxies.get(0);
@@ -528,7 +512,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
         // Publish changes
         DocumentModel input = session.publishDocument(portal, dialectSection, true);
 
-        Map<String, String> dependencies = new HashMap<String, String>();
+        Map<String, String> dependencies = new HashMap<>();
 
         // Portal
         dependencies.put("fv-portal:featured_words", "fvproxy:proxied_words");
@@ -548,8 +532,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             String[] dependencyPropertyValue;
 
             // Handle expection property values as arrays
-            if (dependencyEntry.getKey() == "fv-portal:featured_words"
-                    || dependencyEntry.getKey() == "fv-portal:related_links") {
+            if (dependencyEntry.getKey().equals("fv-portal:featured_words")
+                    || dependencyEntry.getKey().equals("fv-portal:related_links")) {
                 dependencyPropertyValue = (String[]) input.getPropertyValue(dependency);
             }
             // Handle as string
@@ -585,8 +569,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 }
 
                 // Handle exception property values as arrays
-                if (dependencyEntry.getKey() == "fv-portal:featured_words"
-                        || dependencyEntry.getKey() == "fv-portal:related_links") {
+                if (dependencyEntry.getKey().equals("fv-portal:featured_words")
+                        || dependencyEntry.getKey().equals("fv-portal:related_links")) {
                     String[] property = (String[]) input.getPropertyValue(dependencyEntry.getValue());
 
                     if (property == null) {

@@ -35,7 +35,7 @@ public class AssignOriginListener implements EventListener {
             String currentDocDialect = (String) doc.getPropertyValue("fvancestry:dialect");
             String currentMediaDialect = (String) mediaDoc.getPropertyValue("fvancestry:dialect");
 
-            if (currentOrigin == null && (currentMediaDialect != null && currentMediaDialect == currentDocDialect)) {
+            if (currentOrigin == null && (currentMediaDialect != null && currentMediaDialect.equals(currentDocDialect))) {
                 mediaDoc.setPropertyValue("fvm:origin", doc.getId());
                 session.saveDocument(mediaDoc);
             }

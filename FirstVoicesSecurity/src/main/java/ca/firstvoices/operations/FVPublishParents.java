@@ -40,6 +40,8 @@ public class FVPublishParents extends AbstractFVPublishOperation {
 
     private static final Log log = LogFactory.getLog(FVPublishParents.class);
 
+    private OperationContext ctx;
+
     @Param(name = "stopDocumentType", required = true)
     protected String stopDocumentType;
 
@@ -74,7 +76,7 @@ public class FVPublishParents extends AbstractFVPublishOperation {
         // Run Sub-Automation chain to discover if stopDocumentType is published
         try {
             // Run new operation (Document.GetParent to get parent type
-            OperationContext ctx = new OperationContext(session);
+            ctx = new OperationContext(session);
             ctx.setInput(input);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("type", stopDocumentType);
@@ -88,6 +90,8 @@ public class FVPublishParents extends AbstractFVPublishOperation {
         } catch (OperationException e) {
             // TODO Auto-generated catch block
             log.error(e);
+        } finally {
+            ctx.close();
         }
 
         // Stop Type parent is published

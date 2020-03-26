@@ -153,28 +153,33 @@ public class FVGenerateDocumentWithFormat {
 
                 String pathToNewDocument = getPathToChildInDialect(session,
                         session.getDocument(new IdRef(workInfo.dialectGUID)), DIALECT_RESOURCES_TYPE);
-                wrapper = session.createDocumentModel(pathToNewDocument, workInfo.fileName, FVEXPORT);
 
-                wrapper.setPropertyValue(FVEXPORT_DIALECT, workInfo.dialectGUID);
-                wrapper.setPropertyValue(FVEXPORT_FORMAT, workInfo.exportFormat);
-                wrapper.setPropertyValue(FVEXPORT_QUERY, workInfo.exportQuery);
-                wrapper.setPropertyValue(FVEXPORT_COLUMNS, workInfo.columns.toString());
-                wrapper.setPropertyValue(FVEXPORT_WORK_DIGEST, workInfo.workDigest);
-                wrapper.setPropertyValue(FVEXPORT_DIGEST, workInfo.exportDigest);
-                wrapper.setPropertyValue(FVEXPORT_PROGRESS_STRING, "Started.... ");
-                wrapper.setPropertyValue(FVEXPORT_PROGRESS_VALUE, 0.0);
+                if (pathToNewDocument == null) {
+                    parameters.put("message", "Error:Could not get path to new document.");
+                } else {
+                    wrapper = session.createDocumentModel(pathToNewDocument, workInfo.fileName, FVEXPORT);
 
-                workInfo.wrapper = wrapper;
-                wrapper = session.createDocument(wrapper);
-                session.save();
+                    wrapper.setPropertyValue(FVEXPORT_DIALECT, workInfo.dialectGUID);
+                    wrapper.setPropertyValue(FVEXPORT_FORMAT, workInfo.exportFormat);
+                    wrapper.setPropertyValue(FVEXPORT_QUERY, workInfo.exportQuery);
+                    wrapper.setPropertyValue(FVEXPORT_COLUMNS, workInfo.columns.toString());
+                    wrapper.setPropertyValue(FVEXPORT_WORK_DIGEST, workInfo.workDigest);
+                    wrapper.setPropertyValue(FVEXPORT_DIGEST, workInfo.exportDigest);
+                    wrapper.setPropertyValue(FVEXPORT_PROGRESS_STRING, "Started.... ");
+                    wrapper.setPropertyValue(FVEXPORT_PROGRESS_VALUE, 0.0);
 
-                export_ctx.setProperty(EXPORT_WORK_INFO, workInfo);
-                export_ctx.setProperty(DOCS_TO_EXPORT, workParams.docsToProcess);
-                Event event;
-                event = export_ctx.newEvent(PRODUCE_FORMATTED_DOCUMENT);
-                eventProducer.fireEvent(event);
+                    workInfo.wrapper = wrapper;
+                    wrapper = session.createDocument(wrapper);
+                    session.save();
 
-                parameters.put("message", "Request to export documents in " + format + " was submitted");
+                    export_ctx.setProperty(EXPORT_WORK_INFO, workInfo);
+                    export_ctx.setProperty(DOCS_TO_EXPORT, workParams.docsToProcess);
+                    Event event;
+                    event = export_ctx.newEvent(PRODUCE_FORMATTED_DOCUMENT);
+                    eventProducer.fireEvent(event);
+
+                    parameters.put("message", "Request to export documents in " + format + " was submitted");
+                }
             } else {
                 // return information
                 parameters.put("message", "Error:Nothing to export for " + format);

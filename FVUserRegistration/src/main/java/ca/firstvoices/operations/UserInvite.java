@@ -93,7 +93,7 @@ public class UserInvite {
          */
         utilCommon.registrationCommonSetup(registrationRequest, session, userManager);
 
-        autoAccept = utilCommon.UserInviteCondition(registrationRequest, session, autoAccept);
+        autoAccept = utilCommon.UserInviteCondition(registrationRequest, session);
 
         String registrationId = utilCommon.registrationCommonFinish(registrationService, registrationRequest, info,
                 comment, validationMethod, autoAccept, session);

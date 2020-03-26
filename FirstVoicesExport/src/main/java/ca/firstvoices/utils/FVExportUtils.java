@@ -1,7 +1,5 @@
 package ca.firstvoices.utils;
 
-import static ca.firstvoices.utils.FVExportConstants.DIALECT_RESOURCES_TYPE;
-
 import java.lang.reflect.Constructor;
 import java.security.Principal;
 import java.util.List;
@@ -18,20 +16,18 @@ import ca.firstvoices.format_producers.FV_AbstractProducer;
 import ca.firstvoices.property_readers.FV_AbstractPropertyReader;
 
 public class FVExportUtils {
-    public static DocumentModel findDialectChildWithRef(CoreSession session, DocumentRef dialectRef,
-            String dialectChildType) {
-        DocumentModelList children = session.getChildren(dialectRef);
 
-        DocumentModel foundChild = null;
+    public static DocumentModel findDialectChildWithRef(CoreSession session, DocumentRef dialectRef,
+                                                        String dialectChildType) {
+        DocumentModelList children = session.getChildren(dialectRef);
 
         for (DocumentModel child : children) {
             if (child.getType().equals(dialectChildType)) {
-                foundChild = child;
-                break;
+                return child;
             }
         }
 
-        return foundChild;
+        return null;
     }
 
     public static DocumentModel findDialectChild(DocumentModel dialect, String dialectChildType) {
@@ -42,27 +38,14 @@ public class FVExportUtils {
     public static DocumentModel findChildWithName(CoreSession session, DocumentRef parentRef, String childName) {
         DocumentModelList children = session.getChildren(parentRef);
 
-        DocumentModel foundChild = null;
-
         for (DocumentModel child : children) {
             if (child.getName().equals(childName)) {
-                foundChild = child;
-                break;
+                return child;
             }
         }
 
-        return foundChild;
+        return null;
     }
-
-    public static DocumentModel findExportFileWithName(CoreSession session, DocumentRef dialectRef,
-            String exportFileName) {
-        DocumentModel resDoc = findDialectChildWithRef(session, dialectRef, DIALECT_RESOURCES_TYPE);
-        DocumentModel exportDoc = findChildWithName(session, resDoc.getRef(), exportFileName);
-
-        return exportDoc;
-    }
-
-    // ctx.getProperty(INITIATING_PRINCIPAL)+"-"+ctx.getProperty(DIALECT_NAME_EXPORT)+"-"+ctx.getProperty(EXPORT_FORMAT);
 
     public static String makeExportWorkerID(FVExportWorkInfo info) {
         return info.initiatorName + "-" + info.dialectGUID + "-" + info.exportFormat;
@@ -88,7 +71,7 @@ public class FVExportUtils {
 
     public static String getPathToChildInDialect(CoreSession session, DocumentModel dialect, String childType) {
         DocumentModel resourceFolder = findDialectChildWithRef(session, dialect.getRef(), childType);
-
+        if (resourceFolder == null) return null;
         return resourceFolder.getPathAsString();
     }
 

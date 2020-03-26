@@ -75,7 +75,8 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
                 + principal.getName());
 
         // Skip administrators, system and users who aren't recorders
-        if (additionalPrincipalsList.contains("administrators") || principal.equals("system")
+        if (additionalPrincipalsList.contains("administrators")
+                || principal.getName().equals(SecurityConstants.SYSTEM_USERNAME)
                 || !Arrays.asList(additionalPrincipals).contains("recorders")) {
             return Access.UNKNOWN;
         }

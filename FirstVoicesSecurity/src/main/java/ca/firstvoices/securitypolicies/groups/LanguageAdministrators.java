@@ -32,7 +32,8 @@ public class LanguageAdministrators extends AbstractSecurityPolicy {
                 + principal.getName());
 
         // Skip administrators, system user and groups that aren't language administrators
-        if (additionalPrincipalsList.contains("administrators") || principal.equals(SecurityConstants.SYSTEM_USERNAME)
+        if (additionalPrincipalsList.contains("administrators")
+                || principal.getName().equals(SecurityConstants.SYSTEM_USERNAME)
                 || !additionalPrincipalsList.contains(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP)) {
             return Access.UNKNOWN;
         }
