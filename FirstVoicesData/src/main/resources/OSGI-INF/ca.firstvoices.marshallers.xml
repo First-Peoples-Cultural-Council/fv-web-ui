@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.marshallers" version="1.0.0">
+  <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
+    <register class="ca.firstvoices.marshallers.MarshallerExtendTest" enable="true" />
+  </extension>
+</component>
