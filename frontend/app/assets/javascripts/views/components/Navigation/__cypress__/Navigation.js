@@ -45,7 +45,7 @@ describe('Navigation.js > Navigation side bar', () => {
     cy.wait(1500)
     cy.getByTestId('pageContainer').within(() => {
       // should be color
-      cy.getByText('Workspace', { exact: false })
+      cy.get('Header', { exact: false })
         .should('have.css', 'background-color')
         .and('eq', 'rgb(77, 148, 141)')
     })

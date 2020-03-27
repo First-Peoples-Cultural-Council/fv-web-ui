@@ -8,7 +8,7 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
          */
     cy.visit('/home')
     cy.wait(500)
-    cy.get('[title="Settings"]').click()
+    cy.get('[title="Language Settings"]').click()
 
     /*
             Change the website to French.
@@ -17,6 +17,7 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
     cy.getByText('English').click()
     cy.getByText('Français').click()
     cy.wait(1000)
+    cy.reload()
 
     /*
             Check that various parts of the website are now correctly translated to French.
@@ -27,7 +28,7 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
     })
     cy.get('div.PromiseWrapper').within(() => {
       cy.get('div.row').within(() => {
-        cy.getByText('Commencer!', { exact: false }).should('exist')
+        cy.getByText('Commencer', { exact: false }).should('exist')
       })
     })
 
