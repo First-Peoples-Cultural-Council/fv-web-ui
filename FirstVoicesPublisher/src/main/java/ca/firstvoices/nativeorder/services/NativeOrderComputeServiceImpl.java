@@ -1,22 +1,26 @@
 /*
- * Copyright 2016 First People's Cultural Council
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * /
  */
 package ca.firstvoices.nativeorder.services;
 
+import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-
-import ca.firstvoices.services.AbstractService;
 import org.nuxeo.ecm.core.api.PathRef;
 
 import java.util.Arrays;
@@ -27,15 +31,31 @@ import java.util.stream.Collectors;
 /**
  * @author loopingz
  */
-public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
+public class NativeOrderComputeServiceImpl extends AbstractFirstVoicesPublisherService implements NativeOrderComputeService {
 
-    private DocumentModel[] loadAlphabet(DocumentModel dialect) {
-        DocumentModelList chars = dialect.getCoreSession().getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    private DocumentModel[] loadAlphabet(CoreSession session, DocumentModel dialect) {
+        CoreSession coreSession = session;
+
+        if (session == null) {
+            coreSession = dialect.getCoreSession();
+        }
+
+        DocumentModelList chars = coreSession.getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         return chars
                 .stream()
                 .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
                 .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
                 .toArray(DocumentModel[]::new);
+    }
+
+    private DocumentModelList loadWordsAndPhrases(CoreSession session, DocumentModel dialect) {
+        CoreSession coreSession = session;
+
+        if (coreSession == null) {
+            coreSession = dialect.getCoreSession();
+        }
+
+        return coreSession.getChildren(new PathRef(dialect.getPathAsString() + "/Dictionary"));
     }
 
     /* (non-Javadoc)
@@ -49,11 +69,11 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
         // so, instead of processing all the dialect data, and the alphabet only to do nothing,
         // lets check that here
         if (!asset.isImmutable()) {
-            DocumentModel dialect = getDialect(asset);
-            CoreSession session = asset.getCoreSession();
+            CoreSession coreSession = asset.getCoreSession();
+            DocumentModel dialect = getDialectForDoc(coreSession, asset);
             // First get the native alphabet
-            DocumentModel[] chars = loadAlphabet(dialect);
-            computeNativeOrderTranslation(chars, asset);
+            DocumentModel[] chars = loadAlphabet(coreSession, dialect);
+            performComputeNativeOrderTranslations(coreSession, chars, asset);
         }
     }
 
@@ -62,21 +82,27 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
      * .nuxeo.ecm.core.api.DocumentModel)
      */
     @Override
-    public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
-        CoreSession session = dialect.getCoreSession();
+    public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect) {
+        if (session == null) {
+            session = dialect.getCoreSession();
+        }
         // First get the native alphabet
-        DocumentModel[] chars = loadAlphabet(dialect);
-        computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'"));
-        computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'"));
+        DocumentModel[] chars = loadAlphabet(session, dialect);
+        DocumentModelList wordsAndPhrases = loadWordsAndPhrases(session, dialect);
+        computeNativeOrderTranslation(session, chars, wordsAndPhrases);
         session.save();
     }
 
-    protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModel element) {
+    protected void performComputeNativeOrderTranslations(CoreSession session, DocumentModel[] chars, DocumentModel element) {
         if (element.isImmutable()) {
             // We cannot update this element, no point in going any further
             return;
+        }
+
+        CoreSession coreSession = session;
+
+        if (coreSession == null) {
+            coreSession = element.getCoreSession();
         }
 
         String title = (String) element.getPropertyValue("dc:title");
@@ -123,13 +149,19 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             if (!element.isImmutable()) {
                 element.setPropertyValue("fv:custom_order", nativeTitle);
             }
-            element.getCoreSession().saveDocument(element);
+            coreSession.saveDocument(element);
         }
     }
 
-    protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
+    protected void computeNativeOrderTranslation(CoreSession session, DocumentModel[] chars, DocumentModelList elements) {
         for (DocumentModel doc : elements) {
-            computeNativeOrderTranslation(chars, doc);
+            CoreSession coreSession = session;
+
+            if (coreSession == null) {
+                coreSession = doc.getCoreSession();
+            }
+
+            performComputeNativeOrderTranslations(coreSession, chars, doc);
         }
     }
 
@@ -143,7 +175,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                 // Grab all the characters that begin with the current character (for example, if "current character" is
                 // iterating on "a", it will return "aa" if it is also in the alphabet)
                 List<String> charsStartingWithCurrentCharLower =
-                        fvChars.stream().filter(character -> character != null ? character.startsWith(charValue) : false).collect(Collectors.toList());
+                        fvChars.stream().filter(character -> character != null && character.startsWith(charValue)).collect(Collectors.toList());
                 // Go through the characters that begin with the "current character", and ensure that the title does not
                 // start with any character in that list (save for the "current character" that we're iterating on).
                 incorrect =

@@ -1,7 +1,25 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.publisher.services;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
-import ca.firstvoices.services.AbstractService;
+import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
@@ -17,7 +35,7 @@ import java.util.Map.Entry;
 /**
  * @author loopingz
  */
-public class FirstVoicesPublisherServiceImpl extends AbstractService implements FirstVoicesPublisherService {
+public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublisherService implements FirstVoicesPublisherService {
 
     protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
         if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
@@ -153,7 +171,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     public DocumentModel publishAsset(DocumentModel asset) {
         CoreSession session = asset.getCoreSession();
 
-        DocumentModel dialect = getDialect(asset);
+        DocumentModel dialect = getDialectForDoc(session, asset);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
@@ -245,7 +263,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     public DocumentModel republishAsset(DocumentModel asset) {
         CoreSession session = asset.getCoreSession();
 
-        DocumentModel dialect = getDialect(asset);
+        DocumentModel dialect = getDialectForDoc(session, asset);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
@@ -492,7 +510,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     public DocumentModel publishPortalAssets(DocumentModel portal) {
         CoreSession session = portal.getCoreSession();
 
-        DocumentModel dialect = getDialect(portal);
+        DocumentModel dialect = getDialectForDoc(session, portal);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }

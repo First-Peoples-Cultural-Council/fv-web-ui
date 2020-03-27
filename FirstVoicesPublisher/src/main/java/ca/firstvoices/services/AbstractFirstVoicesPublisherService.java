@@ -16,15 +16,31 @@
  * /
  */
 
-package ca.firstvoices.nativeorder.services;
+package ca.firstvoices.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 
-public interface NativeOrderComputeService {
+public abstract class AbstractFirstVoicesPublisherService {
 
-    void computeAssetNativeOrderTranslation(DocumentModel asset);
+    protected DocumentModel getDialectForDoc(CoreSession s, DocumentModel doc) {
+        if ("FVDialect".equals(doc.getType())) {
+            return doc; // doc is dialect
+        }
 
-    void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect);
+        CoreSession coreSession = s;
 
+        if (s == null) {
+            coreSession = doc.getCoreSession();
+        }
+
+        DocumentRef parentRef = doc.getParentRef();
+        DocumentModel parent = coreSession.getDocument(parentRef);
+        if (parent != null) {
+            return getDialectForDoc(coreSession, parent);
+        } else {
+            return null;
+        }
+    }
 }

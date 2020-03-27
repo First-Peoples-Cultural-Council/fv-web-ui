@@ -1,8 +1,25 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.nativeorder.operations;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import ca.firstvoices.workers.ComputeDialectNativeOrderTranslationWorker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -15,9 +32,11 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  *
@@ -47,7 +66,9 @@ public class ComputeNativeOrderForDialect {
 
         // Check if dialect
         if (input.getType().equals("FVDialect")) {
-            service.computeDialectNativeOrderTranslation(input);
+            ComputeDialectNativeOrderTranslationWorker worker = new ComputeDialectNativeOrderTranslationWorker(ctx.getPrincipal().getName(), input);
+            WorkManager workManager = Framework.getService(WorkManager.class);
+            workManager.schedule(worker);
 
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("message", "Dialect sort order updated. Republish if needed.");
