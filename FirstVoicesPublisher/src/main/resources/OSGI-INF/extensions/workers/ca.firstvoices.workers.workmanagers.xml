@@ -17,7 +17,7 @@
   ~ */
   -->
 
-<component name="ca.firstvoices.workers.workmanager">
+<component name="ca.firstvoices.workers.workmanagers">
     <extension target="org.nuxeo.ecm.core.work.service" point="queues">
         <queue id="computeDialectNativeOrderTranslationQueue">
             <name>Queue for recomputing native order</name>

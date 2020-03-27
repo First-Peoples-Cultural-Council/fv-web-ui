@@ -68,7 +68,6 @@ public class ComputeNativeOrderAlphabetListener extends AbstractFirstVoicesPubli
             ComputeDialectNativeOrderTranslationWorker worker = new ComputeDialectNativeOrderTranslationWorker(ctx.getPrincipal().getName(), dialect);
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(worker);
-//            service.computeDialectNativeOrderTranslation(dialect);
         }
     }
 }
