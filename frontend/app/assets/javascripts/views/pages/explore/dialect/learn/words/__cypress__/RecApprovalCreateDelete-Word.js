@@ -192,6 +192,7 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
       .should(($el) => {
         expect($el).to.not.be.visible
       })
+    cy.wait(1500)
     cy.getByText('No Results Found', { exact: false }).should('be.visible')
   })
 })
