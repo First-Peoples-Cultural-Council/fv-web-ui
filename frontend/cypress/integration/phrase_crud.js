@@ -279,7 +279,7 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
 
     // UPDATE
     cy.logger({ type: 'header', text: 'UPDATE' })
-    cy.getByText('Edit phrase', { exact: false })
+    cy.getByText('Edit', { exact: false })
       .parents('button:first')
       .click()
     cy.wait(waitShort)

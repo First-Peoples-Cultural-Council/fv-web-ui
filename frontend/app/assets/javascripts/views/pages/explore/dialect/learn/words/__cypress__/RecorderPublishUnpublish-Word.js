@@ -25,13 +25,31 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.wait(500)
     cy.getByText('TestWord').click()
     cy.wait(1500)
-    cy.getByText('Publish (0)', { exact: true }).click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish').should('exist')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
     cy.reload()
     cy.wait(1500)
-    cy.getByText('Publish (1)').should('have.css', 'cursor', 'pointer')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish')
+            cy.getByText('(1)').should('have.css', 'cursor', 'pointer')
+          })
+      })
+    })
     cy.logout()
 
     /*
@@ -59,13 +77,31 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByText('TestWord').click()
     cy.wait(1500)
-    cy.getByText('Publish (0)', { exact: true }).click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
     cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
       cy.getByText('Publish', { exact: true }).click()
     })
     cy.reload()
     cy.wait(1500)
-    cy.getByText('Publish (1)').should('exist')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish')
+            cy.getByText('(1)').should('exist')
+          })
+      })
+    })
     cy.logout()
 
     /*
@@ -109,8 +145,26 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByText('TestWord').click()
     cy.wait(1500)
-    cy.getByText('Unpublish (0)', { exact: true }).click()
-    cy.getByText('Unpublish (1)').should('exist')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(3)
+          .within(() => {
+            cy.getByText('Unpublish')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(3)
+          .within(() => {
+            cy.getByText('Unpublish').should('exist')
+            cy.getByText('(1)').should('exist')
+          })
+      })
+    })
     cy.logout()
 
     /*
@@ -146,8 +200,26 @@ describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () 
     cy.getByTestId('DictionaryList__row').scrollIntoView()
     cy.getByText('TestWord').click()
     cy.wait(1500)
-    cy.getByText('Unpublish (0)', { exact: true }).click()
-    cy.getByText('Unpublish (1)').should('exist')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(3)
+          .within(() => {
+            cy.getByText('Unpublish')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(3)
+          .within(() => {
+            cy.getByText('Unpublish').should('exist')
+            cy.getByText('(1)').should('exist')
+          })
+      })
+    })
     cy.logout()
 
     /*
