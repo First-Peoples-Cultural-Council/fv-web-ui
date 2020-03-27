@@ -178,6 +178,7 @@ export class MediaView extends Component {
           type={computeResourceType}
         />
       ) : null
+
     return (
       <PromiseWrapper computeEntities={_computeEntities}>
         {(() => {
@@ -185,7 +186,7 @@ export class MediaView extends Component {
             if (selectn('response', computeResource))
               return (
                 <PageToolbar
-                  label={this.props.intl('media', 'Media', 'first')}
+                  label={this.props.intl.trans('media', 'Media', 'first')}
                   handleNavigateRequest={this.onNavigateRequest}
                   actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
                   computeEntity={computeResource}
@@ -205,17 +206,17 @@ export class MediaView extends Component {
               <Card>
                 <FVTab
                   tabItems={[
-                    { label: this.props.intl('overview', 'Overview', 'first'), dataTestId: 'tabOverview' },
+                    { label: this.props.intl.trans('overview', 'Overview', 'first'), dataTestId: 'tabOverview' },
                     {
                       label: UIHelpers.isViewSize('xs')
-                        ? this.props.intl('words', 'Words', 'first')
-                        : this.props.intl('linked_words', 'Linked Words', 'words'),
+                        ? this.props.intl.trans('words', 'Words', 'first')
+                        : this.props.intl.trans('linked_words', 'Linked Words', 'words'),
                       id: 'find_words',
                     },
                     {
                       label: UIHelpers.isViewSize('xs')
-                        ? this.props.intl('phrases', 'Phrases', 'first')
-                        : this.props.intl('linked_phrases', 'Linked Phrases', 'words'),
+                        ? this.props.intl.trans('phrases', 'Phrases', 'first')
+                        : this.props.intl.trans('linked_phrases', 'Linked Phrases', 'words'),
                       id: 'find_phrases',
                     },
                   ]}
@@ -236,7 +237,7 @@ export class MediaView extends Component {
                               return (
                                 <div>
                                   <List
-                                    subheader={this.props.intl(
+                                    subheader={this.props.intl.trans(
                                       'views.pages.explore.dialect.media.available_renditions',
                                       'Available Renditions'
                                     )}
@@ -293,11 +294,7 @@ export class MediaView extends Component {
                                         color="secondary"
                                         onClick={() => this.setState({ showThumbnailDialog: null })}
                                       >
-                                        <FVLabel
-                                          transKey="close"
-                                          defaultStr="Close"
-                                          transform="first"
-                                        />
+                                        <FVLabel transKey="close" defaultStr="Close" transform="first" />
                                       </FVButton>
                                     </DialogActions>
                                   </Dialog>
@@ -367,7 +364,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          this.props.intl(
+          this.props.intl.trans(
             'views.pages.explore.dialect.media.request_to_enable_success',
             'Request to enable resource successfully submitted!'
           ),
@@ -378,7 +375,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          this.props.intl('views.pages.explore.dialect.media.resource_enabled', 'Resource enabled!')
+          this.props.intl.trans('views.pages.explore.dialect.media.resource_enabled', 'Resource enabled!')
         )
       }
     } else {
@@ -390,7 +387,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          this.props.intl(
+          this.props.intl.trans(
             'views.pages.explore.dialect.media.request_to_disable_success',
             'Request to disable resource successfully submitted!'
           ),
@@ -401,7 +398,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          this.props.intl('views.pages.explore.dialect.media.resource_disabled', 'Resource disabled!')
+          this.props.intl.trans('views.pages.explore.dialect.media.resource_disabled', 'Resource disabled!')
         )
       }
     }
@@ -422,7 +419,10 @@ export class MediaView extends Component {
       this._getMediaPath(),
       null,
       null,
-      this.props.intl('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
+      this.props.intl.trans(
+        'views.pages.explore.dialect.media.resource_published_success',
+        'Resource published successfully!'
+      )
     )
   }
 
@@ -450,7 +450,10 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          this.props.intl('views.pages.explore.dialect.media.resource_published_success', 'Resource published successfully!')
+          this.props.intl.trans(
+            'views.pages.explore.dialect.media.resource_published_success',
+            'Resource published successfully!'
+          )
         )
       }
     } else {
@@ -462,7 +465,7 @@ export class MediaView extends Component {
             start: 'true',
           },
           null,
-          this.props.intl(
+          this.props.intl.trans(
             'views.pages.explore.dialect.media.request_to_unpublic_success',
             'Request to unpublish resource successfully submitted!'
           ),
@@ -473,7 +476,7 @@ export class MediaView extends Component {
           this._getMediaPath(),
           null,
           null,
-          this.props.intl(
+          this.props.intl.trans(
             'views.pages.explore.dialect.media.resource_unpublished_success',
             'Resource unpublished successfully!'
           )
