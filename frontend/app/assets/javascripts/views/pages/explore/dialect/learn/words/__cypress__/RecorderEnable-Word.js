@@ -32,11 +32,33 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.getByText('TestWord', { exact: false }).scrollIntoView()
     cy.getByText('TestWord').click()
     cy.wait(500)
-    cy.getByText('Enable (0)', { exact: true }).click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(0)
+          .within(() => {
+            cy.getByText('Enable')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
-    cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
-    cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(0)
+          .within(() => {
+            cy.getByText('Enable')
+            cy.getByText('(1)').should('exist')
+          })
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.getByText('Publish').should('have.css', 'cursor', 'default')
+          })
+      })
+    })
     cy.logout()
 
     /*
@@ -67,11 +89,33 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       cy.getByText('TestWord').click()
     })
     cy.wait(500)
-    cy.getByText('Enable (0)', { exact: true }).click()
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(0)
+          .within(() => {
+            cy.getByText('Enable')
+            cy.getByText('(0)').click()
+          })
+      })
+    })
     cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
-    cy.getByText('Enable (1)', { exact: true }).should('exist')
-    cy.getByText('Publish (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
-    cy.getByText('Publish (0)').should('have.css', 'cursor', 'default')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(0)
+          .within(() => {
+            cy.getByText('Enable')
+            cy.getByText('(1)').should('exist')
+          })
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.getByText('Publish').should('have.css', 'cursor', 'default')
+          })
+      })
+    })
     cy.logout()
 
     /*
@@ -119,8 +163,21 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
       cy.getByText('TestWord').click()
     })
     cy.wait(500)
-    cy.getByText('Enable (0)').should('have.css', 'color', 'rgb(161, 161, 161)')
-    cy.getByText('Enable (0)').should('have.css', 'cursor', 'default')
-    cy.getByText('Publish (0)').should('have.css', 'cursor', 'pointer')
+    cy.getByTestId('pageContainer').within(() => {
+      cy.get('.PageToolbar__request').within(() => {
+        cy.get('.PageToolbar__button')
+          .eq(0)
+          .within(() => {
+            cy.getByText('Enable')
+            cy.getByText('(0)').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.getByText('(0)').should('have.css', 'cursor', 'default')
+          })
+        cy.get('.PageToolbar__button')
+          .eq(2)
+          .within(() => {
+            cy.getByText('Publish').should('have.css', 'cursor', 'pointer')
+          })
+      })
+    })
   })
 })

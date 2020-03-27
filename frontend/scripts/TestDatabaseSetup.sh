@@ -153,6 +153,14 @@ if [[ "$?" -ne 0 ]]; then
   echo
 fi
 echo
+# Publish the language TestLanguageThree
+echo "Publishing language TestLanguageThree"
+response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test/TestLanguageThree","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+if [[ "$response" -ne 200 ]]; then
+    echo -e 'TestLanguageThree publish failed: Error ' $response ' \n'; exit 1
+    echo
+fi
+echo
 
 # Create a fresh TestLanguageFour directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageFour
@@ -162,9 +170,9 @@ if [[ "$?" -ne 0 ]]; then
 fi
 # Publish the language TestLanguageFour
 echo "Publishing language TestLanguageFour"
-responseThree=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test/TestLanguageFour","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
-if [[ "$responseThree" -ne 200 ]]; then
-    echo -e 'TestLanguageFour publish failed: Error ' $responseThree ' \n'; exit 1
+response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/javascript.FVPublishOrRepublish' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test/TestLanguageFour","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
+if [[ "$response" -ne 200 ]]; then
+    echo -e 'TestLanguageFour publish failed: Error ' $response ' \n'; exit 1
     echo
 fi
 echo

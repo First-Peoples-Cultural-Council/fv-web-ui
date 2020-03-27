@@ -59,14 +59,12 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
           cy.getByText('Create Link').click()
         })
     })
-    cy.getByText('Add New Link To Testlanguagesix')
-      .parent()
-      .within(() => {
-        cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
-        cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
-        cy.get('[name="fvlink:url"]').type('http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
-        cy.getByText('Save').click()
-      })
+    cy.getByTestId('DialogCreateForm__DialogContent').within(() => {
+      cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
+      cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
+      cy.get('[name="fvlink:url"]').type('http://127.0.0.1:3001/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
+      cy.getByText('Save').click()
+    })
 
     /*
             Add audio to the portal.
@@ -74,18 +72,15 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new audio in the testlanguagesix dialect')
-      .parent()
-      .parent()
-      .within(() => {
-        cy.get('[name="dc:title"]').type('TestPortalAudio')
-        cy.get('[name="dc:description"]').type('TestPortalAudioDescription')
-        const fileName = 'TestRelatedAudio.wav'
-        cy.fixture(fileName, 'base64').then((fileContent) => {
-          cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
-        })
-        cy.getByText('Upload Media', { exact: true }).click()
+    cy.getByTestId('AddMediaComponent').within(() => {
+      cy.get('[name="dc:title"]').type('TestPortalAudio')
+      cy.get('[name="dc:description"]').type('TestPortalAudioDescription')
+      const fileName = 'TestRelatedAudio.wav'
+      cy.fixture(fileName, 'base64').then((fileContent) => {
+        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
+      cy.getByText('Upload Media', { exact: true }).click()
+    })
     cy.wait(2000)
     cy.getByText('Insert into entry').click()
 
@@ -95,18 +90,15 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new picture in the testlanguagesix dialect')
-      .parent()
-      .parent()
-      .within(() => {
-        cy.get('[name="dc:title"]').type('TestPortalBackgroundImage')
-        cy.get('[name="dc:description"]').type('TestPortalBackgroundImageDescription')
-        const fileName = 'TestBackgroundImage.jpg'
-        cy.fixture(fileName, 'base64').then((fileContent) => {
-          cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/jpg', encoding: 'base64' })
-        })
-        cy.getByText('Upload Media', { exact: true }).click()
+    cy.getByTestId('AddMediaComponent').within(() => {
+      cy.get('[name="dc:title"]').type('TestPortalBackgroundImage')
+      cy.get('[name="dc:description"]').type('TestPortalBackgroundImageDescription')
+      const fileName = 'TestBackgroundImage.jpg'
+      cy.fixture(fileName, 'base64').then((fileContent) => {
+        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/jpg', encoding: 'base64' })
       })
+      cy.getByText('Upload Media', { exact: true }).click()
+    })
     cy.wait(2000)
     cy.getByText('Insert into entry').click()
 
@@ -116,18 +108,15 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByText('Create new picture in the testlanguagesix dialect')
-      .parent()
-      .parent()
-      .within(() => {
-        cy.get('[name="dc:title"]').type('TestLogoBackgroundImage')
-        cy.get('[name="dc:description"]').type('TestLogoBackgroundImageDescription')
-        const fileName = 'TestRelatedImage.png'
-        cy.fixture(fileName, 'base64').then((fileContent) => {
-          cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
-        })
-        cy.getByText('Upload Media', { exact: true }).click()
+    cy.getByTestId('AddMediaComponent').within(() => {
+      cy.get('[name="dc:title"]').type('TestLogoBackgroundImage')
+      cy.get('[name="dc:description"]').type('TestLogoBackgroundImageDescription')
+      const fileName = 'TestRelatedImage.png'
+      cy.fixture(fileName, 'base64').then((fileContent) => {
+        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
+      cy.getByText('Upload Media', { exact: true }).click()
+    })
     cy.wait(2000)
     cy.getByText('Insert into entry').click()
 
@@ -172,7 +161,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
         Check that the information is visible on the public view
      */
     cy.getByText('Publish Changes').click()
-    cy.queryByText('Portal Published Successfully!').should('exist')
+    cy.queryByText('Portal published successfully!!').should('exist')
     cy.getByText('Public View').click()
     cy.wait(1000)
     cy.get('#portalFeaturedAudio').should('exist')
