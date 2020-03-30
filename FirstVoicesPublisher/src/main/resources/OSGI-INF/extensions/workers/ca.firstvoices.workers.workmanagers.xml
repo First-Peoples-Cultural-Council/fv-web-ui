@@ -23,7 +23,7 @@
             <name>Queue for recomputing native order</name>
             <maxThreads>1</maxThreads>
             <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
-            <category>cyclic</category>
+            <category>computeDialectNativeOrderTranslation</category>
         </queue>
     </extension>
     <require>ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl</require>

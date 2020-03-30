@@ -27,7 +27,7 @@ import org.nuxeo.runtime.api.Framework;
 public class ComputeDialectNativeOrderTranslationWorker extends AbstractWork {
 
     private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION = "computeDialectNativeOrderTranslation";
-    private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION_QUEUE = "computeDialectNativeOrderTranslationQueue";
+    private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION_QUEUE = "computeDialectNativeOrderTranslation";
 
     private NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
     private String repositoryName;
