@@ -1,24 +1,36 @@
 version: '3'
 services:
-    db:
-        image: postgres
-        restart: always
+#    db:
+#        image: postgres
+#        restart: always
+#        environment:
+#            - POSTGRES_PASSWORD=local_db_pass
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+        container_name: elasticsearch
+        ports:
+            - '9200:9200'
+            - '9300:9300'
         environment:
-            - POSTGRES_PASSWORD=local_db_pass
+            - discovery.type=single-node
     nuxeo:
+        image: me/nuxeo-dev
         container_name: nuxeo-dev
         volumes:
-            - '~/Dev/Dependencies/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp'
-            - '~/Dev/Dependencies/nuxeo_dev_docker/data:/opt/nuxeo/ext_data'
-            - '~/Dev/Dependencies/nuxeo_dev_docker/logs:/var/log/nuxeo'
+            - '${PWD}/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp'
+            - '${PWD}/nuxeo_dev_docker/data:/opt/nuxeo/ext_data'
+            - '${PWD}/nuxeo_dev_docker/logs:/var/log/nuxeo'
         ports:
             - '8080:8080'
             - '8787:8787'
-            - '3002:3001'
         environment:
             - NUXEO_PACKAGES=nuxeo-dam nuxeo-jsf-ui
             - NUXEO_AUTOMATION_TRACE=true
             - NUXEO_DEV_MODE=true
             - NUXEO_DATA=/opt/nuxeo/ext_data
             - NUXEO_CLID=CLID
-        image: me/nuxeo-dev
+            - NUXEO_URL=http://localhost:8080/nuxeo
+            - CYPRESS_FV_USERNAME
+            - CYPRESS_FV_PASSWORD
+        depends_on:
+            - elasticsearch
