@@ -1,25 +1,29 @@
 
 /*
- * Copyright 2016 First People's Cultural Council
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * /
  */
 
 package ca.firstvoices.listeners;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.inject.Inject;
-
+import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import ca.firstvoices.schedulers.ComputeNativeOrderDialectsScheduler;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -27,20 +31,21 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.trash.TrashService;
-import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.RuntimeFeature;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import javax.inject.Inject;
+import java.text.SimpleDateFormat;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author loopingz
  */
 @RunWith(FeaturesRunner.class)
-@Features({RuntimeFeature.class, CoreFeature.class, PlatformFeature.class})
+@Features({PlatformFeature.class})
 @Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform",
         "org.nuxeo.ecm.platform.commandline.executor",
         "org.nuxeo.ecm.platform.picture.core",
@@ -51,7 +56,9 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
         "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
         "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
         "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.computeschedule.xml"
+})
 public class FirstVoicesNativeOrderTest {
     @Inject
     protected CoreSession session;
@@ -60,13 +67,16 @@ public class FirstVoicesNativeOrderTest {
     protected NativeOrderComputeService nativeOrderComputeService;
 
     @Inject
+    protected ComputeNativeOrderDialectsScheduler computeNativeOrderDialectsScheduler;
+
+    @Inject
     protected TrashService trashService;
 
     private DocumentModel domain;
     private DocumentModel dialect;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         domain = createDocument(session.createDocumentModel("/", "FV", "Domain"));
         createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
         createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
@@ -74,7 +84,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (domain != null) {
             session.removeDocument(domain.getRef());
             session.save();
@@ -138,7 +148,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() throws Exception {
+    public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() {
         String[] orderedWords = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
                 "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â", "ã",
                 "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö", "÷",
@@ -185,7 +195,7 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testDialectOrderingPhrases() throws Exception {
+    public void testDialectOrderingPhrases() {
         String[] orderedPhrases = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î",
                 "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
                 "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "õ", "ö",
@@ -304,6 +314,23 @@ public class FirstVoicesNativeOrderTest {
         }
     }
 
+    @Test
+    @Ignore
+    //    TODO: Finish Unit Test
+    public void testcomputeNativeOrderDialectsScheduler() {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        DocumentModel di2 = createDocument(session.createDocumentModel("/Family/Language", "Dialect2", "FVDialect"));
+        DocumentModel di3 = createDocument(session.createDocumentModel("/Family/Language", "Dialect3", "FVDialect"));
+        DocumentModel di4 = createDocument(session.createDocumentModel("/Family/Language", "Dialect4", "FVDialect"));
+        DocumentModel di5 = createDocument(session.createDocumentModel("/Family/Language", "Dialect5", "FVDialect"));
+
+        computeNativeOrderDialectsScheduler.computeDialectsOnSchedule(session);
+        session.save();
+
+    }
+
     private DocumentModel createDocument(DocumentModel model) {
         model.setPropertyValue("dc:title", model.getName());
         return session.createDocument(model);
@@ -320,11 +347,9 @@ public class FirstVoicesNativeOrderTest {
     }
 
     private void createUnorderedAlphabet(String[] alphabet, String path) {
-        Integer i = 0;
         for (String letter : alphabet) {
             DocumentModel letterDoc = session.createDocumentModel(path, letter, "FVCharacter");
             createDocument(letterDoc);
-            i++;
         }
     }
 
