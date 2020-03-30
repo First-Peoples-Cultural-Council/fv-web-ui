@@ -18,10 +18,7 @@
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,90 +30,67 @@ import java.util.stream.Collectors;
  */
 public class NativeOrderComputeServiceImpl extends AbstractFirstVoicesPublisherService implements NativeOrderComputeService {
 
-    private DocumentModel[] loadAlphabet(CoreSession session, DocumentModel dialect) {
-        CoreSession coreSession = session;
+    private CoreSession session;
 
-        if (session == null) {
-            coreSession = dialect.getCoreSession();
-        }
-
-        DocumentModelList chars = coreSession.getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-        return chars
-                .stream()
-                .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-                .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
-                .toArray(DocumentModel[]::new);
-    }
-
-    private DocumentModelList loadWordsAndPhrases(CoreSession session, DocumentModel dialect) {
-        CoreSession coreSession = session;
-
-        if (coreSession == null) {
-            coreSession = dialect.getCoreSession();
-        }
-
-        return coreSession.getChildren(new PathRef(dialect.getPathAsString() + "/Dictionary"));
-    }
-
-    /* (non-Javadoc)
-     * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
-     * .ecm.core.api.DocumentModel)
-     */
     @Override
-    public void computeAssetNativeOrderTranslation(DocumentModel asset) {
-        // appears that there's a lot of processing going on within the following methods
-        // last of which, computeNativeOrderTranslation will just return if the asset is immutable
-        // so, instead of processing all the dialect data, and the alphabet only to do nothing,
-        // lets check that here
-        if (!asset.isImmutable()) {
-            CoreSession coreSession = asset.getCoreSession();
-            DocumentModel dialect = getDialectForDoc(coreSession, asset);
+    public void computeNativeOrderTranslation(CoreSession coreSession, DocumentModel asset) {
+        session = coreSession;
+
+        String type = asset.getType();
+
+        if (type.equals("FVDialect")) {
+            computeForDialect(asset);
+        } else if (type.equals("FVCharacter")) {
+            computeOnCharacterChange(asset);
+        } else if (type.equals("FVPhrase") || type.equals("FVWord")) {
+            computeOnWordOrPhraseChange(asset);
+        } else {
+            throw new NuxeoException("Cannot compute native order on document type: " + type);
+        }
+    }
+
+    private void computeOnWordOrPhraseChange(DocumentModel wordOrPhrase) {
+        if (!wordOrPhrase.isImmutable()) {
+            DocumentModel dialect = getDialectForDoc(session, wordOrPhrase);
             // First get the native alphabet
-            DocumentModel[] chars = loadAlphabet(coreSession, dialect);
-            performComputeNativeOrderTranslations(coreSession, chars, asset);
+            DocumentModel[] chars = loadAlphabet(dialect);
+            String nativeTitle = translateNativeTitle(chars, wordOrPhrase);
+            String originalCustomSort = (String) wordOrPhrase.getPropertyValue("fv:custom_order");
+
+            if (originalCustomSort == null || !nativeTitle.equals(originalCustomSort)) {
+                session.saveDocument(wordOrPhrase);
+            }
         }
     }
 
-    /* (non-Javadoc)
-     * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeDialectNativeOrderTranslation(org
-     * .nuxeo.ecm.core.api.DocumentModel)
-     */
-    @Override
-    public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect) {
-        if (session == null) {
-            session = dialect.getCoreSession();
-        }
-        // First get the native alphabet
-        DocumentModel[] chars = loadAlphabet(session, dialect);
-        DocumentModelList wordsAndPhrases = loadWordsAndPhrases(session, dialect);
-        computeNativeOrderTranslation(session, chars, wordsAndPhrases);
-        session.save();
+    private void computeOnCharacterChange(DocumentModel character) {
+        DocumentModel dialect = getDialectForDoc(session, character);
+        DocumentModel[] chars = Arrays.stream(loadAlphabet(dialect)).map(c -> c.getId().equals(character.getId()) ? character : c).toArray(DocumentModel[]::new);
+        DocumentModelList wordsAndPhrases = loadWordsAndPhrases(dialect);
+        computeNativeOrderTranslation(chars, wordsAndPhrases);
     }
 
-    protected void performComputeNativeOrderTranslations(CoreSession session, DocumentModel[] chars, DocumentModel element) {
+    private void computeForDialect(DocumentModel dialect) {
+        DocumentModel[] chars = loadAlphabet(dialect);
+        DocumentModelList wordsAndPhrases = loadWordsAndPhrases(dialect);
+        computeNativeOrderTranslation(chars, wordsAndPhrases);
+    }
+
+    private String translateNativeTitle(DocumentModel[] chars, DocumentModel element) {
         if (element.isImmutable()) {
             // We cannot update this element, no point in going any further
-            return;
-        }
-
-        CoreSession coreSession = session;
-
-        if (coreSession == null) {
-            coreSession = element.getCoreSession();
+            return null;
         }
 
         String title = (String) element.getPropertyValue("dc:title");
         String nativeTitle = "";
-        List<String> fvChars =
-                Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title")).collect(Collectors.toList());
-        List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue(
-                "fvcharacter:upper_case_character")).collect(Collectors.toList());
 
-        String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
+        List<String> fvChars = Arrays.stream(chars).map(documentModel -> (String) documentModel.getPropertyValue("dc:title")).collect(Collectors.toList());
+
+        List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character")).collect(Collectors.toList());
 
         while (title.length() > 0) {
             boolean found = false;
-            // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
             int i;
 
             for (i = chars.length - 1; i >= 0; --i) {
@@ -141,28 +115,37 @@ public class NativeOrderComputeServiceImpl extends AbstractFirstVoicesPublisherS
             }
         }
 
+        return nativeTitle;
+    }
 
-        // In the case that the sorting methods are the same,
-        // we don't want to trigger subsequent events that are listening for a save.
-        // Just keep the sorting order on the document as it was. No need to save.
-        if (originalCustomSort == null || !nativeTitle.equals(originalCustomSort)) {
-            if (!element.isImmutable()) {
-                element.setPropertyValue("fv:custom_order", nativeTitle);
+    private void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
+        for (DocumentModel doc : elements) {
+            String nativeTitle = translateNativeTitle(chars, doc);
+            String originalCustomSort = (String) doc.getPropertyValue("fv:custom_order");
+
+            // In the case that the sorting methods are the same,
+            // we don't want to trigger subsequent events that are listening for a save.
+            // Just keep the sorting order on the document as it was. No need to save.
+            if (originalCustomSort == null || !nativeTitle.equals(originalCustomSort)) {
+                if (!doc.isImmutable()) {
+                    doc.setPropertyValue("fv:custom_order", nativeTitle);
+                }
+                session.saveDocument(doc);
             }
-            coreSession.saveDocument(element);
         }
     }
 
-    protected void computeNativeOrderTranslation(CoreSession session, DocumentModel[] chars, DocumentModelList elements) {
-        for (DocumentModel doc : elements) {
-            CoreSession coreSession = session;
+    private DocumentModel[] loadAlphabet(DocumentModel dialect) {
+        DocumentModelList chars = session.getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        return chars
+                .stream()
+                .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+                .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+                .toArray(DocumentModel[]::new);
+    }
 
-            if (coreSession == null) {
-                coreSession = doc.getCoreSession();
-            }
-
-            performComputeNativeOrderTranslations(coreSession, chars, doc);
-        }
+    private DocumentModelList loadWordsAndPhrases(DocumentModel dialect) {
+        return session.getChildren(new PathRef(dialect.getPathAsString() + "/Dictionary"));
     }
 
     private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars, String charValue,

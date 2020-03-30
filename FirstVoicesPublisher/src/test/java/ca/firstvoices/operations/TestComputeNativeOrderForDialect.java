@@ -29,7 +29,6 @@ import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.work.WorkManagerFeature;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -42,14 +41,12 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(FeaturesRunner.class)
-@Features({PlatformFeature.class, AutomationFeature.class, WorkManagerFeature.class})
+@Features({PlatformFeature.class, AutomationFeature.class})
 @Deploy({"org.nuxeo.ecm.automation.jsf", "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
         "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
         "org.nuxeo.ecm.automation.scripting", "FirstVoicesData", "FirstVoicesNuxeoPublisher",
         "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
-        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/workers/ca.firstvoices.workers.workmanagers.xml"
-})
+        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 public class TestComputeNativeOrderForDialect {
 
     @Inject
@@ -69,9 +66,8 @@ public class TestComputeNativeOrderForDialect {
         dialectDoc = session.createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
     }
 
-    //    Ignore until figure out why not working.
-    @Ignore
     @Test
+    @Ignore
     public void testOperation() throws OperationException {
 
         final String path = "/default-domain";

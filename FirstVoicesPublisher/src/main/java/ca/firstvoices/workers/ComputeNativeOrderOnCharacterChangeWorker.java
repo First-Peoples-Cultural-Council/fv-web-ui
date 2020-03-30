@@ -24,10 +24,9 @@ import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 
-public class ComputeDialectNativeOrderTranslationWorker extends AbstractWork {
+public class ComputeNativeOrderOnCharacterChangeWorker extends AbstractWork {
 
     private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION = "computeDialectNativeOrderTranslation";
-    private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION_QUEUE = "computeDialectNativeOrderTranslation";
 
     private NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
     private String repositoryName;
@@ -35,11 +34,11 @@ public class ComputeDialectNativeOrderTranslationWorker extends AbstractWork {
     private String userName;
 
 
-    public ComputeDialectNativeOrderTranslationWorker(String userName, DocumentModel dialect) {
+    public ComputeNativeOrderOnCharacterChangeWorker(String userName, DocumentModel document) {
         super(COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION);
         setStatus("Instantiating worker " + getId());
         this.userName = userName;
-        this.document = dialect;
+        this.document = document;
         this.repositoryName = Framework.getService(RepositoryManager.class).getDefaultRepositoryName();
         setStatus("Finished Instantiating worker " + getId());
         setProgress(new Progress(20));
@@ -47,7 +46,7 @@ public class ComputeDialectNativeOrderTranslationWorker extends AbstractWork {
 
     @Override
     public String getCategory() {
-        return COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION_QUEUE;
+        return COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION;
     }
 
     @Override
@@ -62,8 +61,7 @@ public class ComputeDialectNativeOrderTranslationWorker extends AbstractWork {
         setStatus("Finished opening a user session for user: " + userName + " for worker " + getId());
         setStatus("Starting Work");
         setProgress(new Progress(60));
-        DocumentModel documentModel = session.getDocument(getDocument().getDocRef());
-        service.computeDialectNativeOrderTranslation(session, documentModel);
+        service.computeNativeOrderTranslation(session, document);
         setStatus("Done work. Closing user session for user: " + userName + " for worker " + getId());
         setProgress(new Progress(80));
         closeSession();

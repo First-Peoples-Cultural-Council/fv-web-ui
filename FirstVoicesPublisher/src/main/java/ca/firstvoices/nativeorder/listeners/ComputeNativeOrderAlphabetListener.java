@@ -22,8 +22,7 @@
 package ca.firstvoices.nativeorder.listeners;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
-import ca.firstvoices.workers.ComputeDialectNativeOrderTranslationWorker;
-import org.nuxeo.ecm.core.api.CoreSession;
+import ca.firstvoices.workers.ComputeNativeOrderOnCharacterChangeWorker;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.Event;
@@ -60,12 +59,8 @@ public class ComputeNativeOrderAlphabetListener extends AbstractFirstVoicesPubli
 
         // Handle language assets (Words and Phrases)
         if (doc.getType().equals("FVCharacter") && !doc.isProxy()) {
-
             // Will always run when creating
-            CoreSession session = doc.getCoreSession();
-            DocumentModel dialect = getDialect(session, doc);
-            session.save();
-            ComputeDialectNativeOrderTranslationWorker worker = new ComputeDialectNativeOrderTranslationWorker(ctx.getPrincipal().getName(), dialect);
+            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(ctx.getPrincipal().getName(), doc);
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(worker);
         }

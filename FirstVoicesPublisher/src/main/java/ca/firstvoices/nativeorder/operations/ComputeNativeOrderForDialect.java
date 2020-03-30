@@ -19,7 +19,7 @@
 package ca.firstvoices.nativeorder.operations;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
-import ca.firstvoices.workers.ComputeDialectNativeOrderTranslationWorker;
+import ca.firstvoices.workers.ComputeNativeOrderOnCharacterChangeWorker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -66,7 +66,7 @@ public class ComputeNativeOrderForDialect {
 
         // Check if dialect
         if (input.getType().equals("FVDialect")) {
-            ComputeDialectNativeOrderTranslationWorker worker = new ComputeDialectNativeOrderTranslationWorker(ctx.getPrincipal().getName(), input);
+            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(ctx.getPrincipal().getName(), input);
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(worker);
 

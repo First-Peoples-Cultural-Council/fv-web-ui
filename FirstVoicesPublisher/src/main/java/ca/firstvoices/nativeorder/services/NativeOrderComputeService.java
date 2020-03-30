@@ -23,8 +23,5 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface NativeOrderComputeService {
 
-    void computeAssetNativeOrderTranslation(DocumentModel asset);
-
-    void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect);
-
+    void computeNativeOrderTranslation(CoreSession session, DocumentModel asset);
 }
