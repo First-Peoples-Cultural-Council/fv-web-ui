@@ -1,2 +1,2 @@
 # Dockerignore file
-database/*
+database
