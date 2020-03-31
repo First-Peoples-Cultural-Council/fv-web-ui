@@ -21,19 +21,14 @@ package ca.firstvoices.schedulers;
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
-import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
-import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author david
@@ -46,47 +41,33 @@ public class ComputeNativeOrderDialectsScheduler implements EventListener {
 
     @Override
     public void handleEvent(Event event) {
-        EventContext ctx = event.getContext();
-        if (!(ctx instanceof DocumentEventContext)) {
-            return;
-        }
-        log.info("Performing Routine Recompute of Custom Orders");
-
-        if (event.getName().equals("computeNativeOrderSchedule")) {
-            computeDialectsOnSchedule(ctx.getCoreSession());
+        try {
+            if (event.getName().equals("computeNativeOrder")) {
+                CoreInstance.doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(), session -> {
+                    computeDialectsOnSchedule(session);
+                });
+            }
+        } catch (Exception e) {
+            log.error(e);
         }
     }
 
     public DocumentModelList computeDialectsOnSchedule(CoreSession session) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
-        String date = dateFormat.format(calendar.getTime());
-
-        // oldest/earliest dates to most recent
-        String query = "SELECT * FROM FVDialect "
-                + "WHERE fvdialect:last_native_order_recompute < DATE '"
-                + date + "'"
-                + " OR fvdialect:last_native_order_recompute IS NULL"
-                + " AND ecm:isVersion = 0  AND ecm:isTrashed = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isProxy = 0"
-                + " ORDER BY fvdialect:last_native_order_recompute ASC";
+        log.info("Performing Routine Recompute of Custom Orders");
+        String query = "SELECT * FROM FVDialect WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0 ORDER BY fvdialect:last_native_order_recompute ASC";
 
         DocumentModelList dialects = session.query(query);
 
         // Process only a subset of items each night:
-        for (int i = 0, dialectsSize = dialects.size(); i < (Math.min(dialectsSize, 5)); i++) {
-            DocumentModel dialect = dialects.get(i);
-            log.info("Recomputing custom order for " + dialect.getPropertyValue("dc:title"));
-            try {
+        if (dialects != null && dialects.size() > 0) {
+            for (int i = 0; i < (Math.min(dialects.size(), 5)); i++) {
+                DocumentModel dialect = dialects.get(i);
                 service.computeDialectNativeOrderTranslation(dialect);
                 log.info("Completed recompute of custom order for " + dialect.getPropertyValue("dc:title"));
-            } catch (Exception e) {
-                log.error(e);
             }
-        }
 
-        session.save();
+            session.save();
+        }
 
         return dialects;
     }

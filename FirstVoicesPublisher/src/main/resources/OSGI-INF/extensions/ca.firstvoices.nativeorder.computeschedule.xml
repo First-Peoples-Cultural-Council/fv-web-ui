@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
   ~ /*
   ~ Copyright 2020 First People's Cultural Council
@@ -17,14 +16,16 @@
   ~ */
   -->
 
-<component name="ca.firstvoices.nativeorder.computeschedule">
+<component name="ca.firstvoices.nativeorder.computeschedule.contrib">
     <require>ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl</require>
 
     <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
         <schedule id="computeNativeOrderSchedule">
-            <eventId>computeNativeOrderSchedule</eventId>
+            <eventId>computeNativeOrder</eventId>
             <eventCategory>default</eventCategory>
-            <cronExpression>0 0/1 0 ? * * *</cronExpression>
+            <!-- Everyday at 3 AM -->
+            <cronExpression>0 0 3 * * ?</cronExpression>
+            <username>Administrator</username>
         </schedule>
     </extension>
 </component>
