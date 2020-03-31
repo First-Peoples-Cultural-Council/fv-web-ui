@@ -23,7 +23,6 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import ca.firstvoices.schedulers.ComputeNativeOrderDialectsScheduler;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -37,9 +36,8 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import javax.inject.Inject;
-import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * @author loopingz
@@ -315,20 +313,21 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    @Ignore
-    //    TODO: Finish Unit Test
     public void testcomputeNativeOrderDialectsScheduler() {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
         DocumentModel di2 = createDocument(session.createDocumentModel("/Family/Language", "Dialect2", "FVDialect"));
         DocumentModel di3 = createDocument(session.createDocumentModel("/Family/Language", "Dialect3", "FVDialect"));
         DocumentModel di4 = createDocument(session.createDocumentModel("/Family/Language", "Dialect4", "FVDialect"));
         DocumentModel di5 = createDocument(session.createDocumentModel("/Family/Language", "Dialect5", "FVDialect"));
 
-        computeNativeOrderDialectsScheduler.computeDialectsOnSchedule(session);
-        session.save();
+        assertNull(dialect.getPropertyValue("last_native_order_recompute"));
+        assertNull(di2.getPropertyValue("last_native_order_recompute"));
+        assertNull(di3.getPropertyValue("last_native_order_recompute"));
+        assertNull(di4.getPropertyValue("last_native_order_recompute"));
+        assertNull(di5.getPropertyValue("last_native_order_recompute"));
 
+        DocumentModelList dialects = computeNativeOrderDialectsScheduler.computeDialectsOnSchedule(session);
+
+        dialects.forEach(dialect -> assertNotNull(dialect.getPropertyValue("last_native_order_recompute")));
     }
 
     private DocumentModel createDocument(DocumentModel model) {

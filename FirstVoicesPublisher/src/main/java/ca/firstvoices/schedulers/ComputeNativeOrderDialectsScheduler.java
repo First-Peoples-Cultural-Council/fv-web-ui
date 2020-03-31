@@ -26,6 +26,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
@@ -33,7 +34,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.EventListener;
 
 /**
  * @author david
@@ -42,20 +42,22 @@ public class ComputeNativeOrderDialectsScheduler implements EventListener {
 
     private static final Log log = LogFactory.getLog(ComputeNativeOrderDialectsScheduler.class);
 
-
     protected NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
 
+    @Override
     public void handleEvent(Event event) {
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
             return;
         }
+        log.info("Performing Routine Recompute of Custom Orders");
 
-        computeDialectsOnSchedule(ctx.getCoreSession());
-
+        if (event.getName().equals("computeNativeOrderSchedule")) {
+            computeDialectsOnSchedule(ctx.getCoreSession());
+        }
     }
 
-    public void computeDialectsOnSchedule(CoreSession session) {
+    public DocumentModelList computeDialectsOnSchedule(CoreSession session) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -72,17 +74,20 @@ public class ComputeNativeOrderDialectsScheduler implements EventListener {
 
         DocumentModelList dialects = session.query(query);
 
-
         // Process only a subset of items each night:
         for (int i = 0, dialectsSize = dialects.size(); i < (Math.min(dialectsSize, 5)); i++) {
             DocumentModel dialect = dialects.get(i);
+            log.info("Recomputing custom order for " + dialect.getPropertyValue("dc:title"));
             try {
                 service.computeDialectNativeOrderTranslation(dialect);
+                log.info("Completed recompute of custom order for " + dialect.getPropertyValue("dc:title"));
             } catch (Exception e) {
                 log.error(e);
             }
         }
 
         session.save();
+
+        return dialects;
     }
 }
