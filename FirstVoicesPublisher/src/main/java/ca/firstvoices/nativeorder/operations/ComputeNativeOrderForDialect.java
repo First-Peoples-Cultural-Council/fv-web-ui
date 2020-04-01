@@ -66,7 +66,7 @@ public class ComputeNativeOrderForDialect {
 
         // Check if dialect
         if (input.getType().equals("FVDialect")) {
-            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(ctx.getPrincipal().getName(), input);
+            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(input);
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(worker);
 

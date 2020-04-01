@@ -60,7 +60,7 @@ public class ComputeNativeOrderAlphabetListener extends AbstractFirstVoicesPubli
         // Handle language assets (Words and Phrases)
         if (doc.getType().equals("FVCharacter") && !doc.isProxy()) {
             // Will always run when creating
-            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(ctx.getPrincipal().getName(), doc);
+            ComputeNativeOrderOnCharacterChangeWorker worker = new ComputeNativeOrderOnCharacterChangeWorker(doc);
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(worker);
         }

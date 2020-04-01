@@ -18,13 +18,28 @@
 
 package ca.firstvoices.services;
 
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.*;
 
-public abstract class AbstractFirstVoicesPublisherService {
+import java.util.Comparator;
 
-    protected DocumentModel getDialectForDoc(CoreSession s, DocumentModel doc) {
+public abstract class AbstractService {
+
+    protected DocumentModel[] loadAlphabet(CoreSession session, DocumentModel input) {
+        DocumentModel dialect = getDialect(session, input);
+
+        DocumentModelList chars = session.getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        return chars
+                .stream()
+                .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+                .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+                .toArray(DocumentModel[]::new);
+    }
+
+    protected DocumentModel getDialect(DocumentModel doc) {
+        return getDialect(doc.getCoreSession(), doc);
+    }
+
+    protected DocumentModel getDialect(CoreSession s, DocumentModel doc) {
         if ("FVDialect".equals(doc.getType())) {
             return doc; // doc is dialect
         }
@@ -38,7 +53,7 @@ public abstract class AbstractFirstVoicesPublisherService {
         DocumentRef parentRef = doc.getParentRef();
         DocumentModel parent = coreSession.getDocument(parentRef);
         if (parent != null) {
-            return getDialectForDoc(coreSession, parent);
+            return getDialect(coreSession, parent);
         } else {
             return null;
         }

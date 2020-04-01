@@ -19,29 +19,26 @@
 package ca.firstvoices.workers;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 
 public class ComputeNativeOrderOnCharacterChangeWorker extends AbstractWork {
+    private static final Log log = LogFactory.getLog(ComputeNativeOrderOnCharacterChangeWorker.class);
 
     private static final String COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION = "computeDialectNativeOrderTranslation";
 
     private NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
-    private String repositoryName;
     private DocumentModel document;
-    private String userName;
 
-
-    public ComputeNativeOrderOnCharacterChangeWorker(String userName, DocumentModel document) {
+    public ComputeNativeOrderOnCharacterChangeWorker(DocumentModel document) {
         super(COMPUTE_DIALECT_NATIVE_ORDER_TRANSLATION);
-        setStatus("Instantiating worker " + getId());
-        this.userName = userName;
         this.document = document;
-        this.repositoryName = Framework.getService(RepositoryManager.class).getDefaultRepositoryName();
-        setStatus("Finished Instantiating worker " + getId());
-        setProgress(new Progress(20));
+        setProgress(new Progress(33));
     }
 
     @Override
@@ -51,22 +48,16 @@ public class ComputeNativeOrderOnCharacterChangeWorker extends AbstractWork {
 
     @Override
     public void work() {
-        setStatus("Setting fields for worker " + getId());
-        setOriginatingUsername(userName);
-        setDocument(repositoryName, document.getId(), true);
-        setStatus("Finished setting fields for worker " + getId());
-        setProgress(new Progress(40));
-        setStatus("Opening a user session for user: " + userName + " for worker " + getId());
-        openUserSession();
-        setStatus("Finished opening a user session for user: " + userName + " for worker " + getId());
-        setStatus("Starting Work");
-        setProgress(new Progress(60));
-        service.computeNativeOrderTranslation(session, document);
-        setStatus("Done work. Closing user session for user: " + userName + " for worker " + getId());
-        setProgress(new Progress(80));
-        closeSession();
-        setStatus("Finsihed closing user session for user: " + userName + " for worker " + getId());
-        setProgress(new Progress(100));
+        try {
+            setStatus("Starting Work");
+            setProgress(new Progress(66));
+            CoreInstance.doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(), coreSession -> {
+                service.computeDialectNativeOrderTranslation(coreSession, document);
+            });
+            setProgress(new Progress(100));
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 
     @Override

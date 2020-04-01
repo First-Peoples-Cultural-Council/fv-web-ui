@@ -95,8 +95,8 @@ public class FirstVoicesNativeOrderTest {
 
         createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWordsorPhrases(orderedWords, "FVWord");
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
 
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
@@ -126,8 +126,8 @@ public class FirstVoicesNativeOrderTest {
 
         createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWordsorPhrases(orderedWords, "FVWord");
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
 
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
@@ -173,8 +173,8 @@ public class FirstVoicesNativeOrderTest {
 
         createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWordsorPhrases(orderedWords, "FVWord");
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
 
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
@@ -212,8 +212,7 @@ public class FirstVoicesNativeOrderTest {
         createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWordsorPhrases(orderedPhrases, "FVPhrase");
 
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
-
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedPhrases.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'" +
@@ -246,8 +245,7 @@ public class FirstVoicesNativeOrderTest {
         session.saveDocument(z);
         session.save();
 
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
-
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
@@ -270,7 +268,7 @@ public class FirstVoicesNativeOrderTest {
         createUnorderedAlphabet(unorderedAlphabet, "/Family/Language/Dialect/Alphabet");
         createWordsorPhrases(orderedWords, "FVWord");
 
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +
@@ -296,7 +294,7 @@ public class FirstVoicesNativeOrderTest {
 
         createWordsorPhrases(orderedWords, "FVWord");
 
-        nativeOrderComputeService.computeNativeOrderTranslation(session, dialect);
+        nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
         Integer i = orderedWords.length - 1;
 
         DocumentModelList docs = session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " +

@@ -110,13 +110,13 @@ public class ComputeNativeOrderListener implements EventListener {
 
             // Creation
             case DocumentEventTypes.DOCUMENT_CREATED:
-                service.computeNativeOrderTranslation(ctx.getCoreSession(), doc);
+                service.computeAssetNativeOrderTranslation(doc);
                 break;
 
             // Modification
-                case DocumentEventTypes.DOCUMENT_UPDATED:
+                case DocumentEventTypes.BEFORE_DOC_UPDATE:
                 if (titleModifiedButNotCustomOrder(doc)) {
-                    service.computeNativeOrderTranslation(ctx.getCoreSession(), doc);
+                    service.computeAssetNativeOrderTranslation(doc);
                 }
                 break;
             }

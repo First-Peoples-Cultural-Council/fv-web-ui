@@ -19,7 +19,7 @@
 package ca.firstvoices.publisher.services;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
-import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
+import ca.firstvoices.services.AbstractService;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
@@ -35,7 +35,7 @@ import java.util.Map.Entry;
 /**
  * @author loopingz
  */
-public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublisherService implements FirstVoicesPublisherService {
+public class FirstVoicesPublisherServiceImpl extends AbstractService implements FirstVoicesPublisherService {
 
     protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
         if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
@@ -171,7 +171,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublishe
     public DocumentModel publishAsset(DocumentModel asset) {
         CoreSession session = asset.getCoreSession();
 
-        DocumentModel dialect = getDialectForDoc(session, asset);
+        DocumentModel dialect = getDialect(asset);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
@@ -263,7 +263,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublishe
     public DocumentModel republishAsset(DocumentModel asset) {
         CoreSession session = asset.getCoreSession();
 
-        DocumentModel dialect = getDialectForDoc(session, asset);
+        DocumentModel dialect = getDialect(asset);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
@@ -510,7 +510,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublishe
     public DocumentModel publishPortalAssets(DocumentModel portal) {
         CoreSession session = portal.getCoreSession();
 
-        DocumentModel dialect = getDialectForDoc(session, portal);
+        DocumentModel dialect = getDialect(portal);
         if (dialect == null) {
             throw new InvalidParameterException("Asset should be inside a dialect");
         }
