@@ -6,10 +6,10 @@ This environment is setup for localhost work. It includes an embedded database (
 
 1. You must have Docker installed and running, as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
 
-- Java 8
-- [Apache Maven](https://maven.apache.org/)
-- Node v8.10.0
-- NPM v5.6.0.
+- Java 8 (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
+- [Apache Maven v3.6.3](https://maven.apache.org/)
+- NodeJS v10.19.0 ([node version manager recommended](https://github.com/nvm-sh/nvm))
+- NPM v6.13.4 ([node version manager recommended](https://github.com/nvm-sh/nvm))
 
 2. Basic knowledge of Docker, Nuxeo and bash.
 3. Ensure you have the two environment variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD which will be passed into the container and used to create an admin account during the initial setup. After setting environment variables they can be checked by running the following in your terminal window:
@@ -75,13 +75,13 @@ The Option B `run` command below assumes the following volumes on the host (chan
 If you used Option A and are in the fv-web-ui/docker/ directory:
 
 ```
-docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ${PWD}/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
+docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ${PWD}/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_DATA="/opt/nuxeo/ext_data" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
 ```
 
 If you used Option B:
 
 ```
-docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ~/Dev/Dependencies/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ~/Dev/Dependencies/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ~/Dev/Dependencies/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
+docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ~/Dev/Dependencies/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ~/Dev/Dependencies/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ~/Dev/Dependencies/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_DATA="/opt/nuxeo/ext_data" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
 ```
 
 This may take a few minutes as Nuxeo starts up.
@@ -95,10 +95,10 @@ If you want to rerun the initial setup script for any reason, you can do so by r
 
 Notes:
 
-- To expose remote debugging via port 8787: `-p 8787:8787`\
-- To include automation traces: `-e NUXEO_AUTOMATION_TRACE="true"`\
-- To enable Dev mode: `-e NUXEO_DEV_MODE="true"`\
-- To change the data folder: `-e NUXEO_DATA="/opt/nuxeo/ext_data"`\
+- To expose remote debugging via port 8787: `-p 8787:8787`
+- To include automation traces: `-e NUXEO_AUTOMATION_TRACE="true"`
+- To enable Dev mode: `-e NUXEO_DEV_MODE="true"`
+- To change the data folder: `-e NUXEO_DATA="/opt/nuxeo/ext_data"`
 
 ### Step 4:
 
