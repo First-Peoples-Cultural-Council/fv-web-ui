@@ -17,7 +17,7 @@
  */
 package ca.firstvoices.nativeorder.services;
 
-import ca.firstvoices.services.AbstractService;
+import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * @author loopingz
  */
-public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
+public class NativeOrderComputeServiceImpl extends AbstractFirstVoicesPublisherService implements NativeOrderComputeService {
 
     @Override
     public void computeAssetNativeOrderTranslation(DocumentModel asset) {

@@ -22,12 +22,13 @@
 
     <listener name="ComputeNativeOrderListener" postCommit="false" async="false"
       class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderListener" priority="150">
-      <event>documentModified</event>
+      <event>beforeDocumentModification</event>
       <event>documentCreated</event>
     </listener>
     
     <listener name="ComputeNativeOrderAlphabetListener" postCommit="false" async="false"
       class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderAlphabetListener" priority="250">
+      <event>beforeDocumentModification</event>
       <event>documentModified</event>
       <event>documentTrashed</event>
       <event>documentUntrashed</event>

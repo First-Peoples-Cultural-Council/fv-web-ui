@@ -22,7 +22,7 @@ import org.nuxeo.ecm.core.api.*;
 
 import java.util.Comparator;
 
-public abstract class AbstractService {
+public abstract class AbstractFirstVoicesPublisherService {
 
     protected DocumentModel[] loadAlphabet(CoreSession session, DocumentModel input) {
         DocumentModel dialect = getDialect(session, input);

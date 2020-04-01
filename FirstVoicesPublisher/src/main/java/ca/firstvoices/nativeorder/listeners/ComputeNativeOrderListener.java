@@ -114,7 +114,7 @@ public class ComputeNativeOrderListener implements EventListener {
                 break;
 
             // Modification
-                case DocumentEventTypes.BEFORE_DOC_UPDATE:
+            case DocumentEventTypes.BEFORE_DOC_UPDATE:
                 if (titleModifiedButNotCustomOrder(doc)) {
                     service.computeAssetNativeOrderTranslation(doc);
                 }

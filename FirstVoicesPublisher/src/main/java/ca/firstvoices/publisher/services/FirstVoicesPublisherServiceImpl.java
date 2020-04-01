@@ -19,7 +19,7 @@
 package ca.firstvoices.publisher.services;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
-import ca.firstvoices.services.AbstractService;
+import ca.firstvoices.services.AbstractFirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
@@ -35,7 +35,7 @@ import java.util.Map.Entry;
 /**
  * @author loopingz
  */
-public class FirstVoicesPublisherServiceImpl extends AbstractService implements FirstVoicesPublisherService {
+public class FirstVoicesPublisherServiceImpl extends AbstractFirstVoicesPublisherService implements FirstVoicesPublisherService {
 
     protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
         if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
