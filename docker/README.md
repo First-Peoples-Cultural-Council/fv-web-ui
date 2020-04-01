@@ -95,10 +95,10 @@ If you want to rerun the initial setup script for any reason, you can do so by r
 
 Notes:
 
-- To expose remote debugging via port 8787: `-p 8787:8787`\
-- To include automation traces: `-e NUXEO_AUTOMATION_TRACE="true"`\
-- To enable Dev mode: `-e NUXEO_DEV_MODE="true"`\
-- To change the data folder: `-e NUXEO_DATA="/opt/nuxeo/ext_data"`\
+- To expose remote debugging via port 8787: `-p 8787:8787`
+- To include automation traces: `-e NUXEO_AUTOMATION_TRACE="true"`
+- To enable Dev mode: `-e NUXEO_DEV_MODE="true"`
+- To change the data folder: `-e NUXEO_DATA="/opt/nuxeo/ext_data"`
 
 ### Step 4:
 
