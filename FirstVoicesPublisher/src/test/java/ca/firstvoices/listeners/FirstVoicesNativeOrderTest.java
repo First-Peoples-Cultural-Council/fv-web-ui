@@ -20,7 +20,6 @@
 package ca.firstvoices.listeners;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
-import ca.firstvoices.schedulers.ComputeNativeOrderDialectsScheduler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +35,8 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -55,7 +56,9 @@ import static org.junit.Assert.*;
         "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
         "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
         "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.computeschedule.xml"
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.computeschedule.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml",
 })
 public class FirstVoicesNativeOrderTest {
     @Inject
@@ -64,8 +67,6 @@ public class FirstVoicesNativeOrderTest {
     @Inject
     protected NativeOrderComputeService nativeOrderComputeService;
 
-    @Inject
-    protected ComputeNativeOrderDialectsScheduler computeNativeOrderDialectsScheduler;
 
     @Inject
     protected TrashService trashService;
@@ -79,6 +80,9 @@ public class FirstVoicesNativeOrderTest {
         createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
         createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
         dialect = createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        createDocument(session.createDocumentModel("/Family/Language/Dialect", "Alphabet", "FVAlphabet"));
+        createDocument(session.createDocumentModel("/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+
     }
 
     @After
@@ -290,7 +294,7 @@ public class FirstVoicesNativeOrderTest {
     public void testSomeOrderedSomeNot() {
         String[] orderedWords = {"d", "c", "a", "b"};
 
-        String[] unorderedAlphabet = {"a", "b" };
+        String[] unorderedAlphabet = {"a", "b"};
         String[] orderedAlphabet = {"d", "c"};
 
         createUnorderedAlphabet(unorderedAlphabet, "/Family/Language/Dialect/Alphabet");
@@ -313,21 +317,29 @@ public class FirstVoicesNativeOrderTest {
     }
 
     @Test
-    public void testcomputeNativeOrderDialectsScheduler() {
-        DocumentModel di2 = createDocument(session.createDocumentModel("/Family/Language", "Dialect2", "FVDialect"));
-        DocumentModel di3 = createDocument(session.createDocumentModel("/Family/Language", "Dialect3", "FVDialect"));
-        DocumentModel di4 = createDocument(session.createDocumentModel("/Family/Language", "Dialect4", "FVDialect"));
-        DocumentModel di5 = createDocument(session.createDocumentModel("/Family/Language", "Dialect5", "FVDialect"));
+    public void testcomputeNativeOrderDialectsHaveRecomputePropertyUpdated() {
 
-        assertNull(dialect.getPropertyValue("last_native_order_recompute"));
-        assertNull(di2.getPropertyValue("last_native_order_recompute"));
-        assertNull(di3.getPropertyValue("last_native_order_recompute"));
-        assertNull(di4.getPropertyValue("last_native_order_recompute"));
-        assertNull(di5.getPropertyValue("last_native_order_recompute"));
+        List<DocumentModel> documentModels = new ArrayList<>();
 
-        DocumentModelList dialects = computeNativeOrderDialectsScheduler.computeDialectsOnSchedule(session);
+        for (int i = 0; i < 5; i++) {
+            DocumentModel newDialect = createDocument(session.createDocumentModel("/Family/Language", "Dialect" + i, "FVDialect"));
+            documentModels.add(newDialect);
+        }
+        documentModels.add(dialect);
+
+        for (DocumentModel dialect : documentModels) {
+            assertNull(dialect.getPropertyValue("last_native_order_recompute"));
+            nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+        }
+
+        DocumentModelList dialects = session.query("SELECT * FROM FVDialect WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
 
         dialects.forEach(dialect -> assertNotNull(dialect.getPropertyValue("last_native_order_recompute")));
+
+        for (DocumentModel dialect : dialects) {
+            assertNotNull(dialect.getPropertyValue("last_native_order_recompute"));
+        }
+
     }
 
     private DocumentModel createDocument(DocumentModel model) {

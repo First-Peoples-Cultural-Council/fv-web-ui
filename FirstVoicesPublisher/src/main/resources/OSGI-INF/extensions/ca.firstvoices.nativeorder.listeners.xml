@@ -34,9 +34,9 @@
       <event>documentUntrashed</event>
     </listener>
 
-
     <listener name="ComputeNativeOrderScheduler" async="true" postCommit="false"
-              priority="1000" class="ca.firstvoices.schedulers.ComputeNativeOrderDialectsScheduler">
+              priority="1000" class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderDialectListener">
+      <event>computeNativeOrder</event>
     </listener>
   </extension>
 </component>
