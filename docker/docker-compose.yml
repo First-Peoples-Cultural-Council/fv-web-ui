@@ -1,27 +1,29 @@
 version: '3'
 services:
-    db:
-        image: postgres
-        container_name: nuxeo-db
-        restart: always
-        environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=nuxeo
-            - POSTGRES_DB=nuxeo
-        volumes:
-            - '${PWD}/database/postgres:/var/lib/postgresql/data/'
-            - '${PWD}/postgresql.conf:/etc/postgresql.conf'
-        ports:
-            - '5432:5432'
-        command: postgres -c config_file=/etc/postgresql.conf
+#    db:
+#        image: postgres
+#        container_name: nuxeo-db
+#        restart: always
+#        environment:
+#            - POSTGRES_USER=postgres
+#            - POSTGRES_PASSWORD=nuxeo
+#            - POSTGRES_DB=nuxeo
+#        volumes:
+#            - '${PWD}/database/postgres:/var/lib/postgresql/data/'
+#            - '${PWD}/postgresql.conf:/etc/postgresql.conf'
+#        ports:
+#            - '5432:5432'
+#        command: postgres -c config_file=/etc/postgresql.conf
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
         container_name: nuxeo-elasticsearch
         ports:
             - '9200:9200'
             - '9300:9300'
+            - '443:443'
         environment:
-            - discovery.type=single-node
+            - "discovery.type=single-node"
+            - "cluster.name=firstvoices"
     nuxeo:
         image: me/nuxeo-dev
         container_name: nuxeo-dev
@@ -43,4 +45,4 @@ services:
             - CYPRESS_FV_PASSWORD
         depends_on:
             - elasticsearch
-            - db
+#            - db
