@@ -4,7 +4,7 @@ This environment is setup for localhost work. It includes an embedded database (
 
 ## Prerequisites
 
-1. You must have Docker installed and running, as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
+1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
 
 - Java 8 (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
 - [Apache Maven v3.6.3](https://maven.apache.org/)
@@ -72,17 +72,12 @@ The Option B `run` command below assumes the following volumes on the host (chan
 
 ##### Startup the docker container
 
-If you used Option A and are in the fv-web-ui/docker/ directory:
+If you are in the fv-web-ui/docker/ directory:
 
 ```
-docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ${PWD}/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ${PWD}/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ${PWD}/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_DATA="/opt/nuxeo/ext_data" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
+docker-compose up
 ```
-
-If you used Option B:
-
-```
-docker run --name nuxeo-dev --rm -ti -p 8080:8080 -v ~/Dev/Dependencies/nuxeo_dev_docker:/opt/nuxeo/server/nxserver/tmp -v ~/Dev/Dependencies/nuxeo_dev_docker/data:/opt/nuxeo/ext_data -v ~/Dev/Dependencies/nuxeo_dev_docker/logs:/var/log/nuxeo -e NUXEO_PACKAGES="nuxeo-dam nuxeo-jsf-ui" -e NUXEO_DATA="/opt/nuxeo/ext_data" -e NUXEO_URL="http://localhost:8080/nuxeo" -e CYPRESS_FV_USERNAME -e CYPRESS_FV_PASSWORD me/nuxeo-dev
-```
+**Note:** you may have to change the volumes ```${PWD}``` part in docker-compose.yml to match the path to your ```fv-web-ui/docker/``` directory
 
 This may take a few minutes as Nuxeo starts up.
 The initial backend setup script should automatically run, which will create the proper data structure and an admin account using the environment variables.
@@ -93,12 +88,10 @@ If you want to rerun the initial setup script for any reason, you can do so by r
 ./initialsetup.sh
 ```
 
-Notes:
-
-- To expose remote debugging via port 8787: `-p 8787:8787`
-- To include automation traces: `-e NUXEO_AUTOMATION_TRACE="true"`
-- To enable Dev mode: `-e NUXEO_DEV_MODE="true"`
-- To change the data folder: `-e NUXEO_DATA="/opt/nuxeo/ext_data"`
+**Notes:** (change the following in docker-compose.yml under nuxeo -> environment)
+- To include automation traces: `NUXEO_AUTOMATION_TRACE=true`
+- To enable Dev mode: `NUXEO_DEV_MODE=true`
+- To change the data folder: `NUXEO_DATA=/opt/nuxeo/ext_data`
 
 ### Step 4:
 
@@ -170,6 +163,8 @@ When setting up unit tests:
 * Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
 * Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
 
+Errors:
+* If you encounter 137 or similar errors with docker you may need to allocate more memory for the containers to use
 
 ## TODO
 

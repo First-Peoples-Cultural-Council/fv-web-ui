@@ -28,3 +28,4 @@ nashorn_code_cache
 /docker/nuxeo_dev_docker/
 *.log
 /frontend/temp/*
+/docker/database/*
