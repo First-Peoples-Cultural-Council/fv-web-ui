@@ -36,7 +36,9 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
 
         if (propertyValue != null) {
             Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
+            Map<String, String> uppercase_confusables = mapAndValidateConfusableCharacters(characters, "upper_case_confusable_characters");
             String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
+            updatedPropertyValue = replaceConfusables(uppercase_confusables, "", updatedPropertyValue);
             if (!updatedPropertyValue.equals(propertyValue)) {
                  document.setPropertyValue("dc:title", updatedPropertyValue);
                 return document;
@@ -47,15 +49,21 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     }
 
     @Override
-    public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {
+    public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters){
+        return mapAndValidateConfusableCharacters(characters, "confusable_characters");
+    }
+
+    @Override
+    public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters, String confusable_set) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
         List<String> characterValues = characters.stream().filter(c-> !c.isTrashed()).map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
 
         for (DocumentModel d : characters) {
-            String[] confusableList = (String[]) d.getPropertyValue("confusable_characters");
+            String[] confusableList = (String[]) d.getPropertyValue(confusable_set);
             if (confusableList != null) {
                 for (String confusableCharacter : confusableList) {
-                    String characterTitle = (String) d.getPropertyValue("dc:title");
+                    String characterTitle = (String) d.getPropertyValue(
+                        confusable_set.equals("confusable_characters") ? "dc:title" : "fvcharacter:upper_case_character");
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
                         throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }
