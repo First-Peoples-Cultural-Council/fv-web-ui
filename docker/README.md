@@ -4,7 +4,7 @@ This environment is setup for localhost work. It includes an embedded database (
 
 ## Prerequisites
 
-1. You must have Docker installed and running, as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
+1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
 
 - Java 8 (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
 - [Apache Maven v3.6.3](https://maven.apache.org/)
@@ -163,6 +163,8 @@ When setting up unit tests:
 * Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
 * Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
 
+Errors:
+* If you encounter 137 or similar errors with docker you may need to allocate more memory for the containers to use
 
 ## TODO
 
