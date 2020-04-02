@@ -52,7 +52,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     public void mapAndValidateConfusableCharactersTest() {
         DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
         Map<String, String> charMap = cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
-        assertEquals(11, charMap.size());
+        assertEquals(13, charMap.size());
         for (Map.Entry<String, String> pair : charMap.entrySet()) {
             if ("∀".equals(pair.getKey())) {
                 assertEquals("a", pair.getValue());
@@ -74,17 +74,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
                 assertEquals("a", pair.getValue());
             } else if("ŷ".equals(pair.getKey()) ||"γ".equals(pair.getKey())){
                 assertEquals("y", pair.getValue());
-            } else {
-                fail();
-            }
-        }
-
-        Map<String, String> upperCharMap = cleanupCharactersService.mapAndValidateConfusableCharacters(characters, "upper_case_confusable_characters");
-        assertEquals(2, upperCharMap.size());
-        for (Map.Entry<String, String> pair : upperCharMap.entrySet()) {
-            if ("Ŷ".equals(pair.getKey())) {
-                assertEquals("Y", pair.getValue());
-            } else if ("Υ".equals(pair.getKey())) {
+            } else if("Ŷ".equals(pair.getKey()) ||"Υ".equals(pair.getKey())){
                 assertEquals("Y", pair.getValue());
             } else {
                 fail();
@@ -116,13 +106,9 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         }
     }
 
-    //Setup a create alph. w/ conf. chars for uppercase
     private void createLetterWithLowerCaseUppercaseConfusableCharacters(
         String title, int alphabet_order, String upper_case, String[] confusable_characters, String[] upper_case_confusable_characters
     ) {
-        //Iterator it = character.entrySet().iterator();
-        //int i = 0;
-        //Map.Entry pair = (Map.Entry)it.next();
         DocumentModel letterDoc = session.createDocumentModel(dialect.getPathAsString() + "/Alphabet", (String) title, "FVCharacter");
         letterDoc.setPropertyValue("fvcharacter:alphabet_order", alphabet_order);
         letterDoc.setPropertyValue("fvcharacter:upper_case_character", upper_case);

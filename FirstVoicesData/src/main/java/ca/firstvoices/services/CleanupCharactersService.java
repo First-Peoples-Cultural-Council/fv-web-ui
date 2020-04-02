@@ -8,5 +8,5 @@ import java.util.Map;
 public interface CleanupCharactersService {
         DocumentModel cleanConfusables(DocumentModel document);
         Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters);
-        Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters, String confusable_set);
+        //Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters, String confusable_set);
 }
