@@ -36,9 +36,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
 
         if (propertyValue != null) {
             Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
-            //<String, String> uppercase_confusables = mapAndValidateConfusableCharacters(characters, "upper_case_confusable_characters");
             String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
-            //updatedPropertyValue = replaceConfusables(uppercase_confusables, "", updatedPropertyValue);
             if (!updatedPropertyValue.equals(propertyValue)) {
                  document.setPropertyValue("dc:title", updatedPropertyValue);
                 return document;
@@ -47,11 +45,6 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
 
         return document;
     }
-
-    // @Override
-    // public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters){
-    //     return mapAndValidateConfusableCharacters(characters, "confusable_characters");
-    // }
 
     @Override
     public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {

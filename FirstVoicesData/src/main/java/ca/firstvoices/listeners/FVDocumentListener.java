@@ -137,12 +137,10 @@ public class FVDocumentListener extends AbstractListener {
                     List<DocumentModel> results = characters.stream().map(
                             c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
                     cleanupCharactersService.mapAndValidateConfusableCharacters(results);
-                    //cleanupCharactersService.mapAndValidateConfusableCharacters(results, "upper_case_confusable_characters");
                 }
 
                 if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
                     cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
-                    //cleanupCharactersService.mapAndValidateConfusableCharacters(characters, "upper_case_confusable_characters");
                 }
 
             } catch (Exception exception) {
