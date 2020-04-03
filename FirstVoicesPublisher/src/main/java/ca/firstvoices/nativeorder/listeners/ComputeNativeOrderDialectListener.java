@@ -41,17 +41,14 @@ public class ComputeNativeOrderDialectListener implements EventListener {
 
             CoreInstance.doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(), session -> {
 
+                String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
                 // Null values will be placed first with this query, ASC is the default sort order.
-                String query = "SELECT * FROM FVDialect WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0 ORDER BY fvdialect:last_native_order_recompute";
-
-                DocumentModelList dialects = session.query(query);
-
-                // Process only a subset of items each night:
-                if (dialects != null && dialects.size() > 0) {
-
+                DocumentModelList alphabets = session.query(query);
+                if (alphabets != null && alphabets.size() > 0) {
                     WorkManager workManager = Framework.getService(WorkManager.class);
-                    for (int i = 0; i < (Math.min(dialects.size(), 5)); i++) {
-                        DocumentModel dialect = dialects.get(i);
+                    for (int i = 0; i < alphabets.size(); i++) {
+                        DocumentModel alphabet = alphabets.get(i);
+                        DocumentModel dialect = session.getParentDocument(alphabet.getRef());
                         ComputeNativeOrderDialectWorker worker = new ComputeNativeOrderDialectWorker(dialect.getRef());
                         workManager.schedule(worker);
                     }

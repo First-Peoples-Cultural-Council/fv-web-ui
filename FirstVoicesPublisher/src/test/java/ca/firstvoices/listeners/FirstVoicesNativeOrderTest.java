@@ -35,10 +35,8 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author loopingz
@@ -316,31 +314,6 @@ public class FirstVoicesNativeOrderTest {
         }
     }
 
-    @Test
-    public void testcomputeNativeOrderDialectsHaveRecomputePropertyUpdated() {
-
-        List<DocumentModel> documentModels = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            DocumentModel newDialect = createDocument(session.createDocumentModel("/Family/Language", "Dialect" + i, "FVDialect"));
-            documentModels.add(newDialect);
-        }
-        documentModels.add(dialect);
-
-        for (DocumentModel dialect : documentModels) {
-            assertNull(dialect.getPropertyValue("last_native_order_recompute"));
-            nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
-        }
-
-        DocumentModelList dialects = session.query("SELECT * FROM FVDialect WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
-
-        dialects.forEach(dialect -> assertNotNull(dialect.getPropertyValue("last_native_order_recompute")));
-
-        for (DocumentModel dialect : dialects) {
-            assertNotNull(dialect.getPropertyValue("last_native_order_recompute"));
-        }
-
-    }
 
     private DocumentModel createDocument(DocumentModel model) {
         model.setPropertyValue("dc:title", model.getName());

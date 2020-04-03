@@ -23,11 +23,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
 
-    private DocumentModel[] loadAlphabet(DocumentModel dialect) {
+    private DocumentModel[] loadCharacters(DocumentModel dialect) {
         DocumentModelList chars = dialect.getCoreSession().getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         return chars
                 .stream()
@@ -59,7 +56,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             DocumentModel dialect = getDialect(asset);
             CoreSession session = asset.getCoreSession();
             // First get the native alphabet
-            DocumentModel[] chars = loadAlphabet(dialect);
+            DocumentModel[] chars = loadCharacters(dialect);
             computeNativeOrderTranslation(chars, asset);
         }
     }
@@ -72,14 +69,14 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
     public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
         CoreSession session = dialect.getCoreSession();
         // First get the native alphabet
-        DocumentModel[] chars = loadAlphabet(dialect);
+        DocumentModel[] chars = loadCharacters(dialect);
         computeNativeOrderTranslation(chars,
                 session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'"));
         computeNativeOrderTranslation(chars,
                 session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'"));
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dialect.setPropertyValue("fvdialect:last_native_order_recompute", dateFormat.format(new Date()));
-        session.saveDocument(dialect);
+        DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        alphabet.setPropertyValue("custom_order_recompute_required", false);
+        session.saveDocument(alphabet);
         session.save();
     }
 

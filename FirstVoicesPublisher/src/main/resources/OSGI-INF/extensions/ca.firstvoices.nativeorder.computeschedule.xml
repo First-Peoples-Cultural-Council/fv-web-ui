@@ -17,15 +17,13 @@
   -->
 
 <component name="ca.firstvoices.nativeorder.computeschedule.contrib">
-    <require>ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl</require>
 
     <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
         <schedule id="computeNativeOrderSchedule">
             <eventId>computeNativeOrder</eventId>
             <eventCategory>default</eventCategory>
-            <!-- Everyday at 3 AM -->
-            <cronExpression>0 0 3 * * ?</cronExpression>
-            <username>Administrator</username>
+            <!--            Every 10 minutes-->
+            <cronExpression>* */10 * ? * *</cronExpression>
         </schedule>
     </extension>
 </component>

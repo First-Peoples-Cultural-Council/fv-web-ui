@@ -108,5 +108,4 @@
   <xs:element name="region" type="xs:string"/>
   <xs:element name="related_links" type="nxs:stringList"/>
   <xs:element name="short_url" type="xs:string"/>
-  <xs:element name="last_native_order_recompute" type="xs:date"/>
 </xs:schema>
