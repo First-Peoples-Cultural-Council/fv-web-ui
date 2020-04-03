@@ -1,8 +1,24 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.publisher.utils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -12,7 +28,9 @@ import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PublisherUtils {
 
@@ -23,7 +41,7 @@ public class PublisherUtils {
 
     /**
      * Adds proxy properties to assets (Media, Words, Phrases)
-     * 
+     *
      * @param asset
      * @return
      */
@@ -64,7 +82,7 @@ public class PublisherUtils {
 
     /**
      * Checks if a dependency is empty
-     * 
+     *
      * @param dependencyPropertyValue
      * @return
      */
@@ -75,7 +93,7 @@ public class PublisherUtils {
 
     /**
      * Extracts dependency values from property as a string, always returning an array for simplicity.
-     * 
+     *
      * @param input
      * @param dependency
      * @return
@@ -93,13 +111,13 @@ public class PublisherUtils {
 
     /**
      * Constructs the dependency's updated value for insertion, as an array.
-     * 
+     *
      * @param input
      * @param dependencyEntry
      * @param publishedDep
      */
     public static String[] constructDependencyPropertyValueAsArray(String[] currentPropValue,
-            DocumentModel publishedDep) {
+                                                                   DocumentModel publishedDep) {
         String[] updatedProperty = new String[1];
 
         if (currentPropValue != null) {
@@ -113,7 +131,7 @@ public class PublisherUtils {
 
     /**
      * Publish all ancestors of a document of a specific type
-     * 
+     *
      * @param dependencyDocModel
      * @param string
      * @param session
@@ -122,7 +140,7 @@ public class PublisherUtils {
      * @return
      */
     public static DocumentModel publishAncestors(CoreSession session, String docType, DocumentModel dependencyDocModel,
-            PublisherService publisherService) {
+                                                 PublisherService publisherService) {
         DocumentModel parentDependencySection;
         DocumentModel publishedDep = null;
 

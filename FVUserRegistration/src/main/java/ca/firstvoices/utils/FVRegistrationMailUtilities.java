@@ -1,3 +1,21 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.utils;
 
 import org.apache.commons.lang.StringUtils;
@@ -82,7 +100,7 @@ public class FVRegistrationMailUtilities {
     }
 
     private String composeEmailString(Set<String> emailSet) {
-        String toStr = new String();
+        String toStr = "";
 
         for (String em : emailSet) {
             if (!isValidEmailAddress(em))
@@ -135,27 +153,61 @@ public class FVRegistrationMailUtilities {
         String getEmailBody(int variant, Map<String, String> options);
     }
 
+    /**
+     * @param variant
+     * @param prep
+     * @param options
+     * @param toStr
+     * @throws Exception
+     */
+    private void registrationMailSender(int variant, EmailContentAssembler prep, Map<String, String> options,
+                                        String toStr, String BCC) throws Exception {
+        String title = prep.getEmailTitle(variant, options);
+        String body = prep.getEmailBody(variant, options);
+
+        try {
+            if (title != null && body != null) {
+                if (!toStr.isEmpty()) {
+
+                    // IF BCC equals toStr - a language admin does not exist, and we are sending directly to super admins.
+                    // Remove BCC, and mention something in the title
+                    if (BCC.equals(toStr)) {
+                        BCC = "";
+                        title = "[NO-LANG-ADMIN] " + title;
+                    }
+
+                    generateMail(toStr, "", title, body, BCC);
+                } else {
+                    generateMail(options.get("email"), "", title, body, BCC);
+                }
+            }
+        } catch (NamingException | MessagingException e) {
+            log.warn(e);
+            throw new NuxeoException("Error while sending mail", e);
+        }
+    }
+
     private class AdminMailContent implements EmailContentAssembler {
         @Override
         public String getEmailTitle(int variant, Map<String, String> options) {
             String title = null;
 
             switch (variant) {
-            case MID_REGISTRATION_PERIOD_ACT:
-                title = "FirstVoices: User registration will expire soon.";
-                break;
-            case REGISTRATION_EXPIRATION_ACT:
-                title = "FirstVoices: User registration was not completed and will be deleted.";
-                break;
-            case NEW_USER_SELF_REGISTRATION_ACT:
-                title = "FirstVoices: New User Registration (action may be required)";
-                break;
-            case NEW_MEMBER_SELF_REGISTRATION_ACT:
-                title = options.get("fName") + " wants to join " + options.get("dialect") + " on FirstVoices";
-                break;
-            case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
-                title = options.get("fName") + " wants to join the " + options.get("dialect") + " language team on FirstVoices";
-                break;
+                case MID_REGISTRATION_PERIOD_ACT:
+                    title = "FirstVoices: User registration will expire soon.";
+                    break;
+                case REGISTRATION_EXPIRATION_ACT:
+                    title = "FirstVoices: User registration was not completed and will be deleted.";
+                    break;
+                case NEW_USER_SELF_REGISTRATION_ACT:
+                    title = "FirstVoices: New User Registration (action may be required)";
+                    break;
+                case NEW_MEMBER_SELF_REGISTRATION_ACT:
+                    title = options.get("fName") + " wants to join " + options.get("dialect") + " on FirstVoices";
+                    break;
+                case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
+                    title = options.get("fName") + " wants to join the " + options.get("dialect") + " language team on FirstVoices";
+                    break;
             }
 
             return title;
@@ -166,21 +218,21 @@ public class FVRegistrationMailUtilities {
             String bodyTemplate = null;
 
             switch (variant) {
-            case MID_REGISTRATION_PERIOD_ACT:
-                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-RegisterationAboutToExpire.ftl";
-                break;
-            case REGISTRATION_EXPIRATION_ACT:
-                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-RegisterationExpired.ftl";
-                break;
-            case NEW_USER_SELF_REGISTRATION_ACT:
-                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewUserRegistered.ftl";
-                break;
-            case NEW_MEMBER_SELF_REGISTRATION_ACT:
-                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewMemberRegistered.ftl";
-                break;
-            case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
-                bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewTeamMemberRegistered.ftl";
-                break;
+                case MID_REGISTRATION_PERIOD_ACT:
+                    bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-RegisterationAboutToExpire.ftl";
+                    break;
+                case REGISTRATION_EXPIRATION_ACT:
+                    bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-RegisterationExpired.ftl";
+                    break;
+                case NEW_USER_SELF_REGISTRATION_ACT:
+                    bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewUserRegistered.ftl";
+                    break;
+                case NEW_MEMBER_SELF_REGISTRATION_ACT:
+                    bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewMemberRegistered.ftl";
+                    break;
+                case NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT:
+                    bodyTemplate = "skin/views/FVUserRegistration/NOTIFY-NewTeamMemberRegistered.ftl";
+                    break;
             }
 
             StringWriter writer = new StringWriter();
@@ -212,16 +264,16 @@ public class FVRegistrationMailUtilities {
             String title = null;
 
             switch (variant) {
-            case MID_REGISTRATION_PERIOD_ACT:
-                title = "NOTIFICATION Your registration will expire soon.";
-                break;
-            case REGISTRATION_EXPIRATION_ACT:
-                title = "NOTIFICATION Your registration was not completed and will be deleted.";
-                break;
-            case REGISTRATION_DELETION_ACT:
-                title = "Your registration to FirstVoices was deleted.";
-                break;
-            default:
+                case MID_REGISTRATION_PERIOD_ACT:
+                    title = "NOTIFICATION Your registration will expire soon.";
+                    break;
+                case REGISTRATION_EXPIRATION_ACT:
+                    title = "NOTIFICATION Your registration was not completed and will be deleted.";
+                    break;
+                case REGISTRATION_DELETION_ACT:
+                    title = "Your registration to FirstVoices was deleted.";
+                    break;
+                default:
             }
             return title;
         }
@@ -241,53 +293,19 @@ public class FVRegistrationMailUtilities {
             String thankYou = " <br><br> Regards,<br> The FirstVoices team";
 
             switch (variant) {
-            case MID_REGISTRATION_PERIOD_ACT:
-                body = g + e3 + ln + dp + endStr + thankYou;
-                break;
-            case REGISTRATION_EXPIRATION_ACT:
-                body = g + e24 + ln + dp + endStr + thankYou;
-                break;
-            case REGISTRATION_DELETION_ACT:
-                body = g + del + re + endStr_D + thankYou;
-                break;
-            default:
+                case MID_REGISTRATION_PERIOD_ACT:
+                    body = g + e3 + ln + dp + endStr + thankYou;
+                    break;
+                case REGISTRATION_EXPIRATION_ACT:
+                    body = g + e24 + ln + dp + endStr + thankYou;
+                    break;
+                case REGISTRATION_DELETION_ACT:
+                    body = g + del + re + endStr_D + thankYou;
+                    break;
+                default:
             }
 
             return body;
-        }
-    }
-
-    /**
-     * @param variant
-     * @param prep
-     * @param options
-     * @param toStr
-     * @throws Exception
-     */
-    private void registrationMailSender(int variant, EmailContentAssembler prep, Map<String, String> options,
-            String toStr, String BCC) throws Exception {
-        String title = prep.getEmailTitle(variant, options);
-        String body = prep.getEmailBody(variant, options);
-
-        try {
-            if (title != null && body != null) {
-                if (!toStr.isEmpty()) {
-
-                    // IF BCC equals toStr - a language admin does not exist, and we are sending directly to super admins.
-                    // Remove BCC, and mention something in the title
-                    if (BCC.equals(toStr)) {
-                        BCC = "";
-                        title = "[NO-LANG-ADMIN] " + title;
-                    }
-
-                    generateMail(toStr, "", title, body, BCC);
-                } else {
-                    generateMail(options.get("email"), "", title, body, BCC);
-                }
-            }
-        } catch (NamingException | MessagingException e) {
-            log.warn(e);
-            throw new NuxeoException("Error while sending mail", e);
         }
     }
 

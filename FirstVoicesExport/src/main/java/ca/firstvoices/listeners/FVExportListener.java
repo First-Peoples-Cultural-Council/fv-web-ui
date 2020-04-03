@@ -1,17 +1,29 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.utils.FVExportConstants.AUTO_NEXT_EXPORT_WORKER;
-import static ca.firstvoices.utils.FVExportConstants.AUTO_PRODUCE_FORMATTED_DOCUMENT;
-import static ca.firstvoices.utils.FVExportConstants.CYCLIC_WORKER_ID;
-import static ca.firstvoices.utils.FVExportConstants.DOCS_TO_EXPORT;
-import static ca.firstvoices.utils.FVExportConstants.EXPORT_WORK_INFO;
-import static ca.firstvoices.utils.FVExportConstants.FINISH_EXPORT_BY_WRAPPING_BLOB;
-import static ca.firstvoices.utils.FVExportConstants.INHERITED_FROM_OTHER;
-import static ca.firstvoices.utils.FVExportConstants.PRODUCE_FORMATTED_DOCUMENT;
-import static ca.firstvoices.utils.FVExportUtils.makeExportWorkerID;
-
-import java.util.ArrayList;
-
+import ca.firstvoices.utils.FVExportUtils;
+import ca.firstvoices.utils.FVExportWorkInfo;
+import ca.firstvoices.workers.FVAbstractExportWork;
+import ca.firstvoices.workers.FVCyclicExportWorker;
+import ca.firstvoices.workers.FVExportBlobWorker;
+import ca.firstvoices.workers.FVExportWorker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.util.StringList;
@@ -22,12 +34,10 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.utils.FVExportUtils;
-import ca.firstvoices.utils.FVExportWorkInfo;
-import ca.firstvoices.workers.FVAbstractExportWork;
-import ca.firstvoices.workers.FVCyclicExportWorker;
-import ca.firstvoices.workers.FVExportBlobWorker;
-import ca.firstvoices.workers.FVExportWorker;
+import java.util.ArrayList;
+
+import static ca.firstvoices.utils.FVExportConstants.*;
+import static ca.firstvoices.utils.FVExportUtils.makeExportWorkerID;
 
 /*
  *
@@ -42,36 +52,34 @@ public class FVExportListener implements EventListener {
         EventContext ctx = event.getContext();
 
         switch (event.getName()) {
-        case PRODUCE_FORMATTED_DOCUMENT: // starting point for an export operations
-            FVExportWorkInfo info = (FVExportWorkInfo) ctx.getProperty(EXPORT_WORK_INFO);
+            case PRODUCE_FORMATTED_DOCUMENT: // starting point for an export operations
+                FVExportWorkInfo info = (FVExportWorkInfo) ctx.getProperty(EXPORT_WORK_INFO);
 
-            String id = makeExportWorkerID(info);
+                String id = makeExportWorkerID(info);
 
-            if (checkForRunningWorkerBeforeProceeding(id)) {
-                getWorkManager().schedule(produceWorker(ctx, new FVExportWorker(id)), true);
-            }
-            break;
+                if (checkForRunningWorkerBeforeProceeding(id)) {
+                    getWorkManager().schedule(produceWorker(ctx, new FVExportWorker(id)), true);
+                }
+                break;
 
-        case FINISH_EXPORT_BY_WRAPPING_BLOB: // conclusion of the export - send document to be included in a wrapper
-            getWorkManager().schedule(produceBlobWorker(ctx), true);
-            break;
+            case FINISH_EXPORT_BY_WRAPPING_BLOB: // conclusion of the export - send document to be included in a wrapper
+                getWorkManager().schedule(produceBlobWorker(ctx), true);
+                break;
 
-        case AUTO_PRODUCE_FORMATTED_DOCUMENT: // placeholder for cyclic export
-            if (checkForRunningWorkerBeforeProceeding(CYCLIC_WORKER_ID)) {
-                getWorkManager().schedule(produceWorker(ctx, new FVCyclicExportWorker()), true);
-            }
-            break;
+            case AUTO_PRODUCE_FORMATTED_DOCUMENT: // placeholder for cyclic export
+                if (checkForRunningWorkerBeforeProceeding(CYCLIC_WORKER_ID)) {
+                    getWorkManager().schedule(produceWorker(ctx, new FVCyclicExportWorker()), true);
+                }
+                break;
 
-        case AUTO_NEXT_EXPORT_WORKER: // cyclic: move to work on next export document
-            break;
+            case AUTO_NEXT_EXPORT_WORKER: // cyclic: move to work on next export document
+                break;
         }
     }
 
     private boolean checkForRunningWorkerBeforeProceeding(String workId) {
-        if (!FVExportUtils.checkForRunningWorkerBeforeProceeding(workId, workManager))
-            return true; // worker is not running
-
-        return false; // worker is running
+        return !FVExportUtils.checkForRunningWorkerBeforeProceeding(workId, workManager); // worker is not running
+// worker is running
     }
 
     private FVAbstractExportWork produceBlobWorker(EventContext ctx) {
@@ -94,7 +102,6 @@ public class FVExportListener implements EventListener {
             FVExportWorkInfo workInfo = new FVExportWorkInfo();
 
             workInfo.workDuration = System.currentTimeMillis();
-            ;
             workInfo.dialectGUID = INHERITED_FROM_OTHER;
             workInfo.dialectName = INHERITED_FROM_OTHER;
             workInfo.exportFormat = INHERITED_FROM_OTHER;

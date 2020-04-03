@@ -1,22 +1,26 @@
 /*
- * Copyright 2016 First People's Cultural Council
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * /
  */
 package ca.firstvoices.nativeorder.services;
 
+import ca.firstvoices.services.AbstractService;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-
-import ca.firstvoices.services.AbstractService;
 import org.nuxeo.ecm.core.api.PathRef;
 
 import java.util.Arrays;
@@ -143,7 +147,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                 // Grab all the characters that begin with the current character (for example, if "current character" is
                 // iterating on "a", it will return "aa" if it is also in the alphabet)
                 List<String> charsStartingWithCurrentCharLower =
-                        fvChars.stream().filter(character -> character != null ? character.startsWith(charValue) : false).collect(Collectors.toList());
+                        fvChars.stream().filter(character -> character != null && character.startsWith(charValue)).collect(Collectors.toList());
                 // Go through the characters that begin with the "current character", and ensure that the title does not
                 // start with any character in that list (save for the "current character" that we're iterating on).
                 incorrect =

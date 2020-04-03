@@ -1,9 +1,28 @@
 /*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
+/*
  * Contributors:
  *     Kristof Subryan <vtr_monk@mac.com>
  */
 package ca.firstvoices.nuxeo.operations;
 
+import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -21,8 +40,6 @@ import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.platform.query.api.PageProviderDefinition;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider;
-
-import ca.firstvoices.nuxeo.utils.EnricherUtils;
 
 @Operation(id = DocumentEnrichedQuery.ID, category = Constants.CAT_FETCH, label = "Enriched Query", description = "Returns a query that is transformed, for example - includes a lookup for sub-categories in addition to parent category")
 public class DocumentEnrichedQuery {
@@ -77,9 +94,9 @@ public class DocumentEnrichedQuery {
     public DocumentModelList run() throws OperationException {
 
         switch (enrichment) {
-        case CATEGORY_CHILDREN_ENRICHMENT:
-            query = EnricherUtils.expandCategoriesToChildren(session, query);
-            break;
+            case CATEGORY_CHILDREN_ENRICHMENT:
+                query = EnricherUtils.expandCategoriesToChildren(session, query);
+                break;
         }
 
         PageProviderDefinition def = PageProviderHelper.getPageProviderDefinition("es_nxql_search");

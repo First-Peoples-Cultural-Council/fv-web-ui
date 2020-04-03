@@ -1,3 +1,21 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.security.tests;
 
 import ca.firstvoices.utils.CustomSecurityConstants;
@@ -29,15 +47,15 @@ import static org.junit.Assert.*;
 @RunWith(FeaturesRunner.class)
 @Features({ PlatformFeature.class, AutomationFeature.class })
 @Deploy({
-    "FirstVoicesSecurity.tests:userservice-config.xml",
-    "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.auth.xml",
-    "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml",
-    "org.nuxeo.ecm.user.registration",
-    "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml",
-    "org.nuxeo.ecm.user.invite",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"
+        "FirstVoicesSecurity.tests:userservice-config.xml",
+        "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.auth.xml",
+        "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml",
+        "org.nuxeo.ecm.user.registration",
+        "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml",
+        "org.nuxeo.ecm.user.invite",
+        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
+        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"
 })
 @PartialDeploy(bundle = "FirstVoicesData", extensions = { TargetExtensions.ContentModel.class })
 public class TestSecurityPolicies extends AbstractFVTest {

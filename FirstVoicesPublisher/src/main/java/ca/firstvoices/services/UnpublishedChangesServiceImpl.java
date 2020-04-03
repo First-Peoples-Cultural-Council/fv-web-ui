@@ -1,25 +1,43 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.services;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.schema.DocumentType;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.runtime.api.Framework;
 
 import java.util.Arrays;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
-    
+
     public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
-    
+
         FirstVoicesPublisherService FVPublisherService = Framework.getService(FirstVoicesPublisherService.class);
-        
+
         // Check that the document is a specific type using the helper method
         if (!(checkType(document)))
             return false;
-    
+
         // Check that the document is currently published
         if (! document.getCurrentLifeCycleState().equals("Published")) {
             return false;
@@ -32,14 +50,14 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         DocumentRef workspacesDocRef = CoreInstance.doPrivileged(session, s -> {
             return s.getSourceDocument(document.getRef()).getRef();
         });
-        
+
         int majorVerDoc = CoreInstance.doPrivileged(session, s -> {
             return Integer.parseInt(s.getWorkingCopy(document.getRef()).getPropertyValue("uid:major_version").toString());
         });
         int minorVerDoc = CoreInstance.doPrivileged(session, s -> {
             return Integer.parseInt(s.getWorkingCopy(document.getRef()).getPropertyValue("uid:minor_version").toString());
         });
-        
+
         // Get the sections document and versions
         DocumentModel sectionsDoc = FVPublisherService.getPublication(session, workspacesDocRef);
         int majorVerSections =  Integer.parseInt(sectionsDoc.getPropertyValue("uid:major_version").toString());

@@ -1,14 +1,28 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.format_producers;
 
-import static ca.firstvoices.utils.FVExportConstants.EXPORT_WORK_INFO;
-import static ca.firstvoices.utils.FVExportConstants.FINISH_EXPORT_BY_WRAPPING_BLOB;
-import static ca.firstvoices.utils.FVExportUtils.makePropertyReader;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.firstvoices.property_readers.FV_AbstractPropertyReader;
+import ca.firstvoices.property_readers.FV_DataBinding;
+import ca.firstvoices.utils.ExportColumnRecord;
+import ca.firstvoices.utils.FVExportWorkInfo;
+import ca.firstvoices.utils.FV_CSVExportColumns;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.util.StringList;
@@ -19,11 +33,14 @@ import org.nuxeo.ecm.core.event.EventProducer;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.property_readers.FV_AbstractPropertyReader;
-import ca.firstvoices.property_readers.FV_DataBinding;
-import ca.firstvoices.utils.ExportColumnRecord;
-import ca.firstvoices.utils.FVExportWorkInfo;
-import ca.firstvoices.utils.FV_CSVExportColumns;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ca.firstvoices.utils.FVExportConstants.EXPORT_WORK_INFO;
+import static ca.firstvoices.utils.FVExportConstants.FINISH_EXPORT_BY_WRAPPING_BLOB;
+import static ca.firstvoices.utils.FVExportUtils.makePropertyReader;
 
 /*
  * FV_AbstractProducer is a driver of any export process related to producing a list of words and their
@@ -239,7 +256,7 @@ abstract public class FV_AbstractProducer {
         List<List<FV_DataBinding>> listToReturn = new ArrayList<>();
         int numOutputLines = 1; // maximum number of output lines to be generated
         int scan = 1; // since some columns may have more than 1 row we will need to rescan
-                      // provided data multiple times
+        // provided data multiple times
         do {
             List<FV_DataBinding> singleLine = new ArrayList<>();
 

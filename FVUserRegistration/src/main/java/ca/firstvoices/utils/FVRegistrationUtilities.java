@@ -1,4 +1,22 @@
 /*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
+/*
  * Contributors:
  *     Kristof Subryan <vtr_monk@mac.com>
  */
@@ -289,8 +307,8 @@ public class FVRegistrationUtilities {
      * @return
      */
     public String registrationCommonFinish(UserRegistrationService registrationService,
-            DocumentModel registrationRequest, Map<String, Serializable> info, String comment,
-            ValidationMethod validationMethod, boolean autoAccept, CoreSession session)
+                                           DocumentModel registrationRequest, Map<String, Serializable> info, String comment,
+                                           ValidationMethod validationMethod, boolean autoAccept, CoreSession session)
             throws Exception {
         int validationStatus;
 
@@ -310,15 +328,15 @@ public class FVRegistrationUtilities {
 
         if (validationStatus != REGISTRATION_CAN_PROCEED) {
             switch (validationStatus) {
-            case EMAIL_EXISTS_ERROR:
-            case LOGIN_EXISTS_ERROR:
-            case LOGIN_AND_EMAIL_EXIST_ERROR:
-                throw new RestOperationException("This email address is already in use.", 400);
+                case EMAIL_EXISTS_ERROR:
+                case LOGIN_EXISTS_ERROR:
+                case LOGIN_AND_EMAIL_EXIST_ERROR:
+                    throw new RestOperationException("This email address is already in use.", 400);
 
-            case REGISTRATION_EXISTS_ERROR:
-                throw new RestOperationException(
-                        "A pending registration with the same credentials is present. Please check your email (including SPAM folder) for a message with instructions or contact us for help.",
-                        400);
+                case REGISTRATION_EXISTS_ERROR:
+                    throw new RestOperationException(
+                            "A pending registration with the same credentials is present. Please check your email (including SPAM folder) for a message with instructions or contact us for help.",
+                            400);
 
             }
         }
@@ -421,7 +439,7 @@ public class FVRegistrationUtilities {
         private String language_admin_group;
 
         protected UnrestrictedRequestPermissionResolver(CoreSession session, String registrationDocId,
-                String language_admin_group) {
+                                                        String language_admin_group) {
             super(session);
             this.registrationDocId = registrationDocId;
             this.language_admin_group = language_admin_group;

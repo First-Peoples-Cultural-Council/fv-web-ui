@@ -1,10 +1,22 @@
-package ca.firstvoices.nuxeo.operations;
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+package ca.firstvoices.nuxeo.operations;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,12 +26,13 @@ import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
-import org.nuxeo.ecm.core.api.Blob;
-import org.nuxeo.ecm.core.api.Blobs;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IterableQueryResult;
-import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.*;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Operation(id = ListDialects.ID, category = Constants.CAT_DOCUMENT, label = "List dialects in FV tree", description = "Returns a list of dialects based on selection criteria")
 public class ListDialects {
@@ -60,26 +73,26 @@ public class ListDialects {
         String query = queryFront + queryVersion + querySort;
 
         switch (dialectState.toLowerCase()) {
-        case ALL_DIALECTS:
-            query = "SELECT ecm:uuid, dc:title, ecm:currentLifeCycleState FROM FVDialect " + querySort;
-            break;
-        case NEW_DIALECTS:
-            query = queryFront + "ecm:currentLifeCycleState = 'New' " + querySort;
-            break;
-        case DIALECTS_TO_JOIN:
-            query = queryFront
-                    + "(ecm:currentLifeCycleState = 'Enabled' OR  (ecm:currentLifeCycleState = 'Published' AND ecm:isProxy=0)) AND "
-                    + queryVersion + querySort;
-            break;
-        case ENABLED_DIALECTS:
-            query = queryFront + "ecm:currentLifeCycleState = 'Enabled' AND " + queryVersion + querySort;
-            break;
-        case DISABLED_DIALECTS:
-            query = queryFront + "ecm:currentLifeCycleState = 'Disabled' AND " + queryVersion + querySort;
-            break;
-        case PUBLISHED_DIALECTS:
-            query = queryFront + "ecm:currentLifeCycleState = 'Published' AND " + queryProxy + queryVersion + querySort;
-            break;
+            case ALL_DIALECTS:
+                query = "SELECT ecm:uuid, dc:title, ecm:currentLifeCycleState FROM FVDialect " + querySort;
+                break;
+            case NEW_DIALECTS:
+                query = queryFront + "ecm:currentLifeCycleState = 'New' " + querySort;
+                break;
+            case DIALECTS_TO_JOIN:
+                query = queryFront
+                        + "(ecm:currentLifeCycleState = 'Enabled' OR  (ecm:currentLifeCycleState = 'Published' AND ecm:isProxy=0)) AND "
+                        + queryVersion + querySort;
+                break;
+            case ENABLED_DIALECTS:
+                query = queryFront + "ecm:currentLifeCycleState = 'Enabled' AND " + queryVersion + querySort;
+                break;
+            case DISABLED_DIALECTS:
+                query = queryFront + "ecm:currentLifeCycleState = 'Disabled' AND " + queryVersion + querySort;
+                break;
+            case PUBLISHED_DIALECTS:
+                query = queryFront + "ecm:currentLifeCycleState = 'Published' AND " + queryProxy + queryVersion + querySort;
+                break;
         }
 
         UnrestrictedDialectQuery dialectListQueryRunner = new UnrestrictedDialectQuery(session, query);

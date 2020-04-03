@@ -1,22 +1,35 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.securitypolicies.groups;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import ca.firstvoices.utils.CustomSecurityConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.security.ACE;
-import org.nuxeo.ecm.core.api.security.ACL;
-import org.nuxeo.ecm.core.api.security.ACP;
-import org.nuxeo.ecm.core.api.security.Access;
-import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.api.security.*;
 import org.nuxeo.ecm.core.model.Document;
 import org.nuxeo.ecm.core.query.sql.model.SQLQuery.Transformer;
 import org.nuxeo.ecm.core.security.AbstractSecurityPolicy;
 
-import ca.firstvoices.utils.CustomSecurityConstants;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Language recorders policies
@@ -53,20 +66,16 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
     @Override
     public boolean isRestrictingPermission(String permission) {
 
-        if (permission.equals(SecurityConstants.ADD_CHILDREN) || permission.equals(SecurityConstants.WRITE)
+        return permission.equals(SecurityConstants.ADD_CHILDREN) || permission.equals(SecurityConstants.WRITE)
                 || permission.equals(SecurityConstants.WRITE_PROPERTIES)
                 || permission.equals(CustomSecurityConstants.CAN_ASK_FOR_PUBLISH)
                 || permission.equals(SecurityConstants.REMOVE_CHILDREN)
-                || permission.equals(SecurityConstants.REMOVE)) {
-            return true;
-        }
-
-        return false;
+                || permission.equals(SecurityConstants.REMOVE);
     }
 
     @Override
     public Access checkPermission(Document doc, ACP mergedAcp, NuxeoPrincipal principal, String permission,
-            String[] resolvedPermissions, String[] additionalPrincipals) throws SecurityException {
+                                  String[] resolvedPermissions, String[] additionalPrincipals) throws SecurityException {
 
         List<String> resolvedPermissionsList = Arrays.asList(resolvedPermissions);
         List<String> additionalPrincipalsList = Arrays.asList(additionalPrincipals);
@@ -113,15 +122,15 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
             // Allow adding children and removing children on allowed types
             if (allowedDocumentTypes.contains(docType)
                     && (resolvedPermissionsList.contains(SecurityConstants.ADD_CHILDREN)
-                            || resolvedPermissionsList.contains(SecurityConstants.REMOVE_CHILDREN))) {
+                    || resolvedPermissionsList.contains(SecurityConstants.REMOVE_CHILDREN))) {
                 return Access.GRANT;
             }
 
             // Allow Publishing, Writing and Removing on allowed document type children
             if (docTypeParent != null && allowedDocumentTypes.contains(docTypeParent)
                     && (resolvedPermissionsList.contains(SecurityConstants.WRITE_PROPERTIES)
-                            || resolvedPermissionsList.contains(SecurityConstants.REMOVE)
-                            || resolvedPermissionsList.contains(SecurityConstants.WRITE))) {
+                    || resolvedPermissionsList.contains(SecurityConstants.REMOVE)
+                    || resolvedPermissionsList.contains(SecurityConstants.WRITE))) {
                 return Access.GRANT;
             }
         }

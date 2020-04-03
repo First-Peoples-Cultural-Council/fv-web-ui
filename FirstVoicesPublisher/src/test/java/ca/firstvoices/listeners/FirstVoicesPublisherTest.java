@@ -1,19 +1,28 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 /**
  *
  */
 
 package ca.firstvoices.listeners;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.security.InvalidParameterException;
-
-import javax.inject.Inject;
-
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -29,7 +38,10 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import javax.inject.Inject;
+import java.security.InvalidParameterException;
+
+import static org.junit.Assert.*;
 
 /**
  * @author loopingz
@@ -432,7 +444,7 @@ public class FirstVoicesPublisherTest {
         assertNotEquals(subcategory.getRef(), new IdRef(property[0]));
         doc = session.getDocument(new IdRef(property[0]));
         assertTrue(doc.getPathAsString()
-                      .matches("/FV.*/sections/Family/Language/Dialect/Categories/Category/SubCategory"));
+                .matches("/FV.*/sections/Family/Language/Dialect/Categories/Category/SubCategory"));
         doc = session.getSourceDocument(new IdRef(property[0]));
         assertTrue(doc.getPathAsString().matches("/Family/Language/Dialect/Categories/Category/SubCategory"));
     }
@@ -443,7 +455,7 @@ public class FirstVoicesPublisherTest {
         assertNotEquals(original.getRef(), ref);
         DocumentModel doc = session.getDocument(ref);
         assertTrue(doc.getPathAsString()
-                      .matches("/FV.*/sections/Family/Language/Dialect/Resources/" + original.getName()));
+                .matches("/FV.*/sections/Family/Language/Dialect/Resources/" + original.getName()));
         doc = session.getSourceDocument(ref);
         assertTrue(doc.getPathAsString().matches("/Family/Language/Dialect/Resources/" + original.getName()));
         assertEquals(original.getRef().toString(), doc.getSourceId());

@@ -1,7 +1,22 @@
-package ca.firstvoices.securitypolicies.lifecycle;
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
 
-import java.util.Arrays;
-import java.util.List;
+package ca.firstvoices.securitypolicies.lifecycle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,14 +25,12 @@ import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.Access;
 import org.nuxeo.ecm.core.model.Document;
 import org.nuxeo.ecm.core.query.sql.NXQL;
-import org.nuxeo.ecm.core.query.sql.model.Operator;
-import org.nuxeo.ecm.core.query.sql.model.Predicate;
-import org.nuxeo.ecm.core.query.sql.model.Reference;
-import org.nuxeo.ecm.core.query.sql.model.SQLQuery;
+import org.nuxeo.ecm.core.query.sql.model.*;
 import org.nuxeo.ecm.core.query.sql.model.SQLQuery.Transformer;
-import org.nuxeo.ecm.core.query.sql.model.StringLiteral;
-import org.nuxeo.ecm.core.query.sql.model.WhereClause;
 import org.nuxeo.ecm.core.security.AbstractSecurityPolicy;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class NonRecorders extends AbstractSecurityPolicy {
 
@@ -25,7 +38,7 @@ public class NonRecorders extends AbstractSecurityPolicy {
 
     @Override
     public Access checkPermission(Document doc, ACP mergedAcp, NuxeoPrincipal principal, String permission,
-            String[] resolvedPermissions, String[] additionalPrincipals) {
+                                  String[] resolvedPermissions, String[] additionalPrincipals) {
 
         log.debug("Checking permission: " + permission + " on doc: " + doc.getUUID() + " for user: "
                 + principal.getName());

@@ -1,5 +1,6 @@
 /*
- * (C) Copyright 2016 Nuxeo SA (http://nuxeo.com/) and others.
+ *
+ * Copyright 2020 First People's Cultural Council
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,17 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Contributors:
- *     Nelson Silva <nsilva@nuxeo.com>
- *     Kristof Subryan <vtr_monk@mac.com>
+ * /
  */
 package ca.firstvoices.operations;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
+import ca.firstvoices.utils.FVRegistrationUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -39,7 +34,9 @@ import org.nuxeo.ecm.user.invite.UserInvitationService.ValidationMethod;
 import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
 
-import ca.firstvoices.utils.FVRegistrationUtilities;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Operation to invite a User.

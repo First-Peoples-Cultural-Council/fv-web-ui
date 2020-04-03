@@ -1,5 +1,6 @@
 /*
- * (C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and others.
+ *
+ * Copyright 2020 First People's Cultural Council
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,14 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Contributors:
- *     Nelson Silva <nsilva@nuxeo.com>
+ * /
  */
 package ca.firstvoices.codecs;
 
-import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.automation.io.services.codec.AbstractMarshallingRegistryCodec;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.io.NuxeoPrincipalJsonReader;
 import org.nuxeo.ecm.platform.usermanager.io.NuxeoPrincipalJsonWriter;
 

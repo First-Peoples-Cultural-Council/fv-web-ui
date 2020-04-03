@@ -1,51 +1,68 @@
-package ca.firstvoices.operations;
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
 
-import java.util.*;
-import java.util.stream.Collectors;
+package ca.firstvoices.operations;
 
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
 import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.CoreSession;
-import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
-import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
-import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
-import static org.nuxeo.ecm.platform.usermanager.UserConfig.SCHEMA_NAME;
-import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.nuxeo.ecm.platform.usermanager.UserConfig.*;
 
 /**
  *
  */
-@Operation(id=InitialDatabaseSetup.ID, category= Constants.CAT_DOCUMENT, label="FVInitialDatabaseSetup",
-    description="This operation is used to setup the initial FirstVoices backend for development.  " +
-        "It can be run multiple times without issues. Please ensure you have your environment " +
-        "variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD as these will create an admin " +
-        "account for you.")
+@Operation(id = InitialDatabaseSetup.ID, category = Constants.CAT_DOCUMENT, label = "FVInitialDatabaseSetup",
+        description = "This operation is used to setup the initial FirstVoices backend for development.  " +
+                "It can be run multiple times without issues. Please ensure you have your environment " +
+                "variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD as these will create an admin " +
+                "account for you.")
 public class InitialDatabaseSetup {
-    
+
     public static final String ID = "Document.InitialDatabaseSetup";
-    
+
     public static final String SCHEMA_PUBLISHING = "publishing";
-    
+
     public static final String SECTIONS_PROPERTY_NAME = "publish:sections";
-    
+
     // Environment variables for the admin account that will be created.
     private static final String username = System.getenv("CYPRESS_FV_USERNAME");
     private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
-    
+
     @Context
     protected CoreSession session;
-    
+
     @Context
     protected UserManager userManager;
-    
+
     @OperationMethod
     public void run() {
             /*
@@ -138,33 +155,33 @@ public class InitialDatabaseSetup {
             }
         }
     }
-    
+
     /*
         Helper method to set a publication target for a document.
      */
     private void addSection(String targetSectionId, DocumentModel sourceDocument) {
-        
+
         if (targetSectionId != null && sourceDocument.hasSchema(SCHEMA_PUBLISHING)) {
             String[] sectionIdsArray = (String[]) sourceDocument.getPropertyValue(SECTIONS_PROPERTY_NAME);
-            
+
             List<String> sectionIdsList = new ArrayList<String>();
-            
+
             if (sectionIdsArray != null && sectionIdsArray.length > 0) {
                 sectionIdsList = Arrays.asList(sectionIdsArray);
                 // make it resizable
                 sectionIdsList = new ArrayList<String>(sectionIdsList);
             }
-            
+
             sectionIdsList.add(targetSectionId);
             String[] sectionIdsListIn = new String[sectionIdsList.size()];
             sectionIdsList.toArray(sectionIdsListIn);
-            
+
             sourceDocument.setPropertyValue(SECTIONS_PROPERTY_NAME, sectionIdsListIn);
             session.saveDocument(sourceDocument);
             session.save();
         }
     }
-    
+
     /*
         Helper method to create the folder structure if it doesn't exist already
      */
@@ -176,7 +193,7 @@ public class InitialDatabaseSetup {
             session.saveDocument(newDoc);
         }
     }
-    
+
     /*
         Helper method to create the user groups
      */
@@ -187,7 +204,7 @@ public class InitialDatabaseSetup {
             newGroup.setProperty("group", "grouplabel", groupLabel);
             userManager.createGroup(newGroup);
         }
-        
+
     }
-    
+
 }

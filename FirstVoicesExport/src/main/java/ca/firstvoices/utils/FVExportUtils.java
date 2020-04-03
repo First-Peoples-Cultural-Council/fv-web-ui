@@ -1,10 +1,25 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.utils;
 
-import java.lang.reflect.Constructor;
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-
+import ca.firstvoices.format_producers.FV_AbstractProducer;
+import ca.firstvoices.property_readers.FV_AbstractPropertyReader;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -12,8 +27,10 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 
-import ca.firstvoices.format_producers.FV_AbstractProducer;
-import ca.firstvoices.property_readers.FV_AbstractPropertyReader;
+import java.lang.reflect.Constructor;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 public class FVExportUtils {
 
@@ -101,7 +118,7 @@ public class FVExportUtils {
     }
 
     public static FV_AbstractPropertyReader makePropertyReader(CoreSession session, ExportColumnRecord colR,
-            FV_AbstractProducer producer) throws Exception {
+                                                               FV_AbstractProducer producer) throws Exception {
         Class<?> clazz = colR.requiredPropertyReader;
         Constructor<?> constructor = clazz.getConstructor(CoreSession.class, ExportColumnRecord.class,
                 FV_AbstractProducer.class);
@@ -115,9 +132,8 @@ public class FVExportUtils {
     public static boolean checkForRunningWorkerBeforeProceeding(String workId, WorkManager workManager) {
         if (workManager == null)
             return false; // worker is running
-        if (workManager.find(workId, null) != null)
-            return true; // worker is running
-        return false; // worker is not running
+        return workManager.find(workId, null) != null; // worker is running
+// worker is not running
     }
 
 }

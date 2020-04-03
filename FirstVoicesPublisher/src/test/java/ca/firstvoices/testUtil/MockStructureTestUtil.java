@@ -1,21 +1,32 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.testUtil;
 
 import org.nuxeo.ecm.core.api.*;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.CoreSession;
-import static org.junit.Assert.assertNotNull;
 
-import static org.junit.Assert.*;
-
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.automation.OperationException;
-import org.nuxeo.ecm.core.api.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MockStructureTestUtil {
 
@@ -27,46 +38,39 @@ public class MockStructureTestUtil {
     public static final String SCHEMA_PUBLISHING = "publishing";
     public static final String SECTIONS_PROPERTY_NAME = "publish:sections";
 
-    public DocumentModel getCurrentDialect()
-    {
+    public DocumentModel getCurrentDialect() {
         return dialectDoc;
     }
 
-    private void recursiveRemove( CoreSession session, DocumentModel parent )
-    {
-        DocumentModelList children =  session.getChildren(parent.getRef());
+    private void recursiveRemove(CoreSession session, DocumentModel parent) {
+        DocumentModelList children = session.getChildren(parent.getRef());
 
-        for( DocumentModel child : children )
-        {
-            recursiveRemove( session, child );
+        for (DocumentModel child : children) {
+            recursiveRemove(session, child);
         }
 
         session.removeDocument(parent.getRef());
         session.save();
     }
 
-    private void startFresh( CoreSession session)
-    {
+    private void startFresh(CoreSession session) {
         DocumentRef dRef = new PathRef("/FV");
         DocumentModel defaultDomain = session.getDocument(dRef);
 
-        DocumentModelList children =  session.getChildren(defaultDomain.getRef());
+        DocumentModelList children = session.getChildren(defaultDomain.getRef());
 
-        for( DocumentModel child : children )
-        {
-            recursiveRemove( session, child );
+        for (DocumentModel child : children) {
+            recursiveRemove(session, child);
         }
     }
 
-    public DocumentModel[] getTestWordsArray(CoreSession session)
-    {
-        DocumentModelList testWords =  session.query("SELECT * FROM FVWord WHERE ecm:isVersion = 0");
+    public DocumentModel[] getTestWordsArray(CoreSession session) {
+        DocumentModelList testWords = session.query("SELECT * FROM FVWord WHERE ecm:isVersion = 0");
         assertNotNull("Should always have valid list of FVWords", testWords);
         DocumentModel[] docArray = new DocumentModel[testWords.size()];
         int i = 0;
 
-        for( DocumentModel doc : testWords )
-        {
+        for (DocumentModel doc : testWords) {
             docArray[i] = doc;
             i++;
         }
@@ -77,13 +81,11 @@ public class MockStructureTestUtil {
     }
 
 
-    public void publishWords( CoreSession session )
-    {
+    public void publishWords(CoreSession session) {
         IntStream.range(0, wordArray.length).forEach(i -> assertTrue("Should succesfully publish word", session.followTransition(wordArray[i], "Publish")));
     }
 
-    public void createSetup(CoreSession session )
-    {
+    public void createSetup(CoreSession session) {
         startFresh(session);
 
         DocumentModel domain = createDocument(session, session.createDocumentModel("/", "FV", "Domain"));
@@ -101,16 +103,15 @@ public class MockStructureTestUtil {
         session.save();
     }
 
-    public DocumentModel createDialectTree(CoreSession session)
-    {
+    public DocumentModel createDialectTree(CoreSession session) {
         assertNotNull("Should have a valid Domain",
-            createDocument(session, session.createDocumentModel("/", "FV", "Domain")));
+                createDocument(session, session.createDocumentModel("/", "FV", "Domain")));
         assertNotNull("Should have a valid Workspace",
-            createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
-        assertNotNull( "Should have a valid FVLanguageFamily",
-            createDocument(session, session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily")));
-        assertNotNull( "Should have a valid FVLanguage",
-            createDocument(session, session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage")));
+                createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
+        assertNotNull("Should have a valid FVLanguageFamily",
+                createDocument(session, session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily")));
+        assertNotNull("Should have a valid FVLanguage",
+                createDocument(session, session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage")));
         dialectDoc = createDocument(session, session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
         assertNotNull("Should have a valid FVDialect", dialectDoc);
         session.save();
@@ -118,8 +119,7 @@ public class MockStructureTestUtil {
         return dialectDoc;
     }
 
-    public DocumentModel createDocument(CoreSession session, DocumentModel model)
-    {
+    public DocumentModel createDocument(CoreSession session, DocumentModel model) {
         model.setPropertyValue("dc:title", model.getName());
         DocumentModel newDoc = session.createDocument(model);
         session.save();
@@ -127,8 +127,7 @@ public class MockStructureTestUtil {
         return newDoc;
     }
 
-    public void createWords( CoreSession session)
-    {
+    public void createWords(CoreSession session) {
         Integer i = 0;
 
         for (String wordValue : words) {
@@ -136,8 +135,8 @@ public class MockStructureTestUtil {
             session.save();
             assertNotNull("Should have a valid FVWord model", word);
             word.setPropertyValue("dc:title", wordValue);
-            word.setPropertyValue("fv:reference", wordValue );
-            word = createDocument(session, word );
+            word.setPropertyValue("fv:reference", wordValue);
+            word = createDocument(session, word);
             assertNotNull("Should have a valid FVWord", word);
             i++;
         }

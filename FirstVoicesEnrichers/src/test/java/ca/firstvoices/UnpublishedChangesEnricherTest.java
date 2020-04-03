@@ -1,7 +1,24 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices;
 
 import ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher;
-import ca.firstvoices.EnricherTestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,23 +49,23 @@ import static org.junit.Assert.assertNotNull;
 @Deploy("FirstVoicesNuxeo.Test:OSGI-INF/extensions/fv-word-enricher-test-data.xml")
 
 @Deploy({"FirstVoicesData",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.ProxyPublisherListener.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-    "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
-    "org.nuxeo.ecm.platform",
-    "org.nuxeo.ecm.platform.types.core",
-    "org.nuxeo.ecm.platform.publisher.core",
-    "org.nuxeo.ecm.platform.picture.core",
-    "org.nuxeo.ecm.platform.rendition.core",
-    "org.nuxeo.ecm.platform.video.core",
-    "org.nuxeo.ecm.platform.audio.core",
-    "org.nuxeo.ecm.automation.scripting",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.ProxyPublisherListener.xml",
+        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
+        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+        "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
+        "org.nuxeo.ecm.platform",
+        "org.nuxeo.ecm.platform.types.core",
+        "org.nuxeo.ecm.platform.publisher.core",
+        "org.nuxeo.ecm.platform.picture.core",
+        "org.nuxeo.ecm.platform.rendition.core",
+        "org.nuxeo.ecm.platform.video.core",
+        "org.nuxeo.ecm.platform.audio.core",
+        "org.nuxeo.ecm.automation.scripting",
 })
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
@@ -57,10 +74,10 @@ public class UnpublishedChangesEnricherTest extends AbstractJsonWriterTest .Loca
     public UnpublishedChangesEnricherTest() {
         super(DocumentModelJsonWriter.class, DocumentModel.class);
     }
-    
+
     @Inject
     private EnricherTestUtil testUtil;
-    
+
     @Inject
     protected CoreSession session;
 
@@ -74,7 +91,7 @@ public class UnpublishedChangesEnricherTest extends AbstractJsonWriterTest .Loca
         assertNotNull("Should have a valid session", session);
         session.removeChildren(session.getRootDocument().getRef());
         session.save();
-        
+
         dialectDoc = testUtil.createDialectTree(session);
         dialectDoc.followTransition("Enable");
     }

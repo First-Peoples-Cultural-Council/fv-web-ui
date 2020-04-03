@@ -1,37 +1,51 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.utils;
 
 import ca.firstvoices.property_readers.FV_DataBinding;
 
-public class FVExportProperties
-{
-    public FVExportProperties()
-    {
-    }
+public class FVExportProperties {
+    // FVEXPORT:
+    public static final String FVEXPORT_PROGRESS_STRING = "fvexport:progressString";
 
     public static final String LANGUAGE = "language"; // ??????
-
-    // FVEXPORT:
-    public static final String FVEXPORT_PROGRESS_STRING =   "fvexport:progressString";
-    public static final String FVEXPORT_PROGRESS_VALUE =    "fvexport:progressValue";
-    public static final String FVEXPORT_DIALECT =           "fvexport:dialect";
-    public static final String FVEXPORT_FORMAT =            "fvexport:format";
-    public static final String FVEXPORT_QUERY =             "fvexport:query";
-    public static final String FVEXPORT_COLUMNS =           "fvexport:columns";
-    public static final String FVEXPORT_WORK_DIGEST =       "fvexport:workdigest";
-    public static final String FVEXPORT_DIGEST =            "fvexport:exportdigest";
-
-
+    public static final String FVEXPORT_PROGRESS_VALUE = "fvexport:progressValue";
+    public static final String FVEXPORT_DIALECT = "fvexport:dialect";
+    public static final String FVEXPORT_FORMAT = "fvexport:format";
+    public static final String FVEXPORT_QUERY = "fvexport:query";
+    public static final String FVEXPORT_COLUMNS = "fvexport:columns";
+    public static final String FVEXPORT_WORK_DIGEST = "fvexport:workdigest";
+    public static final String FVEXPORT_DIGEST = "fvexport:exportdigest";
     // FVA:
-    public static final String FV_LANGUAGE =    "fva:language";
-    public static final String FV_DIALAECT =    "fva:dialect";
-    public static final String FV_FAMILY =      "fva:family";
+    public static final String FV_LANGUAGE = "fva:language";
+    public static final String FV_DIALAECT = "fva:dialect";
+    public static final String FV_FAMILY = "fva:family";
+
+    public FVExportProperties() {
+    }
 
     // DC:
-    public static final String TITLE =              "dc:title";
-    public static final String DESCR =              "dc:description";
-    public static final String LAST_CONTRIBUTOR =   "dc:lastContributor";
-    public static final String CREATOR =            "dc:creator";
-    public static final String CONTRIBUTORS =       "dc:contributors";
+    public static final String TITLE = "dc:title";
+    public static final String DESCR = "dc:description";
+    public static final String LAST_CONTRIBUTOR = "dc:lastContributor";
+    public static final String CREATOR = "dc:creator";
+    public static final String CONTRIBUTORS = "dc:contributors";
 
 
     // FV:

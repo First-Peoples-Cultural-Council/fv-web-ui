@@ -1,8 +1,24 @@
+/*
+ *
+ * Copyright 2020 First People's Cultural Council
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * /
+ */
+
 package ca.firstvoices.utils;
 
-import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -43,9 +59,9 @@ public class FVOperationCredentialsVerification {
     }
 
     public static boolean terminateOnInvalidCredentials_NewUserHomeChange(CoreSession session, UserManager userManager,
-            String username, String dialectGUID) {
+                                                                          String username, String dialectGUID) {
         try {
-            NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+            NuxeoPrincipal invoking_principal = session.getPrincipal();
 
             int credentialsType = isValidPrincipal(invoking_principal);
 
@@ -56,8 +72,7 @@ public class FVOperationCredentialsVerification {
                             dialectGUID);
 
                     // If registrations for this dialect found, allow moving user
-                    if (registrations.size() > 0)
-                        return false;
+                    return registrations.size() <= 0;
                 }
 
                 return true; // invalid credentials
@@ -70,8 +85,8 @@ public class FVOperationCredentialsVerification {
     }
 
     public static boolean terminateOnInvalidCredentials_UserUpdate(CoreSession session, UserManager userManager,
-            String username) {
-        NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+                                                                   String username) {
+        NuxeoPrincipal invoking_principal = session.getPrincipal();
 
         int credentialsType = isValidPrincipal(invoking_principal);
 
@@ -100,7 +115,7 @@ public class FVOperationCredentialsVerification {
     }
 
     public static boolean terminateOnInvalidCredentials_GroupUpdate(CoreSession session, String groupName) {
-        NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+        NuxeoPrincipal invoking_principal = session.getPrincipal();
 
         int credentialsType = isValidPrincipal(invoking_principal);
 
@@ -110,8 +125,7 @@ public class FVOperationCredentialsVerification {
                 int ui = language_admin_group.indexOf("_");
                 String dns = language_admin_group.substring(0, ui); // dialect name ending
 
-                if (groupName.contains(dns))
-                    return false; // continue executing command - valid credentials
+                return !groupName.contains(dns); // continue executing command - valid credentials
             }
 
             return true; // invalid credentials
