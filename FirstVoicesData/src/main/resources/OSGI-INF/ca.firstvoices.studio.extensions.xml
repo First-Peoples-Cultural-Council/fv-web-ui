@@ -5140,9 +5140,9 @@
                 </labels>
                 <translated>false</translated>
                 <helpLabels>
-                    <label mode="any">Any other uppercase characters that might be mistaken for this character. (Example: Ts' could
-                        be mistaken for Ts’) Note: This other uppercase character cannot already exist in your alphabet. (Example: Ts'
-                        cannot already exist in your alphabet)
+                    <label mode="any">Any other uppercase characters that might be mistaken for this character. (Example: 
+                        𝔍 could be mistaken for J) Note: This other uppercase character cannot already exist in your alphabet. 
+                        (Example: 𝔍 cannot already exist in your alphabet)
                     </label>
                 </helpLabels>
                 <fields>

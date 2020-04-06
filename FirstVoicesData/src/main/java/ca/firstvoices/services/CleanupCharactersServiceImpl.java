@@ -50,23 +50,34 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
         List<String> characterValues = characters.stream().filter(c-> !c.isTrashed()).map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
-        String[] field_names = {"confusable_characters", "upper_case_confusable_characters"};
         for (DocumentModel d : characters) {
-            for (String confusable_set : field_names){
-                String[] confusableList = (String[]) d.getPropertyValue("fvcharacter:"+confusable_set);
-                if (confusableList != null) {
-                    for (String confusableCharacter : confusableList) {
-                        String characterTitle = (String) d.getPropertyValue(
-                            confusable_set.equals("confusable_characters") ? "dc:title" : "fvcharacter:upper_case_character");
-                        if (confusables.put(confusableCharacter, characterTitle) != null) {
-                            throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
-                        }
-                        if (confusables.containsKey(characterTitle)) {
-                            throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
-                        }
-                        if (characterValues.contains(confusableCharacter)) {
-                            throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
-                        }
+            String[] lowercaseConfusableList = (String[]) d.getPropertyValue("fvcharacter:"+"confusable_characters");
+            String[] uppercaseConfusableList = (String[]) d.getPropertyValue("fvcharacter:"+"upper_case_confusable_characters");
+            if (lowercaseConfusableList != null) {
+                for (String confusableCharacter : lowercaseConfusableList) {
+                    String characterTitle = (String) d.getPropertyValue( "dc:title" );
+                    if (confusables.put(confusableCharacter, characterTitle) != null) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (confusables.containsKey(characterTitle)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (characterValues.contains(confusableCharacter)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                    }
+                }
+            }
+            if (uppercaseConfusableList != null) {
+                for (String confusableCharacter : uppercaseConfusableList) {
+                    String characterTitle = (String) d.getPropertyValue( "fvcharacter:upper_case_character" );
+                    if (confusables.put(confusableCharacter, characterTitle) != null) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (confusables.containsKey(characterTitle)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (characterValues.contains(confusableCharacter)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
                     }
                 }
             }
