@@ -44,4 +44,5 @@
   <xs:element name="sub_classification_2" type="xs:string"/>
   <xs:element name="upper_case_character" type="xs:string"/>
   <xs:element name="confusable_characters" type="nxs:confusableCharacters"/>
+  <xs:element name="upper_case_confusable_characters" type="nxs:confusableCharacters"/>
 </xs:schema>
