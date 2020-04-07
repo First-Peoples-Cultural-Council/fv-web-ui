@@ -38,16 +38,14 @@ public class ComputeNativeOrderDialectListener implements EventListener {
     @Override
     public void handleEvent(Event event) {
         if (event.getName().equals(COMPUTE_NATIVE_ORDER)) {
-
             CoreInstance.doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(), session -> {
 
                 String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-                // Null values will be placed first with this query, ASC is the default sort order.
                 DocumentModelList alphabets = session.query(query);
+
                 if (alphabets != null && alphabets.size() > 0) {
                     WorkManager workManager = Framework.getService(WorkManager.class);
-                    for (int i = 0; i < alphabets.size(); i++) {
-                        DocumentModel alphabet = alphabets.get(i);
+                    for (DocumentModel alphabet : alphabets) {
                         DocumentModel dialect = session.getParentDocument(alphabet.getRef());
                         ComputeNativeOrderDialectWorker worker = new ComputeNativeOrderDialectWorker(dialect.getRef());
                         workManager.schedule(worker);
