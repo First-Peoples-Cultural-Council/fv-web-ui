@@ -54,7 +54,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
 
         characters = characters
                 .stream()
-                .filter(c-> !c.isTrashed())
+                .filter(c -> !c.isTrashed())
                 .map(c -> c.getId().equals(document.getId()) ? document : c)
                 .collect(Collectors.toList());
 
@@ -62,7 +62,7 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
             Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
             String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
             if (!updatedPropertyValue.equals(propertyValue)) {
-                 document.setPropertyValue("dc:title", updatedPropertyValue);
+                document.setPropertyValue("dc:title", updatedPropertyValue);
                 return document;
             }
         }
@@ -73,13 +73,30 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
     @Override
     public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) throws FVCharacterInvalidException {
         Map<String, String> confusables = new HashMap<>();
-        List<String> characterValues = characters.stream().filter(c-> !c.isTrashed()).map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
-
+        List<String> characterValues = characters.stream().filter(c -> !c.isTrashed()).map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
         for (DocumentModel d : characters) {
-            String[] confusableList = (String[]) d.getPropertyValue("confusable_characters");
-            if (confusableList != null) {
-                for (String confusableCharacter : confusableList) {
+            String[] lowercaseConfusableList = (String[]) d.getPropertyValue("fvcharacter:confusable_characters");
+            String[] uppercaseConfusableList = (String[]) d.getPropertyValue("fvcharacter:upper_case_confusable_characters");
+            if (lowercaseConfusableList != null) {
+                for (String confusableCharacter : lowercaseConfusableList) {
                     String characterTitle = (String) d.getPropertyValue("dc:title");
+                    if (confusables.put(confusableCharacter, characterTitle) != null) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (confusables.containsKey(characterTitle)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                    }
+                    if (characterValues.contains(confusableCharacter)) {
+                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                    }
+                }
+            }
+            if (uppercaseConfusableList != null) {
+                for (String confusableCharacter : uppercaseConfusableList) {
+                    String characterTitle = (String) d.getPropertyValue("fvcharacter:upper_case_character");
+                    if (characterTitle.equals("")) {
+                        throw new FVCharacterInvalidException("Can't have uppercase confusable character if there is no uppercase character.", 400);
+                    }
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
                         throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }
