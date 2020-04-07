@@ -70,6 +70,9 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
             if (uppercaseConfusableList != null) {
                 for (String confusableCharacter : uppercaseConfusableList) {
                     String characterTitle = (String) d.getPropertyValue( "fvcharacter:upper_case_character" );
+                    if (characterTitle.equals("")) {
+                        throw new FVCharacterInvalidException("Can't have uppercase confusable character if there is no uppercase character.", 400);
+                    }
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
                         throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
                     }
