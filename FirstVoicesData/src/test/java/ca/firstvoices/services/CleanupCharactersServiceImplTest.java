@@ -96,8 +96,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     public void mapAndValidateConfusableUnicodeCharactersTest() {
         setupUnicodeCharacters();
 
-        String[] words = {"ൟABC", "\u006F\u0D30\u006FABC", "ABCﷳ", "ABC\u006C\u0643\u0628\u0631", "ȾABC", "\u0054\u0338ABC"};
-        String[] correctWords = {"ൟABC", "ൟABC", "ABCﷳ", "ABCﷳ", "ȾABC", "ȾABC"};
+        String[] words = {"ൟABC", "\u006F\u0D30\u006FABC", "CBAﷳ", "CBA\u006C\u0643\u0628\u0631", "ȾABC", "\u0054\u0338ABC"};
+        String[] correctWords = {"ൟABC", "ൟABC", "CBAﷳ", "CBAﷳ", "ȾABC", "ȾABC"};
         List<DocumentModel> documentModels = createWords(words);
         for (int i = 0; i < documentModels.size(); i++) {
             DocumentModel documentModel = documentModels.get(i);
@@ -128,12 +128,13 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     }
 
     private void setupUnicodeCharacters() {
+        // The escaped unicode (\\) is expected input in the field when creating or updating character.
         alphabetAndConfusableCharacters = new HashMap<>();
-        // In this example: ൟ (/u0D5F) can be confused with Composite Character oരo̸ (/u006F/u0D30/u006F)
+        // In this example: ൟ (\u0D5F) can be confused with Composite Character oരo̸ (\u006F\u0D30\u006F)
         alphabetAndConfusableCharacters.put("ൟ", new String[]{"\\u006F\\u0D30\\u006F"});
-        // In this example: ﷳ‎ (/uFDF3) can be confused with Composite Character lكبر (/u006C/u0643/u0628/u0631)
+        // In this example: ﷳ‎ (\uFDF3) can be confused with Composite Character lكبر (\u006C\u0643\u0628\u0631)
         alphabetAndConfusableCharacters.put("ﷳ", new String[]{"\\u006C\\u0643\\u0628\\u0631"});
-        // In this example: Ⱦ (/u023E) can be confused with Composite Character T̸ (/u0054/u0338)
+        // In this example: Ⱦ (\u023E) can be confused with Composite Character T̸ (\u0054\u0338)
         alphabetAndConfusableCharacters.put("Ⱦ", new String[]{"\\u0054\\u0338"});
         createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
     }

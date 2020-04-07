@@ -5109,8 +5109,8 @@
                     <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
                         be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
                         cannot already exist in your alphabet).
-                        Supports Unicode Character Input (Example: Ⱦ (/u023E) can be confused with Composite Character
-                        T̸ (/u0054/u0338)).
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
@@ -5261,8 +5261,8 @@
                     <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
                         be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
                         cannot already exist in your alphabet).
-                        Supports Unicode Character Input (Example: Ⱦ (/u023E) can be confused with Composite Character
-                        T̸ (/u0054/u0338)).
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
