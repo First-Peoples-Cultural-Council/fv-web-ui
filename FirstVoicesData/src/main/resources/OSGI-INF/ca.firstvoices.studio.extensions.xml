@@ -5063,6 +5063,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>upper_case_confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>alphabet_order</widget>
                 </row>
                 <row>
@@ -5116,6 +5122,34 @@
                 </fields>
                 <subWidgets>
                     <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
+            </widget>
+            <widget name="upper_case_confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Uppercase Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any other uppercase characters that might be mistaken for this character. (Example: 
+                        𝔍 could be mistaken for J) Note: This other uppercase character cannot already exist in your alphabet. 
+                        (Example: 𝔍 cannot already exist in your alphabet)
+                    </label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:upper_case_confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="upper_case_confusable_characters_li" type="text">
                         <fields>
                             <field></field>
                         </fields>
@@ -5184,6 +5218,12 @@
                         <property name="nxl_colspan_0">1</property>
                     </properties>
                     <widget>confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
+                    <widget>upper_case_confusable_characters</widget>
                 </row>
                 <row>
                     <properties mode="any">
@@ -5266,6 +5306,34 @@
                 </fields>
                 <subWidgets>
                     <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
+            </widget>
+            <widget name="upper_case_confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Uppercase Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <helpLabels>
+                    <label mode="any">Any other characters that might be mistaken for this character. (Example: Ts' could
+                        be mistaken for Ts’) Note: This other character cannot already exist in your alphabet. (Example: Ts'
+                        cannot already exist in your alphabet)
+                    </label>
+                </helpLabels>
+                <fields>
+                    <field>fvcharacter:upper_case_confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="upper_case_confusable_characters_li" type="text">
                         <fields>
                             <field></field>
                         </fields>
@@ -5387,6 +5455,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>upper_case_confusable_characters</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>alphabet_order</widget>
                 </row>
                 <row>
@@ -5434,6 +5508,28 @@
                 <translated>false</translated>
                 <fields>
                     <field>fvcharacter:confusable_characters</field>
+                </fields>
+                <subWidgets>
+                    <widget name="confusable_characters_li" type="text">
+                        <fields>
+                            <field></field>
+                        </fields>
+                        <labels>
+                            <label mode="any"></label>
+                        </labels>
+                        <properties widgetMode="edit">
+                            <property name="required">true</property>
+                        </properties>
+                    </widget>
+                </subWidgets>
+            </widget>
+            <widget name="upper_case_confusable_characters" type="list">
+                <labels>
+                    <label mode="any">Uppercase Confusable Characters</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvcharacter:upper_case_confusable_characters</field>
                 </fields>
                 <subWidgets>
                     <widget name="confusable_characters_li" type="text">
