@@ -93,6 +93,13 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
     }
 
+    @Test(expected = FVCharacterInvalidException.class)
+    public void mapAndValidateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
+        createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "", new String[]{"ŷ", "γ"}, new String[]{"Ŷ", "Υ"});
+        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
+        cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+    }
+
     private void createAlphabetWithConfusableCharacters(Map<String, String[]> alphabet) {
         Iterator it = alphabet.entrySet().iterator();
         int i = 0;
