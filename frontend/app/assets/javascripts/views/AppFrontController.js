@@ -199,11 +199,11 @@ export class AppFrontController extends Component {
     const covidAlert = isFrontPage ? (
       <>
         <FVSnackbar
-          message="Stay safe during COVID-19"
-          buttontext="See our blog post"
+          message="Stay safe while physically distancing"
+          buttontext="Read More"
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           buttonhandler={() => {
-            window.open('https://wiki.firstvoices.com/display/FIR1/FirstVoices+Development+Updates', '_blank')
+            window.open('https://wiki.firstvoices.com/display/FIR1/2020/04/09/Family-friendly+activities+for+at-home+learning', '_blank')
           }}
         />
       </>
