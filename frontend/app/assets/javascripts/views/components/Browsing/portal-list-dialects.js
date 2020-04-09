@@ -17,6 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
+import DialectTile from 'views/components/DialectTile'
+import FVLabel from 'views/components/FVLabel'
 
 // import { amber } from '@material-ui/core/colors'
 import Grade from '@material-ui/icons/Grade'
@@ -73,25 +75,33 @@ export class PortalListDialects extends Component {
       <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
     ) : null
     return (
-      <a
+      // <a
+      //   key={tile.uid}
+      //   className="Dialect"
+      //   href={NavigationHelpers.generateStaticURL(href)}
+      //   onClick={(e) => {
+      //     e.preventDefault()
+      //     NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+      //   }}
+      //   title={title}
+      // >
+      //   <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
+      //   <span className="DialectData">
+      //     <span className="DialectTitle fontAboriginalSans">
+      //       {dialectTitle}
+      //       {actionIcon}
+      //     </span>
+      //     {dialectDescription}
+      //   </span>
+      // </a>
+      <DialectTile
         key={tile.uid}
-        className="Dialect"
-        href={NavigationHelpers.generateStaticURL(href)}
-        onClick={(e) => {
-          e.preventDefault()
-          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-        }}
-        title={title}
-      >
-        <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
-        <span className="DialectData">
-          <span className="DialectTitle fontAboriginalSans">
-            {dialectTitle}
-            {actionIcon}
-          </span>
-          {dialectDescription}
-        </span>
-      </a>
+        dialectCoverImage={dialectCoverImage}
+        href={href}
+        dialectTitle={dialectTitle}
+        dialectDescription={dialectDescription}
+        actionIcon={actionIcon}
+      />
     )
   }
 
@@ -117,9 +127,11 @@ export class PortalListDialects extends Component {
 
     const toReturn = Object.keys(languages).map((key) => {
       return (
-        <div key={key}>
-          <h1>{key}</h1>
-          {languages[key].map((tile) => this._createTile(tile))}
+        <div className="languageGroup" key={key}>
+          <FVLabel defaultStr={key} transform="title" />
+          <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+            {languages[key].map((tile) => this._createTile(tile))}
+          </div>
         </div>
       )
     })
