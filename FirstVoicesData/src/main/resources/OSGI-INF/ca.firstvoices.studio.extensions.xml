@@ -5114,7 +5114,9 @@
                 <helpLabels>
                     <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
                         be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
-                        cannot already exist in your alphabet)
+                        cannot already exist in your alphabet).
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
@@ -5140,9 +5142,13 @@
                 </labels>
                 <translated>false</translated>
                 <helpLabels>
-                    <label mode="any">Any other uppercase characters that might be mistaken for this character. (Example: 
-                        𝔍 could be mistaken for J) Note: This other uppercase character cannot already exist in your alphabet. 
+                    <label mode="any">Any other uppercase characters that might be mistaken for this character.
+                        (Example:
+                        𝔍 could be mistaken for J) Note: This other uppercase character cannot already exist in your
+                        alphabet.
                         (Example: 𝔍 cannot already exist in your alphabet)
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
@@ -5298,7 +5304,9 @@
                 <helpLabels>
                     <label mode="any">Any other characters that might be mistaken for this character. (Example: ɬ could
                         be mistaken for ɫ) Note: This other character cannot already exist in your alphabet. (Example: ɬ
-                        cannot already exist in your alphabet)
+                        cannot already exist in your alphabet).
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
@@ -5324,9 +5332,12 @@
                 </labels>
                 <translated>false</translated>
                 <helpLabels>
-                    <label mode="any">Any other characters that might be mistaken for this character. (Example: Ts' could
-                        be mistaken for Ts’) Note: This other character cannot already exist in your alphabet. (Example: Ts'
-                        cannot already exist in your alphabet)
+                    <label mode="any">Any other uppercase characters that might be mistaken for this character.
+                        (Example: 𝔍 could be mistaken for J) Note: This other uppercase character cannot already exist
+                        in your
+                        alphabet. (Example: 𝔍 cannot already exist in your alphabet)
+                        Supports Unicode Character Input (Example: Ⱦ (\u023E) can be confused with Composite Character
+                        T̸ (\u0054\u0338)).
                     </label>
                 </helpLabels>
                 <fields>
