@@ -53,52 +53,77 @@ export class PortalListDialects extends Component {
     const content = this._getContent()
     return <div className="DialectList">{content}</div>
   }
+
+  _createTile = (tile) => {
+    // Switch roles
+    const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
+    const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
+      <span>
+        <Grade /*style={{ margin: '0 15px' }} color={amber[200]}*/ />
+      </span>
+    ) : null
+
+    // Dialect title
+    const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
+    const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
+    const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
+    const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
+    const dialectTitle = this.props.intl.searchAndReplace(title)
+    const dialectDescription = tile.description ? (
+      <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
+    ) : null
+    return (
+      <a
+        key={tile.uid}
+        className="Dialect"
+        href={NavigationHelpers.generateStaticURL(href)}
+        onClick={(e) => {
+          e.preventDefault()
+          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+        }}
+        title={title}
+      >
+        <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
+        <span className="DialectData">
+          <span className="DialectTitle fontAboriginalSans">
+            {dialectTitle}
+            {actionIcon}
+          </span>
+          {dialectDescription}
+        </span>
+      </a>
+    )
+  }
+
   _getContent = () => {
     const items = this.props.filteredItems || this.props.items
-    const toReturn = items.map((tile) => {
-      // Switch roles
-      const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
-      const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
-        <span>
-          <Grade /*style={{ margin: '0 15px' }} color={amber[200]}*/ />
-        </span>
-      ) : null
 
-      // Dialect title
-      const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
-      const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
-      const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
-      const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
-      const dialectTitle = this.props.intl.searchAndReplace(title)
-      const dialectDescription = tile.description ? (
-        <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
-      ) : null
-      // const dialectTitle = title
-      // const dialectDescription = tile.description ? (
-      //   <span className="DialectDescription">{tile.description}</span>
-      // ) : null
+    const languages = {
+      unknown: [],
+    }
+
+    items.forEach((archive) => {
+      const language = selectn('contextParameters.lightancestry.dialect.dc:language', archive)
+
+      if (!language) {
+        languages.unknown.push(archive)
+      } else {
+        if (!languages[language]) {
+          languages[language] = []
+        }
+        languages[language].push(archive)
+      }
+    })
+
+    const toReturn = Object.keys(languages).map((key) => {
       return (
-        <a
-          key={tile.uid}
-          className="Dialect"
-          href={NavigationHelpers.generateStaticURL(href)}
-          onClick={(e) => {
-            e.preventDefault()
-            NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-          }}
-          title={title}
-        >
-          <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
-          <span className="DialectData">
-            <span className="DialectTitle fontAboriginalSans">
-              {dialectTitle}
-              {actionIcon}
-            </span>
-            {dialectDescription}
-          </span>
-        </a>
+        <div key={key}>
+          <h1>{key}</h1>
+          {languages[key].map((tile) => this._createTile(tile))}
+        </div>
       )
     })
+
     return toReturn
   }
 }
@@ -118,8 +143,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PortalListDialects)
+export default connect(mapStateToProps, mapDispatchToProps)(PortalListDialects)
