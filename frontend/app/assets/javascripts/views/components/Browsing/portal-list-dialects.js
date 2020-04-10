@@ -18,7 +18,6 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 import DialectTile from 'views/components/DialectTile'
-import FVLabel from 'views/components/FVLabel'
 
 // import { amber } from '@material-ui/core/colors'
 import Grade from '@material-ui/icons/Grade'
@@ -29,7 +28,6 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
 
 const { oneOfType, instanceOf, array, func, object, string } = PropTypes
 
@@ -75,25 +73,6 @@ export class PortalListDialects extends Component {
       <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
     ) : null
     return (
-      // <a
-      //   key={tile.uid}
-      //   className="Dialect"
-      //   href={NavigationHelpers.generateStaticURL(href)}
-      //   onClick={(e) => {
-      //     e.preventDefault()
-      //     NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-      //   }}
-      //   title={title}
-      // >
-      //   <span className="DialectCover" style={{ backgroundImage: `url('${dialectCoverImage}')` }} />
-      //   <span className="DialectData">
-      //     <span className="DialectTitle fontAboriginalSans">
-      //       {dialectTitle}
-      //       {actionIcon}
-      //     </span>
-      //     {dialectDescription}
-      //   </span>
-      // </a>
       <DialectTile
         key={tile.uid}
         dialectCoverImage={dialectCoverImage}
@@ -109,14 +88,14 @@ export class PortalListDialects extends Component {
     const items = this.props.filteredItems || this.props.items
 
     const languages = {
-      unknown: [],
+      'Unknown Language': [],
     }
 
     items.forEach((archive) => {
       const language = selectn('contextParameters.lightancestry.dialect.dc:language', archive)
 
       if (!language) {
-        languages.unknown.push(archive)
+        languages['Unknown Language'].push(archive)
       } else {
         if (!languages[language]) {
           languages[language] = []
@@ -127,8 +106,8 @@ export class PortalListDialects extends Component {
 
     const toReturn = Object.keys(languages).map((key) => {
       return (
-        <div className="languageGroup" key={key}>
-          <FVLabel defaultStr={key} transform="title" />
+        <div className="languageGroup fontAboriginalSans" key={key}>
+          <span className="DialectTitle">{key}</span>
           <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
             {languages[key].map((tile) => this._createTile(tile))}
           </div>

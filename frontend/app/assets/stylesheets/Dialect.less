@@ -1,10 +1,17 @@
 .languageGroup {
-  border-left: 2px RGB(255, 112, 255) solid;
+  border-left: 4px rgb(180, 0, 0) solid;
   width: 100%;
   padding-left: 32px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  a {
+    text-decoration: none;
+  }
 }
 
 .Dialect {
+  background-color: rgb(245, 245, 245);
+  color: rgba(0, 0, 0, 0.8);
   transition: border 55ms cubic-bezier(0.075, 0.82, 0.165, 1);
   &:focus,
   &:hover {
@@ -19,18 +26,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  background-color: #fff;
 }
-.DialectData {
-  background-color: rgb(245, 245, 245);
-  color: rgba(0, 0, 0, 0.8);
-  &:focus,
-  &:hover {
-    background-color: #b40000;
-    color: #fff;
-  }
-  transition: all 55ms cubic-bezier(0.075, 0.82, 0.165, 1);
-}
+
 .DialectDescription {
   color: rgba(0, 0, 0, 0.8);
   line-height: 1.5;
