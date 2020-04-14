@@ -25,6 +25,7 @@ import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'views/components/FVButton'
+import FVSnackbar from 'views/components/FVSnackbar'
 import Navigation from 'views/components/Navigation'
 import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
 import KidsNavigation from 'views/components/Kids/navigation'
@@ -195,6 +196,22 @@ export class AppFrontController extends Component {
 
     let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
 
+    const covidAlert = isFrontPage ? (
+      <>
+        <FVSnackbar
+          message="Stay safe while physically distancing"
+          buttontext="Read More"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          buttonhandler={() => {
+            window.open(
+              'https://wiki.firstvoices.com/display/FIR1/2020/04/09/Family-friendly+activities+for+at-home+learning',
+              '_blank'
+            )
+          }}
+        />
+      </>
+    ) : null
+
     const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
 
     // For print view return page only
@@ -224,6 +241,7 @@ export class AppFrontController extends Component {
 
     return (
       <div>
+        {covidAlert}
         {(matchedPage && matchedPage.hasOwnProperty('warnings') ? matchedPage.get('warnings') : []).map((warning) => {
           if (this.props.warnings.hasOwnProperty(warning) && !this.state.warningsDismissed) {
             return (
