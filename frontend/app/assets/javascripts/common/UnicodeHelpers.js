@@ -5,11 +5,11 @@ const combiningMarks = 'å';
 const newUnicode = 'ᖁ';
 const confusableUnicode = 'ᕐd';
 
-getLiteralUnicodeValues(basicMultiPlane) // returns '\u0061'
-getLiteralUnicodeValues(surrogatePairs) // returns '\ud83d\ude00'
-getLiteralUnicodeValues(combiningMarks) // returns '\u00e5'
-getLiteralUnicodeValues(newUnicode) // returns '\u1581'
-getLiteralUnicodeValues(confusableUnicode) // returns '\u1550\u0064'
+getLiteralUnicodeValues(basicMultiPlane) // returns '\\u0061'
+getLiteralUnicodeValues(surrogatePairs) // returns '\\ud83d\\ude00'
+getLiteralUnicodeValues(combiningMarks) // returns '\\u00e5'
+getLiteralUnicodeValues(newUnicode) // returns '\\u1581'
+getLiteralUnicodeValues(confusableUnicode) // returns '\\u1550\\u0064'
 */
 export const getLiteralUnicodeValues = (char) => {
   return char

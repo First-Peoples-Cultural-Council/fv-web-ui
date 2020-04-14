@@ -7,7 +7,8 @@ Note: to run this test enter the following in the command line:
 Websites to convert unicode:
     - https://convertcodes.com/unicode-converter-encode-decode-utf/
     - https://www.branah.com/unicode-converter
-    - https://onlineunicodetools.com/convert-unicode-to-string-literal // This site generates this string literal for 😀: \u1f600
+    - https://onlineunicodetools.com/convert-unicode-to-string-literal
+        Note: this url generates a different value for 😀 = \u1f600
 */
 const confusables = [
   ['‎ݖ‎', '\\u200e\\u0756\\u200e'],
