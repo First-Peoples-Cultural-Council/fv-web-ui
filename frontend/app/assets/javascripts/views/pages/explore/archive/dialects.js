@@ -32,7 +32,6 @@ import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 import FVLabel from '../../../components/FVLabel/index'
 
-
 /**
  * Explore Archive page shows all the families in the archive
  */
@@ -122,11 +121,7 @@ export class ExploreDialects extends Component {
           <div className="col-xs-12">
             <div className={classNames({ hidden: this.props.routeParams.siteTheme === 'kids' })}>
               <h1>
-                <FVLabel
-                  transKey="general.explore"
-                  defaultStr="Explore Languages"
-                  transform="title"
-                />
+                <FVLabel transKey="general.explore" defaultStr="Explore Languages" transform="title" />
               </h1>
             </div>
             {introText1}
