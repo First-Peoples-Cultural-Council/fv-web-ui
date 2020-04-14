@@ -7,7 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-const { object, string } = PropTypes
+const { object, string, func } = PropTypes
 
 const styles = () => ({
   card: {
@@ -32,13 +32,13 @@ const styles = () => ({
 })
 
 function DialectTile(props) {
-  const { classes, dialectCoverImage, dialectTitle, actionIcon, dialectDescription, href } = props
+  const { classes, dialectCoverImage, dialectTitle, actionIcon, dialectDescription, href, pushWindowPath } = props
   return (
     <a
       href={NavigationHelpers.generateStaticURL(href)}
       onClick={(e) => {
         e.preventDefault()
-        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+        NavigationHelpers.navigate(href, pushWindowPath, false)
       }}
       title={dialectTitle}
     >
@@ -65,6 +65,7 @@ DialectTile.propTypes = {
   actionIcon: object,
   dialectDescription: string,
   href: string.isRequired,
+  pushWindowPath: func.isRequired,
 }
 
 export default withStyles(styles)(DialectTile)

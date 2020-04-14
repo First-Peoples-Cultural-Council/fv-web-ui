@@ -49,6 +49,16 @@ export class PortalListDialects extends Component {
     },
   }
 
+  componentDidUpdate() {
+    const link = window.location.hash
+    if (link) {
+      const anchor = document.querySelector(link)
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }
+  }
+
   render() {
     const content = this._getContent()
     return <div className="DialectList">{content}</div>
@@ -80,6 +90,7 @@ export class PortalListDialects extends Component {
         dialectTitle={dialectTitle}
         dialectDescription={dialectDescription}
         actionIcon={actionIcon}
+        pushWindowPath={this.props.pushWindowPath}
       />
     )
   }
@@ -87,15 +98,30 @@ export class PortalListDialects extends Component {
   _getContent = () => {
     const items = this.props.filteredItems || this.props.items
 
-    const languages = {
-      'Unknown Language': [],
+    if (this.props.isWorkspaces) {
+      return (
+        <div className="languageGroup fontAboriginalSans" style={{ borderLeft: '4px rgb(180, 0, 0) solid' }}>
+          {items.map((tile) => this._createTile(tile))}
+        </div>
+      )
     }
+
+    const languages = {
+      'Other FirstVoices Archives': [],
+    }
+
+    const languageColors = {}
+
+    this.props.languages.forEach((lang) => {
+      languages[lang.language] = []
+      languageColors[lang.language] = lang.color
+    })
 
     items.forEach((archive) => {
       const language = selectn('contextParameters.lightancestry.dialect.dc:language', archive)
 
       if (!language) {
-        languages['Unknown Language'].push(archive)
+        languages['Other FirstVoices Archives'].push(archive)
       } else {
         if (!languages[language]) {
           languages[language] = []
@@ -105,16 +131,44 @@ export class PortalListDialects extends Component {
     })
 
     const toReturn = Object.keys(languages).map((key) => {
-      return (
-        <div className="languageGroup fontAboriginalSans" key={key}>
-          <span className="DialectTitle">{key}</span>
+      if (key !== 'Other FirstVoices Archives') {
+        return (
+          <div
+            className="languageGroup fontAboriginalSans"
+            key={key}
+            style={{ borderLeft: `4px ${languageColors[key]} solid` }}
+          >
+            <span className="DialectTitle" id={key}>
+              {key}
+            </span>
+            <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+              {languages[key].length > 0
+                ? languages[key].map((tile) => this._createTile(tile))
+                : 'No language archives available at this time.'}
+            </div>
+          </div>
+        )
+      }
+    })
+
+    if (languages['Other FirstVoices Archives'].length > 0) {
+      toReturn.push(
+        <div
+          className="languageGroup fontAboriginalSans"
+          key="Other FirstVoices Archives"
+          style={{
+            borderLeft: '4px rgb(180, 0, 0) solid',
+          }}
+        >
+          <span className="DialectTitle" id="Other FirstVoices Archives">
+            Other FirstVoices Archives
+          </span>
           <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-            {languages[key].map((tile) => this._createTile(tile))}
+            {languages['Other FirstVoices Archives'].map((tile) => this._createTile(tile))}
           </div>
         </div>
       )
-    })
-
+    }
     return toReturn
   }
 }
