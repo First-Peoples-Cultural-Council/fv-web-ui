@@ -18,6 +18,9 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 import DialectTile from 'views/components/DialectTile'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
 
 // import { amber } from '@material-ui/core/colors'
 import Grade from '@material-ui/icons/Grade'
@@ -32,6 +35,14 @@ import UIHelpers from 'common/UIHelpers'
 const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
+  state = {
+    checkedA: true,
+  }
+
+  handleChange = (name) => (event) => {
+    this.setState({ [name]: event.target.checked })
+  }
+
   static propTypes = {
     items: oneOfType([array, instanceOf(List)]),
     filteredItems: oneOfType([array, instanceOf(List)]),
@@ -40,6 +51,7 @@ export class PortalListDialects extends Component {
     pushWindowPath: func.isRequired,
     isWorkspaces: bool.isRequired,
     languages: array.isRequired,
+    intl: object.isRequired,
   }
 
   static defaultProps = {
@@ -52,6 +64,8 @@ export class PortalListDialects extends Component {
   componentDidUpdate() {
     const link = decodeURI(window.location.hash.substring(1))
     if (link) {
+      // We want to be able to grab any of the SENĆOŦEN / Malchosen / Lekwungen / Semiahmoo / T’Sou-ke.
+      // This allows us to have a URL with # + one of any of the above names
       const anchor = document.querySelector(`[id*="${link}"]`)
       if (anchor) {
         anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -61,7 +75,22 @@ export class PortalListDialects extends Component {
 
   render() {
     const content = this._getContent()
-    return <div className="DialectList">{content}</div>
+    return (
+      <>
+        <FormGroup
+          row
+          style={{
+            justifyContent: 'flex-end',
+          }}
+        >
+          <FormControlLabel
+            control={<Switch checked={this.state.checkedA} onChange={this.handleChange('checkedA')} value="checkedA" />}
+            label="Organize By Language"
+          />
+        </FormGroup>
+        <div className="DialectList">{content}</div>
+      </>
+    )
   }
 
   _createTile = (tile) => {
@@ -77,7 +106,7 @@ export class PortalListDialects extends Component {
     const title = selectn('contextParameters.lightancestry.dialect.dc:title', tile)
     const logo = selectn('contextParameters.lightportal.fv-portal:logo', tile)
     const dialectCoverImage = encodeURI(UIHelpers.getThumbnail(logo, 'Medium'))
-    const href = `/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`
+    const href = encodeURI(`/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`)
     const dialectTitle = this.props.intl.searchAndReplace(title)
     const dialectDescription = tile.description ? (
       <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
@@ -98,42 +127,47 @@ export class PortalListDialects extends Component {
   _getContent = () => {
     const items = this.props.filteredItems || this.props.items
 
-    if (this.props.isWorkspaces) {
+    if (this.props.isWorkspaces || !this.state.checkedA) {
       return (
-        <div className="languageGroup fontAboriginalSans" style={{ borderLeft: '4px rgb(180, 0, 0) solid' }}>
+        <div className="languageGroup fontAboriginalSans" style={{ display: 'flex', flexFlow: 'row wrap' }}>
           {items.map((tile) => this._createTile(tile))}
         </div>
       )
     }
 
-    const languages = {
-      'Other FirstVoices Archives': [],
-    }
+    // Maps each language name to an array of the associated archives
+    // For example {'Secwepemctsín' : [Splatsin Tsm7aksaltn's Archive, Secwepecm's Archive, etc. ] }
+    const languages = {}
 
+    // Maps language name to the language color.
     const languageColors = {}
 
+    // The map id is stored on the fvdialect, but we need to map the ids to the names
+    const mappedLanguageIdsToName = {}
+
+    // If the language doesn't have a parent language set, it will be put in the 'Other FirstVoices Archives'.
+    const defaultArchiveName = 'Other FirstVoices Archives'
+
+    // Perform mapping of above objects
     this.props.languages.forEach((lang) => {
       languages[lang.label] = []
       languageColors[lang.label] = lang.color
+      mappedLanguageIdsToName[lang.id] = [lang.label]
     })
 
     items.forEach((archive) => {
-      const language = selectn('contextParameters.lightancestry.dialect.dc:language', archive)
-
-      if (!language) {
-        languages['Other FirstVoices Archives'].push(archive)
-      } else {
-        if (!languages[language]) {
-          languages[language] = []
-        }
-        languages[language].push(archive)
+      const languageId = selectn('contextParameters.lightancestry.dialect.fvdialect:maps_language_id', archive)
+      const archiveName = mappedLanguageIdsToName[languageId] || defaultArchiveName
+      if (!languages[archiveName]) {
+        languages[archiveName] = []
       }
+      languages[archiveName].push(archive)
     })
 
     const toReturn = Object.keys(languages)
       .sort()
       .map((key) => {
-        if (key !== 'Other FirstVoices Archives') {
+        if (key !== defaultArchiveName) {
           return (
             <div
               className="languageGroup fontAboriginalSans"
@@ -151,9 +185,11 @@ export class PortalListDialects extends Component {
             </div>
           )
         }
+        return null
       })
 
-    if (languages['Other FirstVoices Archives'].length > 0) {
+    // We want the 'Other FirstVoices Archives' to appear last.
+    if (languages['Other FirstVoices Archives'] && languages['Other FirstVoices Archives'].length > 0) {
       toReturn.push(
         <div
           className="languageGroup fontAboriginalSans"
