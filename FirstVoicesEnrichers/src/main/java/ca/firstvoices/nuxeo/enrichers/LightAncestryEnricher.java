@@ -62,6 +62,7 @@ public class LightAncestryEnricher extends AbstractJsonEnricher<DocumentModel> {
 
                 dialectDoc.put("fvdialect:country", (String) resolvedDoc.getPropertyValue("fvdialect:country"));
                 dialectDoc.put("fvdialect:region", (String) resolvedDoc.getPropertyValue("fvdialect:region"));
+                dialectDoc.put("fvdialect:parent_language", (String) resolvedDoc.getPropertyValue("fvdialect:parent_language"));
 
                 jsonObj.set("dialect", dialectDoc);
 
