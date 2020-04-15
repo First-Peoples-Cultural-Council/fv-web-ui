@@ -113,8 +113,8 @@ export class PortalListDialects extends Component {
     const languageColors = {}
 
     this.props.languages.forEach((lang) => {
-      languages[lang.language] = []
-      languageColors[lang.language] = lang.color
+      languages[lang.label] = []
+      languageColors[lang.label] = lang.color
     })
 
     items.forEach((archive) => {
