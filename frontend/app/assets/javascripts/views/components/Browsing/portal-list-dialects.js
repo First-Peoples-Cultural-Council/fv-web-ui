@@ -29,7 +29,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-const { oneOfType, instanceOf, array, func, object, string } = PropTypes
+const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
   static propTypes = {
@@ -37,9 +37,9 @@ export class PortalListDialects extends Component {
     filteredItems: oneOfType([array, instanceOf(List)]),
     fieldMapping: object,
     siteTheme: string.isRequired,
-    // REDUX: reducers/state - none
-    // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
+    isWorkspaces: bool.isRequired,
+    languages: array.isRequired,
   }
 
   static defaultProps = {
