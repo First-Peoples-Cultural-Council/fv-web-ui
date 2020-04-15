@@ -1,5 +1,5 @@
 /*
-Copyright 2016 First People's Cultural Council
+Copyright 2020 First People's Cultural Council
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
   state = {
-    checkedA: true,
+    isLanguageSwitchToggled: true,
   }
 
   handleChange = (name) => (event) => {
@@ -73,23 +73,27 @@ export class PortalListDialects extends Component {
     }
   }
 
-  render() {
-    const content = this._getContent()
-    return (
-      <>
-        <FormGroup
-          row
-          style={{
-            justifyContent: 'flex-end',
-          }}
-        >
-          <FormControlLabel
-            control={<Switch checked={this.state.checkedA} onChange={this.handleChange('checkedA')} value="checkedA" />}
-            label="Organize By Language"
-          />
-        </FormGroup>
-        <div className="DialectList">{content}</div>
-      </>
+  organizeByLanguageSwitch = () => {
+    return this.props.isWorkspaces ? (
+      ''
+    ) : (
+      <FormGroup
+        row
+        style={{
+          justifyContent: 'flex-end',
+        }}
+      >
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.state.isLanguageSwitchToggled}
+              onChange={this.handleChange('isLanguageSwitchToggled')}
+              value="isLanguageSwitchToggled"
+            />
+          }
+          label="Organize By Language"
+        />
+      </FormGroup>
     )
   }
 
@@ -124,16 +128,21 @@ export class PortalListDialects extends Component {
     )
   }
 
-  _getContent = () => {
+  _oldView = () => {
     const items = this.props.filteredItems || this.props.items
+    return (
+      <div className="languageGroup fontAboriginalSans" style={{ display: 'flex', flexFlow: 'row wrap' }}>
+        {items.map((tile) => this._createTile(tile))}
+      </div>
+    )
+  }
 
-    if (this.props.isWorkspaces || !this.state.checkedA) {
-      return (
-        <div className="languageGroup fontAboriginalSans" style={{ display: 'flex', flexFlow: 'row wrap' }}>
-          {items.map((tile) => this._createTile(tile))}
-        </div>
-      )
+  _getContent = () => {
+    if (this.props.isWorkspaces || !this.state.isLanguageSwitchToggled) {
+      return this._oldView()
     }
+
+    const items = this.props.filteredItems || this.props.items
 
     // Maps each language name to an array of the associated archives
     // For example {'Secwepemctsín' : [Splatsin Tsm7aksaltn's Archive, Secwepecm's Archive, etc. ] }
@@ -168,46 +177,40 @@ export class PortalListDialects extends Component {
       .sort()
       .map((key) => {
         if (key !== defaultArchiveName) {
-          return (
-            <div
-              className="languageGroup fontAboriginalSans"
-              key={key}
-              style={{ borderLeft: `4px ${languageColors[key]} solid` }}
-            >
-              <span className="DialectTitle" id={key.replace(' / ', ' ')}>
-                {key}
-              </span>
-              <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                {languages[key].length > 0
-                  ? languages[key].map((tile) => this._createTile(tile))
-                  : 'No language archives available at this time.'}
-              </div>
-            </div>
-          )
+          return this._tile(key, languageColors[key], languages[key])
         }
         return null
       })
 
     // We want the 'Other FirstVoices Archives' to appear last.
-    if (languages['Other FirstVoices Archives'] && languages['Other FirstVoices Archives'].length > 0) {
-      toReturn.push(
-        <div
-          className="languageGroup fontAboriginalSans"
-          key="Other FirstVoices Archives"
-          style={{
-            borderLeft: '4px rgb(180, 0, 0) solid',
-          }}
-        >
-          <span className="DialectTitle" id="Other FirstVoices Archives">
-            Other FirstVoices Archives
-          </span>
-          <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-            {languages['Other FirstVoices Archives'].map((tile) => this._createTile(tile))}
-          </div>
-        </div>
-      )
+    if (languages[defaultArchiveName] && languages[defaultArchiveName].length > 0) {
+      toReturn.push(this._tile(defaultArchiveName, 'rgb(180, 0, 0)', languages[defaultArchiveName]))
     }
     return toReturn
+  }
+
+  _tile = (key, color, archives) => {
+    return (
+      <div className="languageGroup fontAboriginalSans" key={key} style={{ borderLeft: `4px ${color} solid` }}>
+        <span className="DialectTitle" id={key.replace(' / ', ' ')}>
+          {key}
+        </span>
+        <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+          {archives.length > 0
+            ? archives.map((tile) => this._createTile(tile))
+            : 'No language archives available at this time.'}
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <>
+        {this.organizeByLanguageSwitch()}
+        <div className="DialectList">{this._getContent()}</div>
+      </>
+    )
   }
 }
 
