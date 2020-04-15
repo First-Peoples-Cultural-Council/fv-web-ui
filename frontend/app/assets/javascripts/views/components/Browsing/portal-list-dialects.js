@@ -50,9 +50,9 @@ export class PortalListDialects extends Component {
   }
 
   componentDidUpdate() {
-    const link = window.location.hash
+    const link = decodeURI(window.location.hash.substring(1))
     if (link) {
-      const anchor = document.querySelector(link)
+      const anchor = document.querySelector(`[id*="${link}"]`)
       if (anchor) {
         anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
@@ -130,26 +130,28 @@ export class PortalListDialects extends Component {
       }
     })
 
-    const toReturn = Object.keys(languages).map((key) => {
-      if (key !== 'Other FirstVoices Archives') {
-        return (
-          <div
-            className="languageGroup fontAboriginalSans"
-            key={key}
-            style={{ borderLeft: `4px ${languageColors[key]} solid` }}
-          >
-            <span className="DialectTitle" id={key}>
-              {key}
-            </span>
-            <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-              {languages[key].length > 0
-                ? languages[key].map((tile) => this._createTile(tile))
-                : 'No language archives available at this time.'}
+    const toReturn = Object.keys(languages)
+      .sort()
+      .map((key) => {
+        if (key !== 'Other FirstVoices Archives') {
+          return (
+            <div
+              className="languageGroup fontAboriginalSans"
+              key={key}
+              style={{ borderLeft: `4px ${languageColors[key]} solid` }}
+            >
+              <span className="DialectTitle" id={key.replace(' / ', ' ')}>
+                {key}
+              </span>
+              <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+                {languages[key].length > 0
+                  ? languages[key].map((tile) => this._createTile(tile))
+                  : 'No language archives available at this time.'}
+              </div>
             </div>
-          </div>
-        )
-      }
-    })
+          )
+        }
+      })
 
     if (languages['Other FirstVoices Archives'].length > 0) {
       toReturn.push(
