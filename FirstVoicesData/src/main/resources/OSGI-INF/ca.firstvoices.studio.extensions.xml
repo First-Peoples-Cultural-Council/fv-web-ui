@@ -6250,7 +6250,7 @@
                     <field>fvdialect:maps_language_id</field>
                 </fields>
                 <properties widgetMode="edit">
-                    <property name="directoryName">languages</property>
+                    <property name="directoryName">parent_languages</property>
                     <property name="localize">true</property>
                 </properties>
             </widget>
@@ -6512,7 +6512,7 @@
                     <field>fvdialect:maps_language_id</field>
                 </fields>
                 <properties widgetMode="edit">
-                    <property name="directoryName">languages</property>
+                    <property name="directoryName">parent_languages</property>
                     <property name="localize">true</property>
                 </properties>
             </widget>
@@ -6777,11 +6777,11 @@
                     <field>fvdialect:maps_language_id</field>
                 </fields>
                 <properties widgetMode="edit">
-                    <property name="directoryName">languages</property>
+                    <property name="directoryName">parent_languages</property>
                     <property name="localize">true</property>
                 </properties>
                 <properties widgetMode="view">
-                    <property name="directoryName">languages</property>
+                    <property name="directoryName">parent_languages</property>
                     <property name="localize">true</property>
                 </properties>
             </widget>
@@ -24511,14 +24511,6 @@ function run(input, params) {
             <cacheEntryWithoutReferencesName>vocab-fv_countries-cache-without-references
             </cacheEntryWithoutReferencesName>
         </directory>
-        <directory name="languages" extends="template-vocabulary">
-            <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>on_missing_columns</createTablePolicy>
-            <table>studio_vocabulary_parent_languages</table>
-            <dataFile>data/vocabularies/parent_languages.csv</dataFile>
-            <cacheEntryName>vocab-parent_languages-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-parent_languages-cache-without-references</cacheEntryWithoutReferencesName>
-        </directory>
         <directory name="fv_language" extends="template-vocabulary">
             <autoincrementIdField>false</autoincrementIdField>
             <createTablePolicy>on_missing_columns</createTablePolicy>
@@ -24657,6 +24649,7 @@ function run(input, params) {
         <directory name="parent_languages" extends="template-vocabulary">
             <schema>parent_languages</schema>
             <autoincrementIdField>false</autoincrementIdField>
+            <idField>id</idField>
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_parent_languages</table>
             <dataFile>data/vocabularies/parent_languages.csv</dataFile>

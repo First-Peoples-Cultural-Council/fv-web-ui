@@ -7,8 +7,8 @@
     targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/parent_languages"
     >
 
-    <xs:element name="id" type="xs:string"/>
     <xs:element name="label" type="xs:string"/>
+    <xs:element name="id" type="xs:string"/>
     <xs:element name="obsolete" type="xs:integer" default="0"/>
     <xs:element name="ordering" type="xs:integer" default="10000000"/>
     <xs:element name="color" type="xs:string"/>

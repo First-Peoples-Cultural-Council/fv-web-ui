@@ -84,7 +84,7 @@ export class ExploreDialects extends Component {
 
     const isLoggedIn = this.props.computeLogin.success && this.props.computeLogin.isConnected
 
-    const languages = selectn('directoryEntries.maps_language_ids', this.props.computeDirectory) || []
+    const languages = selectn('directoryEntries.parent_languages', this.props.computeDirectory) || []
 
     const portalListProps = {
       siteTheme: this.props.routeParams.siteTheme,
@@ -145,7 +145,7 @@ export class ExploreDialects extends Component {
       { 'enrichers.document': 'lightancestry,lightportal', properties: '' },
       { queryParams: newProps.routeParams.area }
     )
-    newProps.fetchDirectory('maps_language_ids', 2000, true)
+    newProps.fetchDirectory('parent_languages', 2000, true)
   }
 
   _getQueryPath = (props = this.props) => {
