@@ -151,9 +151,6 @@ export class PortalListDialects extends Component {
     // Maps language name to the language color.
     const languageColors = {}
 
-    // The map id is stored on the fvdialect, but we need to map the ids to the names
-    const mappedLanguageIdsToName = {}
-
     // If the language doesn't have a parent language set, it will be put in the 'Other FirstVoices Archives'.
     const defaultArchiveName = 'Other FirstVoices Archives'
 
@@ -161,12 +158,11 @@ export class PortalListDialects extends Component {
     this.props.languages.forEach((lang) => {
       languages[lang.label] = []
       languageColors[lang.label] = lang.color
-      mappedLanguageIdsToName[lang.id] = [lang.label]
     })
 
     items.forEach((archive) => {
-      const languageId = selectn('contextParameters.lightancestry.dialect.fvdialect:maps_language_id', archive)
-      const archiveName = mappedLanguageIdsToName[languageId] || defaultArchiveName
+      const archiveName =
+        selectn('contextParameters.lightancestry.dialect.fvdialect:parent_language', archive) || defaultArchiveName
       if (!languages[archiveName]) {
         languages[archiveName] = []
       }
