@@ -79,8 +79,7 @@ If you are in the fv-web-ui/docker/ directory:
 ```
 docker-compose up
 ```
-
-**Note:** you may have to change the volumes `${PWD}` part in docker-compose.yml to match the path to your `fv-web-ui/docker/` directory
+**Note:** you may have to change the volumes ```${PWD}``` part in docker-compose.yml to match the path to your ```fv-web-ui/docker/``` directory
 
 This may take a few minutes as Nuxeo starts up.
 The initial backend setup script should automatically run, which will create the proper data structure and an admin account using the environment variables.
@@ -92,15 +91,14 @@ If you want to rerun the initial setup script for any reason, you can do so by r
 ```
 
 **Notes:** (change the following in docker-compose.yml under nuxeo -> environment)
-
 - To include automation traces: `NUXEO_AUTOMATION_TRACE=true`
 - To enable Dev mode: `NUXEO_DEV_MODE=true`
 - To change the data folder: `NUXEO_DATA=/opt/nuxeo/ext_data`
 
 ### Step 4:
 
-- You can now access the FirstVoices backend by going to localhost:8080 and logging in.
-- You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)
+* You can now access the FirstVoices backend by going to localhost:8080 and logging in.
+* You can also [run the frontend independently](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend)
 
 ## Creating an archive to work in
 
@@ -108,12 +106,10 @@ By default, your instance will not have any archives to work in.
 You will need to create a language family, language and dialect (i.e. archive).
 
 ##### Premade dev language:
-
-From the frontend directory run the command `npm run local:language:setup` to create a premade DevLangOne language which contains some words, phrases, and an alphabet.
-You can remove this premade language by running the command `npm run local:language:teardown`.
+From the frontend directory run the command ```npm run local:language:setup``` to create a premade DevLangOne language which contains some words, phrases, and an alphabet.
+You can remove this premade language by running the command ```npm run local:language:teardown```.
 
 ##### Manually:
-
 Log into the backend, navigate to Workspace (top menu) -> FV -> Workspaces -> Data and create a Language Family, a Language and a Dialect (by clicking "New" in each view). You will then be able to work within that archive via the front end.
 
 ## Pushing Changes
@@ -131,26 +127,21 @@ docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accep
 ```
 
 ### Method 2 (deploy a single module):
-
 #### Easy Way:
+* From the root of your module run the command ```./UpdateModule.sh```. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
+(eg: copy ```/FirstVoicesData/UpdateModule.sh``` into ```/YourNewModule```).
 
-- From the root of your module run the command `./UpdateModule.sh`. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
-  (eg: copy `/FirstVoicesData/UpdateModule.sh` into `/YourNewModule`).
+    Optionally you can add the flag ```-skip-tests``` to skip the compilation and running of unit tests during the module deploy (eg: ```./UpdateModule.sh -skip-tests```).
 
-      Optionally you can add the flag ```-skip-tests``` to skip the compilation and running of unit tests during the module deploy (eg: ```./UpdateModule.sh -skip-tests```).
-
-- Alternatively navigate to `docker/` and run the command `./UpdateModuleMain.sh <ModuleName>` where `<ModuleName>` is the name of the module you have created/made changes to (eg: `./UpdateModuleMain.sh FirstVoicesData`).
-
+* Alternatively navigate to ```docker/``` and run the command ```./UpdateModuleMain.sh <ModuleName>``` where ```<ModuleName>``` is the name of the module you have created/made changes to (eg: ```./UpdateModuleMain.sh FirstVoicesData```).
+  
   Both of the above will build the module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
-
 #### Manual method:
-
-- Ensure you remove any old versions of the module inside of the docker container that match the module you want to deploy.
-  To do this you can run the command `docker exec nuxeo-dev sh -c 'rm /opt/nuxeo/server/nxserver/bundles/<ModuleName>-*.jar'`
-- Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it with the command: `mvn clean install`
-  This will generate a jarfile for the module in the target directory (e.g. FirstVoicesSecurity/target/FirstVoicesSecurity-\*.jar).
-- Execute the following command to copy the JAR into the running backend docker container, and restart the server to apply the changes:
-
+* Ensure you remove any old versions of the module inside of the docker container that match the module you want to deploy.
+To do this you can run the command ```docker exec nuxeo-dev sh -c 'rm /opt/nuxeo/server/nxserver/bundles/<ModuleName>-*.jar'``` 
+* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it with the command: ```mvn clean install```
+This will generate a jarfile for the module in the target directory (e.g. FirstVoicesSecurity/target/FirstVoicesSecurity-*.jar).
+* Execute the following command to copy the JAR into the running backend docker container, and restart the server to apply the changes:
 ```
 docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
 ```
@@ -170,14 +161,12 @@ docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/
 ### Tips & Tricks
 
 When setting up unit tests:
-
-- Ensure that all the necessary imports are at the top
-- Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
-- Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
+* Ensure that all the necessary imports are at the top
+* Check that all @Deploy dependencies are set up in the pom.xml, and that the pom.xml
+* Make sure that the @PartialDeploy uses FirstVoicesData as its bundle if you are using the DocumentModel
 
 Errors:
-
-- If you encounter 137 or similar errors with docker you may need to allocate more memory for the containers to use
+* If you encounter 137 or similar errors with docker you may need to allocate more memory for the containers to use
 
 ## TODO
 
