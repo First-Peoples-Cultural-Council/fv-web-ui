@@ -37,7 +37,12 @@ echo
 # Build main project.
 echo 'Building fv-web-ui (this make take a few minutes)'
 cd ..
-mvn clean install
+if [ "$1" == "-skip-tests" ]; then
+    echo "skipping tests"
+    mvn clean install -DskipTests
+else
+    mvn clean install
+fi
 if [[ "$?" -ne 0 ]]; then
     echo
     echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1

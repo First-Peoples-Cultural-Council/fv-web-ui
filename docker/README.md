@@ -47,6 +47,12 @@ You may have to give the script execute permission first:
 chmod +x setup_docker.sh
 ```
 
+Optionally you can add the flag `-skip-tests` to skip the compilation and running of unit tests during the docker setup: 
+
+```
+./setup_docker.sh -skip-tests
+```
+
 #### Option B - Run the commands individually:
 
 ##### B-1:
