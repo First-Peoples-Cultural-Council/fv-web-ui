@@ -111,7 +111,7 @@
         <schema name="var_Task11b2" prefix="var_Task11b2" override="true" src="data/schemas/var_Task11b2.xsd"/>
         <schema name="var_FVUnpublishLanguageAsset" prefix="var_FVUnpublishLanguageAsset" override="true" src="data/schemas/var_FVUnpublishLanguageAsset.xsd"/>
         <schema name="fv_label_vocabulary" prefix="fv_label_vocabulary" override="true" src="data/schemas/fv_label_vocabulary.xsd"/>
-        <schema name="parent_languages" prefix="parent_languages" override="true" src="data/schemas/parent_languages.xsd"/>
+        <schema name="parent_languages" prefix="parent_languages" override="false" src="data/schemas/parent_languages.xsd"/>
     </extension>
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
         <doctype name="Folder" extends="Document">
@@ -6247,11 +6247,16 @@
                 </labels>
                 <translated>false</translated>
                 <fields>
-                    <field>fvdialect:maps_language_id</field>
+                    <field>fvdialect:parent_language</field>
                 </fields>
-                <properties widgetMode="edit">
+                <properties mode="any">
                     <property name="directoryName">parent_languages</property>
-                    <property name="localize">true</property>
+                    <property name="localize">false</property>
+                </properties>
+                <properties widgetMode="edit">
+                    <property name="required">true</property>
+                    <property name="styleClass">dataInputText</property>
+                    <property name="displayIdAndLabel">true</property>
                 </properties>
             </widget>
             <widget name="country" type="selectOneDirectory">
@@ -6509,11 +6514,16 @@
                 </labels>
                 <translated>false</translated>
                 <fields>
-                    <field>fvdialect:maps_language_id</field>
+                    <field>fvdialect:parent_language</field>
                 </fields>
-                <properties widgetMode="edit">
+                <properties mode="any">
                     <property name="directoryName">parent_languages</property>
-                    <property name="localize">true</property>
+                    <property name="localize">false</property>
+                </properties>
+                <properties widgetMode="edit">
+                    <property name="required">true</property>
+                    <property name="styleClass">dataInputText</property>
+                    <property name="displayIdAndLabel">true</property>
                 </properties>
             </widget>
             <widget name="country" type="selectOneDirectory">
@@ -6774,7 +6784,7 @@
                 </labels>
                 <translated>false</translated>
                 <fields>
-                    <field>fvdialect:maps_language_id</field>
+                    <field>fvdialect:parent_language</field>
                 </fields>
                 <properties widgetMode="edit">
                     <property name="directoryName">parent_languages</property>
@@ -24649,7 +24659,7 @@ function run(input, params) {
         <directory name="parent_languages" extends="template-vocabulary">
             <schema>parent_languages</schema>
             <autoincrementIdField>false</autoincrementIdField>
-            <idField>id</idField>
+            <idField>label</idField>
             <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_parent_languages</table>
             <dataFile>data/vocabularies/parent_languages.csv</dataFile>
