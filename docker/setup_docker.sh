@@ -24,7 +24,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo
 
-if [ "$1" == "--frontend" ] || [ "$2" == "--frontend" ]; then
+if [ "$1" == "--frontend" ] || [ "$2" == "--frontend" ] || [ "$3" == "--frontend" ]; then
     # Build the frontend docker image
     cd ${DIRECTORY}/../
     echo 'Building frontend Docker image'
@@ -39,7 +39,7 @@ else
     echo 'Skipping the frontend docker image build'
 fi
 
-if [ "$1" == "--cypress" ] || [ "$2" == "--cypress" ]; then
+if [ "$1" == "--cypress" ] || [ "$2" == "--cypress" ] || [ "$3" == "--cypress" ]; then
     # Build the cypress docker image
     cd ${DIRECTORY}/../
     echo 'Building Cypress Docker image'
@@ -70,7 +70,12 @@ echo
 # Build main project.
 echo 'Building fv-web-ui (this make take a few minutes)'
 cd ..
-mvn clean install -Pbackend
+if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
+    echo "skipping tests"
+    mvn clean install -DskipTests -Pbackend
+else
+    mvn clean install -Pbackend
+fi
 if [[ "$?" -ne 0 ]]; then
     echo
     echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
