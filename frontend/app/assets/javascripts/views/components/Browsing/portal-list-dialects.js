@@ -91,7 +91,7 @@ export class PortalListDialects extends Component {
               value="isLanguageSwitchToggled"
             />
           }
-          label="Organize By Language"
+          label={this.props.intl.searchAndReplace('Organize by language')}
         />
       </FormGroup>
     )
@@ -124,6 +124,7 @@ export class PortalListDialects extends Component {
         dialectDescription={dialectDescription}
         actionIcon={actionIcon}
         pushWindowPath={this.props.pushWindowPath}
+        data-cy="dialect-tile"
       />
     )
   }
@@ -131,7 +132,11 @@ export class PortalListDialects extends Component {
   _oldView = () => {
     const items = this.props.filteredItems || this.props.items
     return (
-      <div className="languageGroup fontAboriginalSans" style={{ display: 'flex', flexFlow: 'row wrap' }}>
+      <div
+        className="languageGroup fontAboriginalSans"
+        data-cy="old_view"
+        style={{ display: 'flex', flexFlow: 'row wrap' }}
+      >
         {items.map((tile) => this._createTile(tile))}
       </div>
     )
@@ -152,7 +157,7 @@ export class PortalListDialects extends Component {
     const languageColors = {}
 
     // If the language doesn't have a parent language set, it will be put in the 'Other FirstVoices Archives'.
-    const defaultArchiveName = 'Other FirstVoices Archives'
+    const defaultArchiveName = this.props.intl.searchAndReplace('Other FirstVoices Archives')
 
     // Perform mapping of above objects
     this.props.languages.forEach((lang) => {
@@ -187,14 +192,19 @@ export class PortalListDialects extends Component {
 
   _tile = (key, color, archives) => {
     return (
-      <div className="languageGroup fontAboriginalSans" key={key} style={{ borderLeft: `4px ${color} solid` }}>
+      <div
+        className="languageGroup fontAboriginalSans"
+        data-cy="language_group_view"
+        key={key}
+        style={{ borderLeft: `4px ${color} solid` }}
+      >
         <span className="DialectTitle" id={key.replace(' / ', ' ')}>
           {key}
         </span>
         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
           {archives.length > 0
             ? archives.map((tile) => this._createTile(tile))
-            : 'No language archives available at this time.'}
+            : this.props.intl.searchAndReplace('No language archives available at this time.')}
         </div>
       </div>
     )
