@@ -1,0 +1,13 @@
+.AlphabetViewRow {
+  display: flex;
+  justify-content: space-between;
+}
+.AlphabetViewRowItem {
+  margin: 10px;
+}
+
+@media (max-width: 767px) {
+  .AlphabetViewRow {
+    flex-direction: column;
+  }
+}
