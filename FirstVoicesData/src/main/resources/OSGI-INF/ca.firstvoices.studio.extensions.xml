@@ -6254,7 +6254,6 @@
                     <property name="localize">false</property>
                 </properties>
                 <properties widgetMode="edit">
-                    <property name="required">true</property>
                     <property name="styleClass">dataInputText</property>
                     <property name="displayIdAndLabel">true</property>
                 </properties>
@@ -6521,7 +6520,6 @@
                     <property name="localize">false</property>
                 </properties>
                 <properties widgetMode="edit">
-                    <property name="required">true</property>
                     <property name="styleClass">dataInputText</property>
                     <property name="displayIdAndLabel">true</property>
                 </properties>
