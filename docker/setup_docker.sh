@@ -6,6 +6,17 @@
 # of the docker images for those components.
 #
 
+#
+# This setup script exists as a convenient way to get your development environment setup.
+# If you wish to get more control over this process, you can execute this commands seperately, for example:
+# 
+# * Build this image locally using `docker build -t me/nuxeo-dev .`
+# * Build the fv-web-ui project manually (`mvn clean install` in `fv-web-ui`, then deploy the ZIP file to the docker server)
+# * Mount directories yourself via docker.
+# 
+# For more information, read more about Docker's capabilities here: https://www.docker.com/
+# 
+
 DIRECTORY=$PWD
 echo ${DIRECTORY}
 
