@@ -108,4 +108,5 @@
   <xs:element name="region" type="xs:string"/>
   <xs:element name="related_links" type="nxs:stringList"/>
   <xs:element name="short_url" type="xs:string"/>
+  <xs:element name="parent_language" type="xs:string"/>
 </xs:schema>

@@ -111,6 +111,7 @@
         <schema name="var_Task11b2" prefix="var_Task11b2" override="true" src="data/schemas/var_Task11b2.xsd"/>
         <schema name="var_FVUnpublishLanguageAsset" prefix="var_FVUnpublishLanguageAsset" override="true" src="data/schemas/var_FVUnpublishLanguageAsset.xsd"/>
         <schema name="fv_label_vocabulary" prefix="fv_label_vocabulary" override="true" src="data/schemas/fv_label_vocabulary.xsd"/>
+        <schema name="parent_languages" prefix="parent_languages" override="false" src="data/schemas/parent_languages.xsd"/>
     </extension>
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
         <doctype name="Folder" extends="Document">
@@ -6158,6 +6159,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>parent_language</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>country</widget>
                 </row>
                 <row>
@@ -6232,6 +6239,23 @@
                 </fields>
                 <properties widgetMode="edit">
                     <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="parent_language" type="selectOneDirectory">
+                <labels>
+                    <label mode="any">Parent Language</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvdialect:parent_language</field>
+                </fields>
+                <properties mode="any">
+                    <property name="directoryName">parent_languages</property>
+                    <property name="localize">false</property>
+                </properties>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="displayIdAndLabel">true</property>
                 </properties>
             </widget>
             <widget name="country" type="selectOneDirectory">
@@ -6377,6 +6401,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>parent_language</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>country</widget>
                 </row>
                 <row>
@@ -6475,6 +6505,23 @@
                 </fields>
                 <properties widgetMode="edit">
                     <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="parent_language" type="selectOneDirectory">
+                <labels>
+                    <label mode="any">Parent Language</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvdialect:parent_language</field>
+                </fields>
+                <properties mode="any">
+                    <property name="directoryName">parent_languages</property>
+                    <property name="localize">false</property>
+                </properties>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="displayIdAndLabel">true</property>
                 </properties>
             </widget>
             <widget name="country" type="selectOneDirectory">
@@ -6665,6 +6712,12 @@
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
+                    <widget>parent_language</widget>
+                </row>
+                <row>
+                    <properties mode="any">
+                        <property name="nxl_colspan_0">1</property>
+                    </properties>
                     <widget>country</widget>
                 </row>
                 <row>
@@ -6721,6 +6774,23 @@
                 </properties>
                 <properties widgetMode="view">
                     <property name="styleClass">dataInputText</property>
+                </properties>
+            </widget>
+            <widget name="parent_language" type="selectOneDirectory">
+                <labels>
+                    <label mode="any">Parent Language</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>fvdialect:parent_language</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="directoryName">parent_languages</property>
+                    <property name="localize">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="directoryName">parent_languages</property>
+                    <property name="localize">true</property>
                 </properties>
             </widget>
             <widget name="country" type="selectOneDirectory">
@@ -22337,6 +22407,93 @@
                 </properties>
             </widget>
         </layout>
+        <layout name="vocabulary-parent_languages">
+            <templates>
+                <template mode="any">/directory/directory_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <widget>language</widget>
+                </row>
+                <row>
+                    <widget>maps_id</widget>
+                </row>
+                <row>
+                    <widget>color</widget>
+                </row>
+                <row>
+                    <widget>family</widget>
+                </row>
+            </rows>
+            <widget name="language" type="text">
+                <labels>
+                    <label mode="any">Language</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>parent_languages:label</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="maps_id" type="text">
+                <labels>
+                    <label mode="any">Maps ID</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>parent_languages:id</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="color" type="text">
+                <labels>
+                    <label mode="any">Color</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>parent_languages:color</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="family" type="text">
+                <labels>
+                    <label mode="any">Family</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>parent_languages:family</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+        </layout>
         <layout name="Task297b@taskLayout">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
@@ -24497,6 +24654,16 @@ function run(input, params) {
             <cacheEntryName>fv_label_categories-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-label-categories-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
+        <directory name="parent_languages" extends="template-vocabulary">
+            <schema>parent_languages</schema>
+            <autoincrementIdField>false</autoincrementIdField>
+            <idField>label</idField>
+            <createTablePolicy>always</createTablePolicy>
+            <table>studio_vocabulary_parent_languages</table>
+            <dataFile>data/vocabularies/parent_languages.csv</dataFile>
+            <cacheEntryName>vocab-parent_languages-cache</cacheEntryName>
+            <cacheEntryWithoutReferencesName>vocab-parent_languages-cache-without-references</cacheEntryWithoutReferencesName>
+        </directory>
     </extension>
     <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
         <cache name="vocab-WorkflowType-cache">
@@ -24699,6 +24866,16 @@ function run(input, params) {
             <option name="concurrencyLevel">500</option>
             <ttl>60</ttl>
         </cache>
+        <cache name="vocab-parent_languages-cache">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
+        <cache name="vocab-parent_languages-cache-without-references">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
     </extension>
     <extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager" point="directories">
         <directory name="WorkflowType" layout="vocabulary" sortField="label"/>
@@ -24741,6 +24918,7 @@ function run(input, params) {
             </deleteConstraint>
         </directory>
         <directory name="reference" layout="vocabulary" sortField="label"/>
+        <directory name="parent_languages" layout="vocabulary-parent_languages" sortField="label"/>
     </extension>
     <extension target="org.nuxeo.ecm.platform.routing.service" point="routeModelImporter">
         <template-resource id="FVDisableLanguageAsset" path="data/FVDisableLanguageAsset.zip"/>

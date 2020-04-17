@@ -1,23 +1,21 @@
-.Dialect {
-  width: 290px;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-    0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  background-color: #fff;
-  margin: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  border: 1px solid rgb(245, 245, 245);
-  transition: border 55ms cubic-bezier(0.075, 0.82, 0.165, 1);
+.languageGroup {
+  width: 100%;
+  padding-left: 32px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  a {
+    text-decoration: none;
+  }
 }
-.Dialect:focus,
-.Dialect:hover {
-  text-decoration: none;
-  border: 1px solid rgb(180, 0, 0);
 
-  .DialectData {
+.Dialect {
+  background-color: rgb(245, 245, 245);
+  color: rgba(0, 0, 0, 0.8);
+  transition: border 55ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  &:focus,
+  &:hover {
+    text-decoration: none;
+    border: 2px solid rgb(180, 0, 0);
     background-color: #b40000;
     color: #fff;
   }
@@ -27,19 +25,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  background-color: #fff;
 }
-.DialectData {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-grow: 1;
-  background-color: rgb(245, 245, 245);
-  color: rgba(0, 0, 0, 0.8);
-  min-height: 60px;
-  transition: all 55ms cubic-bezier(0.075, 0.82, 0.165, 1);
-}
+
 .DialectDescription {
   color: rgba(0, 0, 0, 0.8);
   line-height: 1.5;

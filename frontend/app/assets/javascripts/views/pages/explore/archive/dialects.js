@@ -21,6 +21,7 @@ import ConfGlobal from 'conf/local.js'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchPortals } from 'providers/redux/reducers/fvPortal'
+import { fetchDirectory } from 'providers/redux/reducers/directory'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
@@ -31,7 +32,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 import FVLabel from '../../../components/FVLabel/index'
-
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -49,6 +49,7 @@ export class ExploreDialects extends Component {
     // REDUX: actions/dispatch/func
     fetchPortals: func.isRequired,
     pushWindowPath: func.isRequired,
+    fetchDirectory: func.isRequired,
   }
 
   state = {
@@ -78,10 +79,12 @@ export class ExploreDialects extends Component {
     // TODO: no need to re-declare/fetch data that doesn't change between renders
     //const computePortals = ProviderHelpers.getEntry(this.props.computePortals, this._getQueryPath())
     const portalsEntries = selectn('response.entries', this.props.computePortals) || []
-    // Sort based on dialect name (all FVPortals have dc:title 'Portal')
+
     const sortedPortals = portalsEntries.sort(this._portalEntriesSort)
 
     const isLoggedIn = this.props.computeLogin.success && this.props.computeLogin.isConnected
+
+    const languages = selectn('directoryEntries.parent_languages', this.props.computeDirectory) || []
 
     const portalListProps = {
       siteTheme: this.props.routeParams.siteTheme,
@@ -91,6 +94,8 @@ export class ExploreDialects extends Component {
         logo: this.logoFieldMapping,
       },
       items: sortedPortals,
+      languages,
+      isWorkspaces: this.props.routeParams.area === WORKSPACES,
     }
 
     if (this.props.routeParams.area === WORKSPACES) {
@@ -103,7 +108,7 @@ export class ExploreDialects extends Component {
           <a href={NavigationHelpers.generateStaticURL('/explore/FV/sections/Data')}>
             Click here to view all publicly available portals
           </a>
-          {'or click on "Public View" (top right).'}
+          {' or click on "Public View" (top right).'}
         </p>
       )
     }
@@ -122,11 +127,7 @@ export class ExploreDialects extends Component {
           <div className="col-xs-12">
             <div className={classNames({ hidden: this.props.routeParams.siteTheme === 'kids' })}>
               <h1>
-                <FVLabel
-                  transKey="general.explore"
-                  defaultStr="Explore Languages"
-                  transform="title"
-                />
+                <FVLabel transKey="general.explore" defaultStr="Explore Languages" transform="title" />
               </h1>
             </div>
             {introText1}
@@ -144,6 +145,7 @@ export class ExploreDialects extends Component {
       { 'enrichers.document': 'lightancestry,lightportal', properties: '' },
       { queryParams: newProps.routeParams.area }
     )
+    newProps.fetchDirectory('parent_languages', 2000, true)
   }
 
   _getQueryPath = (props = this.props) => {
@@ -172,15 +174,17 @@ export class ExploreDialects extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPortal, navigation, nuxeo } = state
+  const { fvPortal, navigation, nuxeo, directory } = state
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computePortals } = fvPortal
+  const { computeDirectory } = directory
 
   return {
     computeLogin,
     computePortals,
+    computeDirectory,
     properties,
   }
 }
@@ -188,6 +192,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchPortals,
+  fetchDirectory,
   pushWindowPath,
 }
 
