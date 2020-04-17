@@ -54,12 +54,6 @@ This setup script will:
 2. Create volumes on your host machine (in `fv-web-ui/docker/nuxeo_dev_docker`). These will be mounted on the `nuxeo-dev` container.
 3. Build the back-end using Maven and copy the generated ZIP file into `fv-web-ui/docker/nuxeo_dev_docker`.
 
-To speed up the setup, you can optionally add the flag `-skip-tests` to skip the compilation and running of unit tests: 
-
-```
-./setup_docker.sh -skip-tests
-```
-
 ### Step 2: Startup the environment
 
 Run the following in terminal:
