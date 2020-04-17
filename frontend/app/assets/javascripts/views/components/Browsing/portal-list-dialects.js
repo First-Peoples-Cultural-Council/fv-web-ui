@@ -36,7 +36,7 @@ const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
   state = {
-    isLanguageSwitchToggled: true,
+    isLanguageSwitchToggled: false,
   }
 
   handleChange = (name) => (event) => {
