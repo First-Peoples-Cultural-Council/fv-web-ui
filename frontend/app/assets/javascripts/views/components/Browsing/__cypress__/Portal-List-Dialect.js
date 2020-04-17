@@ -12,7 +12,6 @@ describe('Portal List Dialect Test', () => {
     cy.get('[data-cy="old_view"]').should('not.exist')
   })
 
-  // This cy test will work when the language sort is toggled by default
   it('Scrolls into view when accessing with #', () => {
     cy.visit('/explore/FV/sections/Data#Other')
     cy.wait(9000)
