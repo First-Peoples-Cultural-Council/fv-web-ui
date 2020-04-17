@@ -36,7 +36,7 @@ const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
   state = {
-    isLanguageSwitchToggled: true,
+    isLanguageSwitchToggled: false,
   }
 
   handleChange = (name) => (event) => {
@@ -59,6 +59,13 @@ export class PortalListDialects extends Component {
       title: 'properties.dc:title',
       logo: 'properties.file:content',
     },
+  }
+
+  componentDidMount() {
+    const link = decodeURI(window.location.hash.substring(1))
+    if (link) {
+      this.setState({ isLanguageSwitchToggled: true })
+    }
   }
 
   componentDidUpdate() {

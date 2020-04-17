@@ -5,11 +5,11 @@ describe('Portal List Dialect Test', () => {
     cy.wait(500)
     cy.getByText('EXPLORE LANGUAGES').click()
     cy.wait(500)
-    cy.get('[data-cy="language_group_view"]').should('exist')
-    cy.get('[data-cy="old_view"]').should('not.exist')
-    cy.getByText('Organize by language').click()
     cy.get('[data-cy="language_group_view"]').should('not.exist')
     cy.get('[data-cy="old_view"]').should('exist')
+    cy.getByText('Organize by language').click()
+    cy.get('[data-cy="language_group_view"]').should('exist')
+    cy.get('[data-cy="old_view"]').should('not.exist')
   })
 
   it('Scrolls into view when accessing with #', () => {

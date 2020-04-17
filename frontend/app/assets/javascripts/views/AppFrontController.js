@@ -203,10 +203,7 @@ export class AppFrontController extends Component {
           buttontext="Read More"
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           buttonhandler={() => {
-            window.open(
-              'https://wiki.firstvoices.com/display/FIR1/2020/04/09/Family-friendly+activities+for+at-home+learning',
-              '_blank'
-            )
+            window.open('https://wiki.firstvoices.com/display/FIR1/FirstVoices+Development+Updates', '_blank')
           }}
         />
       </>
