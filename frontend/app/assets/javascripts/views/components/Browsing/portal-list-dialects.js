@@ -61,6 +61,13 @@ export class PortalListDialects extends Component {
     },
   }
 
+  componentDidMount() {
+    const link = decodeURI(window.location.hash.substring(1))
+    if (link) {
+      this.setState({ isLanguageSwitchToggled: true })
+    }
+  }
+
   componentDidUpdate() {
     const link = decodeURI(window.location.hash.substring(1))
     if (link) {

@@ -13,12 +13,12 @@ describe('Portal List Dialect Test', () => {
   })
 
   // This cy test will work when the language sort is toggled by default
-  // it('Scrolls into view when accessing with #', () => {
-  //   cy.visit('/explore/FV/sections/Data#Other')
-  //   cy.wait(9000)
+  it('Scrolls into view when accessing with #', () => {
+    cy.visit('/explore/FV/sections/Data#Other')
+    cy.wait(9000)
 
-  //   cy.window().then(($window) => {
-  //     expect($window.scrollY).to.be.greaterThan(2000)
-  //   })
-  // })
+    cy.window().then(($window) => {
+      expect($window.scrollY).to.be.greaterThan(2000)
+    })
+  })
 })
