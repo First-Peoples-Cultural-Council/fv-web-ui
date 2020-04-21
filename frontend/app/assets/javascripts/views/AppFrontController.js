@@ -145,6 +145,7 @@ export class AppFrontController extends Component {
 
     if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
       this._route({ props: this.props })
+      window.scrollTo(0, 0)
     }
     if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
       this.props.setIntlWorkspace(this.props.routeParams.dialect_path)
@@ -235,7 +236,6 @@ export class AppFrontController extends Component {
     if (hideNavigation) {
       navigation = footer = ''
     }
-
     return (
       <div>
         {covidAlert}
