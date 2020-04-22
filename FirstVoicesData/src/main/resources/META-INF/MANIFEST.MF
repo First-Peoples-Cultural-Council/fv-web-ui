@@ -8,4 +8,9 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ManifestVersion: 2
 Bundle-Vendor: Nuxeo
-Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,OSGI-INF/ca.firstvoices.studio.extensions.xml,OSGI-INF/ca.firstvoices.listeners.xml,OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml,OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml,OSGI-INF/services/ca.firstvoices.services.sanitize.xml
+Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,OSGI-INF/ca.fi
+ rstvoices.studio.extensions.xml,OSGI-INF/ca.firstvoices.listeners.xml
+ ,OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml
+ ,OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xm
+ l,OSGI-INF/services/ca.firstvoices.services.sanitize.xml,OSGI-INF/ser
+ vices/ca.firstvoices.services.addconfusablesservice.xml
