@@ -2,6 +2,7 @@ package ca.firstvoices.operations;
 
 import ca.firstvoices.services.AddConfusablesService;
 import org.nuxeo.ecm.automation.core.Constants;
+import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -16,16 +17,16 @@ public class AddConfusablesEndpoint {
 
   public static final String ID = "Document.AddConfusables";
 
-  CoreSession session;
+  @Context
+  protected CoreSession session;
 
   protected AddConfusablesService service = Framework.getService(AddConfusablesService.class);
 
   @OperationMethod
   public void run() {
-//    session = input.getCoreSession();
 
     // Call the addConfusables service.
-    service.addConfusables();
+    service.addConfusables(session);
   }
 
 }
