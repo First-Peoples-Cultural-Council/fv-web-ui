@@ -5,6 +5,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface AddConfusablesService {
 
-  public void addConfusables(CoreSession session, DocumentModel dialect);
+  void addConfusables(CoreSession session, DocumentModel dialect);
+
+  DocumentModel updateConfusableCharacters(DocumentModel characterDocument, DocumentModel dialect,
+      String characterToUpdate, String[] newConfusables);
 
 }
