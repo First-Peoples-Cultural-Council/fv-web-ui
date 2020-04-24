@@ -6,7 +6,7 @@
   </extension>
 
   <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
-    <operation class="ca.firstvoices.operations.AddConfusablesEndpoint"/>
+    <operation class="ca.firstvoices.operations.AddConfusablesOperation"/>
   </extension>
 
 </component>
