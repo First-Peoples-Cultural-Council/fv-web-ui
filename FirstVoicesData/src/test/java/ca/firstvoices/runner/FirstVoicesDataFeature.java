@@ -1,8 +1,6 @@
 package ca.firstvoices.runner;
 
-import org.nuxeo.directory.test.DirectoryFeature;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
-import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -13,7 +11,7 @@ import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
 
-@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, CoreFeature.class, DirectoryFeature.class})
+@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy("org.nuxeo.binary.metadata")
 @Deploy("org.nuxeo.ecm.platform.url.core")
@@ -43,8 +41,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml")
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
-
-@Deploy("FirstVoicesData.Test:OSGI-INF/fv-add-confusables-test-data.xml")
 
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.sanitize.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")

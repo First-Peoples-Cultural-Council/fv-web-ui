@@ -51,7 +51,6 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {
-          // If a character was matched by title then update the lowercase confusable characters
           session.saveDocument(updateConfusableCharacters(doc, dialect, character, confusables));
         }
       }
@@ -62,6 +61,8 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   public DocumentModel updateConfusableCharacters(DocumentModel characterDocument,
       DocumentModel dialect, String characterToUpdate, String[] newConfusables) {
     String dialectName = dialect.getPropertyValue("dc:title").toString();
+
+    // If a character was matched by title then update the lowercase confusable characters
     if (characterDocument.getPropertyValue("dc:title").equals(characterToUpdate)) {
       String[] existing = (String[]) characterDocument
           .getPropertyValue("fvcharacter:confusable_characters");
