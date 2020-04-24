@@ -7,7 +7,7 @@ public interface AddConfusablesService {
 
   void addConfusables(CoreSession session, DocumentModel dialect);
 
-  DocumentModel updateConfusableCharacters(DocumentModel characterDocument, DocumentModel dialect,
+  DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument, DocumentModel dialect,
       String characterToUpdate, String[] newConfusables);
 
 }

@@ -50,14 +50,14 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {
-          session.saveDocument(updateConfusableCharacters(doc, dialect, character, confusables));
+          updateConfusableCharacters(session, doc, dialect, character, confusables);
         }
       }
     }
   }
 
   @Override
-  public DocumentModel updateConfusableCharacters(DocumentModel characterDocument,
+  public DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument,
       DocumentModel dialect, String characterToUpdate, String[] newConfusables) {
     String dialectName = dialect.getPropertyValue("dc:title").toString();
 
@@ -94,7 +94,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
       }
     }
 
-    return characterDocument;
+    return session.saveDocument(characterDocument);
   }
 
   // Helper method to check existing confusables and only add new ones if they don't already exist

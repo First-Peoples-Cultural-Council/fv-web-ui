@@ -23,7 +23,7 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     session.saveDocument(testConfusable);
 
     DocumentModel updated = session.saveDocument(addConfusablesService
-        .updateConfusableCharacters(testConfusable, dialect, "¢", confusablesToAdd));
+        .updateConfusableCharacters(session, testConfusable, dialect, "¢", confusablesToAdd));
 
     String[] property = (String[]) updated.getPropertyValue("fvcharacter:confusable_characters");
 
@@ -37,7 +37,7 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     session.saveDocument(testConfusableUppercase);
 
     updated = session.saveDocument(addConfusablesService
-        .updateConfusableCharacters(testConfusableUppercase, dialect, "¢", confusablesToAdd));
+        .updateConfusableCharacters(session, testConfusableUppercase, dialect, "¢", confusablesToAdd));
 
     String[] uProperty = (String[]) updated
         .getPropertyValue("fvcharacter:upper_case_confusable_characters");
