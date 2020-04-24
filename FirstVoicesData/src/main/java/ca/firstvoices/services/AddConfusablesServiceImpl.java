@@ -17,11 +17,10 @@ import org.nuxeo.runtime.api.Framework;
 public class AddConfusablesServiceImpl implements AddConfusablesService {
 
   private static final Log log = LogFactory.getLog(AddConfusablesServiceImpl.class);
-  private DirectoryService directoryService = Framework.getService(DirectoryService.class);
 
   @Override
   public void addConfusables(CoreSession session, DocumentModel dialect) {
-
+    DirectoryService directoryService = Framework.getService(DirectoryService.class);
     try (Session directorySession = directoryService.open("confusable_characters")) {
 
       // Get all rows in the confusable_characters vocabulary
