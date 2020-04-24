@@ -10,10 +10,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id=AddConfusablesEndpoint.ID, category= Constants.CAT_DOCUMENT, label="FVAddConfusables",
-    description="This operation is used to setup the initial FirstVoices backend for development.  " +
-        "It can be run multiple times without issues. Please ensure you have your environment " +
-        "variables set for CYPRESS_FV_USERNAME and CYPRESS_FV_PASSWORD as these will create an admin " +
-        "account for you.")
+    description="This operation is used to add confusable call the service which adds confusable "
+        + "characters to the input archive. It will query the archive for the characters column in "
+        + "the confusable_characters vocabulary and add the confusables to that character if it is found.")
 public class AddConfusablesEndpoint {
 
   public static final String ID = "Document.AddConfusables";
