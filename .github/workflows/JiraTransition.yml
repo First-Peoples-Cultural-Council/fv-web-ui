@@ -64,7 +64,7 @@ jobs:
       id: status-checks
       uses: WyriHaximus/github-action-wait-for-status@0.1.0
       with:
-        ignoreActions: Transition_DEV-IN-PROGRESS_to_DEV-DONE,Run-tests
+        ignoreActions: Transition_DEV-IN-PROGRESS_to_DEV-DONE,Run-tests,Add_PR_Review_Info_to_Issue,Transition_DEV-DONE_to_QA-TO-DO,Transition_QA-Done_to_QA-TO-DO_preprod,Transition_QA-Done_to_Launched
         checkInterval: 30
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

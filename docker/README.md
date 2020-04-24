@@ -66,8 +66,6 @@ This command will:
 1. Start all the docker services defined in docker-compose.yml (this may take a few minutes as the environment starts up.)
 2. Automatically execute `./initialsetup.sh` which will create the proper data structure and an admin account using the environment variables.
 
-#### Option B - Run the commands individually:
-
 **Note for Windows environments:** You may need to replace ```${PWD}``` in docker-compose.yml with your full path to your ```fv-web-ui/docker/``` directory, since ```${PWD}``` will not work in Windows terminals.
 
 ### Step 3: Access your URLs
@@ -182,8 +180,6 @@ docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accep
 
 #### Method 2 (deploy a single module):
 
-Easy Way:
-
 * From the root of your module run the command ```./UpdateModule.sh```. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
 (eg: copy ```/FirstVoicesData/UpdateModule.sh``` into ```/YourNewModule```).
 
@@ -192,17 +188,6 @@ Easy Way:
 * Alternatively navigate to ```docker/``` and run the command ```./UpdateModuleMain.sh <ModuleName>``` where ```<ModuleName>``` is the name of the module you have created/made changes to (eg: ```./UpdateModuleMain.sh FirstVoicesData```).
   
   Both of the above will build the module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
-
-Manual method:
-
-* Ensure you remove any old versions of the module inside of the docker container that match the module you want to deploy.
-To do this you can run the command ```docker exec nuxeo-dev sh -c 'rm /opt/nuxeo/server/nxserver/bundles/<ModuleName>-*.jar'``` 
-* Navigate into the module you changed (e.g. FirstVoicesSecurity) and build it with the command: ```mvn clean install```
-This will generate a jarfile for the module in the target directory (e.g. FirstVoicesSecurity/target/FirstVoicesSecurity-*.jar).
-* Execute the following command to copy the JAR into the running backend docker container, and restart the server to apply the changes:
-```
-docker cp target/FirstVoicesSecurity-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
-```
 
 ### Useful commands/common tasks/tips
 
