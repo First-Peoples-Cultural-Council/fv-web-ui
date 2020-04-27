@@ -112,34 +112,31 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void cleanupWordsAndPhrases() {
-    try {
-      WorkManager workManager = Framework.getService(WorkManager.class);
+    if (document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) {
+      try {
+        WorkManager workManager = Framework.getService(WorkManager.class);
 
-      if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-        DocumentPart[] docParts = document.getParts();
-        for (DocumentPart docPart : docParts) {
-          Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
+        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+          DocumentPart[] docParts = document.getParts();
+          for (DocumentPart docPart : docParts) {
+            Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
 
-          while (dirtyChildrenIterator.hasNext()) {
-            Property property = dirtyChildrenIterator.next();
-            String propertyName = property.getField().getName().toString();
-            if (property.isDirty() && propertyName.equals("dc:title")) {
-              CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
-                  document.getRef());
-              workManager.schedule(worker);
+            while (dirtyChildrenIterator.hasNext()) {
+              Property property = dirtyChildrenIterator.next();
+              String propertyName = property.getField().getName().toString();
+              if (property.isDirty() && propertyName.equals("dc:title")) {
+                cleanupCharactersService.cleanConfusables(session, document);
+              }
             }
           }
         }
+        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+          cleanupCharactersService.cleanConfusables(session, document);
+        }
+      } catch (Exception exception) {
+        rollBackEvent(e);
+        throw exception;
       }
-      if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-        CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
-            document.getRef());
-        workManager.schedule(worker);
-
-      }
-    } catch (Exception exception) {
-      rollBackEvent(e);
-      throw exception;
     }
   }
 
