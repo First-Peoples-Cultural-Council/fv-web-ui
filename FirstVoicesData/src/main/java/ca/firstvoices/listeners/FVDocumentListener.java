@@ -1,8 +1,14 @@
 package ca.firstvoices.listeners;
 
-import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
@@ -10,27 +16,23 @@ import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.runtime.api.Framework;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
+public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
-public class FVDocumentListener extends AbstractListener {
+  private CoreSession session;
+  private AssignAncestorsService assignAncestorsService = Framework
+      .getService(AssignAncestorsService.class);
+  protected SanitizeDocumentService sanitizeDocumentService = Framework
+      .getService(SanitizeDocumentService.class);
+  private CleanupCharactersService cleanupCharactersService = Framework
+      .getService(CleanupCharactersService.class);
+  private EventContext ctx;
+  private Event e;
+  private DocumentModel document;
 
-    private CoreSession session;
-    private AssignAncestorsService assignAncestorsService = Framework.getService(AssignAncestorsService.class);
-    protected SanitizeDocumentService sanitizeDocumentService = Framework.getService(SanitizeDocumentService.class);
-    private CleanupCharactersService cleanupCharactersService = Framework.getService(CleanupCharactersService.class);
-    private EventContext ctx;
-    private Event e;
-    private DocumentModel document;
-
-    @Override
+  @Override
     public void handleEvent(Event event) {
         e = event;
         ctx = e.getContext();

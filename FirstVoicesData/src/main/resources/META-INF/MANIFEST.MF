@@ -13,4 +13,4 @@ Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,OSGI-INF/ca.fi
  ,OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml
  ,OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xm
  l,OSGI-INF/services/ca.firstvoices.services.sanitize.xml,OSGI-INF/ser
- vices/ca.firstvoices.services.addconfusablesservice.xml
+ vices/ca.firstvoices.services.addconfusablesservice.xml,OSGI-INF/extensions/ca.firstvoices.workers.fvdataworkmanagers.xml

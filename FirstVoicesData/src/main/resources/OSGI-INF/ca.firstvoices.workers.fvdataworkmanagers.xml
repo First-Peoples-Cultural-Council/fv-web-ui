@@ -16,14 +16,13 @@
   ~ */
   -->
 
-<component name="ca.firstvoices.nativeorder.computeschedule.contrib">
-
-    <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
-        <schedule id="computeNativeOrderSchedule">
-            <eventId>computeNativeOrder</eventId>
-            <eventCategory>default</eventCategory>
-            <!--            Every 10 minutes-->
-            <cronExpression>* */10 * ? * *</cronExpression>
-        </schedule>
-    </extension>
+<component name="ca.firstvoices.workers.fvdataworkmanagers">
+  <extension point="queues" target="org.nuxeo.ecm.core.work.service">
+    <queue id="addConfusablesToArchive">
+      <category>addConfusablesToArchive</category>
+      <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
+      <maxThreads>1</maxThreads>
+      <name>Queue for adding confusables to archive's alphabet</name>
+    </queue>
+  </extension>
 </component>

@@ -19,23 +19,23 @@
 package ca.firstvoices.services;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
-import org.apache.commons.text.StringEscapeUtils;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.PathRef;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.text.StringEscapeUtils;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 
-public class CleanupCharactersServiceImpl extends AbstractService implements CleanupCharactersService {
+public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
+    CleanupCharactersService {
 
     private CoreSession session;
     private String[] types = {
-            "FVPhrase",
-            "FVWord",
+        "FVPhrase",
+        "FVWord",
     };
 
     @Override

@@ -10,11 +10,11 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id= AddConfusablesOperation.ID, category= Constants.CAT_DOCUMENT, label="FVAddConfusables",
-    description="This operation is used to add confusable call the service which adds confusable "
+@Operation(id = AddConfusablesOperation.ID, category = Constants.CAT_DOCUMENT, label = "FVAddConfusables",
+    description = "This operation is used to add confusable call the service which adds confusable "
         + "characters to the input archive. It will query the archive for the characters column in "
         + "the confusable_characters vocabulary and add the confusables to that character if it is found.")
-public class AddConfusablesOperation {
+public class AddConfusablesOperation extends AbstractFirstVoicesDataOperation {
 
   public static final String ID = "Document.AddConfusables";
 
@@ -28,7 +28,8 @@ public class AddConfusablesOperation {
 
     // Call the addConfusables service.
     if(dialect.getType().equals("FVDialect")) {
-      service.addConfusables(session, dialect);
+      DocumentModel alphabet = getAlphabet(session, dialect);
+      alphabet.setPropertyValue("update_confusables_required", true);
     } else {
       throw new NuxeoException("Document type must be FVDialect");
     }
