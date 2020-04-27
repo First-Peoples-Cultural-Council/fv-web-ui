@@ -11,15 +11,15 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author david
  */
-public class AddConfusablesToArchiveWorker extends AbstractWork {
+public class AddConfusablesToAlphabetWorker extends AbstractWork {
 
-  private static final String ADD_CONFUSABLES_TO_ARCHIVE = "addConfusablesToArchive";
+  private static final String ADD_CONFUSABLES_TO_ALPHABET = "addConfusablesToAlphabet";
   private DocumentRef dialect;
   private DocumentRef alphabet;
   private AddConfusablesService service = Framework.getService(AddConfusablesService.class);
 
-  public AddConfusablesToArchiveWorker(DocumentRef dialectRef, DocumentRef alphabetRef) {
-    super(ADD_CONFUSABLES_TO_ARCHIVE);
+  public AddConfusablesToAlphabetWorker(DocumentRef dialectRef, DocumentRef alphabetRef) {
+    super(ADD_CONFUSABLES_TO_ALPHABET);
     this.dialect = dialectRef;
     this.alphabet = alphabetRef;
   }
@@ -39,11 +39,11 @@ public class AddConfusablesToArchiveWorker extends AbstractWork {
 
   @Override
   public String getTitle() {
-    return ADD_CONFUSABLES_TO_ARCHIVE;
+    return ADD_CONFUSABLES_TO_ALPHABET;
   }
 
   @Override
   public String getCategory() {
-    return ADD_CONFUSABLES_TO_ARCHIVE;
+    return ADD_CONFUSABLES_TO_ALPHABET;
   }
 }

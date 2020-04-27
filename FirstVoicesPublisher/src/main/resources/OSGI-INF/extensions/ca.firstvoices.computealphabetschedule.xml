@@ -20,10 +20,11 @@
 
     <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
         <schedule id="computeAlphabetProcesses">
-            <eventId>computeAlphabetProcesses</eventId>
-            <eventCategory>default</eventCategory>
-            <!--            Every 10 minutes-->
-            <cronExpression>* */10 * ? * *</cronExpression>
+          <eventId>computeAlphabetProcesses</eventId>
+          <eventCategory>default</eventCategory>
+          <!--            Every 10 minutes-->
+          <!--            <cronExpression>* */10 * ? * *</cronExpression>-->
+          <cronExpression>0 * * ? * *</cronExpression>
         </schedule>
     </extension>
 </component>

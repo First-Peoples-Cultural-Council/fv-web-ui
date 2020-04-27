@@ -10,11 +10,6 @@
             <event>beforeDocumentModification</event>
             <event>aboutToCreate</event>
             <event>documentModified</event>
-        </listener>
-
-        <listener async="true" class="ca.firstvoices.listeners.AddConfusablesToCharactersListener"
-          name="AddConfusbablesToChractersListener"
-          postCommit="false" priority="1000">
             <event>computeAlphabetProcesses</event>
         </listener>
     </extension>

@@ -39,16 +39,21 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     };
 
     @Override
-    public DocumentModel cleanConfusables(DocumentModel document) {
-        session = document.getCoreSession();
-        if (Arrays.stream(types).parallel().noneMatch(document.getDocumentType().toString()::contains)) return document;
+    public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
+        if (Arrays.stream(types).parallel()
+            .noneMatch(document.getDocumentType().toString()::contains)) {
+            return document;
+        }
 
         DocumentModel dictionary = session.getDocument(document.getParentRef());
         DocumentModel dialect = session.getDocument(dictionary.getParentRef());
-        DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        DocumentModel alphabet = session
+            .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         List<DocumentModel> characters = session.getChildren(alphabet.getRef());
 
-        if (characters.size() == 0) return document;
+        if (characters.size() == 0) {
+            return document;
+        }
 
         String propertyValue = (String) document.getPropertyValue("dc:title");
 

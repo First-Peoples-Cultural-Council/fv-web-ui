@@ -18,17 +18,22 @@
 
 package ca.firstvoices.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-
-import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
 
@@ -56,7 +61,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         List<DocumentModel> documentModels = createWords(words);
         for (int i = 0; i < documentModels.size(); i++) {
             DocumentModel documentModel = documentModels.get(i);
-            DocumentModel updatedDocument = cleanupCharactersService.cleanConfusables(documentModel);
+            DocumentModel updatedDocument = cleanupCharactersService
+                .cleanConfusables(session, documentModel);
             String title = (String) updatedDocument.getPropertyValue("dc:title");
             assertEquals(correctWords[i], title);
         }
@@ -106,7 +112,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         List<DocumentModel> documentModels = createWords(words);
         for (int i = 0; i < documentModels.size(); i++) {
             DocumentModel documentModel = documentModels.get(i);
-            DocumentModel updatedDocument = cleanupCharactersService.cleanConfusables(documentModel);
+            DocumentModel updatedDocument = cleanupCharactersService
+                .cleanConfusables(session, documentModel);
             String title = (String) updatedDocument.getPropertyValue("dc:title");
             assertEquals(correctWords[i], title);
         }
