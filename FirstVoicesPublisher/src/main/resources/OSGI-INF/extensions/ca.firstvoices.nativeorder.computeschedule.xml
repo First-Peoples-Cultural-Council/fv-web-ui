@@ -26,13 +26,4 @@
             <cronExpression>* */10 * ? * *</cronExpression>
         </schedule>
     </extension>
-
-    <extension point="schedule" target="org.nuxeo.ecm.core.scheduler.SchedulerService">
-        <schedule id="computeUnicodeCharacterUpdateSchedule">
-            <cronExpression>*/10 * * ? * *</cronExpression>
-            <eventCategory>default</eventCategory>
-            <!--            Every 10 seconds -->
-            <eventId>computeUnicodeCharacterUpdate</eventId>
-        </schedule>
-    </extension>
 </component>
