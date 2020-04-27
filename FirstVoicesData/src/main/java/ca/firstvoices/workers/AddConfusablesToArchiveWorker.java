@@ -15,11 +15,13 @@ public class AddConfusablesToArchiveWorker extends AbstractWork {
 
   private static final String ADD_CONFUSABLES_TO_ARCHIVE = "addConfusablesToArchive";
   private DocumentRef dialect;
+  private DocumentRef alphabet;
   private AddConfusablesService service = Framework.getService(AddConfusablesService.class);
 
-  public AddConfusablesToArchiveWorker(DocumentRef dialectRef) {
+  public AddConfusablesToArchiveWorker(DocumentRef dialectRef, DocumentRef alphabetRef) {
     super(ADD_CONFUSABLES_TO_ARCHIVE);
     this.dialect = dialectRef;
+    this.alphabet = alphabetRef;
   }
 
   @Override
@@ -29,8 +31,10 @@ public class AddConfusablesToArchiveWorker extends AbstractWork {
             session -> {
               DocumentModel dialectWithSession = session.getDocument(dialect);
               service.addConfusables(session, dialectWithSession);
+              DocumentModel alphabetDoc = session.getDocument(alphabet);
+              alphabetDoc.setPropertyValue("fv-alphabet:update_confusables_required", false);
+              session.saveDocument(alphabetDoc);
             });
-
   }
 
   @Override

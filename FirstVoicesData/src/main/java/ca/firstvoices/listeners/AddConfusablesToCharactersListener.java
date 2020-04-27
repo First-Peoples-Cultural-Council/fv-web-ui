@@ -34,7 +34,7 @@ public class AddConfusablesToCharactersListener implements EventListener {
                   DocumentModel dialect = session.getParentDocument(alphabet.getRef());
 
                   AddConfusablesToArchiveWorker worker = new AddConfusablesToArchiveWorker(
-                      dialect.getRef());
+                      dialect.getRef(), alphabet.getRef());
 
                   workManager.schedule(worker);
                 }
