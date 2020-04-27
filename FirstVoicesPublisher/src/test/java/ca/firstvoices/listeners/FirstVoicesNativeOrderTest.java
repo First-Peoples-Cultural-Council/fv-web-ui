@@ -43,19 +43,19 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class})
 @Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform",
-        "org.nuxeo.ecm.platform.commandline.executor",
-        "org.nuxeo.ecm.platform.picture.core",
-        "org.nuxeo.ecm.platform.rendition.core",
-        "org.nuxeo.ecm.platform.video.core",
-        "org.nuxeo.ecm.platform.audio.core",
-        "org.nuxeo.ecm.automation.scripting",
-        "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
-        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.computeschedule.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml",
-        "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml",
+    "org.nuxeo.ecm.platform.commandline.executor",
+    "org.nuxeo.ecm.platform.picture.core",
+    "org.nuxeo.ecm.platform.rendition.core",
+    "org.nuxeo.ecm.platform.video.core",
+    "org.nuxeo.ecm.platform.audio.core",
+    "org.nuxeo.ecm.automation.scripting",
+    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.computealphabetschedule.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml",
 })
 public class FirstVoicesNativeOrderTest {
     @Inject

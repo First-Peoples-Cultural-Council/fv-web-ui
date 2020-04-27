@@ -16,11 +16,11 @@
   ~ */
   -->
 
-<component name="ca.firstvoices.nativeorder.computeschedule.contrib">
+<component name="ca.firstvoices.computealphabetschedule.contrib">
 
     <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
-        <schedule id="computeNativeOrderSchedule">
-            <eventId>computeNativeOrder</eventId>
+        <schedule id="computeAlphabetProcesses">
+            <eventId>computeAlphabetProcesses</eventId>
             <eventCategory>default</eventCategory>
             <!--            Every 10 minutes-->
             <cronExpression>* */10 * ? * *</cronExpression>

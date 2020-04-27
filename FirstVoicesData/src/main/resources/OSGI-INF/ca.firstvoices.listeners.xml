@@ -15,7 +15,7 @@
         <listener async="true" class="ca.firstvoices.listeners.AddConfusablesToCharactersListener"
           name="AddConfusbablesToChractersListener"
           postCommit="false" priority="1000">
-            <event>computeUnicodeCharacterUpdate</event>
+            <event>computeAlphabetProcesses</event>
         </listener>
     </extension>
 

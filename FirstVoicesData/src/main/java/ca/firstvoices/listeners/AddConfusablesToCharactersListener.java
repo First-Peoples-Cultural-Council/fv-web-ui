@@ -17,7 +17,7 @@ public class AddConfusablesToCharactersListener implements EventListener {
 
   @Override
   public void handleEvent(Event event) {
-    if (!event.getName().equals("computeUnicodeCharacterUpdate")) {
+    if (!event.getName().equals("computeAlphabetProcesses")) {
       return;
     }
 
