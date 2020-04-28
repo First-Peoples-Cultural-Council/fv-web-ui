@@ -3,7 +3,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.3.0</version>
+    <version>3.3.1-RC</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>migration.ca.firstvoices</groupId>
