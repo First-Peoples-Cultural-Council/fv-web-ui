@@ -34,7 +34,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.runtime.test.runner.Deploy;
 
+@Deploy({
+    "org.nuxeo.runtime.datasource",
+    "org.nuxeo.runtime.metrics",
+    "org.nuxeo.ecm.core.persistence",
+    "org.nuxeo.ecm.platform.audit",
+    "FirstVoicesData.tests:audit-contrib.xml"
+})
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
 
     private Map<String, String[]> alphabetAndConfusableCharacters;

@@ -42,15 +42,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
-//Auditing
-@Deploy({
-    "org.nuxeo.runtime.datasource",
-    "org.nuxeo.runtime.metrics",
-    "org.nuxeo.ecm.core.persistence",
-    "org.nuxeo.ecm.platform.audit",
-    "FirstVoicesData.tests:audit-contrib.xml"
-})
-
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.sanitize.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
