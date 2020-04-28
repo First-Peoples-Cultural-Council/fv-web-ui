@@ -19,7 +19,9 @@
 package ca.firstvoices.services;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +30,14 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.platform.audit.api.AuditLogger;
+import org.nuxeo.ecm.platform.audit.api.ExtendedInfo;
+import org.nuxeo.ecm.platform.audit.api.LogEntry;
+import org.nuxeo.runtime.api.Framework;
 
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
 
-    private CoreSession session;
     private String[] types = {
         "FVPhrase",
         "FVWord",
@@ -40,6 +45,9 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
 
     @Override
     public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
+        AuditLogger logger = Framework.getService(AuditLogger.class);
+
+        List<LogEntry> entryList = new ArrayList<>();
         if (Arrays.stream(types).parallel()
             .noneMatch(document.getDocumentType().toString()::contains)) {
             return document;
@@ -68,10 +76,22 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
             String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
             if (!updatedPropertyValue.equals(propertyValue)) {
                 document.setPropertyValue("dc:title", updatedPropertyValue);
+                LogEntry entry = logger.newLogEntry();
+                entry.setEventId("CleanupCharactersServiceImpl");
+                entry.setEventDate(new Date());
+                entry.setDocUUID(document.getRef());
+                Map<String, ExtendedInfo> extended = new HashMap<>();
+                extended.put("dc:title", logger.newExtendedInfo("dc:title"));
+                extended.put("oldValue", logger.newExtendedInfo(propertyValue));
+                extended.put("updatedValue", logger.newExtendedInfo(updatedPropertyValue));
+                entry.setExtendedInfos(extended);
+                entry
+                    .setComment("dc:title" + " : " + propertyValue + " -> " + updatedPropertyValue);
+                entryList.add(entry);
+                logger.addLogEntries(entryList);
                 return document;
             }
         }
-
         return document;
     }
 

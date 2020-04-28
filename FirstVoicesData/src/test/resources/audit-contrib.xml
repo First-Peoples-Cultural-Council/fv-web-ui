@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="audit-test">
+  <extension point="datasources" target="org.nuxeo.runtime.datasource">
+    <datasource driverClassName="org.h2.Driver" name="jdbc/nxaudit-logs">
+      <property name="url">jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</property>
+    </datasource>
+  </extension>
+</component>

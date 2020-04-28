@@ -18,27 +18,38 @@
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.platform.audit.api.AuditLogger;
+import org.nuxeo.ecm.platform.audit.api.LogEntry;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author loopingz
  */
-public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
+public class NativeOrderComputeServiceImpl extends AbstractService implements
+    NativeOrderComputeService {
+
+    private AuditLogger logger = Framework.getService(AuditLogger.class);
 
     private DocumentModel[] loadCharacters(DocumentModel dialect) {
-        DocumentModelList chars = dialect.getCoreSession().getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        DocumentModelList chars = dialect.getCoreSession()
+            .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         return chars
-                .stream()
-                .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-                .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
-                .toArray(DocumentModel[]::new);
+            .stream()
+            .filter(character -> !character.isTrashed()
+                && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+            .sorted(
+                Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+            .toArray(DocumentModel[]::new);
     }
 
     /* (non-Javadoc)
@@ -82,6 +93,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
     }
 
     protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModel element) {
+        List<LogEntry> entryList = new ArrayList<>();
         if (element.isImmutable()) {
             // We cannot update this element, no point in going any further
             return;
@@ -118,11 +130,21 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
                     nativeTitle.append("!");
                 } else {
                     nativeTitle.append("~").append(title, 0, 1);
+                    LogEntry entry = logger.newLogEntry();
+                    entry.setEventId("computeNativeOrderTranslation");
+                    entry.setEventDate(new Date());
+                    DocumentModel dialect = getDialect(element);
+                    entry.setDocUUID(dialect.getRef());
+                    entry.setComment("Character " + title.substring(0, 1)
+                        + " was found on a word or phrase in the dialect " + dialect.getName()
+                        + ", but that dialect does not have that character in their alphabet.");
+                    entryList.add(entry);
                 }
                 title = title.substring(1);
             }
         }
 
+        logger.addLogEntries(entryList);
 
         // In the case that the sorting methods are the same,
         // we don't want to trigger subsequent events that are listening for a save.
