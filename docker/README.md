@@ -11,7 +11,8 @@ This environment is setup for localhost work. It includes:
 
 1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
 
-   - Java 8 (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
+   - Java 8 JDK (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
+     * Don't forget to set JAVA_HOME to the path to the JDK install
    - [Apache Maven v3.6.3](https://maven.apache.org/)
    - NodeJS v10.19.0 ([node version manager recommended](https://github.com/nvm-sh/nvm))
    - NPM v6.13.4 ([node version manager recommended](https://github.com/nvm-sh/nvm))
