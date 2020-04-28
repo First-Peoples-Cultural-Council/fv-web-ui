@@ -37,15 +37,12 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
 
-    private DocumentModel dialect;
-
     private Map<String, String[]> alphabetAndConfusableCharacters;
 
     @Before
     public void setUp() throws Exception {
         assertNotNull("Should have a valid session", session);
         createSetup(session);
-        dialect = getCurrentDialect();
     }
 
     @After
@@ -71,8 +68,9 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     @Test
     public void mapAndValidateConfusableCharactersTest() {
         setupCharacters();
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
-        Map<String, String> charMap = cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
+        Map<String, String> charMap = cleanupCharactersService
+            .mapAndValidateConfusableCharacters(characters);
         assertEquals(13, charMap.size());
         for (Map.Entry<String, String> pair : charMap.entrySet()) {
             if ("∀".equals(pair.getKey())) {
@@ -127,7 +125,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         alphabetAndConfusableCharacters.put("e", new String[]{"f"});
         alphabetAndConfusableCharacters.put("f", new String[]{"e"});
         createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
         cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
     }
 
@@ -135,7 +133,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     public void mapAndValidateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
         setupCharacters();
         createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "", new String[]{"ŷ", "γ"}, new String[]{"Ŷ", "Υ"});
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
         cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
     }
 

@@ -230,9 +230,7 @@ export default class DirectoryOperations {
     return new Promise((resolve, reject) => {
       properties.client
         .directory(name)
-        .fetchAll(
-          {queryParams : {'pageSize': pageSize}}
-        )
+        .fetchAll({ queryParams: { pageSize: pageSize } })
         .then((directory) => {
           resolve(directory)
         })
@@ -376,7 +374,14 @@ export default class DirectoryOperations {
     )
   }
 
-  static getDocumentsViaResultSetQuery(path = '', type = 'Document', select = "*", queryAppend = ' ORDER BY dc:title', headers = null, params = null) {
+  static getDocumentsViaResultSetQuery(
+    path = '',
+    type = 'Document',
+    select = '*',
+    queryAppend = ' ORDER BY dc:title',
+    headers = null,
+    params = null
+  ) {
     const defaultHeaders = {}
     const defaultParams = {}
 
@@ -384,15 +389,15 @@ export default class DirectoryOperations {
 
     const properties = BaseOperations.getProperties()
 
-    let endPointToUse = 'Repository.ResultSetQuery'
+    const endPointToUse = 'Repository.ResultSetQuery'
     const _params = Object.assign(defaultParams, params)
 
     const where = StringHelpers.isUUID(path)
       ? `ecm:parentId = '${path}'`
-      : `ecm:path STARTSWITH '${StringHelpers.clean(path)}'`;
+      : `ecm:path STARTSWITH '${StringHelpers.clean(path)}'`
 
     const _queryAppend = queryAppend
-    
+
     const nxqlQueryParams = Object.assign(
       _params,
       {

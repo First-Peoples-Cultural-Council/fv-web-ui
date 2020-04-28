@@ -22,7 +22,6 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
@@ -46,7 +45,7 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-
+import CategoriesDataLayer from './categoriesDataLayer'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -55,7 +54,6 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
-  getCategoriesOrPhrasebooks,
   getCharacters,
   handleDialectFilterList,
   onNavigateRequest,
@@ -101,21 +99,11 @@ class WordsFilteredByCategory extends Component {
     // Portal
     ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
     // Document
-    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Dictionary`, this.props.fetchDocument, computeDocument)
-
-    // Category
-    const pathOrId = `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
-    let categories = getCategoriesOrPhrasebooks({
-      getEntryId: pathOrId,
-      computeCategories: this.props.computeCategories,
-    })
-    if (categories === undefined) {
-      await this.props.fetchCategories(pathOrId)
-      categories = getCategoriesOrPhrasebooks({
-        getEntryId: pathOrId,
-        computeCategories: this.props.computeCategories,
-      })
-    }
+    await ProviderHelpers.fetchIfMissing(
+      `${routeParams.dialect_path}/Dictionary`,
+      this.props.fetchDocument,
+      computeDocument
+    )
 
     // Alphabet
     // ---------------------------------------------
@@ -145,7 +133,6 @@ class WordsFilteredByCategory extends Component {
     this.setState(
       {
         characters,
-        categories,
       },
       () => {
         const letter = selectn('routeParams.letter', this.props)
@@ -159,7 +146,7 @@ class WordsFilteredByCategory extends Component {
   constructor(props, context) {
     super(props, context)
 
-    const { computeCategories, computeDocument, computePortal, properties, routeParams } = props
+    const { computeDocument, computePortal, properties, routeParams } = props
 
     let filterInfo = this.initialFilterInfo()
 
@@ -183,10 +170,6 @@ class WordsFilteredByCategory extends Component {
         id: `${routeParams.dialect_path}/Dictionary`,
         entity: computeDocument,
       },
-      {
-        id: `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`,
-        entity: computeCategories,
-      },
     ])
 
     this.state = {
@@ -198,7 +181,7 @@ class WordsFilteredByCategory extends Component {
   }
 
   render() {
-    const { categories, characters, computeEntities, filterInfo, isKidsTheme } = this.state
+    const { characters, computeEntities, filterInfo, isKidsTheme } = this.state
 
     const {
       computeDialect2,
@@ -353,32 +336,45 @@ class WordsFilteredByCategory extends Component {
               letter={selectn('letter', routeParams)}
             />
 
-            <DialectFilterList
-              appliedFilterIds={new Set([routeParams.category])}
-              clearDialectFilter={this.clearDialectFilter}
-              facets={categories}
-              facetField={facetField}
-              filterInfo={filterInfo}
-              handleDialectFilterClick={this.handleCategoryClick}
-              handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
-                this.handleDialectFilterChange({
-                  facetField: facetFieldParam,
-                  selected,
-                  type,
-                  unselected,
-                  routeParams: routeParams,
-                  filterInfo: filterInfo,
-                  shouldResetUrlPagination,
-                })
+            <CategoriesDataLayer>
+              {({ categoriesData }) => {
+                return (
+                  <DialectFilterList
+                    appliedFilterIds={new Set([routeParams.category])}
+                    clearDialectFilter={this.clearDialectFilter}
+                    facets={categoriesData}
+                    // facets={categories}
+                    facetField={facetField}
+                    filterInfo={filterInfo}
+                    handleDialectFilterClick={this.handleCategoryClick}
+                    handleDialectFilterList={(
+                      facetFieldParam,
+                      selected,
+                      unselected,
+                      type,
+                      shouldResetUrlPagination
+                    ) => {
+                      this.handleDialectFilterChange({
+                        facetField: facetFieldParam,
+                        selected,
+                        type,
+                        unselected,
+                        routeParams: routeParams,
+                        filterInfo: filterInfo,
+                        shouldResetUrlPagination,
+                      })
+                    }}
+                    routeParams={routeParams}
+                    title={intl.trans(
+                      'views.pages.explore.dialect.learn.words.browse_by_category',
+                      'Browse Categories',
+                      'words'
+                    )}
+                    type={this.DIALECT_FILTER_TYPE}
+                  />
+                )
               }}
-              routeParams={routeParams}
-              title={intl.trans(
-                'views.pages.explore.dialect.learn.words.browse_by_category',
-                'Browse Categories',
-                'words'
-              )}
-              type={this.DIALECT_FILTER_TYPE}
-            />
+            </CategoriesDataLayer>
           </div>
           <div className="col-xs-12 col-md-9">
             <h1 className="DialectPageTitle">{pageTitle}</h1>
@@ -740,7 +736,6 @@ WordsFilteredByCategory.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
-  computeCategories: object.isRequired,
   computeCharacters: object.isRequired,
   computeDialect2: object.isRequired,
   computeDocument: object.isRequired,
@@ -755,7 +750,7 @@ WordsFilteredByCategory.propTypes = {
   splitWindowPath: array.isRequired,
   windowPath: string.isRequired,
   // REDUX: actions/dispatch/func
-  fetchCategories: func.isRequired,
+  // fetchCategories: func.isRequired,
   fetchCharacters: func.isRequired,
   fetchDocument: func.isRequired,
   fetchPortal: func.isRequired,
@@ -776,7 +771,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const {
     document,
     fvCharacter,
-    fvCategory,
     fvDialect,
     fvPortal,
     fvWord,
@@ -787,7 +781,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     windowPath,
   } = state
 
-  const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { computeDocument } = document
@@ -798,7 +791,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
   return {
-    computeCategories,
     computeCharacters,
     computeDialect2,
     computeDocument,
@@ -817,7 +809,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCategories,
   fetchCharacters,
   fetchDocument,
   fetchPortal,

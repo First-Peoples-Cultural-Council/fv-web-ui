@@ -178,15 +178,16 @@ The first thing to do when creating Cypress tests is to figure out if your test 
 
 The following table shows the tests languages and how the current tests use them. If you can fit your new test in without disrupting existing tests please do so, otherwise use a new test language.
 
-| Items in use ->   |  Words   | Phrases  |  Songs   | Stories  |  Portal  | Books       | Other              | Language starts as: | Any item state change |
-| ----------------- | :------: | :------: | :------: | :------: | :------: | ----------- | ------------------ | ------------------- | :-------------------: |
-| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder           | Enabled             |       &#x2713;        |
-| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media | Published           |       &#x2713;        |
-| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder           | Enabled             |       &#x2713;        |
-| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                    | Published           |       &#x2713;        |
-| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports            | Published           |       &#x2713;        |
-| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet           | Published           |       &#x2713;        |
-| TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                    | Enabled             |                       |
+| Items in use ->   |  Words   | Phrases  |  Songs   | Stories  |  Portal  | Books       | Other                | Language starts as: | Any item state change |
+| ----------------- | :------: | :------: | :------: | :------: | :------: | ----------- | -------------------- | ------------------- | :-------------------: |
+| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder             | Enabled             |       &#x2713;        |
+| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media   | Published           |       &#x2713;        |
+| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder             | Enabled             |       &#x2713;        |
+| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                      | Published           |       &#x2713;        |
+| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports              | Published           |       &#x2713;        |
+| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet             | Published           |       &#x2713;        |
+| TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                      | Enabled             |                       |
+| TestLanguageEight | &#x2713; |          | &#x2713; |          |          |             | Alphabet, Categories | Published           |       &#x2713;        |
 
 When you create a new test please update this table.
 

@@ -6,11 +6,11 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 
 import PageDialectPhrasesCreate from 'views/pages/explore/dialect/learn/phrases/Create'
-import PageDialectCategoryCreate from 'views/pages/explore/dialect/category/create'
 
+import PageDialectLinksCreate from 'views/pages/explore/dialect/links/create'
+import PageDialectCategoryCreate from 'views/pages/explore/dialect/Category/createV1'
 import PageDialectContributorsCreate from 'views/pages/explore/dialect/Contributor/createV1'
 import PageDialectPhraseBooksCreate from 'views/pages/explore/dialect/Phrasebook/createV1'
-import PageDialectLinksCreate from 'views/pages/explore/dialect/links/create'
 
 import PageDialectLinksEdit from 'views/pages/explore/dialect/links/edit'
 import PageDialectContributorEdit from 'views/pages/explore/dialect/Contributor/editV1'
@@ -64,16 +64,34 @@ export default class DialogCreateForm extends React.Component {
             onDocumentCreated={this._onDocumentCreated}
           />
         )
-        createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.create_new_phrase" defaultStr="Create New Phrase" transform="words" />
+        createNewButtonLabel = (
+          <FVLabel
+            transKey="views.pages.explore.dialect.phrases.create_new_phrase"
+            defaultStr="Create New Phrase"
+            transform="words"
+          />
+        )
         break
 
       case 'FVCategory':
         if (this.props.fieldAttributes.page_provider.folder == 'Phrase Books') {
           createForm = <PageDialectPhraseBooksCreate embedded onDocumentCreated={this._onDocumentCreated} />
-          createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.create_new_phrase_book" defaultStr="Create New Phrase Book" transform="words" />
+          createNewButtonLabel = (
+            <FVLabel
+              transKey="views.pages.explore.dialect.phrases.create_new_phrase_book"
+              defaultStr="Create New Phrase Book"
+              transform="words"
+            />
+          )
 
           if (this.props.value) {
-            createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.edit_phrase_book" defaultStr="Edit Phrase Book" transform="words" />
+            createNewButtonLabel = (
+              <FVLabel
+                transKey="views.pages.explore.dialect.phrases.edit_phrase_book"
+                defaultStr="Edit Phrase Book"
+                transform="words"
+              />
+            )
             createForm = (
               <PageDialectPhraseBooksEdit
                 dialect={this.props.context}
@@ -90,16 +108,34 @@ export default class DialogCreateForm extends React.Component {
           }
         } else if (this.props.fieldAttributes.page_provider.folder == 'Categories') {
           createForm = <PageDialectCategoryCreate embedded onDocumentCreated={this._onDocumentCreated} />
-          createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.create_new_category" defaultStr="Create New Category" transform="words" />
+          createNewButtonLabel = (
+            <FVLabel
+              transKey="views.pages.explore.dialect.phrases.create_new_category"
+              defaultStr="Create New Category"
+              transform="words"
+            />
+          )
         }
         break
 
       case 'FVContributor':
         createForm = <PageDialectContributorsCreate embedded onDocumentCreated={this._onDocumentCreated} />
-        createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.create_new_contributor" defaultStr="Create New Contributor" transform="words" />
+        createNewButtonLabel = (
+          <FVLabel
+            transKey="views.pages.explore.dialect.phrases.create_new_contributor"
+            defaultStr="Create New Contributor"
+            transform="words"
+          />
+        )
 
         if (this.props.value) {
-          createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.edit_contributor" defaultStr="Edit Contributor" transform="words" />
+          createNewButtonLabel = (
+            <FVLabel
+              transKey="views.pages.explore.dialect.phrases.edit_contributor"
+              defaultStr="Edit Contributor"
+              transform="words"
+            />
+          )
           createForm = (
             <PageDialectContributorEdit
               dialect={this.props.context}
@@ -119,11 +155,23 @@ export default class DialogCreateForm extends React.Component {
       case 'FVLink':
         // Create
         createForm = <PageDialectLinksCreate embedded onDocumentCreated={this._onDocumentCreated} />
-        createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.create_link" defaultStr="Create Link" transform="words" />
+        createNewButtonLabel = (
+          <FVLabel
+            transKey="views.pages.explore.dialect.phrases.create_link"
+            defaultStr="Create Link"
+            transform="words"
+          />
+        )
 
         // Edit
         if (this.props.value) {
-          createNewButtonLabel = <FVLabel transKey="views.pages.explore.dialect.phrases.edit_link" defaultStr="Edit Link" transform="words" />
+          createNewButtonLabel = (
+            <FVLabel
+              transKey="views.pages.explore.dialect.phrases.edit_link"
+              defaultStr="Edit Link"
+              transform="words"
+            />
+          )
           createForm = (
             <PageDialectLinksEdit
               dialect={this.props.context}

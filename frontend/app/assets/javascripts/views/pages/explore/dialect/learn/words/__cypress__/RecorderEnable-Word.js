@@ -70,6 +70,7 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/')
     cy.wait(500)
     cy.getByText('View My Tasks', { exact: false }).click()
+    cy.wait(1000)
     cy.getByText('Reject', { exact: true }).click()
 
     cy.logout()

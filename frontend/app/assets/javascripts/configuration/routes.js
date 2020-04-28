@@ -1499,7 +1499,113 @@ const routes = [
     page: <Pages.ContributorEdit />,
     extractPaths: true,
   },
-
+  // CATEGORY
+  // --------------------------------------------------
+  // Category > Browse
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'categories',
+    ],
+    title: 'Browse Categories, {$dialect_name}',
+    page: <Pages.CategoryBrowse />,
+    extractPaths: true,
+  },
+  // Category > Browse (pagination)
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'categories',
+      ...PAGINATION_PATH,
+    ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2)
+      return _pathArray
+    },
+    title: 'Browse Categories, {$dialect_name}',
+    page: <Pages.CategoryBrowse hasPagination />,
+    extractPaths: true,
+  },
+  // Category > Detail
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'category',
+      new paramMatch('itemId', ANYTHING_BUT_SLASH),
+    ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'categories', 'detail')
+      return _pathArray
+    },
+    title: 'Category Detail, {$dialect_name}',
+    page: <Pages.CategoryDetail />,
+    extractPaths: true,
+  },
+  // Category > Create
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'create',
+      'category',
+    ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 2, 2, 'categories', 'create')
+      return _pathArray
+    },
+    title: 'Create Category, {$dialect_name}',
+    page: <Pages.CategoryCreate />,
+    extractPaths: true,
+  },
+  // Category > Edit
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'edit',
+      'category',
+      new paramMatch('itemId', ANYTHING_BUT_SLASH),
+    ],
+    breadcrumbPathOverride: (pathArray) => {
+      const _pathArray = [...pathArray]
+      _pathArray.splice(_pathArray.length - 3, 3, 'categories', 'edit')
+      return _pathArray
+    },
+    title: 'Edit Category, {$dialect_name}',
+    page: <Pages.CategoryEdit />,
+    extractPaths: true,
+  },
   // PHRASEBOOK
   // --------------------------------------------------
   // Phrasebook > Browse

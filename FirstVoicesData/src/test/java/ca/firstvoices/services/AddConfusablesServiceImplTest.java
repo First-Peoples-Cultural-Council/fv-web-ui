@@ -13,7 +13,6 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
   public void addConfusablesTest() {
     String[] confusablesToAdd = {"￠", "ȼ"};
 
-    DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
     String path = dialect.getPathAsString();
 

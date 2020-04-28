@@ -40,7 +40,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
     @Override
     public DocumentModel publishDialect(DocumentModel dialect) {
-        // Arguments checks : need to be a FVDialect in a normal tree (LanguageFamily/Language/Dialect)
+        // Arguments checks : need to be a FVDialect in a normal tree
+        // (LanguageFamily/Language/Dialect)
         Map<String, DocumentModel> ancestors = getAncestors(dialect);
 
         DocumentModel languageFamily = ancestors.get("LanguageFamily");
@@ -109,7 +110,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
     @Override
     public void unpublishDialect(DocumentModel dialect) {
-        // Arguments checks : need to be a FVDialect in a normal tree (LanguageFamily/Language/Dialect)
+        // Arguments checks : need to be a FVDialect in a normal tree
+        // (LanguageFamily/Language/Dialect)
         Map<String, DocumentModel> ancestors = getAncestors(dialect);
         DocumentModel languageFamily = ancestors.get("LanguageFamily");
         DocumentModel language = ancestors.get("Language");
@@ -369,9 +371,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     }
 
     private boolean isAssetType(String type) {
-        return "FVBookEntry".equals(type) || "FVBook".equals(type) || "FVPhrase".equals(type) || "FVWord".equals(type) || "FVLabel".equals(type)
-                || "FVPicture".equals(type) || "FVVideo".equals(type) || "FVAudio".equals(type)
-                || "FVCharacter".equals(type) || "FVGallery".equals(type) || "FVLink".equals(type);
+        return "FVBookEntry".equals(type) || "FVBook".equals(type) || "FVPhrase".equals(type) || "FVWord".equals(type)
+                || "FVLabel".equals(type) || "FVPicture".equals(type) || "FVVideo".equals(type)
+                || "FVAudio".equals(type) || "FVCategory".equals(type) || "FVCharacter".equals(type)
+                || "FVGallery".equals(type) || "FVLink".equals(type);
     }
 
     @Override
@@ -475,8 +478,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             // Handle property values as arrays
             if (dependencyEntry.getKey().equals("fvdialect:keyboards")
                     || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
-                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.toArray(
-                        new String[dependencyPublishedPropertyValues.size()]));
+                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues
+                        .toArray(new String[dependencyPublishedPropertyValues.size()]));
             }
             // Handle as string
             else {
@@ -552,7 +555,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 DocumentModel publishedDep = getPublication(session, dependencyRef);
 
                 try {
-                    // TODO: Bug? getProxies seems to return documents that don't exist anymore. Force check to see if
+                    // TODO: Bug? getProxies seems to return documents that don't exist anymore.
+                    // Force check to see if
                     // doc exists.
                     session.getDocument(publishedDep.getRef());
                 } catch (NullPointerException | DocumentNotFoundException e) {

@@ -23,20 +23,24 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Features({FirstVoicesDataFeature.class})
 public abstract class AbstractFirstVoicesDataTest {
 
-    private DocumentModel langFamilyDoc;
-    private DocumentModel languageDoc;
-    private DocumentModel dialectDoc;
-    private DocumentModel dictionaryDoc;
-    private DocumentModel alphabetDoc;
+  protected DocumentModel languageFamily;
+  protected DocumentModel language;
+  protected DocumentModel dialect;
+  protected DocumentModel dictionary;
+  protected DocumentModel alphabet;
+  protected DocumentModel categories;
+  protected DocumentModel parentCategory;
+  protected DocumentModel childCategory;
+  protected DocumentModel parentCategory2;
 
-    @Inject
-    protected CoreSession session;
+  @Inject
+  protected CoreSession session;
 
-    @Inject
-    protected UserManager userManager;
+  @Inject
+  protected UserManager userManager;
 
-    @Inject
-    protected AutomationService automationService;
+  @Inject
+  protected AutomationService automationService;
 
     @Inject
     protected AssignAncestorsService assignAncestorsService;
@@ -54,26 +58,6 @@ public abstract class AbstractFirstVoicesDataTest {
     public void setUp() throws Exception {
         assertNotNull("Should have a valid session", session);
         createSetup(session);
-    }
-
-    public DocumentModel getCurrentLanguageFamily() {
-        return langFamilyDoc;
-    }
-
-    public DocumentModel getCurrentLanguage() {
-        return languageDoc;
-    }
-
-    public DocumentModel getCurrentDialect() {
-        return dialectDoc;
-    }
-
-    public DocumentModel getCurrentDictionary(){
-        return dictionaryDoc;
-    }
-
-    public DocumentModel getAlphabetDoc() {
-        return alphabetDoc;
     }
 
     public void createSetup(CoreSession session) {
@@ -119,17 +103,38 @@ public abstract class AbstractFirstVoicesDataTest {
         session.save();
       }
 
-      public void createDialectTree(CoreSession session)
-      {
-        langFamilyDoc = createDocument(session, session.createDocumentModel("/FV", "Family", "FVLanguageFamily"));
-        assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
-        languageDoc = createDocument(session, session.createDocumentModel("/FV/Family", "Language", "FVLanguage"));
-        assertNotNull( "Should have a valid FVLanguage",languageDoc);
-        dialectDoc = createDocument(session, session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
-        assertNotNull("Should have a valid FVDialect", dialectDoc);
-        dictionaryDoc = createDocument(session,  session.createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
-        assertNotNull("Should have a valid FVDictionary", dictionaryDoc);
-        alphabetDoc = createDocument(session, session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));
-        assertNotNull("Should have a valid FVAlphabet", alphabetDoc);
+      public void createDialectTree(CoreSession session) {
+        languageFamily = createDocument(session,
+            session.createDocumentModel("/FV", "Family", "FVLanguageFamily"));
+        assertNotNull("Should have a valid FVLanguageFamily", languageFamily);
+        language = createDocument(session,
+            session.createDocumentModel("/FV/Family", "Language", "FVLanguage"));
+        assertNotNull("Should have a valid FVLanguage", language);
+        dialect = createDocument(session,
+            session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
+        assertNotNull("Should have a valid FVDialect", dialect);
+        dictionary = createDocument(session, session
+            .createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+        assertNotNull("Should have a valid FVDictionary", dictionary);
+        alphabet = createDocument(session,
+            session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+        assertNotNull("Should have a valid FVAlphabet", alphabet);
+        categories = createDocument(session,
+            session.createDocumentModel("/FV/Family/Language/Dialect/", "Categories",
+                "FVCategories"));
+        assertNotNull("Should have a valid Categories", categories);
+        parentCategory = createDocument(session, session
+            .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory1",
+                "FVCategory"));
+        assertNotNull("Should have a valid Parent Category", parentCategory);
+        childCategory = createDocument(session, session
+            .createDocumentModel("/FV/Family/Language/Dialect/Categories/TestParentCategory1",
+                "Category",
+                "FVCategory"));
+        assertNotNull("Should have a valid category", childCategory);
+        parentCategory2 = createDocument(session, session
+            .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory2",
+                "FVCategory"));
+        assertNotNull("Should have a valid Parent Category2", parentCategory2);
       }
     }

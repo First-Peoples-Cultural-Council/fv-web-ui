@@ -1,12 +1,13 @@
 package ca.firstvoices.listeners;
 
-import ca.firstvoices.testUtil.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.test.runner.Deploy;
-
-import static org.junit.Assert.*;
 
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
 public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
@@ -18,9 +19,7 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
     assertNotNull("Language family cannot be null", languageFamily);
     DocumentModel language = session.getDocument(new PathRef("/FV/Family/Language"));
     assertNotNull("Language cannot be null", language);
-    DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
-    DocumentModel dictionary = getCurrentDictionary();
     assertNotNull("Dictionary cannot be null", dictionary);
     
     // Create a new word & phrase document

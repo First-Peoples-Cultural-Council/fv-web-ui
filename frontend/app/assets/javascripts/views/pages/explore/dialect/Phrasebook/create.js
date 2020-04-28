@@ -344,7 +344,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Phrasebook)
+export default connect(mapStateToProps, mapDispatchToProps)(Phrasebook)

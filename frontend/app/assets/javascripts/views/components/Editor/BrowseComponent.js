@@ -131,9 +131,7 @@ export class BrowseComponent extends Component {
           <CategoriesListView
             action={this._handleSelectElement}
             categoriesPath={
-              this.props.containerType === 'FVWord'
-                ? '/FV/Workspaces/SharedData/Shared Categories/'
-                : dialectPath + '/Phrase Books/'
+              this.props.containerType === 'FVWord' ? dialectPath + '/Categories/' : dialectPath + '/Phrase Books/'
             }
             dialect={dialect}
             hasSorting={false}

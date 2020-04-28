@@ -383,7 +383,4 @@ const mapDispatchToProps = {
   updateCategory,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasebookEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasebookEdit)
