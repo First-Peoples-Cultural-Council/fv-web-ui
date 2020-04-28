@@ -112,7 +112,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void cleanupWordsAndPhrases() {
-    if (document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) {
+    if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
+        .isProxy()) {
       try {
         WorkManager workManager = Framework.getService(WorkManager.class);
 
@@ -148,7 +149,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void validateCharacter() {
-    if (document.getDocumentType().getName().equals("FVCharacter")) {
+    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy()) {
       try {
         DocumentModelList characters = getCharacters(document);
 

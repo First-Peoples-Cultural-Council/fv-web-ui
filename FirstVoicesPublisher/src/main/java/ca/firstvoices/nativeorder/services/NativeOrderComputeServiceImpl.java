@@ -18,15 +18,14 @@
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractService;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.PathRef;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.PathRef;
 
 /**
  * @author loopingz
@@ -71,9 +70,11 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
         // First get the native alphabet
         DocumentModel[] chars = loadCharacters(dialect);
         computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'"));
+            session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+                + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
         computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'"));
+            session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+                + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
         DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         alphabet.setPropertyValue("custom_order_recompute_required", false);
         session.saveDocument(alphabet);

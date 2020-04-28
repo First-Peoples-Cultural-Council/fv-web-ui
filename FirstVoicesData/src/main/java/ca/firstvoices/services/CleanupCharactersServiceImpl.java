@@ -86,13 +86,24 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
                 for (String confusableCharacter : lowercaseConfusableList) {
                     String characterTitle = (String) d.getPropertyValue("dc:title");
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (confusables.containsKey(characterTitle)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (characterValues.contains(confusableCharacter)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle + "as it is found in the dialect's alphabet.",
+                            400);
                     }
                 }
             }
@@ -103,13 +114,24 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
                         throw new FVCharacterInvalidException("Can't have uppercase confusable character if there is no uppercase character.", 400);
                     }
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (confusables.containsKey(characterTitle)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (characterValues.contains(confusableCharacter)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is found in the dialect's alphabet.", 400);
                     }
                 }
             }
