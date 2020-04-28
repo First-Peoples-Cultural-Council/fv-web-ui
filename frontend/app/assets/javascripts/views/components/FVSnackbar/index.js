@@ -13,6 +13,8 @@ const styles = (/* theme */) => {
   return {
     root: {
       margin: 4,
+      flexWrap: 'inherit',
+      maxWidth: 'inherit',
       '& > * + *': {
         marginTop: 2,
         marginBottom: 2,
@@ -52,6 +54,11 @@ const FVSnackbar = (props) => {
       open={open}
       action={action}
       TransitionComponent={Fade}
+      ContentProps={{
+        classes: {
+          root: classes.root,
+        },
+      }}
       {...props}
       onClick={(e) => {
         e.preventDefault()
