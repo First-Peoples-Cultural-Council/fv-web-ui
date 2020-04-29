@@ -217,7 +217,11 @@ export class PageDialectCategoryCreate extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
+                  <FVLabel
+                    transKey="save"
+                    defaultStr="Save"
+                    transform="first"
+                  />
                 </button>
               </div>
             </form>
@@ -226,7 +230,11 @@ export class PageDialectCategoryCreate extends Component {
           <div className={classNames('col-xs-4', 'col-md-2')}>
             <Paper style={{ padding: '15px', margin: '20px 0' }}>
               <div className="subheader">
-                <FVLabel transKey="metadata" defaultStr="Metadata" transform="first" />
+                <FVLabel
+                  transKey="metadata"
+                  defaultStr="Metadata"
+                  transform="first"
+                />
               </div>
             </Paper>
           </div>
