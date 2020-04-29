@@ -195,7 +195,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
   private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
     String wordQuery = "SELECT * FROM FVWord WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-phrase:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
 
     List<DocumentModel> list = new ArrayList<DocumentModel>() {{
       addAll(session.query(wordQuery));
