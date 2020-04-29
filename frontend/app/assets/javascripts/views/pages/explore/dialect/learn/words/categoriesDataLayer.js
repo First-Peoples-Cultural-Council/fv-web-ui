@@ -44,11 +44,15 @@ class CategoriesDataLayer extends Component {
     this._isMounted = true
     const { routeParams } = this.props
     // Fetch dialect specific categories
-    await ProviderHelpers.fetchIfMissing(
-      `/api/v1/path/${routeParams.dialect_path}/Categories/@children`,
-      this.props.fetchCategories,
-      this.props.computeCategories
-    )
+    if (this.props.fetchLatest) {
+      await this.props.fetchCategories(`/api/v1/path/${this.props.routeParams.dialect_path}/Categories/@children`)
+    } else {
+      await ProviderHelpers.fetchIfMissing(
+        `/api/v1/path/${routeParams.dialect_path}/Categories/@children`,
+        this.props.fetchCategories,
+        this.props.computeCategories
+      )
+    }
     // Fetch Shared Categories
     await ProviderHelpers.fetchIfMissing(
       `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`,
@@ -89,9 +93,10 @@ class CategoriesDataLayer extends Component {
 }
 
 // PROPTYPES
-const { array, func, object, string } = PropTypes
+const { array, func, object, string, bool } = PropTypes
 CategoriesDataLayer.propTypes = {
   routeParams: object.isRequired,
+  fetchLatest: bool,
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeSharedCategories: object.isRequired,

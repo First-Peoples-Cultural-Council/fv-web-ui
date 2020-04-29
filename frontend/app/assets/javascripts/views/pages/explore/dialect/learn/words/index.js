@@ -303,11 +303,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
               handleClick={this.handleAlphabetClick}
               letter={selectn('routeParams.letter', this.props)}
             />
-            <CategoriesDataLayer>
+            <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
                 return (
                   <DialectFilterList
-                    // appliedFilterIds={new Set([this.props.routeParams.category])}
                     appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                     facetField={ProviderHelpers.switchWorkspaceSectionKeys(
                       'fv-word:categories',
