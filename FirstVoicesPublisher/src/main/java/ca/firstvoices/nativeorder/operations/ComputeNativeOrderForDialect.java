@@ -19,6 +19,8 @@
 package ca.firstvoices.nativeorder.operations;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -28,14 +30,10 @@ import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
-import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  *
@@ -57,9 +55,6 @@ public class ComputeNativeOrderForDialect {
     @Context
     protected OperationContext ctx;
 
-    @Param(name = "path", required = false)
-    protected String path;
-
     @OperationMethod
     public DocumentModel run(DocumentModel input) {
 
@@ -68,6 +63,7 @@ public class ComputeNativeOrderForDialect {
 
             DocumentModel alphabet = session.getDocument(new PathRef(input.getPathAsString() + "/Alphabet"));
             alphabet.setPropertyValue("custom_order_recompute_required", true);
+            session.saveDocument(alphabet);
 
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("message", "Dialect sort order will be updated shortly. Republish if needed.");
