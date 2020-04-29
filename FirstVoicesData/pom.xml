@@ -138,9 +138,5 @@
       <artifactId>nuxeo-features-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <artifactId>nuxeo-platform-audit-api</artifactId>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-    </dependency>
   </dependencies>
 </project>
