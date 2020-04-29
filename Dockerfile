@@ -3,6 +3,7 @@ FROM node:10.19.0 AS build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 ENV GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+ENV DEBIAN_FRONTEND=noninteractive
 COPY frontend /app
 COPY .git /.git
 RUN apt-get update && apt-get install -y libgl1-mesa-dev
@@ -20,7 +21,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         pwgen \
         imagemagick \
         ffmpeg2theora \
-        ufraw \
         poppler-utils \
         libwpd-tools \
         exiftool \
