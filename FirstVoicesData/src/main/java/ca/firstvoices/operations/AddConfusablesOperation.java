@@ -30,7 +30,6 @@ public class AddConfusablesOperation extends AbstractFirstVoicesDataOperation {
 
     CoreSession session = ctx.getCoreSession();
 
-    // Call the addConfusables service.
     if (dialect.getType().equals("FVDialect")) {
       DocumentModel alphabet = getAlphabet(session, dialect);
       alphabet.setPropertyValue("fv-alphabet:update_confusables_required", true);

@@ -28,7 +28,6 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
 
     CoreSession session = ctx.getCoreSession();
 
-    // Call the addConfusables service.
     if (dialect.getType().equals("FVDialect")) {
       String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
           + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
