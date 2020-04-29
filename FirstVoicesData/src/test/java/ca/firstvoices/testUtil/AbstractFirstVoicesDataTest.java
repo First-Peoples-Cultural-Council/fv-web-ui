@@ -2,7 +2,6 @@ package ca.firstvoices.testUtil;
 
 import static org.junit.Assert.assertNotNull;
 
-import ca.firstvoices.runner.AuditFeature;
 import ca.firstvoices.runner.FirstVoicesDataFeature;
 import ca.firstvoices.services.AddConfusablesService;
 import ca.firstvoices.services.AssignAncestorsService;
@@ -21,7 +20,7 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
-@Features({FirstVoicesDataFeature.class, AuditFeature.class})
+@Features({FirstVoicesDataFeature.class })
 public abstract class AbstractFirstVoicesDataTest {
 
   protected DocumentModel languageFamily;
@@ -42,7 +41,6 @@ public abstract class AbstractFirstVoicesDataTest {
 
   @Inject
   protected AutomationService automationService;
-
     @Inject
     protected AssignAncestorsService assignAncestorsService;
 
