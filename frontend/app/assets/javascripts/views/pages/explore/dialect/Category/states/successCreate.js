@@ -32,7 +32,7 @@ export class CategoryStateSuccessCreate extends React.Component {
     },
   }
   render() {
-    const { className, copy, formData, handleClick, routeParams, itemUid } = this.props
+    const { className, copy, formData, routeParams, itemUid } = this.props
     const { siteTheme, dialect_path } = routeParams
     const name = formData['dc:title']
     const description = formData['dc:description']
@@ -79,17 +79,8 @@ export class CategoryStateSuccessCreate extends React.Component {
             <ul className="Category__successLinks">
               {/* CREATE ANOTHER ------------- */}
               <li>
-                <a
-                  href={window.location.pathname}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    handleClick()
-                  }}
-                >
-                  {copy.create.success.linkCreateAnother}
-                </a>
+                <a href={window.location.pathname}>{copy.create.success.linkCreateAnother}</a>
               </li>
-
               {/* BROWSE ------------- */}
               <li>
                 <a href={categoryBrowseUrl}>{copy.create.success.browseView}</a>
