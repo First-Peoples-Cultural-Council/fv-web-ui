@@ -113,10 +113,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
   public void cleanupWordsAndPhrases() {
     if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
-        .isProxy()) {
+        .isProxy() && !document.isVersion()) {
       try {
-        WorkManager workManager = Framework.getService(WorkManager.class);
-
         if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           DocumentPart[] docParts = document.getParts();
           for (DocumentPart docPart : docParts) {
@@ -143,13 +141,13 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
   public void sanitizeWord() {
     if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase"))
-        && !document.isProxy()) {
+        && !document.isProxy() && !document.isVersion()) {
       sanitizeDocumentService.sanitizeDocument(session, document);
     }
   }
 
   public void validateCharacter() {
-    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy()) {
+    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy() && !document.isVersion()) {
       try {
         DocumentModelList characters = getCharacters(document);
 
@@ -200,9 +198,14 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     if (list.size() > 0) {
       WorkManager workManager = Framework.getService(WorkManager.class);
       for (DocumentModel documentModel : list) {
-        CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
-            documentModel.getRef());
-        workManager.schedule(worker);
+
+        boolean doesRequireAlphabetUpdate = getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required").equals("true");
+
+        if (!doesRequireAlphabetUpdate) {
+          CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
+              documentModel.getRef());
+          workManager.schedule(worker);
+        }
       }
     }
   }

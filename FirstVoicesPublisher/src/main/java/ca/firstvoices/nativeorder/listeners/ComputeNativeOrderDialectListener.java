@@ -42,7 +42,7 @@ public class ComputeNativeOrderDialectListener implements EventListener {
                 Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
                 session -> {
 
-                    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+                    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND fv-alphabet:update_confusables_required=0 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
                     DocumentModelList alphabets = session.query(query);
 
                     if (alphabets != null && alphabets.size() > 0) {

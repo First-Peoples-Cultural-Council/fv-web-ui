@@ -12,6 +12,11 @@
             <event>documentModified</event>
             <event>computeAlphabetProcesses</event>
         </listener>
+
+        <listener name="documentTrailListener" async="false" postCommit="false"
+          class="ca.firstvoices.listeners.AuditListener" priority="1000">
+            <event>beforeDocumentModification</event>
+        </listener>
     </extension>
 
 </component>
