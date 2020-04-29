@@ -10,12 +10,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
 import org.nuxeo.ecm.core.api.model.Property;
+import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -40,12 +42,22 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   public void handleEvent(Event event) {
     e = event;
     ctx = e.getContext();
+
+  // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a session.
+    if (event.getName().equals("computeAlphabetProcesses")) {
+      CoreInstance
+          .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+              session -> {
+                addConfusableCharactersToAlphabets(session);
+                cleanConfusablesFromWordsAndPhrases(session);
+              });
+    }
+
     if (!(ctx instanceof DocumentEventContext)) {
       return;
     }
 
     session = ctx.getCoreSession();
-
     document = ((DocumentEventContext) ctx).getSourceDocument();
     if (document == null || document.isImmutable()) {
       return;
@@ -67,11 +79,6 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
     if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
       sanitizeWord();
-    }
-
-    if (event.getName().equals("computeAlphabetProcesses")) {
-      addConfusableCharactersToAlphabets();
-      cleanConfusablesFromWordsAndPhrases();
     }
 
   }
@@ -169,7 +176,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   // This adds confusable characters to any alphabet WHERE fv-alphabet:update_confusables_required = 1
-  private void addConfusableCharactersToAlphabets() {
+  private void addConfusableCharactersToAlphabets(CoreSession session) {
     String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
     DocumentModelList alphabets = session.query(query);
 
@@ -186,7 +193,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     }
   }
 
-  private void cleanConfusablesFromWordsAndPhrases() {
+  private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
     String wordQuery = "SELECT * FROM FVWord WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
     String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
 
@@ -199,9 +206,9 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
       WorkManager workManager = Framework.getService(WorkManager.class);
       for (DocumentModel documentModel : list) {
 
-        boolean doesRequireAlphabetUpdate = getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required").equals("true");
+        Boolean alphabetRequiresUpdate = (Boolean) getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required");
 
-        if (!doesRequireAlphabetUpdate) {
+        if (alphabetRequiresUpdate.equals(false)) {
           CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
               documentModel.getRef());
           workManager.schedule(worker);

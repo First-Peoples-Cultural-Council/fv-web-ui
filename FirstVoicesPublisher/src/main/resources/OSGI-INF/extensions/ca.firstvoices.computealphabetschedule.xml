@@ -23,9 +23,9 @@
           <eventId>computeAlphabetProcesses</eventId>
           <eventCategory>default</eventCategory>
           <!--            Every 10 minutes-->
-<!--          <cronExpression>* */10 * ? * *</cronExpression>-->
-          <!--          Every minute: -->
-          <cronExpression>0 * * ? * *</cronExpression>
+          <cronExpression>* */10 * ? * *</cronExpression>
+          <!--          Every second (can be used for testing) : -->
+          <!-- <cronExpression>* * * ? * *	</cronExpression>-->
         </schedule>
     </extension>
 </component>

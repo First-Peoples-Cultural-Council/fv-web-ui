@@ -23,9 +23,9 @@ import java.util.*;
 /**
  * @author david
  */
-public class AuditListener implements EventListener {
+public class PropertyModifiedAuditListener implements EventListener {
 
-  private static final Log log = LogFactory.getLog(AuditListener.class);
+  private static final Log log = LogFactory.getLog(PropertyModifiedAuditListener.class);
 
   private static final List<String> SYSTEM_PROPS = Arrays
       .asList("dc:created", "dc:creator", "dc:modified",
