@@ -43,12 +43,16 @@ class CategoriesDataLayer extends Component {
   async componentDidMount() {
     this._isMounted = true
     const { routeParams } = this.props
+    let categoryType = 'Categories'
+    if (this.props.fetchPhraseBooks) {
+      categoryType = 'Phrase Books'
+    }
     // Fetch dialect specific categories
     if (this.props.fetchLatest) {
-      await this.props.fetchCategories(`/api/v1/path/${this.props.routeParams.dialect_path}/Categories/@children`)
+      await this.props.fetchCategories(`/api/v1/path/${this.props.routeParams.dialect_path}/${categoryType}/@children`)
     } else {
       await ProviderHelpers.fetchIfMissing(
-        `/api/v1/path/${routeParams.dialect_path}/Categories/@children`,
+        `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`,
         this.props.fetchCategories,
         this.props.computeCategories
       )
@@ -61,7 +65,7 @@ class CategoriesDataLayer extends Component {
     )
     const categories = ProviderHelpers.getEntry(
       this.props.computeCategories,
-      `/api/v1/path/${routeParams.dialect_path}/Categories/@children`
+      `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`
     )
     const sharedCategories = ProviderHelpers.getEntry(
       this.props.computeSharedCategories,
@@ -97,6 +101,7 @@ const { array, func, object, string, bool } = PropTypes
 CategoriesDataLayer.propTypes = {
   routeParams: object.isRequired,
   fetchLatest: bool,
+  fetchPhraseBooks: bool,
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeSharedCategories: object.isRequired,

@@ -62,10 +62,16 @@ function renderInput(locals) {
           <DialogCreateForm context={locals.context} onChange={onChange} fieldAttributes={locals.attrs} />
         )}
         <BrowseComponent
+          locals={locals}
           type={locals.type}
           label={
-            locals.labelBrowseComponent ||
-            <FVLabel transKey="views.components.editor.browse_existing" defaultStr="Browse Existing" transform="words" />
+            locals.labelBrowseComponent || (
+              <FVLabel
+                transKey="views.components.editor.browse_existing"
+                defaultStr="Browse Existing"
+                transform="words"
+              />
+            )
           }
           onComplete={onComplete}
           dialect={locals.context}
