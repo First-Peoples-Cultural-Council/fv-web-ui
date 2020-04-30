@@ -19,36 +19,40 @@
 package ca.firstvoices.services;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
-import org.apache.commons.text.StringEscapeUtils;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.PathRef;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.text.StringEscapeUtils;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 
-public class CleanupCharactersServiceImpl extends AbstractService implements CleanupCharactersService {
+public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
+    CleanupCharactersService {
 
-    private CoreSession session;
     private String[] types = {
-            "FVPhrase",
-            "FVWord",
+        "FVPhrase",
+        "FVWord",
     };
 
     @Override
-    public DocumentModel cleanConfusables(DocumentModel document) {
-        session = document.getCoreSession();
-        if (Arrays.stream(types).parallel().noneMatch(document.getDocumentType().toString()::contains)) return document;
+    public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
+        if (Arrays.stream(types).parallel()
+            .noneMatch(document.getDocumentType().toString()::contains)) {
+            return document;
+        }
 
         DocumentModel dictionary = session.getDocument(document.getParentRef());
         DocumentModel dialect = session.getDocument(dictionary.getParentRef());
-        DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+        DocumentModel alphabet = session
+            .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
         List<DocumentModel> characters = session.getChildren(alphabet.getRef());
 
-        if (characters.size() == 0) return document;
+        if (characters.size() == 0) {
+            return document;
+        }
 
         String propertyValue = (String) document.getPropertyValue("dc:title");
 
@@ -66,7 +70,6 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
                 return document;
             }
         }
-
         return document;
     }
 
@@ -81,13 +84,24 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
                 for (String confusableCharacter : lowercaseConfusableList) {
                     String characterTitle = (String) d.getPropertyValue("dc:title");
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (confusables.containsKey(characterTitle)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (characterValues.contains(confusableCharacter)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter + " on "
+                                + characterTitle + "as it is found in the dialect's alphabet.",
+                            400);
                     }
                 }
             }
@@ -98,13 +112,24 @@ public class CleanupCharactersServiceImpl extends AbstractService implements Cle
                         throw new FVCharacterInvalidException("Can't have uppercase confusable character if there is no uppercase character.", 400);
                     }
                     if (confusables.put(confusableCharacter, characterTitle) != null) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (confusables.containsKey(characterTitle)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is mapped as a confusable character to another alphabet character.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is mapped as a confusable character to another alphabet character.",
+                            400);
                     }
                     if (characterValues.contains(confusableCharacter)) {
-                        throw new FVCharacterInvalidException("Can't have confusable character " + confusableCharacter + " as it is found in the dialect's alphabet.", 400);
+                        throw new FVCharacterInvalidException(
+                            "Can't have confusable character " + confusableCharacter
+                                + " on uppercase" + characterTitle
+                                + " as it is found in the dialect's alphabet.", 400);
                     }
                 }
             }
