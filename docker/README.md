@@ -129,6 +129,15 @@ You should now see your new FirstVoices language archive when you access the fro
 
 These are not required for getting started, but contain some useful information if you wish to modify the environment for your needs.
 
+### Allotting enough resources to Docker
+
+Make sure your Docker Environment (e.g. [Docker engine on Mac](https://docs.docker.com/docker-for-mac/space/)) has enough memory. Elasticsearch [recommends 4 GB](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html) at the very least.
+
+### Clearing your existing containers and dealing with cache
+
+* If you encounter issues with remaining artifacts from previous runs, [you can clear some of those](https://github.com/moby/moby/issues/23371#issuecomment-224927009). Remember that these commands will clear ALL your docker artifacts, not just ones created as part of this project.
+* If you wish to build a docker image with no cache (force a rebuild), add the `--no-cache` flag.   
+
 ### Manually running the initial setup script
 
 This should not be required, but if you need to run it manually, you can do so by running the following command from the docker directory:
