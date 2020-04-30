@@ -9,4 +9,8 @@
     <operation class="ca.firstvoices.operations.AddConfusablesOperation"/>
   </extension>
 
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.operations.CleanConfusablesOperation"/>
+  </extension>
+
 </component>
