@@ -11,7 +11,6 @@ import { fetchSharedLinks } from 'providers/redux/reducers/fvLink'
 import { fetchSharedPhrases } from 'providers/redux/reducers/fvPhrase'
 import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
 
-import selectn from 'selectn'
 import Autosuggest from 'react-autosuggest'
 
 import LinearProgress from '@material-ui/core/LinearProgress'
@@ -92,24 +91,6 @@ export class AutoSuggestComponent extends Component {
         )
 
       case 'FVCategory': {
-        const breadcrumb = []
-
-        selectn('contextParameters.breadcrumb.entries', suggestion).map((entry, i) => {
-          if (entry.type === 'FVCategory') {
-            let shared = ''
-
-            if (entry.path.indexOf('SharedData') !== -1)
-              shared = ' (' + this.props.intl.trans('shared', 'Shared', 'first') + ')'
-
-            breadcrumb.push(
-              <span key={i}>
-                {' '}
-                &raquo; {entry.title} {shared}
-              </span>
-            )
-          }
-        })
-
         return (
           <a
             href="#"
@@ -117,7 +98,10 @@ export class AutoSuggestComponent extends Component {
               e.preventDefault()
             }}
           >
-            {breadcrumb}
+            &raquo; {suggestion.title}{' '}
+            {suggestion.path.indexOf('SharedData') !== -1
+              ? ` (${this.props.intl.trans('shared', 'Shared', 'first')})`
+              : ''}
           </a>
         )
       }
@@ -293,14 +277,13 @@ export class AutoSuggestComponent extends Component {
         return (
           <CategoriesDataLayer value={this.props.value}>
             {({ categoriesData }) => {
-              const categoriesDataModified = this.modifiedCategoriesData(categoriesData)
               return (
                 <div className="row">
                   <div className="col-xs-12">
                     <Autosuggest
                       ref={this.suggestionWidget}
                       theme={AutoSuggestTheme}
-                      suggestions={categoriesDataModified}
+                      suggestions={this.modifiedCategoriesData(categoriesData)}
                       shouldRenderSuggestions={this.shouldRenderSuggestions}
                       onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                       onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -342,6 +325,7 @@ export class AutoSuggestComponent extends Component {
     }
   }
 
+  // Modifying Categories data to raise up children categories to same level as parent
   modifiedCategoriesData(categoriesData) {
     let newData = []
     categoriesData.forEach((parent) => {
@@ -350,7 +334,6 @@ export class AutoSuggestComponent extends Component {
         newData = [...newData, ...parent.contextParameters.children.entries]
       }
     })
-    // console.log(newData)
     return newData
   }
 }
