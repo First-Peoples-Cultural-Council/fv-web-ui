@@ -29,7 +29,7 @@
       <category>cleanConfusablesForWordsAndPhrases</category>
       <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
       <maxThreads>1</maxThreads>
-      <name>Queue for adding cleaning confusables for words and phrases</name>
+      <name>Queue for cleaning confusables for words and phrases</name>
     </queue>
   </extension>
 </component>
