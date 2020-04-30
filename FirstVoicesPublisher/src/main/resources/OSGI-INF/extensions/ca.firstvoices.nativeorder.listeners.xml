@@ -36,7 +36,7 @@
 
     <listener name="ComputeNativeOrderScheduler" async="true" postCommit="false"
               priority="1000" class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderDialectListener">
-      <event>computeNativeOrder</event>
+      <event>computeAlphabetProcesses</event>
     </listener>
   </extension>
 </component>

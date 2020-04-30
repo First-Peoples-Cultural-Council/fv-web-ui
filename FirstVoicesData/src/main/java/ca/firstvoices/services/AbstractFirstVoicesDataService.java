@@ -2,10 +2,9 @@ package ca.firstvoices.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.nuxeo.ecm.core.api.DocumentModel;
 
-public abstract class AbstractService {
+public abstract class AbstractFirstVoicesDataService {
 
     protected DocumentModel getDialect(DocumentModel doc) {
         if ("FVDialect".equals(doc.getType())) {
@@ -14,9 +13,6 @@ public abstract class AbstractService {
         DocumentModel parent = doc.getCoreSession().getParentDocument(doc.getRef());
         while (parent != null && !"FVDialect".equals(parent.getType())) {
             parent = doc.getCoreSession().getParentDocument(parent.getRef());
-        }
-        if (parent == null) {
-            return null;
         }
         return parent;
     }
