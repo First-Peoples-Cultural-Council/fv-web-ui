@@ -3,7 +3,6 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
-    <fv.studio.version>3.1.6</fv.studio.version>
   </properties>
 
   <parent>
@@ -138,27 +137,6 @@
       </releases>
       <snapshots>
         <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>hotfix-releases</id>
-      <url>https://maven.nuxeo.org/nexus/content/repositories/hotfix-releases</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>hotfix-snapshots</id>
-      <url>https://maven.nuxeo.org/nexus/content/repositories/hotfix-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <updatePolicy>always</updatePolicy>
-        <enabled>true</enabled>
       </snapshots>
     </repository>
   </repositories>
