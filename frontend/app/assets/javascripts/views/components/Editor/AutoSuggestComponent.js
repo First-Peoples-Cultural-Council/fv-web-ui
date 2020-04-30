@@ -293,13 +293,14 @@ export class AutoSuggestComponent extends Component {
         return (
           <CategoriesDataLayer value={this.props.value}>
             {({ categoriesData }) => {
+              const categoriesDataModified = this.modifiedCategoriesData(categoriesData)
               return (
                 <div className="row">
                   <div className="col-xs-12">
                     <Autosuggest
                       ref={this.suggestionWidget}
                       theme={AutoSuggestTheme}
-                      suggestions={categoriesData}
+                      suggestions={categoriesDataModified}
                       shouldRenderSuggestions={this.shouldRenderSuggestions}
                       onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                       onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -339,6 +340,18 @@ export class AutoSuggestComponent extends Component {
           </div>
         )
     }
+  }
+
+  modifiedCategoriesData(categoriesData) {
+    let newData = []
+    categoriesData.forEach((parent) => {
+      newData.push(parent)
+      if (parent.contextParameters.children.entries.length > 0) {
+        newData = [...newData, ...parent.contextParameters.children.entries]
+      }
+    })
+    // console.log(newData)
+    return newData
   }
 }
 
