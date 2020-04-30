@@ -2,7 +2,6 @@
 // so imports paths will be based on that location!
 
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Category/internationalization.js'
-import browseCopy from '../../../app/assets/javascripts/views/pages/explore/dialect/Categories/internationalization.js'
 
 const createCategories = (start, max) => {
   if (start >= max) {
@@ -37,7 +36,7 @@ const performBatchDelete = () => {
   cy.get('.DictionaryList__data > .Confirmation > .Confirmation__initiate > .Confirmation__btnInitiate')
     .should('exist')
     .should('be.disabled')
-  cy.getByText(browseCopy.batch.select)
+  cy.getByText(copy.batch.select)
     .should('exist')
     .click()
   cy.wait(2000)
@@ -129,14 +128,14 @@ describe('CategoryCreate.js > Category', () => {
       .should('exist')
       .parent()
       .parent()
-      .contains(browseCopy.btnInitiate)
+      .contains(copy.create.btnInitiate)
       .click()
     cy.wait(1000)
     cy.getByText(categoryName)
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(browseCopy.btnDeny)
+        cy.getByText(copy.create.btnDeny)
           .should('exist')
           .click()
       })
@@ -153,7 +152,7 @@ describe('CategoryCreate.js > Category', () => {
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(browseCopy.btnConfirm)
+        cy.getByText(copy.create.btnConfirm)
           .should('exist')
           .click()
       })
