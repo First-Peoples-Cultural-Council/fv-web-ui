@@ -86,7 +86,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         List<String> excludedSchemasList = Arrays.asList(excludedSchemas);
 
         // The follow properties shouldn't be considered in a diff (they are not user-controlled)
-        String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors", "dc:lastContributor"};
+        String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors", "dc:lastContributor", "fv-alphabet:update_confusables_required", "fv-phrase:update_confusables_required", "fv-word:update_confusables_required", "fv-alphabet:custom_order_recompute_required"};
         List<String> excludedPropertiesList = Arrays.asList(excludedProperties);
 
         Map<String, Object> relevantProperties = new HashMap<>();
