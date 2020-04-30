@@ -88,5 +88,5 @@ public interface FirstVoicesPublisherService {
 
     DocumentModel setDialectProxies(DocumentModel dialectProxy);
 
-    void removeCategoryFromWordsorPhrases(DocumentModel doc);
+    void removeCategoryOrPhrasebooksFromWordsOrPhrases(CoreSession session, DocumentModel doc);
 }

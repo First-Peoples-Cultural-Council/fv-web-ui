@@ -520,9 +520,9 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     }
 
     @Override
-    public void removeCategoryFromWordsorPhrases(DocumentModel doc) {
-        CoreSession session = doc.getCoreSession();
-        DocumentModel dialect = getDialect(doc);
+    public void removeCategoryOrPhrasebooksFromWordsOrPhrases(CoreSession session,
+        DocumentModel doc) {
+        DocumentModel dialect = getDialect(session, doc);
         String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
         DocumentModelList documentModels = session.query(wordQuery);
@@ -532,7 +532,14 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
         documentModels.addAll(phrases);
 
         documentModels.stream().forEach(documentModel -> {
-            Serializable documentModelPropertyValue = documentModel.getPropertyValue("categories");
+            String propertyValue = "";
+            if (documentModel.getType().equals("FVWord")) {
+                propertyValue = "categories";
+            } else {
+                propertyValue = "phrase_books";
+            }
+
+            Serializable documentModelPropertyValue = documentModel.getPropertyValue(propertyValue);
 
             if (documentModelPropertyValue != null) {
                 String[] categories = (String[]) documentModelPropertyValue;
@@ -540,8 +547,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 Serializable updated = (Serializable) Arrays.stream(categories)
                     .filter(id -> !id.equals(categoryId)).collect(
                         Collectors.toList());
-                doc.setPropertyValue("categories", updated);
-                session.saveDocument(doc);
+                documentModel.setPropertyValue(propertyValue, updated);
+                session.saveDocument(documentModel);
             }
         });
 
