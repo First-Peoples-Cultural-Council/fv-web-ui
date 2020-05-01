@@ -15,7 +15,8 @@ limitations under the License.
 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { Map } from 'immutable'
+import { Map } from 'immutable'
+import { cloneDeep } from 'lodash'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -26,12 +27,11 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 /**
  * List view for categories
  */
@@ -40,7 +40,6 @@ const { bool, array, func, number, object, string } = PropTypes
 class WordsCategoriesListView extends DataListView {
   static propTypes = {
     action: func,
-    categoriesPath: string.isRequired,
     data: string,
     DEFAULT_PAGE: number,
     DEFAULT_PAGE_SIZE: number,
@@ -82,7 +81,7 @@ class WordsCategoriesListView extends DataListView {
     super(props, context)
 
     this.state = {
-      columns: [
+      CategoryColumns: [
         {
           name: 'title',
           title: props.intl.trans('category', 'Category', 'first'),
@@ -96,10 +95,15 @@ class WordsCategoriesListView extends DataListView {
             'Parent Category',
             'words'
           ),
-          render: (v, data /*, cellProps*/) => {
-            const parentCategory = selectn('contextParameters.parentDoc.title', data)
-            return parentCategory === 'Shared Categories' ? '' : parentCategory
-          },
+          render: (v, data /*, cellProps*/) => selectn('contextParameters.parentDoc.title', data),
+        },
+      ],
+      PhraseBookColumns: [
+        {
+          name: 'title',
+          title: props.intl.trans('phrase book', 'Phrase Book', 'first'),
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRenderTypography,
+          render: (v /*, data, cellProps*/) => v,
         },
       ],
       sortInfo: {
@@ -128,13 +132,6 @@ class WordsCategoriesListView extends DataListView {
     if (newProps.dialect === null) {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
-    this._fetchListViewData(
-      newProps,
-      newProps.DEFAULT_PAGE,
-      newProps.DEFAULT_PAGE_SIZE,
-      newProps.DEFAULT_SORT_TYPE,
-      newProps.DEFAULT_SORT_COL
-    )
   }
 
   _onEntryNavigateRequest(item) {
@@ -147,60 +144,54 @@ class WordsCategoriesListView extends DataListView {
     }
   }
 
-  _fetchListViewData(props, pageIndex, pageSize, sortOrder, sortBy) {
-    let currentAppliedFilter = ''
-
-    if (props.filter.has('currentAppliedFilter')) {
-      currentAppliedFilter = Object.values(props.filter.get('currentAppliedFilter').toJS()).join('')
+  // Modifying Categories data to raise up children categories to same level as parent
+  modifiedCategoriesData(categoriesData) {
+    const categoriesDataClone = cloneDeep(categoriesData)
+    if (categoriesData && categoriesData.response && categoriesData.response.entries) {
+      categoriesData.response.entries.forEach((parent) => {
+        if (parent.contextParameters.children.entries.length > 0) {
+          parent.contextParameters.children.entries.forEach((child) => {
+            child.contextParameters = {}
+            child.contextParameters.parentDoc = {
+              id: parent.uid,
+              title: parent.title,
+              type: parent.type,
+            }
+            categoriesDataClone.response.entries.push(child)
+          })
+        }
+      })
+      return categoriesDataClone
     }
-
-    props.fetchCategories(
-      this.props.categoriesPath,
-      `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-        1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
-    )
+    return categoriesData
   }
 
   render() {
-    const computeEntities = Immutable.fromJS([
-      {
-        id: this.props.categoriesPath,
-        entity: this.props.computeCategories,
-      },
-      {
-        id: this.props.routeParams.dialect_path,
-        entity: this.props.computeDialect2,
-      },
-    ])
-
-    const computeCategories = ProviderHelpers.getEntry(this.props.computeCategories, this.props.categoriesPath)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-
+    const isPhraseBook = this.props.containerType === 'FVPhrase'
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        {selectn('response.entries', computeCategories) && (
-          <DocumentListView
-            // objectDescriptions="categories"
-            // onSelectionChange={this._onEntryNavigateRequest}
-            // onSortChange={this._handleSortChange}
-            // sortInfo={this.state.sortInfo.uiSortOrder}
-            className="browseDataGrid"
-            columns={this.state.columns}
-            data={computeCategories}
-            dialect={selectn('response', computeDialect2)}
-            gridCols={this.props.gridCols}
-            gridListView={this.props.gridListView}
-            hasViewModeButtons={false}
-            page={this.state.pageInfo.page}
-            pageSize={this.state.pageInfo.pageSize}
-            refetcher={this._handleRefetch}
-            rowClickHandler={(row) => {
-              this._onEntryNavigateRequest(row)
-            }}
-            type="FVCategory"
-          />
-        )}
-      </PromiseWrapper>
+      <CategoriesDataLayer fetchPhraseBooks={isPhraseBook} value={this.props.value}>
+        {({ categoriesRawData }) => {
+          return (
+            <DocumentListView
+              className="browseDataGrid"
+              columns={isPhraseBook ? this.state.PhraseBookColumns : this.state.CategoryColumns}
+              data={this.modifiedCategoriesData(categoriesRawData)}
+              dialect={selectn('response', computeDialect2)}
+              gridCols={this.props.gridCols}
+              gridListView={this.props.gridListView}
+              hasViewModeButtons={false}
+              page={this.state.pageInfo.page}
+              pageSize={this.state.pageInfo.pageSize}
+              refetcher={this._handleRefetch}
+              rowClickHandler={(row) => {
+                this._onEntryNavigateRequest(row)
+              }}
+              type="FVCategory"
+            />
+          )
+        }}
+      </CategoriesDataLayer>
     )
   }
 }

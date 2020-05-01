@@ -74,24 +74,28 @@ class CategoriesDataLayer extends Component {
     const categoriesEntries = selectn('response.entries', categories)
 
     if (this._isMounted) {
-      this.setCategories(categoriesEntries, sharedCategories)
+      this.setCategories(categories, categoriesEntries, sharedCategories)
     }
   }
 
   render() {
-    return this.props.children({ categoriesData: this.state.categoriesData })
+    return this.props.children({
+      categoriesData: this.state.categoriesData,
+      categoriesRawData: this.state.categoriesRawData,
+    })
   }
 
   componentWillUnmount() {
     this._isMounted = false
   }
 
-  setCategories = (categoriesEntries, sharedCategories) => {
+  setCategories = (categories, categoriesEntries, sharedCategories) => {
     this.setState({
       categoriesData:
         categoriesEntries && categoriesEntries.length > 0
           ? categoriesEntries
           : selectn('response.entries', sharedCategories),
+      categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
     })
   }
 }
