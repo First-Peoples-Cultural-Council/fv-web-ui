@@ -3,6 +3,7 @@ package ca.firstvoices.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,10 +44,19 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         String query = "SELECT * FROM FVCharacter "
             + "WHERE fva:dialect='" + dialectUID + "' "
             + "AND dc:title='" + character + "' "
-            + "OR fvcharacter:upper_case_character='" + character + "' "
             + "AND fva:dialect='" + dialectUID + "' "
             + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-        DocumentModelList charactersDocs = session.query(query);
+
+        String uQuery = "SELECT * FROM FVCharacter "
+            + "WHERE fva:dialect='" + dialectUID + "' "
+            + "AND fvcharacter:upper_case_character='" + character + "' "
+            + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+
+        DocumentModelList lowerCharDocs = session.query(query);
+        DocumentModelList upperCharDocs = session.query(uQuery);
+        List<DocumentModel> charactersDocs = new ArrayList<>();
+        charactersDocs.addAll(lowerCharDocs);
+        charactersDocs.addAll(upperCharDocs);
 
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {

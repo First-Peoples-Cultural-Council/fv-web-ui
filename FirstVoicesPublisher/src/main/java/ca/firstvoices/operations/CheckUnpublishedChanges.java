@@ -29,5 +29,4 @@ public class CheckUnpublishedChanges {
         // Call the checkUnpublishedChanges service which returns true if a document has unpublished changes and false otherwise.
         return service.checkUnpublishedChanges(session, input);
     }
-
 }
