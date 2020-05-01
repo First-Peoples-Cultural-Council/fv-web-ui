@@ -15,7 +15,6 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 
 /**
  *
