@@ -85,9 +85,9 @@ public class DocumentEnrichedQuery {
         case CATEGORY_CHILDREN_ENRICHMENT:
             query = EnricherUtils.expandCategoriesToChildren(session, query);
             break;
-        case CUSTOM_ORDER_ENRICHMENT:
-            if(dialectId != null && !dialectId.isEmpty()) query = EnricherUtils.convertLetterToCustomOrder(session, query, dialectId);
-            break;
+        // case CUSTOM_ORDER_ENRICHMENT:
+        //     if(dialectId != null && !dialectId.isEmpty()) query = EnricherUtils.convertLetterToCustomOrder(session, query, dialectId);
+        //     break;
         }
 
         PageProviderDefinition def = PageProviderHelper.getPageProviderDefinition("es_nxql_search");

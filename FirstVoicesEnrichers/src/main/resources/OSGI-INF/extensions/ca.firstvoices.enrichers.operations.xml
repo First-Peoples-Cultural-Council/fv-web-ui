@@ -3,6 +3,7 @@
 
 	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >
 		<operation class="ca.firstvoices.nuxeo.operations.DocumentEnrichedQuery" />
+		<operation class="ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder" />
 	</extension>
 
 	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >

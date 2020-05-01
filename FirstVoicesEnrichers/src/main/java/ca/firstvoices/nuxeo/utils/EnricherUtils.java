@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.net.QCodec;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.analysis.core.LetterTokenizer;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -22,6 +24,7 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.blob.binary.BinaryBlob;
+import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.runtime.api.Framework;
@@ -281,41 +284,22 @@ public class EnricherUtils {
 
         return query;
     }
+    //Letter to custom order -> only custom order
 
-    public static String convertLetterToCustomOrder(CoreSession session, String query, String dialect){
-        if(query != null && !query.isEmpty()){
-            String titleREGEX = "dc:title ILIKE [\"\'](.+)%[\"\']";
+    public static String convertLetterToCustomOrder(CoreSession session, String dialect, String letter){
+        String customOrder = "";
+        String queryLetter = letter;
+        //Double-check escaping
+        String testQuery = "SELECT * FROM FVCharacter WHERE dc:title = \"" + queryLetter + "\" AND fva:dialect = \"" + dialect + "\"";
+        DocumentModelList result = session.query(testQuery); 
 
-            Pattern titlePattern = Pattern.compile(titleREGEX);
-            Matcher titleMatch = titlePattern.matcher(query);
-
-            String customOrder = "";
-
-            if(titleMatch.find() && !titleMatch.group(1).isEmpty()){
-                
-                    String titleEntry = titleMatch.group(1);
-
-                    String testQuery = "SELECT * FROM FVCharacter WHERE dc:title = '" + titleEntry + "' AND fva:dialect = '" + dialect + "'";
-                    DocumentModelList result = session.query(testQuery); 
-
-                    if(result.get(0) != null){
-                        customOrder = (String) result.get(0).getPropertyValue("fv:custom_order");
-                        if(customOrder.equals("%") || 
-                            customOrder.equals("_") ) customOrder = '\\' + customOrder;
-                        query = query.replaceFirst(titleREGEX, 
-                            "fv:custom_order LIKE \'" + customOrder + "\' OR fv:custom_order LIKE \'" + customOrder + "_%\'");
-                    }
-
-                    //Add escaping logic for customOrder
-                }
-            //Get character dc:title
-            //Get dialectID
-            //Find character which matches dc:title within dialectID
-            //Get fv:custom_order from the character (using the session)
-            //Taking the current query and removing the dc:title field, and replacing with fv:custom_order
+        if(!result.isEmpty() && result.get(0) != null){
+            customOrder = (String) result.get(0).getPropertyValue("fv:custom_order");
+        }else{
+            customOrder = "~" + letter;
         }
-
-        return query;
+        
+        return customOrder;
 
     }
 }
