@@ -44,6 +44,7 @@ class CategoriesDataLayer extends Component {
     this._isMounted = true
     const { routeParams } = this.props
     let categoryType = 'Categories'
+    // Change category type to Phrasebooks if 'fetchPhraseBooks' is passed in as a prop
     if (this.props.fetchPhraseBooks) {
       categoryType = 'Phrase Books'
     }
