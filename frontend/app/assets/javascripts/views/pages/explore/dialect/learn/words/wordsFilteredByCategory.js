@@ -455,7 +455,6 @@ class WordsFilteredByCategory extends Component {
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children`
 
     const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
-    debugger
 
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`

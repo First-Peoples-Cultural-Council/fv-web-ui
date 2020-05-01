@@ -467,7 +467,6 @@ export class PhrasesFilteredByCategory extends Component {
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
     const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
-    debugger
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
     } else {

@@ -283,7 +283,6 @@ class WordsListView extends DataListView {
 
     const { computeSearchDialect, routeParams } = this.props
     const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
-    debugger
 
     if (letter) {
       nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
