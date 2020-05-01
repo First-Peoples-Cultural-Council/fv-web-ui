@@ -91,7 +91,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       this.props.fetchDocument,
       this.props.computeDocument
     )
-      //console.log(ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary'))
+    //console.log(ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary'))
 
     // Category
     let categories = this.getCategories()
@@ -112,7 +112,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       //console.log(routeParams)
       await this.props.fetchCharacters(
         `${routeParams.dialect_path}/Alphabet`,
-        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`,
+        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
         // null,
         // null,
         // null,
@@ -120,13 +120,14 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       )
       characters = this.getCharacters()
     }
-    
 
     const newState = {
       characters,
       categories,
-      dialectId : selectn("response.contextParameters.ancestry.dialect.uid",
-          ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary'))
+      dialectId: selectn(
+        'response.contextParameters.ancestry.dialect.uid',
+        ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
+      ),
     }
 
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
@@ -398,8 +399,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         //
         // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
         // and any other unnecessary updates (ie: the filter didn't change)
-        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
-
+        if (updateUrl && !href) {
+          this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+        }
         // See about updating url
         if (href && updateUrl) {
           NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
@@ -430,7 +432,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         searchByDefinitions: false,
         searchByTranslations: false,
         searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-        
       },
       searchTerm: '',
       //dialectId: this.state.dialectId
