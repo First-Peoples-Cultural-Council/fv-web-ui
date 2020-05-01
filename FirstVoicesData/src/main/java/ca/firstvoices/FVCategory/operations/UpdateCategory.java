@@ -15,6 +15,7 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 
 /**
  *
@@ -42,12 +43,32 @@ public class UpdateCategory {
                 if (entry.getKey().equals("ecm:parentRef")) {
                     session.saveDocument(doc);
                     String newTarget = entry.getValue();
-                    if (newTarget.contains("/Categories")) {
-                        newTarget = session.getDocument(new PathRef(newTarget)).getId();
+                    boolean hasChildren = false;
+                    if( session.hasChildren(doc.getRef())){
+                        hasChildren = true;
                     }
+                    
+                    DocumentModel targetDocument = null;
+                    
+                    if (newTarget.contains("/Categories")) {
+                        targetDocument = session.getDocument(new PathRef(newTarget));
+                        newTarget = targetDocument.getId();
+                    }else{
+                        targetDocument = session.getDocument(new IdRef(newTarget));
+                    } 
 
                     IdRef targetRef = new IdRef(newTarget);
                     // update Parent Category i.e. move document
+
+                    DocumentModel parent = session.getDocument(doc.getParentRef());
+                    
+                    if(parent.getTitle().equals("Categories")){ 
+                        if(!(targetDocument == null)
+                            && !(targetDocument.getTitle().equals("Categories")) && hasChildren){
+                            throw new NuxeoException("Cannot set parent category for category which already has children");
+                        }
+                    }
+
                     DocumentRef src = doc.getRef();
                     doc = session.move(src, targetRef, doc.getPropertyValue("dc:title").toString());
                 } else {
