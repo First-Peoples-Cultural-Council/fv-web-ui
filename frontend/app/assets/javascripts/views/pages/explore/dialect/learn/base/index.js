@@ -427,7 +427,7 @@ export const handleDialectFilterList = ({
   selected,
   type = 'words',
   unselected,
-}) => {
+} = {}) => {
   const categoriesOrPhraseBook = type === 'words' ? 'categories' : 'phraseBook'
   const currentDialectFilterIds = filterInfo.get('currentCategoryFilterIds')
   let dialectFilter = ''
@@ -512,9 +512,9 @@ export const handlePagePropertiesChange = ({ changedProperties, getPageKey, upda
 export const resetURLPagination = ({
   pageSize = null,
   preserveSearch = false,
-  routeParams,
-  pushWindowPath,
-  splitWindowPath,
+  routeParams = {},
+  pushWindowPath = () => {},
+  splitWindowPath = [],
 } = {}) => {
   const urlPage = 1
   const urlPageSize = pageSize || routeParams.pageSize || 10

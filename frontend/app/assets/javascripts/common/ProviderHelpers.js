@@ -50,9 +50,9 @@ const proxiesKeys = [
 // @key - the key to look up (or set) in the store for this action/reducer
 // @action - the action to perform if nothing found in store.
 // @reducer - the reducer to look for
-async function fetchIfMissing(key, action, reducer) {
+async function fetchIfMissing(key, action, reducer, actionParams) {
   if (!selectn('success', getEntry(reducer, key)) && typeof action === 'function') {
-    await action(key)
+    await action(key, actionParams)
   }
 }
 
@@ -267,7 +267,7 @@ function isStartsWithQuery(currentAppliedFilter) {
   const regexTest = new RegExp(regex)
 
   if (regexTest.test(currentAppliedFilter)) {
-    starts_with_query = '&starts_with_query=true'
+    starts_with_query = '&starts_with_query=Document.Query'
   }
 
   return starts_with_query
