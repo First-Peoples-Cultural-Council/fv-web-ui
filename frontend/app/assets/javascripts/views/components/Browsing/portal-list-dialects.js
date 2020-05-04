@@ -211,7 +211,7 @@ export class PortalListDialects extends Component {
         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
           {archives.length > 0
             ? archives.map((tile) => this._createTile(tile))
-            : this.props.intl.searchAndReplace('No language archives available at this time.')}
+            : this.props.intl.searchAndReplace('No public language archive.')}
         </div>
       </div>
     )
