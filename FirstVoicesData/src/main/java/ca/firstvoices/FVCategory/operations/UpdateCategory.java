@@ -72,15 +72,12 @@ public class UpdateCategory {
             targetDocument = session.getDocument(new IdRef(value));
           }
 
-          DocumentModel parent = session.getDocument(doc.getParentRef());
-
-          if (parent.getTitle().equals("Categories")) {
-            if (targetDocument.getTitle().equals("Categories") && session
-                .hasChildren(doc.getRef())) {
-              throw new FVCategoryInvalidException(
-                  "A parent category cannot be a child of another parent category.");
-            }
+          // Throw error if the doc being moved is a parent doc
+          if (session.hasChildren(doc.getRef())) {
+            throw new FVCategoryInvalidException(
+                "A parent category cannot be a child of another parent category.");
           }
+          
           doc = session
               .move(doc.getRef(), new IdRef(value), doc.getPropertyValue("dc:title").toString());
         } else {
