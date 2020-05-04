@@ -55,4 +55,5 @@
   <xs:element name="acknowledgement" type="xs:string"/>
   <xs:element name="primary" type="xs:boolean"/>
   <xs:element name="custom_order_recompute_required" type="xs:boolean"/>
+  <xs:element name="update_confusables_required" type="xs:boolean"/>
 </xs:schema>

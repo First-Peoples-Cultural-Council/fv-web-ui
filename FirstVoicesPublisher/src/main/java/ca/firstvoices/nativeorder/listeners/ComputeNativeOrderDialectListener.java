@@ -33,21 +33,24 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class ComputeNativeOrderDialectListener implements EventListener {
 
-    private static final String COMPUTE_NATIVE_ORDER = "computeNativeOrder";
+    private static final String COMPUTE_ALPHABET_PROCESSES = "computeAlphabetProcesses";
 
     @Override
     public void handleEvent(Event event) {
-        if (event.getName().equals(COMPUTE_NATIVE_ORDER)) {
-            CoreInstance.doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(), session -> {
+        if (event.getName().equals(COMPUTE_ALPHABET_PROCESSES)) {
+            CoreInstance.doPrivileged(
+                Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+                session -> {
 
-                String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-                DocumentModelList alphabets = session.query(query);
+                    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:custom_order_recompute_required = 1 AND fv-alphabet:update_confusables_required=0 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+                    DocumentModelList alphabets = session.query(query);
 
-                if (alphabets != null && alphabets.size() > 0) {
-                    WorkManager workManager = Framework.getService(WorkManager.class);
-                    for (DocumentModel alphabet : alphabets) {
-                        DocumentModel dialect = session.getParentDocument(alphabet.getRef());
-                        ComputeNativeOrderDialectWorker worker = new ComputeNativeOrderDialectWorker(dialect.getRef());
+                    if (alphabets != null && alphabets.size() > 0) {
+                        WorkManager workManager = Framework.getService(WorkManager.class);
+                        for (DocumentModel alphabet : alphabets) {
+                            DocumentModel dialect = session.getParentDocument(alphabet.getRef());
+                            ComputeNativeOrderDialectWorker worker = new ComputeNativeOrderDialectWorker(
+                                dialect.getRef());
                         workManager.schedule(worker);
                     }
                 }
