@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.javers</groupId>
       <artifactId>javers-core</artifactId>
-      <version>5.8.13</version>
+      <version>5.8.12</version>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
