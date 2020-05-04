@@ -1,26 +1,27 @@
 /*
  *
- * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * /
  */
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractService;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -31,53 +32,60 @@ import org.nuxeo.ecm.core.api.PathRef;
 /**
  * @author loopingz
  */
-public class NativeOrderComputeServiceImpl extends AbstractService implements NativeOrderComputeService {
+public class NativeOrderComputeServiceImpl extends AbstractService implements
+    NativeOrderComputeService {
 
-    private DocumentModel[] loadCharacters(DocumentModel dialect) {
-        DocumentModelList chars = dialect.getCoreSession().getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-        updateCustomOrderCharacters(dialect, chars.stream().filter(character -> !character.isTrashed()).toArray(DocumentModel[]::new));
-        return chars
-            .stream()
-            .filter(character -> !character.isTrashed() && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-            .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
-            .toArray(DocumentModel[]::new);
-    }
+  private DocumentModel[] loadCharacters(DocumentModel dialect) {
+    DocumentModelList chars = dialect.getCoreSession()
+        .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    updateCustomOrderCharacters(dialect,
+        chars.stream().filter(character -> !character.isTrashed()).toArray(DocumentModel[]::new));
+    return chars
+        .stream()
+        .filter(character -> !character.isTrashed()
+            && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+        .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+        .toArray(DocumentModel[]::new);
+  }
 
-    private void updateCustomOrderCharacters(DocumentModel dialect, DocumentModel[] chars){
-        boolean edited = false;
-        for(DocumentModel c : chars){
-            String customOrder = "";
-            if(c.getPropertyValue("fvcharacter:alphabet_order") != null && (Long) c.getPropertyValue("fvcharacter:alphabet_order") > 0){
-                customOrder += ((char) (34 + (Long) c.getPropertyValue("fvcharacter:alphabet_order")));
-            } else {
-                customOrder += '~';
-                customOrder += c.getPropertyValue("dc:title");
-            }
-            if(c.getPropertyValue("fv:custom_order") == null || !c.getPropertyValue("fv:custom_order").equals(customOrder)){
-                c.setPropertyValue("fv:custom_order", customOrder);
-                edited = true;
-            }
-           if(edited) dialect.getCoreSession().saveDocument(c);
-        }
-        return;
+  private void updateCustomOrderCharacters(DocumentModel dialect, DocumentModel[] chars) {
+    boolean edited = false;
+    for (DocumentModel c : chars) {
+      String customOrder = "";
+      if (c.getPropertyValue("fvcharacter:alphabet_order") != null
+          && (Long) c.getPropertyValue("fvcharacter:alphabet_order") > 0) {
+        customOrder += ((char) (34 + (Long) c.getPropertyValue("fvcharacter:alphabet_order")));
+      } else {
+        customOrder += '~';
+        customOrder += c.getPropertyValue("dc:title");
+      }
+      if (c.getPropertyValue("fv:custom_order") == null || !c.getPropertyValue("fv:custom_order")
+          .equals(customOrder)) {
+        c.setPropertyValue("fv:custom_order", customOrder);
+        edited = true;
+      }
+      if (edited) {
+        dialect.getCoreSession().saveDocument(c);
+      }
     }
-    /* (non-Javadoc)
-     * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
-     * .ecm.core.api.DocumentModel)
-     */
-    @Override
-    public void computeAssetNativeOrderTranslation(DocumentModel asset) {
-        // appears that there's a lot of processing going on within the following methods
-        // last of which, computeNativeOrderTranslation will just return if the asset is immutable
-        // so, instead of processing all the dialect data, and the alphabet only to do nothing,
-        // lets check that here
-        if (!asset.isImmutable()) {
-            DocumentModel dialect = getDialect(asset);
-            CoreSession session = asset.getCoreSession();
-            // First get the native alphabet
-            DocumentModel[] chars = loadCharacters(dialect);
-            computeNativeOrderTranslation(chars, asset);
-        }
+  }
+
+  /* (non-Javadoc)
+   * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
+   * .ecm.core.api.DocumentModel)
+   */
+  @Override
+  public void computeAssetNativeOrderTranslation(DocumentModel asset) {
+    // appears that there's a lot of processing going on within the following methods
+    // last of which, computeNativeOrderTranslation will just return if the asset is immutable
+    // so, instead of processing all the dialect data, and the alphabet only to do nothing,
+    // lets check that here
+    if (!asset.isImmutable()) {
+      DocumentModel dialect = getDialect(asset);
+      CoreSession session = asset.getCoreSession();
+      // First get the native alphabet
+      DocumentModel[] chars = loadCharacters(dialect);
+      computeNativeOrderTranslation(chars, asset);
     }
   }
 
