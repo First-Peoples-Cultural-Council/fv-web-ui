@@ -91,7 +91,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       this.props.fetchDocument,
       this.props.computeDocument
     )
-    //console.log(ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary'))
 
     // Category
     let categories = this.getCategories()
@@ -109,14 +108,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     if (characters === undefined) {
       const _pageIndex = 0
       const _pageSize = 100
-      //console.log(routeParams)
       await this.props.fetchCharacters(
         `${routeParams.dialect_path}/Alphabet`,
         `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
-        // null,
-        // null,
-        // null,
-        // {dialectId: ""}
       )
       characters = this.getCharacters()
     }
@@ -361,26 +355,14 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         searchType = 'startsWith'
-        //console.log('TEST')
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-        // newFilter = newFilter.set('currentCategoryFilterIds', new Set())
         break
       }
       case SEARCH_BY_CATEGORY: {
         searchType = 'categories'
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
         break
       }
       default: {
         searchType = 'contains'
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-        // newFilter = newFilter.set('currentCategoryFilterIds', new Set())
       }
     }
 
@@ -393,32 +375,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       return searchNxqlQuery && searchNxqlQuery !== '' ? ` AND ${searchNxqlQuery}` : ''
     })
 
-    // When facets change, pagination should be reset.
-    // In these pages (words/phrase), list views are controlled via URL
-    // if (is(this.state.filterInfo, newFilter) === false) {
-    //   this.setState({ filterInfo: newFilter }, () => {
-    //     // NOTE: `_resetURLPagination` below can trigger FW-256:
-    //     // "Back button is not working properly when paginating within alphabet chars
-    //     // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
-    //     // You will be sent to the first page)"
-    //     //
-    //     // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
-    //     // and any other unnecessary updates (ie: the filter didn't change)
-    //     if (updateUrl && !href) {
-    //       this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
-    //     }
-    //     // See about updating url
-    //     if (href && updateUrl) {
-    //       NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-    //     }
-    //   })
-    // }
-
-    // TODO: `_resetURLPagination` below can trigger FW-256:
+    // NOTE: `_resetURLPagination` below can trigger FW-256:
     // "Back button is not working properly when paginating within alphabet chars
     // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
     // You will be sent to the first page)"
-
     this.setState({ filterInfo: newFilter }, () => {
       if (updateUrl && !href) {
         this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
