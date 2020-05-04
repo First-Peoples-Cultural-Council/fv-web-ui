@@ -47,6 +47,7 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
+import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
@@ -155,6 +156,10 @@ export class PhrasesFilteredByCategory extends Component {
         }
       }
     )
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {

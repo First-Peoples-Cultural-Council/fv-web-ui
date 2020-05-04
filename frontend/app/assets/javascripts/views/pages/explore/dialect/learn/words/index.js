@@ -14,7 +14,7 @@ limitations under the License.
 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { Set, Map, is } from 'immutable'
+import Immutable, { Set, Map } from 'immutable'
 
 import classNames from 'classnames'
 
@@ -30,7 +30,7 @@ import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
-
+import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -143,6 +143,10 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     })
   }
 
+  componentWillUnmount() {
+    this.props.searchDialectUpdate(initialState)
+  }
+
   DIALECT_FILTER_TYPE = 'words'
 
   constructor(props, context) {
@@ -212,49 +216,50 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
-    const wordListView = selectn('response.uid', computeDocument) ? (
-      <WordListView
-        controlViaURL
-        DEFAULT_PAGE={DEFAULT_PAGE}
-        DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
-        DEFAULT_SORT_COL={DEFAULT_SORT_COL}
-        DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
-        disableClickItem={false}
-        filter={filterInfo}
-        flashcard={this.state.flashcardMode}
-        flashcardTitle={pageTitle}
-        parentID={selectn('response.uid', computeDocument)}
-        dialectID={this.state.dialectId}
-        routeParams={this.props.routeParams}
-        // Search:
-        handleSearch={this.handleSearch}
-        resetSearch={this.resetSearch}
-        hasSearch
-        searchUi={[
-          {
-            defaultChecked: true,
-            idName: 'searchByTitle',
-            labelText: 'Word',
-          },
-          {
-            defaultChecked: true,
-            idName: 'searchByDefinitions',
-            labelText: 'Definitions',
-          },
-          {
-            idName: 'searchByTranslations',
-            labelText: 'Literal translations',
-          },
-          {
-            type: 'select',
-            idName: 'searchPartOfSpeech',
-            labelText: 'Parts of speech:',
-          },
-        ]}
-        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-        dictionaryListViewMode={this.props.listView.mode}
-      />
-    ) : null
+    const wordListView =
+      selectn('response.uid', computeDocument) && this.state.dialectId ? (
+        <WordListView
+          controlViaURL
+          DEFAULT_PAGE={DEFAULT_PAGE}
+          DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+          DEFAULT_SORT_COL={DEFAULT_SORT_COL}
+          DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
+          disableClickItem={false}
+          filter={filterInfo}
+          flashcard={this.state.flashcardMode}
+          flashcardTitle={pageTitle}
+          parentID={selectn('response.uid', computeDocument)}
+          dialectID={this.state.dialectId}
+          routeParams={this.props.routeParams}
+          // Search:
+          handleSearch={this.handleSearch}
+          resetSearch={this.resetSearch}
+          hasSearch
+          searchUi={[
+            {
+              defaultChecked: true,
+              idName: 'searchByTitle',
+              labelText: 'Word',
+            },
+            {
+              defaultChecked: true,
+              idName: 'searchByDefinitions',
+              labelText: 'Definitions',
+            },
+            {
+              idName: 'searchByTranslations',
+              labelText: 'Literal translations',
+            },
+            {
+              type: 'select',
+              idName: 'searchPartOfSpeech',
+              labelText: 'Parts of speech:',
+            },
+          ]}
+          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+          dictionaryListViewMode={this.props.listView.mode}
+        />
+      ) : null
 
     // Render kids or mobile view
     if (isKidsTheme) {
@@ -390,24 +395,39 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    if (is(this.state.filterInfo, newFilter) === false) {
-      this.setState({ filterInfo: newFilter }, () => {
-        // NOTE: `_resetURLPagination` below can trigger FW-256:
-        // "Back button is not working properly when paginating within alphabet chars
-        // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
-        // You will be sent to the first page)"
-        //
-        // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
-        // and any other unnecessary updates (ie: the filter didn't change)
-        if (updateUrl && !href) {
-          this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
-        }
-        // See about updating url
-        if (href && updateUrl) {
-          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-        }
-      })
-    }
+    // if (is(this.state.filterInfo, newFilter) === false) {
+    //   this.setState({ filterInfo: newFilter }, () => {
+    //     // NOTE: `_resetURLPagination` below can trigger FW-256:
+    //     // "Back button is not working properly when paginating within alphabet chars
+    //     // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
+    //     // You will be sent to the first page)"
+    //     //
+    //     // The above test (`is(...) === false`) prevents updates triggered by back or forward buttons
+    //     // and any other unnecessary updates (ie: the filter didn't change)
+    //     if (updateUrl && !href) {
+    //       this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+    //     }
+    //     // See about updating url
+    //     if (href && updateUrl) {
+    //       NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+    //     }
+    //   })
+    // }
+
+    // TODO: `_resetURLPagination` below can trigger FW-256:
+    // "Back button is not working properly when paginating within alphabet chars
+    // (Navigate to /learn/words/alphabet/a/1/1 - go to page 2, 3, 4. Use back button.
+    // You will be sent to the first page)"
+
+    this.setState({ filterInfo: newFilter }, () => {
+      if (updateUrl && !href) {
+        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+      }
+      // See about updating url
+      if (href && updateUrl) {
+        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+      }
+    })
   }
 
   clearDialectFilter = () => {
@@ -434,10 +454,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
       },
       searchTerm: '',
-      //dialectId: this.state.dialectId
     })
-
-    this.changeFilter({ href, updateHistory })
+    await this.changeFilter({ href, updateHistory })
   }
 
   handleSearch = () => {

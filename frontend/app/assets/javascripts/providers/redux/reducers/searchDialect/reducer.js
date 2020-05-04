@@ -16,7 +16,7 @@ import {
   SEARCH_TYPE_WILDCARD_SEARCH,
 } from 'views/components/SearchDialect/constants'
 
-const initialState = {
+export const initialState = {
   searchByAlphabet: '',
   searchByMode: SEARCH_BY_DEFAULT,
   searchBySettings: undefined,
