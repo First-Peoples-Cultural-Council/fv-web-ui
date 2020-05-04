@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -38,8 +39,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   private DocumentModel[] loadCharacters(DocumentModel dialect) {
     DocumentModelList chars = dialect.getCoreSession()
         .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    updateCustomOrderCharacters(dialect,
-        chars.stream().filter(character -> !character.isTrashed()).toArray(DocumentModel[]::new));
+    updateCustomOrderCharacters(dialect.getCoreSession(), chars);
     return chars
         .stream()
         .filter(character -> !character.isTrashed()
@@ -48,26 +48,19 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
         .toArray(DocumentModel[]::new);
   }
 
-  private void updateCustomOrderCharacters(DocumentModel dialect, DocumentModel[] chars) {
-    boolean edited = false;
-    for (DocumentModel c : chars) {
-      String customOrder = "";
-      if (c.getPropertyValue("fvcharacter:alphabet_order") != null
-          && (Long) c.getPropertyValue("fvcharacter:alphabet_order") > 0) {
-        customOrder += ((char) (34 + (Long) c.getPropertyValue("fvcharacter:alphabet_order")));
-      } else {
-        customOrder += '~';
-        customOrder += c.getPropertyValue("dc:title");
+  @Override
+  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
+    chars.forEach(c -> {
+      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
+      String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
+      String updatedCustomOrder = alphabetOrder == null ?
+          "~" + c.getPropertyValue("dc:title")
+          : "" + ((char) (34 + alphabetOrder));
+      if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
+        c.setPropertyValue("fv:custom_order", updatedCustomOrder);
+        session.saveDocument(c);
       }
-      if (c.getPropertyValue("fv:custom_order") == null || !c.getPropertyValue("fv:custom_order")
-          .equals(customOrder)) {
-        c.setPropertyValue("fv:custom_order", customOrder);
-        edited = true;
-      }
-      if (edited) {
-        dialect.getCoreSession().saveDocument(c);
-      }
-    }
+    });
   }
 
   /* (non-Javadoc)
@@ -129,24 +122,21 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
 
     while (title.length() > 0) {
-      boolean found = false;
-      // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
-      int i;
+      ArrayUtils.reverse(chars);
+      String finalTitle = title;
+      DocumentModel characterDoc = Arrays.stream(chars).filter(
+          charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
+              (String) charDoc.getPropertyValue("dc:title"),
+              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character")))
+          .findFirst()
+          .orElse(null);
 
-      for (i = chars.length - 1; i >= 0; --i) {
-        DocumentModel charDoc = chars[i];
-        String charValue = (String) charDoc.getPropertyValue("dc:title");
-        String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
-
-        if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
-          nativeTitle
-              .append((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order")));
-          title = title.substring(charValue.length());
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
+      if (characterDoc != null) {
+        String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
+        String computedCharcterTitle = (String) characterDoc.getPropertyValue("dc:title");
+        nativeTitle.append(computedCharacterOrder);
+        title = title.substring(computedCharcterTitle.length());
+      } else {
         if (" ".equals(title.substring(0, 1))) {
           nativeTitle.append("!");
         } else {
@@ -156,9 +146,6 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       }
     }
 
-    // In the case that the sorting methods are the same,
-    // we don't want to trigger subsequent events that are listening for a save.
-    // Just keep the sorting order on the document as it was. No need to save.
     if (!nativeTitle.toString().equals(originalCustomSort)) {
       if (!element.isImmutable()) {
         element.setPropertyValue("fv:custom_order", nativeTitle.toString());
