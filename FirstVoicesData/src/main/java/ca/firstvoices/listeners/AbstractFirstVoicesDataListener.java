@@ -7,7 +7,8 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 
-public abstract class AbstractListener implements EventListener {
+public abstract class AbstractFirstVoicesDataListener implements EventListener {
+
     protected DocumentModel getDialect(DocumentModel doc) {
         CoreSession session = doc.getCoreSession();
         if ("FVDialect".equals(doc.getType())) {
@@ -16,9 +17,6 @@ public abstract class AbstractListener implements EventListener {
         DocumentModel parent = session.getDocument(doc.getParentRef());
         while (parent != null && !"FVDialect".equals(parent.getType())) {
             parent = session.getDocument(parent.getParentRef());
-        }
-        if (parent == null) {
-            return null;
         }
         return parent;
     }

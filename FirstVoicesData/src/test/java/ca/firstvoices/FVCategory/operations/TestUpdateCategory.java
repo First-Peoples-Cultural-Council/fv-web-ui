@@ -33,9 +33,7 @@ import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.runtime.test.runner.Deploy;
 
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.FVCategory.operations.xml")
 public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
     @Inject

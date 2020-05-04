@@ -1,18 +1,45 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.publisher.services;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import ca.firstvoices.services.AbstractService;
-import org.nuxeo.ecm.core.api.*;
-import org.nuxeo.ecm.core.schema.FacetNames;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
-import org.nuxeo.runtime.api.Framework;
-
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.DocumentNotFoundException;
+import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.core.schema.FacetNames;
+import org.nuxeo.ecm.platform.publisher.api.PublisherService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author loopingz
@@ -483,12 +510,48 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             }
             // Handle as string
             else {
-                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.get(0));
+                dialectProxy.setPropertyValue(dependencyEntry.getValue(),
+                    dependencyPublishedPropertyValues.get(0));
             }
         }
 
         // Save changes to property values
         return session.saveDocument(dialectProxy);
+    }
+
+    @Override
+    public void removeCategoryOrPhrasebooksFromWordsOrPhrases(CoreSession session,
+        DocumentModel doc) {
+        DocumentModel dialect = getDialect(session, doc);
+        String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+        DocumentModelList documentModels = session.query(wordQuery);
+        String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+        DocumentModelList phrases = session.query(phraseQuery);
+        documentModels.addAll(phrases);
+
+        documentModels.stream().forEach(documentModel -> {
+            String propertyValue = "";
+            if (documentModel.getType().equals("FVWord")) {
+                propertyValue = "categories";
+            } else {
+                propertyValue = "phrase_books";
+            }
+
+            Serializable documentModelPropertyValue = documentModel.getPropertyValue(propertyValue);
+
+            if (documentModelPropertyValue != null) {
+                String[] categories = (String[]) documentModelPropertyValue;
+                String categoryId = doc.getId();
+                Serializable updated = (Serializable) Arrays.stream(categories)
+                    .filter(id -> !id.equals(categoryId)).collect(
+                        Collectors.toList());
+                documentModel.setPropertyValue(propertyValue, updated);
+                session.saveDocument(documentModel);
+            }
+        });
+
     }
 
     @Override
