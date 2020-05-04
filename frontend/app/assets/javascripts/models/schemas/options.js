@@ -418,11 +418,22 @@ const options = {
       },
       'fv-word:categories': {
         label: intl.trans('categories', 'Categories', 'first'),
+        help: (
+          <i>
+            {intl.trans(
+              'models.category_list_link',
+              'Categories for your archive can be added and edited from your language homepage',
+              'first'
+            )}
+            .
+          </i>
+        ),
         item: {
           factory: SelectSuggestFactory,
           type: 'FVCategory',
           attrs: {
             containerType: 'FVWord',
+            allowEdit: false,
             page_provider: {
               name: 'category_suggestion',
               folder: 'Categories',
@@ -998,6 +1009,7 @@ const options = {
         factory: SelectSuggestFactory,
         type: 'FVCategory',
         attrs: {
+          containerType: 'FVWord',
           page_provider: {
             name: 'category_suggestion',
             folder: 'Categories',

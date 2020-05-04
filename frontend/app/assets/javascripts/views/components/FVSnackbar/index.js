@@ -13,6 +13,8 @@ const styles = (/* theme */) => {
   return {
     root: {
       margin: 4,
+      flexWrap: 'inherit',
+      maxWidth: 'inherit',
       '& > * + *': {
         marginTop: 2,
         marginBottom: 2,
@@ -22,7 +24,7 @@ const styles = (/* theme */) => {
 }
 
 const FVSnackbar = (props) => {
-  const { buttontext, buttonhandler, classes } = props
+  const { buttontext, classes, onClick } = props
   const [open, setOpen] = React.useState(false)
   useEffect(() => setOpen(true), [])
 
@@ -33,7 +35,7 @@ const FVSnackbar = (props) => {
   const action = (
     <>
       {buttontext ? (
-        <FVButton variant="contained" onClick={buttonhandler}>
+        <FVButton variant="contained" onClick={onClick}>
           {' '}
           {buttontext}
         </FVButton>
@@ -52,14 +54,22 @@ const FVSnackbar = (props) => {
       open={open}
       action={action}
       TransitionComponent={Fade}
+      ContentProps={{
+        classes: {
+          root: classes.root,
+        },
+      }}
       {...props}
+      onClick={(e) => {
+        e.preventDefault()
+      }}
     />
   )
 }
 
 FVSnackbar.propTypes = {
   buttontext: string,
-  buttonhandler: func,
+  onClick: func,
   classes: object,
 }
 

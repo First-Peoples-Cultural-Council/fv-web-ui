@@ -1,11 +1,12 @@
 package ca.firstvoices.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.PathRef;
-
-import static org.junit.Assert.*;
 
 public class AssignAncestorsServiceImplTest extends AbstractFirstVoicesDataTest {
 
@@ -13,11 +14,8 @@ public class AssignAncestorsServiceImplTest extends AbstractFirstVoicesDataTest 
   public void assignAncestors() {
 
     // Get the DocumentModels for each of the parent documents
-    DocumentModel languageFamily = session.getDocument(new PathRef("/FV/Family"));
     assertNotNull("Language family cannot be null", languageFamily);
-    DocumentModel language = session.getDocument(new PathRef("/FV/Family/Language"));
     assertNotNull("Language cannot be null", language);
-    DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
 
     // Create a new child document

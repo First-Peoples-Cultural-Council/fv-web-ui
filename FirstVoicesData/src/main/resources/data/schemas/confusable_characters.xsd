@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:ref="http://www.nuxeo.org/ecm/schemas/core/external-references/"
+    xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/confusable_characters"
+    targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/confusable_characters"
+>
+
+    <xs:element name="label" type="xs:string"/>
+    <xs:element name="id" type="xs:string"/>
+    <xs:element name="confusable_char" type="xs:string"/>
+    <xs:element name="confusable_unicode" type="xs:string"/>
+    <xs:element name="obsolete" type="xs:integer" default="0"/>
+    <xs:element name="ordering" type="xs:integer" default="10000000"/>
+
+</xs:schema>

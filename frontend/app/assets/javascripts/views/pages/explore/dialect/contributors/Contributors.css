@@ -21,7 +21,7 @@
   margin-left: 2rem;
 }
 .Contributors__btnCreate {
-  margin: 0 0 2rem 0;
+  margin: 0 0 2rem 0 !important;
 }
 .Contributors__biographyStatus {
   display: flex;

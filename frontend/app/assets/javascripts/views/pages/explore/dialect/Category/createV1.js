@@ -104,7 +104,7 @@ export class PageDialectCategoryCreate extends Component {
 
   shouldComponentUpdate(newProps /*, newState*/) {
     switch (true) {
-      case newProps.windowPath != this.props.windowPath:
+      case newProps.windowPath !== this.props.windowPath:
         return true
 
       case newProps.computeDialect.response != this.props.computeDialect.response:
@@ -112,10 +112,9 @@ export class PageDialectCategoryCreate extends Component {
 
       case newProps.computeCategory != this.props.computeCategory:
         return true
-      default: // NOTE: do nothing
+      default:
+        return false
     }
-
-    return false
   }
 
   _onNavigateRequest(/*path*/) {
@@ -133,8 +132,14 @@ export class PageDialectCategoryCreate extends Component {
 
     for (const key in formValue) {
       if (formValue.hasOwnProperty(key) && key) {
-        if (formValue[key] && formValue[key] != '') {
-          properties[key] = formValue[key]
+        if (formValue[key] && formValue[key] !== '') {
+          // Filter out null values in an array
+          if (formValue[key] instanceof Array) {
+            const formValueKey = formValue[key].filter((item) => item !== null)
+            properties[key] = formValueKey
+          } else {
+            properties[key] = formValue[key]
+          }
         }
       }
     }

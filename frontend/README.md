@@ -7,6 +7,8 @@ There are several version dependency requirements to properly build and run the 
 - NodeJS v10.19.0 ([node version manager recommended](https://github.com/nvm-sh/nvm))
 - NPM v6.13.4 ([node version manager recommended](https://github.com/nvm-sh/nvm))
 
+If you are using NVM, NPM will be tied to the NodeJS version you install.
+
 Instructions to install specific project dependencies and running the application are described in the _Setting Up and Running_ section.
 
 Mac OS X is the ideal environment for running and developing the FirstVoices Web Application. The steps below are instructions for downloading project dependencies and building the project using Terminal on Mac OS X.
@@ -178,15 +180,16 @@ The first thing to do when creating Cypress tests is to figure out if your test 
 
 The following table shows the tests languages and how the current tests use them. If you can fit your new test in without disrupting existing tests please do so, otherwise use a new test language.
 
-| Items in use ->   |  Words   | Phrases  |  Songs   | Stories  |  Portal  | Books       | Other              | Language starts as: | Any item state change |
-| ----------------- | :------: | :------: | :------: | :------: | :------: | ----------- | ------------------ | ------------------- | :-------------------: |
-| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder           | Enabled             |       &#x2713;        |
-| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media | Published           |       &#x2713;        |
-| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder           | Enabled             |       &#x2713;        |
-| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                    | Published           |       &#x2713;        |
-| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports            | Published           |       &#x2713;        |
-| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet           | Published           |       &#x2713;        |
-| TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                    | Enabled             |                       |
+| Items in use ->   |  Words   | Phrases  |  Songs   | Stories  |  Portal  | Books       | Other                | Language starts as: | Any item state change |
+| ----------------- | :------: | :------: | :------: | :------: | :------: | ----------- | -------------------- | ------------------- | :-------------------: |
+| TestLanguageOne   | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |             | Recorder             | Enabled             |       &#x2713;        |
+| TestLanguageTwo   | &#x2713; | &#x2713; |          |          |          | Phrasebooks | Contributor, Media   | Published           |       &#x2713;        |
+| TestLanguageThree | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             | Recorder             | Enabled             |       &#x2713;        |
+| TestLanguageFour  | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |             |                      | Published           |       &#x2713;        |
+| TestLanguageFive  | &#x2713; | &#x2713; |          |          |          |             | Reports              | Published           |       &#x2713;        |
+| TestLanguageSix   | &#x2713; | &#x2713; | &#x2713; |          |          |             | Alphabet             | Published           |       &#x2713;        |
+| TestLanguageSeven |          |          |          | &#x2713; | &#x2713; | Story Books |                      | Enabled             |                       |
+| TestLanguageEight | &#x2713; |          | &#x2713; |          |          |             | Alphabet, Categories | Published           |       &#x2713;        |
 
 When you create a new test please update this table.
 

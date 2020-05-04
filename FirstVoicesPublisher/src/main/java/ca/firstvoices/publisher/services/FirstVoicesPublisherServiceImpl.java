@@ -1,18 +1,45 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.publisher.services;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import ca.firstvoices.services.AbstractService;
-import org.nuxeo.ecm.core.api.*;
-import org.nuxeo.ecm.core.schema.FacetNames;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
-import org.nuxeo.runtime.api.Framework;
-
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.DocumentNotFoundException;
+import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.core.schema.FacetNames;
+import org.nuxeo.ecm.platform.publisher.api.PublisherService;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author loopingz
@@ -40,7 +67,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
     @Override
     public DocumentModel publishDialect(DocumentModel dialect) {
-        // Arguments checks : need to be a FVDialect in a normal tree (LanguageFamily/Language/Dialect)
+        // Arguments checks : need to be a FVDialect in a normal tree
+        // (LanguageFamily/Language/Dialect)
         Map<String, DocumentModel> ancestors = getAncestors(dialect);
 
         DocumentModel languageFamily = ancestors.get("LanguageFamily");
@@ -109,7 +137,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
 
     @Override
     public void unpublishDialect(DocumentModel dialect) {
-        // Arguments checks : need to be a FVDialect in a normal tree (LanguageFamily/Language/Dialect)
+        // Arguments checks : need to be a FVDialect in a normal tree
+        // (LanguageFamily/Language/Dialect)
         Map<String, DocumentModel> ancestors = getAncestors(dialect);
         DocumentModel languageFamily = ancestors.get("LanguageFamily");
         DocumentModel language = ancestors.get("Language");
@@ -369,9 +398,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
     }
 
     private boolean isAssetType(String type) {
-        return "FVBookEntry".equals(type) || "FVBook".equals(type) || "FVPhrase".equals(type) || "FVWord".equals(type) || "FVLabel".equals(type)
-                || "FVPicture".equals(type) || "FVVideo".equals(type) || "FVAudio".equals(type)
-                || "FVCharacter".equals(type) || "FVGallery".equals(type) || "FVLink".equals(type);
+        return "FVBookEntry".equals(type) || "FVBook".equals(type) || "FVPhrase".equals(type) || "FVWord".equals(type)
+                || "FVLabel".equals(type) || "FVPicture".equals(type) || "FVVideo".equals(type)
+                || "FVAudio".equals(type) || "FVCategory".equals(type) || "FVCharacter".equals(type)
+                || "FVGallery".equals(type) || "FVLink".equals(type);
     }
 
     @Override
@@ -475,17 +505,53 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
             // Handle property values as arrays
             if (dependencyEntry.getKey().equals("fvdialect:keyboards")
                     || dependencyEntry.getKey().equals("fvdialect:language_resources")) {
-                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.toArray(
-                        new String[dependencyPublishedPropertyValues.size()]));
+                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues
+                        .toArray(new String[dependencyPublishedPropertyValues.size()]));
             }
             // Handle as string
             else {
-                dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.get(0));
+                dialectProxy.setPropertyValue(dependencyEntry.getValue(),
+                    dependencyPublishedPropertyValues.get(0));
             }
         }
 
         // Save changes to property values
         return session.saveDocument(dialectProxy);
+    }
+
+    @Override
+    public void removeCategoryOrPhrasebooksFromWordsOrPhrases(CoreSession session,
+        DocumentModel doc) {
+        DocumentModel dialect = getDialect(session, doc);
+        String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+        DocumentModelList documentModels = session.query(wordQuery);
+        String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+        DocumentModelList phrases = session.query(phraseQuery);
+        documentModels.addAll(phrases);
+
+        documentModels.stream().forEach(documentModel -> {
+            String propertyValue = "";
+            if (documentModel.getType().equals("FVWord")) {
+                propertyValue = "categories";
+            } else {
+                propertyValue = "phrase_books";
+            }
+
+            Serializable documentModelPropertyValue = documentModel.getPropertyValue(propertyValue);
+
+            if (documentModelPropertyValue != null) {
+                String[] categories = (String[]) documentModelPropertyValue;
+                String categoryId = doc.getId();
+                Serializable updated = (Serializable) Arrays.stream(categories)
+                    .filter(id -> !id.equals(categoryId)).collect(
+                        Collectors.toList());
+                documentModel.setPropertyValue(propertyValue, updated);
+                session.saveDocument(documentModel);
+            }
+        });
+
     }
 
     @Override
@@ -552,7 +618,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements 
                 DocumentModel publishedDep = getPublication(session, dependencyRef);
 
                 try {
-                    // TODO: Bug? getProxies seems to return documents that don't exist anymore. Force check to see if
+                    // TODO: Bug? getProxies seems to return documents that don't exist anymore.
+                    // Force check to see if
                     // doc exists.
                     session.getDocument(publishedDep.getRef());
                 } catch (NullPointerException | DocumentNotFoundException e) {

@@ -112,6 +112,7 @@
         <schema name="var_FVUnpublishLanguageAsset" prefix="var_FVUnpublishLanguageAsset" override="true" src="data/schemas/var_FVUnpublishLanguageAsset.xsd"/>
         <schema name="fv_label_vocabulary" prefix="fv_label_vocabulary" override="true" src="data/schemas/fv_label_vocabulary.xsd"/>
         <schema name="parent_languages" prefix="parent_languages" override="false" src="data/schemas/parent_languages.xsd"/>
+        <schema name="confusable_characters" prefix="confusable_characters" override="false" src="data/schemas/confusable_characters.xsd"/>
     </extension>
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
         <doctype name="Folder" extends="Document">
@@ -22494,6 +22495,93 @@
                 </properties>
             </widget>
         </layout>
+        <layout name="vocabulary-confusable_characters">
+            <templates>
+                <template mode="any">/directory/directory_layout_template.xhtml</template>
+            </templates>
+            <rows>
+                <row>
+                    <widget>char</widget>
+                </row>
+                <row>
+                    <widget>char_unicode</widget>
+                </row>
+                <row>
+                    <widget>confusable_char</widget>
+                </row>
+                <row>
+                    <widget>confusable_unicode</widget>
+                </row>
+            </rows>
+            <widget name="char" type="text">
+                <labels>
+                    <label mode="any">Character</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>confusable_characters:label</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="char_unicode" type="text">
+                <labels>
+                    <label mode="any">Character Unicode</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>confusable_characters:id</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="confusable_char" type="text">
+                <labels>
+                    <label mode="any">Confusable Character(s)</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>confusable_characters:confusable_char</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+            <widget name="confusable_unicode" type="text">
+                <labels>
+                    <label mode="any">Confusable Character Unicode Value(s)</label>
+                </labels>
+                <translated>false</translated>
+                <fields>
+                    <field>confusable_characters:confusable_unicode</field>
+                </fields>
+                <properties widgetMode="edit">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+                <properties widgetMode="view">
+                    <property name="styleClass">dataInputText</property>
+                    <property name="required">true</property>
+                </properties>
+            </widget>
+        </layout>
         <layout name="Task297b@taskLayout">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
@@ -24664,6 +24752,16 @@ function run(input, params) {
             <cacheEntryName>vocab-parent_languages-cache</cacheEntryName>
             <cacheEntryWithoutReferencesName>vocab-parent_languages-cache-without-references</cacheEntryWithoutReferencesName>
         </directory>
+        <directory name="confusable_characters" extends="template-vocabulary">
+            <schema>confusable_characters</schema>
+            <autoincrementIdField>false</autoincrementIdField>
+            <idField>id</idField>
+            <createTablePolicy>always</createTablePolicy>
+            <table>studio_vocabulary_confusable_characters</table>
+            <dataFile>data/vocabularies/confusable_characters.csv</dataFile>
+            <cacheEntryName>vocab-confusable_characters-cache</cacheEntryName>
+            <cacheEntryWithoutReferencesName>vocab-confusable_characters-cache-without-references</cacheEntryWithoutReferencesName>
+        </directory>
     </extension>
     <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
         <cache name="vocab-WorkflowType-cache">
@@ -24876,6 +24974,16 @@ function run(input, params) {
             <option name="concurrencyLevel">500</option>
             <ttl>60</ttl>
         </cache>
+        <cache name="vocab-confusable_characters-cache">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
+        <cache name="vocab-confusable_characters-cache-without-references">
+            <option name="maxSize">1000</option>
+            <option name="concurrencyLevel">500</option>
+            <ttl>60</ttl>
+        </cache>
     </extension>
     <extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager" point="directories">
         <directory name="WorkflowType" layout="vocabulary" sortField="label"/>
@@ -24919,6 +25027,7 @@ function run(input, params) {
         </directory>
         <directory name="reference" layout="vocabulary" sortField="label"/>
         <directory name="parent_languages" layout="vocabulary-parent_languages" sortField="label"/>
+        <directory name="confusable_characters" layout="vocabulary-confusable_characters" sortField="ordering"/>
     </extension>
     <extension target="org.nuxeo.ecm.platform.routing.service" point="routeModelImporter">
         <template-resource id="FVDisableLanguageAsset" path="data/FVDisableLanguageAsset.zip"/>

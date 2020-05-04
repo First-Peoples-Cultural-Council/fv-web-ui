@@ -6,17 +6,15 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchSharedAudios } from 'providers/redux/reducers/fvAudio'
-import { fetchSharedCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchSharedContributors } from 'providers/redux/reducers/fvContributor'
 import { fetchSharedLinks } from 'providers/redux/reducers/fvLink'
 import { fetchSharedPhrases } from 'providers/redux/reducers/fvPhrase'
 import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
 
-import selectn from 'selectn'
 import Autosuggest from 'react-autosuggest'
 
 import LinearProgress from '@material-ui/core/LinearProgress'
-
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 const AutoSuggestTheme = {
   container: 'autosuggest dropdown',
   containerOpen: 'dropdown open',
@@ -40,14 +38,12 @@ export class AutoSuggestComponent extends Component {
     value: string.isRequired,
     // REDUX: reducers/state
     computeSharedAudios: object.isRequired,
-    computeSharedCategories: object.isRequired,
     computeSharedContributors: object.isRequired,
     computeSharedLinks: object.isRequired,
     computeSharedPhrases: object.isRequired,
     computeSharedWords: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchSharedAudios: func.isRequired,
-    fetchSharedCategories: func.isRequired,
     fetchSharedContributors: func.isRequired,
     fetchSharedLinks: func.isRequired,
     fetchSharedPhrases: func.isRequired,
@@ -95,23 +91,6 @@ export class AutoSuggestComponent extends Component {
         )
 
       case 'FVCategory': {
-        const breadcrumb = []
-
-        selectn('contextParameters.breadcrumb.entries', suggestion).map((entry, i) => {
-          if (entry.type === 'FVCategory') {
-            let shared = ''
-
-            if (entry.path.indexOf('SharedData') !== -1) shared = ' (' + this.props.intl.trans('shared', 'Shared', 'first') + ')'
-
-            breadcrumb.push(
-              <span key={i}>
-                {' '}
-                &raquo; {entry.title} {shared}
-              </span>
-            )
-          }
-        })
-
         return (
           <a
             href="#"
@@ -119,7 +98,10 @@ export class AutoSuggestComponent extends Component {
               e.preventDefault()
             }}
           >
-            {breadcrumb}
+            &raquo; {suggestion.title}{' '}
+            {suggestion.path.indexOf('SharedData') !== -1
+              ? ` (${this.props.intl.trans('shared', 'Shared', 'first')})`
+              : ''}
           </a>
         )
       }
@@ -207,15 +189,7 @@ export class AutoSuggestComponent extends Component {
             )
             break
           case 'FVCategory':
-            this.props.fetchSharedCategories(
-              this.props.provider.name,
-              { 'enrichers.document': 'breadcrumb' },
-              {
-                currentPageIndex: 0,
-                pageSize: 15,
-                queryParams: [value, this.props.dialect.path + '/' + this.props.provider.folder],
-              }
-            )
+            // TODO: NEED TO SUBMIT ENTERED 'value' TO DATALAYER FOR QUERY, at present autosuggest is just listing all categories
             break
           case 'FVContributor':
             this.props.fetchSharedContributors(
@@ -274,7 +248,8 @@ export class AutoSuggestComponent extends Component {
         return this.props.computeSharedPhrases
 
       case 'FVCategory':
-        return this.props.computeSharedCategories
+        // Handled by switch statement inside render
+        break
 
       case 'FVContributor':
         return this.props.computeSharedContributors
@@ -297,52 +272,85 @@ export class AutoSuggestComponent extends Component {
       onChange: this.onChange,
     }
 
-    // const status = this.getComputeType().isFetching
-    //   ? intl.trans('loading', 'Loading', 'first')
-    //   : intl.trans('ready', 'Ready', 'first')
+    switch (this.props.type) {
+      case 'FVCategory':
+        return (
+          <CategoriesDataLayer value={this.props.value}>
+            {({ categoriesData }) => {
+              return (
+                <div className="row">
+                  <div className="col-xs-12">
+                    <Autosuggest
+                      ref={this.suggestionWidget}
+                      theme={AutoSuggestTheme}
+                      suggestions={this.modifiedCategoriesData(categoriesData)}
+                      shouldRenderSuggestions={this.shouldRenderSuggestions}
+                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                      getSuggestionValue={this.getSuggestionValue}
+                      renderSuggestion={this.renderSuggestion}
+                      inputProps={inputProps}
+                    />
+                  </div>
+                </div>
+              )
+            }}
+          </CategoriesDataLayer>
+        )
 
-    return (
-      <div className="row">
-        <div className="col-xs-12">
-          <Autosuggest
-            ref={this.suggestionWidget}
-            theme={AutoSuggestTheme}
-            suggestions={this.getComputeType().response.entries || []}
-            shouldRenderSuggestions={this.shouldRenderSuggestions}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={this.getSuggestionValue}
-            renderSuggestion={this.renderSuggestion}
-            inputProps={inputProps}
-          />
-        </div>
+      default:
+        return (
+          <div className="row">
+            <div className="col-xs-12">
+              <Autosuggest
+                ref={this.suggestionWidget}
+                theme={AutoSuggestTheme}
+                suggestions={this.getComputeType().response.entries || []}
+                shouldRenderSuggestions={this.shouldRenderSuggestions}
+                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                getSuggestionValue={this.getSuggestionValue}
+                renderSuggestion={this.renderSuggestion}
+                inputProps={inputProps}
+              />
+            </div>
+            <div className="col-xs-12">
+              <LinearProgress
+                variant="indeterminate"
+                className={classNames({ hidden: !this.getComputeType().isFetching })}
+              />
+            </div>
+          </div>
+        )
+    }
+  }
 
-        <div className="col-xs-12">
-          <LinearProgress
-            variant="indeterminate"
-            className={classNames({ hidden: !this.getComputeType().isFetching })}
-          />
-        </div>
-      </div>
-    )
+  // Modifying Categories data to raise up children categories to same level as parent
+  modifiedCategoriesData(categoriesData) {
+    let newData = []
+    categoriesData.forEach((parent) => {
+      newData.push(parent)
+      if (parent.contextParameters.children.entries.length > 0) {
+        newData = [...newData, ...parent.contextParameters.children.entries]
+      }
+    })
+    return newData
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvAudio, fvCategory, fvContributor, fvLink, fvPhrase, fvWord, locale } = state
+  const { fvAudio, fvContributor, fvLink, fvPhrase, fvWord, locale } = state
 
   const { computeSharedAudios } = fvAudio
-  const { computeSharedCategories } = fvCategory
   const { computeSharedContributors } = fvContributor
   const { computeSharedLinks } = fvLink
   const { computeSharedPhrases } = fvPhrase
   const { computeSharedWords } = fvWord
-  const { intlService} = locale
+  const { intlService } = locale
 
   return {
     computeSharedAudios,
-    computeSharedCategories,
     computeSharedContributors,
     computeSharedLinks,
     computeSharedPhrases,
@@ -354,14 +362,10 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchSharedAudios,
-  fetchSharedCategories,
   fetchSharedContributors,
   fetchSharedLinks,
   fetchSharedPhrases,
   fetchSharedWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AutoSuggestComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(AutoSuggestComponent)

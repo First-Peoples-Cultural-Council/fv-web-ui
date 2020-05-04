@@ -66,7 +66,7 @@ export class Categories extends Component {
 
   fetchData(newProps) {
     // const pathOrId = '/' + newProps.properties.domain + '/' + newProps.routeParams.area
-    const categoriesPath = '/api/v1/path/FV/' + newProps.routeParams.area + '/SharedData/Shared Categories/@children'
+    const categoriesPath = '/api/v1/path/' + newProps.routeParams.dialect_path + '/Categories/@children'
 
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
     newProps.fetchCategories(categoriesPath)
@@ -149,7 +149,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Categories)
+export default connect(mapStateToProps, mapDispatchToProps)(Categories)

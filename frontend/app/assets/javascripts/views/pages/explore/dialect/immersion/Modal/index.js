@@ -80,15 +80,16 @@ class LabelModal extends Component {
   // We should refactor the various modals and forms to avoid needing to do this
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      this.state !== nextState || 
-      this.props.fullScreen !== nextProps.fullScreen || 
-      this.props.open !== nextProps.open || 
-      this.props.label !== nextProps.label || 
-      this.props.computeLabel !== nextProps.computeLabel || 
-      this.props.computeDialect2 !== nextProps.computeDialect2) {
-      return true;
+      this.state !== nextState ||
+      this.props.fullScreen !== nextProps.fullScreen ||
+      this.props.open !== nextProps.open ||
+      this.props.label !== nextProps.label ||
+      this.props.computeLabel !== nextProps.computeLabel ||
+      this.props.computeDialect2 !== nextProps.computeDialect2
+    ) {
+      return true
     }
-    return false;
+    return false
   }
 
   componentDidUpdate(prevProps) {
@@ -100,7 +101,7 @@ class LabelModal extends Component {
   }
 
   handleCreateSave = (translation, isPublishing = false) => {
-    const { label, createLabel, handleClose, addNewLabelToIntl: updateIntl } = this.props
+    const { label, createLabel: _createLabel, handleClose, addNewLabelToIntl: updateIntl } = this.props
     this.setState({ loading: true })
 
     const now = Date.now()
@@ -108,7 +109,7 @@ class LabelModal extends Component {
     const relatedAudioValue = this.audioRef.current.getValue()
     const relatedAudio = relatedAudioValue ? relatedAudioValue['fv:related_audio'] : null
 
-    createLabel(
+    _createLabel(
       this.dictionaryPath,
       {
         type: 'FVLabel',
@@ -136,7 +137,7 @@ class LabelModal extends Component {
   }
 
   handleEditSave = (translation, isPublishing = false) => {
-    const { label, updateLabel, computeLabel, handleClose, addNewLabelToIntl: updateIntl } = this.props
+    const { label, updateLabel: _updateLabel, computeLabel, handleClose, addNewLabelToIntl: updateIntl } = this.props
     this.setState({ loading: true })
     const computeEntities = Immutable.fromJS([
       {
@@ -159,7 +160,7 @@ class LabelModal extends Component {
 
     newDocument.set({ 'dc:title': translation.join(''), 'fv:related_audio': relatedAudio })
 
-    updateLabel(newDocument, null, null).then((output) => {
+    _updateLabel(newDocument, null, null).then((output) => {
       if (isPublishing) {
         this.handlePublish(output)
       } else {
@@ -175,9 +176,9 @@ class LabelModal extends Component {
   }
 
   handlePublish = (output) => {
-    const { addNewLabelToIntl: updateIntl, handleClose, publishLabel, label, intl } = this.props
+    const { addNewLabelToIntl: updateIntl, handleClose, publishLabel: _publishLabel, label, intl } = this.props
 
-    publishLabel(
+    _publishLabel(
       label.uid,
       null,
       null,
@@ -194,9 +195,9 @@ class LabelModal extends Component {
   }
 
   handleUnpublish = () => {
-    const { handleClose, unpublishLabel, label, intl } = this.props
+    const { handleClose, unpublishLabel: _unpublishLabel, label, intl } = this.props
 
-    unpublishLabel(
+    _unpublishLabel(
       label.uid,
       null,
       null,

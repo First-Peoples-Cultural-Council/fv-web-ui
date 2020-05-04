@@ -1,11 +1,12 @@
 package ca.firstvoices.services;
 
-import ca.firstvoices.testUtil.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
-
-import static org.junit.Assert.*;
 
 public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest {
 
@@ -16,9 +17,7 @@ public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest
     assertNotNull("Language family cannot be null", languageFamily);
     DocumentModel language = session.getDocument(new PathRef("/FV/Family/Language"));
     assertNotNull("Language cannot be null", language);
-    DocumentModel dialect = getCurrentDialect();
     assertNotNull("Dialect cannot be null", dialect);
-    DocumentModel dictionary = getCurrentDictionary();
     assertNotNull("Dictionary cannot be null", dictionary);
     
     // Create a new word & phrase document

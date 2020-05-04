@@ -53,7 +53,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(PhrasebookStateSuccessDelete)
+export default connect(null, mapDispatchToProps)(PhrasebookStateSuccessDelete)

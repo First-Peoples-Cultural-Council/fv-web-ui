@@ -50,10 +50,10 @@ export class PhrasebookDetail extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookDetailInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     await this._getData({ copy })
   }
@@ -78,7 +78,7 @@ export class PhrasebookDetail extends React.Component {
     }
     return content
   }
-  _getData = async(addToState = {}) => {
+  _getData = async (addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -124,7 +124,7 @@ export class PhrasebookDetail extends React.Component {
       />
     )
   }
-  _getItem = async() => {
+  _getItem = async () => {
     const { computeCategory, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:
@@ -161,7 +161,4 @@ const mapDispatchToProps = {
   fetchCategories,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasebookDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasebookDetail)

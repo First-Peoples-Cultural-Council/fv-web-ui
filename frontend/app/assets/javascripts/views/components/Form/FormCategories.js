@@ -30,6 +30,7 @@ export class FormCategories extends React.Component {
     idDescribedbyItemBrowse: string,
     idDescribedByItemMove: string,
     name: string.isRequired,
+    routeParams: object.isRequired,
     textBtnAddItem: string,
     textBtnCreateItem: string,
     textBtnMoveItemUp: string,
@@ -84,7 +85,7 @@ export class FormCategories extends React.Component {
   // Fetch data on initial render
   async componentDidMount() {
     const { splitWindowPath } = this.props
-    const categoriesPath = '/api/v1/path/FV/Workspaces/SharedData/Shared Categories/@children'
+    const categoriesPath = '/api/v1/path/' + this.props.routeParams.dialect_path + '/Categories/@children'
     await this.props.fetchCategories(categoriesPath)
 
     const dialect = await selectn('response', this.props.computeDialect)
@@ -219,7 +220,4 @@ const mapDispatchToProps = {
   fetchResources,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormCategories)
+export default connect(mapStateToProps, mapDispatchToProps)(FormCategories)

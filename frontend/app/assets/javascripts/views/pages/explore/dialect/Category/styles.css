@@ -1,0 +1,76 @@
+/* BLOCK */
+.Category {
+  margin-bottom: 7rem;
+  max-width: 750px;
+}
+/* ELEMENT */
+.Category .delete {
+  padding-left: 3.2rem;
+}
+.Category__heading {
+  font-size: 3rem;
+}
+.Category__label {
+  padding-left: 3rem;
+}
+.Category__content {
+  padding-left: 6rem;
+}
+.Category__select {
+  font-size: 3rem;
+}
+.Category .Text,
+.Category .Textarea,
+.Category .Select {
+  margin-bottom: 3.5rem;
+}
+.Category__btn-container {
+  display: flex;
+  padding-left: 3.2rem;
+}
+.Category__btnBack {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.Category__btnHeader {
+  display: flex;
+  margin-left: -1.6rem;
+}
+.Category__btnHeader .delete {
+  margin-left: auto;
+}
+.Category__delete {
+  margin-left: auto;
+}
+.Category__main {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.Category__mainInner {
+  padding: 3rem;
+}
+.Category__successContent {
+  display: flex;
+}
+.Category__successLinks {
+  list-style-type: none;
+  padding: 0;
+}
+.Category__successMore {
+  flex-grow: 1;
+}
+.Category__successReview {
+  flex-grow: 1;
+}
+
+/* MODIFIER */
+.Category--detail {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.Category--detail .Category__heading {
+  font-size: 1.8rem;
+  font-weight: 100;
+  margin: 0 0 2rem 0;
+}

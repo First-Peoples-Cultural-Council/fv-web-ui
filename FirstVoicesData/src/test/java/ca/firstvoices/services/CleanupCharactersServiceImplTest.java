@@ -18,21 +18,24 @@
 
 package ca.firstvoices.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
-
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
-
-    private DocumentModel dialect;
 
     private Map<String, String[]> alphabetAndConfusableCharacters;
 
@@ -40,7 +43,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     public void setUp() throws Exception {
         assertNotNull("Should have a valid session", session);
         createSetup(session);
-        dialect = getCurrentDialect();
     }
 
     @After
@@ -56,7 +58,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         List<DocumentModel> documentModels = createWords(words);
         for (int i = 0; i < documentModels.size(); i++) {
             DocumentModel documentModel = documentModels.get(i);
-            DocumentModel updatedDocument = cleanupCharactersService.cleanConfusables(documentModel);
+            DocumentModel updatedDocument = cleanupCharactersService
+                .cleanConfusables(session, documentModel);
             String title = (String) updatedDocument.getPropertyValue("dc:title");
             assertEquals(correctWords[i], title);
         }
@@ -65,8 +68,9 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     @Test
     public void mapAndValidateConfusableCharactersTest() {
         setupCharacters();
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
-        Map<String, String> charMap = cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
+        Map<String, String> charMap = cleanupCharactersService
+            .mapAndValidateConfusableCharacters(characters);
         assertEquals(13, charMap.size());
         for (Map.Entry<String, String> pair : charMap.entrySet()) {
             if ("∀".equals(pair.getKey())) {
@@ -106,7 +110,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         List<DocumentModel> documentModels = createWords(words);
         for (int i = 0; i < documentModels.size(); i++) {
             DocumentModel documentModel = documentModels.get(i);
-            DocumentModel updatedDocument = cleanupCharactersService.cleanConfusables(documentModel);
+            DocumentModel updatedDocument = cleanupCharactersService
+                .cleanConfusables(session, documentModel);
             String title = (String) updatedDocument.getPropertyValue("dc:title");
             assertEquals(correctWords[i], title);
         }
@@ -120,7 +125,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         alphabetAndConfusableCharacters.put("e", new String[]{"f"});
         alphabetAndConfusableCharacters.put("f", new String[]{"e"});
         createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
         cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
     }
 
@@ -128,7 +133,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     public void mapAndValidateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
         setupCharacters();
         createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "", new String[]{"ŷ", "γ"}, new String[]{"Ŷ", "Υ"});
-        DocumentModelList characters = session.getChildren(getAlphabetDoc().getRef());
+        DocumentModelList characters = session.getChildren(alphabet.getRef());
         cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
     }
 

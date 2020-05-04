@@ -94,7 +94,7 @@ Cypress.Commands.add('login', (obj = {}) => {
 // Logs any user out using a GET request.
 Cypress.Commands.add('logout', () => {
   cy.log('--- LOGGING OUT ---')
-  cy.request({method: 'GET', url: (Cypress.env('TARGET') + '/nuxeo/logout'), failOnStatusCode: false})
+  cy.request({method: 'GET', url: (Cypress.env('FRONTEND') + '/nuxeo/logout'), failOnStatusCode: false})
   cy.visit('')
   cy.wait(2000)
   cy.log('--- SHOULD BE LOGGED OUT ---')

@@ -1,0 +1,23 @@
+.Categories__colSort {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.Categories__actions {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 0;
+  padding: 0;
+}
+.Categories__actionContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+.Categories__actionDelete {
+  margin-left: 2rem;
+}

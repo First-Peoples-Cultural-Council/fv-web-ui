@@ -122,7 +122,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   pushWindowPath,
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhrasebookStateSuccessEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasebookStateSuccessEdit)

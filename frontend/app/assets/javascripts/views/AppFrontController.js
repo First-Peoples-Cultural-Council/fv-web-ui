@@ -25,7 +25,6 @@ import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'views/components/FVButton'
-import FVSnackbar from 'views/components/FVSnackbar'
 import Navigation from 'views/components/Navigation'
 import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
 import KidsNavigation from 'views/components/Kids/navigation'
@@ -145,6 +144,7 @@ export class AppFrontController extends Component {
 
     if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
       this._route({ props: this.props })
+      window.scrollTo(0, 0)
     }
     if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
       this.props.setIntlWorkspace(this.props.routeParams.dialect_path)
@@ -196,19 +196,6 @@ export class AppFrontController extends Component {
 
     let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
 
-    const covidAlert = isFrontPage ? (
-      <>
-        <FVSnackbar
-          message="Stay safe while physically distancing"
-          buttontext="Read More"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          buttonhandler={() => {
-            window.open('https://wiki.firstvoices.com/display/FIR1/FirstVoices+Development+Updates', '_blank')
-          }}
-        />
-      </>
-    ) : null
-
     const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
 
     // For print view return page only
@@ -235,10 +222,8 @@ export class AppFrontController extends Component {
     if (hideNavigation) {
       navigation = footer = ''
     }
-
     return (
       <div>
-        {covidAlert}
         {(matchedPage && matchedPage.hasOwnProperty('warnings') ? matchedPage.get('warnings') : []).map((warning) => {
           if (this.props.warnings.hasOwnProperty(warning) && !this.state.warningsDismissed) {
             return (

@@ -18,16 +18,15 @@
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractService;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.PathRef;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.PathRef;
 
 /**
  * @author loopingz
@@ -80,117 +79,127 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements Na
             computeNativeOrderTranslation(chars, asset);
         }
     }
+  }
 
-    /* (non-Javadoc)
-     * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeDialectNativeOrderTranslation(org
-     * .nuxeo.ecm.core.api.DocumentModel)
-     */
-    @Override
-    public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
-        CoreSession session = dialect.getCoreSession();
-        // First get the native alphabet
-        DocumentModel[] chars = loadCharacters(dialect);
-        computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'"));
-        computeNativeOrderTranslation(chars,
-                session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'"));
-        DocumentModel alphabet = session.getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-        alphabet.setPropertyValue("custom_order_recompute_required", false);
-        session.saveDocument(alphabet);
-        session.save();
+  /* (non-Javadoc)
+   * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeDialectNativeOrderTranslation(org
+   * .nuxeo.ecm.core.api.DocumentModel)
+   */
+  @Override
+  public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
+    CoreSession session = dialect.getCoreSession();
+    // First get the native alphabet
+    DocumentModel[] chars = loadCharacters(dialect);
+    computeNativeOrderTranslation(chars,
+        session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
+    computeNativeOrderTranslation(chars,
+        session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
+    DocumentModel alphabet = session
+        .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    alphabet.setPropertyValue("custom_order_recompute_required", false);
+    session.saveDocument(alphabet);
+    session.save();
+  }
+
+  protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModel element) {
+    if (element.isImmutable()) {
+      // We cannot update this element, no point in going any further
+      return;
     }
 
-    protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModel element) {
-        if (element.isImmutable()) {
-            // We cannot update this element, no point in going any further
-            return;
+    String title = (String) element.getPropertyValue("dc:title");
+    StringBuilder nativeTitle = new StringBuilder();
+    List<String> fvChars =
+        Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title"))
+            .collect(Collectors.toList());
+    List<String> upperChars = Arrays.stream(chars)
+        .map(character -> (String) character.getPropertyValue(
+            "fvcharacter:upper_case_character")).collect(Collectors.toList());
+
+    String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
+
+    while (title.length() > 0) {
+      boolean found = false;
+      // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
+      int i;
+
+      for (i = chars.length - 1; i >= 0; --i) {
+        DocumentModel charDoc = chars[i];
+        String charValue = (String) charDoc.getPropertyValue("dc:title");
+        String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
+
+        if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
+          nativeTitle
+              .append((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order")));
+          title = title.substring(charValue.length());
+          found = true;
+          break;
         }
-
-        String title = (String) element.getPropertyValue("dc:title");
-        StringBuilder nativeTitle = new StringBuilder();
-        List<String> fvChars =
-                Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title")).collect(Collectors.toList());
-        List<String> upperChars = Arrays.stream(chars).map(character -> (String) character.getPropertyValue(
-                "fvcharacter:upper_case_character")).collect(Collectors.toList());
-
-        String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
-
-        while (title.length() > 0) {
-            boolean found = false;
-            // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
-            int i;
-
-            for (i = chars.length - 1; i >= 0; --i) {
-                DocumentModel charDoc = chars[i];
-                String charValue = (String) charDoc.getPropertyValue("dc:title");
-                String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
-
-                if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
-                    nativeTitle.append((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order")));
-                    title = title.substring(charValue.length());
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                if (" ".equals(title.substring(0, 1))) {
-                    nativeTitle.append("!");
-                } else {
-                    nativeTitle.append("~").append(title, 0, 1);
-                }
-                title = title.substring(1);
-            }
+      }
+      if (!found) {
+        if (" ".equals(title.substring(0, 1))) {
+          nativeTitle.append("!");
+        } else {
+          nativeTitle.append("~").append(title, 0, 1);
         }
-
-
-        // In the case that the sorting methods are the same,
-        // we don't want to trigger subsequent events that are listening for a save.
-        // Just keep the sorting order on the document as it was. No need to save.
-        if (!nativeTitle.toString().equals(originalCustomSort)) {
-            if (!element.isImmutable()) {
-                element.setPropertyValue("fv:custom_order", nativeTitle.toString());
-            }
-            element.getCoreSession().saveDocument(element);
-        }
+        title = title.substring(1);
+      }
     }
 
-    protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
-        for (DocumentModel doc : elements) {
-            computeNativeOrderTranslation(chars, doc);
-        }
+    // In the case that the sorting methods are the same,
+    // we don't want to trigger subsequent events that are listening for a save.
+    // Just keep the sorting order on the document as it was. No need to save.
+    if (!nativeTitle.toString().equals(originalCustomSort)) {
+      if (!element.isImmutable()) {
+        element.setPropertyValue("fv:custom_order", nativeTitle.toString());
+      }
+      element.getCoreSession().saveDocument(element);
     }
+  }
 
-    private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars, String charValue,
-                                       String ucCharValue) {
-
-        if ((title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
-            boolean incorrect;
-
-            // Grab all the characters that begin with the current character (for example, if "current character" is
-            // iterating on "a", it will return "aa" if it is also in the alphabet)
-            List<String> charsStartingWithCurrentCharLower =
-                    fvChars.stream().filter(character -> character != null && character.startsWith(charValue)).collect(Collectors.toList());
-            // Go through the characters that begin with the "current character", and ensure that the title does not
-            // start with any character in that list (save for the "current character" that we're iterating on).
-            incorrect =
-                    charsStartingWithCurrentCharLower.stream().anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
-            // If there is no match and the character has an uppercase equivalent, we want to repeat the process
-            // above with uppercase character. We also check the lowercase in an example of yZ is the "uppercase" of yz.
-            if (ucCharValue != null && !incorrect) {
-                List<String> charsStartingWithCurrentCharUpper =
-                        upperChars.stream().filter(character -> {
-                            if (character == null) {
-                                return false;
-                            }
-                            return character.startsWith(ucCharValue) || character.startsWith(charValue);
-                        }).collect(Collectors.toList());
-                incorrect =
-                        charsStartingWithCurrentCharUpper.stream().anyMatch(uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
-            }
-
-            // If it is the right character this value, "incorrect" will be false.
-            return !incorrect;
-        }
-        return false;
+  protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
+    for (DocumentModel doc : elements) {
+      computeNativeOrderTranslation(chars, doc);
     }
+  }
+
+  private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars,
+      String charValue,
+      String ucCharValue) {
+
+    if ((title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
+      boolean incorrect;
+
+      // Grab all the characters that begin with the current character (for example, if "current character" is
+      // iterating on "a", it will return "aa" if it is also in the alphabet)
+      List<String> charsStartingWithCurrentCharLower =
+          fvChars.stream().filter(character -> character != null && character.startsWith(charValue))
+              .collect(Collectors.toList());
+      // Go through the characters that begin with the "current character", and ensure that the title does not
+      // start with any character in that list (save for the "current character" that we're iterating on).
+      incorrect =
+          charsStartingWithCurrentCharLower.stream()
+              .anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
+      // If there is no match and the character has an uppercase equivalent, we want to repeat the process
+      // above with uppercase character. We also check the lowercase in an example of yZ is the "uppercase" of yz.
+      if (ucCharValue != null && !incorrect) {
+        List<String> charsStartingWithCurrentCharUpper =
+            upperChars.stream().filter(character -> {
+              if (character == null) {
+                return false;
+              }
+              return character.startsWith(ucCharValue) || character.startsWith(charValue);
+            }).collect(Collectors.toList());
+        incorrect =
+            charsStartingWithCurrentCharUpper.stream().anyMatch(
+                uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
+      }
+
+      // If it is the right character this value, "incorrect" will be false.
+      return !incorrect;
+    }
+    return false;
+  }
 }

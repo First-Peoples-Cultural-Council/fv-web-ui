@@ -4,7 +4,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.3.0</version>
+    <version>3.3.1-RC</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>FirstVoicesPublisher</name>
@@ -37,6 +37,11 @@
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-schema</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.javers</groupId>
+      <artifactId>javers-core</artifactId>
+      <version>5.8.12</version>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>

@@ -1,7 +1,7 @@
 import 'cypress-testing-library/add-commands'
 describe('Portal List Dialect Test', () => {
   it('Toggles between new and old view', () => {
-    cy.visit('http://127.0.0.1:3001/home')
+    cy.visit('/home')
     cy.wait(500)
     cy.getByText('EXPLORE LANGUAGES').click()
     cy.wait(500)
