@@ -1,4 +1,25 @@
 const copy = {
+  title: {
+    th: 'Category Title',
+  },
+  description: {
+    th: 'Description',
+  },
+  batch: {
+    select: 'Select all',
+    deselect: 'Deselect all',
+    isConfirmOrDenyTitle: 'Warning: Deleting a category will also delete any of its subcategories!',
+    btnInitiate: 'Delete selected categories',
+    btnDeny: 'No, do not delete the selected categories',
+    btnConfirm: 'Yes, delete the selected categories',
+  },
+  actions: {
+    th: '',
+    edit: 'Edit',
+  },
+  parentCategory: {
+    th: 'Parent Category',
+  },
   detail: {
     isTrashed: 'This category has been deleted',
     description: 'Category description',
@@ -36,7 +57,7 @@ const copy = {
     btnInitiate: 'Delete',
     parent: 'Parent category',
     description: 'Category description',
-    isConfirmOrDenyTitle: 'Delete category?',
+    isConfirmOrDenyTitle: 'Warning: Deleting a category will also delete any of its subcategories!',
     isTrashed: 'This category has been deleted and can not be edited',
     name: 'Category name *',
     requiredNotice: 'All fields with an asterisk are required',

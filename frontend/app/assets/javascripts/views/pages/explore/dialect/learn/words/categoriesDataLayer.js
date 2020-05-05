@@ -43,12 +43,21 @@ class CategoriesDataLayer extends Component {
   async componentDidMount() {
     this._isMounted = true
     const { routeParams } = this.props
+    let categoryType = 'Categories'
+    // Change category type to Phrasebooks if 'fetchPhraseBooks' is passed in as a prop
+    if (this.props.fetchPhraseBooks) {
+      categoryType = 'Phrase Books'
+    }
     // Fetch dialect specific categories
-    await ProviderHelpers.fetchIfMissing(
-      `/api/v1/path/${routeParams.dialect_path}/Categories/@children`,
-      this.props.fetchCategories,
-      this.props.computeCategories
-    )
+    if (this.props.fetchLatest) {
+      await this.props.fetchCategories(`/api/v1/path/${this.props.routeParams.dialect_path}/${categoryType}/@children`)
+    } else {
+      await ProviderHelpers.fetchIfMissing(
+        `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`,
+        this.props.fetchCategories,
+        this.props.computeCategories
+      )
+    }
     // Fetch Shared Categories
     await ProviderHelpers.fetchIfMissing(
       `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`,
@@ -57,7 +66,7 @@ class CategoriesDataLayer extends Component {
     )
     const categories = ProviderHelpers.getEntry(
       this.props.computeCategories,
-      `/api/v1/path/${routeParams.dialect_path}/Categories/@children`
+      `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`
     )
     const sharedCategories = ProviderHelpers.getEntry(
       this.props.computeSharedCategories,
@@ -66,32 +75,38 @@ class CategoriesDataLayer extends Component {
     const categoriesEntries = selectn('response.entries', categories)
 
     if (this._isMounted) {
-      this.setCategories(categoriesEntries, sharedCategories)
+      this.setCategories(categories, categoriesEntries, sharedCategories)
     }
   }
 
   render() {
-    return this.props.children({ categoriesData: this.state.categoriesData })
+    return this.props.children({
+      categoriesData: this.state.categoriesData,
+      categoriesRawData: this.state.categoriesRawData,
+    })
   }
 
   componentWillUnmount() {
     this._isMounted = false
   }
 
-  setCategories = (categoriesEntries, sharedCategories) => {
+  setCategories = (categories, categoriesEntries, sharedCategories) => {
     this.setState({
       categoriesData:
         categoriesEntries && categoriesEntries.length > 0
           ? categoriesEntries
           : selectn('response.entries', sharedCategories),
+      categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
     })
   }
 }
 
 // PROPTYPES
-const { array, func, object, string } = PropTypes
+const { array, func, object, string, bool } = PropTypes
 CategoriesDataLayer.propTypes = {
   routeParams: object.isRequired,
+  fetchLatest: bool,
+  fetchPhraseBooks: bool,
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   computeSharedCategories: object.isRequired,

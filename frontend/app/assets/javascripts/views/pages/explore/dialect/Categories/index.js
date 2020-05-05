@@ -66,7 +66,9 @@ export const Categories = (props) => {
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
   const copy = useGetCopy(async () => {
-    const success = await import(/* webpackChunkName: "CategoriesInternationalization" */ './internationalization')
+    const success = await import(
+      /* webpackChunkName: "CategoryInternationalization" */ 'views/pages/explore/dialect/Category/internationalization.js'
+    )
     return success.default
   })
 
@@ -166,10 +168,10 @@ export const Categories = (props) => {
                 <ConfirmationDelete
                   reverse
                   compact
-                  copyIsConfirmOrDenyTitle={copy.isConfirmOrDenyTitle}
-                  copyBtnInitiate={copy.btnInitiate}
-                  copyBtnDeny={copy.btnDeny}
-                  copyBtnConfirm={copy.btnConfirm}
+                  copyIsConfirmOrDenyTitle={copy.edit.isConfirmOrDenyTitle}
+                  copyBtnInitiate={copy.edit.btnInitiate}
+                  copyBtnDeny={copy.edit.btnDeny}
+                  copyBtnConfirm={copy.edit.btnConfirm}
                   confirmationAction={() => {
                     props.deleteCategory(uid)
                     setDeletedUids([...deletedUids, uid])
@@ -219,12 +221,12 @@ export const Categories = (props) => {
         <DictionaryListWithPagination
           hasViewModeButtons={false}
           // Listview: Batch
-          batchTitleSelect="Deselect all"
-          batchTitleDeselect="Select all"
-          batchFooterIsConfirmOrDenyTitle="Delete selected categories?"
-          batchFooterBtnInitiate="Delete"
-          batchFooterBtnDeny="No, do not delete the selected categories"
-          batchFooterBtnConfirm="Yes, delete the selected categories"
+          batchTitleSelect={copy.batch.deselect}
+          batchTitleDeselect={copy.batch.select}
+          batchFooterIsConfirmOrDenyTitle={copy.batch.isConfirmOrDenyTitle}
+          batchFooterBtnInitiate={copy.edit.btnInitiate}
+          batchFooterBtnDeny={copy.batch.btnDeny}
+          batchFooterBtnConfirm={copy.batch.btnConfirm}
           batchConfirmationAction={(uids) => {
             // Delete all items in selected
             uids.forEach((uid) => {
