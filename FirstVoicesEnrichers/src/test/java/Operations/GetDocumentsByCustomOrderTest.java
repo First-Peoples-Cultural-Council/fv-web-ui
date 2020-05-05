@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
@@ -39,8 +40,12 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
  */
 public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTest {
 
-  @Test
-  public void GetDocumentsByCustomOrderTest() throws OperationException {
+  private Map<String, String> params = new HashMap<>();
+
+
+  @Before
+  public void setup() {
+    super.setUp();
 
     String[] letterArray = {"a", "aa", "ae", "b", "c", "d", "e", "'"};
     int[] wordOrder = {1, 3, 5, 8, 58, 61, 1, 91};
@@ -59,17 +64,20 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
         "la'oo'a'a"};
 
     createWordsorPhrases(orderedWords, "FVWord");
-    NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc);
 
-    OperationContext ctx = new OperationContext(session);
-
-    Map<String, String> params = new HashMap<>();
     String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + dictionaryDoc.getRef()
         + "' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ";
     params.put("query", query);
     params.put("dialectId", dialectDoc.getId());
     params.put("letter", "a");
+  }
+
+  @Test
+  public void GetDocumentsByCustomOrderTest() throws OperationException {
+    NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc);
+    OperationContext ctx = new OperationContext(session);
+
     DocumentModelList documentModelList = (DocumentModelList) automationService
         .run(ctx, GetDocumentsByCustomOrder.ID, params);
 
@@ -79,6 +87,21 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     documentModelList.forEach(doc -> {
       Assert.assertTrue(aWords.contains(doc.getPropertyValue("dc:title")));
     });
+
+  }
+
+  @Test
+  public void GetDocumentsByCustomOrderWithoutComptuedWordsTest() throws OperationException {
+    OperationContext ctx = new OperationContext(session);
+    DocumentModelList documentModelList = (DocumentModelList) automationService
+        .run(ctx, GetDocumentsByCustomOrder.ID, params);
+
+    Assert.assertTrue(documentModelList.size() == 0);
+
+    DocumentModel documentModel = session.getDocument(alphabetDoc.getRef());
+
+    Assert.assertTrue(
+        documentModel.getPropertyValue("fv-alphabet:update_confusables_required").equals(true));
 
   }
 
