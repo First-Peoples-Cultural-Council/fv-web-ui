@@ -112,7 +112,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const newState = {
       characters,
-      categories,
       dialectId: selectn(
         'response.contextParameters.ancestry.dialect.uid',
         ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
@@ -202,6 +201,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
     const wordListView =
       selectn('response.uid', computeDocument) && this.state.dialectId ? (
