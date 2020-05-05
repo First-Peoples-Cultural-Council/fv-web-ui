@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -330,11 +331,16 @@ public class EnricherUtils {
       // This is a good opportunity to queue a worker that will recalculate this in the future.
       // But for now let's try to just try to send over a "~ + letter":
       // TODO: Implement this in a way that ensures we always get the correct response.
-      DocumentModel dialectDoc = session.getDocument(new IdRef(dialect));
-      DocumentModel alphabet = session
-          .getDocument(new PathRef(dialectDoc.getPathAsString() + "/Alphabet"));
-      alphabet.setPropertyValue("fv-alphabet:update_confusables_required", true);
-      session.saveDocument(alphabet);
+
+      CoreInstance.doPrivileged(session, s -> {
+        DocumentModel dialectDoc = s.getDocument(new IdRef(dialect));
+        DocumentModel alphabet = s
+            .getDocument(new PathRef(dialectDoc.getPathAsString() + "/Alphabet"));
+        if (alphabet.getPropertyValue("fv-alphabet:update_confusables_required").equals(false)) {
+          alphabet.setPropertyValue("fv-alphabet:update_confusables_required", true);
+          s.saveDocument(alphabet);
+        }
+      });
       return NativeOrderComputeServiceImpl.NO_ORDER_STARTING_CHARACTER + letter;
     } else {
       return customOrder;
