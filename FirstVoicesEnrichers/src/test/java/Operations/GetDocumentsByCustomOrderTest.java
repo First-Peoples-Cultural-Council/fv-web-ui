@@ -40,7 +40,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
  */
 public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTest {
 
-  private Map<String, String> params = new HashMap<>();
+  private Map<String, String> params;
 
 
   @Before
@@ -67,6 +67,8 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
 
     String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + dictionaryDoc.getRef()
         + "' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ";
+
+    params = new HashMap<>();
     params.put("query", query);
     params.put("dialectId", dialectDoc.getId());
     params.put("letter", "a");
