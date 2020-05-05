@@ -180,7 +180,7 @@ docker-compose -f docker-compose.yml -f frontend-docker-compose.yml -f cypress-d
 
 ### Postgres
 
-You can access the Postgres database, run `docker exec -it <CONTAINER ID> psql -U nuxeo_admin`, where `<CONTAINER ID>` is the container id of postgres. Run `docker ps` to list running containers.
+You can access the Postgres database, run `docker exec -it <CONTAINER ID> psql -U nuxeo_admin nuxeo`, where `<CONTAINER ID>` is the container id of postgres. Run `docker ps` to list running containers.
 
 ## Development Procedures
 
