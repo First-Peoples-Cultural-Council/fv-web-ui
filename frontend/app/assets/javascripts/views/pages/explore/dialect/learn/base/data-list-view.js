@@ -87,26 +87,31 @@ export default class DataListView extends Component {
   componentDidUpdate(prevProps) {
     const _sortOrder = selectn(['navigationRouteSearch', 'sortOrder'], this.props) || this.props.DEFAULT_SORT_TYPE
     const _sortBy = selectn(['navigationRouteSearch', 'sortBy'], this.props) || this.props.DEFAULT_SORT_COL
+    const letterChanged = this.props.routeParams.letter !== prevProps.routeParams.letter
     if (this.props.controlViaURL) {
       if (
         this.props.routeParams.page !== prevProps.routeParams.page ||
-        this.props.routeParams.pageSize !== prevProps.routeParams.pageSize
+        this.props.routeParams.pageSize !== prevProps.routeParams.pageSize ||
+        letterChanged
       ) {
         this._fetchListViewData(this.props, this.props.DEFAULT_PAGE, this.props.DEFAULT_PAGE_SIZE, _sortOrder, _sortBy)
         this._resetPagination(this.props)
+        return
       }
-    } else {
-      if (
-        routeHasChanged({
-          prevWindowPath: prevProps.windowPath,
-          curWindowPath: this.props.windowPath,
-          prevRouteParams: prevProps.routeParams,
-          curRouteParams: this.props.routeParams,
-        })
-      ) {
-        // NOTE: fetchData also calls _fetchListViewData!
-        this.fetchData(this.props)
-      }
+    }
+
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      }) ||
+      letterChanged
+    ) {
+      // NOTE: fetchData also calls _fetchListViewData!
+      this.fetchData(this.props)
+      return
     }
 
     if (this.props.routeParams.area !== prevProps.routeParams.area) {
@@ -115,8 +120,9 @@ export default class DataListView extends Component {
     }
 
     if (
-      prevProps.filter.has('currentAppliedFilter') &&
-      !prevProps.filter.get('currentAppliedFilter').equals(this.props.filter.get('currentAppliedFilter'))
+      (prevProps.filter.has('currentAppliedFilter') &&
+        !prevProps.filter.get('currentAppliedFilter').equals(this.props.filter.get('currentAppliedFilter'))) ||
+      letterChanged
     ) {
       // TODO: should we use _sortOrder & _sortBy here as well?
       this._fetchListViewData(

@@ -252,7 +252,6 @@ export default class DocumentOperations {
    */
   static getDocument(pathOrUid = '', type, headers = {} /*params = {}*/) {
     const properties = BaseOperations.getProperties()
-
     return new Promise((resolve, reject) => {
       properties.client
         .repository()

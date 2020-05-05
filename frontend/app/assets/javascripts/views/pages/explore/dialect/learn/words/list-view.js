@@ -51,77 +51,7 @@ import {
 /**
  * List view for words
  */
-const { array, bool, func, number, object, string } = PropTypes
 class WordsListView extends DataListView {
-  static propTypes = {
-    action: func,
-    controlViaURL: bool,
-    data: string,
-    DEFAULT_PAGE_SIZE: number,
-    DEFAULT_PAGE: number,
-    DEFAULT_SORT_COL: string,
-    DEFAULT_SORT_TYPE: string,
-    dialect: object,
-    disableClickItem: bool,
-    DISABLED_SORT_COLS: array,
-    disablePageSize: bool,
-    ENABLED_COLS: array,
-    filter: object,
-    flashcard: bool,
-    flashcardTitle: string,
-    gridListView: bool,
-    pageProperties: object,
-    parentID: string,
-    routeParams: object.isRequired,
-    // Search
-    handleSearch: func,
-    resetSearch: func,
-    hasSearch: bool,
-    hasViewModeButtons: bool,
-    // Export
-    hasExportDialect: bool,
-    exportDialectExportElement: string,
-    exportDialectColumns: string,
-    exportDialectLabel: string,
-    exportDialectQuery: string,
-    // REDUX: reducers/state
-    computeDialect2: object.isRequired,
-    computeLogin: object.isRequired,
-    computeWords: object.isRequired,
-    properties: object.isRequired,
-    splitWindowPath: array.isRequired,
-    windowPath: string.isRequired,
-    // REDUX: actions/dispatch/func
-    fetchDialect2: func.isRequired,
-    fetchWords: func.isRequired,
-    pushWindowPath: func.isRequired,
-  }
-  static defaultProps = {
-    controlViaURL: false,
-    DEFAULT_LANGUAGE: 'english',
-    DEFAULT_PAGE_SIZE: 10,
-    DEFAULT_PAGE: 1,
-    DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
-    DEFAULT_SORT_TYPE: 'asc',
-    dialect: null,
-    disableClickItem: true,
-    DISABLED_SORT_COLS: ['state', 'fv-word:categories', 'related_audio', 'related_pictures', 'dc:modified'],
-    disablePageSize: false,
-    ENABLED_COLS: [
-      'fv-word:categories',
-      'fv-word:part_of_speech',
-      'fv-word:pronunciation',
-      'fv:definitions',
-      'related_audio',
-      'related_pictures',
-      'title',
-    ],
-    filter: new Map(),
-    flashcard: false,
-    flashcardTitle: '',
-    gridListView: false,
-  }
-
   constructor(props, context) {
     super(props, context)
 
@@ -318,7 +248,6 @@ class WordsListView extends DataListView {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
     const searchObj = getSearchObject()
-
     this._fetchListViewData(
       newProps,
       newProps.DEFAULT_PAGE,
@@ -349,11 +278,18 @@ class WordsListView extends DataListView {
       currentAppliedFilter = Object.values(props.filter.get('currentAppliedFilter').toJS()).join('')
     }
 
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+    let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${startsWithQuery}`
+    const { computeSearchDialect, routeParams } = this.props
+    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+
+    if (letter) {
+      nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
+    } else {
+      // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+      nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
+    }
 
     // NOTE: this prevents double requests due to DataListView re-calling _fetchListViewData
     if (this.state.nql !== nql) {
@@ -480,9 +416,81 @@ class WordsListView extends DataListView {
   }
 }
 
+// PropTypes
+const { array, bool, func, number, object, string } = PropTypes
+WordsListView.propTypes = {
+  action: func,
+  controlViaURL: bool,
+  data: string,
+  DEFAULT_PAGE_SIZE: number,
+  DEFAULT_PAGE: number,
+  DEFAULT_SORT_COL: string,
+  DEFAULT_SORT_TYPE: string,
+  dialect: object,
+  disableClickItem: bool,
+  DISABLED_SORT_COLS: array,
+  disablePageSize: bool,
+  ENABLED_COLS: array,
+  filter: object,
+  flashcard: bool,
+  flashcardTitle: string,
+  gridListView: bool,
+  pageProperties: object,
+  parentID: string,
+  dialectID: string,
+  routeParams: object.isRequired,
+  // Search
+  handleSearch: func,
+  resetSearch: func,
+  hasSearch: bool,
+  hasViewModeButtons: bool,
+  // Export
+  hasExportDialect: bool,
+  exportDialectExportElement: string,
+  exportDialectColumns: string,
+  exportDialectLabel: string,
+  exportDialectQuery: string,
+  // REDUX: reducers/state
+  computeDialect2: object.isRequired,
+  computeLogin: object.isRequired,
+  computeWords: object.isRequired,
+  properties: object.isRequired,
+  splitWindowPath: array.isRequired,
+  windowPath: string.isRequired,
+  // REDUX: actions/dispatch/func
+  fetchDialect2: func.isRequired,
+  fetchWords: func.isRequired,
+  pushWindowPath: func.isRequired,
+}
+WordsListView.defaultProps = {
+  controlViaURL: false,
+  DEFAULT_LANGUAGE: 'english',
+  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_PAGE: 1,
+  DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
+  DEFAULT_SORT_TYPE: 'asc',
+  dialect: null,
+  disableClickItem: true,
+  DISABLED_SORT_COLS: ['state', 'fv-word:categories', 'related_audio', 'related_pictures', 'dc:modified'],
+  disablePageSize: false,
+  ENABLED_COLS: [
+    'fv-word:categories',
+    'fv-word:part_of_speech',
+    'fv-word:pronunciation',
+    'fv:definitions',
+    'related_audio',
+    'related_pictures',
+    'title',
+  ],
+  filter: new Map(),
+  flashcard: false,
+  flashcardTitle: '',
+  gridListView: false,
+}
+
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale, searchDialect } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
@@ -490,16 +498,18 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
+  const { computeSearchDialect } = searchDialect
 
   return {
     computeDialect2,
     computeLogin,
+    computeSearchDialect,
     computeWords,
-    properties,
+    intl: intlService,
     navigationRouteSearch: route.search,
+    properties,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService,
   }
 }
 

@@ -1,6 +1,31 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.services;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
@@ -9,12 +34,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.runtime.api.Framework;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
 
@@ -86,7 +105,11 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         List<String> excludedSchemasList = Arrays.asList(excludedSchemas);
 
         // The follow properties shouldn't be considered in a diff (they are not user-controlled)
-        String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors", "dc:lastContributor", "fv-alphabet:update_confusables_required", "fv-phrase:update_confusables_required", "fv-word:update_confusables_required", "fv-alphabet:custom_order_recompute_required"};
+        String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors",
+            "dc:lastContributor", "fv-alphabet:update_confusables_required",
+            "fv-phrase:update_confusables_required", "fv-word:update_confusables_required",
+            "fv-alphabet:custom_order_recompute_required", "fvcharacter:alphabet_order",
+            "fv:custom_order"};
         List<String> excludedPropertiesList = Arrays.asList(excludedProperties);
 
         Map<String, Object> relevantProperties = new HashMap<>();
@@ -108,7 +131,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     // Helper method to convert certain types that are hard to compare (e.g. String list) to comparable types
     private Object convertDiffFields(Object field) {
         if (field == null) {
-            return new String("");
+            return "";
         }
 
         if (field instanceof String[]) {

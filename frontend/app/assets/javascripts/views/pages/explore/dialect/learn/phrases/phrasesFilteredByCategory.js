@@ -47,6 +47,7 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
+import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
@@ -155,6 +156,10 @@ export class PhrasesFilteredByCategory extends Component {
         }
       }
     )
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {
@@ -439,33 +444,40 @@ export class PhrasesFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeDocument, navigationRouteSearch, routeParams } = this.props
+    const { computeSearchDialect, computeDocument, navigationRouteSearch, routeParams } = this.props
+    const { phraseBook, area } = routeParams
 
     let currentAppliedFilter = ''
-    if (routeParams.phraseBook) {
+    if (phraseBook) {
       // Private
-      if (routeParams.area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
+      if (area === 'Workspaces') {
+        currentAppliedFilter = ` AND fv-phrase:phrase_books/* IN ("${phraseBook}")`
       }
       // Public
-      if (routeParams.area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.phraseBook}")`
+      if (area === 'sections') {
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${phraseBook}")`
       }
     }
-
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
 
     const searchObj = getSearchObject()
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
 
-    const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const uid = useIdOrPathFallback({ id: selectn('response.uid', computedDocument), routeParams })
+    const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+    const uid = useIdOrPathFallback({ id: selectn('response.uid', extractComputeDocument), routeParams })
+    const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
 
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
+    let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+
+    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    if (letter) {
+      nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
+    } else {
+      // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+      nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
+    }
 
     this.props.fetchPhrases(uid, nql)
   }

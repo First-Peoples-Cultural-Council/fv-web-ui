@@ -83,7 +83,7 @@ echo 'Building fv-web-ui (this make take a few minutes)'
 cd ..
 if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
     echo "skipping tests"
-    mvn clean install -DskipTests -Pbackend
+    mvn clean install -DskipTests -Pbackend -q
 else
     mvn clean install -Pbackend
 fi

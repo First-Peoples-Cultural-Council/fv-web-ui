@@ -1,19 +1,21 @@
 /*
  *
- * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * /
  */
 package ca.firstvoices.nativeorder.services;
 
@@ -22,6 +24,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -33,16 +36,40 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class NativeOrderComputeServiceImpl extends AbstractService implements
     NativeOrderComputeService {
 
+  public static final int BASE = 34;
+  public static final String NO_ORDER_STARTING_CHARACTER = "~";
+  public static final String SPACE_CHARACTER = "!";
+
   private DocumentModel[] loadCharacters(DocumentModel dialect) {
     DocumentModelList chars = dialect.getCoreSession()
         .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    updateCustomOrderCharacters(dialect.getCoreSession(), chars);
     return chars
         .stream()
         .filter(character -> !character.isTrashed()
             && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-        .sorted(
-            Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+        .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
         .toArray(DocumentModel[]::new);
+  }
+
+  @Override
+  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
+    chars.forEach(c ->
+        updateCustomOrderForCharacter(session, c));
+  }
+
+  @Override
+  public String updateCustomOrderForCharacter(CoreSession session, DocumentModel c) {
+    Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
+    String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
+    String updatedCustomOrder = alphabetOrder == null ?
+        NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
+        : "" + ((char) (BASE + alphabetOrder));
+    if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
+      c.setPropertyValue("fv:custom_order", updatedCustomOrder);
+      session.saveDocument(c);
+    }
+    return (String) c.getPropertyValue("fv:custom_order");
   }
 
   /* (non-Javadoc)
@@ -104,36 +131,30 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
 
     while (title.length() > 0) {
-      boolean found = false;
-      // Evaluate characters in reverse to find 'double' chars (e.g. 'aa' vs. 'a') before single ones
-      int i;
+      ArrayUtils.reverse(chars);
+      String finalTitle = title;
+      DocumentModel characterDoc = Arrays.stream(chars).filter(
+          charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
+              (String) charDoc.getPropertyValue("dc:title"),
+              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character")))
+          .findFirst()
+          .orElse(null);
 
-      for (i = chars.length - 1; i >= 0; --i) {
-        DocumentModel charDoc = chars[i];
-        String charValue = (String) charDoc.getPropertyValue("dc:title");
-        String ucCharValue = (String) charDoc.getPropertyValue("fvcharacter:upper_case_character");
-
-        if (isCorrectCharacter(title, fvChars, upperChars, charValue, ucCharValue)) {
-          nativeTitle
-              .append((char) (34 + (Long) charDoc.getPropertyValue("fvcharacter:alphabet_order")));
-          title = title.substring(charValue.length());
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
+      if (characterDoc != null) {
+        String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
+        String computedCharacterTitle = (String) characterDoc.getPropertyValue("dc:title");
+        nativeTitle.append(computedCharacterOrder);
+        title = title.substring(computedCharacterTitle.length());
+      } else {
         if (" ".equals(title.substring(0, 1))) {
-          nativeTitle.append("!");
+          nativeTitle.append(SPACE_CHARACTER);
         } else {
-          nativeTitle.append("~").append(title, 0, 1);
+          nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
         }
         title = title.substring(1);
       }
     }
 
-    // In the case that the sorting methods are the same,
-    // we don't want to trigger subsequent events that are listening for a save.
-    // Just keep the sorting order on the document as it was. No need to save.
     if (!nativeTitle.toString().equals(originalCustomSort)) {
       if (!element.isImmutable()) {
         element.setPropertyValue("fv:custom_order", nativeTitle.toString());

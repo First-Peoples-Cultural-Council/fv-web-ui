@@ -29,7 +29,7 @@ import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
-
+import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -126,6 +126,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     const newState = {
       characters,
       phraseBooks,
+      dialectId: selectn(
+        'response.contextParameters.ancestry.dialect.uid',
+        ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
+      ),
     }
 
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
@@ -139,6 +143,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         this.handleAlphabetClick(letter)
       }
     })
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {
@@ -215,45 +223,47 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       [dialect]
     )
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
-    const phraseListView = selectn('response.uid', computeDocument) ? (
-      <PhraseListView
-        controlViaURL
-        DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
-        DEFAULT_PAGE={DEFAULT_PAGE}
-        disableClickItem={false}
-        filter={this.state.filterInfo}
-        flashcard={this.state.flashcardMode}
-        flashcardTitle={pageTitle}
-        onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
-        parentID={selectn('response.uid', computeDocument)}
-        routeParams={this.props.routeParams}
-        // Search:
-        handleSearch={this.handleSearch}
-        resetSearch={this.resetSearch}
-        hasSearch
-        searchUi={[
-          {
-            defaultChecked: true,
-            idName: 'searchByTitle',
-            labelText: 'Phrase',
-          },
-          {
-            defaultChecked: true,
-            idName: 'searchByDefinitions',
-            labelText: 'Definitions',
-          },
-          {
-            idName: 'searchByCulturalNotes',
-            labelText: 'Cultural notes',
-          },
-        ]}
-        searchByMode={searchByMode}
-        rowClickHandler={this.props.rowClickHandler}
-        hasSorting={this.props.hasSorting}
-        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-        dictionaryListViewMode={this.props.listView.mode}
-      />
-    ) : null
+    const phraseListView =
+      selectn('response.uid', computeDocument) && this.state.dialectId ? (
+        <PhraseListView
+          controlViaURL
+          DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+          DEFAULT_PAGE={DEFAULT_PAGE}
+          disableClickItem={false}
+          filter={this.state.filterInfo}
+          flashcard={this.state.flashcardMode}
+          flashcardTitle={pageTitle}
+          onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
+          parentID={selectn('response.uid', computeDocument)}
+          dialectID={this.state.dialectId}
+          routeParams={this.props.routeParams}
+          // Search:
+          handleSearch={this.handleSearch}
+          resetSearch={this.resetSearch}
+          hasSearch
+          searchUi={[
+            {
+              defaultChecked: true,
+              idName: 'searchByTitle',
+              labelText: 'Phrase',
+            },
+            {
+              defaultChecked: true,
+              idName: 'searchByDefinitions',
+              labelText: 'Definitions',
+            },
+            {
+              idName: 'searchByCulturalNotes',
+              labelText: 'Cultural notes',
+            },
+          ]}
+          searchByMode={searchByMode}
+          rowClickHandler={this.props.rowClickHandler}
+          hasSorting={this.props.hasSorting}
+          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+          dictionaryListViewMode={this.props.listView.mode}
+        />
+      ) : null
 
     // Render kids view
     if (isKidsTheme) {
@@ -388,7 +398,9 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
     this.setState({ filterInfo: newFilter }, () => {
-      this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+      if (updateUrl && !href) {
+        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+      }
       // See about updating url
       if (href && updateUrl) {
         NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
@@ -432,7 +444,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       searchTerm: '',
     })
 
-    this.changeFilter(href, updateHistory)
+    await this.changeFilter(href, updateHistory)
   }
 
   handlePhraseBookClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {

@@ -73,6 +73,7 @@ export class PhrasesListView extends DataListView {
     gridCols: number,
     gridListView: bool,
     parentID: string,
+    dialectID: string,
     onPagePropertiesChange: func,
     pageProperties: object,
     routeParams: object.isRequired,
@@ -419,10 +420,18 @@ export class PhrasesListView extends DataListView {
       currentAppliedFilter = Object.values(props.filter.get('currentAppliedFilter').toJS()).join('')
     }
 
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${startsWithQuery}`
+    let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+
+    const { computeSearchDialect, routeParams } = this.props
+    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+
+    if (letter) {
+      nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
+    } else {
+      // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+      nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
+    }
 
     props.fetchPhrases(this._getPathOrParentID(props), nql)
   }
@@ -446,7 +455,7 @@ export class PhrasesListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath, locale } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, searchDialect, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
@@ -454,16 +463,17 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computePhrases } = fvPhrase
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
-
+  const { computeSearchDialect } = searchDialect
   return {
     computeDialect2,
     computeLogin,
     computePhrases,
+    computeSearchDialect,
+    intl: intlService,
     navigationRouteSearch: route.search,
     properties,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService,
   }
 }
 
