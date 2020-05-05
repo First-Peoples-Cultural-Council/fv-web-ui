@@ -223,8 +223,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       [dialect]
     )
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
+    const dialectId = selectn(
+      'response.contextParameters.ancestry.dialect.uid',
+      ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
+    )
     const phraseListView =
-      selectn('response.uid', computeDocument) && this.state.dialectId ? (
+      selectn('response.uid', computeDocument) && dialectId ? (
         <PhraseListView
           controlViaURL
           DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
@@ -235,7 +239,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           flashcardTitle={pageTitle}
           onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
           parentID={selectn('response.uid', computeDocument)}
-          dialectID={this.state.dialectId}
+          dialectID={dialectId}
           routeParams={this.props.routeParams}
           // Search:
           handleSearch={this.handleSearch}
