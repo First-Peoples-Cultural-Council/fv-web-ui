@@ -36,7 +36,7 @@ public class GetUnpublishedChanges {
         session = input.getCoreSession();
         Diff diff = service.getUnpublishedChanges(session, input);
 
-        if (!diff.hasChanges()) {
+        if (diff == null || !diff.hasChanges()) {
             return new StringBlob("", "application/json");
         }
 
