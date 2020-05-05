@@ -97,16 +97,16 @@ public abstract class AbstractFirstVoicesEnricherTest {
     domain = createDocument(session,
         session.createDocumentModel("/", "FV", "Domain"));
     langFamilyDoc = createDocument(session,
-        session.createDocumentModel("/FV", "Family", "FVLanguageFamily"));
+        session.createDocumentModel(domain.getPathAsString(), "Family", "FVLanguageFamily"));
     assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
     languageDoc = createDocument(session,
-        session.createDocumentModel("/FV/Family", "Language", "FVLanguage"));
+        session.createDocumentModel(langFamilyDoc.getPathAsString(), "Language", "FVLanguage"));
     assertNotNull("Should have a valid FVLanguage", languageDoc);
     dialectDoc = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel(languageDoc.getPathAsString(), "Dialect", "FVDialect"));
     assertNotNull("Should have a valid FVDialect", dialectDoc);
     dictionaryDoc = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+        session.createDocumentModel(dialectDoc.getPathAsString(), "Dictionary", "FVDictionary"));
     assertNotNull("Should have a valid FVDictionary", dictionaryDoc);
     alphabetDoc = createDocument(session,
         session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));

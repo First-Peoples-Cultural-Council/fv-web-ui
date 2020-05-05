@@ -65,7 +65,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     OperationContext ctx = new OperationContext(session);
 
     Map<String, String> params = new HashMap<>();
-    String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + alphabetDoc.getRef()
+    String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + dictionaryDoc.getRef()
         + "' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ";
     params.put("query", query);
     params.put("dialectId", dialectDoc.getId());
