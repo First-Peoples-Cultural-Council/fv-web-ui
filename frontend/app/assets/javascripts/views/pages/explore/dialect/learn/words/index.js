@@ -112,10 +112,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
     const newState = {
       characters,
-      dialectId: selectn(
-        'response.contextParameters.ancestry.dialect.uid',
-        ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
-      ),
     }
 
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
@@ -203,8 +199,12 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
+    const dialectId = selectn(
+      'response.contextParameters.ancestry.dialect.uid',
+      ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
+    )
     const wordListView =
-      selectn('response.uid', computeDocument) && this.state.dialectId ? (
+      selectn('response.uid', computeDocument) && dialectId ? (
         <WordListView
           controlViaURL
           DEFAULT_PAGE={DEFAULT_PAGE}
@@ -216,7 +216,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           flashcard={this.state.flashcardMode}
           flashcardTitle={pageTitle}
           parentID={selectn('response.uid', computeDocument)}
-          dialectID={this.state.dialectId}
+          dialectID={dialectId}
           routeParams={this.props.routeParams}
           // Search:
           handleSearch={this.handleSearch}
