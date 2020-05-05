@@ -108,7 +108,8 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
         String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors",
             "dc:lastContributor", "fv-alphabet:update_confusables_required",
             "fv-phrase:update_confusables_required", "fv-word:update_confusables_required",
-            "fv-alphabet:custom_order_recompute_required", "fvcharacter:alphabet_order"};
+            "fv-alphabet:custom_order_recompute_required", "fvcharacter:alphabet_order",
+            "fv:custom_order"};
         List<String> excludedPropertiesList = Arrays.asList(excludedProperties);
 
         Map<String, Object> relevantProperties = new HashMap<>();
