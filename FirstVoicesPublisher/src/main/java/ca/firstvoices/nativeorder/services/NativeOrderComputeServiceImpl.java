@@ -36,6 +36,10 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class NativeOrderComputeServiceImpl extends AbstractService implements
     NativeOrderComputeService {
 
+  public static final int BASE = 34;
+  public static final String NO_ORDER_STARTING_CHARACTER = "~";
+  public static final String SPACE_CHARACTER = "!";
+
   private DocumentModel[] loadCharacters(DocumentModel dialect) {
     DocumentModelList chars = dialect.getCoreSession()
         .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
@@ -50,17 +54,22 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
   @Override
   public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
-    chars.forEach(c -> {
-      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
-      String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
-      String updatedCustomOrder = alphabetOrder == null ?
-          "~" + c.getPropertyValue("dc:title")
-          : "" + ((char) (34 + alphabetOrder));
-      if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
-        c.setPropertyValue("fv:custom_order", updatedCustomOrder);
-        session.saveDocument(c);
-      }
-    });
+    chars.forEach(c ->
+        updateCustomOrderForCharacter(session, c));
+  }
+
+  @Override
+  public String updateCustomOrderForCharacter(CoreSession session, DocumentModel c) {
+    Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
+    String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
+    String updatedCustomOrder = alphabetOrder == null ?
+        NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
+        : "" + ((char) (BASE + alphabetOrder));
+    if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
+      c.setPropertyValue("fv:custom_order", updatedCustomOrder);
+      session.saveDocument(c);
+    }
+    return (String) c.getPropertyValue("fv:custom_order");
   }
 
   /* (non-Javadoc)
@@ -133,14 +142,14 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
       if (characterDoc != null) {
         String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
-        String computedCharcterTitle = (String) characterDoc.getPropertyValue("dc:title");
+        String computedCharacterTitle = (String) characterDoc.getPropertyValue("dc:title");
         nativeTitle.append(computedCharacterOrder);
-        title = title.substring(computedCharcterTitle.length());
+        title = title.substring(computedCharacterTitle.length());
       } else {
         if (" ".equals(title.substring(0, 1))) {
-          nativeTitle.append("!");
+          nativeTitle.append(SPACE_CHARACTER);
         } else {
-          nativeTitle.append("~").append(title, 0, 1);
+          nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
         }
         title = title.substring(1);
       }
