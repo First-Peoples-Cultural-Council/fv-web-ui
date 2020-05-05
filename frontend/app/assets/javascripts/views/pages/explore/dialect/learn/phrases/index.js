@@ -126,10 +126,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     const newState = {
       characters,
       phraseBooks,
-      dialectId: selectn(
-        'response.contextParameters.ancestry.dialect.uid',
-        ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
-      ),
     }
 
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
