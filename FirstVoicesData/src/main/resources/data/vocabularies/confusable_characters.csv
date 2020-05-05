@@ -141,3 +141,4 @@ label,id,confusable_char,confusable_unicode,obsolete,ordering
 χ,\u03C7,Χ,\u03A7,0,0
 ᕀ,\u1540,ᐩ,\u1429,0,0
 ᒼ,\u14bc,ᑦ,\u1466,0,0
+Ā,\u0100,"Ā,A̅,A︤,A︥,A¯,A‾","\u0041\u0304,\u0041\u0305,\u0041\uFE24,\u0041\uFE25,\u0041\u00AF,\u0041\u203E",0,0
