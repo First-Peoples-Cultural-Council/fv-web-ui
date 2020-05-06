@@ -271,7 +271,7 @@ export class AutoSuggestComponent extends Component {
       value: value,
       onChange: this.onChange,
     }
-    // const isPhraseBook = this.props.locals.attrs.containerType === 'FVPhrase'
+
     switch (this.props.type) {
       case 'FVCategory':
         if (this.props.locals.attrs.containerType === 'FVWord') {
