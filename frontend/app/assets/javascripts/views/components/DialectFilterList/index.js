@@ -224,7 +224,8 @@ export class DialectFilterList extends Component {
       if (children.length > 0) {
         children.forEach((filterChild) => {
           const uidChild = filterChild.uid
-
+          // TODO: Address fitering this in the Enricher or with an Operation
+          if (filterChild.isTrashed) return
           childrenUids.push(uidChild)
           const childIsActive = appliedFilterIds.includes(uidChild)
 
