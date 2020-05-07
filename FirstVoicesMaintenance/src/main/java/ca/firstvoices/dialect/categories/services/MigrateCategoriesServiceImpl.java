@@ -21,10 +21,60 @@ import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
-public class MigrateToLocalCategoriesServiceImpl implements MigrateToLocalCategoriesService {
+public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   DocumentModelList localCategories = null;
   DocumentModel localCategoriesDirectory = null;
+
+  /**
+   * This method will migrate a category tree from Shared Categories to Local Categories.
+   * It does not update references. It will also publish the categories if the dialect is published.
+   * @param session
+   * @param dialect
+   * @return true if categories were copied, false otherwise
+   */
+  @Override
+  public boolean migrateCategoriesTree(CoreSession session, DocumentModel dialect) {
+
+    FirstVoicesPublisherService publisherService = Framework.getService(FirstVoicesPublisherService.class);
+
+    int copiedCategories = 0;
+
+    localCategoriesDirectory = session.getChild(dialect.getRef(), "Categories");
+
+    // Get the local categories that already exist
+    localCategories = getCategories(session, dialect.getId());
+
+    // Get the unique categories from all the words in this dialect
+    for (String categoryId : getUniqueCategories(session, dialect.getId())) {
+      DocumentModel category = session.getDocument(new IdRef(categoryId));
+      DocumentModel parentCategory = session.getParentDocument(category.getRef());
+
+      // Skip if category exists locally
+      if (categoryExists(category)) {
+        continue;
+      }
+
+      DocumentModel copiedCategory = null;
+
+      if (parentCategory.getTitle().equals("Shared Categories")) {
+        // Copy category and children (categoryId is a "parent" shared category)
+        copiedCategory = copyCategory(session, category.getId());
+        ++copiedCategories;
+      } else {
+        // Copy parent and children (categoryId is a "child" shared category)
+        copiedCategory = copyCategory(session, parentCategory.getId());
+        ++copiedCategories;
+      }
+
+      if (copiedCategory != null && dialect.getCurrentLifeCycleState().equals("Published")) {
+        publisherService.publish(copiedCategory);
+      }
+    }
+
+    return copiedCategories > 0;
+  }
+
 
   @Override
   public boolean migrateWords(CoreSession session, DocumentModel dialect, int batchSize) {
@@ -108,48 +158,6 @@ public class MigrateToLocalCategoriesServiceImpl implements MigrateToLocalCatego
     }
 
     return false;
-  }
-
-  @Override
-  public boolean migrateCategoriesTree(CoreSession session, DocumentModel dialect) {
-
-    FirstVoicesPublisherService publisherService = Framework.getService(FirstVoicesPublisherService.class);
-
-    int copiedCategories = 0;
-
-    localCategoriesDirectory = session.getChild(dialect.getRef(), "Categories");
-
-    // Get the local categories that already exist
-    localCategories = getCategories(session, dialect.getId());
-
-    // Get the unique categories from all the words in this dialect
-    for (String categoryId : getUniqueCategories(session, dialect.getId())) {
-      DocumentModel category = session.getDocument(new IdRef(categoryId));
-      DocumentModel parentCategory = session.getParentDocument(category.getRef());
-
-      // Skip if category exists locally
-      if (categoryExists(category)) {
-        continue;
-      }
-
-      DocumentModel copiedCategory = null;
-
-      if (parentCategory.getTitle().equals("Shared Categories")) {
-        // Copy category and children (categoryId is a "parent" shared category)
-        copiedCategory = copyCategory(session, category.getId());
-        ++copiedCategories;
-      } else {
-        // Copy parent and children (categoryId is a "child" shared category)
-        copiedCategory = copyCategory(session, parentCategory.getId());
-        ++copiedCategories;
-      }
-
-      if (copiedCategory != null && dialect.getCurrentLifeCycleState().equals("Published")) {
-         publisherService.publish(copiedCategory);
-      }
-    }
-
-    return copiedCategories > 0;
   }
 
   // This is a search based on title

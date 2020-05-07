@@ -1,0 +1,10 @@
+<component name="fv-maintenance-dialect-worker-contrib">
+  <extension point="queues" target="org.nuxeo.ecm.core.work.service">
+    <queue id="evaluateDialectJobs">
+      <category>dialectRequiredJobs</category>
+      <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
+      <maxThreads>1</maxThreads>
+      <name>This worker will handle required dialect jobs. Textual data updates and migrations.</name>
+    </queue>
+  </extension>
+</component>

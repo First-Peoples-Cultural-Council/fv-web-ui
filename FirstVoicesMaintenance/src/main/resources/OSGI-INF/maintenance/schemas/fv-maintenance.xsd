@@ -28,10 +28,11 @@
     <xs:list itemType="xs:string"/>
   </xs:simpleType>
 
+  <!-- TODO: Externalize this as a Directory so that it is less prone to misnaming -->
   <!-- List of available jobs to set -->
   <xs:simpleType name="job_ids">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="migrate_categories" />
+      <xs:enumeration value="Categories.Migrate" /> <!-- note: this must much the ID used to evaluate the jobs to run -->
     </xs:restriction>
   </xs:simpleType>
 

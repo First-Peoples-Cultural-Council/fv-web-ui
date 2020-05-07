@@ -1,6 +1,42 @@
 <?xml version="1.0"?>
-<component name="fv-data-maintenance-contrib" version="1.0">
+<component name="fv-maintenance-contrib" version="1.0">
+
+    <require>org.nuxeo.ecm.platform.audit.service.NXAuditEventsService</require>
+
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
         <schema name="fv-maintenance" prefix="fv-maintenance" src="OSGI-INF/maintenance/schemas/fv-maintenance.xsd"/>
     </extension>
+
+    <!-- Schedule evaluation of required jobs -->
+    <!-- Multiple listeners can handle document types that have the maintenance schema -->
+    <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
+        <schedule id="queueRequiredJobs">
+            <eventId>executeRequiredJobs</eventId>
+            <eventCategory>maintenance</eventCategory>
+            <!-- Every 2 minutes-->
+            <cronExpression>* */2 * ? * *</cronExpression>
+        </schedule>
+    </extension>
+
+    <!-- A listener specific for dialect jobs -->
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener name="queueRequiredJobsListener" class="ca.firstvoices.dialect.RequiredJobsListener">
+            <event>executeRequiredJobs</event>
+        </listener>
+    </extension>
+
+    <!-- log events -->
+    <extension point="event" target="org.nuxeo.ecm.platform.audit.service.NXAuditEventsService">
+        <event name="executeRequiredJobs"/>
+    </extension>
+
+
+    <!-- Block Operations from being visible to external users -->
+    <extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
+        <binding name="Categories.Migrate">
+            <administrator>true</administrator>
+            <secure>true</secure>
+        </binding>
+    </extension>
+
 </component>
