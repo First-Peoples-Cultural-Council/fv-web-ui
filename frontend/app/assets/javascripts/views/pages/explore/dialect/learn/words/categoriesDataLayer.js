@@ -75,7 +75,7 @@ class CategoriesDataLayer extends Component {
     const categoriesEntries = selectn('response.entries', categories)
 
     if (this._isMounted) {
-      this.setCategories(categories, categoriesEntries, sharedCategories)
+      this.setCategories(categoryType, categories, categoriesEntries, sharedCategories)
     }
   }
 
@@ -90,14 +90,28 @@ class CategoriesDataLayer extends Component {
     this._isMounted = false
   }
 
-  setCategories = (categories, categoriesEntries, sharedCategories) => {
-    this.setState({
-      categoriesData:
-        categoriesEntries && categoriesEntries.length > 0
-          ? categoriesEntries
-          : selectn('response.entries', sharedCategories),
-      categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
-    })
+  setCategories = (categoryType, categories, categoriesEntries, sharedCategories) => {
+    switch (categoryType) {
+      case 'Categories':
+        // Update state
+        // Fallback to shared categories if no local categories
+        this.setState({
+          categoriesData:
+            categoriesEntries && categoriesEntries.length > 0
+              ? categoriesEntries
+              : selectn('response.entries', sharedCategories),
+          categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
+        })
+        break
+
+      default:
+        // Update state with no fallback (for Phrase Books)
+        this.setState({
+          categoriesData: categoriesEntries && categoriesEntries.length > 0 ? categoriesEntries : [],
+          categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : [],
+        })
+        break
+    }
   }
 }
 
