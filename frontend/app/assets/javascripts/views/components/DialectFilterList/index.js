@@ -223,8 +223,8 @@ export class DialectFilterList extends Component {
       let hasActiveChild = false
       if (children.length > 0) {
         children.forEach((filterChild) => {
+          if (filterChild.isTrashed) return
           const uidChild = filterChild.uid
-
           childrenUids.push(uidChild)
           const childIsActive = appliedFilterIds.includes(uidChild)
 
