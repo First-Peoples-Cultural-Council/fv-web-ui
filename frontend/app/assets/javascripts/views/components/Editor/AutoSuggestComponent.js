@@ -271,12 +271,14 @@ export class AutoSuggestComponent extends Component {
       value: value,
       onChange: this.onChange,
     }
-    const isPhraseBook = this.props.locals.attrs.containerType === 'FVPhrase'
 
     switch (this.props.type) {
       case 'FVCategory':
         return (
-          <CategoriesDataLayer fetchPhraseBooks={isPhraseBook} value={this.props.value}>
+          <CategoriesDataLayer
+            fetchPhraseBooks={this.props.locals.attrs.containerType === 'FVPhrase'}
+            value={this.props.value}
+          >
             {({ categoriesData }) => {
               return (
                 <div className="row">
