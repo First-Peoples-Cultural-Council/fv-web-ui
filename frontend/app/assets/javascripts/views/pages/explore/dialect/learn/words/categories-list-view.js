@@ -151,6 +151,7 @@ class WordsCategoriesListView extends DataListView {
       categoriesData.response.entries.forEach((parent) => {
         if (parent.contextParameters.children.entries.length > 0) {
           parent.contextParameters.children.entries.forEach((child) => {
+            if (child.isTrashed) return
             child.contextParameters = {}
             child.contextParameters.parentDoc = {
               id: parent.uid,
