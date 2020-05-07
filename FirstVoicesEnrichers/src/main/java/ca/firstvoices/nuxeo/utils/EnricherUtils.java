@@ -20,7 +20,6 @@
 
 package ca.firstvoices.nuxeo.utils;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -43,7 +42,6 @@ import org.nuxeo.ecm.core.api.DocumentSecurityException;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.blob.binary.BinaryBlob;
@@ -76,7 +74,7 @@ public class EnricherUtils {
   public static ObjectNode getBinaryPropertiesJsonObject(String binaryId, CoreSession session) {
 
     IdRef ref = new IdRef(binaryId);
-    DocumentModel binaryDoc = null;
+    DocumentModel binaryDoc;
     ObjectNode binaryJsonObj = mapper.createObjectNode();
 
     try {
@@ -153,7 +151,7 @@ public class EnricherUtils {
     }
 
     IdRef ref = new IdRef(binaryId);
-    DocumentModel linkDoc = null;
+    DocumentModel linkDoc;
     ObjectNode linkJsonObj = mapper.createObjectNode();
 
     try {
@@ -197,7 +195,7 @@ public class EnricherUtils {
       CoreSession session) {
 
     IdRef ref = new IdRef(documentId);
-    DocumentModel doc = null;
+    DocumentModel doc;
     ObjectNode jsonObj = mapper.createObjectNode();
 
     try {
@@ -227,7 +225,7 @@ public class EnricherUtils {
       String partOfSpeechLabel = "";
       if (partOfSpeechId != null && !partOfSpeechId.isEmpty()) {
         // Create a query filter
-        Map<String, Serializable> queryFilter = new HashMap<String, Serializable>();
+        Map<String, Serializable> queryFilter = new HashMap<>();
         queryFilter.put("id", partOfSpeechId);
 
         // Execute the query, wrapped in a DocumentModel list
@@ -282,7 +280,7 @@ public class EnricherUtils {
   public static String expandCategoriesToChildren(CoreSession session, String query) {
     if (query != null && !query.isEmpty()) {
       // Expand value of fv-word:categories so that it includes children
-      String REGEX = "(fv-word:categories|fvproxy:proxied_categories)\\/\\* IN \\(\"([a-zA-Z0-9\\-]*)\"\\)";
+      String REGEX = "(fv-word:categories|fvproxy:proxied_categories)/\\* IN \\(\"([a-zA-Z0-9\\-]*)\"\\)";
 
       Pattern pattern = Pattern.compile(REGEX);
       Matcher m = pattern.matcher(query);
@@ -326,18 +324,8 @@ public class EnricherUtils {
     String customOrder = (String) result.get(0).getPropertyValue("fv:custom_order");
 
     if (StringUtils.isEmpty(customOrder)) {
-      // The custom order hasn't been calculated on this alphabet.
-      // This is a good opportunity to queue a worker that will recalculate this in the future.
-      // But for now let's try to just try to send over a "~ + letter":
-      // TODO: Implement this in a way that ensures we always get the correct response.
-      DocumentModel dialectDoc = session.getDocument(new IdRef(dialect));
-      DocumentModel alphabet = session
-          .getDocument(new PathRef(dialectDoc.getPathAsString() + "/Alphabet"));
-      alphabet.setPropertyValue("fv-alphabet:update_confusables_required", true);
-      session.saveDocument(alphabet);
-      return NativeOrderComputeServiceImpl.NO_ORDER_STARTING_CHARACTER + letter;
-    } else {
+      log.info("Dialect " + dialect + " requires custom order recompute.");
+    }
       return customOrder;
     }
-  }
 }
