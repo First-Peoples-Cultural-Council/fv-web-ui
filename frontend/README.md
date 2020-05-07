@@ -405,4 +405,4 @@ export default connect(
 
 The data and code in this repository is licensed under multiple licenses.
 
-- All code in the /app directory is licensed under the Apache License 2.0. See LICENSE.
+- All code in the /app directory is licensed under the Apache License 2.0. See LICENSE..
