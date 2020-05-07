@@ -32,6 +32,7 @@ import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import { CategoryEdit } from '../../../../index'
 /**
  * List view for categories
  */
@@ -151,6 +152,7 @@ class WordsCategoriesListView extends DataListView {
       categoriesData.response.entries.forEach((parent) => {
         if (parent.contextParameters.children.entries.length > 0) {
           parent.contextParameters.children.entries.forEach((child) => {
+            if (child.isTrashed) return
             child.contextParameters = {}
             child.contextParameters.parentDoc = {
               id: parent.uid,
