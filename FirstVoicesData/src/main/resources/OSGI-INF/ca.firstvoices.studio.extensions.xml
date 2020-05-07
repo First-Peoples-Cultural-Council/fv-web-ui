@@ -29,7 +29,6 @@
         <schema name="fvcharacter" prefix="fvcharacter" override="true" src="data/schemas/fvcharacter.xsd"/>
         <schema name="fvcontributor" prefix="fvcontributor" override="true" src="data/schemas/fvcontributor.xsd"/>
         <schema name="fvcontributors" prefix="fvcontributors" override="true" src="data/schemas/fvcontributors.xsd"/>
-        <schema name="fvdialect" prefix="fvdialect" override="true" src="data/schemas/fvdialect.xsd"/>
         <schema name="fvdictionary" prefix="fvdictionary" override="true" src="data/schemas/fvdictionary.xsd"/>
         <schema name="fvdraftfolder" prefix="fvdraftfolder" override="true" src="data/schemas/fvdraftfolder.xsd"/>
         <schema name="fvgallery" prefix="fvgallery" override="true" src="data/schemas/fvgallery.xsd"/>
@@ -166,11 +165,6 @@
                 <type>FVCharacter</type>
             </subtypes>
         </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVAlphabet</type>
-            </subtypes>
-        </doctype>
         <doctype name="FVAudio" extends="Audio">
             <schema name="fvaudio"/>
             <schema name="fvancestry"/>
@@ -234,11 +228,6 @@
                 <type>FVBook</type>
             </subtypes>
         </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVBooks</type>
-            </subtypes>
-        </doctype>
         <doctype name="FVCategories" extends="Folder">
             <schema name="fvcategories"/>
             <schema name="fvancestry"/>
@@ -247,11 +236,6 @@
             <subtypes>
                 <type>FVCategory</type>
                 <type>FVLabelCategory</type>
-            </subtypes>
-        </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVCategories</type>
             </subtypes>
         </doctype>
         <doctype name="FVCategory" extends="Document">
@@ -311,32 +295,6 @@
                 <type>FVContributor</type>
             </subtypes>
         </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVContributors</type>
-            </subtypes>
-        </doctype>
-        <doctype name="FVDialect" extends="Folder">
-            <schema name="fvdialect"/>
-            <schema name="fvancestry"/>
-            <schema name="fvlegacy"/>
-            <schema name="publishing"/>
-            <facet name="Versionable"/>
-            <facet name="Publishable"/>
-            <facet name="Commentable"/>
-            <facet name="PublishSpace"/>
-            <subtypes>
-                <type>FVAlphabet</type>
-                <type>FVContributors</type>
-                <type>FVDictionary</type>
-                <type>FVLabelDictionary</type>
-                <type>FVLabel</type>
-                <type>FVDraftFolder</type>
-                <type>FVPortal</type>
-                <type>FVResources</type>
-                <type>Forum</type>
-            </subtypes>
-        </doctype>
         <doctype name="FVLanguage" append="true">
             <subtypes>
                 <type>FVDialect</type>
@@ -361,11 +319,6 @@
                 <type>FVLabel</type>
             </subtypes>
         </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVDictionary</type>
-            </subtypes>
-        </doctype>
         <doctype name="FVDraftFolder" extends="Folder">
             <schema name="fvdraftfolder"/>
             <facet name="NotCollectionMember"/>
@@ -386,11 +339,6 @@
                 <type>FVVideo</type>
                 <type>FVWord</type>
                 <type>FVLabel</type>
-            </subtypes>
-        </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVDraftFolder</type>
             </subtypes>
         </doctype>
         <doctype name="FVGallery" extends="Folder">
@@ -477,11 +425,6 @@
             <facet name="PublishSpace"/>
             <subtypes>
                 <type>FVLink</type>
-            </subtypes>
-        </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVLinks</type>
             </subtypes>
         </doctype>
         <doctype name="Workspace" append="true">
@@ -599,11 +542,6 @@
                 <type>Forum</type>
             </subtypes>
         </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVPortal</type>
-            </subtypes>
-        </doctype>
         <doctype name="FVResources" extends="Folder">
             <schema name="fvresources"/>
             <schema name="fvancestry"/>
@@ -616,11 +554,6 @@
                 <type>FVVideo</type>
                 <type>File</type>
                 <type>Folder</type>
-            </subtypes>
-        </doctype>
-        <doctype name="FVDialect" append="true">
-            <subtypes>
-                <type>FVResources</type>
             </subtypes>
         </doctype>
         <doctype name="FVSong" extends="Document">
@@ -667,7 +600,7 @@
                 <type>INDemonstrative</type>
             </subtypes>
         </doctype>
-        <doctype name="INDialect" extends="FVDialect">
+        <doctype name="INDialect">
             <schema name="indialect"/>
         </doctype>
         <doctype name="INDictionary" extends="FVDictionary">
@@ -934,9 +867,6 @@
         </types>
         <types>
             <type name="FVContributors">fv-lifecycle</type>
-        </types>
-        <types>
-            <type name="FVDialect">fv-lifecycle</type>
         </types>
         <types>
             <type name="FVDictionary">fv-lifecycle</type>
@@ -1283,29 +1213,6 @@
             </layouts>
             <layouts mode="view">
                 <layout>layout@FVContributors-view</layout>
-            </layouts>
-            <contentViews category="content">
-                <contentView showInExportView="false">document_content</contentView>
-            </contentViews>
-            <contentViews category="trash_content">
-                <contentView showInExportView="false">document_trash_content</contentView>
-            </contentViews>
-        </type>
-        <type id="FVDialect">
-            <label>Dialect</label>
-            <category>Collaborative</category>
-            <icon>/img/folder_orange.png</icon>
-            <bigIcon>/img/folder_orange_100.png</bigIcon>
-            <description>A folder to contain a language's various artificats including words.</description>
-            <default-view>view_documents</default-view>
-            <layouts mode="create">
-                <layout>layout@FVDialect-create</layout>
-            </layouts>
-            <layouts mode="edit">
-                <layout>layout@FVDialect-edit</layout>
-            </layouts>
-            <layouts mode="view">
-                <layout>layout@FVDialect-view</layout>
             </layouts>
             <contentViews category="content">
                 <contentView showInExportView="false">document_content</contentView>

@@ -18,43 +18,43 @@
  *
  */
 
-package ca.firstvoices.exceptions;
+package ca.firstvoices.dialect.categories.exceptions;
 
 import org.nuxeo.ecm.core.api.NuxeoException;
 
 /**
  * @author david
  */
-public class FVCategoryInvalidException extends NuxeoException {
+public class InvalidCategoryException extends NuxeoException {
 
-  public FVCategoryInvalidException() {
+  public InvalidCategoryException() {
   }
 
-  public FVCategoryInvalidException(int statusCode) {
+  public InvalidCategoryException(int statusCode) {
     super(statusCode);
   }
 
-  public FVCategoryInvalidException(String message) {
+  public InvalidCategoryException(String message) {
     super(message);
   }
 
-  public FVCategoryInvalidException(String message, int statusCode) {
+  public InvalidCategoryException(String message, int statusCode) {
     super(message, statusCode);
   }
 
-  public FVCategoryInvalidException(String message, Throwable cause) {
+  public InvalidCategoryException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public FVCategoryInvalidException(String message, Throwable cause, int statusCode) {
+  public InvalidCategoryException(String message, Throwable cause, int statusCode) {
     super(message, cause, statusCode);
   }
 
-  public FVCategoryInvalidException(Throwable cause) {
+  public InvalidCategoryException(Throwable cause) {
     super(cause);
   }
 
-  public FVCategoryInvalidException(Throwable cause, int statusCode) {
+  public InvalidCategoryException(Throwable cause, int statusCode) {
     super(cause, statusCode);
   }
 

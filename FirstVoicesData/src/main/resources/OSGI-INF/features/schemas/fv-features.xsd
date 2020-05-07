@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ /*
+  ~ Copyright 2020 First People's Cultural Council
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ */
+  -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv-features"
+           targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv-features">
+
+  <!-- field definitions -->
+
+  <!-- List of available features to set -->
+  <xs:simpleType name="feature_id">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="categories" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- feature is a FV feature we want to define; by default, all non-experimental features should be available to everyone -->
+  <xs:complexType name="feature">
+    <xs:sequence>
+      <xs:element name="feature_id" type="nxs:feature_id"/> <!-- defined by developers above, e.g. "categories" -->
+      <xs:element name="enabled" type="xs:boolean"/> <!-- whether this should be enabled or not -->
+      <xs:element name="date" type="xs:date"/> <!-- when this feature was added -->
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="featureList">
+    <xs:sequence>
+      <xs:element name="item" type="nxs:feature" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- fields -->
+
+  <!-- a list of features available for this specific type (e.g. Dialect) -->
+  <xs:element name="features" type="nxs:featureList"/>
+
+</xs:schema>

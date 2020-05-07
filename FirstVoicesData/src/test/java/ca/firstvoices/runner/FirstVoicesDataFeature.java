@@ -42,12 +42,13 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.search.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 
+// NOTE: All of FirstVoicesData may already be deployed? Not sure if this is needed.
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.sanitize.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.addconfusablesservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.FVCategory.operations.xml")
+@Deploy("FirstVoicesData:OSGI-INF/dialect/categories/categories-operations.xml")
 
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesDataFeature implements RunnerFeature {
