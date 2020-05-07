@@ -69,7 +69,7 @@ import {
   SEARCH_PART_OF_SPEECH_ANY,
 } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
-import CategoriesDataLayer from './categoriesDataLayer'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
