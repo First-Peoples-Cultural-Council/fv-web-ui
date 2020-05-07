@@ -406,12 +406,12 @@ export class PageToolbar extends Component {
             transform="words"
           />
         </MenuItem>,
-        <MenuItem
-          key="immersionPortal"
-          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/immersion')}
-        >
-          <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
-        </MenuItem>,
+        // <MenuItem
+        //   key="immersionPortal"
+        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/immersion')}
+        // >
+        //   <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
+        // </MenuItem>,
         <MenuItem
           key="categories"
           onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/categories')}
