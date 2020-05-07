@@ -13,4 +13,8 @@
     <operation class="ca.firstvoices.operations.CleanConfusablesOperation"/>
   </extension>
 
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.FVCategory.operations.GetCategories"/>
+  </extension>
 </component>

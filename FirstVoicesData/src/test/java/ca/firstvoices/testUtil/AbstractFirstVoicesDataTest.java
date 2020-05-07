@@ -125,15 +125,21 @@ public abstract class AbstractFirstVoicesDataTest {
         .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory1",
             "FVCategory"));
     assertNotNull("Should have a valid Parent Category", parentCategory);
+    parentCategory.setPropertyValue("fva:dialect", dialect.getId());
+    session.saveDocument(parentCategory);
     childCategory = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Categories/TestParentCategory1",
             "Category",
             "FVCategory"));
     assertNotNull("Should have a valid category", childCategory);
+    childCategory.setPropertyValue("fva:dialect", dialect.getId());
+    session.saveDocument(childCategory);
     parentCategory2 = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory2",
             "FVCategory"));
     assertNotNull("Should have a valid Parent Category2", parentCategory2);
+    parentCategory2.setPropertyValue("fva:dialect", dialect.getId());
+    session.saveDocument(parentCategory2);
   }
 
 

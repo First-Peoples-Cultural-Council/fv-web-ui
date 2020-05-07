@@ -1,0 +1,20 @@
+1) Create an operation that will return all of the categories for a specific dialect
+  - Operation will take in a dialect document
+  - Will return all of the categories for that dialect
+
+
+  In Nuxeo ALMOST EVERYTHING IS A DOCUMENT.
+
+2) Write some unit tests
+  - Make sure that, if a dialect has categories, it returns categories for that dialect
+    - INPUT: DIALECT
+    - OUTPUT: LIST OF CATEGORIES
+  - Make sure that, if another dialect has categories, and my input is a different dialect, I don't see those categories
+    - INPUT: A DIFFERENT DIALECT
+    - OUTPUT: EITHER THE INPUT DIALECT'S CATEGORIES OR MAYBE NOTHING IF MAYBE PERMISSIONS?
+  - What happens when the dialect has no categories?
+    -INPUT: DIALECT
+    -OUTPUT: NULL, EMPTY LIST
+  - What happens in this case:
+    -INPUT: NOT A DIALECT
+    -OUTPUT: ? SOME SORT OF EXCEPTION
