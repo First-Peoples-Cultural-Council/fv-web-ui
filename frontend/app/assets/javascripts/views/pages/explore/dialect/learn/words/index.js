@@ -52,7 +52,7 @@ import {
   SEARCH_BY_CATEGORY,
 } from 'views/components/SearchDialect/constants'
 
-import CategoriesDataLayer from './categoriesDataLayer'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 const { array, bool, func, object, string } = PropTypes
 /**
  * Learn words
