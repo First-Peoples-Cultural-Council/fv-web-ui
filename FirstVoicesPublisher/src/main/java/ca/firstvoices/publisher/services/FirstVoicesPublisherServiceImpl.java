@@ -536,33 +536,39 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
       DocumentModel doc) {
     DocumentModel dialect = getDialect(session, doc);
-    String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
-        + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    String wordQuery = "SELECT * FROM FVWord WHERE fv-word:categories IN ('" + doc.getId()
+        + "') AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
     DocumentModelList documentModels = session.query(wordQuery);
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-        + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-phrase:phrase_books IN ('" + doc.getId()
+        + "') AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+
     DocumentModelList phrases = session.query(phraseQuery);
     documentModels.addAll(phrases);
 
-    documentModels.stream().forEach(documentModel -> {
+    documentModels.stream().forEach(wordOrPhrase -> {
       String propertyValue = "";
-      if (documentModel.getType().equals("FVWord")) {
+      if (wordOrPhrase.getType().equals("FVWord")) {
         propertyValue = "categories";
       } else {
         propertyValue = "phrase_books";
       }
 
-      Serializable documentModelPropertyValue = documentModel.getPropertyValue(propertyValue);
-
+      // TODO: Move to this to maintenance worker
+      // There is an edge-case that seems to be a race condition when you bulk delete categories.
+      Serializable documentModelPropertyValue = wordOrPhrase.getPropertyValue(propertyValue);
       if (documentModelPropertyValue != null) {
         String[] categories = (String[]) documentModelPropertyValue;
         String categoryId = doc.getId();
         Serializable updated = (Serializable) Arrays.stream(categories)
-            .filter(id -> session.getDocument(new IdRef(id)).isTrashed() && !id.equals(categoryId))
+            .filter(id -> {
+              IdRef idRef = new IdRef(id);
+              DocumentModel category = session.getDocument(idRef);
+              return !category.isTrashed() && !id.equals(categoryId);
+            })
             .collect(
                 Collectors.toList());
-        documentModel.setPropertyValue(propertyValue, updated);
-        session.saveDocument(documentModel);
+        wordOrPhrase.setPropertyValue(propertyValue, updated);
+        session.saveDocument(wordOrPhrase);
       }
     });
 
