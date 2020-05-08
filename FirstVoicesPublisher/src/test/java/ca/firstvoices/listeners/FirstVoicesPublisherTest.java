@@ -513,7 +513,7 @@ public class FirstVoicesPublisherTest {
         String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
         Assert.assertTrue(categoriesProperty.length > 0);
         firstVoicesPublisherService
-            .removeCategoryOrPhrasebooksFromWordsOrPhrases(session, subcategory);
+            .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, subcategory);
 
         String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialectDoc.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
@@ -528,7 +528,7 @@ public class FirstVoicesPublisherTest {
         String[] phraseBookProperty = (String[]) phrase.getPropertyValue("phrase_books");
         Assert.assertTrue(phraseBookProperty.length > 0);
         firstVoicesPublisherService
-            .removeCategoryOrPhrasebooksFromWordsOrPhrases(session, phraseBook);
+            .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, phraseBook);
 
         String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialectDoc.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";

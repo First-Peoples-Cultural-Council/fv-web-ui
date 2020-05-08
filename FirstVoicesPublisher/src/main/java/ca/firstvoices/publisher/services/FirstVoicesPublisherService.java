@@ -88,5 +88,6 @@ public interface FirstVoicesPublisherService {
 
     DocumentModel setDialectProxies(DocumentModel dialectProxy);
 
-    void removeCategoryOrPhrasebooksFromWordsOrPhrases(CoreSession session, DocumentModel doc);
+    void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
+        DocumentModel doc);
 }
