@@ -69,6 +69,26 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
     }
   }
 
+  @Override
+  public void addToJobHistory() {
+
+  }
+
+  @Override
+  public void logError() {
+
+  }
+
+  @Override
+  public void logWarning() {
+
+  }
+
+  @Override
+  public void logInsight() {
+
+  }
+
   // This is sent for audit purposes at the moment
   // In the future Listeners could catch these events to send emails, and turn on features
   private void sendEvent(String status, String message, String eventId, CoreSession session, DocumentModel jobContainer) {
