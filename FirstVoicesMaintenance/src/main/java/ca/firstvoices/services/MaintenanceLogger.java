@@ -8,7 +8,9 @@ public interface MaintenanceLogger {
 
   public void addToRequiredJobs(DocumentModel jobContainer, String job);
 
-  public void removeFromRequiredJobs();
+  public void removeFromRequiredJobs(DocumentModel jobContainer, String job);
+
+  public void addToJobHistory();
 
   public void logError();
 

@@ -5,13 +5,12 @@ import ca.firstvoices.services.UnpublishedChangesService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -22,6 +21,8 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
 public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
+
+  private static final Log log = LogFactory.getLog(MigrateCategoriesService.class);
 
   DocumentModelList localCategories = null;
   DocumentModel localCategoriesDirectory = null;
@@ -50,8 +51,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       DocumentModel category = session.getDocument(new IdRef(categoryId));
       DocumentModel parentCategory = session.getParentDocument(category.getRef());
 
-      // Skip if category exists locally
-      if (categoryExists(category)) {
+      // Skip if category or parent category exists locally
+      if (categoryExists(category) || categoryExists(parentCategory)) {
         continue;
       }
 
@@ -67,8 +68,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         ++copiedCategories;
       }
 
-      if (copiedCategory != null && dialect.getCurrentLifeCycleState().equals("Published")) {
-        publisherService.publish(copiedCategory);
+      if (copiedCategory != null) {
+        // Publish if relevant
+        if (dialect.getCurrentLifeCycleState().equals("Published")) {
+          publisherService.publish(copiedCategory);
+        }
       }
     }
 
@@ -77,13 +81,15 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
 
   @Override
-  public boolean migrateWords(CoreSession session, DocumentModel dialect, int batchSize) {
+  public int migrateWords(CoreSession session, DocumentModel dialect, int batchSize) {
+
+    if (session == null) {
+      log.error("Migrate words could not run on " + dialect.getTitle() + ".");
+      return 0;
+    }
 
     FirstVoicesPublisherService publisherService = Framework.getService(FirstVoicesPublisherService.class);
     UnpublishedChangesService unpublishedChangesService = Framework.getService(UnpublishedChangesService.class);
-
-    // Unpublished changes warnings
-    int unpublishedChangesFound = 0;
 
     // Get the local categories that already exist
     localCategories = getCategories(session, dialect.getId());
@@ -98,16 +104,14 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
           + " WHERE fva:dialect = '" + dialect.getId() + "' "
           + " AND fv-word:categories/* IN ( " + ids + ")"
           + " AND ecm:isTrashed = 0"
+          + " AND ecm:isProxy = 0"
           + " AND ecm:isVersion = 0";
       DocumentModelList words = session.query(query, batchSize);
 
-      if (words.size() == 0) {
-        return false;
-      }
-
       for (DocumentModel word : words) {
 
-        // First, check for unpublished changes
+        // Get unpublished changes
+        // Remember to do this here, BEFORE we modify the document
         boolean unpublishedChangesExist = unpublishedChangesService.checkUnpublishedChanges(session, word);
 
         // Update category Ids
@@ -118,46 +122,19 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         // Save document
         session.saveDocument(word);
 
-        // If word is published, and no unpublished changes exist - republish
+        // If word is published and no unpublished changes exist - republish
         if (word.getCurrentLifeCycleState().equals("Published")) {
+          // Check for unpublished changes
           if (!unpublishedChangesExist) {
             publisherService.republish(word);
-          } else {
-            ++unpublishedChangesFound;
           }
         }
       }
 
-      // Good opportunity to output a warning about unpublished changes
-      if (unpublishedChangesFound > 0) {
-
-        Date eventDate = new Date(new Date().getTime());
-        Calendar calendarEventDate = Calendar.getInstance();
-        calendarEventDate.setTime(eventDate);
-
-          HashMap<String, Object> errorEntry = new HashMap<String, Object>();
-          errorEntry.put("id", "unpublished_words");
-          errorEntry.put("message", unpublishedChangesFound + " found after updating " + words + " word categories.");
-          errorEntry.put("created", calendarEventDate);
-          errorEntry.put("job", null);
-
-          ArrayList<HashMap<String, Object>> warnings = (ArrayList<HashMap<String, Object>>) dialect.getProperty("fv-maintenance", "warnings");
-
-          if (warnings == null) {
-            warnings = new ArrayList<HashMap<String, Object>>();
-          }
-
-        warnings.add(errorEntry);
-
-          dialect.setProperty("fv-maintenance", "warnings", warnings);
-
-        session.saveDocument(dialect);
-      }
-
-      return words.size() > 0;
+      return words.size();
     }
 
-    return false;
+    return 0;
   }
 
   // This is a search based on title
@@ -175,6 +152,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     // Copy category to local
     DocumentModel newCategory = session.copy(category.getRef(), localCategoriesDirectory.getRef(), null);
+    session.saveDocument(newCategory);
 
     // Add to local cache
     localCategories.add(newCategory);
@@ -201,6 +179,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       String uid = (String) item.get("fv-word:categories/*");
       categoryIds.add(uid);
     }
+
+    results.close();
 
     return categoryIds;
   }

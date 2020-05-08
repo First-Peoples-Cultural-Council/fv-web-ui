@@ -39,6 +39,10 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesMaintenance</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
       <artifactId>firstvoices-web-ui</artifactId>
     </dependency>
   </dependencies>

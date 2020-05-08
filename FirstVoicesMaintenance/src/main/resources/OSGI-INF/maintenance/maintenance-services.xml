@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="fv-maintenance-services-contrib" version="1.0">
+
+  <implementation class="ca.firstvoices.services.MaintenanceLoggerImpl"/>
+
+  <service>
+    <provide interface="ca.firstvoices.services.MaintenanceLogger"/>
+  </service>
+
+</component>
+
+

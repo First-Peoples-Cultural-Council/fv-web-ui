@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="fv-maintenance-categories-services-contrib" version="1.0">
 
+  <require>fv-maintenance-services-contrib</require>
+
   <implementation class="ca.firstvoices.dialect.categories.services.MigrateCategoriesServiceImpl"/>
 
   <service>

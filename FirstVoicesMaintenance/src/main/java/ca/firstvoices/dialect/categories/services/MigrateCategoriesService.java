@@ -12,7 +12,7 @@ public interface MigrateCategoriesService {
    * @param session
    * @param dialect
    * @param batchSize
-   * @return true if there is more to migrate, false otherwise
+   * @return the amount of words found to process
    */
-  public boolean migrateWords(CoreSession session, DocumentModel dialect, int batchSize);
+  public int migrateWords(CoreSession session, DocumentModel dialect, int batchSize);
 }
