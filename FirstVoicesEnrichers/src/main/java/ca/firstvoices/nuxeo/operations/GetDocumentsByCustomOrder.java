@@ -27,6 +27,7 @@ package ca.firstvoices.nuxeo.operations;
 import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
@@ -53,7 +54,7 @@ public class GetDocumentsByCustomOrder {
   protected CoreSession session;
   @Context
   protected AutomationService automationService;
-  @Param(name = "query", required = true, description = "The query to " + "perform.")
+  @Param(name = "query", description = "The query to " + "perform.")
   protected String query;
   @Param(name = "currentPageIndex", alias = "page", required = false, description = "Target listing page.")
   protected Integer currentPageIndex;
@@ -76,8 +77,12 @@ public class GetDocumentsByCustomOrder {
     if ((dialectId != null && !dialectId.isEmpty()) && (letter != null && !letter.isEmpty())) {
       customOrder = EnricherUtils.convertLetterToCustomOrder(session, dialectId, letter);
     }
-
-    if (customOrder.startsWith("%") || customOrder.startsWith("$") || customOrder.startsWith("&") ||
+    if (StringUtils.isEmpty(customOrder)) {
+      //      We shouldn't get to this state when the archive has the custom order computed on it.
+      //      Just in case, handle it gracefully by just querying dc:title.
+      query = query + " AND dc:title ILIKE '" + letter + "%'";
+    } else if (customOrder.startsWith("%") || customOrder.startsWith("$") || customOrder
+        .startsWith("&") ||
         customOrder.startsWith("'") || customOrder.startsWith("*") || customOrder.startsWith("_")) {
       query = query +
           " AND fv:custom_order LIKE \"" + NXQL.escapeStringInner("\\") + customOrder + "%\"";
@@ -90,16 +95,14 @@ public class GetDocumentsByCustomOrder {
     }
     OperationContext ctx = new OperationContext(session);
 
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     params.put("currentPageIndex", currentPageIndex);
     params.put("query", query);
     params.put("pageSize", pageSize);
     params.put("sortBy", sortBy);
     params.put("sortOrder", sortOrder);
 
-    DocumentModelList res = (DocumentModelList) automationService
+    return (DocumentModelList) automationService
         .run(ctx, "Document.Query", params);
-    return res;
-
   }
 }

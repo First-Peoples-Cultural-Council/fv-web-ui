@@ -75,7 +75,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
   }
 
   @Test
-  public void GetDocumentsByCustomOrderTest() throws OperationException {
+  public void DocumentsByCustomOrderOperationTest() throws OperationException {
     NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc);
     OperationContext ctx = new OperationContext(session);
@@ -85,26 +85,23 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
 
     List<String> aWords = Arrays.asList("adoḵs", "agwii-gin̓am");
 
-    Assert.assertTrue(documentModelList.size() == 2);
-    documentModelList.forEach(doc -> {
-      Assert.assertTrue(aWords.contains(doc.getPropertyValue("dc:title")));
-    });
-
+    Assert.assertEquals(2, documentModelList.size());
+    documentModelList
+        .forEach(doc -> Assert.assertTrue(aWords.contains(doc.getPropertyValue("dc:title"))));
   }
 
   @Test
-  public void GetDocumentsByCustomOrderWithoutComptuedWordsTest() throws OperationException {
+  public void GetDocumentsByCustomOrderWithoutComputedWordsTest() throws OperationException {
     OperationContext ctx = new OperationContext(session);
     DocumentModelList documentModelList = (DocumentModelList) automationService
         .run(ctx, GetDocumentsByCustomOrder.ID, params);
 
-    Assert.assertTrue(documentModelList.size() == 0);
+    // Since the custom order isn't recomputed on the archive, it's expected it will have "aa" in the list.
+    List<String> aWords = Arrays.asList("aada gadaalee", "adoḵs", "agwii-gin̓am");
 
-    DocumentModel documentModel = session.getDocument(alphabetDoc.getRef());
-
-    Assert.assertTrue(
-        documentModel.getPropertyValue("fv-alphabet:update_confusables_required").equals(true));
-
+    Assert.assertEquals(3, documentModelList.size());
+    documentModelList
+        .forEach(doc -> Assert.assertTrue(aWords.contains(doc.getPropertyValue("dc:title"))));
   }
 
 }
