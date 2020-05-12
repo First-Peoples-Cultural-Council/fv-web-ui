@@ -44,6 +44,10 @@ public class MigrateCategories {
 
     protectOperation();
 
+    if (!dialect.getType().equals("FVDialect")) {
+      throw new OperationException("Document type must be FVDialect");
+    }
+
     // This is the first phase that triggers the work.
     // Migrates the category tree from Shared Categories to Local
     // If successful and category tree migrated, it adds required job to complete phase 2.

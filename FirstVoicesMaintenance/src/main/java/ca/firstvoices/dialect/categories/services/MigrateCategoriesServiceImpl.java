@@ -51,22 +51,13 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       DocumentModel category = session.getDocument(new IdRef(categoryId));
       DocumentModel parentCategory = session.getParentDocument(category.getRef());
 
-      // Skip if category or parent category exists locally
-      if (categoryExists(category) || categoryExists(parentCategory)) {
+      // check if category exists. If so, skip.
+      if (categoryExists(category)) {
         continue;
       }
 
-      DocumentModel copiedCategory = null;
-
-      if (parentCategory.getTitle().equals("Shared Categories")) {
-        // Copy category and children (categoryId is a "parent" shared category)
-        copiedCategory = copyCategory(session, category.getId());
-        ++copiedCategories;
-      } else {
-        // Copy parent and children (categoryId is a "child" shared category)
-        copiedCategory = copyCategory(session, parentCategory.getId());
-        ++copiedCategories;
-      }
+      DocumentModel copiedCategory = copyCategory(session, category);
+      ++copiedCategories;
 
       if (copiedCategory != null) {
         // Publish if relevant
@@ -137,22 +128,42 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     return 0;
   }
 
-  // This is a search based on title
-  private boolean categoryExists(DocumentModel categoryToCopy) {
-    DocumentModel category = localCategories.stream()
-        .filter(localCategory -> localCategory.getTitle().equals(categoryToCopy.getTitle()))
+  private DocumentModel getExistingCategory(DocumentModel category) {
+    return localCategories.stream()
+        .filter(localCategory -> localCategory.getTitle().equals(category.getTitle()))
         .findFirst()
         .orElse(null);
-
-    return category != null;
   }
 
-  private DocumentModel copyCategory(CoreSession session, String categoryToCopy) {
-    DocumentModel category = session.getDocument(new IdRef(categoryToCopy));
+  // This is a search based on title
+  private boolean categoryExists(DocumentModel categoryToCopy) {
+    return getExistingCategory(categoryToCopy) != null;
+  }
 
-    // Copy category to local
-    DocumentModel newCategory = session.copy(category.getRef(), localCategoriesDirectory.getRef(), null);
-    session.saveDocument(newCategory);
+  private DocumentModel copyCategory(CoreSession session, DocumentModel category) {
+    String localCategoryDirPath = localCategoriesDirectory.getPathAsString();
+
+    if (!isParent(session, category)) {
+
+      // For child categories, create parent if it does not exist
+      DocumentModel parentCategory = session.getParentDocument(category.getRef());
+      DocumentModel newLocalParent;
+
+      // Check if parent category exists
+      if (!categoryExists(parentCategory)) {
+        newLocalParent = copyCategory(session, parentCategory);
+      } else {
+        newLocalParent = getExistingCategory(parentCategory);
+      }
+
+      localCategoryDirPath = newLocalParent.getPathAsString();
+    }
+
+    // Create new category
+    DocumentModel newLocalCategory = session.createDocumentModel(
+        localCategoryDirPath, category.getName(), "FVCategory");
+    newLocalCategory.setPropertyValue("dc:title", category.getTitle());
+    DocumentModel newCategory = session.createDocument(newLocalCategory);
 
     // Add to local cache
     localCategories.add(newCategory);
@@ -210,6 +221,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   private DocumentModel getSharedCategoriesContainer(CoreSession session) {
     return session.getDocument(new PathRef("/FV/Workspaces/SharedData/Shared Categories"));
+  }
+
+  private boolean isParent(CoreSession session, DocumentModel category) {
+    DocumentModel parent = session.getParentDocument(category.getRef());
+    return parent.getTitle().equals("Shared Categories");
   }
 
 }
