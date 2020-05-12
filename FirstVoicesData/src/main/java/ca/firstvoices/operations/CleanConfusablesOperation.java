@@ -1,16 +1,18 @@
 package ca.firstvoices.operations;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
+import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
+import org.nuxeo.ecm.core.bulk.BulkService;
+import org.nuxeo.ecm.core.bulk.action.SetPropertiesAction;
+import org.nuxeo.ecm.core.bulk.message.BulkCommand;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = CleanConfusablesOperation.ID, category = Constants.CAT_DOCUMENT, label = "FVCleanConfusables",
@@ -21,32 +23,25 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
   protected AutomationService automation = Framework.getService(AutomationService.class);
 
   @Context
-  protected OperationContext ctx;
+  protected CoreSession session;
 
   @OperationMethod
-  public void run(DocumentModel dialect) {
-
-    CoreSession session = ctx.getCoreSession();
+  public Blob run(DocumentModel dialect) {
 
     if (dialect.getType().equals("FVDialect")) {
-      String wordQuery = "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
-          + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-      String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-          + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+      String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+          + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
 
-      session.query(wordQuery).forEach(word -> {
-        word.setPropertyValue("fv-word:update_confusables_required", true);
-        session.saveDocument(word);
-      });
+      // bulk update word and phrases
+      BulkCommand command = new BulkCommand.Builder(SetPropertiesAction.ACTION_NAME,
+          wordPhraseQuery).repository(session.getRepositoryName())
+          .param("fv:update_confusables_required", Boolean.TRUE)
+          .build();
 
-      session.query(phraseQuery).forEach(word -> {
-        word.setPropertyValue("fv-phrase:update_confusables_required", true);
-        session.saveDocument(word);
-      });
+      BulkService bulkService = Framework.getService(BulkService.class);
+      String commandId = bulkService.submit(command);
 
-      Map<String, Object> parameters = new HashMap<>();
-      parameters.put("message",
-          "Words And Phrases will be updated shortly with confusable characters. Republish if needed when complete.");
+      return new JSONBlob(commandId);
     } else {
       throw new NuxeoException("Document type must be FVDialect");
     }

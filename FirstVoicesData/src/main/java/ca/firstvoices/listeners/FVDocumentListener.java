@@ -5,7 +5,6 @@ import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
 import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
 import ca.firstvoices.workers.CleanConfusablesForWordsAndPhrasesWorker;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -194,17 +193,13 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
-    String wordQuery = "SELECT * FROM FVWord WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-phrase:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE fv:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery);
 
-    List<DocumentModel> list = new ArrayList<DocumentModel>() {{
-      addAll(session.query(wordQuery));
-      addAll(session.query(phraseQuery));
-    }};
+    if (wordsAndPhrases.size() > 0) {
 
-    if (list.size() > 0) {
       WorkManager workManager = Framework.getService(WorkManager.class);
-      for (DocumentModel documentModel : list) {
+      for (DocumentModel documentModel : wordsAndPhrases) {
 
         Boolean alphabetRequiresUpdate = (Boolean) getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required");
 

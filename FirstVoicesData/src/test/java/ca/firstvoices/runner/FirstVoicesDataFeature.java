@@ -1,6 +1,7 @@
 package ca.firstvoices.runner;
 
 import org.nuxeo.ecm.automation.test.AutomationFeature;
+import org.nuxeo.ecm.core.bulk.CoreBulkFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -11,7 +12,7 @@ import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
 
-@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class})
+@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, CoreBulkFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy("org.nuxeo.binary.metadata")
 @Deploy("org.nuxeo.ecm.platform.url.core")

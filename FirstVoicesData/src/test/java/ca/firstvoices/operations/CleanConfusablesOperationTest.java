@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
-import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
 
 /**
  * @author david
@@ -43,22 +43,8 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     createWordsorPhrases(orderedWords, "FVWord");
     createWordsorPhrases(orderedPhrases, "FVPhrase");
 
-    automationService.run(ctx, CleanConfusablesOperation.ID);
-
-    String wordQuery = "SELECT * FROM FVWord WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-
-    DocumentModelList words = session.query(wordQuery);
-    DocumentModelList phrases = session.query(phraseQuery);
-
-    words.forEach(word -> {
-      Assert.assertEquals(true, word.getPropertyValue("update_confusables_required"));
-    });
-
-    phrases.forEach(phrase -> {
-      Assert.assertEquals(true, phrase.getPropertyValue("update_confusables_required"));
-    });
-
+    JSONBlob bulkOperationId = (JSONBlob) automationService.run(ctx, CleanConfusablesOperation.ID);
+    Assert.assertNotNull(bulkOperationId);
   }
 
 }
