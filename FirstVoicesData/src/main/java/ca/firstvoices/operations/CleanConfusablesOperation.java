@@ -20,11 +20,13 @@
 
 package ca.firstvoices.operations;
 
+import javax.ws.rs.core.Context;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
@@ -40,17 +42,21 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
   public static final String ID = "Document.CleanConfusables";
   protected AutomationService automation = Framework.getService(AutomationService.class);
 
+  @Context
+  CoreSession session;
+
   @OperationMethod
   public Blob run(DocumentModel dialect) {
 
     if (dialect.getType().equals("FVDialect")) {
-      String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-          + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
+      String wordPhraseQuery =
+          "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+              + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
 
       // bulk update word and phrases
       BulkCommand command = new BulkCommand.Builder(SetPropertiesAction.ACTION_NAME,
-          wordPhraseQuery).repository(dialect.getCoreSession().getRepositoryName())
-          .user("Administrator")
+          wordPhraseQuery).repository(session.getRepositoryName())
+          .user(session.getPrincipal().getName())
           .param("fv:update_confusables_required", true)
           .build();
 
