@@ -101,7 +101,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     private HashMap<String, Object> getDiffProperties(DocumentModel doc) {
 
         // The following schemas shouldn't be considered in a diff (they are not user-controlled)
-        String[] excludedSchemas = {"uid", "collectionMember", "common", "fvancestry", "fvproxy", "fvlegacy", "relatedtext", "facetedTag", "notif"};
+        String[] excludedSchemas = {"uid", "collectionMember", "common", "fvancestry", "fvproxy", "fvlegacy", "relatedtext", "facetedTag", "notification"};
         List<String> excludedSchemasList = Arrays.asList(excludedSchemas);
 
         // The follow properties shouldn't be considered in a diff (they are not user-controlled)
