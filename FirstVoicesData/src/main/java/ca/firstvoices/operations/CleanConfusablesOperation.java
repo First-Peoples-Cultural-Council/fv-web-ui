@@ -20,7 +20,6 @@
 
 package ca.firstvoices.operations;
 
-import javax.ws.rs.core.Context;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -42,11 +41,10 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
   public static final String ID = "Document.CleanConfusables";
   protected AutomationService automation = Framework.getService(AutomationService.class);
 
-  @Context
-  CoreSession session;
-
   @OperationMethod
   public Blob run(DocumentModel dialect) {
+
+    CoreSession session = dialect.getCoreSession();
 
     if (dialect.getType().equals("FVDialect")) {
       String wordPhraseQuery =
