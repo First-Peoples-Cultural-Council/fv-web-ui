@@ -20,7 +20,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.core.api.PartialList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
@@ -96,11 +95,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
           + " AND ecm:isTrashed = 0"
           + " AND ecm:isProxy = 0"
           + " AND ecm:isVersion = 0";
-      DocumentModelList words = session.query(query, batchSize);
-
-      // Get the total words that match the query (not just the batch size)
-      PartialList<Map<String, Serializable>> resultProjection =
-          session.queryProjection(query, batchSize, 0);
+      DocumentModelList words = session.query(query, null, batchSize, 0, true);
 
       for (DocumentModel word : words) {
 
@@ -125,7 +120,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         }
       }
 
-      return resultProjection.size();
+      // Return total words found
+      return (int) words.totalSize();
     }
 
     return 0;
