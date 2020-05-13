@@ -24,7 +24,6 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPhrases } from 'providers/redux/reducers/fvPhrase'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
@@ -35,7 +34,9 @@ import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/n
 
 // FPCC
 // -------------------------------------------
-import AlphabetListView from 'views/components/AlphabetListView'
+import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import DialectFilterList from 'views/components/DialectFilterList'
 import Edit from '@material-ui/icons/Edit'
@@ -60,7 +61,6 @@ import {
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
   getCategoriesOrPhrasebooks,
-  getCharacters,
   handleDialectFilterList,
   onNavigateRequest,
   sortHandler,
@@ -69,11 +69,7 @@ import {
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
-import {
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_PHRASE_BOOK,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_PHRASE_BOOK, SEARCH_PART_OF_SPEECH_ANY } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -121,41 +117,13 @@ export class PhrasesFilteredByCategory extends Component {
       })
     }
 
-    // Alphabet
-    // ---------------------------------------------
-    let characters = getCharacters({
-      computeCharacters: this.props.computeCharacters,
-      routeParamsDialectPath: routeParams.dialect_path,
-    })
-    if (characters === undefined) {
-      const _pageIndex = 0
-      const _pageSize = 100
-      await this.props.fetchCharacters(
-        `${routeParams.dialect_path}/Alphabet`,
-        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
-      )
-      characters = getCharacters({
-        computeCharacters: this.props.computeCharacters,
-        routeParamsDialectPath: routeParams.dialect_path,
-      })
-    }
-
     // PHRASES
     // ---------------------------------------------
     this.fetchListViewData()
 
-    this.setState(
-      {
-        characters,
-        phraseBook,
-      },
-      () => {
-        const letter = selectn('letter', routeParams)
-        if (letter) {
-          this.handleAlphabetClick(letter)
-        }
-      }
-    )
+    this.setState({
+      phraseBook,
+    })
   }
 
   componentWillUnmount() {
@@ -205,7 +173,6 @@ export class PhrasesFilteredByCategory extends Component {
 
   render() {
     const {
-      characters,
       computeEntities,
       filterInfo,
       // flashcardMode, // TODO ?
@@ -340,7 +307,7 @@ export class PhrasesFilteredByCategory extends Component {
                 onClick={() => {
                   const url = appendPathArrayAfterLandmark({
                     pathArray: ['create'],
-                    splitWindowPath: splitWindowPath,
+                    splitWindowPath,
                   })
                   if (url) {
                     NavigationHelpers.navigate(`/${url}`, this.props.pushWindowPath, false)
@@ -362,12 +329,24 @@ export class PhrasesFilteredByCategory extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-3 PrintHide">
-            <AlphabetListView
-              characters={characters}
-              dialectClassName={dialectClassName}
-              handleClick={this.handleAlphabetClick}
-              letter={selectn('letter', routeParams)}
-            />
+            <AlphabetCharactersData
+              letterClickedCallback={() => {
+                this.changeFilter()
+              }}
+            >
+              {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked }) => {
+                return (
+                  <AlphabetCharactersPresentation
+                    activeLetter={activeLetter}
+                    characters={characters}
+                    dialectClassName={dialectClassName}
+                    generateAlphabetCharacterHref={generateAlphabetCharacterHref}
+                    letterClicked={letterClicked}
+                    splitWindowPath={splitWindowPath}
+                  />
+                )
+              }}
+            </AlphabetCharactersData>
 
             {computedPhraseBooksSize !== 0 && (
               <DialectFilterList
@@ -643,24 +622,6 @@ export class PhrasesFilteredByCategory extends Component {
     return columns
   }
 
-  handleAlphabetClick = async (letter, href) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: letter,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByDefinitions: false,
-        searchByTitle: true,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
-    this.changeFilter()
-
-    NavigationHelpers.navigate(href, this.props.pushWindowPath)
-  }
-
   handleCategoryClick = async ({ facetField, selected, unselected } = {}) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: '',
@@ -705,8 +666,8 @@ export class PhrasesFilteredByCategory extends Component {
         // pageSize, // TODO ?
         // preserveSearch, // TODO ?
         pushWindowPath: this.props.pushWindowPath,
-        routeParams: routeParams,
-        splitWindowPath: splitWindowPath,
+        routeParams,
+        splitWindowPath,
       })
     }
 
@@ -778,7 +739,6 @@ PhrasesFilteredByCategory.propTypes = {
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
   computeCategories: object.isRequired,
-  computeCharacters: object.isRequired,
   computeDialect2: object.isRequired,
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
@@ -793,7 +753,6 @@ PhrasesFilteredByCategory.propTypes = {
   windowPath: string.isRequired,
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
-  fetchCharacters: func.isRequired,
   fetchDocument: func.isRequired,
   fetchPortal: func.isRequired,
   pushWindowPath: func.isRequired,
@@ -813,7 +772,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const {
     document,
     fvCategory,
-    fvCharacter,
     fvDialect,
     fvPhrase,
     fvPortal,
@@ -825,7 +783,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   } = state
 
   const { computeCategories } = fvCategory
-  const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { computePhrases } = fvPhrase
   const { computePortal } = fvPortal
@@ -837,7 +794,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeCategories,
-    computeCharacters,
     computeDialect2,
     computeDocument,
     computeLogin,
@@ -856,7 +812,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
-  fetchCharacters,
   fetchDocument,
   fetchPhrases,
   fetchPortal,

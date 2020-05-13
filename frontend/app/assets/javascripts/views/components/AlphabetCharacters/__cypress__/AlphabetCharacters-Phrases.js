@@ -1,5 +1,5 @@
 import 'cypress-testing-library/add-commands'
-describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
+describe('AlphabetCharacters-Phrases.js > AlphabetCharacters', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases')
     cy.wait(3000)
@@ -11,7 +11,7 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
     cy.log('No message, button, or selected letters')
     cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
     cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
-    cy.getByTestId('AlphabetListView').within(() => {
+    cy.getByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
           .should('have.css', 'color')
@@ -19,7 +19,7 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
       })
     })
 
-    cy.AlphabetListView({
+    cy.AlphabetCharacters({
       letter,
       confirmData: true,
       shouldPaginate: true,
@@ -28,7 +28,7 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
 
     // Is it highlighted?
     cy.log('Is it highlighted?')
-    cy.getByTestId('AlphabetListView').within(() => {
+    cy.getByTestId('AlphabetCharacters').within(() => {
       cy.getByText(letter)
         .should('have.css', 'color')
         .and('not.eq', unselectedColor)
@@ -47,7 +47,7 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
     cy.log('Ensure all is back to normal...')
     cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
     cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
-    cy.getByTestId('AlphabetListView').within(() => {
+    cy.getByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
           .should('have.css', 'color')
@@ -63,7 +63,7 @@ describe('AlphabetListView-Phrases.js > AlphabetListView', () => {
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
     cy.getByText(/showing phrases that start with the letter/i).should('exist')
-    cy.getByTestId('AlphabetListView').within(() => {
+    cy.getByTestId('AlphabetCharacters').within(() => {
       cy.getByText('t')
         .should('have.css', 'color')
         .and('eq', 'rgb(130, 0, 0)')

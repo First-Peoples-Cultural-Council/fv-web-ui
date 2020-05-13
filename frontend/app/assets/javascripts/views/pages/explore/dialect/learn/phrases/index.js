@@ -15,14 +15,13 @@ limitations under the License.
 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { Set, Map } from 'immutable'
+import Immutable, { is, Set, Map } from 'immutable'
 import classNames from 'classnames'
 
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
@@ -41,7 +40,10 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import DialectFilterList from 'views/components/DialectFilterList'
-import AlphabetListView from 'views/components/AlphabetListView'
+
+import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+
 import FVLabel from 'views/components/FVLabel/index'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -84,8 +86,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
   DIALECT_FILTER_TYPE = 'phrases'
 
   async componentDidMountViaPageDialectLearnBase() {
-    const { routeParams } = this.props
-
     // Portal
     ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Portal',
@@ -109,22 +109,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       phraseBooks = this.getPhraseBooks()
     }
 
-    // Alphabet
-    // ---------------------------------------------
-    let characters = this.getCharacters()
-
-    if (characters === undefined) {
-      const _pageIndex = 0
-      const _pageSize = 100
-      await this.props.fetchCharacters(
-        `${routeParams.dialect_path}/Alphabet`,
-        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
-      )
-      characters = this.getCharacters()
-    }
-
     const newState = {
-      characters,
       phraseBooks,
     }
 
@@ -133,12 +118,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       newState.filterInfo = this.initialFilterInfo()
     }
 
-    this.setState(newState, () => {
-      const letter = selectn('routeParams.letter', this.props)
-      if (letter) {
-        this.handleAlphabetClick(letter)
-      }
-    })
+    this.setState(newState)
   }
 
   componentWillUnmount() {
@@ -329,12 +309,24 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         </div>
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
-            <AlphabetListView
-              characters={this.state.characters}
-              dialectClassName={dialectClassName}
-              handleClick={this.handleAlphabetClick}
-              letter={selectn('routeParams.letter', this.props)}
-            />
+            <AlphabetCharactersData
+              letterClickedCallback={({ href, updateHistory }) => {
+                this.changeFilter(href, updateHistory)
+              }}
+            >
+              {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked, splitWindowPath }) => {
+                return (
+                  <AlphabetCharactersPresentation
+                    activeLetter={activeLetter}
+                    characters={characters}
+                    dialectClassName={dialectClassName}
+                    generateAlphabetCharacterHref={generateAlphabetCharacterHref}
+                    letterClicked={letterClicked}
+                    splitWindowPath={splitWindowPath}
+                  />
+                )
+              }}
+            </AlphabetCharactersData>
             {computePhraseBooksSize !== 0 && (
               <DialectFilterList
                 appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
@@ -397,32 +389,29 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    this.setState({ filterInfo: newFilter }, () => {
-      if (updateUrl && !href) {
-        this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
-      }
-      // See about updating url
-      if (href && updateUrl) {
-        NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-      }
-    })
+    //
+    // The `is(...) === false` check prevents updates triggered by back or forward buttons
+    // and any other unnecessary updates (ie: the filter didn't change)
+    if (is(this.state.filterInfo, newFilter) === false) {
+      this.setState({ filterInfo: newFilter }, () => {
+        if (updateUrl && !href) {
+          this._resetURLPagination({ preserveSearch: true }) // NOTE: This function is in PageDialectLearnBase
+        }
+        // See about updating url
+        if (href && updateUrl) {
+          NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+        }
+      })
+    }
   }
 
   clearDialectFilter = () => {
     this.setState({ filterInfo: this.initialFilterInfo() })
   }
+
   // NOTE: PageDialectLearnBase calls `fetchData`
   // NOTE: Providing an empty fn() so that PageDialectLearnBase doesn't complain.
   fetchData() {}
-
-  getCharacters = () => {
-    const { routeParams } = this.props
-    const computedCharacters = ProviderHelpers.getEntry(
-      this.props.computeCharacters,
-      `${routeParams.dialect_path}/Alphabet`
-    )
-    return selectn('response.entries', computedCharacters)
-  }
 
   getPhraseBooks = () => {
     const computeCategories = ProviderHelpers.getEntry(
@@ -430,21 +419,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       '/api/v1/path/' + this.props.routeParams.dialect_path + '/Phrase Books/@children'
     )
     return selectn('response.entries', computeCategories)
-  }
-  handleAlphabetClick = async (letter, href, updateHistory = true) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: letter,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByDefinitions: false,
-        searchByTitle: true,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
-    await this.changeFilter(href, updateHistory)
   }
 
   handlePhraseBookClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
@@ -531,21 +505,9 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const {
-    document,
-    fvCategory,
-    fvPortal,
-    fvCharacter,
-    listView,
-    navigation,
-    nuxeo,
-    searchDialect,
-    windowPath,
-    locale,
-  } = state
+  const { document, fvCategory, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath, locale } = state
 
   const { computeCategories } = fvCategory
-  const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
   const { computePortal } = fvPortal
@@ -556,7 +518,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeCategories,
-    computeCharacters,
     computeDocument,
     computeLogin,
     computePortal,
@@ -572,7 +533,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
-  fetchCharacters,
   fetchDocument,
   fetchPortal,
   overrideBreadcrumbs,
