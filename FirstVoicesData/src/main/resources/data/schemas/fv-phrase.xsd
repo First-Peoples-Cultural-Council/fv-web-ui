@@ -38,5 +38,4 @@
   <xs:element name="alternate_spellings" type="nxs:stringList"/>
   <xs:element name="notes" type="xs:string"/>
   <xs:element name="phrase_books" type="nxs:stringList"/>
-  <xs:element name="update_confusables_required" type="xs:boolean"/>
 </xs:schema>

@@ -81,5 +81,4 @@
       </xs:list>
     </xs:simpleType>
   </xs:element>
-  <xs:element name="update_confusables_required" type="xs:boolean"/>
 </xs:schema>
