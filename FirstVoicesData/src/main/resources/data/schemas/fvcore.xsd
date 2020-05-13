@@ -65,4 +65,5 @@
   <xs:element name="related_pictures" type="nxs:stringList"/>
   <xs:element name="related_videos" type="nxs:stringList"/>
   <xs:element name="source" type="nxs:stringList"/>
+  <xs:element name="update_confusables_required" type="xs:boolean"/>
 </xs:schema>

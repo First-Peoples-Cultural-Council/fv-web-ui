@@ -18,9 +18,9 @@
  *
  */
 
-package ca.firstvoices.FVCategory.operations;
+package ca.firstvoices.dialect.categories.operations;
 
-import ca.firstvoices.exceptions.FVCategoryInvalidException;
+import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import java.util.Map;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -52,7 +52,7 @@ public class UpdateCategory {
   public DocumentModel run(DocumentModel doc) throws ConcurrentUpdateException {
 
     if (!doc.getType().equals("FVCategory")) {
-      throw new FVCategoryInvalidException("Document type must be FVCategory.");
+      throw new InvalidCategoryException("Document type must be FVCategory.");
     }
 
     if (properties.size() > 0) {
@@ -74,7 +74,7 @@ public class UpdateCategory {
 
           // Throw error if the doc being moved is a parent doc
           if (session.hasChildren(doc.getRef())) {
-            throw new FVCategoryInvalidException(
+            throw new InvalidCategoryException(
                 "A parent category cannot be a child of another parent category.");
           }
           

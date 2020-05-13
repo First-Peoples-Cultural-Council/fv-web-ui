@@ -34,6 +34,9 @@
   </xs:complexType>  
   <xs:element name="assigned_usr_id" type="xs:integer"/>
   <xs:element name="change_date" type="xs:string"/>
+  <xs:element name="created_date" type="xs:string"/>
   <xs:element name="import_id" type="xs:integer"/>
+  <!-- this allows for free form IDs to be captured -->
+  <xs:element name="import_id-v2" type="xs:string"/>
   <xs:element name="status_id" type="xs:integer"/>
 </xs:schema>

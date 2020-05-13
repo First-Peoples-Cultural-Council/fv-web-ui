@@ -6,6 +6,7 @@ Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ManifestVersion: 2
+Export-Package: FirstVoicesNuxeoPublisher
 Bundle-Vendor: Nuxeo
 Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.templates.factorie
  s.xml,OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml,OSGI

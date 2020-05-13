@@ -18,11 +18,11 @@
  *
  */
 
-package ca.firstvoices.FVCategory.operations;
+package ca.firstvoices.dialect.categories.operations;
 
 import static org.junit.Assert.assertEquals;
 
-import ca.firstvoices.exceptions.FVCategoryInvalidException;
+import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
         assertEquals(parentCategory2.getPathAsString() + "/Category Title", doc.getPathAsString());
     }
 
-    @Test(expected = FVCategoryInvalidException.class)
+    @Test(expected = InvalidCategoryException.class)
     public void updateCategoryOperationOnlyAcceptsFVCategory() throws OperationException {
 
         OperationContext ctx = new OperationContext(session);
@@ -91,7 +91,7 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
     }
 
-    @Test(expected = FVCategoryInvalidException.class)
+    @Test(expected = InvalidCategoryException.class)
     public void cannotAssignParentToParentCategoryCategoriesPath() throws OperationException {
         childCategory = session
             .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
@@ -110,7 +110,7 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
         automationService.run(ctx, UpdateCategory.ID, params);
     }
 
-    @Test(expected = FVCategoryInvalidException.class)
+    @Test(expected = InvalidCategoryException.class)
     public void cannotAssignParentToParentCategoryCategoriesId() throws OperationException {
         childCategory = session
             .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");

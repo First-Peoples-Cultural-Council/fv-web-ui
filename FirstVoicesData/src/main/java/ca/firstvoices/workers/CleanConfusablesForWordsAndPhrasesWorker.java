@@ -30,10 +30,10 @@ public class CleanConfusablesForWordsAndPhrasesWorker extends AbstractWork {
               DocumentModel documentModel = session.getDocument(document);
               service.cleanConfusables(session, documentModel);
               if (documentModel.getType().equals("FVWord")) {
-                documentModel.setPropertyValue("fv-word:update_confusables_required", false);
+                documentModel.setPropertyValue("fv:update_confusables_required", false);
               }
               if (documentModel.getType().equals("FVPhrase")) {
-                documentModel.setPropertyValue("fv-phrase:update_confusables_required", false);
+                documentModel.setPropertyValue("fv:update_confusables_required", false);
               }
               session.saveDocument(documentModel);
             });

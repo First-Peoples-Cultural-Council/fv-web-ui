@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ /*
+  ~ Copyright 2020 First People's Cultural Council
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ */
+  -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv-maintenance"
+           targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv-maintenance">
+
+  <!-- field definitions -->
+
+  <xs:simpleType name="stringList">
+    <xs:list itemType="xs:string"/>
+  </xs:simpleType>
+
+  <!-- TODO: Externalize this as a Directory so that it is less prone to misnaming -->
+  <!-- List of available jobs to set -->
+  <xs:simpleType name="job_ids">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Categories.Migrate" /> <!-- note: this must much the ID used to evaluate the jobs to run -->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- job stores some basic metadata about a maintenance operation -->
+  <xs:complexType name="job">
+    <xs:sequence>
+      <xs:element name="id" type="nxs:job_ids"/> <!-- defined by developers, e.g. "custom_order_recompute", or "migrate_shared_categories" -->
+      <xs:element name="last_run" type="xs:dateTime"/> <!-- defined by developers -->
+      <xs:element name="success" type="xs:boolean"/> <!-- whether this should be enabled or not -->
+      <xs:element name="message" type="xs:string"/> <!-- any optional additional messages to store -->
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- a list of jobs available for this specific type (e.g. Dialect) -->
+  <xs:complexType name="jobList">
+    <xs:sequence>
+      <xs:element name="item" type="nxs:job" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- statusItem (error/warning/insight) stores some basic metadata about a maintenance operation -->
+  <xs:complexType name="statusItem">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/> <!-- defined by developers, e.g. "custom_order_recompute" -->
+      <xs:element name="message" type="xs:string"/> <!-- any messages to store -->
+      <xs:element name="created" type="xs:dateTime"/> <!-- defined by developers -->
+      <xs:element name="job" type="nxs:job_ids"/> <!-- whether this should be enabled or not -->
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- a list of jobs available for this specific type (e.g. Dialect) -->
+  <xs:complexType name="statusList">
+    <xs:sequence>
+      <xs:element name="item" type="nxs:statusItem" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- fields -->
+
+  <!-- jobs -->
+
+  <!-- a list of required maintenance for this type (e.g. Dialect). Ids to be determined by developers and match worker/operation Ids -->
+  <!-- e.g. ['custom_order_recompute', 'migrate_shared_categories', 'other_things_we_want_to_do'], -->
+  <xs:element name="required_jobs" type="nxs:stringList"/>
+
+  <!-- a list of jobs that have run on this type -->
+  <xs:element name="history" type="nxs:jobList"/>
+
+  <!-- errors, warning, and insights -->
+  <!-- errors, warnings and insights are meant to store results of 'audits' of the data -->
+
+  <!-- a list of errors that MUST be addressed on this type (manually or automatically) -->
+  <!-- e.g. references to categories that do not exist anymore -->
+  <xs:element name="errors" type="nxs:statusList"/>
+
+  <!-- a list of warnings that SHOULD be addressed on this type (manually or automatically) -->
+  <!-- e.g. audio files that have low volume -->
+  <xs:element name="warnings" type="nxs:statusList"/>
+
+  <!-- a list of insights that are RECOMMENDED to be addressed on this type (manually or automatically) -->
+  <!-- e.g. missing related phrases, missing videos -->
+  <xs:element name="insights" type="nxs:statusList"/>
+
+</xs:schema>

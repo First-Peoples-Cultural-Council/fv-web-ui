@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<component name="fv-data-dialect-contrib" version="1.0">
+
+  <require>org.nuxeo.runtime.started</require>
+  <require>org.nuxeo.ecm.core.schema.TypeService</require>
+  <require>org.nuxeo.ecm.core.CoreExtensions</require>
+
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="fvdialect" prefix="fvdialect" override="true" src="OSGI-INF/dialect/_schemas/fvdialect.xsd"/>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <doctype name="FVDialect" extends="Folder">
+      <schema name="fvdialect"/>
+      <schema name="fvancestry"/>
+      <schema name="fvlegacy"/>
+      <schema name="publishing"/>
+      <schema name="fv-features"/>
+      <subtypes>
+        <type>FVAlphabet</type>
+        <type>FVContributors</type>
+        <type>FVCategories</type>
+        <type>FVLabelDictionary</type>
+        <type>FVLabel</type>
+        <type>FVDictionary</type>
+        <type>FVDraftFolder</type>
+        <type>FVResources</type>
+        <type>FVLinks</type>
+        <type>FVPortal</type>
+        <type>FVBooks</type>
+        <type>FVResources</type>
+        <type>Forum</type>
+      </subtypes>
+      <facet name="Versionable"/>
+      <facet name="Publishable"/>
+      <facet name="Commentable"/>
+      <facet name="PublishSpace"/>
+    </doctype>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+    <type id="FVDialect">
+      <label>Dialect</label>
+      <category>Collaborative</category>
+      <icon>/img/folder_orange.png</icon>
+      <bigIcon>/img/folder_orange_100.png</bigIcon>
+      <description>A folder to contain a language's various artificats including words.</description>
+      <default-view>view_documents</default-view>
+      <layouts mode="create">
+        <layout>layout@FVDialect-create</layout>
+      </layouts>
+      <layouts mode="edit">
+        <layout>layout@FVDialect-edit</layout>
+      </layouts>
+      <layouts mode="view">
+        <layout>layout@FVDialect-view</layout>
+      </layouts>
+      <contentViews category="content">
+        <contentView showInExportView="false">document_content</contentView>
+      </contentViews>
+      <contentViews category="trash_content">
+        <contentView showInExportView="false">document_trash_content</contentView>
+      </contentViews>
+    </type>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+    <types>
+      <type name="FVDialect">fv-lifecycle</type>
+    </types>
+  </extension>
+
+</component>

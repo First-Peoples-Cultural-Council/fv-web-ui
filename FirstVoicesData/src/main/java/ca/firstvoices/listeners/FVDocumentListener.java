@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.AssignAncestorsService;
@@ -5,7 +25,6 @@ import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
 import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
 import ca.firstvoices.workers.CleanConfusablesForWordsAndPhrasesWorker;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -194,21 +213,17 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
-    String wordQuery = "SELECT * FROM FVWord WHERE fv-word:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE fv-phrase:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE fv:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery);
 
-    List<DocumentModel> list = new ArrayList<DocumentModel>() {{
-      addAll(session.query(wordQuery));
-      addAll(session.query(phraseQuery));
-    }};
+    if (wordsAndPhrases.size() > 0) {
 
-    if (list.size() > 0) {
       WorkManager workManager = Framework.getService(WorkManager.class);
-      for (DocumentModel documentModel : list) {
+      for (DocumentModel documentModel : wordsAndPhrases) {
 
         Boolean alphabetRequiresUpdate = (Boolean) getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required");
 
-        if (alphabetRequiresUpdate.equals(false)) {
+        if (alphabetRequiresUpdate == null || alphabetRequiresUpdate.equals(false)) {
           CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
               documentModel.getRef());
           workManager.schedule(worker);

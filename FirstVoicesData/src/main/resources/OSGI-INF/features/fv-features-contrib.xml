@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<component name="fv-data-features-contrib" version="1.0">
+    <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+        <schema name="fv-features" prefix="fv-features" src="OSGI-INF/features/schemas/fv-features.xsd"/>
+    </extension>
+</component>
