@@ -11,12 +11,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
+import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.core.api.PartialList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
@@ -44,7 +48,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     localCategoriesDirectory = session.getChild(dialect.getRef(), "Categories");
 
     // Get the local categories that already exist
-    localCategories = getCategories(session, dialect.getId());
+    localCategories = getCategories(session, dialect);
 
     // Get the unique categories from all the words in this dialect
     for (String categoryId : getUniqueCategories(session, dialect.getId())) {
@@ -58,13 +62,6 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
       DocumentModel copiedCategory = copyCategory(session, category);
       ++copiedCategories;
-
-      if (copiedCategory != null) {
-        // Publish if relevant
-        if (dialect.getCurrentLifeCycleState().equals("Published")) {
-          publisherService.publish(copiedCategory);
-        }
-      }
     }
 
     return copiedCategories > 0;
@@ -83,13 +80,15 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     UnpublishedChangesService unpublishedChangesService = Framework.getService(UnpublishedChangesService.class);
 
     // Get the local categories that already exist
-    localCategories = getCategories(session, dialect.getId());
+    localCategories = getCategories(session, dialect);
 
-    DocumentModelList sharedCategories = getCategories(session, getSharedCategoriesContainer(session).getId());
+    // Get the shared categories
+    DocumentModelList sharedCategories = getCategories(session, null);
 
     if (sharedCategories.size() > 0) {
       String ids = "'" + sharedCategories.stream().map(DocumentModel::getId).collect(Collectors.joining("','")) + "'";
 
+      // This would benefit greatly from an ES query using ElasticSearchService
       // Get all words that reference shared categories
       String query =  "SELECT * FROM FVWord"
           + " WHERE fva:dialect = '" + dialect.getId() + "' "
@@ -98,6 +97,10 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
           + " AND ecm:isProxy = 0"
           + " AND ecm:isVersion = 0";
       DocumentModelList words = session.query(query, batchSize);
+
+      // Get the total words that match the query (not just the batch size)
+      PartialList<Map<String, Serializable>> resultProjection =
+          session.queryProjection(query, batchSize, 0);
 
       for (DocumentModel word : words) {
 
@@ -122,10 +125,28 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         }
       }
 
-      return words.size();
+      return resultProjection.size();
     }
 
     return 0;
+  }
+
+  @Override
+  public void publishCategoriesTree(CoreSession session, DocumentModel dialect) {
+
+    AutomationService automationService = Framework.getService(AutomationService.class);
+
+    DocumentModel localCategoriesDir = getLocalCategoriesDirectory(session, dialect);
+
+    try {
+      OperationContext operation = new OperationContext(session);
+      operation.setInput(localCategoriesDir);
+      automationService.run(operation, "FVPublish");
+
+    } catch (OperationException e) {
+      e.printStackTrace();
+    }
+
   }
 
   private DocumentModel getExistingCategory(DocumentModel category) {
@@ -201,12 +222,21 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     return localCategories.stream().filter(localCategory -> localCategory.getTitle().equals(sharedCategory.getTitle())).findFirst().orElse(sharedCategory).getId();
   }
 
-  private DocumentModelList getCategories(CoreSession session, String containerId) {
+  private DocumentModelList getCategories(CoreSession session, DocumentModel dialect) {
 
     DocumentModelList categories = null;
+    DocumentModel categoriesDirectory;
+
+    if (dialect == null) {
+      // Get shared categories directory
+      categoriesDirectory = getSharedCategoriesDirectory(session);
+    } else {
+      // Get local categories directory
+      categoriesDirectory = getLocalCategoriesDirectory(session, dialect);
+    }
 
     String query = "SELECT * FROM FVCategory "
-        + "WHERE ecm:ancestorId = '" + containerId + "' "
+        + "WHERE ecm:ancestorId = '" + categoriesDirectory.getId() + "' "
         + "AND ecm:isTrashed = 0"
         + "AND ecm:isVersion = 0";
 
@@ -219,8 +249,12 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     return categories;
   }
 
-  private DocumentModel getSharedCategoriesContainer(CoreSession session) {
+  private DocumentModel getSharedCategoriesDirectory(CoreSession session) {
     return session.getDocument(new PathRef("/FV/Workspaces/SharedData/Shared Categories"));
+  }
+
+  private DocumentModel getLocalCategoriesDirectory(CoreSession session, DocumentModel dialect) {
+    return session.getChild(dialect.getRef(), "Categories");
   }
 
   private boolean isParent(CoreSession session, DocumentModel category) {
