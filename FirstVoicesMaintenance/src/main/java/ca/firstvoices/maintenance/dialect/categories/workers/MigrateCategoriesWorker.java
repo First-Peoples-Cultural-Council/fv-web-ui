@@ -1,8 +1,8 @@
-package ca.firstvoices.dialect.categories.workers;
+package ca.firstvoices.maintenance.dialect.categories.workers;
 
-import ca.firstvoices.dialect.categories.Constants;
-import ca.firstvoices.dialect.categories.services.MigrateCategoriesService;
-import ca.firstvoices.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.dialect.categories.Constants;
+import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
+import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -74,6 +74,6 @@ public class MigrateCategoriesWorker extends AbstractWork {
 
   @Override
   public String getCategory() {
-    return ca.firstvoices.Constants.EXECUTE_REQUIRED_JOBS_EVENT_ID;
+    return ca.firstvoices.maintenance.Constants.EXECUTE_REQUIRED_JOBS_EVENT_ID;
   }
 }

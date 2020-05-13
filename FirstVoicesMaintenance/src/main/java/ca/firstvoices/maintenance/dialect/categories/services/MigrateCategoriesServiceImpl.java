@@ -1,4 +1,4 @@
-package ca.firstvoices.dialect.categories.services;
+package ca.firstvoices.maintenance.dialect.categories.services;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;

@@ -1,4 +1,4 @@
-package ca.firstvoices.dialect.categories;
+package ca.firstvoices.maintenance.dialect.categories;
 
 public class Constants {
   public static final String GROUP_NAME = "Categories";

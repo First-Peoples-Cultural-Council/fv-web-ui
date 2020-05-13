@@ -1,9 +1,9 @@
-package ca.firstvoices.dialect.categories.operations;
+package ca.firstvoices.maintenance.dialect.categories.operations;
 
-import ca.firstvoices.dialect.categories.Constants;
-import ca.firstvoices.dialect.categories.services.MigrateCategoriesService;
-import ca.firstvoices.dialect.categories.workers.MigrateCategoriesWorker;
-import ca.firstvoices.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.dialect.categories.Constants;
+import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
+import ca.firstvoices.maintenance.dialect.categories.workers.MigrateCategoriesWorker;
+import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;

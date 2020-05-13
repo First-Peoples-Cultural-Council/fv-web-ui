@@ -3,10 +3,10 @@
 
   <require>fv-maintenance-services-contrib</require>
 
-  <implementation class="ca.firstvoices.dialect.categories.services.MigrateCategoriesServiceImpl"/>
+  <implementation class="ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesServiceImpl"/>
 
   <service>
-    <provide interface="ca.firstvoices.dialect.categories.services.MigrateCategoriesService"/>
+    <provide interface="ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService"/>
   </service>
 
 </component>

@@ -37,6 +37,11 @@
       <artifactId>nuxeo-platform-audit-core</artifactId>
       <version>10.10</version>
     </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesData</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 

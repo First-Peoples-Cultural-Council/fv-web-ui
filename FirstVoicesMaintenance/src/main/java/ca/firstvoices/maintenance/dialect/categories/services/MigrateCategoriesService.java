@@ -1,4 +1,4 @@
-package ca.firstvoices.dialect.categories.services;
+package ca.firstvoices.maintenance.dialect.categories.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

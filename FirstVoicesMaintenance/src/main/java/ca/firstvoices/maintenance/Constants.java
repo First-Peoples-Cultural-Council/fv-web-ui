@@ -1,4 +1,4 @@
-package ca.firstvoices;
+package ca.firstvoices.maintenance;
 
 public class Constants {
   public static final String REQUIRED_JOBS_FRIENDLY_NAME = "Maintenance: Required Jobs";

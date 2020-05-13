@@ -1,7 +1,7 @@
-package ca.firstvoices.dialect;
+package ca.firstvoices.maintenance.dialect;
 
-import ca.firstvoices.Constants;
-import ca.firstvoices.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.Constants;
+import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
