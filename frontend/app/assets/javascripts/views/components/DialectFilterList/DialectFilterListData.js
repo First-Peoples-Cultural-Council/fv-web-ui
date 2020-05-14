@@ -1,11 +1,30 @@
+/*
+Hi! These are notes on what I find confusing and MAYBE things we could drop or simplify
+
+facetField = not certain how this is used
+facets = not certain how this is used
+lastCheckedUid = Related to 'unchecking' previously selected list items. Believe this is from a previous version of the category list that could select multiple items. May be able to remove/simplify this system since we currently aren't supporting multiple categories.
+lastCheckedChildrenUids = Related to 'unchecking' previously selected list items. See note in lastCheckedUid.
+lastCheckedParentFacetUid = Related to 'unchecking' previously selected list items. See note in lastCheckedUid.
+
+generateDataForHistoryEvents: this generates data used when the back/forward buttons are clicked. May not be necessary if componentDidUpdate handles everything and/or can't we use data created by `generateListItemData`?
+setSelected: do we need to manage this anymore since we don't support multiple selections? We might be bale to drop the `unselected` & `lastChecked*` code but need to see how this is being used by external components
+*/
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { Set } from 'immutable'
 import PropTypes from 'prop-types'
-import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
+
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
+import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
+
+import ProviderHelpers from 'common/ProviderHelpers'
+import { SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'views/components/SearchDialect/constants'
+
+const TYPE_WORDS = 'words'
+const TYPE_PHRASES = 'phrases'
 
 class DialectFilterListData extends Component {
   historyData = {}
@@ -15,80 +34,81 @@ class DialectFilterListData extends Component {
   constructor(props) {
     super(props)
 
+    const { workspaceKey } = this.props
     this.state = {
-      facets: [],
-      facetField: ProviderHelpers.switchWorkspaceSectionKeys(props.workspaceKey, this.props.routeParams.area),
-      lastCheckedUid: undefined,
-      lastCheckedChildrenUids: [],
-      lastCheckedParentFacetUid: undefined,
+      // `switchWorkspaceSectionKeys` will return the related `section` "key" when passed a `Workspaces` "key". Think this value would be used in network/nql requests somewhere
+      facetField: workspaceKey
+        ? ProviderHelpers.switchWorkspaceSectionKeys(workspaceKey, this.props.routeParams.area)
+        : '', // NOTE: not certain how this is used. See note above.
+      facets: [], // NOTE: not certain how this is used
+      lastCheckedChildrenUids: [], // NOTE: Related to 'unchecking' previously selected list items. Believe this is from a previous version of the category list that could select multiple items. May be able to remove/simplify this system since we currently aren't supporting multiple selections.
+      lastCheckedParentFacetUid: undefined, // NOTE: Related to 'unchecking' previously selected list items. See note in lastCheckedChildrenUids.
+      lastCheckedUid: undefined, // NOTE: Related to 'unchecking' previously selected list items. See note in lastCheckedChildrenUids.
     }
   }
   async componentDidMount() {
-    const { path, type } = this.props
-    // Get categories
-    await ProviderHelpers.fetchIfMissing(path, this.props.fetchCategories, this.props.computeCategories)
-    const extractComputedCategories = ProviderHelpers.getEntry(this.props.computeCategories, path)
-    const facets = selectn('response.entries', extractComputedCategories)
-
     // Bind history events
     window.addEventListener('popstate', this.handleHistoryEvent)
 
+    const { path, type, transformData } = this.props
+
+    // Use provided data or fetch new data
+    let facets
+
+    // NOTE: transformData can be set AND be empty
+    if (transformData) {
+      facets = transformData
+    } else {
+      // Get categories
+      await ProviderHelpers.fetchIfMissing(path, this.props.fetchCategories, this.props.computeCategories)
+      const extractComputedCategories = ProviderHelpers.getEntry(this.props.computeCategories, path)
+      facets = selectn('response.entries', extractComputedCategories)
+    }
+
     // Is something selected? (via url)
+    // NOTE: could this be driven by the `appliedFilterIds` prop?
     const selectedDialectFilter =
-      type === 'words' ? selectn('category', this.props.routeParams) : selectn('phraseBook', this.props.routeParams)
+      type === TYPE_WORDS ? selectn('category', this.props.routeParams) : selectn('phraseBook', this.props.routeParams)
 
     if (selectedDialectFilter) {
       this.selectedDialectFilter = selectedDialectFilter
     }
 
-    // we have data, so...
+    // We may have data, update this.filtersSorted & history data
     if (facets && facets.length > 0) {
       this.filtersSorted = this.sortDialectFilters(facets)
-      this.generateClickParamData(this.filtersSorted)
-    }
-
-    this.setState(
-      {
-        facets,
-      },
-      () => {
-        if (this.selectedDialectFilter) {
-          const selectedParams = this.historyData[this.selectedDialectFilter]
-          if (selectedParams) {
-            this.setSelected(selectedParams)
-            this.selectedDialectFilter = undefined
+      this.historyData = this.generateDataForHistoryEvents(this.filtersSorted)
+      this.setState(
+        {
+          facets,
+        },
+        () => {
+          if (this.selectedDialectFilter) {
+            const selectedParams = this.historyData[this.selectedDialectFilter]
+            if (selectedParams) {
+              this.setSelected(selectedParams)
+              this.selectedDialectFilter = undefined
+            }
           }
         }
-      }
-    )
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('popstate', this.handleHistoryEvent)
-
-    // NOTE: Believe this stuff is legacy from a previous version of the category sidebar
-    // that could select multiple items. May be able to toss it but not 100% sure.
-    const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
-    // 'uncheck' previous
-    if (lastCheckedUid) {
-      const unselected = {
-        checkedFacetUid: lastCheckedUid,
-        childrenIds: lastCheckedChildrenUids,
-        parentFacetUid: lastCheckedParentFacetUid,
-      }
-      this.props.dialectFilterListWillUnmount({
-        facetField: this.state.facetField,
-        unselected,
-        type: this.props.type,
-        resetUrlPagination: false,
-      })
+      )
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { facets } = this.state
-    const { facets: prevFacets } = prevState
+    const { type } = this.props
 
+    let facets
+    let prevFacets
+
+    // Are we using transformData or internal state?
+    if (this.props.transformData) {
+      facets = this.props.transformData
+      prevFacets = prevProps.transformData
+    } else {
+      facets = this.state.facets
+      prevFacets = prevState.facets
+    }
     // Note: guard against undefined
     const prevAppliedFilterIds = prevProps.appliedFilterIds || new Set()
     const currentAppliedFilterIds = this.props.appliedFilterIds || new Set()
@@ -98,26 +118,60 @@ class DialectFilterListData extends Component {
     }
 
     if (prevFacets.length !== facets.length || prevAppliedFilterIds.equals(currentAppliedFilterIds) === false) {
-      this.generateClickParamData(this.filtersSorted)
+      this.historyData = this.generateDataForHistoryEvents(this.filtersSorted)
     }
+
+    // Is something selected? (via url)
+    // NOTE: could this be driven by the `appliedFilterIds` prop?
+    let selectedDialectFilter
+    let prevSelectedDialectFilter
+    if (type === TYPE_WORDS) {
+      selectedDialectFilter = selectn('category', this.props.routeParams)
+      prevSelectedDialectFilter = selectn('category', prevProps.routeParams)
+    } else {
+      selectedDialectFilter = selectn('phraseBook', this.props.routeParams)
+      prevSelectedDialectFilter = selectn('phraseBook', prevProps.routeParams)
+    }
+
+    if (selectedDialectFilter !== prevSelectedDialectFilter) {
+      const selectedParams = this.historyData[selectedDialectFilter]
+      if (selectedParams) {
+        this.setSelected(selectedParams)
+        this.selectedDialectFilter = undefined
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.handleHistoryEvent)
+
+    // // NOTE: Believe this stuff is legacy from a previous version of the category sidebar
+    // // that could select multiple items. May be able to toss it but not 100% sure.
+    // const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
+    // // 'uncheck' previous
+    // if (lastCheckedUid) {
+    //   const unselected = {
+    //     checkedFacetUid: lastCheckedUid,
+    //     childrenIds: lastCheckedChildrenUids,
+    //     parentFacetUid: lastCheckedParentFacetUid,
+    //   }
+    //   this.props.dialectFilterListWillUnmount({
+    //     facetField: this.state.facetField,
+    //     unselected,
+    //     type: this.props.type,
+    //     resetUrlPagination: false,
+    //   })
+    // }
   }
 
   render() {
     return this.props.children({
-      facetField: this.state.facetField,
-      facets: this.state.facets,
-      routeParams: this.props.routeParams,
-      facetSelected: this.props.routeParams.category,
-
-      listItemsData: this.generateListItemData(),
-
-      lastCheckedUid: this.state.lastCheckedUid,
-      lastCheckedChildrenUids: this.state.lastCheckedChildrenUids,
-      lastCheckedParentFacetUid: this.state.lastCheckedParentFacetUid,
+      listItemData: this.generateListItemData(),
     })
   }
 
-  generateDialectFilterUrl = (filterId) => {
+  // Creates url used with <Link>/<a> in Presentation layer
+  generateUrlDialectFilterListItem = (filterId) => {
     let href = `/${this.props.splitWindowPath.join('/')}`
     const _splitWindowPath = [...this.props.splitWindowPath]
     const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
@@ -125,18 +179,42 @@ class DialectFilterListData extends Component {
     })
     if (wordOrPhraseIndex !== -1) {
       _splitWindowPath.splice(wordOrPhraseIndex + 1)
-      const urlFragment = this.props.type === 'words' ? 'categories' : 'book'
+      const urlFragment = this.props.type === TYPE_WORDS ? 'categories' : 'book'
       href = `/${_splitWindowPath.join('/')}/${urlFragment}/${filterId}`
     }
     return href
   }
 
+  // generateListItemData
+  // ---------------------------------------------------
   // Generates data structure representing the list
-  generateListItemData = () => {
+  // Processes `filters` and transforms into an object to be used by the Presentation layer
+  //
+  // returns [
+  //   { // Top level category
+  //     children: [ // Children categories of the top level category
+  //       {
+  //         hasActiveParent,
+  //         href,
+  //         isActive,
+  //         text,
+  //         uid,
+  //       },
+  //       /* More children... */
+  //     ],
+  //     hasActiveChild,
+  //     href,
+  //     isActive,
+  //     text,
+  //     uid,
+  //   },
+  //   /* More top level categories... */
+  // ]
+  generateListItemData = (filters = this.filtersSorted) => {
     const { appliedFilterIds } = this.props
 
     const listItemData = []
-    this.filtersSorted.forEach((filter) => {
+    filters.forEach((filter) => {
       const childData = []
       const uidParent = filter.uid
 
@@ -153,30 +231,42 @@ class DialectFilterListData extends Component {
           hasActiveChild = childIsActive
           // Save child data
           childData.push({
-            uid: uidChild,
-            href: this.generateDialectFilterUrl(uidChild),
-            isActive: childIsActive,
             hasActiveParent: parentIsActive,
+            href: this.generateUrlDialectFilterListItem(uidChild),
+            isActive: childIsActive,
             text: filterChild.title,
+            uid: uidChild,
           })
         })
       }
 
       // Process parent
       listItemData.push({
-        uid: uidParent,
-        href: this.generateDialectFilterUrl(uidParent),
-        isActive: parentIsActive,
-        hasActiveChild: hasActiveChild,
-        text: filter.title,
         children: childData,
+        hasActiveChild: hasActiveChild,
+        href: this.generateUrlDialectFilterListItem(uidParent),
+        isActive: parentIsActive,
+        text: filter.title,
+        uid: uidParent,
       })
     })
     return listItemData
   }
 
-  // Generates data used with history events
-  generateClickParamData = (filters) => {
+  // This generates data used when the back/forward buttons are clicked.
+  // Not certain why it's needed and if it is, why can't we reuse data created by `generateListItemData`?
+  // Creates:
+  // {
+  //   [uid]: {
+  //     checkedFacetUid, // ''
+  //     childrenIds, // []
+  //     href, // ''
+  //     parentFacetUid, // '' || undefined
+  //   },
+  //   // more entries...
+  // }
+  generateDataForHistoryEvents = (filters) => {
+    const newHistoryData = {}
     filters.forEach((filter) => {
       const uidParent = filter.uid
 
@@ -191,7 +281,7 @@ class DialectFilterListData extends Component {
 
           // Saving for history events
           this.historyData[uidChild] = {
-            href: this.generateDialectFilterUrl(uidChild),
+            href: this.generateUrlDialectFilterListItem(uidChild),
             checkedFacetUid: uidChild,
             childrenIds: null,
             parentFacetUid: uidParent,
@@ -201,16 +291,20 @@ class DialectFilterListData extends Component {
 
       // Process parent
       const parentClickParams = {
-        href: this.generateDialectFilterUrl(uidParent),
+        href: this.generateUrlDialectFilterListItem(uidParent),
         checkedFacetUid: uidParent,
         childrenIds: childrenUids,
         parentFacetUid: undefined,
       }
-      this.historyData[uidParent] = parentClickParams
+      newHistoryData[uidParent] = parentClickParams
     })
+
+    return newHistoryData
   }
 
-  // NOTE: used to be called handleClick
+  // Do we need to manage this anymore since we don't support multiple selections?
+  // We might be able to drop the `unselected` & `lastChecked*` code
+  // Maybe only need to call `setDialectFilter`?
   setSelected = ({ href, checkedFacetUid, childrenIds, parentFacetUid }) => {
     const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
 
@@ -237,19 +331,46 @@ class DialectFilterListData extends Component {
           checkedFacetUid,
           childrenIds,
         }
-        this.props.setDialectFilter({
+
+        this.setDialectFilter({
           facetField: this.state.facetField,
+          href,
           selected,
           unselected,
-          href,
         })
       }
     )
   }
 
+  // Saves to redux so other components can respond (eg: "you are searching...")
+  // also calls any passed in callback from the parent/layout component (typically used to update it's state)
+  setDialectFilter = async ({ facetField, href, selected, unselected, updateUrl }) => {
+    await this.props.searchDialectUpdate({
+      searchByAlphabet: '',
+      searchByMode: SEARCH_BY_CATEGORY,
+      searchBySettings: {
+        searchByTitle: true,
+        searchByDefinitions: false,
+        searchByTranslations: false,
+        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      },
+      searchingDialectFilter: selected.checkedFacetUid,
+      searchTerm: '',
+    })
+
+    this.props.setDialectFilterCallback({
+      facetField,
+      href,
+      selected,
+      unselected,
+      updateUrl,
+    })
+  }
+
+  // `handleHistoryEvent` is called during history events
   handleHistoryEvent = () => {
     const _filterId =
-      this.props.type === 'words'
+      this.props.type === TYPE_WORDS
         ? selectn('routeParams.category', this.props)
         : selectn('routeParams.phraseBook', this.props)
     if (_filterId) {
@@ -267,10 +388,10 @@ class DialectFilterListData extends Component {
               checkedFacetUid,
               childrenIds,
             }
-            this.props.setDialectFilter({
+            this.setDialectFilter({
               facetField: this.state.facetField,
-              selected,
               href,
+              selected,
               updateUrl: false,
             })
           }
@@ -279,6 +400,7 @@ class DialectFilterListData extends Component {
     }
   }
 
+  // Not being used. Believe this was in-progress work from Nolan or Daniel
   setUidUrlPath = (filter, path) => {
     // TODO: map encodeUri title to uid for friendly urls
     // this.uidUrl[category.uid] = encodeURI(category.title)
@@ -287,6 +409,7 @@ class DialectFilterListData extends Component {
     this.uidUrl[filter.uid] = `${path}/${encodeURI(filter.uid)}`
   }
 
+  // Sort functions:
   sortByTitle = (a, b) => {
     if (a.title < b.title) return -1
     if (a.title > b.title) return 1
@@ -310,26 +433,29 @@ class DialectFilterListData extends Component {
 }
 
 // PROPTYPES
-const { any, array, func, instanceOf, object, string } = PropTypes
+const { any, array, func, instanceOf, object, string, oneOf } = PropTypes
 DialectFilterListData.propTypes = {
-  appliedFilterIds: instanceOf(Set),
+  // React built-in prop:
   children: any,
-  dialectFilterListWillUnmount: func,
-  path: string.isRequired, // Used with facets
-  setDialectFilter: func,
-  type: string,
-  workspaceKey: string.isRequired, // Used with facetField
+  // Props applied to instance of data component:
+  appliedFilterIds: instanceOf(Set), // Selected list items, rename?
+  path: string, // Used with facets
+  setDialectFilterCallback: func,
+  transformData: array,
+  type: oneOf([TYPE_WORDS, TYPE_PHRASES]).isRequired,
+  workspaceKey: string, // Used with facetField
+  // Redux props:
   // REDUX: reducers/state
   computeCategories: object.isRequired,
   routeParams: object.isRequired,
   splitWindowPath: array.isRequired,
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
+  searchDialectUpdate: func.isRequired,
 }
 DialectFilterListData.defaultProps = {
   appliedFilterIds: new Set(),
   dialectFilterListWillUnmount: () => {},
-  setDialectFilter: () => {},
 }
 
 // REDUX: reducers/state
@@ -347,6 +473,7 @@ const mapStateToProps = (state) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
+  searchDialectUpdate,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterListData)
