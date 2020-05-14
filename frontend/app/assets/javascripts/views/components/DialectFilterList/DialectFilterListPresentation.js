@@ -8,33 +8,9 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import Link from 'views/components/Link'
-import URLHelpers from '../../../common/URLHelpers'
+import URLHelpers from 'common/URLHelpers'
 
-const { instanceOf, any, array, func, object, string } = PropTypes
-
-export class DialectFilterList extends Component {
-  static propTypes = {
-    appliedFilterIds: instanceOf(Set),
-    facetField: string.isRequired,
-    facets: array.isRequired,
-    handleDialectFilterClick: func,
-    handleDialectFilterList: func.isRequired,
-    routeParams: any,
-    styles: object,
-    title: string.isRequired,
-    type: string.isRequired,
-    // REDUX: reducers/state
-    splitWindowPath: array,
-    // REDUX: actions/dispatch/func
-    pushWindowPath: func.isRequired,
-  }
-
-  static defaultProps = {
-    type: 'words',
-    facets: [],
-    handleDialectFilterClick: () => {},
-  }
-
+export class DialectFilterListPresentation extends Component {
   clickParams = {}
   filtersSorted = []
   _isMounted = false
@@ -384,6 +360,30 @@ export class DialectFilterList extends Component {
   }
 }
 
+// PropTypes
+const { instanceOf, any, array, func, object, string } = PropTypes
+DialectFilterListPresentation.propTypes = {
+  appliedFilterIds: instanceOf(Set),
+  facetField: string.isRequired,
+  facets: array.isRequired,
+  handleDialectFilterClick: func,
+  handleDialectFilterList: func.isRequired,
+  routeParams: any,
+  styles: object,
+  title: string.isRequired,
+  type: string.isRequired,
+  // REDUX: reducers/state
+  splitWindowPath: array,
+  // REDUX: actions/dispatch/func
+  pushWindowPath: func.isRequired,
+}
+
+DialectFilterListPresentation.defaultProps = {
+  type: 'words',
+  facets: [],
+  handleDialectFilterClick: () => {},
+}
+
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { windowPath } = state
@@ -400,4 +400,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterList)
+export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterListPresentation)
