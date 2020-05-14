@@ -40,7 +40,7 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
-import DialectFilterList from 'views/components/DialectFilterList'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import AlphabetListView from 'views/components/AlphabetListView'
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -336,7 +336,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
               letter={selectn('routeParams.letter', this.props)}
             />
             {computePhraseBooksSize !== 0 && (
-              <DialectFilterList
+              <DialectFilterListPresentation
                 appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
                 // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
                 facetField={ProviderHelpers.switchWorkspaceSectionKeys(

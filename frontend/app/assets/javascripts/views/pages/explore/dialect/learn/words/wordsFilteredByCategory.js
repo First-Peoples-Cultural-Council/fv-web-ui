@@ -35,7 +35,7 @@ import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/n
 // -------------------------------------------
 import AlphabetListView from 'views/components/AlphabetListView'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import DialectFilterList from 'views/components/DialectFilterList'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
@@ -343,7 +343,7 @@ class WordsFilteredByCategory extends Component {
             <CategoriesDataLayer>
               {({ categoriesData }) => {
                 return (
-                  <DialectFilterList
+                  <DialectFilterListPresentation
                     appliedFilterIds={new Set([routeParams.category])}
                     clearDialectFilter={this.clearDialectFilter}
                     facets={categoriesData}

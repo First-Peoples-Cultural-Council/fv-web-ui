@@ -39,7 +39,7 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 
-import DialectFilterList from 'views/components/DialectFilterList'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import AlphabetListView from 'views/components/AlphabetListView'
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -316,7 +316,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
                 return (
-                  <DialectFilterList
+                  <DialectFilterListPresentation
                     appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                     facetField={ProviderHelpers.switchWorkspaceSectionKeys(
                       'fv-word:categories',
