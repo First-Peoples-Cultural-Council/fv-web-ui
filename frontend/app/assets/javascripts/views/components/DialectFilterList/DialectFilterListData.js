@@ -89,8 +89,9 @@ class DialectFilterListData extends Component {
     const { facets } = this.state
     const { facets: prevFacets } = prevState
 
-    const prevAppliedFilterIds = prevProps.appliedFilterIds
-    const currentAppliedFilterIds = this.props.appliedFilterIds
+    // Note: guard against undefined
+    const prevAppliedFilterIds = prevProps.appliedFilterIds || new Set()
+    const currentAppliedFilterIds = this.props.appliedFilterIds || new Set()
 
     if (prevFacets.length !== facets.length) {
       this.filtersSorted = this.sortDialectFilters(facets)
@@ -316,7 +317,7 @@ DialectFilterListData.propTypes = {
   dialectFilterListWillUnmount: func,
   path: string.isRequired, // Used with facets
   setDialectFilter: func,
-  type: string.isRequired,
+  type: string,
   workspaceKey: string.isRequired, // Used with facetField
   // REDUX: reducers/state
   computeCategories: object.isRequired,
@@ -326,6 +327,7 @@ DialectFilterListData.propTypes = {
   fetchCategories: func.isRequired,
 }
 DialectFilterListData.defaultProps = {
+  appliedFilterIds: new Set(),
   dialectFilterListWillUnmount: () => {},
   setDialectFilter: () => {},
 }
