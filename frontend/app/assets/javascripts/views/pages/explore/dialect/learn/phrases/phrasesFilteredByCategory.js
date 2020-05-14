@@ -36,8 +36,11 @@ import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/n
 // FPCC
 // -------------------------------------------
 import AlphabetListView from 'views/components/AlphabetListView'
+
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import DialectFilterList from 'views/components/DialectFilterList'
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
@@ -59,7 +62,6 @@ import {
   dictionaryListSmallScreenTemplatePhrases,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
-  getCategoriesOrPhrasebooks,
   getCharacters,
   handleDialectFilterList,
   onNavigateRequest,
@@ -69,11 +71,7 @@ import {
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
-import {
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_PHRASE_BOOK,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_PART_OF_SPEECH_ANY } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -107,20 +105,6 @@ export class PhrasesFilteredByCategory extends Component {
     // Document
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path + '/Dictionary', this.props.fetchDocument, computeDocument)
 
-    // Phrasebooks (Category)
-    const pathOrId = `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`
-    let phraseBook = getCategoriesOrPhrasebooks({
-      getEntryId: pathOrId,
-      computeCategories: this.props.computeCategories,
-    })
-    if (phraseBook === undefined) {
-      await this.props.fetchCategories(pathOrId)
-      phraseBook = getCategoriesOrPhrasebooks({
-        getEntryId: pathOrId,
-        computeCategories: this.props.computeCategories,
-      })
-    }
-
     // Alphabet
     // ---------------------------------------------
     let characters = getCharacters({
@@ -147,7 +131,6 @@ export class PhrasesFilteredByCategory extends Component {
     this.setState(
       {
         characters,
-        phraseBook,
       },
       () => {
         const letter = selectn('letter', routeParams)
@@ -165,7 +148,7 @@ export class PhrasesFilteredByCategory extends Component {
   constructor(props, context) {
     super(props, context)
 
-    const { computeCategories, computeDocument, computePortal, properties, routeParams } = props
+    const { computeDocument, computePortal, properties, routeParams } = props
 
     let filterInfo = this.initialFilterInfo()
 
@@ -189,10 +172,6 @@ export class PhrasesFilteredByCategory extends Component {
         id: `${routeParams.dialect_path}/Dictionary`,
         entity: computeDocument,
       },
-      {
-        id: `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`,
-        entity: computeCategories,
-      },
     ])
 
     this.state = {
@@ -210,11 +189,9 @@ export class PhrasesFilteredByCategory extends Component {
       filterInfo,
       // flashcardMode, // TODO ?
       isKidsTheme,
-      phraseBook,
     } = this.state
 
     const {
-      computeCategories,
       computeDialect2,
       computeDocument,
       computeLogin,
@@ -231,12 +208,6 @@ export class PhrasesFilteredByCategory extends Component {
     const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
 
     const computedDialect2Response = selectn('response', computedDialect2)
-    const computedPhraseBooks = ProviderHelpers.getEntry(
-      computeCategories,
-      `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`
-    )
-    const computedPhraseBooksSize = selectn('response.entries.length', computedPhraseBooks) || 0
-
     const dialect = selectn('response.contextParameters.ancestry.dialect.dc:title', computedPortal) || ''
     const pageTitle = intl.trans('views.pages.explore.dialect.phrases.x_phrases', `${dialect} Phrases`, null, [dialect])
     const parentUid = selectn('response.uid', computedDocument)
@@ -369,34 +340,52 @@ export class PhrasesFilteredByCategory extends Component {
               letter={selectn('letter', routeParams)}
             />
 
-            {computedPhraseBooksSize !== 0 && (
-              <DialectFilterList
-                appliedFilterIds={new Set([routeParams.phraseBook])}
-                clearDialectFilter={this.clearDialectFilter}
-                facets={phraseBook}
-                facetField={ProviderHelpers.switchWorkspaceSectionKeys('fv-phrase:phrase_books', routeParams.area)}
-                // filterInfo={filterInfo} // TODO ?
-                handleDialectFilterClick={this.handleCategoryClick}
-                handleDialectFilterList={(facetFieldParam, selected, unselected, type, shouldResetUrlPagination) => {
-                  this.handleDialectFilterChange({
-                    facetField: facetFieldParam,
-                    selected,
-                    type,
-                    unselected,
-                    routeParams: routeParams,
-                    filterInfo: filterInfo,
-                    shouldResetUrlPagination,
-                  })
-                }}
-                routeParams={routeParams}
-                title={intl.trans(
-                  'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
-                  'Browse Phrase Books',
-                  'words'
-                )}
-                type={this.DIALECT_FILTER_TYPE}
-              />
-            )}
+            <DialectFilterListData
+              appliedFilterIds={new Set([routeParams.phraseBook])}
+              setDialectFilterCallback={this.setDialectFilterCallback} // TODO
+              path={`/api/v1/path/${this.props.routeParams.dialect_path}/Phrase Books/@children`}
+              workspaceKey="fv-phrase:phrase_books" // TODO?
+              type={this.DIALECT_FILTER_TYPE}
+              // ------------------------------------------------
+              // PREVIOUSLY ATTACHED TO PRESENTATION COMPONENT
+              // May not be needed
+              // ------------------------------------------------
+              // clearDialectFilter={this.clearDialectFilter}
+              // facets={facets}
+              // facetField={facetField}
+              // handleDialectFilterClick={this.handleCategoryClick}
+              // handleDialectFilterList={(
+              //   facetFieldParam,
+              //   selected,
+              //   unselected,
+              //   type,
+              //   shouldResetUrlPagination
+              // ) => {
+              //   this.handleDialectFilterChange({
+              //     facetField: facetFieldParam,
+              //     selected,
+              //     type,
+              //     unselected,
+              //     routeParams: routeParams,
+              //     filterInfo: filterInfo,
+              //     shouldResetUrlPagination,
+              //   })
+              // }}
+              // routeParams={routeParams}
+            >
+              {({ listItemData }) => {
+                return (
+                  <DialectFilterListPresentation
+                    title={intl.trans(
+                      'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
+                      'Browse Phrase Books',
+                      'words'
+                    )}
+                    listItemData={listItemData}
+                  />
+                )
+              }}
+            </DialectFilterListData>
           </div>
           <div className="col-xs-12 col-md-9">
             <h1 className="DialectPageTitle">{pageTitle}</h1>
@@ -661,20 +650,7 @@ export class PhrasesFilteredByCategory extends Component {
     NavigationHelpers.navigate(href, this.props.pushWindowPath)
   }
 
-  handleCategoryClick = async ({ facetField, selected, unselected } = {}) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_PHRASE_BOOK,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
+  setDialectFilterCallback = async ({ facetField, selected, unselected } = {}) => {
     this.changeFilter()
 
     this.handleDialectFilterChange({
@@ -777,7 +753,6 @@ PhrasesFilteredByCategory.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
-  computeCategories: object.isRequired,
   computeCharacters: object.isRequired,
   computeDialect2: object.isRequired,
   computeDocument: object.isRequired,
@@ -812,7 +787,6 @@ PhrasesFilteredByCategory.defaultProps = {
 const mapStateToProps = (state /*, ownProps*/) => {
   const {
     document,
-    fvCategory,
     fvCharacter,
     fvDialect,
     fvPhrase,
@@ -824,7 +798,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     windowPath,
   } = state
 
-  const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { computePhrases } = fvPhrase
@@ -836,7 +809,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { splitWindowPath, _windowPath } = windowPath
 
   return {
-    computeCategories,
     computeCharacters,
     computeDialect2,
     computeDocument,

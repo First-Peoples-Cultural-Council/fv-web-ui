@@ -21,7 +21,6 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
@@ -40,7 +39,9 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
-import DialectFilterList from 'views/components/DialectFilterList'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+
 import AlphabetListView from 'views/components/AlphabetListView'
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -62,7 +63,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     hasPagination: bool,
     routeParams: object.isRequired,
     // REDUX: reducers/state
-    computeCategories: object.isRequired,
     computeDocument: object.isRequired,
     computeLogin: object.isRequired,
     computePortal: object.isRequired,
@@ -70,7 +70,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    fetchCategories: func.isRequired,
     fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
@@ -81,33 +80,22 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     searchDialectUpdate: () => {},
   }
 
-  DIALECT_FILTER_TYPE = 'phrases'
-
   async componentDidMountViaPageDialectLearnBase() {
     const { routeParams } = this.props
 
     // Portal
-    ProviderHelpers.fetchIfMissing(
+    await ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Portal',
       this.props.fetchPortal,
       this.props.computePortal
     )
 
     // Document
-    ProviderHelpers.fetchIfMissing(
+    await ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Dictionary',
       this.props.fetchDocument,
       this.props.computeDocument
     )
-
-    // Phrasebooks (Category)
-    let phraseBooks = this.getPhraseBooks()
-    if (phraseBooks === undefined) {
-      await this.props.fetchCategories(
-        '/api/v1/path/' + this.props.routeParams.dialect_path + '/Phrase Books/@children'
-      )
-      phraseBooks = this.getPhraseBooks()
-    }
 
     // Alphabet
     // ---------------------------------------------
@@ -125,7 +113,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     const newState = {
       characters,
-      phraseBooks,
+      dialectId: selectn(
+        'response.contextParameters.ancestry.dialect.uid',
+        ProviderHelpers.getEntry(this.props.computeDocument, routeParams.dialect_path + '/Dictionary')
+      ),
     }
 
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
@@ -167,10 +158,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         id: this.props.routeParams.dialect_path + '/Dictionary',
         entity: this.props.computeDocument,
       },
-      {
-        id: '/api/v1/path/' + this.props.routeParams.dialect_path + '/Phrase Books/@children',
-        entity: this.props.computeCategories,
-      },
     ])
 
     this.state = {
@@ -203,14 +190,9 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
-    const computePhraseBooks = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      '/api/v1/path/' + this.props.routeParams.dialect_path + '/Phrase Books/@children'
-    )
 
     const { searchByMode } = this.props.computeSearchDialect
 
-    const computePhraseBooksSize = selectn('response.entries.length', computePhraseBooks) || 0
     const dialect = selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || ''
     const pageTitle = this.props.intl.trans(
       'views.pages.explore.dialect.phrases.x_phrases',
@@ -219,12 +201,8 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       [dialect]
     )
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
-    const dialectId = selectn(
-      'response.contextParameters.ancestry.dialect.uid',
-      ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
-    )
     const phraseListView =
-      selectn('response.uid', computeDocument) && dialectId ? (
+      selectn('response.uid', computeDocument) && this.state.dialectId ? (
         <PhraseListView
           controlViaURL
           DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
@@ -235,7 +213,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           flashcardTitle={pageTitle}
           onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
           parentID={selectn('response.uid', computeDocument)}
-          dialectID={dialectId}
+          dialectID={this.state.dialectId}
           routeParams={this.props.routeParams}
           // Search:
           handleSearch={this.handleSearch}
@@ -335,26 +313,36 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
               handleClick={this.handleAlphabetClick}
               letter={selectn('routeParams.letter', this.props)}
             />
-            {computePhraseBooksSize !== 0 && (
-              <DialectFilterList
-                appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
-                // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
-                facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                  'fv-phrase:phrase_books',
-                  this.props.routeParams.area
-                )}
-                facets={this.state.phraseBooks} // TODO: NOT IN WORDS
-                handleDialectFilterClick={this.handlePhraseBookClick} // TODO: NOT IN WORDS
-                handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-                routeParams={this.props.routeParams}
-                title={this.props.intl.trans(
-                  'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
-                  'Browse Phrase Books',
-                  'words'
-                )}
-                type={this.DIALECT_FILTER_TYPE}
-              />
-            )}
+
+            <DialectFilterListData
+              appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
+              path={`/api/v1/path/${this.props.routeParams.dialect_path}/Phrase Books/@children`}
+              type="phrases"
+              workspaceKey="fv-phrase:phrase_books"
+              // ------------------------------------------------
+              // PREVIOUSLY ATTACHED TO PRESENTATION COMPONENT
+              // May not be needed
+              // ------------------------------------------------
+              // // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
+              // facetField={facetField}
+              // facets={facets} // TODO: NOT IN WORDS
+              // handleDialectFilterClick={this.handlePhraseBookClick} // TODO: NOT IN WORDS
+              // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              // routeParams={this.props.routeParams}
+            >
+              {({ listItemData }) => {
+                return (
+                  <DialectFilterListPresentation
+                    title={this.props.intl.trans(
+                      'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
+                      'Browse Phrase Books',
+                      'words'
+                    )}
+                    listItemData={listItemData}
+                  />
+                )
+              }}
+            </DialectFilterListData>
           </div>
           <div className={classNames('col-xs-12', 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
@@ -424,13 +412,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     return selectn('response.entries', computedCharacters)
   }
 
-  getPhraseBooks = () => {
-    const computeCategories = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      '/api/v1/path/' + this.props.routeParams.dialect_path + '/Phrase Books/@children'
-    )
-    return selectn('response.entries', computeCategories)
-  }
   handleAlphabetClick = async (letter, href, updateHistory = true) => {
     await this.props.searchDialectUpdate({
       searchByAlphabet: letter,
@@ -530,21 +511,9 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 }
 
 // REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const {
-    document,
-    fvCategory,
-    fvPortal,
-    fvCharacter,
-    listView,
-    navigation,
-    nuxeo,
-    searchDialect,
-    windowPath,
-    locale,
-  } = state
+const mapStateToProps = (state) => {
+  const { document, fvPortal, fvCharacter, listView, navigation, nuxeo, searchDialect, windowPath, locale } = state
 
-  const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
@@ -555,7 +524,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { intlService } = locale
 
   return {
-    computeCategories,
     computeCharacters,
     computeDocument,
     computeLogin,
@@ -571,7 +539,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCategories,
   fetchCharacters,
   fetchDocument,
   fetchPortal,

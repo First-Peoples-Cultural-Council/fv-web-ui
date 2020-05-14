@@ -56,10 +56,17 @@ public class MigrateCategories {
       boolean success = migrateCategoriesService.migrateCategoriesTree(session, dialect);
 
       if (success) {
+        // After tree has been created, publish all categories
+        if (dialect.getCurrentLifeCycleState().equals("Published")) {
+          migrateCategoriesService.publishCategoriesTree(session, dialect);
+        }
+
+        // Add job to update references
         maintenanceLogger.addToRequiredJobs(dialect, Constants.MIGRATE_CATEGORIES_JOB_ID);
+
       } else {
         throw new OperationException(
-            "Task to migrate categories was unsuccessful. Job not queued.");
+            "Migrate categories tree not completed and job not queued. Tree is possibly already migrated.");
       }
 
     } else if (phase.equals("work")) {
