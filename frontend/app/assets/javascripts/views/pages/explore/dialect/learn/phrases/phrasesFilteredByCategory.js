@@ -71,11 +71,7 @@ import {
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
-import {
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_PHRASE_BOOK,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_PART_OF_SPEECH_ANY } from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -345,42 +341,47 @@ export class PhrasesFilteredByCategory extends Component {
             />
 
             <DialectFilterListData
-              workspaceKey="fv-phrase:phrase_books"
+              appliedFilterIds={new Set([routeParams.phraseBook])}
+              setDialectFilterCallback={this.setDialectFilterCallback} // TODO
               path={`/api/v1/path/${this.props.routeParams.dialect_path}/Phrase Books/@children`}
+              workspaceKey="fv-phrase:phrase_books" // TODO?
+              type={this.DIALECT_FILTER_TYPE}
+              // ------------------------------------------------
+              // PREVIOUSLY ATTACHED TO PRESENTATION COMPONENT
+              // May not be needed
+              // ------------------------------------------------
+              // clearDialectFilter={this.clearDialectFilter}
+              // facets={facets}
+              // facetField={facetField}
+              // handleDialectFilterClick={this.handleCategoryClick}
+              // handleDialectFilterList={(
+              //   facetFieldParam,
+              //   selected,
+              //   unselected,
+              //   type,
+              //   shouldResetUrlPagination
+              // ) => {
+              //   this.handleDialectFilterChange({
+              //     facetField: facetFieldParam,
+              //     selected,
+              //     type,
+              //     unselected,
+              //     routeParams: routeParams,
+              //     filterInfo: filterInfo,
+              //     shouldResetUrlPagination,
+              //   })
+              // }}
+              // routeParams={routeParams}
             >
-              {({ facetField, facets }) => {
+              {({ listItemData }) => {
                 return (
                   <DialectFilterListPresentation
-                    appliedFilterIds={new Set([routeParams.phraseBook])}
-                    clearDialectFilter={this.clearDialectFilter}
-                    facets={facets}
-                    facetField={facetField}
-                    // filterInfo={filterInfo} // TODO ?
-                    handleDialectFilterClick={this.handleCategoryClick}
-                    handleDialectFilterList={(
-                      facetFieldParam,
-                      selected,
-                      unselected,
-                      type,
-                      shouldResetUrlPagination
-                    ) => {
-                      this.handleDialectFilterChange({
-                        facetField: facetFieldParam,
-                        selected,
-                        type,
-                        unselected,
-                        routeParams: routeParams,
-                        filterInfo: filterInfo,
-                        shouldResetUrlPagination,
-                      })
-                    }}
-                    routeParams={routeParams}
                     title={intl.trans(
                       'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                       'Browse Phrase Books',
                       'words'
                     )}
-                    type={this.DIALECT_FILTER_TYPE}
+                    listItemData={listItemData}
                   />
                 )
               }}
@@ -649,20 +650,7 @@ export class PhrasesFilteredByCategory extends Component {
     NavigationHelpers.navigate(href, this.props.pushWindowPath)
   }
 
-  handleCategoryClick = async ({ facetField, selected, unselected } = {}) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_PHRASE_BOOK,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
+  setDialectFilterCallback = async ({ facetField, selected, unselected } = {}) => {
     this.changeFilter()
 
     this.handleDialectFilterChange({

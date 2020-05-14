@@ -315,25 +315,30 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             />
 
             <DialectFilterListData
-              workspaceKey="fv-phrase:phrase_books"
+              appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
               path={`/api/v1/path/${this.props.routeParams.dialect_path}/Phrase Books/@children`}
+              type="phrases"
+              workspaceKey="fv-phrase:phrase_books"
+              // ------------------------------------------------
+              // PREVIOUSLY ATTACHED TO PRESENTATION COMPONENT
+              // May not be needed
+              // ------------------------------------------------
+              // // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
+              // facetField={facetField}
+              // facets={facets} // TODO: NOT IN WORDS
+              // handleDialectFilterClick={this.handlePhraseBookClick} // TODO: NOT IN WORDS
+              // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+              // routeParams={this.props.routeParams}
             >
-              {({ facetField, facets }) => {
+              {({ listItemData }) => {
                 return (
                   <DialectFilterListPresentation
-                    appliedFilterIds={this.state.filterInfo.get('currentCategoryFilterIds')}
-                    // clearDialectFilter={this.clearDialectFilter} // TODO: NOT IN WORDS
-                    facetField={facetField}
-                    facets={facets} // TODO: NOT IN WORDS
-                    handleDialectFilterClick={this.handlePhraseBookClick} // TODO: NOT IN WORDS
-                    handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-                    routeParams={this.props.routeParams}
                     title={this.props.intl.trans(
                       'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                       'Browse Phrase Books',
                       'words'
                     )}
-                    type="phrases"
+                    listItemData={listItemData}
                   />
                 )
               }}
