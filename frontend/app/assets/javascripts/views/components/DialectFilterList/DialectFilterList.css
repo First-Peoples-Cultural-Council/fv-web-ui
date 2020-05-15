@@ -1,9 +1,9 @@
-// BLOCK
+/* BLOCK */
 .DialectFilterList {
   font-size: 16px;
   line-height: 1.2;
 }
-// ELEMENT
+/* ELEMENT */
 .DialectFilterListItemGroup {
   display: flex;
   width: 100%;
@@ -37,7 +37,7 @@
 .DialectFilterListLink:focus {
   text-decoration: underline;
 }
-// MODIFIERS
+/* MODIFIERS */
 .DialectFilterListLink--child {
   padding-left: 35px;
 }
@@ -58,7 +58,7 @@ a.DialectFilterListLink--activeParent:hover {
   border-left: 3px solid #820000;
 }
 
-@media (max-width: @medium-screen) {
+@media (max-width: 991px) {
   .DialectFilterListLink {
     padding: 5px;
   }

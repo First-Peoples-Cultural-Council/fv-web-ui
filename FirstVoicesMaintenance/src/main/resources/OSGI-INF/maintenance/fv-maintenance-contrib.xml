@@ -30,7 +30,7 @@
 
     <!-- A listener specific for dialect jobs -->
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener name="queueRequiredJobsListener" class="ca.firstvoices.dialect.RequiredJobsListener">
+        <listener name="queueRequiredJobsListener" class="ca.firstvoices.maintenance.dialect.RequiredJobsListener">
             <event>executeRequiredJobs</event>
         </listener>
     </extension>

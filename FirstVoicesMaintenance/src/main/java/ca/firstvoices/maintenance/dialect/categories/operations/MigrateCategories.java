@@ -1,9 +1,9 @@
-package ca.firstvoices.dialect.categories.operations;
+package ca.firstvoices.maintenance.dialect.categories.operations;
 
-import ca.firstvoices.dialect.categories.Constants;
-import ca.firstvoices.dialect.categories.services.MigrateCategoriesService;
-import ca.firstvoices.dialect.categories.workers.MigrateCategoriesWorker;
-import ca.firstvoices.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.dialect.categories.Constants;
+import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
+import ca.firstvoices.maintenance.dialect.categories.workers.MigrateCategoriesWorker;
+import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -44,6 +44,10 @@ public class MigrateCategories {
 
     protectOperation();
 
+    if (!dialect.getType().equals("FVDialect")) {
+      throw new OperationException("Document type must be FVDialect");
+    }
+
     // This is the first phase that triggers the work.
     // Migrates the category tree from Shared Categories to Local
     // If successful and category tree migrated, it adds required job to complete phase 2.
@@ -52,10 +56,17 @@ public class MigrateCategories {
       boolean success = migrateCategoriesService.migrateCategoriesTree(session, dialect);
 
       if (success) {
+        // After tree has been created, publish all categories
+        if (dialect.getCurrentLifeCycleState().equals("Published")) {
+          migrateCategoriesService.publishCategoriesTree(session, dialect);
+        }
+
+        // Add job to update references
         maintenanceLogger.addToRequiredJobs(dialect, Constants.MIGRATE_CATEGORIES_JOB_ID);
+
       } else {
         throw new OperationException(
-            "Task to migrate categories was unsuccessful. Job not queued.");
+            "Migrate categories tree not completed and job not queued. Tree is possibly already migrated.");
       }
 
     } else if (phase.equals("work")) {
