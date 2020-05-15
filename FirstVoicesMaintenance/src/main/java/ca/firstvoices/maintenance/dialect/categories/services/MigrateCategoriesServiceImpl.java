@@ -238,6 +238,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     String query = "SELECT * FROM FVCategory "
         + "WHERE ecm:ancestorId = '" + categoriesDirectory.getId() + "' "
         + "AND ecm:isTrashed = 0"
+        + " AND ecm:isProxy = 0"
         + "AND ecm:isVersion = 0";
 
     try {
@@ -250,10 +251,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   }
 
   public String getUniqueCategoriesQuery(String dialectId) {
-    return "SELECT fv-word:categories/* FROM FVWord "
+    return "SELECT DISTINCT fv-word:categories/* FROM FVWord "
         + "WHERE fv-word:categories/* IS NOT NULL "
         + "AND fva:dialect = '" + dialectId + "' "
-        + "AND ecm:isTrashed = 0"
+        + "AND ecm:isTrashed = 0 "
+        + "AND ecm:isProxy = 0 "
         + "AND ecm:isVersion = 0";
   }
 

@@ -3,16 +3,22 @@ package ca.firstvoices.maintenance.dialect.categories.operations;
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import ca.firstvoices.services.UnpublishedChangesService;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
+import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -30,13 +36,29 @@ import org.nuxeo.runtime.api.Framework;
 public class MigrateCategoriesStatus {
 
   public static final String ID = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID;
+
   @Context
   protected CoreSession session;
+
   @Context
   protected WorkManager workManager;
+
+  @Param(name = "publishAction", required = false, values = { "force", "ignore" })
+  protected String publishAction = "ignore";
+
   MigrateCategoriesService migrateCategoriesService = Framework.getService(
       MigrateCategoriesService.class);
+
   MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
+
+  UnpublishedChangesService unpublishedChangesService = Framework
+      .getService(UnpublishedChangesService.class);
+
+  FirstVoicesPublisherService publisherService = Framework
+      .getService(FirstVoicesPublisherService.class);
+
+  AutomationService automationService = Framework
+      .getService(AutomationService.class);
 
   @OperationMethod
   public Blob run(DocumentModel dialect) throws OperationException {
@@ -86,14 +108,62 @@ public class MigrateCategoriesStatus {
     DocumentModelList sharedCategories = migrateCategoriesService.getCategories(session, null);
     long sharedCategoriesCreated = sharedCategories.totalSize();
 
+    // Do a survey of Shared Categories
+    // Do a survey of all shared categories referenced by proxies (i.e. unpublished changes).
+
+    HashMap<String, Double> sharedCategoriesInProxies = new HashMap<>();
+    HashMap<String, String> wordsFailedPublishing = new HashMap<>();
+
+    for (DocumentModel sharedCategory : sharedCategories) {
+
+      String sharedCategoryTitle = sharedCategory.getTitle();
+
+      DocumentModel sharedCategoryProxy = publisherService
+          .getPublication(session, sharedCategory.getRef());
+
+      if (sharedCategoryProxy != null) {
+        String query = "SELECT * FROM FVWord WHERE "
+            + "fva:dialect = '" + dialect.getId() + "' "
+            + "AND ecm:isTrashed = 0 "
+            + "AND ecm:isVersion = 0 "
+            + "AND ecm:isProxy = 1 "
+            + "AND fvproxy:proxied_categories/* IN ('" + sharedCategoryProxy.getId() + "')";
+
+        DocumentModelList sections = session.query(query, null, 1000, 0, true);
+
+        if (publishAction.equals("force")) {
+
+          for (DocumentModel publishedVersion : sections) {
+
+            // Get Workspace document
+            OperationContext operation = new OperationContext(session);
+            operation.setInput(publishedVersion);
+
+            DocumentModel workingCopy = (DocumentModel) automationService
+                .run(operation, "Proxy.GetSourceDocument");
+
+            // Republish
+            publisherService.republish(workingCopy);
+            wordsFailedPublishing.put(workingCopy.getId(), sharedCategoryTitle);
+          }
+        }
+
+        sharedCategoriesInProxies
+            .put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
+                new Double(sections.totalSize()));
+      }
+    }
+
     JSONObject json = new JSONObject();
 
     try {
-      json.put("words_referencing_shared_categories", new Integer(sharedCategoriesCount));
-      json.put("words_referencing_local_categories", new Integer(localCategoriesCount));
+      json.put("total_referenced_shared_categories", new Integer(sharedCategoriesCount));
+      json.put("total_shared_categories", new Double(sharedCategoriesCreated));
+      json.put("total_referenced_local_categories", new Integer(localCategoriesCount));
       json.put("required_category_migration_job_exists", Boolean.valueOf(requiredJobExists));
       json.put("local_categories_created", new Double(localCategoriesCreated));
-      json.put("shared_categories_total", new Double(sharedCategoriesCreated));
+      json.put("shared_categories_in_proxies", sharedCategoriesInProxies);
+      json.put("words_failed_publishing", wordsFailedPublishing);
     } catch (JSONException e) {
       e.printStackTrace();
     }

@@ -40,6 +40,7 @@ import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.query.sql.NXQL;
+import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 
 @Operation(id = GetDocumentsByCustomOrder.ID, category = Constants.CAT_FETCH, label = "Custom Order Query", description = "Returns a list of words that begin with a character")
 public class GetDocumentsByCustomOrder {
@@ -80,7 +81,8 @@ public class GetDocumentsByCustomOrder {
     if (StringUtils.isEmpty(customOrder)) {
       //      We shouldn't get to this state when the archive has the custom order computed on it.
       //      Just in case, handle it gracefully by just querying dc:title.
-      query = query + " AND dc:title ILIKE '" + letter + "%'";
+      query = query + " AND dc:title ILIKE '" + NXQLQueryBuilder
+          .prepareStringLiteral(letter, false, true) + "%'";
     } else if (customOrder.startsWith("%") || customOrder.startsWith("$") || customOrder
         .startsWith("&") ||
         customOrder.startsWith("'") || customOrder.startsWith("*") || customOrder.startsWith("_")) {
