@@ -17,7 +17,7 @@ export class DialectFilterListPresentation extends Component {
 
   componentHasData = () => {
     const { listItemData } = this.props
-    const listItems = listItemData.map((parent) => {
+    const listItems = listItemData.map((parent, parentIndex) => {
       const {
         isActive: parentIsActive,
         hasActiveChild: parentHasActiveChild,
@@ -29,7 +29,7 @@ export class DialectFilterListPresentation extends Component {
 
       const childrenNodes =
         parent.children.length > 0
-          ? parent.children.map((child) => {
+          ? parent.children.map((child, childIndex) => {
               const { isActive: childIsActive, uid: childUid, text: childText, href: childHref } = child
 
               let childActiveClass = ''
@@ -42,6 +42,7 @@ export class DialectFilterListPresentation extends Component {
               return (
                 <li key={childUid}>
                   <Link
+                    dataTestId={`DialectFilterListItem-${parentIndex}-${childIndex}`}
                     className={`DialectFilterListLink DialectFilterListLink--child ${childActiveClass}`}
                     href={childHref}
                     title={childText}
@@ -58,6 +59,7 @@ export class DialectFilterListPresentation extends Component {
         <li key={parentUid} className={`DialectFilterListItemParent ${parentActiveClass} ${parentActiveChildClass}`}>
           <div className="DialectFilterListItemGroup">
             <Link
+              dataTestId={`DialectFilterListItem-${parentIndex}`}
               className={`DialectFilterListLink DialectFilterListLink--parent ${parentActiveClass}`}
               href={parentHref}
               title={parentText}
