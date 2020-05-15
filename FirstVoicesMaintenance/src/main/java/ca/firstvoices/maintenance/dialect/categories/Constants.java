@@ -8,4 +8,7 @@ public class Constants {
 
   // Migrate categories ACTION ID
   public static final String MIGRATE_CATEGORIES_ACTION_ID = MIGRATE_CATEGORIES_JOB_ID;
+
+  // Migrate categories status ACTION ID
+  public static final String MIGRATE_CATEGORIES_STATUS_ACTION_ID = GROUP_NAME + ".MigrateStatus";
 }

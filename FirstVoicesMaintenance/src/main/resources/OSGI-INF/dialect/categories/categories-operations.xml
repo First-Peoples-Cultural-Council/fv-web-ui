@@ -5,6 +5,7 @@
 
   <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.maintenance.dialect.categories.operations.MigrateCategories"/>
+    <operation class="ca.firstvoices.maintenance.dialect.categories.operations.MigrateCategoriesStatus"/>
   </extension>
 
   <!-- Block Operation from being visible to non admins -->
