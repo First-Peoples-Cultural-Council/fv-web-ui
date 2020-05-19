@@ -21,7 +21,7 @@ export class Link extends Component {
     const { className, href, dataTestId } = this.props
     return (
       <a
-        data-testId={dataTestId}
+        data-testid={dataTestId}
         className={className}
         onClick={(e) => {
           e.preventDefault()
