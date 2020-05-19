@@ -49,7 +49,7 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
   }
 
   @Override
-  public void removeFromRequiredJobs(DocumentModel jobContainer, String job) {
+  public void removeFromRequiredJobs(DocumentModel jobContainer, String job, boolean success) {
     if (jobContainer != null) {
       Set<String> requiredJobs = getRequiredJobs(jobContainer);
 
@@ -61,10 +61,16 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
         CoreSession session = jobContainer.getCoreSession();
         session.saveDocument(jobContainer);
 
+        String reason = Constants.EXECUTE_REQUIRED_JOBS_COMPLETE;
+
+        if (!success) {
+          reason = Constants.EXECUTE_REQUIRED_JOBS_FAILED;
+        }
+
         sendEvent(
             "Job Complete",
             job + " completed for `" + jobContainer.getTitle() + "`",
-            Constants.EXECUTE_REQUIRED_JOBS_COMPLETE, session, jobContainer);
+            reason, session, jobContainer);
       }
     }
   }

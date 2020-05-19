@@ -27,6 +27,7 @@ import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+
 import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import selectn from 'selectn'
 
@@ -38,10 +39,11 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
 
-import DialectFilterList from 'views/components/DialectFilterList'
-
 import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
 import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+
+import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -283,22 +285,34 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
                 return (
-                  <DialectFilterList
-                    appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                    facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                      'fv-word:categories',
-                      this.props.routeParams.area
-                    )}
-                    facets={categoriesData}
-                    handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
-                    routeParams={this.props.routeParams}
-                    title={this.props.intl.trans(
-                      'views.pages.explore.dialect.learn.words.browse_by_category',
-                      'Browse Categories',
-                      'words'
-                    )}
-                    type={this.DIALECT_FILTER_TYPE}
-                  />
+                  categoriesData &&
+                  categoriesData.length > 0 && (
+                    <DialectFilterListData
+                      appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+                      setDialectFilterCallback={this.setDialectFilterCallback}
+                      transformData={categoriesData}
+                      type="words"
+                      // --------
+                      // facetField={ProviderHelpers.switchWorkspaceSectionKeys(
+                      //   'fv-word:categories',
+                      //   this.props.routeParams.area
+                      // )}
+                      // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+                    >
+                      {({ listItemData }) => {
+                        return (
+                          <DialectFilterListPresentation
+                            title={this.props.intl.trans(
+                              'views.pages.explore.dialect.learn.words.browse_by_category',
+                              'Browse Categories',
+                              'words'
+                            )}
+                            listItemData={listItemData}
+                          />
+                        )
+                      }}
+                    </DialectFilterListData>
+                  )
                 )
               }}
             </CategoriesDataLayer>
@@ -438,18 +452,28 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       }
     )
   }
+
+  setDialectFilterCallback = ({
+    // facetField,
+    href,
+    // selected,
+    // unselected,
+    updateUrl,
+  }) => {
+    this.changeFilter({ href, updateHistory: updateUrl })
+  }
 }
 
 // Proptypes
 const { array, bool, func, object, string } = PropTypes
 PageDialectLearnWords.propTypes = {
   hasPagination: bool,
-  routeParams: object.isRequired,
   // REDUX: reducers/state
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
   computePortal: object.isRequired,
   properties: object.isRequired,
+  routeParams: object.isRequired,
   splitWindowPath: array.isRequired,
   windowPath: string.isRequired,
   // REDUX: actions/dispatch/func
@@ -480,11 +504,12 @@ const mapStateToProps = (state) => {
     computeLogin,
     computePortal,
     computeSearchDialect,
+    intl: intlService,
     listView,
     properties,
+    routeParams: navigation.route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService,
   }
 }
 

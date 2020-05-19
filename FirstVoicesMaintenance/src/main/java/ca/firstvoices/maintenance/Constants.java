@@ -5,4 +5,5 @@ public class Constants {
   public static final String EXECUTE_REQUIRED_JOBS_EVENT_ID = "executeRequiredJobs";
   public static final String EXECUTE_REQUIRED_JOBS_QUEUED = EXECUTE_REQUIRED_JOBS_EVENT_ID + "_queued";
   public static final String EXECUTE_REQUIRED_JOBS_COMPLETE = EXECUTE_REQUIRED_JOBS_EVENT_ID + "_completed";
+  public static final String EXECUTE_REQUIRED_JOBS_FAILED = EXECUTE_REQUIRED_JOBS_EVENT_ID + "_failed";
 }
