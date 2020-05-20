@@ -37,141 +37,127 @@ import org.nuxeo.runtime.api.Framework;
 
 public class UnpublishedChangesServiceImpl implements UnpublishedChangesService {
 
-    public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
-        Diff diff = getUnpublishedChanges(session, document);
+  public boolean checkUnpublishedChanges(CoreSession session, DocumentModel document) {
+    Diff diff = getUnpublishedChanges(session, document);
 
-        if (diff == null) {
-            return false;
-        }
-
-        return diff.hasChanges();
+    if (diff == null) {
+      return false;
     }
 
-    public Diff getUnpublishedChanges(CoreSession session, DocumentModel document) {
-        FirstVoicesPublisherService FVPublisherService = Framework.getService(FirstVoicesPublisherService.class);
+    return diff.hasChanges();
+  }
 
-        // Check that the document is a specific type using the helper method
-        if (!(checkType(document)))
-            return null;
+  public Diff getUnpublishedChanges(CoreSession session, DocumentModel document) {
+    FirstVoicesPublisherService service = Framework.getService(FirstVoicesPublisherService.class);
 
-        // Check that the document is currently published
-        if (! document.getCurrentLifeCycleState().equals("Published")) {
-            return null;
-        }
-
-        /*
-             A privileged session is used to get the workspaces doc ref and versions in case the
-             service is being called from a place that does not have access to the workspaces document.
-        */
-        DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> {
-            return s.getSourceDocument(document.getRef());
-        });
-
-        // Get the sections document and versions
-        DocumentModel sectionsDoc = FVPublisherService.getPublication(session, workspacesDoc.getRef());
-
-        return compareDocs(sectionsDoc, workspacesDoc);
+    // Check that the document is a specific type using the helper method
+    if (!(checkType(document))) {
+      return null;
     }
 
-    // Note: This is unrelated to publisher - will diff any two objects. Could potentially move to another package.
-    public Diff getChanges(CoreSession session, DocumentModel leftDocument, DocumentModel rightDocument) {
-        // Check that the document is a specific type using the helper method
-        if (!(checkType(leftDocument)) || !(checkType(rightDocument)))
-            return null;
-
-        return compareDocs(leftDocument, rightDocument);
+    // Check that the document is currently published
+    if (!document.getCurrentLifeCycleState().equals("Published")) {
+      return null;
     }
 
-    private Diff compareDocs(DocumentModel leftDoc, DocumentModel rightDoc) {
+    /*
+         A privileged session is used to get the workspaces doc
+         ref and versions in case the
+         service is being called from a place that does not have
+         access to the workspaces document.
+    */
+    DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> {
+      return s.getSourceDocument(document.getRef());
+    });
 
-        // Get all properties for all schemas (left doc)
-        Map<String, Object> leftDocAllProps = getDiffProperties(leftDoc);
+    // Get the sections document and versions
+    DocumentModel sectionsDoc = service.getPublication(session, workspacesDoc.getRef());
 
-        // Get all relevant properties (right doc)
-        Map<String, Object> rightDocAllProps = getDiffProperties(rightDoc);
+    return compareDocs(sectionsDoc, workspacesDoc);
+  }
 
-        // Setup javers for diff
-        Javers javers = JaversBuilder.javers().build();
-
-        // Compare left doc and right doc
-        return javers.compare(leftDocAllProps, rightDocAllProps);
+  // Note: This is unrelated to publisher - will diff any two objects.
+  // Could potentially move to another package.
+  public Diff getChanges(CoreSession session, DocumentModel leftDocument,
+      DocumentModel rightDocument) {
+    // Check that the document is a specific type using the helper method
+    if (!(checkType(leftDocument)) || !(checkType(rightDocument))) {
+      return null;
     }
 
-    // Helper method to get all relevant properties for the diff
-    private HashMap<String, Object> getDiffProperties(DocumentModel doc) {
+    return compareDocs(leftDocument, rightDocument);
+  }
 
-        // The following schemas shouldn't be considered in a diff (they are not user-controlled)
-        String[] excludedSchemas = {"uid", "collectionMember", "common", "fvancestry", "fvproxy", "fvlegacy", "relatedtext", "facetedTag", "notification"};
-        List<String> excludedSchemasList = Arrays.asList(excludedSchemas);
+  private Diff compareDocs(DocumentModel leftDoc, DocumentModel rightDoc) {
 
-        // The follow properties shouldn't be considered in a diff (they are not user-controlled)
-        String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors",
-            "dc:lastContributor", "fv-alphabet:update_confusables_required",
-            "fv:update_confusables_required",
-            "fv-alphabet:custom_order_recompute_required", "fvcharacter:alphabet_order",
-            "fv:custom_order"};
-        List<String> excludedPropertiesList = Arrays.asList(excludedProperties);
+    // Get all properties for all schemas (left doc)
+    Map<String, Object> leftDocAllProps = getDiffProperties(leftDoc);
 
-        Map<String, Object> relevantProperties = new HashMap<>();
+    // Get all relevant properties (right doc)
+    Map<String, Object> rightDocAllProps = getDiffProperties(rightDoc);
 
-        for (String schema : doc.getSchemas()) {
-            if (excludedSchemasList.contains(schema)) {
-                continue;
-            }
+    // Setup javers for diff
+    Javers javers = JaversBuilder.javers().build();
 
-            relevantProperties.putAll(doc.getProperties(schema));
-        }
+    // Compare left doc and right doc
+    return javers.compare(leftDocAllProps, rightDocAllProps);
+  }
 
-        // Filter out excluded properties and process conversions
-        return (HashMap<String, Object>) relevantProperties.entrySet().stream()
-                .filter(e -> !excludedPropertiesList.contains(e.getKey())) // Filter out excluded properties
-                .collect(Collectors.toMap( t -> t.getKey(), t->convertDiffFields(t.getValue()) ));
+  // Helper method to get all relevant properties for the diff
+  private HashMap<String, Object> getDiffProperties(DocumentModel doc) {
+
+    // The following schemas shouldn't be considered in a diff (they are not user-controlled)
+    String[] excludedSchemas = {"uid", "collectionMember", "common", "fvancestry", "fvproxy",
+        "fvlegacy", "relatedtext", "facetedTag", "notification"};
+    List<String> excludedSchemasList = Arrays.asList(excludedSchemas);
+
+    // The follow properties shouldn't be considered in a diff (they are not user-controlled)
+    String[] excludedProperties = {"dc:modified", "dc:created", "dc:contributors",
+        "dc:lastContributor", "fv-alphabet:update_confusables_required",
+        "fv:update_confusables_required", "fv-alphabet:custom_order_recompute_required",
+        "fvcharacter:alphabet_order", "fv:custom_order"};
+    List<String> excludedPropertiesList = Arrays.asList(excludedProperties);
+
+    Map<String, Object> relevantProperties = new HashMap<>();
+
+    for (String schema : doc.getSchemas()) {
+      if (excludedSchemasList.contains(schema)) {
+        continue;
+      }
+
+      relevantProperties.putAll(doc.getProperties(schema));
     }
 
-    // Helper method to convert certain types that are hard to compare (e.g. String list) to comparable types
-    private Object convertDiffFields(Object field) {
-        if (field == null) {
-            return "";
-        }
+    // Filter out excluded properties and process conversions
+    return (HashMap<String, Object>) relevantProperties.entrySet().stream()
+        .filter(e -> !excludedPropertiesList.contains(e.getKey())) // Filter out excluded properties
+        .collect(Collectors.toMap(t -> t.getKey(), t -> convertDiffFields(t.getValue())));
+  }
 
-        if (field instanceof String[]) {
-            return Arrays.toString((String[]) field);
-        }
-
-        return field;
+  // Helper method to convert certain types that are hard to compare
+  // (e.g. String list) to comparable types
+  private Object convertDiffFields(Object field) {
+    if (field == null) {
+      return "";
     }
 
-    // Helper method to check that the new document is one of the types below
-    private boolean checkType(DocumentModel inputDoc) {
-        DocumentType currentType = inputDoc.getDocumentType();
-
-        String[] types = {
-                "FVAlphabet",
-                "FVAudio",
-                "FVBook",
-                "FVBookEntry",
-                "FVBooks",
-                "FVCategories",
-                "FVCategory",
-                "FVCharacter",
-                "FVContributor",
-                "FVContributors",
-                "FVDialect",
-                "FVDictionary",
-                "FVGallery",
-                "FVLanguage",
-                "FVLanguageFamily",
-                "FVLink",
-                "FVLinks",
-                "FVPhrase",
-                "FVPicture",
-                "FVPortal",
-                "FVResources",
-                "FVVideo",
-                "FVWord",
-        };
-
-        return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
+    if (field instanceof String[]) {
+      return Arrays.toString((String[]) field);
     }
+
+    return field;
+  }
+
+  // Helper method to check that the new document is one of the types below
+  private boolean checkType(DocumentModel inputDoc) {
+    DocumentType currentType = inputDoc.getDocumentType();
+
+    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
+        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
+        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
+        "FVPortal", "FVResources", "FVVideo", "FVWord",};
+
+    return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
+  }
 
 }

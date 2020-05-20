@@ -22,14 +22,16 @@ import 'cypress-file-upload'
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-beforeEach(function() {
-  cy.log('NOTE: Tests are typically run with `npm run startPreprod`')
-  cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
-})
-afterEach(function() {
+beforeEach(() => {
   // Logout to fix issue with user being logged in between tests.
   cy.logout()
+})
+
+afterEach(() => {
   cy.log('Test complete')
+  // TODO: could we...
+  // TODO: a) not need to wait?
+  // TODO: b) if we do need to wait, only wait when we are recording?
   // Wait to ensure video recording is not cut early on failed test.
   cy.wait(1000)
 })
@@ -127,7 +129,7 @@ Cypress.Commands.add('abort', () => {
   cy.log(subdivider)
 })
 
-// AlphabetListView
+// AlphabetCharacters
 //
 // obj = {
 //   letter: undefined, // Letter to click
@@ -137,47 +139,47 @@ Cypress.Commands.add('abort', () => {
 // }
 //
 // eg:
-// cy.AlphabetListView({
+// cy.AlphabetCharacters({
 //   letter: 'k̓',
 //   confirmData: true,
 //   shouldPaginate: true,
 //   clearFilter: true,
 // })
-Cypress.Commands.add('AlphabetListView', (obj) => {
+Cypress.Commands.add('AlphabetCharacters', (obj) => {
   const _obj = Object.assign(
     {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
     obj
   )
-  cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
-  cy.log('--- AlphabetListView: Filter by letter  ---')
+  cy.log('--- Running cypress/support/commands.js > AlphabetCharacters ---')
+  cy.log('--- AlphabetCharacters: Filter by letter  ---')
   // Filter by letter
-  cy.getByTestId('AlphabetListView').within(() => {
+  cy.getByTestId('AlphabetCharacters').within(() => {
     cy.getByText(_obj.letter).click()
   })
   cy.wait(500)
 
   if (_obj.confirmData) {
-    cy.log('--- AlphabetListView: Confirm data  ---')
+    cy.log('--- AlphabetCharacters: Confirm data  ---')
     // Confirm data
     cy.getByTestId('DictionaryList__row').should('exist')
   }
 
   if (_obj.shouldPaginate) {
-    cy.log('--- AlphabetListView: Navigate to next page  ---')
+    cy.log('--- AlphabetCharacters: Navigate to next page  ---')
     // Navigate to next page
     cy.wait(500)
     cy.getByTestId('pagination__next').click()
     cy.wait(500)
 
     if (_obj.confirmData) {
-      cy.log('--- AlphabetListView: Confirm data  ---')
+      cy.log('--- AlphabetCharacters: Confirm data  ---')
       // Confirm data
       cy.wait(500)
       cy.getByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
-    cy.log('--- AlphabetListView: Clear filter ---')
+    cy.log('--- AlphabetCharacters: Clear filter ---')
     cy.queryByText(/stop browsing alphabetically/i).click()
   }
   cy.wait(3000)

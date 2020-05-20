@@ -1,8 +1,27 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.securitypolicies.lifecycle;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -21,103 +40,103 @@ import org.nuxeo.ecm.core.security.AbstractSecurityPolicy;
 
 public class NonRecorders extends AbstractSecurityPolicy {
 
-    private static final Log log = LogFactory.getLog(NonRecorders.class);
+  public static final Transformer NOT_DISABLED_AND_NOT_NEW_TRANSFORMER =
+      new NotDisabledAndNotNewTransformer();
+  private static final Log log = LogFactory.getLog(NonRecorders.class);
 
-    @Override
-    public Access checkPermission(Document doc, ACP mergedAcp, NuxeoPrincipal principal, String permission,
-            String[] resolvedPermissions, String[] additionalPrincipals) {
+  @Override
+  public Access checkPermission(Document doc, ACP mergedAcp, NuxeoPrincipal principal,
+      String permission, String[] resolvedPermissions, String[] additionalPrincipals) {
 
-        log.debug("Checking permission: " + permission + " on doc: " + doc.getUUID() + " for user: "
-                + principal.getName());
-        // Skip administrators
-        if (Arrays.asList(additionalPrincipals).contains("administrators")) {
-            return Access.UNKNOWN;
+    log.debug("Checking permission: " + permission + " on doc: " + doc.getUUID() + " for user: "
+        + principal.getName());
+    // Skip administrators
+    if (Arrays.asList(additionalPrincipals).contains("administrators")) {
+      return Access.UNKNOWN;
+    }
+
+    List<String> additionalPrincipalsList = Arrays.asList(additionalPrincipals);
+
+    // Security policy should only apply to non-proxied documents
+    if (!doc.isProxy()) {
+      // Users who aren't at least recorders should be denied
+      // access documents with New or Disabled state
+      if (!additionalPrincipalsList.contains("recorders") && !additionalPrincipalsList
+          .contains("language_administrators")) {
+        String docLifeCycle = doc.getLifeCycleState();
+        if (docLifeCycle != null) {
+          if (docLifeCycle.equals("New") || docLifeCycle.equals("Disabled")) {
+            log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
+            return Access.DENY;
+          }
         }
-
-        List<String> additionalPrincipalsList = Arrays.asList(additionalPrincipals);
-
-        // Security policy should only apply to non-proxied documents
-        if (!doc.isProxy()) {
-            // Users who aren't at least recorders should be denied access documents with New or Disabled state
-            if (!additionalPrincipalsList.contains("recorders")
-                    && !additionalPrincipalsList.contains("language_administrators")) {
-                String docLifeCycle = doc.getLifeCycleState();
-                if (docLifeCycle != null) {
-                    if (docLifeCycle.equals("New") || docLifeCycle.equals("Disabled")) {
-                        log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
-                        return Access.DENY;
-                    }
-                }
-            }
-        }
-
-        return Access.UNKNOWN;
+      }
     }
+
+    return Access.UNKNOWN;
+  }
+
+  @Override
+  public SQLQuery.Transformer getQueryTransformer(String repositoryName) {
+    return NOT_DISABLED_AND_NOT_NEW_TRANSFORMER;
+  }
+
+  @Override
+  public boolean isExpressibleInQuery(String repositoryName) {
+    return true;
+  }
+
+  /**
+   * Transformer that adds {@code AND ecm:lifeCycleState <> 'Disabled' AND ecm:lifeCycleState <>
+   * 'New'} to the query.
+   */
+  public static class NotDisabledAndNotNewTransformer implements SQLQuery.Transformer {
+
+    public static final Predicate NOT_DISABLED = new Predicate(
+        new Reference(NXQL.ECM_LIFECYCLESTATE), Operator.NOTEQ, new StringLiteral("Disabled"));
+    public static final Predicate NOT_NEW = new Predicate(new Reference(NXQL.ECM_LIFECYCLESTATE),
+        Operator.NOTEQ, new StringLiteral("New"));
+    private static final long serialVersionUID = 1L;
 
     @Override
-    public SQLQuery.Transformer getQueryTransformer(String repositoryName) {
-        return NOT_DISABLED_AND_NOT_NEW_TRANSFORMER;
-    }
+    public SQLQuery transform(NuxeoPrincipal nxPrincipal, SQLQuery query) {
 
-    @Override
-    public boolean isExpressibleInQuery(String repositoryName) {
-        return true;
-    }
+      log.debug("Transforming the query: " + query);
+      // Skip Admins
+      if (nxPrincipal.isAdministrator()) {
+        return query;
+      }
 
-    public static final Transformer NOT_DISABLED_AND_NOT_NEW_TRANSFORMER = new NotDisabledAndNotNewTransformer();
+      // Modify the query for anonymous and non-recorders only
+      if (nxPrincipal.isAnonymous() || (!nxPrincipal.isMemberOf("recorders") && !nxPrincipal
+          .isMemberOf("language_administrators"))) {
 
-    /**
-     * Transformer that adds {@code AND ecm:lifeCycleState <> 'Disabled' AND ecm:lifeCycleState <> 'New'} to the query.
-     */
-    public static class NotDisabledAndNotNewTransformer implements SQLQuery.Transformer {
+        WhereClause where = query.where;
+        Predicate predicate;
 
-        private static final long serialVersionUID = 1L;
+        if (where == null || where.predicate == null) {
+          predicate = new Predicate(NOT_DISABLED, Operator.AND, NOT_NEW);
+        } else {
 
-        public static final Predicate NOT_DISABLED = new Predicate(new Reference(NXQL.ECM_LIFECYCLESTATE),
-                Operator.NOTEQ, new StringLiteral("Disabled"));
-
-        public static final Predicate NOT_NEW = new Predicate(new Reference(NXQL.ECM_LIFECYCLESTATE), Operator.NOTEQ,
-                new StringLiteral("New"));
-
-        @Override
-        public SQLQuery transform(NuxeoPrincipal nxPrincipal, SQLQuery query) {
-
-            log.debug("Transforming the query: " + query);
-            // Skip Admins
-            if (nxPrincipal.isAdministrator()) {
-                return query;
-            }
-
-            // Modify the query for anonymous and non-recorders only
-            if (nxPrincipal.isAnonymous()
-                    || (!nxPrincipal.isMemberOf("recorders") && !nxPrincipal.isMemberOf("language_administrators"))) {
-
-                WhereClause where = query.where;
-                Predicate predicate;
-
-                if (where == null || where.predicate == null) {
-                    predicate = new Predicate(NOT_DISABLED, Operator.AND, NOT_NEW);
-                } else {
-
-                    // Do not limit published assets in the Site and SharedData directories. These generally do not
-                    // follow fv-lifecycle
-                    if (where.toString().contains("ecm:path STARTSWITH '/FV/sections/Site/Resources/'")
-                            || where.toString().contains("ecm:path STARTSWITH '/FV/sections/SharedData/'")) {
-                        return query;
-                    }
-
-                    Predicate notDisabledAndNotNew = new Predicate(NOT_DISABLED, Operator.AND, NOT_NEW);
-                    predicate = new Predicate(notDisabledAndNotNew, Operator.AND, where.predicate);
-                }
-                // return query with updated WHERE clause
-                SQLQuery newQuery = new SQLQuery(query.select, query.from, new WhereClause(predicate), query.groupBy,
-                        query.having, query.orderBy, query.limit, query.offset);
-                log.debug("New transformed query: " + newQuery.getQueryString());
-                return newQuery;
-            }
-
+          // Do not limit published assets in the Site and SharedData directories.
+          // These generally do not follow fv-lifecycle
+          if (where.toString().contains("ecm:path STARTSWITH '/FV/sections/Site/Resources/'")
+              || where.toString().contains("ecm:path STARTSWITH '/FV/sections/SharedData/'")) {
             return query;
+          }
+
+          Predicate notDisabledAndNotNew = new Predicate(NOT_DISABLED, Operator.AND, NOT_NEW);
+          predicate = new Predicate(notDisabledAndNotNew, Operator.AND, where.predicate);
         }
+        // return query with updated WHERE clause
+        SQLQuery newQuery = new SQLQuery(query.select, query.from, new WhereClause(predicate),
+            query.groupBy, query.having, query.orderBy, query.limit, query.offset);
+        log.debug("New transformed query: " + newQuery.getQueryString());
+        return newQuery;
+      }
+
+      return query;
     }
+  }
 
 }

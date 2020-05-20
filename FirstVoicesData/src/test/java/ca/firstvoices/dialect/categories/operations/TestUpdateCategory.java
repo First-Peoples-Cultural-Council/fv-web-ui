@@ -36,97 +36,97 @@ import org.nuxeo.ecm.core.api.IdRef;
 
 public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
-    @Inject
-    protected AutomationService automationService;
+  @Inject
+  protected AutomationService automationService;
 
-    @Test
-    public void updateCategory() throws OperationException {
+  @Test
+  public void updateCategory() throws OperationException {
 
-        Map<String, String> properties = new HashMap<>();
-        properties.put("dc:title", "Category Title");
-        properties.put("dc:description", "A description of the category without a target.");
+    Map<String, String> properties = new HashMap<>();
+    properties.put("dc:title", "Category Title");
+    properties.put("dc:description", "A description of the category without a target.");
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("properties", properties);
+    Map<String, Object> params = new HashMap<>();
+    params.put("properties", properties);
 
-        OperationContext ctx = new OperationContext(session);
-        ctx.setInput(childCategory);
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(childCategory);
 
-        DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
-        assertEquals("A description of the category without a target.",
-            doc.getPropertyValue("dc:description"));
-    }
+    DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
+    assertEquals("A description of the category without a target.",
+        doc.getPropertyValue("dc:description"));
+  }
 
-    @Test
-    public void updateCategoryWithParameters() throws OperationException {
+  @Test
+  public void updateCategoryWithParameters() throws OperationException {
 
-        childCategory.setPropertyValue("dc:title", "Category Title");
-        childCategory
-            .setPropertyValue("dc:description", "A description of the category with a target.");
+    childCategory.setPropertyValue("dc:title", "Category Title");
+    childCategory
+        .setPropertyValue("dc:description", "A description of the category with a target.");
 
-        Map<String, String> properties = new HashMap<>();
-        properties.put("dc:title", "Category Title");
-        properties.put("dc:description", "A description of the category without a target.");
-        properties.put("ecm:parentRef", parentCategory2.getId());
+    Map<String, String> properties = new HashMap<>();
+    properties.put("dc:title", "Category Title");
+    properties.put("dc:description", "A description of the category without a target.");
+    properties.put("ecm:parentRef", parentCategory2.getId());
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("properties", properties);
+    Map<String, Object> params = new HashMap<>();
+    params.put("properties", properties);
 
-        OperationContext ctx = new OperationContext(session);
-        ctx.setInput(childCategory);
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(childCategory);
 
-        DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
+    DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
 
-        assertEquals(parentCategory2.getPathAsString() + "/Category Title", doc.getPathAsString());
-    }
+    assertEquals(parentCategory2.getPathAsString() + "/Category Title", doc.getPathAsString());
+  }
 
-    @Test(expected = InvalidCategoryException.class)
-    public void updateCategoryOperationOnlyAcceptsFVCategory() throws OperationException {
+  @Test(expected = InvalidCategoryException.class)
+  public void updateCategoryOperationOnlyAcceptsFVCategory() throws OperationException {
 
-        OperationContext ctx = new OperationContext(session);
-        ctx.setInput(dialect);
-        Map<String, Object> params = new HashMap<>();
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(dialect);
+    Map<String, Object> params = new HashMap<>();
 
-        automationService.run(ctx, UpdateCategory.ID, params);
+    automationService.run(ctx, UpdateCategory.ID, params);
 
-    }
+  }
 
-    @Test(expected = InvalidCategoryException.class)
-    public void cannotAssignParentToParentCategoryCategoriesPath() throws OperationException {
-        childCategory = session
-            .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
-        session.saveDocument(childCategory);
+  @Test(expected = InvalidCategoryException.class)
+  public void cannotAssignParentToParentCategoryCategoriesPath() throws OperationException {
+    childCategory = session
+        .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
+    session.saveDocument(childCategory);
 
-        Map<String, String> props = new HashMap<>();
-        props.put("dc:title", "Parent Category Title");
-        props.put("dc:description", "A description of the parent category.");
-        props.put("ecm:parentRef", categories.getPathAsString());
+    Map<String, String> props = new HashMap<>();
+    props.put("dc:title", "Parent Category Title");
+    props.put("dc:description", "A description of the parent category.");
+    props.put("ecm:parentRef", categories.getPathAsString());
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("properties", props);
-        OperationContext ctx = new OperationContext(session);
+    Map<String, Object> params = new HashMap<>();
+    params.put("properties", props);
+    OperationContext ctx = new OperationContext(session);
 
-        ctx.setInput(parentCategory2);
-        automationService.run(ctx, UpdateCategory.ID, params);
-    }
+    ctx.setInput(parentCategory2);
+    automationService.run(ctx, UpdateCategory.ID, params);
+  }
 
-    @Test(expected = InvalidCategoryException.class)
-    public void cannotAssignParentToParentCategoryCategoriesId() throws OperationException {
-        childCategory = session
-            .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
-        session.saveDocument(childCategory);
+  @Test(expected = InvalidCategoryException.class)
+  public void cannotAssignParentToParentCategoryCategoriesId() throws OperationException {
+    childCategory = session
+        .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
+    session.saveDocument(childCategory);
 
-        Map<String, String> props = new HashMap<>();
-        props.put("dc:title", "Parent Category Title");
-        props.put("dc:description", "A description of the parent category.");
-        props.put("ecm:parentRef", categories.getId());
+    Map<String, String> props = new HashMap<>();
+    props.put("dc:title", "Parent Category Title");
+    props.put("dc:description", "A description of the parent category.");
+    props.put("ecm:parentRef", categories.getId());
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("properties", props);
-        OperationContext ctx = new OperationContext(session);
+    Map<String, Object> params = new HashMap<>();
+    params.put("properties", props);
+    OperationContext ctx = new OperationContext(session);
 
-        ctx.setInput(parentCategory2);
-        automationService.run(ctx, UpdateCategory.ID, params);
-    }
+    ctx.setInput(parentCategory2);
+    automationService.run(ctx, UpdateCategory.ID, params);
+  }
 
 }

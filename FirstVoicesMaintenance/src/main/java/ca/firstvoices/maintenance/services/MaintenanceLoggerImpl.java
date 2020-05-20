@@ -21,7 +21,8 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
     }
 
     // Get current required jobs
-    String[] requiredJobsRawList = (String[]) jobContainer.getPropertyValue("fv-maintenance:required_jobs");
+    String[] requiredJobsRawList = (String[]) jobContainer
+        .getPropertyValue("fv-maintenance:required_jobs");
     if (requiredJobsRawList != null) {
       return new HashSet<>(Arrays.asList(requiredJobsRawList));
     }
@@ -41,15 +42,13 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
       CoreSession session = jobContainer.getCoreSession();
       session.saveDocument(jobContainer);
 
-      sendEvent(
-          "Job Queued",
-          job + " queued for `" + jobContainer.getTitle() + "`",
+      sendEvent("Job Queued", job + " queued for `" + jobContainer.getTitle() + "`",
           Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainer);
     }
   }
 
   @Override
-  public void removeFromRequiredJobs(DocumentModel jobContainer, String job) {
+  public void removeFromRequiredJobs(DocumentModel jobContainer, String job, boolean success) {
     if (jobContainer != null) {
       Set<String> requiredJobs = getRequiredJobs(jobContainer);
 
@@ -61,10 +60,14 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
         CoreSession session = jobContainer.getCoreSession();
         session.saveDocument(jobContainer);
 
-        sendEvent(
-            "Job Complete",
-            job + " completed for `" + jobContainer.getTitle() + "`",
-            Constants.EXECUTE_REQUIRED_JOBS_COMPLETE, session, jobContainer);
+        String reason = Constants.EXECUTE_REQUIRED_JOBS_COMPLETE;
+
+        if (!success) {
+          reason = Constants.EXECUTE_REQUIRED_JOBS_FAILED;
+        }
+
+        sendEvent("Job Complete", job + " completed for `" + jobContainer.getTitle() + "`", reason,
+            session, jobContainer);
       }
     }
   }
@@ -91,13 +94,15 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
 
   // This is sent for audit purposes at the moment
   // In the future Listeners could catch these events to send emails, and turn on features
-  private void sendEvent(String status, String message, String eventId, CoreSession session, DocumentModel jobContainer) {
-    EventProducer eventProducer = Framework.getService(EventProducer.class);
-    DocumentEventContext ctx = new DocumentEventContext(session, session.getPrincipal(), jobContainer);
+  private void sendEvent(String status, String message, String eventId, CoreSession session,
+      DocumentModel jobContainer) {
+    DocumentEventContext ctx = new DocumentEventContext(session, session.getPrincipal(),
+        jobContainer);
     ctx.setProperty("status", status);
     ctx.setComment(message);
     ctx.setCategory(Constants.REQUIRED_JOBS_FRIENDLY_NAME);
     Event event = ctx.newEvent(eventId);
+    EventProducer eventProducer = Framework.getService(EventProducer.class);
     eventProducer.fireEvent(event);
   }
 }

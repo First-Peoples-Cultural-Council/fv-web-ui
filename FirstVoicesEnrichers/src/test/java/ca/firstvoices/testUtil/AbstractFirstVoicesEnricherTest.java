@@ -94,8 +94,7 @@ public abstract class AbstractFirstVoicesEnricherTest {
   }
 
   public void createDialectTree(CoreSession session) {
-    domain = createDocument(session,
-        session.createDocumentModel("/", "FV", "Domain"));
+    domain = createDocument(session, session.createDocumentModel("/", "FV", "Domain"));
     langFamilyDoc = createDocument(session,
         session.createDocumentModel(domain.getPathAsString(), "Family", "FVLanguageFamily"));
     assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
@@ -111,13 +110,12 @@ public abstract class AbstractFirstVoicesEnricherTest {
     alphabetDoc = createDocument(session,
         session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));
     assertNotNull("Should have a valid FVAlphabet", alphabetDoc);
-    categories = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString(), "Categories", "FVCategories"));
-    category = session.createDocument(session
-        .createDocumentModel(categories.getPathAsString(), "Category", "FVCategory"));
-    subcategory = session.createDocument(session
-        .createDocumentModel(categories.getPathAsString(), "SubCategory",
-            "FVCategory"));
+    categories = session.createDocument(
+        session.createDocumentModel(dialectDoc.getPathAsString(), "Categories", "FVCategories"));
+    category = session.createDocument(
+        session.createDocumentModel(categories.getPathAsString(), "Category", "FVCategory"));
+    subcategory = session.createDocument(
+        session.createDocumentModel(categories.getPathAsString(), "SubCategory", "FVCategory"));
     session.move(subcategory.getRef(), category.getRef(), "SubCategory");
     session.save();
     word = createWordorPhrase("New Word", "FVWord", null, null);

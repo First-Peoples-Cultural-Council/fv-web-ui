@@ -34,10 +34,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 
-/**
- *
- */
-@Operation(id = UpdateCategory.ID, category = Constants.CAT_DOCUMENT, label = "Update Category", description = "Set multiple properties on the input document. Move document to new target location.")
+@Operation(id = UpdateCategory.ID, category = Constants.CAT_DOCUMENT, label = "Update Category",
+    description =
+    "Set multiple properties on the input document. " + "Move document to new target location.")
 public class UpdateCategory {
 
   public static final String ID = "Document.UpdateCategory";
@@ -77,7 +76,7 @@ public class UpdateCategory {
             throw new InvalidCategoryException(
                 "A parent category cannot be a child of another parent category.");
           }
-          
+
           doc = session
               .move(doc.getRef(), new IdRef(value), doc.getPropertyValue("dc:title").toString());
         } else {

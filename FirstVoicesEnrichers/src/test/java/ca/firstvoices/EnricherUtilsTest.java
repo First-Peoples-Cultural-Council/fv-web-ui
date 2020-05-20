@@ -47,15 +47,13 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void shouldExpandCategoriesToChildren() {
 
     String categoryQuery =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\")";
 
     String modifiedQuery = EnricherUtils.expandCategoriesToChildren(session, categoryQuery);
 
     String queryWithCategoriesAndChildren =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\",\"" + subcategory.getId()
-            + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\",\""
+            + subcategory.getId() + "\")";
 
     assertEquals(modifiedQuery, queryWithCategoriesAndChildren);
   }
@@ -77,8 +75,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void shouldReturnWordFromSubCategory() throws OperationException {
 
     String categoryQuery =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\")";
 
     OperationContext ctx = new OperationContext(session);
     Map<String, Object> params = new HashMap<>();
@@ -120,4 +117,27 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     }
   }
 
+  @Test
+  public void testLetterNoCustomOrder() {
+    String[] letterArray = {"a", "aa", "ae", "b", "c", "d", "e", "'"};
+
+    for (int i = 0; i < letterArray.length; i++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
+              "FVCharacter");
+      letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
+      createDocument(session, letterDoc);
+      session.save();
+    }
+
+    NativeOrderComputeService service = new NativeOrderComputeServiceImpl();
+    service.computeDialectNativeOrderTranslation(dialectDoc);
+
+    for (int i = 0; i < letterArray.length; i++) {
+      String customOrder = EnricherUtils
+          .convertLetterToCustomOrder(session, dialectDoc.getId(), letterArray[i]);
+      String calculatedOrder = "~" + letterArray[i];
+      assertEquals(calculatedOrder, customOrder);
+    }
+  }
 }

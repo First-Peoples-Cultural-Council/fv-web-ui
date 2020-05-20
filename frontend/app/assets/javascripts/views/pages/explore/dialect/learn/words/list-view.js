@@ -270,7 +270,6 @@ class WordsListView extends DataListView {
     }
   }
 
-  // NOTE: DataListView calls `_fetchListViewData`
   _fetchListViewData(props, pageIndex, pageSize, sortOrder, sortBy) {
     let currentAppliedFilter = ''
 
@@ -291,7 +290,10 @@ class WordsListView extends DataListView {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
-    // NOTE: this prevents double requests due to DataListView re-calling _fetchListViewData
+    // NOTE: the following attempts to prevent double requests but it doesn't work all the time!
+    // Eventually `this.state.nql` becomes `undefined` and then a duplicate request is initiated
+    //
+    // DataListView calls this._fetchListViewData AND this.fetchData (which calls this.__fetchListViewData)
     if (this.state.nql !== nql) {
       this.setState(
         {

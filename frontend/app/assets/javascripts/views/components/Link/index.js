@@ -11,15 +11,17 @@ export class Link extends Component {
   static propTypes = {
     className: string,
     clickHandler: func,
+    dataTestId: string,
     href: string.isRequired,
     // REDUX: actions/dispatch/func
     pushWindowPath: func.isRequired,
   }
 
   render() {
-    const { className, href } = this.props
+    const { className, href, dataTestId } = this.props
     return (
       <a
+        data-testid={dataTestId}
         className={className}
         onClick={(e) => {
           e.preventDefault()

@@ -22,8 +22,8 @@
         <schedule id="computeAlphabetProcesses">
           <eventId>computeAlphabetProcesses</eventId>
           <eventCategory>default</eventCategory>
-          <!--            Every 10 minutes-->
-          <cronExpression>* */10 * ? * *</cronExpression>
+          <!-- every 30 minutes between 01am and 06am-->
+          <cronExpression>0 0/30 1-6 ? * *</cronExpression>
         </schedule>
     </extension>
 </component>

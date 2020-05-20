@@ -34,8 +34,11 @@ import org.nuxeo.ecm.core.bulk.action.SetPropertiesAction;
 import org.nuxeo.ecm.core.bulk.message.BulkCommand;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = CleanConfusablesOperation.ID, category = Constants.CAT_DOCUMENT, label = "FVCleanConfusables",
-    description = "This operation is used to clean all confusable characters across the archive. It will query the archive for all FVWords and FVPhrases, and queue them to be cleaned by a worker.")
+@Operation(id = CleanConfusablesOperation.ID, category = Constants.CAT_DOCUMENT, label =
+    "FVCleanConfusables", description =
+    "This operation is used to clean all confusable characters across the archive. "
+        + "It will query the archive for all FVWords and FVPhrases, "
+        + "and queue them to be cleaned by a worker.")
 public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation {
 
   public static final String ID = "Document.CleanConfusables";
@@ -54,8 +57,7 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
       // bulk update word and phrases
       BulkCommand command = new BulkCommand.Builder(SetPropertiesAction.ACTION_NAME,
           wordPhraseQuery).repository(session.getRepositoryName())
-          .user(session.getPrincipal().getName())
-          .param("fv:update_confusables_required", true)
+          .user(session.getPrincipal().getName()).param("fv:update_confusables_required", true)
           .build();
 
       BulkService bulkService = Framework.getService(BulkService.class);

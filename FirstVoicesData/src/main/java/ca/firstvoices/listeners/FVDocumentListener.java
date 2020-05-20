@@ -26,8 +26,10 @@ import ca.firstvoices.services.SanitizeDocumentService;
 import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
 import ca.firstvoices.workers.CleanConfusablesForWordsAndPhrasesWorker;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -46,23 +48,24 @@ import org.nuxeo.runtime.api.Framework;
 
 public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
+  protected SanitizeDocumentService sanitizeDocumentService = Framework
+      .getService(SanitizeDocumentService.class);
   private CoreSession session;
   private AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-  protected SanitizeDocumentService sanitizeDocumentService = Framework
-      .getService(SanitizeDocumentService.class);
   private CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
-  private Event e;
+  private Event event;
   private DocumentModel document;
 
   @Override
   public void handleEvent(Event event) {
-    e = event;
-    ctx = e.getContext();
+    this.event = event;
+    ctx = this.event.getContext();
 
-  // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a session.
+    // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a
+    // session.
     if (event.getName().equals("computeAlphabetProcesses")) {
       CoreInstance
           .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
@@ -103,34 +106,13 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void assignAncestors() {
-    String[] types = {
-        "FVAlphabet",
-        "FVAudio",
-        "FVBook",
-        "FVBookEntry",
-        "FVBooks",
-        "FVCategories",
-        "FVCategory",
-        "FVCharacter",
-        "FVContributor",
-        "FVContributors",
-        "FVDialect",
-        "FVDictionary",
-        "FVGallery",
-        "FVLanguage",
-        "FVLanguageFamily",
-        "FVLink",
-        "FVLinks",
-        "FVPhrase",
-        "FVPicture",
-        "FVPortal",
-        "FVResources",
-        "FVVideo",
-        "FVWord",
-    };
+    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
+        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
+        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
+        "FVPortal", "FVResources", "FVVideo", "FVWord",};
 
-    if (!Arrays.stream(types).parallel()
-        .anyMatch(document.getDocumentType().toString()::contains)) {
+    if (Arrays.stream(types).parallel()
+        .noneMatch(document.getDocumentType().toString()::contains)) {
       return;
     }
 
@@ -141,7 +123,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
         .isProxy() && !document.isVersion()) {
       try {
-        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           DocumentPart[] docParts = document.getParts();
           for (DocumentPart docPart : docParts) {
             Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
@@ -155,57 +137,62 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
             }
           }
         }
-        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
           cleanupCharactersService.cleanConfusables(session, document);
         }
       } catch (Exception exception) {
-        rollBackEvent(e);
+        rollBackEvent(event);
         throw exception;
       }
     }
   }
 
   public void sanitizeWord() {
-    if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase"))
-        && !document.isProxy() && !document.isVersion()) {
+    if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
+        .isProxy() && !document.isVersion()) {
       sanitizeDocumentService.sanitizeDocument(session, document);
     }
   }
 
   public void validateCharacter() {
-    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy() && !document.isVersion()) {
+    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy()
+        && !document.isVersion()) {
       try {
         DocumentModelList characters = getCharacters(document);
 
-        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-          List<DocumentModel> results = characters.stream().map(
-              c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+          List<DocumentModel> results = characters.stream()
+              .map(c -> c.getId().equals(document.getId()) ? document : c)
+              .collect(Collectors.toList());
           cleanupCharactersService.mapAndValidateConfusableCharacters(results);
         }
 
-        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
           cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
         }
 
       } catch (Exception exception) {
-        rollBackEvent(e);
+        rollBackEvent(event);
         throw exception;
       }
     }
   }
 
-  // This adds confusable characters to any alphabet WHERE fv-alphabet:update_confusables_required = 1
+  // This adds confusable characters to any alphabet WHERE
+  // fv-alphabet:update_confusables_required = 1
   private void addConfusableCharactersToAlphabets(CoreSession session) {
-    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    DocumentModelList alphabets = session.query(query);
+    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:update_confusables_required = 1 "
+        + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    // Only process 100 documents at a time
+    DocumentModelList alphabets = session.query(query, 100);
 
     if (alphabets != null && alphabets.size() > 0) {
       WorkManager workManager = Framework.getService(WorkManager.class);
       for (DocumentModel alphabet : alphabets) {
         DocumentModel dialect = session.getParentDocument(alphabet.getRef());
 
-        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(
-            dialect.getRef(), alphabet.getRef());
+        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(dialect.getRef(),
+            alphabet.getRef());
 
         workManager.schedule(worker);
       }
@@ -213,18 +200,35 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
-    String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE fv:update_confusables_required = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery);
+    String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE fv:update_confusables_required"
+        + " = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery, 100);
+
+    Map<String, Boolean> requiresUpdate = new HashMap<>();
 
     if (wordsAndPhrases.size() > 0) {
 
       WorkManager workManager = Framework.getService(WorkManager.class);
       for (DocumentModel documentModel : wordsAndPhrases) {
 
-        Boolean alphabetRequiresUpdate = (Boolean) getAlphabet(documentModel).getPropertyValue("fv-alphabet:update_confusables_required");
+        String dialect = (String) documentModel.getPropertyValue("fva:dialect");
 
-        if (alphabetRequiresUpdate == null || alphabetRequiresUpdate.equals(false)) {
-          CleanConfusablesForWordsAndPhrasesWorker worker = new CleanConfusablesForWordsAndPhrasesWorker(
+        // Cache whether or not the alphabet requires update
+        Boolean alphabetRequiresUpdate;
+        if (requiresUpdate.containsKey(dialect)) {
+          alphabetRequiresUpdate = requiresUpdate.get(dialect);
+        } else {
+          alphabetRequiresUpdate = (Boolean) getAlphabet(documentModel)
+              .getPropertyValue("fv-alphabet:update_confusables_required");
+          if (alphabetRequiresUpdate == null) {
+            alphabetRequiresUpdate = false;
+          }
+          requiresUpdate.put(dialect, alphabetRequiresUpdate);
+        }
+
+        if (alphabetRequiresUpdate.equals(false)) {
+          CleanConfusablesForWordsAndPhrasesWorker worker =
+              new CleanConfusablesForWordsAndPhrasesWorker(
               documentModel.getRef());
           workManager.schedule(worker);
         }

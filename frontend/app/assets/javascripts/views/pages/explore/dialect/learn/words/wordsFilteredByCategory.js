@@ -22,7 +22,6 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { fetchWords } from 'providers/redux/reducers/fvWord'
@@ -33,9 +32,14 @@ import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/n
 
 // FPCC
 // -------------------------------------------
-import AlphabetListView from 'views/components/AlphabetListView'
+import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import DialectFilterList from 'views/components/DialectFilterList'
+
+import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
@@ -54,8 +58,6 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
-  getCharacters,
-  handleDialectFilterList,
   onNavigateRequest,
   sortHandler,
   updateFilter,
@@ -63,11 +65,6 @@ import {
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
-import {
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_CATEGORY,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'views/components/SearchDialect/constants'
 import { WORKSPACES } from 'common/Constants'
 import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -78,7 +75,6 @@ const intl = IntlService.instance
 class WordsFilteredByCategory extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
-  DIALECT_FILTER_TYPE = 'words'
 
   componentDidUpdate(prevProps) {
     const { routeParams: curRouteParams } = this.props
@@ -105,42 +101,9 @@ class WordsFilteredByCategory extends Component {
       computeDocument
     )
 
-    // Alphabet
-    // ---------------------------------------------
-    let characters = getCharacters({
-      computeCharacters: this.props.computeCharacters,
-      routeParamsDialectPath: routeParams.dialect_path,
-    })
-
-    if (characters === undefined) {
-      const _pageIndex = 0
-      const _pageSize = 100
-
-      await this.props.fetchCharacters(
-        `${routeParams.dialect_path}/Alphabet`,
-        `&currentPageIndex=${_pageIndex}&pageSize=${_pageSize}&sortOrder=asc&sortBy=fvcharacter:alphabet_order`
-      )
-      characters = getCharacters({
-        computeCharacters: this.props.computeCharacters,
-        routeParamsDialectPath: routeParams.dialect_path,
-      })
-    }
-
     // WORDS
     // ---------------------------------------------
     this.fetchListViewData()
-
-    this.setState(
-      {
-        characters,
-      },
-      () => {
-        const letter = selectn('routeParams.letter', this.props)
-        if (letter) {
-          this.handleAlphabetClick(letter)
-        }
-      }
-    )
   }
 
   componentWillUnmount() {
@@ -185,7 +148,7 @@ class WordsFilteredByCategory extends Component {
   }
 
   render() {
-    const { characters, computeEntities, filterInfo, isKidsTheme } = this.state
+    const { computeEntities, filterInfo, isKidsTheme } = this.state
 
     const {
       computeDialect2,
@@ -292,7 +255,7 @@ class WordsFilteredByCategory extends Component {
     }
 
     const dialectClassName = getDialectClassname(computedPortal)
-    const facetField = ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', routeParams.area)
+    // const facetField = ProviderHelpers.switchWorkspaceSectionKeys('fv-word:categories', routeParams.area)
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className="row row-create-wrapper">
@@ -333,49 +296,51 @@ class WordsFilteredByCategory extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-3 PrintHide">
-            <AlphabetListView
-              characters={characters}
-              dialectClassName={dialectClassName}
-              handleClick={this.handleAlphabetClick}
-              letter={selectn('letter', routeParams)}
-            />
+            <AlphabetCharactersData
+              letterClickedCallback={() => {
+                this.changeFilter()
+              }}
+            >
+              {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked }) => {
+                return (
+                  <AlphabetCharactersPresentation
+                    activeLetter={activeLetter}
+                    characters={characters}
+                    dialectClassName={dialectClassName}
+                    generateAlphabetCharacterHref={generateAlphabetCharacterHref}
+                    letterClicked={letterClicked}
+                    splitWindowPath={splitWindowPath}
+                  />
+                )
+              }}
+            </AlphabetCharactersData>
 
             <CategoriesDataLayer>
               {({ categoriesData }) => {
                 return (
-                  <DialectFilterList
-                    appliedFilterIds={new Set([routeParams.category])}
-                    clearDialectFilter={this.clearDialectFilter}
-                    facets={categoriesData}
-                    // facets={categories}
-                    facetField={facetField}
-                    filterInfo={filterInfo}
-                    handleDialectFilterClick={this.handleCategoryClick}
-                    handleDialectFilterList={(
-                      facetFieldParam,
-                      selected,
-                      unselected,
-                      type,
-                      shouldResetUrlPagination
-                    ) => {
-                      this.handleDialectFilterChange({
-                        facetField: facetFieldParam,
-                        selected,
-                        type,
-                        unselected,
-                        routeParams: routeParams,
-                        filterInfo: filterInfo,
-                        shouldResetUrlPagination,
-                      })
-                    }}
-                    routeParams={routeParams}
-                    title={intl.trans(
-                      'views.pages.explore.dialect.learn.words.browse_by_category',
-                      'Browse Categories',
-                      'words'
-                    )}
-                    type={this.DIALECT_FILTER_TYPE}
-                  />
+                  categoriesData &&
+                  categoriesData.length > 0 && (
+                    <DialectFilterListData
+                      appliedFilterIds={new Set([routeParams.category])}
+                      setDialectFilterCallback={this.setDialectFilterCallback}
+                      transformData={categoriesData}
+                      type="words"
+                      // workspaceKey="fv-phrase:phrase_books" // TODO?
+                    >
+                      {({ listItemData }) => {
+                        return (
+                          <DialectFilterListPresentation
+                            title={intl.trans(
+                              'views.pages.explore.dialect.learn.words.browse_by_category',
+                              'Browse Categories',
+                              'words'
+                            )}
+                            listItemData={listItemData}
+                          />
+                        )
+                      }}
+                    </DialectFilterListData>
+                  )
                 )
               }}
             </CategoriesDataLayer>
@@ -615,76 +580,6 @@ class WordsFilteredByCategory extends Component {
     return columns
   }
 
-  handleAlphabetClick = async (letter, href) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: letter,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
-    this.changeFilter()
-
-    NavigationHelpers.navigate(href, this.props.pushWindowPath)
-  }
-
-  handleCategoryClick = async ({ facetField, selected, unselected }) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CATEGORY,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
-    this.changeFilter()
-
-    this.handleDialectFilterChange({
-      facetField,
-      selected,
-      type: this.DIALECT_FILTER_TYPE,
-      unselected,
-    })
-  }
-
-  handleDialectFilterChange = ({ facetField, selected, type, unselected, shouldResetUrlPagination }) => {
-    const { filterInfo } = this.state
-    const { routeParams, splitWindowPath } = this.props
-
-    const newFilter = handleDialectFilterList({
-      facetField,
-      selected,
-      type,
-      unselected,
-      routeParams,
-      filterInfo,
-    })
-
-    // When facets change, pagination should be reset.
-    // In these pages (words/phrase), list views are controlled via URL
-    if (shouldResetUrlPagination === true) {
-      updateUrlIfPageOrPageSizeIsDifferent({
-        // pageSize, // TODO ?
-        // preserveSearch, // TODO ?
-        pushWindowPath: this.props.pushWindowPath,
-        routeParams: routeParams,
-        splitWindowPath: splitWindowPath,
-      })
-    }
-
-    this.setState({ filterInfo: newFilter })
-  }
-
   handleSearch = () => {
     this.changeFilter()
   }
@@ -707,6 +602,35 @@ class WordsFilteredByCategory extends Component {
         categories: currentAppliedFilterCategories,
       }),
     })
+  }
+
+  setDialectFilterCallback = (/*{
+    facetField,
+    href,
+    selected,
+    unselected,
+    updateUrl,
+  }*/) => {
+    this.changeFilter()
+
+    // const newFilter = handleDialectFilterList({
+    //   facetField,
+    //   selected,
+    //   unselected,
+    //   type: 'words',
+    // })
+
+    // // When facets change, pagination should be reset
+    // const { routeParams, splitWindowPath } = this.props
+    // if (shouldResetUrlPagination === true) {
+    //   updateUrlIfPageOrPageSizeIsDifferent({
+    //     pushWindowPath: this.props.pushWindowPath,
+    //     routeParams: routeParams,
+    //     splitWindowPath: splitWindowPath,
+    //   })
+    // }
+
+    // this.setState({ filterInfo: newFilter })
   }
 
   resetSearch = () => {
@@ -749,7 +673,6 @@ WordsFilteredByCategory.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
-  computeCharacters: object.isRequired,
   computeDialect2: object.isRequired,
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
@@ -781,20 +704,8 @@ WordsFilteredByCategory.defaultProps = {
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const {
-    document,
-    fvCharacter,
-    fvDialect,
-    fvPortal,
-    fvWord,
-    listView,
-    navigation,
-    nuxeo,
-    searchDialect,
-    windowPath,
-  } = state
+  const { document, fvDialect, fvPortal, fvWord, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
-  const { computeCharacters } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { computeDocument } = document
   const { computeLogin } = nuxeo
@@ -804,7 +715,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
   return {
-    computeCharacters,
     computeDialect2,
     computeDocument,
     computeLogin,
@@ -822,7 +732,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCharacters,
   fetchDocument,
   fetchPortal,
   fetchWords,
