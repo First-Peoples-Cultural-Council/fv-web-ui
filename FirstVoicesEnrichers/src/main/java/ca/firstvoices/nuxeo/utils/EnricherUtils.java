@@ -312,7 +312,8 @@ public class EnricherUtils {
 
     String testQuery =
         "SELECT * FROM FVCharacter WHERE dc:title = \"" + letter + "\" AND fva:dialect = \""
-            + dialect + "\"";
+            + dialect + "\"" + "' AND ecm:isProxy = 0 " + "AND ecm:isVersion = 0 "
+            + "AND ecm:isTrashed = 0";
 
     DocumentModelList result = session.query(testQuery);
 
