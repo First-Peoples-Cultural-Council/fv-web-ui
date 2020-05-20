@@ -129,7 +129,7 @@ Cypress.Commands.add('abort', () => {
   cy.log(subdivider)
 })
 
-// AlphabetListView
+// AlphabetCharacters
 //
 // obj = {
 //   letter: undefined, // Letter to click
@@ -139,47 +139,47 @@ Cypress.Commands.add('abort', () => {
 // }
 //
 // eg:
-// cy.AlphabetListView({
+// cy.AlphabetCharacters({
 //   letter: 'k̓',
 //   confirmData: true,
 //   shouldPaginate: true,
 //   clearFilter: true,
 // })
-Cypress.Commands.add('AlphabetListView', (obj) => {
+Cypress.Commands.add('AlphabetCharacters', (obj) => {
   const _obj = Object.assign(
     {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
     obj
   )
-  cy.log('--- Running cypress/support/commands.js > AlphabetListView ---')
-  cy.log('--- AlphabetListView: Filter by letter  ---')
+  cy.log('--- Running cypress/support/commands.js > AlphabetCharacters ---')
+  cy.log('--- AlphabetCharacters: Filter by letter  ---')
   // Filter by letter
-  cy.getByTestId('AlphabetListView').within(() => {
+  cy.getByTestId('AlphabetCharacters').within(() => {
     cy.getByText(_obj.letter).click()
   })
   cy.wait(500)
 
   if (_obj.confirmData) {
-    cy.log('--- AlphabetListView: Confirm data  ---')
+    cy.log('--- AlphabetCharacters: Confirm data  ---')
     // Confirm data
     cy.getByTestId('DictionaryList__row').should('exist')
   }
 
   if (_obj.shouldPaginate) {
-    cy.log('--- AlphabetListView: Navigate to next page  ---')
+    cy.log('--- AlphabetCharacters: Navigate to next page  ---')
     // Navigate to next page
     cy.wait(500)
     cy.getByTestId('pagination__next').click()
     cy.wait(500)
 
     if (_obj.confirmData) {
-      cy.log('--- AlphabetListView: Confirm data  ---')
+      cy.log('--- AlphabetCharacters: Confirm data  ---')
       // Confirm data
       cy.wait(500)
       cy.getByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
-    cy.log('--- AlphabetListView: Clear filter ---')
+    cy.log('--- AlphabetCharacters: Clear filter ---')
     cy.queryByText(/stop browsing alphabetically/i).click()
   }
   cy.wait(3000)
