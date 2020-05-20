@@ -25,8 +25,6 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertTrue;
 
-
-
 // @RunWith(FeaturesRunner.class)
 // @Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class } )
 // @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
@@ -73,7 +71,6 @@
 //     public static final String DIALECT_DISABLED     = "FVDialect-DISABLED";
 //     public static final String DIALECT_DELETED      = "FVDialect-DELETED";
 
-
 //     DocumentModel languageDoc = null;
 
 //     DocumentModel familyDoc = null;
@@ -93,12 +90,18 @@
 
 //         domain = session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
 
-//         familyDoc = session.createDocument(session.createDocumentModel("/FV", "Family", "FVLanguageFamily"));
-//         languageDoc = session.createDocument(session.createDocumentModel("/FV/Family", "Language", "FVLanguage"));
-//         dialectDocNew = session.createDocument(session.createDocumentModel("/FV/Family/Language",           DIALECT_NEW,        "FVDialect" ));
-//         dialectDocEnabled = session.createDocument(session.createDocumentModel("/FV/Family/Language",       DIALECT_ENABLED,    "FVDialect" ));
-//         dialectDocPublished = session.createDocument(session.createDocumentModel("/FV/Family/Language",     DIALECT_PUBLISHED,  "FVDialect" ));
-//         dialectDocDisabled = session.createDocument(session.createDocumentModel("/FV/Family/Language",      DIALECT_DISABLED,   "FVDialect" ));
+//         familyDoc = session.createDocument(session.createDocumentModel("/FV", "Family",
+//         "FVLanguageFamily"));
+//         languageDoc = session.createDocument(session.createDocumentModel("/FV/Family",
+//         "Language", "FVLanguage"));
+//         dialectDocNew = session.createDocument(session.createDocumentModel
+//         ("/FV/Family/Language",           DIALECT_NEW,        "FVDialect" ));
+//         dialectDocEnabled = session.createDocument(session.createDocumentModel
+//         ("/FV/Family/Language",       DIALECT_ENABLED,    "FVDialect" ));
+//         dialectDocPublished = session.createDocument(session.createDocumentModel
+//         ("/FV/Family/Language",     DIALECT_PUBLISHED,  "FVDialect" ));
+//         dialectDocDisabled = session.createDocument(session.createDocumentModel
+//         ("/FV/Family/Language",      DIALECT_DISABLED,   "FVDialect" ));
 
 //         dialectDocEnabled.followTransition("Enable");
 //         session.saveDocument( dialectDocEnabled);
@@ -117,16 +120,20 @@
 //     public void checkDialectStates()
 //     {
 //         dialectDocNew = session.getDocument( new IdRef(dialectDocNew.getId()));
-//         assertTrue( "Dialect should be in new state", dialectDocNew.getCurrentLifeCycleState().equals("New"));
+//         assertTrue( "Dialect should be in new state", dialectDocNew.getCurrentLifeCycleState
+//         ().equals("New"));
 
 //         dialectDocEnabled = session.getDocument( new IdRef( dialectDocEnabled.getId()) );
-//         assertTrue( "Dialect should be in enabled state", dialectDocEnabled.getCurrentLifeCycleState().equals("Enabled"));
+//         assertTrue( "Dialect should be in enabled state", dialectDocEnabled
+//         .getCurrentLifeCycleState().equals("Enabled"));
 
 //         dialectDocPublished = session.getDocument( new IdRef( dialectDocPublished.getId()));
-//         assertTrue( "Dialect should be in published state", dialectDocPublished.getCurrentLifeCycleState().equals("Published"));
+//         assertTrue( "Dialect should be in published state", dialectDocPublished
+//         .getCurrentLifeCycleState().equals("Published"));
 
 //         dialectDocDisabled = session.getDocument( new IdRef( dialectDocDisabled.getId()));
-//         assertTrue( "Dialect should be in disabled state", dialectDocDisabled.getCurrentLifeCycleState().equals("Disabled"));
+//         assertTrue( "Dialect should be in disabled state", dialectDocDisabled
+//         .getCurrentLifeCycleState().equals("Disabled"));
 //     }
 
 //     @Test
@@ -139,15 +146,20 @@
 //         params.put("dialectState", ALL_DIALECTS );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have 4 dialects", countDocsInBlob( docs.getString(), "ecm:uuid" ) == 4);
+//         assertTrue("Should have 4 dialects", countDocsInBlob( docs.getString(), "ecm:uuid" )
+//         == 4);
 
-//         assertTrue("Should have 1 New dialect", countDocsInBlob( docs.getString(), "New" ) == 1);
+//         assertTrue("Should have 1 New dialect", countDocsInBlob( docs.getString(), "New" ) ==
+//         1);
 
-//         assertTrue("Should have 1 Enabled dialect", countDocsInBlob( docs.getString(), "Enabled" ) == 1);
+//         assertTrue("Should have 1 Enabled dialect", countDocsInBlob( docs.getString(),
+//         "Enabled" ) == 1);
 
-//         assertTrue("Should have 1 Disabled dialect", countDocsInBlob( docs.getString(), "Disabled" ) == 1);
+//         assertTrue("Should have 1 Disabled dialect", countDocsInBlob( docs.getString(),
+//         "Disabled" ) == 1);
 
-//         assertTrue("Should have 1 Published dialect", countDocsInBlob( docs.getString(), "Published" ) == 1);
+//         assertTrue("Should have 1 Published dialect", countDocsInBlob( docs.getString(),
+//         "Published" ) == 1);
 
 //     }
 
@@ -161,7 +173,8 @@
 //         params.put("dialectState", NEW_DIALECTS );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have only 1 New dialect", countDocsInBlob( docs.getString(), "ecm:uuid" ) == 1);
+//         assertTrue("Should have only 1 New dialect", countDocsInBlob( docs.getString(),
+//         "ecm:uuid" ) == 1);
 //     }
 
 //     @Test
@@ -174,7 +187,8 @@
 //         params.put("dialectState", DIALECTS_TO_JOIN );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have only 2 dialects as candidates to join", countDocsInBlob( docs.getString(), "ecm:uuid" ) == 2);
+//         assertTrue("Should have only 2 dialects as candidates to join", countDocsInBlob( docs
+//         .getString(), "ecm:uuid" ) == 2);
 //     }
 
 //     @Test
@@ -187,7 +201,8 @@
 //         params.put("dialectState", PUBLISHED_DIALECTS );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have only 1 published dialect", countDocsInBlob( docs.getString(), "ecm:uuid"  ) == 1);
+//         assertTrue("Should have only 1 published dialect", countDocsInBlob( docs.getString(),
+//         "ecm:uuid"  ) == 1);
 //     }
 
 //     @Test
@@ -199,9 +214,9 @@
 //         params.put("dialectState", ENABLED_DIALECTS );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have only 1 Enabled dialect", countDocsInBlob( docs.getString(), "ecm:uuid"  ) == 1);
+//         assertTrue("Should have only 1 Enabled dialect", countDocsInBlob( docs.getString(),
+//         "ecm:uuid"  ) == 1);
 //     }
-
 
 //     @Test
 //     @Ignore
@@ -213,7 +228,8 @@
 //         params.put("dialectState", DISABLED_DIALECTS );
 
 //         Blob docs = (Blob) automationService.run(ctx, ListDialects.ID, params);
-//         assertTrue("Should have only 1 disabled dialect", countDocsInBlob( docs.getString(), "ecm:uuid"  ) == 1);
+//         assertTrue("Should have only 1 disabled dialect", countDocsInBlob( docs.getString(),
+//         "ecm:uuid"  ) == 1);
 
 //     }
 

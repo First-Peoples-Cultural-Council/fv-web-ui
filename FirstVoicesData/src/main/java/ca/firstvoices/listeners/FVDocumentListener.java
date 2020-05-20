@@ -48,21 +48,21 @@ import org.nuxeo.runtime.api.Framework;
 
 public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
+  protected SanitizeDocumentService sanitizeDocumentService = Framework
+      .getService(SanitizeDocumentService.class);
   private CoreSession session;
   private AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-  protected SanitizeDocumentService sanitizeDocumentService = Framework
-      .getService(SanitizeDocumentService.class);
   private CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
-  private Event e;
+  private Event event;
   private DocumentModel document;
 
   @Override
   public void handleEvent(Event event) {
-    e = event;
-    ctx = e.getContext();
+    this.event = event;
+    ctx = this.event.getContext();
 
     // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a
     // session.
@@ -111,8 +111,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
         "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
         "FVPortal", "FVResources", "FVVideo", "FVWord",};
 
-    if (!Arrays.stream(types).parallel()
-        .anyMatch(document.getDocumentType().toString()::contains)) {
+    if (Arrays.stream(types).parallel()
+        .noneMatch(document.getDocumentType().toString()::contains)) {
       return;
     }
 
@@ -123,7 +123,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
         .isProxy() && !document.isVersion()) {
       try {
-        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           DocumentPart[] docParts = document.getParts();
           for (DocumentPart docPart : docParts) {
             Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
@@ -137,11 +137,11 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
             }
           }
         }
-        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
           cleanupCharactersService.cleanConfusables(session, document);
         }
       } catch (Exception exception) {
-        rollBackEvent(e);
+        rollBackEvent(event);
         throw exception;
       }
     }
@@ -160,19 +160,19 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
       try {
         DocumentModelList characters = getCharacters(document);
 
-        if (e.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           List<DocumentModel> results = characters.stream()
               .map(c -> c.getId().equals(document.getId()) ? document : c)
               .collect(Collectors.toList());
           cleanupCharactersService.mapAndValidateConfusableCharacters(results);
         }
 
-        if (e.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
+        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
           cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
         }
 
       } catch (Exception exception) {
-        rollBackEvent(e);
+        rollBackEvent(event);
         throw exception;
       }
     }

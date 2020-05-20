@@ -44,24 +44,19 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a"};
 
-    String[] orderedPhrases = {"A bad excuse is better than none", "A bit", "A bit " +
-        "more", "A bit of a...", "A couple of sth", "Ability Something", "Able bodied",
-        "Better safe than " +
-            "sorry", "Curiosity killed the cat", "Do not make a mountain out of a mole " + "hill",
-        "Easy come, " +
-            "easy go", "Fine feathers make fine birds", "Give credit where credit is due",
-        "Home is where the " +
-            "heart is", "If you play with fire, you will get burned",
-        "Judge not, that ye be not judged", "Kill " +
-        "two birds with one stone.", "Learn a language, and you will avoid a war",
-        "Memory is the treasure of" +
-            " the mind", "No man is an island", "Oil and water do not mix",
-        "Penny, Penny. Makes many.", "Respect" +
-        " is not given, it is earned.",
-        "Sticks and stones may break my bones, but wordsAndPhrases will never hurt me."
-        , "There is no smoke without fire.", "Use it or lose it", "Virtue is its own reward",
-        "When it rains " +
-            "it pours.", "You cannot teach an old dog new tricks",
+    String[] orderedPhrases = {"A bad excuse is better than none", "A bit", "A bit " + "more",
+        "A bit of a...", "A couple of sth", "Ability Something", "Able bodied",
+        "Better safe than " + "sorry", "Curiosity killed the cat",
+        "Do not make a mountain out of a mole " + "hill", "Easy come, " + "easy go",
+        "Fine feathers make fine birds", "Give credit where credit is due",
+        "Home is where the " + "heart is", "If you play with fire, you will get burned",
+        "Judge not, that ye be not judged", "Kill " + "two birds with one stone.",
+        "Learn a language, and you will avoid a war", "Memory is the treasure of" + " the mind",
+        "No man is an island", "Oil and water do not mix", "Penny, Penny. Makes many.",
+        "Respect" + " is not given, it is earned.",
+        "Sticks and stones may break my bones, but wordsAndPhrases will never hurt me.",
+        "There is no smoke without fire.", "Use it or lose it", "Virtue is its own reward",
+        "When it rains " + "it pours.", "You cannot teach an old dog new tricks",
         "Zeal without knowledge is fire without light."};
 
     createWordsorPhrases(orderedWords, "FVWord");

@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
 import ca.firstvoices.maintenance.dialect.categories.Constants;
@@ -15,29 +35,23 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = MigrateCategories.ID, category = Constants.GROUP_NAME,
-    label = Constants.MIGRATE_CATEGORIES_ACTION_ID,
-    description = "Operation to start migration of dialect to Local Categories")
+@Operation(id = MigrateCategories.ID, category = Constants.GROUP_NAME, label =
+    Constants.MIGRATE_CATEGORIES_ACTION_ID, description =
+    "Operation to start migration of " + "dialect to Local Categories")
 public class MigrateCategories {
 
   public static final String ID = Constants.MIGRATE_CATEGORIES_ACTION_ID;
-
-  MigrateCategoriesService migrateCategoriesService = Framework.getService(
-      MigrateCategoriesService.class);
-
-  MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
-
   @Context
   protected CoreSession session;
-
   @Context
   protected WorkManager workManager;
-
-  @Param(name = "phase", required = true, values = { "init", "work" })
+  @Param(name = "phase", values = {"init", "work"})
   protected String phase = "init";
-
   @Param(name = "batchSize")
   protected int batchSize = 1000;
+  MigrateCategoriesService migrateCategoriesService = Framework
+      .getService(MigrateCategoriesService.class);
+  MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
 
   @OperationMethod
   public void run(DocumentModel dialect) throws OperationException {
@@ -66,13 +80,14 @@ public class MigrateCategories {
 
       } else {
         throw new OperationException(
-            "Migrate categories tree not completed and job not queued. Tree is possibly already migrated.");
+            "Migrate categories tree not completed and job not queued. Tree is possibly already "
+                + "migrated.");
       }
 
     } else if (phase.equals("work")) {
       // Call worker
-      MigrateCategoriesWorker worker = new MigrateCategoriesWorker(
-          dialect.getRef(), Constants.MIGRATE_CATEGORIES_JOB_ID, batchSize);
+      MigrateCategoriesWorker worker = new MigrateCategoriesWorker(dialect.getRef(),
+          Constants.MIGRATE_CATEGORIES_JOB_ID, batchSize);
       workManager.schedule(worker, true);
 
       // Alternatively, we can call the service directly (not async)
@@ -81,9 +96,9 @@ public class MigrateCategories {
   }
 
   /**
-   * Maintenance tasks should just be available to system admins.
-   * This is done via a filter in fv-maintenance contrib, but here for extra caution
-   * This should become a service as part of First Voices Security
+   * Maintenance tasks should just be available to system admins. This is done via a filter in
+   * fv-maintenance contrib, but here for extra caution This should become a service as part of
+   * First Voices Security
    */
   private void protectOperation() {
     if (!session.getPrincipal().isAdministrator()) {

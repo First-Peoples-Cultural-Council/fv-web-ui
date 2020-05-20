@@ -1,4 +1,27 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package firstvoices.editors.operations;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import ca.firstvoices.editors.services.DraftEditorService;
 import com.google.inject.Inject;
@@ -8,8 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -18,94 +39,82 @@ import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
-import org.nuxeo.runtime.test.runner.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static ca.firstvoices.editors.configuration.FVLocalConf.DRAFT_UUID_REF;
-import static ca.firstvoices.editors.configuration.FVLocalConf.LIVE_UUID_REF;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(FeaturesRunner.class)
-@Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class, RepositoryElasticSearchFeature.class})
+@Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class,
+    RepositoryElasticSearchFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy( {"FirstVoicesData",
-        "org.nuxeo.ecm.platform",
-        "org.nuxeo.ecm.platform.commandline.executor",
-        "org.nuxeo.ecm.platform.picture.core",
-        "org.nuxeo.ecm.platform.rendition.core",
-        "org.nuxeo.ecm.platform.video.core",
-        "org.nuxeo.ecm.platform.audio.core",
-        "org.nuxeo.ecm.automation.scripting",
-        "org.nuxeo.ecm.platform.web.common",
-        "org.nuxeo.ecm.automation.jsf",
-        "FirstVoicesPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
-        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.operations.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.configuration.adapter.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.schedulers.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.services.xml",
-        "FirstVoicesDraftEditor:schemas/fvconfiguration.xsd",
-        "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
-        "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
-        "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-actions.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-es-provider.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-directory-sql-contrib.xml"} )
+@Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
+    "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
+    "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
+    "org.nuxeo.ecm.automation.scripting", "org.nuxeo.ecm.platform.web.common",
+    "org.nuxeo.ecm.automation.jsf",
+    "FirstVoicesPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.operations.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.configuration.adapter.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.schedulers.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.services.xml",
+    "FirstVoicesDraftEditor:schemas/fvconfiguration.xsd",
+    "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-actions.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-es-provider.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-directory-sql-contrib.xml"})
 
-public class EditReleaseDraftTest
-{
-    private draftDocTestUtil testUtil;
+public class EditReleaseDraftTest {
 
-    @Inject
-    private CoreSession session;
+  private draftDocTestUtil testUtil;
 
-    @Inject
-    private AutomationService automationService;
+  @Inject
+  private CoreSession session;
 
-    @Inject
-    private DraftEditorService draftEditorServiceInstance;
+  @Inject
+  private AutomationService automationService;
 
-    @Before
-    public void setUp() throws Exception
-    {
-        testUtil = new draftDocTestUtilImpl();
+  @Inject
+  private DraftEditorService draftEditorServiceInstance;
 
-        assertNotNull("Should have a valid test utilities obj", testUtil);
-        assertNotNull("Should have a valid session", session);
-        assertNotNull("Should have a valid automationService", automationService);
-        assertNotNull("Should have a valid DraftEditorServiceImpl", draftEditorServiceInstance);
+  @Before
+  public void setUp() throws Exception {
+    testUtil = new draftDocTestUtilImpl();
 
-        testUtil.createSetup(session );
-    }
+    assertNotNull("Should have a valid test utilities obj", testUtil);
+    assertNotNull("Should have a valid session", session);
+    assertNotNull("Should have a valid automationService", automationService);
+    assertNotNull("Should have a valid DraftEditorServiceImpl", draftEditorServiceInstance);
 
-    @Test
-    public void editReleaseDraftTest()
-    {
-        DocumentModel[] docArray = testUtil.getTestWordsArray( session );
-        int initialWordCount = docArray.length;
+    testUtil.createSetup(session);
+  }
 
-        testUtil.startEditViaAutomation(automationService, docArray );
+  @Test
+  public void editReleaseDraftTest() {
+    DocumentModel[] docArray = testUtil.getTestWordsArray(session);
+    int initialWordCount = docArray.length;
 
-        session.save();
+    testUtil.startEditViaAutomation(automationService, docArray);
 
-        docArray = testUtil.getTestWordsArray( session );
-        int afterEditStartedWordCount = docArray.length;
+    session.save();
 
-        assertTrue("Should have all draft documents created", 2*initialWordCount == afterEditStartedWordCount );
+    docArray = testUtil.getTestWordsArray(session);
+    int afterEditStartedWordCount = docArray.length;
 
-        testUtil.checkDraftEditLock( draftEditorServiceInstance, docArray );
+    assertTrue("Should have all draft documents created",
+        2 * initialWordCount == afterEditStartedWordCount);
 
-        testUtil.releaseDraftEditLockViaAutomation( automationService, draftEditorServiceInstance, docArray);
+    testUtil.checkDraftEditLock(draftEditorServiceInstance, docArray);
 
-        session.save();
+    testUtil
+        .releaseDraftEditLockViaAutomation(automationService, draftEditorServiceInstance, docArray);
 
-        docArray = testUtil.getTestWordsArray( session );
+    session.save();
 
-        assertTrue("Should have draft documents after lock release", docArray.length == afterEditStartedWordCount);
+    docArray = testUtil.getTestWordsArray(session);
 
-        testUtil.checkAfterReleaseSave(draftEditorServiceInstance, docArray );
-    }
+    assertTrue("Should have draft documents after lock release",
+        docArray.length == afterEditStartedWordCount);
+
+    testUtil.checkAfterReleaseSave(draftEditorServiceInstance, docArray);
+  }
 }

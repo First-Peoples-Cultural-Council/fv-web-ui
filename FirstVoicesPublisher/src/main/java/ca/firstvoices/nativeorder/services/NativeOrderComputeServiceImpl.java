@@ -17,6 +17,7 @@
  *  * /
  *
  */
+
 package ca.firstvoices.nativeorder.services;
 
 import ca.firstvoices.services.AbstractService;
@@ -44,27 +45,24 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     DocumentModelList chars = dialect.getCoreSession()
         .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
     updateCustomOrderCharacters(dialect.getCoreSession(), chars);
-    return chars
-        .stream()
-        .filter(character -> !character.isTrashed()
-            && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+    return chars.stream().filter(character -> !character.isTrashed()
+        && character.getPropertyValue("fvcharacter:alphabet_order") != null)
         .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
         .toArray(DocumentModel[]::new);
   }
 
   @Override
   public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
-    chars.forEach(c ->
-        updateCustomOrderForCharacter(session, c));
+    chars.forEach(c -> updateCustomOrderForCharacter(session, c));
   }
 
   @Override
   public String updateCustomOrderForCharacter(CoreSession session, DocumentModel c) {
     Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
     String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
-    String updatedCustomOrder = alphabetOrder == null ?
-        NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
-        : "" + ((char) (BASE + alphabetOrder));
+    String updatedCustomOrder =
+        alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
+            : "" + ((char) (BASE + alphabetOrder));
     if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
       c.setPropertyValue("fv:custom_order", updatedCustomOrder);
       session.saveDocument(c);
@@ -73,7 +71,8 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   }
 
   /* (non-Javadoc)
-   * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
+   * @see ca.firstvoices.publisher.services.
+   * NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
    * .ecm.core.api.DocumentModel)
    */
   @Override
@@ -92,7 +91,8 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   }
 
   /* (non-Javadoc)
-   * @see ca.firstvoices.publisher.services.NativeOrderComputeService#computeDialectNativeOrderTranslation(org
+   * @see ca.firstvoices.publisher.services
+   * .NativeOrderComputeService#computeDialectNativeOrderTranslation(org
    * .nuxeo.ecm.core.api.DocumentModel)
    */
   @Override
@@ -100,11 +100,11 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     CoreSession session = dialect.getCoreSession();
     // First get the native alphabet
     DocumentModel[] chars = loadCharacters(dialect);
-    computeNativeOrderTranslation(chars,
-        session.query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+    computeNativeOrderTranslation(chars, session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
-    computeNativeOrderTranslation(chars,
-        session.query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+    computeNativeOrderTranslation(chars, session.query(
+        "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
     DocumentModel alphabet = session
         .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
@@ -121,12 +121,12 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
     String title = (String) element.getPropertyValue("dc:title");
     StringBuilder nativeTitle = new StringBuilder();
-    List<String> fvChars =
-        Arrays.stream(chars).map(character -> (String) character.getPropertyValue("dc:title"))
-            .collect(Collectors.toList());
+    List<String> fvChars = Arrays.stream(chars)
+        .map(character -> (String) character.getPropertyValue("dc:title"))
+        .collect(Collectors.toList());
     List<String> upperChars = Arrays.stream(chars)
-        .map(character -> (String) character.getPropertyValue(
-            "fvcharacter:upper_case_character")).collect(Collectors.toList());
+        .map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character"))
+        .collect(Collectors.toList());
 
     String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
 
@@ -136,8 +136,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       DocumentModel characterDoc = Arrays.stream(chars).filter(
           charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
               (String) charDoc.getPropertyValue("dc:title"),
-              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character")))
-          .findFirst()
+              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
           .orElse(null);
 
       if (characterDoc != null) {
@@ -170,35 +169,35 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   }
 
   private boolean isCorrectCharacter(String title, List<String> fvChars, List<String> upperChars,
-      String charValue,
-      String ucCharValue) {
+      String charValue, String ucCharValue) {
 
     if ((title.startsWith(charValue)) || (ucCharValue != null && title.startsWith(ucCharValue))) {
       boolean incorrect;
 
-      // Grab all the characters that begin with the current character (for example, if "current character" is
+      // Grab all the characters that begin with the current character
+      // (for example, if "current character" is
       // iterating on "a", it will return "aa" if it is also in the alphabet)
-      List<String> charsStartingWithCurrentCharLower =
-          fvChars.stream().filter(character -> character != null && character.startsWith(charValue))
-              .collect(Collectors.toList());
-      // Go through the characters that begin with the "current character", and ensure that the title does not
-      // start with any character in that list (save for the "current character" that we're iterating on).
-      incorrect =
-          charsStartingWithCurrentCharLower.stream()
-              .anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
-      // If there is no match and the character has an uppercase equivalent, we want to repeat the process
-      // above with uppercase character. We also check the lowercase in an example of yZ is the "uppercase" of yz.
+      List<String> charsStartingWithCurrentCharLower = fvChars.stream()
+          .filter(character -> character != null && character.startsWith(charValue))
+          .collect(Collectors.toList());
+      // Go through the characters that begin with the "current character",
+      // and ensure that the title does not
+      // start with any character in that list (save for the "current character"
+      // that we're iterating on).
+      incorrect = charsStartingWithCurrentCharLower.stream()
+          .anyMatch(character -> !character.equals(charValue) && title.startsWith(character));
+      // If there is no match and the character has an uppercase equivalent,
+      // we want to repeat the process above with uppercase character.
+      // We also check the lowercase in an example of yZ is the "uppercase" of yz.
       if (ucCharValue != null && !incorrect) {
-        List<String> charsStartingWithCurrentCharUpper =
-            upperChars.stream().filter(character -> {
-              if (character == null) {
-                return false;
-              }
-              return character.startsWith(ucCharValue) || character.startsWith(charValue);
-            }).collect(Collectors.toList());
-        incorrect =
-            charsStartingWithCurrentCharUpper.stream().anyMatch(
-                uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
+        List<String> charsStartingWithCurrentCharUpper = upperChars.stream().filter(character -> {
+          if (character == null) {
+            return false;
+          }
+          return character.startsWith(ucCharValue) || character.startsWith(charValue);
+        }).collect(Collectors.toList());
+        incorrect = charsStartingWithCurrentCharUpper.stream().anyMatch(
+            uCharacter -> !uCharacter.equals(ucCharValue) && title.startsWith(uCharacter));
       }
 
       // If it is the right character this value, "incorrect" will be false.

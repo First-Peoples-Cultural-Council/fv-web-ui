@@ -121,6 +121,25 @@
         <version>1.1.0</version>
       </extension>
     </extensions>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>
+            https://raw.githubusercontent.com/First-Peoples-Cultural-Council/fv-checkstyle/master/java/java-fv-google-style-strict.xml
+          </configLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.1.1</version>
+      </plugin>
+    </plugins>
   </build>
 
   <repositories>

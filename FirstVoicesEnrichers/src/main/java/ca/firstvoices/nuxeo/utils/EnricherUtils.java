@@ -110,8 +110,7 @@ public class EnricherUtils {
         ArrayNode thumbnailsJsonArray = mapper.createArrayNode();
 
         List<HashMap<String, Object>> views = (List<HashMap<String, Object>>) binaryDoc
-            .getPropertyValue(
-                "picture:views");
+            .getPropertyValue("picture:views");
 
         int i = 0;
 
@@ -280,9 +279,10 @@ public class EnricherUtils {
   public static String expandCategoriesToChildren(CoreSession session, String query) {
     if (query != null && !query.isEmpty()) {
       // Expand value of fv-word:categories so that it includes children
-      String REGEX = "(fv-word:categories|fvproxy:proxied_categories)/\\* IN \\(\"([a-zA-Z0-9\\-]*)\"\\)";
+      String regex =
+          "(fv-word:categories|fvproxy:proxied_categories)/\\* IN \\(\"" + "([a-zA-Z0-9\\-]*)\"\\)";
 
-      Pattern pattern = Pattern.compile(REGEX);
+      Pattern pattern = Pattern.compile(regex);
       Matcher m = pattern.matcher(query);
 
       if (m.find() && !m.group(2).isEmpty()) {
@@ -300,7 +300,7 @@ public class EnricherUtils {
 
         inClause += ")";
 
-        query = query.replaceFirst(REGEX, categoryProperty + "/* IN " + inClause);
+        query = query.replaceFirst(regex, categoryProperty + "/* IN " + inClause);
       }
     }
 
@@ -327,6 +327,6 @@ public class EnricherUtils {
     if (StringUtils.isEmpty(customOrder)) {
       log.info("Dialect " + dialect + " requires custom order recompute.");
     }
-      return customOrder;
-    }
+    return customOrder;
+  }
 }

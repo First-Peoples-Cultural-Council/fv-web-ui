@@ -47,15 +47,13 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void shouldExpandCategoriesToChildren() {
 
     String categoryQuery =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\")";
 
     String modifiedQuery = EnricherUtils.expandCategoriesToChildren(session, categoryQuery);
 
     String queryWithCategoriesAndChildren =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\",\"" + subcategory.getId()
-            + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\",\""
+            + subcategory.getId() + "\")";
 
     assertEquals(modifiedQuery, queryWithCategoriesAndChildren);
   }
@@ -77,8 +75,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void shouldReturnWordFromSubCategory() throws OperationException {
 
     String categoryQuery =
-        "SELECT * FROM FVWord WHERE " +
-            "fv-word:categories/* IN (\"" + category.getId() + "\")";
+        "SELECT * FROM FVWord WHERE " + "fv-word:categories/* IN (\"" + category.getId() + "\")";
 
     OperationContext ctx = new OperationContext(session);
     Map<String, Object> params = new HashMap<>();

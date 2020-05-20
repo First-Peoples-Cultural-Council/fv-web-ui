@@ -59,13 +59,13 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Features({PlatformFeature.class})
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",
-    "org.nuxeo.ecm.platform.audio.core",
-    "org.nuxeo.ecm.automation.scripting", "FirstVoicesData",
+    "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting", "FirstVoicesData",
     "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
+        + ".ProxyPublisherListener.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
 public class FirstVoicesPublisherTest {
@@ -130,9 +130,9 @@ public class FirstVoicesPublisherTest {
     child = session.getChild(dialect.getRef(), "Dictionary");
     assertNotNull(child);
     assertEquals("FVDictionary", child.getDocumentType().getName());
-//        child = session.getChild(dialect.getRef(), "Forum");
-//        assertNotNull(child);
-//        assertEquals("Forum", child.getDocumentType().getName());
+    //        child = session.getChild(dialect.getRef(), "Forum");
+    //        assertNotNull(child);
+    //        assertEquals("Forum", child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Portal");
     assertNotNull(child);
     assertEquals("FVPortal", child.getDocumentType().getName());
@@ -279,33 +279,30 @@ public class FirstVoicesPublisherTest {
     session.save();
 
     domain = session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    sectionRoot = publisherService.getRootSectionFinder(session)
-        .getDefaultSectionRoots(true, true).get(0);
+    sectionRoot = publisherService.getRootSectionFinder(session).getDefaultSectionRoots(true, true)
+        .get(0);
     createDialectTree();
   }
 
   private void createWord() {
-    category = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString() + "/Categories", "Category",
+    category = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Categories", "Category",
             "FVCategory"));
     subcategory = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(),
-            "SubCategory", "FVCategory"));
-    contributor = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor",
+        session.createDocumentModel(category.getPathAsString(), "SubCategory", "FVCategory"));
+    contributor = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor",
             "FVContributor"));
-    contributor2 = session
-        .createDocument(session.createDocumentModel(dialectDoc.getPathAsString() + "/Contributors",
-            "myContributor2", "FVContributor"));
-    picture = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myPicture",
+    contributor2 = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor2",
+            "FVContributor"));
+    picture = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myPicture",
             "FVPicture"));
-    audio = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myAudio",
-            "FVAudio"));
-    video = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myVideo",
-            "FVVideo"));
+    audio = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myAudio", "FVAudio"));
+    video = session.createDocument(session
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myVideo", "FVVideo"));
     word = session
         .createDocumentModel(dialectDoc.getPathAsString() + "/Dictionary", "myWord1", "FVWord");
     String[] values = new String[1];
@@ -361,9 +358,8 @@ public class FirstVoicesPublisherTest {
   }
 
   private void createPhrase() {
-    phraseBook = session.createDocument(
-        session.createDocumentModel("/Family/Language/Dialect/Categories", "PhraseBook",
-            "FVCategory"));
+    phraseBook = session.createDocument(session
+        .createDocumentModel("/Family/Language/Dialect/Categories", "PhraseBook", "FVCategory"));
     phrase = session
         .createDocumentModel("/Family/Language/Dialect/Dictionary", "myPhrase1", "FVPhrase");
     phrase.setPropertyValue("fv-phrase:phrase_books", new String[]{phraseBook.getId()});
@@ -387,12 +383,10 @@ public class FirstVoicesPublisherTest {
     link2 = session.createDocument(
         session.createDocumentModel("/Family/Language/Dialect/Links", "myLink2", "FVLink"));
 
-    DocumentModel picture = session.createDocument(
-        session.createDocumentModel("/Family/Language/Dialect/Resources", "myPicture1",
-            "FVPicture"));
+    DocumentModel picture = session.createDocument(session
+        .createDocumentModel("/Family/Language/Dialect/Resources", "myPicture1", "FVPicture"));
     DocumentModel audio = session.createDocument(
-        session
-            .createDocumentModel("/Family/Language/Dialect/Resources", "myAudio1", "FVAudio"));
+        session.createDocumentModel("/Family/Language/Dialect/Resources", "myAudio1", "FVAudio"));
 
     String[] values = new String[1];
 
@@ -461,8 +455,7 @@ public class FirstVoicesPublisherTest {
     // Check that the property has been set correctly
     verifyProxiedResource((String[]) proxy.getPropertyValue("fvproxy:proxied_audio"), audio);
     verifyProxiedResource((String[]) proxy.getPropertyValue("fvproxy:proxied_videos"), video);
-    verifyProxiedResource((String[]) proxy.getPropertyValue("fvproxy:proxied_pictures"),
-        picture);
+    verifyProxiedResource((String[]) proxy.getPropertyValue("fvproxy:proxied_pictures"), picture);
     // Specific source as there is 2 items
     String[] property = (String[]) proxy.getPropertyValue("fvproxy:proxied_source");
     assertEquals(2, property.length);
@@ -489,8 +482,8 @@ public class FirstVoicesPublisherTest {
     assertTrue(doc.getPathAsString()
         .matches("/FV.*/sections/Family/Language/Dialect/Categories/Category/SubCategory"));
     doc = session.getSourceDocument(new IdRef(property[0]));
-    assertTrue(doc.getPathAsString()
-        .matches("/Family/Language/Dialect/Categories/Category/SubCategory"));
+    assertTrue(
+        doc.getPathAsString().matches("/Family/Language/Dialect/Categories/Category/SubCategory"));
   }
 
   private String[] getPropertyValueAsArray(DocumentModel proxy, String propertyName) {
@@ -508,8 +501,8 @@ public class FirstVoicesPublisherTest {
     assertTrue(doc.getPathAsString()
         .matches("/FV.*/sections/Family/Language/Dialect/Resources/" + original.getName()));
     doc = session.getSourceDocument(ref);
-    assertTrue(doc.getPathAsString()
-        .matches("/Family/Language/Dialect/Resources/" + original.getName()));
+    assertTrue(
+        doc.getPathAsString().matches("/Family/Language/Dialect/Resources/" + original.getName()));
     assertEquals(original.getRef().toString(), doc.getSourceId());
   }
 
@@ -545,11 +538,9 @@ public class FirstVoicesPublisherTest {
     createWord();
 
     DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(),
-            "SubCategory2", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory2", "FVCategory"));
     DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(),
-            "SubCategory3", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory3", "FVCategory"));
 
     session.saveDocument(subcategory2);
     session.saveDocument(subcategory3);
@@ -578,11 +569,9 @@ public class FirstVoicesPublisherTest {
     createWord();
 
     DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(),
-            "SubCategory2", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory2", "FVCategory"));
     DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(),
-            "SubCategory3", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory3", "FVCategory"));
 
     session.saveDocument(subcategory2);
     session.saveDocument(subcategory3);

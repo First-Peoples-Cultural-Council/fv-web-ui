@@ -16,7 +16,8 @@ public class MigrateCategoriesWorker extends AbstractWork {
   private final DocumentRef jobContainerRef;
   private final int batchSize;
 
-  private final MigrateCategoriesService service = Framework.getService(MigrateCategoriesService.class);
+  private final MigrateCategoriesService service = Framework
+      .getService(MigrateCategoriesService.class);
 
   private final MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
 
@@ -50,14 +51,16 @@ public class MigrateCategoriesWorker extends AbstractWork {
     int wordsRemaining = service.migrateWords(session, jobContainer, batchSize);
 
     while (wordsRemaining != 0) {
-      setStatus("Migrating next batch on `" + jobContainer.getTitle() + "` ( " + wordsRemaining + " words remaining).");
+      setStatus("Migrating next batch on `" + jobContainer.getTitle() + "` ( " + wordsRemaining
+          + " words remaining).");
       int nextWordsRemaining = service.migrateWords(session, jobContainer, batchSize);
 
       // No progress, worker is stuck
       if (nextWordsRemaining == wordsRemaining) {
         setStatus("Failed");
         maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-        workFailed(new NuxeoException("worker is stuck with progress on " + jobContainer.getTitle()));
+        workFailed(
+            new NuxeoException("worker is stuck with progress on " + jobContainer.getTitle()));
       }
 
       wordsRemaining = nextWordsRemaining;

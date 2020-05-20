@@ -18,9 +18,6 @@
  *
  */
 
-/**
- *
- */
 package ca.firstvoices.publisher.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -31,63 +28,64 @@ import org.nuxeo.ecm.core.api.DocumentRef;
  * @author loopingz
  */
 public interface FirstVoicesPublisherService {
-    /**
-     * Publish a dialect, publishing its parents if needed and its direct publishable children
-     *
-     * @param dialect
-     */
-    DocumentModel publishDialect(DocumentModel dialect);
 
-    /**
-     * Publish or republish a portal's assets (arrays or strings)
-     *
-     * @param dialect
-     */
-    DocumentModel publishPortalAssets(DocumentModel portal);
+  /**
+   * Publish a dialect, publishing its parents if needed and its direct publishable children
+   *
+   * @param dialect
+   */
+  DocumentModel publishDialect(DocumentModel dialect);
 
-    /**
-     * Unpublish a dialect, cleaning its parent if they have no more child
-     *
-     * @param dialect
-     */
-    void unpublishDialect(DocumentModel dialect);
+  /**
+   * Publish or republish a portal's assets (arrays or strings)
+   *
+   * @param portal
+   */
+  DocumentModel publishPortalAssets(DocumentModel portal);
 
-    /**
-     * Publish an asset, publishing its related assets and adding proxies information
-     *
-     * @param asset
-     */
-    DocumentModel publishAsset(DocumentModel asset);
+  /**
+   * Unpublish a dialect, cleaning its parent if they have no more child
+   *
+   * @param dialect
+   */
+  void unpublishDialect(DocumentModel dialect);
 
-    /**
-     * Unpublish an asset, it wont clean the related assets
-     *
-     * @param asset
-     */
-    void unpublishAsset(DocumentModel asset);
+  /**
+   * Publish an asset, publishing its related assets and adding proxies information
+   *
+   * @param asset
+   */
+  DocumentModel publishAsset(DocumentModel asset);
 
-    /**
-     * Will split depending on the document between unpublishAsset and unpublishDialect
-     *
-     * @param doc to unpublish
-     */
-    void unpublish(DocumentModel doc);
+  /**
+   * Unpublish an asset, it wont clean the related assets
+   *
+   * @param asset
+   */
+  void unpublishAsset(DocumentModel asset);
 
-    /**
-     * Will split depending on the document between publishAsset and publishDialect
-     *
-     * @param doc to publish
-     */
-    DocumentModel publish(DocumentModel doc);
+  /**
+   * Will split depending on the document between unpublishAsset and unpublishDialect
+   *
+   * @param doc to unpublish
+   */
+  void unpublish(DocumentModel doc);
 
-    DocumentModel republish(DocumentModel doc);
+  /**
+   * Will split depending on the document between publishAsset and publishDialect
+   *
+   * @param doc to publish
+   */
+  DocumentModel publish(DocumentModel doc);
 
-    DocumentModel getPublication(CoreSession session, DocumentRef docRef);
+  DocumentModel republish(DocumentModel doc);
 
-    DocumentModel publishDocument(CoreSession session, DocumentModel doc, DocumentModel section);
+  DocumentModel getPublication(CoreSession session, DocumentRef docRef);
 
-    DocumentModel setDialectProxies(DocumentModel dialectProxy);
+  DocumentModel publishDocument(CoreSession session, DocumentModel doc, DocumentModel section);
 
-    void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
-        DocumentModel doc);
+  DocumentModel setDialectProxies(DocumentModel dialectProxy);
+
+  void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
+      DocumentModel doc);
 }

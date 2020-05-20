@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.services;
 
 import java.util.ArrayList;
@@ -34,26 +54,23 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
         // Get the confusable unicode value(s) as an array
         String[] confusables = Arrays
-            .stream(entry.getPropertyValue("confusable_unicode").toString().split(",")).map(
-                StringEscapeUtils::unescapeJava
-            ).toArray(String[]::new);
+            .stream(entry.getPropertyValue("confusable_unicode").toString().split(","))
+            .map(StringEscapeUtils::unescapeJava).toArray(String[]::new);
 
         String dialectUID = dialect.getId();
 
         // Do a query for the alphabet characters that match the spreadsheet
-        String query = "SELECT * FROM FVCharacter "
-            + "WHERE fva:dialect='" + dialectUID + "' "
-            + "AND dc:title='" + character + "' "
-            + "AND fva:dialect='" + dialectUID + "' "
+        String query = "SELECT * FROM FVCharacter " + "WHERE fva:dialect='" + dialectUID + "' "
+            + "AND dc:title='" + character + "' " + "AND fva:dialect='" + dialectUID + "' "
             + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
 
-        String uQuery = "SELECT * FROM FVCharacter "
-            + "WHERE fva:dialect='" + dialectUID + "' "
-            + "AND fvcharacter:upper_case_character='" + character + "' "
-            + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+        String upperCharacterQuery =
+            "SELECT * FROM FVCharacter " + "WHERE fva:dialect='" + dialectUID + "' "
+                + "AND fvcharacter:upper_case_character='" + character + "' "
+                + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
 
         DocumentModelList lowerCharDocs = session.query(query);
-        DocumentModelList upperCharDocs = session.query(uQuery);
+        DocumentModelList upperCharDocs = session.query(upperCharacterQuery);
         List<DocumentModel> charactersDocs = new ArrayList<>();
         charactersDocs.addAll(lowerCharDocs);
         charactersDocs.addAll(upperCharDocs);
@@ -67,8 +84,9 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   }
 
   @Override
-  public DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument,
-      DocumentModel dialect, String characterToUpdate, String[] newConfusables) {
+  public DocumentModel updateConfusableCharacters(CoreSession session,
+      DocumentModel characterDocument, DocumentModel dialect, String characterToUpdate,
+      String[] newConfusables) {
     String dialectName = dialect.getPropertyValue("dc:title").toString();
 
     // If a character was matched by title then update the lowercase confusable characters
@@ -86,7 +104,8 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         log.info(dialectName + ": Added " + Arrays.toString(newConfusables) + " to "
             + characterToUpdate);
       }
-      // If a characterToUpdate was matched to an uppercase characterToUpdate then update the uppercase confusable characters
+      // If a characterToUpdate was matched to an uppercase characterToUpdate
+      // then update the uppercase confusable characters
     } else {
       String[] existing = (String[]) characterDocument
           .getPropertyValue("fvcharacter:upper_case_confusable_characters");

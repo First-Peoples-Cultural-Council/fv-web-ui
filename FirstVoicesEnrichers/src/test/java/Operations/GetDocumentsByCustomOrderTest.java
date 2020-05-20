@@ -96,7 +96,8 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     DocumentModelList documentModelList = (DocumentModelList) automationService
         .run(ctx, GetDocumentsByCustomOrder.ID, params);
 
-    // Since the custom order isn't recomputed on the archive, it's expected it will have "aa" in the list.
+    // Since the custom order isn't recomputed on the archive, it's expected it will have "aa"
+    // in the list.
     List<String> aWords = Arrays.asList("aada gadaalee", "adoḵs", "agwii-gin̓am");
 
     Assert.assertEquals(3, documentModelList.size());

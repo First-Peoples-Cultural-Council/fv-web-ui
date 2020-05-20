@@ -30,9 +30,9 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = MigrateCategoriesStatus.ID, category = Constants.GROUP_NAME,
-    label = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID,
-    description = "Operation to show the status of the migration for categories")
+@Operation(id = MigrateCategoriesStatus.ID, category = Constants.GROUP_NAME, label =
+    Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID, description = "Operation to show the status of"
+    + " the migration for categories")
 public class MigrateCategoriesStatus {
 
   public static final String ID = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID;
@@ -43,11 +43,11 @@ public class MigrateCategoriesStatus {
   @Context
   protected WorkManager workManager;
 
-  @Param(name = "publishAction", required = false, values = { "force", "ignore" })
+  @Param(name = "publishAction", required = false, values = {"force", "ignore"})
   protected String publishAction = "ignore";
 
-  MigrateCategoriesService migrateCategoriesService = Framework.getService(
-      MigrateCategoriesService.class);
+  MigrateCategoriesService migrateCategoriesService = Framework
+      .getService(MigrateCategoriesService.class);
 
   MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
 
@@ -57,8 +57,7 @@ public class MigrateCategoriesStatus {
   FirstVoicesPublisherService publisherService = Framework
       .getService(FirstVoicesPublisherService.class);
 
-  AutomationService automationService = Framework
-      .getService(AutomationService.class);
+  AutomationService automationService = Framework.getService(AutomationService.class);
 
   @OperationMethod
   public Blob run(DocumentModel dialect) throws OperationException {
@@ -73,8 +72,9 @@ public class MigrateCategoriesStatus {
     int sharedCategoriesCount = 0;
     int localCategoriesCount = 0;
 
-    IterableQueryResult results = session.queryAndFetch(
-        migrateCategoriesService.getUniqueCategoriesQuery(dialect.getId()), "NXQL", true, null);
+    IterableQueryResult results = session
+        .queryAndFetch(migrateCategoriesService.getUniqueCategoriesQuery(dialect.getId()), "NXQL",
+            true, null);
     Iterator<Map<String, Serializable>> it = results.iterator();
 
     while (it.hasNext()) {
@@ -122,11 +122,8 @@ public class MigrateCategoriesStatus {
           .getPublication(session, sharedCategory.getRef());
 
       if (sharedCategoryProxy != null) {
-        String query = "SELECT * FROM FVWord WHERE "
-            + "fva:dialect = '" + dialect.getId() + "' "
-            + "AND ecm:isTrashed = 0 "
-            + "AND ecm:isVersion = 0 "
-            + "AND ecm:isProxy = 1 "
+        String query = "SELECT * FROM FVWord WHERE " + "fva:dialect = '" + dialect.getId() + "' "
+            + "AND ecm:isTrashed = 0 " + "AND ecm:isVersion = 0 " + "AND ecm:isProxy = 1 "
             + "AND fvproxy:proxied_categories/* IN ('" + sharedCategoryProxy.getId() + "')";
 
         DocumentModelList sections = session.query(query, null, 1000, 0, true);
@@ -148,9 +145,8 @@ public class MigrateCategoriesStatus {
           }
         }
 
-        sharedCategoriesInProxies
-            .put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
-                new Double(sections.totalSize()));
+        sharedCategoriesInProxies.put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
+            new Double(sections.totalSize()));
       }
     }
 
