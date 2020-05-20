@@ -22,14 +22,16 @@ import 'cypress-file-upload'
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-beforeEach(function() {
-  cy.log('NOTE: Tests are typically run with `npm run startPreprod`')
-  cy.log('NOTE: We will be migrating the tests to dev sandbox soon`')
-})
-afterEach(function() {
+beforeEach(() => {
   // Logout to fix issue with user being logged in between tests.
   cy.logout()
+})
+
+afterEach(() => {
   cy.log('Test complete')
+  // TODO: could we...
+  // TODO: a) not need to wait?
+  // TODO: b) if we do need to wait, only wait when we are recording?
   // Wait to ensure video recording is not cut early on failed test.
   cy.wait(1000)
 })
