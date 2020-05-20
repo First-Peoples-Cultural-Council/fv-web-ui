@@ -23,8 +23,8 @@
         <schedule id="queueRequiredJobs">
             <eventId>executeRequiredJobs</eventId>
             <eventCategory>maintenance</eventCategory>
-            <!-- Every 5 minutes-->
-            <cronExpression>* */5 * ? * *</cronExpression>
+            <!-- every 30 minutes between 20pm and 23pm -->
+            <cronExpression>0 0/30 20-23 ? * *</cronExpression>
         </schedule>
     </extension>
 

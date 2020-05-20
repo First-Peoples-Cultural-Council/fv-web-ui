@@ -183,8 +183,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   private void addConfusableCharactersToAlphabets(CoreSession session) {
     String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:update_confusables_required = 1 "
         + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    // Only process 1000 documents at a time
-    DocumentModelList alphabets = session.query(query, 1000);
+    // Only process 100 documents at a time
+    DocumentModelList alphabets = session.query(query, 100);
 
     if (alphabets != null && alphabets.size() > 0) {
       WorkManager workManager = Framework.getService(WorkManager.class);
@@ -202,7 +202,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
     String wordPhraseQuery = "SELECT * FROM FVWord, FVPhrase WHERE fv:update_confusables_required"
         + " = 1 AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery, 1000);
+    DocumentModelList wordsAndPhrases = session.query(wordPhraseQuery, 100);
 
     Map<String, Boolean> requiresUpdate = new HashMap<>();
 
