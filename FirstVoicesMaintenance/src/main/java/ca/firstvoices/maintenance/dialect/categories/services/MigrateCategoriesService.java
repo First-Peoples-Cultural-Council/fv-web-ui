@@ -6,7 +6,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public interface MigrateCategoriesService {
 
-  boolean migrateCategoriesTree(CoreSession session, DocumentModel dialect);
+  public boolean migrateCategoriesTree(CoreSession session, DocumentModel dialect);
 
   /**
    * @param session
@@ -14,11 +14,12 @@ public interface MigrateCategoriesService {
    * @param batchSize
    * @return the amount of words that are left to process
    */
-  int migrateWords(CoreSession session, DocumentModel dialect, int batchSize);
+  public int migrateWords(CoreSession session, DocumentModel dialect, int batchSize);
 
-  void publishCategoriesTree(CoreSession session, DocumentModel dialect);
+  public void publishCategoriesTree(CoreSession session, DocumentModel dialect);
 
-  String getUniqueCategoriesQuery(String dialectId);
+  public String getUniqueCategoriesQuery(String dialectId);
 
-  DocumentModelList getCategories(CoreSession session, DocumentModel container);
+  public DocumentModelList getCategories(CoreSession session, DocumentModel container,
+      boolean includeProxies);
 }
