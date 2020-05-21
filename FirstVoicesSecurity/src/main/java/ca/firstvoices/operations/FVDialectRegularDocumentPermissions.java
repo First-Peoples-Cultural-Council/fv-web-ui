@@ -1,26 +1,29 @@
 /*
- * (C) Copyright ${year} Nuxeo SA (http://nuxeo.com/) and contributors.
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser General Public License
- * (LGPL) version 2.1 which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-2.1.html
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * Contributors:
- *     dyona
  */
 
 package ca.firstvoices.operations;
 
+import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -30,64 +33,67 @@ import org.nuxeo.ecm.automation.core.collectors.DocumentModelCollector;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentNotFoundException;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
-import ca.firstvoices.utils.CustomSecurityConstants;
 
 /**
  * This method will assign the correct permissions when a new dialect is created.
  */
-@Operation(id=FVDialectRegularDocumentPermissions.ID, category=Constants.CAT_USERS_GROUPS, label="FVDialectRegularDocumentPermissions", description="")
-public class FVDialectRegularDocumentPermissions extends AbstractFVDialectOperation {
+@Operation(id = FVDialectRegularDocumentPermissions.ID, category = Constants.CAT_USERS_GROUPS,
+    label = "FVDialectRegularDocumentPermissions", description = "")
+public class FVDialectRegularDocumentPermissions extends AbstractFirstVoicesDialectOperation {
 
-    public static final String ID = "FVDialectRegularDocumentPermissions";
+  public static final String ID = "FVDialectRegularDocumentPermissions";
 
-    private static final Log log = LogFactory.getLog(FVDialectRegularDocumentPermissions.class);
+  private static final Log log = LogFactory.getLog(FVDialectRegularDocumentPermissions.class);
 
-    @OperationMethod(collector=DocumentModelCollector.class)
-    public DocumentModel run(DocumentModel input) {
+  @OperationMethod(collector = DocumentModelCollector.class)
+  public DocumentModel run(DocumentModel input) {
 
-    	// Don't process published document
-    	if (input.isProxy()) {
-    		return input;
-    	}
-
-    	HashMap<String, String> groupsToCreate = new HashMap<String, String>();
-
-    	try {
-           	groupsToCreate.put(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP, SecurityConstants.EVERYTHING);
-        	groupsToCreate.put(CustomSecurityConstants.RECORDERS_GROUP, CustomSecurityConstants.RECORD);
-        	groupsToCreate.put(CustomSecurityConstants.RECORDERS_APPROVERS_GROUP, CustomSecurityConstants.APPROVE);
-        	groupsToCreate.put(userManager.getGroupMembersField(), SecurityConstants.READ);
-
-	    	for (Map.Entry<String, String> group : groupsToCreate.entrySet()) {
-	    		processGroup(input, group);
-	    	}
-    	}
-    	catch (DocumentNotFoundException e){
-    		log.warn("Could not find document.", e);
-    	}
-    	catch (Exception e){
-    		log.warn("Could not create groups automatically.", e);
-    	}
-
-    	return input;
+    // Don't process published document
+    if (input.isProxy()) {
+      return input;
     }
 
-	@Override
-	protected ArrayList<String> addParentsToGroup(ArrayList<String> currentGroups, DocumentModel groupDocModel, Map.Entry<String, String> currentGroup, DocumentModel input) {
+    HashMap<String, String> groupsToCreate = new HashMap<String, String>();
 
-    	// All groups have their 'members' group as parent (except for members)
-    	if (!userManager.getGroupMembersField().equals(currentGroup.getKey())) {
-    		String dialectMembersGroupName = generateGroupNameFromDialect(input.getName(), userManager.getGroupMembersField());
-    		currentGroups.add(dialectMembersGroupName);
-    	}
+    try {
+      groupsToCreate
+          .put(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP, SecurityConstants.EVERYTHING);
+      groupsToCreate.put(CustomSecurityConstants.RECORDERS_GROUP, CustomSecurityConstants.RECORD);
+      groupsToCreate
+          .put(CustomSecurityConstants.RECORDERS_APPROVERS_GROUP, CustomSecurityConstants.APPROVE);
+      groupsToCreate.put(userManager.getGroupMembersField(), SecurityConstants.READ);
 
-    	// Recorders with Approval should have the Recorders group as a parent
-    	if (CustomSecurityConstants.RECORDERS_APPROVERS_GROUP.equals(currentGroup.getKey())) {
-    		String dialectRecordersGroupName = generateGroupNameFromDialect(input.getName(), CustomSecurityConstants.RECORDERS_GROUP);
-    		currentGroups.add(dialectRecordersGroupName);
-    	}
+      for (Map.Entry<String, String> group : groupsToCreate.entrySet()) {
+        processGroup(input, group);
+      }
+    } catch (DocumentNotFoundException e) {
+      log.warn("Could not find document.", e);
+    } catch (Exception e) {
+      log.warn("Could not create groups automatically.", e);
+    }
 
-    	return currentGroups;
-	}
+    return input;
+  }
+
+  @Override
+  protected ArrayList<String> addParentsToGroup(ArrayList<String> currentGroups,
+      DocumentModel groupDocModel, Map.Entry<String, String> currentGroup, DocumentModel input) {
+
+    // All groups have their 'members' group as parent (except for members)
+    if (!userManager.getGroupMembersField().equals(currentGroup.getKey())) {
+      String dialectMembersGroupName = generateGroupNameFromDialect(input.getName(),
+          userManager.getGroupMembersField());
+      currentGroups.add(dialectMembersGroupName);
+    }
+
+    // Recorders with Approval should have the Recorders group as a parent
+    if (CustomSecurityConstants.RECORDERS_APPROVERS_GROUP.equals(currentGroup.getKey())) {
+      String dialectRecordersGroupName = generateGroupNameFromDialect(input.getName(),
+          CustomSecurityConstants.RECORDERS_GROUP);
+      currentGroups.add(dialectRecordersGroupName);
+    }
+
+    return currentGroups;
+  }
 
 }

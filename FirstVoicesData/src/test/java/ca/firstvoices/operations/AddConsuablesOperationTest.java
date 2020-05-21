@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoException;
 
 /**
  * @author david
@@ -23,6 +24,16 @@ public class AddConsuablesOperationTest extends AbstractFirstVoicesDataTest {
 
     Assert.assertTrue(
         (Boolean) alphabetModel.getPropertyValue("fv-alphabet:update_confusables_required"));
+  }
+
+  @Test(expected = NuxeoException.class)
+  public void addConfusablesOperationOnlyAcceptsFVDialect() throws OperationException {
+
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(childCategory);
+
+    automationService.run(ctx, AddConfusablesOperation.ID);
+
   }
 
 }

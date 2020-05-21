@@ -1,18 +1,21 @@
 /*
- * (C) Copyright ${year} Nuxeo SA (http://nuxeo.com/) and contributors.
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser General Public License
- * (LGPL) version 2.1 which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-2.1.html
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * Contributors:
- *     dyona
  */
 
 package ca.firstvoices.operations;
@@ -27,25 +30,25 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 /**
- * Operation gets the dialects a user is a member of
- * TODO: Convert to service
+ * Operation gets the dialects a user is a member of TODO: Convert to service
  */
-@Operation(id=FVGetDialectsForUser.ID, category=Constants.CAT_USERS_GROUPS, label="FVGetDialectsForUser", description="")
+@Operation(id = FVGetDialectsForUser.ID, category = Constants.CAT_USERS_GROUPS, label =
+    "FVGetDialectsForUser", description = "")
 public class FVGetDialectsForUser {
 
-    public static final String ID = "FVGetDialectsForUser";
+  public static final String ID = "FVGetDialectsForUser";
 
-	@Context
-	protected CoreSession session;
+  @Context
+  protected CoreSession session;
 
-    @Context
-    private FVUserProfileService fvUserProfileService;
+  @Context
+  private FVUserProfileService fvUserProfileService;
 
-    @OperationMethod
-    public DocumentModelList run() {
+  @OperationMethod
+  public DocumentModelList run() {
 
-    	NuxeoPrincipal currentUser = (NuxeoPrincipal) session.getPrincipal();
-        return fvUserProfileService.getUserDialects(currentUser, session);
-    }
+    NuxeoPrincipal currentUser = session.getPrincipal();
+    return fvUserProfileService.getUserDialects(currentUser, session);
+  }
 
 }

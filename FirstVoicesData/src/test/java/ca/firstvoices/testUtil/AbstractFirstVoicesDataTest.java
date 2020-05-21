@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.testUtil;
 
 import static org.junit.Assert.assertNotNull;
@@ -111,15 +131,14 @@ public abstract class AbstractFirstVoicesDataTest {
     dialect = createDocument(session,
         session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
     assertNotNull("Should have a valid FVDialect", dialect);
-    dictionary = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+    dictionary = createDocument(session,
+        session.createDocumentModel("/FV/Family/Language/Dialect", "Dictionary", "FVDictionary"));
     assertNotNull("Should have a valid FVDictionary", dictionary);
     alphabet = createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
     assertNotNull("Should have a valid FVAlphabet", alphabet);
     categories = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language/Dialect/", "Categories",
-            "FVCategories"));
+        session.createDocumentModel("/FV/Family/Language/Dialect/", "Categories", "FVCategories"));
     assertNotNull("Should have a valid Categories", categories);
     parentCategory = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory1",
@@ -127,8 +146,7 @@ public abstract class AbstractFirstVoicesDataTest {
     assertNotNull("Should have a valid Parent Category", parentCategory);
     childCategory = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Categories/TestParentCategory1",
-            "Category",
-            "FVCategory"));
+            "Category", "FVCategory"));
     assertNotNull("Should have a valid category", childCategory);
     parentCategory2 = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Categories", "TestParentCategory2",

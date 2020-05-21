@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.utils.FVExportConstants.CSV_FORMAT;
@@ -22,10 +42,11 @@ import static ca.firstvoices.utils.FVExportUtils.checkForRunningWorkerBeforeProc
 import static ca.firstvoices.utils.FVExportUtils.getPathToChildInDialect;
 import static ca.firstvoices.utils.FVExportUtils.makeExportWorkerID;
 
+import ca.firstvoices.utils.FVExportUtils;
+import ca.firstvoices.utils.FVExportWorkInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -47,208 +68,210 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
-import ca.firstvoices.utils.FVExportUtils;
-import ca.firstvoices.utils.FVExportWorkInfo;
-
 /*
- * FVGenerateDocumentWithFormat endpoint starts the export of words or phrases base on provided parameters
+ * FVGenerateDocumentWithFormat endpoint starts the export of words or phrases base on provided
+ * parameters
  * for specified dialect and ties it to the requesting user.
- * Initial setup includes collection of the document IDS to be processed and filling in the work information
+ * Initial setup includes collection of the document IDS to be processed and filling in the work
+ *  information
  * which will be passed between different stages of the export process.
  *
- * Document representing the wrapper which will hold the generated export document is returned back to the
+ * Document representing the wrapper which will hold the generated export document is returned
+ * back to the
  * requesting user.
  */
 
-@Operation(id = FVGenerateDocumentWithFormat.ID, category = Constants.CAT_DOCUMENT, label = "Export Document with format", description = "Export word or phrase documents with format (CSV or PDF). ")
+@Operation(id = FVGenerateDocumentWithFormat.ID, category = Constants.CAT_DOCUMENT, label =
+    "Export Document with format", description =
+    "Export word or phrase documents with format " + "(CSV or PDF). ")
 public class FVGenerateDocumentWithFormat {
-    private class GeneratedQueryArguments {
-        ArrayList<String> docsToProcess;
 
-        String actualQuery;
-    }
+  public static final String ID = "Document.FVGenerateDocumentWithFormat";
+  private static final Log log = LogFactory.getLog(FVGenerateDocumentWithFormat.class);
+  @Param(name = "query")
+  protected String query;
+  @Param(name = "columns")
+  protected StringList columns;
+  @Param(name = "format", values = {CSV_FORMAT, PDF_FORMAT})
+  protected String format = CSV_FORMAT;
+  @Param(name = "exportElement", values = {FVWORD, FVPHRASE})
+  protected String exportElement = FVWORD;
+  protected AutomationService automation = Framework.getService(AutomationService.class);
+  protected WorkManager workManager = Framework.getService(WorkManager.class);
+  @Context
+  protected CoreSession session;
+  @Context
+  protected OperationContext ctx;
 
-    public static final String ID = "Document.FVGenerateDocumentWithFormat";
+  /**
+   * @param input - dialect for which the export is to be generated
+   * @return - wrapper document which will hold the exported document once finished
+   */
+  @OperationMethod
+  public DocumentModel run(DocumentModel input) {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    DocumentModel wrapper = null;
 
-    private static final Log log = LogFactory.getLog(FVGenerateDocumentWithFormat.class);
+    try {
+      FVExportWorkInfo workInfo = new FVExportWorkInfo();
 
-    @Param(name = "query")
-    protected String query;
+      // setup work information for export
+      workInfo.workDuration = System.currentTimeMillis();
+      workInfo.columns = columns;
+      workInfo.dialectGUID = input.getId();
+      workInfo.dialectName = input.getName();
+      workInfo.exportFormat = format;
+      workInfo.initiatorName = session.getPrincipal().getName();
+      workInfo.exportElement = exportElement;
+      workInfo.continueAutoEvent = null;
 
-    @Param(name = "columns")
-    protected StringList columns;
+      if (format.equals(CSV_FORMAT)) {
+        workInfo.mimeType = "text/csv";
+        workInfo.encoding = "UTF-8";
+      }
 
-    @Param(name = "format", values = { CSV_FORMAT, PDF_FORMAT })
-    protected String format = CSV_FORMAT;
+      GeneratedQueryArguments workParams = getDocumentIDs(query, input);
 
-    @Param(name = "exportElement", values = { FVWORD, FVPHRASE })
-    protected String exportElement = FVWORD;
+      if (workParams != null) {
+        DocumentModel resourceFolder = FVExportUtils
+            .findDialectChild(input, DIALECT_RESOURCES_TYPE);
 
-    protected AutomationService automation = Framework.getService(AutomationService.class);
+        EventProducer eventProducer = Framework.getService(EventProducer.class);
+        DocumentEventContext exportCtx = new DocumentEventContext(session, session.getPrincipal(),
+            input);
 
-    protected WorkManager workManager = Framework.getService(WorkManager.class);
+        // complete work information setup
+        workInfo.resourcesFolderGUID = resourceFolder.getId();
+        workInfo.exportDigest = FVExportUtils
+            .makeExportDigest(session.getPrincipal(), workParams.actualQuery, columns);
+        workInfo.workDigest = FVExportUtils.makePrincipalWorkDigest(session.getPrincipal());
+        workInfo.exportQuery = workParams.actualQuery;
+        workInfo.originalWorkloadSize = workParams.docsToProcess.size();
+        workInfo.fileName = workInfo.getWrapperName();
 
-    @Context
-    protected CoreSession session;
+        // check if wrapper already exists
+        wrapper = findWrapper(session, workInfo);
 
-    @Context
-    protected OperationContext ctx;
+        if (wrapper != null) {
+          if (checkForRunningWorkerBeforeProceeding(makeExportWorkerID(workInfo), workManager)) {
+            return wrapper; // return a valid wrapper if export is already running
+          }
 
-    /**
-     * @param input - dialect for which the export is to be generated
-     * @return - wrapper document which will hold the exported document once finished
-     */
-    @OperationMethod
-    public DocumentModel run(DocumentModel input) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        DocumentModel wrapper = null;
-
-        try {
-            FVExportWorkInfo workInfo = new FVExportWorkInfo();
-
-            // setup work information for export
-            workInfo.workDuration = System.currentTimeMillis();
-            ;
-            workInfo.columns = columns;
-            workInfo.dialectGUID = input.getId();
-            workInfo.dialectName = input.getName();
-            workInfo.exportFormat = format;
-            workInfo.initiatorName = session.getPrincipal().getName();
-            workInfo.exportElement = exportElement;
-            workInfo.continueAutoEvent = null;
-
-            if (format.equals(CSV_FORMAT)) {
-                workInfo.mimeType = "text/csv";
-                workInfo.encoding = "UTF-8";
-            }
-
-            GeneratedQueryArguments workParams = getDocumentIDs(query, input);
-
-            if (workParams != null) {
-                DocumentModel resourceFolder = FVExportUtils.findDialectChild(input, DIALECT_RESOURCES_TYPE);
-
-                EventProducer eventProducer = Framework.getService(EventProducer.class);
-                DocumentEventContext export_ctx = new DocumentEventContext(session, session.getPrincipal(), input);
-
-                // complete work information setup
-                workInfo.resourcesFolderGUID = resourceFolder.getId();
-                workInfo.exportDigest = FVExportUtils.makeExportDigest(session.getPrincipal(), workParams.actualQuery,
-                        columns);
-                workInfo.workDigest = FVExportUtils.makePrincipalWorkDigest(session.getPrincipal());
-                workInfo.exportQuery = workParams.actualQuery;
-                workInfo.originalWorkloadSize = workParams.docsToProcess.size();
-                workInfo.fileName = workInfo.getWrapperName();
-
-                // check if wrapper already exists
-                wrapper = findWrapper(session, workInfo);
-
-                if (wrapper != null) {
-                    if (checkForRunningWorkerBeforeProceeding(makeExportWorkerID(workInfo), workManager)) {
-                        return wrapper; // return a valid wrapper if export is already running
-                    }
-
-                    // cannot delete wrapper if worker is running to create export file
-                    session.removeDocument(wrapper.getRef());
-                }
-
-                String pathToNewDocument = getPathToChildInDialect(session,
-                        session.getDocument(new IdRef(workInfo.dialectGUID)), DIALECT_RESOURCES_TYPE);
-
-                if (pathToNewDocument == null) {
-                    parameters.put("message", "Error:Could not get path to new document.");
-                } else {
-                    wrapper = session.createDocumentModel(pathToNewDocument, workInfo.fileName, FVEXPORT);
-
-                    wrapper.setPropertyValue(FVEXPORT_DIALECT, workInfo.dialectGUID);
-                    wrapper.setPropertyValue(FVEXPORT_FORMAT, workInfo.exportFormat);
-                    wrapper.setPropertyValue(FVEXPORT_QUERY, workInfo.exportQuery);
-                    wrapper.setPropertyValue(FVEXPORT_COLUMNS, workInfo.columns.toString());
-                    wrapper.setPropertyValue(FVEXPORT_WORK_DIGEST, workInfo.workDigest);
-                    wrapper.setPropertyValue(FVEXPORT_DIGEST, workInfo.exportDigest);
-                    wrapper.setPropertyValue(FVEXPORT_PROGRESS_STRING, "Started.... ");
-                    wrapper.setPropertyValue(FVEXPORT_PROGRESS_VALUE, 0.0);
-
-                    workInfo.wrapper = wrapper;
-                    wrapper = session.createDocument(wrapper);
-                    session.save();
-
-                    export_ctx.setProperty(EXPORT_WORK_INFO, workInfo);
-                    export_ctx.setProperty(DOCS_TO_EXPORT, workParams.docsToProcess);
-                    Event event;
-                    event = export_ctx.newEvent(PRODUCE_FORMATTED_DOCUMENT);
-                    eventProducer.fireEvent(event);
-
-                    parameters.put("message", "Request to export documents in " + format + " was submitted");
-                }
-            } else {
-                // return information
-                parameters.put("message", "Error:Nothing to export for " + format);
-            }
-
-            automation.run(ctx, "WebUI.AddInfoMessage", parameters);
-
-        } catch (OperationException e) {
-            log.error(e);
+          // cannot delete wrapper if worker is running to create export file
+          session.removeDocument(wrapper.getRef());
         }
 
-        return wrapper;
-    }
+        String pathToNewDocument = getPathToChildInDialect(session,
+            session.getDocument(new IdRef(workInfo.dialectGUID)), DIALECT_RESOURCES_TYPE);
 
-    /**
-     * @param query - as supplied by requesting user
-     * @param dialect - dialect associated with a user requesting export
-     * @return - string of the query which was executed
-     */
-    private GeneratedQueryArguments getDocumentIDs(String query, DocumentModel dialect) {
-        DocumentModelList docs;
-        GeneratedQueryArguments returnArgs = new GeneratedQueryArguments();
-        DocumentModel dictionary = FVExportUtils.findDialectChild(dialect, DIALECT_DICTIONARY_TYPE);
-        String generatedQuery;
-
-        generatedQuery = "SELECT * FROM " + exportElement + " WHERE ecm:ancestorId = '" + dictionary.getId()
-                + "' AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0 ORDER BY ecm:name";
-
-        if (query.equals("*")) {
-            docs = session.query(generatedQuery); // TODO: be weary of limits of how many records will be returned
-
-            if (docs.size() == 0)
-                return null;
+        if (pathToNewDocument == null) {
+          parameters.put("message", "Error:Could not get path to new document.");
         } else {
-            docs = session.query(query);
+          wrapper = session.createDocumentModel(pathToNewDocument, workInfo.fileName, FVEXPORT);
 
-            if (docs.size() == 0)
-                return null;
+          wrapper.setPropertyValue(FVEXPORT_DIALECT, workInfo.dialectGUID);
+          wrapper.setPropertyValue(FVEXPORT_FORMAT, workInfo.exportFormat);
+          wrapper.setPropertyValue(FVEXPORT_QUERY, workInfo.exportQuery);
+          wrapper.setPropertyValue(FVEXPORT_COLUMNS, workInfo.columns.toString());
+          wrapper.setPropertyValue(FVEXPORT_WORK_DIGEST, workInfo.workDigest);
+          wrapper.setPropertyValue(FVEXPORT_DIGEST, workInfo.exportDigest);
+          wrapper.setPropertyValue(FVEXPORT_PROGRESS_STRING, "Started.... ");
+          wrapper.setPropertyValue(FVEXPORT_PROGRESS_VALUE, 0.0);
+
+          workInfo.wrapper = wrapper;
+          wrapper = session.createDocument(wrapper);
+          session.save();
+
+          exportCtx.setProperty(EXPORT_WORK_INFO, workInfo);
+          exportCtx.setProperty(DOCS_TO_EXPORT, workParams.docsToProcess);
+          Event event;
+          event = exportCtx.newEvent(PRODUCE_FORMATTED_DOCUMENT);
+          eventProducer.fireEvent(event);
+
+          parameters.put("message", "Request to export documents in " + format + " was submitted");
         }
+      } else {
+        // return information
+        parameters.put("message", "Error:Nothing to export for " + format);
+      }
 
-        ArrayList<String> docsToProcess = new ArrayList<>();
+      automation.run(ctx, "WebUI.AddInfoMessage", parameters);
 
-        for (DocumentModel doc : docs) {
-            docsToProcess.add(doc.getId());
-        }
-
-        returnArgs.docsToProcess = docsToProcess;
-        returnArgs.actualQuery = generatedQuery;
-
-        return returnArgs;
+    } catch (OperationException e) {
+      log.error(e);
     }
 
-    /**
-     * @param session - session associated with the the endpoint
-     * @param workInfo - work information
-     * @return - existing wrapper or null if document does not exist
-     */
-    private DocumentModel findWrapper(CoreSession session, FVExportWorkInfo workInfo) {
-        DocumentModel wrapper = null;
+    return wrapper;
+  }
 
-        String wrapperQ = "SELECT * FROM " + FVEXPORT + " WHERE ecm:ancestorId = '" + workInfo.resourcesFolderGUID
-                + "' AND fvexport:workdigest = '" + workInfo.workDigest + "' AND fvexport:exportdigest = '"
-                + workInfo.exportDigest + "'";
-        DocumentModelList docs = session.query(wrapperQ);
+  /**
+   * @param query   - as supplied by requesting user
+   * @param dialect - dialect associated with a user requesting export
+   * @return - string of the query which was executed
+   */
+  private GeneratedQueryArguments getDocumentIDs(String query, DocumentModel dialect) {
+    DocumentModelList docs;
+    DocumentModel dictionary = FVExportUtils.findDialectChild(dialect, DIALECT_DICTIONARY_TYPE);
+    String generatedQuery;
 
-        if (docs != null && docs.size() > 0) {
-            wrapper = docs.get(0);
-        }
+    generatedQuery =
+        "SELECT * FROM " + exportElement + " WHERE ecm:ancestorId = '" + dictionary.getId()
+            + "' AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0 ORDER BY "
+            + "ecm:name";
 
-        return wrapper;
+    if (query.equals("*")) {
+      docs = session
+          .query(generatedQuery); // TODO: be weary of limits of how many records will be returned
+
+      if (docs.size() == 0) {
+        return null;
+      }
+    } else {
+      docs = session.query(query);
+
+      if (docs.size() == 0) {
+        return null;
+      }
     }
+
+    ArrayList<String> docsToProcess = new ArrayList<>();
+
+    for (DocumentModel doc : docs) {
+      docsToProcess.add(doc.getId());
+    }
+    GeneratedQueryArguments returnArgs = new GeneratedQueryArguments();
+
+    returnArgs.docsToProcess = docsToProcess;
+    returnArgs.actualQuery = generatedQuery;
+
+    return returnArgs;
+  }
+
+  /**
+   * @param session  - session associated with the the endpoint
+   * @param workInfo - work information
+   * @return - existing wrapper or null if document does not exist
+   */
+  private DocumentModel findWrapper(CoreSession session, FVExportWorkInfo workInfo) {
+    DocumentModel wrapper = null;
+
+    String wrapperQ =
+        "SELECT * FROM " + FVEXPORT + " WHERE ecm:ancestorId = '" + workInfo.resourcesFolderGUID
+            + "' AND fvexport:workdigest = '" + workInfo.workDigest
+            + "' AND fvexport:exportdigest = '" + workInfo.exportDigest + "'";
+    DocumentModelList docs = session.query(wrapperQ);
+
+    if (docs != null && docs.size() > 0) {
+      wrapper = docs.get(0);
+    }
+
+    return wrapper;
+  }
+
+  private class GeneratedQueryArguments {
+
+    ArrayList<String> docsToProcess;
+
+    String actualQuery;
+  }
 }

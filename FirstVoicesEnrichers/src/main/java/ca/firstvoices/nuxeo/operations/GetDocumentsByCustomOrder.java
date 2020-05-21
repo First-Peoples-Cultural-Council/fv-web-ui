@@ -18,11 +18,12 @@
  *
  */
 
+package ca.firstvoices.nuxeo.operations;
+
 /*
  * Contributors:
  *     Kristof Subryan <vtr_monk@mac.com>
  */
-package ca.firstvoices.nuxeo.operations;
 
 import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import java.util.HashMap;
@@ -42,7 +43,8 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 
-@Operation(id = GetDocumentsByCustomOrder.ID, category = Constants.CAT_FETCH, label = "Custom Order Query", description = "Returns a list of words that begin with a character")
+@Operation(id = GetDocumentsByCustomOrder.ID, category = Constants.CAT_FETCH, label = "Custom "
+    + "Order Query", description = "Returns a list of words that begin with a character")
 public class GetDocumentsByCustomOrder {
 
   public static final String ID = "Document.CustomOrderQuery";
@@ -57,13 +59,16 @@ public class GetDocumentsByCustomOrder {
   protected AutomationService automationService;
   @Param(name = "query", description = "The query to " + "perform.")
   protected String query;
-  @Param(name = "currentPageIndex", alias = "page", required = false, description = "Target listing page.")
+  @Param(name = "currentPageIndex", alias = "page", required = false, description = "Target "
+      + "listing page.")
   protected Integer currentPageIndex;
   @Param(name = "pageSize", required = false, description = "Entries number per page.")
   protected Integer pageSize;
-  @Param(name = "sortBy", required = false, description = "Sort by properties (separated by comma)")
+  @Param(name = "sortBy", required = false, description = "Sort by properties (separated by "
+      + "comma)")
   protected StringList sortBy;
-  @Param(name = "sortOrder", required = false, description = "Sort order, ASC or DESC", widget = Constants.W_OPTION, values = {
+  @Param(name = "sortOrder", required = false, description = "Sort order, ASC or DESC", widget =
+      Constants.W_OPTION, values = {
       ASC, DESC})
   protected StringList sortOrder;
   @Param(name = "dialectId", required = false, description = "Id of the target dialect")
@@ -84,18 +89,15 @@ public class GetDocumentsByCustomOrder {
       query = query + " AND dc:title ILIKE '" + NXQLQueryBuilder
           .prepareStringLiteral(letter, false, true) + "%'";
     } else if (customOrder.startsWith("%") || customOrder.startsWith("$") || customOrder
-        .startsWith("&") ||
-        customOrder.startsWith("'") || customOrder.startsWith("*") || customOrder.startsWith("_")) {
-      query = query +
-          " AND fv:custom_order LIKE \"" + NXQL.escapeStringInner("\\") + customOrder + "%\"";
+        .startsWith("&") || customOrder.startsWith("'") || customOrder.startsWith("*")
+        || customOrder.startsWith("_")) {
+      query = query + " AND fv:custom_order LIKE \"" + NXQL.escapeStringInner("\\") + customOrder
+          + "%\"";
     } else if (customOrder.startsWith("\\")) {
-      query = query +
-          " AND fv:custom_order LIKE \"" + "\\\\\\" + customOrder + "%\"";
+      query = query + " AND fv:custom_order LIKE \"" + "\\\\\\" + customOrder + "%\"";
     } else {
-      query = query +
-          " AND fv:custom_order LIKE \"" + customOrder + "%\"";
+      query = query + " AND fv:custom_order LIKE \"" + customOrder + "%\"";
     }
-    OperationContext ctx = new OperationContext(session);
 
     Map<String, Object> params = new HashMap<>();
     params.put("currentPageIndex", currentPageIndex);
@@ -103,8 +105,7 @@ public class GetDocumentsByCustomOrder {
     params.put("pageSize", pageSize);
     params.put("sortBy", sortBy);
     params.put("sortOrder", sortOrder);
-
-    return (DocumentModelList) automationService
-        .run(ctx, "Document.Query", params);
+    OperationContext ctx = new OperationContext(session);
+    return (DocumentModelList) automationService.run(ctx, "Document.Query", params);
   }
 }

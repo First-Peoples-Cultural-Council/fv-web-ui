@@ -5,9 +5,7 @@ import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
 import ca.firstvoices.services.UnpublishedChangesService;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
@@ -42,8 +40,7 @@ public class UnpublishedChangesEnricher extends AbstractJsonEnricher<DocumentMod
     jg.writeObject(unpublishedChangesJsonObject);
   }
 
-  private ObjectNode constructUnpublishedChangesJSON(DocumentModel doc)
-      throws JsonGenerationException, JsonMappingException, IOException {
+  private ObjectNode constructUnpublishedChangesJSON(DocumentModel doc) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
 
     return CoreInstance.doPrivileged(doc.getCoreSession(), session -> {
@@ -67,31 +64,10 @@ public class UnpublishedChangesEnricher extends AbstractJsonEnricher<DocumentMod
   private boolean checkType(DocumentModel inputDoc) {
     DocumentType currentType = inputDoc.getDocumentType();
 
-    String[] types = {
-        "FVAlphabet",
-        "FVAudio",
-        "FVBook",
-        "FVBookEntry",
-        "FVBooks",
-        "FVCategories",
-        "FVCategory",
-        "FVCharacter",
-        "FVContributor",
-        "FVContributors",
-        "FVDialect",
-        "FVDictionary",
-        "FVGallery",
-        "FVLanguage",
-        "FVLanguageFamily",
-        "FVLink",
-        "FVLinks",
-        "FVPhrase",
-        "FVPicture",
-        "FVPortal",
-        "FVResources",
-        "FVVideo",
-        "FVWord",
-    };
+    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
+        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
+        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
+        "FVPortal", "FVResources", "FVVideo", "FVWord",};
     return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
   }
 

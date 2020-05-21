@@ -1,19 +1,21 @@
 /*
  *
- * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * /
  */
 
 package ca.firstvoices.nativeorder.operations;
@@ -38,43 +40,47 @@ import org.nuxeo.runtime.api.Framework;
 /*
  *
  */
-@Operation(id = ComputeNativeOrderForDialect.ID, category = Constants.CAT_DOCUMENT, label = "Compute Native Order for Dialect", description = "Computes the native sort order for all words/phrases within a dialect.")
+@Operation(id = ComputeNativeOrderForDialect.ID, category = Constants.CAT_DOCUMENT, label =
+    "Compute Native Order for Dialect", description =
+    "Computes the native sort order for all " + "words/phrases within a dialect.")
 public class ComputeNativeOrderForDialect {
 
-    public static final String ID = "Document.ComputeNativeOrderForDialect";
+  public static final String ID = "Document.ComputeNativeOrderForDialect";
 
-    private static final Log log = LogFactory.getLog(ComputeNativeOrderForDialect.class);
+  private static final Log log = LogFactory.getLog(ComputeNativeOrderForDialect.class);
 
-    protected NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
+  protected NativeOrderComputeService service = Framework
+      .getService(NativeOrderComputeService.class);
 
-    protected AutomationService automation = Framework.getService(AutomationService.class);
+  protected AutomationService automation = Framework.getService(AutomationService.class);
 
-    @Context
-    protected CoreSession session;
+  @Context
+  protected CoreSession session;
 
-    @Context
-    protected OperationContext ctx;
+  @Context
+  protected OperationContext ctx;
 
-    @OperationMethod
-    public DocumentModel run(DocumentModel input) {
+  @OperationMethod
+  public DocumentModel run(DocumentModel input) {
 
-        // Check if dialect
-        if (input.getType().equals("FVDialect")) {
+    // Check if dialect
+    if (input.getType().equals("FVDialect")) {
 
-            DocumentModel alphabet = session.getDocument(new PathRef(input.getPathAsString() + "/Alphabet"));
-            alphabet.setPropertyValue("custom_order_recompute_required", true);
-            session.saveDocument(alphabet);
+      DocumentModel alphabet = session
+          .getDocument(new PathRef(input.getPathAsString() + "/Alphabet"));
+      alphabet.setPropertyValue("custom_order_recompute_required", true);
+      session.saveDocument(alphabet);
 
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("message", "Dialect sort order will be updated shortly. Republish if needed.");
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      parameters.put("message", "Dialect sort order will be updated shortly. Republish if needed.");
 
-            try {
-                automation.run(ctx, "WebUI.AddInfoMessage", parameters);
-            } catch (OperationException e) {
-                log.error(e);
-            }
-        }
-
-        return input;
+      try {
+        automation.run(ctx, "WebUI.AddInfoMessage", parameters);
+      } catch (OperationException e) {
+        log.error(e);
+      }
     }
+
+    return input;
+  }
 }

@@ -37,7 +37,9 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
+
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
+
 import FVLabel from 'views/components/FVLabel/index'
 
 import FVButton from 'views/components/FVButton'
@@ -198,9 +200,9 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
     const isSection = this.props.routeParams.area === SECTIONS
 
-    const alphabetListView = <AlphabetListView pagination={false} dialect={selectn('response', _computeDialect2)} />
-
+    // NOTE: when in print view we use AlphabetListView
     if (this.props.print) {
+      const alphabetListView = <AlphabetListView pagination={false} dialect={selectn('response', _computeDialect2)} />
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <div className="row">

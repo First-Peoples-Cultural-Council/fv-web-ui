@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_AND_EMAIL_EXIST_ERROR;
@@ -27,63 +47,70 @@ import org.nuxeo.runtime.api.Framework;
     public static final int REGISTRATION_EXISTS_ERROR      = 4;
 
 */
-@Operation(id = FVValidateRegistrationAttempt.ID, category = Constants.CAT_USERS_GROUPS, label = "FVValidateRegistrationAttempt", description = "Validate new user registration attempt. Input: Login and Email of the new user. Return error code (email exists, login exist, registration can be accepted)")
+@Operation(id = FVValidateRegistrationAttempt.ID, category = Constants.CAT_USERS_GROUPS, label =
+    "FVValidateRegistrationAttempt", description =
+    "Validate new user registration attempt. "
+        + "Input: Login and Email of the new user. Return error code (email exists, login exist, "
+        + "registration can be accepted)")
 public class FVValidateRegistrationAttempt {
-    public static final String ID = "FVValidateRegistrationAttempt";
 
-    private static final Log log = LogFactory.getLog(FVValidateRegistrationAttempt.class);
+  public static final String ID = "FVValidateRegistrationAttempt";
 
-    @Param(name = "Login:")
-    protected String login;
+  private static final Log log = LogFactory.getLog(FVValidateRegistrationAttempt.class);
 
-    @Param(name = "email:", required = false)
-    protected String email = null;
+  @Param(name = "Login:")
+  protected String login;
 
-    @Context
-    protected CoreSession session;
+  @Param(name = "email:", required = false)
+  protected String email = null;
 
-    @OperationMethod
-    public int run() {
+  @Context
+  protected CoreSession session;
 
-        return CoreInstance.doPrivileged(session, s -> {
+  @OperationMethod
+  public int run() {
 
-            DocumentModelList registrations = null;
-            DocumentModel userE = null;
-            int verificationState = REGISTRATION_CAN_PROCEED;
-            UserManager userManager = Framework.getService(UserManager.class);
-            DocumentModel user = userManager.getUserModel(login);
+    return CoreInstance.doPrivileged(session, s -> {
 
-            if (user != null) {
-                verificationState = LOGIN_EXISTS_ERROR;
-            } else {
-                String querryStr = null;
+      DocumentModelList registrations = null;
+      DocumentModel userE = null;
+      int verificationState = REGISTRATION_CAN_PROCEED;
+      UserManager userManager = Framework.getService(UserManager.class);
+      DocumentModel user = userManager.getUserModel(login);
 
-                if (email != null) {
-                    userE = userManager.getUserModel(email);
+      if (user != null) {
+        verificationState = LOGIN_EXISTS_ERROR;
+      } else {
+        String querryStr = null;
 
-                    if (userE != null) {
-                        verificationState = LOGIN_AND_EMAIL_EXIST_ERROR;
-                    } else {
-                        querryStr = String.format(
-                                "Select * from Document where ecm:mixinType = 'UserRegistration' AND ecm:currentLifeCycleState = 'approved' AND ( %s = '%s' OR %s = '%s')",
-                                "userinfo:login", login, "userinfo:email", email);
-                    }
-                } else {
-                    querryStr = String.format(
-                            "Select * from Document where ecm:mixinType = 'UserRegistration' AND ecm:currentLifeCycleState = 'approved' AND  %s = '%s' ",
-                            "userinfo:login", login);
-                }
+        if (email != null) {
+          userE = userManager.getUserModel(email);
 
-                if (userE == null && querryStr != null) {
-                    registrations = s.query(querryStr);
+          if (userE != null) {
+            verificationState = LOGIN_AND_EMAIL_EXIST_ERROR;
+          } else {
+            querryStr = String.format(
+                "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
+                    + "ecm:currentLifeCycleState = 'approved' AND ( %s = '%s' OR %s = '%s')",
+                "userinfo:login", login, "userinfo:email", email);
+          }
+        } else {
+          querryStr = String.format(
+              "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
+                  + "ecm:currentLifeCycleState = 'approved' AND  %s = '%s' ", "userinfo:login",
+              login);
+        }
 
-                    if (registrations != null && !registrations.isEmpty()) {
-                        verificationState = REGISTRATION_EXISTS_ERROR;
-                    }
-                }
-            }
-            return verificationState;
+        if (userE == null && querryStr != null) {
+          registrations = s.query(querryStr);
 
-        });
-    }
+          if (registrations != null && !registrations.isEmpty()) {
+            verificationState = REGISTRATION_EXISTS_ERROR;
+          }
+        }
+      }
+      return verificationState;
+
+    });
+  }
 }

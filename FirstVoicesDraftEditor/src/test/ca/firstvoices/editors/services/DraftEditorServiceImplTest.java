@@ -1,492 +1,465 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package firstvoices.editors.services;
 
-import javax.inject.Inject;
+import static ca.firstvoices.editors.configuration.FVLocalConf.DRAFT_UUID_REF;
+import static ca.firstvoices.editors.configuration.FVLocalConf.LIVE_UUID_REF;
+import static org.junit.Assert.*;
 
+import ca.firstvoices.editors.services.DraftEditorService;
+import ca.firstvoices.editors.utils.EditingUtils;
+import firstvoices.editors.testUtil.draftDocTestUtil;
 import firstvoices.editors.testUtil.draftDocTestUtilImpl;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
-import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
-import org.nuxeo.runtime.test.runner.*;
-
-
-import static ca.firstvoices.editors.configuration.FVLocalConf.DRAFT_UUID_REF;
-import static ca.firstvoices.editors.configuration.FVLocalConf.LIVE_UUID_REF;
-import ca.firstvoices.editors.services.DraftEditorService;
-import static org.junit.Assert.*;
-import firstvoices.editors.testUtil.draftDocTestUtil;
-import ca.firstvoices.editors.utils.EditingUtils;
-
-import java.util.*;
 
 //, RepositoryElasticSearchFeature.class
 
 @RunWith(FeaturesRunner.class)
-@Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class, RepositoryElasticSearchFeature.class})
+@Features({RuntimeFeature.class, CoreFeature.class, AutomationFeature.class,
+    RepositoryElasticSearchFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy( {"FirstVoicesData",
-        "org.nuxeo.ecm.platform",
-        "org.nuxeo.ecm.platform.commandline.executor",
-        "org.nuxeo.ecm.platform.picture.core",
-        "org.nuxeo.ecm.platform.rendition.core",
-        "org.nuxeo.ecm.platform.video.core",
-        "org.nuxeo.ecm.platform.audio.core",
-        "org.nuxeo.ecm.automation.scripting",
-        "org.nuxeo.ecm.platform.web.common",
-        "FirstVoicesPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
-        "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.operations.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.configuration.adapter.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.schedulers.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.services.xml",
-        "FirstVoicesDraftEditor:schemas/fvconfiguration.xsd",
-        "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
-        "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
-        "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-actions.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-es-provider.xml",
-        "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-directory-sql-contrib.xml"} )
+@Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
+    "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
+    "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
+    "org.nuxeo.ecm.automation.scripting", "org.nuxeo.ecm.platform.web.common",
+    "FirstVoicesPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.operations.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.configuration.adapter.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.schedulers.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/ca.firstvoices.editors.services.xml",
+    "FirstVoicesDraftEditor:schemas/fvconfiguration.xsd",
+    "org.nuxeo.elasticsearch.core:pageprovider-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:schemas-test-contrib.xml",
+    "org.nuxeo.elasticsearch.core:elasticsearch-test-contrib.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-actions.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-load-es-provider.xml",
+    "FirstVoicesDraftEditor:OSGI-INF/extensions/fake-directory-sql-contrib.xml"})
 
 public class DraftEditorServiceImplTest {
 
-    private draftDocTestUtil testUtil;
+  private draftDocTestUtil testUtil;
 
-    private DocumentModel draftFolder;
+  private DocumentModel draftFolder;
 
-    @Inject
-    private CoreSession session;
+  @Inject
+  private CoreSession session;
 
-    @Inject
-    private AutomationService automationService;
+  @Inject
+  private AutomationService automationService;
 
-    @Inject
-    private DraftEditorService draftEditorServiceInstance;
+  @Inject
+  private DraftEditorService draftEditorServiceInstance;
 
-    @Before
-    public void setUp() throws Exception
-    {
-        testUtil = new draftDocTestUtilImpl();
+  @Before
+  public void setUp() throws Exception {
+    testUtil = new draftDocTestUtilImpl();
 
-        assertNotNull("Should have a valid test utilities obj", testUtil);
-        assertNotNull("Should have a valid session", session);
-        assertNotNull("Should have a valid automationService", automationService);
-        assertNotNull("Should have a valid DraftEditorServiceImpl", draftEditorServiceInstance);
+    assertNotNull("Should have a valid test utilities obj", testUtil);
+    assertNotNull("Should have a valid session", session);
+    assertNotNull("Should have a valid automationService", automationService);
+    assertNotNull("Should have a valid DraftEditorServiceImpl", draftEditorServiceInstance);
 
-        testUtil.createSetup(session );
+    testUtil.createSetup(session);
+  }
+
+  @Test
+  public void getDraftFolder() {
+    DocumentModel dialect = testUtil.getCurrentDialect();
+    assertNotNull("Dialect cannot be null", dialect);
+
+    DocumentRef draftFolderRef = EditingUtils.getDraftFolderRef(dialect);
+    assertNotNull("DraftFolderRef cannot be null", draftFolderRef);
+
+    // draft folder reference can be used from this point in other tests
+    draftFolder = session.getDocument(draftFolderRef);
+    assertNotNull("Should have a valid draftFolder", draftFolder);
+  }
+
+  @Test
+  public void getUUID() {
+    // get created words
+    DocumentModel[] docArray = testUtil.getTestWordsArray(session);
+    assertNotNull("Should always have a valid array of words(1)", docArray);
+
+    // there are 10 words .. for testing we can use first 4 as original and next 4 as draft
+    //
+    for (int i = 0; i < 4; i++) {
+      String masterId = docArray[i].getId();
+      String draftId = docArray[i + 4].getId();
+
+      draftEditorServiceInstance.putUUIDInfo(session, docArray[i], DRAFT_UUID_REF, draftId);
+      draftEditorServiceInstance.putUUIDInfo(session, docArray[i + 4], LIVE_UUID_REF, masterId);
     }
 
-    @Test
-    public void getDraftFolder()
-    {
-        DocumentModel dialect = testUtil.getCurrentDialect();
-        assertNotNull("Dialect cannot be null", dialect);
+    session.save();
 
-        DocumentRef draftFolderRef = EditingUtils.getDraftFolderRef(dialect);
-        assertNotNull("DraftFolderRef cannot be null", draftFolderRef);
+    // re-load words
+    docArray = testUtil.getTestWordsArray(session);
+    assertNotNull("Should always have a valid array of words(2)", docArray);
 
-        // draft folder reference can be used from this point in other tests
-        draftFolder = session.getDocument(draftFolderRef);
-        assertNotNull("Should have a valid draftFolder", draftFolder);
+    for (int i = 0; i < 4; i++) {
+      String draftUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF);
+      assertNotNull("Should always have a valid draft doc UUID", draftUuid);
+
+      DocumentModel draftDoc = session.getDocument(new IdRef(draftUuid));
+      assertNotNull("Should retrieve a valid draft document", draftDoc);
+
+      String liveUuid = draftEditorServiceInstance.getUUID(docArray[i + 4], LIVE_UUID_REF);
+      assertNotNull("Should always have a valid live doc UUID", liveUuid);
+
+      DocumentModel liveDoc = session.getDocument(new IdRef(liveUuid));
+      assertNotNull("Should retrieve a valid live document", liveDoc);
+
+      // since we are in the loop we can just as well clear records for the next step
+      draftEditorServiceInstance.removeUUIDInfo(docArray[i], DRAFT_UUID_REF);
+      draftEditorServiceInstance.removeUUIDInfo(docArray[i + 4], LIVE_UUID_REF);
     }
 
-    @Test
-    public void getUUID()
-    {
-        // get created words
-        DocumentModel[] docArray = testUtil.getTestWordsArray( session );
-        assertNotNull("Should always have a valid array of words(1)", docArray);
+    session.save();
 
-        // there are 10 words .. for testing we can use first 4 as original and next 4 as draft
-        //
-        for( int i = 0; i < 4; i++)
-        {
-            String masterId = docArray[i].getId();
-            String draftId = docArray[i+4].getId();
+    // re-load words
+    docArray = testUtil.getTestWordsArray(session);
+    assertNotNull("Should always have a valid array of words(3)", docArray);
 
-            draftEditorServiceInstance.putUUIDInfo(session, docArray[i], DRAFT_UUID_REF, draftId);
-            draftEditorServiceInstance.putUUIDInfo(session, docArray[i+4], LIVE_UUID_REF, masterId);
-        }
+    for (int i = 0; i < 4; i++) {
+      String draftUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF);
+      assertNull("Should NOT have a draft doc UUID", draftUuid);
 
-        session.save();
-
-        // re-load words
-        docArray = testUtil.getTestWordsArray( session );
-        assertNotNull("Should always have a valid array of words(2)", docArray);
-
-        for( int i = 0; i < 4; i++ )
-        {
-            String draftUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF );
-            assertNotNull("Should always have a valid draft doc UUID", draftUuid);
-
-            DocumentModel draftDoc = session.getDocument( new IdRef(draftUuid));
-            assertNotNull("Should retrieve a valid draft document", draftDoc );
-
-            String liveUuid = draftEditorServiceInstance.getUUID(docArray[i+4], LIVE_UUID_REF );
-            assertNotNull("Should always have a valid live doc UUID", liveUuid);
-
-            DocumentModel liveDoc = session.getDocument( new IdRef(liveUuid));
-            assertNotNull("Should retrieve a valid live document", liveDoc );
-
-            // since we are in the loop we can just as well clear records for the next step
-            draftEditorServiceInstance.removeUUIDInfo(docArray[i], DRAFT_UUID_REF );
-            draftEditorServiceInstance.removeUUIDInfo(docArray[i+4], LIVE_UUID_REF);
-        }
-
-        session.save();
-
-        // re-load words
-        docArray = testUtil.getTestWordsArray( session );
-        assertNotNull("Should always have a valid array of words(3)", docArray);
-
-        for( int i = 0; i < 4; i++ )
-        {
-            String draftUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF );
-            assertNull("Should NOT have a draft doc UUID", draftUuid);
-
-            String liveUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF );
-            assertNull("Should NOT have a live doc UUID", liveUuid);
-        }
-
-        session.save();
+      String liveUuid = draftEditorServiceInstance.getUUID(docArray[i], DRAFT_UUID_REF);
+      assertNull("Should NOT have a live doc UUID", liveUuid);
     }
 
-    private void startEdit(DocumentModel[] wordArray )
-    {
-        DocumentModel draftDoc = null;
+    session.save();
+  }
 
-        for( DocumentModel aWord : wordArray ) {
-            draftDoc = draftEditorServiceInstance.editDraftForDocument(aWord);
-            assertNotNull("Should have a valid draft document when starting edit", draftDoc);
-        }
+  private void startEdit(DocumentModel[] wordArray) {
+    DocumentModel draftDoc = null;
+
+    for (DocumentModel aWord : wordArray) {
+      draftDoc = draftEditorServiceInstance.editDraftForDocument(aWord);
+      assertNotNull("Should have a valid draft document when starting edit", draftDoc);
+    }
+  }
+
+  @Test
+  public void editDraftForDocument() {
+    DocumentModel[] wordArray = testUtil.getTestWordsArray(session);
+    DocumentModel draftDoc = null;
+    String draftUuid = null;
+
+    startEdit(wordArray);
+
+    session.save();
+
+    for (DocumentModel aWord : wordArray) {
+      // check if we have a valid uuid attached to live doc
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+
+      // we have 20 words 10 live & 10 draft
+      if (draftUuid != null) {
+        draftDoc = session.getDocument(new IdRef(draftUuid));
+        assertNotNull("Should have a valid draft document", draftDoc);
+        String liveUuid = draftEditorServiceInstance.getUUID(draftDoc, LIVE_UUID_REF);
+        assertEquals("Saved and true uuids should match", liveUuid, aWord.getId());
+      }
+    }
+  }
+
+  @Test
+  public void saveEditedDraftDocument() {
+    DocumentModel[] wordArray = testUtil.getTestWordsArray(session);
+    DocumentModel draftDoc = null;
+    String draftUuid = null;
+
+    startEdit(wordArray);
+
+    session.save();
+
+    wordArray = testUtil.getTestWordsArray(session);
+
+    for (DocumentModel aWord : wordArray) {
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+
+      if (draftUuid != null) {
+        // we have 20 words 10 live & 10 draft
+        draftDoc = session.getDocument(new IdRef(draftUuid));
+        assertNotNull("Should always have a valid draft doc", draftDoc);
+        assertTrue("Live document should be LOCKED", aWord.isLocked());
+        draftEditorServiceInstance.saveEditedDraftDocument(draftDoc);
+      }
     }
 
-    @Test
-    public void editDraftForDocument()
-    {
-        DocumentModel[] wordArray = testUtil.getTestWordsArray( session );
-        DocumentModel draftDoc = null;
-        String draftUuid = null;
+    session.save();
 
-        startEdit( wordArray );
+    // check if lock on the live document is released but we still have draft uuid attached
+    wordArray = testUtil.getTestWordsArray(session);
 
-        session.save();
+    // note we will have 20 words since we should have draft document for each word
+    for (DocumentModel aWord : wordArray) {
+      String liveUuid;
 
-        for( DocumentModel aWord : wordArray )
-        {
-            // check if we have a valid uuid attached to live doc
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF );
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
 
-            // we have 20 words 10 live & 10 draft
-            if( draftUuid != null )
-            {
-                draftDoc = session.getDocument(new IdRef(draftUuid));
-                assertNotNull("Should have a valid draft document", draftDoc);
-                String liveUuid = draftEditorServiceInstance.getUUID(draftDoc, LIVE_UUID_REF );
-                assertEquals("Saved and true uuids should match", liveUuid, aWord.getId());
-            }
-        }
+      // if draftUuid is null (we are looking at draft document or error)
+      if (draftUuid != null) {
+        assertFalse("Live document should be unlocked", aWord.isLocked());
+      } else {
+        liveUuid = draftEditorServiceInstance.getUUID(aWord, LIVE_UUID_REF);
+        // if liveUUid is null this is an error
+        assertNotNull("Live UUID should not be null", liveUuid);
+      }
+    }
+  }
+
+  private void testEndCheck(int initialNumberOfWords, int editedNumberOfWords, Boolean condSwitch) {
+    DocumentModel[] wordArray = null;
+    String draftUuid = null;
+
+    wordArray = testUtil.getTestWordsArray(session);
+
+    if (condSwitch) {
+      assertEquals("We should have only initial number of words after termination/publishing",
+          wordArray.length, initialNumberOfWords);
+      assertEquals("We should have exactly 1/2 of words after termination/publishing",
+          editedNumberOfWords, 2 * initialNumberOfWords);
+    } else {
+      assertEquals("We should have exactly the same number of words as we did after edit started",
+          editedNumberOfWords, 2 * initialNumberOfWords);
     }
 
-    @Test
-    public void saveEditedDraftDocument()
-    {
-        DocumentModel[] wordArray = testUtil.getTestWordsArray( session );
-        DocumentModel draftDoc = null;
-        String draftUuid = null;
+    for (DocumentModel aWord : wordArray) {
+      String liveUuid;
 
-        startEdit( wordArray );
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
 
-        session.save();
-
-        wordArray = testUtil.getTestWordsArray( session );
-
-        for (DocumentModel aWord : wordArray)
-        {
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
-
-            if (draftUuid != null)
-            {
-                // we have 20 words 10 live & 10 draft
-                draftDoc = session.getDocument(new IdRef(draftUuid));
-                assertNotNull("Should always have a valid draft doc", draftDoc);
-                assertTrue("Live document should be LOCKED", aWord.isLocked());
-                draftEditorServiceInstance.saveEditedDraftDocument(draftDoc);
-            }
+      if (condSwitch) {
+        assertNull("DraftUuid should be NULL", draftUuid);
+      } else {
+        liveUuid = draftEditorServiceInstance.getUUID(aWord, LIVE_UUID_REF);
+        if (liveUuid == null) {
+          // we have drafts mixed with live documents at this point
+          // we have to filter out live documents
+          assertNotNull("DraftUuid should NOT be NULL", draftUuid);
         }
+      }
 
-        session.save();
+      assertFalse("Live document should be UNLOCKED", aWord.isLocked());
+    }
+  }
 
-        // check if lock on the live document is released but we still have draft uuid attached
-        wordArray = testUtil.getTestWordsArray( session );
+  @Test
+  public void releaseTimedOutLock() {
+    DocumentModel[] wordArray = testUtil.getTestWordsArray(session);
+    DocumentModel draftDoc = null;
+    String draftUuid = null;
 
-        // note we will have 20 words since we should have draft document for each word
-        for( DocumentModel aWord : wordArray)
-        {
-            String liveUuid;
+    int initialNumberOfWords = wordArray.length;
 
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+    startEdit(wordArray);
 
-            // if draftUuid is null (we are looking at draft document or error)
-            if (draftUuid != null)
-            {
-                assertFalse("Live document should be unlocked", aWord.isLocked());
-            }
-            else
-            {
-                liveUuid = draftEditorServiceInstance.getUUID(aWord, LIVE_UUID_REF);
-                // if liveUUid is null this is an error
-                assertNotNull("Live UUID should not be null", liveUuid);
-            }
-        }
+    session.save();
+
+    wordArray = testUtil.getTestWordsArray(session);
+
+    int editedNumberOfWords = wordArray.length;
+
+    for (DocumentModel aWord : wordArray) {
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+
+      if (draftUuid != null) {
+        // we have a mix of live and draft documents
+        draftEditorServiceInstance.releaseTimedOutLock(aWord);
+      }
     }
 
-    private void testEndCheck(int initialNumberOfWords, int editedNumberOfWords, Boolean condSwitch )
-    {
-        DocumentModel[] wordArray = null;
-        String draftUuid = null;
+    session.save();
 
-        wordArray = testUtil.getTestWordsArray( session );
+    testEndCheck(initialNumberOfWords, editedNumberOfWords, false);
+  }
 
-        if( condSwitch )
-        {
-            assertEquals("We should have only initial number of words after termination/publishing", wordArray.length, initialNumberOfWords);
-            assertEquals("We should have exactly 1/2 of words after termination/publishing", editedNumberOfWords, 2 * initialNumberOfWords);
-        }
-        else
-        {
-            assertEquals("We should have exactly the same number of words as we did after edit started", editedNumberOfWords, 2 * initialNumberOfWords);
-        }
 
-        for (DocumentModel aWord : wordArray)
-        {
-            String liveUuid;
+  @Test
+  public void terminateDraftEditSession() {
+    DocumentModel[] wordArray = testUtil.getTestWordsArray(session);
+    DocumentModel draftDoc = null;
+    String draftUuid = null;
 
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+    int initialNumberOfWords = wordArray.length;
 
-            if (condSwitch)
-            {
-                assertNull("DraftUuid should be NULL", draftUuid);
-            }
-            else
-            {
-                liveUuid = draftEditorServiceInstance.getUUID(aWord, LIVE_UUID_REF);
-                if( liveUuid == null )
-                {
-                    // we have drafts mixed with live documents at this point
-                    // we have to filter out live documents
-                    assertNotNull("DraftUuid should NOT be NULL", draftUuid);
-                }
-            }
+    startEdit(wordArray);
 
-            assertFalse("Live document should be UNLOCKED", aWord.isLocked());
-        }
+    session.save();
+
+    wordArray = testUtil.getTestWordsArray(session);
+    int editedNumberOfWords = wordArray.length;
+
+    for (DocumentModel aWord : wordArray) {
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+      if (draftUuid != null) {
+        // we have 20 words 10 live & 10 draft
+        assertNotNull("Should have a valid draft dcoument uuid", draftUuid);
+        draftDoc = session.getDocument(new IdRef(draftUuid));
+        assertNotNull("Should always have a valid draft doc", draftDoc);
+        assertTrue("Live document should be LOCKED", aWord.isLocked());
+        draftEditorServiceInstance.terminateDraftEditSession(draftDoc);
+      }
     }
 
-    @Test
-    public void releaseTimedOutLock()
-    {
-        DocumentModel[] wordArray = testUtil.getTestWordsArray( session );
-        DocumentModel draftDoc = null;
-        String draftUuid = null;
+    session.save();
 
-        int initialNumberOfWords = wordArray.length;
+    testEndCheck(initialNumberOfWords, editedNumberOfWords, true);
+  }
 
-        startEdit( wordArray );
+  @Test
+  public void publishDraftDocument() {
+    DocumentModel[] wordArray = testUtil.getTestWordsArray(session);
+    DocumentModel draftDoc = null;
+    String draftUuid = null;
+    int initialNumberOfWords = wordArray.length;
 
-        session.save();
+    String[] keys = {"ONE", "TWO", "THREE", "FOUR", "FIVE"};
+    String[] values = {"VALUE-ONE", "VALUE-TWO", "VALUE-THREE", "VALUE-FOUR", "VALUE-FIVE"};
+    ArrayList<Map<String, String>> testList = testUtil.createListMapTestData(keys, values);
 
-        wordArray = testUtil.getTestWordsArray( session );
+    // property labels
+    String[] propertiesToCheck = {"fv:related_pictures", "fv:cultural_note", "fv:related_audio",
+        "fv:related_videos"};
 
-        int editedNumberOfWords = wordArray.length;
+    String[] relatedAudiouuids = {"Pict-1", "Pict-2"};
+    String[] relatedCulturalNotesUuids = {"CulturalNote-1", "CulturalNote-2", "CulturalNote-3"};
+    String[] relatedAudioUuids = {"RelatedAudio-1", "RelatedAudio-2", "RelatedAudio-3",
+        "RelatedAudio-4"};
+    String[] relatedVideoUuids = {"RelatedVideo-1", "RelatedVideo-2", "RelatedVideo-3",
+        "RelatedVideo-4", "RelatedVideo-5"};
 
-        for (DocumentModel aWord : wordArray)
-        {
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+    HashMap<String, String[]> testPropertyDict = new HashMap<>();
 
-            if (draftUuid != null)
-            {
-                // we have a mix of live and draft documents
-                draftEditorServiceInstance.releaseTimedOutLock(aWord);
-            }
+    testPropertyDict.put(propertiesToCheck[0], relatedAudiouuids);
+    testPropertyDict.put(propertiesToCheck[1], relatedCulturalNotesUuids);
+    testPropertyDict.put(propertiesToCheck[2], relatedAudioUuids);
+    testPropertyDict.put(propertiesToCheck[3], relatedVideoUuids);
+
+    startEdit(wordArray);
+
+    session.save();
+
+    wordArray = testUtil.getTestWordsArray(session);
+
+    // we have a double number of words ... live and corresponding drafts
+    for (DocumentModel aWord : wordArray) {
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+      // alter draft document
+      // if draftUuid is null we are looking at a draft document
+      if (draftUuid == null) {
+        if (!aWord.isCheckedOut()) {
+          aWord.checkOut();
         }
 
-        session.save();
+        // change draft name
+        String wordTitle = aWord.getTitle() + "-1";
+        aWord.setPropertyValue("fv:reference", wordTitle);
+        aWord.setPropertyValue("fv-word:available_in_games", true);
 
-        testEndCheck( initialNumberOfWords, editedNumberOfWords, false );
+        //add complex properties
+        aWord.setPropertyValue("fvcore:definitions", testList);
+        aWord.setPropertyValue("fvcore:literal_translation", testList);
+
+        // "edit" draft documents
+        for (String key : testPropertyDict.keySet()) {
+          aWord.setPropertyValue(key, testPropertyDict.get(key));
+        }
+
+        DocumentModel savedDraft = session.saveDocument(aWord);
+      }
     }
 
+    wordArray = testUtil.getTestWordsArray(session);
+    int editedNumberOfWords = wordArray.length;
 
-    @Test
-    public void terminateDraftEditSession()
-    {
-        DocumentModel[] wordArray = testUtil.getTestWordsArray( session );
-        DocumentModel draftDoc = null;
-        String draftUuid = null;
-
-        int initialNumberOfWords = wordArray.length;
-
-        startEdit( wordArray );
-
-        session.save();
-
-        wordArray = testUtil.getTestWordsArray( session );
-        int editedNumberOfWords = wordArray.length;
-
-        for (DocumentModel aWord : wordArray)
-        {
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
-            if (draftUuid != null) {
-                // we have 20 words 10 live & 10 draft
-                assertNotNull("Should have a valid draft dcoument uuid", draftUuid);
-                draftDoc = session.getDocument(new IdRef(draftUuid));
-                assertNotNull("Should always have a valid draft doc", draftDoc);
-                assertTrue("Live document should be LOCKED", aWord.isLocked());
-                draftEditorServiceInstance.terminateDraftEditSession(draftDoc);
-            }
-        }
-
-        session.save();
-
-        testEndCheck(initialNumberOfWords, editedNumberOfWords, true );
+    for (DocumentModel aWord : wordArray) {
+      draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
+      if (draftUuid != null) {
+        // we have 20 words 10 live & 10 draft
+        assertNotNull("Should have a valid draft document uuid", draftUuid);
+        draftDoc = session.getDocument(new IdRef(draftUuid));
+        assertNotNull("Should always have a valid draft doc", draftDoc);
+        assertTrue("Live document should be LOCKED", aWord.isLocked());
+        draftEditorServiceInstance.publishDraftDocument(draftDoc);
+      }
     }
 
-    @Test
-    public void publishDraftDocument()
-    {
-        DocumentModel[] wordArray = testUtil.getTestWordsArray( session );
-        DocumentModel draftDoc = null;
-        String draftUuid = null;
-        int initialNumberOfWords = wordArray.length;
+    session.save();
 
-        String[] keys = { "ONE", "TWO", "THREE", "FOUR", "FIVE"};
-        String[] values = {"VALUE-ONE", "VALUE-TWO", "VALUE-THREE", "VALUE-FOUR", "VALUE-FIVE"};
-        ArrayList<Map<String,String>> testList = testUtil.createListMapTestData( keys, values );
+    // check if live document has property values copied from draft
+    wordArray = testUtil.getTestWordsArray(session);
+    for (DocumentModel aWord : wordArray) {
+      String wordTitle = (String) aWord.getPropertyValue("fv:reference");
 
-        // property labels
-        String[] propertiesToCheck = {  "fv:related_pictures",
-                                        "fv:cultural_note",
-                                        "fv:related_audio",
-                                        "fv:related_videos"};
+      assertTrue("fv:reference has to have word name appened with '-1'", wordTitle.endsWith("-1"));
 
-        String[] relatedAudiouuids = {"Pict-1", "Pict-2"};
-        String[] relatedCulturalNotesUuids = {"CulturalNote-1","CulturalNote-2","CulturalNote-3"};
-        String[] relatedAudioUuids = {"RelatedAudio-1","RelatedAudio-2","RelatedAudio-3", "RelatedAudio-4"};
-        String[] relatedVideoUuids = {"RelatedVideo-1","RelatedVideo-2","RelatedVideo-3", "RelatedVideo-4", "RelatedVideo-5"};
+      Boolean availableInGames = (Boolean) aWord.getPropertyValue("fv-word:available_in_games");
+      assertTrue("Available_in_games has to be TRUE", availableInGames);
 
-        HashMap<String, String[]> testPropertyDict = new HashMap<>();
+      // check complex properties
+      testUtil
+          .checkListMapTestData((ArrayList<Object>) aWord.getPropertyValue("fvcore:definitions"),
+              keys, values);
+      testUtil.checkListMapTestData(
+          (ArrayList<Object>) aWord.getPropertyValue("fvcore:literal_translation"), keys, values);
 
-        testPropertyDict.put( propertiesToCheck[0], relatedAudiouuids );
-        testPropertyDict.put( propertiesToCheck[1], relatedCulturalNotesUuids );
-        testPropertyDict.put( propertiesToCheck[2], relatedAudioUuids );
-        testPropertyDict.put( propertiesToCheck[3], relatedVideoUuids );
+      for (String key : testPropertyDict.keySet()) {
+        String[] propertyValue = (String[]) aWord.getPropertyValue(key);
+        String[] setPropertyValue = testPropertyDict.get(key);
 
-        startEdit( wordArray );
+        assertEquals("Should have the same number of elements in synchronized property",
+            propertyValue.length, setPropertyValue.length);
 
-        session.save();
+        for (String property : setPropertyValue) {
+          Boolean found = false;
 
-        wordArray = testUtil.getTestWordsArray( session );
-
-        // we have a double number of words ... live and corresponding drafts
-        for (DocumentModel aWord : wordArray)
-        {
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
-            // alter draft document
-            // if draftUuid is null we are looking at a draft document
-            if (draftUuid == null)
-            {
-                if( !aWord.isCheckedOut() )
-                {
-                    aWord.checkOut();
-                }
-
-                // change draft name
-                String wordTitle = aWord.getTitle()+"-1";
-                aWord.setPropertyValue("fv:reference", wordTitle );
-                aWord.setPropertyValue("fv-word:available_in_games", true);
-
-                //add complex properties
-                aWord.setPropertyValue("fvcore:definitions", testList);
-                aWord.setPropertyValue("fvcore:literal_translation", testList);
-
-                // "edit" draft documents
-                for( String key : testPropertyDict.keySet() )
-                {
-                    aWord.setPropertyValue(key, testPropertyDict.get(key));
-                }
-
-                DocumentModel savedDraft = session.saveDocument( aWord );
+          for (String item : propertyValue) {
+            if (property.equals(item)) {
+              found = true;
+              break;
             }
+          }
+
+          assertTrue("Property content should match with original", found);
         }
-
-        wordArray = testUtil.getTestWordsArray( session );
-        int editedNumberOfWords = wordArray.length;
-
-        for (DocumentModel aWord : wordArray)
-        {
-            draftUuid = draftEditorServiceInstance.getUUID(aWord, DRAFT_UUID_REF);
-            if (draftUuid != null)
-            {
-                // we have 20 words 10 live & 10 draft
-                assertNotNull("Should have a valid draft document uuid", draftUuid);
-                draftDoc = session.getDocument(new IdRef(draftUuid));
-                assertNotNull("Should always have a valid draft doc", draftDoc);
-                assertTrue("Live document should be LOCKED", aWord.isLocked());
-                draftEditorServiceInstance.publishDraftDocument(draftDoc);
-            }
-        }
-
-        session.save();
-
-        // check if live document has property values copied from draft
-        wordArray = testUtil.getTestWordsArray( session );
-        for (DocumentModel aWord : wordArray)
-        {
-            String wordTitle = (String) aWord.getPropertyValue("fv:reference");
-
-            assertTrue("fv:reference has to have word name appened with '-1'", wordTitle.endsWith("-1"));
-
-            Boolean availableInGames = (Boolean) aWord.getPropertyValue("fv-word:available_in_games");
-            assertTrue("Available_in_games has to be TRUE", availableInGames );
-
-            // check complex properties
-            testUtil.checkListMapTestData( (ArrayList<Object>) aWord.getPropertyValue("fvcore:definitions"), keys, values);
-            testUtil.checkListMapTestData( (ArrayList<Object>) aWord.getPropertyValue("fvcore:literal_translation"), keys, values);
-
-            for( String key : testPropertyDict.keySet() )
-            {
-                String[] propertyValue = (String[])aWord.getPropertyValue(key);
-                String[] setPropertyValue = testPropertyDict.get(key);
-
-                assertEquals("Should have the same number of elements in synchronized property", propertyValue.length, setPropertyValue.length);
-
-                for( String property : setPropertyValue )
-                {
-                    Boolean found = false;
-
-                    for( String item : propertyValue )
-                    {
-                        if( property.equals(item))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    assertTrue("Property content should match with original", found);
-                }
-            }
-        }
-
-        testEndCheck( initialNumberOfWords, editedNumberOfWords, true );
+      }
     }
 
+    testEndCheck(initialNumberOfWords, editedNumberOfWords, true);
+  }
 
-    // TODO add tests for change of state during editing to verify correct behaviour
+  // TODO add tests for change of state during editing to verify correct behaviour
 }

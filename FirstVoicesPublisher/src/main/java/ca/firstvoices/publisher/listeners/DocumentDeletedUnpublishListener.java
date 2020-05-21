@@ -44,36 +44,37 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class DocumentDeletedUnpublishListener implements EventListener {
 
-    private static final Log log = LogFactory.getLog(DocumentDeletedUnpublishListener.class);
+  private static final Log log = LogFactory.getLog(DocumentDeletedUnpublishListener.class);
 
-    protected FirstVoicesPublisherService service = Framework.getService(FirstVoicesPublisherService.class);
+  protected FirstVoicesPublisherService service = Framework
+      .getService(FirstVoicesPublisherService.class);
 
-    @Override
-    public void handleEvent(Event event) {
-        EventContext ctx = event.getContext();
-        if (!(ctx instanceof DocumentEventContext)) {
-            return;
-        }
-        DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
-        if (doc == null) {
-            return;
-        }
-
-        // Only required if document is not proxy
-        if (!doc.isProxy()) {
-            CoreSession session = doc.getCoreSession();
-
-            DocumentModelList proxies = session.getProxies(doc.getRef(), null);
-
-            for (DocumentModel proxy : proxies) {
-                if ("Published".equals(proxy.getCurrentLifeCycleState())) {
-                    service.unpublish(proxy);
-                }
-            }
-
-            if (doc.getType().equals("FVCategory")) {
-                service.removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, doc);
-            }
-        }
+  @Override
+  public void handleEvent(Event event) {
+    EventContext ctx = event.getContext();
+    if (!(ctx instanceof DocumentEventContext)) {
+      return;
     }
+    DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
+    if (doc == null) {
+      return;
+    }
+
+    // Only required if document is not proxy
+    if (!doc.isProxy()) {
+      CoreSession session = doc.getCoreSession();
+
+      DocumentModelList proxies = session.getProxies(doc.getRef(), null);
+
+      for (DocumentModel proxy : proxies) {
+        if ("Published".equals(proxy.getCurrentLifeCycleState())) {
+          service.unpublish(proxy);
+        }
+      }
+
+      if (doc.getType().equals("FVCategory")) {
+        service.removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, doc);
+      }
+    }
+  }
 }

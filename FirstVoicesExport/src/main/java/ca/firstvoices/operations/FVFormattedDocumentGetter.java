@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.utils.FVExportConstants.CSV_FORMAT;
@@ -8,7 +28,6 @@ import static ca.firstvoices.utils.FVExportUtils.makePrincipalWorkDigest;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -27,66 +46,73 @@ import org.nuxeo.runtime.api.Framework;
 /*
  * This end-point will return all the documents export by a specific principal
  */
-@Operation(id = FVFormattedDocumentGetter.ID, category = Constants.CAT_DOCUMENT, label = "Get exported documents", description = "Retrieve formatted (CSV or PDF) documents from principals home directory.")
+@Operation(id = FVFormattedDocumentGetter.ID, category = Constants.CAT_DOCUMENT, label = "Get "
+    + "exported documents", description = "Retrieve formatted (CSV or PDF) documents from "
+    + "principals home directory.")
 public class FVFormattedDocumentGetter {
-    public static final String ID = "Document.GetFormattedDocument";
 
-    private static final Log log = LogFactory.getLog(FVFormattedDocumentGetter.class);
+  public static final String ID = "Document.GetFormattedDocument";
 
-    protected AutomationService automation = Framework.getService(AutomationService.class);
+  private static final Log log = LogFactory.getLog(FVFormattedDocumentGetter.class);
 
-    @Param(name = "format", values = { CSV_FORMAT, PDF_FORMAT })
-    protected String format = CSV_FORMAT;
+  protected AutomationService automation = Framework.getService(AutomationService.class);
 
-    @Context
-    protected CoreSession session;
+  @Param(name = "format", values = {CSV_FORMAT, PDF_FORMAT})
+  protected String format = CSV_FORMAT;
 
-    @Context
-    protected OperationContext ctx;
+  @Context
+  protected CoreSession session;
 
-    /**
-     * @param input - dialect to check for export documents
-     * @return - list of ALL export documents associated with requesting user
-     */
-    // input should be DocumentModel for a dialect where we will check for existence of exported files
-    @OperationMethod
-    public DocumentModelList run(DocumentModel input) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        DocumentModelList result = null;
+  @Context
+  protected OperationContext ctx;
 
-        try {
-            DocumentModel resF = findDialectChildWithRef(session, input.getRef(), DIALECT_RESOURCES_TYPE);
-            String workDigest = makePrincipalWorkDigest(session.getPrincipal());
+  /**
+   * @param input - dialect to check for export documents
+   * @return - list of ALL export documents associated with requesting user
+   */
+  // input should be DocumentModel for a dialect where we will check for existence of exported
+  // files
+  @OperationMethod
+  public DocumentModelList run(DocumentModel input) {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    DocumentModelList result = null;
 
-            DocumentModelList exportFileDocs = findExportDocs(session, resF.getId(), workDigest);
+    try {
+      DocumentModel resF = findDialectChildWithRef(session, input.getRef(), DIALECT_RESOURCES_TYPE);
+      String workDigest = makePrincipalWorkDigest(session.getPrincipal());
 
-            if (exportFileDocs != null) {
-                result = exportFileDocs; // "fileName:" + exportFileName + ", documentId:" + exportFileDoc.getId() ;
-            } else {
-                parameters.put("message", "Error: While attempting to retrieve formatted documents from your ("
-                        + ctx.getPrincipal().getName() + ") home directory.");
+      DocumentModelList exportFileDocs = findExportDocs(session, resF.getId(), workDigest);
 
-                automation.run(ctx, "WebUI.AddInfoMessage", parameters);
-            }
-        } catch (OperationException e) {
-            log.error(e);
-        }
+      if (exportFileDocs != null) {
+        result = exportFileDocs; // "fileName:" + exportFileName + ", documentId:" +
+        // exportFileDoc.getId() ;
+      } else {
+        parameters.put("message",
+            "Error: While attempting to retrieve formatted documents from your (" + ctx
+                .getPrincipal().getName() + ") home directory.");
 
-        return result;
+        automation.run(ctx, "WebUI.AddInfoMessage", parameters);
+      }
+    } catch (OperationException e) {
+      log.error(e);
     }
 
-    private DocumentModelList findExportDocs(CoreSession session, String resourcesFolderGUID, String workDigest) {
-        DocumentModelList wrappers = null;
+    return result;
+  }
 
-        String wrapperQ = "SELECT * FROM FVExport WHERE ecm:ancestorId = '" + resourcesFolderGUID
-                + "' AND fvexport:workdigest = '" + workDigest + "' ORDER BY dc:created DESC";
-        DocumentModelList docs = session.query(wrapperQ);
+  private DocumentModelList findExportDocs(CoreSession session, String resourcesFolderGUID,
+      String workDigest) {
+    DocumentModelList wrappers = null;
 
-        if (docs != null && docs.size() > 0) {
-            wrappers = docs;
-        }
+    String wrapperQ = "SELECT * FROM FVExport WHERE ecm:ancestorId = '" + resourcesFolderGUID
+        + "' AND fvexport:workdigest = '" + workDigest + "' ORDER BY dc:created DESC";
+    DocumentModelList docs = session.query(wrapperQ);
 
-        return wrappers;
+    if (docs != null && docs.size() > 0) {
+      wrappers = docs;
     }
+
+    return wrappers;
+  }
 
 }

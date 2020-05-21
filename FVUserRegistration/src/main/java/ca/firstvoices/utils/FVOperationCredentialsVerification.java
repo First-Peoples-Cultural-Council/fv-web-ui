@@ -1,122 +1,139 @@
+/*
+ *
+ *  *
+ *  * Copyright 2020 First People's Cultural Council
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *     http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * /
+ *
+ */
+
 package ca.firstvoices.utils;
 
-import org.nuxeo.ecm.automation.core.util.StringList;
+import java.util.List;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 
-import java.util.List;
-
 public class FVOperationCredentialsVerification {
-    private static int GLOBAL_ADMINISTRATOR_OR_SYSTEM = 1;
 
-    private static int LANGUAGE_ADMINISTRATOR = 2;
+  private static int GLOBAL_ADMINISTRATOR_OR_SYSTEM = 1;
 
-    private static int INVALID_CREDENTIALS = 0;
+  private static int LANGUAGE_ADMINISTRATOR = 2;
 
-    private static String language_admin_group = null;
+  private static int INVALID_CREDENTIALS = 0;
 
-    private static int isValidPrincipal(NuxeoPrincipal p) {
-        String pName = p.getName();
-        language_admin_group = null;
+  private static String language_admin_group = null;
 
-        if (!(pName.equals("system") || pName.equals("Administrator"))) {
-            List<String> pGroups = p.getGroups();
+  private static int isValidPrincipal(NuxeoPrincipal p) {
+    String principalName = p.getName();
+    language_admin_group = null;
 
-            for (String gn : pGroups) {
-                if (gn.equals("administrators")) {
-                    return GLOBAL_ADMINISTRATOR_OR_SYSTEM;
-                }
+    if (!(principalName.equals("system") || principalName.equals("Administrator"))) {
+      List<String> principalGroups = p.getGroups();
 
-                if (gn.contains("_language_administrators")) {
-                    language_admin_group = gn;
-                    return LANGUAGE_ADMINISTRATOR;
-                }
-            }
-
-            return INVALID_CREDENTIALS;
+      for (String gn : principalGroups) {
+        if (gn.equals("administrators")) {
+          return GLOBAL_ADMINISTRATOR_OR_SYSTEM;
         }
 
-        return GLOBAL_ADMINISTRATOR_OR_SYSTEM;
+        if (gn.contains("_language_administrators")) {
+          language_admin_group = gn;
+          return LANGUAGE_ADMINISTRATOR;
+        }
+      }
+
+      return INVALID_CREDENTIALS;
     }
 
-    public static boolean terminateOnInvalidCredentials_NewUserHomeChange(CoreSession session, UserManager userManager,
-            String username, String dialectGUID) {
-        try {
-            NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+    return GLOBAL_ADMINISTRATOR_OR_SYSTEM;
+  }
 
-            int credentialsType = isValidPrincipal(invoking_principal);
+  public static boolean terminateOnInvalidCredentials_NewUserHomeChange(CoreSession session,
+      UserManager userManager, String username, String dialectGUID) {
+    try {
+      NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
-            if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
-                // language admin can make changes to a user in their dialect
-                if (credentialsType == LANGUAGE_ADMINISTRATOR) {
-                    DocumentModelList registrations = FVRegistrationUtilities.getRegistrations(session, username,
-                            dialectGUID);
+      int credentialsType = isValidPrincipal(invokingPrincipal);
 
-                    // If registrations for this dialect found, allow moving user
-                    if (registrations.size() > 0)
-                        return false;
-                }
+      if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
+        // language admin can make changes to a user in their dialect
+        if (credentialsType == LANGUAGE_ADMINISTRATOR) {
+          DocumentModelList registrations = FVRegistrationUtilities
+              .getRegistrations(session, username, dialectGUID);
 
-                return true; // invalid credentials
-            }
-        } catch (Exception e) {
-            return true;
+          // If registrations for this dialect found, allow moving user
+          return registrations.size() <= 0;
         }
 
-        return false; // continue executing command - valid credentials
+        return true; // invalid credentials
+      }
+    } catch (Exception e) {
+      return true;
     }
 
-    public static boolean terminateOnInvalidCredentials_UserUpdate(CoreSession session, UserManager userManager,
-            String username) {
-        NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+    return false; // continue executing command - valid credentials
+  }
 
-        int credentialsType = isValidPrincipal(invoking_principal);
+  public static boolean terminateOnInvalidCredentials_UserUpdate(CoreSession session,
+      UserManager userManager, String username) {
+    NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
-        if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
-            // language admin can make changes to a user in their dialect
-            if (credentialsType == LANGUAGE_ADMINISTRATOR) // LANGUAGE_ADMINISTRATOR
-            {
-                NuxeoPrincipal userToChange = userManager.getPrincipal(username);
+    int credentialsType = isValidPrincipal(invokingPrincipal);
 
-                int ui = language_admin_group.indexOf("_");
-                String dns = language_admin_group.substring(0, ui); // dialect name
+    if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
+      // language admin can make changes to a user in their dialect
+      // LANGUAGE_ADMINISTRATOR
+      if (credentialsType == LANGUAGE_ADMINISTRATOR) {
+        NuxeoPrincipal userToChange = userManager.getPrincipal(username);
 
-                List<String> upr_groups = userToChange.getGroups();
+        int ui = language_admin_group.indexOf("_");
+        String dns = language_admin_group.substring(0, ui); // dialect name
 
-                for (String gn : upr_groups) {
-                    if (gn.contains(dns)) {
-                        return false; // valid credentials
-                    }
-                }
-            }
+        List<String> userToChangeGroups = userToChange.getGroups();
 
-            return true; // invalid credentials
+        for (String gn : userToChangeGroups) {
+          if (gn.contains(dns)) {
+            return false; // valid credentials
+          }
         }
+      }
 
-        return false; // continue executing command - valid credentials
+      return true; // invalid credentials
     }
 
-    public static boolean terminateOnInvalidCredentials_GroupUpdate(CoreSession session, String groupName) {
-        NuxeoPrincipal invoking_principal = (NuxeoPrincipal) session.getPrincipal();
+    return false; // continue executing command - valid credentials
+  }
 
-        int credentialsType = isValidPrincipal(invoking_principal);
+  public static boolean terminateOnInvalidCredentials_GroupUpdate(CoreSession session,
+      String groupName) {
+    NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
-        if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
-            // language admin can make changes to a group associated with their dialect
-            if (credentialsType == LANGUAGE_ADMINISTRATOR) {
-                int ui = language_admin_group.indexOf("_");
-                String dns = language_admin_group.substring(0, ui); // dialect name ending
+    int credentialsType = isValidPrincipal(invokingPrincipal);
 
-                if (groupName.contains(dns))
-                    return false; // continue executing command - valid credentials
-            }
+    if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
+      // language admin can make changes to a group associated with their dialect
+      if (credentialsType == LANGUAGE_ADMINISTRATOR) {
+        int ui = language_admin_group.indexOf("_");
+        String dns = language_admin_group.substring(0, ui); // dialect name ending
 
-            return true; // invalid credentials
-        }
+        return !groupName.contains(dns); // continue executing command - valid credentials
+      }
 
-        return false; // continue executing command - valid credentials
+      return true; // invalid credentials
     }
+
+    return false; // continue executing command - valid credentials
+  }
 }

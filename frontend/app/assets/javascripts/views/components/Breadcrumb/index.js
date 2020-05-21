@@ -1,7 +1,6 @@
 /*
     Old system:
     Home → Explore → Alqonquin → Mi'kmaw → Mi'kmaw → Learn → Words
-
     New release:
     Mi’kmaw Home Page → Learn → Words
 */
@@ -26,6 +25,7 @@ const REMOVE_FROM_BREADCRUMBS = ['FV', 'sections', 'Data', 'Workspaces', 'search
 export class Breadcrumb extends Component {
   static propTypes = {
     className: string,
+    dataTestId: string,
     findReplace: object, // Note: {find: '', replace: ''}
     matchedPage: object, // Note: Immutable Obj
     routes: object, // Note: Immutable Obj
@@ -136,7 +136,7 @@ export class Breadcrumb extends Component {
         // Last breadcrumb item (i.e. current page)
         if (splitPathIndex === splitPath.length - 1) {
           return (
-            <li key={splitPathIndex} className="active">
+            <li data-testid={'BreadcrumbCurrentPage'} key={splitPathIndex} className="active">
               {decodeURIComponent(pathTitle)}
             </li>
           )
@@ -162,7 +162,6 @@ export class Breadcrumb extends Component {
                 props: {splitWindowPath}
               })=>{}
             }],
-
             */
             if (value.has('redirects')) {
               value.get('redirects').forEach((redirectValue) => {
@@ -190,7 +189,9 @@ export class Breadcrumb extends Component {
                 NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
               }}
             >
-              {`${this.props.intl.searchAndReplace(decodeURIComponent(pathTitle).replace('&amp;', '&'), { case: 'lower' })}`}
+              {`${this.props.intl.searchAndReplace(decodeURIComponent(pathTitle).replace('&amp;', '&'), {
+                case: 'lower',
+              })}`}
             </a>
           </li>
         )
@@ -221,7 +222,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Breadcrumb)
+export default connect(mapStateToProps, mapDispatchToProps)(Breadcrumb)
