@@ -337,6 +337,11 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
           continue;
         }
 
+        // If dependency does not exist (e.g. deleted), skip
+        if (!session.exists(dependencyRef)) {
+          continue;
+        }
+
         DocumentModel publishedDep = null;
 
         try {

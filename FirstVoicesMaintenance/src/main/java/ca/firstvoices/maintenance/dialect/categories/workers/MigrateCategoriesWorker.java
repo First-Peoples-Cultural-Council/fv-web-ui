@@ -9,6 +9,7 @@ import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 public class MigrateCategoriesWorker extends AbstractWork {
 
@@ -42,31 +43,52 @@ public class MigrateCategoriesWorker extends AbstractWork {
       return;
     }
 
+    if (!TransactionHelper.isTransactionActive()) {
+      TransactionHelper.startTransaction();
+    }
+
     openSystemSession();
 
     DocumentModel jobContainer = session.getDocument(jobContainerRef);
     setStatus("Starting migrate category for words in `" + jobContainer.getTitle() + "`");
 
-    // Run first iteration
-    int wordsRemaining = service.migrateWords(session, jobContainer, batchSize);
+    try {
+      // Run first iteration
+      int wordsRemaining = service.migrateWords(session, jobContainer, batchSize);
 
-    while (wordsRemaining != 0) {
-      setStatus("Migrating next batch on `" + jobContainer.getTitle() + "` ( " + wordsRemaining
-          + " words remaining).");
-      int nextWordsRemaining = service.migrateWords(session, jobContainer, batchSize);
+      while (wordsRemaining != 0) {
+        setStatus("Migrating next batch on `" + jobContainer.getTitle() + "` ( " + wordsRemaining
+            + " words remaining).");
+        int nextWordsRemaining = service.migrateWords(session, jobContainer, batchSize);
 
-      // No progress, worker is stuck
-      if (nextWordsRemaining == wordsRemaining) {
-        setStatus("Failed");
-        maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-        workFailed(
-            new NuxeoException("worker is stuck with progress on " + jobContainer.getTitle()));
+        // No progress, worker is stuck
+        if (nextWordsRemaining == wordsRemaining) {
+          setStatus("Failed");
+          maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
+          workFailed(
+              new NuxeoException("worker is stuck with progress on " + jobContainer.getTitle()));
+        }
+
+        wordsRemaining = nextWordsRemaining;
+
+        // Create transaction for next batch
+        // See examples:
+        // nuxeo @ org/nuxeo/ecm/core/BatchProcessorWork.java
+        // nuxeo @ org/nuxeo/elasticsearch/work/BucketIndexingWorker.java
+        // nuxeo @ org/nuxeo/ai/transcribe/TranscribeWork
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
+
+        //Add real progress here when we can modify query for total words
+        //setProgress(new Progress((wordsFound/totalWords)*100));
       }
-
-      wordsRemaining = nextWordsRemaining;
-
-      //Add real progress here when we can modify query for total words
-      //setProgress(new Progress((wordsFound/totalWords)*100));
+      // Save session (in case it wasn't saved in migrate words)
+      session.save();
+    } catch (Exception e) {
+      setStatus("Failed");
+      maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
+      workFailed(
+          new NuxeoException("worker unable to save session on " + jobContainer.getTitle()));
     }
 
     maintenanceLogger.removeFromRequiredJobs(jobContainer, job, true);

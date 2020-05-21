@@ -30,9 +30,9 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = MigrateCategoriesStatus.ID, category = Constants.GROUP_NAME, label =
-    Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID, description = "Operation to show the status of"
-    + " the migration for categories")
+@Operation(id = MigrateCategoriesStatus.ID, category = Constants.GROUP_NAME,
+    label = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID,
+    description = "Operation to show the status of the migration for categories")
 public class MigrateCategoriesStatus {
 
   public static final String ID = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID;
@@ -46,8 +46,8 @@ public class MigrateCategoriesStatus {
   @Param(name = "publishAction", required = false, values = {"force", "ignore"})
   protected String publishAction = "ignore";
 
-  MigrateCategoriesService migrateCategoriesService = Framework
-      .getService(MigrateCategoriesService.class);
+  MigrateCategoriesService migrateCategoriesService = Framework.getService(
+      MigrateCategoriesService.class);
 
   MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
 
@@ -57,7 +57,8 @@ public class MigrateCategoriesStatus {
   FirstVoicesPublisherService publisherService = Framework
       .getService(FirstVoicesPublisherService.class);
 
-  AutomationService automationService = Framework.getService(AutomationService.class);
+  AutomationService automationService = Framework
+      .getService(AutomationService.class);
 
   @OperationMethod
   public Blob run(DocumentModel dialect) throws OperationException {
@@ -72,24 +73,31 @@ public class MigrateCategoriesStatus {
     int sharedCategoriesCount = 0;
     int localCategoriesCount = 0;
 
-    IterableQueryResult results = session
-        .queryAndFetch(migrateCategoriesService.getUniqueCategoriesQuery(dialect.getId()), "NXQL",
-            true, null);
-    Iterator<Map<String, Serializable>> it = results.iterator();
+    IterableQueryResult results = null;
 
-    while (it.hasNext()) {
-      Map<String, Serializable> item = it.next();
-      String uid = (String) item.get("fv-word:categories/*");
-      DocumentModel category = session.getDocument(new IdRef(uid));
+    try {
+      results = session.queryAndFetch(
+          migrateCategoriesService.getUniqueCategoriesQuery(dialect.getId()), "NXQL", true, null);
+      Iterator<Map<String, Serializable>> it = results.iterator();
 
-      if (category.getPathAsString().contains("Shared Categories")) {
-        ++sharedCategoriesCount;
-      } else {
-        ++localCategoriesCount;
+      while (it.hasNext()) {
+        Map<String, Serializable> item = it.next();
+        String uid = (String) item.get("fv-word:categories/*");
+        DocumentModel category = session.getDocument(new IdRef(uid));
+
+        if (category.getPathAsString().contains("Shared Categories")) {
+          ++sharedCategoriesCount;
+        } else {
+          ++localCategoriesCount;
+        }
+      }
+    } catch (Exception e) {
+      throw new OperationException(e.getMessage());
+    } finally {
+      if (results != null) {
+        results.close();
       }
     }
-
-    results.close();
 
     // Check if required job exists
     boolean requiredJobExists = false;
@@ -101,11 +109,13 @@ public class MigrateCategoriesStatus {
     }
 
     // Check and see how many local categories were created
-    DocumentModelList localCategories = migrateCategoriesService.getCategories(session, dialect);
+    DocumentModelList localCategories = migrateCategoriesService
+        .getCategories(session, dialect, false);
     long localCategoriesCreated = localCategories.totalSize();
 
     // Check and see how many shared categories exist
-    DocumentModelList sharedCategories = migrateCategoriesService.getCategories(session, null);
+    DocumentModelList sharedCategories = migrateCategoriesService
+        .getCategories(session, null, false);
     long sharedCategoriesCreated = sharedCategories.totalSize();
 
     // Do a survey of Shared Categories
@@ -113,6 +123,7 @@ public class MigrateCategoriesStatus {
 
     HashMap<String, Double> sharedCategoriesInProxies = new HashMap<>();
     HashMap<String, String> wordsFailedPublishing = new HashMap<>();
+    HashMap<String, String> wordsFailedPublishingDueToDeleted = new HashMap<>();
 
     for (DocumentModel sharedCategory : sharedCategories) {
 
@@ -122,8 +133,11 @@ public class MigrateCategoriesStatus {
           .getPublication(session, sharedCategory.getRef());
 
       if (sharedCategoryProxy != null) {
-        String query = "SELECT * FROM FVWord WHERE " + "fva:dialect = '" + dialect.getId() + "' "
-            + "AND ecm:isTrashed = 0 " + "AND ecm:isVersion = 0 " + "AND ecm:isProxy = 1 "
+        String query = "SELECT * FROM FVWord WHERE "
+            + "fva:dialect = '" + dialect.getId() + "' "
+            + "AND ecm:isTrashed = 0 "
+            + "AND ecm:isVersion = 0 "
+            + "AND ecm:isProxy = 1 "
             + "AND fvproxy:proxied_categories/* IN ('" + sharedCategoryProxy.getId() + "')";
 
         DocumentModelList sections = session.query(query, null, 1000, 0, true);
@@ -139,14 +153,28 @@ public class MigrateCategoriesStatus {
             DocumentModel workingCopy = (DocumentModel) automationService
                 .run(operation, "Proxy.GetSourceDocument");
 
-            // Republish
-            publisherService.republish(workingCopy);
-            wordsFailedPublishing.put(workingCopy.getId(), sharedCategoryTitle);
+            // Perform actions on words that failed to publish
+
+            // Note: this can happen due to possible existing bug with delete not unpublishing
+            if (workingCopy.isTrashed()) {
+              // Remove proxy
+              session.removeDocument(publishedVersion.getRef());
+
+              // Document under words that failed to publish due to their working copy being trashed
+              wordsFailedPublishingDueToDeleted.put(workingCopy.getId(), sharedCategoryTitle);
+            } else {
+              // Try to republish
+              publisherService.republish(workingCopy);
+
+              // Document under words that failed to publish for other reasons
+              wordsFailedPublishing.put(workingCopy.getId(), sharedCategoryTitle);
+            }
           }
         }
 
-        sharedCategoriesInProxies.put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
-            new Double(sections.totalSize()));
+        sharedCategoriesInProxies
+            .put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
+                new Double(sections.totalSize()));
       }
     }
 
@@ -159,7 +187,8 @@ public class MigrateCategoriesStatus {
       json.put("required_category_migration_job_exists", Boolean.valueOf(requiredJobExists));
       json.put("local_categories_created", new Double(localCategoriesCreated));
       json.put("shared_categories_in_proxies", sharedCategoriesInProxies);
-      json.put("words_failed_publishing", wordsFailedPublishing);
+      json.put("words_failed_publishing_general", wordsFailedPublishing);
+      json.put("words_failed_publishing_deleted", wordsFailedPublishingDueToDeleted);
     } catch (JSONException e) {
       e.printStackTrace();
     }
