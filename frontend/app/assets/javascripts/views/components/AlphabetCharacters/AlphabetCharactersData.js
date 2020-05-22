@@ -15,50 +15,31 @@ import NavigationHelpers from 'common/NavigationHelpers'
 class AlphabetCharactersData extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {}
+    this.path = `${props.routeParams.dialect_path}/Alphabet`
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     window.addEventListener('popstate', this.clickLetterIfInRouteParams)
 
-    const { routeParams, computePortal } = this.props
-    const path = `${routeParams.dialect_path}/Alphabet`
-    await ProviderHelpers.fetchIfMissing(
-      path,
+    ProviderHelpers.fetchIfMissing(
+      this.path,
       this.props.fetchCharacters,
       this.props.computeCharacters,
       '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
     )
-    const extractComputedCharacters = ProviderHelpers.getEntry(this.props.computeCharacters, path)
-    const characters = selectn('response.entries', extractComputedCharacters)
-    const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
-    const dialectClassName = getDialectClassname(extractComputePortal)
-    this.setState(
-      {
-        characters,
-        dialectClassName,
-      },
-      () => {
-        // this.clickLetterIfInRouteParams()
-      }
-    )
   }
-
-  // componentDidUpdate(prevProps) {
-  //   const letter = selectn('letter', this.props.routeParams)
-  //   const prevLetter = selectn('letter', prevProps.routeParams)
-  //   if (letter && letter !== prevLetter) {
-  //     this.clickLetterIfInRouteParams()
-  //   }
-  // }
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.clickLetterIfInRouteParams)
   }
 
   render() {
-    const { characters, dialectClassName } = this.state
+    const { routeParams, computePortal } = this.props
+    const extractComputedCharacters = ProviderHelpers.getEntry(this.props.computeCharacters, this.path)
+    const characters = selectn('response.entries', extractComputedCharacters)
+    const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
+    const dialectClassName = getDialectClassname(extractComputePortal)
+
     return this.props.children({
       characters,
       dialectClassName,
