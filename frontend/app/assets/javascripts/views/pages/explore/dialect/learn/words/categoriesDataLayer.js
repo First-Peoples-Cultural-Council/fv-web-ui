@@ -32,85 +32,95 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 class CategoriesDataLayer extends Component {
-  _isMounted = false
   constructor(props) {
     super(props)
 
+    this.catPath = ''
+    this.sharedCatPath = ''
+    this.categoryType = props.fetchPhraseBooks ? 'Phrase Books' : 'Categories'
     this.state = {
       categoriesData: [],
+      categoriesRawData: [],
     }
   }
-  async componentDidMount() {
-    this._isMounted = true
-    const { routeParams } = this.props
-    let categoryType = 'Categories'
-    // Change category type to Phrasebooks if 'fetchPhraseBooks' is passed in as a prop
-    if (this.props.fetchPhraseBooks) {
-      categoryType = 'Phrase Books'
-    }
-    // Fetch dialect specific categories
-    if (this.props.fetchLatest) {
-      await this.props.fetchCategories(`/api/v1/path/${this.props.routeParams.dialect_path}/${categoryType}/@children`)
-    } else {
-      await ProviderHelpers.fetchIfMissing(
-        `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`,
-        this.props.fetchCategories,
-        this.props.computeCategories
-      )
-    }
-    // Fetch Shared Categories
-    await ProviderHelpers.fetchIfMissing(
-      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`,
-      this.props.fetchSharedCategories,
-      this.props.computeSharedCategories
-    )
-    const categories = ProviderHelpers.getEntry(
-      this.props.computeCategories,
-      `/api/v1/path/${routeParams.dialect_path}/${categoryType}/@children`
-    )
-    const sharedCategories = ProviderHelpers.getEntry(
-      this.props.computeSharedCategories,
-      `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
-    )
-    const categoriesEntries = selectn('response.entries', categories)
+  componentDidMount() {
+    this.catPath = `/api/v1/path/${this.props.routeParams.dialect_path}/${this.categoryType}/@children`
+    this.sharedCatPath = `/api/v1/path/FV/${this.props.routeParams.area}/SharedData/Shared Categories/@children`
+    const { categories, sharedCategories } = this.getDataSet()
 
-    if (this._isMounted) {
-      this.setCategories(categoryType, categories, categoriesEntries, sharedCategories)
+    // Fetch dialect specific categories
+    if (selectn('action', categories) !== 'FV_CATEGORIES_QUERY_START') {
+      if (this.props.fetchLatest) {
+        this.props.fetchCategories(this.catPath)
+      } else {
+        ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
+      }
+    }
+    if (selectn('action', sharedCategories) !== 'FV_CATEGORIES_SHARED_QUERY_START') {
+      ProviderHelpers.fetchIfMissing(
+        this.sharedCatPath,
+        this.props.fetchSharedCategories,
+        this.props.computeSharedCategories
+      )
     }
   }
 
   render() {
+    const { categories, categoriesEntries, sharedCategories } = this.getDataSet()
+    const { categoriesData, categoriesRawData } = this.getCategories(
+      this.categoryType,
+      categories,
+      categoriesEntries,
+      sharedCategories
+    )
     return this.props.children({
-      categoriesData: this.state.categoriesData,
-      categoriesRawData: this.state.categoriesRawData,
+      categoriesData,
+      categoriesRawData,
     })
   }
 
-  componentWillUnmount() {
-    this._isMounted = false
+  /*
+  Returns: {
+    categories,
+    sharedCategories,
+    categoriesEntries
   }
-
-  setCategories = (categoryType, categories, categoriesEntries, sharedCategories) => {
+  */
+  getDataSet() {
+    return {
+      categories: ProviderHelpers.getEntry(this.props.computeCategories, this.catPath),
+      sharedCategories: ProviderHelpers.getEntry(this.props.computeSharedCategories, this.sharedCatPath),
+      categoriesEntries: selectn(
+        'response.entries',
+        ProviderHelpers.getEntry(this.props.computeCategories, this.catPath)
+      ),
+    }
+  }
+  /*
+  Returns: {
+    categoriesData: [],
+    categoriesRawData: [],
+  }
+  */
+  getCategories = (categoryType, categories, categoriesEntries, sharedCategories) => {
     switch (categoryType) {
       case 'Categories':
         // Update state
         // Fallback to shared categories if no local categories
-        this.setState({
+        return {
           categoriesData:
             categoriesEntries && categoriesEntries.length > 0
               ? categoriesEntries
               : selectn('response.entries', sharedCategories),
           categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
-        })
-        break
+        }
 
       default:
         // Update state with no fallback (for Phrase Books)
-        this.setState({
+        return {
           categoriesData: categoriesEntries && categoriesEntries.length > 0 ? categoriesEntries : [],
           categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : [],
-        })
-        break
+        }
     }
   }
 }
