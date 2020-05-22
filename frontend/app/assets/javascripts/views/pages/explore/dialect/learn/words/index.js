@@ -57,30 +57,12 @@ import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categor
  * Learn words
  */
 class PageDialectLearnWords extends PageDialectLearnBase {
-  async componentDidMountViaPageDialectLearnBase() {
-    const { routeParams } = this.props
-
-    // Portal
-    ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
-
-    // Document
-    await ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Dictionary',
-      this.props.fetchDocument,
-      this.props.computeDocument
-    )
-
-    const newState = {}
+  componentDidMountViaPageDialectLearnBase() {
+    // console.log('#### PageDialectLearnWords > componentDidMountViaPageDialectLearnBase')
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
     if (this.props.routeParams.category === undefined) {
-      newState.filterInfo = this.initialFilterInfo()
+      this.setState({ filterInfo: this.initialFilterInfo() })
     }
-
-    this.setState(newState)
   }
 
   componentWillUnmount() {
@@ -331,7 +313,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
-
+    // console.log({
+    //   routeParamsLetter: this.props.routeParams.letter,
+    // })
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         searchType = 'startsWith'
@@ -380,9 +364,20 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   }
 
   // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
+  async fetchData() {
+    // Portal
+    await ProviderHelpers.fetchIfMissing(
+      this.props.routeParams.dialect_path + '/Portal',
+      this.props.fetchPortal,
+      this.props.computePortal
+    )
+
+    // Document
+    await ProviderHelpers.fetchIfMissing(
+      this.props.routeParams.dialect_path + '/Dictionary',
+      this.props.fetchDocument,
+      this.props.computeDocument
+    )
   }
 
   // NOTE: PageDialectLearnBase calls `_getPageKey`
