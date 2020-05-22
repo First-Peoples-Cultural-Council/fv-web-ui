@@ -44,6 +44,7 @@ import AlphabetCharactersData from 'views/components/AlphabetCharacters/Alphabet
 
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -52,7 +53,6 @@ import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/Navigati
 
 import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY } from 'views/components/SearchDialect/constants'
 
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 /**
  * Learn words
  */
@@ -61,7 +61,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { routeParams } = this.props
 
     // Portal
-    ProviderHelpers.fetchIfMissing(
+    await ProviderHelpers.fetchIfMissing(
       routeParams.dialect_path + '/Portal',
       this.props.fetchPortal,
       this.props.computePortal
@@ -74,7 +74,12 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       this.props.computeDocument
     )
 
-    const newState = {}
+    const newState = {
+      dialectId: selectn(
+        'response.contextParameters.ancestry.dialect.uid',
+        ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
+      ),
+    }
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
     if (this.props.routeParams.category === undefined) {
       newState.filterInfo = this.initialFilterInfo()
@@ -86,8 +91,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   componentWillUnmount() {
     this.props.searchDialectUpdate(initialState)
   }
-
-  DIALECT_FILTER_TYPE = 'words'
 
   constructor(props, context) {
     super(props, context)
@@ -154,13 +157,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
-
-    const dialectId = selectn(
-      'response.contextParameters.ancestry.dialect.uid',
-      ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
-    )
     const wordListView =
-      selectn('response.uid', computeDocument) && dialectId ? (
+      selectn('response.uid', computeDocument) && this.state.dialectId ? (
         <WordListView
           controlViaURL
           DEFAULT_PAGE={DEFAULT_PAGE}
@@ -172,7 +170,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           flashcard={this.state.flashcardMode}
           flashcardTitle={pageTitle}
           parentID={selectn('response.uid', computeDocument)}
-          dialectID={dialectId}
+          dialectID={this.state.dialectId}
           routeParams={this.props.routeParams}
           // Search:
           handleSearch={this.handleSearch}
@@ -224,6 +222,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
 
     const dialectClassName = getDialectClassname(computePortal)
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper')}>
@@ -289,15 +288,11 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                   categoriesData.length > 0 && (
                     <DialectFilterListData
                       appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                      setDialectFilterCallback={this.setDialectFilterCallback}
-                      transformData={categoriesData}
+                      setDialectFilterCallback={this.changeFilter}
+                      facets={categoriesData}
+                      facetType="category"
                       type="words"
-                      // --------
-                      // facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                      //   'fv-word:categories',
-                      //   this.props.routeParams.area
-                      // )}
-                      // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+                      workspaceKey="fv-word:categories"
                     >
                       {({ listItemData }) => {
                         return (
@@ -375,25 +370,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
   }
 
-  clearDialectFilter = () => {
-    this.setState({ filterInfo: this.initialFilterInfo() })
-  }
-
-  // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-  }
-
-  // NOTE: PageDialectLearnBase calls `_getPageKey`
-  _getPageKey = () => {
-    return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
-  }
-
-  handleSearch = () => {
-    this.changeFilter()
-  }
-
   initialFilterInfo = () => {
     const routeParamsCategory = this.props.routeParams.category
     const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
@@ -430,7 +406,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     this.setState(
       {
         filterInfo: newFilter,
-        // searchNxqlSort: 'fv:custom_order', // TODO: IS THIS BREAKING SOMETHING?
       },
       () => {
         // When facets change, pagination should be reset.
@@ -453,14 +428,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     )
   }
 
-  setDialectFilterCallback = ({
-    // facetField,
-    href,
-    // selected,
-    // unselected,
-    updateUrl,
-  }) => {
-    this.changeFilter({ href, updateHistory: updateUrl })
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
+  _getPageKey = () => {
+    return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_learn_words'
   }
 }
 
