@@ -51,11 +51,7 @@ import FVLabel from 'views/components/FVLabel/index'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
-import {
-  SEARCH_PART_OF_SPEECH_ANY,
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_PHRASE_BOOK,
-} from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'views/components/SearchDialect/constants'
 
 const { array, bool, func, object, string } = PropTypes
 /**
@@ -403,19 +399,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
   fetchData() {}
 
   handlePhraseBookClick = async ({ facetField, selected, unselected, href } = {}, updateHistory = true) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_PHRASE_BOOK,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
     this.changeFilter(href, updateHistory)
 
     this.handleDialectFilterList(facetField, selected, unselected, this.DIALECT_FILTER_TYPE) // NOTE: This function is in PageDialectLearnBase

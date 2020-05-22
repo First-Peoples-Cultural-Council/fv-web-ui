@@ -18,10 +18,8 @@ import selectn from 'selectn'
 
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'views/components/SearchDialect/constants'
 
 const TYPE_WORDS = 'words'
 const TYPE_PHRASES = 'phrases'
@@ -60,6 +58,7 @@ class DialectFilterListData extends Component {
       facets = transformData
     } else {
       // Get categories
+      // console.log('may fire request!')
       await ProviderHelpers.fetchIfMissing(path, this.props.fetchCategories, this.props.computeCategories)
       const extractComputedCategories = ProviderHelpers.getEntry(this.props.computeCategories, path)
       facets = selectn('response.entries', extractComputedCategories)
@@ -345,19 +344,6 @@ class DialectFilterListData extends Component {
   // Saves to redux so other components can respond (eg: "you are searching...")
   // also calls any passed in callback from the parent/layout component (typically used to update it's state)
   setDialectFilter = async ({ facetField, href, selected, unselected, updateUrl }) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CATEGORY,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
     this.props.setDialectFilterCallback({
       facetField,
       href,
@@ -451,7 +437,6 @@ DialectFilterListData.propTypes = {
   splitWindowPath: array.isRequired,
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
-  searchDialectUpdate: func.isRequired,
 }
 DialectFilterListData.defaultProps = {
   appliedFilterIds: new Set(),
@@ -473,7 +458,6 @@ const mapStateToProps = (state) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
-  searchDialectUpdate,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterListData)

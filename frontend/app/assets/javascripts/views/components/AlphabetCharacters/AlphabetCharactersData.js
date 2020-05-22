@@ -10,7 +10,6 @@ import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import { SEARCH_PART_OF_SPEECH_ANY, SEARCH_BY_ALPHABET } from 'views/components/SearchDialect/constants'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 class AlphabetCharactersData extends Component {
@@ -35,17 +34,24 @@ class AlphabetCharactersData extends Component {
     const characters = selectn('response.entries', extractComputedCharacters)
     const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
     const dialectClassName = getDialectClassname(extractComputePortal)
-
     this.setState(
       {
         characters,
         dialectClassName,
       },
       () => {
-        this.clickLetterIfInRouteParams()
+        // this.clickLetterIfInRouteParams()
       }
     )
   }
+
+  // componentDidUpdate(prevProps) {
+  //   const letter = selectn('letter', this.props.routeParams)
+  //   const prevLetter = selectn('letter', prevProps.routeParams)
+  //   if (letter && letter !== prevLetter) {
+  //     this.clickLetterIfInRouteParams()
+  //   }
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.clickLetterIfInRouteParams)
@@ -86,18 +92,6 @@ class AlphabetCharactersData extends Component {
 
   // Called from the presentation layer when a letter is clicked
   letterClicked = async ({ href, letter, updateHistory = false }) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: letter,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByDefinitions: false,
-        searchByTitle: true,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
     this.props.letterClickedCallback({
       href,
       letter,
