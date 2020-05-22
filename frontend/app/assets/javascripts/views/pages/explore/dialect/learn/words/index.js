@@ -58,7 +58,6 @@ import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categor
  */
 class PageDialectLearnWords extends PageDialectLearnBase {
   componentDidMountViaPageDialectLearnBase() {
-    // console.log('#### PageDialectLearnWords > componentDidMountViaPageDialectLearnBase')
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
     if (this.props.routeParams.category === undefined) {
       this.setState({ filterInfo: this.initialFilterInfo() })
@@ -204,7 +203,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         </PromiseWrapper>
       )
     }
-
     const dialectClassName = getDialectClassname(computePortal)
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -266,9 +264,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             </AlphabetCharactersData>
             <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                       setDialectFilterCallback={this.setDialectFilterCallback}
@@ -295,7 +293,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -365,19 +364,20 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
   // NOTE: PageDialectLearnBase calls `fetchData`
   async fetchData() {
-    // Portal
-    await ProviderHelpers.fetchIfMissing(
-      this.props.routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
+    const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
+    const portalPath = `${this.props.routeParams.dialect_path}/Portal`
 
-    // Document
-    await ProviderHelpers.fetchIfMissing(
-      this.props.routeParams.dialect_path + '/Dictionary',
-      this.props.fetchDocument,
-      this.props.computeDocument
-    )
+    const computeDocumentRequest = ProviderHelpers.getEntry(this.props.computeDocument, documentPath)
+    if (selectn('action', computeDocumentRequest) !== 'FV_DOCUMENT_FETCH_START') {
+      // Document
+      await ProviderHelpers.fetchIfMissing(documentPath, this.props.fetchDocument, this.props.computeDocument)
+    }
+
+    const computePortalRequest = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
+    if (selectn('action', computePortalRequest) !== 'FV_PORTAL_FETCH_START') {
+      // Portal
+      await ProviderHelpers.fetchIfMissing(portalPath, this.props.fetchPortal, this.props.computePortal)
+    }
   }
 
   // NOTE: PageDialectLearnBase calls `_getPageKey`
