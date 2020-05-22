@@ -9,7 +9,10 @@ This environment is setup for localhost work. It includes:
 
 ## Prerequisites
 
-1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
+1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads).
+
+
+If you are planning on building the back-end from source, you will also need the following dependencies:
 
    - Java 8 JDK (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
      - Don't forget to set JAVA_HOME to the path to the JDK install

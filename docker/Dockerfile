@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends nano
 
 # No need to start Nuxeo here - will happen automatically.
 
+##### test me?
+##### Add prebuilt latest version for download
+#ADD https://dist.firstvoices.io/FirstVoices-marketplace-package-latest.zip /opt/nuxeo/server/nxserver/tmp
+
 #USER 1000
 COPY initialsetup.sh /opt/nuxeo/server/tmp/
 RUN ["chmod", "+x", "/opt/nuxeo/server/tmp/initialsetup.sh"]

@@ -78,36 +78,37 @@ if [[ ! -d "$DIRECTORY/nuxeo_dev_docker" ]]; then
 fi
 echo
 
-# Build main project.
-echo 'Building fv-web-ui (this make take a few minutes)'
-cd ..
-if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
-    echo "skipping tests"
-    mvn clean install -DskipTests -Pbackend -q
-else
-    mvn clean install -Pbackend
-fi
-if [[ "$?" -ne 0 ]]; then
-    echo
-    echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
-    echo
-fi
-echo
+# Don't really need this if we pull a latest dist right?!!!!?!?!?!
+# # Build main project.
+# echo 'Building fv-web-ui (this make take a few minutes)'
+# cd ..
+# if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
+#     echo "skipping tests"
+#     mvn clean install -DskipTests -Pbackend -q
+# else
+#     mvn clean install -Pbackend
+# fi
+# if [[ "$?" -ne 0 ]]; then
+#     echo
+#     echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
+#     echo
+# fi
+# echo
 
-# Copy build zipfile to nuxeo_dev_docker folder
-cd ${DIRECTORY}
-echo 'Copying built zipfile to nuxeo_dev_docker'
-cp ../FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip ./nuxeo_dev_docker/
-if [[ "$?" -ne 0 ]]; then
-    echo
-    echo -e "${RED}Zipfile copy failed \n${ENDCOLOR}"; exit 1
-    echo
-fi
-echo
+# # Copy build zipfile to nuxeo_dev_docker folder
+# cd ${DIRECTORY}
+# echo 'Copying built zipfile to nuxeo_dev_docker'
+# cp ../FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip ./nuxeo_dev_docker/
+# if [[ "$?" -ne 0 ]]; then
+#     echo
+#     echo -e "${RED}Zipfile copy failed \n${ENDCOLOR}"; exit 1
+#     echo
+# fi
+# echo
 
 echo
 echo -e "--------------------------------------------------------------------------------------"
 echo -e "${GREEN}Setup completed successfully. Docker is setup and ready to run."
-echo -e "Please refer to the README on how to use the docker run command to startup the backend.${ENDCOLOR}"
+echo -e "Please refer to the README on how to use a docker command to startup the backend.${ENDCOLOR}"
 echo -e "--------------------------------------------------------------------------------------"
 exit 0

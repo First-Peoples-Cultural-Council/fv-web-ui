@@ -1,16 +1,17 @@
-FROM node:10.19.0 AS build
+# FROM node:10.19.0 AS build
 
-WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-ENV GIT_DISCOVERY_ACROSS_FILESYSTEM=1
-ENV DEBIAN_FRONTEND=noninteractive
-COPY frontend /app
-COPY .git /.git
-RUN apt-get update && apt-get install -y libgl1-mesa-dev
-RUN npm ci
-RUN npm run production
+# WORKDIR /app
+# ENV PATH /app/node_modules/.bin:$PATH
+# ENV GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+# COPY frontend /app
+# COPY .git /.git
+# RUN apt-get update && apt-get install -y libgl1-mesa-dev
+# RUN npm ci
+# RUN npm run production
 
 FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
@@ -43,7 +44,12 @@ a2enmod rewrite && \
 a2enmod proxy_http && \
 a2enmod ssl
 
-COPY --from=build /app/public /opt/fv/www/
+# COPY --from=build /app/public /opt/fv/www/
+
+# Test me -- if this works... all above is not needed!!!
+ADD https://dist.firstvoices.io/public.tar.gz /opt/fv/www
+RUN tar -xzf public.tar.gz && rm public.tar.gz
+
 COPY docker/apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait

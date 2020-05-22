@@ -1,0 +1,52 @@
+version: '3'
+services:
+  nuxeo-backend:
+      environment:
+        - NUXEO_DB_TYPE=postgresql
+        - NUXEO_DB_HOST=db
+        - NUXEO_DB_NAME=nuxeo
+        - NUXEO_DB_USER=nuxeo_admin
+        - NUXEO_DB_PASSWORD=nuxeo
+        - NUXEO_ES_CLUSTER_NAME=firstvoices
+        - NUXEO_ES_INDEX_NAME=nuxeo-fv
+        - NUXEO_ES_REPLICAS=0
+        - NUXEO_ES_HOSTS=elasticsearch:443,elasticsearch:9200
+        - NUXEO_TEMPLATES=postgresql
+      depends_on:
+      - db
+      - elasticsearch
+  db:
+      image: postgres
+      container_name: nuxeo-db
+      restart: always
+      environment:
+          - POSTGRES_USER=nuxeo_admin
+          - POSTGRES_PASSWORD=nuxeo
+          - POSTGRES_DB=nuxeo
+      volumes:
+          - '${PWD}/postgresql.conf:/etc/postgresql.conf'
+      ports:
+          - '5432:5432'
+      command: postgres -c config_file=/etc/postgresql.conf
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.5.4'
+    container_name: nuxeo-elasticsearch
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+      - '443:443'
+    environment:
+      - discovery.type=single-node
+      - cluster.name=firstvoices
+  frontend:
+    image: me/fv-web-ui
+    container_name: fv-web-ui
+    ports:
+      - '3001:80'
+    environment:
+      WAIT_HOSTS: nuxeo-backend:8080, elasticsearch:9200
+      WAIT_SLEEP_INTERVAL: 15
+      WAIT_AFTER_HOSTS: 15
+      WAIT_HOSTS_TIMEOUT: 120
+    depends_on:
+      - nuxeo-backend
