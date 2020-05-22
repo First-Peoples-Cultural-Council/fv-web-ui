@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List } from 'immutable'
+import Immutable, { is, List } from 'immutable'
 
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -134,7 +134,7 @@ export class AppFrontController extends Component {
     // Re-route if needed:
     const prevCl = prevProps.computeLogin
     const curCl = this.props.computeLogin
-    const loggedIn = prevCl.isConnected !== curCl.isConnected && curCl.isConnected === true
+    const newlyLoggedIn = curCl.isConnected === true && prevCl.isConnected !== true
 
     const { sortOrder: newSortOrder, sortBy: newSortBy } = this.props.search
     const { sortOrder: prevSortOrder, sortBy: prevSortBy } = prevProps.search
@@ -142,7 +142,7 @@ export class AppFrontController extends Component {
     const sortOrderChanged = newSortOrder !== prevSortOrder
     const sortByChanged = newSortBy !== prevSortBy
 
-    if (_routeHasChanged || loggedIn || sortOrderChanged || sortByChanged) {
+    if (_routeHasChanged || newlyLoggedIn || sortOrderChanged || sortByChanged) {
       this._route({ props: this.props })
       window.scrollTo(0, 0)
     }
@@ -429,20 +429,13 @@ export class AppFrontController extends Component {
         }
       }
 
-      // const matchReturn = {
-      //   matchedPage,
-      //   matchedRouteParams: _routeParams,
-      // }
-      // Load help
-      //props.loadGuide(props.windowPath, matchReturn);
-      // Load Navigation
-      //props.loadNavigation();
-
-      this.props.setRouteParams({
-        matchedPage,
-        matchedRouteParams: _routeParams,
-        // search: getSearchObject(),
-      })
+      // Reduces duplicate updates
+      if (is(this.props.matchedPage, matchedPage) === false) {
+        this.props.setRouteParams({
+          matchedPage,
+          matchedRouteParams: _routeParams,
+        })
+      }
       return
     }
 
@@ -456,7 +449,6 @@ export class AppFrontController extends Component {
     this.props.setRouteParams({
       matchedPage: notFoundPage,
       matchedRouteParams: _routeParams,
-      // search: getSearchObject(),
     })
   }
 
