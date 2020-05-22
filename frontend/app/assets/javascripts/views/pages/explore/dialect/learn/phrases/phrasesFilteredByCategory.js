@@ -410,7 +410,7 @@ export class PhrasesFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeSearchDialect, computeDocument, navigationRouteSearch, routeParams } = this.props
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
     const { phraseBook, area } = routeParams
 
     let currentAppliedFilter = ''
@@ -437,7 +437,7 @@ export class PhrasesFilteredByCategory extends Component {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const letter = routeParams.letter
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
     } else {
@@ -742,14 +742,13 @@ PhrasesFilteredByCategory.defaultProps = {
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, windowPath } = state
 
   const { computeDialect2 } = fvDialect
   const { computePhrases } = fvPhrase
   const { computePortal } = fvPortal
   const { computeDocument } = document
   const { computeLogin } = nuxeo
-  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
 
@@ -759,7 +758,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePhrases,
     computePortal,
-    computeSearchDialect,
     listView,
     navigationRouteSearch: route.search,
     routeParams: route.routeParams,
