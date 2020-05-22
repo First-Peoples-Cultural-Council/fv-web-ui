@@ -49,27 +49,35 @@ class AppWrapper extends Component {
     super(props, context)
 
     this.state = {
-      dialect: null,
       covidAlert: true,
+      muiTheme: createMuiTheme(FirstVoicesTheme),
+      siteTheme: 'default',
+    }
+  }
+  componentDidUpdate(prevProps) {
+    const theme = selectn('siteTheme', this.props.properties)
+    const prevTheme = selectn('siteTheme', prevProps.properties)
+    if (theme !== prevTheme && theme !== this.state.siteTheme) {
+      let newTheme
+      switch (theme) {
+        case 'kids':
+          newTheme = createMuiTheme(FirstVoicesKidsTheme)
+          break
+
+        case 'workspace':
+          newTheme = createMuiTheme(FirstVoicesWorkspaceTheme)
+          break
+        default:
+          newTheme = createMuiTheme(FirstVoicesTheme)
+      }
+      this.setState({
+        muiTheme: newTheme,
+        siteTheme: theme,
+      })
     }
   }
 
   render() {
-    const { properties } = this.props
-    let theme = null
-
-    switch (selectn('siteTheme', properties)) {
-      case 'kids':
-        theme = createMuiTheme(FirstVoicesKidsTheme)
-        break
-
-      case 'workspace':
-        theme = createMuiTheme(FirstVoicesWorkspaceTheme)
-        break
-      default:
-        theme = createMuiTheme(FirstVoicesTheme)
-    }
-
     const covidAlert =
       new Date('April 30, 2020 12:00:00 PDT') > Date.now() && this.state.covidAlert ? (
         <>
@@ -91,7 +99,7 @@ class AppWrapper extends Component {
       )
 
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
           {covidAlert}
           <AppFrontController warnings={{}} />
