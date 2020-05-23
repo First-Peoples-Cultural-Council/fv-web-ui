@@ -62,23 +62,26 @@ public class UpdateCategory {
         if (key.equals("ecm:parentRef")) {
           session.saveDocument(doc);
 
-          DocumentModel targetDocument;
-
           if (value.contains("/Categories")) {
-            targetDocument = session.getDocument(new PathRef(value));
-            value = targetDocument.getId();
-          } else {
-            targetDocument = session.getDocument(new IdRef(value));
+            value = session.getDocument(new PathRef(value)).getId();
           }
 
-          // Throw error if the doc being moved is a parent doc
-          if (session.hasChildren(doc.getRef())) {
-            throw new InvalidCategoryException(
-                "A parent category cannot be a child of another parent category.");
+          DocumentModel parent = session.getDocument(doc.getParentRef());
+
+          if (!value.equals(parent.getId())) {
+            // Throw error if the doc being moved is a parent doc
+            Boolean hasChildren = session.getChildren(doc.getRef()).stream()
+                .anyMatch(child -> !child.isTrashed());
+
+            if (hasChildren) {
+              throw new InvalidCategoryException(
+                  "A parent category cannot be a child of another parent category.");
+            }
+
+            doc = session
+                .move(doc.getRef(), new IdRef(value), doc.getPropertyValue("dc:title").toString());
           }
 
-          doc = session
-              .move(doc.getRef(), new IdRef(value), doc.getPropertyValue("dc:title").toString());
         } else {
           doc.setPropertyValue(key, value);
         }

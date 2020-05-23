@@ -32,7 +32,6 @@ import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.IdRef;
 
 public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
@@ -59,7 +58,6 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
   @Test
   public void updateCategoryWithParameters() throws OperationException {
-
     childCategory.setPropertyValue("dc:title", "Category Title");
     childCategory
         .setPropertyValue("dc:description", "A description of the category with a target.");
@@ -92,41 +90,22 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
   }
 
   @Test(expected = InvalidCategoryException.class)
-  public void cannotAssignParentToParentCategoryCategoriesPath() throws OperationException {
-    childCategory = session
-        .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
-    session.saveDocument(childCategory);
-
+  public void cannotAssignParentToParentCategoryCategory() throws OperationException {
+    DocumentModel newCategory = createDocument(session, session
+        .createDocumentModel("/FV/Family/Language/Dialect/Categories", "New Category",
+            "FVCategory"));
     Map<String, String> props = new HashMap<>();
     props.put("dc:title", "Parent Category Title");
     props.put("dc:description", "A description of the parent category.");
-    props.put("ecm:parentRef", categories.getPathAsString());
+    props.put("ecm:parentRef", newCategory.getPathAsString());
 
     Map<String, Object> params = new HashMap<>();
     params.put("properties", props);
     OperationContext ctx = new OperationContext(session);
 
-    ctx.setInput(parentCategory2);
+    ctx.setInput(parentCategory);
     automationService.run(ctx, UpdateCategory.ID, params);
   }
 
-  @Test(expected = InvalidCategoryException.class)
-  public void cannotAssignParentToParentCategoryCategoriesId() throws OperationException {
-    childCategory = session
-        .move(childCategory.getRef(), new IdRef(parentCategory2.getId()), "Category Title");
-    session.saveDocument(childCategory);
-
-    Map<String, String> props = new HashMap<>();
-    props.put("dc:title", "Parent Category Title");
-    props.put("dc:description", "A description of the parent category.");
-    props.put("ecm:parentRef", categories.getId());
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("properties", props);
-    OperationContext ctx = new OperationContext(session);
-
-    ctx.setInput(parentCategory2);
-    automationService.run(ctx, UpdateCategory.ID, params);
-  }
 
 }
