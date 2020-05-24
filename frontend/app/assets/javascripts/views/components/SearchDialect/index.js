@@ -50,7 +50,6 @@ export const SearchDialect = (props) => {
     const phraseBook = props.routeParams.phraseBook
 
     if (letter) {
-      // console.log('letter', letter)
       const letterData = {
         searchByAlphabet: letter,
         searchByMode: SEARCH_BY_ALPHABET,
@@ -64,7 +63,6 @@ export const SearchDialect = (props) => {
       return
     }
     if (category) {
-      // console.log('category')
       const categoryData = {
         searchByAlphabet: '',
         searchByMode: SEARCH_BY_CATEGORY,
@@ -79,7 +77,6 @@ export const SearchDialect = (props) => {
       return
     }
     if (phraseBook) {
-      // console.log('phraseBook')
       const phraseBookData = {
         searchByAlphabet: '',
         searchByMode: SEARCH_BY_PHRASE_BOOK,
@@ -95,7 +92,6 @@ export const SearchDialect = (props) => {
     }
 
     // If all the above fail...
-    // console.log('default')
     props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_DEFAULT,
