@@ -317,9 +317,9 @@ class WordsFilteredByCategory extends Component {
 
             <CategoriesDataLayer>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={new Set([routeParams.category])}
                       setDialectFilterCallback={this.setDialectFilterCallback}
@@ -341,7 +341,8 @@ class WordsFilteredByCategory extends Component {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -686,8 +687,6 @@ WordsFilteredByCategory.propTypes = {
   splitWindowPath: array.isRequired,
   windowPath: string.isRequired,
   // REDUX: actions/dispatch/func
-  // fetchCategories: func.isRequired,
-  fetchCharacters: func.isRequired,
   fetchDocument: func.isRequired,
   fetchPortal: func.isRequired,
   fetchWords: func.isRequired,
