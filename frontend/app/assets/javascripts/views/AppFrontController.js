@@ -37,33 +37,7 @@ import '!style-loader!css-loader!./AppFrontController.css'
 import FVLabel from './components/FVLabel/index'
 import HelperModeToggle from 'views/components/HelperModeToggle/index'
 
-const { any, array, func, object, string } = PropTypes
-
 export class AppFrontController extends Component {
-  static propTypes = {
-    warnings: object.isRequired,
-    // REDUX: reducers/state
-    computeLogin: object.isRequired,
-    matchedPage: any,
-    properties: object.isRequired,
-    routeParams: object.isRequired,
-    search: object.isRequired,
-    splitWindowPath: array.isRequired,
-    windowPath: string.isRequired,
-    // REDUX: actions/dispatch/func
-    changeSiteTheme: func.isRequired,
-    getCurrentUser: func.isRequired,
-    nuxeoConnect: func.isRequired,
-    pushWindowPath: func.isRequired,
-    replaceWindowPath: func.isRequired,
-    setRouteParams: func.isRequired,
-    updateWindowPath: func.isRequired,
-  }
-
-  static defaultProps = {
-    matchedPage: undefined,
-  }
-
   PAGE_NOT_FOUND_TITLE =
     '404 - ' +
     this.props.intl.translate({
@@ -149,13 +123,102 @@ export class AppFrontController extends Component {
     if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
       this.props.setIntlWorkspace(this.props.routeParams.dialect_path)
     }
+
+    // Note this code used to be in the render function
+    // An issue with having it in render is that the children components would be
+    // deleted & remounted. When that happens the child component would fire
+    // componentDidMount multiple times.
+    //
+    // Most components make network requests on componentDidMount so we end up
+    // with duplicate & unneccessary network requests being fired
+    if (is(this.props.matchedPage, prevProps.matchedPage) === false) {
+      const { matchedPage, routeParams, localeLoading } = this.props
+      // View during user checking, pre routing
+      let isLoading = false
+      if (matchedPage === undefined || localeLoading) {
+        isLoading = true
+      }
+
+      const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
+      const hideNavigation = matchedPage && matchedPage.has('navigation') && matchedPage.get('navigation') === false
+
+      let page
+
+      let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
+      const siteTheme = routeParams.hasOwnProperty('siteTheme') ? routeParams.siteTheme : 'default'
+      // prettier-ignore
+      const isPrintView = matchedPage
+        ? matchedPage
+          .get('page')
+          .get('props')
+          .get('print') === true
+        : false
+
+      let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
+      const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
+
+      // For print view return page only
+      let print = null
+      if (isPrintView) {
+        print = <div style={{ margin: '25px' }}>{clonedElement}</div>
+      }
+
+      // Remove breadcrumbs for Kids portal
+      // TODO: Make more generic if additional siteThemes are added in the future.
+      if (siteTheme === 'kids') {
+        page = clonedElement
+        navigation = <KidsNavigation frontpage={isFrontPage} routeParams={routeParams} />
+      } else {
+        // Without breadcrumbs
+        if (matchedPage.get('breadcrumbs') === false) {
+          page = clonedElement
+        } else {
+          // With breadcrumbs
+          page = this._renderWithBreadcrumb(clonedElement, matchedPage, this.props, siteTheme)
+        }
+      }
+
+      // Hide navigation
+      if (hideNavigation) {
+        navigation = footer = ''
+      }
+
+      let warning = null
+      if (matchedPage && matchedPage.hasOwnProperty('warnings')) {
+        warning = matchedPage.get('warnings').map((warningItem) => {
+          if (this.props.warnings.hasOwnProperty(warningItem) && !this.state.warningsDismissed) {
+            return (
+              <div
+                style={{ position: 'fixed', bottom: 0, zIndex: 99999 }}
+                className={classNames('alert', 'alert-warning')}
+              >
+                {selectn(warningItem, this.props.warnings)}
+                <FVButton onClick={() => this.setState({ warningsDismissed: true })}>
+                  <FVLabel transKey="dismiss" defaultStr="Dismiss" transform="words" />
+                </FVButton>
+              </div>
+            )
+          }
+        })
+      }
+
+      this.setState({
+        footer,
+        isLoading,
+        navigation,
+        page,
+        print,
+        warning,
+      })
+    }
   }
 
   render() {
-    const { matchedPage, routeParams, localeLoading } = this.props
-    // View during user checking, pre routing
-    if (matchedPage === undefined || localeLoading) {
-      return (
+    const { footer, isLoading, navigation, page, print, warning } = this.state
+
+    let toRender = null
+    if (isLoading) {
+      toRender = (
         <div id="app-loader" className="app-loader">
           <div
             style={{
@@ -177,82 +240,31 @@ export class AppFrontController extends Component {
           <p>Loading / Chargement / Cargando...</p>
         </div>
       )
-    }
-
-    const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
-    const hideNavigation = matchedPage && matchedPage.has('navigation') && matchedPage.get('navigation') === false
-
-    let page
-
-    let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
-    const siteTheme = routeParams.hasOwnProperty('siteTheme') ? routeParams.siteTheme : 'default'
-    // prettier-ignore
-    const print = matchedPage
-      ? matchedPage
-        .get('page')
-        .get('props')
-        .get('print') === true
-      : false
-
-    let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
-
-    const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
-
-    // For print view return page only
-    if (print) {
-      return <div style={{ margin: '25px' }}>{clonedElement}</div>
-    }
-
-    // Remove breadcrumbs for Kids portal
-    // TODO: Make more generic if additional siteThemes are added in the future.
-    if (siteTheme === 'kids') {
-      page = clonedElement
-      navigation = <KidsNavigation frontpage={isFrontPage} routeParams={routeParams} />
     } else {
-      // Without breadcrumbs
-      if (matchedPage.get('breadcrumbs') === false) {
-        page = clonedElement
+      if (print) {
+        toRender = print
       } else {
-        // With breadcrumbs
-        page = this._renderWithBreadcrumb(clonedElement, matchedPage, this.props, siteTheme)
+        toRender = (
+          <div>
+            {warning}
+            <div className="AppFrontController__inner">
+              <div id="pageNavigation" className="AppFrontController__navigation row">
+                {navigation}
+              </div>
+              <div id="pageContainer" data-testid="pageContainer" className="AppFrontController__content">
+                {page}
+              </div>
+              <div id="pageFooter" className="AppFrontController__footer row">
+                {footer}
+              </div>
+            </div>
+            <HelperModeToggle />
+          </div>
+        )
       }
     }
 
-    // Hide navigation
-    if (hideNavigation) {
-      navigation = footer = ''
-    }
-    return (
-      <div>
-        {(matchedPage && matchedPage.hasOwnProperty('warnings') ? matchedPage.get('warnings') : []).map((warning) => {
-          if (this.props.warnings.hasOwnProperty(warning) && !this.state.warningsDismissed) {
-            return (
-              <div
-                style={{ position: 'fixed', bottom: 0, zIndex: 99999 }}
-                className={classNames('alert', 'alert-warning')}
-              >
-                {selectn(warning, this.props.warnings)}
-                <FVButton onClick={() => this.setState({ warningsDismissed: true })}>
-                  <FVLabel transKey="dismiss" defaultStr="Dismiss" transform="words" />
-                </FVButton>
-              </div>
-            )
-          }
-        })}
-        <div className="AppFrontController__inner">
-          <div id="pageNavigation" className="AppFrontController__navigation row">
-            {navigation}
-          </div>
-          <div id="pageContainer" data-testid="pageContainer" className="AppFrontController__content">
-            {page}
-          </div>
-          <div id="pageFooter" className="AppFrontController__footer row">
-            {footer}
-          </div>
-        </div>
-        <HelperModeToggle />
-      </div>
-    )
+    return toRender
   }
 
   _getInitialState() {
@@ -269,6 +281,7 @@ export class AppFrontController extends Component {
     }
 
     return {
+      isLoading: true,
       routes,
       warningsDismissed: false,
     }
@@ -429,13 +442,11 @@ export class AppFrontController extends Component {
         }
       }
 
-      // Reduces duplicate updates
-      if (is(this.props.matchedPage, matchedPage) === false) {
-        this.props.setRouteParams({
-          matchedPage,
-          matchedRouteParams: _routeParams,
-        })
-      }
+      this.props.setRouteParams({
+        matchedPage,
+        matchedRouteParams: _routeParams,
+      })
+
       return
     }
 
@@ -491,6 +502,32 @@ export class AppFrontController extends Component {
 
     document.title = title
   }
+}
+
+// PROPTYPES
+const { any, array, func, object, string } = PropTypes
+AppFrontController.propTypes = {
+  warnings: object.isRequired,
+  // REDUX: reducers/state
+  computeLogin: object.isRequired,
+  matchedPage: any,
+  properties: object.isRequired,
+  routeParams: object.isRequired,
+  search: object.isRequired,
+  splitWindowPath: array.isRequired,
+  windowPath: string.isRequired,
+  localeLoading: any,
+  // REDUX: actions/dispatch/func
+  changeSiteTheme: func.isRequired,
+  getCurrentUser: func.isRequired,
+  nuxeoConnect: func.isRequired,
+  pushWindowPath: func.isRequired,
+  replaceWindowPath: func.isRequired,
+  setRouteParams: func.isRequired,
+  updateWindowPath: func.isRequired,
+}
+AppFrontController.defaultProps = {
+  matchedPage: undefined,
 }
 // REDUX: reducers/state
 const mapStateToProps = (state) => {
