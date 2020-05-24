@@ -15,18 +15,25 @@ import NavigationHelpers from 'common/NavigationHelpers'
 class AlphabetCharactersData extends Component {
   constructor(props) {
     super(props)
-    this.path = `${props.routeParams.dialect_path}/Alphabet`
+    this.alphabetPath = ''
+    this.portalPath = ''
   }
 
   componentDidMount() {
     window.addEventListener('popstate', this.clickLetterIfInRouteParams)
 
-    ProviderHelpers.fetchIfMissing(
-      this.path,
-      this.props.fetchCharacters,
-      this.props.computeCharacters,
-      '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
-    )
+    this.alphabetPath = `${this.props.routeParams.dialect_path}/Alphabet`
+    this.portalPath = `${this.props.routeParams.dialect_path}/Portal`
+
+    const { extractComputedCharacters } = this.returnCommonData()
+    if (selectn('action', extractComputedCharacters) !== 'FV_CHARACTERS_QUERY_START') {
+      ProviderHelpers.fetchIfMissing(
+        this.alphabetPath,
+        this.props.fetchCharacters,
+        this.props.computeCharacters,
+        '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
+      )
+    }
   }
 
   componentWillUnmount() {
@@ -34,15 +41,10 @@ class AlphabetCharactersData extends Component {
   }
 
   render() {
-    const { routeParams, computePortal } = this.props
-    const extractComputedCharacters = ProviderHelpers.getEntry(this.props.computeCharacters, this.path)
-    const characters = selectn('response.entries', extractComputedCharacters)
-    const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
-    const dialectClassName = getDialectClassname(extractComputePortal)
-
+    const { extractComputedCharacters, extractComputePortal } = this.returnCommonData()
     return this.props.children({
-      characters,
-      dialectClassName,
+      characters: selectn('response.entries', extractComputedCharacters),
+      dialectClassName: getDialectClassname(extractComputePortal),
       generateAlphabetCharacterHref: this.generateAlphabetCharacterHref,
       activeLetter: this.props.routeParams.letter,
       letterClicked: this.letterClicked,
@@ -54,6 +56,14 @@ class AlphabetCharactersData extends Component {
     const letter = selectn('letter', this.props.routeParams)
     if (letter) {
       this.letterClicked({ letter })
+    }
+  }
+
+  returnCommonData = () => {
+    const { computePortal, computeCharacters } = this.props
+    return {
+      extractComputedCharacters: ProviderHelpers.getEntry(computeCharacters, this.alphabetPath),
+      extractComputePortal: ProviderHelpers.getEntry(computePortal, this.portalPath),
     }
   }
 
@@ -72,7 +82,7 @@ class AlphabetCharactersData extends Component {
   }
 
   // Called from the presentation layer when a letter is clicked
-  letterClicked = async ({ href, letter, updateHistory = false }) => {
+  letterClicked = ({ href, letter, updateHistory = false }) => {
     this.props.letterClickedCallback({
       href,
       letter,
