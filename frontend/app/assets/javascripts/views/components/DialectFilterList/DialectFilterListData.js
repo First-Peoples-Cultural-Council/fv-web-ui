@@ -58,7 +58,6 @@ class DialectFilterListData extends Component {
       facets = transformData
     } else {
       // Get categories
-      // console.log('may fire request!')
       await ProviderHelpers.fetchIfMissing(path, this.props.fetchCategories, this.props.computeCategories)
       const extractComputedCategories = ProviderHelpers.getEntry(this.props.computeCategories, path)
       facets = selectn('response.entries', extractComputedCategories)
@@ -143,24 +142,6 @@ class DialectFilterListData extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.handleHistoryEvent)
-
-    // // NOTE: Believe this stuff is legacy from a previous version of the category sidebar
-    // // that could select multiple items. May be able to toss it but not 100% sure.
-    // const { lastCheckedUid, lastCheckedChildrenUids, lastCheckedParentFacetUid } = this.state
-    // // 'uncheck' previous
-    // if (lastCheckedUid) {
-    //   const unselected = {
-    //     checkedFacetUid: lastCheckedUid,
-    //     childrenIds: lastCheckedChildrenUids,
-    //     parentFacetUid: lastCheckedParentFacetUid,
-    //   }
-    //   this.props.dialectFilterListWillUnmount({
-    //     facetField: this.state.facetField,
-    //     unselected,
-    //     type: this.props.type,
-    //     resetUrlPagination: false,
-    //   })
-    // }
   }
 
   render() {
