@@ -186,13 +186,17 @@ describe('RecApprovalCreateDelete-Word.js > RecApprovalCreateDelete-Word', () =>
       cy.getByTestId('ViewWithActions__buttonDelete').click()
     })
     cy.getByText('Delete word success').should('exist')
+
+    // There are leftover modals with the same data test id and cy grabs the wrong one
+    // and we end up at the wrong location.
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
-    cy.getByText('Return To Previous Page')
-      .pipe(click)
-      .should(($el) => {
-        expect($el).to.not.be.visible
-      })
-    cy.wait(1500)
+    // cy.getByText('Return To Previous Page')
+    //   .pipe(click)
+    //   .should(($el) => {
+    //     expect($el).to.not.be.visible
+    //   })
+    // cy.wait(1500)
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/words')
     cy.getByText('No Results Found', { exact: false }).should('be.visible')
   })
 })
