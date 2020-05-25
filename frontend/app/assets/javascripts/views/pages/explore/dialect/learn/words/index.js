@@ -44,6 +44,7 @@ import AlphabetCharactersData from 'views/components/AlphabetCharacters/Alphabet
 
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -52,7 +53,6 @@ import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/Navigati
 
 import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY } from 'views/components/SearchDialect/constants'
 
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 /**
  * Learn words
  */
@@ -67,8 +67,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
   componentWillUnmount() {
     this.props.searchDialectUpdate(initialState)
   }
-
-  DIALECT_FILTER_TYPE = 'words'
 
   constructor(props, context) {
     super(props, context)
@@ -204,6 +202,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       )
     }
     const dialectClassName = getDialectClassname(computePortal)
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper')}>
@@ -269,15 +268,11 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                   categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                      setDialectFilterCallback={this.setDialectFilterCallback}
-                      transformData={categoriesData}
+                      setDialectFilterCallback={this.changeFilter}
+                      facets={categoriesData}
+                      facetType="category"
                       type="words"
-                      // --------
-                      // facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                      //   'fv-word:categories',
-                      //   this.props.routeParams.area
-                      // )}
-                      // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+                      workspaceKey="fv-word:categories"
                     >
                       {({ listItemData }) => {
                         return (
@@ -358,10 +353,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
   }
 
-  clearDialectFilter = () => {
-    this.setState({ filterInfo: this.initialFilterInfo() })
-  }
-
   // NOTE: PageDialectLearnBase calls `fetchData`
   async fetchData() {
     const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
@@ -425,7 +416,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     this.setState(
       {
         filterInfo: newFilter,
-        // searchNxqlSort: 'fv:custom_order', // TODO: IS THIS BREAKING SOMETHING?
       },
       () => {
         // When facets change, pagination should be reset.
@@ -446,16 +436,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         }
       }
     )
-  }
-
-  setDialectFilterCallback = ({
-    // facetField,
-    href,
-    // selected,
-    // unselected,
-    updateUrl,
-  }) => {
-    this.changeFilter({ href, updateHistory: updateUrl })
   }
 }
 
