@@ -318,9 +318,9 @@ class WordsFilteredByCategory extends Component {
 
             <CategoriesDataLayer>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={new Set([routeParams.category])}
                       setDialectFilterCallback={this.changeFilter}
@@ -343,7 +343,8 @@ class WordsFilteredByCategory extends Component {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -394,7 +395,7 @@ class WordsFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeDocument, computeSearchDialect, navigationRouteSearch, routeParams } = this.props
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
     const { category, area } = routeParams
     let currentAppliedFilter = ''
     if (category) {
@@ -420,7 +421,7 @@ class WordsFilteredByCategory extends Component {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children`
 
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const letter = routeParams.letter
 
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`

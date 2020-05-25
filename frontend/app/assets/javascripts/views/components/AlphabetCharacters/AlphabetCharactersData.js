@@ -10,41 +10,30 @@ import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
 import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import { SEARCH_PART_OF_SPEECH_ANY, SEARCH_BY_ALPHABET } from 'views/components/SearchDialect/constants'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 class AlphabetCharactersData extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {}
+    this.alphabetPath = ''
+    this.portalPath = ''
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     window.addEventListener('popstate', this.clickLetterIfInRouteParams)
 
-    const { routeParams, computePortal } = this.props
-    const path = `${routeParams.dialect_path}/Alphabet`
-    await ProviderHelpers.fetchIfMissing(
-      path,
-      this.props.fetchCharacters,
-      this.props.computeCharacters,
-      '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
-    )
-    const extractComputedCharacters = ProviderHelpers.getEntry(this.props.computeCharacters, path)
-    const characters = selectn('response.entries', extractComputedCharacters)
-    const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
-    const dialectClassName = getDialectClassname(extractComputePortal)
+    this.alphabetPath = `${this.props.routeParams.dialect_path}/Alphabet`
+    this.portalPath = `${this.props.routeParams.dialect_path}/Portal`
 
-    this.setState(
-      {
-        characters,
-        dialectClassName,
-      },
-      () => {
-        this.clickLetterIfInRouteParams()
-      }
-    )
+    const { extractComputedCharacters } = this.returnCommonData()
+    if (selectn('action', extractComputedCharacters) !== 'FV_CHARACTERS_QUERY_START') {
+      ProviderHelpers.fetchIfMissing(
+        this.alphabetPath,
+        this.props.fetchCharacters,
+        this.props.computeCharacters,
+        '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
+      )
+    }
   }
 
   componentWillUnmount() {
@@ -52,10 +41,10 @@ class AlphabetCharactersData extends Component {
   }
 
   render() {
-    const { characters, dialectClassName } = this.state
+    const { extractComputedCharacters, extractComputePortal } = this.returnCommonData()
     return this.props.children({
-      characters,
-      dialectClassName,
+      characters: selectn('response.entries', extractComputedCharacters),
+      dialectClassName: getDialectClassname(extractComputePortal),
       generateAlphabetCharacterHref: this.generateAlphabetCharacterHref,
       activeLetter: this.props.routeParams.letter,
       letterClicked: this.letterClicked,
@@ -67,6 +56,14 @@ class AlphabetCharactersData extends Component {
     const letter = selectn('letter', this.props.routeParams)
     if (letter) {
       this.letterClicked({ letter })
+    }
+  }
+
+  returnCommonData = () => {
+    const { computePortal, computeCharacters } = this.props
+    return {
+      extractComputedCharacters: ProviderHelpers.getEntry(computeCharacters, this.alphabetPath),
+      extractComputePortal: ProviderHelpers.getEntry(computePortal, this.portalPath),
     }
   }
 
@@ -85,19 +82,7 @@ class AlphabetCharactersData extends Component {
   }
 
   // Called from the presentation layer when a letter is clicked
-  letterClicked = async ({ href, letter, updateHistory = false }) => {
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: letter,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByDefinitions: false,
-        searchByTitle: true,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-
+  letterClicked = ({ href, letter, updateHistory = false }) => {
     this.props.letterClickedCallback({
       href,
       letter,

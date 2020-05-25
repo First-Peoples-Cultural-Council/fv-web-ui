@@ -34,12 +34,6 @@ import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 /*
 SearchDialect
 ------------------------------------------------------------------------------------------
-NOTE: Some data is split between internal (useState) and external (redux)
-External data are things that external components can trigger that need to be reflected in this component,
-ie: Alphabet or Category buttons clicked in a sidebar
-
-Internal data is local state that is mostly contained,
-but some internal data is sent out to ancestors via props: props.handleSearch & props.resetSearch
 */
 export const SearchDialect = (props) => {
   const csd = props.computeSearchDialect
@@ -49,21 +43,71 @@ export const SearchDialect = (props) => {
   const [searchTerm, setSearchTerm] = useState(csd.searchTerm || undefined)
   const [searchType, setSearchType] = useState(csd.searchType || SEARCH_TYPE_DEFAULT)
 
-  // Sets `searchMessage` when updates are made to:
-  // `csd.searchByAlphabet`, `csd.searchByMode`, or `csd.searchingDialectFilter`
-  // ------------------------------------------------------------
+  // Updates redux store when changes are made to routeParams[letter||category||phraseBook]
   useEffect(() => {
-    const _searchMessage = getSearchMessage({
-      searchByAlphabet: csd.searchByAlphabet || '',
-      searchByMode: csd.searchByMode || SEARCH_BY_DEFAULT,
-      searchBySettings: csd.searchBySettings || searchBySettings,
-      searchTerm: csd.searchTerm || searchTerm,
-      searchType: csd.searchType || searchType,
-    })
+    const letter = props.routeParams.letter
+    const category = props.routeParams.category
+    const phraseBook = props.routeParams.phraseBook
 
-    // Save to redux
-    props.searchDialectUpdate({ searchMessage: _searchMessage })
-  }, [csd.searchByAlphabet, csd.searchByMode, csd.searchingDialectFilter])
+    if (letter) {
+      const letterData = {
+        searchByAlphabet: letter,
+        searchByMode: SEARCH_BY_ALPHABET,
+        searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
+        searchTerm: '',
+        searchType: csd.searchType || searchType,
+      }
+      letterData.searchMessage = getSearchMessage(letterData)
+      letterData.searchingDialectFilter = ''
+      props.searchDialectUpdate(letterData)
+      return
+    }
+    if (category) {
+      const categoryData = {
+        searchByAlphabet: '',
+        searchByMode: SEARCH_BY_CATEGORY,
+        searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
+        searchTerm: '',
+        searchType: csd.searchType || searchType,
+      }
+      categoryData.searchMessage = getSearchMessage(categoryData)
+      categoryData.searchingDialectFilter = category
+
+      props.searchDialectUpdate(categoryData)
+      return
+    }
+    if (phraseBook) {
+      const phraseBookData = {
+        searchByAlphabet: '',
+        searchByMode: SEARCH_BY_PHRASE_BOOK,
+        searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
+        searchTerm: '',
+        searchType: csd.searchType || searchType,
+      }
+      phraseBookData.searchMessage = getSearchMessage(phraseBookData)
+      phraseBookData.searchingDialectFilter = phraseBook
+
+      props.searchDialectUpdate(phraseBookData)
+      return
+    }
+
+    // If all the above fail...
+    props.searchDialectUpdate({
+      searchByAlphabet: '',
+      searchByMode: SEARCH_BY_DEFAULT,
+      searchBySettings: csd.searchBySettings || searchBySettings,
+      searchingDialectFilter: undefined,
+      searchMessage: getSearchMessage({
+        searchByAlphabet: csd.searchByAlphabet || '',
+        searchByMode: csd.searchByMode || SEARCH_BY_DEFAULT,
+        searchBySettings: csd.searchBySettings || searchBySettings,
+        searchTerm: csd.searchTerm || searchTerm,
+        searchType: csd.searchType || searchType,
+      }),
+      searchNxqlQuery: undefined,
+      searchNxqlSort: {},
+    })
+  }, [props.routeParams.letter, props.routeParams.category, props.routeParams.phraseBook])
 
   // Sets `searchBySettings` when `csd.searchBySettings` changes
   // ------------------------------------------------------------
@@ -564,10 +608,8 @@ export const SearchDialect = (props) => {
     }
   }
 
-  // Resets search
-  // ------------------------------------------------------------
-  const resetSearch = async () => {
-    // Generate default UI settings from props.searchUi
+  // Generate default UI settings from props.searchUi
+  const generateDefaultUiSettingsFromPropsSearchUI = () => {
     const resetSearchBySettings = {}
     props.searchUi.forEach((element) => {
       if (element.idName === 'searchPartOfSpeech') {
@@ -578,14 +620,22 @@ export const SearchDialect = (props) => {
         }
       }
     })
+    return resetSearchBySettings
+  }
 
+  // Resets search
+  // ------------------------------------------------------------
+  const resetSearch = async () => {
     // Save to redux
     await props.searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_DEFAULT,
-      searchBySettings: resetSearchBySettings,
-      searchingDialectFilter: '',
+      searchBySettings: undefined,
+      searchingDialectFilter: undefined,
       searchMessage: null,
+      searchNxqlQuery: undefined,
+      searchNxqlSort: {},
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
       searchTerm: undefined,
     })
 
@@ -680,15 +730,17 @@ SearchDialect.defaultProps = {
 // ------------------------------------------------------------
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { directory, searchDialect, locale } = state
+  const { directory, searchDialect, navigation, locale } = state
 
   const { computeDirectory } = directory
   const { computeSearchDialect } = searchDialect
   const { intlService } = locale
+  const { route } = navigation
 
   return {
     computeDirectory,
     computeSearchDialect,
+    routeParams: route.routeParams,
     intl: intlService,
   }
 }

@@ -86,9 +86,9 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
 
   // Repeat Tests on a dialect that uses its own categories (Test Language)
   it('Filter by category, then click to second page of results', () => {
-    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageEight/learn/words')
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(1750)
-    const category = 'TestDialectCategory'
+    const category = 'TestCategory'
     cy.DialectFilterList({
       category,
       confirmData: true,
@@ -99,11 +99,11 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
 
   it('Filter by a category, then click Create Word', () => {
     cy.login({
-      userName: 'TESTLANGUAGEEIGHT_ADMIN',
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageEight/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(1750)
-    const category = 'TestDialectCategory'
+    const category = 'TestCategory'
     cy.DialectFilterList({
       category,
       confirmData: false,
@@ -122,11 +122,11 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
 
   it('Stop filtering by category and then sort results', () => {
     cy.login({
-      userName: 'TESTLANGUAGEEIGHT_ADMIN',
+      userName: 'TESTLANGUAGESIX_ADMIN',
     })
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageEight/learn/words')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(1750)
-    const category = 'TestDialectCategory'
+    const category = 'TestCategory'
     cy.DialectFilterList({
       category,
       confirmData: false,
@@ -147,9 +147,9 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
     cy.login({
       userName: 'TESTLANGUAGEEIGHT_ADMIN',
     })
-    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageEight/learn/words')
+    cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
     cy.wait(1750)
-    const category = 'TestDialectCategory'
+    const category = 'TestCategory'
     cy.DialectFilterList({
       category,
       confirmData: false,

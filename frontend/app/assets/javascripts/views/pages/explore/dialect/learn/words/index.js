@@ -57,35 +57,11 @@ import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY } from 'views/components/SearchD
  * Learn words
  */
 class PageDialectLearnWords extends PageDialectLearnBase {
-  async componentDidMountViaPageDialectLearnBase() {
-    const { routeParams } = this.props
-
-    // Portal
-    await ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
-
-    // Document
-    await ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Dictionary',
-      this.props.fetchDocument,
-      this.props.computeDocument
-    )
-
-    const newState = {
-      dialectId: selectn(
-        'response.contextParameters.ancestry.dialect.uid',
-        ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
-      ),
-    }
+  componentDidMountViaPageDialectLearnBase() {
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
     if (this.props.routeParams.category === undefined) {
-      newState.filterInfo = this.initialFilterInfo()
+      this.setState({ filterInfo: this.initialFilterInfo() })
     }
-
-    this.setState(newState)
   }
 
   componentWillUnmount() {
@@ -157,8 +133,13 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { searchNxqlSort = {} } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
+
+    const dialectId = selectn(
+      'response.contextParameters.ancestry.dialect.uid',
+      ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
+    )
     const wordListView =
-      selectn('response.uid', computeDocument) && this.state.dialectId ? (
+      selectn('response.uid', computeDocument) && dialectId ? (
         <WordListView
           controlViaURL
           DEFAULT_PAGE={DEFAULT_PAGE}
@@ -170,7 +151,7 @@ class PageDialectLearnWords extends PageDialectLearnBase {
           flashcard={this.state.flashcardMode}
           flashcardTitle={pageTitle}
           parentID={selectn('response.uid', computeDocument)}
-          dialectID={this.state.dialectId}
+          dialectID={dialectId}
           routeParams={this.props.routeParams}
           // Search:
           handleSearch={this.handleSearch}
@@ -220,7 +201,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         </PromiseWrapper>
       )
     }
-
     const dialectClassName = getDialectClassname(computePortal)
 
     return (
@@ -283,9 +263,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             </AlphabetCharactersData>
             <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                       setDialectFilterCallback={this.changeFilter}
@@ -308,7 +288,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -326,7 +307,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
-
+    // console.log({
+    //   routeParamsLetter: this.props.routeParams.letter,
+    // })
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         searchType = 'startsWith'
@@ -368,6 +351,33 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         }
       })
     }
+  }
+
+  // NOTE: PageDialectLearnBase calls `fetchData`
+  async fetchData() {
+    const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
+    const portalPath = `${this.props.routeParams.dialect_path}/Portal`
+
+    const computeDocumentRequest = ProviderHelpers.getEntry(this.props.computeDocument, documentPath)
+    if (selectn('action', computeDocumentRequest) !== 'FV_DOCUMENT_FETCH_START') {
+      // Document
+      await ProviderHelpers.fetchIfMissing(documentPath, this.props.fetchDocument, this.props.computeDocument)
+    }
+
+    const computePortalRequest = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
+    if (selectn('action', computePortalRequest) !== 'FV_PORTAL_FETCH_START') {
+      // Portal
+      await ProviderHelpers.fetchIfMissing(portalPath, this.props.fetchPortal, this.props.computePortal)
+    }
+  }
+
+  // NOTE: PageDialectLearnBase calls `_getPageKey`
+  _getPageKey = () => {
+    return `${this.props.routeParams.area}_${this.props.routeParams.dialect_name}_learn_words`
+  }
+
+  handleSearch = () => {
+    this.changeFilter()
   }
 
   initialFilterInfo = () => {
@@ -426,11 +436,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         }
       }
     )
-  }
-
-  // NOTE: PageDialectLearnBase calls `_getPageKey`
-  _getPageKey = () => {
-    return this.props.routeParams.area + '_' + this.props.routeParams.dialect_name + '_learn_words'
   }
 }
 

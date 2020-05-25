@@ -10,14 +10,8 @@ import selectn from 'selectn'
 
 // REDUX: actions/dispatch/func
 import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import {
-  SEARCH_BY_CATEGORY,
-  SEARCH_BY_PHRASE_BOOK,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'views/components/SearchDialect/constants'
 
 class DialectFilterListData extends Component {
   historyData = {}
@@ -275,20 +269,6 @@ class DialectFilterListData extends Component {
   // Saves to redux so other components can respond (eg: "you are searching...")
   // also calls any passed in callback from the parent/layout component (typically used to update it's state)
   setDialectFilter = async ({ facetField, href, selected, updateUrl }) => {
-    const searchBy = this.props.type === 'phrases' ? SEARCH_BY_PHRASE_BOOK : SEARCH_BY_CATEGORY
-    await this.props.searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: searchBy,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-
     this.props.setDialectFilterCallback({
       facetField,
       selected,
@@ -363,7 +343,6 @@ DialectFilterListData.propTypes = {
   splitWindowPath: array.isRequired,
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
-  searchDialectUpdate: func.isRequired,
 }
 DialectFilterListData.defaultProps = {
   appliedFilterIds: new Set(),
@@ -385,7 +364,6 @@ const mapStateToProps = (state) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
-  searchDialectUpdate,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterListData)

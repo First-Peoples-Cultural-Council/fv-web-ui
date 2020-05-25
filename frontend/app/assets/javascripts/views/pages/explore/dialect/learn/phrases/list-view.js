@@ -423,8 +423,8 @@ export class PhrasesListView extends DataListView {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const { computeSearchDialect, routeParams } = this.props
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const { routeParams } = this.props
+    const letter = routeParams.letter
 
     if (letter) {
       nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
@@ -455,7 +455,7 @@ export class PhrasesListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, nuxeo, searchDialect, windowPath, locale } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
@@ -463,12 +463,10 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computePhrases } = fvPhrase
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
-  const { computeSearchDialect } = searchDialect
   return {
     computeDialect2,
     computeLogin,
     computePhrases,
-    computeSearchDialect,
     intl: intlService,
     navigationRouteSearch: route.search,
     properties,

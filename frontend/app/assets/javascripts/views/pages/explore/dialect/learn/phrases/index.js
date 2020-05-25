@@ -177,7 +177,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           dialectID={this.state.dialectId}
           routeParams={this.props.routeParams}
           // Search:
-          handleSearch={this.handleSearch}
+          handleSearch={this.changeFilter}
           resetSearch={this.resetSearch}
           hasSearch
           searchUi={[
@@ -206,17 +206,23 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     // Render kids or mobile view
     if (isKidsTheme) {
+      const kidsFilter = this.state.filterInfo.setIn(
+        ['currentAppliedFilter', 'kids'],
+        ' AND fv:available_in_childrens_archive=1'
+      )
+
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
             DEFAULT_PAGE_SIZE: 8,
             disablePageSize: true,
-            filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
+            filter: kidsFilter,
+            gridCols: 2,
             gridListView: true,
           })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="row" style={{ marginTop: '15px' }}>
+          <div className="row">
             <div className={classNames('col-xs-12', 'col-md-8', 'col-md-offset-2')}>{cloneWordListView}</div>
           </div>
         </PromiseWrapper>

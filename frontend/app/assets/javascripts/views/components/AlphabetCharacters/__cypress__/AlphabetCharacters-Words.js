@@ -7,9 +7,7 @@ describe('AlphabetCharacters-Words.js > AlphabetCharacters', () => {
     const unselectedColor = 'rgb(60, 52, 52)'
 
     // No message, button, or selected letters
-    cy.log('No message, button, or selected letters')
-    cy.queryByText(/showing words that start with the letter/i).should('not.exist')
-    cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
+    cy.queryByText(/Showing all words in the dictionary/i).should('exist')
     cy.getByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
@@ -44,8 +42,7 @@ describe('AlphabetCharacters-Words.js > AlphabetCharacters', () => {
 
     // Ensure all is back to normal...
     cy.log('Ensure all is back to normal...')
-    cy.queryByText(/showing words that start with the letter/i).should('not.exist')
-    cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
+    cy.queryByText(/Showing all words in the dictionary/i).should('exist')
     cy.getByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
