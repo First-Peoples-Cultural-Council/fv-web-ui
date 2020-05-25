@@ -227,17 +227,17 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         ['currentAppliedFilter', 'kids'],
         ' AND fv:available_in_childrens_archive=1'
       )
-
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <div className="row">
             <div className={classNames('col-xs-12', 'col-md-8', 'col-md-offset-2')}>
-              {React.cloneElement(phraseListView, {
-                gridListView: true,
-                gridCols: 2,
-                DEFAULT_PAGE_SIZE: pageSize,
-                filter: kidsFilter,
-              })}
+              {phraseListView &&
+                React.cloneElement(phraseListView, {
+                  gridListView: true,
+                  gridCols: 2,
+                  DEFAULT_PAGE_SIZE: pageSize,
+                  filter: kidsFilter,
+                })}
             </div>
           </div>
         </PromiseWrapper>
