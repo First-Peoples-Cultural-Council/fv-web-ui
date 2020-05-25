@@ -105,7 +105,7 @@ class WordsFilteredByCategory extends Component {
 
     // WORDS
     // ---------------------------------------------
-    this.fetchListViewData()
+    this.fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
   }
 
   componentWillUnmount() {
