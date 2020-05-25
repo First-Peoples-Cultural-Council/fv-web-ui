@@ -77,12 +77,18 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     Assert.assertEquals("COMPLETED", status);
     Assert.assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
 
+  }
+
+  @Test
+  public void cleanConfusablesChangesValues(){
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(dialect);
+
     DocumentModelList wordsAndPhrases = session.getChildren(new PathRef("/FV/Family/Language/Dialect/Dictionary"));
 
     for(DocumentModel x: wordsAndPhrases) {
-      if (x.getType().equals("FVWord") || x.getType().equals("FVPhrase")) {
-        Assert.assertEquals(true, x.getPropertyValue("update_confusables_required"));
-      }
+      //System.out.println("TITLE: " + x.getTitle()+ ", " + "VALUE:" + x.getPropertyValue("update_confusables_required"));
+      Assert.assertEquals(true, x.getPropertyValue("update_confusables_required"));
     }
 
   }
