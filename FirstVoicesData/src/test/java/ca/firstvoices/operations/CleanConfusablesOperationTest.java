@@ -26,6 +26,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
 import org.nuxeo.ecm.core.bulk.BulkService;
 import org.nuxeo.runtime.api.Framework;
@@ -73,8 +76,15 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
 
     Assert.assertEquals("COMPLETED", status);
     Assert.assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
-  }
 
-  //  TODO: TEST THE BULK ACTION HAS UPDATED WORDS AND PHRASES. (FW-1404)
+    DocumentModelList wordsAndPhrases = session.getChildren(new PathRef("/FV/Family/Language/Dialect/Dictionary"));
+
+    for(DocumentModel x: wordsAndPhrases) {
+      if (x.getType().equals("FVWord") || x.getType().equals("FVPhrase")) {
+        Assert.assertEquals(true, x.getPropertyValue("update_confusables_required"));
+      }
+    }
+
+  }
 
 }
