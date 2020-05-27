@@ -26,7 +26,6 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
 
@@ -50,7 +49,6 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -106,10 +104,6 @@ class WordsFilteredByCategory extends Component {
     // WORDS
     // ---------------------------------------------
     this.fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
-  }
-
-  componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {
@@ -661,7 +655,6 @@ WordsFilteredByCategory.propTypes = {
   fetchPortal: func.isRequired,
   fetchWords: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
@@ -705,7 +698,6 @@ const mapDispatchToProps = {
   fetchPortal,
   fetchWords,
   pushWindowPath,
-  searchDialectUpdate,
   setListViewMode,
   setRouteParams,
   updatePageProperties,

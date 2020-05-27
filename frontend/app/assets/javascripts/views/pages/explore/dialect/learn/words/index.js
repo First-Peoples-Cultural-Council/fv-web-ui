@@ -25,10 +25,8 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -62,10 +60,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     if (this.props.routeParams.category === undefined) {
       this.setState({ filterInfo: this.initialFilterInfo() })
     }
-  }
-
-  componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {
@@ -457,10 +451,6 @@ PageDialectLearnWords.propTypes = {
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
   replaceWindowPath: func.isRequired,
-  searchDialectUpdate: func,
-}
-PageDialectLearnWords.defaultProps = {
-  searchDialectUpdate: () => {},
 }
 
 // REDUX: reducers/state
@@ -495,7 +485,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  searchDialectUpdate,
   setListViewMode,
 }
 
