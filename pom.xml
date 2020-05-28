@@ -15,13 +15,14 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.4.4-SNAPSHOT</version>
+  <version>3.4.5-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoices-marketplace</module>
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
+    <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
     <module>FirstVoicesMaintenance</module>
@@ -50,6 +51,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesSecurity</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesHealthMonitor</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

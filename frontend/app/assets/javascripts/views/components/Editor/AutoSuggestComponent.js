@@ -280,7 +280,7 @@ export class AutoSuggestComponent extends Component {
             value={this.props.value}
           >
             {({ categoriesData }) => {
-              return (
+              return categoriesData ? (
                 <div className="row">
                   <div className="col-xs-12">
                     <Autosuggest
@@ -296,7 +296,7 @@ export class AutoSuggestComponent extends Component {
                     />
                   </div>
                 </div>
-              )
+              ) : null
             }}
           </CategoriesDataLayer>
         )

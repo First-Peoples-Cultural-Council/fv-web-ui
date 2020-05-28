@@ -26,7 +26,6 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { fetchDirectory } from 'providers/redux/reducers/directory'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -71,10 +70,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     fetchPortal: func.isRequired,
     fetchDirectory: func.isRequired,
     pushWindowPath: func.isRequired,
-    searchDialectUpdate: func,
-  }
-  static defaultProps = {
-    searchDialectUpdate: () => {},
   }
 
   DIALECT_FILTER_TYPE = 'immersion'
@@ -87,7 +82,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
   constructor(props, context) {
     super(props, context)
 
-    let selectedCategory = this.initialFilterInfo()
+    const selectedCategory = this.initialFilterInfo()
 
     const computeEntities = Immutable.fromJS([
       {
@@ -132,25 +127,25 @@ class PageDialectImmersionList extends PageDialectLearnBase {
   }
 
   listToTree(arr) {
-    var tree = [],
-      mappedArr = {},
-      arrElem,
-      mappedElem
+    const tree = []
+    const mappedArr = {}
+    let arrElem
+    let mappedElem
 
     // First map the nodes of the array to an object -> create a hash table.
-    for (var i = 0, len = arr.length; i < len; i++) {
+    for (let i = 0, len = arr.length; i < len; i++) {
       arrElem = arr[i]
       mappedArr[arrElem.id] = arrElem
-      mappedArr[arrElem.id]['children'] = []
+      mappedArr[arrElem.id].children = []
     }
 
-    for (var id in mappedArr) {
+    for (const id in mappedArr) {
       if (mappedArr.hasOwnProperty(id)) {
         mappedElem = mappedArr[id]
         // If the element is not at the root level, add it to its parent array of children.
         if (mappedElem.parent !== '') {
-          if (mappedArr[mappedElem['parent']]) {
-            mappedArr[mappedElem['parent']]['children'].push(mappedElem)
+          if (mappedArr[mappedElem.parent]) {
+            mappedArr[mappedElem.parent].children.push(mappedElem)
           } else {
             // console.log(mappedElem, ' is wrong parent')
           }
@@ -300,7 +295,6 @@ const mapDispatchToProps = {
   fetchPortal,
   fetchDirectory,
   pushWindowPath,
-  searchDialectUpdate,
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PageDialectImmersionList))

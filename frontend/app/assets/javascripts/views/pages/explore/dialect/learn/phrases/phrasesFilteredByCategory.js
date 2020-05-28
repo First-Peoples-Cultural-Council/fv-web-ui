@@ -26,7 +26,6 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPhrases } from 'providers/redux/reducers/fvPhrase'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
 
@@ -51,7 +50,6 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import {
@@ -104,10 +102,6 @@ export class PhrasesFilteredByCategory extends Component {
     // PHRASES
     // ---------------------------------------------
     this.fetchListViewData()
-  }
-
-  componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
   }
 
   constructor(props, context) {
@@ -628,7 +622,7 @@ PhrasesFilteredByCategory.propTypes = {
   computeLogin: object.isRequired,
   computePhrases: object.isRequired,
   computePortal: object.isRequired,
-  computeSearchDialect: object.isRequired,
+  computeSearchDialect: object,
   listView: object.isRequired,
   navigationRouteSearch: object.isRequired,
   properties: object.isRequired,
@@ -640,13 +634,12 @@ PhrasesFilteredByCategory.propTypes = {
   fetchPhrases: func.isRequired,
   fetchPortal: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
 }
 PhrasesFilteredByCategory.defaultProps = {
-  searchDialectUpdate: () => {},
+  computeSearchDialect: {},
   DEFAULT_LANGUAGE: 'english',
 }
 
@@ -684,7 +677,6 @@ const mapDispatchToProps = {
   fetchPhrases,
   fetchPortal,
   pushWindowPath,
-  searchDialectUpdate,
   setListViewMode,
   setRouteParams,
   updatePageProperties,
