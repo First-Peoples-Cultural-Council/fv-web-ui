@@ -20,20 +20,19 @@
 
 package ca.firstvoices.dialect.categories.operations;
 
-import static org.junit.Assert.assertEquals;
-
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
-import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import testUtil.AbstractFirstVoicesOperationsTest;
 
-public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
+public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
 
   @Inject
   protected AutomationService automationService;
@@ -52,7 +51,7 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
     ctx.setInput(childCategory);
 
     DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
-    assertEquals("A description of the category without a target.",
+    Assert.assertEquals("A description of the category without a target.",
         doc.getPropertyValue("dc:description"));
   }
 
@@ -75,7 +74,8 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
     DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
 
-    assertEquals(parentCategory2.getPathAsString() + "/Category Title", doc.getPathAsString());
+    Assert.assertEquals(parentCategory2.getPathAsString() + "/Category Title",
+        doc.getPathAsString());
   }
 
   @Test(expected = InvalidCategoryException.class)

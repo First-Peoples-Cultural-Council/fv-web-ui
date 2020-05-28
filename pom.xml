@@ -17,20 +17,6 @@
   <packaging>pom</packaging>
   <version>3.4.5-SNAPSHOT</version>
 
-  <modules>
-    <module>FirstVoices-marketplace</module>
-    <module>FirstVoicesPublisher</module>
-    <module>FirstVoicesEnrichers</module>
-    <module>FirstVoicesSecurity</module>
-    <module>FirstVoicesHealthMonitor</module>
-    <module>FirstVoicesExport</module>
-    <module>FVUserRegistration</module>
-    <module>FirstVoicesMaintenance</module>
-    <module>migration-contributions</module>
-    <module>frontend</module>
-    <module>FirstVoicesData</module>
-  </modules>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -116,8 +102,28 @@
         <artifactId>FirstVoicesData</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <artifactId>FirstVoicesOperations</artifactId>
+        <groupId>ca.firstvoices</groupId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <modules>
+    <module>FirstVoices-marketplace</module>
+    <module>FirstVoicesPublisher</module>
+    <module>FirstVoicesEnrichers</module>
+    <module>FirstVoicesSecurity</module>
+    <module>FirstVoicesHealthMonitor</module>
+    <module>FirstVoicesExport</module>
+    <module>FVUserRegistration</module>
+    <module>FirstVoicesMaintenance</module>
+    <module>migration-contributions</module>
+    <module>frontend</module>
+    <module>FirstVoicesData</module>
+    <module>FirstVoicesOperations</module>
+  </modules>
 
   <build>
     <extensions>
