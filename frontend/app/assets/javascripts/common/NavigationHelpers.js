@@ -17,7 +17,7 @@ import selectn from 'selectn'
 import ConfRoutes, { paramMatch } from 'conf/routes'
 import Immutable, { is } from 'immutable'
 import { SECTIONS } from 'common/Constants'
-import URLHelpers from './URLHelpers'
+import URLHelpers from 'common/URLHelpers'
 
 const arrayPopImmutable = (array, sizeToPop = 1) => {
   return array.slice(0, array.length - sizeToPop)
