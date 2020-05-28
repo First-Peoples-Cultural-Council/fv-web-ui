@@ -20,7 +20,6 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
@@ -44,7 +43,6 @@ export class WordCategories extends Component {
     computeDialect2: object.isRequired,
     properties: object.isRequired,
     // REDUX: actions/dispatch/func
-    fetchCategories: func.isRequired,
     fetchPortal: func.isRequired,
     pushWindowPath: func.isRequired,
   }
@@ -68,7 +66,6 @@ export class WordCategories extends Component {
     const categoriesPath = '/api/v1/path/' + newProps.routeParams.dialect_path + '/Categories/@children'
 
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchCategories(categoriesPath)
     this.setState({ categoriesPath })
   }
 
@@ -147,7 +144,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCategories,
   fetchPortal,
   pushWindowPath,
 }
