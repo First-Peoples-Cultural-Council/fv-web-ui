@@ -179,6 +179,10 @@
       <groupId>ca.firstvoices</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <artifactId>FirstVoicesPublisher</artifactId>
+      <groupId>ca.firstvoices</groupId>
+    </dependency>
   </dependencies>
   <description></description>
   <modelVersion>4.0.0</modelVersion>
