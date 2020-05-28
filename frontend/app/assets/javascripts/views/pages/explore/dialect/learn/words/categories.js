@@ -24,12 +24,11 @@ import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import selectn from 'selectn'
-import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import CategoryList from 'views/components/Browsing/category-list'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 
 /**
  * Categories page for words
@@ -109,20 +108,24 @@ export class WordCategories extends Component {
       },
     ])
 
-    const _computeCategories = ProviderHelpers.getEntry(this.props.computeCategories, this.state.categoriesPath)
-
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="row">
-          <div className="col-xs-12">
-            <CategoryList
-              action={this._onNavigateRequest}
-              items={selectn('response.entries', _computeCategories)}
-              cols={6}
-            />
-          </div>
-        </div>
-      </PromiseWrapper>
+      <CategoriesDataLayer fetchLatest>
+        {({ categoriesData }) => {
+          let categoriesDataLayerToRender = null
+          if (categoriesData && categoriesData.length > 0) {
+            categoriesDataLayerToRender = (
+              <PromiseWrapper renderOnError computeEntities={computeEntities}>
+                <div className="row">
+                  <div className="col-xs-12">
+                    <CategoryList action={this._onNavigateRequest} items={categoriesData} cols={6} />
+                  </div>
+                </div>
+              </PromiseWrapper>
+            )
+          }
+          return categoriesDataLayerToRender
+        }}
+      </CategoriesDataLayer>
     )
   }
 }
