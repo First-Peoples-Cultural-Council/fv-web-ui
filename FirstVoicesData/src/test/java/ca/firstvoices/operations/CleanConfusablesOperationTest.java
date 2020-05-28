@@ -20,6 +20,9 @@
 
 package ca.firstvoices.operations;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.time.Duration;
 import org.junit.Assert;
@@ -32,6 +35,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
 import org.nuxeo.ecm.core.bulk.BulkService;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.TransactionalFeature;
 
 /**
  * @author david
@@ -75,20 +79,38 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     String status = bulkService.getStatus(id).getState().toString();
 
     Assert.assertEquals("COMPLETED", status);
-    Assert.assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
+    assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
 
   }
 
   @Test
-  public void cleanConfusablesChangesValues(){
+  public void cleanConfusablesChangesValues() throws OperationException, InterruptedException {
     OperationContext ctx = new OperationContext(session);
     ctx.setInput(dialect);
+    TransactionalFeature txFeature = new TransactionalFeature();
 
-    DocumentModelList wordsAndPhrases = session.getChildren(new PathRef("/FV/Family/Language/Dialect/Dictionary"));
+    String[] orderedWords = {"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot"};
+    String[] orderedPhrases = {"A way out", "Brandishing a weapon", "Come on lets go",
+        "The quick brown fox jumps over the lazy dog"};
 
-    for(DocumentModel x: wordsAndPhrases) {
-      //System.out.println("TITLE: " + x.getTitle()+ ", " + "VALUE:" + x.getPropertyValue("update_confusables_required"));
-      Assert.assertEquals(true, x.getPropertyValue("update_confusables_required"));
+    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedPhrases, "FVPhrase");
+    txFeature.nextTransaction();
+
+    JSONBlob blob = (JSONBlob) automationService.run(ctx, CleanConfusablesOperation.ID);
+    Assert.assertNotNull(blob);
+    String id = blob.getString();
+
+    BulkService bulkService = Framework.getService(BulkService.class);
+    bulkService.await(id, Duration.ofMinutes(1));
+    String status = bulkService.getStatus(id).getState().toString();
+    Assert.assertEquals("COMPLETED", status);
+
+    DocumentModelList wordsAndPhrases = session
+        .getChildren(new PathRef("/FV/Family/Language/Dialect/Dictionary"));
+
+    for (DocumentModel x : wordsAndPhrases) {
+      assertEquals(true, x.getPropertyValue("update_confusables_required"));
     }
 
   }
