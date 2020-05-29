@@ -28,6 +28,7 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
@@ -104,6 +105,10 @@ class WordsFilteredByCategory extends Component {
     // WORDS
     // ---------------------------------------------
     this.fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -658,6 +663,7 @@ WordsFilteredByCategory.propTypes = {
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 WordsFilteredByCategory.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
@@ -701,6 +707,7 @@ const mapDispatchToProps = {
   setListViewMode,
   setRouteParams,
   updatePageProperties,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordsFilteredByCategory)
