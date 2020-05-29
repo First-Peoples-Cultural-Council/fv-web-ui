@@ -39,7 +39,6 @@ export const initialState = {
     searchPartOfSpeech: 'pos',
   },
   searchTerm: undefined,
-  updateNote: 'initialState',
 }
 
 const switchSearchModes = (searchField, searchValue, searchType) => {
