@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
-import { SEARCH_DIALECT_UPDATE } from './actionTypes'
+import { SEARCH_DIALECT_UPDATE, SEARCH_DIALECT_RESET } from './actionTypes'
 import {
   SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_BY_DEFAULT,
@@ -39,6 +39,7 @@ export const initialState = {
     searchPartOfSpeech: 'pos',
   },
   searchTerm: undefined,
+  updateNote: 'initialState',
 }
 
 const switchSearchModes = (searchField, searchValue, searchType) => {
@@ -301,8 +302,13 @@ const computeSearchDialect = (state = initialState, action) => {
       return newState
     }
 
-    default:
+    case SEARCH_DIALECT_RESET: {
+      return initialState
+    }
+
+    default: {
       return state
+    }
   }
 }
 

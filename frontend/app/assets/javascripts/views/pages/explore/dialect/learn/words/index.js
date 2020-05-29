@@ -26,6 +26,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -60,6 +61,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     if (this.props.routeParams.category === undefined) {
       this.setState({ filterInfo: this.initialFilterInfo() })
     }
+  }
+  componentWillUnmount() {
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -451,6 +455,7 @@ PageDialectLearnWords.propTypes = {
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
   replaceWindowPath: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 
 // REDUX: reducers/state
@@ -486,6 +491,7 @@ const mapDispatchToProps = {
   pushWindowPath,
   replaceWindowPath,
   setListViewMode,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnWords)
