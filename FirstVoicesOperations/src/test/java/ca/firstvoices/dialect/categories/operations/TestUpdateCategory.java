@@ -107,5 +107,27 @@ public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
     automationService.run(ctx, UpdateCategory.ID, params);
   }
 
+  @Test
+  public void updatingCategoryRepublishesCategory() throws OperationException {
+    Map<String, String> properties = new HashMap<>();
+    properties.put("dc:title", "Category Title");
+    properties.put("dc:description", "A description of the category without a target.");
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("properties", properties);
+
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(childCategory);
+
+    Assert.assertEquals("New", childCategory.getCurrentLifeCycleState());
+
+    DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
+    Assert.assertEquals("A description of the category without a target.",
+        doc.getPropertyValue("dc:description"));
+
+    Assert.assertEquals("Published", childCategory.getCurrentLifeCycleState());
+
+  }
+
 
 }

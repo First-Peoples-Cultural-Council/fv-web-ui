@@ -9,9 +9,10 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
+import org.nuxeo.runtime.test.runner.RuntimeFeature;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
 
-@Features({CoreFeature.class, AutomationFeature.class})
+@Features({CoreFeature.class, AutomationFeature.class, RuntimeFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy("org.nuxeo.binary.metadata")
 @Deploy("org.nuxeo.ecm.platform.url.core")
@@ -24,7 +25,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.commandline.executor")
 @Deploy("org.nuxeo.ecm.platform.convert")
 @Deploy("org.nuxeo.ecm.platform.preview")
-
 // Audio doctype
 @Deploy("org.nuxeo.ecm.platform.audio.core")
 
@@ -39,6 +39,17 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-operations.xml")
 @Deploy("FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
+
+@Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
+    "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",
+    "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting", "FirstVoicesData",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
+        + ".ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
+
 @Deploy("FirstVoicesData")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesOperationsFeature implements RunnerFeature {
