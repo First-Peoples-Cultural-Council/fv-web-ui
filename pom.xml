@@ -30,7 +30,6 @@
     <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
-    <module>frontend</module>
     <module>FirstVoicesData</module>
   </modules>
 
@@ -79,11 +78,6 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoices-marketplace</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>firstvoices-web-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

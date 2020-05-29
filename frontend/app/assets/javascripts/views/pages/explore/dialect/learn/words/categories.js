@@ -20,16 +20,14 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
-import selectn from 'selectn'
-import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import CategoryList from 'views/components/Browsing/category-list'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 
 /**
  * Categories page for words
@@ -45,7 +43,6 @@ export class WordCategories extends Component {
     computeDialect2: object.isRequired,
     properties: object.isRequired,
     // REDUX: actions/dispatch/func
-    fetchCategories: func.isRequired,
     fetchPortal: func.isRequired,
     pushWindowPath: func.isRequired,
   }
@@ -69,7 +66,6 @@ export class WordCategories extends Component {
     const categoriesPath = '/api/v1/path/' + newProps.routeParams.dialect_path + '/Categories/@children'
 
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchCategories(categoriesPath)
     this.setState({ categoriesPath })
   }
 
@@ -109,20 +105,24 @@ export class WordCategories extends Component {
       },
     ])
 
-    const _computeCategories = ProviderHelpers.getEntry(this.props.computeCategories, this.state.categoriesPath)
-
     return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="row">
-          <div className="col-xs-12">
-            <CategoryList
-              action={this._onNavigateRequest}
-              items={selectn('response.entries', _computeCategories)}
-              cols={6}
-            />
-          </div>
-        </div>
-      </PromiseWrapper>
+      <CategoriesDataLayer fetchLatest>
+        {({ categoriesData }) => {
+          let categoriesDataLayerToRender = null
+          if (categoriesData && categoriesData.length > 0) {
+            categoriesDataLayerToRender = (
+              <PromiseWrapper renderOnError computeEntities={computeEntities}>
+                <div className="row">
+                  <div className="col-xs-12">
+                    <CategoryList action={this._onNavigateRequest} items={categoriesData} cols={6} />
+                  </div>
+                </div>
+              </PromiseWrapper>
+            )
+          }
+          return categoriesDataLayerToRender
+        }}
+      </CategoriesDataLayer>
     )
   }
 }
@@ -144,7 +144,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCategories,
   fetchPortal,
   pushWindowPath,
 }
