@@ -20,15 +20,23 @@
 
 package ca.firstvoices.operations;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.time.Duration;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
 import org.nuxeo.ecm.core.bulk.BulkService;
+import org.nuxeo.ecm.core.bulk.message.BulkStatus;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.TransactionalFeature;
 
 /**
  * @author david
@@ -72,9 +80,47 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     String status = bulkService.getStatus(id).getState().toString();
 
     Assert.assertEquals("COMPLETED", status);
-    Assert.assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
+    assertTrue((bulkService.getStatus(id).getErrorCount() == 0));
+
   }
 
-  //  TODO: TEST THE BULK ACTION HAS UPDATED WORDS AND PHRASES. (FW-1404)
+  @Test
+  public void cleanConfusablesChangesValues() throws OperationException, InterruptedException {
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(dialect);
+    TransactionalFeature txFeature = new TransactionalFeature();
+    String username = session.getPrincipal().getName();
+
+    String[] orderedWords = {"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot"};
+    String[] orderedPhrases = {"A way out", "Brandishing a weapon", "Come on lets go",
+        "The quick brown fox jumps over the lazy dog"};
+
+    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedPhrases, "FVPhrase");
+    txFeature.nextTransaction();
+
+    BulkService bulkService = Framework.getService(BulkService.class);
+    int oldSize = bulkService.getStatuses(username).size();
+
+    JSONBlob blob = (JSONBlob) automationService.run(ctx, CleanConfusablesOperation.ID);
+    Assert.assertNotNull(blob);
+    String id = blob.getString();
+
+    bulkService.await(id, Duration.ofMinutes(1));
+    String status = bulkService.getStatus(id).getState().toString();
+    Assert.assertEquals("COMPLETED", status);
+
+    List<BulkStatus> statuses = bulkService.getStatuses(username);
+    int newSize = statuses.size();
+    assertEquals(1, (newSize - oldSize));
+    assertEquals(id, statuses.get(newSize - 1).getId());
+
+    DocumentModelList wordsAndPhrases = session.query(bulkService.getCommand(id).getQuery());
+
+    for (DocumentModel x : wordsAndPhrases) {
+      assertEquals(true, x.getPropertyValue("update_confusables_required"));
+    }
+
+  }
 
 }
