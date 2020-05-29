@@ -26,6 +26,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -60,6 +61,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     if (this.props.routeParams.category === undefined) {
       this.setState({ filterInfo: this.initialFilterInfo() })
     }
+  }
+  componentWillUnmount() {
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -349,19 +353,22 @@ class PageDialectLearnWords extends PageDialectLearnBase {
 
   // NOTE: PageDialectLearnBase calls `fetchData`
   async fetchData() {
-    const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
-    const portalPath = `${this.props.routeParams.dialect_path}/Portal`
+    const { dialect_path } = this.props.routeParams
+    if (dialect_path) {
+      const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
+      const portalPath = `${this.props.routeParams.dialect_path}/Portal`
 
-    const computeDocumentRequest = ProviderHelpers.getEntry(this.props.computeDocument, documentPath)
-    if (selectn('action', computeDocumentRequest) !== 'FV_DOCUMENT_FETCH_START') {
-      // Document
-      await ProviderHelpers.fetchIfMissing(documentPath, this.props.fetchDocument, this.props.computeDocument)
-    }
+      const computeDocumentRequest = ProviderHelpers.getEntry(this.props.computeDocument, documentPath)
+      if (selectn('action', computeDocumentRequest) !== 'FV_DOCUMENT_FETCH_START') {
+        // Document
+        await ProviderHelpers.fetchIfMissing(documentPath, this.props.fetchDocument, this.props.computeDocument)
+      }
 
-    const computePortalRequest = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
-    if (selectn('action', computePortalRequest) !== 'FV_PORTAL_FETCH_START') {
-      // Portal
-      await ProviderHelpers.fetchIfMissing(portalPath, this.props.fetchPortal, this.props.computePortal)
+      const computePortalRequest = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
+      if (selectn('action', computePortalRequest) !== 'FV_PORTAL_FETCH_START') {
+        // Portal
+        await ProviderHelpers.fetchIfMissing(portalPath, this.props.fetchPortal, this.props.computePortal)
+      }
     }
   }
 
@@ -451,6 +458,7 @@ PageDialectLearnWords.propTypes = {
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
   replaceWindowPath: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 
 // REDUX: reducers/state
@@ -486,6 +494,7 @@ const mapDispatchToProps = {
   pushWindowPath,
   replaceWindowPath,
   setListViewMode,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnWords)
