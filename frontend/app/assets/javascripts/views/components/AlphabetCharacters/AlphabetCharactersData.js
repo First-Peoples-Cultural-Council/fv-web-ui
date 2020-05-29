@@ -7,7 +7,6 @@ import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 // REDUX: actions/dispatch/func
 import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -110,12 +109,10 @@ AlphabetCharactersData.propTypes = {
   fetchCharacters: func.isRequired,
   fetchDocument: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func,
 }
 
 AlphabetCharactersData.defaultProps = {
   letterClickedCallback: () => {},
-  searchDialectUpdate: () => {},
 }
 
 // REDUX: reducers/state
@@ -139,7 +136,6 @@ const mapDispatchToProps = {
   fetchDocument,
   fetchCharacters,
   pushWindowPath,
-  searchDialectUpdate,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlphabetCharactersData)

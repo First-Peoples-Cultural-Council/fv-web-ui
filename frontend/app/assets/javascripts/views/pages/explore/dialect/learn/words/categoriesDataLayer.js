@@ -24,7 +24,6 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 
 import selectn from 'selectn'
@@ -149,7 +148,6 @@ CategoriesDataLayer.propTypes = {
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
   replaceWindowPath: func.isRequired,
-  searchDialectUpdate: func,
 }
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
@@ -203,7 +201,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  searchDialectUpdate,
   setListViewMode,
 }
 

@@ -3,7 +3,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.4.4-SNAPSHOT</version>
+    <version>3.4.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>FirstVoicesData</artifactId>

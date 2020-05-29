@@ -31,6 +31,22 @@
     <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
     <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
 
+      <artifact:file artifactId="aws-java-sdk"/>
+      <artifact:dependencies artifactId="aws-java-sdk">
+        <excludes>
+          <artifact scope="test"/>
+          <artifact scope="provided"/>
+        </excludes>
+      </artifact:dependencies>
+
+      <artifact:file artifactId="aws-java-sdk-core"/>
+      <artifact:dependencies artifactId="aws-java-sdk-core">
+        <excludes>
+          <artifact scope="test"/>
+          <artifact scope="provided"/>
+        </excludes>
+      </artifact:dependencies>
+
       <!-- Include javers-core and related dependencies as JARs to be deployed -->
       <artifact:file artifactId="javers-core"/>
       <artifact:dependencies artifactId="javers-core">
