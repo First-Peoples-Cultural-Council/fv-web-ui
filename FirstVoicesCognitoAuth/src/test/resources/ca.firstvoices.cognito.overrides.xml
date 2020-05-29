@@ -1,0 +1,27 @@
+<component name="ca.firstvoices.cognito.overrides">
+
+    <require>org.nuxeo.ecm.platform.ui.web.auth.WebEngineConfig</require>
+    <require>org.nuxeo.ecm.platform.ui.web.auth.defaultConfig</require>
+    <require>ca.firstvoices.cognito</require>
+
+    <extension point="userManager" target="org.nuxeo.ecm.platform.usermanager.UserService">
+        <userManager class="ca.firstvoices.cognito.AWSAwareUserManager">
+            <userCacheName>userManagerCache</userCacheName>
+            <users>
+                <directory>userDirectory</directory>
+
+                <virtualUser id="test_aws_user_1">
+                    <property name="firstName">AWS</property>
+                    <property name="lastName">USER</property>
+                    <group>administrators</group>
+                </virtualUser>
+                <virtualUser id="test_migrate_user_1">
+                    <property name="firstName">AWS</property>
+                    <property name="lastName">USER</property>
+                    <group>administrators</group>
+                </virtualUser>
+\            </users>
+        </userManager>
+    </extension>
+
+</component>

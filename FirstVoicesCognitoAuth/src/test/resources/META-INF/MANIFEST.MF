@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesCognitoAuth.test
+Bundle-Name: FirstVoicesCognitoAuth.test
+Import-Package: org.nuxeo.ecm.core,
+ org.nuxeo.ecm.directory
+
