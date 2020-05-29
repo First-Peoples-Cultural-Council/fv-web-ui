@@ -1,0 +1,29 @@
+<component name="ca.firstvoices.cognito.aws">
+
+    <documentation>
+        AWS Cognito Authentication
+    </documentation>
+
+    <implementation class="ca.firstvoices.cognito.TestAWSAuthenticationServiceFactory"/>
+
+    <extension-point name="configuration">
+        <object class="ca.firstvoices.cognito.AWSAuthenticationServiceConfigurationDescriptor"/>
+    </extension-point>
+
+    <extension target="ca.firstvoices.cognito.aws" point="configuration">
+
+        <configuration>
+            <accessKey>TEST_MODE</accessKey>
+            <secretKey>TEST_MODE</secretKey>
+            <region>TEST_MODE</region>
+            <clientID>TEST_MODE</clientID>
+            <userPool>TEST_MODE</userPool>
+        </configuration>
+
+    </extension>
+
+    <service>
+        <provide interface="ca.firstvoices.cognito.AWSAuthenticationService"/>
+    </service>
+
+</component>

@@ -1,0 +1,24 @@
+<component name="ca.firstvoices.cognito.usermanager">
+
+    <documentation>
+        AWS Cognito User Manager
+    </documentation>
+
+    <implementation class="ca.firstvoices.cognito.AWSAwareUserManagerFactory"/>
+
+    <extension-point name="configuration">
+        <object class="ca.firstvoices.cognito.AWSAwareUserManagerConfigurationDescriptor"/>
+    </extension-point>
+
+    <extension target="ca.firstvoices.cognito.usermanager" point="configuration">
+        <configuration>
+            <useCognitoAsPrincipalDirectory>false</useCognitoAsPrincipalDirectory>
+            <authenticateWithCognito>${fv.cognito.authenticateWithCognito}</authenticateWithCognito>
+        </configuration>
+    </extension>
+
+    <service>
+        <provide interface="ca.firstvoices.cognito.AWSAwareUserManagerConfigurationService"/>
+    </service>
+
+</component>
