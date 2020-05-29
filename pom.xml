@@ -31,6 +31,7 @@
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
     <module>FirstVoicesData</module>
+    <module>FirstVoicesOperations</module>
   </modules>
 
   <dependencyManagement>

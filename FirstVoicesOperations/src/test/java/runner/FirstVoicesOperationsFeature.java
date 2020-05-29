@@ -1,4 +1,4 @@
-package ca.firstvoices.runner;
+package runner;
 
 import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.test.CoreFeature;

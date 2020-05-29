@@ -22,7 +22,6 @@ package testUtil;
 
 import static org.junit.Assert.assertNotNull;
 
-import ca.firstvoices.runner.FirstVoicesOperationsFeature;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -32,6 +31,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import runner.FirstVoicesOperationsFeature;
 
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesOperationsFeature.class})
