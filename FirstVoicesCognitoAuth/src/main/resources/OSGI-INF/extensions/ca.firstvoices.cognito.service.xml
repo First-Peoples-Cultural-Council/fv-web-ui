@@ -1,0 +1,29 @@
+<component name="ca.firstvoices.cognito.aws">
+
+    <documentation>
+        AWS Cognito Authentication
+    </documentation>
+
+    <implementation class="ca.firstvoices.cognito.AWSAuthenticationServiceFactory"/>
+
+    <extension-point name="configuration">
+        <object class="ca.firstvoices.cognito.AWSAuthenticationServiceConfigurationDescriptor"/>
+    </extension-point>
+
+    <extension target="ca.firstvoices.cognito.aws" point="configuration">
+
+        <configuration>
+            <accessKey>${fv.cognito.accessKey}</accessKey>
+            <secretKey>${fv.cognito.secretKey}</secretKey>
+            <region>${fv.cognito.region}</region>
+            <clientID>${fv.cognito.clientID}</clientID>
+            <userPool>${fv.cognito.userPool}</userPool>
+        </configuration>
+
+    </extension>
+
+    <service>
+        <provide interface="ca.firstvoices.cognito.AWSAuthenticationService"/>
+    </service>
+
+</component>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesCognitoAuth
+Bundle-Version: 1.0.qualifier
+Bundle-Name: FirstVoicesCognitoAuth
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Nuxeo
+Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.cognito.xml,
+    OSGI-INF/extensions/ca.firstvoices.cognito.service.xml,
+    OSGI-INF/extensions/ca.firstvoices.cognito.usermanager.xml
+
