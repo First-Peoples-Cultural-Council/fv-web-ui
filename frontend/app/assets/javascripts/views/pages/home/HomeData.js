@@ -13,163 +13,95 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Component } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-// REDUX
-import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { queryPage } from 'providers/redux/reducers/fvPage'
-import { fetchUserStartpage } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
-// import ProviderHelpers from 'common/ProviderHelpers'
-import { withTheme } from '@material-ui/core/styles'
+// import { withTheme } from '@material-ui/core/styles'
 
-/**
- * Explore Archive page shows all the families in the archive
- */
+import useIntl from './dataSource/useIntl'
+import usePage from './dataSource/usePage'
+import useProperties from './dataSource/useProperties'
+import useUserStartpage from './dataSource/useUserStartpage'
+import useWindowPath from './dataSource/useWindowPath'
 
-export class HomeData extends Component {
-  // Constructor
-  // ----------------------------------------
-  constructor(props, context) {
-    super(props, context)
+function HomeData(props) {
+  const { intl } = useIntl()
+  const { computePage, queryPage } = usePage()
+  const { properties } = useProperties()
+  const { computeUserStartpage, fetchUserStartpage } = useUserStartpage()
+  const { windowPath, pushWindowPath } = useWindowPath()
 
-    this.state = {
-      pagePath: '/' + this.props.properties.domain + '/sections/Site/Resources/',
-      dialectsPath: '/' + this.props.properties.domain + '/sections/',
-    }
-  }
-  // Life cycle methods
-  // ----------------------------------------
-  componentDidMount() {
-    this.props.queryPage(this.state.pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
+  const pagePath = `/${properties.domain}/sections/Site/Resources/`
+
+  useEffect(() => {
+    queryPage(pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
     // Get user start page
-    this.props.fetchUserStartpage('currentUser', {
+    fetchUserStartpage('currentUser', {
       defaultHome: false,
     })
+  }, [])
+
+  const _computeUserStartpage = ProviderHelpers.getEntry(computeUserStartpage, 'currentUser')
+  const startPage = selectn('response.value', _computeUserStartpage)
+  // If user is accessing /home directly, do not redirect.
+  if (windowPath.indexOf('/home') === -1 && startPage) {
+    window.location = startPage
   }
 
-  componentDidUpdate() {
-    // Redirect user to their start page if they:
-    // - are members of a single dialect
-    // - have one defined
-
-    // If user is accessing /home directly, do not redirect.
-    if (this.props.windowPath.indexOf('/home') !== -1) {
-      return
+  // Access Buttons
+  const accessButtonsEntries = selectn('response.entries', _computeUserStartpage) || []
+  const accessButtons = accessButtonsEntries.map((dialect) => {
+    return {
+      url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
+      text: `Access ${selectn('properties.dc:title', dialect)}`,
     }
-    const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
-    const startPage = selectn('response.value', _computeUserStartpage)
-    if (startPage) {
-      window.location = startPage
-    }
-  }
-
-  // Render
-  // ----------------------------------------
-  render() {
-    const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
-
-    // Access Buttons
-    const accessButtonsEntries = selectn('response.entries', _computeUserStartpage) || []
-    const accessButtons = accessButtonsEntries.map((dialect) => {
-      return {
-        url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
-        text: `Access ${selectn('properties.dc:title', dialect)}`,
-      }
-    })
-    if (accessButtons.length === 0) {
-      accessButtons.push({
-        url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
-      })
-    }
-
-    // Sections
-    const computePage = ProviderHelpers.getEntry(
-      this.props.computePage,
-      `/${this.props.properties.domain}/sections/Site/Resources/`
-    )
-    const page = selectn('response.entries[0].properties', computePage)
-    const sections = (selectn('fvpage:blocks', page) || []).map((block) => {
-      const { area, title, text, summary, file } = block
-      return {
-        area,
-        file,
-        summary,
-        text,
-        title,
-      }
-    })
-    return this.props.children({
-      sections,
-      properties: this.props.properties,
-      computeEntities: Immutable.fromJS([
-        {
-          id: this.state.pagePath,
-          entity: this.props.computePage,
-        },
-        {
-          id: 'currentUser',
-          entity: this.props.computeUserStartpage,
-        },
-      ]),
-      primary1Color: selectn('theme.palette.primary1Color', this.props),
-      primary2Color: selectn('theme.palette.primary2Color', this.props),
-      accessButtons,
-      pushWindowPath,
+  })
+  if (accessButtons.length === 0) {
+    accessButtons.push({
+      url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
     })
   }
-}
 
-// PROPTYPES
-// ----------------------------------------
-const { func, object, string } = PropTypes
-HomeData.propTypes = {
-  // REDUX: reducers/state
-  computeLogin: object.isRequired,
-  computePage: object.isRequired,
-  computeUserStartpage: object.isRequired,
-  properties: object.isRequired,
-  windowPath: string.isRequired,
-  // REDUX: actions/dispatch/func
-  fetchUserStartpage: func.isRequired,
-  pushWindowPath: func.isRequired,
-  queryPage: func.isRequired,
-}
+  // Sections
+  const _computePage = ProviderHelpers.getEntry(computePage, `/${properties.domain}/sections/Site/Resources/`)
+  const page = selectn('response.entries[0].properties', _computePage)
+  const sections = (selectn('fvpage:blocks', page) || []).map((block) => {
+    const { area, title, text, summary, file } = block
+    return {
+      area,
+      file,
+      summary,
+      text,
+      title,
+    }
+  })
 
-// REDUX: reducers/state
-// ----------------------------------------
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, fvUser, navigation, nuxeo, windowPath, locale } = state
-
-  const { properties } = navigation
-  const { computeLogin } = nuxeo
-  const { computePage } = fvPage
-  const { computeUserStartpage } = fvUser
-  const { _windowPath } = windowPath
-  const { intlService } = locale
-
-  return {
-    computeLogin,
-    computePage,
-    computeUserStartpage,
+  return props.children({
+    sections,
     properties,
-    windowPath: _windowPath,
-    intl: intlService,
-  }
+    computeEntities: Immutable.fromJS([
+      {
+        id: pagePath,
+        entity: computePage,
+      },
+      {
+        id: 'currentUser',
+        entity: computeUserStartpage,
+      },
+    ]),
+    primary1Color: '#eaeaea', // TODO: selectn('theme.palette.primary1Color', this.props),
+    primary2Color: '#eaeaea', // TODO: selectn('theme.palette.primary2Color', this.props),
+    accessButtons,
+    pushWindowPath,
+    intl,
+  })
 }
 
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchUserStartpage,
-  pushWindowPath,
-  queryPage,
-}
+// TODO: hook into Mat-UIs withTheme()
+// export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(HomeData))
 
-export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(HomeData))
+export default HomeData

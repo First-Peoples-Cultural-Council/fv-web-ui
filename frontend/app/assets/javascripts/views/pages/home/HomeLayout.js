@@ -15,9 +15,6 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 
-// REDUX
-import { connect } from 'react-redux'
-
 import selectn from 'selectn'
 import classNames from 'classnames'
 import { isMobile } from 'react-device-detect'
@@ -28,7 +25,6 @@ import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
 import FVLabel from 'views/components/FVLabel/index'
 import HomeData from 'views/pages/home/HomeData'
-// import NavigationHelpers from '../../../common/NavigationHelpers'
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -47,6 +43,7 @@ export class HomeLayout extends Component {
           primary2Color,
           properties,
           sections,
+          intl,
           // pushWindowPath,
         }) => {
           const area0 = this.getSectionByArea(sections, 0)
@@ -105,12 +102,12 @@ export class HomeLayout extends Component {
                           fontWeight: 500,
                         }}
                       >
-                        {this.props.intl.searchAndReplace(selectn([0, 'title'], area0), {})}
+                        {intl.searchAndReplace(selectn([0, 'title'], area0), {})}
                       </h1>
                       <div className={classNames('home-intro-p-cont', 'body')}>
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: this.props.intl.searchAndReplace(selectn([0, 'text'], area0), {}),
+                            __html: intl.searchAndReplace(selectn([0, 'text'], area0), {}),
                           }}
                         />
                       </div>
@@ -128,7 +125,7 @@ export class HomeLayout extends Component {
                         <div key={`area1SubSection${index}`} className={classNames('col-xs-12')}>
                           <div className="body">
                             <h2 style={{ fontWeight: 500 }}>
-                              {this.props.intl.searchAndReplace(selectn('title', area1SubSection))}
+                              {intl.searchAndReplace(selectn('title', area1SubSection))}
                             </h2>
                             <p dangerouslySetInnerHTML={{ __html: selectn('text', area1SubSection) }} />
                           </div>
@@ -143,7 +140,7 @@ export class HomeLayout extends Component {
                   <>
                     <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                       <TextHeader
-                        title={this.props.intl.translate({
+                        title={intl.translate({
                           key: ['views', 'pages', 'home', 'tools_and_resources'],
                           default: 'TOOLS &amp; RESOURCES',
                           case: 'words',
@@ -174,7 +171,7 @@ export class HomeLayout extends Component {
                   <>
                     <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                       <TextHeader
-                        title={this.props.intl.translate({
+                        title={intl.translate({
                           key: ['views', 'pages', 'home', 'news_and_updates'],
                           default: 'NEWS &amp; UPDATES',
                           case: 'words',
@@ -205,7 +202,7 @@ export class HomeLayout extends Component {
                   <>
                     <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                       <TextHeader
-                        title={this.props.intl.translate({
+                        title={intl.translate({
                           key: ['views', 'pages', 'home', 'compatibility'],
                           default: 'COMBATIBILITY',
                           case: 'words',
@@ -216,12 +213,10 @@ export class HomeLayout extends Component {
                     <div>
                       <div className={classNames('col-xs-12')}>
                         <div className="body">
-                          <h2 style={{ fontWeight: 500 }}>
-                            {this.props.intl.searchAndReplace(selectn([0, 'title'], area4))}
-                          </h2>
+                          <h2 style={{ fontWeight: 500 }}>{intl.searchAndReplace(selectn([0, 'title'], area4))}</h2>
                           <p
                             dangerouslySetInnerHTML={{
-                              __html: this.props.intl.searchAndReplace(selectn([0, 'text'], area4)),
+                              __html: intl.searchAndReplace(selectn([0, 'text'], area4)),
                             }}
                           />
                         </div>
@@ -251,16 +246,4 @@ export class HomeLayout extends Component {
   }
 }
 
-// REDUX: reducers/state
-// ----------------------------------------
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { locale } = state
-
-  const { intlService } = locale
-
-  return {
-    intl: intlService,
-  }
-}
-
-export default connect(mapStateToProps, null)(HomeLayout)
+export default HomeLayout
