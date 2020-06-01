@@ -111,25 +111,14 @@ class WordsData extends PageDialectLearnBase {
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         searchType = 'startsWith'
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-        // newFilter = newFilter.set('currentCategoryFilterIds', new Set())
         break
       }
       case SEARCH_BY_CATEGORY: {
         searchType = 'categories'
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
         break
       }
       default: {
         searchType = 'contains'
-        // Remove other settings
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
-        // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-        // newFilter = newFilter.set('currentCategoryFilterIds', new Set())
       }
     }
 
