@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -23,6 +23,7 @@ import selectn from 'selectn'
 
 import useIntl from './dataSource/useIntl'
 import usePage from './dataSource/usePage'
+import usePrevious from './dataSource/usePrevious'
 import useProperties from './dataSource/useProperties'
 import useUserStartpage from './dataSource/useUserStartpage'
 import useWindowPath from './dataSource/useWindowPath'
@@ -35,10 +36,15 @@ function HomeData(props) {
   const { windowPath, pushWindowPath } = useWindowPath()
 
   const pagePath = `/${properties.domain}/sections/Site/Resources/`
+  const prevPagePath = usePrevious(pagePath)
 
   useEffect(() => {
-    queryPage(pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
+    if (pagePath !== prevPagePath) {
+      // console.log('#### calling queryPage', {pagePath, prevPagePath})
+      queryPage(pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
+    }
     // Get user start page
+    // console.log('#### calling fetchUserStartpage')
     fetchUserStartpage('currentUser', {
       defaultHome: false,
     })
@@ -108,4 +114,4 @@ function HomeData(props) {
 //   return <span>{`spacing ${theme.spacing}`}</span>;
 // }
 
-export default HomeData
+export default React.memo(HomeData)
