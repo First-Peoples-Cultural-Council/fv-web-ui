@@ -82,12 +82,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    # Build only the backend if changes are made to the backend and not frontend
+      # Build only the backend if changes are made to the backend and not frontend
     - name: Build backend with Maven
       if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files == ''
       run: mvn clean install -Pbackend
 
-    # Setup the Node modules caching (~/.npm directory) to restore from or save to
+      # Run Sonar Analysis on Backend
+    - name: Sonar
+      if: steps.changed-backend.outputs.backend_files
+      run: mvnorg.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+
+      # Setup the Node modules caching (~/.npm directory) to restore from or save to
     - name: Cache node modules
       if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
       uses: actions/cache@v1.1.2
