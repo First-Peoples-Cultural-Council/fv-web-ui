@@ -26,7 +26,3 @@ jobs:
       run: mvn sonar:sonar -Dsonar.branc.name=${BRANCH_NAME} -Dsonar.login=${{ secrets
       .SONAR_LOGIN }} -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=first-peoples-cultural-council
 
-
-
-
-
