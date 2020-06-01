@@ -186,14 +186,9 @@ class WordsData extends PageDialectLearnBase {
 
   resetSearch = () => {
     let newFilter = this.state.filterInfo
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'categories'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'contains'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFilter', 'startsWith'], null)
+
     newFilter = newFilter.set('currentAppliedFilter', new Map())
 
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'categories'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'contains'], null)
-    // newFilter = newFilter.deleteIn(['currentAppliedFiltersDesc', 'startsWith'], null)
     newFilter = newFilter.set('currentAppliedFiltersDesc', new Map())
 
     newFilter = newFilter.set('currentCategoryFilterIds', new Set())

@@ -170,18 +170,6 @@ class DictionaryListData extends Component {
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const uid = useIdOrPathFallback({ id: selectn('response.uid', computedDocument), routeParams })
 
-    // const nql = `${currentAppliedFilter}&currentPageIndex=${
-    //   pageIndex - 1
-    // }&pageSize=${
-    //   pageSize
-    // }&sortOrder=${
-    //   sortOrder
-    // }&sortBy=${
-    //   sortBy
-    // }&enrichment=category_children${
-    //   startsWithQuery
-    // }`
-
     const dialectId = selectn(
       'response.contextParameters.ancestry.dialect.uid',
       ProviderHelpers.getEntry(this.props.computeDocument, this.computeDocumentkey)
