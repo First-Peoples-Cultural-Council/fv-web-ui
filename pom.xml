@@ -6,6 +6,7 @@
     <aws.sdk.version>1.11.785</aws.sdk.version>
     <sonar.organization>first-peoples-cultural-council</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.login>9f75d2f9521d6752c99cf87f9c11969253732a72</sonar.login>
   </properties>
 
   <parent>
@@ -169,6 +170,7 @@
         <version>0.8.5</version>
         <executions>
           <execution>
+            <id>prepare-agent</id>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
