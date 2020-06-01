@@ -4,7 +4,7 @@
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
     <aws.sdk.version>1.11.785</aws.sdk.version>
-    <sonar.organization>davidlacho</sonar.organization>
+    <sonar.organization>first-peoples-cultural-council</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
