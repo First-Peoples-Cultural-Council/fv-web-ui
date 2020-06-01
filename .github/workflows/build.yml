@@ -122,10 +122,7 @@ jobs:
         cd frontend
         npm ci
 
-    - name: Setup sonarqube
-      uses: warchant/setup-sonar-scanner@v1
-
-      #      # Run Sonar Analysis on Backend
+      # Run Sonar Analysis on Backend (If Backend Changes)
     - name: Sonar Analysis on Backend
       if: steps.changed-backend.outputs.backend_files
       run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
@@ -133,10 +130,15 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
 
-      # Run Sonar Analysis on Frontend
+      # Needed to run seperate Frontend Project
+    - name: Setup Sonar Analysis For Frontend
+      #      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
+      uses: warchant/setup-sonar-scanner@v1
+
+      # Run Sonar Analysis on Frontend (If Frontend Changes)
     - name: Sonar Analysis on Frontend
       #      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
-      run: cd frontend && sonar-scanner
+      run: cd frontend && npm test && sonar-scanner
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
