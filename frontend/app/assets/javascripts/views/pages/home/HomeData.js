@@ -103,5 +103,13 @@ function HomeData(props) {
 
 // TODO: hook into Mat-UIs withTheme()
 // export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(HomeData))
+//
+// NOTE: v4.10.0 has a hook
+// https://material-ui.com/styles/advanced/#accessing-the-theme-in-a-component
+// import { useTheme } from '@material-ui/core/styles'
+// function DeepChild() {
+//   const theme = useTheme();
+//   return <span>{`spacing ${theme.spacing}`}</span>;
+// }
 
 export default HomeData
