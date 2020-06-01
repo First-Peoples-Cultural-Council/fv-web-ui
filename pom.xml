@@ -6,7 +6,6 @@
     <aws.sdk.version>1.11.785</aws.sdk.version>
     <sonar.organization>davidlacho</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.login>8d06587efdbecc71da7d994d92c50581b86361b3</sonar.login>
   </properties>
 
   <parent>
