@@ -75,6 +75,8 @@ export class HomeData extends Component {
   // ----------------------------------------
   render() {
     const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
+
+    // Access Buttons
     const accessButtonsEntries = selectn('response.entries', _computeUserStartpage) || []
     const accessButtons = accessButtonsEntries.map((dialect) => {
       return {
@@ -88,17 +90,24 @@ export class HomeData extends Component {
       })
     }
 
+    // Sections
+    const computePage = ProviderHelpers.getEntry(
+      this.props.computePage,
+      `/${this.props.properties.domain}/sections/Site/Resources/`
+    )
+    const page = selectn('response.entries[0].properties', computePage)
+    const sections = (selectn('fvpage:blocks', page) || []).map((block) => {
+      const { area, title, text, summary, file } = block
+      return {
+        area,
+        file,
+        summary,
+        text,
+        title,
+      }
+    })
     return this.props.children({
-      sections: [
-        {
-          file: {
-            data: '',
-          },
-          title: '',
-          summary: '',
-          text: '',
-        },
-      ],
+      sections,
       properties: this.props.properties,
       computeEntities: Immutable.fromJS([
         {
@@ -113,18 +122,7 @@ export class HomeData extends Component {
       primary1Color: selectn('theme.palette.primary1Color', this.props),
       primary2Color: selectn('theme.palette.primary2Color', this.props),
       accessButtons,
-    })
-  }
-
-  // Custom methods
-  // ----------------------------------------
-  _onNavigateRequest(path) {
-    this.props.pushWindowPath(path)
-  }
-
-  _getBlockByArea(page, area) {
-    return (selectn('fvpage:blocks', page) || []).filter((block) => {
-      return block.area === area
+      pushWindowPath,
     })
   }
 }

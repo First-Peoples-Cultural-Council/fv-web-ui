@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -23,18 +22,13 @@ import selectn from 'selectn'
 import classNames from 'classnames'
 import { isMobile } from 'react-device-detect'
 
-import ProviderHelpers from 'common/ProviderHelpers'
-
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-
 import FVButton from 'views/components/FVButton'
-// import IntroCardView from 'views/components/Browsing/intro-card-view'
-// import TextHeader from 'views/components/Document/Typography/text-header'
-
-// import NavigationHelpers from '../../../common/NavigationHelpers'
+import IntroCardView from 'views/components/Browsing/intro-card-view'
+import TextHeader from 'views/components/Document/Typography/text-header'
 import FVLabel from 'views/components/FVLabel/index'
-
 import HomeData from 'views/pages/home/HomeData'
+// import NavigationHelpers from '../../../common/NavigationHelpers'
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -52,39 +46,14 @@ export class HomeLayout extends Component {
           primary1Color,
           primary2Color,
           properties,
-          // sections,
+          sections,
+          // pushWindowPath,
         }) => {
-          // eslint-disable-next-line
-          console.log('HomeData Liminal', {
-            accessButtons,
-            computeEntities,
-            primary1Color,
-            primary2Color,
-            properties,
-            // sections,
-          })
-
-          let bgAlign = 'center'
-
-          if (isMobile) {
-            bgAlign = 'left'
-          }
-
-          const homePageStyle = {
-            position: 'relative',
-            minHeight: '155px',
-            backgroundAttachment: 'fixed',
-            background: 'transparent url("assets/images/fv-intro-background.jpg") bottom ' + bgAlign + ' no-repeat',
-            backgroundSize: 'cover',
-            boxShadow: 'inset 0px 64px 112px 0 rgba(0,0,0,0.6)',
-            overflow: 'hidden',
-          }
-
-          const computePage = ProviderHelpers.getEntry(
-            this.props.computePage,
-            `/${properties.domain}/sections/Site/Resources/`
-          )
-          const page = selectn('response.entries[0].properties', computePage)
+          const area0 = this.getSectionByArea(sections, 0)
+          const area1 = this.getSectionByArea(sections, 1)
+          const area2 = this.getSectionByArea(sections, 2)
+          const area3 = this.getSectionByArea(sections, 3)
+          const area4 = this.getSectionByArea(sections, 4)
 
           const accessButtonMarkup = accessButtons.map(({ url, text }, index) => {
             return (
@@ -93,6 +62,7 @@ export class HomeLayout extends Component {
                 key={`accessButton${index}`}
                 color="primary"
                 onClick={() => {
+                  // TODO: make this work
                   // eslint-disable-next-line
                   console.log('url!', url)
                   // pushWindowPath(url)
@@ -109,6 +79,18 @@ export class HomeLayout extends Component {
               </FVButton>
             )
           })
+
+          const homePageStyle = {
+            position: 'relative',
+            minHeight: '155px',
+            backgroundAttachment: 'fixed',
+            background: `transparent url("assets/images/fv-intro-background.jpg") bottom ${
+              isMobile ? 'left' : 'center'
+            } no-repeat`,
+            backgroundSize: 'cover',
+            boxShadow: 'inset 0px 64px 112px 0 rgba(0,0,0,0.6)',
+            overflow: 'hidden',
+          }
           return (
             // DATA: computeEntities
             <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -123,16 +105,12 @@ export class HomeLayout extends Component {
                           fontWeight: 500,
                         }}
                       >
-                        {/* DATA:
-                        blocks[0].title
-                        blocks[0].text
-                      */}
-                        {this.props.intl.searchAndReplace(selectn('fvpage:blocks[0].title', page), {})}
+                        {this.props.intl.searchAndReplace(selectn([0, 'title'], area0), {})}
                       </h1>
                       <div className={classNames('home-intro-p-cont', 'body')}>
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: this.props.intl.searchAndReplace(selectn('fvpage:blocks[0].text', page), {}),
+                            __html: this.props.intl.searchAndReplace(selectn([0, 'text'], area0), {}),
                           }}
                         />
                       </div>
@@ -144,128 +122,113 @@ export class HomeLayout extends Component {
 
               <div className={classNames('row')} style={{ margin: '25px 0' }}>
                 <div>
-                  {/* DATA:
-                  blocks[1].title
-                  blocks[1].text
-                */}
-                  {/* {this._getBlockByArea(page, 1).map((block, i) => {
-                    return (
-                      <div key={i} className={classNames('col-xs-12')}>
-                        <div className="body">
-                          <h2 style={{ fontWeight: 500 }}>
-                            {this.props.intl.searchAndReplace(selectn('title', block))}
-                          </h2>
-                          <p dangerouslySetInnerHTML={{ __html: selectn('text', block) }} />
+                  {area1.length > 0 &&
+                    area1.map((area1SubSection, index) => {
+                      return (
+                        <div key={`area1SubSection${index}`} className={classNames('col-xs-12')}>
+                          <div className="body">
+                            <h2 style={{ fontWeight: 500 }}>
+                              {this.props.intl.searchAndReplace(selectn('title', area1SubSection))}
+                            </h2>
+                            <p dangerouslySetInnerHTML={{ __html: selectn('text', area1SubSection) }} />
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })} */}
+                      )
+                    })}
                 </div>
               </div>
 
               <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {/* DATA:
-                  blocks[2].file.data
-                  blocks[2].title
-                  blocks[2].summary
-                  √ primary1Color
-                  √ primary2Color
-                  √ properties
-                */}
-                {/* {this._getBlockByArea(page, 2).length > 0 ? (
-                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                    <TextHeader
-                      title={this.props.intl.translate({
-                        key: ['views', 'pages', 'home', 'tools_and_resources'],
-                        default: 'TOOLS &amp; RESOURCES',
-                        case: 'words',
-                      })}
-                      properties={properties}
-                    />
-                  </div>
-                ) : null} */}
-
-                <div>
-                  {/* {this._getBlockByArea(page, 2).map((block, i) => {
-                    return (
-                      <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
-                        <IntroCardView block={block} primary1Color={primary1Color} primary2Color={primary2Color} />
+                {area2.length > 0 && (
+                  <>
+                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                      <TextHeader
+                        title={this.props.intl.translate({
+                          key: ['views', 'pages', 'home', 'tools_and_resources'],
+                          default: 'TOOLS &amp; RESOURCES',
+                          case: 'words',
+                        })}
+                        properties={properties}
+                      />
+                    </div>
+                    <div>
+                      <div className={classNames('col-xs-12', 'col-md-3')}>
+                        {area2.map((area2Subsection, index) => {
+                          return (
+                            <IntroCardView
+                              key={`area2Subsection${index}`}
+                              block={area2Subsection}
+                              primary1Color={primary1Color}
+                              primary2Color={primary2Color}
+                            />
+                          )
+                        })}
                       </div>
-                    )
-                  })} */}
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {/* DATA:
-                  blocks[3].file.data
-                  blocks[3].title
-                  blocks[3].summary
-                  √ primary1Color
-                  √ primary2Color
-                  √ properties
-                */}
-                {/* {this._getBlockByArea(page, 3).length > 0 ? (
-                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                    <TextHeader
-                      title={this.props.intl.translate({
-                        key: ['views', 'pages', 'home', 'news_and_updates'],
-                        default: 'NEWS &amp; UPDATES',
-                        case: 'words',
-                      })}
-                      properties={properties}
-                    />
-                  </div>
-                ) : null} */}
-
-                <div>
-                  {/* {this._getBlockByArea(page, 3).map((block, i) => {
-                    return (
-                      <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
-                        <IntroCardView block={block} primary1Color={primary1Color} primary2Color={primary2Color} />
+                {area3.length > 0 && (
+                  <>
+                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                      <TextHeader
+                        title={this.props.intl.translate({
+                          key: ['views', 'pages', 'home', 'news_and_updates'],
+                          default: 'NEWS &amp; UPDATES',
+                          case: 'words',
+                        })}
+                        properties={properties}
+                      />
+                    </div>
+                    <div>
+                      <div className={classNames('col-xs-12', 'col-md-3')}>
+                        {area3.map((area3Subsection, index) => {
+                          return (
+                            <IntroCardView
+                              key={`area3Subsection${index}`}
+                              block={area3Subsection}
+                              primary1Color={primary1Color}
+                              primary2Color={primary2Color}
+                            />
+                          )
+                        })}
                       </div>
-                    )
-                  })} */}
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {/* DATA:
-                  blocks[4].title
-                  blocks[4].text
-                  √ properties
-                */}
-                {/* {this._getBlockByArea(page, 4).length > 0 ? (
-                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                    <TextHeader
-                      title={this.props.intl.translate({
-                        key: ['views', 'pages', 'home', 'compatibility'],
-                        default: 'COMBATIBILITY',
-                        case: 'words',
-                      })}
-                      properties={properties}
-                    />
-                  </div>
-                ) : null} */}
-
-                <div>
-                  {/* {this._getBlockByArea(page, 4).map((block, i) => {
-                    return (
-                      <div key={i} className={classNames('col-xs-12')}>
+                {area4.length > 0 && (
+                  <>
+                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                      <TextHeader
+                        title={this.props.intl.translate({
+                          key: ['views', 'pages', 'home', 'compatibility'],
+                          default: 'COMBATIBILITY',
+                          case: 'words',
+                        })}
+                        properties={properties}
+                      />
+                    </div>
+                    <div>
+                      <div className={classNames('col-xs-12')}>
                         <div className="body">
                           <h2 style={{ fontWeight: 500 }}>
-                            {this.props.intl.searchAndReplace(selectn('title', block))}
+                            {this.props.intl.searchAndReplace(selectn([0, 'title'], area4))}
                           </h2>
                           <p
                             dangerouslySetInnerHTML={{
-                              __html: this.props.intl.searchAndReplace(selectn('text', block)),
+                              __html: this.props.intl.searchAndReplace(selectn([0, 'text'], area4)),
                             }}
                           />
                         </div>
                       </div>
-                    )
-                  })} */}
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
             </PromiseWrapper>
           )
@@ -273,29 +236,29 @@ export class HomeLayout extends Component {
       </HomeData>
     )
   }
-}
 
-// PROPTYPES
-// ----------------------------------------
-const { object } = PropTypes
-HomeLayout.propTypes = {
-  // REDUX: reducers/state
-  computeLogin: object.isRequired,
-  computePage: object.isRequired,
+  // Custom methods
+  // ----------------------------------------
+
+  // _onNavigateRequest(path) {
+  //   this.props.pushWindowPath(path)
+  // }
+
+  getSectionByArea(sections, area) {
+    return (sections || []).filter((section) => {
+      return section.area === area
+    })
+  }
 }
 
 // REDUX: reducers/state
 // ----------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, nuxeo, locale } = state
+  const { locale } = state
 
-  const { computeLogin } = nuxeo
-  const { computePage } = fvPage
   const { intlService } = locale
 
   return {
-    computeLogin,
-    computePage,
     intl: intlService,
   }
 }
