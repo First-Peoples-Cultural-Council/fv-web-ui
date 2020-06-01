@@ -123,7 +123,7 @@ jobs:
         npm ci
 
       # Run Sonar Analysis on Backend
-    - name: Sonar
+    - name: Sonar Analysis on Backend
       if: steps.changed-backend.outputs.backend_files
       run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       env:
