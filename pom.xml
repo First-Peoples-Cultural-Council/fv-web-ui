@@ -3,10 +3,10 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
+    <aws.sdk.version>1.11.785</aws.sdk.version>
     <sonar.organization>davidlacho</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.login>8d06587efdbecc71da7d994d92c50581b86361b3</sonar.login>
-    <sonar.branch.name>${scmBranch}</sonar.branch.name>
   </properties>
 
   <parent>
@@ -19,23 +19,29 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.4.2-rc</version>
+  <version>3.4.5-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoices-marketplace</module>
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
+    <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
+    <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
-    <module>frontend</module>
     <module>FirstVoicesData</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCognitoAuth</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesPublisher</artifactId>
@@ -58,6 +64,11 @@
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesHealthMonitor</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesExport</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -69,11 +80,6 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoices-marketplace</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>firstvoices-web-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -115,9 +121,14 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.4</version>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>${aws.sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-core</artifactId>
+        <version>${aws.sdk.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -147,18 +158,6 @@
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.1.1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>

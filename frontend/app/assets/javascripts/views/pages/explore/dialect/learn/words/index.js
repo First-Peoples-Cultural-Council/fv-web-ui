@@ -25,10 +25,9 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
@@ -44,6 +43,7 @@ import AlphabetCharactersData from 'views/components/AlphabetCharacters/Alphabet
 
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -52,42 +52,19 @@ import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/Navigati
 
 import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY } from 'views/components/SearchDialect/constants'
 
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 /**
  * Learn words
  */
 class PageDialectLearnWords extends PageDialectLearnBase {
-  async componentDidMountViaPageDialectLearnBase() {
-    const { routeParams } = this.props
-
-    // Portal
-    ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
-
-    // Document
-    await ProviderHelpers.fetchIfMissing(
-      routeParams.dialect_path + '/Dictionary',
-      this.props.fetchDocument,
-      this.props.computeDocument
-    )
-
-    const newState = {}
+  componentDidMountViaPageDialectLearnBase() {
     // Clear out filterInfo if not in url, eg: /learn/words/categories/[category]
     if (this.props.routeParams.category === undefined) {
-      newState.filterInfo = this.initialFilterInfo()
+      this.setState({ filterInfo: this.initialFilterInfo() })
     }
-
-    this.setState(newState)
   }
-
   componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
+    this.props.searchDialectReset()
   }
-
-  DIALECT_FILTER_TYPE = 'words'
 
   constructor(props, context) {
     super(props, context)
@@ -222,8 +199,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         </PromiseWrapper>
       )
     }
-
     const dialectClassName = getDialectClassname(computePortal)
+
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className={classNames('row', 'row-create-wrapper')}>
@@ -284,20 +261,16 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             </AlphabetCharactersData>
             <CategoriesDataLayer fetchLatest>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
-                      setDialectFilterCallback={this.setDialectFilterCallback}
-                      transformData={categoriesData}
+                      setDialectFilterCallback={this.changeFilter}
+                      facets={categoriesData}
+                      facetType="category"
                       type="words"
-                      // --------
-                      // facetField={ProviderHelpers.switchWorkspaceSectionKeys(
-                      //   'fv-word:categories',
-                      //   this.props.routeParams.area
-                      // )}
-                      // handleDialectFilterList={this.handleDialectFilterList} // NOTE: This function is in PageDialectLearnBase
+                      workspaceKey="fv-word:categories"
                     >
                       {({ listItemData }) => {
                         return (
@@ -313,7 +286,8 @@ class PageDialectLearnWords extends PageDialectLearnBase {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -331,7 +305,9 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     const { searchByMode, searchNxqlQuery } = this.props.computeSearchDialect
     let searchType
     let newFilter = this.state.filterInfo
-
+    // console.log({
+    //   routeParamsLetter: this.props.routeParams.letter,
+    // })
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
         searchType = 'startsWith'
@@ -375,14 +351,25 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     }
   }
 
-  clearDialectFilter = () => {
-    this.setState({ filterInfo: this.initialFilterInfo() })
-  }
-
   // NOTE: PageDialectLearnBase calls `fetchData`
-  fetchData(newProps) {
-    newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
+  async fetchData() {
+    const { dialect_path } = this.props.routeParams
+    if (dialect_path) {
+      const documentPath = `${this.props.routeParams.dialect_path}/Dictionary`
+      const portalPath = `${this.props.routeParams.dialect_path}/Portal`
+
+      const computeDocumentRequest = ProviderHelpers.getEntry(this.props.computeDocument, documentPath)
+      if (selectn('action', computeDocumentRequest) !== 'FV_DOCUMENT_FETCH_START') {
+        // Document
+        await ProviderHelpers.fetchIfMissing(documentPath, this.props.fetchDocument, this.props.computeDocument)
+      }
+
+      const computePortalRequest = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
+      if (selectn('action', computePortalRequest) !== 'FV_PORTAL_FETCH_START') {
+        // Portal
+        await ProviderHelpers.fetchIfMissing(portalPath, this.props.fetchPortal, this.props.computePortal)
+      }
+    }
   }
 
   // NOTE: PageDialectLearnBase calls `_getPageKey`
@@ -430,7 +417,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
     this.setState(
       {
         filterInfo: newFilter,
-        // searchNxqlSort: 'fv:custom_order', // TODO: IS THIS BREAKING SOMETHING?
       },
       () => {
         // When facets change, pagination should be reset.
@@ -452,16 +438,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
       }
     )
   }
-
-  setDialectFilterCallback = ({
-    // facetField,
-    href,
-    // selected,
-    // unselected,
-    updateUrl,
-  }) => {
-    this.changeFilter({ href, updateHistory: updateUrl })
-  }
 }
 
 // Proptypes
@@ -482,10 +458,7 @@ PageDialectLearnWords.propTypes = {
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
   replaceWindowPath: func.isRequired,
-  searchDialectUpdate: func,
-}
-PageDialectLearnWords.defaultProps = {
-  searchDialectUpdate: () => {},
+  searchDialectReset: func.isRequired,
 }
 
 // REDUX: reducers/state
@@ -520,8 +493,8 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  searchDialectUpdate,
   setListViewMode,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnWords)

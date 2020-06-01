@@ -280,8 +280,8 @@ class WordsListView extends DataListView {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const { computeSearchDialect, routeParams } = this.props
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const { routeParams } = this.props
+    const letter = routeParams.letter
 
     if (letter) {
       nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
@@ -378,8 +378,8 @@ class WordsListView extends DataListView {
                 sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
               })
             }}
-            sortHandler={async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-              await this.props.setRouteParams({
+            sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
+              this.props.setRouteParams({
                 search: {
                   pageSize,
                   page,
@@ -492,7 +492,7 @@ WordsListView.defaultProps = {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale, searchDialect } = state
+  const { fvDialect, fvWord, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
@@ -500,12 +500,10 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
-  const { computeSearchDialect } = searchDialect
 
   return {
     computeDialect2,
     computeLogin,
-    computeSearchDialect,
     computeWords,
     intl: intlService,
     navigationRouteSearch: route.search,

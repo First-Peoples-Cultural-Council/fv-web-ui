@@ -21,16 +21,7 @@ Search
 
 `handleSearch` func
 ------------------------------------
-  Callback called after search is initiated in <SearchDialect /> via:
-    // In SearchDialect
-    const handleSearch = async () => {
-      // ...
-      // Save to redux
-      await props.searchDialectUpdate(searchData)
-
-      // Notify ancestors
-      props.handleSearch()
-    }
+  Callback called after search is initiated in <SearchDialect />
 
     TODO: Since SearchDialect is setting search data in Redux, we may be
     TODO: able to drop this prop if the relevant ancestors are also using
@@ -44,17 +35,7 @@ Search
 
 `resetSearch` func
 ------------------------------------
-  Callback called after search is reset in <SearchDialect /> via:
-    // In SearchDialect
-    const resetSearch = async () => {
-      // ...
-
-      // Save to redux
-      await props.searchDialectUpdate(searchData)
-
-      // Notify ancestors
-      props.resetSearch()
-    }
+  Callback called after search is reset in <SearchDialect />
 
     TODO: Since SearchDialect is setting search data in Redux, we may be
     TODO: able to drop this prop if the relevant ancestors are also using

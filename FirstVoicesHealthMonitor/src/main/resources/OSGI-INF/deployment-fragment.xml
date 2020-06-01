@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<fragment version="1">
+
+    <!-- StatusServlet mapping -->
+    <extension target="web#LAST-SERVLET">
+
+        <servlet>
+            <servlet-name>Nuxeo Instance Status Servlet</servlet-name>
+            <servlet-class>ca.firstvoices.probes.NodeStatusServlet</servlet-class>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>Nuxeo Instance Status Servlet</servlet-name>
+            <url-pattern>/nodestatus</url-pattern>
+        </servlet-mapping>
+
+    </extension>
+
+</fragment>
