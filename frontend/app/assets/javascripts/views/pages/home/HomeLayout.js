@@ -21,18 +21,18 @@ import { connect } from 'react-redux'
 
 import selectn from 'selectn'
 import classNames from 'classnames'
+import { isMobile } from 'react-device-detect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-// import FVButton from 'views/components/FVButton'
+import FVButton from 'views/components/FVButton'
 // import IntroCardView from 'views/components/Browsing/intro-card-view'
 // import TextHeader from 'views/components/Document/Typography/text-header'
 
-import { isMobile } from 'react-device-detect'
 // import NavigationHelpers from '../../../common/NavigationHelpers'
-// import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel/index'
 
 import HomeData from 'views/pages/home/HomeData'
 
@@ -47,7 +47,7 @@ export class HomeLayout extends Component {
     return (
       <HomeData>
         {({
-          // accessButtons,
+          accessButtons,
           computeEntities,
           primary1Color,
           primary2Color,
@@ -56,7 +56,7 @@ export class HomeLayout extends Component {
         }) => {
           // eslint-disable-next-line
           console.log('HomeData Liminal', {
-            // accessButtons,
+            accessButtons,
             computeEntities,
             primary1Color,
             primary2Color,
@@ -85,48 +85,30 @@ export class HomeLayout extends Component {
             `/${properties.domain}/sections/Site/Resources/`
           )
           const page = selectn('response.entries[0].properties', computePage)
-          const accessButtons = [<div key="temp">TODO</div>]
-          /*
-          const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
-    // Compute User Registration Tasks
-    ;(selectn('response.entries', _computeUserStartpage) || []).map(
-            function computeUserStartPageMap(dialect, index) {
-              const tableRow = (
-                <FVButton
-                  variant="contained"
-                  key={index}
-                  color="primary"
-                  onClick={this._onNavigateRequest.bind(
-                    this,
-                    NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
-                  )}
-                  style={{ marginRight: '10px', height: '50px' }}
-                >
-                  {'Access ' + selectn('properties.dc:title', dialect)}
-                </FVButton>
-              )
 
-              accessButtons.push(tableRow)
-            }.bind(this)
-          )
-
-          if (accessButtons.length === 0) {
-            accessButtons[0] = (
+          const accessButtonMarkup = accessButtons.map(({ url, text }, index) => {
+            return (
               <FVButton
                 variant="contained"
-                key={0}
+                key={`accessButton${index}`}
                 color="primary"
-                onClick={this._onNavigateRequest.bind(
-                  this,
-                  NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
-                )}
+                onClick={() => {
+                  // eslint-disable-next-line
+                  console.log('url!', url)
+                  // pushWindowPath(url)
+                }}
                 style={{ marginRight: '10px', height: '50px' }}
               >
-                <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
+                {text ? (
+                  text
+                ) : (
+                  <>
+                    <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
+                  </>
+                )}
               </FVButton>
             )
-          }
-*/
+          })
           return (
             // DATA: computeEntities
             <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -154,7 +136,7 @@ export class HomeLayout extends Component {
                           }}
                         />
                       </div>
-                      <div>{accessButtons}</div>
+                      <div>{accessButtonMarkup}</div>
                     </div>
                   </div>
                 </div>
@@ -295,31 +277,25 @@ export class HomeLayout extends Component {
 
 // PROPTYPES
 // ----------------------------------------
-const { object, string } = PropTypes
+const { object } = PropTypes
 HomeLayout.propTypes = {
   // REDUX: reducers/state
   computeLogin: object.isRequired,
   computePage: object.isRequired,
-  computeUserStartpage: object.isRequired,
-  windowPath: string.isRequired,
 }
 
 // REDUX: reducers/state
 // ----------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, fvUser, nuxeo, windowPath, locale } = state
+  const { fvPage, nuxeo, locale } = state
 
   const { computeLogin } = nuxeo
   const { computePage } = fvPage
-  const { computeUserStartpage } = fvUser
-  const { _windowPath } = windowPath
   const { intlService } = locale
 
   return {
     computeLogin,
     computePage,
-    computeUserStartpage,
-    windowPath: _windowPath,
     intl: intlService,
   }
 }

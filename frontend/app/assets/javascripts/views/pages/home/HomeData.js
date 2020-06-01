@@ -17,7 +17,8 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Immutable from 'immutable'
-
+import ProviderHelpers from 'common/ProviderHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -46,7 +47,6 @@ export class HomeData extends Component {
   }
   // Life cycle methods
   // ----------------------------------------
-  /*
   componentDidMount() {
     this.props.queryPage(this.state.pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
     // Get user start page
@@ -70,10 +70,24 @@ export class HomeData extends Component {
       window.location = startPage
     }
   }
-  */
+
   // Render
   // ----------------------------------------
   render() {
+    const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
+    const accessButtonsEntries = selectn('response.entries', _computeUserStartpage) || []
+    const accessButtons = accessButtonsEntries.map((dialect) => {
+      return {
+        url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
+        text: `Access ${selectn('properties.dc:title', dialect)}`,
+      }
+    })
+    if (accessButtons.length === 0) {
+      accessButtons.push({
+        url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
+      })
+    }
+
     return this.props.children({
       sections: [
         {
@@ -98,12 +112,7 @@ export class HomeData extends Component {
       ]),
       primary1Color: selectn('theme.palette.primary1Color', this.props),
       primary2Color: selectn('theme.palette.primary2Color', this.props),
-      accessButtons: [
-        {
-          url: '',
-          text: '',
-        },
-      ],
+      accessButtons,
     })
   }
 
