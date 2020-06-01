@@ -85,7 +85,7 @@ class IntroCardView extends Component {
             fontWeight: 500,
           }}
         >
-          <FVLabel />
+          {/* <FVLabel /> */}
           {/* // DATA: block.title */}
           {this.props.intl.searchAndReplace(selectn('title', this.props.block))}
         </h2>
