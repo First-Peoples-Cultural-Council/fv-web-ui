@@ -57,7 +57,7 @@ export default class MediaPanel extends Component {
               ref={(i) => (this._imageGallery = i)}
               items={items}
               renderItem={function(item) {
-                //console.log(item);
+                console.log(item);
                 return (
                   <div className="image-gallery-image">
                     <Preview

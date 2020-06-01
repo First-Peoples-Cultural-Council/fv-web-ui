@@ -47,7 +47,7 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
   @OperationMethod
   public Blob run(DocumentModel dialect) {
 
-    CoreSession session = dialect.getCoreSession();
+    CoreSession sesh = dialect.getCoreSession();
 
     if (dialect.getType().equals("FVDialect")) {
       String wordPhraseQuery =
@@ -56,8 +56,8 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
 
       // bulk update word and phrases
       BulkCommand command = new BulkCommand.Builder(SetPropertiesAction.ACTION_NAME,
-          wordPhraseQuery).repository(session.getRepositoryName())
-          .user(session.getPrincipal().getName()).param("fv:update_confusables_required", true)
+          wordPhraseQuery).repository(sesh.getRepositoryName())
+          .user(sesh.getPrincipal().getName()).param("fv:update_confusables_required", true)
           .build();
 
       BulkService bulkService = Framework.getService(BulkService.class);
