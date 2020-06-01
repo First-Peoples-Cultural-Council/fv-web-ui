@@ -129,3 +129,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+
+      # Run Sonar Analysis on Frontend
+    - name: Sonar Analysis on Frontend
+      uses: sonarsource/sonarcloud-github-action@master
+      with:
+        projectBaseDir: frontend
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
