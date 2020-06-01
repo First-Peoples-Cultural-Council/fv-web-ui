@@ -20,7 +20,6 @@
 
 package ca.firstvoices.dialect.categories.operations;
 
-import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -39,7 +38,6 @@ public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
 
   @Test
   public void updateCategory() throws OperationException {
-
     Map<String, String> properties = new HashMap<>();
     properties.put("dc:title", "Category Title");
     properties.put("dc:description", "A description of the category without a target.");
@@ -76,57 +74,6 @@ public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
 
     Assert.assertEquals(parentCategory2.getPathAsString() + "/Category Title",
         doc.getPathAsString());
-  }
-
-  @Test(expected = InvalidCategoryException.class)
-  public void updateCategoryOperationOnlyAcceptsFVCategory() throws OperationException {
-
-    OperationContext ctx = new OperationContext(session);
-    ctx.setInput(dialect);
-    Map<String, Object> params = new HashMap<>();
-
-    automationService.run(ctx, UpdateCategory.ID, params);
-
-  }
-
-  @Test(expected = InvalidCategoryException.class)
-  public void cannotAssignParentToParentCategoryCategory() throws OperationException {
-    DocumentModel newCategory = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect/Categories", "New Category",
-            "FVCategory"));
-    Map<String, String> props = new HashMap<>();
-    props.put("dc:title", "Parent Category Title");
-    props.put("dc:description", "A description of the parent category.");
-    props.put("ecm:parentRef", newCategory.getPathAsString());
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("properties", props);
-    OperationContext ctx = new OperationContext(session);
-
-    ctx.setInput(parentCategory);
-    automationService.run(ctx, UpdateCategory.ID, params);
-  }
-
-  @Test
-  public void updatingCategoryRepublishesCategory() throws OperationException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("dc:title", "Category Title");
-    properties.put("dc:description", "A description of the category without a target.");
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("properties", properties);
-
-    OperationContext ctx = new OperationContext(session);
-    ctx.setInput(childCategory);
-
-    Assert.assertEquals("New", childCategory.getCurrentLifeCycleState());
-
-    DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
-    Assert.assertEquals("A description of the category without a target.",
-        doc.getPropertyValue("dc:description"));
-
-    Assert.assertEquals("Published", childCategory.getCurrentLifeCycleState());
-
   }
 
 

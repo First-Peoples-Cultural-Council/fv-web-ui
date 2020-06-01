@@ -22,7 +22,7 @@ package testUtil;
 
 import static org.junit.Assert.assertNotNull;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import ca.firstvoices.dialect.categories.services.CategoryService;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -30,7 +30,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import runner.FirstVoicesOperationsFeature;
@@ -39,7 +38,6 @@ import runner.FirstVoicesOperationsFeature;
 @Features({FirstVoicesOperationsFeature.class})
 public abstract class AbstractFirstVoicesOperationsTest {
 
-  protected DocumentModel sectionRoot;
   protected DocumentModel domain;
   protected DocumentModel languageFamily;
   protected DocumentModel language;
@@ -55,10 +53,7 @@ public abstract class AbstractFirstVoicesOperationsTest {
   protected CoreSession session;
 
   @Inject
-  protected FirstVoicesPublisherService firstVoicesPublisherService;
-
-  @Inject
-  protected PublisherService publisherService;
+  protected CategoryService categoryService;
 
   @Before
   public void setUp() throws Exception {
@@ -132,10 +127,6 @@ public abstract class AbstractFirstVoicesOperationsTest {
     parentCategory2 = createDocument(session, session
         .createDocumentModel(categories.getPathAsString(), "TestParentCategory2", "FVCategory"));
     assertNotNull("Should have a valid Parent Category2", parentCategory2);
-    sectionRoot = publisherService.getRootSectionFinder(session).getDefaultSectionRoots(true, true)
-        .get(0);
-    dialect.followTransition("Enable");
-    firstVoicesPublisherService.publishDialect(dialect);
   }
 
   protected DocumentModel createWordorPhrase(String value, String typeName, String pv, String v) {
@@ -158,5 +149,10 @@ public abstract class AbstractFirstVoicesOperationsTest {
     }
 
     session.save();
+  }
+
+  protected Boolean isPublished(DocumentModel doc) {
+    return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
+        .equals("Published");
   }
 }

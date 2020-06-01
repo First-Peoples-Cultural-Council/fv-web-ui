@@ -38,6 +38,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.picture.convert")
 
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-operations.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-services.xml")
 @Deploy("FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
 
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
