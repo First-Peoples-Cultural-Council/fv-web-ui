@@ -123,7 +123,7 @@ class WordsFilteredByCategory extends Component {
                       )
                     }}
                   </AlphabetCharactersData>
-                  <CategoriesDataLayer fetchLatest>
+                  <CategoriesDataLayer>
                     {({ categoriesData }) => {
                       let categoriesDataLayerToRender = null
                       if (categoriesData && categoriesData.length > 0) {
@@ -170,8 +170,8 @@ class WordsFilteredByCategory extends Component {
                       items,
                       listViewMode,
                       metadata,
-                      // page,
-                      // pageSize,
+                      //   page,
+                      //   pageSize,
                       pageTitle,
                       parentId,
                       // routeParams,

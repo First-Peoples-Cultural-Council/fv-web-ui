@@ -108,7 +108,7 @@ class PageDialectLearnWords extends Component {
                       )
                     }}
                   </AlphabetCharactersData>
-                  <CategoriesDataLayer fetchLatest>
+                  <CategoriesDataLayer>
                     {({ categoriesData }) => {
                       let categoriesDataLayerToRender = null
                       if (categoriesData && categoriesData.length > 0) {

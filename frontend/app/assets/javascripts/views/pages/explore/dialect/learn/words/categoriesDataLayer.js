@@ -49,11 +49,7 @@ class CategoriesDataLayer extends Component {
 
     // Fetch dialect specific categories
     if (selectn('action', categories) !== 'FV_CATEGORIES_QUERY_START') {
-      if (this.props.fetchLatest) {
-        this.props.fetchCategories(this.catPath)
-      } else {
-        ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
-      }
+      ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
     }
     if (selectn('action', sharedCategories) !== 'FV_CATEGORIES_SHARED_QUERY_START') {
       ProviderHelpers.fetchIfMissing(
@@ -128,7 +124,6 @@ class CategoriesDataLayer extends Component {
 const { array, func, object, string, bool } = PropTypes
 CategoriesDataLayer.propTypes = {
   routeParams: object.isRequired,
-  fetchLatest: bool,
   fetchPhraseBooks: bool,
   // REDUX: reducers/state
   computeCategories: object.isRequired,
