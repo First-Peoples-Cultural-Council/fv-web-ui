@@ -52,31 +52,6 @@ export class HomeLayout extends Component {
           const area3 = this.getSectionByArea(sections, 3)
           const area4 = this.getSectionByArea(sections, 4)
 
-          const accessButtonMarkup = accessButtons.map(({ url, text }, index) => {
-            return (
-              <FVButton
-                variant="contained"
-                key={`accessButton${index}`}
-                color="primary"
-                onClick={() => {
-                  // TODO: make this work
-                  // eslint-disable-next-line
-                  console.log('url!', url)
-                  // pushWindowPath(url)
-                }}
-                style={{ marginRight: '10px', height: '50px' }}
-              >
-                {text ? (
-                  text
-                ) : (
-                  <>
-                    <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
-                  </>
-                )}
-              </FVButton>
-            )
-          })
-
           const homePageStyle = {
             position: 'relative',
             minHeight: '155px',
@@ -111,120 +86,136 @@ export class HomeLayout extends Component {
                           }}
                         />
                       </div>
-                      <div>{accessButtonMarkup}</div>
+                      <div>
+                        {accessButtons.map(({ url, text }, index) => {
+                          return (
+                            <FVButton
+                              variant="contained"
+                              key={`accessButton${index}`}
+                              color="primary"
+                              onClick={() => {
+                                // TODO: make this work
+                                // eslint-disable-next-line
+                                console.log('url!', url)
+                              }}
+                              style={{ marginRight: '10px', height: '50px' }}
+                            >
+                              {text ? (
+                                text
+                              ) : (
+                                <>
+                                  <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
+                                </>
+                              )}
+                            </FVButton>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                <div>
-                  {area1.length > 0 &&
-                    area1.map((area1SubSection, index) => {
-                      return (
-                        <div key={`area1SubSection${index}`} className={classNames('col-xs-12')}>
-                          <div className="body">
-                            <h2 style={{ fontWeight: 500 }}>
-                              {intl.searchAndReplace(selectn('title', area1SubSection))}
-                            </h2>
-                            <p dangerouslySetInnerHTML={{ __html: selectn('text', area1SubSection) }} />
-                          </div>
-                        </div>
-                      )
-                    })}
-                </div>
-              </div>
-
-              <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {area2.length > 0 && (
-                  <>
-                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                      <TextHeader
-                        title={intl.translate({
-                          key: ['views', 'pages', 'home', 'tools_and_resources'],
-                          default: 'TOOLS &amp; RESOURCES',
-                          case: 'words',
-                        })}
-                        properties={properties}
-                      />
-                    </div>
-                    <div>
-                      <div className={classNames('col-xs-12', 'col-md-3')}>
-                        {area2.map((area2Subsection, index) => {
-                          return (
-                            <IntroCardView
-                              key={`area2Subsection${index}`}
-                              block={area2Subsection}
-                              primary1Color={primary1Color}
-                              primary2Color={primary2Color}
-                            />
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {area3.length > 0 && (
-                  <>
-                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                      <TextHeader
-                        title={intl.translate({
-                          key: ['views', 'pages', 'home', 'news_and_updates'],
-                          default: 'NEWS &amp; UPDATES',
-                          case: 'words',
-                        })}
-                        properties={properties}
-                      />
-                    </div>
-                    <div>
-                      <div className={classNames('col-xs-12', 'col-md-3')}>
-                        {area3.map((area3Subsection, index) => {
-                          return (
-                            <IntroCardView
-                              key={`area3Subsection${index}`}
-                              block={area3Subsection}
-                              primary1Color={primary1Color}
-                              primary2Color={primary2Color}
-                            />
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className={classNames('row')} style={{ margin: '25px 0' }}>
-                {area4.length > 0 && (
-                  <>
-                    <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
-                      <TextHeader
-                        title={intl.translate({
-                          key: ['views', 'pages', 'home', 'compatibility'],
-                          default: 'COMBATIBILITY',
-                          case: 'words',
-                        })}
-                        properties={properties}
-                      />
-                    </div>
-                    <div>
+              {area1.length > 0 &&
+                area1.map((area1SubSection, index) => {
+                  return (
+                    <div key={`area1SubSection${index}`} className={classNames('row')} style={{ margin: '25px 0' }}>
                       <div className={classNames('col-xs-12')}>
                         <div className="body">
-                          <h2 style={{ fontWeight: 500 }}>{intl.searchAndReplace(selectn([0, 'title'], area4))}</h2>
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: intl.searchAndReplace(selectn([0, 'text'], area4)),
-                            }}
-                          />
+                          <h2 style={{ fontWeight: 500 }}>
+                            {intl.searchAndReplace(selectn('title', area1SubSection))}
+                          </h2>
+                          <p dangerouslySetInnerHTML={{ __html: selectn('text', area1SubSection) }} />
                         </div>
                       </div>
                     </div>
-                  </>
-                )}
-              </div>
+                  )
+                })}
+
+              {area2.length > 0 && (
+                <div className={classNames('row')} style={{ margin: '25px 0' }}>
+                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                    <TextHeader
+                      title={intl.translate({
+                        key: ['views', 'pages', 'home', 'tools_and_resources'],
+                        default: 'TOOLS &amp; RESOURCES',
+                        case: 'words',
+                      })}
+                      properties={properties}
+                    />
+                  </div>
+                  <div>
+                    <div className={classNames('col-xs-12', 'col-md-3')}>
+                      {area2.map((area2Subsection, index) => {
+                        return (
+                          <IntroCardView
+                            key={`area2Subsection${index}`}
+                            block={area2Subsection}
+                            primary1Color={primary1Color}
+                            primary2Color={primary2Color}
+                          />
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {area3.length > 0 && (
+                <div className={classNames('row')} style={{ margin: '25px 0' }}>
+                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                    <TextHeader
+                      title={intl.translate({
+                        key: ['views', 'pages', 'home', 'news_and_updates'],
+                        default: 'NEWS &amp; UPDATES',
+                        case: 'words',
+                      })}
+                      properties={properties}
+                    />
+                  </div>
+                  <div>
+                    <div className={classNames('col-xs-12', 'col-md-3')}>
+                      {area3.map((area3Subsection, index) => {
+                        return (
+                          <IntroCardView
+                            key={`area3Subsection${index}`}
+                            block={area3Subsection}
+                            primary1Color={primary1Color}
+                            primary2Color={primary2Color}
+                          />
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {area4.length > 0 && (
+                <div className={classNames('row')} style={{ margin: '25px 0' }}>
+                  <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
+                    <TextHeader
+                      title={intl.translate({
+                        key: ['views', 'pages', 'home', 'compatibility'],
+                        default: 'COMBATIBILITY',
+                        case: 'words',
+                      })}
+                      properties={properties}
+                    />
+                  </div>
+                  <div>
+                    <div className={classNames('col-xs-12')}>
+                      <div className="body">
+                        <h2 style={{ fontWeight: 500 }}>{intl.searchAndReplace(selectn([0, 'title'], area4))}</h2>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: intl.searchAndReplace(selectn([0, 'text'], area4)),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </PromiseWrapper>
           )
         }}
@@ -234,11 +225,6 @@ export class HomeLayout extends Component {
 
   // Custom methods
   // ----------------------------------------
-
-  // _onNavigateRequest(path) {
-  //   this.props.pushWindowPath(path)
-  // }
-
   getSectionByArea(sections, area) {
     return (sections || []).filter((section) => {
       return section.area === area
