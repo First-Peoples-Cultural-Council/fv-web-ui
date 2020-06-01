@@ -597,6 +597,7 @@ export class PhrasesFilteredByCategory extends Component {
           routeParams: this.props.routeParams,
           splitWindowPath: this.props.splitWindowPath,
           pushWindowPath: this.props.pushWindowPath,
+          urlAppend: `/${this.props.routeParams.pageSize}/1`,
         })
       }
     )
