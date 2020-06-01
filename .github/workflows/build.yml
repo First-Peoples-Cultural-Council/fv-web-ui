@@ -87,13 +87,6 @@ jobs:
       if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files == ''
       run: mvn clean install -Pbackend
 
-      # Run Sonar Analysis on Backend
-    - name: Sonar
-      if: steps.changed-backend.outputs.backend_files
-      run: mvnorg.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
 
       # Setup the Node modules caching (~/.npm directory) to restore from or save to
     - name: Cache node modules
@@ -122,9 +115,17 @@ jobs:
       if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files
       run: mvn clean install
 
-    # Install Node packages if any changes are made to the package files and the install has not already been done by the backend or frontend builds
+      # Install Node packages if any changes are made to the package files and the install has not already been done by the backend or frontend builds
     - name: Install Node packages
       if: steps.changed-package.outputs.package_files && steps.changed-frontend.outputs.frontend_files == '' && steps.changed-backend.outputs.backend_files == ''
       run: |
         cd frontend
         npm ci
+
+      # Run Sonar Analysis on Backend
+    - name: Sonar
+      if: steps.changed-backend.outputs.backend_files
+      run: mvnorg.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
