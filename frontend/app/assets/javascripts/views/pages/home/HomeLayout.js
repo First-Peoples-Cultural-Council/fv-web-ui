@@ -41,6 +41,8 @@ import { isMobile } from 'react-device-detect'
 import NavigationHelpers from '../../../common/NavigationHelpers'
 import FVLabel from 'views/components/FVLabel/index'
 
+import HomeData from 'views/pages/home/HomeData'
+
 /**
  * Explore Archive page shows all the families in the archive
  */
@@ -196,6 +198,13 @@ export class HomeLayout extends Component {
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
+        <HomeData>
+          {(homeDataOutput) => {
+            // eslint-disable-next-line
+            console.log('HomeData Liminal', homeDataOutput)
+            return <h1>HomeData Liminal</h1>
+          }}
+        </HomeData>
         <div className="row" style={homePageStyle}>
           <div style={{ position: 'relative', height: '650px' }}>
             <div className={classNames('col-xs-12')} style={{ height: '100%' }}>

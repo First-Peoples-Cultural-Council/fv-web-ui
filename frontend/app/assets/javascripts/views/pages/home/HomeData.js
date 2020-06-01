@@ -24,7 +24,7 @@ import { queryPage } from 'providers/redux/reducers/fvPage'
 import { fetchUserStartpage } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
-import ProviderHelpers from 'common/ProviderHelpers'
+// import ProviderHelpers from 'common/ProviderHelpers'
 import { withTheme } from '@material-ui/core/styles'
 
 /**
@@ -44,6 +44,7 @@ export class HomeData extends Component {
   }
   // Life cycle methods
   // ----------------------------------------
+  /*
   componentDidMount() {
     this.props.queryPage(this.state.pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
     // Get user start page
@@ -53,11 +54,9 @@ export class HomeData extends Component {
   }
 
   componentDidUpdate() {
-    /*
-    Redirect user to their start page if they:
-    - are members of a single dialect
-    - have one defined
-    */
+    // Redirect user to their start page if they:
+    // - are members of a single dialect
+    // - have one defined
 
     // If user is accessing /home directly, do not redirect.
     if (this.props.windowPath.indexOf('/home') !== -1) {
@@ -69,7 +68,7 @@ export class HomeData extends Component {
       window.location = startPage
     }
   }
-
+  */
   // Render
   // ----------------------------------------
   render() {
