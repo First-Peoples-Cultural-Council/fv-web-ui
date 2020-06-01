@@ -26,6 +26,7 @@
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "test": "jest",
+    "test:nofail": "jest --coverage || true",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
     "test:databaseSetup:local": "bash ./scripts/TestDatabaseSetup.sh http://127.0.0.1:8080",

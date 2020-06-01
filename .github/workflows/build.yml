@@ -122,23 +122,23 @@ jobs:
         cd frontend
         npm ci
 
-      # Run Sonar Analysis on Backend (If Backend Changes)
-    - name: Sonar Analysis on Backend
-      if: steps.changed-backend.outputs.backend_files
-      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      # Run Sonar Analysis on Frontend (If Frontend Changes)
+    - name: Setup Sonar Analysis For Frontend
+      if: steps.changed-frontend.outputs.frontend_files
+      uses: warchant/setup-sonar-scanner@v1
+
+      # Run Sonar Analysis on Frontend (If Frontend Changes) (Needs npm ci to run beforehand)
+    - name: Sonar Analysis on Frontend
+      if: steps.changed-frontend.outputs.frontend_files
+      run: cd frontend && npm run test:nofail && sonar-scanner
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
 
-      # Needed to run seperate Frontend Project
-    - name: Setup Sonar Analysis For Frontend
-      #      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
-      uses: warchant/setup-sonar-scanner@v1
-
-      # Run Sonar Analysis on Frontend (If Frontend Changes)
-    - name: Sonar Analysis on Frontend
-      #      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
-      run: cd frontend && npm ci && npm test && sonar-scanner
+      # Run Sonar Analysis on Backend (If Backend Changes)
+    - name: Sonar Analysis on Backend
+      if: steps.changed-backend.outputs.backend_files
+      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
