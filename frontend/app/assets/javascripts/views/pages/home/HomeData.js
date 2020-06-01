@@ -16,6 +16,8 @@ limitations under the License.
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import Immutable from 'immutable'
+
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -73,7 +75,35 @@ export class HomeData extends Component {
   // ----------------------------------------
   render() {
     return this.props.children({
-      log: 'hello from HomeData!',
+      sections: [
+        {
+          file: {
+            data: '',
+          },
+          title: '',
+          summary: '',
+          text: '',
+        },
+      ],
+      properties: this.props.properties,
+      computeEntities: Immutable.fromJS([
+        {
+          id: this.state.pagePath,
+          entity: this.props.computePage,
+        },
+        {
+          id: 'currentUser',
+          entity: this.props.computeUserStartpage,
+        },
+      ]),
+      primary1Color: selectn('theme.palette.primary1Color', this.props),
+      primary2Color: selectn('theme.palette.primary2Color', this.props),
+      accessButtons: [
+        {
+          url: '',
+          text: '',
+        },
+      ],
     })
   }
 

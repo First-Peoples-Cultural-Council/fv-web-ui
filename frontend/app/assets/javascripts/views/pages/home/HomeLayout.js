@@ -15,14 +15,9 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { queryPage } from 'providers/redux/reducers/fvPage'
-import { fetchUserStartpage } from 'providers/redux/reducers/fvUser'
 
 import selectn from 'selectn'
 import classNames from 'classnames'
@@ -31,15 +26,13 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-import FVButton from 'views/components/FVButton'
-import { withTheme } from '@material-ui/core/styles'
-
-import IntroCardView from 'views/components/Browsing/intro-card-view'
-import TextHeader from 'views/components/Document/Typography/text-header'
+// import FVButton from 'views/components/FVButton'
+// import IntroCardView from 'views/components/Browsing/intro-card-view'
+// import TextHeader from 'views/components/Document/Typography/text-header'
 
 import { isMobile } from 'react-device-detect'
-import NavigationHelpers from '../../../common/NavigationHelpers'
-import FVLabel from 'views/components/FVLabel/index'
+// import NavigationHelpers from '../../../common/NavigationHelpers'
+// import FVLabel from 'views/components/FVLabel/index'
 
 import HomeData from 'views/pages/home/HomeData'
 
@@ -48,120 +41,92 @@ import HomeData from 'views/pages/home/HomeData'
  */
 
 export class HomeLayout extends Component {
+  // Render
   // ----------------------------------------
   render() {
-    let bgAlign = 'center'
-
-    if (isMobile) {
-      bgAlign = 'left'
-    }
-
-    const homePageStyle = {
-      position: 'relative',
-      minHeight: '155px',
-      backgroundAttachment: 'fixed',
-      background: 'transparent url("assets/images/fv-intro-background.jpg") bottom ' + bgAlign + ' no-repeat',
-      backgroundSize: 'cover',
-      boxShadow: 'inset 0px 64px 112px 0 rgba(0,0,0,0.6)',
-      overflow: 'hidden',
-    }
-
-    const computeEntities = Immutable.fromJS([
-      {
-        id: this.state.pagePath,
-        entity: this.props.computePage,
-      },
-      {
-        id: 'currentUser',
-        entity: this.props.computeUserStartpage,
-      },
-      /*
-      {
-      'id': this.state.dialectsPath,
-      'entity': this.props.computePortals
-      }
-      */
-    ])
-
-    const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
-    const computePage = ProviderHelpers.getEntry(this.props.computePage, this.state.pagePath)
-    //const computePortals = ProviderHelpers.getEntry(this.props.computePortals, this.state.dialectsPath);
-
-    const page = selectn('response.entries[0].properties', computePage)
-    //const dialects = selectn('response.entries', computePortals);
-
-    const primary1Color = selectn('theme.palette.primary1Color', this.props)
-    const primary2Color = selectn('theme.palette.primary2Color', this.props)
-
-    const accessButtons = []
-
-    // Compute User Registration Tasks
-    ;(selectn('response.entries', _computeUserStartpage) || []).map(
-      function computeUserStartPageMap(dialect, index) {
-        const tableRow = (
-          <FVButton
-            variant="contained"
-            key={index}
-            color="primary"
-            onClick={this._onNavigateRequest.bind(
-              this,
-              NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
-            )}
-            style={{ marginRight: '10px', height: '50px' }}
-          >
-            {'Access ' + selectn('properties.dc:title', dialect)}
-          </FVButton>
-        )
-
-        accessButtons.push(tableRow)
-      }.bind(this)
-    )
-
-    if (accessButtons.length === 0) {
-      accessButtons[0] = (
-        <FVButton
-          variant="contained"
-          key={0}
-          color="primary"
-          onClick={this._onNavigateRequest.bind(
-            this,
-            NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
-          )}
-          style={{ marginRight: '10px', height: '50px' }}
-        >
-          <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
-        </FVButton>
-      )
-    }
-
     return (
       <HomeData>
-        {(homeDataOutput) => {
-          /*
-Looks like the component can render with the following data:
-{
-  sections: [{
-    // IntroCardView
-    file: {
-      data: '',
-    },
-    title: '', // IntroCardView, & General
-    summary: '', // IntroCardView
-    text: '', // General
-  }],
-  properties: '', // TextHeader
-  computeEntities: '', // PromiseWrapper
-  primary1Color: '', // IntroCardView
-  primary2Color: '', // IntroCardView
-  accessButtons: [{
-    url: '',
-    text: ''
-  }],
-}
-*/
+        {({
+          // accessButtons,
+          computeEntities,
+          primary1Color,
+          primary2Color,
+          properties,
+          // sections,
+        }) => {
           // eslint-disable-next-line
-          console.log('HomeData Liminal', homeDataOutput)
+          console.log('HomeData Liminal', {
+            // accessButtons,
+            computeEntities,
+            primary1Color,
+            primary2Color,
+            properties,
+            // sections,
+          })
 
+          let bgAlign = 'center'
+
+          if (isMobile) {
+            bgAlign = 'left'
+          }
+
+          const homePageStyle = {
+            position: 'relative',
+            minHeight: '155px',
+            backgroundAttachment: 'fixed',
+            background: 'transparent url("assets/images/fv-intro-background.jpg") bottom ' + bgAlign + ' no-repeat',
+            backgroundSize: 'cover',
+            boxShadow: 'inset 0px 64px 112px 0 rgba(0,0,0,0.6)',
+            overflow: 'hidden',
+          }
+
+          const computePage = ProviderHelpers.getEntry(
+            this.props.computePage,
+            `/${properties.domain}/sections/Site/Resources/`
+          )
+          const page = selectn('response.entries[0].properties', computePage)
+          const accessButtons = [<div key="temp">TODO</div>]
+          /*
+          const _computeUserStartpage = ProviderHelpers.getEntry(this.props.computeUserStartpage, 'currentUser')
+    // Compute User Registration Tasks
+    ;(selectn('response.entries', _computeUserStartpage) || []).map(
+            function computeUserStartPageMap(dialect, index) {
+              const tableRow = (
+                <FVButton
+                  variant="contained"
+                  key={index}
+                  color="primary"
+                  onClick={this._onNavigateRequest.bind(
+                    this,
+                    NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
+                  )}
+                  style={{ marginRight: '10px', height: '50px' }}
+                >
+                  {'Access ' + selectn('properties.dc:title', dialect)}
+                </FVButton>
+              )
+
+              accessButtons.push(tableRow)
+            }.bind(this)
+          )
+
+          if (accessButtons.length === 0) {
+            accessButtons[0] = (
+              <FVButton
+                variant="contained"
+                key={0}
+                color="primary"
+                onClick={this._onNavigateRequest.bind(
+                  this,
+                  NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/')
+                )}
+                style={{ marginRight: '10px', height: '50px' }}
+              >
+                <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
+              </FVButton>
+            )
+          }
+*/
           return (
             // DATA: computeEntities
             <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -201,7 +166,7 @@ Looks like the component can render with the following data:
                   blocks[1].title
                   blocks[1].text
                 */}
-                  {this._getBlockByArea(page, 1).map((block, i) => {
+                  {/* {this._getBlockByArea(page, 1).map((block, i) => {
                     return (
                       <div key={i} className={classNames('col-xs-12')}>
                         <div className="body">
@@ -212,7 +177,7 @@ Looks like the component can render with the following data:
                         </div>
                       </div>
                     )
-                  })}
+                  })} */}
                 </div>
               </div>
 
@@ -221,9 +186,11 @@ Looks like the component can render with the following data:
                   blocks[2].file.data
                   blocks[2].title
                   blocks[2].summary
-                  properties
+                  √ primary1Color
+                  √ primary2Color
+                  √ properties
                 */}
-                {this._getBlockByArea(page, 2).length > 0 ? (
+                {/* {this._getBlockByArea(page, 2).length > 0 ? (
                   <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                     <TextHeader
                       title={this.props.intl.translate({
@@ -231,19 +198,19 @@ Looks like the component can render with the following data:
                         default: 'TOOLS &amp; RESOURCES',
                         case: 'words',
                       })}
-                      properties={this.props.properties}
+                      properties={properties}
                     />
                   </div>
-                ) : null}
+                ) : null} */}
 
                 <div>
-                  {this._getBlockByArea(page, 2).map((block, i) => {
+                  {/* {this._getBlockByArea(page, 2).map((block, i) => {
                     return (
                       <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
                         <IntroCardView block={block} primary1Color={primary1Color} primary2Color={primary2Color} />
                       </div>
                     )
-                  })}
+                  })} */}
                 </div>
               </div>
 
@@ -252,9 +219,11 @@ Looks like the component can render with the following data:
                   blocks[3].file.data
                   blocks[3].title
                   blocks[3].summary
-                  properties
+                  √ primary1Color
+                  √ primary2Color
+                  √ properties
                 */}
-                {this._getBlockByArea(page, 3).length > 0 ? (
+                {/* {this._getBlockByArea(page, 3).length > 0 ? (
                   <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                     <TextHeader
                       title={this.props.intl.translate({
@@ -262,19 +231,19 @@ Looks like the component can render with the following data:
                         default: 'NEWS &amp; UPDATES',
                         case: 'words',
                       })}
-                      properties={this.props.properties}
+                      properties={properties}
                     />
                   </div>
-                ) : null}
+                ) : null} */}
 
                 <div>
-                  {this._getBlockByArea(page, 3).map((block, i) => {
+                  {/* {this._getBlockByArea(page, 3).map((block, i) => {
                     return (
                       <div key={i} className={classNames('col-xs-12', 'col-md-3')}>
                         <IntroCardView block={block} primary1Color={primary1Color} primary2Color={primary2Color} />
                       </div>
                     )
-                  })}
+                  })} */}
                 </div>
               </div>
 
@@ -282,9 +251,9 @@ Looks like the component can render with the following data:
                 {/* DATA:
                   blocks[4].title
                   blocks[4].text
-                  properties
+                  √ properties
                 */}
-                {this._getBlockByArea(page, 4).length > 0 ? (
+                {/* {this._getBlockByArea(page, 4).length > 0 ? (
                   <div className={classNames('col-xs-12')} style={{ marginBottom: '15px' }}>
                     <TextHeader
                       title={this.props.intl.translate({
@@ -292,13 +261,13 @@ Looks like the component can render with the following data:
                         default: 'COMBATIBILITY',
                         case: 'words',
                       })}
-                      properties={this.props.properties}
+                      properties={properties}
                     />
                   </div>
-                ) : null}
+                ) : null} */}
 
                 <div>
-                  {this._getBlockByArea(page, 4).map((block, i) => {
+                  {/* {this._getBlockByArea(page, 4).map((block, i) => {
                     return (
                       <div key={i} className={classNames('col-xs-12')}>
                         <div className="body">
@@ -313,7 +282,7 @@ Looks like the component can render with the following data:
                         </div>
                       </div>
                     )
-                  })}
+                  })} */}
                 </div>
               </div>
             </PromiseWrapper>
@@ -326,26 +295,20 @@ Looks like the component can render with the following data:
 
 // PROPTYPES
 // ----------------------------------------
-const { func, object, string } = PropTypes
+const { object, string } = PropTypes
 HomeLayout.propTypes = {
   // REDUX: reducers/state
   computeLogin: object.isRequired,
   computePage: object.isRequired,
   computeUserStartpage: object.isRequired,
-  properties: object.isRequired,
   windowPath: string.isRequired,
-  // REDUX: actions/dispatch/func
-  fetchUserStartpage: func.isRequired,
-  pushWindowPath: func.isRequired,
-  queryPage: func.isRequired,
 }
 
 // REDUX: reducers/state
 // ----------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvPage, fvUser, navigation, nuxeo, windowPath, locale } = state
+  const { fvPage, fvUser, nuxeo, windowPath, locale } = state
 
-  const { properties } = navigation
   const { computeLogin } = nuxeo
   const { computePage } = fvPage
   const { computeUserStartpage } = fvUser
@@ -356,17 +319,9 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePage,
     computeUserStartpage,
-    properties,
     windowPath: _windowPath,
     intl: intlService,
   }
 }
 
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchUserStartpage,
-  pushWindowPath,
-  queryPage,
-}
-
-export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(HomeLayout))
+export default connect(mapStateToProps, null)(HomeLayout)
