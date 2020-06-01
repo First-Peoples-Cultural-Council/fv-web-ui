@@ -20,7 +20,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import selectn from 'selectn'
-// import { withTheme } from '@material-ui/core/styles'
 
 import useIntl from './dataSource/useIntl'
 import usePage from './dataSource/usePage'
@@ -93,18 +92,15 @@ function HomeData(props) {
         entity: computeUserStartpage,
       },
     ]),
-    primary1Color: '#eaeaea', // TODO: selectn('theme.palette.primary1Color', this.props),
-    primary2Color: '#eaeaea', // TODO: selectn('theme.palette.primary2Color', this.props),
+    primary1Color: '#eaeaea', // TODO: theme.palette.primary1Color
+    primary2Color: '#eaeaea', // TODO: theme.palette.primary2Color
     accessButtons,
     pushWindowPath,
     intl,
   })
 }
 
-// TODO: hook into Mat-UIs withTheme()
-// export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(HomeData))
-//
-// NOTE: v4.10.0 has a hook
+// TODO: MAT-UI v4.10.0 has a hook
 // https://material-ui.com/styles/advanced/#accessing-the-theme-in-a-component
 // import { useTheme } from '@material-ui/core/styles'
 // function DeepChild() {

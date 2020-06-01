@@ -64,7 +64,6 @@ export class HomeLayout extends Component {
             overflow: 'hidden',
           }
           return (
-            // DATA: computeEntities
             <PromiseWrapper renderOnError computeEntities={computeEntities}>
               <div className="row" style={homePageStyle}>
                 <div style={{ position: 'relative', height: '650px' }}>
