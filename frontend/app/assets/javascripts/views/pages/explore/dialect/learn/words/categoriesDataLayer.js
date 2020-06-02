@@ -61,13 +61,8 @@ class CategoriesDataLayer extends Component {
   }
 
   render() {
-    const { categories, categoriesEntries, sharedCategories } = this.getDataSet()
-    const { categoriesData, categoriesRawData } = this.getCategories(
-      this.categoryType,
-      categories,
-      categoriesEntries,
-      sharedCategories
-    )
+    const { categories, sharedCategories } = this.getDataSet()
+    const { categoriesData, categoriesRawData } = this.getCategories(this.categoryType, categories, sharedCategories)
     return this.props.children({
       categoriesData,
       categoriesRawData,
@@ -78,17 +73,12 @@ class CategoriesDataLayer extends Component {
   Returns: {
     categories,
     sharedCategories,
-    categoriesEntries
   }
   */
   getDataSet() {
     return {
       categories: ProviderHelpers.getEntry(this.props.computeCategories, this.catPath),
       sharedCategories: ProviderHelpers.getEntry(this.props.computeSharedCategories, this.sharedCatPath),
-      categoriesEntries: selectn(
-        'response.entries',
-        ProviderHelpers.getEntry(this.props.computeCategories, this.catPath)
-      ),
     }
   }
   /*
@@ -97,9 +87,17 @@ class CategoriesDataLayer extends Component {
     categoriesRawData: [],
   }
   */
-  getCategories = (categoryType, categories, categoriesEntries, sharedCategories) => {
+  getCategories = (categoryType, categories, sharedCategories) => {
+    const categoriesEntries = selectn('response.entries', categories)
     switch (categoryType) {
       case 'Categories':
+        // Wait for a response from local categories before returning data
+        if (selectn('action', categories) === 'FV_CATEGORIES_QUERY_START') {
+          return {
+            categoriesData: undefined,
+            categoriesRawData: undefined,
+          }
+        }
         // Update state
         // Fallback to shared categories if no local categories
         return {
