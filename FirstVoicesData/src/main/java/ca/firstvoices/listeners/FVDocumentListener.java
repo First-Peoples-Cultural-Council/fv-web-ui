@@ -97,12 +97,18 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
       cleanupWordsAndPhrases();
       validateCharacter();
+      assignRelatedWords();
     }
 
     if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
       sanitizeWord();
     }
 
+  }
+
+  private void assignRelatedWords() {
+    String[] property = (String[]) document.getProperty("fv:core", "related_words");
+    if (property != null && ) {}
   }
 
   public void assignAncestors() {
