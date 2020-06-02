@@ -244,9 +244,9 @@ export class DialectViewWord extends Component {
   }
 
   _getAudio = (computeWord) => {
-    const audios = []
-    ;(selectn('response.contextParameters.word.related_audio', computeWord) || []).map((audio) => {
-      audios.push(
+    const audiosData = selectn('response.contextParameters.word.related_audio', computeWord) || []
+    const audios = audiosData.map((audio) => {
+      return (
         <Preview
           key={selectn('uid', audio)}
           expandedValue={audio}
@@ -377,9 +377,9 @@ export class DialectViewWord extends Component {
   }
 
   _getPhotos = (computeWord) => {
-    const photos = []
-    ;(selectn('response.contextParameters.word.related_pictures', computeWord) || []).map((picture, key) => {
-      const image = {
+    const photosData = selectn('response.contextParameters.word.related_pictures', computeWord) || []
+    const photos = photosData.map((picture, key) => {
+      return {
         original: selectn('views[2].url', picture),
         thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
         description: picture['dc:description'],
@@ -387,7 +387,6 @@ export class DialectViewWord extends Component {
         id: picture.uid,
         object: picture,
       }
-      photos.push(image)
     })
 
     return photos.length > 0 ? (
@@ -401,9 +400,9 @@ export class DialectViewWord extends Component {
   }
 
   _getPhrases = (computeWord) => {
-    const phrases = []
+    const phrasesData = selectn('response.contextParameters.word.related_phrases', computeWord) || []
     const siteTheme = this.props.routeParams.siteTheme
-    ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
+    const phrases = phrasesData.map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
@@ -420,23 +419,22 @@ export class DialectViewWord extends Component {
       )
 
       if (phraseDefinitions.length === 0) {
-        phrases.push(<p key={key}>{phraseLink}</p>)
-      } else {
-        phrases.push(
-          <div key={key}>
-            <p>
-              {phraseLink}
-              {phraseDefinitions.map((groupValue, innerKey) => {
-                return (
-                  <span key={innerKey} className="DialectViewRelatedPhrasesDefinition">
-                    {groupValue.translation}
-                  </span>
-                )
-              })}
-            </p>
-          </div>
-        )
+        return <p key={key}>{phraseLink}</p>
       }
+      return (
+        <div key={key}>
+          <p>
+            {phraseLink}
+            {phraseDefinitions.map((groupValue, innerKey) => {
+              return (
+                <span key={innerKey} className="DialectViewRelatedPhrasesDefinition">
+                  {groupValue.translation}
+                </span>
+              )
+            })}
+          </p>
+        </div>
+      )
     })
     return phrases.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
@@ -467,11 +465,12 @@ export class DialectViewWord extends Component {
   }
 
   _getTabs = (computeWord) => {
+    const tabsData = selectn('response.contextParameters.word.related_pictures', computeWord) || []
     const tabs = []
 
     // Photos
     const photosThumbnails = []
-    ;(selectn('response.contextParameters.word.related_pictures', computeWord) || []).map((picture) => {
+    tabsData.forEach((picture) => {
       photosThumbnails.push(
         <img
           key={picture.uid}
@@ -490,9 +489,9 @@ export class DialectViewWord extends Component {
     }
 
     // Videos
-    const videoThumbnails = []
-    ;(selectn('response.contextParameters.word.related_videos', computeWord) || []).map((video) => {
-      videoThumbnails.push(
+    const videoThumbnailsData = selectn('response.contextParameters.word.related_videos', computeWord) || []
+    const videoThumbnails = videoThumbnailsData.map((video) => {
+      return (
         <video
           key={video.uid}
           src={NavigationHelpers.getBaseURL() + video.path}
@@ -510,9 +509,9 @@ export class DialectViewWord extends Component {
     }
 
     // Audio
-    const audios = []
-    ;(selectn('response.contextParameters.word.related_audio', computeWord) || []).map((audio) => {
-      audios.push(<Preview key={selectn('uid', audio)} expandedValue={audio} minimal type="FVAudio" />)
+    const audiosData = selectn('response.contextParameters.word.related_audio', computeWord) || []
+    const audios = audiosData.map((audio) => {
+      return <Preview key={selectn('uid', audio)} expandedValue={audio} minimal type="FVAudio" />
     })
     if (audios.length > 0) {
       tabs.push(
@@ -523,9 +522,9 @@ export class DialectViewWord extends Component {
     }
 
     // Phrases
-    const phrases = []
+    const phrasesData = selectn('response.contextParameters.word.related_phrases', computeWord) || []
     const siteTheme = this.props.routeParams.siteTheme
-    ;(selectn('response.contextParameters.word.related_phrases', computeWord) || []).map((phrase, key) => {
+    const phrases = phrasesData.map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
       const phraseLink = (
@@ -544,23 +543,22 @@ export class DialectViewWord extends Component {
         </a>
       )
       if (phraseDefinitions.length === 0) {
-        phrases.push(<p key={key}>{phraseLink}</p>)
-      } else {
-        phrases.push(
-          <div key={key}>
-            <p>{phraseLink}</p>{' '}
-            <ul>
-              {phraseDefinitions.map((groupValue, innerKey) => {
-                return (
-                  <li key={innerKey}>
-                    {groupValue.translation} ({groupValue.language})
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )
+        return <p key={key}>{phraseLink}</p>
       }
+      return (
+        <div key={key}>
+          <p>{phraseLink}</p>{' '}
+          <ul>
+            {phraseDefinitions.map((groupValue, innerKey) => {
+              return (
+                <li key={innerKey}>
+                  {groupValue.translation} ({groupValue.language})
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )
     })
     if (phrases.length > 0) {
       tabs.push(
@@ -574,9 +572,9 @@ export class DialectViewWord extends Component {
   }
 
   _getVideos = (computeWord) => {
-    const videos = []
-    ;(selectn('response.contextParameters.word.related_videos', computeWord) || []).map((video, key) => {
-      const vid = {
+    const videosData = selectn('response.contextParameters.word.related_videos', computeWord) || []
+    const videos = videosData.map((video, key) => {
+      return {
         original: NavigationHelpers.getBaseURL() + video.path,
         thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
         description: video['dc:description'],
@@ -584,7 +582,6 @@ export class DialectViewWord extends Component {
         id: video.uid,
         object: video,
       }
-      videos.push(vid)
     })
     return videos.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseVideo">
