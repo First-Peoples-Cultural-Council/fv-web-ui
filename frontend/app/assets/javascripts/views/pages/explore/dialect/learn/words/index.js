@@ -41,7 +41,6 @@ class PageDialectLearnWords extends Component {
           changeFilter,
           dialectFilterListWillUnmount, // TODO: why this can't be handled by setDialectFilter?
           filterInfo,
-          handleAlphabetClick,
           intl,
           isKidsTheme,
           onNavigateRequest,
@@ -90,19 +89,19 @@ class PageDialectLearnWords extends Component {
               </div>
               <div className="row">
                 <div className="col-xs-12 col-md-3 PrintHide">
-                  <AlphabetCharactersData>
-                    {({ characters, dialectClassName, letter }) => {
+                  <AlphabetCharactersData
+                    letterClickedCallback={({ href, updateHistory }) => {
+                      this.changeFilter(href, updateHistory)
+                    }}
+                  >
+                    {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked, dialectClassName }) => {
                       return (
                         <AlphabetCharactersPresentation
+                          activeLetter={activeLetter}
                           characters={characters}
                           dialectClassName={dialectClassName}
-                          handleClick={(letterClicked, href) => {
-                            // Update redux
-                            handleAlphabetClick({ letterClicked, href, updateHistory: false })
-                            // Navigate to new page
-                            NavigationHelpers.navigate(href, pushWindowPath, false)
-                          }}
-                          letter={letter}
+                          generateAlphabetCharacterHref={generateAlphabetCharacterHref}
+                          letterClicked={letterClicked}
                           splitWindowPath={splitWindowPath}
                         />
                       )
