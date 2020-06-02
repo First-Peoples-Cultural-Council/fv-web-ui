@@ -15,7 +15,7 @@ limitations under the License.
 
 // 3rd party
 // -------------------------------------------
-import React, { Component, Suspense } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is, Set, Map } from 'immutable'
 import selectn from 'selectn'
@@ -40,6 +40,7 @@ import DialectFilterListPresentation from 'views/components/DialectFilterList/Di
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 
 import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
@@ -51,13 +52,12 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
+
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
-  dictionaryListSmallScreenTemplatePhrases,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
@@ -66,10 +66,10 @@ import {
   updateUrlAfterResetSearch,
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
+  getURLPageProps,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
 
-const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
 // PhrasesFilteredByCategory
@@ -148,84 +148,64 @@ export class PhrasesFilteredByCategory extends Component {
       isKidsTheme,
     } = this.state
 
-    const {
-      computeDialect2,
-      computeDocument,
-      computeLogin,
-      computePhrases,
-      computePortal,
-      hasPagination,
-      listView,
-      routeParams,
-      splitWindowPath,
-    } = this.props
+    const { computeDocument, computeLogin, computePortal, hasPagination, routeParams, splitWindowPath } = this.props
 
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const computedPortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
-    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    const computedDialect2Response = selectn('response', computedDialect2)
-    const parentUid = selectn('response.uid', computedDocument)
-    const computedPhrases = ProviderHelpers.getEntry(computePhrases, parentUid)
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computedPortal) ||
       ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
-    const phraseListView = parentUid ? (
-      <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryList
-          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-          dictionaryListViewMode={listView.mode}
-          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
-          flashcardTitle={pageTitle}
-          dialect={computedDialect2Response}
-          // ==================================================
-          // Search
-          // --------------------------------------------------
-          handleSearch={this.changeFilter}
-          resetSearch={this.resetSearch}
-          hasSearch
-          searchUi={[
-            {
-              defaultChecked: true,
-              idName: 'searchByTitle',
-              labelText: 'Phrase',
-            },
-            {
-              defaultChecked: true,
-              idName: 'searchByDefinitions',
-              labelText: 'Definitions',
-            },
-            {
-              idName: 'searchByCulturalNotes',
-              labelText: 'Cultural notes',
-            },
-          ]}
-          searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-          // ==================================================
-          // Table data
-          // --------------------------------------------------
-          items={selectn('response.entries', computedPhrases)}
-          columns={this.getColumns()}
-          // ===============================================
-          // Pagination
-          // -----------------------------------------------
-          hasPagination
-          fetcher={({ currentPageIndex, pageSize }) => {
-            const newUrl = appendPathArrayAfterLandmark({
-              pathArray: [pageSize, currentPageIndex],
-              splitWindowPath,
-              landmarkArray: [routeParams.phraseBook],
-            })
-            NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
-          }}
-          fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
-          metadata={selectn('response', computedPhrases)}
-          // ===============================================
-          // Sort
-          // -----------------------------------------------
-          sortHandler={this._sortHandler}
-          // ===============================================
-        />
-      </Suspense>
+    const { searchByMode, searchNxqlSort } = this.props.computeSearchDialect
+    const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
+    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = getURLPageProps({ routeParams })
+
+    const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+    const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
+
+    const phraseListView = dialectUid ? (
+      <PhraseListView
+        controlViaURL
+        DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
+        DEFAULT_PAGE={DEFAULT_PAGE}
+        DEFAULT_SORT_COL={DEFAULT_SORT_COL}
+        DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
+        disableClickItem={false}
+        filter={filterInfo}
+        flashcard={this.state.flashcardMode}
+        flashcardTitle={pageTitle}
+        // TODO
+        onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
+        parentID={selectn('response.uid', computeDocument)}
+        dialectID={dialectUid}
+        routeParams={this.props.routeParams}
+        // Search:
+        handleSearch={this.changeFilter}
+        resetSearch={this.resetSearch}
+        hasSearch
+        searchUi={[
+          {
+            defaultChecked: true,
+            idName: 'searchByTitle',
+            labelText: 'Phrase',
+          },
+          {
+            defaultChecked: true,
+            idName: 'searchByDefinitions',
+            labelText: 'Definitions',
+          },
+          {
+            idName: 'searchByCulturalNotes',
+            labelText: 'Cultural notes',
+          },
+        ]}
+        searchByMode={searchByMode}
+        // TODO
+        rowClickHandler={this.props.rowClickHandler}
+        // TODO
+        hasSorting={this.props.hasSorting}
+        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+        dictionaryListViewMode={this.props.listView.mode}
+      />
     ) : null
 
     // Render kids view
@@ -236,6 +216,7 @@ export class PhrasesFilteredByCategory extends Component {
             disablePageSize: true,
             filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
             gridListView: true,
+            gridCols: 2,
           })
         : null
       return (
@@ -396,7 +377,6 @@ export class PhrasesFilteredByCategory extends Component {
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
 
     const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const uid = useIdOrPathFallback({ id: selectn('response.uid', extractComputeDocument), routeParams })
     const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
 
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
@@ -410,6 +390,7 @@ export class PhrasesFilteredByCategory extends Component {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
+    const uid = useIdOrPathFallback({ id: selectn('response.uid', extractComputeDocument), routeParams })
     this.props.fetchPhrases(uid, nql)
   }
 
@@ -622,7 +603,7 @@ PhrasesFilteredByCategory.propTypes = {
   computeLogin: object.isRequired,
   computePhrases: object.isRequired,
   computePortal: object.isRequired,
-  computeSearchDialect: object,
+  computeSearchDialect: object.isRequired,
   listView: object.isRequired,
   navigationRouteSearch: object.isRequired,
   properties: object.isRequired,
@@ -639,20 +620,20 @@ PhrasesFilteredByCategory.propTypes = {
   updatePageProperties: func.isRequired,
 }
 PhrasesFilteredByCategory.defaultProps = {
-  computeSearchDialect: {},
   DEFAULT_LANGUAGE: 'english',
 }
 
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, windowPath } = state
+  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeDialect2 } = fvDialect
-  const { computePhrases } = fvPhrase
-  const { computePortal } = fvPortal
   const { computeDocument } = document
   const { computeLogin } = nuxeo
+  const { computePhrases } = fvPhrase
+  const { computePortal } = fvPortal
+  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
 
@@ -662,10 +643,11 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePhrases,
     computePortal,
+    computeSearchDialect,
     listView,
     navigationRouteSearch: route.search,
-    routeParams: route.routeParams,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }

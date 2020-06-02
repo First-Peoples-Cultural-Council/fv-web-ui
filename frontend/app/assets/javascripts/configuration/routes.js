@@ -278,18 +278,22 @@ const addImmersionCategory = (route) => {
   })
 }
 
+// eg: /learn/phraseBook/[uid]
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
-    path: route.path.concat(['book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)]),
-    title:
-      intl.translate({
-        key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
-        default: 'Browsing by Phrase Book',
-        case: 'words',
-      }) +
-      ' | ' +
-      selectn('title', route),
+    path: [...DIALECT_PATH, 'learn', 'phraseBook', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
+    title: `${intl.translate({
+      key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
+      default: 'Browsing by Phrase Book',
+      case: 'words',
+    })} | ${intl.translate({
+      key: 'views.pages.explore.dialect.learn.phrases.page_title',
+      default: 'Phrases',
+      case: 'words',
+    })} | {$dialect_name}`,
     page: <Pages.PageDialectLearnPhrasesFilteredByCategory />,
+    extractPaths: true,
+    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   })
 }
 
@@ -1800,10 +1804,11 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  addBrowsePhraseBook(DIALECT_LEARN_PHRASES), // NOTE: THIS IS PHRASE'S BROWSE BY CATEGORY
-  addPagination(addBrowsePhraseBook(DIALECT_LEARN_PHRASES)), // NOTE: THIS IS PHRASE'S BROWSE BY CATEGORY
-  addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES),
-  addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)),
+  addBrowsePhraseBook(), // eg: /learn/phraseBook/[uid]
+  addPagination(addBrowsePhraseBook()), // eg: /learn/phraseBook/[uid]/10/1
+  addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES), // eg: learn/phrases/alphabet/b
+  addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)), // eg: learn/phrases/alphabet/b/10/1
+  // Phrasebooks
   {
     path: [
       KIDS_OR_DEFAULT,
@@ -1814,8 +1819,7 @@ const routes = [
       ANYTHING_BUT_SLASH,
       ANYTHING_BUT_SLASH,
       'learn',
-      'phrases',
-      'categories',
+      'phraseBooks',
     ],
     title:
       intl.translate({
@@ -1827,8 +1831,7 @@ const routes = [
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
-  addCategory(DIALECT_LEARN_PHRASES), // NOTE: This creates `.../learn/phrases/categories/[catId]` but it's not being used! `addBrowsePhraseBook` above is phrase's category view
-  addPagination(addCategory(DIALECT_LEARN_PHRASES)), // NOTE: This creates `.../learn/phrases/categories/[catId]` but it's not being used! `addBrowsePhraseBook` above is phrase's category view
+  // Phrases: Create
   {
     path: [
       KIDS_OR_DEFAULT,

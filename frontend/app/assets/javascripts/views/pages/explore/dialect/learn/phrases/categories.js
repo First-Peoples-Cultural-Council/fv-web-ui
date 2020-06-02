@@ -104,15 +104,12 @@ export class PhraseCategories extends Component {
   }
 
   _onNavigateRequest(category) {
+    const { routeParams } = this.props
     if (this.props.action) {
       this.props.action(category)
     } else {
       NavigationHelpers.navigate(
-        '/' +
-          this.props.routeParams.siteTheme +
-          this.props.routeParams.dialect_path +
-          '/learn/phrases/categories/' +
-          category.uid,
+        `/${routeParams.siteTheme}${routeParams.dialect_path}/learn/phraseBook/${category.uid}`,
         this.props.pushWindowPath,
         true
       )

@@ -121,6 +121,7 @@ export class PhrasesListView extends DataListView {
     const searchObj = getSearchObject()
 
     this.state = {
+      phrasesPath: props.parentID ? props.parentID : `${props.routeParams.dialect_path}/Dictionary`,
       columns: [
         {
           name: 'title',
@@ -282,25 +283,45 @@ export class PhrasesListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
-      '_onEntryNavigateRequest',
-      '_handleRefetch',
-      '_handleSortChange',
-      '_handleColumnOrderChange',
-      '_getPathOrParentID',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
+      (method) => (this[method] = this[method].bind(this))
+    )
   }
 
   render() {
+    const {
+      dialect,
+      dictionaryListClickHandlerViewMode,
+      dictionaryListViewMode,
+      exportDialectColumns,
+      exportDialectExportElement,
+      exportDialectLabel,
+      exportDialectQuery,
+      flashcard,
+      flashcardTitle,
+      gridCols,
+      gridListView,
+      gridViewProps,
+      handleSearch,
+      hasSearch,
+      hasSorting,
+      hasViewModeButtons,
+      navigationRouteSearch,
+      resetSearch,
+      rowClickHandler,
+      searchByMode,
+      searchUi,
+    } = this.props
+
     const computeEntities = Immutable.fromJS([
       {
-        id: this._getPathOrParentID(this.props),
+        id: this.state.phrasesPath,
         entity: this.props.computePhrases,
       },
     ])
 
     // If dialect not supplied, promise wrapper will need to wait for compute dialect
-    if (!this.props.dialect) {
+    if (!dialect) {
       computeEntities.push(
         new Map({
           id: this.props.routeParams.dialect_path,
@@ -309,9 +330,8 @@ export class PhrasesListView extends DataListView {
       )
     }
 
-    const computePhrases = ProviderHelpers.getEntry(this.props.computePhrases, this._getPathOrParentID(this.props))
-    const computeDialect2 = this.props.dialect || this.getDialect()
-
+    const computePhrases = ProviderHelpers.getEntry(this.props.computePhrases, this.state.phrasesPath)
+    const computeDialect2 = dialect || this.getDialect()
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computePhrases) && (
@@ -324,18 +344,19 @@ export class PhrasesListView extends DataListView {
 
             // Export
             hasExportDialect
-            exportDialectExportElement={this.props.exportDialectExportElement || 'FVPhrase'}
-            exportDialectLabel={this.props.exportDialectLabel}
-            exportDialectQuery={this.props.exportDialectQuery}
-            exportDialectColumns={this.props.exportDialectColumns}
+            exportDialectExportElement={exportDialectExportElement || 'FVPhrase'}
+            exportDialectLabel={exportDialectLabel}
+            exportDialectQuery={exportDialectQuery}
+            exportDialectColumns={exportDialectColumns}
             //
             columns={this.state.columns}
             data={computePhrases}
             dialect={selectn('response', computeDialect2)}
-            flashcard={this.props.flashcard}
-            flashcardTitle={this.props.flashcardTitle}
-            gridCols={this.props.gridCols}
-            gridListView={this.props.gridListView}
+            flashcard={flashcard}
+            flashcardTitle={flashcardTitle}
+            gridCols={gridCols}
+            gridListView={gridListView}
+            gridViewProps={gridViewProps}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
             // refetcher: this._handleRefetch,
@@ -347,9 +368,8 @@ export class PhrasesListView extends DataListView {
                 pageSize,
                 preserveSearch: true,
                 // 1st: redux values, 2nd: url search query, 3rd: defaults
-                sortOrder:
-                  this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
-                sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+                sortOrder: navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
+                sortBy: navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
               })
             }}
             sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
@@ -373,20 +393,20 @@ export class PhrasesListView extends DataListView {
               })
             }}
             type={'FVPhrase'}
-            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
-            dictionaryListViewMode={this.props.dictionaryListViewMode}
+            dictionaryListClickHandlerViewMode={dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
             // SEARCH:
-            handleSearch={this.props.handleSearch}
-            hasSearch={this.props.hasSearch}
+            handleSearch={handleSearch}
+            hasSearch={hasSearch}
             searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-            resetSearch={this.props.resetSearch}
-            searchByMode={this.props.searchByMode}
-            searchUi={this.props.searchUi}
+            resetSearch={resetSearch}
+            searchByMode={searchByMode}
+            searchUi={searchUi}
             // List view
-            hasViewModeButtons={this.props.hasViewModeButtons}
-            hasSorting={this.props.hasSorting}
-            rowClickHandler={this.props.rowClickHandler}
+            hasViewModeButtons={hasViewModeButtons}
+            hasSorting={hasSorting}
+            rowClickHandler={rowClickHandler}
           />
         )}
       </PromiseWrapper>
@@ -433,11 +453,7 @@ export class PhrasesListView extends DataListView {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
-    props.fetchPhrases(this._getPathOrParentID(props), nql)
-  }
-
-  _getPathOrParentID(newProps) {
-    return newProps.parentID ? newProps.parentID : newProps.routeParams.dialect_path + '/Dictionary'
+    props.fetchPhrases(this.state.phrasesPath, nql)
   }
 
   _onEntryNavigateRequest(item) {
