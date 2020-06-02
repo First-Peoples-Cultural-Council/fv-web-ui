@@ -28,6 +28,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
@@ -102,6 +103,10 @@ export class PhrasesFilteredByCategory extends Component {
     // PHRASES
     // ---------------------------------------------
     this.fetchListViewData()
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -592,6 +597,7 @@ export class PhrasesFilteredByCategory extends Component {
           routeParams: this.props.routeParams,
           splitWindowPath: this.props.splitWindowPath,
           pushWindowPath: this.props.pushWindowPath,
+          urlAppend: `/${this.props.routeParams.pageSize}/1`,
         })
       }
     )
@@ -637,6 +643,7 @@ PhrasesFilteredByCategory.propTypes = {
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 PhrasesFilteredByCategory.defaultProps = {
   computeSearchDialect: {},
@@ -680,6 +687,7 @@ const mapDispatchToProps = {
   setListViewMode,
   setRouteParams,
   updatePageProperties,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)

@@ -3,6 +3,8 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
+    <aws.sdk.version>1.11.785</aws.sdk.version>
+
   </properties>
 
   <parent>
@@ -25,14 +27,19 @@
     <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
+    <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
-    <module>frontend</module>
     <module>FirstVoicesData</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCognitoAuth</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesPublisher</artifactId>
@@ -74,11 +81,6 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>firstvoices-web-ui</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.nuxeo.ecm.distribution</groupId>
         <artifactId>nuxeo-distribution-cap</artifactId>
         <version>${nuxeo.distribution.version}</version>
@@ -115,6 +117,16 @@
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesData</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>${aws.sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-core</artifactId>
+        <version>${aws.sdk.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -1,8 +1,0 @@
-Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
-Manifest-Version: 1.0
-Bundle-Version: 1.0.0
-Bundle-Name: FirstVoicesUI
-Bundle-ManifestVersion: 1
-Bundle-SymbolicName: first.voices.ui.app;singleton=true
-Nuxeo-Component: OSGI-INF/fv-auth-contrib.xml,OSGI-INF/fv-login-startup-page-web-contrib.xml,OSGI-INF/fv-browser-cache-contrib.xml

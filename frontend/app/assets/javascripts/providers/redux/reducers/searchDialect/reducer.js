@@ -305,8 +305,9 @@ const computeSearchDialect = (state = initialState, action) => {
       return initialState
     }
 
-    default:
+    default: {
       return state
+    }
   }
 }
 
