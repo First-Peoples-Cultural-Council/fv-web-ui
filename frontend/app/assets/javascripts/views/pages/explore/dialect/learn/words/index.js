@@ -419,10 +419,6 @@ class PageDialectLearnWords extends PageDialectLearnBase {
         filterInfo: newFilter,
       },
       () => {
-        // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
-
         // Remove alphabet/category filter urls
         if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
           let resetUrl = `/${this.props.splitWindowPath.join('/')}`
@@ -433,7 +429,15 @@ class PageDialectLearnWords extends PageDialectLearnBase {
             resetUrl = `/${_splitWindowPath.join('/')}`
           }
 
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+          NavigationHelpers.navigate(
+            `${resetUrl}/${this.props.routeParams.pageSize}/1`,
+            this.props.pushWindowPath,
+            false
+          )
+        } else {
+          // When facets change, pagination should be reset.
+          // In these pages (words/phrase), list views are controlled via URL
+          this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
         }
       }
     )
