@@ -207,7 +207,11 @@ class WordsData extends PageDialectLearnBase {
             _splitWindowPath.splice(learnIndex + 2)
             resetUrl = `/${_splitWindowPath.join('/')}`
           }
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+          NavigationHelpers.navigate(
+            `${resetUrl}/${this.props.routeParams.pageSize}/1`,
+            this.props.pushWindowPath,
+            false
+          )
         } else {
           // When facets change, pagination should be reset.
           // In these pages (words/phrase), list views are controlled via URL
