@@ -105,7 +105,7 @@ class WordsFilteredByCategory extends Component {
                 <div className="col-xs-12 col-md-3 PrintHide">
                   <AlphabetCharactersData
                     letterClickedCallback={({ href, updateHistory }) => {
-                      this.changeFilter(href, updateHistory)
+                      changeFilter(href, updateHistory)
                     }}
                   >
                     {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked, dialectClassName }) => {
