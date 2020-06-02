@@ -80,5 +80,9 @@ public class AssignOriginListener implements EventListener {
       saveOrigin(doc, relatedAudio);
       saveOrigin(doc, relatedVideos);
     }
+
+    if (doc.getType().equals("FVCategory")) {
+      doc.followTransition("Publish");
+    }
   }
 }
