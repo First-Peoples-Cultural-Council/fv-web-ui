@@ -26,9 +26,9 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPhrases } from 'providers/redux/reducers/fvPhrase'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
@@ -51,7 +51,6 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import {
@@ -107,7 +106,7 @@ export class PhrasesFilteredByCategory extends Component {
   }
 
   componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -315,9 +314,9 @@ export class PhrasesFilteredByCategory extends Component {
 
             <CategoriesDataLayer fetchPhraseBooks>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let CategoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  CategoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={new Set([routeParams.phraseBook])}
                       setDialectFilterCallback={this.changeFilter} // TODO
@@ -340,7 +339,8 @@ export class PhrasesFilteredByCategory extends Component {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return CategoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -380,7 +380,7 @@ export class PhrasesFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeSearchDialect, computeDocument, navigationRouteSearch, routeParams } = this.props
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
     const { phraseBook, area } = routeParams
 
     let currentAppliedFilter = ''
@@ -407,8 +407,7 @@ export class PhrasesFilteredByCategory extends Component {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
-
+    const letter = routeParams.letter
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
     } else {
@@ -598,6 +597,7 @@ export class PhrasesFilteredByCategory extends Component {
           routeParams: this.props.routeParams,
           splitWindowPath: this.props.splitWindowPath,
           pushWindowPath: this.props.pushWindowPath,
+          urlAppend: `/${this.props.routeParams.pageSize}/1`,
         })
       }
     )
@@ -628,7 +628,7 @@ PhrasesFilteredByCategory.propTypes = {
   computeLogin: object.isRequired,
   computePhrases: object.isRequired,
   computePortal: object.isRequired,
-  computeSearchDialect: object.isRequired,
+  computeSearchDialect: object,
   listView: object.isRequired,
   navigationRouteSearch: object.isRequired,
   properties: object.isRequired,
@@ -640,27 +640,26 @@ PhrasesFilteredByCategory.propTypes = {
   fetchPhrases: func.isRequired,
   fetchPortal: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 PhrasesFilteredByCategory.defaultProps = {
-  searchDialectUpdate: () => {},
+  computeSearchDialect: {},
   DEFAULT_LANGUAGE: 'english',
 }
 
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, windowPath } = state
 
   const { computeDialect2 } = fvDialect
   const { computePhrases } = fvPhrase
   const { computePortal } = fvPortal
   const { computeDocument } = document
   const { computeLogin } = nuxeo
-  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
 
@@ -670,7 +669,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePhrases,
     computePortal,
-    computeSearchDialect,
     listView,
     navigationRouteSearch: route.search,
     routeParams: route.routeParams,
@@ -686,10 +684,10 @@ const mapDispatchToProps = {
   fetchPhrases,
   fetchPortal,
   pushWindowPath,
-  searchDialectUpdate,
   setListViewMode,
   setRouteParams,
   updatePageProperties,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)

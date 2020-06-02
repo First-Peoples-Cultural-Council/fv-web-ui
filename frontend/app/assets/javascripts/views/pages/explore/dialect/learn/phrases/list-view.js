@@ -423,8 +423,8 @@ export class PhrasesListView extends DataListView {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
-    const { computeSearchDialect, routeParams } = this.props
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const { routeParams } = this.props
+    const letter = routeParams.letter
 
     if (letter) {
       nql = `${nql}&dialectId=${this.props.dialectID}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
@@ -433,7 +433,20 @@ export class PhrasesListView extends DataListView {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
-    props.fetchPhrases(this._getPathOrParentID(props), nql)
+    // NOTE: the following attempts to prevent double requests but it doesn't work all the time!
+    // Eventually `this.state.nql` becomes `undefined` and then a duplicate request is initiated
+    //
+    // DataListView calls this._fetchListViewData AND this.fetchData (which calls this.__fetchListViewData)
+    if (this.state.nql !== nql) {
+      this.setState(
+        {
+          nql,
+        },
+        () => {
+          props.fetchPhrases(this._getPathOrParentID(props), nql)
+        }
+      )
+    }
   }
 
   _getPathOrParentID(newProps) {
@@ -455,7 +468,7 @@ export class PhrasesListView extends DataListView {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, nuxeo, searchDialect, windowPath, locale } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath, locale } = state
 
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
@@ -463,12 +476,10 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computePhrases } = fvPhrase
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
-  const { computeSearchDialect } = searchDialect
   return {
     computeDialect2,
     computeLogin,
     computePhrases,
-    computeSearchDialect,
     intl: intlService,
     navigationRouteSearch: route.search,
     properties,

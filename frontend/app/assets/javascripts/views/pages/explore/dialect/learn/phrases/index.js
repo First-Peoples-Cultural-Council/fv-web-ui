@@ -25,10 +25,8 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
-
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -90,7 +88,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
   }
 
   componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -177,7 +175,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           dialectID={this.state.dialectId}
           routeParams={this.props.routeParams}
           // Search:
-          handleSearch={this.handleSearch}
+          handleSearch={this.changeFilter}
           resetSearch={this.resetSearch}
           hasSearch
           searchUi={[
@@ -206,17 +204,23 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     // Render kids or mobile view
     if (isKidsTheme) {
+      const kidsFilter = this.state.filterInfo.setIn(
+        ['currentAppliedFilter', 'kids'],
+        ' AND fv:available_in_childrens_archive=1'
+      )
+
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
             DEFAULT_PAGE_SIZE: 8,
             disablePageSize: true,
-            filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
+            filter: kidsFilter,
+            gridCols: 2,
             gridListView: true,
           })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="row" style={{ marginTop: '15px' }}>
+          <div className="row">
             <div className={classNames('col-xs-12', 'col-md-8', 'col-md-offset-2')}>{cloneWordListView}</div>
           </div>
         </PromiseWrapper>
@@ -401,10 +405,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         filterInfo: newFilter,
       },
       () => {
-        // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
-
         // Remove alphabet/category filter urls
         if (selectn('routeParams.phraseBook', this.props) || selectn('routeParams.letter', this.props)) {
           let resetUrl = `/${this.props.splitWindowPath.join('/')}`
@@ -415,7 +415,15 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             resetUrl = `/${_splitWindowPath.join('/')}`
           }
 
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+          NavigationHelpers.navigate(
+            `${resetUrl}/${this.props.routeParams.pageSize}/1`,
+            this.props.pushWindowPath,
+            false
+          )
+        } else {
+          // When facets change, pagination should be reset.
+          // In these pages (words/phrase), list views are controlled via URL
+          this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
         }
       }
     )
@@ -441,10 +449,7 @@ PageDialectLearnPhrases.propTypes = {
   fetchPortal: func.isRequired,
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func,
-}
-PageDialectLearnPhrases.defaultProps = {
-  searchDialectUpdate: () => {},
+  searchDialectReset: func.isRequired,
 }
 
 // REDUX: reducers/state
@@ -479,8 +484,8 @@ const mapDispatchToProps = {
   fetchPortal,
   overrideBreadcrumbs,
   pushWindowPath,
-  searchDialectUpdate,
   setListViewMode,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnPhrases)

@@ -26,9 +26,9 @@ import { fetchDocument } from 'providers/redux/reducers/document'
 import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { fetchWords } from 'providers/redux/reducers/fvWord'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDialectUpdate } from 'providers/redux/reducers/searchDialect'
 import { setListViewMode } from 'providers/redux/reducers/listView'
 import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
@@ -50,7 +50,6 @@ import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { initialState } from 'providers/redux/reducers/searchDialect/reducer'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -105,11 +104,11 @@ class WordsFilteredByCategory extends Component {
 
     // WORDS
     // ---------------------------------------------
-    this.fetchListViewData()
+    this.fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
   }
 
   componentWillUnmount() {
-    this.props.searchDialectUpdate(initialState)
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -318,9 +317,9 @@ class WordsFilteredByCategory extends Component {
 
             <CategoriesDataLayer>
               {({ categoriesData }) => {
-                return (
-                  categoriesData &&
-                  categoriesData.length > 0 && (
+                let categoriesDataLayerToRender = null
+                if (categoriesData && categoriesData.length > 0) {
+                  categoriesDataLayerToRender = (
                     <DialectFilterListData
                       appliedFilterIds={new Set([routeParams.category])}
                       setDialectFilterCallback={this.changeFilter}
@@ -343,7 +342,8 @@ class WordsFilteredByCategory extends Component {
                       }}
                     </DialectFilterListData>
                   )
-                )
+                }
+                return categoriesDataLayerToRender
               }}
             </CategoriesDataLayer>
           </div>
@@ -394,7 +394,7 @@ class WordsFilteredByCategory extends Component {
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeDocument, computeSearchDialect, navigationRouteSearch, routeParams } = this.props
+    const { computeDocument, navigationRouteSearch, routeParams } = this.props
     const { category, area } = routeParams
     let currentAppliedFilter = ''
     if (category) {
@@ -420,7 +420,7 @@ class WordsFilteredByCategory extends Component {
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
       1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children`
 
-    const letter = computeSearchDialect.searchByAlphabet || routeParams.letter
+    const letter = routeParams.letter
 
     if (letter) {
       nql = `${nql}&dialectId=${dialectUid}&letter=${letter}&starts_with_query=Document.CustomOrderQuery`
@@ -618,6 +618,7 @@ class WordsFilteredByCategory extends Component {
           routeParams: this.props.routeParams,
           splitWindowPath: this.props.splitWindowPath,
           pushWindowPath: this.props.pushWindowPath,
+          urlAppend: `/${this.props.routeParams.pageSize}/1`,
         })
       }
     )
@@ -660,10 +661,10 @@ WordsFilteredByCategory.propTypes = {
   fetchPortal: func.isRequired,
   fetchWords: func.isRequired,
   pushWindowPath: func.isRequired,
-  searchDialectUpdate: func.isRequired,
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 WordsFilteredByCategory.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
@@ -704,10 +705,10 @@ const mapDispatchToProps = {
   fetchPortal,
   fetchWords,
   pushWindowPath,
-  searchDialectUpdate,
   setListViewMode,
   setRouteParams,
   updatePageProperties,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordsFilteredByCategory)

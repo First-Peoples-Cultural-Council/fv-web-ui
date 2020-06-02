@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesHealthMonitor
+Bundle-Name: FirstVoicesHealthMonitor
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ManifestVersion: 2
+Export-Package: FirstVoicesHealthMonitor
+Bundle-Vendor: Nuxeo

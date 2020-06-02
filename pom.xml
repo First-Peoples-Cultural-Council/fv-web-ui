@@ -3,6 +3,8 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
+    <aws.sdk.version>1.11.785</aws.sdk.version>
+
   </properties>
 
   <parent>
@@ -15,23 +17,29 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.4.3-SNAPSHOT</version>
+  <version>3.4.5-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoices-marketplace</module>
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
+    <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
+    <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
-    <module>frontend</module>
     <module>FirstVoicesData</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCognitoAuth</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesPublisher</artifactId>
@@ -54,6 +62,11 @@
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesHealthMonitor</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesExport</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -65,11 +78,6 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoices-marketplace</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>firstvoices-web-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -109,6 +117,16 @@
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesData</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>${aws.sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-core</artifactId>
+        <version>${aws.sdk.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

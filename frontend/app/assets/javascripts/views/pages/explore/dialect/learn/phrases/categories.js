@@ -37,7 +37,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  */
 
 const { array, func, object, string } = PropTypes
-export class Categories extends Component {
+export class PhraseCategories extends Component {
   static propTypes = {
     action: func,
     routeParams: object.isRequired,
@@ -93,7 +93,7 @@ export class Categories extends Component {
       ProviderHelpers.getEntry(nextProps.computeCategories, this.state.categoriesPath)
     )
 
-    if (nextProps.routeParams.area != this.props.routeParams.area) {
+    if (nextProps.routeParams.area !== this.props.routeParams.area) {
       this.fetchData(nextProps)
     }
 
@@ -171,7 +171,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Categories)
+export default connect(mapStateToProps, mapDispatchToProps)(PhraseCategories)
