@@ -2,7 +2,7 @@
 
 ## Module Description
 This module handles migrating `trash` services due to the change in Nuxeo introducing `ecm:isTrashed` (from `ecm:currentLifecycleState = 'deleted'`).
-This should be removed as still as the ToDo below is done.
+This should most likely be removed as the Prod state is `Trashed state stored as system property` (i.e. migration was successful).
 
 ## ToDo
-* Determine if this is still needed ([follow steps here](https://doc.nuxeo.com/nxdoc/trash-service/#trash-migration))
+* Double check and ensure that all code (FE/BE) uses `ecm:isTrashed` and not `ecm:currentLifecycleState = 'deleted'` ([see here](https://doc.nuxeo.com/nxdoc/trash-service/#trash-migration))
