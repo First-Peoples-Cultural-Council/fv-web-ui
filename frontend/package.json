@@ -26,6 +26,7 @@
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "test": "jest",
+    "test:nofail": "jest --coverage || true",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
     "test:databaseSetup:local": "bash ./scripts/TestDatabaseSetup.sh http://127.0.0.1:8080",
@@ -73,6 +74,9 @@
   },
   "engines": {
     "node": ">=8.10"
+  },
+  "jest": {
+    "testResultsProcessor": "jest-sonar-reporter"
   },
   "dependencies": {
     "@fpcc/fv-flash-cards-pdf": "~1.0.1",
@@ -164,6 +168,7 @@
     "jest": "^24.3.0",
     "jest-axe": "^3.1.1",
     "jest-dom": "^3.1.3",
+    "jest-sonar-reporter": "^2.0.0",
     "jscodeshift": "^0.6.4",
     "json-loader": "~0.5.2",
     "jsx-loader": "~0.13.2",
