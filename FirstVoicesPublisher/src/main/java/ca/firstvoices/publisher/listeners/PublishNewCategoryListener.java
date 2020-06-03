@@ -38,7 +38,6 @@ public class PublishNewCategoryListener implements EventListener {
 
   @Override
   public void handleEvent(Event event) {
-    // We currently only want to publish categories if parent dialect is published
     EventContext ctx = event.getContext();
     if (!(ctx instanceof DocumentEventContext)) {
       return;
