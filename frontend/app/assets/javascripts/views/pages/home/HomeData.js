@@ -21,12 +21,12 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import selectn from 'selectn'
 
-import useIntl from './dataSource/useIntl'
-import usePage from './dataSource/usePage'
-import usePrevious from './dataSource/usePrevious'
-import useProperties from './dataSource/useProperties'
-import useUserStartpage from './dataSource/useUserStartpage'
-import useWindowPath from './dataSource/useWindowPath'
+import useIntl from 'DataSource/useIntl'
+import usePage from 'DataSource/usePage'
+import usePrevious from 'DataSource/usePrevious'
+import useProperties from 'DataSource/useProperties'
+import useUserStartpage from 'DataSource/useUserStartpage'
+import useWindowPath from 'DataSource/useWindowPath'
 
 function HomeData(props) {
   const { intl } = useIntl()

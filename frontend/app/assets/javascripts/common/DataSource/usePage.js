@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { queryPage as _queryPage } from 'providers/redux/reducers/fvPage'
-function useComputePage() {
+function usePage() {
   const dispatch = useDispatch()
   const queryPage = (pathOrId, queryAppend, messageStart, messageSuccess, messageError) => {
     const dispatchObj = _queryPage(pathOrId, queryAppend, messageStart, messageSuccess, messageError)
@@ -11,4 +11,4 @@ function useComputePage() {
     queryPage,
   }
 }
-export default useComputePage
+export default usePage

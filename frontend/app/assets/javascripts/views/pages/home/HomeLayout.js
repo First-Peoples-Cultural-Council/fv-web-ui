@@ -73,15 +73,6 @@ export class HomeLayout extends Component {
             return (
               <PromiseWrapper renderOnError computeEntities={computeEntities}>
                 <div className="row" style={homePageStyle}>
-                  <h1
-                    onClick={() => {
-                      this.setState({
-                        test: Date.now(),
-                      })
-                    }}
-                  >
-                    Rerender!
-                  </h1>
                   <div style={{ position: 'relative', height: '650px' }}>
                     <div className={classNames('col-xs-12')} style={{ height: '100%' }}>
                       <div className="home-intro-block">
