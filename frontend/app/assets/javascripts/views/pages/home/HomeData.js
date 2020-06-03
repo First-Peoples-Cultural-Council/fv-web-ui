@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 
@@ -30,6 +30,7 @@ import useUserStartpage from 'DataSource/useUserStartpage'
 import useWindowPath from 'DataSource/useWindowPath'
 
 function HomeData(props) {
+  const [isUnmounting, setIsUnmounting] = useState(false)
   const { intl } = useIntl()
   const { computePage, queryPage } = usePage()
   const { properties } = useProperties()
@@ -49,8 +50,8 @@ function HomeData(props) {
 
   const _computeUserStartpage = ProviderHelpers.getEntry(computeUserStartpage, 'currentUser')
   const startPage = selectn('response.value', _computeUserStartpage)
-  // If user is accessing /home directly, do not redirect.
-  if (windowPath.indexOf('/home') === -1 && startPage) {
+  // Redirect to start page (but not when accessing /home directly)
+  if (isUnmounting === false && windowPath.indexOf('/home') === -1 && startPage) {
     window.location = startPage
   }
 
@@ -83,6 +84,10 @@ function HomeData(props) {
   })
 
   return props.children({
+    accessButtonClickHandler: (url) => {
+      setIsUnmounting(true)
+      NavigationHelpers.navigate(url, pushWindowPath, true)
+    },
     sections,
     properties,
     computeEntities: Immutable.fromJS([
@@ -98,7 +103,6 @@ function HomeData(props) {
     primary1Color: selectn('theme.palette.primary1Color', props),
     primary2Color: selectn('theme.palette.primary2Color', props),
     accessButtons,
-    pushWindowPath,
     intl,
   })
 }

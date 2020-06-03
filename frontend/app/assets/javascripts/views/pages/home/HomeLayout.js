@@ -44,6 +44,7 @@ export class HomeLayout extends Component {
       <div key={this.state.test}>
         <HomeData>
           {({
+            accessButtonClickHandler,
             accessButtons,
             computeEntities,
             primary1Color,
@@ -51,7 +52,6 @@ export class HomeLayout extends Component {
             properties,
             sections,
             intl,
-            // pushWindowPath,
           }) => {
             const area0 = this.getSectionByArea(sections, 0)
             const area1 = this.getSectionByArea(sections, 1)
@@ -100,9 +100,7 @@ export class HomeLayout extends Component {
                                 key={`accessButton${index}`}
                                 color="primary"
                                 onClick={() => {
-                                  // TODO: make this work
-                                  // eslint-disable-next-line
-                                  console.log('url!', url)
+                                  accessButtonClickHandler(url)
                                 }}
                                 style={{ marginRight: '10px', height: '50px' }}
                               >
