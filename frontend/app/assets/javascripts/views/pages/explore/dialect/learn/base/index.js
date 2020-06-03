@@ -605,7 +605,7 @@ export const sortHandler = async ({
   })
 }
 
-export const updateUrlAfterResetSearch = ({ routeParams, splitWindowPath, pushWindowPath }) => {
+export const updateUrlAfterResetSearch = ({ routeParams, splitWindowPath, pushWindowPath, urlAppend = '' }) => {
   // When facets change, pagination should be reset.
   if (selectn('category', routeParams) || selectn('letter', routeParams) || selectn('phraseBook', routeParams)) {
     let resetUrl = window.location.pathname + ''
@@ -615,7 +615,7 @@ export const updateUrlAfterResetSearch = ({ routeParams, splitWindowPath, pushWi
       _splitWindowPath.splice(learnIndex + 2)
       resetUrl = `/${_splitWindowPath.join('/')}`
     }
-    NavigationHelpers.navigate(resetUrl, pushWindowPath, false)
+    NavigationHelpers.navigate(`${resetUrl}${urlAppend}`, pushWindowPath, false)
   } else {
     // In these pages (words/phrase), list views are controlled via URL
     updateUrlIfPageOrPageSizeIsDifferent({

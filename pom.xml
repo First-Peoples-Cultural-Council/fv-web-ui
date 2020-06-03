@@ -4,7 +4,11 @@
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
     <aws.sdk.version>1.11.785</aws.sdk.version>
-
+    <sonar.organization>first-peoples-cultural-council</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
+    <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
+    <it.failsafe.argLine></it.failsafe.argLine>
   </properties>
 
   <parent>
@@ -157,6 +161,68 @@
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.1.1</version>
       </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.4.0.905</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.2</version>
+        <configuration>
+          <propertyName>it.failsafe.argLine</propertyName>
+          <destFile>${it.jacoco.destFile}</destFile>
+          <append>true</append>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit47</artifactId>
+            <version>2.22.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.22.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit47</artifactId>
+            <version>2.22.2</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <argLine>2.22.2</argLine>
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -194,6 +260,28 @@
           <url>${external.releases.url}</url>
         </repository>
       </distributionManagement>
+    </profile>
+    <profile>
+      <id>sonar</id>
+      <properties>
+        <failIfNoTests>false</failIfNoTests>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>-Xmx1g -Dfile.encoding=UTF-8 -XX:-OmitStackTraceInFastThrow @{it.failsafe.argLine}</argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

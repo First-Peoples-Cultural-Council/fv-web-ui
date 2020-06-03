@@ -4,14 +4,9 @@ on:
   pull_request:
     branches:
       - master
-  # Every day at 9:30 UTC
-  #   schedule:
-  #     - cron: '30 9 * * *'
 
 jobs:
-
   build_linux:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -82,14 +77,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    # Build only the backend if changes are made to the backend and not frontend
+      # Build only the backend if changes are made to the backend and not frontend
     - name: Build backend with Maven
-      if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files == ''
+      if: steps.changed-backend.outputs.backend_files
       run: mvn clean install -Pbackend
 
-    # Setup the Node modules caching (~/.npm directory) to restore from or save to
+      # Setup the Node modules caching (~/.npm directory) to restore from or save to
     - name: Cache node modules
-      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
+      if: steps.changed-backend.outputs.backend_files
       uses: actions/cache@v1.1.2
       env:
         cache-name: cache-node-modules
@@ -101,22 +96,31 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
 
-    # Build only the frontend if changes are made to the frontend and not backend (this includes installing the Node packages)
+      # Build only the frontend if changes are made to the frontend(this includes installing the Node packages)
     - name: Build frontend (includes Node package install)
-      if: steps.changed-backend.outputs.backend_files == '' && steps.changed-frontend.outputs.frontend_files
+      if: steps.changed-frontend.outputs.frontend_files
       run: |
         cd frontend
         npm ci
         npm run build:production
 
-    # Build the entire project if changes are made to both the backend and frontend
-    - name: Build entire project with Maven
-      if: steps.changed-backend.outputs.backend_files && steps.changed-frontend.outputs.frontend_files
-      run: mvn clean install
+      # Run Sonar Analysis on Frontend (If Frontend Changes)
+    - name: Setup Sonar Analysis For Frontend
+      if: steps.changed-frontend.outputs.frontend_files
+      uses: warchant/setup-sonar-scanner@v1
 
-    # Install Node packages if any changes are made to the package files and the install has not already been done by the backend or frontend builds
-    - name: Install Node packages
-      if: steps.changed-package.outputs.package_files && steps.changed-frontend.outputs.frontend_files == '' && steps.changed-backend.outputs.backend_files == ''
-      run: |
-        cd frontend
-        npm ci
+      # Run Sonar Analysis on Frontend (If Frontend Changes)
+    - name: Sonar Analysis on Frontend
+      if: steps.changed-frontend.outputs.frontend_files
+      run: cd frontend && npm run test:nofail && sonar-scanner
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+
+      # Run Sonar Analysis on Backend (If Backend Changes)
+    - name: Sonar Analysis on Backend
+      if: steps.changed-backend.outputs.backend_files
+      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}

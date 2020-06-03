@@ -24480,7 +24480,7 @@ function run(input, params) {
         </directory>
         <directory name="categories" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_categories</table>
             <dataFile>data/vocabularies/categories.csv</dataFile>
             <parentDirectory>categories</parentDirectory>
@@ -24615,7 +24615,7 @@ function run(input, params) {
         </directory>
         <directory name="parts_of_speech" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_parts_of_speech</table>
             <dataFile>data/vocabularies/parts_of_speech.csv</dataFile>
             <parentDirectory>parts_of_speech</parentDirectory>
@@ -24635,7 +24635,7 @@ function run(input, params) {
         <directory name="fv_labels" extends="template-xvocabulary">
             <schema>fv_label_vocabulary</schema>
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_fv_labels</table>
             <dataFile>data/vocabularies/fv_labels.csv</dataFile>
             <cacheEntryName>fv_labels-cache</cacheEntryName>
@@ -24643,7 +24643,7 @@ function run(input, params) {
         </directory>
         <directory name="fv_label_categories" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_fv_label_categories</table>
             <dataFile>data/vocabularies/fv_label_categories.csv</dataFile>
             <cacheEntryName>fv_label_categories-cache</cacheEntryName>
@@ -24653,7 +24653,7 @@ function run(input, params) {
             <schema>parent_languages</schema>
             <autoincrementIdField>false</autoincrementIdField>
             <idField>label</idField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_parent_languages</table>
             <dataFile>data/vocabularies/parent_languages.csv</dataFile>
             <cacheEntryName>vocab-parent_languages-cache</cacheEntryName>
@@ -24663,7 +24663,7 @@ function run(input, params) {
             <schema>confusable_characters</schema>
             <autoincrementIdField>false</autoincrementIdField>
             <idField>id</idField>
-            <createTablePolicy>always</createTablePolicy>
+            <createTablePolicy>on_missing_columns</createTablePolicy>
             <table>studio_vocabulary_confusable_characters</table>
             <dataFile>data/vocabularies/confusable_characters.csv</dataFile>
             <cacheEntryName>vocab-confusable_characters-cache</cacheEntryName>

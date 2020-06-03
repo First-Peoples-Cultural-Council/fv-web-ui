@@ -113,10 +113,9 @@ export class AlphabetView extends Component {
     const character = selectn('response.title', computeCharacter)
 
     // Generate photos
-    const photos = []
     const photosMap = selectn('response.contextParameters.word.related_pictures', computeCharacter) || []
-    photosMap.map((picture, key) => {
-      const image = {
+    const photos = photosMap.map((picture, key) => {
+      return {
         original: selectn('views[2].url', picture),
         thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
         description: picture['dc:description'],
@@ -124,14 +123,12 @@ export class AlphabetView extends Component {
         id: picture.uid,
         object: picture,
       }
-      photos.push(image)
     })
 
     // Generate videos
-    const videos = []
     const videosMap = selectn('response.contextParameters.word.related_videos', computeCharacter) || []
-    videosMap.map((video, key) => {
-      const vid = {
+    const videos = videosMap.map((video, key) => {
+      return {
         original: NavigationHelpers.getBaseURL() + video.path,
         thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
         description: video['dc:description'],
@@ -139,7 +136,6 @@ export class AlphabetView extends Component {
         id: video.uid,
         object: video,
       }
-      videos.push(vid)
     })
 
     // Clean character to make it NXQL friendly
