@@ -25,6 +25,7 @@ import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
 import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
 import ca.firstvoices.workers.CleanConfusablesForWordsAndPhrasesWorker;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
 import org.nuxeo.ecm.core.api.model.Property;
@@ -97,25 +99,66 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
       cleanupWordsAndPhrases();
       validateCharacter();
-      assignRelatedWords();
     }
 
     if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
       sanitizeWord();
+      assignRelatedWords();
     }
 
   }
 
   private void assignRelatedWords() {
-    String[] property = (String[]) document.getProperty("fv:core", "related_words");
-    if (property != null && ) {}
+    if (!document.isProxy() && !document.isVersion()) {
+
+      if (!document.getType().equals("FVWord")) {
+        return;
+      }
+
+      DocumentModel oldDocument = session.getLastDocumentVersion(document.getRef());
+      String[] oldProp = (String[]) oldDocument.getProperty("fvcore", "related_words");
+      String[] prop = (String[]) document.getProperty("fvcore", "related_words");
+      if (oldProp == null && prop == null) {
+        return;
+      }
+
+      if (Arrays.equals(oldProp, prop)) {
+        return;
+      }
+
+      createRelationsBetweenWords(prop);
+    }
+  }
+
+
+  private void createRelationsBetweenWords(String[] prop) {
+    if (prop.length > 0) {
+      for (String s : prop) {
+        DocumentModel word = session.getDocument(new IdRef(s));
+        if (!word.isProxy() && !word.isVersion()) {
+          String[] wordProperties = (String[]) word
+              .getProperty("fvcore", "related_words");
+          if (wordProperties == null || wordProperties.length == 0) {
+            String[] props = new String[1];
+            props[0] = document.getId();
+            word.setPropertyValue("fvcore:related_words", props);
+            session.saveDocument(word);
+          } else if ((Arrays.stream(wordProperties).noneMatch(item -> item.equals(word)))) {
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(wordProperties));
+            arrayList.add(document.getId());
+            word.setPropertyValue("fvcore:related_words", arrayList.toArray());
+            session.saveDocument(word);
+          }
+        }
+      }
+    }
   }
 
   public void assignAncestors() {
     String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
-        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
-        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
-        "FVPortal", "FVResources", "FVVideo", "FVWord",};
+        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect",
+        "FVDictionary", "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks",
+        "FVPhrase", "FVPicture", "FVPortal", "FVResources", "FVVideo", "FVWord",};
 
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
@@ -197,8 +240,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
       for (DocumentModel alphabet : alphabets) {
         DocumentModel dialect = session.getParentDocument(alphabet.getRef());
 
-        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(dialect.getRef(),
-            alphabet.getRef());
+        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(
+            dialect.getRef(), alphabet.getRef());
 
         workManager.schedule(worker);
       }
