@@ -60,10 +60,9 @@ export class MetadataPanel extends Component {
     /**
      * Categories
      */
-    const categories = []
     const categoriesMap = selectn('response.contextParameters.word.categories', computeEntity) || []
-    categoriesMap.map((category, key) => {
-      categories.push(<div key={key}>{selectn('dc:title', category)}</div>)
+    const categories = categoriesMap.map((category, key) => {
+      return <div key={key}>{selectn('dc:title', category)}</div>
     })
     metadata.push({
       label: this.props.intl.trans('categories', 'Categories', 'first'),
@@ -73,11 +72,10 @@ export class MetadataPanel extends Component {
     /**
      * Phrase books
      */
-    const phrase_books = []
     const phraseBooksMap = selectn('response.contextParameters.phrase.phrase_books', computeEntity) || []
 
-    phraseBooksMap.map((phrase_book, key) => {
-      phrase_books.push(<div key={key}>{selectn('dc:title', phrase_book)}</div>)
+    const phrase_books = phraseBooksMap.map((phrase_book, key) => {
+      return <div key={key}>{selectn('dc:title', phrase_book)}</div>
     })
 
     metadata.push({
@@ -96,14 +94,13 @@ export class MetadataPanel extends Component {
     /**
      * Sources
      */
-    const sources = []
     const sourcesMap =
       selectn('response.contextParameters.word.sources', computeEntity) ||
       selectn('response.contextParameters.phrase.sources', computeEntity) ||
       []
 
-    sourcesMap.map((source, key) => {
-      sources.push(<Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />)
+    const sources = sourcesMap.map((source, key) => {
+      return <Preview styles={{ padding: 0 }} expandedValue={source} key={key} type="FVContributor" />
     })
 
     metadata.push({
@@ -156,11 +153,7 @@ export class MetadataPanel extends Component {
                 color: themePalette.secondary.contrastText,
               }}
             >
-              <FVLabel
-                transKey="metadata"
-                defaultStr="METADATA"
-                transform="upper"
-              />
+              <FVLabel transKey="metadata" defaultStr="METADATA" transform="upper" />
               <IconButton
                 onClick={() => {
                   this.setState({
