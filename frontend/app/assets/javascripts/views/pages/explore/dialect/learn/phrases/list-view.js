@@ -52,66 +52,7 @@ import {
 /**
  * List view for phrases
  */
-
-const { array, bool, func, number, object, string } = PropTypes
 export class PhrasesListView extends DataListView {
-  static propTypes = {
-    action: func,
-    data: string,
-    controlViaURL: bool,
-    DEFAULT_PAGE: number,
-    DEFAULT_PAGE_SIZE: number,
-    DEFAULT_SORT_COL: string,
-    DEFAULT_SORT_TYPE: string,
-    dialect: object,
-    disableClickItem: bool,
-    // DISABLED_SORT_COLS: array,
-    ENABLED_COLS: array,
-    filter: object,
-    flashcard: bool,
-    flashcardTitle: string,
-    gridCols: number,
-    gridListView: bool,
-    parentID: string,
-    dialectID: string,
-    onPagePropertiesChange: func,
-    pageProperties: object,
-    routeParams: object.isRequired,
-    // Export
-    hasExportDialect: bool,
-    exportDialectExportElement: string,
-    exportDialectColumns: string,
-    exportDialectLabel: string,
-    exportDialectQuery: string,
-    // REDUX: reducers/state
-    computeDialect2: object.isRequired,
-    computeLogin: object.isRequired,
-    computePhrases: object.isRequired,
-    properties: object.isRequired,
-    splitWindowPath: array.isRequired,
-    windowPath: string.isRequired,
-    // REDUX: actions/dispatch/func
-    fetchDialect2: func.isRequired,
-    fetchPhrases: func.isRequired,
-    pushWindowPath: func.isRequired,
-  }
-  static defaultProps = {
-    disableClickItem: true,
-    DEFAULT_PAGE: 1,
-    DEFAULT_PAGE_SIZE: 10,
-    DEFAULT_LANGUAGE: 'english',
-    DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
-    DEFAULT_SORT_TYPE: 'asc',
-    ENABLED_COLS: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
-    dialect: null,
-    filter: new Map(),
-    gridListView: false,
-    gridCols: 4,
-    controlViaURL: false,
-    flashcard: false,
-    flashcardTitle: '',
-  }
-
   constructor(props, context) {
     super(props, context)
 
@@ -453,7 +394,20 @@ export class PhrasesListView extends DataListView {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
-    props.fetchPhrases(this.state.phrasesPath, nql)
+    // NOTE: the following attempts to prevent double requests but it doesn't work all the time!
+    // Eventually `this.state.nql` becomes `undefined` and then a duplicate request is initiated
+    //
+    // DataListView calls this._fetchListViewData AND this.fetchData (which calls this.__fetchListViewData)
+    if (this.state.nql !== nql) {
+      this.setState(
+        {
+          nql,
+        },
+        () => {
+          props.fetchPhrases(this.state.phrasesPath, nql)
+        }
+      )
+    }
   }
 
   _onEntryNavigateRequest(item) {
@@ -467,6 +421,65 @@ export class PhrasesListView extends DataListView {
       )
     }
   }
+}
+
+// PROPTYPES
+const { array, bool, func, number, object, string } = PropTypes
+PhrasesListView.propTypes = {
+  action: func,
+  data: string,
+  controlViaURL: bool,
+  DEFAULT_PAGE: number,
+  DEFAULT_PAGE_SIZE: number,
+  DEFAULT_SORT_COL: string,
+  DEFAULT_SORT_TYPE: string,
+  dialect: object,
+  disableClickItem: bool,
+  // DISABLED_SORT_COLS: array,
+  ENABLED_COLS: array,
+  filter: object,
+  flashcard: bool,
+  flashcardTitle: string,
+  gridCols: number,
+  gridListView: bool,
+  parentID: string,
+  dialectID: string,
+  onPagePropertiesChange: func,
+  pageProperties: object,
+  routeParams: object.isRequired,
+  // Export
+  hasExportDialect: bool,
+  exportDialectExportElement: string,
+  exportDialectColumns: string,
+  exportDialectLabel: string,
+  exportDialectQuery: string,
+  // REDUX: reducers/state
+  computeDialect2: object.isRequired,
+  computeLogin: object.isRequired,
+  computePhrases: object.isRequired,
+  properties: object.isRequired,
+  splitWindowPath: array.isRequired,
+  windowPath: string.isRequired,
+  // REDUX: actions/dispatch/func
+  fetchDialect2: func.isRequired,
+  fetchPhrases: func.isRequired,
+  pushWindowPath: func.isRequired,
+}
+PhrasesListView.defaultProps = {
+  disableClickItem: true,
+  DEFAULT_PAGE: 1,
+  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_LANGUAGE: 'english',
+  DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
+  DEFAULT_SORT_TYPE: 'asc',
+  ENABLED_COLS: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
+  dialect: null,
+  filter: new Map(),
+  gridListView: false,
+  gridCols: 4,
+  controlViaURL: false,
+  flashcard: false,
+  flashcardTitle: '',
 }
 
 // REDUX: reducers/state

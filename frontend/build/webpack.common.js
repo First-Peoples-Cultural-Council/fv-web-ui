@@ -127,6 +127,7 @@ module.exports = (env) => ({
       providers: path.resolve(sourceScriptsDirectory, 'providers'),
       components: path.resolve(sourceScriptsDirectory, 'components'),
       common: path.resolve(sourceScriptsDirectory, 'common'),
+      DataSource: path.resolve(sourceScriptsDirectory, 'common', 'DataSource'),
       games: path.resolve(sourceAssetsDirectory, 'games'),
       images: path.resolve(sourceAssetsDirectory, 'images'),
       phaser: phaser,

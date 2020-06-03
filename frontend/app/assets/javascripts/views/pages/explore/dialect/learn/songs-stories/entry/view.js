@@ -153,9 +153,9 @@ class Page extends Component {
     const DEFAULT_LANGUAGE = this.props.defaultLanguage
 
     // Audio
-    const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
-      audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
+    const audiosData = selectn('contextParameters.book.related_audio', this.props.entry) || []
+    const audios = audiosData.map((audio) => {
+      return <Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />
     })
 
     return (
@@ -197,13 +197,9 @@ class Page extends Component {
                   return (
                     <span key={i}>
                       <strong>
-                        <FVLabel
-                          transKey="literal_translation"
-                          defaultStr="Literal Translation"
-                          transform="first"
-                        />
-                      </strong>:{' '}
-                      <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} />
+                        <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
+                      </strong>
+                      : <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} />
                     </span>
                   )
                 }
@@ -216,11 +212,7 @@ class Page extends Component {
           <div className={classNames('col-xs-12', 'text-right')}>
             {this.props.editAction ? (
               <FVButton variant="contained" onClick={this.props.editAction.bind(this, this.props.entry)}>
-                <FVLabel
-                  transKey="edit"
-                  defaultStr="Edit"
-                  transform="first"
-                />
+                <FVLabel transKey="edit" defaultStr="Edit" transform="first" />
               </FVButton>
             ) : (
               ''
@@ -240,9 +232,10 @@ export default class SongsStoriesEntryView extends Component {
 
   render() {
     // Photos
+    const photosData = selectn('contextParameters.book.related_pictures', this.props.entry) || []
     const photos = []
     const photosThumbnails = []
-    ;(selectn('contextParameters.book.related_pictures', this.props.entry) || []).map(function(picture, key) {
+    photosData.forEach((picture, key) => {
       const image = {
         original: selectn('views[2].url', picture),
         thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
@@ -263,9 +256,10 @@ export default class SongsStoriesEntryView extends Component {
     })
 
     // Videos
+    const videosData = selectn('contextParameters.book.related_videos', this.props.entry) || []
     const videos = []
     const videoThumbnails = []
-    ;(selectn('contextParameters.book.related_videos', this.props.entry) || []).map(function(video, key) {
+    videosData.forEach((video, key) => {
       const vid = {
         original: NavigationHelpers.getBaseURL() + video.path,
         thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
@@ -286,9 +280,9 @@ export default class SongsStoriesEntryView extends Component {
     })
 
     // Audio
-    const audios = []
-    ;(selectn('contextParameters.book.related_audio', this.props.entry) || []).map(function(audio) {
-      audios.push(<Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />)
+    const audiosData = selectn('contextParameters.book.related_audio', this.props.entry) || []
+    const audios = audiosData.map((audio) => {
+      return <Preview minimal key={selectn('uid', audio)} expandedValue={audio} type="FVAudio" />
     })
 
     const media = {

@@ -1,5 +1,6 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=First-Voices-Frontend&metric=alert_status)](https://sonarcloud.io/dashboard?id=First-Voices-Frontend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=First-Voices-Frontend&metric=coverage)](https://sonarcloud.io/dashboard?id=First-Voices-Frontend)
 # FirstVoices Front-end
-
 ## Getting Started
 
 There are several version dependency requirements to properly build and run the project:

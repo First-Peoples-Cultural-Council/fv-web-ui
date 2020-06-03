@@ -26,6 +26,7 @@ import { fetchPortal } from 'providers/redux/reducers/fvPortal'
 import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
 import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import { setListViewMode } from 'providers/redux/reducers/listView'
+import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -84,6 +85,10 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     }
 
     this.setState(newState)
+  }
+
+  componentWillUnmount() {
+    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -400,10 +405,6 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         filterInfo: newFilter,
       },
       () => {
-        // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
-
         // Remove alphabet/category filter urls
         if (selectn('routeParams.phraseBook', this.props) || selectn('routeParams.letter', this.props)) {
           let resetUrl = `/${this.props.splitWindowPath.join('/')}`
@@ -414,7 +415,15 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
             resetUrl = `/${_splitWindowPath.join('/')}`
           }
 
-          NavigationHelpers.navigate(resetUrl, this.props.pushWindowPath, false)
+          NavigationHelpers.navigate(
+            `${resetUrl}/${this.props.routeParams.pageSize}/1`,
+            this.props.pushWindowPath,
+            false
+          )
+        } else {
+          // When facets change, pagination should be reset.
+          // In these pages (words/phrase), list views are controlled via URL
+          this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
         }
       }
     )
@@ -440,6 +449,7 @@ PageDialectLearnPhrases.propTypes = {
   fetchPortal: func.isRequired,
   overrideBreadcrumbs: func.isRequired,
   pushWindowPath: func.isRequired,
+  searchDialectReset: func.isRequired,
 }
 
 // REDUX: reducers/state
@@ -475,6 +485,7 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   setListViewMode,
+  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectLearnPhrases)

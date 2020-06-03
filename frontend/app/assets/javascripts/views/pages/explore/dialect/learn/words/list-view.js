@@ -378,8 +378,8 @@ class WordsListView extends DataListView {
                 sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
               })
             }}
-            sortHandler={async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-              await this.props.setRouteParams({
+            sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
+              this.props.setRouteParams({
                 search: {
                   pageSize,
                   page,
