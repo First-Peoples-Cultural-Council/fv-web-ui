@@ -793,13 +793,11 @@ export class Preview extends Component {
     /**
      * Recorders
      */
-    const recorders = []
-
     const recordersData = selectn('contextParameters.media.recorders', response) || []
-    recordersData.map((recorder, key) => {
+    const recorders = recordersData.map((recorder, key) => {
       // NOTE: The following triggers FW-299
       // recorders.push(<Preview expandedValue={recorder} key={key} type="FVContributor" />)
-      recorders.push(<PreviewMetaDataContributor expandedValue={recorder} key={key} />)
+      return <PreviewMetaDataContributor expandedValue={recorder} key={key} />
     })
 
     metadata.push({
@@ -810,13 +808,12 @@ export class Preview extends Component {
     /**
      * Contributors
      */
-    const contributors = []
     const contributorsData = selectn('contextParameters.media.sources', response) || []
 
-    contributorsData.map((contributor, key) => {
+    const contributors = contributorsData.map((contributor, key) => {
       // NOTE: The following triggers FW-299
       // contributors.push(<Preview expandedValue={contributor} key={key} type="FVContributor" />)
-      contributors.push(<PreviewMetaDataContributor expandedValue={contributor} key={key} />)
+      return <PreviewMetaDataContributor expandedValue={contributor} key={key} />
     })
 
     metadata.push({

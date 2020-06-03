@@ -433,7 +433,20 @@ export class PhrasesListView extends DataListView {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
-    props.fetchPhrases(this._getPathOrParentID(props), nql)
+    // NOTE: the following attempts to prevent double requests but it doesn't work all the time!
+    // Eventually `this.state.nql` becomes `undefined` and then a duplicate request is initiated
+    //
+    // DataListView calls this._fetchListViewData AND this.fetchData (which calls this.__fetchListViewData)
+    if (this.state.nql !== nql) {
+      this.setState(
+        {
+          nql,
+        },
+        () => {
+          props.fetchPhrases(this._getPathOrParentID(props), nql)
+        }
+      )
+    }
   }
 
   _getPathOrParentID(newProps) {

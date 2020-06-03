@@ -28,7 +28,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 // import selectn from 'selectn'
 // import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-
+import Link from 'views/components/Link'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
 import FVButton from 'views/components/FVButton'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
@@ -50,6 +50,7 @@ export class ToolbarNavigation extends Component {
     computeResultSet: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
+    pageSize: string.isRequired,
     // REDUX: actions/dispatch/func
     fetchResultSet: func.isRequired,
     navigateTo: func.isRequired,
@@ -89,11 +90,17 @@ export class ToolbarNavigation extends Component {
     }
   }
 
-  _getNavigationURL = (path) => {
+  _getNavigationURL = (path, appendPagination = false) => {
+    let url = ''
     if (this.props.splitWindowPath[this.props.splitWindowPath.length - 1] === 'learn') {
-      return this.props.windowPath + '/' + path
+      url = `${this.props.windowPath}/${path}`
+    } else {
+      url = `${this.props.windowPath}/learn/${path}`
     }
-    return this.props.windowPath + '/learn/' + path
+    if (appendPagination) {
+      url = `${url}/${this.props.pageSize}/1`
+    }
+    return url
   }
 
   render() {
@@ -129,21 +136,21 @@ export class ToolbarNavigation extends Component {
         <div className="row">
           <div className="col-xs-12 col-md-10">
             <div float="left">
-              <a href={this._getNavigationURL('words')} onClick={this._onNavigateRequest.bind(this, 'words')}>
+              <Link href={this._getNavigationURL('words', true)}>
                 <FVLabel transKey="words" defaultStr="Words" transform="first" />
-              </a>
-              <a href={this._getNavigationURL('phrases')} onClick={this._onNavigateRequest.bind(this, 'phrases')}>
+              </Link>
+              <Link href={this._getNavigationURL('phrases', true)}>
                 <FVLabel transKey="phrases" defaultStr="Phrases" transform="first" />
-              </a>
-              <a href={this._getNavigationURL('songs')} onClick={this._onNavigateRequest.bind(this, 'songs')}>
+              </Link>
+              <Link href={this._getNavigationURL('songs')}>
                 <FVLabel transKey="songs" defaultStr="Songs" transform="first" />
-              </a>
-              <a href={this._getNavigationURL('stories')} onClick={this._onNavigateRequest.bind(this, 'stories')}>
+              </Link>
+              <Link href={this._getNavigationURL('stories')}>
                 <FVLabel transKey="stories" defaultStr="Stories" transform="first" />
-              </a>
-              <a href={this._getNavigationURL('alphabet')} onClick={this._onNavigateRequest.bind(this, 'alphabet')}>
+              </Link>
+              <Link href={this._getNavigationURL('alphabet')}>
                 <FVLabel transKey="alphabet" defaultStr="Alphabet" transform="first" />
-              </a>
+              </Link>
             </div>
           </div>
           {this.props.hideStatistics !== true && this.props.isStatisticsVisible !== true && (
@@ -166,17 +173,18 @@ export class ToolbarNavigation extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, nuxeo, windowPath } = state
+  const { document, nuxeo, navigation, windowPath } = state
 
   const { computeResultSet } = document
   const { computeLogin } = nuxeo
   const { splitWindowPath, _windowPath } = windowPath
-
+  const { pageSize = 10 } = navigation.route.routeParams
   return {
     computeLogin,
     computeResultSet,
     splitWindowPath,
     windowPath: _windowPath,
+    pageSize,
   }
 }
 

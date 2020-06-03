@@ -119,14 +119,11 @@ export class Gallery extends React.Component {
   }
 
   render() {
-    const images = []
-
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const computeGallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
     const toMap = selectn('response.contextParameters.gallery.related_pictures', computeGallery) || []
-    toMap.map((picture) => {
-      const image = { original: UIHelpers.getThumbnail(picture, 'Medium'), description: picture['dc:description'] }
-      images.push(image)
+    const images = toMap.map((picture) => {
+      return { original: UIHelpers.getThumbnail(picture, 'Medium'), description: picture['dc:description'] }
     })
 
     const computeEntities = Immutable.fromJS([
@@ -218,7 +215,4 @@ const mapDispatchToProps = {
   unpublishGallery,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Gallery)
+export default connect(mapStateToProps, mapDispatchToProps)(Gallery)
