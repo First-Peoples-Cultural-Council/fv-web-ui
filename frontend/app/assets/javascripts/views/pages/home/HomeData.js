@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
 
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -23,7 +25,6 @@ import selectn from 'selectn'
 
 import useIntl from 'DataSource/useIntl'
 import usePage from 'DataSource/usePage'
-import usePrevious from 'DataSource/usePrevious'
 import useProperties from 'DataSource/useProperties'
 import useUserStartpage from 'DataSource/useUserStartpage'
 import useWindowPath from 'DataSource/useWindowPath'
@@ -36,15 +37,11 @@ function HomeData(props) {
   const { windowPath, pushWindowPath } = useWindowPath()
 
   const pagePath = `/${properties.domain}/sections/Site/Resources/`
-  const prevPagePath = usePrevious(pagePath)
 
   useEffect(() => {
-    if (pagePath !== prevPagePath) {
-      // console.log('#### calling queryPage', {pagePath, prevPagePath})
-      queryPage(pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
-    }
+    queryPage(pagePath, " AND fvpage:url LIKE '/home/'" + '&sortOrder=ASC' + '&sortBy=dc:title')
+
     // Get user start page
-    // console.log('#### calling fetchUserStartpage')
     fetchUserStartpage('currentUser', {
       defaultHome: false,
     })
@@ -98,20 +95,18 @@ function HomeData(props) {
         entity: computeUserStartpage,
       },
     ]),
-    primary1Color: '#eaeaea', // TODO: theme.palette.primary1Color
-    primary2Color: '#eaeaea', // TODO: theme.palette.primary2Color
+    primary1Color: selectn('theme.palette.primary1Color', props),
+    primary2Color: selectn('theme.palette.primary2Color', props),
     accessButtons,
     pushWindowPath,
     intl,
   })
 }
 
-// TODO: MAT-UI v4.10.0 has a hook
-// https://material-ui.com/styles/advanced/#accessing-the-theme-in-a-component
-// import { useTheme } from '@material-ui/core/styles'
-// function DeepChild() {
-//   const theme = useTheme();
-//   return <span>{`spacing ${theme.spacing}`}</span>;
-// }
+// PropTypes
+const { object } = PropTypes
+HomeData.propTypes = {
+  theme: object,
+}
 
-export default React.memo(HomeData)
+export default withTheme()(HomeData)
