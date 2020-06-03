@@ -81,6 +81,9 @@ public class AssignOriginListener implements EventListener {
       saveOrigin(doc, relatedVideos);
     }
 
+    // Might not be the best place for it, but we're handling publishing on updating a category,
+    // but we're not handling publishing on a new category. I'd expect that if we are handling
+    // new categories in their own operations in the future we would consider moving this.
     if (doc.getType().equals("FVCategory")) {
       doc.followTransition("Publish");
     }

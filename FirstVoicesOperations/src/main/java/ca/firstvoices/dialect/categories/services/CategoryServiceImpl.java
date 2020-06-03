@@ -29,9 +29,14 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
         String key = entry.getKey();
         String value = entry.getValue();
 
+        // Key passed in from Frontend to move category to a new parent (ecm:parentRef)
+        // Typically an id of a category
         if (key.equals("ecm:parentRef")) {
           session.saveDocument(doc);
 
+          // If the vlaue of parentRef key is "/Categories" that means it does not have a parent
+          // category. This is to handle the case that an id is not passed in from FE, but
+          // instead is passed in as "/Categories"
           if (value.contains("/Categories")) {
             value = session.getDocument(new PathRef(value)).getId();
           }
@@ -59,10 +64,11 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
     }
     session.saveDocument(doc);
 
-    return publishDocumentIfDialectPublished(session, doc);
+    return publishCategory(session, doc);
   }
 
-  private DocumentModel publishDocumentIfDialectPublished(CoreSession session, DocumentModel doc) {
+  //  Will only publish category if the dialect is published
+  private DocumentModel publishCategory(CoreSession session, DocumentModel doc) {
     FirstVoicesPublisherService publisherService = Framework
         .getService(FirstVoicesPublisherService.class);
     DocumentModel dialect = getDialect(session, doc);
