@@ -575,6 +575,22 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   }
 
   @Override
+  public DocumentModel publishDocumentIfDialectPublished(CoreSession session, DocumentModel doc) {
+    //  Will only publish document if the parent dialect is published
+
+    DocumentModel dialect = getDialect(session, doc);
+
+    if (isPublished(dialect)) {
+      if (isPublished(doc)) {
+        republish(doc);
+      } else {
+        publish(doc);
+      }
+    }
+    return doc;
+  }
+
+  @Override
   public DocumentModel publishPortalAssets(DocumentModel portal) {
     CoreSession session = portal.getCoreSession();
 

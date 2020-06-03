@@ -62,23 +62,10 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
     }
     session.saveDocument(doc);
 
-    return publishCategory(session, doc);
-  }
-
-  //  Will only publish category if the dialect is published
-  private DocumentModel publishCategory(CoreSession session, DocumentModel doc) {
     FirstVoicesPublisherService publisherService = Framework
         .getService(FirstVoicesPublisherService.class);
-    DocumentModel dialect = getDialect(session, doc);
 
-    if (isPublished(dialect)) {
-      if (isPublished(doc)) {
-        publisherService.republish(doc);
-      } else {
-        publisherService.publish(doc);
-      }
-    }
-    return doc;
+    return publisherService.publishDocumentIfDialectPublished(session, doc);
   }
 
 }

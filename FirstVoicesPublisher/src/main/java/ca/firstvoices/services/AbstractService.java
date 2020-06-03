@@ -62,4 +62,10 @@ public abstract class AbstractService {
 
     return propertyValueArray;
   }
+
+  protected Boolean isPublished(DocumentModel doc) {
+    return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
+        .equals("Published");
+  }
+
 }
