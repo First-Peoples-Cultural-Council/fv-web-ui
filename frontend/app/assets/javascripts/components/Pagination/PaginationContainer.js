@@ -6,7 +6,6 @@ import PaginationData from './PaginationData'
 
 /**
  * @summary PaginationContainer
- * @description Knits together Pagination Data & Presentation
  * @version 1.0.1
  *
  * @component

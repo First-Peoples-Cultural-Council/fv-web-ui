@@ -8,31 +8,33 @@ import PropTypes from 'prop-types'
  *
  * @component
  *
- * @prop {function} children function to handle output from data layer
+ * @prop {function} children children({ onChangePage, onChangePageSize, pageCount, pageSize,  page })
  * @prop {number} resultsCount number of results
  * @prop {number} [initialPageSize] starting page size. used on init, then it's internally controlled
  * @prop {number} [initialPage] starting page selected. used on init, then it's internally controlled
  * @prop {function} onUpdate called anytime there is a change to pageSize or page
  *
- * @returns {props.children()} Calls children with { onChangePage, onChangePageSize, pageCount, pageSize,  page }
- *
  */
 function PaginationData({ initialPageSize, initialPage, onUpdate, resultsCount, children }) {
   const [pageSize, setPageSize] = useState(initialPageSize)
   const [page, setPage] = useState(initialPage)
+  const pageCount = Math.ceil(resultsCount / pageSize)
+
   const onChangePageSize = (value) => {
     // reset page when pageSize changes
+    const valueNumber = Number(value)
     const newPage = 1
     onUpdate({
       page: newPage,
-      pageSize: value,
+      pageSize: valueNumber,
     })
     setPage(newPage)
-    setPageSize(value)
+    setPageSize(valueNumber)
   }
-  const pageCount = Math.ceil(resultsCount / pageSize)
+
   const onChangePage = (value) => {
-    const newPage = value > pageCount ? pageCount : value
+    const valueNumber = Number(value)
+    const newPage = valueNumber > pageCount ? pageCount : valueNumber
 
     onUpdate({
       page: newPage,
