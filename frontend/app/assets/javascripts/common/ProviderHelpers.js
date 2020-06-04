@@ -351,6 +351,7 @@ export default {
     ANY_LANGUAGE_CODE: '(en|fr)',
     WORKSPACE_OR_SECTION: `(${SECTIONS}|${WORKSPACES})`,
     KIDS_OR_DEFAULT: '(kids|explore)',
+    KIDS: '(kids)',
   },
   userRegistrationRoles: [
     { value: 'teacher', text: 'I am a teacher/educator' },

@@ -49,7 +49,7 @@ import PageDialectViewBook from './explore/dialect/learn/songs-stories/view'
 import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'
 import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
 import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
-import PageDialectLearnPhrasesCategories from './explore/dialect/learn/phrases/categories'
+import CategoriesGridView from 'components/CategoriesGridView'
 import PageDialectLearnWordsFilteredByCategory from './explore/dialect/learn/words/wordsFilteredByCategory'
 import PageDialectLearnPhrasesFilteredByCategory from './explore/dialect/learn/phrases/phrasesFilteredByCategory'
 
@@ -142,7 +142,7 @@ export {
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
   PageDialectLearnPhrasesFilteredByCategory,
-  PageDialectLearnPhrasesCategories,
+  CategoriesGridView,
   PageDialectLearnStoriesAndSongs,
   PageDialectViewWord,
   PageDialectViewMedia,
