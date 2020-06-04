@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Pagination/PaginationPresentation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Pagination/PaginationPresentation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import PropTypes from 'prop-types'
+
+import classNames from 'classnames'
+
+import Pagination from 'views/components/Navigation/Pagination'
+
+import { MenuItem, Select, TextField } from '@material-ui/core'
+
+import UIHelpers from 'common/UIHelpers'
+import FVLabel from 'views/components/FVLabel/index'
+/**
+ * @summary PaginationPresentation
+ * @version 1.0.1
+ *
+ * @description
+ *
+ * @component
+ *
+ * @prop {node} children
+ * @prop {node} childrenUnderPageSize
+ * @prop {function} onChangePage: call when changing page
+ * @prop {function} onChangePageSize: call when changing pageSize
+ * @prop {number} page
+ * @prop {number} pageCount
+ * @prop {number} pageSize
+ * @prop {number} resultsCount number of results
+ * @prop {boolean} [showPageSize] Defaults to true
+ */
+function PaginationPresentation({
+  children,
+  childrenUnderPageSize,
+  onChangePage,
+  onChangePageSize,
+  page,
+  pageCount,
+  pageSize,
+  resultsCount,
+  showPageSize,
+}) {
+  return (
+    &lt;div>
+      &lt;div className="row">
+        &lt;div className="col-xs-12">{children}&lt;/div>
+      &lt;/div>
+
+      &lt;div className="row PrintHide" style={{ marginTop: '15px' }}>
+        &lt;div className={classNames('col-md-7', 'col-xs-12')} style={{ paddingBottom: '15px' }}>
+          &lt;Pagination
+            forcePage={page - 1}
+            pageCount={pageCount}
+            marginPagesDisplayed={0}
+            pageRangeDisplayed={UIHelpers.isViewSize('xs') ? 3 : 10}
+            onPageChange={(paginationOutput) => {
+              onChangePage(paginationOutput.selected + 1)
+            }}
+          />
+        &lt;/div>
+
+        &lt;div className={classNames('col-md-5', 'col-xs-12')} style={{ textAlign: 'right' }}>
+          {showPageSize &amp;&amp; (
+            &lt;div>
+              &lt;label style={{ verticalAlign: '4px', marginRight: '8px' }}>Page:&lt;/label>
+              &lt;span style={{ verticalAlign: '4px' }}>
+                {page} / {pageCount}
+              &lt;/span>
+              &lt;label
+                style={{
+                  verticalAlign: '4px',
+                  marginRight: '8px',
+                  marginLeft: '8px',
+                  paddingLeft: '8px',
+                  borderLeft: '1px solid #e0e0e0',
+                }}
+              >
+                Per Page:
+              &lt;/label>
+              &lt;Select
+                style={{ width: '45px', marginRight: '8px' }}
+                value={pageSize}
+                onChange={(event) => {
+                  onChangePageSize(event.target.value)
+                }}
+              >
+                &lt;MenuItem value={10}>10&lt;/MenuItem>
+                &lt;MenuItem value={20}>20&lt;/MenuItem>
+                &lt;MenuItem value={50}>50&lt;/MenuItem>
+                &lt;MenuItem value={100}>100&lt;/MenuItem>
+                &lt;MenuItem value={250}>250&lt;/MenuItem>
+                &lt;MenuItem value={500}>500&lt;/MenuItem>
+              &lt;/Select>
+              &lt;label
+                style={{
+                  verticalAlign: '4px',
+                  marginRight: '8px',
+                  paddingLeft: '8px',
+                  borderLeft: '1px solid #e0e0e0',
+                }}
+              >
+                &lt;FVLabel transKey="results" defaultStr="Results" transform="first" />
+              &lt;/label>
+              &lt;span style={{ verticalAlign: '4px' }}>{resultsCount}&lt;/span>
+            &lt;/div>
+          )}
+          {childrenUnderPageSize}
+        &lt;/div>
+
+        &lt;div
+          className={classNames('col-xs-12')}
+          style={{
+            textAlign: 'left',
+            backgroundColor: '#f1f1f1',
+            borderTop: '1px #d8d8d8 solid',
+          }}
+        >
+          Skip to Page:
+          &lt;TextField
+            style={{ paddingLeft: '5px' }}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                onChangePage(event.target.value)
+              }
+            }}
+          />
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  )
+}
+// PROPTYPES
+const { node, bool, func, /*object, */ number } = PropTypes
+PaginationPresentation.propTypes = {
+  children: node,
+  childrenUnderPageSize: node,
+  onChangePage: func,
+  onChangePageSize: func,
+  showPageSize: bool,
+  resultsCount: number,
+  pageCount: number,
+  pageSize: number,
+  page: number,
+}
+PaginationPresentation.defaultProps = {
+  onChangePage: () => {},
+  onChangePageSize: () => {},
+  showPageSize: true,
+  resultsCount: 0,
+  pageSize: 10,
+  page: 1,
+  pageCount: 1,
+}
+
+export default PaginationPresentation
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CategoriesGridViewContainer">CategoriesGridViewContainer</a></li><li><a href="global.html#CategoriesGridViewData">CategoriesGridViewData</a></li><li><a href="global.html#CategoriesGridViewPresentation">CategoriesGridViewPresentation</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 04 2020 16:41:45 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
