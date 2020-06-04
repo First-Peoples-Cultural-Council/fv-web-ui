@@ -4,7 +4,6 @@ import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -52,22 +51,9 @@ public class CategoryServiceTest extends AbstractFirstVoicesOperationsTest {
   }
 
   //  TODO: TEST THAT UPDATING AN UNPUBLISHED CATEGORY ON A PUBLISHED DIALECT WILL PUBLISH IT
-  @Ignore
-  @Test
-  public void updatingUnpublishedCategoryPublishesCategory() throws OperationException {
-  }
-
 
   //  TODO: TEST THAT UPDATING A CATEGORY ON AN UNPUBLISHED DIALECT WILL NOT PUBLISH IT
-  @Ignore
-  @Test
-  public void updatingCategoryOnUnpublishedDialectDoesNotPublishCategory() {
-  }
 
   //  TODO: TEST THAT UPDATING A PUBLISHED CATEGORY ON A PUBLISHED DIALECT WILL REPUBLISH IT
-  @Ignore
-  @Test
-  public void updatingPublishedCategoryOnPublishedDialectRepublishesCategory() {
-  }
 
 }

@@ -76,7 +76,7 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
     }
 
     // Throw error if the doc being moved is a parent doc
-    Boolean hasChildren = session.getChildren(categoryDoc.getRef()).stream()
+    boolean hasChildren = session.getChildren(categoryDoc.getRef()).stream()
         .anyMatch(child -> !child.isTrashed());
 
     if (hasChildren) {

@@ -21,8 +21,6 @@
 package ca.firstvoices.publisher.listeners;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
@@ -33,9 +31,7 @@ import org.nuxeo.runtime.api.Framework;
 
 //  TODO: MOVE THIS LOGIC TO OPERATIONS MODULE AND REMOVE RELIANCE ON LISTENER
 public class PublishNewCategoryListener implements EventListener {
-
-  private static final Log log = LogFactory.getLog(PublishNewCategoryListener.class);
-
+  
   @Override
   public void handleEvent(Event event) {
     EventContext ctx = event.getContext();

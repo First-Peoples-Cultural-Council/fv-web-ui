@@ -19,7 +19,7 @@ public abstract class AbstractFirstVoicesOperationsService {
     return parent;
   }
 
-  protected Boolean isPublished(DocumentModel doc) {
+  protected boolean isPublished(DocumentModel doc) {
     return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
         .equals("Published");
   }
