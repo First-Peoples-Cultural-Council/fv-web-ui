@@ -105,7 +105,7 @@ export class Kids extends Component {
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(
-                      `${this.props.windowPath}/learn/phraseBooks`,
+                      `${this.props.windowPath}/learn/phrasebooks`,
                       this.props.pushWindowPath,
                       false
                     )

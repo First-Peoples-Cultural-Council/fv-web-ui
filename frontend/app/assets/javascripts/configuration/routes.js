@@ -278,10 +278,10 @@ const addImmersionCategory = (route) => {
   })
 }
 
-// eg: /learn/phraseBook/[uid]
+// eg: /learn/phrasebook/[uid]
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
-    path: [...DIALECT_PATH, 'learn', 'phraseBook', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
+    path: [...DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -1804,8 +1804,8 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  addBrowsePhraseBook(), // eg: /learn/phraseBook/[uid]
-  addPagination(addBrowsePhraseBook()), // eg: /learn/phraseBook/[uid]/10/1
+  addBrowsePhraseBook(), // eg: /learn/phrasebook/[uid]
+  addPagination(addBrowsePhraseBook()), // eg: /learn/phrasebook/[uid]/10/1
   addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES), // eg: learn/phrases/alphabet/b
   addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)), // eg: learn/phrases/alphabet/b/10/1
   // Phrasebooks
@@ -1819,7 +1819,7 @@ const routes = [
       ANYTHING_BUT_SLASH,
       ANYTHING_BUT_SLASH,
       'learn',
-      'phraseBooks',
+      'phrasebooks',
     ],
     title:
       intl.translate({
