@@ -43,24 +43,22 @@ public class PublishNewCategoryListener implements EventListener {
       return;
     }
     DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
+    if (doc != null) {
 
-    // Skip proxies and versions
-    if (doc.isProxy() || doc.isVersion()) {
-      return;
+      // Skip proxies and versions
+      if (doc.isProxy() || doc.isVersion()) {
+        return;
+      }
+
+      if (!doc.getType().equals("FVCategory")) {
+        return;
+      }
+
+      CoreSession session = ctx.getCoreSession();
+
+      FirstVoicesPublisherService service = Framework
+          .getService(FirstVoicesPublisherService.class);
+      service.publishDocumentIfDialectPublished(session, doc);
     }
-
-    if (!doc.getType().equals("FVCategory")) {
-      return;
-    }
-
-    CoreSession session = ctx.getCoreSession();
-
-    if (doc == null) {
-      return;
-    }
-
-    FirstVoicesPublisherService service = Framework.getService(FirstVoicesPublisherService.class);
-    service.publishDocumentIfDialectPublished(session, doc);
-
   }
 }
