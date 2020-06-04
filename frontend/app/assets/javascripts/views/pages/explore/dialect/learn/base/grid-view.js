@@ -192,7 +192,7 @@ class GridView extends Component {
 
 const mapStateToProps = (state) => {
   const { locale } = state
-  const {intlService} = locale
+  const { intlService } = locale
 
   return {
     intl: intlService,
