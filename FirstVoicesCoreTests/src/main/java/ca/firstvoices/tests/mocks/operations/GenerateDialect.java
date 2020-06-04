@@ -20,15 +20,15 @@ public class GenerateDialect {
   @Context
   protected CoreSession session;
 
-  @Param(name = "randomize", required = true, description = "`true` to create random data;"
-      + " `false` to create real demo data")
+  @Param(name = "randomize", values = {"true", "false"},
+      description = "`true` to create random data; `false` to create real demo data")
   protected boolean randomize = true;
 
   @Param(name = "maxEntries", required = false, description = "how many entries to generate"
       + " for words, phrases, etc.")
   protected int maxEntries = 100;
 
-  @Param(name = "dialectName")
+  @Param(name = "dialectName", required = false)
   protected String dialectName = "TestDialect1";
 
   MockDialectService generateDialectService = Framework
@@ -42,7 +42,8 @@ public class GenerateDialect {
       createdDialect = generateDialectService
           .generateMockRandomDialect(session, maxEntries, dialectName);
     } else {
-      createdDialect = generateDialectService.generateMockDemoDialect(session, maxEntries, dialectName);
+      createdDialect = generateDialectService
+          .generateMockDemoDialect(session, maxEntries, dialectName);
     }
 
     return createdDialect;

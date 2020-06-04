@@ -12,7 +12,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = GenerateDialect.ID, category = Constants.GROUP_NAME, label =
+@Operation(id = GenerateDialects.ID, category = Constants.GROUP_NAME, label =
     "Generate Dialects", description = "Operation to create multiple test dialects.")
 public class GenerateDialects {
 
@@ -21,11 +21,11 @@ public class GenerateDialects {
   @Context
   protected CoreSession session;
 
-  @Param(name = "randomize", required = true, description = "`true` to create random data;"
-      + " `false` to create real demo data")
+  @Param(name = "randomize", values = {"true", "false"},
+      description = "`true` to create random data; `false` to create real demo data")
   protected boolean randomize = true;
 
-  @Param(name = "maxEntries", required = false, description = "how many dialects to generate")
+  @Param(name = "maxDialects", required = false, description = "how many dialects to generate")
   protected int maxDialects = 10;
 
   @Param(name = "maxEntries", required = false, description = "how many entries to generate"
@@ -47,7 +47,8 @@ public class GenerateDialects {
         createdDialects
             .add(generateDialectService.generateMockRandomDialect(session, maxEntries, name));
       } else {
-        createdDialects.add(generateDialectService.generateMockDemoDialect(session, maxEntries, name));
+        createdDialects
+            .add(generateDialectService.generateMockDemoDialect(session, maxEntries, name));
       }
     }
 

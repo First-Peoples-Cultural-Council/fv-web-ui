@@ -21,5 +21,6 @@
 package ca.firstvoices.tests.mocks;
 
 public class Constants {
+
   public static final String GROUP_NAME = "Mocks";
 }
