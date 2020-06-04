@@ -49,8 +49,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.addconfusablesservice.xml")
 @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
-@Deploy("FirstVoicesData:OSGI-INF/dialect/categories/categories-operations.xml")
-
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesDataFeature implements RunnerFeature {
 

@@ -15,14 +15,29 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { List, Map } from 'immutable'
 import selectn from 'selectn'
 import classNames from 'classnames'
 
-import ConfGlobal from 'conf/local.js'
 import FVLabel from '../FVLabel/index'
 import { connect } from 'react-redux'
+/*
+IntroCardView uses the following data from the `block` prop:
+{
+    file: {
+        data: '',
+    },
+    title: '',
+    summary: '',
+}
 
+Note:
+This is stamp coupling where the structure of the data enforces a linkage with an external file
+
+Props could instead be separated out to flat structures:
+- fileData
+- title
+- summary
+*/
 class IntroCardView extends Component {
   static propTypes = {
     primary1Color: PropTypes.string.isRequired,
@@ -36,13 +51,16 @@ class IntroCardView extends Component {
 
   render() {
     let imgTag = ''
+    // DATA: block.file.data
     const imgFile = selectn('file.data', this.props.block)
 
     if (imgFile) {
       imgTag = (
         <img
           style={{ width: '100%', borderBottom: '3px solid #fff' }}
+          // DATA: block.file.data
           src={selectn('file.data', this.props.block)}
+          // DATA: block.title
           alt={selectn('title', this.props.block)}
         />
       )
@@ -67,14 +85,14 @@ class IntroCardView extends Component {
             fontWeight: 500,
           }}
         >
-          <FVLabel
-
-          />
+          {/* <FVLabel /> */}
+          {/* // DATA: block.title */}
           {this.props.intl.searchAndReplace(selectn('title', this.props.block))}
         </h2>
         <p
           className={classNames('body')}
           style={{ padding: '0 0 10px 12px', color: '#ffffff' }}
+          // DATA: block.summary
           dangerouslySetInnerHTML={{ __html: selectn('summary', this.props.block) }}
         />
         <div
@@ -87,12 +105,7 @@ class IntroCardView extends Component {
             fontSize: '0.9em',
           }}
         >
-          <FVLabel
-            transKey="read_more"
-            defaultStr="READ MORE"
-            transform="upper"
-            append=" +"
-          />
+          <FVLabel transKey="read_more" defaultStr="READ MORE" transform="upper" append=" +" />
         </div>
       </div>
     )
@@ -109,4 +122,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(IntroCardView)
-
