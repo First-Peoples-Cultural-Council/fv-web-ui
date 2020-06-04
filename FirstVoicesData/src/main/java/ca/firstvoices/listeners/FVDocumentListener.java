@@ -51,9 +51,9 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   protected SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
   private CoreSession session;
-  private final AssignAncestorsService assignAncestorsService = Framework
+  private AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-  private final CleanupCharactersService cleanupCharactersService = Framework
+  private CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
   private Event event;
@@ -107,9 +107,9 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
   public void assignAncestors() {
     String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
-        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect",
-        "FVDictionary", "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks",
-        "FVPhrase", "FVPicture", "FVPortal", "FVResources", "FVVideo", "FVWord",};
+        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
+        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
+        "FVPortal", "FVResources", "FVVideo", "FVWord",};
 
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
@@ -191,8 +191,8 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
       for (DocumentModel alphabet : alphabets) {
         DocumentModel dialect = session.getParentDocument(alphabet.getRef());
 
-        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(
-            dialect.getRef(), alphabet.getRef());
+        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(dialect.getRef(),
+            alphabet.getRef());
 
         workManager.schedule(worker);
       }
