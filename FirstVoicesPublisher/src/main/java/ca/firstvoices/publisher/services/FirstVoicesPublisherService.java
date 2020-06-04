@@ -88,4 +88,8 @@ public interface FirstVoicesPublisherService {
 
   void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
       DocumentModel doc);
+
+  DocumentModel publishDocumentIfDialectPublished(CoreSession session,
+      DocumentModel documentModel);
+
 }

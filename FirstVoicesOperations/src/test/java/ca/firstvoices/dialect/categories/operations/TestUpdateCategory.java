@@ -20,27 +20,24 @@
 
 package ca.firstvoices.dialect.categories.operations;
 
-import static org.junit.Assert.assertEquals;
-
-import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
-import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import testUtil.AbstractFirstVoicesOperationsTest;
 
-public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
+public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
 
   @Inject
   protected AutomationService automationService;
 
   @Test
   public void updateCategory() throws OperationException {
-
     Map<String, String> properties = new HashMap<>();
     properties.put("dc:title", "Category Title");
     properties.put("dc:description", "A description of the category without a target.");
@@ -52,7 +49,7 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
     ctx.setInput(childCategory);
 
     DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
-    assertEquals("A description of the category without a target.",
+    Assert.assertEquals("A description of the category without a target.",
         doc.getPropertyValue("dc:description"));
   }
 
@@ -75,36 +72,8 @@ public class TestUpdateCategory extends AbstractFirstVoicesDataTest {
 
     DocumentModel doc = (DocumentModel) automationService.run(ctx, UpdateCategory.ID, params);
 
-    assertEquals(parentCategory2.getPathAsString() + "/Category Title", doc.getPathAsString());
-  }
-
-  @Test(expected = InvalidCategoryException.class)
-  public void updateCategoryOperationOnlyAcceptsFVCategory() throws OperationException {
-
-    OperationContext ctx = new OperationContext(session);
-    ctx.setInput(dialect);
-    Map<String, Object> params = new HashMap<>();
-
-    automationService.run(ctx, UpdateCategory.ID, params);
-
-  }
-
-  @Test(expected = InvalidCategoryException.class)
-  public void cannotAssignParentToParentCategoryCategory() throws OperationException {
-    DocumentModel newCategory = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect/Categories", "New Category",
-            "FVCategory"));
-    Map<String, String> props = new HashMap<>();
-    props.put("dc:title", "Parent Category Title");
-    props.put("dc:description", "A description of the parent category.");
-    props.put("ecm:parentRef", newCategory.getPathAsString());
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("properties", props);
-    OperationContext ctx = new OperationContext(session);
-
-    ctx.setInput(parentCategory);
-    automationService.run(ctx, UpdateCategory.ID, params);
+    Assert.assertEquals(parentCategory2.getPathAsString() + "/Category Title",
+        doc.getPathAsString());
   }
 
 

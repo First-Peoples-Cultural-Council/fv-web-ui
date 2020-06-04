@@ -30,3 +30,5 @@ nashorn_code_cache
 /frontend/temp/*
 /docker/database/*
 /docker/frontend/
+*/test-report.xml
+*.scannerwork
