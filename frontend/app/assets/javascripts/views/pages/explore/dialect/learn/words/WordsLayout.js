@@ -33,7 +33,7 @@ import WordsData from 'views/pages/explore/dialect/learn/words/WordsData'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
-class PageDialectLearnWords extends Component {
+class WordsLayout extends Component {
   render() {
     return (
       <WordsData>
@@ -263,7 +263,7 @@ class PageDialectLearnWords extends Component {
 
 // Proptypes
 const { object } = PropTypes
-PageDialectLearnWords.propTypes = {
+WordsLayout.propTypes = {
   // REDUX: reducers/state
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
@@ -281,4 +281,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(PageDialectLearnWords)
+export default connect(mapStateToProps)(WordsLayout)
