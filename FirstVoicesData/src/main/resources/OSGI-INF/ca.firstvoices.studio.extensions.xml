@@ -19404,7 +19404,7 @@
                 <properties mode="any">
                   <property name="nxl_colspan_0">1</property>
                 </properties>
-                <widget>fvcore_related_words</widget>
+                <widget>fvcore_related_assets</widget>
               </row>
             </rows>
             <widget name="literal_translation" type="list">
@@ -19563,14 +19563,14 @@
                     <field>fv:available_in_childrens_archive</field>
                 </fields>
             </widget>
-            <widget name="fvcore_related_words" type="multipleDocumentsSuggestion">
-            <labels>
-              <label mode="any">Related Words</label>
-            </labels>
-            <translated>false</translated>
+          <widget name="fvcore_related_assets" type="multipleDocumentsSuggestion">
             <fields>
-              <field>fv:related_words</field>
+              <field>fv:related_assets</field>
             </fields>
+            <translated>false</translated>
+            <labels>
+              <label mode="any">Related Assets</label>
+            </labels>
             <properties widgetMode="edit">
               <property name="pageProviderName">dialect_word_suggestion</property>
             </properties>
@@ -19627,7 +19627,7 @@
                 <properties mode="any">
                   <property name="nxl_colspan_0">1</property>
                 </properties>
-                <widget>fvcore_related_words</widget>
+                  <widget>fvcore_related_assets</widget>
               </row>
             </rows>
             <widget name="literal_translation" type="list">
@@ -19768,14 +19768,14 @@
                     <property name="pageProviderName">contributor_suggestion</property>
                 </properties>
             </widget>
-            <widget name="fvcore_related_words" type="multipleDocumentsSuggestion">
-            <labels>
-              <label mode="any">Related Words</label>
-            </labels>
-            <translated>false</translated>
+          <widget name="fvcore_related_words" type="multipleDocumentsSuggestion">
             <fields>
-              <field>fv:related_words</field>
+              <field>fv:related_assets</field>
             </fields>
+            <translated>false</translated>
+            <labels>
+              <label mode="any">Related Assets</label>
+            </labels>
             <properties widgetMode="edit">
               <property name="pageProviderName">dialect_word_suggestion</property>
             </properties>
@@ -19832,7 +19832,7 @@
                 <properties mode="any">
                   <property name="nxl_colspan_0">1</property>
                 </properties>
-                <widget>fvcore_related_words</widget>
+                <widget>fvcore_related_assets</widget>
               </row>
             </rows>
             <widget name="literal_translation" type="list">
@@ -19985,18 +19985,18 @@
                     <property name="pageProviderName">contributor_suggestion</property>
                 </properties>
             </widget>
-            <widget name="fvcore_related_words" type="multipleDocumentsSuggestion">
-              <labels>
-                <label mode="any">Related Words</label>
-              </labels>
-              <translated>false</translated>
-              <fields>
-                <field>fv:related_words</field>
-              </fields>
-              <properties widgetMode="edit">
-                <property name="pageProviderName">dialect_word_suggestion</property>
-              </properties>
-            </widget>
+          <widget name="fvcore_related_assets" type="multipleDocumentsSuggestion">
+            <fields>
+              <field>fv:related_assets</field>
+            </fields>
+            <translated>false</translated>
+            <labels>
+              <label mode="any">Related Assets</label>
+            </labels>
+            <properties widgetMode="edit">
+              <property name="pageProviderName">dialect_word_suggestion</property>
+            </properties>
+          </widget>
         </layout>
         <layout name="fvmedia@create">
             <templates>
