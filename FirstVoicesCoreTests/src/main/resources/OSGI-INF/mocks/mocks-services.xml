@@ -1,16 +1,10 @@
 <?xml version="1.0"?>
 <component name="fv-core-tests-mocks-services-contrib" version="1.0">
 
-  <implementation class="ca.firstvoices.tests.mocks.services.GenerateDialectServiceImpl"/>
-  <implementation class="ca.firstvoices.tests.mocks.services.GenerateDialectsServiceImpl"/>
-  <implementation class="ca.firstvoices.tests.mocks.services.RemoveDialectServiceImpl"/>
-  <implementation class="ca.firstvoices.tests.mocks.services.RemoveDialectsServiceImpl"/>
+  <implementation class="ca.firstvoices.tests.mocks.services.MockDialectServiceImpl"/>
 
   <service>
-    <provide interface="ca.firstvoices.tests.mocks.services.GenerateDialectService"/>
-    <provide interface="ca.firstvoices.tests.mocks.services.GenerateDialectsService"/>
-    <provide interface="ca.firstvoices.tests.mocks.services.RemoveDialectService"/>
-    <provide interface="ca.firstvoices.tests.mocks.services.RemoveDialectsService"/>
+    <provide interface="ca.firstvoices.tests.mocks.services.MockDialectService"/>
   </service>
 
 </component>
