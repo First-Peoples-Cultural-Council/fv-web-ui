@@ -26,6 +26,7 @@ import ca.firstvoices.dialect.categories.services.CategoryService;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -54,6 +55,9 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
   @Inject
   protected CategoryService categoryService;
+
+  @Inject
+  protected AutomationService automationService;
 
   @Before
   public void setUp() throws Exception {

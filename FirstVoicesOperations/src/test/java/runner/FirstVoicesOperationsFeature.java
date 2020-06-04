@@ -39,6 +39,9 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-services.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-services.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-operations.xml")
+
 @Deploy("FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
 
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
