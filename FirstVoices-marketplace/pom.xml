@@ -49,6 +49,10 @@
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesMaintenance</artifactId>
     </dependency>
+    <dependency>
+      <artifactId>FirstVoicesOperations</artifactId>
+      <groupId>ca.firstvoices</groupId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
