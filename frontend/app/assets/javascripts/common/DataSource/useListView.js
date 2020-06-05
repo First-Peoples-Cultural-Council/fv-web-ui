@@ -10,7 +10,7 @@ function useListView() {
   }
 
   return {
-    listViewReducer: useSelector((state) => state.listView.listViewReducer),
+    listView: useSelector((state) => state.listView),
     setListViewMode,
   }
 }
