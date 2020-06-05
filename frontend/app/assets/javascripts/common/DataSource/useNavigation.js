@@ -19,6 +19,7 @@ function useNavigation() {
 
   return {
     routeParams: useSelector((state) => state.navigation.route.routeParams),
+    navigationRouteSearch: useSelector((state) => state.navigation.route.search),
     setRouteParams,
     updatePageProperties,
   }
