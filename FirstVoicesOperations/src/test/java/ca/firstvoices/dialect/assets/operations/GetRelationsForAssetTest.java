@@ -40,8 +40,6 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
 
     DocumentModelList assets = (DocumentModelList) automationService.run(ctx, GetRelationsForAsset.ID);
 
-    wordDocs.forEach(word -> {
-      Assert.assertTrue(assets.contains(word));
-    });
+    wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
   }
 }
