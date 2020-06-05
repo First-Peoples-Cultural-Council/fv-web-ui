@@ -13,10 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component, Suspense } from 'react'
-import PropTypes from 'prop-types'
-
-// REDUX
-import { connect } from 'react-redux'
 
 import selectn from 'selectn'
 import FVLabel from 'views/components/FVLabel/index'
@@ -39,6 +35,8 @@ class WordsLayout extends Component {
       <WordsData>
         {({
           changeFilter,
+          computeDocument,
+          computeLogin,
           dialectFilterListWillUnmount, // TODO: why this can't be handled by setDialectFilter?
           filterInfo,
           intl,
@@ -56,8 +54,8 @@ class WordsLayout extends Component {
                 <div className="col-xs-12 col-md-4 col-md-offset-8 text-right">
                   <AuthorizationFilter
                     filter={{
-                      entity: selectn('response', this.props.computeDocument),
-                      login: this.props.computeLogin,
+                      entity: selectn('response', computeDocument),
+                      login: computeLogin,
                       role: ['Record', 'Approve', 'Everything'],
                     }}
                     hideFromSections
@@ -146,25 +144,18 @@ class WordsLayout extends Component {
                   <DictionaryListData>
                     {({
                       columns,
-                      // computeDocumentResponse,
                       dialect,
                       dialectClassName,
-                      // dialectUid,
                       fetcher,
                       fetcherParams,
                       items,
                       listViewMode,
                       metadata,
-                      // page,
-                      // pageSize,
                       pageTitle,
                       parentId,
-                      // routeParams,
                       setListViewMode,
                       smallScreenTemplate,
-                      // sortCol,
                       sortHandler,
-                      // sortType,
                     }) => {
                       const wordsListView = parentId ? (
                         <Suspense fallback={<div>Loading...</div>}>
@@ -261,24 +252,4 @@ class WordsLayout extends Component {
   }
 }
 
-// Proptypes
-const { object } = PropTypes
-WordsLayout.propTypes = {
-  // REDUX: reducers/state
-  computeDocument: object.isRequired,
-  computeLogin: object.isRequired,
-}
-
-// REDUX: reducers/state
-const mapStateToProps = (state) => {
-  const { document, nuxeo } = state
-  const { computeDocument } = document
-  const { computeLogin } = nuxeo
-
-  return {
-    computeDocument,
-    computeLogin,
-  }
-}
-
-export default connect(mapStateToProps)(WordsLayout)
+export default WordsLayout

@@ -16,9 +16,11 @@ import { useEffect, useState } from 'react'
 import { Set, Map, is } from 'immutable'
 import selectn from 'selectn'
 
+import useDocument from 'DataSource/useDocument'
 import useIntl from 'DataSource/useIntl'
-import useProperties from 'DataSource/useProperties'
+import useLogin from 'DataSource/useLogin'
 import useNavigation from 'DataSource/useNavigation'
+import useProperties from 'DataSource/useProperties'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
 
@@ -31,7 +33,9 @@ import {
 } from 'views/components/SearchDialect/constants'
 
 function WordsData(props) {
+  const { computeDocument } = useDocument()
   const { intl } = useIntl()
+  const { computeLogin } = useLogin()
   const { properties } = useProperties()
   const { routeParams, updatePageProperties } = useNavigation()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -267,6 +271,8 @@ function WordsData(props) {
     isKidsTheme: routeParams.siteTheme === 'kids',
     changeFilter,
     clearDialectFilter,
+    computeDocument,
+    computeLogin,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     dialectFilterListWillUnmount: ({ facetField, resetUrlPagination }) => {

@@ -16,11 +16,8 @@ limitations under the License.
 // 3rd party
 // -------------------------------------------
 import React, { Component, Suspense } from 'react'
-import PropTypes from 'prop-types'
 import { Set } from 'immutable'
 import selectn from 'selectn'
-// REDUX
-import { connect } from 'react-redux'
 
 // FPCC
 // -------------------------------------------
@@ -33,7 +30,7 @@ import DialectFilterListPresentation from 'views/components/DialectFilterList/Di
 import DictionaryListData from 'views/components/Browsing/DictionaryListData'
 import WordsData from 'views/pages/explore/dialect/learn/words/WordsData'
 
-import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
+import NavigationHelpers, { appendPathArrayAfterLandmark, hasPagination } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -42,11 +39,12 @@ const DictionaryList = React.lazy(() => import('views/components/Browsing/Dictio
 // ====================================================
 class WordsFilteredByCategory extends Component {
   render() {
-    const { computeDocument, computeLogin, hasPagination } = this.props
     return (
       <WordsData>
         {({
           changeFilter,
+          computeDocument,
+          computeLogin,
           dialectFilterListWillUnmount,
           filterInfo,
           intl,
@@ -276,27 +274,4 @@ class WordsFilteredByCategory extends Component {
   }
 }
 
-// PROPTYPES
-// -------------------------------------------
-const { bool, object } = PropTypes
-WordsFilteredByCategory.propTypes = {
-  hasPagination: bool,
-  // REDUX: reducers/state
-  computeDocument: object.isRequired,
-  computeLogin: object.isRequired,
-}
-
-// REDUX: reducers/state
-// -------------------------------------------
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, nuxeo } = state
-
-  const { computeDocument } = document
-  const { computeLogin } = nuxeo
-  return {
-    computeDocument,
-    computeLogin,
-  }
-}
-
-export default connect(mapStateToProps, null)(WordsFilteredByCategory)
+export default WordsFilteredByCategory
