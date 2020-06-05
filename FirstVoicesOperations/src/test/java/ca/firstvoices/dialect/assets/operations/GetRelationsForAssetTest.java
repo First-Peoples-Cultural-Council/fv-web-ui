@@ -1,7 +1,9 @@
 package ca.firstvoices.dialect.assets.operations;
 
+import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -12,6 +14,8 @@ import testUtil.AbstractFirstVoicesOperationsTest;
  */
 public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest {
 
+  @Inject
+  AutomationService automationService;
 
   @Test
   public void getRelationsForAsset() throws OperationException {
@@ -37,7 +41,7 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
     DocumentModelList assets = (DocumentModelList) automationService.run(ctx, GetRelationsForAsset.ID);
 
     wordDocs.forEach(word -> {
-      Assert.assertTrue(assets.contains(word.getId()));
+      Assert.assertTrue(assets.contains(word));
     });
   }
 }
