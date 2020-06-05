@@ -62,6 +62,25 @@ function WordsData(props) {
     return searchDialectReset()
   }, [])
 
+  function initialFilterInfo() {
+    const routeParamsCategory = routeParams.category
+    const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
+    const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
+      'fv-word:categories',
+      routeParams.area
+    )
+    const currentAppliedFilterCategories = routeParamsCategory
+      ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
+      : ''
+
+    return new Map({
+      currentCategoryFilterIds: initialCategories,
+      currentAppliedFilter: new Map({
+        categories: currentAppliedFilterCategories,
+      }),
+    })
+  }
+
   const changeFilter = ({ href, updateUrl = true } = {}) => {
     const { searchByMode, searchNxqlQuery } = computeSearchDialect
     let searchType
@@ -107,25 +126,6 @@ function WordsData(props) {
     setValue({ ...value, filterInfo: initialFilterInfo() })
   }
 
-  function initialFilterInfo() {
-    const routeParamsCategory = routeParams.category
-    const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
-    const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
-      'fv-word:categories',
-      routeParams.area
-    )
-    const currentAppliedFilterCategories = routeParamsCategory
-      ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
-      : ''
-
-    return new Map({
-      currentCategoryFilterIds: initialCategories,
-      currentAppliedFilter: new Map({
-        categories: currentAppliedFilterCategories,
-      }),
-    })
-  }
-
   const resetSearch = () => {
     let newFilter = value.filterInfo
 
@@ -137,7 +137,7 @@ function WordsData(props) {
 
     setValue({ ...value, filterInfo: newFilter }, () => {
       // Remove alphabet/category filter urls
-      if (selectn('routeParams.category', this.props) || selectn('routeParams.letter', this.props)) {
+      if (routeParams.category || routeParams.letter) {
         let resetUrl = `/${splitWindowPath.join('/')}`
         const _splitWindowPath = [...splitWindowPath]
         const learnIndex = _splitWindowPath.indexOf('learn')
@@ -171,7 +171,7 @@ function WordsData(props) {
   }
 
   const handleAlphabetClick = async ({ letterClicked, href, updateHistory }) => {
-    await this.props.searchDialectUpdate({
+    await searchDialectUpdate({
       searchByAlphabet: letterClicked,
       searchByMode: SEARCH_BY_ALPHABET,
       searchBySettings: {
@@ -183,14 +183,6 @@ function WordsData(props) {
       searchTerm: '',
     })
     changeFilter({ href, updateUrl: updateHistory })
-  }
-
-  const onNavigateRequest = (path) => {
-    if (NavigationHelpers.hasPagination) {
-      NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
-    } else {
-      NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
-    }
   }
 
   const handleDialectFilterList = (facetField, resetUrlPagination = true) => {
@@ -244,12 +236,20 @@ function WordsData(props) {
     updatePageProperties({ [`${routeParams.area}_${routeParams.dialect_name}_learn_words`]: changedProperties })
   }
 
+  const onNavigateRequest = (path) => {
+    if (NavigationHelpers.hasPagination) {
+      NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
+    } else {
+      NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
+    }
+  }
+
   const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
     const urlPage = 1
     const urlPageSize = pageSize || routeParams.pageSize || 10
 
     const navHelperCallback = (url) => {
-      this.props.pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
+      pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
     }
     const hasPaginationUrl = NavigationHelpers.hasPagination(splitWindowPath)
     if (hasPaginationUrl) {
@@ -265,21 +265,21 @@ function WordsData(props) {
     filterInfo: value.filterInfo,
     flashcardMode: false,
     isKidsTheme: routeParams.siteTheme === 'kids',
-    changeFilter: changeFilter,
-    clearDialectFilter: clearDialectFilter,
-    resetSearch: resetSearch,
+    changeFilter,
+    clearDialectFilter,
+    constSearchByAlphabet: SEARCH_BY_ALPHABET,
+    constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     dialectFilterListWillUnmount: ({ facetField, resetUrlPagination }) => {
       handleDialectFilterList(facetField, resetUrlPagination)
     },
-    splitWindowPath,
-    pushWindowPath,
+    handleAlphabetClick,
     intl,
+    onNavigateRequest,
+    pushWindowPath,
+    resetSearch,
     routeParams,
-    onNavigateRequest: onNavigateRequest,
-    constSearchByAlphabet: SEARCH_BY_ALPHABET,
-    constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
-    handleAlphabetClick: handleAlphabetClick,
-    setDialectFilter: setDialectFilter,
+    setDialectFilter,
+    splitWindowPath,
   })
 }
 
