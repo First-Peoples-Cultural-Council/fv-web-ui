@@ -12,20 +12,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+// 3rd party
+// -------------------------------------------
 import React, { Component, Suspense } from 'react'
-
 import selectn from 'selectn'
-import FVLabel from 'views/components/FVLabel/index'
-import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+// FPCC
+// -------------------------------------------
 import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
 import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import DictionaryListData from 'views/components/Browsing/DictionaryListData'
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import FVLabel from 'views/components/FVLabel/index'
 import WordsData from 'views/pages/explore/dialect/learn/words/WordsData'
+
+import NavigationHelpers, { appendPathArrayAfterLandmark, hasPagination } from 'common/NavigationHelpers'
+import ProviderHelpers from 'common/ProviderHelpers'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
@@ -48,13 +53,14 @@ class WordsLayout extends Component {
           setDialectFilter,
           splitWindowPath,
         }) => {
+          const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
           return (
             <>
               <div className="row row-create-wrapper">
                 <div className="col-xs-12 col-md-4 col-md-offset-8 text-right">
                   <AuthorizationFilter
                     filter={{
-                      entity: selectn('response', computeDocument),
+                      entity: selectn('response', computedDocument),
                       login: computeLogin,
                       role: ['Record', 'Approve', 'Everything'],
                     }}
@@ -71,7 +77,12 @@ class WordsLayout extends Component {
                         if (url) {
                           NavigationHelpers.navigate(`/${url}`, pushWindowPath, false)
                         } else {
-                          onNavigateRequest('create')
+                          onNavigateRequest({
+                            hasPagination,
+                            path: 'create',
+                            pushWindowPath,
+                            splitWindowPath,
+                          })
                         }
                       }}
                       className="PrintHide buttonRaised"
@@ -229,7 +240,9 @@ class WordsLayout extends Component {
 
                         return (
                           <div className="row" style={{ marginTop: '15px' }}>
-                            <div className="col-xs-12 col-md-8 col-md-offset-2">{cloneWordsListView}</div>
+                            <div className={`col-xs-12 col-md-8 col-md-offset-2 ${dialectClassName}`}>
+                              {cloneWordsListView}
+                            </div>
                           </div>
                         )
                       }

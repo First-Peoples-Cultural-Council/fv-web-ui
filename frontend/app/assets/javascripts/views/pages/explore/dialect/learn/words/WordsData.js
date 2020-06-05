@@ -266,9 +266,6 @@ function WordsData(props) {
   }
 
   return props.children({
-    filterInfo: value.filterInfo,
-    flashcardMode: false,
-    isKidsTheme: routeParams.siteTheme === 'kids',
     changeFilter,
     clearDialectFilter,
     computeDocument,
@@ -278,8 +275,11 @@ function WordsData(props) {
     dialectFilterListWillUnmount: ({ facetField, resetUrlPagination }) => {
       handleDialectFilterList(facetField, resetUrlPagination)
     },
+    filterInfo: value.filterInfo,
+    flashcardMode: false,
     handleAlphabetClick,
     intl,
+    isKidsTheme: routeParams.siteTheme === 'kids',
     onNavigateRequest,
     pushWindowPath,
     resetSearch,
