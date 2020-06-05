@@ -3093,6 +3093,18 @@
                     <property name="pageProviderName">contributor_suggestion</property>
                 </properties>
             </widget>
+            <widget name="related_assets" type="multipleDocumentsSuggestion">
+              <labels>
+                <label mode="any">Related Assets</label>
+              </labels>
+              <translated>false</translated>
+              <fields>
+                <field>fv:related_assets</field>
+              </fields>
+              <properties widgetMode="edit">
+                <property name="pageProviderName">all_document_suggestion</property>
+              </properties>
+            </widget>
             <widget name="source" type="multipleDocumentsSuggestion">
                 <labels>
                     <label mode="any">Source</label>
@@ -19383,6 +19395,12 @@
                     <widget>cultural_note</widget>
                 </row>
                 <row>
+                  <properties mode="any">
+                    <property name="nxl_colspan_0">1</property>
+                  </properties>
+                  <widget>related_assets</widget>
+                </row>
+                <row>
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
@@ -19400,12 +19418,6 @@
                     </properties>
                     <widget>available_in_childrens_archive</widget>
                 </row>
-                <row>
-                <properties mode="any">
-                  <property name="nxl_colspan_0">1</property>
-                </properties>
-                <widget>fvcore_related_assets</widget>
-              </row>
             </rows>
             <widget name="literal_translation" type="list">
                 <labels>
@@ -19533,6 +19545,18 @@
                     </widget>
                 </subWidgets>
             </widget>
+            <widget name="related_assets" type="multipleDocumentsSuggestion">
+              <labels>
+                <label mode="any">Related Assets</label>
+              </labels>
+              <translated>false</translated>
+              <fields>
+                <field>fv:related_assets</field>
+              </fields>
+              <properties widgetMode="edit">
+                <property name="pageProviderName">all_document_suggestion</property>
+              </properties>
+            </widget>
             <widget name="source" type="multipleDocumentsSuggestion">
                 <labels>
                     <label mode="any">Source</label>
@@ -19563,18 +19587,6 @@
                     <field>fv:available_in_childrens_archive</field>
                 </fields>
             </widget>
-          <widget name="fvcore_related_assets" type="multipleDocumentsSuggestion">
-            <fields>
-              <field>fv:related_assets</field>
-            </fields>
-            <translated>false</translated>
-            <labels>
-              <label mode="any">Related Assets</label>
-            </labels>
-            <properties widgetMode="edit">
-              <property name="pageProviderName">dialect_word_suggestion</property>
-            </properties>
-          </widget>
         </layout>
         <layout name="fvcore@edit">
             <templates>
@@ -19618,17 +19630,17 @@
                     <widget>cultural_note</widget>
                 </row>
                 <row>
+                  <properties mode="any">
+                    <property name="nxl_colspan_0">1</property>
+                  </properties>
+                  <widget>related_assets</widget>
+                </row>
+                <row>
                     <properties mode="any">
                         <property name="nxl_colspan_0">1</property>
                     </properties>
                     <widget>source</widget>
                 </row>
-                <row>
-                <properties mode="any">
-                  <property name="nxl_colspan_0">1</property>
-                </properties>
-                  <widget>fvcore_related_assets</widget>
-              </row>
             </rows>
             <widget name="literal_translation" type="list">
                 <labels>
@@ -19768,17 +19780,14 @@
                     <property name="pageProviderName">contributor_suggestion</property>
                 </properties>
             </widget>
-          <widget name="fvcore_related_words" type="multipleDocumentsSuggestion">
-            <fields>
-              <field>fv:related_assets</field>
-            </fields>
-            <translated>false</translated>
+          <widget name="related_assets" type="multipleDocumentsSuggestion">
             <labels>
               <label mode="any">Related Assets</label>
             </labels>
-            <properties widgetMode="edit">
-              <property name="pageProviderName">dialect_word_suggestion</property>
-            </properties>
+            <translated>false</translated>
+            <fields>
+              <field>fv:related_assets</field>
+            </fields>
           </widget>
         </layout>
         <layout name="fvcore@view">
@@ -19828,12 +19837,12 @@
                     </properties>
                     <widget>source</widget>
                 </row>
-              <row>
-                <properties mode="any">
-                  <property name="nxl_colspan_0">1</property>
-                </properties>
-                <widget>fvcore_related_assets</widget>
-              </row>
+                <row>
+                  <properties mode="any">
+                    <property name="nxl_colspan_0">1</property>
+                  </properties>
+                  <widget>related_assets</widget>
+                </row>
             </rows>
             <widget name="literal_translation" type="list">
                 <labels>
@@ -19985,7 +19994,7 @@
                     <property name="pageProviderName">contributor_suggestion</property>
                 </properties>
             </widget>
-          <widget name="fvcore_related_assets" type="multipleDocumentsSuggestion">
+          <widget name="related_assets" type="multipleDocumentsSuggestion">
             <fields>
               <field>fv:related_assets</field>
             </fields>
@@ -19994,7 +20003,7 @@
               <label mode="any">Related Assets</label>
             </labels>
             <properties widgetMode="edit">
-              <property name="pageProviderName">dialect_word_suggestion</property>
+              <property name="pageProviderName">all_document_suggestion</property>
             </properties>
           </widget>
         </layout>
@@ -20862,6 +20871,15 @@
                     <field>fv:source</field>
                 </fields>
             </widget>
+          <widget name="related_assets" type="multipleDocumentsSuggestion">
+            <labels>
+              <label mode="any">Related Assets</label>
+            </labels>
+            <translated>false</translated>
+            <fields>
+              <field>fv:related_assets</field>
+            </fields>
+          </widget>
             <widget name="related_audio" type="multipleDocumentsSuggestion">
                 <labels>
                     <label mode="any">Related Audio</label>
@@ -21030,6 +21048,12 @@
                     </properties>
                     <widget>related_videos</widget>
                 </row>
+                <row>
+                  <properties mode="any">
+                    <property name="nxl_colspan_0">1</property>
+                  </properties>
+                  <widget>related_assets</widget>
+                </row>
             </rows>
             <widget name="literal_translation" type="list">
                 <labels>
@@ -21074,6 +21098,15 @@
                 <fields>
                     <field>fv:source</field>
                 </fields>
+            </widget>
+            <widget name="related_assets" type="multipleDocumentsSuggestion">
+              <labels>
+                <label mode="any">Related Assets</label>
+              </labels>
+              <translated>false</translated>
+              <fields>
+                <field>fv:related_assets</field>
+              </fields>
             </widget>
             <widget name="related_audio" type="multipleDocumentsSuggestion">
                 <labels>
@@ -25592,6 +25625,21 @@ function run(input, params) {
             <pageSize>10</pageSize>
 
         </coreQueryPageProvider>
+
+
+      <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
+        name="all_document_suggestion">
+
+        <property name="coreSession">#{documentManager}</property>
+
+        <pattern quoteParameters="false">SELECT * FROM fvcore WHERE (ecm:path STARTSWITH '/FV/' AND
+          ecm:mixinType
+          != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%'
+        </pattern>
+
+        <pageSize>10</pageSize>
+
+      </coreQueryPageProvider>
     </extension>
     <extension target="org.nuxeo.ecm.platform.filemanager.service.FileManagerService" point="plugins">
 
