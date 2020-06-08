@@ -39,7 +39,7 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
     ctx.setInput(childCategory);
 
     DocumentModelList assets = (DocumentModelList) automationService.run(ctx, GetRelationsForAsset.ID);
-
+    Assert.assertEquals(wordDocs.size(), assets.size());
     wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
   }
 }

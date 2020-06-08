@@ -3102,7 +3102,7 @@
                 <field>fv:related_assets</field>
               </fields>
               <properties widgetMode="edit">
-                <property name="pageProviderName">all_document_suggestion</property>
+                <property name="pageProviderName">all_workspace_documents_suggestion</property>
               </properties>
             </widget>
             <widget name="source" type="multipleDocumentsSuggestion">
@@ -19554,7 +19554,7 @@
                 <field>fv:related_assets</field>
               </fields>
               <properties widgetMode="edit">
-                <property name="pageProviderName">all_document_suggestion</property>
+                <property name="pageProviderName">all_workspace_documents_suggestion</property>
               </properties>
             </widget>
             <widget name="source" type="multipleDocumentsSuggestion">
@@ -19788,6 +19788,9 @@
             <fields>
               <field>fv:related_assets</field>
             </fields>
+            <properties widgetMode="edit">
+              <property name="pageProviderName">all_workspace_documents_suggestion</property>
+            </properties>
           </widget>
         </layout>
         <layout name="fvcore@view">
@@ -20003,7 +20006,7 @@
               <label mode="any">Related Assets</label>
             </labels>
             <properties widgetMode="edit">
-              <property name="pageProviderName">all_document_suggestion</property>
+              <property name="pageProviderName">all_workspace_documents_suggestion</property>
             </properties>
           </widget>
         </layout>
@@ -25628,13 +25631,13 @@ function run(input, params) {
 
 
       <coreQueryPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider"
-        name="all_document_suggestion">
+        name="all_workspace_documents_suggestion">
 
         <property name="coreSession">#{documentManager}</property>
 
-        <pattern quoteParameters="false">SELECT * FROM fvcore WHERE (ecm:path STARTSWITH '/FV/' AND
-          ecm:mixinType
-          != 'HiddenInNavigation' AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed =0 AND dc:title ILIKE '%?%'
+        <pattern quoteParameters="false">SELECT * FROM Document WHERE ecm:path STARTSWITH
+          '/FV/Workspaces' AND ecm:mixinType !='HiddenInNavigation' AND ecm:isCheckedInVersion = 0
+          AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND dc:title ILIKE '%?%'
         </pattern>
 
         <pageSize>10</pageSize>

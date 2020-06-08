@@ -7,10 +7,10 @@ Bundle-ActivationPolicy: lazy
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Nuxeo
-Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.securitypolicies.g
- roups.xml,OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecyc
- le.xml,OSGI-INF/extensions/ca.firstvoices.permissions.xml,OSGI-INF/ex
- tensions/ca.firstvoices.filters.xml,OSGI-INF/extensions/ca.firstvoice
- s.operations.xml,OSGI-INF/extensions/ca.firstvoices.listeners.xml,OSG
- I-INF/extensions/ca.firstvoices.fvuserprofile.services.xml
-
+Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml,
+  OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml,
+  OSGI-INF/extensions/ca.firstvoices.permissions.xml,
+  OSGI-INF/extensions/ca.firstvoices.filters.xml,
+  OSGI-INF/extensions/ca.firstvoices.operations.xml,
+  OSGI-INF/extensions/ca.firstvoices.listeners.xml,
+  OSGI-INF/extensions/ca.firstvoices.fvuserprofile.services.xml
