@@ -41,17 +41,27 @@ In this setup you will have the back-end of FirstVoices running, and will be abl
 
 ### Step 1: Run the setup script
 
+To install the latest snapshot (i.e. unstable) version of FirstVoices locally:
 ```
 chmod +x setup_docker.sh && ./setup_docker.sh
+```
+
+You can install the environment with a specific version of FirstVoices like so:
+```
+chmod +x setup_docker.sh && ./setup_docker.sh --dist=3.4.4
+```
+
+Or even with a "release candidate" version:
+```
+chmod +x setup_docker.sh && ./setup_docker.sh --dist=3.4.4-RC
 ```
 
 This setup script will:
 
 1. Create a docker image called `nuxeo-dev` for the back-end
 2. Create volumes on your host machine (in `fv-web-ui/docker/nuxeo_dev_docker`). These will be mounted on the `nuxeo-dev` container.
-3. Install either the latest `master` version of the FirstVoices back-end, or the version you specify by adding `--dist=x.x.x` or `--dist=x.x.x-RC`.
 
-*Note*: To build the back-end modules from source rather than use a pre-compiled distribution, either set `FORCE_BUILD=true` in setup_docker.sh, or build and deploy as specified in Development Procedures -> Pushing Changes -> Method 1, after your environment has started.
+*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in Development Procedures -> Pushing Changes -> Method 1.
 
 ### Step 2: Startup the environment
 
@@ -182,13 +192,13 @@ After making a change to a Nuxeo module, you can deploy your change to the docke
 
 #### Method 1 (deploy entire ZIP - recommended for changes in multiple modules):
 
-- Build the project at `fv-web-ui`
-- Copy `FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip` to your mounted directory (e.g. in Option A: `docker/nuxeo_dev_docker`
-- Execute the following command to stop the server, install the package and start the server:
+To build the entire project and deploy it to your local container, run:
+```
+./docker/UpdatePackage.sh
+```
 
-```
-docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/FirstVoices-marketplace-package-latest.zip && nuxeoctl start"
-```
+You can skip tests by using the `-skip-tests` flag.
+
 
 #### Method 2 (deploy a single module):
 
@@ -233,3 +243,4 @@ Errors:
 
 1. Add additional requirements such as FFMPEG and CCExtractor to image.
 2. Figure out how to hot-reload into a docker container (potentially tied into IntelliJ). See https://doc.nuxeo.com/nxdoc/nuxeo-cli/.
+3. Modify script for handling multiple RC versions. Ensure case sensitive.

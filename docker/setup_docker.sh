@@ -21,7 +21,6 @@ DIRECTORY=$PWD
 echo ${DIRECTORY}
 
 DIST_VERSION=
-FORCE_BUILD= # Set to 'true' to force building the project rather than using binary
 
 RED="\e[31m"
 GREEN="\e[32m"
@@ -38,12 +37,6 @@ fi
 # Build the backend docker image
 cd ${DIRECTORY}
 if [[ -z "$DIST_VERSION" ]]; then
-    if [[ "$FORCE_BUILD" == true ]]; then
-        echo 'Building backend Docker image (building from source)'
-    else
-        echo 'Building backend Docker image (using latest binary version)'
-    fi
-
     docker build -t me/nuxeo-dev .
 else
     echo -e "Building backend Docker image (using binary version $DIST_VERSION)"
@@ -93,37 +86,6 @@ if [[ ! -d "$DIRECTORY/nuxeo_dev_docker" ]]; then
     fi
 fi
 echo
-
-
-# Build main project.
-if [[ "$FORCE_BUILD" == true ]]; then
-
-echo 'Building fv-web-ui (this make take a few minutes)'
-cd ..
-if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
-    echo "skipping tests"
-    mvn clean install -DskipTests -Pbackend -q
-else
-    mvn clean install -Pbackend
-fi
-if [[ "$?" -ne 0 ]]; then
-    echo
-    echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
-    echo
-fi
-echo
-
-# Copy build zipfile to nuxeo_dev_docker folder
-cd ${DIRECTORY}
-echo 'Copying built zipfile to nuxeo_dev_docker'
-cp ../FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip ./nuxeo_dev_docker/
-if [[ "$?" -ne 0 ]]; then
-    echo
-    echo -e "${RED}Zipfile copy failed \n${ENDCOLOR}"; exit 1
-    echo
-fi
-echo
-fi
 
 echo
 echo -e "--------------------------------------------------------------------------------------"
