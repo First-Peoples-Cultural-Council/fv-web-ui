@@ -201,6 +201,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           assetObj.put("uid", assetId);
           assetObj.put("path", assetDoc.getPath().toString());
           assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put("type", assetDoc.getType());
           assetArray.add(assetObj);
         }
         jsonObj.set("related_assets", assetArray);
