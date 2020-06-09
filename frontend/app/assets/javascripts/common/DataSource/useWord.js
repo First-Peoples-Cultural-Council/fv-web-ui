@@ -3,12 +3,12 @@ import { fetchWord as _fetchWord, fetchWords as _fetchWords } from 'providers/re
 
 function useWord() {
   const dispatch = useDispatch()
-  const fetchWord = () => {
-    const dispatchObj = _fetchWord()
+  const fetchWord = (pathOrId, operationParams, message, headers, properties) => {
+    const dispatchObj = _fetchWord(pathOrId, operationParams, message, headers, properties)
     dispatch(dispatchObj)
   }
-  const fetchWords = (searchObj) => {
-    const dispatchObj = _fetchWords(searchObj)
+  const fetchWords = (pathOrId, operationParams, message, headers, properties) => {
+    const dispatchObj = _fetchWords(pathOrId, operationParams, message, headers, properties)
     dispatch(dispatchObj)
   }
   return {

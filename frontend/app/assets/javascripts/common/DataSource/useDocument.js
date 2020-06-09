@@ -4,8 +4,8 @@ import { fetchDocument as _fetchDocument } from 'providers/redux/reducers/docume
 function useDocument() {
   const dispatch = useDispatch()
 
-  const fetchDocument = () => {
-    const dispatchObj = _fetchDocument()
+  const fetchDocument = (pathOrId, operationParams, message, headers, properties) => {
+    const dispatchObj = _fetchDocument(pathOrId, operationParams, message, headers, properties)
     dispatch(dispatchObj)
   }
 
