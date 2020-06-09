@@ -1,16 +1,18 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import Edit from '@material-ui/icons/Edit'
-import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-// REDUX: actions/dispatch/func
-import { connect } from 'react-redux'
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { fetchWords } from 'providers/redux/reducers/fvWord'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setListViewMode } from 'providers/redux/reducers/listView'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
+import useDialect from 'DataSource/useDialect'
+import useDocument from 'DataSource/useDocument'
+import useIntl from 'DataSource/useIntl'
+import useListView from 'DataSource/useListView'
+import useLogin from 'DataSource/useLogin'
+import useNavigation from 'DataSource/useNavigation'
+import usePortal from 'DataSource/usePortal'
+// import usePrevious from 'DataSource/usePrevious'
+import useSearchDialect from 'DataSource/useSearchDialect'
+import useWindowPath from 'DataSource/useWindowPath'
+import useWord from 'DataSource/useWord'
 
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -25,128 +27,81 @@ import Link from 'views/components/Link'
 import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import ProviderHelpers from 'common/ProviderHelpers'
-import { sortHandler, useIdOrPathFallback } from 'views/pages/explore/dialect/learn/base'
+import { updateUrlIfPageOrPageSizeIsDifferent } from 'views/pages/explore/dialect/learn/base'
 import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
 
-class DictionaryListData extends Component {
-  DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
-  DEFAULT_SORT_TYPE = 'asc'
-  DIALECT_FILTER_TYPE = 'words'
+function DictionaryListData(props) {
+  const { computeDocument, fetchDocument } = useDocument()
+  const { computeDialect2 } = useDialect()
+  const { intl } = useIntl()
+  const { listView, setListViewMode } = useListView()
+  const { computeLogin } = useLogin()
+  const { routeParams, setRouteParams, navigationRouteSearch } = useNavigation()
+  const { computePortal, fetchPortal } = usePortal()
+  const { computeSearchDialect } = useSearchDialect()
+  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { computeWords, fetchWords } = useWord()
 
-  constructor(props) {
-    super(props)
+  const computeDocumentkey = `${routeParams.dialect_path}/Dictionary`
+  const DEFAULT_LANGUAGE = 'english'
 
-    this.computeDocumentkey = `${props.routeParams.dialect_path}/Dictionary`
-    this.state = {
-      columns: this.getColumns(),
-    }
-  }
+  const [columns] = useState(getColumns())
 
-  componentDidUpdate(prevProps) {
-    const { routeParams: curRouteParams } = this.props
-    const { routeParams: prevRouteParams } = prevProps
-
-    const { letter: curLetter, category: curCategory } = curRouteParams
-    const { letter: prevLetter, category: prevCategory } = prevRouteParams
-
-    if (
-      curRouteParams.page !== prevRouteParams.page ||
-      curRouteParams.pageSize !== prevRouteParams.pageSize ||
-      curRouteParams.category !== prevRouteParams.category ||
-      curRouteParams.area !== prevRouteParams.area ||
-      curCategory !== prevCategory ||
-      curLetter !== prevLetter
-    ) {
-      this.fetchListViewData({ pageIndex: curRouteParams.page, pageSize: curRouteParams.pageSize })
-    }
-  }
-
-  async componentDidMount() {
-    const { routeParams, computeDocument, computePortal } = this.props
+  const fetchData = async () => {
     // Document
-    await ProviderHelpers.fetchIfMissing(this.computeDocumentkey, this.props.fetchDocument, computeDocument)
-
+    await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
     // Portal
-    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
+
     // Words
-    this.fetchListViewData()
-  }
-  render() {
-    const {
-      computeDialect2,
-      computeDocument,
-      computePortal,
-      computeSearchDialect,
-      computeWords,
-      intl,
-      listView,
-      routeParams,
-    } = this.props
-
-    const { dialect_path, page, pageSize } = routeParams
-
-    // Parsing computeDocument
-    const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${dialect_path}/Dictionary`)
-    const computeDocumentResponse = selectn('response', extractComputeDocument)
-    const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
-    const parentId = selectn('uid', computeDocumentResponse)
-
-    // Parsing computePortal
-    const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${dialect_path}/Portal`)
-    const dialectClassName = getDialectClassname(extractComputePortal)
-    const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
-      ''} ${intl.trans('words', 'Words', 'first')}`
-
-    // Parsing computeDialect2
-    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    const dialect = selectn('response', computedDialect2)
-
-    const { searchNxqlSort = {} } = computeSearchDialect
-    const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
-    const computedWords = ProviderHelpers.getEntry(computeWords, parentId)
-    const items = selectn('response.entries', computedWords)
-    const metadata = selectn('response', computedWords)
-
-    return this.props.children({
-      columns: this.state.columns,
-      computeDocumentResponse,
-      dialect,
-      dialectClassName,
-      dialectUid,
-      fetcher: this.fetcher,
-      fetcherParams: { currentPageIndex: routeParams.page, pageSize: routeParams.pageSize },
-      items,
-      listViewMode: listView.mode,
-      metadata,
-      page: parseInt(page, 10),
-      pageSize: parseInt(pageSize, 10),
-      pageTitle,
-      parentId,
-      routeParams,
-      setListViewMode: this.props.setListViewMode,
-      smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
-      sortCol: DEFAULT_SORT_COL,
-      sortHandler: this._sortHandler,
-      sortType: DEFAULT_SORT_TYPE,
+    fetchListViewData({
+      pageIndex: routeParams.page,
+      pageSize: routeParams.pageSize,
     })
   }
-  fetcher = ({ currentPageIndex, pageSize }) => {
-    const { routeParams, splitWindowPath } = this.props
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const { dialect_path } = routeParams
+
+  // Parsing computeDocument
+  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${dialect_path}/Dictionary`)
+  const computeDocumentResponse = selectn('response', extractComputeDocument)
+  const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
+  const parentId = selectn('uid', computeDocumentResponse)
+
+  // Parsing computePortal
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${dialect_path}/Portal`)
+  const dialectClassName = getDialectClassname(extractComputePortal)
+  const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
+    ''} ${intl.trans('words', 'Words', 'first')}`
+
+  // Parsing computeDialect2
+  const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const dialect = selectn('response', computedDialect2)
+
+  const { searchNxqlSort = {} } = computeSearchDialect
+  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
+
+  const computedWords = ProviderHelpers.getEntry(computeWords, parentId)
+  const items = selectn('response.entries', computedWords)
+  const metadata = selectn('response', computedWords)
+
+  function fetcher({ currentPageIndex, pageSize }) {
     const newUrl = appendPathArrayAfterLandmark({
       pathArray: [pageSize, currentPageIndex],
       splitWindowPath,
       landmarkArray: [routeParams.category, 'words'],
     })
     if (newUrl) {
-      NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
+      NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
     }
   }
 
-  fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
-    const { computeDocument, navigationRouteSearch, routeParams } = this.props
-
+  function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     let currentAppliedFilter = ''
     if (routeParams.category) {
       // Private
@@ -158,38 +113,31 @@ class DictionaryListData extends Component {
         currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}")`
       }
     }
-
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
     const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-
     const searchObj = getSearchObject()
     // 1st: redux values, 2nd: url search query, 3rd: defaults
-    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || this.DEFAULT_SORT_TYPE
-    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
-
+    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
+    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const uid = useIdOrPathFallback({ id: selectn('response.uid', computedDocument), routeParams })
-
-    const dialectId = selectn(
-      'response.contextParameters.ancestry.dialect.uid',
-      ProviderHelpers.getEntry(this.props.computeDocument, this.computeDocumentkey)
-    )
-
+    const uid = useIdOrPathFallback({
+      id: selectn('response.uid', computedDocument),
+    })
     const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&dialectId=${dialectId}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${
-      this.props.routeParams.letter
-        ? `&letter=${this.props.routeParams.letter}&starts_with_query=Document.CustomOrderQuery`
-        : startsWithQuery
+      1}&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${
+      routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
     }`
 
-    this.props.fetchWords(uid, nql)
+    fetchWords(uid, nql)
   }
-  getColumns = () => {
-    const { intl, computeDialect2, DEFAULT_LANGUAGE, computeLogin, routeParams } = this.props
 
-    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  function useIdOrPathFallback({ id } = {}) {
+    return id || `${routeParams.dialect_path}/Dictionary`
+  }
+
+  function getColumns() {
     const computedDialect2Response = selectn('response', computedDialect2)
-    const columns = [
+    const columnsArray = [
       {
         name: 'title',
         title: intl.trans('word', 'Word', 'first'),
@@ -221,7 +169,7 @@ class DictionaryListData extends Component {
                   href={hrefEditRedirect}
                   onClick={(e) => {
                     e.preventDefault()
-                    NavigationHelpers.navigate(hrefEditRedirect, this.props.pushWindowPath, false)
+                    NavigationHelpers.navigate(hrefEditRedirect, pushWindowPath, false)
                   }}
                 >
                   <Edit title={intl.trans('edit', 'Edit', 'first')} />
@@ -313,7 +261,7 @@ class DictionaryListData extends Component {
 
     // NOTE: Append `categories` & `state` columns if on Workspaces
     if (routeParams.area === WORKSPACES) {
-      columns.push({
+      columnsArray.push({
         name: 'fv-word:categories',
         title: intl.trans('categories', 'Categories', 'first'),
         render: (v, data) => {
@@ -324,107 +272,61 @@ class DictionaryListData extends Component {
         },
       })
 
-      columns.push({
+      columnsArray.push({
         name: 'state',
         title: intl.trans('state', 'State', 'first'),
       })
     }
 
-    return columns
+    return columnsArray
   }
 
-  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    sortHandler({
+  const sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+    await setRouteParams({
+      search: {
+        pageSize,
+        page,
+        sortBy,
+        sortOrder,
+      },
+    })
+    // Conditionally update the url after a sort event
+    updateUrlIfPageOrPageSizeIsDifferent({
       page,
       pageSize,
-      pushWindowPath: this.props.pushWindowPath,
-      routeParams: this.props.routeParams,
-      setRouteParams: this.props.setRouteParams,
-      sortBy,
-      sortOrder,
-      splitWindowPath: this.props.splitWindowPath,
+      pushWindowPath: pushWindowPath,
+      routeParamsPage: routeParams.page,
+      routeParamsPageSize: routeParams.pageSize,
+      splitWindowPath: splitWindowPath,
+      windowLocationSearch: window.location.search, // Set only if you want to append the search
     })
   }
+
+  return props.children({
+    columns: columns,
+    computeDocumentResponse,
+    dialect,
+    dialectClassName,
+    dialectUid,
+    fetcher: fetcher,
+    fetcherParams: {
+      currentPageIndex: routeParams.page,
+      pageSize: routeParams.pageSize,
+    },
+    items,
+    listViewMode: listView.mode,
+    metadata,
+    page: parseInt(routeParams.page, 10),
+    pageSize: parseInt(routeParams.pageSize, 10),
+    pageTitle,
+    parentId,
+    routeParams,
+    setListViewMode: setListViewMode,
+    smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
+    sortCol: DEFAULT_SORT_COL,
+    sortHandler: sortHandler,
+    sortType: DEFAULT_SORT_TYPE,
+  })
 }
 
-// PROPTYPES
-const { any, array, func, object } = PropTypes
-DictionaryListData.propTypes = {
-  children: any,
-  DEFAULT_LANGUAGE: any, // TODO ?
-  // REDUX: reducers/state
-  computeDialect2: object.isRequired,
-  computeDocument: object.isRequired,
-  computeLogin: object.isRequired,
-  computePortal: object.isRequired,
-  computeSearchDialect: object.isRequired,
-  computeWords: object.isRequired,
-  intl: object.isRequired,
-  listView: object.isRequired,
-  routeParams: object.isRequired,
-  splitWindowPath: array.isRequired,
-  navigationRouteSearch: object.isRequired,
-  // REDUX: actions/dispatch/func
-  fetchDocument: func.isRequired,
-  fetchPortal: func.isRequired,
-  fetchWords: func.isRequired,
-  pushWindowPath: func.isRequired,
-  setListViewMode: func.isRequired,
-  setRouteParams: func.isRequired,
-}
-DictionaryListData.defaultProps = {
-  searchDialectUpdate: () => {},
-  DEFAULT_LANGUAGE: 'english',
-}
-
-// REDUX: reducers/state
-const mapStateToProps = (state) => {
-  const {
-    document,
-    fvDialect,
-    fvPortal,
-    fvWord,
-    listView,
-    locale,
-    navigation,
-    nuxeo,
-    searchDialect,
-    windowPath,
-  } = state
-
-  const { computeDialect2 } = fvDialect
-  const { computeDocument } = document
-  const { computeLogin } = nuxeo
-  const { computePortal } = fvPortal
-  const { computeSearchDialect } = searchDialect
-  const { computeWords } = fvWord
-  const { intlService } = locale
-  const { route } = navigation
-  const { splitWindowPath } = windowPath
-
-  return {
-    computeDialect2,
-    computeDocument,
-    computeLogin,
-    computePortal,
-    computeSearchDialect,
-    computeWords,
-    intl: intlService,
-    listView,
-    routeParams: route.routeParams,
-    splitWindowPath,
-    navigationRouteSearch: route.search,
-  }
-}
-
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchDocument,
-  fetchPortal,
-  fetchWords,
-  pushWindowPath,
-  setListViewMode,
-  setRouteParams,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DictionaryListData)
+export default DictionaryListData
