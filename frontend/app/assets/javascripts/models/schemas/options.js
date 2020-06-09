@@ -314,6 +314,7 @@ const options = {
       'fv:related_pictures',
       'fv:related_videos',
       'fv-word:related_phrases',
+      'fv:related_assets',
       'fv-word:categories',
       'fv:cultural_note',
       'fv:reference',
@@ -414,6 +415,25 @@ const options = {
         i18n: {
           ...i18nExt,
           add: `+ ${intl.trans('add_related_phrases', 'Add related phrases', 'first')}`,
+        },
+      },
+      'fv:related_assets': {
+        label: intl.trans('related_assets', 'Related Assets', 'first'),
+        item: {
+          factory: SelectSuggestFactory,
+          type: 'FVWord',
+          attrs: {
+            containerType: 'FVWord',
+            allowEdit: false,
+            hideCreate: true,
+          },
+          locals: {
+            labelBrowseComponent: intl.trans('assets_browse', 'Browse Assets', 'first'),
+          },
+        },
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add_related_asset', 'Add related asset', 'first')}`,
         },
       },
       'fv-word:categories': {
