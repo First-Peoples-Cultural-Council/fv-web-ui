@@ -11,7 +11,7 @@ services:
       - nuxeo-backend
       - db
     environment:
-      - CYPRESS_baseUrl=http://frontend
+      - CYPRESS_BASE_URL=http://frontend
       - CYPRESS_FV_USERNAME
       - CYPRESS_FV_PASSWORD
       - CYPRESS_PROJECT_ID
