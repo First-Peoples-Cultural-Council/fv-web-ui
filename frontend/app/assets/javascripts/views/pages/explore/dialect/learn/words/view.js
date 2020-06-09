@@ -199,6 +199,7 @@ export class DialectViewWord extends Component {
               {this._getCulturalNotes(computeWord)}
               {this._getLiteralTranslations(computeWord)}
               {this._getPronounciation(computeWord, computeDialect2)}
+              {this._getRelatedAssets(computeWord)}
             </div>
 
             <aside className="DialectViewWordPhraseContentSecondary">
@@ -446,53 +447,39 @@ export class DialectViewWord extends Component {
     ) : null
   }
 
-  // TODO: RELATED ASSETS GO HERE:
-  // _getRelatedAssets = (computeWord) => {
-  //   const phrasesData = selectn('response.properties.fv:related_assets', computeWord) || []
-  //   const siteTheme = this.props.routeParams.siteTheme
-  //   const phrases = phrasesData.map((phrase, key) => {
-  //     const phraseDefinitions = selectn('fv:definitions', phrase)
-  //     const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
-  //     const phraseLink = (
-  //       <a
-  //         key={selectn('uid', phrase)}
-  //         href={hrefPath}
-  //         onClick={(e) => {
-  //           e.preventDefault()
-  //           NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-  //         }}
-  //       >
-  //         {selectn('dc:title', phrase)}
-  //       </a>
-  //     )
+  _getRelatedAssets = (computeWord) => {
+    const assetData = selectn('response.contextParameters.word.related_assets', computeWord) || []
+    const siteTheme = this.props.routeParams.siteTheme
+    const assets = assetData.map((asset, key) => {
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'assets')
+      const assetLink = (
+        <a
+          key={selectn('uid', asset)}
+          href={hrefPath}
+          onClick={(e) => {
+            e.preventDefault()
+            NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+          }}
+        >
+          {selectn('dc:title', asset)}
+        </a>
+      )
 
-  //     if (phraseDefinitions.length === 0) {
-  //       return <p key={key}>{phraseLink}</p>
-  //     }
-  //     return (
-  //       <div key={key}>
-  //         <p>
-  //           {phraseLink}
-  //           {phraseDefinitions.map((groupValue, innerKey) => {
-  //             return (
-  //               <span key={innerKey} className="DialectViewRelatedPhrasesDefinition">
-  //                 {groupValue.translation}
-  //               </span>
-  //             )
-  //           })}
-  //         </p>
-  //       </div>
-  //     )
-  //   })
-  //   return phrases.length > 0 ? (
-  //     <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
-  //       <h3 className="DialectViewWordPhraseContentItemTitle">
-  //         <FVLabel transKey="related_phrases" defaultStr="Related Phrases" transform="first" />
-  //       </h3>
-  //       <div className="DialectViewWordPhraseContentItemGroup">{phrases}</div>
-  //     </div>
-  //   ) : null
-  // }
+      return (
+        <div key={key}>
+          <p>{assetLink}</p>
+        </div>
+      )
+    })
+    return assets.length > 0 ? (
+      <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
+        <h3 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="related_assets" defaultStr="Related Assets" transform="first" />
+        </h3>
+        <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
+      </div>
+    ) : null
+  }
 
   _getPronounciation = (computeWord, computeDialect2) => {
     const pronunciation = selectn('response.properties.fv-word:pronunciation', computeWord)
