@@ -1,10 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  setRouteParams as _setRouteParams,
-  updatePageProperties as _updatePageProperties,
-} from 'providers/redux/reducers/navigation'
+import { setRouteParams as _setRouteParams } from 'providers/redux/reducers/navigation'
 
-function useNavigation() {
+function useRoute() {
   const dispatch = useDispatch()
 
   const setRouteParams = (data) => {
@@ -12,17 +9,11 @@ function useNavigation() {
     dispatch(dispatchObj)
   }
 
-  const updatePageProperties = (pageProperties) => {
-    const dispatchObj = _updatePageProperties(pageProperties)
-    dispatch(dispatchObj)
-  }
-
   return {
     routeParams: useSelector((state) => state.navigation.route.routeParams),
     navigationRouteSearch: useSelector((state) => state.navigation.route.search),
     setRouteParams,
-    updatePageProperties,
   }
 }
 
-export default useNavigation
+export default useRoute

@@ -4,8 +4,8 @@ import { fetchPortal as _fetchPortal } from 'providers/redux/reducers/fvPortal'
 function usePortal() {
   const dispatch = useDispatch()
 
-  const fetchPortal = (pathOrId, operationParams, message, properties) => {
-    const dispatchObj = _fetchPortal(pathOrId, operationParams, message, properties)
+  const fetchPortal = (pathOrId, messageStart, messageSuccess, messageError, propertiesOverride) => {
+    const dispatchObj = _fetchPortal(pathOrId, messageStart, messageSuccess, messageError, propertiesOverride)
     dispatch(dispatchObj)
   }
 

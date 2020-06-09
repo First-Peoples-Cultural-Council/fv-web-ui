@@ -19,7 +19,7 @@ import selectn from 'selectn'
 import useDocument from 'DataSource/useDocument'
 import useIntl from 'DataSource/useIntl'
 import useLogin from 'DataSource/useLogin'
-import useNavigation from 'DataSource/useNavigation'
+import useRoute from 'DataSource/useRoute'
 import useProperties from 'DataSource/useProperties'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
@@ -36,8 +36,8 @@ function WordsData(props) {
   const { computeDocument } = useDocument()
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
-  const { properties } = useProperties()
-  const { routeParams, updatePageProperties } = useNavigation()
+  const { properties, updatePageProperties } = useProperties()
+  const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeSearchDialect, searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
