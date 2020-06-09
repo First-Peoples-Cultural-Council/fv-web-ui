@@ -41,19 +41,24 @@ In this setup you will have the back-end of FirstVoices running, and will be abl
 
 ### Step 1: Run the setup script
 
+Make sure the setup script has execute permissions:
+```
+chmod +x setup_docker.sh
+```
+
 To install the latest snapshot (i.e. unstable) version of FirstVoices locally:
 ```
-chmod +x setup_docker.sh && ./setup_docker.sh
+./setup_docker.sh
 ```
 
 You can install the environment with a specific version of FirstVoices like so:
 ```
-chmod +x setup_docker.sh && ./setup_docker.sh --dist=3.4.4
+./setup_docker.sh --dist=3.4.4
 ```
 
 Or even with a "release candidate" version:
 ```
-chmod +x setup_docker.sh && ./setup_docker.sh --dist=3.4.4-RC
+./setup_docker.sh --dist=3.4.4-RC
 ```
 
 This setup script will:
