@@ -33,7 +33,7 @@ import CategoryList from 'views/components/Browsing/category-list'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
- * Categories page for words
+ * Categories page for phrases
  */
 
 const { array, func, object, string } = PropTypes
