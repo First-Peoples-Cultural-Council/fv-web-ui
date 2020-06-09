@@ -10,13 +10,14 @@ import PaginationData from './PaginationData'
  *
  * @component
  *
- * @prop {node} children Content to be paged
- * @prop {node} childrenUnderPageSize Pass in markup to render underneath the Page Size select
- * @prop {number} initialPage Starting Page number, will be taken over by Data's internal state
- * @prop {number} initialPageSize Starting Page Size number, will be taken over by Data's internal state
- * @prop {function} onUpdate Called when there are changes to page || pageSize, use with ancestors to fetch new data
- * @prop {number} resultsCount Number of hits, items, results count, etc
- * @prop {boolean} showPageSize Toggle visibility of the Page Size select list
+ * @prop {object} props
+ * @prop {node} props.children Content to be paged
+ * @prop {node} props.childrenUnderPageSize Pass in markup to render underneath the Page Size select
+ * @prop {number} props.initialPage Starting Page number, will be taken over by Data's internal state
+ * @prop {number} props.initialPageSize Starting Page Size number, will be taken over by Data's internal state
+ * @prop {function} props.onUpdate Called when there are changes to page || pageSize, use with ancestors to fetch new data
+ * @prop {number} props.resultsCount Number of hits, items, results count, etc
+ * @prop {boolean} props.showPageSize Toggle visibility of the Page Size select list
  */
 function PaginationContainer({
   children,

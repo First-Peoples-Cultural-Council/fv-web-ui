@@ -1,31 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import classNames from 'classnames'
-
-import Pagination from 'views/components/Navigation/Pagination'
-
 import { MenuItem, Select, TextField } from '@material-ui/core'
 
+import Pagination from 'views/components/Navigation/Pagination'
 import UIHelpers from 'common/UIHelpers'
 import FVLabel from 'views/components/FVLabel/index'
+import '!style-loader!css-loader!./Pagination.css'
+
 /**
  * @summary PaginationPresentation
  * @version 1.0.1
  *
- * @description
- *
  * @component
  *
- * @prop {node} children
- * @prop {node} childrenUnderPageSize
- * @prop {function} onChangePage: call when changing page
- * @prop {function} onChangePageSize: call when changing pageSize
- * @prop {number} page
- * @prop {number} pageCount
- * @prop {number} pageSize
- * @prop {number} resultsCount number of results
- * @prop {boolean} [showPageSize] Defaults to true
+ * @prop {object} props
+ * @prop {node} props.children
+ * @prop {node} props.childrenUnderPageSize
+ * @prop {function} props.onChangePage: call when changing page
+ * @prop {function} props.onChangePageSize: call when changing pageSize
+ * @prop {number} props.page
+ * @prop {number} props.pageCount
+ * @prop {number} props.pageSize
+ * @prop {number} props.resultsCount number of results
+ * @prop {boolean} [props.showPageSize] Defaults to true
+ *
+ * @returns {node} jsx markup
  */
 function PaginationPresentation({
   children,
@@ -39,13 +38,13 @@ function PaginationPresentation({
   showPageSize,
 }) {
   return (
-    <div>
+    <div className="Pagination">
       <div className="row">
         <div className="col-xs-12">{children}</div>
       </div>
 
-      <div className="row PrintHide" style={{ marginTop: '15px' }}>
-        <div className={classNames('col-md-7', 'col-xs-12')} style={{ paddingBottom: '15px' }}>
+      <div className="row PrintHide Pagination__container">
+        <div className="col-md-7 col-xs-12 Pagination__pager">
           <Pagination
             forcePage={page - 1}
             pageCount={pageCount}
@@ -57,26 +56,17 @@ function PaginationPresentation({
           />
         </div>
 
-        <div className={classNames('col-md-5', 'col-xs-12')} style={{ textAlign: 'right' }}>
+        <div className="col-md-5 col-xs-12 Pagination__pageSizeContainer">
           {showPageSize && (
-            <div>
-              <label style={{ verticalAlign: '4px', marginRight: '8px' }}>Page:</label>
-              <span style={{ verticalAlign: '4px' }}>
+            <>
+              <label className="Pagination__pageSizeLabel">Page:</label>
+              <span className="Pagination__pageSizePageOverPageCount">
                 {page} / {pageCount}
               </span>
-              <label
-                style={{
-                  verticalAlign: '4px',
-                  marginRight: '8px',
-                  marginLeft: '8px',
-                  paddingLeft: '8px',
-                  borderLeft: '1px solid #e0e0e0',
-                }}
-              >
-                Per Page:
-              </label>
+              <label className="Pagination__pageSizePerPageLabel">Per Page:</label>
               <Select
-                style={{ width: '45px', marginRight: '8px' }}
+                l
+                className="Pagination__pageSizePerPageSelect"
                 value={pageSize}
                 onChange={(event) => {
                   onChangePageSize(event.target.value)
@@ -89,33 +79,19 @@ function PaginationPresentation({
                 <MenuItem value={250}>250</MenuItem>
                 <MenuItem value={500}>500</MenuItem>
               </Select>
-              <label
-                style={{
-                  verticalAlign: '4px',
-                  marginRight: '8px',
-                  paddingLeft: '8px',
-                  borderLeft: '1px solid #e0e0e0',
-                }}
-              >
+              <label className="Pagination__resultsLabel">
                 <FVLabel transKey="results" defaultStr="Results" transform="first" />
               </label>
-              <span style={{ verticalAlign: '4px' }}>{resultsCount}</span>
-            </div>
+              <span className="Pagination__resultsCount">{resultsCount}</span>
+            </>
           )}
           {childrenUnderPageSize}
         </div>
 
-        <div
-          className={classNames('col-xs-12')}
-          style={{
-            textAlign: 'left',
-            backgroundColor: '#f1f1f1',
-            borderTop: '1px #d8d8d8 solid',
-          }}
-        >
+        <div className="col-xs-12 Pagination__skipContainer">
           Skip to Page:
           <TextField
-            style={{ paddingLeft: '5px' }}
+            className="Pagination__skipPageNumber"
             onKeyDown={(e) => {
               if (e.keyCode === 13) {
                 onChangePage(event.target.value)

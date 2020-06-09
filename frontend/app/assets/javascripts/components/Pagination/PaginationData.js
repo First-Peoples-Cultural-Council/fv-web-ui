@@ -8,14 +8,21 @@ import PropTypes from 'prop-types'
  *
  * @component
  *
- * @prop {function} children children({ onChangePage, onChangePageSize, pageCount, pageSize,  page })
- * @prop {number} resultsCount number of results
- * @prop {number} [initialPageSize] starting page size. used on init, then it's internally controlled
- * @prop {number} [initialPage] starting page selected. used on init, then it's internally controlled
- * @prop {function} onUpdate called anytime there is a change to pageSize or page
+ * @prop {object} props
+ * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
+ * @prop {function} props.onUpdate called anytime there is a change to pageSize or page
+ * @prop {number} [props.initialPage] starting page selected. used on init, then is internally controlled
+ * @prop {number} [props.initialPageSize] starting page size. used on init, then is internally controlled
+ * @prop {number} props.resultsCount number of results
  *
+ * @returns {object} output = { onChangePage, onChangePageSize, page, pageCount, pageSize}
+ * @returns {function} output.onChangePage
+ * @returns {function} output.onChangePageSize
+ * @returns {number} output.page
+ * @returns {number} output.pageCount
+ * @returns {number} output.pageSize
  */
-function PaginationData({ initialPageSize, initialPage, onUpdate, resultsCount, children }) {
+function PaginationData({ children, initialPage, initialPageSize, onUpdate, resultsCount }) {
   const [pageSize, setPageSize] = useState(initialPageSize)
   const [page, setPage] = useState(initialPage)
   const pageCount = Math.ceil(resultsCount / pageSize)
@@ -50,9 +57,9 @@ function PaginationData({ initialPageSize, initialPage, onUpdate, resultsCount, 
   return children({
     onChangePage,
     onChangePageSize,
+    page,
     pageCount,
     pageSize,
-    page,
   })
 }
 // PROPTYPES
