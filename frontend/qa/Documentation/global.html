@@ -193,7 +193,7 @@
     
 
     
-    <h4 class="name" id="CategoriesGridViewData"><span class="type-signature"></span>CategoriesGridViewData<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CategoriesGridViewData"><span class="type-signature"></span>CategoriesGridViewData<span class="signature">()</span><span class="type-signature"> &rarr; {object|array|arrayImmutable|function}</span></h4>
     
 
     
@@ -240,6 +240,47 @@
 
         <tr>
             
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
                 <td class="name"><code>children</code></td>
             
 
@@ -256,7 +297,14 @@
 
             
 
-            <td class="description last">children({categories, computeEntities})</td>
+            <td class="description last">Render prop technique. Assumes children will be a function, eg: children({ ... })</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -298,7 +346,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CategoriesGridView_CategoriesGridViewData.js.html">CategoriesGridView/CategoriesGridViewData.js</a>, <a href="CategoriesGridView_CategoriesGridViewData.js.html#line31">line 31</a>
+        <a href="CategoriesGridView_CategoriesGridViewData.js.html">CategoriesGridView/CategoriesGridViewData.js</a>, <a href="CategoriesGridView_CategoriesGridViewData.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -323,6 +371,88 @@
 
 
 
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    output = {categories, computeEntities, onClickTile}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.categories eg: [{text, href}]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.computeEntities eg: [{id, entity}]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">arrayImmutable</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.onClickTile click handler
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
 
 
 
@@ -334,7 +464,7 @@
     
 
     
-    <h4 class="name" id="CategoriesGridViewPresentation"><span class="type-signature"></span>CategoriesGridViewPresentation<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CategoriesGridViewPresentation"><span class="type-signature"></span>CategoriesGridViewPresentation<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
     
 
     
@@ -358,6 +488,47 @@
     <h5 class="subsection-title">Properties:</h5>
 
     
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
 
 <table class="props">
     <thead>
@@ -441,6 +612,35 @@
 
         <tr>
             
+                <td class="name"><code>onClickTile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">event handler when tile is clicked</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>cols</code></td>
             
 
@@ -503,6 +703,13 @@
     </tbody>
 </table>
 
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -538,7 +745,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html">CategoriesGridView/CategoriesGridViewPresentation.js</a>, <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html#line34">line 34</a>
+        <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html">CategoriesGridView/CategoriesGridViewPresentation.js</a>, <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -563,6 +770,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -598,6 +827,47 @@
     <h5 class="subsection-title">Properties:</h5>
 
     
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
 
 <table class="props">
     <thead>
@@ -782,6 +1052,13 @@
     </tbody>
 </table>
 
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -817,7 +1094,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationContainer.js.html">Pagination/PaginationContainer.js</a>, <a href="Pagination_PaginationContainer.js.html#line21">line 21</a>
+        <a href="Pagination_PaginationContainer.js.html">Pagination/PaginationContainer.js</a>, <a href="Pagination_PaginationContainer.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -853,7 +1130,7 @@
     
 
     
-    <h4 class="name" id="PaginationData"><span class="type-signature"></span>PaginationData<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PaginationData"><span class="type-signature"></span>PaginationData<span class="signature">()</span><span class="type-signature"> &rarr; {object|function|function|number|number|number}</span></h4>
     
 
     
@@ -881,6 +1158,47 @@
     <h5 class="subsection-title">Properties:</h5>
 
     
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
 
 <table class="props">
     <thead>
@@ -928,7 +1246,98 @@
 
             
 
-            <td class="description last">children({ onChangePage, onChangePageSize, pageCount, pageSize,  page })</td>
+            <td class="description last">Render prop technique. Assumes children will be a function, eg: children({ ... })</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onUpdate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">called anytime there is a change to pageSize or page</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>initialPage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">starting page selected. used on init, then is internally controlled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>initialPageSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">starting page size. used on init, then is internally controlled</td>
         </tr>
 
     
@@ -961,94 +1370,10 @@
         </tr>
 
     
+    </tbody>
+</table>
 
-        <tr>
-            
-                <td class="name"><code>initialPageSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
             </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">starting page size. used on init, then it's internally controlled</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>initialPage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">starting page selected. used on init, then it's internally controlled</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onUpdate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">called anytime there is a change to pageSize or page</td>
         </tr>
 
     
@@ -1090,7 +1415,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationData.js.html">Pagination/PaginationData.js</a>, <a href="Pagination_PaginationData.js.html#line18">line 18</a>
+        <a href="Pagination_PaginationData.js.html">Pagination/PaginationData.js</a>, <a href="Pagination_PaginationData.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -1115,6 +1440,128 @@
 
 
 
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    output = { onChangePage, onChangePageSize, page, pageCount, pageSize}
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.onChangePage
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.onChangePageSize
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.page
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.pageCount
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    output.pageSize
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
 
 
 
@@ -1126,7 +1573,7 @@
     
 
     
-    <h4 class="name" id="PaginationPresentation"><span class="type-signature"></span>PaginationPresentation<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PaginationPresentation"><span class="type-signature"></span>PaginationPresentation<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
     
 
     
@@ -1150,6 +1597,47 @@
     <h5 class="subsection-title">Properties:</h5>
 
     
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
 
 <table class="props">
     <thead>
@@ -1438,6 +1926,13 @@
     </tbody>
 </table>
 
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -1473,7 +1968,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationPresentation.js.html">Pagination/PaginationPresentation.js</a>, <a href="Pagination_PaginationPresentation.js.html#line30">line 30</a>
+        <a href="Pagination_PaginationPresentation.js.html">Pagination/PaginationPresentation.js</a>, <a href="Pagination_PaginationPresentation.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -1498,6 +1993,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1525,7 +2042,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 04 2020 16:41:45 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 09 2020 08:06:01 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
