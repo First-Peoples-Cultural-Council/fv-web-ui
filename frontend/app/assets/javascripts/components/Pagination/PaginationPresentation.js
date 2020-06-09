@@ -65,7 +65,6 @@ function PaginationPresentation({
               </span>
               <label className="Pagination__pageSizePerPageLabel">Per Page:</label>
               <Select
-                l
                 className="Pagination__pageSizePerPageSelect"
                 value={pageSize}
                 onChange={(event) => {

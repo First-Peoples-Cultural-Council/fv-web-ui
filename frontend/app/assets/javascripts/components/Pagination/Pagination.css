@@ -1,6 +1,5 @@
 .Pagination__container {
   margin-top: 15px;
-  border: 1px solid red;
 }
 .Pagination__pager {
   padding-bottom: 15px;
@@ -37,7 +36,7 @@
 }
 .Pagination__skipContainer {
   text-align: left;
-  background-color: #ff1111;
+  background-color: rgb(241, 241, 241);
   border-top: 1px solid #d8d8d8;
 }
 .Pagination__skipPageNumber {
