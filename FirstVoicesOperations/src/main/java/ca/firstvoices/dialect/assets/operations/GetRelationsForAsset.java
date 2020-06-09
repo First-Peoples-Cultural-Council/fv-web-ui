@@ -15,9 +15,10 @@ import org.nuxeo.runtime.api.Framework;
  * @author david
  */
 @Operation(id = GetRelationsForAsset.ID, category = Constants.CAT_DOCUMENT, label =
-    "GetRelationsForAsset",
-    description = "Given a document, returns a list documents that refer to that document in the"
-        + " 'fv:related_assets' field")
+    "GetRelationsForAsset", description =
+    "Given a document, returns a list documents that refer to that document in the "
+        + "'fv:related_assets' field. If the given document is a proxy, this endpoint will return"
+        + " proxied documents")
 public class GetRelationsForAsset {
 
   @Context
