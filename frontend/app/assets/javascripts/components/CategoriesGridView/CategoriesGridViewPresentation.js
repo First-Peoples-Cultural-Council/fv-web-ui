@@ -28,8 +28,7 @@ import '!style-loader!css-loader!./CategoriesGridView.css'
  * @version 1.0.1
  *
  * @prop {object} props
- * @prop {node} props.children
- * @prop {array} props.categories
+ * @prop {array} props.categories [{href, text}]
  * @prop {function} props.onClickTile event handler when tile is clicked
  * @prop {number} [props.cols] defaults to 6
  * @prop {number} [props.cellHeight] defaults to 160
