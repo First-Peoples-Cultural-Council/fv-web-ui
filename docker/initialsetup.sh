@@ -6,8 +6,6 @@
 echo ''
 echo "Running initial database setup."
 
-START_WITH_DATA=
-
 TARGET="$1"
 if [ -z "$1" ]; then
     echo "No target url found. Using the default http://127.0.0.1:8080"
@@ -25,7 +23,7 @@ else
 fi
 
 echo "Sending initial database setup request"
-response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Document.InitialDatabaseSetup' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"context":{}}' -u Administrator:Administrator)
+response=$(curl --max-time 120 --connect-timeout 120 -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Document.InitialDatabaseSetup' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"context":{}}' -u Administrator:Administrator) ; echo "Exit code: $?"
 if [[ "response" -ne 200 && "response" -ne 204 ]]; then
     echo -e 'Initial database setup failed: Error ' ${response} ' \n'; exit 1
     echo

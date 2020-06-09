@@ -18,8 +18,9 @@ a2enmod proxy_http && \
 a2enmod ssl
 
 # Add prebuilt version of marketplace package
-ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public.tar.gz /app/ 
-RUN tar -xzf public.tar.gz -C /opt/fv/www/ && rm public.tar.gz
+ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public.tar.gz /app/
+# Tar retains folder structure, so we need to extract 2 layers deep
+RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
 
 COPY docker/apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
