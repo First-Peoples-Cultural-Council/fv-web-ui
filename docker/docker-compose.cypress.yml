@@ -18,5 +18,5 @@ services:
       - CYPRESS_RECORD_KEY
     volumes:
       - '${PWD}/../frontend:/e2e'
-      - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress/cypress.json'
+      - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress.json'
     entrypoint: ["/bin/sh", "-c", "scripts/start_e2e_tests.sh"]
