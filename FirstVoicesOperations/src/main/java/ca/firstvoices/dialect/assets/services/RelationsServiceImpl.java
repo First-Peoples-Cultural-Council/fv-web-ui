@@ -12,8 +12,13 @@ public class RelationsServiceImpl implements RelationsService {
   @Override
   public DocumentModelList getRelations(CoreSession session, DocumentModel doc) {
 
-    String query = "SELECT * FROM Document WHERE fv:related_assets = '" + doc.getId() + "' AND "
-        + "ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
+    String query = "SELECT * FROM Document WHERE fv:related_assets = '" + doc.getId()
+        + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
+
+    if (doc.isProxy()) {
+      query = "SELECT * FROM Document WHERE fvproxy:proxied_related_assets/* = '" + doc.getId()
+          + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0";
+    }
 
     return session.query(query);
   }

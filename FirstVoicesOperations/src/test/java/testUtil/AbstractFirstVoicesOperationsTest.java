@@ -23,6 +23,8 @@ package testUtil;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -141,14 +143,16 @@ public abstract class AbstractFirstVoicesOperationsTest {
     return document;
   }
 
-  protected void createWordsorPhrases(String[] orderedValues, String typeName) {
+  protected List<DocumentModel> createWordsorPhrases(String[] orderedValues, String typeName) {
+    List<DocumentModel> documentModelList = new ArrayList<>();
     Integer i = 0;
     for (String value : orderedValues) {
-      createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
+      documentModelList.add(createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i)));
       i++;
     }
 
     session.save();
+    return documentModelList;
   }
 
   protected Boolean isPublished(DocumentModel doc) {
