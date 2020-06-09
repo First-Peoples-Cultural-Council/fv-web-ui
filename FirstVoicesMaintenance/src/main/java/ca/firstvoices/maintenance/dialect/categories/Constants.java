@@ -22,6 +22,10 @@ package ca.firstvoices.maintenance.dialect.categories;
 
 public class Constants {
 
+  private Constants() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final String GROUP_NAME = "Categories";
 
   // Migrate categories JOB ID

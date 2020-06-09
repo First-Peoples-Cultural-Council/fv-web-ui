@@ -18,47 +18,52 @@
  *
  */
 
-package ca.firstvoices.testUtil;
+package testUtil;
 
 import static org.junit.Assert.assertNotNull;
 
-import ca.firstvoices.runner.FirstVoicesEnricherFeature;
+import ca.firstvoices.dialect.categories.services.CategoryService;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import runner.FirstVoicesOperationsFeature;
 
 @RunWith(FeaturesRunner.class)
-@Features({FirstVoicesEnricherFeature.class})
-public abstract class AbstractFirstVoicesEnricherTest {
+@Features({FirstVoicesOperationsFeature.class})
+public abstract class AbstractFirstVoicesOperationsTest {
 
   protected DocumentModel domain;
-  protected DocumentModel langFamilyDoc;
-  protected DocumentModel languageDoc;
-  protected DocumentModel dialectDoc;
-  protected DocumentModel dictionaryDoc;
-  protected DocumentModel alphabetDoc;
-  protected DocumentModel categories = null;
-  protected DocumentModel category = null;
-  protected DocumentModel subcategory = null;
-  protected DocumentModel word = null;
+  protected DocumentModel languageFamily;
+  protected DocumentModel language;
+  protected DocumentModel dialect;
+  protected DocumentModel dictionary;
+  protected DocumentModel alphabet;
+  protected DocumentModel categories;
+  protected DocumentModel parentCategory;
+  protected DocumentModel childCategory;
+  protected DocumentModel parentCategory2;
 
   @Inject
   protected CoreSession session;
 
   @Inject
-  protected AutomationService automationService;
+  protected CategoryService categoryService;
 
   @Before
-  public void setUp() {
+  public void setUp() throws Exception {
+    assertNotNull("Should have a valid session", session);
+    createSetup(session);
+  }
+
+  public void createSetup(CoreSession session) {
     startFresh(session);
+
     createDialectTree(session);
     session.save();
   }
@@ -95,47 +100,41 @@ public abstract class AbstractFirstVoicesEnricherTest {
 
   public void createDialectTree(CoreSession session) {
     domain = createDocument(session, session.createDocumentModel("/", "FV", "Domain"));
-    langFamilyDoc = createDocument(session,
+    languageFamily = createDocument(session,
         session.createDocumentModel(domain.getPathAsString(), "Family", "FVLanguageFamily"));
-    assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
-    languageDoc = createDocument(session,
-        session.createDocumentModel(langFamilyDoc.getPathAsString(), "Language", "FVLanguage"));
-    assertNotNull("Should have a valid FVLanguage", languageDoc);
-    dialectDoc = createDocument(session,
-        session.createDocumentModel(languageDoc.getPathAsString(), "Dialect", "FVDialect"));
-    assertNotNull("Should have a valid FVDialect", dialectDoc);
-    dictionaryDoc = createDocument(session,
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Dictionary", "FVDictionary"));
-    assertNotNull("Should have a valid FVDictionary", dictionaryDoc);
-    alphabetDoc = createDocument(session,
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));
-    assertNotNull("Should have a valid FVAlphabet", alphabetDoc);
-    categories = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Categories", "FVCategories"));
-    category = session.createDocument(
-        session.createDocumentModel(categories.getPathAsString(), "Category", "FVCategory"));
-    subcategory = session.createDocument(
-        session.createDocumentModel(categories.getPathAsString(), "SubCategory", "FVCategory"));
-    session.move(subcategory.getRef(), category.getRef(), "SubCategory");
-    session.save();
-    word = createWordorPhrase("New Word", "FVWord", null, null);
-    StringList categories = new StringList();
-    categories.add(subcategory.getId());
-    word.setPropertyValue("dc:title", "New Word");
-    word.setPropertyValue("fv-word:categories", categories.toArray());
-    session.saveDocument(word);
-    session.save();
+    assertNotNull("Should have a valid FVLanguageFamily", languageFamily);
+    language = createDocument(session,
+        session.createDocumentModel(languageFamily.getPathAsString(), "Language", "FVLanguage"));
+    assertNotNull("Should have a valid FVLanguage", language);
+    dialect = createDocument(session,
+        session.createDocumentModel(language.getPathAsString(), "Dialect", "FVDialect"));
+    assertNotNull("Should have a valid FVDialect", dialect);
+    dictionary = createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", "FVDictionary"));
+    assertNotNull("Should have a valid FVDictionary", dictionary);
+    alphabet = createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+    assertNotNull("Should have a valid FVAlphabet", alphabet);
+    categories = createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Categories", "FVCategories"));
+    assertNotNull("Should have a valid Categories", categories);
+    parentCategory = createDocument(session, session
+        .createDocumentModel(categories.getPathAsString(), "TestParentCategory1", "FVCategory"));
+    assertNotNull("Should have a valid Parent Category", parentCategory);
+    childCategory = createDocument(session,
+        session.createDocumentModel(parentCategory.getPathAsString(), "Category", "FVCategory"));
+    assertNotNull("Should have a valid category", childCategory);
+    parentCategory2 = createDocument(session, session
+        .createDocumentModel(categories.getPathAsString(), "TestParentCategory2", "FVCategory"));
+    assertNotNull("Should have a valid Parent Category2", parentCategory2);
   }
-
 
   protected DocumentModel createWordorPhrase(String value, String typeName, String pv, String v) {
     DocumentModel document = session
-        .createDocumentModel(dictionaryDoc.getPathAsString(), value, typeName);
+        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", value, typeName);
     if (pv != null) {
       document.setPropertyValue(pv, v);
     }
-
-    document.setPropertyValue("fva:dialect", dialectDoc.getId());
 
     document = createDocument(session, document);
 
@@ -150,5 +149,10 @@ public abstract class AbstractFirstVoicesEnricherTest {
     }
 
     session.save();
+  }
+
+  protected Boolean isPublished(DocumentModel doc) {
+    return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
+        .equals("Published");
   }
 }

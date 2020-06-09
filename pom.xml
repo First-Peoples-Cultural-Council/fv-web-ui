@@ -35,6 +35,7 @@
     <module>FirstVoicesMaintenance</module>
     <module>migration-contributions</module>
     <module>FirstVoicesData</module>
+    <module>FirstVoicesOperations</module>
   </modules>
 
   <dependencyManagement>
@@ -120,6 +121,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesData</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <artifactId>FirstVoicesOperations</artifactId>
+        <groupId>ca.firstvoices</groupId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

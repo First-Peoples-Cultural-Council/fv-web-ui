@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesOperations
+Bundle-Name: FirstVoicesOperations
+Require-Bundle: org.nuxeo.runtime
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ManifestVersion: 2
+Bundle-Vendor: Nuxeo
+Nuxeo-component: OSGI-INF/dialect/categories/categories-operations.xml,
+ OSGI-INF/dialect/categories/categories-services.xml
