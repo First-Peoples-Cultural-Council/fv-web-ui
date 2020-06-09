@@ -13,24 +13,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component } from 'react'
+import React from 'react'
 import CategoriesGridViewData from './CategoriesGridViewData'
 import CategoriesGridViewPresentation from './CategoriesGridViewPresentation'
-export class CategoriesGridViewContainer extends Component {
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+/**
+ * @summary CategoriesGridViewContainer
+ * @component
+ * @version 1.0.1
+ */
+function CategoriesGridViewContainer() {
   // Render
   // ----------------------------------------
-  render() {
-    return (
-      <div>
-        <div>CategoriesGridViewContainer</div>
-        <CategoriesGridViewData>
-          {({ categories }) => {
-            return <CategoriesGridViewPresentation categories={categories} />
-          }}
-        </CategoriesGridViewData>
-      </div>
-    )
-  }
+  return (
+    <CategoriesGridViewData>
+      {({ categories, computeEntities, onClickTile }) => {
+        return (
+          <PromiseWrapper renderOnError computeEntities={computeEntities}>
+            <CategoriesGridViewPresentation categories={categories} onClickTile={onClickTile} />
+          </PromiseWrapper>
+        )
+      }}
+    </CategoriesGridViewData>
+  )
 }
 
 export default CategoriesGridViewContainer

@@ -15,36 +15,59 @@ limitations under the License.
 */
 import React from 'react'
 import PropTypes from 'prop-types'
-function CategoriesGridViewPresentation(props) {
-  let toRender = null
-  if (props.categories.length === 0) {
-    toRender = <div>no categories</div>
-  } else {
-    toRender = props.categories.map((category, index) => {
-      return (
-        <div key={index}>
-          <h2>{category.text}</h2>
-        </div>
-      )
-    })
-  }
-  // Render
-  // ----------------------------------------
+
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+import { Cover } from 'components/svg/cover'
+import '!style-loader!css-loader!./CategoriesGridView.css'
+
+/**
+ * @summary CategoriesGridViewPresentation
+ * @component
+ * @version 1.0.1
+ *
+ * @prop {object} props
+ * @prop {node} props.children
+ * @prop {array} props.categories
+ * @prop {function} props.onClickTile event handler when tile is clicked
+ * @prop {number} [props.cols] defaults to 6
+ * @prop {number} [props.cellHeight] defaults to 160
+ *
+ * @returns {node} jsx markup
+ */
+function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickTile }) {
   return (
-    <div>
-      <h1>CategoriesGridViewPresentation</h1>
-      {toRender}
-    </div>
+    <GridList cols={cols} cellHeight={cellHeight} id="CategoriesGridViewPresentation">
+      {categories.map((category, index) => {
+        return (
+          <GridListTile
+            onClick={() => {
+              onClickTile(category.href)
+            }}
+            key={`category${index}`}
+          >
+            <Cover />
+            <GridListTileBar title={category.text} className="CategoriesGridViewTileBar" />
+          </GridListTile>
+        )
+      })}
+    </GridList>
   )
 }
 
 // Proptypes
-const { array } = PropTypes
+const { array, func, number } = PropTypes
 CategoriesGridViewPresentation.propTypes = {
   categories: array.isRequired,
+  cols: number,
+  cellHeight: number,
+  onClickTile: func,
 }
 CategoriesGridViewPresentation.defaultProps = {
   categories: [],
+  cols: 6,
+  cellHeight: 160,
 }
 
 export default CategoriesGridViewPresentation

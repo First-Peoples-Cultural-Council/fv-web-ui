@@ -13,17 +13,62 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { useEffect } from 'react'
+import Immutable from 'immutable'
+import useCategories from 'DataSource/useCategories'
+import useRoute from 'DataSource/useRoute'
+import useWindowPath from 'DataSource/useWindowPath'
+
+import selectn from 'selectn'
 import PropTypes from 'prop-types'
-function CategoriesGridViewData(props) {
+import ProviderHelpers from 'common/ProviderHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
+
+/**
+ * @summary CategoriesGridViewData
+ * @component
+ * @version 1.0.1
+ *
+ * @prop {object} props
+ * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
+ *
+ * @returns {object} output = {categories, computeEntities, onClickTile}
+ * @returns {array} output.categories eg: [{text, href}]
+ * @returns {arrayImmutable} output.computeEntities eg: [{id, entity}]
+ * @returns {function} output.onClickTile click handler
+ */
+function CategoriesGridViewData({ children }) {
+  const { computeCategories, fetchCategories } = useCategories()
+  const { routeParams } = useRoute()
+  const { pushWindowPath } = useWindowPath()
+  // Note: Phrasebooks don't have shared 'categories' so no need to do a switch between custom & shared
+  const phraseBooksPath = `/api/v1/path/${routeParams.dialect_path}/Phrase Books/@children`
+
+  useEffect(() => {
+    fetchCategories(phraseBooksPath)
+  }, [])
+
+  const computedCategories = ProviderHelpers.getEntry(computeCategories, phraseBooksPath)
+  const categories = (selectn('response.entries', computedCategories) || []).map((category) => {
+    return {
+      text: category.title,
+      href: `/kids${routeParams.dialect_path}/learn/phrasebook/${category.uid}`,
+    }
+  })
+
   // Render
   // ----------------------------------------
-  return props.children({
-    categories: [
+  return children({
+    categories,
+    computeEntities: Immutable.fromJS([
       {
-        text: 'Category (prepared in Data layer)',
-        href: '#href',
+        id: phraseBooksPath,
+        entity: computeCategories,
       },
-    ],
+    ]),
+    onClickTile: (url) => {
+      NavigationHelpers.navigate(url, pushWindowPath, true)
+    },
   })
 }
 
