@@ -8,6 +8,7 @@ function useWindowPath() {
   }
   return {
     windowPath: useSelector((state) => state.windowPath._windowPath),
+    splitWindowPath: useSelector((state) => state.windowPath.splitWindowPath),
     pushWindowPath,
   }
 }
