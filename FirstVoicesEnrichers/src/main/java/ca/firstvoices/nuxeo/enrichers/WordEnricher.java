@@ -49,6 +49,7 @@ import org.nuxeo.runtime.api.Framework;
 public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
 
   public static final String NAME = "word";
+  public static final String DC_TITLE = "dc:title";
   private static final Log log = LogFactory.getLog(WordEnricher.class);
 
   public WordEnricher() {
@@ -178,7 +179,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           }
           phraseObj.set("fv:literal_translation", literalTranslationJsonArray);
 
-          phraseObj.put("dc:title", phraseDoc.getTitle());
+          phraseObj.put(DC_TITLE, phraseDoc.getTitle());
           phraseArray.add(phraseObj);
         }
         jsonObj.set("related_phrases", phraseArray);
@@ -203,7 +204,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           ObjectNode assetObj = mapper.createObjectNode();
           assetObj.put("uid", assetId);
           assetObj.put("path", assetDoc.getPath().toString());
-          assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put(DC_TITLE, assetDoc.getTitle());
           assetObj.put("type", assetDoc.getType());
           assetArray.add(assetObj);
         }
@@ -220,7 +221,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           ObjectNode assetObj = mapper.createObjectNode();
           assetObj.put("uid", assetDoc.getId());
           assetObj.put("path", assetDoc.getPath().toString());
-          assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put(DC_TITLE, assetDoc.getTitle());
           assetObj.put("type", assetDoc.getType());
           assetArray.add(assetObj);
         }
