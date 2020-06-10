@@ -116,6 +116,7 @@ const WORKSPACE_OR_SECTION = new RegExp(ProviderHelpers.regex.WORKSPACE_OR_SECTI
 //const ANY_LANGUAGE_CODE = new RegExp(ProviderHelpers.regex.ANY_LANGUAGE_CODE)
 const KIDS_OR_DEFAULT = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.KIDS_OR_DEFAULT))
 const KIDS = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.KIDS))
+const DEFAULT = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.DEFAULT))
 
 const WORKSPACE_TO_SECTION_REDIRECT = {
   condition: (params) => {
@@ -139,6 +140,24 @@ const NOT_CONNECTED_REDIRECT = {
 // Common Paths
 const DIALECT_PATH = [
   KIDS_OR_DEFAULT,
+  'FV',
+  new paramMatch('area', WORKSPACE_OR_SECTION),
+  'Data',
+  ANYTHING_BUT_SLASH,
+  ANYTHING_BUT_SLASH,
+  ANYTHING_BUT_SLASH,
+]
+const DEFAULT_DIALECT_PATH = [
+  DEFAULT,
+  'FV',
+  new paramMatch('area', WORKSPACE_OR_SECTION),
+  'Data',
+  ANYTHING_BUT_SLASH,
+  ANYTHING_BUT_SLASH,
+  ANYTHING_BUT_SLASH,
+]
+const KIDS_DIALECT_PATH = [
+  KIDS,
   'FV',
   new paramMatch('area', WORKSPACE_OR_SECTION),
   'Data',
@@ -279,10 +298,10 @@ const addImmersionCategory = (route) => {
   })
 }
 
-// eg: /learn/phrasebook/[uid]
+// EXPLORE: Phrasebook, eg: /explore/.../learn/phrasebook/[uid]
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
-    path: [...DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
+    path: [...DEFAULT_DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -292,7 +311,26 @@ const addBrowsePhraseBook = (route) => {
       default: 'Phrases',
       case: 'words',
     })} | {$dialect_name}`,
-    page: <Pages.PageDialectLearnPhrasesFilteredByCategory />,
+    page: <Pages.PageDialectLearnPhrasesByCategory />,
+    extractPaths: true,
+    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+  })
+}
+
+// KIDS: Phrasebook, eg: /kids/.../learn/phrasebook/[uid]
+const addBrowsePhraseBookKids = (route) => {
+  return Object.assign({}, route, {
+    path: [...KIDS_DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
+    title: `${intl.translate({
+      key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
+      default: 'Browsing by Phrase Book',
+      case: 'words',
+    })} | ${intl.translate({
+      key: 'views.pages.explore.dialect.learn.phrases.page_title',
+      default: 'Phrases',
+      case: 'words',
+    })} | {$dialect_name}`,
+    page: <Pages.KidsPhrasesByCategory />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   })
@@ -392,7 +430,7 @@ const routes = [
     path: [new paramMatch('siteTheme', new RegExp('kids'))],
     frontpage: true,
     title: intl.translate({ key: 'kids_home', default: 'Kids Home', case: 'words' }),
-    page: <Pages.PageKidsHome />,
+    page: <Pages.KidsHome />,
   },
   {
     path: ['play'],
@@ -1805,11 +1843,15 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  addBrowsePhraseBook(), // eg: /learn/phrasebook/[uid]
-  addPagination(addBrowsePhraseBook()), // eg: /learn/phrasebook/[uid]/10/1
-  addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES), // eg: learn/phrases/alphabet/b
-  addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)), // eg: learn/phrases/alphabet/b/10/1
-  // Phrasebooks /kids/.../learn/phrasebooks
+  // EXPLORE: Phrasebook, eg: /explore/.../learn/phrasebook/[uid]
+  addBrowsePhraseBook(),
+  // EXPLORE: Phrasebook w/Pagination, eg: /explore/.../learn/phrasebook/[uid]/10/1
+  addPagination(addBrowsePhraseBook()),
+  // Phrase by Alphabet, eg: /[kids|explore]/.../learn/phrases/alphabet/b
+  addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES),
+  // Phrase by Alphabet w/Pagination, eg: /[kids|explore]/.../learn/phrases/alphabet/b/10/1
+  addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)),
+  // KIDS: Phrasebooks, eg: /kids/.../learn/phrasebooks
   {
     path: [
       KIDS,
@@ -1832,6 +1874,10 @@ const routes = [
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
+  // KIDS: Phrasebook, eg: /kids/.../learn/phrasebook/[uid]
+  addBrowsePhraseBookKids(),
+  // KIDS: Phrasebook w/Pagination, eg: /kids/.../learn/phrasebook/[uid]/10/1
+  addPagination(addBrowsePhraseBookKids()),
   // Phrases: Create
   {
     path: [

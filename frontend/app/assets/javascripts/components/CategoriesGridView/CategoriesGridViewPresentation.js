@@ -19,8 +19,10 @@ import PropTypes from 'prop-types'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-import { Cover } from 'components/svg/cover'
 import '!style-loader!css-loader!./CategoriesGridView.css'
+
+import AudioPreviewMinimal from 'components/AudioPreviewMinimal'
+import { Cover } from 'components/svg/cover'
 
 /**
  * @summary CategoriesGridViewPresentation
@@ -28,7 +30,7 @@ import '!style-loader!css-loader!./CategoriesGridView.css'
  * @version 1.0.1
  *
  * @prop {object} props
- * @prop {array} props.categories [{href, text}]
+ * @prop {array} props.categories [{href, text, image, audio, subtitle, title}]
  * @prop {function} props.onClickTile event handler when tile is clicked
  * @prop {number} [props.cols] defaults to 6
  * @prop {number} [props.cellHeight] defaults to 160
@@ -47,7 +49,12 @@ function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickT
             key={`category${index}`}
           >
             <Cover />
-            <GridListTileBar title={category.text} className="CategoriesGridViewTileBar" />
+            <GridListTileBar
+              title={category.text}
+              className="CategoriesGridViewTileBar"
+              actionPosition="right"
+              actionIcon={category.audio ? <AudioPreviewMinimal.Container src={category.audio.src} /> : null}
+            />
           </GridListTile>
         )
       })}

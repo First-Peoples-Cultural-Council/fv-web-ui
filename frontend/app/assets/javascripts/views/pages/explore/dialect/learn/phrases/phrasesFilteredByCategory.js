@@ -73,9 +73,9 @@ import { WORKSPACES } from 'common/Constants'
 
 const intl = IntlService.instance
 
-// PhrasesFilteredByCategory
+// PhrasesByCategory
 // ====================================================
-export class PhrasesFilteredByCategory extends Component {
+export class PhrasesByCategory extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
 
@@ -217,12 +217,12 @@ export class PhrasesFilteredByCategory extends Component {
     if (isKidsTheme) {
       const clonePhraseListView = phraseListView
         ? React.cloneElement(phraseListView, {
-            DEFAULT_PAGE_SIZE: 8,
-            disablePageSize: true,
-            filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
-            gridListView: true,
-            gridCols: 2,
-          })
+          DEFAULT_PAGE_SIZE: 8,
+          disablePageSize: true,
+          filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
+          gridListView: true,
+          gridCols: 2,
+        })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -583,7 +583,7 @@ export class PhrasesFilteredByCategory extends Component {
       }
     )
   }
-  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+  _sortHandler = async({ page, pageSize, sortBy, sortOrder } = {}) => {
     sortHandler({
       page,
       pageSize,
@@ -600,7 +600,7 @@ export class PhrasesFilteredByCategory extends Component {
 // PROPTYPES
 // -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
-PhrasesFilteredByCategory.propTypes = {
+PhrasesByCategory.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
@@ -626,7 +626,7 @@ PhrasesFilteredByCategory.propTypes = {
   updatePageProperties: func.isRequired,
   searchDialectReset: func.isRequired,
 }
-PhrasesFilteredByCategory.defaultProps = {
+PhrasesByCategory.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
 }
 
@@ -672,4 +672,4 @@ const mapDispatchToProps = {
   searchDialectReset,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesByCategory)
