@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: CategoriesGridView/CategoriesGridViewContainer.js</title>
+    <title>JSDoc: Source: AudioMinimal/AudioMinimalContainer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: CategoriesGridView/CategoriesGridViewContainer.js</h1>
+    <h1 class="page-title">Source: AudioMinimal/AudioMinimalContainer.js</h1>
 
     
 
@@ -26,47 +26,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/*
-Copyright 2016 First People's Cultural Council
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import PropTypes from 'prop-types'
+import AudioMinimalPresentation from './AudioMinimalPresentation'
+import AudioMinimalData from './AudioMinimalData'
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-import React from 'react'
-import CategoriesGridViewData from './CategoriesGridViewData'
-import CategoriesGridViewPresentation from './CategoriesGridViewPresentation'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 /**
- * @summary CategoriesGridViewContainer
- * @component
+ * @summary AudioMinimalContainer
  * @version 1.0.1
+ *
+ * @component
+ *
+ * @prop {object} props
+ * @prop {string} props.src URL for audio file
+ *
+ * @returns {node} jsx markup
  */
-function CategoriesGridViewContainer() {
-  // Render
-  // ----------------------------------------
+function AudioMinimalContainer(props) {
   return (
-    &lt;CategoriesGridViewData>
-      {({ categories, computeEntities, onClickTile }) => {
-        return (
-          &lt;PromiseWrapper renderOnError computeEntities={computeEntities}>
-            &lt;CategoriesGridViewPresentation categories={categories} onClickTile={onClickTile} />
-          &lt;/PromiseWrapper>
-        )
-      }}
-    &lt;/CategoriesGridViewData>
+    &lt;AudioMinimalData src={props.src}>{({isPlaying, onPlay, onPause})=>{
+      return &lt;AudioMinimalPresentation isPlaying={isPlaying} onPlay={onPlay} onPause={onPause} />
+    }}&lt;/AudioMinimalData>
   )
 }
+// PROPTYPES
+const { string } = PropTypes
+AudioMinimalContainer.propTypes = {
+  src: string,
+}
 
-export default CategoriesGridViewContainer
+export default AudioMinimalContainer
 </code></pre>
         </article>
     </section>
