@@ -2,34 +2,42 @@ import React, { useEffect, useState } from 'react'
 import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
 
+// FPCC
+
+//DataSources
 import useDialect from 'DataSource/useDialect'
 import useDocument from 'DataSource/useDocument'
 import useIntl from 'DataSource/useIntl'
 import useListView from 'DataSource/useListView'
 import useLogin from 'DataSource/useLogin'
-import useNavigation from 'DataSource/useNavigation'
+import useRoute from 'DataSource/useRoute'
 import usePortal from 'DataSource/usePortal'
-// import usePrevious from 'DataSource/usePrevious'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
 import useWord from 'DataSource/useWord'
 
+// Helpers
+import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import NavigationHelpers, {
+  appendPathArrayAfterLandmark,
+  getSearchObject,
+  updateUrlIfPageOrPageSizeIsDifferent,
+} from 'common/NavigationHelpers'
+import ProviderHelpers from 'common/ProviderHelpers'
+import UIHelpers from 'common/UIHelpers'
+import { WORKSPACES } from 'common/Constants'
+
+// Components
+import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import FVButton from 'views/components/FVButton'
+import Link from 'views/components/Link'
+import Preview from 'views/components/Editor/Preview'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import FVButton from 'views/components/FVButton'
-import Link from 'views/components/Link'
-import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from 'common/NavigationHelpers'
-import Preview from 'views/components/Editor/Preview'
-import ProviderHelpers from 'common/ProviderHelpers'
-import { updateUrlIfPageOrPageSizeIsDifferent } from 'views/pages/explore/dialect/learn/base'
-import UIHelpers from 'common/UIHelpers'
-import { WORKSPACES } from 'common/Constants'
 
 function DictionaryListData(props) {
   const { computeDocument, fetchDocument } = useDocument()
@@ -37,7 +45,7 @@ function DictionaryListData(props) {
   const { intl } = useIntl()
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
-  const { routeParams, setRouteParams, navigationRouteSearch } = useNavigation()
+  const { routeParams, setRouteParams, navigationRouteSearch } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -45,36 +53,20 @@ function DictionaryListData(props) {
 
   const computeDocumentkey = `${routeParams.dialect_path}/Dictionary`
   const DEFAULT_LANGUAGE = 'english'
+  const { searchNxqlSort = {} } = computeSearchDialect
+  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
 
   const [columns] = useState(getColumns())
 
-  const fetchData = async () => {
-    // Document
-    await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
-    // Portal
-    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
-
-    // Words
-    fetchListViewData({
-      pageIndex: routeParams.page,
-      pageSize: routeParams.pageSize,
-    })
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const { dialect_path } = routeParams
-
   // Parsing computeDocument
-  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${dialect_path}/Dictionary`)
+  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
   const computeDocumentResponse = selectn('response', extractComputeDocument)
   const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
   const parentId = selectn('uid', computeDocumentResponse)
+  const curFetchDocumentAction = selectn('action', extractComputeDocument)
 
   // Parsing computePortal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${dialect_path}/Portal`)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
   const dialectClassName = getDialectClassname(extractComputePortal)
   const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
     ''} ${intl.trans('words', 'Words', 'first')}`
@@ -83,22 +75,35 @@ function DictionaryListData(props) {
   const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const dialect = selectn('response', computedDialect2)
 
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
+  // Parsing computeWords
   const computedWords = ProviderHelpers.getEntry(computeWords, parentId)
   const items = selectn('response.entries', computedWords)
   const metadata = selectn('response', computedWords)
 
-  function fetcher({ currentPageIndex, pageSize }) {
-    const newUrl = appendPathArrayAfterLandmark({
-      pathArray: [pageSize, currentPageIndex],
-      splitWindowPath,
-      landmarkArray: [routeParams.category, 'words'],
-    })
-    if (newUrl) {
-      NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
+  useEffect(() => {
+    fetchData()
+    // Words
+    fetchListViewData()
+  }, [])
+
+  useEffect(() => {
+    if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
+      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
     }
+  }, [
+    curFetchDocumentAction,
+    routeParams.area,
+    routeParams.category,
+    routeParams.letter,
+    routeParams.page,
+    routeParams.pageSize,
+  ])
+
+  const fetchData = async () => {
+    // Document
+    await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
+    // Portal
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
   }
 
   function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
@@ -258,7 +263,6 @@ function DictionaryListData(props) {
         sortBy: 'fv-word:part_of_speech',
       },
     ]
-
     // NOTE: Append `categories` & `state` columns if on Workspaces
     if (routeParams.area === WORKSPACES) {
       columnsArray.push({
@@ -271,14 +275,23 @@ function DictionaryListData(props) {
           })
         },
       })
-
       columnsArray.push({
         name: 'state',
         title: intl.trans('state', 'State', 'first'),
       })
     }
-
     return columnsArray
+  }
+
+  function fetcher({ currentPageIndex, pageSize }) {
+    const newUrl = appendPathArrayAfterLandmark({
+      pathArray: [pageSize, currentPageIndex],
+      splitWindowPath,
+      landmarkArray: [routeParams.category, 'words'],
+    })
+    if (newUrl) {
+      NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
+    }
   }
 
   const sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
