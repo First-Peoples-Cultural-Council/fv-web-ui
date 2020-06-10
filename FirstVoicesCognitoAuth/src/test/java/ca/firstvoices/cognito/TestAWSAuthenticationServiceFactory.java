@@ -86,7 +86,13 @@ public class TestAWSAuthenticationServiceFactory extends DefaultComponent {
     }
 
     @Override
-    public void updatePassword(String username, String password) throws MiscellaneousFailureException {
+    public void updatePassword(String username, String password)
+        throws MiscellaneousFailureException {
+    }
+
+    @Override
+    public void migrateUser(String username, String password, String email)
+        throws MiscellaneousFailureException {
 
     }
   }

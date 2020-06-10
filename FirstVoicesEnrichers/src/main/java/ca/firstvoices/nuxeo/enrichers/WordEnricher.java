@@ -181,6 +181,32 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
         jsonObj.set("related_phrases", phraseArray);
       }
 
+      // Process "fv:related_assets" values
+      String[] relatedAssets =
+          (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "related_assets")
+              : (String[]) doc.getProperty("fvproxy", "proxied_related_assets");
+      if (relatedAssets != null) {
+        ArrayNode assetArray = mapper.createArrayNode();
+        for (String assetId : relatedAssets) {
+          IdRef ref = new IdRef(assetId);
+          DocumentModel assetDoc = null;
+          // Try to retrieve Nuxeo document. If it isn't found, continue to next iteration.
+          try {
+            assetDoc = session.getDocument(ref);
+          } catch (DocumentNotFoundException | DocumentSecurityException de) {
+            continue;
+          }
+
+          ObjectNode assetObj = mapper.createObjectNode();
+          assetObj.put("uid", assetId);
+          assetObj.put("path", assetDoc.getPath().toString());
+          assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put("type", assetDoc.getType());
+          assetArray.add(assetObj);
+        }
+        jsonObj.set("related_assets", assetArray);
+      }
+
       // Process "fv:related_audio" values
       String[] audioIds = (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "related_audio")
           : (String[]) doc.getProperty("fvproxy", "proxied_audio");
