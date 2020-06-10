@@ -41,26 +41,21 @@ function WordsData(props) {
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeSearchDialect, searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
-  const [value, setValue] = useState({
-    filterInfo: initialFilterInfo(),
-    flashcardMode: false,
-    isKidsTheme: false,
-  })
-
-  // If no filters are applied via URL, use props
-  if (value.filterInfo.get('currentCategoryFilterIds').isEmpty()) {
-    const pagePropertiesFilterInfo = selectn(
-      [[`${routeParams.area}_${routeParams.dialect_name}_learn_words`], 'filterInfo'],
-      properties.pageProperties
-    )
-    if (pagePropertiesFilterInfo) {
-      setValue({ ...value, filterInfo: pagePropertiesFilterInfo })
-    }
-  }
+  const [filterInfo, setfilterInfo] = useState(initialFilterInfo())
 
   useEffect(() => {
+    // If no filters are applied via URL, use props
+    if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
+      const pagePropertiesFilterInfo = selectn(
+        [[`${routeParams.area}_${routeParams.dialect_name}_learn_words`], 'filterInfo'],
+        properties.pageProperties
+      )
+      if (pagePropertiesFilterInfo) {
+        setfilterInfo(pagePropertiesFilterInfo)
+      }
+    }
     if (routeParams.category === undefined) {
-      setValue({ ...value, filterInfo: initialFilterInfo() })
+      setfilterInfo(initialFilterInfo())
     }
     // Specify how to clean up after this effect:
     return searchDialectReset()
@@ -88,7 +83,7 @@ function WordsData(props) {
   const changeFilter = ({ href, updateUrl = true } = {}) => {
     const { searchByMode, searchNxqlQuery } = computeSearchDialect
     let searchType
-    let newFilter = value.filterInfo
+    let newFilter = filterInfo
 
     switch (searchByMode) {
       case SEARCH_BY_ALPHABET: {
@@ -115,8 +110,8 @@ function WordsData(props) {
 
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
-    if (is(value.filterInfo, newFilter) === false) {
-      setValue({ ...value, filterInfo: newFilter }, () => {
+    if (is(filterInfo, newFilter) === false) {
+      setfilterInfo(newFilter, () => {
         if (href && updateUrl) {
           NavigationHelpers.navigate(href, pushWindowPath, false)
         } else {
@@ -127,11 +122,11 @@ function WordsData(props) {
   }
 
   const clearDialectFilter = () => {
-    setValue({ ...value, filterInfo: initialFilterInfo() })
+    setfilterInfo(initialFilterInfo())
   }
 
   const resetSearch = () => {
-    let newFilter = value.filterInfo
+    let newFilter = filterInfo
 
     newFilter = newFilter.set('currentAppliedFilter', new Map())
 
@@ -139,7 +134,7 @@ function WordsData(props) {
 
     newFilter = newFilter.set('currentCategoryFilterIds', new Set())
 
-    setValue({ ...value, filterInfo: newFilter }, () => {
+    setfilterInfo(newFilter, () => {
       // Remove alphabet/category filter urls
       if (routeParams.category || routeParams.letter) {
         let resetUrl = `/${splitWindowPath.join('/')}`
@@ -201,7 +196,7 @@ function WordsData(props) {
       )}/* IN ("${newList.join('","')}")`
     }
 
-    let newFilter = value.filterInfo.updateIn(['currentCategoryFilterIds'], () => {
+    let newFilter = filterInfo.updateIn(['currentCategoryFilterIds'], () => {
       return newList
     })
     newFilter = newFilter.updateIn(['currentAppliedFilter', 'categories'], () => {
@@ -233,7 +228,7 @@ function WordsData(props) {
       resetURLPagination()
     }
 
-    setValue({ ...value, filterInfo: newFilter })
+    setfilterInfo(newFilter)
   }
 
   const handlePagePropertiesChange = (changedProperties) => {
@@ -266,26 +261,26 @@ function WordsData(props) {
   }
 
   return props.children({
-    changeFilter,
-    clearDialectFilter,
-    computeDocument,
-    computeLogin,
+    changeFilter: changeFilter,
+    clearDialectFilter: clearDialectFilter,
+    computeDocument: computeDocument,
+    computeLogin: computeLogin,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     dialectFilterListWillUnmount: ({ facetField, resetUrlPagination }) => {
       handleDialectFilterList(facetField, resetUrlPagination)
     },
-    filterInfo: value.filterInfo,
+    filterInfo: filterInfo,
     flashcardMode: false,
-    handleAlphabetClick,
-    intl,
+    handleAlphabetClick: (event) => handleAlphabetClick(event),
+    intl: intl,
     isKidsTheme: routeParams.siteTheme === 'kids',
-    onNavigateRequest,
-    pushWindowPath,
-    resetSearch,
-    routeParams,
-    setDialectFilter,
-    splitWindowPath,
+    onNavigateRequest: onNavigateRequest,
+    pushWindowPath: pushWindowPath,
+    resetSearch: resetSearch,
+    routeParams: routeParams,
+    setDialectFilter: setDialectFilter,
+    splitWindowPath: splitWindowPath,
   })
 }
 
