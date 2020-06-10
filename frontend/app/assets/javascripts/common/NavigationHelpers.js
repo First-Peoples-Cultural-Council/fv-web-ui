@@ -334,3 +334,47 @@ export const routeHasChanged = (obj = {}) => {
     is(immutablePrevRouteParams, immutableCurRouteParams) === false
   )
 }
+
+export const updateUrlIfPageOrPageSizeIsDifferent = ({
+  page = 1,
+  pageSize = 10,
+  pushWindowPath = () => {},
+  routeParamsPage = 1,
+  routeParamsPageSize = 10,
+  splitWindowPath,
+  windowLocationSearch,
+  onPaginationReset = () => {},
+} = {}) => {
+  // Function that will update the url, possibly appending `windowLocationSearch`
+  const navigationFunc = (url) => {
+    pushWindowPath(`${url}${windowLocationSearch ? windowLocationSearch : ''}`)
+  }
+  // Cast to numbers
+  let pageNum = parseInt(page, 10)
+  const pageSizeNum = parseInt(pageSize, 10)
+  const routeParamsPageNum = parseInt(routeParamsPage, 10)
+  const routeParamsPageSizeNum = parseInt(routeParamsPageSize, 10)
+
+  if (pageNum !== routeParamsPageNum || pageSizeNum !== routeParamsPageSizeNum) {
+    if (pageSizeNum !== routeParamsPageSizeNum && pageNum !== 1) {
+      pageNum = 1
+    }
+    // With pagination, replace end part of url
+    if (hasPagination(splitWindowPath)) {
+      navigationFunc(
+        '/' +
+          arrayPopImmutable(splitWindowPath, [pageSizeNum, pageNum].length)
+            .concat([pageSizeNum, pageNum])
+            .join('/')
+      )
+    } else {
+      // When no pagination, append to url
+      navigationFunc('/' + splitWindowPath.concat([pageSizeNum, pageNum]).join('/'))
+    }
+  }
+  // TODO: Drop the following?
+  // If `pageSize` has changed, reset `page`
+  if (pageSizeNum !== routeParamsPageSizeNum) {
+    onPaginationReset(pageNum, pageSizeNum)
+  }
+}
