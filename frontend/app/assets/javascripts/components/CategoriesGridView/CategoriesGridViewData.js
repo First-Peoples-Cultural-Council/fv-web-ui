@@ -51,7 +51,7 @@ function CategoriesGridViewData({ children }) {
   const computedCategories = ProviderHelpers.getEntry(computeCategories, phraseBooksPath)
   const categories = (selectn('response.entries', computedCategories) || []).map((category) => {
     return {
-      text: category.title,
+      title: category.title,
       href: `/kids${routeParams.dialect_path}/learn/phrasebook/${category.uid}`,
     }
   })

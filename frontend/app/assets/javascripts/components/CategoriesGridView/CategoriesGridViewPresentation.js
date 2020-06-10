@@ -21,7 +21,7 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import '!style-loader!css-loader!./CategoriesGridView.css'
 
-import AudioPreviewMinimal from 'components/AudioPreviewMinimal'
+import AudioMinimal from 'components/AudioMinimal'
 import { Cover } from 'components/svg/cover'
 
 /**
@@ -41,19 +41,28 @@ function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickT
   return (
     <GridList cols={cols} cellHeight={cellHeight} id="CategoriesGridViewPresentation">
       {categories.map((category, index) => {
+        const { href, title, subtitle, audio, image } = category
+        const _subtitle = subtitle ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: subtitle,
+            }}
+          />
+        ) : null
         return (
           <GridListTile
             onClick={() => {
-              onClickTile(category.href)
+              onClickTile(href)
             }}
             key={`category${index}`}
           >
-            <Cover />
+            {image ? <img src={image} alt={title} /> : <Cover />}
             <GridListTileBar
-              title={category.text}
+              title={title}
+              subtitle={_subtitle}
               className="CategoriesGridViewTileBar"
               actionPosition="right"
-              actionIcon={category.audio ? <AudioPreviewMinimal.Container src={category.audio.src} /> : null}
+              actionIcon={audio ? <AudioMinimal.Container src={audio} /> : null}
             />
           </GridListTile>
         )
@@ -74,6 +83,7 @@ CategoriesGridViewPresentation.defaultProps = {
   categories: [],
   cols: 6,
   cellHeight: 160,
+  onClickTile: () => {},
 }
 
 export default CategoriesGridViewPresentation
