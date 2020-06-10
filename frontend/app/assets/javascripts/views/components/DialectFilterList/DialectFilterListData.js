@@ -249,17 +249,15 @@ class DialectFilterListData extends Component {
 
   setSelected = ({ href, checkedFacetUid, childrenIds }) => {
     // 'check' new
-    this.setState(() => {
-      const selected = {
-        checkedFacetUid,
-        childrenIds,
-      }
+    const selected = {
+      checkedFacetUid,
+      childrenIds,
+    }
 
-      this.setDialectFilter({
-        facetField: this.state.facetField,
-        href,
-        selected,
-      })
+    this.setDialectFilter({
+      facetField: this.state.facetField,
+      href,
+      selected,
     })
   }
 
@@ -281,17 +279,15 @@ class DialectFilterListData extends Component {
       const selectedParams = this.historyData[_filterId]
       if (selectedParams) {
         const { href, checkedFacetUid, childrenIds } = selectedParams
-        this.setState(() => {
-          const selected = {
-            checkedFacetUid,
-            childrenIds,
-          }
-          this.setDialectFilter({
-            facetField: this.state.facetField,
-            href,
-            selected,
-            updateUrl: false,
-          })
+        const selected = {
+          checkedFacetUid,
+          childrenIds,
+        }
+        this.setDialectFilter({
+          facetField: this.state.facetField,
+          href,
+          selected,
+          updateUrl: false,
         })
       }
     }

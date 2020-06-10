@@ -24,7 +24,7 @@ import useProperties from 'DataSource/useProperties'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
 
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { hasPagination } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import {
   SEARCH_BY_ALPHABET,
@@ -111,13 +111,12 @@ function WordsData(props) {
     // When facets change, pagination should be reset.
     // In these pages (words/phrase), list views are controlled via URL
     if (is(filterInfo, newFilter) === false) {
-      setfilterInfo(newFilter, () => {
-        if (href && updateUrl) {
-          NavigationHelpers.navigate(href, pushWindowPath, false)
-        } else {
-          resetURLPagination({ preserveSearch: true })
-        }
-      })
+      setfilterInfo(newFilter)
+      if (href && updateUrl) {
+        NavigationHelpers.navigate(href, pushWindowPath, false)
+      } else {
+        resetURLPagination({ preserveSearch: true })
+      }
     }
   }
 
@@ -134,23 +133,23 @@ function WordsData(props) {
 
     newFilter = newFilter.set('currentCategoryFilterIds', new Set())
 
-    setfilterInfo(newFilter, () => {
-      // Remove alphabet/category filter urls
-      if (routeParams.category || routeParams.letter) {
-        let resetUrl = `/${splitWindowPath.join('/')}`
-        const _splitWindowPath = [...splitWindowPath]
-        const learnIndex = _splitWindowPath.indexOf('learn')
-        if (learnIndex !== -1) {
-          _splitWindowPath.splice(learnIndex + 2)
-          resetUrl = `/${_splitWindowPath.join('/')}`
-        }
-        NavigationHelpers.navigate(`${resetUrl}/${routeParams.pageSize}/1`, pushWindowPath, false)
-      } else {
-        // When facets change, pagination should be reset.
-        // In these pages (words/phrase), list views are controlled via URL
-        resetURLPagination()
+    setfilterInfo(newFilter)
+
+    // Remove alphabet/category filter urls
+    if (routeParams.category || routeParams.letter) {
+      let resetUrl = `/${splitWindowPath.join('/')}`
+      const _splitWindowPath = [...splitWindowPath]
+      const learnIndex = _splitWindowPath.indexOf('learn')
+      if (learnIndex !== -1) {
+        _splitWindowPath.splice(learnIndex + 2)
+        resetUrl = `/${_splitWindowPath.join('/')}`
       }
-    })
+      NavigationHelpers.navigate(`${resetUrl}/${routeParams.pageSize}/1`, pushWindowPath, false)
+    } else {
+      // When facets change, pagination should be reset.
+      // In these pages (words/phrase), list views are controlled via URL
+      resetURLPagination()
+    }
   }
 
   const setDialectFilter = async ({ selected, href, updateUrl }) => {
@@ -236,7 +235,7 @@ function WordsData(props) {
   }
 
   const onNavigateRequest = (path) => {
-    if (NavigationHelpers.hasPagination) {
+    if (hasPagination) {
       NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
     } else {
       NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
@@ -250,7 +249,7 @@ function WordsData(props) {
     const navHelperCallback = (url) => {
       pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
     }
-    const hasPaginationUrl = NavigationHelpers.hasPagination(splitWindowPath)
+    const hasPaginationUrl = hasPagination(splitWindowPath)
     if (hasPaginationUrl) {
       // Replace them
       NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
