@@ -107,9 +107,12 @@ export class DialectViewWord extends Component {
 
   // Refetch data on URL change
   componentWillReceiveProps(nextProps) {
+    console.log('DialectViewWord > componentWillReceiveProps', {nextProps, props: this.props})
     if (nextProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
+      console.log('DialectViewWord > componentWillReceiveProps: fetchData 1')
       this.fetchData(nextProps)
     } else if (nextProps.routeParams.word !== this.props.routeParams.word) {
+      console.log('DialectViewWord > componentWillReceiveProps: fetchData 2')
       this.fetchData(nextProps)
     }
     // else if (nextProps.computeLogin.success !== this.props.computeLogin.success) {
@@ -123,6 +126,7 @@ export class DialectViewWord extends Component {
   }
 
   componentDidUpdate(prevProps /*, prevState*/) {
+    console.log('DialectViewWord > componentDidUpdate', {prevProps, props: this.props})
     const word = selectn('response', ProviderHelpers.getEntry(this.props.computeWord, this._getWordPath()))
     const title = selectn('properties.dc:title', word)
     const uid = selectn('uid', word)
