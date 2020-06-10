@@ -212,7 +212,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
 
       RelationsService relationsService = Framework.getService(RelationsService.class);
       DocumentModelList relatedTo = relationsService.getRelations(session, doc, "FVWord");
-      if (relatedTo != null && relatedTo.size() > 0) {
+      if (relatedTo != null && !relatedTo.isEmpty()) {
         ArrayNode assetArray = mapper.createArrayNode();
         for (DocumentModel assetDoc : relatedTo) {
           ObjectNode assetObj = mapper.createObjectNode();
