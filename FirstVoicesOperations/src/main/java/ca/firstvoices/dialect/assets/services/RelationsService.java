@@ -8,6 +8,9 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
  * @author david
  */
 public interface RelationsService {
+
   DocumentModelList getRelations(CoreSession session, DocumentModel doc);
+
+  DocumentModelList getRelations(CoreSession session, DocumentModel doc, String type);
 
 }

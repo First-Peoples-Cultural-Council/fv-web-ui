@@ -48,6 +48,31 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
     wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
   }
 
+  @Test
+  public void testGetRelationsByType() {
+
+    String[] words = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
+        "la'oo'a'a",};
+
+    createWordsorPhrases(words, "FVWord");
+
+    DocumentModelList wordDocs = session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " + "ORDER BY "
+            + "fv:custom_order DESC");
+
+    String[] propertyValue = new String[]{childCategory.getId()};
+
+    wordDocs.forEach(word -> {
+      word.setPropertyValue("fv:related_assets", propertyValue);
+      session.saveDocument(word);
+    });
+
+    DocumentModelList assets = relationsService.getRelations(session, childCategory, "FVWord");
+
+    Assert.assertEquals(wordDocs.size(), assets.size());
+    wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
+  }
+
   // This unit test is always returning one less document than expected and is failing.
   @Test
   @Ignore

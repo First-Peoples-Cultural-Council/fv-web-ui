@@ -22,4 +22,20 @@ public class RelationsServiceImpl implements RelationsService {
 
     return session.query(query);
   }
+
+  @Override
+  public DocumentModelList getRelations(CoreSession session, DocumentModel doc, String type) {
+
+    String query =
+        "SELECT * FROM Document WHERE ecm:primaryType = '" + type + "' AND fv:related_assets = '"
+            + doc.getId() + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
+
+    if (doc.isProxy()) {
+      query = "SELECT * FROM Document WHERE ecm:primaryType = '" + type + "' AND "
+          + "fvproxy:proxied_related_assets/* = '" + doc.getId() + "' AND ecm:isTrashed = 0 AND "
+          + "ecm:isVersion = 0";
+    }
+
+    return session.query(query);
+  }
 }
