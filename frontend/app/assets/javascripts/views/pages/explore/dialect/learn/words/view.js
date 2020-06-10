@@ -466,6 +466,7 @@ export class DialectViewWord extends Component {
     return assets.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
         <h3 className="DialectViewWordPhraseContentItemTitle">
+          {/* When change from Related Words -> Related Assets change label below */}
           <FVLabel transKey="related_assets" defaultStr="Related Words" transform="first" />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
