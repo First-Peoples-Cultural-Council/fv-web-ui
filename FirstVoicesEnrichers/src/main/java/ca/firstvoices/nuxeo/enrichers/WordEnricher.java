@@ -23,6 +23,7 @@ package ca.firstvoices.nuxeo.enrichers;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
+import ca.firstvoices.dialect.assets.services.RelationsService;
 import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,9 +35,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -66,7 +64,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
     jg.writeObject(wordJsonObject);
   }
 
-  private ObjectNode constructWordJSON(DocumentModel doc) throws IOException {
+  private ObjectNode constructWordJSON(DocumentModel doc) {
     ObjectMapper mapper = new ObjectMapper();
 
     // JSON object to be returned
@@ -212,27 +210,19 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
         jsonObj.set("related_assets", assetArray);
       }
 
-      // Process related_by documents
-      AutomationService automation = Framework.getService(AutomationService.class);
-      OperationContext operation = new OperationContext(session);
-      operation.setInput(doc);
-      try {
-        DocumentModelList relatedTo = (DocumentModelList) automation
-            .run(operation, "Document.GetRelationsForAsset");
-        if (relatedTo != null && relatedTo.size() > 0) {
-          ArrayNode assetArray = mapper.createArrayNode();
-          for (DocumentModel assetDoc : relatedTo) {
-            ObjectNode assetObj = mapper.createObjectNode();
-            assetObj.put("uid", assetDoc.getId());
-            assetObj.put("path", assetDoc.getPath().toString());
-            assetObj.put("dc:title", assetDoc.getTitle());
-            assetObj.put("type", assetDoc.getType());
-            assetArray.add(assetObj);
-          }
-          jsonObj.set("related_by", assetArray);
+      RelationsService relationsService = Framework.getService(RelationsService.class);
+      DocumentModelList relatedTo = relationsService.getRelations(session, doc, "FVWord");
+      if (relatedTo != null && relatedTo.size() > 0) {
+        ArrayNode assetArray = mapper.createArrayNode();
+        for (DocumentModel assetDoc : relatedTo) {
+          ObjectNode assetObj = mapper.createObjectNode();
+          assetObj.put("uid", assetDoc.getId());
+          assetObj.put("path", assetDoc.getPath().toString());
+          assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put("type", assetDoc.getType());
+          assetArray.add(assetObj);
         }
-      } catch (OperationException e) {
-        e.printStackTrace();
+        jsonObj.set("related_by", assetArray);
       }
 
       // Process "fv:related_audio" values
