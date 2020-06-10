@@ -69,11 +69,11 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
 
     Map<String, String> parameters = new HashMap<>();
 
-    parameters.put("type", "FVPhrase");
+    parameters.put("type", "FVWord");
 
     DocumentModelList assets = (DocumentModelList) automationService
         .run(ctx, GetRelationsForAsset.ID, parameters);
     Assert.assertEquals(phraseDocs.size(), assets.size());
-    phraseDocs.forEach(phrase -> Assert.assertTrue(assets.contains(phrase)));
+    wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
   }
 }
