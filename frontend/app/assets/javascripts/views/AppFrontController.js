@@ -116,18 +116,7 @@ export class AppFrontController extends Component {
     const sortOrderChanged = newSortOrder !== prevSortOrder
     const sortByChanged = newSortBy !== prevSortBy
 
-    console.log('AppFrontController > Will we reroute?')
     if (_routeHasChanged || newlyLoggedIn || sortOrderChanged || sortByChanged) {
-      console.log('AppFrontController > Yes we will...', {
-        windowPath: {
-          prevWindowPath: prevProps.windowPath,
-          curWindowPath: this.props.windowPath,
-        },
-        routeParams: {
-          prevRouteParams: prevProps.routeParams,
-          curRouteParams: this.props.routeParams,
-        },
-      })
       this._route({ props: this.props })
       window.scrollTo(0, 0)
     }
@@ -412,7 +401,6 @@ export class AppFrontController extends Component {
     // Match found
     // ----------------------------------------------
     if (matchedPage !== null) {
-      console.log('AppFrontController > We have a matchedPage:', matchedPage.toJS())
       // Redirect if required
       if (matchedPage.has('redirects')) {
         matchedPage.get('redirects').forEach((value) => {
