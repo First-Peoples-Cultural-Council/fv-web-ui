@@ -418,22 +418,20 @@ const options = {
         },
       },
       'fv:related_assets': {
-        label: intl.trans('related_assets', 'Related Assets', 'first'),
+        label: intl.trans('related_assets', 'Related Words', 'first'),
         item: {
           factory: SelectSuggestFactory,
           type: 'FVWord',
           attrs: {
-            containerType: 'FVWord',
-            allowEdit: false,
-            hideCreate: true,
-          },
-          locals: {
-            labelBrowseComponent: intl.trans('assets_browse', 'Browse Assets', 'first'),
+            disableCreateNewButton: true,
+            previewProps: {
+              minimal: true,
+            },
           },
         },
         i18n: {
           ...i18nExt,
-          add: `+ ${intl.trans('add_related_asset', 'Add related asset', 'first')}`,
+          add: `+ ${intl.trans('add_related_asset', 'Add related word', 'first')}`,
         },
       },
       'fv-word:categories': {

@@ -34,13 +34,18 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
+import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentNotFoundException;
 import org.nuxeo.ecm.core.api.DocumentSecurityException;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.io.marshallers.json.enrichers.AbstractJsonEnricher;
 import org.nuxeo.ecm.core.io.registry.reflect.Setup;
+import org.nuxeo.runtime.api.Framework;
 
 @Setup(mode = SINGLETON, priority = REFERENCE)
 public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
@@ -205,6 +210,29 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           assetArray.add(assetObj);
         }
         jsonObj.set("related_assets", assetArray);
+      }
+
+      // Process related_by documents
+      AutomationService automation = Framework.getService(AutomationService.class);
+      OperationContext operation = new OperationContext(session);
+      operation.setInput(doc);
+      try {
+        DocumentModelList relatedTo = (DocumentModelList) automation
+            .run(operation, "Document.GetRelationsForAsset");
+        if (relatedTo != null && relatedTo.size() > 0) {
+          ArrayNode assetArray = mapper.createArrayNode();
+          for (DocumentModel assetDoc : relatedTo) {
+            ObjectNode assetObj = mapper.createObjectNode();
+            assetObj.put("uid", assetDoc.getId());
+            assetObj.put("path", assetDoc.getPath().toString());
+            assetObj.put("dc:title", assetDoc.getTitle());
+            assetObj.put("type", assetDoc.getType());
+            assetArray.add(assetObj);
+          }
+          jsonObj.set("related_by", assetArray);
+        }
+      } catch (OperationException e) {
+        e.printStackTrace();
       }
 
       // Process "fv:related_audio" values

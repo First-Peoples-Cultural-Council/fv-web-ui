@@ -16,6 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
+import Link from 'views/components/Link'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -200,6 +201,7 @@ export class DialectViewWord extends Component {
               {this._getLiteralTranslations(computeWord)}
               {this._getPronounciation(computeWord, computeDialect2)}
               {this._getRelatedAssets(computeWord)}
+              {this._getRelatedToAssets(computeWord)}
             </div>
 
             <aside className="DialectViewWordPhraseContentSecondary">
@@ -447,34 +449,42 @@ export class DialectViewWord extends Component {
     ) : null
   }
 
-  _getRelatedAssets = (computeWord) => {
-    const assetData = selectn('response.contextParameters.word.related_assets', computeWord) || []
+  _getRelations = (assetData) => {
     const siteTheme = this.props.routeParams.siteTheme
-    const assets = assetData.map((asset, key) => {
-      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'assets')
-      const assetLink = (
-        <a
-          key={selectn('uid', asset)}
-          href={hrefPath}
-          onClick={(e) => {
-            e.preventDefault()
-            NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-          }}
-        >
-          {selectn('dc:title', asset)}
-        </a>
-      )
-
+    return assetData.map((asset, key) => {
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'words')
       return (
         <div key={key}>
-          <p>{assetLink}</p>
+          <p>
+            <Link key={selectn('uid', asset)} href={hrefPath}>
+              {selectn('dc:title', asset)}
+            </Link>
+          </p>
         </div>
       )
     })
+  }
+
+  _getRelatedAssets = (computeWord) => {
+    const assetData = selectn('response.contextParameters.word.related_assets', computeWord) || []
+    const assets = this._getRelations(assetData)
     return assets.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
         <h3 className="DialectViewWordPhraseContentItemTitle">
-          <FVLabel transKey="related_assets" defaultStr="Related Assets" transform="first" />
+          <FVLabel transKey="related_assets" defaultStr="Related Words" transform="first" />
+        </h3>
+        <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
+      </div>
+    ) : null
+  }
+
+  _getRelatedToAssets = (computeWord) => {
+    const relatedToAssetData = selectn('response.contextParameters.word.related_by', computeWord) || []
+    const assets = this._getRelations(relatedToAssetData)
+    return assets.length > 0 ? (
+      <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
+        <h3 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="related_by_assets" defaultStr="See Also" transform="first" />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
       </div>
