@@ -211,6 +211,8 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
       }
 
       RelationsService relationsService = Framework.getService(RelationsService.class);
+      // When this is changed to include all related assets, change to the overloaded
+      // getRelations that does not take a type (relationsService.getRelations(session, doc))
       DocumentModelList relatedTo = relationsService.getRelations(session, doc, "FVWord");
       if (relatedTo != null && !relatedTo.isEmpty()) {
         ArrayNode assetArray = mapper.createArrayNode();
