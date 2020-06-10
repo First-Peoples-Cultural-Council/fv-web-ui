@@ -6,6 +6,7 @@ import {
 
 function useSearchDialect() {
   const dispatch = useDispatch()
+
   const searchDialectReset = () => {
     const dispatchObj = _searchDialectReset()
     dispatch(dispatchObj)

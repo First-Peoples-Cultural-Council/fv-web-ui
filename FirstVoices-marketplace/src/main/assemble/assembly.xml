@@ -31,8 +31,8 @@
     <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
     <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
 
-      <artifact:file artifactId="aws-java-sdk"/>
-      <artifact:dependencies artifactId="aws-java-sdk">
+      <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
+      <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
         <excludes>
           <artifact scope="test"/>
           <artifact scope="provided"/>

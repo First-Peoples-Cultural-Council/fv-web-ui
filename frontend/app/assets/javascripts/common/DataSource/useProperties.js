@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { updatePageProperties as _updatePageProperties } from 'providers/redux/reducers/navigation'
+
 function useProperties() {
   const dispatch = useDispatch()
 
@@ -12,4 +13,5 @@ function useProperties() {
     updatePageProperties,
   }
 }
+
 export default useProperties
