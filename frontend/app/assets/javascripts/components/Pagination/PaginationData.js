@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
 /**
  * @summary PaginationData
@@ -10,7 +9,7 @@ import PropTypes from 'prop-types'
  *
  * @prop {object} props
  * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
- * @prop {function} props.onUpdate called anytime there is a change to pageSize or page
+ * @prop {function} props.onPaginationUpdate called anytime there is a change to pageSize or page
  * @prop {number} [props.initialPage] starting page selected. used on init, then is internally controlled
  * @prop {number} [props.initialPageSize] starting page size. used on init, then is internally controlled
  * @prop {number} props.resultsCount number of results
@@ -22,36 +21,27 @@ import PropTypes from 'prop-types'
  * @returns {number} output.pageCount
  * @returns {number} output.pageSize
  */
-function PaginationData({ children, initialPage, initialPageSize, onUpdate, resultsCount }) {
-  const [pageSize, setPageSize] = useState(initialPageSize)
-  const [page, setPage] = useState(initialPage)
+function PaginationData({ children, page, pageSize, onPaginationUpdate, resultsCount }) {
   const pageCount = Math.ceil(resultsCount / pageSize)
 
   const onChangePageSize = (value) => {
     // reset page when pageSize changes
     const valueNumber = Number(value)
     const newPage = 1
-    onUpdate({
+    onPaginationUpdate({
       page: newPage,
       pageSize: valueNumber,
     })
-    setPage(newPage)
-    setPageSize(valueNumber)
   }
 
   const onChangePage = (value) => {
     const valueNumber = Number(value)
     const newPage = valueNumber > pageCount ? pageCount : valueNumber
 
-    onUpdate({
+    onPaginationUpdate({
       page: newPage,
       pageSize,
     })
-
-    setPage(newPage)
-
-    // For longer pages, user should be taken to the top when changing pages
-    // document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
   return children({

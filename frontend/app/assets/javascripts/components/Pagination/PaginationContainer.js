@@ -13,39 +13,34 @@ import PaginationData from './PaginationData'
  * @prop {object} props
  * @prop {node} props.children Content to be paged
  * @prop {node} props.childrenUnderPageSize Pass in markup to render underneath the Page Size select
- * @prop {number} props.initialPage Starting Page number, will be taken over by Data's internal state
- * @prop {number} props.initialPageSize Starting Page Size number, will be taken over by Data's internal state
- * @prop {function} props.onUpdate Called when there are changes to page || pageSize, use with ancestors to fetch new data
+ * @prop {function} props.onPaginationUpdate Called when there are changes to page || pageSize, use with ancestors to fetch new data
+ * @prop {number} props.page Page number
+ * @prop {number} props.pageSize Page Size number
  * @prop {number} props.resultsCount Number of hits, items, results count, etc
  * @prop {boolean} props.showPageSize Toggle visibility of the Page Size select list
  */
 function PaginationContainer({
   children,
   childrenUnderPageSize,
-  initialPage,
-  initialPageSize,
-  onUpdate,
+  onPaginationUpdate,
+  page,
+  pageSize,
   resultsCount,
   showPageSize,
 }) {
   return (
-    <PaginationData
-      resultsCount={resultsCount}
-      initialPageSize={initialPageSize}
-      initialPage={initialPage}
-      onUpdate={onUpdate}
-    >
-      {({ onChangePage, onChangePageSize, pageSize, page, pageCount }) => {
+    <PaginationData onPaginationUpdate={onPaginationUpdate} page={page} pageSize={pageSize} resultsCount={resultsCount}>
+      {({ onChangePage, onChangePageSize, page: dataPage, pageCount, pageSize: dataPageSize }) => {
         return (
           <PaginationPresentation
-            showPageSize={showPageSize}
             childrenUnderPageSize={childrenUnderPageSize}
             onChangePage={onChangePage}
             onChangePageSize={onChangePageSize}
-            resultsCount={resultsCount}
-            pageSize={pageSize}
-            page={page}
+            page={dataPage}
             pageCount={pageCount}
+            pageSize={dataPageSize}
+            resultsCount={resultsCount}
+            showPageSize={showPageSize}
           >
             {children}
           </PaginationPresentation>
@@ -59,9 +54,9 @@ const { node, func, bool, number } = PropTypes
 PaginationContainer.propTypes = {
   children: node,
   childrenUnderPageSize: node,
-  initialPage: number,
-  initialPageSize: number,
-  onUpdate: func,
+  onPaginationUpdate: func,
+  page: number,
+  pageSize: number,
   resultsCount: number,
   showPageSize: bool,
 }
