@@ -22,7 +22,6 @@ import GridListTileBar from '@material-ui/core/GridListTileBar'
 import '!style-loader!css-loader!./CategoriesGridView.css'
 
 import AudioMinimal from 'components/AudioMinimal'
-import { Cover } from 'components/svg/cover'
 
 /**
  * @summary CategoriesGridViewPresentation
@@ -56,7 +55,7 @@ function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickT
             }}
             key={`category${index}`}
           >
-            {image ? <img src={image} alt={title} /> : <Cover />}
+            <img src={image ? image : 'assets/images/cover-thumbnail.png'} alt={title} />
             <GridListTileBar
               title={title}
               subtitle={_subtitle}
