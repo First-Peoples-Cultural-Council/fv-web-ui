@@ -12,100 +12,42 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-// 3rd party
-// -------------------------------------------
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-// import selectn from 'selectn'
-
-// FPCC
-// -------------------------------------------
 import Pagination from 'components/Pagination'
 import KidsPhrasesByCategoryData from 'components/kids/KidsPhrasesByCategory/KidsPhrasesByCategoryData'
-// import KidsPhrasesByCategoryPresentation from 'components/kids/KidsPhrasesByCategory/KidsPhrasesByCategoryPresentation'
-// import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-
+import CategoriesGridView from 'components/CategoriesGridView'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // KidsPhrasesByCategoryContainer
 // ====================================================
-export class KidsPhrasesByCategoryContainer extends Component {
-  render() {
-    return (
-      <KidsPhrasesByCategoryData>{({computeEntities, filterInfo, items, resultsCount})=>{
-        console.log('KidsPhrasesByCategoryData Liminal', {filterInfo, items, resultsCount})
-        // const phraseListView = dialectUid ? (
-        //   <PhraseListView
-        //     DEFAULT_PAGE_SIZE={8}
-        //     disablePageSize
-        //     filter={filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1')}
-        //     gridListView
-        //     gridCols={2}
-        //     controlViaURL
-        //     DEFAULT_PAGE={DEFAULT_PAGE}
-        //     DEFAULT_SORT_COL={DEFAULT_SORT_COL}
-        //     DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
-        //     disableClickItem={false}
-        //     // flashcardTitle={pageTitle}
-        //     // TODO
-        //     onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
-        //     parentID={selectn('response.uid', computeDocument)}
-        //     dialectID={dialectUid}
-        //     routeParams={this.props.routeParams}
-        //     // Search:
-        //     handleSearch={this.changeFilter}
-        //     resetSearch={this.resetSearch}
-        //     hasSearch
-        //     searchUi={[
-        //       {
-        //         defaultChecked: true,
-        //         idName: 'searchByTitle',
-        //         labelText: 'Phrase',
-        //       },
-        //       {
-        //         defaultChecked: true,
-        //         idName: 'searchByDefinitions',
-        //         labelText: 'Definitions',
-        //       },
-        //       {
-        //         idName: 'searchByCulturalNotes',
-        //         labelText: 'Cultural notes',
-        //       },
-        //     ]}
-        //     searchByMode={searchByMode}
-        //     // TODO
-        //     rowClickHandler={this.props.rowClickHandler}
-        //     // TODO
-        //     hasSorting={this.props.hasSorting}
-        //     dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-        //     dictionaryListViewMode={this.props.listView.mode}
-        //   />
-        // ) : null
-        const phraseListView = <div>TEMP: phraseListView</div>
+function KidsPhrasesByCategoryContainer() {
+  return (
+    <KidsPhrasesByCategoryData>
+      {({ computeEntities, items, hasItems, onPaginationUpdate, page, pageSize, resultsCount }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <div className="row" style={{ marginTop: '15px' }}>
-              <div className="col-xs-12 col-md-8 col-md-offset-2">{(items || []).map((item, index)=>{
-                return <div key={`item${index}`}>An item</div>
-              })}</div>
               <div className="col-xs-12 col-md-8 col-md-offset-2">
-                <Pagination.Container
-                  initialPageSize={10}
-                  initialPage={1}
-                  resultsCount={resultsCount}
-                  onUpdate={({page, pageSize})=>{console.log('onUpdate', {page, pageSize})}}>
-                  <div>test</div>
-                </Pagination.Container>
+                {resultsCount && (
+                  <Pagination.Container
+                    pageSize={pageSize}
+                    page={page}
+                    resultsCount={resultsCount}
+                    onPaginationUpdate={(pagePageSize) => {
+                      onPaginationUpdate(pagePageSize)
+                    }}
+                  >
+                    {hasItems ? <CategoriesGridView.Presentation categories={items} /> : <div>No results</div>}
+                  </Pagination.Container>
+                )}
               </div>
             </div>
           </PromiseWrapper>
         )
       }}
-      </KidsPhrasesByCategoryData>
-    )
-  }
-  // END render
+    </KidsPhrasesByCategoryData>
+  )
 }
 
 // PROPTYPES
