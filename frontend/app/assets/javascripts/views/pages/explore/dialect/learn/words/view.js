@@ -454,7 +454,7 @@ export class DialectViewWord extends Component {
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'words')
       return (
         <a key={selectn('uid', asset)} href={hrefPath}>
-          {selectn('dc:title', asset)}
+          <li>{selectn('dc:title', asset)}</li>
         </a>
       )
     })
@@ -469,7 +469,9 @@ export class DialectViewWord extends Component {
           {/* When change from Related Words -> Related Assets change label below */}
           <FVLabel transKey="related_assets" defaultStr="Related Words" transform="first" />
         </h3>
-        <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
+        <div className="DialectViewWordPhraseContentItemGroup">
+          <ul>{assets}</ul>
+        </div>
       </div>
     ) : null
   }
@@ -482,7 +484,9 @@ export class DialectViewWord extends Component {
         <h3 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="related_by_assets" defaultStr="See Also" transform="first" />
         </h3>
-        <div className="DialectViewWordPhraseContentItemGroup">{assets}</div>
+        <div className="DialectViewWordPhraseContentItemGroup">
+          <ul>{assets}</ul>
+        </div>
       </div>
     ) : null
   }
