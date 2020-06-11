@@ -23,6 +23,7 @@ package ca.firstvoices.nuxeo.enrichers;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
+import ca.firstvoices.dialect.assets.services.RelationsService;
 import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,16 +37,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentNotFoundException;
 import org.nuxeo.ecm.core.api.DocumentSecurityException;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.io.marshallers.json.enrichers.AbstractJsonEnricher;
 import org.nuxeo.ecm.core.io.registry.reflect.Setup;
+import org.nuxeo.runtime.api.Framework;
 
 @Setup(mode = SINGLETON, priority = REFERENCE)
 public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
 
   public static final String NAME = "word";
+  public static final String DC_TITLE = "dc:title";
   private static final Log log = LogFactory.getLog(WordEnricher.class);
 
   public WordEnricher() {
@@ -61,7 +65,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
     jg.writeObject(wordJsonObject);
   }
 
-  private ObjectNode constructWordJSON(DocumentModel doc) throws IOException {
+  private ObjectNode constructWordJSON(DocumentModel doc) {
     ObjectMapper mapper = new ObjectMapper();
 
     // JSON object to be returned
@@ -175,7 +179,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           }
           phraseObj.set("fv:literal_translation", literalTranslationJsonArray);
 
-          phraseObj.put("dc:title", phraseDoc.getTitle());
+          phraseObj.put(DC_TITLE, phraseDoc.getTitle());
           phraseArray.add(phraseObj);
         }
         jsonObj.set("related_phrases", phraseArray);
@@ -200,11 +204,28 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
           ObjectNode assetObj = mapper.createObjectNode();
           assetObj.put("uid", assetId);
           assetObj.put("path", assetDoc.getPath().toString());
-          assetObj.put("dc:title", assetDoc.getTitle());
+          assetObj.put(DC_TITLE, assetDoc.getTitle());
           assetObj.put("type", assetDoc.getType());
           assetArray.add(assetObj);
         }
         jsonObj.set("related_assets", assetArray);
+      }
+
+      RelationsService relationsService = Framework.getService(RelationsService.class);
+      // When this is changed to include all related assets, change to the overloaded
+      // getRelations that does not take a type (relationsService.getRelations(session, doc))
+      DocumentModelList relatedTo = relationsService.getRelations(session, doc, "FVWord");
+      if (relatedTo != null && !relatedTo.isEmpty()) {
+        ArrayNode assetArray = mapper.createArrayNode();
+        for (DocumentModel assetDoc : relatedTo) {
+          ObjectNode assetObj = mapper.createObjectNode();
+          assetObj.put("uid", assetDoc.getId());
+          assetObj.put("path", assetDoc.getPath().toString());
+          assetObj.put(DC_TITLE, assetDoc.getTitle());
+          assetObj.put("type", assetDoc.getType());
+          assetArray.add(assetObj);
+        }
+        jsonObj.set("related_by", assetArray);
       }
 
       // Process "fv:related_audio" values

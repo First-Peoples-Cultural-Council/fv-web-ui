@@ -20,10 +20,13 @@
 
 package ca.firstvoices;
 
+import ca.firstvoices.dialect.assets.services.RelationsService;
 import ca.firstvoices.nuxeo.enrichers.WordEnricher;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.nuxeo.directory.test.DirectoryFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -35,23 +38,26 @@ import org.nuxeo.ecm.core.io.registry.context.RenderingContext.CtxBuilder;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.runtime.mockito.MockitoFeature;
+import org.nuxeo.runtime.mockito.RuntimeService;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 
 @RepositoryConfig(init = DefaultRepositoryInit.class)
 
-@Features({CoreFeature.class, DirectoryFeature.class})
-
+@Features({CoreFeature.class, DirectoryFeature.class, MockitoFeature.class})
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
 @Deploy("FirstVoicesNuxeo.Test:OSGI-INF/extensions/fv-word-enricher-test-data.xml")
 public class WordEnricherTest extends
     AbstractJsonWriterTest.Local<DocumentModelJsonWriter, DocumentModel> {
 
+  @Mock
+  @RuntimeService
+  RelationsService relationsService;
+
   @Inject
   protected CoreSession session;
   DocumentModel word = null;
-  @Inject
-  private EnricherTestUtil testUtil;
 
   public WordEnricherTest() {
     super(DocumentModelJsonWriter.class, DocumentModel.class);
@@ -66,6 +72,8 @@ public class WordEnricherTest extends
 
   @Test
   public void testPartOfSpeech() throws Exception {
+
+    Mockito.when(relationsService.getRelations(session, word, "FVWord")).thenReturn(null);
 
     word.setPropertyValue("fv-word:part_of_speech", "event_activity_verb_like_word");
     session.saveDocument(word);

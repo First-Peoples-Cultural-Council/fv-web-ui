@@ -110,9 +110,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
+      <groupId>ca.firstvoices</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesOperations</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
