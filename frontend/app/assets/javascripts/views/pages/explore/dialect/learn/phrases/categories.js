@@ -109,7 +109,7 @@ export class PhraseCategories extends Component {
       this.props.action(category)
     } else {
       NavigationHelpers.navigate(
-        `/${routeParams.siteTheme}${routeParams.dialect_path}/learn/phrasebook/${category.uid}`,
+        `/${routeParams.siteTheme}${routeParams.dialect_path}/learn/phrases/book/${category.uid}`,
         this.props.pushWindowPath,
         true
       )

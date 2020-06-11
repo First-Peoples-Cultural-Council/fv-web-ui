@@ -128,7 +128,7 @@ class DialectFilterListData extends Component {
     }
     if (type === 'phrases') {
       href = `/${appendPathArrayAfterLandmark({
-        pathArray: ['phrasebook', filterId],
+        pathArray: ['phrases', 'book', filterId],
         splitWindowPath: this.props.splitWindowPath,
         landmarkArray: ['learn'],
       })}`

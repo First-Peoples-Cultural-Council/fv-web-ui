@@ -298,10 +298,10 @@ const addImmersionCategory = (route) => {
   })
 }
 
-// EXPLORE: Phrasebook, eg: /explore/.../learn/phrasebook/[uid]
+// EXPLORE: Phrasebook, eg: /explore/.../learn/phrases/book/[uid]
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
-    path: [...DEFAULT_DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
+    path: [...DEFAULT_DIALECT_PATH, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -317,10 +317,10 @@ const addBrowsePhraseBook = (route) => {
   })
 }
 
-// KIDS: Phrasebook, eg: /kids/.../learn/phrasebook/[uid]
+// KIDS: Phrasebook, eg: /kids/.../learn/phrases/book/[uid]
 const addBrowsePhraseBookKids = (route) => {
   return Object.assign({}, route, {
-    path: [...KIDS_DIALECT_PATH, 'learn', 'phrasebook', new paramMatch('phrasebook', ANYTHING_BUT_SLASH)],
+    path: [...KIDS_DIALECT_PATH, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -1843,15 +1843,15 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  // EXPLORE: Phrasebook, eg: /explore/.../learn/phrasebook/[uid]
+  // EXPLORE: Phrasebook, eg: /explore/.../learn/phrases/book/[uid]
   addBrowsePhraseBook(),
-  // EXPLORE: Phrasebook w/Pagination, eg: /explore/.../learn/phrasebook/[uid]/10/1
+  // EXPLORE: Phrasebook w/Pagination, eg: /explore/.../learn/phrases/book/[uid]/10/1
   addPagination(addBrowsePhraseBook()),
   // Phrase by Alphabet, eg: /[kids|explore]/.../learn/phrases/alphabet/b
   addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES),
   // Phrase by Alphabet w/Pagination, eg: /[kids|explore]/.../learn/phrases/alphabet/b/10/1
   addPagination(addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES)),
-  // KIDS: Phrasebooks, eg: /kids/.../learn/phrasebooks
+  // KIDS: Phrasebooks, eg: /kids/.../learn/phrases
   {
     path: [
       KIDS,
@@ -1874,9 +1874,9 @@ const routes = [
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
-  // KIDS: Phrasebook, eg: /kids/.../learn/phrasebook/[uid]
+  // KIDS: Phrasebook, eg: /kids/.../learn/phrases/book/[uid]
   addBrowsePhraseBookKids(),
-  // KIDS: Phrasebook w/Pagination, eg: /kids/.../learn/phrasebook/[uid]/10/1
+  // KIDS: Phrasebook w/Pagination, eg: /kids/.../learn/phrases/book/[uid]/10/1
   addPagination(addBrowsePhraseBookKids()),
   // Phrases: Create
   {

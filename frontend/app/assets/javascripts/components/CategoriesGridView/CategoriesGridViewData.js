@@ -52,7 +52,7 @@ function CategoriesGridViewData({ children }) {
   const categories = (selectn('response.entries', computedCategories) || []).map((category) => {
     return {
       title: category.title,
-      href: `/kids${routeParams.dialect_path}/learn/phrasebook/${category.uid}`,
+      href: `/kids${routeParams.dialect_path}/learn/phrases/book/${category.uid}`,
     }
   })
 
