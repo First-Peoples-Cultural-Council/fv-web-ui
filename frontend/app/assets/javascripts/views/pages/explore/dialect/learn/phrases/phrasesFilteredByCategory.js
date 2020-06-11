@@ -15,7 +15,7 @@ limitations under the License.
 
 // 3rd party
 // -------------------------------------------
-import React, { Component } from 'react'
+import React, { Component, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is, Set, Map } from 'immutable'
 import selectn from 'selectn'
@@ -41,7 +41,6 @@ import DialectFilterListPresentation from 'views/components/DialectFilterList/Di
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 
 import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
-import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
@@ -53,12 +52,13 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-
+import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
+  dictionaryListSmallScreenTemplatePhrases,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
@@ -67,15 +67,15 @@ import {
   updateUrlAfterResetSearch,
   updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
-  getURLPageProps,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
 
+const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
-// PhrasesByCategory
+// PhrasesFilteredByCategory
 // ====================================================
-export class PhrasesByCategory extends Component {
+export class PhrasesFilteredByCategory extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
 
@@ -96,12 +96,17 @@ export class PhrasesByCategory extends Component {
     const { routeParams, computePortal, computeDocument } = this.props
 
     // Portal
-    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
     // Document
-    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Dictionary`, this.props.fetchDocument, computeDocument)
+    await ProviderHelpers.fetchIfMissing(
+      `${routeParams.dialect_path}/Dictionary`,
+      this.props.fetchDocument,
+      computeDocument
+    )
 
-    // PHRASES
-    // ---------------------------------------------
+    // Phrases
+    // NOTE: need to wait for computeDocument to finish before calling fetchListViewData
+    // If we don't then within fetchListViewData dialectUid will be undefined and useIdOrPathFallback will use the path
     this.fetchListViewData()
   }
 
@@ -141,97 +146,91 @@ export class PhrasesByCategory extends Component {
     this.state = {
       computeEntities,
       filterInfo,
-      isKidsTheme: routeParams.siteTheme === 'kids',
     }
   }
 
   render() {
-    const {
-      computeEntities,
-      filterInfo,
-      // flashcardMode, // TODO ?
-      isKidsTheme,
-    } = this.state
+    const { computeEntities } = this.state
 
-    const { computeDocument, computeLogin, computePortal, hasPagination, routeParams, splitWindowPath } = this.props
+    const {
+      computeDialect2,
+      computeDocument,
+      computeLogin,
+      computePhrases,
+      computePortal,
+      hasPagination,
+      listView,
+      routeParams,
+      splitWindowPath,
+    } = this.props
 
     const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
     const computedPortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
+    const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+    const computedDialect2Response = selectn('response', computedDialect2)
+    const parentUid = selectn('response.uid', computedDocument)
+    const computedPhrases = ProviderHelpers.getEntry(computePhrases, parentUid)
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computedPortal) ||
       ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
-    const { searchByMode, searchNxqlSort } = this.props.computeSearchDialect
-    const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-    const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = getURLPageProps({ routeParams })
-
-    const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
-
-    const phraseListView = dialectUid ? (
-      <PhraseListView
-        controlViaURL
-        DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
-        DEFAULT_PAGE={DEFAULT_PAGE}
-        DEFAULT_SORT_COL={DEFAULT_SORT_COL}
-        DEFAULT_SORT_TYPE={DEFAULT_SORT_TYPE}
-        disableClickItem={false}
-        filter={filterInfo}
-        flashcard={this.state.flashcardMode}
-        flashcardTitle={pageTitle}
-        // TODO
-        onPagePropertiesChange={this._handlePagePropertiesChange} // NOTE: This function is in PageDialectLearnBase
-        parentID={selectn('response.uid', computeDocument)}
-        dialectID={dialectUid}
-        routeParams={this.props.routeParams}
-        // Search:
-        handleSearch={this.changeFilter}
-        resetSearch={this.resetSearch}
-        hasSearch
-        searchUi={[
-          {
-            defaultChecked: true,
-            idName: 'searchByTitle',
-            labelText: 'Phrase',
-          },
-          {
-            defaultChecked: true,
-            idName: 'searchByDefinitions',
-            labelText: 'Definitions',
-          },
-          {
-            idName: 'searchByCulturalNotes',
-            labelText: 'Cultural notes',
-          },
-        ]}
-        searchByMode={searchByMode}
-        // TODO
-        rowClickHandler={this.props.rowClickHandler}
-        // TODO
-        hasSorting={this.props.hasSorting}
-        dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-        dictionaryListViewMode={this.props.listView.mode}
-      />
+    const phraseListView = parentUid ? (
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryList
+          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+          dictionaryListViewMode={listView.mode}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
+          flashcardTitle={pageTitle}
+          dialect={computedDialect2Response}
+          // ==================================================
+          // Search
+          // --------------------------------------------------
+          handleSearch={this.changeFilter}
+          resetSearch={this.resetSearch}
+          hasSearch
+          searchUi={[
+            {
+              defaultChecked: true,
+              idName: 'searchByTitle',
+              labelText: 'Phrase',
+            },
+            {
+              defaultChecked: true,
+              idName: 'searchByDefinitions',
+              labelText: 'Definitions',
+            },
+            {
+              idName: 'searchByCulturalNotes',
+              labelText: 'Cultural notes',
+            },
+          ]}
+          searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+          // ==================================================
+          // Table data
+          // --------------------------------------------------
+          items={selectn('response.entries', computedPhrases)}
+          columns={this.getColumns()}
+          // ===============================================
+          // Pagination
+          // -----------------------------------------------
+          hasPagination
+          fetcher={({ currentPageIndex, pageSize }) => {
+            const newUrl = appendPathArrayAfterLandmark({
+              pathArray: [pageSize, currentPageIndex],
+              splitWindowPath,
+              landmarkArray: [routeParams.phraseBook],
+            })
+            NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
+          }}
+          fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
+          metadata={selectn('response', computedPhrases)}
+          // ===============================================
+          // Sort
+          // -----------------------------------------------
+          sortHandler={this._sortHandler}
+          // ===============================================
+        />
+      </Suspense>
     ) : null
-
-    // Render kids view
-    if (isKidsTheme) {
-      const clonePhraseListView = phraseListView
-        ? React.cloneElement(phraseListView, {
-          DEFAULT_PAGE_SIZE: 8,
-          disablePageSize: true,
-          filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
-          gridListView: true,
-          gridCols: 2,
-        })
-        : null
-      return (
-        <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="row" style={{ marginTop: '15px' }}>
-            <div className="col-xs-12 col-md-8 col-md-offset-2">{clonePhraseListView}</div>
-          </div>
-        </PromiseWrapper>
-      )
-    }
 
     const dialectClassName = getDialectClassname(computedPortal)
     return (
@@ -583,7 +582,7 @@ export class PhrasesByCategory extends Component {
       }
     )
   }
-  _sortHandler = async({ page, pageSize, sortBy, sortOrder } = {}) => {
+  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
     sortHandler({
       page,
       pageSize,
@@ -600,7 +599,7 @@ export class PhrasesByCategory extends Component {
 // PROPTYPES
 // -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
-PhrasesByCategory.propTypes = {
+PhrasesFilteredByCategory.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
@@ -626,7 +625,7 @@ PhrasesByCategory.propTypes = {
   updatePageProperties: func.isRequired,
   searchDialectReset: func.isRequired,
 }
-PhrasesByCategory.defaultProps = {
+PhrasesFilteredByCategory.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
 }
 
@@ -672,4 +671,4 @@ const mapDispatchToProps = {
   searchDialectReset,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhrasesByCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)
