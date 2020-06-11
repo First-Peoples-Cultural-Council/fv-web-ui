@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Recorder/internationalization'
 
 describe('Recorder/Create.js > RecorderCreate', () => {

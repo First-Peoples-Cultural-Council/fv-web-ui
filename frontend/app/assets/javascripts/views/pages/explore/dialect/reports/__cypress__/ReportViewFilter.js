@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 
 describe('ReportViewFilter.js > ReportViewFilter', () => {
   it('Test to check that reports are generated properly.', () => {

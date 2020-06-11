@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 describe('Portal List Dialect Test', () => {
   it('Toggles between new and old view', () => {
     cy.visit('/home')

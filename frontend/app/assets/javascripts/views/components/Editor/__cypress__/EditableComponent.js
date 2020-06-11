@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 
 describe('EditableComponent.js > EditableComponent', () => {
   it('FW-212: Drop AlloyEditor for Quill', () => {

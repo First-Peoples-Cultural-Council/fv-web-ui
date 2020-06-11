@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 describe('AlphabetCharacters-Words.js > AlphabetCharacters', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words')
