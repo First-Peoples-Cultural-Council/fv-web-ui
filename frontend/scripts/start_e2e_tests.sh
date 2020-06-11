@@ -10,7 +10,7 @@ npm install -g wait-on
 echo "Cypress Base URL is set to {$CYPRESS_BASE_URL}"
 
 echo "*****"
-echo "Cat Cypress.json"
+echo "Cypress CI config (`frontend/cypress_CI.json` -> `/e2e/cypress.json`) file content:"
 cat /e2e/cypress.json
 echo "*****"
 
