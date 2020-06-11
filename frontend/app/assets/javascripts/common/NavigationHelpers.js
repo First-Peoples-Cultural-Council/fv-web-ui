@@ -303,6 +303,14 @@ export const hasPagination = (arr = []) => {
   return _arr
 }
 
+// Returns a new url with pagination
+export const getNewPaginationUrl = ({ splitWindowPath, page, pageSize }) => {
+  if (hasPagination(splitWindowPath)) {
+    return '/' + [...splitWindowPath.slice(0, splitWindowPath.length - 2), pageSize, page].join('/')
+  }
+  return '/' + [...splitWindowPath, pageSize, page].join('/')
+}
+
 export const windowLocationPathnameWithoutPagination = () => {
   const pathnameAsArray = window.location.pathname.replace(/^\//, '').split('/')
   if (hasPagination(pathnameAsArray)) {
