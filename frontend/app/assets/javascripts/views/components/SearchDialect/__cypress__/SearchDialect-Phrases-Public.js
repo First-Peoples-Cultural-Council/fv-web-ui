@@ -11,32 +11,32 @@ describe('SearchDialect-Phrases-Public.js > SearchDialect', () => {
 })
 
 function verifyDefaults() {
-  cy.getByLabelText('Phrase').should('be.checked')
-  cy.getByLabelText('Definitions').should('be.checked')
-  cy.getByLabelText('Cultural notes').should('not.be.checked')
+  cy.findByLabelText('Phrase').should('be.checked')
+  cy.findByLabelText('Definitions').should('be.checked')
+  cy.findByLabelText('Cultural notes').should('not.be.checked')
 }
 describe('SearchDialect-Phrases-Public.js > FW-936', () => {
   it('Resetting search should set to initial settings', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageTwo/learn/phrases')
 
-    cy.getByText('Showing all phrases', { exact: false }).should('exist')
+    cy.findByText('Showing all phrases', { exact: false }).should('exist')
 
     // Verify Load
     verifyDefaults()
 
     // Change & verify
-    cy.getByLabelText('Phrase')
+    cy.findByLabelText('Phrase')
       .uncheck()
       .should('not.be.checked')
-    cy.getByLabelText('Definitions')
+    cy.findByLabelText('Definitions')
       .check()
       .should('be.checked')
-    cy.getByLabelText('Cultural notes')
+    cy.findByLabelText('Cultural notes')
       .check()
       .should('be.checked')
 
     // Reset
-    cy.getByText('reset search', { exact: false }).click()
+    cy.findByText('reset search', { exact: false }).click()
 
     cy.wait(1000)
 

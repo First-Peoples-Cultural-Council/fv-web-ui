@@ -24,11 +24,11 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
       shouldPaginate: false,
       clearFilter: false,
     })
-    cy.getByText('Create new word', {
+    cy.findByText('Create new word', {
       exact: false,
     }).click()
     cy.wait(1750)
-    cy.getByText('Add New Word to', {
+    cy.findByText('Add New Word to', {
       exact: false,
     }).should('exist')
     cy.log('Test complete')
@@ -52,8 +52,8 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
     })
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(1750)
-    cy.getByTestId('DialectFilterList').within(() => {
-      cy.getByText(category).should('not.have.class', 'DialectFilterListLink--active')
+    cy.findByTestId('DialectFilterList').within(() => {
+      cy.findByText(category).should('not.have.class', 'DialectFilterListLink--active')
     })
   })
 
@@ -73,14 +73,14 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('Dog').should('exist')
+        cy.findByText('Dog').should('exist')
       })
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(1750)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('Tiger').should('exist')
+        cy.findByText('Tiger').should('exist')
       })
   })
 
@@ -110,11 +110,11 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
       shouldPaginate: false,
       clearFilter: false,
     })
-    cy.getByText('Create new word', {
+    cy.findByText('Create new word', {
       exact: false,
     }).click()
     cy.wait(1750)
-    cy.getByText('Add New Word to', {
+    cy.findByText('Add New Word to', {
       exact: false,
     }).should('exist')
     cy.log('Test complete')
@@ -138,8 +138,8 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
     })
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(1750)
-    cy.getByTestId('DialectFilterList').within(() => {
-      cy.getByText(category).should('not.have.class', 'DialectFilterListLink--active')
+    cy.findByTestId('DialectFilterList').within(() => {
+      cy.findByText(category).should('not.have.class', 'DialectFilterListLink--active')
     })
   })
 
@@ -159,14 +159,14 @@ describe('DialectFilterList-Words.js > DialectFilterList', () => {
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('Dog').should('exist')
+        cy.findByText('Dog').should('exist')
       })
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(1750)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('Tiger').should('exist')
+        cy.findByText('Tiger').should('exist')
       })
   })
 })
