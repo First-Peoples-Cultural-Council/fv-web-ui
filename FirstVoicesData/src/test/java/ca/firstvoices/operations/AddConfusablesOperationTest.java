@@ -11,7 +11,7 @@ import org.nuxeo.ecm.core.api.NuxeoException;
 /**
  * @author david
  */
-public class AddConsuablesOperationTest extends AbstractFirstVoicesDataTest {
+public class AddConfusablesOperationTest extends AbstractFirstVoicesDataTest {
 
   @Test
   public void callingOperationSetsPropertyOnAlphabet() throws OperationException {
