@@ -1,5 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>firstvoices-modules-parent</artifactId>
 
   <dependencyManagement>
     <dependencies>
@@ -41,6 +45,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FVUserRegistration</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <artifactId>FirstVoicesLifecycle</artifactId>
+        <groupId>ca.firstvoices</groupId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -101,26 +110,10 @@
         <artifactId>aws-java-sdk-core</artifactId>
         <version>${aws.sdk.version}</version>
       </dependency>
-      <dependency>
-        <artifactId>FirstVoicesLifecycle</artifactId>
-        <groupId>ca.firstvoices</groupId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
-  <parent>
-    <groupId>org.nuxeo.ecm.distribution</groupId>
-    <artifactId>nuxeo-distribution</artifactId>
-    <version>10.10</version>
-  </parent>
-
   <groupId>ca.firstvoices</groupId>
-  <artifactId>firstvoices-modules-parent</artifactId>
-  <name>First Voices Project Parent</name>
-  <packaging>pom</packaging>
-  <version>3.4.6-SNAPSHOT</version>
-
   <modules>
     <module>FirstVoices-marketplace</module>
     <module>FirstVoicesPublisher</module>
@@ -136,17 +129,26 @@
     <module>FirstVoicesOperations</module>
     <module>FirstVoicesLifecycle</module>
   </modules>
+  <name>First Voices Project Parent</name>
+  <packaging>pom</packaging>
+  <parent>
+    <artifactId>nuxeo-distribution</artifactId>
+    <groupId>org.nuxeo.ecm.distribution</groupId>
+    <version>10.10</version>
+  </parent>
 
   <properties>
-    <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
     <aws.sdk.version>1.11.785</aws.sdk.version>
-    <sonar.organization>first-peoples-cultural-council</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <it.failsafe.argLine></it.failsafe.argLine>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
+    <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}
     </sonar.coverage.jacoco.xmlReportPaths>
-    <it.failsafe.argLine/>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.organization>first-peoples-cultural-council</sonar.organization>
   </properties>
+
+  <version>3.4.6-SNAPSHOT</version>
 
   <build>
     <extensions>
