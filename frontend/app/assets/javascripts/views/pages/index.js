@@ -51,6 +51,7 @@ import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
 import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
+import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
 import PageDialectLearnPhrasesByCategory from './explore/dialect/learn/phrases/phrasesFilteredByCategory'
 
 import PageDialectImmersionList from './explore/dialect/immersion'
@@ -144,6 +145,7 @@ export {
   PageDialectLearnPhrases,
   PageDialectLearnPhrasesByCategory,
   PhraseBooksGrid,
+  WordsCategoriesGrid,
   PageDialectLearnStoriesAndSongs,
   PageDialectViewWord,
   PageDialectViewMedia,
