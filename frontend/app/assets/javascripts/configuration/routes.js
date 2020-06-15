@@ -113,7 +113,6 @@ const PAGE_NOT_FOUND_BODY = (
 const ANYTHING_BUT_SLASH = new RegExp(ProviderHelpers.regex.ANYTHING_BUT_SLASH)
 const NUMBER = new RegExp(ProviderHelpers.regex.NUMBER)
 const WORKSPACE_OR_SECTION = new RegExp(ProviderHelpers.regex.WORKSPACE_OR_SECTION)
-//const ANY_LANGUAGE_CODE = new RegExp(ProviderHelpers.regex.ANY_LANGUAGE_CODE)
 const KIDS_OR_DEFAULT = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.KIDS_OR_DEFAULT))
 const KIDS = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.KIDS))
 const DEFAULT = new paramMatch('siteTheme', RegExp(ProviderHelpers.regex.DEFAULT))
@@ -138,7 +137,7 @@ const NOT_CONNECTED_REDIRECT = {
 }
 
 // Common Paths
-const DIALECT_PATH = [
+const DIALECT_PATH_KIDS_OR_DEFAULT = [
   KIDS_OR_DEFAULT,
   'FV',
   new paramMatch('area', WORKSPACE_OR_SECTION),
@@ -147,7 +146,7 @@ const DIALECT_PATH = [
   ANYTHING_BUT_SLASH,
   ANYTHING_BUT_SLASH,
 ]
-const DEFAULT_DIALECT_PATH = [
+const DIALECT_PATH_ONLY_DEFAULT = [
   DEFAULT,
   'FV',
   new paramMatch('area', WORKSPACE_OR_SECTION),
@@ -156,7 +155,7 @@ const DEFAULT_DIALECT_PATH = [
   ANYTHING_BUT_SLASH,
   ANYTHING_BUT_SLASH,
 ]
-const KIDS_DIALECT_PATH = [
+const DIALECT_PATH_ONLY_KIDS = [
   KIDS,
   'FV',
   new paramMatch('area', WORKSPACE_OR_SECTION),
@@ -165,15 +164,11 @@ const KIDS_DIALECT_PATH = [
   ANYTHING_BUT_SLASH,
   ANYTHING_BUT_SLASH,
 ]
-const PHRASES_PATH = [...DIALECT_PATH, 'learn', 'phrases']
-const WORDS_PATH = [...DIALECT_PATH, 'learn', 'words']
-const IMMERSION_PATH = [...DIALECT_PATH, 'immersion']
-const REPORTS_PATH = [...DIALECT_PATH, 'reports']
 const PAGINATION_PATH = [new paramMatch('pageSize', NUMBER), new paramMatch('page', NUMBER)]
 
 // Common Routes
 const DIALECT_LEARN_WORDS = {
-  path: WORDS_PATH,
+  path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'learn', 'words'],
   title:
     intl.translate({
       key: 'words',
@@ -184,9 +179,33 @@ const DIALECT_LEARN_WORDS = {
   extractPaths: true,
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
+const DIALECT_LEARN_WORDS_ONLY_DEFAULT = {
+  path: [...DIALECT_PATH_ONLY_DEFAULT, 'learn', 'words'],
+  title:
+    intl.translate({
+      key: 'words',
+      default: 'Words',
+      case: 'words',
+    }) + ' | {$dialect_name}',
+  page: <Pages.PageDialectLearnWords />,
+  extractPaths: true,
+  redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+}
+const DIALECT_LEARN_WORDS_ONLY_KIDS = {
+  path: [...DIALECT_PATH_ONLY_KIDS, 'learn', 'words'],
+  title:
+    intl.translate({
+      key: 'words',
+      default: 'Words',
+      case: 'words',
+    }) + ' | {$dialect_name}',
+  page: <Pages.WordsCategoriesGrid.Container />,
+  extractPaths: true,
+  redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+}
 
 const DIALECT_LEARN_PHRASES = {
-  path: PHRASES_PATH,
+  path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'learn', 'phrases'],
   title:
     intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title',
@@ -199,7 +218,7 @@ const DIALECT_LEARN_PHRASES = {
 }
 
 const DIALECT_IMMERSION_WORDS = {
-  path: IMMERSION_PATH,
+  path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'immersion'],
   title: 'Immersion', // TODOSL add locale for this
   page: <Pages.PageDialectImmersionList />,
   extractPaths: true,
@@ -250,7 +269,7 @@ const SEARCH_DIALECT = {
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
 const REPORT_VIEW = {
-  path: REPORTS_PATH.concat(new paramMatch('reportName', ANYTHING_BUT_SLASH)),
+  path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'reports', new paramMatch('reportName', ANYTHING_BUT_SLASH)],
   title:
     '{$reportName} | ' +
     intl.translate({
@@ -267,7 +286,7 @@ const REPORT_VIEW = {
 // Adds a pagination route to an existing route
 const addPagination = (route) => {
   return Object.assign({}, route, {
-    path: route.path.concat(PAGINATION_PATH),
+    path: [...route.path, ...PAGINATION_PATH],
     page: React.cloneElement(route.page, { hasPagination: true }),
     breadcrumbPathOverride: (pathArray) => {
       return pathArray.slice(0, pathArray.length - 2)
@@ -288,6 +307,23 @@ const addCategory = (route) => {
   })
 }
 
+const addCategoryKids = (route) => {
+  return Object.assign({}, route, {
+    path: [...DIALECT_PATH_ONLY_KIDS, 'learn', 'words', 'categories', new paramMatch('category', ANYTHING_BUT_SLASH)],
+    title:
+      intl.translate({
+        key: 'views.pages.explore.dialect.learn.words.page_title_category',
+        default: 'Category View',
+        case: 'words',
+      }) +
+      ' | ' +
+      selectn('title', route),
+    page: <Pages.KidsWordsByCategory />,
+    extractPaths: true,
+    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+  })
+}
+
 const addImmersionCategory = (route) => {
   return Object.assign({}, route, {
     path: route.path.concat(['categories', new paramMatch('category', ANYTHING_BUT_SLASH)]),
@@ -298,7 +334,7 @@ const addImmersionCategory = (route) => {
 // EXPLORE: Phrasebook, eg: /explore/.../learn/phrases/book/[uid]
 const addBrowsePhraseBook = (route) => {
   return Object.assign({}, route, {
-    path: [...DEFAULT_DIALECT_PATH, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
+    path: [...DIALECT_PATH_ONLY_DEFAULT, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -317,7 +353,7 @@ const addBrowsePhraseBook = (route) => {
 // KIDS: Phrasebook, eg: /kids/.../learn/phrases/book/[uid]
 const addBrowsePhraseBookKids = (route) => {
   return Object.assign({}, route, {
-    path: [...KIDS_DIALECT_PATH, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
+    path: [...DIALECT_PATH_ONLY_KIDS, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
     title: `${intl.translate({
       key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
       default: 'Browsing by Phrase Book',
@@ -1181,7 +1217,7 @@ const routes = [
     extractPaths: true,
   },
   {
-    path: REPORTS_PATH,
+    path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'reports'],
     title:
       intl.translate({
         key: 'reports',
@@ -1219,7 +1255,7 @@ const routes = [
   addPagination(DIALECT_LEARN_WORDS),
   {
     path: [
-      KIDS_OR_DEFAULT,
+      DEFAULT,
       'FV',
       new paramMatch('area', WORKSPACE_OR_SECTION),
       'Data',
@@ -1249,8 +1285,41 @@ const routes = [
   },
   addBrowseAlphabet(DIALECT_LEARN_WORDS),
   addPagination(addBrowseAlphabet(DIALECT_LEARN_WORDS)),
-  addCategory(DIALECT_LEARN_WORDS),
-  addPagination(addCategory(DIALECT_LEARN_WORDS)),
+  addCategory(DIALECT_LEARN_WORDS_ONLY_DEFAULT),
+  addPagination(addCategory(DIALECT_LEARN_WORDS_ONLY_DEFAULT)),
+  // WORDS: KIDS VIEW
+  {
+    path: [
+      KIDS,
+      'FV',
+      new paramMatch('area', WORKSPACE_OR_SECTION),
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'learn',
+      'words',
+      'categories',
+    ],
+    title:
+      intl.translate({
+        key: 'categories',
+        default: 'Categories',
+        case: 'words',
+      }) +
+      ' | ' +
+      intl.translate({
+        key: 'words',
+        default: 'Words',
+        case: 'words',
+      }) +
+      ' | {$dialect_name} | {$siteTheme}',
+    page: <Pages.WordsCategoriesGrid.Container />,
+    extractPaths: true,
+    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+  },
+  addCategoryKids(DIALECT_LEARN_WORDS_ONLY_KIDS),
+  addPagination(addCategoryKids(DIALECT_LEARN_WORDS_ONLY_KIDS)),
   {
     path: [
       KIDS_OR_DEFAULT,
