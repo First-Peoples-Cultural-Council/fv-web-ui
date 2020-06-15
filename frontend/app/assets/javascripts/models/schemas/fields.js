@@ -49,6 +49,7 @@ const fields = {
     'fv-word:available_in_games': t.Boolean,
     'fv-word:acknowledgement': t.maybe(t.String),
     'fv:related_audio': t.list(t.maybe(t.String)),
+    'fv:related_assets': t.list(t.maybe(t.String)),
     'fv:related_pictures': t.list(t.maybe(t.String)),
     'fv:related_videos': t.list(t.maybe(t.String)),
   }),

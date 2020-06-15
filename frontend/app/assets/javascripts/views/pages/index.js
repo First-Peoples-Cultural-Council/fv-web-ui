@@ -38,7 +38,7 @@ import PageDialectReports from './explore/dialect/reports'
 import PageDialectReportsView from './explore/dialect/reports/view'
 import PageDialectUsers from './explore/dialect/users'
 
-import PageDialectLearnWords from './explore/dialect/learn/words'
+import PageDialectLearnWords from './explore/dialect/learn/words/WordsLayout'
 import PageDialectLearnPhrases from './explore/dialect/learn/phrases'
 import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stories'
 
@@ -49,8 +49,8 @@ import PageDialectViewBook from './explore/dialect/learn/songs-stories/view'
 import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'
 import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
 import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
+
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
-import PageDialectLearnWordsFilteredByCategory from './explore/dialect/learn/words/wordsFilteredByCategory'
 import PageDialectLearnPhrasesByCategory from './explore/dialect/learn/phrases/phrasesFilteredByCategory'
 
 import PageDialectImmersionList from './explore/dialect/immersion'
@@ -140,7 +140,6 @@ export {
   PageDialectLearn,
   PageDialectMedia,
   PageDialectLearnWords,
-  PageDialectLearnWordsFilteredByCategory,
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
   PageDialectLearnPhrasesByCategory,

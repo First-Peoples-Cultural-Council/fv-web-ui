@@ -24,8 +24,7 @@ public interface AWSAuthenticationService {
   boolean userExists(String username);
 
   /**
-   * Initiate a username and password authentication flow with the given credentials. This can
-   * cause an automatic migration if the Cognito user pool is configured appropriately.
+   * Initiate a username and password authentication flow with the given credentials.
    *
    * @return false when the username exists in Cognito and the password does not match,
    *         false when the username does not exist in Cognito and migration is disabled
@@ -35,6 +34,17 @@ public interface AWSAuthenticationService {
    *                                       migrate a user that does not exist in Nuxeo)
    **/
   boolean authenticate(String username, String password)
+      throws MiscellaneousFailureException;
+
+  /**
+   * Create a user with this username and password in the Cognito database
+   *
+   * @param username
+   * @param password
+   * @param email
+   *
+   */
+  void migrateUser(String username, String password, String email)
       throws MiscellaneousFailureException;
 
   /**

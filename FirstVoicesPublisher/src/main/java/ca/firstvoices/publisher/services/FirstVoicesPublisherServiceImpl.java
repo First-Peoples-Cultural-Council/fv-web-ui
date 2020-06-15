@@ -47,12 +47,14 @@ import org.nuxeo.runtime.api.Framework;
 public class FirstVoicesPublisherServiceImpl extends AbstractService implements
     FirstVoicesPublisherService {
 
+  private CoreSession session;
+
   protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
     if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
       throw new InvalidParameterException("Document must be a FVDialect type");
     }
     Map<String, DocumentModel> map = new HashMap<>();
-    CoreSession session = model.getCoreSession();
+    session = model.getCoreSession();
     DocumentModel language = session.getDocument(model.getParentRef());
     if (language == null || !language.getDocumentType().getName().equals("FVLanguage")) {
       throw new InvalidParameterException("Parent document must be a FVLanguage type");
@@ -74,8 +76,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
     Map<String, DocumentModel> ancestors = getAncestors(dialect);
 
     DocumentModel languageFamily = ancestors.get("LanguageFamily");
-    DocumentModel language = ancestors.get("Language");
-    CoreSession session = dialect.getCoreSession();
+    session = dialect.getCoreSession();
 
     DocumentModel section = getRootSection(dialect);
     // Publish grand parent
@@ -83,6 +84,8 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
       session.publishDocument(languageFamily, section);
     }
     // Publish parent
+
+    DocumentModel language = ancestors.get("Language");
     section = session.getChild(section.getRef(), languageFamily.getName());
     if (Boolean.FALSE.equals(isPublished(language, section))) {
       session.publishDocument(language, section);
@@ -120,7 +123,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
   private DocumentModel getRootSection(DocumentModel doc) {
     DocumentModel workspace = doc;
-    CoreSession session = doc.getCoreSession();
+    session = doc.getCoreSession();
     while (workspace != null && !"Workspace".equals(workspace.getType())) {
       workspace = session.getParentDocument(workspace.getRef());
     }
@@ -143,7 +146,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public void unpublishDialect(DocumentModel dialect) {
     // Arguments checks : need to be a FVDialect in a normal tree
     // (LanguageFamily/Language/Dialect)
-    CoreSession session = dialect.getCoreSession();
+    session = dialect.getCoreSession();
     Map<String, DocumentModel> ancestors = getAncestors(dialect);
     DocumentModel languageFamily = ancestors.get("LanguageFamily");
     DocumentModel language = ancestors.get("Language");
@@ -186,7 +189,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
   @Override
   public DocumentModel publishAsset(DocumentModel asset) {
-    CoreSession session = asset.getCoreSession();
+    session = asset.getCoreSession();
 
     DocumentModel dialect = getDialect(asset);
     if (dialect == null) {
@@ -281,7 +284,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   }
 
   public DocumentModel republishAsset(DocumentModel asset) {
-    CoreSession session = asset.getCoreSession();
+    session = asset.getCoreSession();
 
     DocumentModel dialect = getDialect(asset);
     if (dialect == null) {
@@ -458,7 +461,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
    */
   @Override
   public DocumentModel setDialectProxies(DocumentModel dialectProxy) {
-    CoreSession session = dialectProxy.getCoreSession();
+    session = dialectProxy.getCoreSession();
 
     Map<String, String> dependencies = new HashMap<>();
 
@@ -592,7 +595,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
   @Override
   public DocumentModel publishPortalAssets(DocumentModel portal) {
-    CoreSession session = portal.getCoreSession();
+    session = portal.getCoreSession();
 
     DocumentModel dialect = getDialect(portal);
     if (dialect == null) {

@@ -54,6 +54,7 @@ public class PublisherUtils {
     dependencies.put("fvcore:related_pictures", "fvproxy:proxied_pictures");
     dependencies.put("fvcore:related_videos", "fvproxy:proxied_videos");
     dependencies.put("fvcore:source", "fvproxy:proxied_source");
+    dependencies.put("fvcore:related_assets", "fvproxy:proxied_related_assets");
 
     if (asset.hasSchema("fvmedia")) {
       dependencies.put("fvmedia:source", "fvproxy:proxied_source");

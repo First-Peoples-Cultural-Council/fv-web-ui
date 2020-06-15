@@ -284,10 +284,7 @@ const addCategory = (route) => {
         key: 'views.pages.explore.dialect.learn.words.page_title_category',
         default: 'Category View',
         case: 'words',
-      }) +
-      ' | ' +
-      selectn('title', route),
-    page: <Pages.PageDialectLearnWordsFilteredByCategory />,
+      }) + ` | ${selectn('title', route)}`,
   })
 }
 
