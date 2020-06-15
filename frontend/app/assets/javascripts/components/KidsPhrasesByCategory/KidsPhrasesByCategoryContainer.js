@@ -15,8 +15,8 @@ limitations under the License.
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pagination from 'components/Pagination'
-import KidsPhrasesByCategoryData from 'components/kids/KidsPhrasesByCategory/KidsPhrasesByCategoryData'
-import CategoriesGridView from 'components/CategoriesGridView'
+import KidsPhrasesByCategoryData from 'components/KidsPhrasesByCategory/KidsPhrasesByCategoryData'
+import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 // KidsPhrasesByCategoryContainer
@@ -38,7 +38,7 @@ function KidsPhrasesByCategoryContainer() {
                       onPaginationUpdate(pagePageSize)
                     }}
                   >
-                    {hasItems ? <CategoriesGridView.Presentation categories={items} /> : <div>No results</div>}
+                    {hasItems ? <PhraseBooksGrid.Presentation categories={items} /> : <div>No results</div>}
                   </Pagination.Container>
                 )}
               </div>

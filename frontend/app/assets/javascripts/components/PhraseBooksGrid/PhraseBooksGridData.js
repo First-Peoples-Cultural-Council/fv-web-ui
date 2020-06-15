@@ -25,7 +25,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
- * @summary CategoriesGridViewData
+ * @summary PhraseBooksGridData
  * @component
  * @version 1.0.1
  *
@@ -37,7 +37,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
  * @returns {arrayImmutable} output.computeEntities eg: [{id, entity}]
  * @returns {function} output.onClickTile click handler
  */
-function CategoriesGridViewData({ children }) {
+function PhraseBooksGridData({ children }) {
   const { computeCategories, fetchCategories } = useCategories()
   const { routeParams } = useRoute()
   const { pushWindowPath } = useWindowPath()
@@ -74,11 +74,11 @@ function CategoriesGridViewData({ children }) {
 
 // Proptypes
 const { func } = PropTypes
-CategoriesGridViewData.propTypes = {
+PhraseBooksGridData.propTypes = {
   children: func.isRequired,
 }
-CategoriesGridViewData.defaultProps = {
+PhraseBooksGridData.defaultProps = {
   children: () => {},
 }
 
-export default CategoriesGridViewData
+export default PhraseBooksGridData

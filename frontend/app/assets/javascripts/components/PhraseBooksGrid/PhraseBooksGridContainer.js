@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react'
-import CategoriesGridViewData from './CategoriesGridViewData'
-import CategoriesGridViewPresentation from './CategoriesGridViewPresentation'
+import PhraseBooksGridData from './PhraseBooksGridData'
+import PhraseBooksGridPresentation from './PhraseBooksGridPresentation'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 /**
- * @summary CategoriesGridViewContainer
+ * @summary PhraseBooksGridContainer
  * @component
  * @version 1.0.1
  */
-function CategoriesGridViewContainer() {
+function PhraseBooksGridContainer() {
   // Render
   // ----------------------------------------
   return (
-    <CategoriesGridViewData>
+    <PhraseBooksGridData>
       {({ categories, computeEntities, onClickTile }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
-            <CategoriesGridViewPresentation categories={categories} onClickTile={onClickTile} />
+            <PhraseBooksGridPresentation categories={categories} onClickTile={onClickTile} />
           </PromiseWrapper>
         )
       }}
-    </CategoriesGridViewData>
+    </PhraseBooksGridData>
   )
 }
 
-export default CategoriesGridViewContainer
+export default PhraseBooksGridContainer

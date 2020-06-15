@@ -165,10 +165,10 @@ const KIDS_DIALECT_PATH = [
   ANYTHING_BUT_SLASH,
   ANYTHING_BUT_SLASH,
 ]
-const PHRASES_PATH = DIALECT_PATH.concat(['learn', 'phrases'])
-const WORDS_PATH = DIALECT_PATH.concat(['learn', 'words'])
-const IMMERSION_PATH = DIALECT_PATH.concat(['immersion'])
-const REPORTS_PATH = DIALECT_PATH.concat(['reports'])
+const PHRASES_PATH = [...DIALECT_PATH, 'learn', 'phrases']
+const WORDS_PATH = [...DIALECT_PATH, 'learn', 'words']
+const IMMERSION_PATH = [...DIALECT_PATH, 'immersion']
+const REPORTS_PATH = [...DIALECT_PATH, 'reports']
 const PAGINATION_PATH = [new paramMatch('pageSize', NUMBER), new paramMatch('page', NUMBER)]
 
 // Common Routes
@@ -1870,7 +1870,7 @@ const routes = [
         default: 'Phrase Categories',
         case: 'words',
       }) + ' | {$dialect_name} | {$siteTheme}',
-    page: <Pages.CategoriesGridView.Container />,
+    page: <Pages.PhraseBooksGrid.Container />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },

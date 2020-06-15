@@ -19,12 +19,12 @@ import PropTypes from 'prop-types'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-import '!style-loader!css-loader!./CategoriesGridView.css'
+import '!style-loader!css-loader!./PhraseBooksGrid.css'
 
 import AudioMinimal from 'components/AudioMinimal'
 
 /**
- * @summary CategoriesGridViewPresentation
+ * @summary PhraseBooksGridPresentation
  * @component
  * @version 1.0.1
  *
@@ -36,9 +36,9 @@ import AudioMinimal from 'components/AudioMinimal'
  *
  * @returns {node} jsx markup
  */
-function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickTile }) {
+function PhraseBooksGridPresentation({ categories, cols, cellHeight, onClickTile }) {
   return (
-    <GridList cols={cols} cellHeight={cellHeight} id="CategoriesGridViewPresentation">
+    <GridList cols={cols} cellHeight={cellHeight} id="PhraseBooksGrid">
       {categories.map((category, index) => {
         const { href, title, subtitle, audio, image } = category
         const _subtitle = subtitle ? (
@@ -59,7 +59,7 @@ function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickT
             <GridListTileBar
               title={title}
               subtitle={_subtitle}
-              className="CategoriesGridViewTileBar"
+              className="PhraseBooksGridTileBar"
               actionPosition="right"
               actionIcon={audio ? <AudioMinimal.Container src={audio} /> : null}
             />
@@ -72,17 +72,17 @@ function CategoriesGridViewPresentation({ categories, cols, cellHeight, onClickT
 
 // Proptypes
 const { array, func, number } = PropTypes
-CategoriesGridViewPresentation.propTypes = {
+PhraseBooksGridPresentation.propTypes = {
   categories: array.isRequired,
   cols: number,
   cellHeight: number,
   onClickTile: func,
 }
-CategoriesGridViewPresentation.defaultProps = {
+PhraseBooksGridPresentation.defaultProps = {
   categories: [],
   cols: 6,
   cellHeight: 160,
   onClickTile: () => {},
 }
 
-export default CategoriesGridViewPresentation
+export default PhraseBooksGridPresentation
