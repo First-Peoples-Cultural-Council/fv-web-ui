@@ -68,6 +68,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
         + ".ProxyPublisherListener.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
+@Deploy("FirstVoicesLifecycle:OSGI-INF/ca.firstvoices.FirstVoicesLifecycle.extensions.xml")
 public class FirstVoicesPublisherTest {
 
   @Inject

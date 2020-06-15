@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: FirstVoicesLifecycle
 Bundle-Name: FirstVoicesLifecycle
-Require-Bundle: org.nuxeo.runtime,FirstVoicesNuxeoPublisher
+Require-Bundle: org.nuxeo.runtime
 Bundle-Version: 1.0.qualifier
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy

@@ -18,10 +18,6 @@
       <groupId>org.nuxeo.elasticsearch</groupId>
     </dependency>
     <dependency>
-      <artifactId>FirstVoicesPublisher</artifactId>
-      <groupId>ca.firstvoices</groupId>
-    </dependency>
-    <dependency>
       <artifactId>nuxeo-platform-audit-core</artifactId>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <version>10.10</version>

@@ -61,7 +61,8 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
         + ".ProxyPublisherListener.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
-    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesLifecycle:OSGI-INF/ca.firstvoices.FirstVoicesLifecycle.extensions.xml"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
 public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
