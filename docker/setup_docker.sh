@@ -83,9 +83,9 @@ echo 'Building fv-web-ui (this make take a few minutes)'
 cd ..
 if [ "$1" == "-skip-tests" ] || [ "$2" == "-skip-tests" ] || [ "$3" == "-skip-tests" ]; then
     echo "skipping tests"
-    mvn clean install -DskipTests -Pbackend -q
+    mvn clean install -DskipTests -q
 else
-    mvn clean install -Pbackend
+    mvn clean install
 fi
 if [[ "$?" -ne 0 ]]; then
     echo
