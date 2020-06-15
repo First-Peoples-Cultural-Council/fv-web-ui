@@ -62,7 +62,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"})
-@Deploy({"FirstVoicesLifecycle:OSGI-INF/ca.firstvoices.FirstVoicesLifecycle.extensions.xml"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class TestSecurityPolicies extends AbstractFVTest {
 

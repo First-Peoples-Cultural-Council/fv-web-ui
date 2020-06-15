@@ -69,7 +69,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting",})
-@Deploy("FirstVoicesLifecycle:OSGI-INF/ca.firstvoices.FirstVoicesLifecycle.extensions.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
 public class UnpublishedChangesEnricherTest extends

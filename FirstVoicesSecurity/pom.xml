@@ -161,11 +161,6 @@
       <artifactId>FirstVoicesData</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <artifactId>FirstVoicesLifecycle</artifactId>
-      <groupId>ca.firstvoices</groupId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <build>

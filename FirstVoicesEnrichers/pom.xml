@@ -115,11 +115,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>FirstVoicesLifecycle</artifactId>
-      <groupId>ca.firstvoices</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <artifactId>FirstVoicesOperations</artifactId>
       <groupId>ca.firstvoices</groupId>
     </dependency>

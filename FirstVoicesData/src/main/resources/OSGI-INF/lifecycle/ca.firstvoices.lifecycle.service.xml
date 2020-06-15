@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<component name="ca.firstvoices.FirstVoicesLifecycle" version="1.0.0">
+<component name="ca.firstvoices.lifecycle.service" version="1.0.0">
   <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
     <lifecycle defaultInitial="draft" name="fv-alt1-lifecycle">
       <states>
@@ -213,91 +213,6 @@
         </transition>
       </transitions>
     </lifecycle>
-    <lifecycle defaultInitial="New" name="fv-lifecycle">
-      <states>
-        <state description="A new document is created." initial="true" name="New">
-          <transitions>
-            <transition>Enable</transition>
-            <transition>Disable</transition>
-            <transition>Publish</transition>
-          </transitions>
-        </state>
-        <state description="Document is enabled and visible to dialect members." name="Enabled">
-          <transitions>
-            <transition>RevertToNew</transition>
-            <transition>Disable</transition>
-            <transition>Publish</transition>
-          </transitions>
-        </state>
-        <state description="Document is only available to language administrators or recorders."
-          name="Disabled">
-          <transitions>
-            <transition>Enable</transition>
-          </transitions>
-        </state>
-        <state description="" name="Published">
-          <transitions>
-            <transition>Unpublish</transition>
-            <transition>Republish</transition>
-            <transition>RevertToNew</transition>
-            <transition>Disable</transition>
-          </transitions>
-        </state>
-        <state description="Temp state for legacy life cycle" name="project">
-          <transitions>
-            <transition>Publish</transition>
-          </transitions>
-        </state>
-        <state
-          description="Intermediate state before publishing again (a state can't do back to itself)."
-          name="Republish">
-          <transitions>
-            <transition>Publish</transition>
-          </transitions>
-        </state>
-      </states>
-      <transitions>
-        <transition destinationState="Enabled" name="Enable">
-          <description>Document has been approved.</description>
-        </transition>
-        <transition destinationState="Disabled" name="Disable">
-          <description></description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-        <transition destinationState="Disabled" name="Disable">
-          <description>Document has been disabled.</description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-        <transition destinationState="New" name="RevertToNew">
-          <description></description>
-        </transition>
-        <transition destinationState="Enabled" name="Enable">
-          <description>Make document available to members again.</description>
-        </transition>
-        <transition destinationState="Enabled" name="Unpublish">
-          <description></description>
-        </transition>
-        <transition destinationState="Disabled" name="Disable">
-          <description></description>
-        </transition>
-        <transition destinationState="Republish" name="Republish">
-          <description></description>
-        </transition>
-        <transition destinationState="New" name="RevertToNew">
-          <description></description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-      </transitions>
-    </lifecycle>
     <lifecycle defaultInitial="waiting_for_admin" name="fv-request-lifecycle">
       <states>
         <state description="Waiting for Admin" initial="true" name="waiting_for_admin">
@@ -404,142 +319,90 @@
         </transition>
       </transitions>
     </lifecycle>
-  </extension>
-  <extension point="types" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
-    <types>
-      <type name="Folder">default</type>
-    </types>
-    <types>
-      <type name="Domain">default</type>
-    </types>
-    <types>
-      <type name="FVAlphabet">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVAudio">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVBook">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVBookEntry">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVBooks">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVCategories">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVCategory">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLabelCategory">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVCharacter">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVContributor">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVContributors">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVDictionary">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLabel">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLabelDictionary">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVDraftFolder">default</type>
-    </types>
-    <types>
-      <type name="FVGallery">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVGuide">default</type>
-    </types>
-    <types>
-      <type name="FVLanguage">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLanguageFamily">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLink">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVLinks">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="File">default</type>
-    </types>
-    <types>
-      <type name="FVPage">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVPhrase">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVPicture">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVWord">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVPlaceName">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVPortal">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVResources">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVSong">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="FVVideo">fv-lifecycle</type>
-    </types>
-    <types>
-      <type name="INMorpheme">default</type>
-    </types>
-    <types>
-      <type name="INDemonstrative">default</type>
-    </types>
-    <types>
-      <type name="INDialect">default</type>
-    </types>
-    <types>
-      <type name="INDictionary">default</type>
-    </types>
-    <types>
-      <type name="INInfix">default</type>
-    </types>
-    <types>
-      <type name="INNounEnding">default</type>
-    </types>
-    <types>
-      <type name="INPersonalPronounce">default</type>
-    </types>
-    <types>
-      <type name="INPhrase">default</type>
-    </types>
-    <types>
-      <type name="INPlaceLocation">default</type>
-    </types>
-    <types>
-      <type name="INRoot">default</type>
-    </types>
-    <types>
-      <type name="INVerbEnding">default</type>
-    </types>
-    <types>
-      <type name="Workspace">default</type>
-    </types>
+    <lifecycle defaultInitial="New" name="fv-lifecycle">
+      <states>
+        <state description="A new document is created." initial="true" name="New">
+          <transitions>
+            <transition>Enable</transition>
+            <transition>Disable</transition>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state description="Document is enabled and visible to dialect members." name="Enabled">
+          <transitions>
+            <transition>RevertToNew</transition>
+            <transition>Disable</transition>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state description="Document is only available to language administrators or recorders."
+          name="Disabled">
+          <transitions>
+            <transition>Enable</transition>
+          </transitions>
+        </state>
+        <state description="" name="Published">
+          <transitions>
+            <transition>Unpublish</transition>
+            <transition>Republish</transition>
+            <transition>RevertToNew</transition>
+            <transition>Disable</transition>
+          </transitions>
+        </state>
+        <state description="Temp state for legacy life cycle" name="project">
+          <transitions>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state
+          description="Intermediate state before publishing again (a state can't do back to itself)."
+          name="Republish">
+          <transitions>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="Enabled" name="Enable">
+          <description>Document has been approved.</description>
+        </transition>
+        <transition destinationState="Disabled" name="Disable">
+          <description></description>
+        </transition>
+        <transition destinationState="Published" name="Publish">
+          <description></description>
+        </transition>
+        <transition destinationState="Disabled" name="Disable">
+          <description>Document has been disabled.</description>
+        </transition>
+        <transition destinationState="Published" name="Publish">
+          <description></description>
+        </transition>
+        <transition destinationState="New" name="RevertToNew">
+          <description></description>
+        </transition>
+        <transition destinationState="Enabled" name="Enable">
+          <description>Make document available to members again.</description>
+        </transition>
+        <transition destinationState="Enabled" name="Unpublish">
+          <description></description>
+        </transition>
+        <transition destinationState="Disabled" name="Disable">
+          <description></description>
+        </transition>
+        <transition destinationState="Republish" name="Republish">
+          <description></description>
+        </transition>
+        <transition destinationState="New" name="RevertToNew">
+          <description></description>
+        </transition>
+        <transition destinationState="Published" name="Publish">
+          <description></description>
+        </transition>
+        <transition destinationState="Published" name="Publish">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
   </extension>
 </component>
