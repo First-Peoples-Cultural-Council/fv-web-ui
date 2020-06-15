@@ -151,7 +151,7 @@
       <artifactId>nuxeo-automation-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
       <scope>test</scope>

@@ -1,9 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <properties>
+    <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
+    <aws.sdk.version>1.11.785</aws.sdk.version>
+    <sonar.organization>first-peoples-cultural-council</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
+    <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
+    <it.failsafe.argLine></it.failsafe.argLine>
+  </properties>
+
+  <parent>
+    <groupId>org.nuxeo.ecm.distribution</groupId>
+    <artifactId>nuxeo-distribution</artifactId>
+    <version>10.10</version>
+  </parent>
+
+  <groupId>ca.firstvoices</groupId>
   <artifactId>firstvoices-modules-parent</artifactId>
+  <name>First Voices Project Parent</name>
+  <packaging>pom</packaging>
+  <version>3.4.6-SNAPSHOT</version>
+
+  <modules>
+    <module>FirstVoices-marketplace</module>
+    <module>FirstVoicesPublisher</module>
+    <module>FirstVoicesEnrichers</module>
+    <module>FirstVoicesSecurity</module>
+    <module>FirstVoicesHealthMonitor</module>
+    <module>FirstVoicesExport</module>
+    <module>FVUserRegistration</module>
+    <module>FirstVoicesCognitoAuth</module>
+    <module>FirstVoicesMaintenance</module>
+    <module>migration-contributions</module>
+    <module>FirstVoicesData</module>
+    <module>FirstVoicesOperations</module>
+  </modules>
 
   <dependencyManagement>
     <dependencies>
@@ -107,42 +140,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <groupId>ca.firstvoices</groupId>
-  <modules>
-    <module>FirstVoices-marketplace</module>
-    <module>FirstVoicesPublisher</module>
-    <module>FirstVoicesEnrichers</module>
-    <module>FirstVoicesSecurity</module>
-    <module>FirstVoicesHealthMonitor</module>
-    <module>FirstVoicesExport</module>
-    <module>FVUserRegistration</module>
-    <module>FirstVoicesCognitoAuth</module>
-    <module>FirstVoicesMaintenance</module>
-    <module>migration-contributions</module>
-    <module>FirstVoicesData</module>
-    <module>FirstVoicesOperations</module>
-  </modules>
-  <name>First Voices Project Parent</name>
-  <packaging>pom</packaging>
-  <parent>
-    <artifactId>nuxeo-distribution</artifactId>
-    <groupId>org.nuxeo.ecm.distribution</groupId>
-    <version>10.10</version>
-  </parent>
-
-  <properties>
-    <aws.sdk.version>1.11.785</aws.sdk.version>
-    <it.failsafe.argLine></it.failsafe.argLine>
-    <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
-    <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
-    <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}
-    </sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.organization>first-peoples-cultural-council</sonar.organization>
-  </properties>
-
-  <version>3.4.6-SNAPSHOT</version>
 
   <build>
     <extensions>
