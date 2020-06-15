@@ -22,7 +22,7 @@ import PropTypes from 'prop-types'
  * @returns {number} output.pageSize
  */
 function PaginationData({ children, page, pageSize, onPaginationUpdate, resultsCount }) {
-  const pageCount = Math.ceil(resultsCount / pageSize)
+  const pageCount = resultsCount === 0 ? 1 : Math.ceil(resultsCount / pageSize)
 
   const onChangePageSize = (value) => {
     // reset page when pageSize changes
