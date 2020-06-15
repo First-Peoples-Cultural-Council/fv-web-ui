@@ -58,7 +58,7 @@ function WordsData(props) {
       setfilterInfo(initialFilterInfo())
     }
     // Specify how to clean up after this effect:
-    return searchDialectReset()
+    return searchDialectReset
   }, [])
 
   function initialFilterInfo() {
