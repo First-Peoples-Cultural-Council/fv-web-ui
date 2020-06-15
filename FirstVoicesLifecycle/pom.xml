@@ -23,6 +23,10 @@
       <version>10.10</version>
     </dependency>
     <dependency>
+      <artifactId>FirstVoicesPublisher</artifactId>
+      <groupId>ca.firstvoices</groupId>
+    </dependency>
+    <dependency>
       <artifactId>FirstVoicesData</artifactId>
       <groupId>ca.firstvoices</groupId>
       <scope>test</scope>
