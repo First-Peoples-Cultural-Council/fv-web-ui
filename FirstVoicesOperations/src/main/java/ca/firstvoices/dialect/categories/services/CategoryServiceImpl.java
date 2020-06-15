@@ -8,7 +8,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
-import services.AbstractFirstVoicesOperationsService;
+import ca.firstvoices.services.AbstractFirstVoicesOperationsService;
 
 /**
  * @author david

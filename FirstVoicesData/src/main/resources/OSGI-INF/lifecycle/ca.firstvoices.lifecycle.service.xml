@@ -341,7 +341,7 @@
             <transition>Enable</transition>
           </transitions>
         </state>
-        <state description="" name="Published">
+        <state description="Document is available to public." name="Published">
           <transitions>
             <transition>Unpublish</transition>
             <transition>Republish</transition>
@@ -366,40 +366,19 @@
         <transition destinationState="Enabled" name="Enable">
           <description>Document has been approved.</description>
         </transition>
-        <transition destinationState="Disabled" name="Disable">
-          <description></description>
-        </transition>
         <transition destinationState="Published" name="Publish">
           <description></description>
         </transition>
         <transition destinationState="Disabled" name="Disable">
           <description>Document has been disabled.</description>
         </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-        <transition destinationState="New" name="RevertToNew">
-          <description></description>
-        </transition>
         <transition destinationState="Enabled" name="Enable">
           <description>Make document available to members again.</description>
-        </transition>
-        <transition destinationState="Enabled" name="Unpublish">
-          <description></description>
-        </transition>
-        <transition destinationState="Disabled" name="Disable">
-          <description></description>
         </transition>
         <transition destinationState="Republish" name="Republish">
           <description></description>
         </transition>
         <transition destinationState="New" name="RevertToNew">
-          <description></description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
-          <description></description>
-        </transition>
-        <transition destinationState="Published" name="Publish">
           <description></description>
         </transition>
       </transitions>
