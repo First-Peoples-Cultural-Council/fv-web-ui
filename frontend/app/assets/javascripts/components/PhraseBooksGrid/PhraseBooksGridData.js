@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import selectn from 'selectn'
+import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import Immutable from 'immutable'
+
 import useCategories from 'DataSource/useCategories'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
-
-import selectn from 'selectn'
-import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
