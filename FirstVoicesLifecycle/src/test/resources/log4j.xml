@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+  debug="false">
+
+  <appender class="org.apache.log4j.ConsoleAppender" name="CONSOLE">
+    <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p [%C{1}] %m%n"/>
+    </layout>
+    <param name="Threshold" value="INFO"/>
+
+    <param name="Target" value="System.out"/>
+  </appender>
+
+  <appender class="org.apache.log4j.FileAppender" name="FILE">
+    <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p [%C{1}] %m%n"/>
+    </layout>
+    <param name="Append" value="false"/>
+    <param name="File" value="target/trace.log"/>
+  </appender>
+
+
+  <category name="org.nuxeo">
+    <!-- <priority value="TRACE"/> -->
+    <appender-ref ref="FILE"/>
+    <priority value="INFO"/>
+  </category>
+
+  <root>
+    <appender-ref ref="CONSOLE"/>
+    <priority value="INFO"/>
+  </root>
+
+</log4j:configuration>
