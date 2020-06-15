@@ -30,7 +30,11 @@ function PhraseBooksGridContainer() {
       {({ categories, computeEntities, onClickTile }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
-            <PhraseBooksGridPresentation categories={categories} onClickTile={onClickTile} />
+            {categories && categories.length > 0 ? (
+              <PhraseBooksGridPresentation categories={categories} onClickTile={onClickTile} />
+            ) : (
+              <div>No results</div>
+            )}
           </PromiseWrapper>
         )
       }}
