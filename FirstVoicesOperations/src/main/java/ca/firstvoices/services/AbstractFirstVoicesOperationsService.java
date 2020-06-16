@@ -1,5 +1,7 @@
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 

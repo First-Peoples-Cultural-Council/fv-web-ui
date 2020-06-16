@@ -1,19 +1,20 @@
 <component name="ca.firstvoices.lifecycle.types" version="1.0.0">
-  <extension point="types" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
-    <types>
-      <type name="Folder">default</type>
-      <type name="Domain">default</type>
-      <type name="FVAlphabet">fv-lifecycle</type>
-      <type name="FVAudio">fv-lifecycle</type>
-      <type name="FVBook">fv-lifecycle</type>
-      <type name="FVBookEntry">fv-lifecycle</type>
-      <type name="FVBooks">fv-lifecycle</type>
-      <type name="FVCategories">fv-lifecycle</type>
-      <type name="FVCategory">fv-lifecycle</type>
+<extension point="types" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+  <types>
+    <type name="Folder">default</type>
+    <type name="Domain">default</type>
+    <type name="FVAlphabet">fv-lifecycle</type>
+    <type name="FVAudio">fv-lifecycle</type>
+    <type name="FVBook">fv-lifecycle</type>
+    <type name="FVBookEntry">fv-lifecycle</type>
+    <type name="FVBooks">fv-lifecycle</type>
+    <type name="FVCategories">fv-lifecycle</type>
+    <type name="FVCategory">fv-lifecycle</type>
       <type name="FVLabelCategory">fv-lifecycle</type>
       <type name="FVCharacter">fv-lifecycle</type>
       <type name="FVContributor">fv-lifecycle</type>
       <type name="FVContributors">fv-lifecycle</type>
+    <type name="FVDialect">fv-lifecycle</type>
       <type name="FVDictionary">fv-lifecycle</type>
       <type name="FVLabel">fv-lifecycle</type>
       <type name="FVLabelDictionary">fv-lifecycle</type>

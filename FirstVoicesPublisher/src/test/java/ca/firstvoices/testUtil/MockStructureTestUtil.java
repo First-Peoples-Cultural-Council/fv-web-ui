@@ -20,6 +20,10 @@
 
 package ca.firstvoices.testUtil;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 

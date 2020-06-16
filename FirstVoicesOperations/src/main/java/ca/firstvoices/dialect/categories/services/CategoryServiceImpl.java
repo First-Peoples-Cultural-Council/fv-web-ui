@@ -1,5 +1,7 @@
 package ca.firstvoices.dialect.categories.services;
 
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.AbstractFirstVoicesOperationsService;

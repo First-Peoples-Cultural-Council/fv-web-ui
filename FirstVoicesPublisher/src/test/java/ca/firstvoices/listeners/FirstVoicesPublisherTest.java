@@ -33,6 +33,8 @@ import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTOR;
 import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTORS;
 import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
 import static ca.firstvoices.schemas.Constants.FV_LINK;
 import static ca.firstvoices.schemas.Constants.FV_LINKS;
 import static ca.firstvoices.schemas.Constants.FV_PHRASE;
@@ -303,7 +305,7 @@ public class FirstVoicesPublisherTest {
 
   private void createWord() {
     category = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Categories", FV_CATEGORY,
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Categories", "Category",
             FV_CATEGORY));
     subcategory = session.createDocument(
         session.createDocumentModel(category.getPathAsString(), "SubCategory", FV_CATEGORY));
@@ -314,8 +316,7 @@ public class FirstVoicesPublisherTest {
         .createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor2",
             FV_CONTRIBUTOR));
     picture = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myPicture",
-            FV_PICTURE));
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myPicture", FV_PICTURE));
     audio = session.createDocument(session
         .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myAudio", FV_AUDIO));
     video = session.createDocument(session
@@ -482,7 +483,7 @@ public class FirstVoicesPublisherTest {
     assertNotEquals(contributor.getRef(), new IdRef(property[0]));
     doc = session.getDocument(new IdRef(property[0]));
     assertTrue(doc.getPathAsString()
-        .matches("/FV.*/sections/Family/Language/Dialect/Contributors/myContributor"));
+        .matches("/FV/sections/Family/Language/Dialect/Contributors/myContributor"));
     doc = session.getSourceDocument(new IdRef(property[0]));
     assertTrue(
         doc.getPathAsString().matches("/Family/Language/Dialect/Contributors/myContributor"));

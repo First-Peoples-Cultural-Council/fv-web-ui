@@ -20,6 +20,13 @@
 
 package ca.firstvoices.securitypolicies.groups;
 
+import static ca.firstvoices.schemas.Constants.FV_BOOK;
+import static ca.firstvoices.schemas.Constants.FV_BOOKS;
+import static ca.firstvoices.schemas.Constants.FV_BOOK_ENTRY;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.Constants.FV_PORTAL;
+
+import ca.firstvoices.schemas.Constants;
 import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,10 +122,10 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
 
       if (allowedDocumentTypes.isEmpty()) {
         allowedDocumentTypes.add(FV_CATEGORIES);
-        allowedDocumentTypes.add(FV_CONTRIBUTORS);
-        allowedDocumentTypes.add(FV_DICTIONARY);
+        allowedDocumentTypes.add(Constants.FV_CONTRIBUTORS);
+        allowedDocumentTypes.add(Constants.FV_DICTIONARY);
         allowedDocumentTypes.add("FVLabelDictionary");
-        allowedDocumentTypes.add(FV_RESOURCES);
+        allowedDocumentTypes.add(Constants.FV_RESOURCES);
         allowedDocumentTypes.add(FV_BOOK);
         allowedDocumentTypes.add(FV_BOOKS);
         allowedDocumentTypes.add(FV_BOOK_ENTRY);

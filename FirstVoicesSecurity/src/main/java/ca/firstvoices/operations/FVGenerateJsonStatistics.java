@@ -24,6 +24,11 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_BOOK;
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.GregorianCalendar;

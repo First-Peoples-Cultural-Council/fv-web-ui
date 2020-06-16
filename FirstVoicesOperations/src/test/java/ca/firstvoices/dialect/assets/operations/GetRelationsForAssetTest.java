@@ -1,5 +1,8 @@
 package ca.firstvoices.dialect.assets.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

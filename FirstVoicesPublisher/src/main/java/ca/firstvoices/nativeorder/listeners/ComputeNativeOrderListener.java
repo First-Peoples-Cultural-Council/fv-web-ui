@@ -23,6 +23,9 @@ package ca.firstvoices.nativeorder.listeners;
  * Compute asset custom order when asset (Word/Phrase) modified or created.
  */
 
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import java.util.Iterator;
 import org.apache.commons.logging.Log;

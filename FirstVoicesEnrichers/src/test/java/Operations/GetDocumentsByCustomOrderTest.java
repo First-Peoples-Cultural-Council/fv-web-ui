@@ -20,6 +20,9 @@
 
 package Operations;
 
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder;
 import ca.firstvoices.testUtil.AbstractFirstVoicesEnricherTest;

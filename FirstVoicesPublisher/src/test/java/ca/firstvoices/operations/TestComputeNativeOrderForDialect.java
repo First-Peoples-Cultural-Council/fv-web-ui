@@ -20,6 +20,9 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 
 import ca.firstvoices.nativeorder.operations.ComputeNativeOrderForDialect;

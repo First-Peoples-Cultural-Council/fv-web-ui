@@ -20,6 +20,8 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;

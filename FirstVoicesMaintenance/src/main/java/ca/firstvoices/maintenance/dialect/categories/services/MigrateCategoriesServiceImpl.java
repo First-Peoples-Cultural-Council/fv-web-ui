@@ -1,5 +1,7 @@
 package ca.firstvoices.maintenance.dialect.categories.services;
 
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.io.Serializable;

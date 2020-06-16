@@ -24,6 +24,7 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 

@@ -1,5 +1,7 @@
 package ca.firstvoices.dialect.categories.services;
 
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import java.util.HashMap;
 import java.util.Map;

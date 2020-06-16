@@ -20,6 +20,8 @@
 
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.dialect.categories.workers.MigrateCategoriesWorker;

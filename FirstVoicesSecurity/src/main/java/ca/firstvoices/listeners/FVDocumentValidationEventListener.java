@@ -24,6 +24,9 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import java.util.List;
 import java.util.Map;
 import org.nuxeo.ecm.core.api.DocumentModel;

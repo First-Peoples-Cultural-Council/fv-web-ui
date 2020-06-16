@@ -20,6 +20,8 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.nuxeo.ecm.core.api.CoreSession;

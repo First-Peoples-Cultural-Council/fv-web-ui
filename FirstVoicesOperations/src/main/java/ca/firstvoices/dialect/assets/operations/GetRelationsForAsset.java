@@ -1,5 +1,7 @@
 package ca.firstvoices.dialect.assets.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import ca.firstvoices.dialect.assets.services.RelationsService;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.OperationContext;

@@ -20,6 +20,9 @@
 
 package ca.firstvoices.nativeorder.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import java.util.HashMap;
 import java.util.Map;

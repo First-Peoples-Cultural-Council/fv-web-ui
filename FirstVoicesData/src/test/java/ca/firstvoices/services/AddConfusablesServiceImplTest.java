@@ -20,6 +20,7 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;

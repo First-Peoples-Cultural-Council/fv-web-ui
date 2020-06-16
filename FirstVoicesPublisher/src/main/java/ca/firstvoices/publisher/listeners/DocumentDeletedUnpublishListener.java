@@ -24,6 +24,8 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

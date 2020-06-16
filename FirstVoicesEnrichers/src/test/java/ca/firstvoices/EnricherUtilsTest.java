@@ -20,6 +20,7 @@
 
 package ca.firstvoices;
 
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
 import static org.junit.Assert.assertEquals;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
