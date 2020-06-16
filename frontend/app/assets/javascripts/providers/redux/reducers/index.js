@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { audioReducer } from './audio'
 import { directoryReducer } from './directory'
 import { documentReducer } from './document'
 import { errorReducer } from './error'
@@ -34,6 +35,7 @@ import { tasksReducer } from './tasks'
 import { windowPathReducer } from './windowPath'
 
 export default combineReducers({
+  audio: audioReducer,
   directory: directoryReducer,
   document: documentReducer,
   error: errorReducer,
