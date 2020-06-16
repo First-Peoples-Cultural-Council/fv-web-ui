@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 /**
- * @summary ContributorsListPresentation
+ * @summary ListContributorsPresentation
  * @version 1.0.1
  * @component
  *
@@ -10,13 +10,13 @@ import React from 'react'
  *
  * @returns {node} jsx markup
  */
-function ContributorsListPresentation() {
-  return <div>ContributorsListPresentation</div>
+function ListContributorsPresentation() {
+  return <div>ListContributorsPresentation</div>
 }
 // PROPTYPES
 // const { string } = PropTypes
-ContributorsListPresentation.propTypes = {
+ListContributorsPresentation.propTypes = {
   //   something: string,
 }
 
-export default ContributorsListPresentation
+export default ListContributorsPresentation

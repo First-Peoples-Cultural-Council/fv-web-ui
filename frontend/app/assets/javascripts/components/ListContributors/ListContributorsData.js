@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary ContributorsListData
+ * @summary ListContributorsData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function ContributorsListData({ children }) {
+function ListContributorsData({ children }) {
   return children({
-    log: 'Output from ContributorsListData',
+    log: 'Output from ListContributorsData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-ContributorsListData.propTypes = {
+ListContributorsData.propTypes = {
   children: func,
 }
 
-export default ContributorsListData
+export default ListContributorsData

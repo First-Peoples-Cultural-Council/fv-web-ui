@@ -35,7 +35,7 @@ import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-import ContributorsList from 'components/ContributorsList'
+import ListContributors from 'components/ListContributors'
 import '!style-loader!css-loader!./Contributors.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -190,11 +190,11 @@ function Contributors(props) {
       >
         Create a new contributor
       </FVButton>
-      <ContributorsList.Data>
-        {(ContributorsListOutput) => {
+      <ListContributors.Data>
+        {(ListContributorsOutput) => {
           // TODO
           // eslint-disable-next-line
-          console.log('ContributorsListOutput', ContributorsListOutput)
+          console.log('ListContributorsOutput', ListContributorsOutput)
           return (
             <Suspense fallback={<div>Loading...</div>}>
               <DictionaryListWithPagination
@@ -241,7 +241,7 @@ function Contributors(props) {
             </Suspense>
           )
         }}
-      </ContributorsList.Data>
+      </ListContributors.Data>
     </>
   ) : null
 }
