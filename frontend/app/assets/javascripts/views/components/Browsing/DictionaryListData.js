@@ -140,6 +140,7 @@ function DictionaryListData(props) {
     return id || `${routeParams.dialect_path}/Dictionary`
   }
 
+  // TODO FW-1607
   function getColumns() {
     const computedDialect2Response = selectn('response', computedDialect2)
     const columnsArray = [
