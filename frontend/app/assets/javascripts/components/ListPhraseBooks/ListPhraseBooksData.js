@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary PhraseBooksListData
+ * @summary ListPhraseBooksData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function PhraseBooksListData({ children }) {
+function ListPhraseBooksData({ children }) {
   return children({
-    log: 'Output from PhraseBooksListData',
+    log: 'Output from ListPhraseBooksData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-PhraseBooksListData.propTypes = {
+ListPhraseBooksData.propTypes = {
   children: func,
 }
 
-export default PhraseBooksListData
+export default ListPhraseBooksData

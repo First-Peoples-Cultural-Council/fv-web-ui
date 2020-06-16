@@ -25,7 +25,7 @@ import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 // CUSTOM
 // ----------------------------------------
-import PhraseBooksList from 'components/PhraseBooksList'
+import ListPhraseBooks from 'components/ListPhraseBooks'
 import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
@@ -178,11 +178,11 @@ export const Phrasebooks = (props) => {
       >
         Create a new phrase book
       </FVButton>
-      <PhraseBooksList.Data>
-        {(PhraseBooksListDataOutput) => {
+      <ListPhraseBooks.Data>
+        {(ListPhraseBooksDataOutput) => {
           // TODO
           // eslint-disable-next-line
-          console.log('PhraseBooksListDataOutput', PhraseBooksListDataOutput)
+          console.log('ListPhraseBooksDataOutput', ListPhraseBooksDataOutput)
           return (
             <Suspense fallback={<div>Loading...</div>}>
               <DictionaryListWithPagination
@@ -229,7 +229,7 @@ export const Phrasebooks = (props) => {
             </Suspense>
           )
         }}
-      </PhraseBooksList.Data>
+      </ListPhraseBooks.Data>
     </>
   ) : null
 }

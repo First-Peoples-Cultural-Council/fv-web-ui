@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 /**
- * @summary PhraseBooksListPresentation
+ * @summary ListPhraseBooksPresentation
  * @version 1.0.1
  * @component
  *
@@ -10,13 +10,13 @@ import React from 'react'
  *
  * @returns {node} jsx markup
  */
-function PhraseBooksListPresentation() {
-  return <div>PhraseBooksListPresentation</div>
+function ListPhraseBooksPresentation() {
+  return <div>ListPhraseBooksPresentation</div>
 }
 // PROPTYPES
 // const { string } = PropTypes
-PhraseBooksListPresentation.propTypes = {
+ListPhraseBooksPresentation.propTypes = {
   //   something: string,
 }
 
-export default PhraseBooksListPresentation
+export default ListPhraseBooksPresentation
