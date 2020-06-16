@@ -25,6 +25,7 @@ import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 // CUSTOM
 // ----------------------------------------
+import PhraseBooksList from 'components/PhraseBooksList'
 import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
@@ -177,49 +178,58 @@ export const Phrasebooks = (props) => {
       >
         Create a new phrase book
       </FVButton>
-      <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryListWithPagination
-          // Listview: Batch
-          batchTitleSelect="Deselect all"
-          batchTitleDeselect="Select all"
-          batchFooterIsConfirmOrDenyTitle="Delete selected phrase books?"
-          batchFooterBtnInitiate="Delete"
-          batchFooterBtnDeny="No, do not delete the selected phrase books"
-          batchFooterBtnConfirm="Yes, delete the selected phrase books"
-          batchConfirmationAction={(uids) => {
-            // Delete all items in selected
-            uids.forEach((uid) => {
-              props.deleteCategory(uid)
-            })
-            setDeletedUids([...deletedUids, ...uids])
-          }}
-          // Listview: computed data
-          computedData={computedData}
-          sortHandler={async (sortData) => {
-            await props.setRouteParams({
-              search: {
-                page: sortData.page,
-                pageSize: sortData.pageSize,
-                sortOrder: sortData.sortOrder,
-                sortBy: sortData.sortBy,
-              },
-            })
-            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
-          }}
-          // ==================================================
-          columns={getColumns()}
-          cssModifier="DictionaryList--contributors"
-          items={selectn('response.entries', computedData)}
-          // Pagination
-          fetcher={(fetcherParams) => {
-            setPaginationRequest(
-              `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
-            )
-          }}
-          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-          metadata={selectn('response', computedData)}
-        />
-      </Suspense>
+      <PhraseBooksList.Data>
+        {(PhraseBooksListDataOutput) => {
+          // TODO
+          // eslint-disable-next-line
+          console.log('PhraseBooksListDataOutput', PhraseBooksListDataOutput)
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <DictionaryListWithPagination
+                // Listview: Batch
+                batchTitleSelect="Deselect all"
+                batchTitleDeselect="Select all"
+                batchFooterIsConfirmOrDenyTitle="Delete selected phrase books?"
+                batchFooterBtnInitiate="Delete"
+                batchFooterBtnDeny="No, do not delete the selected phrase books"
+                batchFooterBtnConfirm="Yes, delete the selected phrase books"
+                batchConfirmationAction={(uids) => {
+                  // Delete all items in selected
+                  uids.forEach((uid) => {
+                    props.deleteCategory(uid)
+                  })
+                  setDeletedUids([...deletedUids, ...uids])
+                }}
+                // Listview: computed data
+                computedData={computedData}
+                sortHandler={async (sortData) => {
+                  await props.setRouteParams({
+                    search: {
+                      page: sortData.page,
+                      pageSize: sortData.pageSize,
+                      sortOrder: sortData.sortOrder,
+                      sortBy: sortData.sortBy,
+                    },
+                  })
+                  NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+                }}
+                // ==================================================
+                columns={getColumns()}
+                cssModifier="DictionaryList--contributors"
+                items={selectn('response.entries', computedData)}
+                // Pagination
+                fetcher={(fetcherParams) => {
+                  setPaginationRequest(
+                    `/${siteTheme}${dialect_path}/phrasebooks/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
+                  )
+                }}
+                fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+                metadata={selectn('response', computedData)}
+              />
+            </Suspense>
+          )
+        }}
+      </PhraseBooksList.Data>
     </>
   ) : null
 }
