@@ -41,7 +41,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import Tasks from 'components/Tasks'
+import ListTasks from 'components/ListTasks'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import '!style-loader!css-loader!./Tasks.css'
 import FVLabel from '../../components/FVLabel/index'
@@ -148,11 +148,11 @@ export class TasksContainer extends Component {
           {userRegistrationTaskList}
 
           {hasTasks && (
-            <Tasks.Data>
-              {(TasksDataOutput) => {
+            <ListTasks.Data>
+              {(ListTasksDataOutput) => {
                 // TODO
                 // eslint-disable-next-line
-                console.log('TasksDataOutput', TasksDataOutput)
+                console.log('ListTasksDataOutput', ListTasksDataOutput)
                 return (
                   <Suspense fallback={<div>Loading...</div>}>
                     <DictionaryList
@@ -195,7 +195,7 @@ export class TasksContainer extends Component {
                   </Suspense>
                 )
               }}
-            </Tasks.Data>
+            </ListTasks.Data>
           )}
 
           {hasTasks && (

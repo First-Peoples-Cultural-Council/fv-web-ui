@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary TasksData
+ * @summary ListTasksData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function TasksData({ children }) {
+function ListTasksData({ children }) {
   return children({
-    log: 'Output from TasksData',
+    log: 'Output from ListTasksData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-TasksData.propTypes = {
+ListTasksData.propTypes = {
   children: func,
 }
 
-export default TasksData
+export default ListTasksData
