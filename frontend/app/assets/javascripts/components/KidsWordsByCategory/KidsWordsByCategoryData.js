@@ -25,13 +25,12 @@ import useRoute from 'DataSource/useRoute'
 
 import useWindowPath from 'DataSource/useWindowPath'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-// import useCategoriesData from 'common/useCategoriesData'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject, appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
 /**
  * @summary KidsWordsByCategoryData
- * @description Note: no corresponding KidsWordsByCategoryPresentation component
+ * @description Used on: /kids/.../learn/words/categories/[CAT_ID], so no need to check shared/custom categories. Note: no corresponding KidsWordsByCategoryPresentation component
  * @version 1.0.1
  * @component
  *
@@ -47,7 +46,6 @@ function KidsWordsByCategoryData({ children }) {
   const { splitWindowPath } = useWindowPath()
   const { searchParams } = useSearch()
   const { changePagination } = useNavigationHelpers()
-  // const { categories } = useCategoriesData(true)
   const documentPath = `${routeParams.dialect_path}/Dictionary`
   // on load
   useEffect(() => {
