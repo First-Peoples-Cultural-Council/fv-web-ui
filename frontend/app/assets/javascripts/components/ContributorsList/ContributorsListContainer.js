@@ -16,7 +16,7 @@ function ContributorsListContainer() {
   return (
     <ContributorsListData>
       {(ContributorsListDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-1607
         // eslint-disable-next-line
         console.log('ContributorsListDataOutput', ContributorsListDataOutput)
         return <ContributorsListPresentation />

@@ -16,7 +16,7 @@ function TEMPLATEContainer() {
   return (
     <TEMPLATEData>
       {(TEMPLATEDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-TEMPLATE
         // eslint-disable-next-line
         console.log('TEMPLATEDataOutput', TEMPLATEDataOutput)
         return <TEMPLATEPresentation />

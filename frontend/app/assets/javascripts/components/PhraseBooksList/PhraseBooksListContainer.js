@@ -16,7 +16,7 @@ function PhraseBooksListContainer() {
   return (
     <PhraseBooksListData>
       {(PhraseBooksListDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-1607
         // eslint-disable-next-line
         console.log('PhraseBooksListDataOutput', PhraseBooksListDataOutput)
         return <PhraseBooksListPresentation />

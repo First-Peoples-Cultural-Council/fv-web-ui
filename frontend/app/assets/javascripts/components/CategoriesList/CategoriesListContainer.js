@@ -16,7 +16,7 @@ function CategoriesListContainer() {
   return (
     <CategoriesListData>
       {(CategoriesListDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-1607
         // eslint-disable-next-line
         console.log('CategoriesListDataOutput', CategoriesListDataOutput)
         return <CategoriesListPresentation />

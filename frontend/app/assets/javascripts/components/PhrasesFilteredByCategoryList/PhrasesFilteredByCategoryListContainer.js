@@ -16,7 +16,7 @@ function PhrasesFilteredByCategoryListContainer() {
   return (
     <PhrasesFilteredByCategoryListData>
       {(PhrasesFilteredByCategoryListDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-1607
         // eslint-disable-next-line
         console.log('PhrasesFilteredByCategoryListDataOutput', PhrasesFilteredByCategoryListDataOutput)
         return <PhrasesFilteredByCategoryListPresentation />

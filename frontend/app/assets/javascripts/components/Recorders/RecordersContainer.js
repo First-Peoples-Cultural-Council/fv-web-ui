@@ -16,7 +16,7 @@ function RecordersContainer() {
   return (
     <RecordersData>
       {(RecordersDataOutput) => {
-        // TODO: PLEASE REMOVE
+        // TODO FW-1607
         // eslint-disable-next-line
         console.log('RecordersDataOutput', RecordersDataOutput)
         return <RecordersPresentation />
