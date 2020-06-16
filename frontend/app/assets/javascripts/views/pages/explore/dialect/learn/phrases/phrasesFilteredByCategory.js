@@ -72,13 +72,13 @@ import {
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
-
+import PhrasesFilteredByCategory from 'components/PhrasesFilteredByCategory'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
-// PhrasesFilteredByCategory
+// PhrasesFilteredByCategoryContainer
 // ====================================================
-export class PhrasesFilteredByCategory extends Component {
+export class PhrasesFilteredByCategoryContainer extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
 
@@ -178,62 +178,71 @@ export class PhrasesFilteredByCategory extends Component {
       ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
     const phraseListView = parentUid ? (
-      <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryList
-          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-          dictionaryListViewMode={listView.mode}
-          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
-          flashcardTitle={pageTitle}
-          dialect={computedDialect2Response}
-          // ==================================================
-          // Search
-          // --------------------------------------------------
-          handleSearch={this.changeFilter}
-          resetSearch={this.resetSearch}
-          hasSearch
-          searchUi={[
-            {
-              defaultChecked: true,
-              idName: 'searchByTitle',
-              labelText: 'Phrase',
-            },
-            {
-              defaultChecked: true,
-              idName: 'searchByDefinitions',
-              labelText: 'Definitions',
-            },
-            {
-              idName: 'searchByCulturalNotes',
-              labelText: 'Cultural notes',
-            },
-          ]}
-          searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-          // ==================================================
-          // Table data
-          // --------------------------------------------------
-          items={selectn('response.entries', computedPhrases)}
-          columns={this.getColumns()}
-          // ===============================================
-          // Pagination
-          // -----------------------------------------------
-          hasPagination
-          fetcher={({ currentPageIndex, pageSize }) => {
-            const newUrl = appendPathArrayAfterLandmark({
-              pathArray: [pageSize, currentPageIndex],
-              splitWindowPath,
-              landmarkArray: [routeParams.phraseBook],
-            })
-            NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
-          }}
-          fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
-          metadata={selectn('response', computedPhrases)}
-          // ===============================================
-          // Sort
-          // -----------------------------------------------
-          sortHandler={this._sortHandler}
-          // ===============================================
-        />
-      </Suspense>
+      <PhrasesFilteredByCategory.Data>
+        {(PhrasesFilteredByCategoryOutput) => {
+          // TODO
+          // eslint-disable-next-line
+          console.log('PhrasesFilteredByCategoryOutput', PhrasesFilteredByCategoryOutput)
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <DictionaryList
+                dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+                dictionaryListViewMode={listView.mode}
+                dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
+                flashcardTitle={pageTitle}
+                dialect={computedDialect2Response}
+                // ==================================================
+                // Search
+                // --------------------------------------------------
+                handleSearch={this.changeFilter}
+                resetSearch={this.resetSearch}
+                hasSearch
+                searchUi={[
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByTitle',
+                    labelText: 'Phrase',
+                  },
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByDefinitions',
+                    labelText: 'Definitions',
+                  },
+                  {
+                    idName: 'searchByCulturalNotes',
+                    labelText: 'Cultural notes',
+                  },
+                ]}
+                searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+                // ==================================================
+                // Table data
+                // --------------------------------------------------
+                items={selectn('response.entries', computedPhrases)}
+                columns={this.getColumns()}
+                // ===============================================
+                // Pagination
+                // -----------------------------------------------
+                hasPagination
+                fetcher={({ currentPageIndex, pageSize }) => {
+                  const newUrl = appendPathArrayAfterLandmark({
+                    pathArray: [pageSize, currentPageIndex],
+                    splitWindowPath,
+                    landmarkArray: [routeParams.phraseBook],
+                  })
+                  NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
+                }}
+                fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
+                metadata={selectn('response', computedPhrases)}
+                // ===============================================
+                // Sort
+                // -----------------------------------------------
+                sortHandler={this._sortHandler}
+                // ===============================================
+              />
+            </Suspense>
+          )
+        }}
+      </PhrasesFilteredByCategory.Data>
     ) : null
 
     // Render kids view
@@ -622,7 +631,7 @@ export class PhrasesFilteredByCategory extends Component {
 // PROPTYPES
 // -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
-PhrasesFilteredByCategory.propTypes = {
+PhrasesFilteredByCategoryContainer.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
@@ -648,7 +657,7 @@ PhrasesFilteredByCategory.propTypes = {
   updatePageProperties: func.isRequired,
   searchDialectReset: func.isRequired,
 }
-PhrasesFilteredByCategory.defaultProps = {
+PhrasesFilteredByCategoryContainer.defaultProps = {
   computeSearchDialect: {},
   DEFAULT_LANGUAGE: 'english',
 }
@@ -693,4 +702,4 @@ const mapDispatchToProps = {
   searchDialectReset,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategoryContainer)
