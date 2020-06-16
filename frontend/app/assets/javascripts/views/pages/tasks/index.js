@@ -41,7 +41,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentView from 'views/components/Document/view'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-
+import Tasks from 'components/Tasks'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import '!style-loader!css-loader!./Tasks.css'
 import FVLabel from '../../components/FVLabel/index'
@@ -49,7 +49,7 @@ import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Br
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
 const { func, object } = PropTypes
-export class Tasks extends Component {
+export class TasksContainer extends Component {
   static propTypes = {
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
@@ -148,45 +148,54 @@ export class Tasks extends Component {
           {userRegistrationTaskList}
 
           {hasTasks && (
-            <Suspense fallback={<div>Loading...</div>}>
-              <DictionaryList
-                // Listview: Batch
-                // batchTitleSelect="Deselect all"
-                // batchTitleDeselect="Select all"
-                // batchFooterIsConfirmOrDenyTitle="Delete selected phrase books?"
-                // batchFooterBtnInitiate="Delete"
-                // batchFooterBtnDeny="No, do not delete the selected phrase books"
-                // batchFooterBtnConfirm="Yes, delete the selected phrase books"
-                // batchConfirmationAction={(uids) => {}}
-                // Listview: view mode buttons
-                hasViewModeButtons={false}
-                // Listview: computed data
-                columns={this.getColumns()}
-                computedData={_computeUserTasks}
-                items={selectn('response', _computeUserTasks)}
-                // sortHandler={(sortData) => {}}
-                // Pagination
-                // fetcher={(fetcherParams) => {
-                //   console.log('fetcher', fetcherParams)
-                //   debugger
-                // }}
-                // fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-                // hasPagination
-                // metadata={selectn('response', _computeUserTasks)}
-                dictionaryListSmallScreenTemplate={({ templateData }) => {
-                  return (
-                    <span className="DictionaryListSmallScreen__ContributorsListView">
-                      {templateData.documentTitle}
-                      <div>
-                        {templateData.taskName}
-                        {templateData.dueDate}
-                      </div>
-                      {templateData.taskActions}
-                    </span>
-                  )
-                }}
-              />
-            </Suspense>
+            <Tasks.Data>
+              {(TasksDataOutput) => {
+                // TODO
+                // eslint-disable-next-line
+                console.log('TasksDataOutput', TasksDataOutput)
+                return (
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <DictionaryList
+                      // Listview: Batch
+                      // batchTitleSelect="Deselect all"
+                      // batchTitleDeselect="Select all"
+                      // batchFooterIsConfirmOrDenyTitle="Delete selected phrase books?"
+                      // batchFooterBtnInitiate="Delete"
+                      // batchFooterBtnDeny="No, do not delete the selected phrase books"
+                      // batchFooterBtnConfirm="Yes, delete the selected phrase books"
+                      // batchConfirmationAction={(uids) => {}}
+                      // Listview: view mode buttons
+                      hasViewModeButtons={false}
+                      // Listview: computed data
+                      columns={this.getColumns()}
+                      computedData={_computeUserTasks}
+                      items={selectn('response', _computeUserTasks)}
+                      // sortHandler={(sortData) => {}}
+                      // Pagination
+                      // fetcher={(fetcherParams) => {
+                      //   console.log('fetcher', fetcherParams)
+                      //   debugger
+                      // }}
+                      // fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+                      // hasPagination
+                      // metadata={selectn('response', _computeUserTasks)}
+                      dictionaryListSmallScreenTemplate={({ templateData }) => {
+                        return (
+                          <span className="DictionaryListSmallScreen__ContributorsListView">
+                            {templateData.documentTitle}
+                            <div>
+                              {templateData.taskName}
+                              {templateData.dueDate}
+                            </div>
+                            {templateData.taskActions}
+                          </span>
+                        )
+                      }}
+                    />
+                  </Suspense>
+                )
+              }}
+            </Tasks.Data>
           )}
 
           {hasTasks && (
@@ -454,4 +463,4 @@ const mapDispatchToProps = {
   rejectTask,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks)
+export default connect(mapStateToProps, mapDispatchToProps)(TasksContainer)
