@@ -6,16 +6,6 @@ import Pagination from 'views/components/Navigation/Pagination'
 import UIHelpers from 'common/UIHelpers'
 import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./Pagination.css'
-/*
-childrenUnderPageSize
-onChangePage
-onChangePageSize
-page
-pageCount
-pageSize
-resultsCount
-showPageSize
-*/
 /**
  * @summary PaginationPresentation
  * @version 1.0.1
@@ -112,7 +102,7 @@ function PaginationPresentation({
   )
 }
 // PROPTYPES
-const { node, bool, func, /*object, */ number } = PropTypes
+const { node, bool, func, number } = PropTypes
 PaginationPresentation.propTypes = {
   children: node,
   childrenUnderPageSize: node,
