@@ -29,13 +29,10 @@ import NavigationHelpers from 'common/NavigationHelpers'
  * @component
  * @version 1.0.1
  *
- * @prop {object} props
- * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
+ * @param {object} props
+ * @param {function} props.children props.children({categories, computeEntities, onClickTile})
  *
- * @returns {object} output = {categories, computeEntities, onClickTile}
- * @returns {array} output.categories eg: [{text, href}]
- * @returns {arrayImmutable} output.computeEntities eg: [{id, entity}]
- * @returns {function} output.onClickTile click handler
+ * @see {@link PhraseBooksGridPresentation} for info on the children callback object
  */
 function PhraseBooksGridData({ children }) {
   const { computeCategories, fetchCategories } = useCategories()

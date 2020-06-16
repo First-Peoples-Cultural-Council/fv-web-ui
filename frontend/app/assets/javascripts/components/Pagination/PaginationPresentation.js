@@ -6,23 +6,32 @@ import Pagination from 'views/components/Navigation/Pagination'
 import UIHelpers from 'common/UIHelpers'
 import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./Pagination.css'
-
+/*
+childrenUnderPageSize
+onChangePage
+onChangePageSize
+page
+pageCount
+pageSize
+resultsCount
+showPageSize
+*/
 /**
  * @summary PaginationPresentation
  * @version 1.0.1
  *
  * @component
  *
- * @prop {object} props
- * @prop {node} props.children
- * @prop {node} props.childrenUnderPageSize
- * @prop {function} props.onChangePage: call when changing page
- * @prop {function} props.onChangePageSize: call when changing pageSize
- * @prop {number} props.page
- * @prop {number} props.pageCount
- * @prop {number} props.pageSize
- * @prop {number} props.resultsCount number of results
- * @prop {boolean} [props.showPageSize] Defaults to true
+ * @param {object} props
+ * @param {node} props.children The paged data
+ * @param {node} [props.childrenUnderPageSize] Slot to add markup just below the "per page" select.
+ * @param {function} [props.onChangePage] Called when changing page. Default: () => {}
+ * @param {function} [props.onChangePageSize] Called when changing pageSize. Default: () => {}
+ * @param {number} [props.page] Default: 1
+ * @param {number} [props.pageCount] Default: 1
+ * @param {number} [props.pageSize] Default: 10
+ * @param {number} [props.resultsCount] Number of results. Default: 0
+ * @param {boolean} [props.showPageSize] Default: true
  *
  * @returns {node} jsx markup
  */
@@ -109,20 +118,20 @@ PaginationPresentation.propTypes = {
   childrenUnderPageSize: node,
   onChangePage: func,
   onChangePageSize: func,
-  showPageSize: bool,
-  resultsCount: number,
+  page: number,
   pageCount: number,
   pageSize: number,
-  page: number,
+  resultsCount: number,
+  showPageSize: bool,
 }
 PaginationPresentation.defaultProps = {
   onChangePage: () => {},
   onChangePageSize: () => {},
-  showPageSize: true,
-  resultsCount: 0,
-  pageSize: 10,
   page: 1,
   pageCount: 1,
+  pageSize: 10,
+  resultsCount: 0,
+  showPageSize: true,
 }
 
 export default PaginationPresentation

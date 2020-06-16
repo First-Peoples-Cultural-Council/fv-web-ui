@@ -19,8 +19,10 @@ import WordsCategoriesGridPresentation from './WordsCategoriesGridPresentation'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 /**
  * @summary WordsCategoriesGridContainer
- * @component
  * @version 1.0.1
+ * @component
+ *
+ * @returns {node} jsx markup
  */
 function WordsCategoriesGridContainer() {
   // Render

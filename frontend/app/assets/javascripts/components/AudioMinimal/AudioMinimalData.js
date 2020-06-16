@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react'
 /**
  * @summary AudioMinimalData
  * @version 1.0.1
- *
  * @component
  *
- * @prop {object} props
- * @prop {function} props.children Render prop, expects children to be a function
- * @prop {string} props.src URL for audio file
- *
- * @returns {callback} props.children({isPlaying, onPlay, onPause})
+ * @param {object} props
+ * @param {string} props.src URL to audio file
+ * @param {function} props.children props.children({ isPlaying, onPlay, onPause })
+ * @see {@link AudioMinimalPresentation} for info on the children callback object
  */
 function AudioMinimalData({ children, src }) {
   const [player] = useState(new Audio(src))

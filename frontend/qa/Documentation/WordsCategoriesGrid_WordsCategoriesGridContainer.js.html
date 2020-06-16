@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: WordsCategoriesGrid/WordsCategoriesGridContainer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,61 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: WordsCategoriesGrid/WordsCategoriesGridContainer.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+Copyright 2016 First People's Cultural Council
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-    <h3> </h3>
+    http://www.apache.org/licenses/LICENSE-2.0
 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+import React from 'react'
+import WordsCategoriesGridData from './WordsCategoriesGridData'
+import WordsCategoriesGridPresentation from './WordsCategoriesGridPresentation'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+/**
+ * @summary WordsCategoriesGridContainer
+ * @version 1.0.1
+ * @component
+ *
+ * @returns {node} jsx markup
+ */
+function WordsCategoriesGridContainer() {
+  // Render
+  // ----------------------------------------
+  return (
+    &lt;WordsCategoriesGridData>
+      {({ categories, computeEntities, onClickTile }) => {
+        return (
+          &lt;PromiseWrapper renderOnError computeEntities={computeEntities}>
+            &lt;WordsCategoriesGridPresentation categories={categories} onClickTile={onClickTile} />
+          &lt;/PromiseWrapper>
+        )
+      }}
+    &lt;/WordsCategoriesGridData>
+  )
+}
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default WordsCategoriesGridContainer
+</code></pre>
+        </article>
+    </section>
 
 
 

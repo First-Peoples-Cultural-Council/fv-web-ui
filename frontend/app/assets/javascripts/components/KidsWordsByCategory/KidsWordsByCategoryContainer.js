@@ -19,8 +19,14 @@ import KidsWordsByCategoryData from 'components/KidsWordsByCategory/KidsWordsByC
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-// KidsWordsByCategoryContainer
-// ====================================================
+/**
+ * @summary KidsWordsByCategoryContainer
+ * @description Note: no corresponding KidsWordsByCategoryPresentation component
+ * @version 1.0.1
+ * @component
+ *
+ * @returns {node} jsx markup
+ */
 function KidsWordsByCategoryContainer() {
   return (
     <KidsWordsByCategoryData>

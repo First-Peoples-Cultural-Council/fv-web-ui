@@ -2,26 +2,18 @@ import PropTypes from 'prop-types'
 /**
  * @summary PaginationData
  * @version 1.0.1
- *
- * @description PaginationData manages state for PaginationPresentation.
- *
  * @component
  *
- * @prop {object} props
- * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
- * @prop {function} props.onPaginationUpdate called anytime there is a change to pageSize or page
- * @prop {number} [props.initialPage] starting page selected. used on init, then is internally controlled
- * @prop {number} [props.initialPageSize] starting page size. used on init, then is internally controlled
- * @prop {number} props.resultsCount number of results
+ * @param {object} props
+ * @param {function} props.children props.children({ onChangePage, onChangePageSize, page, pageCount, pageSize})
+ * @param {function} [props.onPaginationUpdate] Called anytime there is a change to pageSize or page. Default: ()=>{}
+ * @param {number} [props.page] Default: 1
+ * @param {number} [props.pageSize] Default: 10
+ * @param {number} [props.resultsCount] Number of results. Default: 0
  *
- * @returns {object} output = { onChangePage, onChangePageSize, page, pageCount, pageSize}
- * @returns {function} output.onChangePage
- * @returns {function} output.onChangePageSize
- * @returns {number} output.page
- * @returns {number} output.pageCount
- * @returns {number} output.pageSize
+ * @see {@link PaginationPresentation} for info on the children callback object
  */
-function PaginationData({ children, page, pageSize, onPaginationUpdate, resultsCount }) {
+function PaginationData({ children, onPaginationUpdate, page, pageSize, resultsCount }) {
   const pageCount = resultsCount === 0 ? 1 : Math.ceil(resultsCount / pageSize)
 
   const onChangePageSize = (value) => {
@@ -56,16 +48,17 @@ function PaginationData({ children, page, pageSize, onPaginationUpdate, resultsC
 const { func, number } = PropTypes
 PaginationData.propTypes = {
   children: func.isRequired,
-  initialPage: number,
-  initialPageSize: number,
+  page: number,
+  pageSize: number,
   pageCount: number,
   resultsCount: number,
 }
 PaginationData.defaultProps = {
-  initialPage: 1,
-  initialPageSize: 10,
+  page: 1,
+  pageSize: 10,
   pageCount: 1,
   resultsCount: 0,
+  onPaginationUpdate: () => {},
 }
 
 export default PaginationData

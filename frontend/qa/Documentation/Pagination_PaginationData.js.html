@@ -26,60 +26,42 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { useState } from 'react'
-import PropTypes from 'prop-types'
+            <pre class="prettyprint source linenums"><code>import PropTypes from 'prop-types'
 /**
  * @summary PaginationData
  * @version 1.0.1
- *
- * @description PaginationData manages state for PaginationPresentation.
- *
  * @component
  *
- * @prop {object} props
- * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
- * @prop {function} props.onUpdate called anytime there is a change to pageSize or page
- * @prop {number} [props.initialPage] starting page selected. used on init, then is internally controlled
- * @prop {number} [props.initialPageSize] starting page size. used on init, then is internally controlled
- * @prop {number} props.resultsCount number of results
+ * @param {object} props
+ * @param {function} props.children props.children({ onChangePage, onChangePageSize, page, pageCount, pageSize})
+ * @param {function} [props.onPaginationUpdate] Called anytime there is a change to pageSize or page. Default: ()=>{}
+ * @param {number} [props.page] Default: 1
+ * @param {number} [props.pageSize] Default: 10
+ * @param {number} [props.resultsCount] Number of results. Default: 0
  *
- * @returns {object} output = { onChangePage, onChangePageSize, page, pageCount, pageSize}
- * @returns {function} output.onChangePage
- * @returns {function} output.onChangePageSize
- * @returns {number} output.page
- * @returns {number} output.pageCount
- * @returns {number} output.pageSize
+ * @see {@link PaginationPresentation} for info on the children callback object
  */
-function PaginationData({ children, initialPage, initialPageSize, onUpdate, resultsCount }) {
-  const [pageSize, setPageSize] = useState(initialPageSize)
-  const [page, setPage] = useState(initialPage)
-  const pageCount = Math.ceil(resultsCount / pageSize)
+function PaginationData({ children, onPaginationUpdate, page, pageSize, resultsCount }) {
+  const pageCount = resultsCount === 0 ? 1 : Math.ceil(resultsCount / pageSize)
 
   const onChangePageSize = (value) => {
     // reset page when pageSize changes
     const valueNumber = Number(value)
     const newPage = 1
-    onUpdate({
+    onPaginationUpdate({
       page: newPage,
       pageSize: valueNumber,
     })
-    setPage(newPage)
-    setPageSize(valueNumber)
   }
 
   const onChangePage = (value) => {
     const valueNumber = Number(value)
     const newPage = valueNumber > pageCount ? pageCount : valueNumber
 
-    onUpdate({
+    onPaginationUpdate({
       page: newPage,
       pageSize,
     })
-
-    setPage(newPage)
-
-    // For longer pages, user should be taken to the top when changing pages
-    // document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
   return children({
@@ -94,16 +76,17 @@ function PaginationData({ children, initialPage, initialPageSize, onUpdate, resu
 const { func, number } = PropTypes
 PaginationData.propTypes = {
   children: func.isRequired,
-  initialPage: number,
-  initialPageSize: number,
+  page: number,
+  pageSize: number,
   pageCount: number,
   resultsCount: number,
 }
 PaginationData.defaultProps = {
-  initialPage: 1,
-  initialPageSize: 10,
+  page: 1,
+  pageSize: 10,
   pageCount: 1,
   resultsCount: 0,
+  onPaginationUpdate: ()=>{},
 }
 
 export default PaginationData
@@ -117,13 +100,13 @@ export default PaginationData
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#CategoriesGridViewContainer">CategoriesGridViewContainer</a></li><li><a href="global.html#CategoriesGridViewData">CategoriesGridViewData</a></li><li><a href="global.html#CategoriesGridViewPresentation">CategoriesGridViewPresentation</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#KidsPhrasesByCategoryContainer">KidsPhrasesByCategoryContainer</a></li><li><a href="global.html#KidsPhrasesByCategoryData">KidsPhrasesByCategoryData</a></li><li><a href="global.html#KidsWordsByCategoryContainer">KidsWordsByCategoryContainer</a></li><li><a href="global.html#KidsWordsByCategoryData">KidsWordsByCategoryData</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li><li><a href="global.html#PhraseBooksGridContainer">PhraseBooksGridContainer</a></li><li><a href="global.html#PhraseBooksGridData">PhraseBooksGridData</a></li><li><a href="global.html#PhraseBooksGridPresentation">PhraseBooksGridPresentation</a></li><li><a href="global.html#WordsCategoriesGridContainer">WordsCategoriesGridContainer</a></li><li><a href="global.html#WordsCategoriesGridData">WordsCategoriesGridData</a></li><li><a href="global.html#WordsCategoriesGridPresentation">WordsCategoriesGridPresentation</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 10 2020 13:10:56 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 15 2020 17:03:02 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

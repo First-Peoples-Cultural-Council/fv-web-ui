@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: CategoriesGridView/CategoriesGridViewData.js</title>
+    <title>JSDoc: Source: PhraseBooksGrid/PhraseBooksGridData.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: CategoriesGridView/CategoriesGridViewData.js</h1>
+    <h1 class="page-title">Source: PhraseBooksGrid/PhraseBooksGridData.js</h1>
 
     
 
@@ -41,31 +41,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import selectn from 'selectn'
+import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import Immutable from 'immutable'
+
 import useCategories from 'DataSource/useCategories'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
-
-import selectn from 'selectn'
-import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
- * @summary CategoriesGridViewData
+ * @summary PhraseBooksGridData
  * @component
  * @version 1.0.1
  *
- * @prop {object} props
- * @prop {function} props.children Render prop technique. Assumes children will be a function, eg: children({ ... })
+ * @param {object} props
+ * @param {function} props.children props.children({categories, computeEntities, onClickTile})
  *
- * @returns {object} output = {categories, computeEntities, onClickTile}
- * @returns {array} output.categories eg: [{text, href}]
- * @returns {arrayImmutable} output.computeEntities eg: [{id, entity}]
- * @returns {function} output.onClickTile click handler
+ * @see {@link PhraseBooksGridPresentation} for info on the children callback object
  */
-function CategoriesGridViewData({ children }) {
+function PhraseBooksGridData({ children }) {
   const { computeCategories, fetchCategories } = useCategories()
   const { routeParams } = useRoute()
   const { pushWindowPath } = useWindowPath()
@@ -80,7 +77,7 @@ function CategoriesGridViewData({ children }) {
   const categories = (selectn('response.entries', computedCategories) || []).map((category) => {
     return {
       title: category.title,
-      href: `/kids${routeParams.dialect_path}/learn/phrasebook/${category.uid}`,
+      href: `/kids${routeParams.dialect_path}/learn/phrases/book/${category.uid}`,
     }
   })
 
@@ -102,14 +99,14 @@ function CategoriesGridViewData({ children }) {
 
 // Proptypes
 const { func } = PropTypes
-CategoriesGridViewData.propTypes = {
+PhraseBooksGridData.propTypes = {
   children: func.isRequired,
 }
-CategoriesGridViewData.defaultProps = {
+PhraseBooksGridData.defaultProps = {
   children: () => {},
 }
 
-export default CategoriesGridViewData
+export default PhraseBooksGridData
 </code></pre>
         </article>
     </section>
@@ -120,13 +117,13 @@ export default CategoriesGridViewData
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#CategoriesGridViewContainer">CategoriesGridViewContainer</a></li><li><a href="global.html#CategoriesGridViewData">CategoriesGridViewData</a></li><li><a href="global.html#CategoriesGridViewPresentation">CategoriesGridViewPresentation</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#KidsPhrasesByCategoryContainer">KidsPhrasesByCategoryContainer</a></li><li><a href="global.html#KidsPhrasesByCategoryData">KidsPhrasesByCategoryData</a></li><li><a href="global.html#KidsWordsByCategoryContainer">KidsWordsByCategoryContainer</a></li><li><a href="global.html#KidsWordsByCategoryData">KidsWordsByCategoryData</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li><li><a href="global.html#PhraseBooksGridContainer">PhraseBooksGridContainer</a></li><li><a href="global.html#PhraseBooksGridData">PhraseBooksGridData</a></li><li><a href="global.html#PhraseBooksGridPresentation">PhraseBooksGridPresentation</a></li><li><a href="global.html#WordsCategoriesGridContainer">WordsCategoriesGridContainer</a></li><li><a href="global.html#WordsCategoriesGridData">WordsCategoriesGridData</a></li><li><a href="global.html#WordsCategoriesGridPresentation">WordsCategoriesGridPresentation</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 10 2020 13:10:56 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 15 2020 17:03:02 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

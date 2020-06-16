@@ -28,19 +28,19 @@ import AudioMinimal from 'components/AudioMinimal'
  * @component
  * @version 1.0.1
  *
- * @prop {object} props
- * @prop {array} props.categories [{href, text, image, audio, subtitle, title}]
- * @prop {function} props.onClickTile event handler when tile is clicked
- * @prop {number} [props.cols] defaults to 6
- * @prop {number} [props.cellHeight] defaults to 160
+ * @param {object} props
+ * @param {array} [props.categories] [{audio, href, image, subtitle, title}, ...] Default: []
+ * @param {function} [props.onClickTile] event handler when tile is clicked. Default: () => {}
+ * @param {number} [props.cols] Default: 6
+ * @param {number} [props.cellHeight] Default: 160
  *
  * @returns {node} jsx markup
  */
-function WordsCategoriesGridPresentation({ categories, cols, cellHeight, onClickTile }) {
+function WordsCategoriesGridPresentation({ categories, cellHeight, cols, onClickTile }) {
   return (
     <GridList cols={cols} cellHeight={cellHeight} id="WordsCategoriesGrid">
       {categories.map((category, index) => {
-        const { href, title, subtitle, audio, image } = category
+        const { audio, href, image, subtitle, title } = category
         const _subtitle = subtitle ? (
           <div
             dangerouslySetInnerHTML={{

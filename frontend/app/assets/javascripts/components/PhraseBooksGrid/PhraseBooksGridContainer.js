@@ -19,8 +19,10 @@ import PhraseBooksGridPresentation from './PhraseBooksGridPresentation'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 /**
  * @summary PhraseBooksGridContainer
- * @component
  * @version 1.0.1
+ * @component
+ *
+ * @returns {node} jsx markup
  */
 function PhraseBooksGridContainer() {
   // Render

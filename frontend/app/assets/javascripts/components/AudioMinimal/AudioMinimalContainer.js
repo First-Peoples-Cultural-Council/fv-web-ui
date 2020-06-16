@@ -6,11 +6,10 @@ import AudioMinimalData from './AudioMinimalData'
 /**
  * @summary AudioMinimalContainer
  * @version 1.0.1
- *
  * @component
  *
- * @prop {object} props
- * @prop {string} props.src URL for audio file
+ * @param {object} props
+ * @param {string} props.src URL for audio file
  *
  * @returns {node} jsx markup
  */

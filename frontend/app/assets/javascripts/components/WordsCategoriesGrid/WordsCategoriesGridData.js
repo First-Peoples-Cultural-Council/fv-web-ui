@@ -25,6 +25,11 @@ import NavigationHelpers from 'common/NavigationHelpers'
  * @summary WordsCategoriesGridData
  * @component
  * @version 1.0.1
+ *
+ * @param {object} props
+ * @param {function} props.children props.children({ categories, computeEntities, onClickTile })
+ *
+ * @see {@link WordsCategoriesGridPresentation} for info on the children callback object
  */
 function WordsCategoriesGridData({ children }) {
   const { routeParams } = useRoute()

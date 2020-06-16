@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="AudioMinimalContainer"><span class="type-signature"></span>AudioMinimalContainer<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    <h4 class="name" id="AudioMinimalContainer"><span class="type-signature"></span>AudioMinimalContainer<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
     
 
     
@@ -121,15 +121,10 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -169,8 +164,9 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -225,6 +221,8 @@
 
 
 
+
+
 <dl class="details">
 
     
@@ -257,7 +255,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AudioMinimal_AudioMinimalContainer.js.html">AudioMinimal/AudioMinimalContainer.js</a>, <a href="AudioMinimal_AudioMinimalContainer.js.html#line17">line 17</a>
+        <a href="AudioMinimal_AudioMinimalContainer.js.html">AudioMinimal/AudioMinimalContainer.js</a>, <a href="AudioMinimal_AudioMinimalContainer.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -315,7 +313,7 @@
     
 
     
-    <h4 class="name" id="AudioMinimalData"><span class="type-signature"></span>AudioMinimalData<span class="signature">()</span><span class="type-signature"> &rarr; {callback}</span></h4>
+    <h4 class="name" id="AudioMinimalData"><span class="type-signature"></span>AudioMinimalData<span class="signature">(props)</span><span class="type-signature"></span></h4>
     
 
     
@@ -332,15 +330,10 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -380,8 +373,9 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -403,29 +397,6 @@
 
         <tr>
             
-                <td class="name"><code>children</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Render prop, expects children to be a function</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>src</code></td>
             
 
@@ -442,7 +413,30 @@
 
             
 
-            <td class="description last">URL for audio file</td>
+            <td class="description last">URL to audio file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">props.children({ isPlaying, onPlay, onPause })</td>
         </tr>
 
     
@@ -455,6 +449,8 @@
     
     </tbody>
 </table>
+
+
 
 
 
@@ -491,53 +487,38 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AudioMinimal_AudioMinimalData.js.html">AudioMinimal/AudioMinimalData.js</a>, <a href="AudioMinimal_AudioMinimalData.js.html#line16">line 16</a>
+        <a href="AudioMinimal_AudioMinimalData.js.html">AudioMinimal/AudioMinimalData.js</a>, <a href="AudioMinimal_AudioMinimalData.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
     
 
     
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    props.children({isPlaying, onPlay, onPause})
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">callback</span>
-
-
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a> for info on the children callback object</li>
+        </ul>
     </dd>
-</dl>
+    
 
     
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -549,7 +530,7 @@
     
 
     
-    <h4 class="name" id="AudioMinimalPresentation"><span class="type-signature"></span>AudioMinimalPresentation<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    <h4 class="name" id="AudioMinimalPresentation"><span class="type-signature"></span>AudioMinimalPresentation<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
     
 
     
@@ -566,15 +547,10 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -614,8 +590,9 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -645,94 +622,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Flag used to toggle the play/pause buttons</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onPause</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Callback when paused</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onPlay</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Callback when played</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>shouldStopPropagation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -745,12 +635,113 @@
                 
 
                 
+
+                
                 </td>
             
 
             
 
-            <td class="description last">Flag for event.stopPropagation() when clicking on buttons. Defaults to true</td>
+            <td class="description last">Flag used to toggle the play/pause buttons. Default: false</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onPause</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Callback when paused. Default: () => {}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onPlay</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Callback when played. Default: () => {}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shouldStopPropagation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Flag for event.stopPropagation() when clicking on buttons. Default: true</td>
         </tr>
 
     
@@ -763,6 +754,8 @@
     
     </tbody>
 </table>
+
+
 
 
 
@@ -799,7 +792,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AudioMinimal_AudioMinimalPresentation.js.html">AudioMinimal/AudioMinimalPresentation.js</a>, <a href="AudioMinimal_AudioMinimalPresentation.js.html#line20">line 20</a>
+        <a href="AudioMinimal_AudioMinimalPresentation.js.html">AudioMinimal/AudioMinimalPresentation.js</a>, <a href="AudioMinimal_AudioMinimalPresentation.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -857,14 +850,18 @@
     
 
     
-    <h4 class="name" id="CategoriesGridViewContainer"><span class="type-signature"></span>CategoriesGridViewContainer<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="KidsPhrasesByCategoryContainer"><span class="type-signature"></span>KidsPhrasesByCategoryContainer<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
     
 
     
-    <p class="summary">CategoriesGridViewContainer</p>
+    <p class="summary">KidsPhrasesByCategoryContainer</p>
     
 
 
+
+<div class="description">
+    Note: no corresponding KidsPhrasesByCategoryPresentation component
+</div>
 
 
 
@@ -910,7 +907,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CategoriesGridView_CategoriesGridViewContainer.js.html">CategoriesGridView/CategoriesGridViewContainer.js</a>, <a href="CategoriesGridView_CategoriesGridViewContainer.js.html#line25">line 25</a>
+        <a href="KidsPhrasesByCategory_KidsPhrasesByCategoryContainer.js.html">KidsPhrasesByCategory/KidsPhrasesByCategoryContainer.js</a>, <a href="KidsPhrasesByCategory_KidsPhrasesByCategoryContainer.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -935,6 +932,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -946,15 +965,18 @@
     
 
     
-    <h4 class="name" id="CategoriesGridViewData"><span class="type-signature"></span>CategoriesGridViewData<span class="signature">()</span><span class="type-signature"> &rarr; {object|array|arrayImmutable|function}</span></h4>
+    <h4 class="name" id="KidsPhrasesByCategoryData"><span class="type-signature"></span>KidsPhrasesByCategoryData<span class="signature">(props)</span><span class="type-signature"></span></h4>
     
 
     
-    <p class="summary">CategoriesGridViewData</p>
+    <p class="summary">KidsPhrasesByCategoryData</p>
     
 
 
 
+<div class="description">
+    Note: no corresponding KidsPhrasesByCategoryPresentation component
+</div>
 
 
 
@@ -964,14 +986,10 @@
 
 
 
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -1011,8 +1029,9 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -1050,7 +1069,7 @@
 
             
 
-            <td class="description last">Render prop technique. Assumes children will be a function, eg: children({ ... })</td>
+            <td class="description last">props.children({computeEntities, items, hasItems, onPaginationUpdate, page, pageSize, resultsCount})</td>
         </tr>
 
     
@@ -1063,6 +1082,8 @@
     
     </tbody>
 </table>
+
+
 
 
 
@@ -1099,7 +1120,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CategoriesGridView_CategoriesGridViewData.js.html">CategoriesGridView/CategoriesGridViewData.js</a>, <a href="CategoriesGridView_CategoriesGridViewData.js.html#line40">line 40</a>
+        <a href="KidsPhrasesByCategory_KidsPhrasesByCategoryData.js.html">KidsPhrasesByCategory/KidsPhrasesByCategoryData.js</a>, <a href="KidsPhrasesByCategory_KidsPhrasesByCategoryData.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -1124,315 +1145,38 @@
 
 
 
-<h5>Returns:</h5>
-<ul>
-        <li>
-<div class="param-desc">
-    output = {categories, computeEntities, onClickTile}
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="KidsWordsByCategoryContainer"><span class="type-signature"></span>KidsWordsByCategoryContainer<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">KidsWordsByCategoryContainer</p>
+    
+
+
+
+<div class="description">
+    Note: no corresponding KidsWordsByCategoryPresentation component
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
 
 
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.categories eg: [{text, href}]
-</div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">array</span>
 
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.computeEntities eg: [{id, entity}]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">arrayImmutable</span>
-
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.onClickTile click handler
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-</li>
-    </ul>
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="CategoriesGridViewPresentation"><span class="type-signature"></span>CategoriesGridViewPresentation<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
-    
-
-    
-    <p class="summary">CategoriesGridViewPresentation</p>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>props</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <h6>Properties</h6>
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>categories</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">[{href, text, image, audio, subtitle, title}]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onClickTile</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">event handler when tile is clicked</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cols</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">defaults to 6</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cellHeight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">defaults to 160</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -1469,7 +1213,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html">CategoriesGridView/CategoriesGridViewPresentation.js</a>, <a href="CategoriesGridView_CategoriesGridViewPresentation.js.html#line40">line 40</a>
+        <a href="KidsWordsByCategory_KidsWordsByCategoryContainer.js.html">KidsWordsByCategory/KidsWordsByCategoryContainer.js</a>, <a href="KidsWordsByCategory_KidsWordsByCategoryContainer.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -1527,15 +1271,18 @@
     
 
     
-    <h4 class="name" id="PaginationContainer"><span class="type-signature"></span>PaginationContainer<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="KidsWordsByCategoryData"><span class="type-signature"></span>KidsWordsByCategoryData<span class="signature">(props)</span><span class="type-signature"></span></h4>
     
 
     
-    <p class="summary">PaginationContainer</p>
+    <p class="summary">KidsWordsByCategoryData</p>
     
 
 
 
+<div class="description">
+    Note: no corresponding KidsWordsByCategoryPresentation component
+</div>
 
 
 
@@ -1545,14 +1292,10 @@
 
 
 
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -1592,8 +1335,196 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">children({computeEntities, items, hasItems, onPaginationUpdate, page, pageSize, resultsCount})</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KidsWordsByCategory_KidsWordsByCategoryData.js.html">KidsWordsByCategory/KidsWordsByCategoryData.js</a>, <a href="KidsWordsByCategory_KidsWordsByCategoryData.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PaginationContainer"><span class="type-signature"></span>PaginationContainer<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">PaginationContainer</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
     <thead>
     <tr>
         
@@ -1661,53 +1592,7 @@
 
         <tr>
             
-                <td class="name"><code>initialPage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Starting Page number, will be taken over by Data's internal state</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>initialPageSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Starting Page Size number, will be taken over by Data's internal state</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onUpdate</code></td>
+                <td class="name"><code>onPaginationUpdate</code></td>
             
 
             <td class="type">
@@ -1724,6 +1609,52 @@
             
 
             <td class="description last">Called when there are changes to page || pageSize, use with ancestors to fetch new data</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Page number</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pageSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Page Size number</td>
         </tr>
 
     
@@ -1786,325 +1717,6 @@
 
 
 
-<dl class="details">
-
-    
-    <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationContainer.js.html">Pagination/PaginationContainer.js</a>, <a href="Pagination_PaginationContainer.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="PaginationData"><span class="type-signature"></span>PaginationData<span class="signature">()</span><span class="type-signature"> &rarr; {object|function|function|number|number|number}</span></h4>
-    
-
-    
-    <p class="summary">PaginationData</p>
-    
-
-
-
-<div class="description">
-    PaginationData manages state for PaginationPresentation.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>props</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <h6>Properties</h6>
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>children</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Render prop technique. Assumes children will be a function, eg: children({ ... })</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>onUpdate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">called anytime there is a change to pageSize or page</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>initialPage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">starting page selected. used on init, then is internally controlled</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>initialPageSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">starting page size. used on init, then is internally controlled</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>resultsCount</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">number of results</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 <dl class="details">
@@ -2139,7 +1751,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationData.js.html">Pagination/PaginationData.js</a>, <a href="Pagination_PaginationData.js.html#line25">line 25</a>
+        <a href="Pagination_PaginationContainer.js.html">Pagination/PaginationContainer.js</a>, <a href="Pagination_PaginationContainer.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -2165,10 +1777,10 @@
 
 
 <h5>Returns:</h5>
-<ul>
-        <li>
+
+        
 <div class="param-desc">
-    output = { onChangePage, onChangePageSize, page, pageCount, pageSize}
+    jsx markup
 </div>
 
 
@@ -2179,113 +1791,13 @@
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">node</span>
 
 
     </dd>
 </dl>
-</li>
+
     
-        <li>
-<div class="param-desc">
-    output.onChangePage
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.onChangePageSize
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.page
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.pageCount
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-</li>
-    
-        <li>
-<div class="param-desc">
-    output.pageSize
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-</li>
-    </ul>
 
 
 
@@ -2297,11 +1809,11 @@
     
 
     
-    <h4 class="name" id="PaginationPresentation"><span class="type-signature"></span>PaginationPresentation<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    <h4 class="name" id="PaginationData"><span class="type-signature"></span>PaginationData<span class="signature">(props)</span><span class="type-signature"></span></h4>
     
 
     
-    <p class="summary">PaginationPresentation</p>
+    <p class="summary">PaginationData</p>
     
 
 
@@ -2314,15 +1826,10 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -2362,8 +1869,345 @@
 
             <td class="description last">
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">props.children({ onChangePage, onChangePageSize, page, pageCount, pageSize})</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onPaginationUpdate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called anytime there is a change to pageSize or page. Default: ()=>{}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pageSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 10</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>resultsCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of results. Default: 0</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Pagination_PaginationData.js.html">Pagination/PaginationData.js</a>, <a href="Pagination_PaginationData.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#PaginationPresentation">PaginationPresentation</a> for info on the children callback object</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PaginationPresentation"><span class="type-signature"></span>PaginationPresentation<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">PaginationPresentation</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
     <thead>
     <tr>
         
@@ -2404,12 +2248,14 @@
                 
 
                 
+
+                
                 </td>
             
 
             
 
-            <td class="description last"></td>
+            <td class="description last">The paged data</td>
         </tr>
 
     
@@ -2431,6 +2277,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2438,14 +2288,14 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Slot to add markup just below the "per page" select.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>onChangePage:</code></td>
+                <td class="name"><code>onChangePage</code></td>
             
 
             <td class="type">
@@ -2460,6 +2310,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2467,14 +2321,14 @@
 
             
 
-            <td class="description last">call when changing page</td>
+            <td class="description last">Called when changing page. Default: () => {}</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>onChangePageSize:</code></td>
+                <td class="name"><code>onChangePageSize</code></td>
             
 
             <td class="type">
@@ -2489,6 +2343,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2496,7 +2354,7 @@
 
             
 
-            <td class="description last">call when changing pageSize</td>
+            <td class="description last">Called when changing pageSize. Default: () => {}</td>
         </tr>
 
     
@@ -2518,6 +2376,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2525,7 +2387,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Default: 1</td>
         </tr>
 
     
@@ -2547,6 +2409,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2554,7 +2420,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Default: 1</td>
         </tr>
 
     
@@ -2576,6 +2442,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2583,7 +2453,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Default: 10</td>
         </tr>
 
     
@@ -2605,6 +2475,10 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
 
                 
                 </td>
@@ -2612,7 +2486,7 @@
 
             
 
-            <td class="description last">number of results</td>
+            <td class="description last">Number of results. Default: 0</td>
         </tr>
 
     
@@ -2638,12 +2512,14 @@
                 
 
                 
+
+                
                 </td>
             
 
             
 
-            <td class="description last">Defaults to true</td>
+            <td class="description last">Default: true</td>
         </tr>
 
     
@@ -2656,6 +2532,8 @@
     
     </tbody>
 </table>
+
+
 
 
 
@@ -2692,7 +2570,1257 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Pagination_PaginationPresentation.js.html">Pagination/PaginationPresentation.js</a>, <a href="Pagination_PaginationPresentation.js.html#line29">line 29</a>
+        <a href="Pagination_PaginationPresentation.js.html">Pagination/PaginationPresentation.js</a>, <a href="Pagination_PaginationPresentation.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PhraseBooksGridContainer"><span class="type-signature"></span>PhraseBooksGridContainer<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">PhraseBooksGridContainer</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PhraseBooksGrid_PhraseBooksGridContainer.js.html">PhraseBooksGrid/PhraseBooksGridContainer.js</a>, <a href="PhraseBooksGrid_PhraseBooksGridContainer.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PhraseBooksGridData"><span class="type-signature"></span>PhraseBooksGridData<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">PhraseBooksGridData</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">props.children({categories, computeEntities, onClickTile})</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PhraseBooksGrid_PhraseBooksGridData.js.html">PhraseBooksGrid/PhraseBooksGridData.js</a>, <a href="PhraseBooksGrid_PhraseBooksGridData.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#PhraseBooksGridPresentation">PhraseBooksGridPresentation</a> for info on the children callback object</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PhraseBooksGridPresentation"><span class="type-signature"></span>PhraseBooksGridPresentation<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">PhraseBooksGridPresentation</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>categories</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">[{audio, href, image, subtitle, title}, ...] Default: []</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onClickTile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">event handler when tile is clicked. Default: () => {}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cols</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 6</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cellHeight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 160</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PhraseBooksGrid_PhraseBooksGridPresentation.js.html">PhraseBooksGrid/PhraseBooksGridPresentation.js</a>, <a href="PhraseBooksGrid_PhraseBooksGridPresentation.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="WordsCategoriesGridContainer"><span class="type-signature"></span>WordsCategoriesGridContainer<span class="signature">()</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">WordsCategoriesGridContainer</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="WordsCategoriesGrid_WordsCategoriesGridContainer.js.html">WordsCategoriesGrid/WordsCategoriesGridContainer.js</a>, <a href="WordsCategoriesGrid_WordsCategoriesGridContainer.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx markup
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">node</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="WordsCategoriesGridData"><span class="type-signature"></span>WordsCategoriesGridData<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">WordsCategoriesGridData</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">props.children({ categories, computeEntities, onClickTile })</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="WordsCategoriesGrid_WordsCategoriesGridData.js.html">WordsCategoriesGrid/WordsCategoriesGridData.js</a>, <a href="WordsCategoriesGrid_WordsCategoriesGridData.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#WordsCategoriesGridPresentation">WordsCategoriesGridPresentation</a> for info on the children callback object</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="WordsCategoriesGridPresentation"><span class="type-signature"></span>WordsCategoriesGridPresentation<span class="signature">(props)</span><span class="type-signature"> &rarr; {node}</span></h4>
+    
+
+    
+    <p class="summary">WordsCategoriesGridPresentation</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>categories</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">[{audio, href, image, subtitle, title}, ...] Default: []</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onClickTile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">event handler when tile is clicked. Default: () => {}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cols</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 6</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cellHeight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Default: 160</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="WordsCategoriesGrid_WordsCategoriesGridPresentation.js.html">WordsCategoriesGrid/WordsCategoriesGridPresentation.js</a>, <a href="WordsCategoriesGrid_WordsCategoriesGridPresentation.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -2760,13 +3888,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#CategoriesGridViewContainer">CategoriesGridViewContainer</a></li><li><a href="global.html#CategoriesGridViewData">CategoriesGridViewData</a></li><li><a href="global.html#CategoriesGridViewPresentation">CategoriesGridViewPresentation</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AudioMinimalContainer">AudioMinimalContainer</a></li><li><a href="global.html#AudioMinimalData">AudioMinimalData</a></li><li><a href="global.html#AudioMinimalPresentation">AudioMinimalPresentation</a></li><li><a href="global.html#KidsPhrasesByCategoryContainer">KidsPhrasesByCategoryContainer</a></li><li><a href="global.html#KidsPhrasesByCategoryData">KidsPhrasesByCategoryData</a></li><li><a href="global.html#KidsWordsByCategoryContainer">KidsWordsByCategoryContainer</a></li><li><a href="global.html#KidsWordsByCategoryData">KidsWordsByCategoryData</a></li><li><a href="global.html#PaginationContainer">PaginationContainer</a></li><li><a href="global.html#PaginationData">PaginationData</a></li><li><a href="global.html#PaginationPresentation">PaginationPresentation</a></li><li><a href="global.html#PhraseBooksGridContainer">PhraseBooksGridContainer</a></li><li><a href="global.html#PhraseBooksGridData">PhraseBooksGridData</a></li><li><a href="global.html#PhraseBooksGridPresentation">PhraseBooksGridPresentation</a></li><li><a href="global.html#WordsCategoriesGridContainer">WordsCategoriesGridContainer</a></li><li><a href="global.html#WordsCategoriesGridData">WordsCategoriesGridData</a></li><li><a href="global.html#WordsCategoriesGridPresentation">WordsCategoriesGridPresentation</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 10 2020 13:10:56 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 15 2020 17:03:02 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

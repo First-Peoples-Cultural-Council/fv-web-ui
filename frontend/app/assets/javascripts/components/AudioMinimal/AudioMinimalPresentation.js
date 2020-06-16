@@ -6,14 +6,13 @@ import AVStop from '@material-ui/icons/Stop'
 /**
  * @summary AudioMinimalPresentation
  * @version 1.0.1
- *
  * @component
  *
- * @prop {object} props
- * @prop {string} props.isPlaying Flag used to toggle the play/pause buttons
- * @prop {string} props.onPause Callback when paused
- * @prop {string} props.onPlay Callback when played
- * @prop {string} [props.shouldStopPropagation] Flag for event.stopPropagation() when clicking on buttons. Defaults to true
+ * @param {object} props
+ * @param {boolean} [props.isPlaying] Flag used to toggle the play/pause buttons. Default: false
+ * @param {function} [props.onPause] Callback when paused. Default: () => {}
+ * @param {function} [props.onPlay] Callback when played. Default: () => {}
+ * @param {boolean} [props.shouldStopPropagation] Flag for event.stopPropagation() when clicking on buttons. Default: true
  *
  * @returns {node} jsx markup
  */
