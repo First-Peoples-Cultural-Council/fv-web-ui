@@ -72,7 +72,7 @@ import {
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
-import PhrasesFilteredByCategory from 'components/PhrasesFilteredByCategory'
+import ListPhrasesFilteredByCategory from 'components/ListPhrasesFilteredByCategory'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
@@ -178,11 +178,11 @@ export class PhrasesFilteredByCategoryContainer extends Component {
       ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
     const phraseListView = parentUid ? (
-      <PhrasesFilteredByCategory.Data>
-        {(PhrasesFilteredByCategoryOutput) => {
+      <ListPhrasesFilteredByCategory.Data>
+        {(ListPhrasesFilteredByCategoryOutput) => {
           // TODO
           // eslint-disable-next-line
-          console.log('PhrasesFilteredByCategoryOutput', PhrasesFilteredByCategoryOutput)
+          console.log('ListPhrasesFilteredByCategoryOutput', ListPhrasesFilteredByCategoryOutput)
           return (
             <Suspense fallback={<div>Loading...</div>}>
               <DictionaryList
@@ -242,7 +242,7 @@ export class PhrasesFilteredByCategoryContainer extends Component {
             </Suspense>
           )
         }}
-      </PhrasesFilteredByCategory.Data>
+      </ListPhrasesFilteredByCategory.Data>
     ) : null
 
     // Render kids view
