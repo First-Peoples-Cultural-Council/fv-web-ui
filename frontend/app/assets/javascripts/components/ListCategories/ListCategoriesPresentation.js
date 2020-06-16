@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 /**
- * @summary CategoriesListPresentation
+ * @summary ListCategoriesPresentation
  * @version 1.0.1
  * @component
  *
@@ -10,13 +10,13 @@ import React from 'react'
  *
  * @returns {node} jsx markup
  */
-function CategoriesListPresentation() {
-  return <div>CategoriesListPresentation</div>
+function ListCategoriesPresentation() {
+  return <div>ListCategoriesPresentation</div>
 }
 // PROPTYPES
 // const { string } = PropTypes
-CategoriesListPresentation.propTypes = {
+ListCategoriesPresentation.propTypes = {
   //   something: string,
 }
 
-export default CategoriesListPresentation
+export default ListCategoriesPresentation

@@ -36,7 +36,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-import CategoriesList from 'components/CategoriesList'
+import ListCategories from 'components/ListCategories'
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -218,11 +218,11 @@ export const Categories = (props) => {
       >
         Create a new {categoryType.title.singular}
       </FVButton>
-      <CategoriesList.Data>
-        {(CategoriesListOutput) => {
+      <ListCategories.Data>
+        {(ListCategoriesOutput) => {
           // TODO
           // eslint-disable-next-line
-          console.log('CategoriesListOutput', CategoriesListOutput)
+          console.log('ListCategoriesOutput', ListCategoriesOutput)
           return (
             <Suspense fallback={<div>Loading...</div>}>
               <DictionaryListWithPagination
@@ -270,7 +270,7 @@ export const Categories = (props) => {
             </Suspense>
           )
         }}
-      </CategoriesList.Data>
+      </ListCategories.Data>
     </>
   ) : null
 }

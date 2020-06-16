@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary CategoriesListData
+ * @summary ListCategoriesData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function CategoriesListData({ children }) {
+function ListCategoriesData({ children }) {
   return children({
-    log: 'Output from CategoriesListData',
+    log: 'Output from ListCategoriesData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-CategoriesListData.propTypes = {
+ListCategoriesData.propTypes = {
   children: func,
 }
 
-export default CategoriesListData
+export default ListCategoriesData
