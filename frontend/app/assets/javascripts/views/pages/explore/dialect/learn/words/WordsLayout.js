@@ -25,7 +25,7 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
-import DictionaryListData from 'views/components/Browsing/DictionaryListData'
+import ListWords from 'views/components/Browsing/ListWords'
 import FVLabel from 'views/components/FVLabel/index'
 import WordsData from 'views/pages/explore/dialect/learn/words/WordsData'
 
@@ -152,7 +152,7 @@ class WordsLayout extends Component {
                 </div>
 
                 <div className="col-xs-12 col-md-9">
-                  <DictionaryListData>
+                  <ListWords.Data>
                     {({
                       columns,
                       dialect,
@@ -168,6 +168,7 @@ class WordsLayout extends Component {
                       smallScreenTemplate,
                       sortHandler,
                     }) => {
+                      // TODO FW-1607
                       const wordsListView = parentId ? (
                         <Suspense fallback={<div>Loading...</div>}>
                           <DictionaryList
@@ -254,7 +255,7 @@ class WordsLayout extends Component {
                         </>
                       )
                     }}
-                  </DictionaryListData>
+                  </ListWords.Data>
                 </div>
               </div>
             </>

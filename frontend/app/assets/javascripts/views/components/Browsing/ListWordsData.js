@@ -39,7 +39,7 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 
-function DictionaryListData(props) {
+function ListWordsData(props) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -343,4 +343,4 @@ function DictionaryListData(props) {
   })
 }
 
-export default DictionaryListData
+export default ListWordsData
