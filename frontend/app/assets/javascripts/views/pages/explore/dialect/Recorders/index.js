@@ -32,7 +32,7 @@ import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
-import Recorders from 'components/Recorders'
+import ListRecorders from 'components/ListRecorders'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
@@ -202,11 +202,11 @@ function RecordersContainer(props) {
       >
         Create a new recorder
       </FVButton>
-      <Recorders.Data>
-        {(RecordersDataOutput) => {
+      <ListRecorders.Data>
+        {(ListRecordersDataOutput) => {
           // TODO
           // eslint-disable-next-line
-          console.log('RecordersDataOutput', RecordersDataOutput)
+          console.log('ListRecordersDataOutput', ListRecordersDataOutput)
           return (
             <Suspense fallback={<div>Loading...</div>}>
               <DictionaryListWithPagination
@@ -253,7 +253,7 @@ function RecordersContainer(props) {
             </Suspense>
           )
         }}
-      </Recorders.Data>
+      </ListRecorders.Data>
     </>
   ) : null
 }

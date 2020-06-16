@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 /**
- * @summary RecordersPresentation
+ * @summary ListRecordersPresentation
  * @version 1.0.1
  * @component
  *
@@ -10,13 +10,13 @@ import React from 'react'
  *
  * @returns {node} jsx markup
  */
-function RecordersPresentation() {
-  return <div>RecordersPresentation</div>
+function ListRecordersPresentation() {
+  return <div>ListRecordersPresentation</div>
 }
 // PROPTYPES
 // const { string } = PropTypes
-RecordersPresentation.propTypes = {
+ListRecordersPresentation.propTypes = {
   //   something: string,
 }
 
-export default RecordersPresentation
+export default ListRecordersPresentation

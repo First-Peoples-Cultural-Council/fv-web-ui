@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary RecordersData
+ * @summary ListRecordersData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function RecordersData({ children }) {
+function ListRecordersData({ children }) {
   return children({
-    log: 'Output from RecordersData',
+    log: 'Output from ListRecordersData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-RecordersData.propTypes = {
+ListRecordersData.propTypes = {
   children: func,
 }
 
-export default RecordersData
+export default ListRecordersData
