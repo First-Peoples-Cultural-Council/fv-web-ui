@@ -36,6 +36,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import CategoriesList from 'components/CategoriesList'
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -217,50 +218,59 @@ export const Categories = (props) => {
       >
         Create a new {categoryType.title.singular}
       </FVButton>
-      <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryListWithPagination
-          hasViewModeButtons={false}
-          // Listview: Batch
-          batchTitleSelect={copy.batch.deselect}
-          batchTitleDeselect={copy.batch.select}
-          batchFooterIsConfirmOrDenyTitle={copy.batch.isConfirmOrDenyTitle}
-          batchFooterBtnInitiate={copy.edit.btnInitiate}
-          batchFooterBtnDeny={copy.batch.btnDeny}
-          batchFooterBtnConfirm={copy.batch.btnConfirm}
-          batchConfirmationAction={(uids) => {
-            // Delete all items in selected
-            uids.forEach((uid) => {
-              props.deleteCategory(uid)
-            })
-            setDeletedUids([...deletedUids, ...uids])
-          }}
-          // Listview: computed data
-          computedData={computedData}
-          sortHandler={async (sortData) => {
-            await props.setRouteParams({
-              search: {
-                page: sortData.page,
-                pageSize: sortData.pageSize,
-                sortOrder: sortData.sortOrder,
-                sortBy: sortData.sortBy,
-              },
-            })
-            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
-          }}
-          // ==================================================
-          columns={getColumns()}
-          cssModifier="DictionaryList--contributors"
-          items={selectn('response.entries', computedData)}
-          // Pagination
-          fetcher={(fetcherParams) => {
-            setPaginationRequest(
-              `/${siteTheme}${dialect_path}/${categoryType.label.plural}/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
-            )
-          }}
-          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-          metadata={selectn('response', computedData)}
-        />
-      </Suspense>
+      <CategoriesList.Data>
+        {(CategoriesListOutput) => {
+          // TODO
+          // eslint-disable-next-line
+          console.log('CategoriesListOutput', CategoriesListOutput)
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <DictionaryListWithPagination
+                hasViewModeButtons={false}
+                // Listview: Batch
+                batchTitleSelect={copy.batch.deselect}
+                batchTitleDeselect={copy.batch.select}
+                batchFooterIsConfirmOrDenyTitle={copy.batch.isConfirmOrDenyTitle}
+                batchFooterBtnInitiate={copy.edit.btnInitiate}
+                batchFooterBtnDeny={copy.batch.btnDeny}
+                batchFooterBtnConfirm={copy.batch.btnConfirm}
+                batchConfirmationAction={(uids) => {
+                  // Delete all items in selected
+                  uids.forEach((uid) => {
+                    props.deleteCategory(uid)
+                  })
+                  setDeletedUids([...deletedUids, ...uids])
+                }}
+                // Listview: computed data
+                computedData={computedData}
+                sortHandler={async (sortData) => {
+                  await props.setRouteParams({
+                    search: {
+                      page: sortData.page,
+                      pageSize: sortData.pageSize,
+                      sortOrder: sortData.sortOrder,
+                      sortBy: sortData.sortBy,
+                    },
+                  })
+                  NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+                }}
+                // ==================================================
+                columns={getColumns()}
+                cssModifier="DictionaryList--contributors"
+                items={selectn('response.entries', computedData)}
+                // Pagination
+                fetcher={(fetcherParams) => {
+                  setPaginationRequest(
+                    `/${siteTheme}${dialect_path}/${categoryType.label.plural}/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
+                  )
+                }}
+                fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+                metadata={selectn('response', computedData)}
+              />
+            </Suspense>
+          )
+        }}
+      </CategoriesList.Data>
     </>
   ) : null
 }
