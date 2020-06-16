@@ -32,6 +32,7 @@ import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'
 import FVButton from 'views/components/FVButton'
+import Recorders from 'components/Recorders'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
@@ -52,7 +53,7 @@ const DictionaryList = React.lazy(() => import('views/components/Browsing/Dictio
 // Despite some duplication between Recorders & Contributors,
 // it does allow for flexibility on how we render the Recorders table.
 // ----------------------------------------
-function Recorders(props) {
+function RecordersContainer(props) {
   const { computeContributors, routeParams, search } = props
   const { dialect_path, pageSize, page, siteTheme } = routeParams
   const { sortOrder, sortBy } = search
@@ -201,55 +202,64 @@ function Recorders(props) {
       >
         Create a new recorder
       </FVButton>
-      <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryListWithPagination
-          // Listview: Batch
-          batchTitleSelect="Deselect all"
-          batchTitleDeselect="Select all"
-          batchFooterIsConfirmOrDenyTitle="Delete Recorders?"
-          batchFooterBtnInitiate="Delete"
-          batchFooterBtnDeny="No, do not delete the selected recorders"
-          batchFooterBtnConfirm="Yes, delete the selected recorders"
-          batchConfirmationAction={(uids) => {
-            // Delete all items in selected
-            uids.forEach((uid) => {
-              props.deleteContributor(uid)
-            })
-            setDeletedUids([...deletedUids, ...uids])
-          }}
-          // Listview: computed data
-          computedData={computedData}
-          sortHandler={async (sortData) => {
-            await props.setRouteParams({
-              search: {
-                page: sortData.page,
-                pageSize: sortData.pageSize,
-                sortOrder: sortData.sortOrder,
-                sortBy: sortData.sortBy,
-              },
-            })
-            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
-          }}
-          // ==================================================
-          columns={getColumns()}
-          cssModifier="DictionaryList--contributors"
-          items={selectn('response.entries', computedData)}
-          // Pagination
-          fetcher={(fetcherParams) => {
-            setPaginationRequest(
-              `/${siteTheme}${dialect_path}/recorders/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
-            )
-          }}
-          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-          metadata={selectn('response', computedData)}
-        />
-      </Suspense>
+      <Recorders.Data>
+        {(RecordersDataOutput) => {
+          // TODO
+          // eslint-disable-next-line
+          console.log('RecordersDataOutput', RecordersDataOutput)
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <DictionaryListWithPagination
+                // Listview: Batch
+                batchTitleSelect="Deselect all"
+                batchTitleDeselect="Select all"
+                batchFooterIsConfirmOrDenyTitle="Delete Recorders?"
+                batchFooterBtnInitiate="Delete"
+                batchFooterBtnDeny="No, do not delete the selected recorders"
+                batchFooterBtnConfirm="Yes, delete the selected recorders"
+                batchConfirmationAction={(uids) => {
+                  // Delete all items in selected
+                  uids.forEach((uid) => {
+                    props.deleteContributor(uid)
+                  })
+                  setDeletedUids([...deletedUids, ...uids])
+                }}
+                // Listview: computed data
+                computedData={computedData}
+                sortHandler={async (sortData) => {
+                  await props.setRouteParams({
+                    search: {
+                      page: sortData.page,
+                      pageSize: sortData.pageSize,
+                      sortOrder: sortData.sortOrder,
+                      sortBy: sortData.sortBy,
+                    },
+                  })
+                  NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+                }}
+                // ==================================================
+                columns={getColumns()}
+                cssModifier="DictionaryList--contributors"
+                items={selectn('response.entries', computedData)}
+                // Pagination
+                fetcher={(fetcherParams) => {
+                  setPaginationRequest(
+                    `/${siteTheme}${dialect_path}/recorders/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
+                  )
+                }}
+                fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+                metadata={selectn('response', computedData)}
+              />
+            </Suspense>
+          )
+        }}
+      </Recorders.Data>
     </>
   ) : null
 }
 
 const { func, object } = PropTypes
-Recorders.propTypes = {
+RecordersContainer.propTypes = {
   // REDUX: reducers/state
   routeParams: object.isRequired,
   computeContributors: object.isRequired,
@@ -259,7 +269,7 @@ Recorders.propTypes = {
   fetchContributors: func.isRequired,
   pushWindowPath: func.isRequired,
 }
-Recorders.defaultProps = {
+RecordersContainer.defaultProps = {
   fetchContributors: () => {},
   pushWindowPath: () => {},
 }
@@ -286,4 +296,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recorders)
+export default connect(mapStateToProps, mapDispatchToProps)(RecordersContainer)
