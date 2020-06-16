@@ -20,6 +20,31 @@
 
 package ca.firstvoices.services;
 
+
+import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
+import static ca.firstvoices.schemas.Constants.FV_AUDIO;
+import static ca.firstvoices.schemas.Constants.FV_BOOK;
+import static ca.firstvoices.schemas.Constants.FV_BOOKS;
+import static ca.firstvoices.schemas.Constants.FV_BOOK_ENTRY;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
+import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTOR;
+import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTORS;
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.Constants.FV_GALLERY;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.schemas.Constants.FV_LINK;
+import static ca.firstvoices.schemas.Constants.FV_LINKS;
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_PICTURE;
+import static ca.firstvoices.schemas.Constants.FV_PORTAL;
+import static ca.firstvoices.schemas.Constants.FV_RESOURCES;
+import static ca.firstvoices.schemas.Constants.FV_VIDEO;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -152,10 +177,10 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
   private boolean checkType(DocumentModel inputDoc) {
     DocumentType currentType = inputDoc.getDocumentType();
 
-    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
-        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
-        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
-        "FVPortal", "FVResources", "FVVideo", "FVWord",};
+    String[] types = {FV_ALPHABET, FV_AUDIO, FV_BOOK, FV_BOOK_ENTRY, FV_BOOKS, FV_CATEGORIES,
+        FV_CATEGORY, FV_CHARACTER, FV_CONTRIBUTOR, FV_CONTRIBUTORS, FV_DIALECT, FV_DICTIONARY,
+        FV_GALLERY, FV_LANGUAGE, FV_LANGUAGE_FAMILY, FV_LINK, FV_LINKS, FV_PHRASE, FV_PICTURE,
+        FV_PORTAL, FV_RESOURCES, FV_VIDEO, FV_WORD};
 
     return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
   }

@@ -33,11 +33,11 @@ public abstract class AbstractService {
   }
 
   protected DocumentModel getDialect(CoreSession session, DocumentModel doc) {
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       return doc; // doc is dialect
     }
     DocumentModel parent = session.getParentDocument(doc.getRef());
-    while (parent != null && !"FVDialect".equals(parent.getType())) {
+    while (parent != null && !FV_DIALECT.equals(parent.getType())) {
       parent = session.getParentDocument(parent.getRef());
     }
     return parent;

@@ -114,15 +114,15 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
     if (hasPermissionInACP(mergedAcp, additionalPrincipalsList, CustomSecurityConstants.RECORD)) {
 
       if (allowedDocumentTypes.isEmpty()) {
-        allowedDocumentTypes.add("FVCategories");
-        allowedDocumentTypes.add("FVContributors");
-        allowedDocumentTypes.add("FVDictionary");
+        allowedDocumentTypes.add(FV_CATEGORIES);
+        allowedDocumentTypes.add(FV_CONTRIBUTORS);
+        allowedDocumentTypes.add(FV_DICTIONARY);
         allowedDocumentTypes.add("FVLabelDictionary");
-        allowedDocumentTypes.add("FVResources");
-        allowedDocumentTypes.add("FVBook");
-        allowedDocumentTypes.add("FVBooks");
-        allowedDocumentTypes.add("FVBookEntry");
-        allowedDocumentTypes.add("FVPortal");
+        allowedDocumentTypes.add(FV_RESOURCES);
+        allowedDocumentTypes.add(FV_BOOK);
+        allowedDocumentTypes.add(FV_BOOKS);
+        allowedDocumentTypes.add(FV_BOOK_ENTRY);
+        allowedDocumentTypes.add(FV_PORTAL);
       }
 
       // Allow adding children and removing children on allowed types

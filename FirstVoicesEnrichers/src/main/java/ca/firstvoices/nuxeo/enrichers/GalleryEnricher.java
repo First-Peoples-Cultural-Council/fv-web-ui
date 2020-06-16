@@ -63,7 +63,7 @@ public class GalleryEnricher extends AbstractJsonEnricher<DocumentModel> {
 
     String documentType = doc.getType();
 
-    if (documentType.equalsIgnoreCase("FVGallery")) {
+    if (documentType.equalsIgnoreCase(FV_GALLERY)) {
 
       // Process "fv:related_pictures" values
       String[] pictureIds =

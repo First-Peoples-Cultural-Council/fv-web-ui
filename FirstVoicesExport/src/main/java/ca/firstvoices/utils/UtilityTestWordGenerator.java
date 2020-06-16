@@ -43,7 +43,7 @@ public class UtilityTestWordGenerator {
       complexValue.put("translation", "translation" + wordValue);
       ArrayList<Object> definitionsList = new ArrayList<>();
       definitionsList.add(complexValue);
-      DocumentModel word = session.createDocumentModel(path, wordValue, "FVWord");
+      DocumentModel word = session.createDocumentModel(path, wordValue, FV_WORD);
       word.setPropertyValue("fvcore:definitions", definitionsList);
       word.setPropertyValue("fv:reference", wordValue);
       word.setPropertyValue("fv-word:part_of_speech", "Basic");

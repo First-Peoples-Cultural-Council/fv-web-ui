@@ -87,23 +87,23 @@ public class TestSecurityPolicies extends AbstractFVTest {
     session.save();
 
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data", "Family", "FVLanguageFamily"));
+        session.createDocumentModel("/FV/Workspaces/Data", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", "FVLanguage"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", FV_LANGUAGE));
 
     dialectDoc = session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dialect", FV_DIALECT));
     dialectDoc = session.saveDocument(dialectDoc);
     session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Categories", "Category",
-            "FVCategory"));
+            FV_CATEGORY));
     session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Categories/Category",
-            "SubCategory", "FVCategory"));
+            "SubCategory", FV_CATEGORY));
 
     wordDoc = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Dictionary", "NewWord",
-            "FVWord"));
+            FV_WORD));
     wordDoc = session.saveDocument(wordDoc);
     wordDoc.setPropertyValue("dc:title", "Test");
     wordDoc = session.saveDocument(wordDoc);

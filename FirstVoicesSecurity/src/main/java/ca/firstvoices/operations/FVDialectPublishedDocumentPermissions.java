@@ -79,7 +79,7 @@ public class FVDialectPublishedDocumentPermissions extends AbstractFirstVoicesDi
         if (CustomSecurityConstants.LANGUAGE_ADMINS_GROUP.equals(group.getKey())) {
           DocumentModel parentDoc = session.getParentDocument(input.getRef());
 
-          if (parentDoc != null && "FVLanguage".equals(parentDoc.getType())) {
+          if (parentDoc != null && FV_LANGUAGE.equals(parentDoc.getType())) {
             String groupName = generateGroupNameFromDialect(input.getName(), group.getKey());
             ACE parentRecordACE = new ACE(groupName, CustomSecurityConstants.CAN_ASK_FOR_PUBLISH,
                 true);

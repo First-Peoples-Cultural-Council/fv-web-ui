@@ -77,7 +77,7 @@ public class PortalEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVPortal
      */
-    if (documentType.equalsIgnoreCase("FVPortal")) {
+    if (documentType.equalsIgnoreCase(FV_PORTAL)) {
 
       // Process "fv-portal:featured_words" values
       String[] featuredWordsIds =

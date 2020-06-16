@@ -46,7 +46,7 @@ public class PublishNewCategoryListener implements EventListener {
         return;
       }
 
-      if (!doc.getType().equals("FVCategory")) {
+      if (!doc.getType().equals(FV_CATEGORY)) {
         return;
       }
 

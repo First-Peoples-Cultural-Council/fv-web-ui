@@ -76,7 +76,7 @@ public class ProxyPublisherListener implements EventListener {
     }
 
     // If re-publishing a dialect directly (no transition)
-    if ("FVDialect".equals(doc.getType()) && "Published".equals(doc.getCurrentLifeCycleState())
+    if (FV_DIALECT.equals(doc.getType()) && "Published".equals(doc.getCurrentLifeCycleState())
         && doc.isProxy()) {
       service.setDialectProxies(doc);
     }

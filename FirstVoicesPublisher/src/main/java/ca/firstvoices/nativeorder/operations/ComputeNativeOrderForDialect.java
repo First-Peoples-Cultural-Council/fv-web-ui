@@ -64,7 +64,7 @@ public class ComputeNativeOrderForDialect {
   public DocumentModel run(DocumentModel input) {
 
     // Check if dialect
-    if (input.getType().equals("FVDialect")) {
+    if (input.getType().equals(FV_DIALECT)) {
 
       DocumentModel alphabet = session
           .getDocument(new PathRef(input.getPathAsString() + "/Alphabet"));

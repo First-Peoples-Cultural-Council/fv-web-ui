@@ -20,6 +20,13 @@
 
 package testUtil;
 
+import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;
@@ -103,31 +110,31 @@ public abstract class AbstractFirstVoicesOperationsTest {
   public void createDialectTree(CoreSession session) {
     domain = createDocument(session, session.createDocumentModel("/", "FV", "Domain"));
     languageFamily = createDocument(session,
-        session.createDocumentModel(domain.getPathAsString(), "Family", "FVLanguageFamily"));
+        session.createDocumentModel(domain.getPathAsString(), "Family", FV_LANGUAGE_FAMILY));
     assertNotNull("Should have a valid FVLanguageFamily", languageFamily);
     language = createDocument(session,
-        session.createDocumentModel(languageFamily.getPathAsString(), "Language", "FVLanguage"));
+        session.createDocumentModel(languageFamily.getPathAsString(), "Language", FV_LANGUAGE));
     assertNotNull("Should have a valid FVLanguage", language);
     dialect = createDocument(session,
-        session.createDocumentModel(language.getPathAsString(), "Dialect", "FVDialect"));
+        session.createDocumentModel(language.getPathAsString(), "Dialect", FV_DIALECT));
     assertNotNull("Should have a valid FVDialect", dialect);
     dictionary = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", "FVDictionary"));
+        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", FV_DICTIONARY));
     assertNotNull("Should have a valid FVDictionary", dictionary);
     alphabet = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", FV_ALPHABET));
     assertNotNull("Should have a valid FVAlphabet", alphabet);
     categories = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Categories", "FVCategories"));
+        session.createDocumentModel(dialect.getPathAsString(), "Categories", FV_CATEGORIES));
     assertNotNull("Should have a valid Categories", categories);
     parentCategory = createDocument(session, session
-        .createDocumentModel(categories.getPathAsString(), "TestParentCategory1", "FVCategory"));
+        .createDocumentModel(categories.getPathAsString(), "TestParentCategory1", FV_CATEGORY));
     assertNotNull("Should have a valid Parent Category", parentCategory);
     childCategory = createDocument(session,
-        session.createDocumentModel(parentCategory.getPathAsString(), "Category", "FVCategory"));
+        session.createDocumentModel(parentCategory.getPathAsString(), "Category", FV_CATEGORY));
     assertNotNull("Should have a valid category", childCategory);
     parentCategory2 = createDocument(session, session
-        .createDocumentModel(categories.getPathAsString(), "TestParentCategory2", "FVCategory"));
+        .createDocumentModel(categories.getPathAsString(), "TestParentCategory2", FV_CATEGORY));
     assertNotNull("Should have a valid Parent Category2", parentCategory2);
   }
 

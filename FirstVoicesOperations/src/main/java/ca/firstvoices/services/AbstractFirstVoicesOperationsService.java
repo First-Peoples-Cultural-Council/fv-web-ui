@@ -9,11 +9,11 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 public abstract class AbstractFirstVoicesOperationsService {
 
   protected DocumentModel getDialect(CoreSession session, DocumentModel doc) {
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       return doc;
     }
     DocumentModel parent = session.getParentDocument(doc.getRef());
-    while (parent != null && !"FVDialect".equals(parent.getType())) {
+    while (parent != null && !FV_DIALECT.equals(parent.getType())) {
       parent = session.getParentDocument(parent.getRef());
     }
     return parent;

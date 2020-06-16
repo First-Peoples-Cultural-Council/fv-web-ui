@@ -63,7 +63,7 @@ public class ComputeNativeOrderForAsset {
   public DocumentModel run(DocumentModel input) {
 
     // Check if word or phrase
-    if (input.getType().equals("FVWord") || input.getType().equals("FVPhrase")) {
+    if (input.getType().equals(FV_WORD) || input.getType().equals(FV_PHRASE)) {
       service.computeAssetNativeOrderTranslation(input);
 
       Map<String, Object> parameters = new HashMap<String, Object>();

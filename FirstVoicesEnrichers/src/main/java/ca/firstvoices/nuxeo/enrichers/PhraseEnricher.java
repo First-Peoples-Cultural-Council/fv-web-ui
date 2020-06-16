@@ -71,7 +71,7 @@ public class PhraseEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVPhrase
      */
-    if (documentType.equalsIgnoreCase("FVPhrase")) {
+    if (documentType.equalsIgnoreCase(FV_PHRASE)) {
 
       // Process "fv-phrase:phrase_books" values
       String[] phraseBookIds =

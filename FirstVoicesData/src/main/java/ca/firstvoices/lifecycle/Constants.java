@@ -17,7 +17,6 @@ public class Constants {
   public static final String DISABLE_TRANSITION = "Disable";
   public static final String REPUBLISH_TRANSITION = "Republish";
 
-
   private Constants() {
     throw new IllegalStateException("Utility class");
   }

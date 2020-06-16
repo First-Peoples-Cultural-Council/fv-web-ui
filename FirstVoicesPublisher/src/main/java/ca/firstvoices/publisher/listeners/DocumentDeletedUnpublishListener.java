@@ -72,7 +72,7 @@ public class DocumentDeletedUnpublishListener implements EventListener {
         }
       }
 
-      if (doc.getType().equals("FVCategory")) {
+      if (doc.getType().equals(FV_CATEGORY)) {
         service.removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, doc);
       }
     }

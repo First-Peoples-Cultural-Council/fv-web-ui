@@ -104,9 +104,9 @@ public class TestSecurityPolicies extends AbstractFVTest {
     session.createDocument(session.createDocumentModel("/FV/", "Workspaces", "WorkspaceRoot"));
     session.createDocument(session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data", "Family", "FVLanguageFamily"));
+        session.createDocumentModel("/FV/Workspaces/Data", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", "FVLanguage"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", FV_LANGUAGE));
 
     session.save();
 
@@ -131,23 +131,23 @@ public class TestSecurityPolicies extends AbstractFVTest {
     setACL(sectionsRoot, "members", SecurityConstants.READ);
 
     dialectSencoten = session.createDocument(session
-        .createDocumentModel("/FV/Workspaces/Data/Family/Language", "Senćoŧen", "FVDialect"));
+        .createDocumentModel("/FV/Workspaces/Data/Family/Language", "Senćoŧen", FV_DIALECT));
     dialectSencoten = session.saveDocument(dialectSencoten);
 
     dialectSencotenDictionary = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Senćoŧen", "Dictionary",
-            "FVDictionary"));
+            FV_DICTIONARY));
     dialectSencotenDictionary = session.saveDocument(dialectSencotenDictionary);
 
     assertNotNull(dialectSencoten);
 
     dialectDene = session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dene", "FVDialect"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dene", FV_DIALECT));
     dialectDene = session.saveDocument(dialectDene);
 
     dialectDeneDictionary = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dene", "Dictionary",
-            "FVDictionary"));
+            FV_DICTIONARY));
     dialectDeneDictionary = session.saveDocument(dialectDeneDictionary);
 
     assertNotNull(dialectDene);

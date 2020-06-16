@@ -61,11 +61,11 @@ public class TestComputeNativeOrderForDialect {
   @Before
   public void setUp() throws Exception {
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    session.createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
-    session.createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
+    session.createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
+    session.createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
 
     dialectDoc = session
-        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", FV_DIALECT));
   }
 
   @Test

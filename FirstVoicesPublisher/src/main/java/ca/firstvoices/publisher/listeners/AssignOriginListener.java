@@ -71,7 +71,7 @@ public class AssignOriginListener implements EventListener {
       return;
     }
 
-    if (doc.getType().equals("FVWord") || doc.getType().equals("FVPhrase")) {
+    if (doc.getType().equals(FV_WORD) || doc.getType().equals(FV_PHRASE)) {
       String[] relatedPictures = (String[]) doc.getPropertyValue("fvcore:related_pictures");
       String[] relatedAudio = (String[]) doc.getPropertyValue("fvcore:related_audio");
       String[] relatedVideos = (String[]) doc.getPropertyValue("fvcore:related_videos");

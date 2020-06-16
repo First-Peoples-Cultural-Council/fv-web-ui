@@ -56,7 +56,7 @@ public class ComputeNativeOrderAlphabetListener implements EventListener {
     }
 
     // Handle language assets (Words and Phrases)
-    if (doc.getType().equals("FVCharacter") && !doc.isProxy()) {
+    if (doc.getType().equals(FV_CHARACTER) && !doc.isProxy()) {
 
       // Will always run when creating
       CoreSession session = doc.getCoreSession();

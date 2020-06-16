@@ -99,7 +99,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", wordOrder[i]);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
       createDocument(session, letterDoc);
@@ -124,7 +124,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
       createDocument(session, letterDoc);
       session.save();

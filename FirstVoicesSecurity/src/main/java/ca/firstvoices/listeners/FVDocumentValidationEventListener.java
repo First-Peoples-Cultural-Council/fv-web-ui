@@ -103,7 +103,7 @@ public class FVDocumentValidationEventListener implements EventListener {
       }
 
       // Word-specific
-      if (doc.getType().equals("FVWord")) {
+      if (doc.getType().equals(FV_WORD)) {
         // Return an error if part of speech is empty
         String partOfSpeech = (String) doc.getPropertyValue("fv-word:part_of_speech");
         if (partOfSpeech == null || partOfSpeech.isEmpty()) {
@@ -118,7 +118,7 @@ public class FVDocumentValidationEventListener implements EventListener {
       }
 
       // Phrase-specific
-      if (doc.getType().equals("FVPhrase")) {
+      if (doc.getType().equals(FV_PHRASE)) {
         if (!documentTitleValidates(ctx, title)) {
           generateValidationError(event,
               "A phrase with the same title already exists in this dictionary.");

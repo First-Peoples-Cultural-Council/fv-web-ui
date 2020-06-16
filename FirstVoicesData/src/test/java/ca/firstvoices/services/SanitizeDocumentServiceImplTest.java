@@ -42,10 +42,10 @@ public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest
 
     // Create a new word & phrase document
     DocumentModel TestWord = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", "FVWord"));
+        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", FV_WORD));
     DocumentModel TestPhrase = createDocument(session, session
         .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "  Test Phrase  ",
-            "FVPhrase"));
+            FV_PHRASE));
 
     assertNotNull(TestWord);
     assertNotNull(TestPhrase);

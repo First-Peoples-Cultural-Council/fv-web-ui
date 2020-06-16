@@ -106,7 +106,7 @@ public class ComputeNativeOrderListener implements EventListener {
     }
 
     // Handle language assets (Words and Phrases)
-    if ((doc.getType().equals("FVWord") || doc.getType().equals("FVPhrase"))) {
+    if ((doc.getType().equals(FV_WORD) || doc.getType().equals(FV_PHRASE))) {
 
       switch (event.getName()) {
 

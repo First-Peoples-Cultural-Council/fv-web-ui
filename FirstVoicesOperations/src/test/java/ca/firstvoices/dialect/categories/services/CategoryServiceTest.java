@@ -36,7 +36,7 @@ public class CategoryServiceTest extends AbstractFirstVoicesOperationsTest {
   @Test(expected = InvalidCategoryException.class)
   public void cannotAssignParentToParentCategoryCategory() throws OperationException {
     DocumentModel newCategory = createDocument(session,
-        session.createDocumentModel(categories.getPathAsString(), "New Category", "FVCategory"));
+        session.createDocumentModel(categories.getPathAsString(), "New Category", FV_CATEGORY));
     Map<String, String> props = new HashMap<>();
     props.put("dc:title", "Parent Category Title");
     props.put("dc:description", "A description of the parent category.");

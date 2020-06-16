@@ -65,7 +65,7 @@ public class MigrateCategoriesStatus {
 
     protectOperation();
 
-    if (!dialect.getType().equals("FVDialect")) {
+    if (!dialect.getType().equals(FV_DIALECT)) {
       throw new OperationException("Document type must be FVDialect");
     }
 

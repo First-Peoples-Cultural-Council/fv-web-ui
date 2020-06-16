@@ -66,7 +66,7 @@ public class DialectEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVDialect
      */
-    if (documentType.equalsIgnoreCase("FVDialect")) {
+    if (documentType.equalsIgnoreCase(FV_DIALECT)) {
 
       // Process "fvdialect:keyboards" values
       String[] keyboardLinkIds =

@@ -73,7 +73,7 @@ public class CharacterEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVCharacter
      */
-    if (documentType.equalsIgnoreCase("FVCharacter")) {
+    if (documentType.equalsIgnoreCase(FV_CHARACTER)) {
 
       // Process "fv:related_audio" values
       String[] audioIds = (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "related_audio")

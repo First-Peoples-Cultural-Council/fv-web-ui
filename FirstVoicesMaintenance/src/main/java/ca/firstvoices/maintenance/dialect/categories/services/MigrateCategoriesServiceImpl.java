@@ -186,7 +186,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     // Create new category
     DocumentModel newLocalCategory = session.createDocumentModel(
-        localCategoryDirPath, category.getName(), "FVCategory");
+        localCategoryDirPath, category.getName(), FV_CATEGORY);
     newLocalCategory.setPropertyValue("dc:title", category.getTitle());
     DocumentModel newCategory = session.createDocument(newLocalCategory);
 

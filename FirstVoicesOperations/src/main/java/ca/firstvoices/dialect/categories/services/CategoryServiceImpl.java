@@ -2,13 +2,13 @@ package ca.firstvoices.dialect.categories.services;
 
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import ca.firstvoices.services.AbstractFirstVoicesOperationsService;
 import java.util.Map;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
-import ca.firstvoices.services.AbstractFirstVoicesOperationsService;
 
 /**
  * @author david
@@ -24,7 +24,7 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
 
     CoreSession session = doc.getCoreSession();
 
-    if (!doc.getType().equals("FVCategory")) {
+    if (!doc.getType().equals(FV_CATEGORY)) {
       throw new InvalidCategoryException("Document type must be FVCategory.");
     }
 

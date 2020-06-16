@@ -68,7 +68,7 @@ public class RestrictFVDialectPublishing implements EventListener {
 
     for (Object doc : ctx.getArguments()) {
       // A Language Administrator trying TO PUBLISH someone else's Dialect
-      if (doc instanceof DocumentModel && ((DocumentModel) doc).getType().equals("FVDialect")) {
+      if (doc instanceof DocumentModel && ((DocumentModel) doc).getType().equals(FV_DIALECT)) {
         DocumentModel currentDoc = (DocumentModel) doc;
 
         // Check if principal has EVERYTHING permission on the source dialect,

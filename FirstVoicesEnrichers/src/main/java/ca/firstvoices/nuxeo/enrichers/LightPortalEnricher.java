@@ -73,7 +73,7 @@ public class LightPortalEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVPortal
      */
-    if (documentType.equalsIgnoreCase("FVPortal")) {
+    if (documentType.equalsIgnoreCase(FV_PORTAL)) {
 
       // Process "fv-portal:logo" value
       String logoImageId = (!doc.isProxy()) ? (String) doc.getProperty("fv-portal", "logo")

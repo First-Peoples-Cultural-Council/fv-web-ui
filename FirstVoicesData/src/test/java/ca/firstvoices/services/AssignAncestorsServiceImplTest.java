@@ -40,7 +40,7 @@ public class AssignAncestorsServiceImplTest extends AbstractFirstVoicesDataTest 
 
     // Create a new child document
     DocumentModel TestWord = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
+        session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", FV_LINKS));
 
     // Check that the child document does not have the parent document UUIDs in it's properties
     assertNull("Word should have no ID for parent family property",

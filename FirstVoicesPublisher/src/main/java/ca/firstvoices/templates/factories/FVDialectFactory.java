@@ -34,7 +34,7 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
   public void createContentStructure(DocumentModel eventDoc) {
 
     // Only apply to one type
-    if ("FVDialect".equals(eventDoc.getType())) {
+    if (FV_DIALECT.equals(eventDoc.getType())) {
       if (eventDoc.isProxy()) {
         return;
       }

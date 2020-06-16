@@ -28,7 +28,7 @@ public class GetRelationsForAsset {
 
   public static final String ID = "Document.GetRelationsForAsset";
 
-  @Param(name = "type", values = {"FVWord"}, required = false)
+  @Param(name = "type", values = {FV_WORD}, required = false)
   protected String type;
 
   @OperationMethod

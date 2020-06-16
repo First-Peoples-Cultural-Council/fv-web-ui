@@ -20,6 +20,9 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.Constants.FV_LINKS;
+import static ca.firstvoices.schemas.Constants.FV_RESOURCES;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
@@ -77,11 +80,11 @@ public class InitialDatabaseSetup {
 
     createNewDocument("Site", "Workspace", "/FV/Workspaces");
     createNewDocument("Site", "Section", "/FV/sections");
-    createNewDocument("Resources", "FVResources", "/FV/Workspaces/Site");
+    createNewDocument("Resources", FV_RESOURCES, "/FV/Workspaces/Site");
     createNewDocument("Pages", "Folder", "/FV/Workspaces/Site/Resources");
-    createNewDocument("Shared Categories", "FVCategories", "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Links", "FVLinks", "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Resources", "FVResources", "/FV/Workspaces/SharedData");
+    createNewDocument("Shared Categories", FV_CATEGORIES, "/FV/Workspaces/SharedData");
+    createNewDocument("Shared Links", FV_LINKS, "/FV/Workspaces/SharedData");
+    createNewDocument("Shared Resources", FV_RESOURCES, "/FV/Workspaces/SharedData");
 
     /*
         Create the user groups.

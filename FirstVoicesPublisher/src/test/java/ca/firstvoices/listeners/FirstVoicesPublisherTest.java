@@ -24,6 +24,23 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
+import static ca.firstvoices.schemas.Constants.FV_AUDIO;
+import static ca.firstvoices.schemas.Constants.FV_BOOKS;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
+import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTOR;
+import static ca.firstvoices.schemas.Constants.FV_CONTRIBUTORS;
+import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.Constants.FV_LINK;
+import static ca.firstvoices.schemas.Constants.FV_LINKS;
+import static ca.firstvoices.schemas.Constants.FV_PHRASE;
+import static ca.firstvoices.schemas.Constants.FV_PICTURE;
+import static ca.firstvoices.schemas.Constants.FV_PORTAL;
+import static ca.firstvoices.schemas.Constants.FV_RESOURCES;
+import static ca.firstvoices.schemas.Constants.FV_VIDEO;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -126,49 +143,49 @@ public class FirstVoicesPublisherTest {
     // Check the factory is doing its job - check template
     DocumentModel child = session.getChild(dialect.getRef(), "Contributors");
     assertNotNull(child);
-    assertEquals("FVContributors", child.getDocumentType().getName());
+    assertEquals(FV_CONTRIBUTORS, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Dictionary");
     assertNotNull(child);
-    assertEquals("FVDictionary", child.getDocumentType().getName());
+    assertEquals(FV_DICTIONARY, child.getDocumentType().getName());
     //        child = session.getChild(dialect.getRef(), "Forum");
     //        assertNotNull(child);
     //        assertEquals("Forum", child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Portal");
     assertNotNull(child);
-    assertEquals("FVPortal", child.getDocumentType().getName());
+    assertEquals(FV_PORTAL, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Alphabet");
     assertNotNull(child);
-    assertEquals("FVAlphabet", child.getDocumentType().getName());
+    assertEquals(FV_ALPHABET, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Resources");
     assertNotNull(child);
-    assertEquals("FVResources", child.getDocumentType().getName());
+    assertEquals(FV_RESOURCES, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Categories");
     assertNotNull(child);
-    assertEquals("FVCategories", child.getDocumentType().getName());
+    assertEquals(FV_CATEGORIES, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Links");
     assertNotNull(child);
-    assertEquals("FVLinks", child.getDocumentType().getName());
+    assertEquals(FV_LINKS, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Stories & Songs");
     assertNotNull(child);
-    assertEquals("FVBooks", child.getDocumentType().getName());
+    assertEquals(FV_BOOKS, child.getDocumentType().getName());
     child = session.getChild(dialect.getRef(), "Phrase Books");
     assertNotNull(child);
-    assertEquals("FVCategories", child.getDocumentType().getName());
+    assertEquals(FV_CATEGORIES, child.getDocumentType().getName());
   }
 
   protected void createDialectTree() throws Exception {
     familyDoc = session
-        .createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
+        .createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
     languageDoc = session
-        .createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
+        .createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
     language2Doc = session
-        .createDocument(session.createDocumentModel("/Family", "Language2", "FVLanguage"));
+        .createDocument(session.createDocumentModel("/Family", "Language2", FV_LANGUAGE));
     dialectDoc = session
-        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", FV_DIALECT));
     dialect2Doc = session
-        .createDocument(session.createDocumentModel("/Family/Language", "Dialect2", "FVDialect"));
+        .createDocument(session.createDocumentModel("/Family/Language", "Dialect2", FV_DIALECT));
     dialect3Doc = session
-        .createDocument(session.createDocumentModel("/Family/Language2", "Dialect", "FVDialect"));
+        .createDocument(session.createDocumentModel("/Family/Language2", "Dialect", FV_DIALECT));
     dialectDoc.followTransition("Enable");
     dialect2Doc.followTransition("Enable");
     dialect3Doc.followTransition("Enable");
@@ -286,25 +303,25 @@ public class FirstVoicesPublisherTest {
 
   private void createWord() {
     category = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Categories", "Category",
-            "FVCategory"));
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Categories", FV_CATEGORY,
+            FV_CATEGORY));
     subcategory = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory", FV_CATEGORY));
     contributor = session.createDocument(session
         .createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor",
-            "FVContributor"));
+            FV_CONTRIBUTOR));
     contributor2 = session.createDocument(session
         .createDocumentModel(dialectDoc.getPathAsString() + "/Contributors", "myContributor2",
-            "FVContributor"));
+            FV_CONTRIBUTOR));
     picture = session.createDocument(session
         .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myPicture",
-            "FVPicture"));
+            FV_PICTURE));
     audio = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myAudio", "FVAudio"));
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myAudio", FV_AUDIO));
     video = session.createDocument(session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myVideo", "FVVideo"));
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Resources", "myVideo", FV_VIDEO));
     word = session
-        .createDocumentModel(dialectDoc.getPathAsString() + "/Dictionary", "myWord1", "FVWord");
+        .createDocumentModel(dialectDoc.getPathAsString() + "/Dictionary", "myWord1", FV_WORD);
     String[] values = new String[1];
     values[0] = audio.getId();
     word.setPropertyValue("fvcore:related_audio", values);
@@ -330,7 +347,7 @@ public class FirstVoicesPublisherTest {
   @Test(expected = InvalidParameterException.class)
   public void testDialectPublishingWrongPlace() throws Exception {
     dialectPublisherService.publishDialect(
-        session.createDocument(session.createDocumentModel("/", "Dialect", "FVDialect")));
+        session.createDocument(session.createDocumentModel("/", "Dialect", FV_DIALECT)));
   }
 
   private DocumentModel getProxy(DocumentModel model) {
@@ -362,9 +379,9 @@ public class FirstVoicesPublisherTest {
 
   private void createPhrase() {
     phraseBook = session.createDocument(session
-        .createDocumentModel("/Family/Language/Dialect/Categories", "PhraseBook", "FVCategory"));
+        .createDocumentModel("/Family/Language/Dialect/Categories", "PhraseBook", FV_CATEGORY));
     phrase = session
-        .createDocumentModel("/Family/Language/Dialect/Dictionary", "myPhrase1", "FVPhrase");
+        .createDocumentModel("/Family/Language/Dialect/Dictionary", "myPhrase1", FV_PHRASE);
     phrase.setPropertyValue("fv-phrase:phrase_books", new String[]{phraseBook.getId()});
     phrase = session.createDocument(phrase);
   }
@@ -382,14 +399,14 @@ public class FirstVoicesPublisherTest {
     DocumentModel portal = session.getChild(dialect.getRef(), "Portal");
 
     link = session.createDocument(
-        session.createDocumentModel("/Family/Language/Dialect/Links", "myLink", "FVLink"));
+        session.createDocumentModel("/Family/Language/Dialect/Links", "myLink", FV_LINK));
     link2 = session.createDocument(
-        session.createDocumentModel("/Family/Language/Dialect/Links", "myLink2", "FVLink"));
+        session.createDocumentModel("/Family/Language/Dialect/Links", "myLink2", FV_LINK));
 
     DocumentModel picture = session.createDocument(session
-        .createDocumentModel("/Family/Language/Dialect/Resources", "myPicture1", "FVPicture"));
+        .createDocumentModel("/Family/Language/Dialect/Resources", "myPicture1", FV_PICTURE));
     DocumentModel audio = session.createDocument(
-        session.createDocumentModel("/Family/Language/Dialect/Resources", "myAudio1", "FVAudio"));
+        session.createDocumentModel("/Family/Language/Dialect/Resources", "myAudio1", FV_AUDIO));
 
     String[] values = new String[1];
 
@@ -544,9 +561,9 @@ public class FirstVoicesPublisherTest {
     createWord();
 
     DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory2", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory2", FV_CATEGORY));
     DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory3", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory3", FV_CATEGORY));
 
     session.saveDocument(subcategory2);
     session.saveDocument(subcategory3);
@@ -575,9 +592,9 @@ public class FirstVoicesPublisherTest {
     createWord();
 
     DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory2", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory2", FV_CATEGORY));
     DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory3", "FVCategory"));
+        session.createDocumentModel(category.getPathAsString(), "SubCategory3", FV_CATEGORY));
 
     session.saveDocument(subcategory2);
     session.saveDocument(subcategory3);
