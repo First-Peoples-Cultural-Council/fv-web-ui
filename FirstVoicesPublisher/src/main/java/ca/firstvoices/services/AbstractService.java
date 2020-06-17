@@ -20,6 +20,7 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public abstract class AbstractService {
 
   protected boolean isPublished(DocumentModel doc) {
     return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
-        .equals("Published");
+        .equals(PUBLISHED_STATE);
   }
 
 }

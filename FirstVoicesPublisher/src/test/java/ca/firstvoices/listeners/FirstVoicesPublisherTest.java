@@ -24,6 +24,10 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
 import static ca.firstvoices.schemas.Constants.FV_AUDIO;
 import static ca.firstvoices.schemas.Constants.FV_BOOKS;
@@ -188,15 +192,15 @@ public class FirstVoicesPublisherTest {
         .createDocument(session.createDocumentModel("/Family/Language", "Dialect2", FV_DIALECT));
     dialect3Doc = session
         .createDocument(session.createDocumentModel("/Family/Language2", "Dialect", FV_DIALECT));
-    dialectDoc.followTransition("Enable");
-    dialect2Doc.followTransition("Enable");
-    dialect3Doc.followTransition("Enable");
+    dialectDoc.followTransition(ENABLE_TRANSITION);
+    dialect2Doc.followTransition(ENABLE_TRANSITION);
+    dialect3Doc.followTransition(ENABLE_TRANSITION);
   }
 
   @Test
   public void testDialectPublishing() throws Exception {
     // Publishing dialect
-    session.followTransition(dialectDoc, "Publish");
+    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
     DocumentModel section = sectionRoot;
     // Data and SharedData are by default inside section
     assertEquals(3, session.getChildren(section.getRef()).size());
@@ -222,7 +226,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(session.getChildren(section.getRef()).size(), 10);
 
     // Check that none is duplicated if we publish again
-    session.followTransition(dialect2Doc, "Publish");
+    session.followTransition(dialect2Doc, PUBLISH_TRANSITION);
     section = sectionRoot;
     assertEquals(3, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), familyDoc.getName());
@@ -233,7 +237,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(session.getChildren(section.getRef()).size(), 10);
 
     // Check that none is duplicated if we publish again
-    session.followTransition(dialect3Doc, "Publish");
+    session.followTransition(dialect3Doc, PUBLISH_TRANSITION);
     section = sectionRoot;
     assertEquals(3, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), familyDoc.getName());
@@ -244,7 +248,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(session.getChildren(section.getRef()).size(), 10);
 
     // Test unpublish
-    session.followTransition(dialect2Doc, "Unpublish");
+    session.followTransition(dialect2Doc, UNPUBLISH_TRANSITION);
     section = sectionRoot;
     assertEquals(3, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), familyDoc.getName());
@@ -255,7 +259,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(session.getChildren(section.getRef()).size(), 10);
 
     // Test unpublish
-    session.followTransition(dialectDoc, "Unpublish");
+    session.followTransition(dialectDoc, UNPUBLISH_TRANSITION);
     section = sectionRoot;
     assertEquals(3, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), familyDoc.getName());
@@ -269,7 +273,7 @@ public class FirstVoicesPublisherTest {
     assertTrue(notFound);
 
     // Test unpublish
-    session.followTransition(dialect3Doc, "Unpublish");
+    session.followTransition(dialect3Doc, UNPUBLISH_TRANSITION);
     section = sectionRoot;
     assertEquals(2, session.getChildren(section.getRef()).size());
     notFound = false;
@@ -359,8 +363,8 @@ public class FirstVoicesPublisherTest {
   public void testDocumentPublishing() throws Exception {
     // Create a word
     createWord();
-    session.followTransition(dialectDoc, "Publish");
-    session.followTransition(word, "Publish");
+    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
+    session.followTransition(word, PUBLISH_TRANSITION);
     // Not nice to have all parameters
     verifyProxy(getProxy(word));
   }
@@ -369,12 +373,12 @@ public class FirstVoicesPublisherTest {
   @Test
   public void testDocumentRepublishing() throws Exception {
     createWord();
-    session.followTransition(dialectDoc, "Publish");
-    session.followTransition(word, "Publish");
+    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
+    session.followTransition(word, PUBLISH_TRANSITION);
     verifyProxy(getProxy(word));
-    session.followTransition(dialectDoc, "Unpublish");
+    session.followTransition(dialectDoc, UNPUBLISH_TRANSITION);
     assertEquals(0, session.getProxies(word.getRef(), null).size());
-    session.followTransition(dialectDoc, "Publish");
+    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
     verifyProxy(getProxy(word));
   }
 
@@ -423,11 +427,11 @@ public class FirstVoicesPublisherTest {
 
     portal.getCurrentLifeCycleState();
 
-    if (!"Published".equals(dialectDoc.getCurrentLifeCycleState())) {
-      session.followTransition(dialectDoc, "Publish");
+    if (!PUBLISHED_STATE.equals(dialectDoc.getCurrentLifeCycleState())) {
+      session.followTransition(dialectDoc, PUBLISH_TRANSITION);
     }
 
-    session.followTransition(portal, "Publish");
+    session.followTransition(portal, PUBLISH_TRANSITION);
 
     DocumentModel proxy = getProxy(portal);
 

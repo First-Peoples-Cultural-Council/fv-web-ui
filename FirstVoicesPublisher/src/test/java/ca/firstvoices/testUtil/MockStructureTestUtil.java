@@ -20,6 +20,7 @@
 
 package ca.firstvoices.testUtil;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
 import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
@@ -93,7 +94,7 @@ public class MockStructureTestUtil {
 
   public void publishWords(CoreSession session) {
     IntStream.range(0, wordArray.length).forEach(i -> assertTrue("Should succesfully publish word",
-        session.followTransition(wordArray[i], "Publish")));
+        session.followTransition(wordArray[i], PUBLISH_TRANSITION)));
   }
 
   public void createSetup(CoreSession session) {

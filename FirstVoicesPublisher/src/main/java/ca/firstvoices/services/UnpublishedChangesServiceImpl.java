@@ -21,6 +21,7 @@
 package ca.firstvoices.services;
 
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
 import static ca.firstvoices.schemas.Constants.FV_AUDIO;
 import static ca.firstvoices.schemas.Constants.FV_BOOK;
@@ -81,7 +82,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     }
 
     // Check that the document is currently published
-    if (!document.getCurrentLifeCycleState().equals("Published")) {
+    if (!document.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
       return null;
     }
 

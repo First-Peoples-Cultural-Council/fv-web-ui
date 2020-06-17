@@ -20,6 +20,9 @@
 
 package ca.firstvoices.security.tests;
 
+import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
 import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
@@ -331,13 +334,13 @@ public class TestSecurityPolicies extends AbstractFVTest {
             SecurityConstants.READ));
 
     // Members SHOULD NOT have READ access in the DISABLED state
-    dialectDene.followTransition("Disable");
+    dialectDene.followTransition(DISABLE_TRANSITION);
     assertFalse(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));
 
     // Members SHOULD have READ access in the ENABLED state
-    dialectDene.followTransition("Enable");
+    dialectDene.followTransition(ENABLE_TRANSITION);
     assertTrue(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));
@@ -348,7 +351,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
             SecurityConstants.READ));
 
     // Members SHOULD have READ access in the PUBLISHED state
-    dialectDene.followTransition("Publish");
+    dialectDene.followTransition(PUBLISH_TRANSITION);
     assertTrue(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));

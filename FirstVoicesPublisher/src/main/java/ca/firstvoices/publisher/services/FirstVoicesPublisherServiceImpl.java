@@ -20,6 +20,8 @@
 
 package ca.firstvoices.publisher.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.Constants.FV_AUDIO;
 import static ca.firstvoices.schemas.Constants.FV_BOOK;
 import static ca.firstvoices.schemas.Constants.FV_BOOK_ENTRY;
@@ -197,9 +199,9 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel publishDocument(CoreSession session, DocumentModel doc,
       DocumentModel section) {
     DocumentModel proxy = session.publishDocument(doc, section, true);
-    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !"Published"
+    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !PUBLISHED_STATE
         .equals(doc.getCurrentLifeCycleState())) {
-      doc.followTransition("Publish");
+      doc.followTransition(PUBLISH_TRANSITION);
     }
     return proxy;
   }
@@ -217,7 +219,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
       throw new InvalidParameterException("Dialect should be published");
     }
     DocumentModel input = getPublication(session, asset.getRef());
-    if (input != null && input.getCurrentLifeCycleState().equals("Published")) {
+    if (input != null && input.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
       // Already published
       return input;
     }

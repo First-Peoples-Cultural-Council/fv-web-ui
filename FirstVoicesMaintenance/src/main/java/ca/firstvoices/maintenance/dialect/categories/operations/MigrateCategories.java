@@ -20,6 +20,7 @@
 
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 
 import ca.firstvoices.maintenance.dialect.categories.Constants;
@@ -73,7 +74,7 @@ public class MigrateCategories {
 
       if (success) {
         // After tree has been created, publish all categories
-        if (dialect.getCurrentLifeCycleState().equals("Published")) {
+        if (dialect.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
           migrateCategoriesService.publishCategoriesTree(session, dialect);
         }
 

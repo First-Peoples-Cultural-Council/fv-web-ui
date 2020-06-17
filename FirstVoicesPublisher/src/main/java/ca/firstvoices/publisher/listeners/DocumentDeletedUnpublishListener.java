@@ -24,6 +24,7 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -69,7 +70,7 @@ public class DocumentDeletedUnpublishListener implements EventListener {
       DocumentModelList proxies = session.getProxies(doc.getRef(), null);
 
       for (DocumentModel proxy : proxies) {
-        if ("Published".equals(proxy.getCurrentLifeCycleState())) {
+        if (PUBLISHED_STATE.equals(proxy.getCurrentLifeCycleState())) {
           service.unpublish(proxy);
         }
       }

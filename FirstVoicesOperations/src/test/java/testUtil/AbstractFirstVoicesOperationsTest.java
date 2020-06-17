@@ -20,6 +20,7 @@
 
 package testUtil;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
 import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
 import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
@@ -169,6 +170,6 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
   protected Boolean isPublished(DocumentModel doc) {
     return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
-        .equals("Published");
+        .equals(PUBLISHED_STATE);
   }
 }
