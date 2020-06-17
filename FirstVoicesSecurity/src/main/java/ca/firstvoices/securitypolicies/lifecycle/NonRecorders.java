@@ -67,11 +67,10 @@ public class NonRecorders extends AbstractSecurityPolicy {
       if (!additionalPrincipalsList.contains("recorders") && !additionalPrincipalsList
           .contains("language_administrators")) {
         String docLifeCycle = doc.getLifeCycleState();
-        if (docLifeCycle != null) {
-          if (docLifeCycle.equals(NEW_STATE) || docLifeCycle.equals(DISABLED_STATE)) {
-            log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
-            return Access.DENY;
-          }
+        if (docLifeCycle != null && (docLifeCycle.equals(NEW_STATE) || docLifeCycle
+            .equals(DISABLED_STATE))) {
+          log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
+          return Access.DENY;
         }
       }
     }
