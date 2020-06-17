@@ -27,6 +27,7 @@ import static ca.firstvoices.schemas.Constants.FV_DIALECT;
 import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
 import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
 import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.schemas.Constants.FV_WORD;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;
@@ -52,6 +53,7 @@ public abstract class AbstractFirstVoicesOperationsTest {
   protected DocumentModel language;
   protected DocumentModel dialect;
   protected DocumentModel dictionary;
+  protected DocumentModel word;
   protected DocumentModel alphabet;
   protected DocumentModel categories;
   protected DocumentModel parentCategory;
@@ -136,6 +138,9 @@ public abstract class AbstractFirstVoicesOperationsTest {
     parentCategory2 = createDocument(session, session
         .createDocumentModel(categories.getPathAsString(), "TestParentCategory2", FV_CATEGORY));
     assertNotNull("Should have a valid Parent Category2", parentCategory2);
+    word = createDocument(session, session
+        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", FV_WORD));
+    assertNotNull("Should have a valid Word", word);
   }
 
   protected DocumentModel createWordorPhrase(String value, String typeName, String pv, String v) {
