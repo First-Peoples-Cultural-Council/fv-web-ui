@@ -152,7 +152,7 @@ export class ToolbarNavigation extends Component {
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
               <div className="col-xs-12 col-md-2">
                 <div className={classNames('hidden-xs')} float="right">
-                  <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
+                  <FVButton variant="text" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
                     <EditorInsertChart />
                     <FVLabel transKey="language_statistics" defaultStr="Language Statistics" />
                   </FVButton>

@@ -122,16 +122,16 @@ export class DocumentView extends Component {
 
       content = (
         <div className="DocumentView">
-          <Typography variant="display1">{selectn('response.title', computeDocument)}</Typography>
+          <Typography variant="h4">{selectn('response.title', computeDocument)}</Typography>
 
-          <Typography variant="headline">
+          <Typography variant="h5">
             <FVLabel transKey="type" defaultStr="Type" transform="first" />:{' '}
             {selectn('response.type', computeDocument).replace('FV', '')}
           </Typography>
 
           {actionButton && (
             <div className="DocumentView__actionButtons">
-              <Typography variant="title">{actionButton}</Typography>
+              <Typography variant="h6">{actionButton}</Typography>
             </div>
           )}
         </div>

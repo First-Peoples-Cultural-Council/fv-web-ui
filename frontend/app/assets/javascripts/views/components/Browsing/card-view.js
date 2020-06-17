@@ -90,11 +90,10 @@ class BrowsingCardView extends Component {
           <CardContent style={{ padding: '4px' }}>
             <div className="CardViewCopy">
               <div className="CardViewTitles">
-                <Typography className="CardViewTitle" variant="headline" component="h2">
-                  <span>
-                    {this.props.intl.searchAndReplace(this.props.item.title)}</span>
+                <Typography className="CardViewTitle" variant="h5" component="h2">
+                  <span>{this.props.intl.searchAndReplace(this.props.item.title)}</span>
                 </Typography>
-                <Typography className="CardViewSubtitle" variant="subheading" component="h3">
+                <Typography className="CardViewSubtitle" variant="subtitle1" component="h3">
                   {this.props.intl.searchAndReplace(selectn('properties.dc:description', this.props.item))}
                 </Typography>
               </div>

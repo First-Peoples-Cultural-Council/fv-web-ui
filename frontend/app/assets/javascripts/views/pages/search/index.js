@@ -302,7 +302,7 @@ export class Search extends DataListView {
                   >
                     <FVButton
                       type="button"
-                      variant="flat"
+                      variant="text"
                       size="small"
                       component="a"
                       className="PrintHide"

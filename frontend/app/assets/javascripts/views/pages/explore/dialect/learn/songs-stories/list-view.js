@@ -74,11 +74,7 @@ class _Introduction extends Component {
         <div className="IntroductionTranslations">
           <div>
             <h1 className="IntroductionTitle">
-              <FVLabel
-                transKey="introduction"
-                defaultStr="Introduction"
-                transform="first"
-              />
+              <FVLabel transKey="introduction" defaultStr="Introduction" transform="first" />
               {this.props.audio}
             </h1>
           </div>
@@ -101,12 +97,12 @@ class _Introduction extends Component {
         />
 
         {this.state.tabValue === 0 && (
-          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
+          <Typography variant="h5" component="div" style={{ padding: 8 * 3 }}>
             {introductionDiv}
           </Typography>
         )}
         {this.state.tabValue === 1 && (
-          <Typography variant="headline" component="div" style={{ padding: 8 * 3 }}>
+          <Typography variant="h5" component="div" style={{ padding: 8 * 3 }}>
             <div className="IntroductionContent">
               {introductionTranslations.map(function introductionTranslationsMapper(translation, i) {
                 if (translation.language === DEFAULT_LANGUAGE) {
@@ -132,7 +128,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const Introduction = connect(mapStateToProps)(withTheme()(_Introduction))
+const Introduction = connect(mapStateToProps)(withTheme(_Introduction))
 
 class _SongsStoriesCardView extends Component {
   static propTypes = {
@@ -144,7 +140,7 @@ class _SongsStoriesCardView extends Component {
     siteTheme: PropTypes.any, // TODO: set correct type
   }
   static defaultProps = {
-    action: () => { },
+    action: () => {},
     style: {},
     siteTheme: 'explore',
   }
@@ -307,7 +303,4 @@ class _SongsStoriesCardView extends Component {
 
 const SongsStoriesCardView = connect(mapStateToProps)(_SongsStoriesCardView)
 
-export {
-  Introduction,
-  SongsStoriesCardView,
-}
+export { Introduction, SongsStoriesCardView }

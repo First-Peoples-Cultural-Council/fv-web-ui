@@ -1,9 +1,20 @@
+// import PropTypes from 'prop-types'
+// function ListWordsData({ children }) {
+//   return children({
+//     log: 'Output from ListWordsData',
+//   })
+// }
+// // PROPTYPES
+// const { func } = PropTypes
+// ListWordsData.propTypes = {
+//   children: func,
+// }
+
+// export default ListWordsData
+
 import React, { useEffect, useState } from 'react'
 import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
-
-// FPCC
-
 //DataSources
 import useDialect from 'DataSource/useDialect'
 import useDocument from 'DataSource/useDocument'
@@ -39,7 +50,16 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 
-function DictionaryListData(props) {
+/**
+ * @summary ListWordsData
+ * @version 1.0.1
+ * @component
+ *
+ * @param {object} props
+ * @param {function} props.children
+ *
+ */
+function ListWordsData(props) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -140,6 +160,7 @@ function DictionaryListData(props) {
     return id || `${routeParams.dialect_path}/Dictionary`
   }
 
+  // TODO FW-1607
   function getColumns() {
     const computedDialect2Response = selectn('response', computedDialect2)
     const columnsArray = [
@@ -342,4 +363,4 @@ function DictionaryListData(props) {
   })
 }
 
-export default DictionaryListData
+export default ListWordsData

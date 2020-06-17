@@ -148,7 +148,7 @@ export class MetadataPanel extends Component {
           className="card-header-custom"
           title={
             <Typography
-              variant="subheading"
+              variant="subtitle1"
               style={{
                 color: themePalette.secondary.contrastText,
               }}
@@ -190,4 +190,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(withTheme()(MetadataPanel))
+export default connect(mapStateToProps)(withTheme(MetadataPanel))

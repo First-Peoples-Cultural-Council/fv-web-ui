@@ -22,11 +22,11 @@ const HelperModeToggle = ({
   editingLabel,
   labelIds,
   computeDirectory,
-  fetchDirectory,
+  fetchDirectory: _fetchDirectory,
   intl,
   locale,
   routeParams,
-  setEditingLabel,
+  setEditingLabel: _setEditingLabel,
 }) => {
   const [isNew, setIsNew] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -36,8 +36,8 @@ const HelperModeToggle = ({
 
   useEffect(() => {
     if (!fetched) {
-      fetchDirectory('fv_labels', 2000, true)
-      fetchDirectory('fv_label_categories', 100, true)
+      _fetchDirectory('fv_labels', 2000, true)
+      _fetchDirectory('fv_label_categories', 100, true)
       setFetched(true)
     }
     if (editingLabel) {
@@ -55,7 +55,7 @@ const HelperModeToggle = ({
           })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
-      const label = {
+      const _label = {
         labelKey: editingLabel,
         type: mappedLabel ? mappedLabel.type : 'phrase',
         templateStrings,
@@ -68,14 +68,14 @@ const HelperModeToggle = ({
       }
       if (uid) {
         DocumentOperations.getDocument(uid, 'FVLabel').then((data) => {
-          label.relatedAudio = selectn('properties.fv:related_audio[0]', data)
-          label.translation = selectn('properties.dc:title', data)
-          label.state = selectn('state', data)
-          setLabel(label)
+          _label.relatedAudio = selectn('properties.fv:related_audio[0]', data)
+          _label.translation = selectn('properties.dc:title', data)
+          _label.state = selectn('state', data)
+          setLabel(_label)
           setIsOpen(true)
         })
       } else {
-        setLabel(label)
+        setLabel(_label)
         setIsOpen(true)
       }
     } else {
@@ -97,7 +97,7 @@ const HelperModeToggle = ({
   const closeModal = () => {
     setLabel(null)
     setIsOpen(false)
-    setEditingLabel()
+    _setEditingLabel()
   }
 
   const closeSnackbar = (event, reason) => {
@@ -112,7 +112,7 @@ const HelperModeToggle = ({
       {isImmersionModeOn && (
         <>
           <Tooltip title={isInHelpMode ? 'Close Helper' : 'Turn on Helper then click labels to translate'}>
-            <FVButton variant="extendedFab" color="primary" onClick={handleToggleHelpMode}>
+            <FVButton isFab color="primary" onClick={handleToggleHelpMode}>
               {!isInHelpMode && (
                 <>
                   <LiveHelpIcon />
