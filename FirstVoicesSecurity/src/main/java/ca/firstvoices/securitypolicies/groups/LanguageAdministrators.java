@@ -80,11 +80,6 @@ public class LanguageAdministrators extends AbstractSecurityPolicy {
     if (doc.isProxy()) {
 
       // TODO: Restrict language administrators from publishing to someone else's FVDialect
-      /*
-       * if ( FV_DIALECT.equals(docType) ) { if ( !Access.GRANT.equals(mergedAcp.getAccess
-       * (additionalPrincipals,
-       * new String[]{SecurityConstants.EVERYTHING})) ) { return Access.DENY; } }
-       */
 
       // Allow WriteSecurity on dialect so permissions can be assigned when publishing
       if (FV_DIALECT.equals(docType) && SecurityConstants.WRITE_SECURITY.equals(permission)) {

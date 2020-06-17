@@ -125,7 +125,6 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
   @Test(expected = OperationException.class)
   public void testToPublicOnUnpublishedDialect() throws OperationException {
     word.followTransition(ENABLE_TRANSITION);
-    Assert.assertEquals(ENABLED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
     ctx.setInput(word);
     Map<String, String> params = new HashMap<>();

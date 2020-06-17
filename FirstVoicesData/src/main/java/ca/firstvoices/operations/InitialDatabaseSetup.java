@@ -65,6 +65,9 @@ public class InitialDatabaseSetup {
   // Environment variables for the admin account that will be created.
   private static final String username = System.getenv("CYPRESS_FV_USERNAME");
   private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
+  private static final String FV_WORKSPACES = "/FV/Workspaces";
+  public static final String WORKSPACES_SHARED_DATA = FV_WORKSPACES + "/SharedData";
+  private static final String FV_SECTIONS = "/FV/sections";
 
   @Context
   protected CoreSession session;
@@ -78,13 +81,13 @@ public class InitialDatabaseSetup {
   @OperationMethod
   public void run() {
 
-    createNewDocument("Site", "Workspace", "/FV/Workspaces");
-    createNewDocument("Site", "Section", "/FV/sections");
-    createNewDocument("Resources", FV_RESOURCES, "/FV/Workspaces/Site");
-    createNewDocument("Pages", "Folder", "/FV/Workspaces/Site/Resources");
-    createNewDocument("Shared Categories", FV_CATEGORIES, "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Links", FV_LINKS, "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Resources", FV_RESOURCES, "/FV/Workspaces/SharedData");
+    createNewDocument("Site", "Workspace", FV_WORKSPACES);
+    createNewDocument("Site", "Section", FV_SECTIONS);
+    createNewDocument("Resources", FV_RESOURCES, FV_WORKSPACES + "/Site");
+    createNewDocument("Pages", "Folder", FV_WORKSPACES + "/Site/Resources");
+    createNewDocument("Shared Categories", FV_CATEGORIES, WORKSPACES_SHARED_DATA);
+    createNewDocument("Shared Links", FV_LINKS, WORKSPACES_SHARED_DATA);
+    createNewDocument("Shared Resources", FV_RESOURCES, WORKSPACES_SHARED_DATA);
 
     /*
         Create the user groups.
@@ -138,17 +141,17 @@ public class InitialDatabaseSetup {
     */
     DocumentModel target = session.getDocument(new PathRef("/FV/sections/Data"));
     String targetSectionId = target.getId();
-    DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
+    DocumentModel sourceDoc = session.getDocument(new PathRef(FV_WORKSPACES + "/Data"));
     addSection(targetSectionId, sourceDoc);
 
     target = session.getDocument(new PathRef("/FV/sections/SharedData"));
     targetSectionId = target.getId();
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
+    sourceDoc = session.getDocument(new PathRef(WORKSPACES_SHARED_DATA));
     addSection(targetSectionId, sourceDoc);
 
-    target = session.getDocument(new PathRef("/FV/sections/Site"));
+    target = session.getDocument(new PathRef(FV_SECTIONS + "/Site"));
     targetSectionId = target.getId();
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
+    sourceDoc = session.getDocument(new PathRef(FV_WORKSPACES + "/Site"));
     addSection(targetSectionId, sourceDoc);
 
     /*

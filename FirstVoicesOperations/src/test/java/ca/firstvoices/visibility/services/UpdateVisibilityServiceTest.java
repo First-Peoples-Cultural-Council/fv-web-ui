@@ -79,8 +79,7 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
   @Test(expected = InvalidParameterException.class)
   public void testToPublicOnUnpublishedDialect() {
     word.followTransition(ENABLE_TRANSITION);
-    Assert.assertEquals(ENABLED_STATE, word.getCurrentLifeCycleState());
-    DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, PUBLIC);
+    updateVisibilityService.updateVisibility(word, PUBLIC);
   }
 
   @Test
