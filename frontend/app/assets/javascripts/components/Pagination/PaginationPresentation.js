@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ReactPaginate from 'react-paginate'
 import { MenuItem, Select, TextField } from '@material-ui/core'
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
 
-import Pagination from 'views/components/Navigation/Pagination'
 import UIHelpers from 'common/UIHelpers'
 import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!./Pagination.css'
@@ -44,14 +46,22 @@ function PaginationPresentation({
 
       <div className="row PrintHide Pagination__container">
         <div className="col-md-7 col-xs-12 Pagination__pager">
-          <Pagination
+          <ReactPaginate
+            activeClassName={'active'}
+            breakClassName={'pagination-page'}
+            breakLabel={<a style={{ paddingBottom: '7px' }}>...</a>}
+            containerClassName={'pagination'}
             forcePage={page - 1}
-            pageCount={pageCount}
             marginPagesDisplayed={0}
-            pageRangeDisplayed={UIHelpers.isViewSize('xs') ? 3 : 10}
+            nextLabel={<ChevronRight data-testid="pagination__next" />}
             onPageChange={(paginationOutput) => {
               onChangePage(paginationOutput.selected + 1)
             }}
+            pageCount={pageCount}
+            pageLinkClassName={'pagination-page'}
+            pageRangeDisplayed={UIHelpers.isViewSize('xs') ? 3 : 10}
+            previousLabel={<ChevronLeft />}
+            subContainerClassName={'pages pagination'}
           />
         </div>
 
