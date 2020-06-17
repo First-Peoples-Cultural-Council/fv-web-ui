@@ -35,7 +35,7 @@ import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-import ListContributors from 'components/ListContributors'
+
 import '!style-loader!css-loader!./Contributors.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -190,58 +190,49 @@ function Contributors(props) {
       >
         Create a new contributor
       </FVButton>
-      <ListContributors.Data>
-        {(ListContributorsOutput) => {
-          // TODO
-          // eslint-disable-next-line
-          console.log('ListContributorsOutput', ListContributorsOutput)
-          return (
-            <Suspense fallback={<div>Loading...</div>}>
-              <DictionaryListWithPagination
-                // Listview: Batch
-                batchTitleSelect="Deselect all"
-                batchTitleDeselect="Select all"
-                batchFooterIsConfirmOrDenyTitle="Delete Contributors?"
-                batchFooterBtnInitiate="Delete"
-                batchFooterBtnDeny="No, do not delete the selected contributors"
-                batchFooterBtnConfirm="Yes, delete the selected contributors"
-                batchConfirmationAction={(uids) => {
-                  // Delete all items in selected
-                  uids.forEach((uid) => {
-                    props.deleteContributor(uid)
-                  })
-                  setDeletedUids([...deletedUids, ...uids])
-                }}
-                // Listview: computed data
-                computedData={computedData}
-                sortHandler={async (sortData) => {
-                  await props.setRouteParams({
-                    search: {
-                      page: sortData.page,
-                      pageSize: sortData.pageSize,
-                      sortOrder: sortData.sortOrder,
-                      sortBy: sortData.sortBy,
-                    },
-                  })
-                  NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
-                }}
-                // ==================================================
-                columns={getColumns(copy)}
-                cssModifier="DictionaryList--contributors"
-                items={selectn('response.entries', computedData)}
-                // Pagination
-                fetcher={(fetcherParams) => {
-                  setPaginationRequest(
-                    `/${siteTheme}${dialect_path}/contributors/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
-                  )
-                }}
-                fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
-                metadata={selectn('response', computedData)}
-              />
-            </Suspense>
-          )
-        }}
-      </ListContributors.Data>
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryListWithPagination
+          // Listview: Batch
+          batchTitleSelect="Deselect all"
+          batchTitleDeselect="Select all"
+          batchFooterIsConfirmOrDenyTitle="Delete Contributors?"
+          batchFooterBtnInitiate="Delete"
+          batchFooterBtnDeny="No, do not delete the selected contributors"
+          batchFooterBtnConfirm="Yes, delete the selected contributors"
+          batchConfirmationAction={(uids) => {
+            // Delete all items in selected
+            uids.forEach((uid) => {
+              props.deleteContributor(uid)
+            })
+            setDeletedUids([...deletedUids, ...uids])
+          }}
+          // Listview: computed data
+          computedData={computedData}
+          sortHandler={async (sortData) => {
+            await props.setRouteParams({
+              search: {
+                page: sortData.page,
+                pageSize: sortData.pageSize,
+                sortOrder: sortData.sortOrder,
+                sortBy: sortData.sortBy,
+              },
+            })
+            NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
+          }}
+          // ==================================================
+          columns={getColumns(copy)}
+          cssModifier="DictionaryList--contributors"
+          items={selectn('response.entries', computedData)}
+          // Pagination
+          fetcher={(fetcherParams) => {
+            setPaginationRequest(
+              `/${siteTheme}${dialect_path}/contributors/${fetcherParams.pageSize}/${fetcherParams.currentPageIndex}${window.location.search}`
+            )
+          }}
+          fetcherParams={{ currentPageIndex: page, pageSize: pageSize }}
+          metadata={selectn('response', computedData)}
+        />
+      </Suspense>
     </>
   ) : null
 }

@@ -72,7 +72,7 @@ import {
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
-import ListPhrasesFilteredByCategory from 'components/ListPhrasesFilteredByCategory'
+
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
@@ -178,71 +178,62 @@ export class PhrasesFilteredByCategoryContainer extends Component {
       ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
     const phraseListView = parentUid ? (
-      <ListPhrasesFilteredByCategory.Data>
-        {(ListPhrasesFilteredByCategoryOutput) => {
-          // TODO
-          // eslint-disable-next-line
-          console.log('ListPhrasesFilteredByCategoryOutput', ListPhrasesFilteredByCategoryOutput)
-          return (
-            <Suspense fallback={<div>Loading...</div>}>
-              <DictionaryList
-                dictionaryListClickHandlerViewMode={this.props.setListViewMode}
-                dictionaryListViewMode={listView.mode}
-                dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
-                flashcardTitle={pageTitle}
-                dialect={computedDialect2Response}
-                // ==================================================
-                // Search
-                // --------------------------------------------------
-                handleSearch={this.changeFilter}
-                resetSearch={this.resetSearch}
-                hasSearch
-                searchUi={[
-                  {
-                    defaultChecked: true,
-                    idName: 'searchByTitle',
-                    labelText: 'Phrase',
-                  },
-                  {
-                    defaultChecked: true,
-                    idName: 'searchByDefinitions',
-                    labelText: 'Definitions',
-                  },
-                  {
-                    idName: 'searchByCulturalNotes',
-                    labelText: 'Cultural notes',
-                  },
-                ]}
-                searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-                // ==================================================
-                // Table data
-                // --------------------------------------------------
-                items={selectn('response.entries', computedPhrases)}
-                columns={this.getColumns()}
-                // ===============================================
-                // Pagination
-                // -----------------------------------------------
-                hasPagination
-                fetcher={({ currentPageIndex, pageSize }) => {
-                  const newUrl = appendPathArrayAfterLandmark({
-                    pathArray: [pageSize, currentPageIndex],
-                    splitWindowPath,
-                    landmarkArray: [routeParams.phraseBook],
-                  })
-                  NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
-                }}
-                fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
-                metadata={selectn('response', computedPhrases)}
-                // ===============================================
-                // Sort
-                // -----------------------------------------------
-                sortHandler={this._sortHandler}
-                // ===============================================
-              />
-            </Suspense>
-          )
-        }}
-      </ListPhrasesFilteredByCategory.Data>
+      <Suspense fallback={<div>Loading...</div>}>
+        <DictionaryList
+          dictionaryListClickHandlerViewMode={this.props.setListViewMode}
+          dictionaryListViewMode={listView.mode}
+          dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
+          flashcardTitle={pageTitle}
+          dialect={computedDialect2Response}
+          // ==================================================
+          // Search
+          // --------------------------------------------------
+          handleSearch={this.changeFilter}
+          resetSearch={this.resetSearch}
+          hasSearch
+          searchUi={[
+            {
+              defaultChecked: true,
+              idName: 'searchByTitle',
+              labelText: 'Phrase',
+            },
+            {
+              defaultChecked: true,
+              idName: 'searchByDefinitions',
+              labelText: 'Definitions',
+            },
+            {
+              idName: 'searchByCulturalNotes',
+              labelText: 'Cultural notes',
+            },
+          ]}
+          searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+          // ==================================================
+          // Table data
+          // --------------------------------------------------
+          items={selectn('response.entries', computedPhrases)}
+          columns={this.getColumns()}
+          // ===============================================
+          // Pagination
+          // -----------------------------------------------
+          hasPagination
+          fetcher={({ currentPageIndex, pageSize }) => {
+            const newUrl = appendPathArrayAfterLandmark({
+              pathArray: [pageSize, currentPageIndex],
+              splitWindowPath,
+              landmarkArray: [routeParams.phraseBook],
+            })
+            NavigationHelpers.navigate(`/${newUrl}`, this.props.pushWindowPath)
+          }}
+          fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
+          metadata={selectn('response', computedPhrases)}
+          // ===============================================
+          // Sort
+          // -----------------------------------------------
+          sortHandler={this._sortHandler}
+          // ===============================================
+        />
+      </Suspense>
     ) : null
 
     // Render kids view
