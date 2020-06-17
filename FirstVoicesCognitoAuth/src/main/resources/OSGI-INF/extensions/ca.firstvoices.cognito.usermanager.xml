@@ -14,7 +14,7 @@
         <configuration>
             <useCognitoAsPrincipalDirectory>false</useCognitoAsPrincipalDirectory>
             <authenticateWithCognito>${fv.cognito.authenticateWithCognito}</authenticateWithCognito>
-            <blacklistUsers>${fv.cognito.blacklistUsers}</blacklistUsers>
+            <ignoreUsers>${fv.cognito.ignoreUsers}</ignoreUsers>
         </configuration>
     </extension>
 

@@ -26,7 +26,7 @@ public class AWSAwareUserManager extends UserManagerImpl {
 
   private boolean awsConnectionSucceeded = false;
   private boolean awsAuthenticationEnabled;
-  private Set<String> blacklistUsers = new HashSet<>();
+  private Set<String> ignoreUsers = new HashSet<>();
 
 
   private AWSAuthenticationService getAWSAuthenticationService() {
@@ -49,16 +49,16 @@ public class AWSAwareUserManager extends UserManagerImpl {
     this.awsAuthenticationEnabled = getAWSAwareUserManagerConfigurationService()
         .getConfig().authenticateWithCognito;
 
-    String rawBlackList = getAWSAwareUserManagerConfigurationService()
+    String rawIgnoreList = getAWSAwareUserManagerConfigurationService()
         .getConfig()
-        .blacklistUsers;
-    if (rawBlackList != null) {
-      blacklistUsers.addAll(Arrays.asList(rawBlackList.split("\\s*,\\s*")));
+        .ignoreUsers;
+    if (rawIgnoreList != null) {
+      ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
     }
 
     LOG.error("Startup. AWS Authentication is "
         + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
-        + "\nblacklisting users: " + String.join(", ", blacklistUsers)
+        + "\nignoring users: " + String.join(", ", ignoreUsers)
     );
 
     if (this.awsAuthenticationEnabled) {
@@ -89,8 +89,8 @@ public class AWSAwareUserManager extends UserManagerImpl {
       return super.checkUsernamePassword(username, password);
     }
 
-    if (this.blacklistUsers.contains(username)) {
-      LOG.info("skipping Cognito check for blacklisted user: " + username);
+    if (this.ignoreUsers.contains(username)) {
+      LOG.info("skipping Cognito check for ignored user: " + username);
       return super.checkUsernamePassword(username, password);
     }
 
@@ -150,7 +150,7 @@ public class AWSAwareUserManager extends UserManagerImpl {
       String username = (String) userModel.getProperty(schema, userDir.getIdField());
       String password = (String) userModel.getProperty(schema, userDir.getPasswordField());
       try {
-        if (this.blacklistUsers.contains(username)) {
+        if (this.ignoreUsers.contains(username)) {
           LOG.info("skipping Cognito update for blacklisted user: " + username);
           return;
         }
