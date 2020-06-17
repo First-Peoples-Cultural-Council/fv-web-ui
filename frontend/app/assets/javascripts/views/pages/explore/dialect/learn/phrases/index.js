@@ -287,7 +287,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
               }}
             </AlphabetCharactersData>
 
-            <CategoriesDataLayer fetchPhraseBooks fetchLatest>
+            <CategoriesDataLayer fetchPhraseBooks>
               {({ categoriesData }) => {
                 return (
                   categoriesData &&

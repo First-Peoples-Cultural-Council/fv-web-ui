@@ -12,11 +12,15 @@ public class AWSAwareUserManagerConfigurationDescriptor {
   @XNode("useCognitoAsPrincipalDirectory")
   public boolean useCognitoAsPrincipalDirectory;
 
+  @XNode("blacklistUsers")
+  public String blacklistUsers;
+
   @Override
   public String toString() {
     return "AWSAwareUserManagerConfigurationDescriptor{"
         + "authenticateWithCognito=" + authenticateWithCognito
         + ", useCognitoAsPrincipalDirectory=" + useCognitoAsPrincipalDirectory
+        + ", blackListUsers=" + blacklistUsers
         + '}';
   }
 }

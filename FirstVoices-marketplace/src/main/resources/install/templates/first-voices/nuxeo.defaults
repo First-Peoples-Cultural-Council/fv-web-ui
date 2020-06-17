@@ -16,3 +16,4 @@ fv.cognito.accessKey=ACCESS_KEY_PLACEHOLDER
 fv.cognito.secretKey=SECRET_KEY_PLACEHOLDER
 fv.cognito.clientID=CLIENT_ID_PLACEHOLDER
 fv.cognito.region=ca-central-1
+fv.cognito.blacklistUsers=FVCCAdmin, Administrator, system

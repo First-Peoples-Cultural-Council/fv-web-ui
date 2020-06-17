@@ -34,7 +34,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 
-import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
+import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import SongsStoriesListViewAlt from 'views/pages/explore/dialect/learn/songs-stories/list-view-alt'
 
@@ -109,7 +109,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
         exportDialectExportElement = 'FVWord'
         exportDialectLabel = 'Word Report'
         listView = (
-          <WordListView
+          <WordsListView
             controlViaURL
             DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             DEFAULT_PAGE={DEFAULT_PAGE}

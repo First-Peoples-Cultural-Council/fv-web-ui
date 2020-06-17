@@ -26,7 +26,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
     }
     static defaultProps = {
       disablePageSize: false,
-      fetcher: () => { },
+      fetcher: () => {},
       fetcherParams: {},
       metadata: {
         resultsCount: 0,
@@ -39,8 +39,8 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
 
       this.state = {
         pageRange: pageRange,
-        initialPageSize: selectn('fetcherParams.pageSize', props) || pageSize,
-        currentPageSize: selectn('fetcherParams.pageSize', props) || pageSize,
+        initialPageSize: parseInt(props.fetcherParams.pageSize, 10) || pageSize,
+        currentPageSize: parseInt(props.fetcherParams.pageSize, 10) || pageSize,
         currentPageIndex: 1,
       }
       ;['_onPageChange', '_onPageSizeChange', '_onGoToPage', '_getPageSizeControls'].forEach(
@@ -180,11 +180,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
               borderLeft: '1px solid #e0e0e0',
             }}
           >
-            <FVLabel
-              transKey="results"
-              defaultStr="Results"
-              transform="first"
-            />
+            <FVLabel transKey="results" defaultStr="Results" transform="first" />
           </label>
           <span style={{ verticalAlign: '4px' }}>{selectn('resultsCount', this.props.metadata)}</span>
         </div>
