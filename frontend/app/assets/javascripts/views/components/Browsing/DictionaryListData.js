@@ -39,7 +39,7 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 
-function ListWordsData(props) {
+function DictionaryListData(props) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -140,7 +140,6 @@ function ListWordsData(props) {
     return id || `${routeParams.dialect_path}/Dictionary`
   }
 
-  // TODO FW-1607
   function getColumns() {
     const computedDialect2Response = selectn('response', computedDialect2)
     const columnsArray = [
@@ -343,4 +342,4 @@ function ListWordsData(props) {
   })
 }
 
-export default ListWordsData
+export default DictionaryListData
