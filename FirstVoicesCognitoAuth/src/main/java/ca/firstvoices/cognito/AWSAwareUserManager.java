@@ -56,7 +56,7 @@ public class AWSAwareUserManager extends UserManagerImpl {
       ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
     }
 
-    LOG.error("Startup. AWS Authentication is "
+    LOG.info("Startup. AWS Authentication is "
         + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
         + "\nignoring users: " + String.join(", ", ignoreUsers)
     );
@@ -117,7 +117,11 @@ public class AWSAwareUserManager extends UserManagerImpl {
                 this.getPrincipal(username).getEmail()
             );
           } catch (InvalidMigrationException e) {
-            LOG.warn("Migration failed", e);
+            LOG.error("Migration failed", e);
+
+            // Still log the user in with basic authentication
+            // We need to provide alternative ways to migrate edge cases (FW-1643)
+            return super.checkUsernamePassword(username, password);
           }
           return true;
         }
