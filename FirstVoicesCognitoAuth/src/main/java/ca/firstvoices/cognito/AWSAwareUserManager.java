@@ -1,6 +1,7 @@
 package ca.firstvoices.cognito;
 
 
+import ca.firstvoices.cognito.exceptions.InvalidMigrationException;
 import ca.firstvoices.cognito.exceptions.MiscellaneousFailureException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -109,11 +110,15 @@ public class AWSAwareUserManager extends UserManagerImpl {
         // the user does not exist yet in Cognito. Do they exist locally with this password?
         if (super.checkUsernamePassword(username, password)) {
           // yes, so migrate them
-          getAWSAuthenticationService().migrateUser(
-              username,
-              password,
-              this.getPrincipal(username).getEmail()
-          );
+          try {
+            getAWSAuthenticationService().migrateUser(
+                username,
+                password,
+                this.getPrincipal(username).getEmail()
+            );
+          } catch (InvalidMigrationException e) {
+            LOG.warn("Migration failed", e);
+          }
           return true;
         }
 
