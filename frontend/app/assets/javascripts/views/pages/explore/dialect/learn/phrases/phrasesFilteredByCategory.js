@@ -46,7 +46,11 @@ import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
 import IntlService from 'views/services/intl'
 import Link from 'views/components/Link'
-import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from 'common/NavigationHelpers'
+import NavigationHelpers, {
+  appendPathArrayAfterLandmark,
+  getSearchObject,
+  updateUrlIfPageOrPageSizeIsDifferent,
+} from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -65,7 +69,6 @@ import {
   sortHandler,
   updateFilter,
   updateUrlAfterResetSearch,
-  updateUrlIfPageOrPageSizeIsDifferent,
   useIdOrPathFallback,
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
@@ -450,7 +453,7 @@ export class PhrasesFilteredByCategory extends Component {
               >
                 <FVButton
                   type="button"
-                  variant="flat"
+                  variant="text"
                   size="small"
                   component="a"
                   className="DictionaryList__linkEdit PrintHide"

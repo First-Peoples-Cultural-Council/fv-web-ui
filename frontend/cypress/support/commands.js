@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 import 'cypress-file-upload'
 // ***********************************************
 // This example commands.js shows you how to
@@ -153,34 +153,34 @@ Cypress.Commands.add('AlphabetCharacters', (obj) => {
   cy.log('--- Running cypress/support/commands.js > AlphabetCharacters ---')
   cy.log('--- AlphabetCharacters: Filter by letter  ---')
   // Filter by letter
-  cy.getByTestId('AlphabetCharacters').within(() => {
-    cy.getByText(_obj.letter).click()
+  cy.findByTestId('AlphabetCharacters').within(() => {
+    cy.findByText(_obj.letter).click()
   })
   cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- AlphabetCharacters: Confirm data  ---')
     // Confirm data
-    cy.getByTestId('DictionaryList__row').should('exist')
+    cy.findByTestId('DictionaryList__row').should('exist')
   }
 
   if (_obj.shouldPaginate) {
     cy.log('--- AlphabetCharacters: Navigate to next page  ---')
     // Navigate to next page
     cy.wait(500)
-    cy.getByTestId('pagination__next').click()
+    cy.findByTestId('pagination__next').click()
     cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- AlphabetCharacters: Confirm data  ---')
       // Confirm data
       cy.wait(500)
-      cy.getByTestId('DictionaryList__row').should('exist')
+      cy.findByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
     cy.log('--- AlphabetCharacters: Clear filter ---')
-    cy.queryByText(/stop browsing alphabetically/i).click()
+    cy.findByText(/stop browsing alphabetically/i).click()
   }
   cy.wait(3000)
 })
@@ -220,42 +220,42 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
   cy.wait(1500)
-  cy.getByTestId('DialectFilterList').within(() => {
-    cy.getByText(_obj.category).click()
+  cy.findByTestId('DialectFilterList').within(() => {
+    cy.findByText(_obj.category).click()
   })
   cy.wait(500)
   if (_obj.confirmActiveClass) {
-    cy.getByTestId('DialectFilterList').within(() => {
-      cy.getByText(_obj.category).should('have.class', _obj.activeClassName)
+    cy.findByTestId('DialectFilterList').within(() => {
+      cy.findByText(_obj.category).should('have.class', _obj.activeClassName)
     })
   }
 
   if (_obj.confirmData) {
     cy.log('--- DialectFilterList: Confirm data  ---')
     // Confirm data
-    cy.getByTestId('DictionaryList__row').should('exist')
+    cy.findByTestId('DictionaryList__row').should('exist')
   }
 
   if (_obj.shouldPaginate) {
     cy.log('--- DialectFilterList: Navigate to next page  ---')
     // Navigate to next page
     cy.wait(500)
-    cy.getByTestId('pagination__next').click()
+    cy.findByTestId('pagination__next').click()
     cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- DialectFilterList: Confirm data  ---')
       // Confirm data
       cy.wait(500)
-      cy.getByTestId('DictionaryList__row').should('exist')
+      cy.findByTestId('DictionaryList__row').should('exist')
     }
   }
   if (_obj.clearFilter) {
     cy.log('--- DialectFilterList: Clear filter ---')
-    cy.queryByText(new RegExp(_obj.clearFilterText, 'i')).click()
+    cy.findByText(new RegExp(_obj.clearFilterText, 'i')).click()
     if (_obj.confirmActiveClass) {
-      cy.getByTestId('DialectFilterList').within(() => {
-        cy.getByText(_obj.category).should('not.have.class', _obj.activeClassName)
+      cy.findByTestId('DialectFilterList').within(() => {
+        cy.findByText(_obj.category).should('not.have.class', _obj.activeClassName)
       })
     }
   }
@@ -283,34 +283,34 @@ Cypress.Commands.add('FlashcardList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > FlashcardList ---')
 
   cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
-  cy.getByTestId('DictionaryList__row')
+  cy.findByTestId('DictionaryList__row')
 
   cy.log('--- FlashcardList: Enter flashcard mode  ---')
-  cy.queryByText(/Flashcard view/i).click()
+  cy.findByText(/Flashcard view/i).click()
   cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- FlashcardList: Confirm flashcard  ---')
-    cy.getByTestId('Flashcard').should('exist')
+    cy.findByTestId('Flashcard').should('exist')
   }
 
   if (_obj.shouldPaginate) {
     cy.log('--- FlashcardList: Paginate  ---')
     cy.wait(500)
-    cy.getByTestId('pagination__next').click()
+    cy.findByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- FlashcardList: Confirm flashcard  ---')
       cy.wait(500)
-      cy.getByTestId('Flashcard').should('exist')
+      cy.findByTestId('Flashcard').should('exist')
     }
   }
   if (_obj.clearFilter) {
     cy.log('--- FlashcardList: Leave flashcard mode  ---')
-    cy.queryByText(/Cancel flashcard view/i).click()
+    cy.findByText(/Cancel flashcard view/i).click()
 
     cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
-    cy.getByTestId('DictionaryList__row').should('exist')
+    cy.findByTestId('DictionaryList__row').should('exist')
   }
 })
 
@@ -348,71 +348,71 @@ Cypress.Commands.add('browseSearch', (obj) => {
   cy.log('--- Running cypress/support/commands.js > browseSearch ---')
 
   cy.log('--- browseSearch: Searching  ---')
-  cy.getByTestId('SearchDialectFormPrimaryInput').clear()
+  cy.findByTestId('SearchDialectFormPrimaryInput').clear()
   if (_obj.term) {
-    cy.getByTestId('SearchDialectFormPrimaryInput').type(_obj.term)
+    cy.findByTestId('SearchDialectFormPrimaryInput').type(_obj.term)
   }
 
   // set all search options:
-  cy.getByTestId('SearchDialect').within(() => {
-    cy.getByTestId('SearchDialectFormSelectSearchType').select(searchTypeString[_obj.searchType])
+  cy.findByTestId('SearchDialect').within(() => {
+    cy.findByTestId('SearchDialectFormSelectSearchType').select(searchTypeString[_obj.searchType])
 
 
     if (_obj.searchWord !== undefined) {
-      _obj.searchWord ? cy.getByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
+      _obj.searchWord ? cy.findByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
     }
     if (_obj.searchPhrase !== undefined) {
-      _obj.searchPhrase ? cy.getByLabelText(new RegExp(searchingByPhraseText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByPhraseText, 'i')).uncheck()
+      _obj.searchPhrase ? cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).uncheck()
     }
 
-    _obj.searchDefinitions ? cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
+    _obj.searchDefinitions ? cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
     if (_obj.searchLiteralTranslations !== undefined) {
-      _obj.searchLiteralTranslations ? cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
+      _obj.searchLiteralTranslations ? cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
     }
     if (_obj.searchCulturalNotes !== undefined) {
-      _obj.searchCulturalNotes ? cy.getByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).check() : cy.getByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).uncheck()
+      _obj.searchCulturalNotes ? cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).uncheck()
     }
     if (_obj.searchPartsOfSpeech) {
-      cy.getByLabelText(new RegExp(searchingByPartsOfSpeech, 'i')).select(_obj.searchPartsOfSpeech)
+      cy.findByLabelText(new RegExp(searchingByPartsOfSpeech, 'i')).select(_obj.searchPartsOfSpeech)
     }
   })
 
   // Search
-  cy.queryByText(new RegExp(_obj.btnSearch, 'i')).click()
+  cy.findByText(new RegExp(_obj.btnSearch, 'i')).click()
 
   cy.log('--- browseSearch: Confirm in search mode  ---')
-  cy.queryByText(new RegExp(_obj.searchingText, 'i')).should('exist')
+  cy.findByText(new RegExp(_obj.searchingText, 'i')).should('exist')
 
   if (_obj.confirmData) {
     cy.log('--- browseSearch: Confirm data  ---')
-    cy.getByTestId('DictionaryList__row').should('exist')
+    cy.findByTestId('DictionaryList__row').should('exist')
   }
   if (_obj.confirmNoData) {
     cy.log('--- browseSearch: Confirm no data  ---')
-    cy.queryByText(/No results found/i).should('exist')
+    cy.findByText(/No results found/i).should('exist')
   }
 
   if (_obj.shouldPaginate) {
     cy.log('--- browseSearch: Paginate  ---')
     cy.wait(500)
-    cy.getByTestId('pagination__next').click()
+    cy.findByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- browseSearch: Confirm data  ---')
       cy.wait(500)
-      cy.getByTestId('DictionaryList__row').should('exist')
+      cy.findByTestId('DictionaryList__row').should('exist')
     }
     if (_obj.confirmNoData) {
       cy.log('--- browseSearch: Confirm no data  ---')
-      cy.queryByText(/No results found/i).should('exist')
+      cy.findByText(/No results found/i).should('exist')
     }
   }
   if (_obj.clearFilter) {
     cy.log('--- browseSearch: Reset search  ---')
-    cy.queryByText(/reset search/i).click()
+    cy.findByText(/reset search/i).click()
 
     cy.log('--- browseSearch: Confirm not in search mode (only when after clicking reset search)  ---')
-    cy.queryByText(new RegExp(_obj.postClearFilterText, 'i')).should('exist')
+    cy.findByText(new RegExp(_obj.postClearFilterText, 'i')).should('exist')
   }
 })
 
@@ -464,29 +464,29 @@ Cypress.Commands.add('formClickAllXs', () => {
 // ===============================================
 Cypress.Commands.add('formPopulateRelatedAudio', ({name, description}) => {
   cy.logger({type: 'subheader', text: 'formPopulateRelatedAudio'})
-  cy.getByText('Related audio')
+  cy.findByText('Related audio')
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText('+ Add Related Audio', { exact: false })
+      cy.findByText('+ Add Related Audio', { exact: false })
         .parents('button:first')
         .click()
 
-      cy.getByText('upload audio', { exact: false }).click()
+      cy.findByText('upload audio', { exact: false }).click()
     })
-  cy.getByTestId('AddMediaComponent')
+  cy.findByTestId('AddMediaComponent')
     .within(() => {
       // Note: There are duplicate IDs because of modals & tcomb-form
       // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.getByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.getByText('description', { exact: false }).parent().find('textarea').type(description)
-      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+      cy.findByText('description', { exact: false }).parent().find('textarea').type(description)
+      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
 
       const fileName = 'TestRelatedAudio.wav'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('input[type=file]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
 })
 
@@ -495,30 +495,30 @@ Cypress.Commands.add('formPopulateRelatedAudio', ({name, description}) => {
 // ===============================================
 Cypress.Commands.add('formPopulateRelatedPictures', ({name, description}) => {
   cy.logger({type: 'subheader', text: 'formPopulateRelatedPictures'})
-  cy.getByText('Related pictures')
+  cy.findByText('Related pictures')
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText('+ Add Related pictures', { exact: false })
+      cy.findByText('+ Add Related pictures', { exact: false })
         .parents('button:first')
         .click()
 
-      cy.getByText('upload picture', { exact: false }).click()
+      cy.findByText('upload picture', { exact: false }).click()
     })
-  cy.getByTestId('AddMediaComponent')
+  cy.findByTestId('AddMediaComponent')
     .within(() => {
       // Note: There are duplicate IDs because of modals & tcomb-form
       // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.getByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.getByText('description', { exact: false }).parent().find('textarea').type(
+      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+      cy.findByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedImage.png'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
 })
 
@@ -527,30 +527,30 @@ Cypress.Commands.add('formPopulateRelatedPictures', ({name, description}) => {
 // ===============================================
 Cypress.Commands.add('formPopulateRelatedVideos', ({name, description}) => {
   cy.logger({type: 'subheader', text: 'formPopulateRelatedVideos'})
-  cy.getByText('Related videos')
+  cy.findByText('Related videos')
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText('+ Add Related videos', { exact: false })
+      cy.findByText('+ Add Related videos', { exact: false })
         .parents('button:first')
         .click()
 
-      cy.getByText('upload video', { exact: false }).click()
+      cy.findByText('upload video', { exact: false }).click()
     })
-  cy.getByTestId('AddMediaComponent')
+  cy.findByTestId('AddMediaComponent')
     .within(() => {
       // Note: There are duplicate IDs because of modals & tcomb-form
       // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.getByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.getByText('description', { exact: false }).parent().find('textarea').type(
+      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+      cy.findByText('description', { exact: false }).parent().find('textarea').type(
         description
       )
-      cy.getByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.getByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
       const fileName = 'TestRelatedVideo.mp4'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
 })
 
@@ -566,26 +566,26 @@ Cypress.Commands.add('formBrowseMediaSelectItem', ({
   mediaTitle,
 }) => {
   cy.logger({type: 'subheader', text: 'formBrowseMediaSelectItem'})
-  cy.getByText(sectionTitle, { exact: sectionTitleExact })
+  cy.findByText(sectionTitle, { exact: sectionTitleExact })
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText(addButtonText, { exact: false })
+      cy.findByText(addButtonText, { exact: false })
         .parents('button:first')
         .click()
 
-      cy.getByText(browseButtonText, { exact: false }).click()
+      cy.findByText(browseButtonText, { exact: false }).click()
     })
   cy.wait(1000)
-  cy.queryByText('select existing', { exact: false }).should('exist')
-  cy.getByTestId('withFilter')
+  cy.findByText('select existing', { exact: false }).should('exist')
+  cy.findByTestId('withFilter')
     .within(() => {
-      cy.getByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
-      cy.getByText('Filter').click()
+      cy.findByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
+      cy.findByText('Filter').click()
     })
   cy.wait(500)
-  cy.getByTestId('MediaList')
+  cy.findByTestId('MediaList')
     .within(() => {
-      cy.getByLabelText(`${mediaTitle}`, { exact: false }).click()
+      cy.findByLabelText(`${mediaTitle}`, { exact: false }).click()
     })
 })
 
@@ -594,19 +594,19 @@ Cypress.Commands.add('formBrowseMediaSelectItem', ({
 // ===============================================
 Cypress.Commands.add('formBrowseTableSelectItem', ({sectionTitle, addButtonText, browseButtonText, itemTitle}) => {
   cy.logger({type: 'subheader', text: 'formBrowseTableSelectItem'})
-  cy.getByText(sectionTitle, { exact: false })
+  cy.findByText(sectionTitle, { exact: false })
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText(addButtonText, { exact: false }).click()
+      cy.findByText(addButtonText, { exact: false }).click()
 
-      cy.getByText(browseButtonText, { exact: false }).click()
+      cy.findByText(browseButtonText, { exact: false }).click()
     })
   cy.wait(1000)
-  cy.getByTestId('BrowseComponent__dialogContent')
+  cy.findByTestId('BrowseComponent__dialogContent')
     .within(() => {
-      cy.getByText(`${itemTitle}`, { exact: false })
+      cy.findByText(`${itemTitle}`, { exact: false })
         .parent('[data-testid=DictionaryList__row]').within(()=>{
-          cy.getByText('select', { exact: false }).click()
+          cy.findByText('select', { exact: false }).click()
         })
     })
 })
@@ -616,17 +616,17 @@ Cypress.Commands.add('formBrowseTableSelectItem', ({sectionTitle, addButtonText,
 // ===============================================
 Cypress.Commands.add('formPopulateSource', ({name}) => {
   cy.logger({type: 'subheader', text: 'formPopulateSource'})
-  cy.getByText('Source')
+  cy.findByText('Source')
     .parent()
     .within(() => {
-      cy.getByText('+ Add source', { exact: false }).click()
-      cy.getByText('create new contributor', { exact: false }).click()
+      cy.findByText('+ Add source', { exact: false }).click()
+      cy.findByText('create new contributor', { exact: false }).click()
     })
-  cy.getByTestId('DialogCreateForm__DialogContent').within(() => {
-    cy.getByText('Contributor name', { exact: false }).parent().within(()=>{
+  cy.findByTestId('DialogCreateForm__DialogContent').within(() => {
+    cy.findByText('Contributor name', { exact: false }).parent().within(()=>{
       cy.get('input[type=text]').type(name)
     })
-    cy.getByText('save', { exact: false }).click()
+    cy.findByText('save', { exact: false }).click()
   })
 })
 
@@ -636,11 +636,11 @@ Cypress.Commands.add('formPopulateSource', ({name}) => {
 Cypress.Commands.add('formPopulateDefinitions', ({definition}) => {
   cy.logger({type: 'subheader', text: 'formPopulateDefinitions'})
 
-  cy.getByText('Definitions', { exact: false })
+  cy.findByText('Definitions', { exact: false })
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText('+ Add definition', { exact: false }).click()
-      cy.getByLabelText('translation', { exact: false }).type(definition)
+      cy.findByText('+ Add definition', { exact: false }).click()
+      cy.findByLabelText('translation', { exact: false }).type(definition)
     })
 })
 
@@ -651,26 +651,26 @@ Cypress.Commands.add('formPopulateDefinitions', ({definition}) => {
 Cypress.Commands.add('formPopulateCulturalNotes', ({prefix}) => {
   cy.logger({type: 'subheader', text: 'formPopulateCulturalNotes'})
 
-  cy.getByText('Cultural note', { exact: false })
+  cy.findByText('Cultural note', { exact: false })
     .parent()
     .within(() => {
-      cy.getByText('+ Add cultural note', { exact: false }).click()
+      cy.findByText('+ Add cultural note', { exact: false }).click()
       cy.logger({type: 'subheader', text: 'Create 2 cultural notes'})
-      cy.getByTestId('fv-cultural_note0').type(`${prefix} cultural note 0`)
-      cy.getByText('+ Add cultural note', { exact: false }).click()
+      cy.findByTestId('fv-cultural_note0').type(`${prefix} cultural note 0`)
+      cy.findByText('+ Add cultural note', { exact: false }).click()
       cy.logger({type: 'subheader', text: 'Change order'})
-      cy.getByTestId('fv-cultural_note1').type(`${prefix} cultural note 1`)
-      cy.getByTestId('fv-cultural_note1')
+      cy.findByTestId('fv-cultural_note1').type(`${prefix} cultural note 1`)
+      cy.findByTestId('fv-cultural_note1')
         .parent()
         .parent()
         .parent()
         .parent()
         .within(() => {
-          cy.getByText('▲').click()
+          cy.findByText('▲').click()
         })
     })
   cy.logger({type: 'subheader', text: 'Confirm order'})
-  cy.getByText('Cultural note', { exact: false })
+  cy.findByText('Cultural note', { exact: false })
     .parent()
     .within(() => {
       cy.get('input.form-control[type=text]:first')

@@ -261,7 +261,7 @@ export class AlphabetView extends Component {
                       <div className={`${hasMedia ? 'col-xs-8' : ''} fontAboriginalSans`}>
                         <div className="AlphabetViewRow">
                           <div className="AlphabetViewRowItem">
-                            <Typography component="h2" variant="headline">
+                            <Typography component="h2" variant="h5">
                               {character}
                             </Typography>
                           </div>
@@ -385,7 +385,7 @@ export class AlphabetView extends Component {
       return (
         <div className="AlphabetViewRowItem">
           <h3>
-            <FVLabel transKey="audio" defaultStr="Audio" transform="first" />:
+            <FVLabel transKey="audio" defaultStr="Audio" transform="first" />
           </h3>
           <div>
             {noAudioMessage}

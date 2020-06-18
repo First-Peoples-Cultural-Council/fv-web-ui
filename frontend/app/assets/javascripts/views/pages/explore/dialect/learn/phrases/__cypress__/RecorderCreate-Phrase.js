@@ -11,12 +11,12 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
     cy.wait(1500)
-    cy.getByText('Create New Phrase', { exact: true }).click()
+    cy.findByText('Create New Phrase', { exact: true }).click()
     cy.wait(3000)
 
     /*
@@ -24,15 +24,15 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
          */
     cy.get('fieldset.fieldset').within(() => {
       cy.get('[name="dc:title"]').type('TestPhrase')
-      cy.getByText('+ Add definition', { exact: true }).click()
+      cy.findByText('+ Add definition', { exact: true }).click()
       cy.get('[name="fv:definitions[0][translation]"]').type('TestTranslation')
     })
 
     /*
             Audio upload
         */
-    cy.getByText('+ Add related audio', { exact: true }).click()
-    cy.getByText('Upload audio', { exact: true }).click()
+    cy.findByText('+ Add related audio', { exact: true }).click()
+    cy.findByText('Upload audio', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestAudio')
       cy.get('[name="dc:description"]').type('TestAudioDescription')
@@ -40,16 +40,16 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
             Image upload
         */
-    cy.getByText('+ Add related pictures', { exact: true }).click()
-    cy.getByText('Upload picture', { exact: true }).click()
+    cy.findByText('+ Add related pictures', { exact: true }).click()
+    cy.findByText('Upload picture', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestImage')
       cy.get('[name="dc:description"]').type('TestImageDescription')
@@ -57,16 +57,16 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
           Video upload
         */
-    cy.getByText('+ Add related videos', { exact: true }).click()
-    cy.getByText('Upload video', { exact: true }).click()
+    cy.findByText('+ Add related videos', { exact: true }).click()
+    cy.findByText('Upload video', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestVideo')
       cy.get('[name="dc:description"]').type('TestVideoDescription')
@@ -74,19 +74,19 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
             Finishing the phrase creation form and save
         */
-    cy.getByText('+ Add cultural note', { exact: true }).click()
-    cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
+    cy.findByText('+ Add cultural note', { exact: true }).click()
+    cy.findByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.get('[name="fv:reference"]', { exact: true }).type('TestReference')
     cy.get('[name="fv-phrase:acknowledgement"]', { exact: true }).type('TestAcknowledgement')
-    cy.getByText('Save', { exact: true }).click()
+    cy.findByText('Save', { exact: true }).click()
     cy.wait(500)
 
     /*
@@ -94,10 +94,10 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestPhrase').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('New').should('exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('New').should('exist')
     })
 
     /*
@@ -113,8 +113,8 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
-    cy.queryByText('TestPhrase').should('not.exist')
-    cy.getByText('No Results Found', { exact: false }).should('exist')
+    cy.findByText('TestPhrase').should('not.exist')
+    cy.findByText('No Results Found', { exact: false }).should('exist')
 
     /*
             Logout
@@ -129,7 +129,7 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
-    cy.getByText('TestPhrase', { exact: false }).click()
+    cy.findByText('TestPhrase', { exact: false }).click()
     cy.wait(2000)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
@@ -146,12 +146,12 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestPhrase').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Enabled').should('exist')
     })
-    cy.queryByText('No Results Found', { exact: false }).should('not.exist')
+    cy.findByText('No Results Found', { exact: false }).should('not.exist')
     cy.logout()
 
     /*
@@ -162,11 +162,11 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/phrases')
     cy.wait(3500)
-    cy.queryByText('TestPhrase')
+    cy.findByText('TestPhrase')
       .should('exist')
       .click()
     cy.wait(2000)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(1)
@@ -174,8 +174,8 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
       })
     })
     cy.wait(500)
-    cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
-      cy.getByText('Publish', { exact: true }).click()
+    cy.findByTestId('ViewWithActions__buttonPublish').within(() => {
+      cy.findByText('Publish', { exact: true }).click()
     })
     cy.reload()
     cy.wait(1000)
@@ -183,20 +183,20 @@ describe('RecorderCreate-Phrase.js > RecorderCreate-Phrase', () => {
     /*
         Check that the published phrase is visible.
      */
-    cy.getByText('Public View').click()
+    cy.findByText('Public View').click()
     cy.wait(3000)
     cy.get('[id="pageNavigation"]').within(() => {
       cy.get('div.row.Navigation__dialectContainer')
         .should('have.css', 'background-color')
         .and('eq', 'rgb(58, 104, 128)')
     })
-    cy.getByText('TestPhrase').should('exist')
-    cy.getByText('TestTranslation').should('exist')
-    cy.getByText('TestCulturalNote').should('exist')
-    cy.getByText('TestImage').should('exist')
-    cy.getByText('TestVideo')
+    cy.findByText('TestPhrase').should('exist')
+    cy.findByText('TestTranslation').should('exist')
+    cy.findByText('TestCulturalNote').should('exist')
+    cy.findByText('TestImage').should('exist')
+    cy.findByText('TestVideo')
       .scrollIntoView()
       .should('exist')
-    cy.getByText('TestAcknowledgement').should('exist')
+    cy.findByText('TestAcknowledgement').should('exist')
   })
 })

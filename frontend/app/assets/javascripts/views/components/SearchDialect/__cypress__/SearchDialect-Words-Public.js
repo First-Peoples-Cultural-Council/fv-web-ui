@@ -1,6 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 import testSearch from '../../../app/assets/javascripts/views/components/SearchDialect/__cypress__/common/testSearch.js'
 import testSearchWords from '../../../app/assets/javascripts/views/components/SearchDialect/__cypress__/common/testSearchWords.js'
 describe('SearchDialect-Words-Public.js > SearchDialect', () => {
@@ -11,36 +11,36 @@ describe('SearchDialect-Words-Public.js > SearchDialect', () => {
   })
 })
 function verifyDefaults() {
-  cy.getByLabelText('Word').should('be.checked')
-  cy.getByLabelText('Definitions').should('be.checked')
-  cy.getByLabelText('Literal translations').should('not.be.checked')
-  cy.getByLabelText('Parts of speech', { exact: false }).should('have.value', 'Any')
+  cy.findByLabelText('Word').should('be.checked')
+  cy.findByLabelText('Definitions').should('be.checked')
+  cy.findByLabelText('Literal translations').should('not.be.checked')
+  cy.findByLabelText('Parts of speech', { exact: false }).should('have.value', 'Any')
 }
 describe('SearchDialect-Words-Public.js > FW-936', () => {
   it('Resetting search should set to initial settings', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageTwo/learn/words')
 
-    cy.getByText('Showing all words in the dictionary listed alphabetically').should('exist')
+    cy.findByText('Showing all words in the dictionary listed alphabetically').should('exist')
 
     // Verify Load
     verifyDefaults()
 
     // Change & verify
-    cy.getByLabelText('Word')
+    cy.findByLabelText('Word')
       .uncheck()
       .should('not.be.checked')
-    cy.getByLabelText('Definitions')
+    cy.findByLabelText('Definitions')
       .check()
       .should('be.checked')
-    cy.getByLabelText('Literal translations')
+    cy.findByLabelText('Literal translations')
       .check()
       .should('be.checked')
-    cy.getByLabelText('Parts of speech', { exact: false })
+    cy.findByLabelText('Parts of speech', { exact: false })
       .select('adjective')
       .should('have.value', 'adjective')
 
     // Reset
-    cy.getByText('reset search', { exact: false }).click()
+    cy.findByText('reset search', { exact: false }).click()
 
     cy.wait(1000)
 

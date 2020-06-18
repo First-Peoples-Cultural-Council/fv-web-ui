@@ -464,7 +464,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { words: !this.state.expandedCards.words } })}
                     title={
                       <Typography
-                        variant="subheading"
+                        variant="subtitle1"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -554,7 +554,7 @@ export class DialectLearn extends Component {
                     className="card-header-custom"
                     title={
                       <Typography
-                        variant="subheading"
+                        variant="subtitle1"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -642,7 +642,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { songs: !this.state.expandedCards.songs } })}
                     title={
                       <Typography
-                        variant="subheading"
+                        variant="subtitle1"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -730,7 +730,7 @@ export class DialectLearn extends Component {
                     onClick={() => this.setState({ expandedCards: { stories: !this.state.expandedCards.stories } })}
                     title={
                       <Typography
-                        variant="subheading"
+                        variant="subtitle1"
                         style={{
                           color: themePalette.secondary.contrastText,
                         }}
@@ -907,4 +907,4 @@ const mapDispatchToProps = {
   updatePortal,
 }
 
-export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(DialectLearn))
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(DialectLearn))

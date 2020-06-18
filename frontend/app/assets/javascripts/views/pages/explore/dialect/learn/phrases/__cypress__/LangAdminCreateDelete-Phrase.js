@@ -17,19 +17,19 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
     cy.wait(1000)
-    cy.getByText('No Results Found', { exact: false }).should('be.visible')
+    cy.findByText('No Results Found', { exact: false }).should('be.visible')
 
     /*
                 Going through the steps to create a phrase
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: false }).click()
+    cy.findByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
     cy.wait(1500)
-    cy.getByText('Create New Phrase', { exact: false }).click()
+    cy.findByText('Create New Phrase', { exact: false }).click()
     cy.wait(3000)
 
     /*
@@ -37,15 +37,15 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
          */
     cy.get('fieldset.fieldset').within(() => {
       cy.get('[name="dc:title"]').type('TestPhrase')
-      cy.getByText('+ Add definition', { exact: true }).click()
+      cy.findByText('+ Add definition', { exact: true }).click()
       cy.get('[name="fv:definitions[0][translation]"]').type('TestTranslation')
     })
 
     /*
                 Audio upload
             */
-    cy.getByText('+ Add related audio', { exact: true }).click()
-    cy.getByText('Upload audio', { exact: true }).click()
+    cy.findByText('+ Add related audio', { exact: true }).click()
+    cy.findByText('Upload audio', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestAudio')
       cy.get('[name="dc:description"]').type('TestAudioDescription')
@@ -53,16 +53,16 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                 Image upload
             */
-    cy.getByText('+ Add related pictures', { exact: true }).click()
-    cy.getByText('Upload picture', { exact: true }).click()
+    cy.findByText('+ Add related pictures', { exact: true }).click()
+    cy.findByText('Upload picture', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestImage')
       cy.get('[name="dc:description"]').type('TestImageDescription')
@@ -70,16 +70,16 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
               Video upload
             */
-    cy.getByText('+ Add related videos', { exact: true }).click()
-    cy.getByText('Upload video', { exact: true }).click()
+    cy.findByText('+ Add related videos', { exact: true }).click()
+    cy.findByText('Upload video', { exact: true }).click()
     cy.get('[id="AddMediaComponent"]').within(() => {
       cy.get('[name="dc:title"]').type('TestVideo')
       cy.get('[name="dc:description"]').type('TestVideoDescription')
@@ -87,19 +87,19 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                 Finishing the phrase creation form and save
             */
-    cy.getByText('+ Add cultural note', { exact: true }).click()
-    cy.getByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
+    cy.findByText('+ Add cultural note', { exact: true }).click()
+    cy.findByTestId('fv-cultural_note0', { exact: true }).type('TestCulturalNote')
     cy.get('[name="fv:reference"]', { exact: true }).type('TestReference')
     cy.get('[name="fv-phrase:acknowledgement"]', { exact: true }).type('TestAcknowledgement')
-    cy.getByText('Save', { exact: true }).click()
+    cy.findByText('Save', { exact: true }).click()
     cy.wait(500)
 
     /*
@@ -107,10 +107,10 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
             */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
     cy.wait(3000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestPhrase').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('New').should('exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('New').should('exist')
     })
 
     /*
@@ -118,53 +118,53 @@ describe('LangAdminCreateDelete-Phrase.js > LangAdminCreateDelete-Phrase', () =>
                 Check that the cancel button when editing phrase works.
             */
     cy.wait(500)
-    cy.getByText('TestPhrase').click()
-    cy.getByText('Edit')
+    cy.findByText('TestPhrase').click()
+    cy.findByText('Edit')
       .should('exist')
       .click()
     cy.get('div.form-horizontal').within(() => {
-      cy.getByText('Phrase', { exact: true }).should('exist')
-      cy.getByText('Definitions', { exact: true }).should('exist')
-      cy.getByText('Phrase books', { exact: true }).should('exist')
+      cy.findByText('Phrase', { exact: true }).should('exist')
+      cy.findByText('Definitions', { exact: true }).should('exist')
+      cy.findByText('Phrase books', { exact: true }).should('exist')
     })
     cy.get('[name="dc:title"]').type('ShouldNotShow')
     cy.wait(500)
-    cy.getByTestId('withForm__btnGroup1').within(() => {
-      cy.getByText('Cancel').click()
+    cy.findByTestId('withForm__btnGroup1').within(() => {
+      cy.findByText('Cancel').click()
     })
-    cy.getByText('Yes').click()
-    cy.queryByText('TestPhraseShouldNotShow').should('not.exist')
+    cy.findByText('Yes').click()
+    cy.findByText('TestPhraseShouldNotShow').should('not.exist')
 
     /*
                 Check that edit phrase saves properly.
             */
-    cy.getByText('Edit')
+    cy.findByText('Edit')
       .should('exist')
       .click()
     cy.get('[name="dc:title"]').type('TestPhrase1')
     cy.wait(500)
-    cy.getByTestId('withForm__btnGroup1').within(() => {
-      cy.getByText('Save').click()
+    cy.findByTestId('withForm__btnGroup1').within(() => {
+      cy.findByText('Save').click()
     })
-    cy.getByText('TestPhraseTestPhrase1', { exact: true }).should('exist')
+    cy.findByText('TestPhraseTestPhrase1', { exact: true }).should('exist')
 
     /*
                 Delete the phrase and check that it no longer exists.
             */
-    cy.getByText('Delete phrase').click()
+    cy.findByText('Delete phrase').click()
     cy.wait(300)
-    cy.getByTestId('ViewWithActions__dialog').within(() => {
-      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.findByTestId('ViewWithActions__dialog').within(() => {
+      cy.findByTestId('ViewWithActions__buttonDelete').click()
     })
     cy.wait(500)
-    cy.getByText('Delete phrase success').should('exist')
+    cy.findByText('Delete phrase success').should('exist')
 
     // https://www.cypress.io/blog/2019/01/22/when-can-the-test-click/
-    cy.getByText('Return To Previous Page')
+    cy.findByText('Return To Previous Page')
       .pipe(click)
       .should(($el) => {
         expect($el).to.not.be.visible
       })
-    cy.getByText('No Results Found', { exact: false }).should('be.visible')
+    cy.findByText('No Results Found', { exact: false }).should('be.visible')
   })
 })

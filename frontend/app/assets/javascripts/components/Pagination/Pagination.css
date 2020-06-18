@@ -1,0 +1,44 @@
+.Pagination__container {
+  margin-top: 15px;
+}
+.Pagination__pager {
+  padding-bottom: 15px;
+}
+.Pagination__pageSizeContainer {
+  text-align: right;
+}
+.Pagination__pageSizeLabel {
+  vertical-align: 4px;
+  margin-right: 8px;
+}
+.Pagination__pageSizePageOverPageCount {
+  vertical-align: 4px;
+}
+.Pagination__pageSizePerPageLabel {
+  vertical-align: 4px;
+  margin-right: 8px;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid #e0e0e0;
+}
+.Pagination__pageSizePerPageSelect {
+  width: 45px;
+  margin-right: 8px;
+}
+.Pagination__resultsLabel {
+  vertical-align: 4px;
+  margin-right: 8px;
+  padding-left: 8px;
+  border-left: 1px solid #e0e0e0;
+}
+.Pagination__resultsCount {
+  vertical-align: 4px;
+}
+.Pagination__skipContainer {
+  text-align: left;
+  background-color: rgb(241, 241, 241);
+  border-top: 1px solid #d8d8d8;
+}
+.Pagination__skipPageNumber {
+  padding-left: 5px;
+}

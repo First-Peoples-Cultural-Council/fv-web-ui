@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesOperations.test
+Require-Bundle: org.nuxeo.runtime,FirstVoicesNuxeoPublisher
+Bundle-Version: 1.0.qualifier
+Bundle-Name: FVUserRegistration.test
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Nuxeo

@@ -1,11 +1,15 @@
 package ca.firstvoices.cognito;
 
 
+import ca.firstvoices.cognito.exceptions.InvalidMigrationException;
 import ca.firstvoices.cognito.exceptions.MiscellaneousFailureException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.directory.DirectoryException;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.platform.usermanager.UserManagerImpl;
 import org.nuxeo.runtime.api.Framework;
@@ -23,6 +27,8 @@ public class AWSAwareUserManager extends UserManagerImpl {
 
   private boolean awsConnectionSucceeded = false;
   private boolean awsAuthenticationEnabled;
+  private Set<String> ignoreUsers = new HashSet<>();
+
 
   private AWSAuthenticationService getAWSAuthenticationService() {
     if (this.aws != null) {
@@ -44,8 +50,16 @@ public class AWSAwareUserManager extends UserManagerImpl {
     this.awsAuthenticationEnabled = getAWSAwareUserManagerConfigurationService()
         .getConfig().authenticateWithCognito;
 
-    LOG.error("Startup. AWS Authentication is "
+    String rawIgnoreList = getAWSAwareUserManagerConfigurationService()
+        .getConfig()
+        .ignoreUsers;
+    if (rawIgnoreList != null) {
+      ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
+    }
+
+    LOG.info("Startup. AWS Authentication is "
         + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
+        + "\nignoring users: " + String.join(", ", ignoreUsers)
     );
 
     if (this.awsAuthenticationEnabled) {
@@ -76,13 +90,50 @@ public class AWSAwareUserManager extends UserManagerImpl {
       return super.checkUsernamePassword(username, password);
     }
 
+    if (this.ignoreUsers.contains(username)) {
+      LOG.info("skipping Cognito check for ignored user: " + username);
+      return super.checkUsernamePassword(username, password);
+    }
+
     try {
       if (getAWSAuthenticationService().authenticate(username, password)) {
         /* AWS Authentication succeeded, but we only consider this a success if the local user
         actually exists */
         return this.getPrincipal(username) != null;
       } else {
-        // The user entered an incorrect password
+        // The user failed to authenticate
+
+        if (getAWSAuthenticationService().userExists(username)) {
+          // the user exists in AWS, so they must have forgotten the password
+          return false;
+        }
+
+        // the user does not exist yet in Cognito. Do they exist locally with this password?
+        if (super.checkUsernamePassword(username, password)) {
+          // yes, so migrate them
+          try {
+
+            NuxeoPrincipal currentPrincipal = this.getPrincipal(username);
+
+            if (currentPrincipal == null) {
+              throw new InvalidMigrationException("Current principal was null for " + username);
+            }
+
+            getAWSAuthenticationService().migrateUser(
+                username,
+                password,
+                currentPrincipal.getEmail()
+            );
+          } catch (InvalidMigrationException e) {
+            LOG.error("[AWS Cognito] Migration failed", e);
+
+            // Still log the user in if migration fails
+            // We need to provide alternative ways to migrate edge cases (FW-1643)
+            return true;
+          }
+          return true;
+        }
+
         return false;
       }
     } catch (MiscellaneousFailureException e) {
@@ -111,6 +162,10 @@ public class AWSAwareUserManager extends UserManagerImpl {
       String username = (String) userModel.getProperty(schema, userDir.getIdField());
       String password = (String) userModel.getProperty(schema, userDir.getPasswordField());
       try {
+        if (this.ignoreUsers.contains(username)) {
+          LOG.info("skipping Cognito update for blacklisted user: " + username);
+          return;
+        }
         getAWSAuthenticationService().updatePassword(username, password);
       } catch (MiscellaneousFailureException e) {
         // We don't handle this -- it will have been logged by the authentication service
@@ -118,4 +173,5 @@ public class AWSAwareUserManager extends UserManagerImpl {
 
     }
   }
+
 }

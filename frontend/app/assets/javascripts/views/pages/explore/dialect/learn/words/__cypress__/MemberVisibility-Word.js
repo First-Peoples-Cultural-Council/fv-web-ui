@@ -21,26 +21,26 @@ describe('MemberVisibility-Word.js > MemberVisibility-Word', () => {
         */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
-    cy.queryByText('Edit').should('not.exist')
+    cy.findByText('Edit').should('not.exist')
     cy.get('[title="More Options"]').click()
     cy.wait(500)
-    cy.getByText('Reports', { exact: true }).click({ force: true })
+    cy.findByText('Reports', { exact: true }).click({ force: true })
     /*
             Check that no results exist in "Words in New Status" page
         */
-    cy.getByText('Words in New Status', { exact: true }).click()
-    cy.getByText('No Results Found', { exact: false }).should('exist')
+    cy.findByText('Words in New Status', { exact: true }).click()
+    cy.findByText('No Results Found', { exact: false }).should('exist')
     /*
             Check that the word exists in "Words in Enabled Status" page and make sure it has "Enabled" status
         */
-    cy.getByText('reports', { exact: true }).click()
-    cy.getByText('Words in Enabled Status', { exact: true }).click()
+    cy.findByText('reports', { exact: true }).click()
+    cy.findByText('Words in Enabled Status', { exact: true }).click()
     cy.wait(3000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
-      cy.queryByText('New').should('not.exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Enabled').should('exist')
+      cy.findByText('New').should('not.exist')
     })
   })
 })

@@ -1,0 +1,22 @@
+version: '3'
+services:
+  nuxeo-backend:
+    environment:
+      - START_WITH_DATA=cypress_fixtures
+  cypress:
+    working_dir: /e2e
+    image: "cypress/included:4.8.0"
+    depends_on:
+      - frontend
+      - nuxeo-backend
+      - db
+    environment:
+      - CYPRESS_BASE_URL=http://frontend
+      - CYPRESS_FV_USERNAME
+      - CYPRESS_FV_PASSWORD
+      - CYPRESS_PROJECT_ID
+      - CYPRESS_RECORD_KEY
+    volumes:
+      - '${PWD}/../frontend:/e2e'
+      - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress.json'
+    entrypoint: ["/bin/sh", "-c", "scripts/start_e2e_tests.sh"]

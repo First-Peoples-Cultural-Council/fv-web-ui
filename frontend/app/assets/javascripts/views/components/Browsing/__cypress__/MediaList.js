@@ -1,23 +1,23 @@
 function formBrowseMedia({ sectionTitle, sectionTitleExact = false, addButtonText, browseButtonText, mediaTitle }) {
-  cy.getByText(sectionTitle, { exact: sectionTitleExact })
+  cy.findByText(sectionTitle, { exact: sectionTitleExact })
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText(addButtonText, { exact: false })
+      cy.findByText(addButtonText, { exact: false })
         .parents('button:first')
         .click()
       cy.wait(500)
 
-      cy.getByText(browseButtonText, { exact: false }).click()
+      cy.findByText(browseButtonText, { exact: false }).click()
       cy.wait(1000)
     })
-  cy.getByText('select existing', { exact: false }).should('exist')
-  cy.getByTestId('withFilter').within(() => {
-    cy.getByText('Name/Description', { exact: false })
+  cy.findByText('select existing', { exact: false }).should('exist')
+  cy.findByTestId('withFilter').within(() => {
+    cy.findByText('Name/Description', { exact: false })
       .parent()
       .within(() => {
         cy.get('input[type=text]').type(mediaTitle)
       })
-    cy.getByText('Filter').click()
+    cy.findByText('Filter').click()
     cy.wait(1000)
   })
 }
@@ -31,8 +31,8 @@ describe('media-list.js > MediaList', () => {
 
     // Create
     cy.logger({ type: 'header', text: 'CREATE' })
-    cy.getByText('create new phrase', { exact: false }).click()
-    cy.getByText('Add New Phrase to TestLanguageSeven').should('exist')
+    cy.findByText('create new phrase', { exact: false }).click()
+    cy.findByText('Add New Phrase to TestLanguageSeven').should('exist')
 
     const prefix = 'FW-889'
 
@@ -43,7 +43,7 @@ describe('media-list.js > MediaList', () => {
       description: `${prefix} AUDIO > DESCRIPTION`,
     })
     cy.wait(500)
-    cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+    cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
     // [POPULATE] Related pictures
     cy.logger({ type: 'subheader', text: `${prefix} Related pictures` })
@@ -52,7 +52,7 @@ describe('media-list.js > MediaList', () => {
       description: `${prefix} Related pictures > Description`,
     })
     cy.wait(500)
-    cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+    cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
     // BROWSE > PICTURES
     formBrowseMedia({
@@ -62,10 +62,10 @@ describe('media-list.js > MediaList', () => {
       mediaTitle: prefix,
     })
 
-    cy.getByTestId('MediaList').within(() => {
+    cy.findByTestId('MediaList').within(() => {
       cy.get('audio').should('not.exist')
     })
-    cy.getByTestId('Dialog__SelectMediaComponentCancel').click()
+    cy.findByTestId('Dialog__SelectMediaComponentCancel').click()
 
     // BROWSE > AUDIO
     formBrowseMedia({
@@ -76,10 +76,10 @@ describe('media-list.js > MediaList', () => {
       mediaTitle: prefix,
     })
 
-    cy.getByTestId('MediaList').within(() => {
+    cy.findByTestId('MediaList').within(() => {
       cy.get('audio').should('exist')
     })
-    cy.getByTestId('Dialog__SelectMediaComponentCancel').click()
+    cy.findByTestId('Dialog__SelectMediaComponentCancel').click()
 
     // BROWSE > PICTURES
     formBrowseMedia({
@@ -89,7 +89,7 @@ describe('media-list.js > MediaList', () => {
       mediaTitle: prefix,
     })
 
-    cy.getByTestId('MediaList').within(() => {
+    cy.findByTestId('MediaList').within(() => {
       cy.get('audio').should('not.exist')
     })
   })

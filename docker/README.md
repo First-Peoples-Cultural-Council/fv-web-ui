@@ -2,14 +2,17 @@
 
 This environment is setup for localhost work. It includes:
 
-1. A Nuxeo instance.
-2. An embedded database (Postgres)
-3. A standalone instance of Elasticsearch (for caching and search)
+1. A Nuxeo instance (back-end).
+2. A database (either embedded H2 or Postgres)
+3. Elasticsearch for caching and search (either embedded or standalone)
 4. Optionally, the compiled FirstVoices front-end behind an Apache2 server
 
 ## Prerequisites
 
-1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads). You will also need the following dependencies:
+1. You must have Docker installed and running with at least 4GB of memory allocated to docker (preferrably more), as well as git installed. Docker can be downloaded from [this link](https://docs.docker.com/install/) and git can be downloaded from [this link](https://git-scm.com/downloads).
+
+
+If you are planning on building the back-end from source, you will also need the following dependencies:
 
    - Java 8 JDK (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
      - Don't forget to set JAVA_HOME to the path to the JDK install
@@ -32,36 +35,45 @@ cd ./fv-web-ui/docker
 
 ---
 
-## Back-End Only Setup
+## Back-End Only Setup (Minimal)
 
 In this setup you will have the back-end of FirstVoices running, and will be able to [run and point the front-end development environment](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend) to this instance.
 
 ### Step 1: Run the setup script
 
-Give the script execute permission first:
-
+Make sure the setup script has execute permissions:
 ```
 chmod +x setup_docker.sh
 ```
 
-Execute via terminal:
-
+To install the latest snapshot (i.e. unstable) version of FirstVoices locally:
 ```
 ./setup_docker.sh
+```
+
+You can install the environment with a specific version of FirstVoices like so:
+```
+./setup_docker.sh --dist=3.4.4
+```
+
+Or even with a "release candidate" version:
+```
+./setup_docker.sh --dist=3.4.4-RC
 ```
 
 This setup script will:
 
 1. Create a docker image called `nuxeo-dev` for the back-end
 2. Create volumes on your host machine (in `fv-web-ui/docker/nuxeo_dev_docker`). These will be mounted on the `nuxeo-dev` container.
-3. Build the back-end using Maven and copy the generated ZIP file into `fv-web-ui/docker/nuxeo_dev_docker`.
+
+*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in [Development Procedures -> Pushing Changes -> Method 1](#method-1-deploy-entire-zip---recommended-for-changes-in-multiple-modules).
 
 ### Step 2: Startup the environment
 
 Run the following in terminal:
 
 ```
-docker-compose up
+docker-compose up --remove-orphans
 ```
 
 This command will:
@@ -80,9 +92,11 @@ This command will:
 
 ---
 
-## Full Setup (Back-end, Front-end)
+## Full Setup (Back-end, Front-end, and Related Services)
 
 You can use docker to have a self-contained environment with both the front-end and back-end of FirstVoices for testing of other components. Please review the "Back-End Only Setup" above to gain some insight into the various steps. The following instructions supplement those steps.
+
+This setup is much closer to a production environment. It required more resources, and can be used to test more advanced components.
 
 ### Step 1: Run the setup script, including the front-end image:
 
@@ -97,12 +111,13 @@ In addition to the back-end instructions, with this argument the setup script wi
 Run the following in terminal:
 
 ```
-docker-compose -f docker-compose.yml -f frontend-docker-compose.yml up
+docker-compose -f docker-compose.yml -f docker-compose.full.yml up
 ```
 
 In addition to the back-end instructions, with this argument docker will:
 
 1. Build the front-end
+2. Setup Postgresql and Elasticsearch in seperate containers
 2. Setup apache2 web server to serve the front-end static files
 
 ### Step 3: Access your URLs
@@ -133,12 +148,21 @@ You should now see your new FirstVoices language archive when you access the fro
 
 These are not required for getting started, but contain some useful information if you wish to modify the environment for your needs.
 
+### Private Docker Configuration keys 
+If you need to reference external servers, or include other private dev information in your build, you can do so in a special docker-compose yml file that will be ignored by source control - docker-compose.private.yml
+To see an example of what this file might look like for AWS Cognito configuration, view docker-compose.private.sample.yml
+
+You can use this docker file by appending it:
+```
+docker-compose -f docker-compose.yml -f docker-compose.private.yml up
+```
+
 ### Allotting enough resources to Docker
 
 Make sure your Docker Environment (e.g. [Docker engine on Mac](https://docs.docker.com/docker-for-mac/space/)) has enough memory. Elasticsearch [recommends 4 GB](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html) at the very least.
 
 ### Clearing your existing containers and dealing with cache
-
+- The easiest way to clear all your docker related assets and `start from scratch` is to run `./teardown_docker.sh`.
 - If you encounter issues with remaining artifacts from previous runs, [you can clear some of those](https://github.com/moby/moby/issues/23371#issuecomment-224927009). Remember that these commands will clear ALL your docker artifacts, not just ones created as part of this project.
 - If you wish to build a docker image with no cache (force a rebuild), add the `--no-cache` flag.
 
@@ -162,18 +186,10 @@ For additional options, consult: https://hub.docker.com/_/nuxeo
 
 ### Cypress (testing) Containers
 
-You can use docker to setup an environment that includes FirstVoices and Cypress, in order to run Cypress tests against the platform.
-
-To build all docker images run the following command from the docker directory:
+You can use docker to setup an environment to run Cypress tests against. First, setup docker for the Full Setup (see above). Then, start it up and run tests:
 
 ```
-./setup_docker.sh --frontend --cypress
-```
-
-To startup the frontend, backend, and run the complete Cypress test suite run the following command (requires :
-
-```
-docker-compose -f docker-compose.yml -f frontend-docker-compose.yml -f cypress-docker-compose.yml up --abort-on-container-exit
+docker-compose -f docker-compose.yml -f docker-compose.full.yml -f docker-compose.cypress.yml up --abort-on-container-exit
 ```
 
 ---
@@ -190,13 +206,13 @@ After making a change to a Nuxeo module, you can deploy your change to the docke
 
 #### Method 1 (deploy entire ZIP - recommended for changes in multiple modules):
 
-- Build the project at `fv-web-ui`
-- Copy `FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip` to your mounted directory (e.g. in Option A: `docker/nuxeo_dev_docker`
-- Execute the following command to stop the server, install the package and start the server:
+To build the entire project and deploy it to your local container, run:
+```
+./docker/UpdatePackage.sh
+```
 
-```
-docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/FirstVoices-marketplace-package-latest.zip && nuxeoctl start"
-```
+You can skip tests by using the `-skip-tests` flag.
+
 
 #### Method 2 (deploy a single module):
 
@@ -241,3 +257,4 @@ Errors:
 
 1. Add additional requirements such as FFMPEG and CCExtractor to image.
 2. Figure out how to hot-reload into a docker container (potentially tied into IntelliJ). See https://doc.nuxeo.com/nxdoc/nuxeo-cli/.
+3. Modify script for handling multiple RC versions. Ensure case sensitive.

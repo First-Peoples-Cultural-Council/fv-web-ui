@@ -17,12 +17,12 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.wait(1000)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
-    cy.getByText('No Results Found', { exact: false }).should('exist')
-    cy.queryByText('TestPhrase').should('not.exist')
+    cy.findByText('No Results Found', { exact: false }).should('exist')
+    cy.findByText('TestPhrase').should('not.exist')
     cy.logout()
 
     /*
@@ -33,16 +33,16 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
     cy.wait(3000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('New').should('exist')
-      cy.queryByText('TestPhrase').should('exist')
-      cy.getByText('TestPhrase').click()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('New').should('exist')
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestPhrase').click()
     })
 
     /*
@@ -50,8 +50,8 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
          */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
     cy.wait(2000)
-    cy.queryByText('TestPhrase', { exact: false }).clickandwait()
-    cy.queryByText('Edit', { exact: true }).should('exist')
+    cy.findByText('TestPhrase', { exact: false }).clickandwait()
+    cy.findByText('Edit', { exact: true }).should('exist')
     cy.wait(500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
@@ -68,15 +68,15 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
     cy.wait(3000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.queryByText('TestPhrase').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Enabled').should('exist')
     })
     cy.logout()
 
@@ -88,22 +88,22 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/learn/phrases')
     cy.wait(2500)
-    cy.queryByText('TestPhrase', { exact: false }).click()
+    cy.findByText('TestPhrase', { exact: false }).click()
     cy.wait(1500)
     cy.get('div.hidden-xs').within(() => {
       cy.get('input[type=checkbox]')
         .eq(1)
         .click()
     })
-    cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
-      cy.getByText('Publish', { exact: true }).click()
+    cy.findByTestId('ViewWithActions__buttonPublish').within(() => {
+      cy.findByText('Publish', { exact: true }).click()
     })
     cy.wait(1000)
 
     /*
     Check that the phrase is now visible to the public.
    */
-    cy.getByText('Public View')
+    cy.findByText('Public View')
       .pipe(click)
       .should(($el) => {
         expect($el).to.not.be.visible
@@ -112,11 +112,11 @@ describe('LangAdminViewEdit-Phrase.js > LangAdminViewEdit-Phrase', () => {
     cy.get('div.row.Navigation__dialectContainer')
       .should('have.css', 'background-color')
       .and('eq', 'rgb(58, 104, 128)')
-    cy.queryByText('TestPhrase').should('exist')
-    cy.queryByText('TestTranslation').should('exist')
-    cy.queryByText('TestCulturalNote').should('exist')
-    cy.queryByText('TestPhraseImage').should('exist')
-    cy.queryByText('TestPhraseVideo').should('exist')
-    cy.queryByText('TestAcknowledgement').should('exist')
+    cy.findByText('TestPhrase').should('exist')
+    cy.findByText('TestTranslation').should('exist')
+    cy.findByText('TestCulturalNote').should('exist')
+    cy.findByText('TestPhraseImage').should('exist')
+    cy.findByText('TestPhraseVideo').should('exist')
+    cy.findByText('TestAcknowledgement').should('exist')
   })
 })

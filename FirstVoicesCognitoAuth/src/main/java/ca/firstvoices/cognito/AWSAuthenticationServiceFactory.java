@@ -40,7 +40,6 @@ public class AWSAuthenticationServiceFactory extends DefaultComponent {
           this.config.region,
           this.config.clientID
       );
-
       try {
         this.authenticationService.testConnection();
       } catch (MiscellaneousFailureException e) {

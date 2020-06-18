@@ -59,7 +59,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 
 import FVTab from 'views/components/FVTab'
-import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
+import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -319,7 +319,7 @@ export class MediaView extends Component {
                           <strong>{selectn('response.title', computeResource)}</strong>
                         </h2>
                         <div className="row">
-                          <WordListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
+                          <WordsListView filter={currentAppliedFilter} routeParams={this.props.routeParams} />
                         </div>
                       </CardContent>
                     </div>

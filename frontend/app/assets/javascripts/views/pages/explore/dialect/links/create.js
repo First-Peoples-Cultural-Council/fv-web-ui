@@ -174,7 +174,7 @@ export class PageDialectLinksCreate extends Component {
 
     return (
       <div>
-        <Typography variant="headline" component="h2">
+        <Typography variant="h5" component="h2">
           <FVLabel
             transKey="views.pages.explore.dialect.links.add_new_link_to_x"
             defaultStr={'Add New Link to ' + dialect.get('dc:title')}
@@ -197,11 +197,7 @@ export class PageDialectLinksCreate extends Component {
               />
               <div className="form-group">
                 <button type="button" onClick={this._onRequestSaveForm} className="btn btn-primary">
-                  <FVLabel
-                    transKey="save"
-                    defaultStr="Save"
-                    transform="first"
-                  />
+                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
                 </button>
               </div>
             </form>

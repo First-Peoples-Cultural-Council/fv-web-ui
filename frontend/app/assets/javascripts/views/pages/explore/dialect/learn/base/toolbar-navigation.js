@@ -91,12 +91,7 @@ export class ToolbarNavigation extends Component {
   }
 
   _getNavigationURL = (path, appendPagination = false) => {
-    let url = ''
-    if (this.props.splitWindowPath[this.props.splitWindowPath.length - 1] === 'learn') {
-      url = `${this.props.windowPath}/${path}`
-    } else {
-      url = `${this.props.windowPath}/learn/${path}`
-    }
+    let url = `/explore${this.props.routeParams.dialect_path}/learn/${path}`
     if (appendPagination) {
       url = `${url}/${this.props.pageSize}/1`
     }
@@ -157,7 +152,7 @@ export class ToolbarNavigation extends Component {
             <AuthenticationFilter login={this.props.computeLogin} hideFromSections routeParams={this.props.routeParams}>
               <div className="col-xs-12 col-md-2">
                 <div className={classNames('hidden-xs')} float="right">
-                  <FVButton variant="flat" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
+                  <FVButton variant="text" style={{ color: '#fff' }} onClick={this.props.handleShowStats}>
                     <EditorInsertChart />
                     <FVLabel transKey="language_statistics" defaultStr="Language Statistics" />
                   </FVButton>
