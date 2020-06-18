@@ -11,9 +11,8 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 public class GetTasksServiceImpl implements GetTasksService {
 
   @Override
-  public DocumentModelList getTasksForUser(CoreSession session) {
-    NuxeoPrincipal currentUser = session.getPrincipal();
-    List<String> userGroups = currentUser.getGroups();
+  public DocumentModelList getTasksForUser(CoreSession session, NuxeoPrincipal principal) {
+    List<String> userGroups = principal.getGroups();
     if (userGroups != null && !userGroups.isEmpty()) {
       StringBuilder query = new StringBuilder(
           "SELECT * FROM TaskDoc WHERE ecm:currentLifeCycleState = 'opened' AND "

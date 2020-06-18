@@ -24,7 +24,7 @@ public class GetTasksForUserOperation {
   @OperationMethod
   public DocumentModelList run() {
     GetTasksService service = Framework.getService(GetTasksService.class);
-    return service.getTasksForUser(session);
+    return service.getTasksForUser(session, session.getPrincipal());
   }
 
 }
