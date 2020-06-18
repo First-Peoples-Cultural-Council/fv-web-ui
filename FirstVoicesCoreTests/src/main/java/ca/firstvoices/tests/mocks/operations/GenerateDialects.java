@@ -2,7 +2,6 @@ package ca.firstvoices.tests.mocks.operations;
 
 import ca.firstvoices.tests.mocks.Constants;
 import ca.firstvoices.tests.mocks.services.MockDialectService;
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
@@ -21,7 +20,7 @@ public class GenerateDialects {
   @Context
   protected CoreSession session;
 
-  @Param(name = "randomize", values = {"true", "false"},
+  @Param(name = "randomize", required = false, values = {"true", "false"},
       description = "`true` to create random data; `false` to create real demo data")
   protected boolean randomize = true;
 
@@ -36,7 +35,7 @@ public class GenerateDialects {
       .getService(MockDialectService.class);
 
   @OperationMethod
-  public DocumentModelList run() throws OperationException {
+  public DocumentModelList run() {
     DocumentModelList createdDialects = new DocumentModelListImpl(maxDialects);
 
     for (int i = 0; i < maxDialects; ++i) {
