@@ -453,7 +453,7 @@ export class PhrasesFilteredByCategory extends Component {
               >
                 <FVButton
                   type="button"
-                  variant="flat"
+                  variant="text"
                   size="small"
                   component="a"
                   className="DictionaryList__linkEdit PrintHide"

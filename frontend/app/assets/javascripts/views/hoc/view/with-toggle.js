@@ -50,7 +50,7 @@ export default function withToggle() {
           <div className="panel-heading">
             {label}
             <FVButton
-              variant="flat"
+              variant="text"
               className={classNames({ 'visible-xs': mobileOnly })}
               onClick={(e) => {
                 this.setState({ open: !this.state.open })

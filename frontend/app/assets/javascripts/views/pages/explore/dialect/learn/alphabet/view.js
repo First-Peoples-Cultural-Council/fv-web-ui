@@ -261,7 +261,7 @@ export class AlphabetView extends Component {
                       <div className={`${hasMedia ? 'col-xs-8' : ''} fontAboriginalSans`}>
                         <div className="AlphabetViewRow">
                           <div className="AlphabetViewRowItem">
-                            <Typography component="h2" variant="headline">
+                            <Typography component="h2" variant="h5">
                               {character}
                             </Typography>
                           </div>

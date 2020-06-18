@@ -167,7 +167,7 @@ function DictionaryListData(props) {
               >
                 <FVButton
                   type="button"
-                  variant="flat"
+                  variant="text"
                   size="small"
                   component="a"
                   className="DictionaryList__linkEdit PrintHide"
