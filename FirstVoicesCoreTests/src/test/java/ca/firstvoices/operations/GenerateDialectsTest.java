@@ -2,6 +2,7 @@ package ca.firstvoices.operations;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesCoreTestsTest;
 import ca.firstvoices.tests.mocks.operations.GenerateDialects;
+import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -16,15 +17,22 @@ public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
 
   @Test
   public void generateEmptyDialects() throws OperationException {
-    //will refactor to add parameters once populating the dialects is implemented
+
+    int expectedDialects = 50;
+    params = new HashMap<>();
+    params.put("randomize", "true");
+    params.put("maxDialects", "" + expectedDialects);
+    params.put("maxEntries", "20");
+
     startFresh(session);
     OperationContext ctx = new OperationContext(session);
 
-    automationService.run(ctx, GenerateDialects.ID);
+    automationService.run(ctx, GenerateDialects.ID, params);
 
     DocumentModelList generatedDialects = session.query("SELECT * FROM FVDialect");
 
-    Assert.assertEquals(10, generatedDialects.size());
+    Assert.assertEquals(generatedDialects.size(), expectedDialects);
+    Assert.assertEquals(0, session.query("SELECT * from FVWord, FVPhrase").size());
   }
 
 }

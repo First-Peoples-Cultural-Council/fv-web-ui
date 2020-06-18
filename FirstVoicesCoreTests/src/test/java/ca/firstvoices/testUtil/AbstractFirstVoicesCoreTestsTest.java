@@ -1,6 +1,7 @@
 package ca.firstvoices.testUtil;
 
 import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
+import java.util.Map;
 import javax.inject.Inject;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.AutomationService;
@@ -21,6 +22,7 @@ public abstract class AbstractFirstVoicesCoreTestsTest {
   @Inject
   protected AutomationService automationService;
 
+  protected Map<String, String> params;
 
   public void startFresh(CoreSession session) {
     DocumentRef dRef = session.getRootDocument().getRef();

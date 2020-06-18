@@ -2,6 +2,7 @@ package ca.firstvoices.operations;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesCoreTestsTest;
 import ca.firstvoices.tests.mocks.operations.GenerateDialect;
+import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -17,17 +18,30 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
 
   @Test
   public void generateEmptyDialectTreeDoesntExist() throws OperationException {
+
+    params = new HashMap<>();
+    params.put("randomize", "true");
+    params.put("maxEntries", "50");
+    params.put("dialectName", "Xx_Dialect_xX");
+
     startFresh(session);
     OperationContext ctx = new OperationContext(session);
 
-    automationService.run(ctx, GenerateDialect.ID);
+    automationService.run(ctx, GenerateDialect.ID, params);
 
     Assert.assertTrue(
-        session.exists(new PathRef("/FV/Workspaces/Data/TestLangFam/TestLang/TestDialect1")));
+        session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
+    Assert.assertEquals(0, session.query("SELECT * from FVWord, FVPhrase").size());
   }
 
   @Test
   public void generateEmptyDialectTreeExists() throws OperationException {
+
+    params = new HashMap<>();
+    params.put("randomize", "true");
+    params.put("maxEntries", "50");
+    params.put("dialectName", "Xx_Dialect_xX");
+
     startFresh(session);
 
     DocumentModel domain = createDocument(session,
@@ -38,17 +52,17 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
         session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
     DocumentModel languageFamily = createDocument(session,
         session
-            .createDocumentModel("/FV/Workspaces/Data", "TestLangFam", "FVLanguageFamily"));
+            .createDocumentModel("/FV/Workspaces/Data", "Test", "FVLanguageFamily"));
     DocumentModel language = createDocument(session,
-        session.createDocumentModel("/FV/Workspaces/Data/TestLangFam", "TestLang",
+        session.createDocumentModel("/FV/Workspaces/Data/Test", "Test",
             "FVLanguage"));
 
     OperationContext ctx = new OperationContext(session);
 
-    automationService.run(ctx, GenerateDialect.ID);
+    automationService.run(ctx, GenerateDialect.ID, params);
 
     Assert.assertTrue(
-        session.exists(new PathRef("/FV/Workspaces/Data/TestLangFam/TestLang/TestDialect1")));
+        session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
   }
 
 

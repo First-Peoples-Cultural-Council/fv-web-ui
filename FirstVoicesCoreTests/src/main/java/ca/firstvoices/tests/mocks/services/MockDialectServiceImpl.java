@@ -48,9 +48,9 @@ public class MockDialectServiceImpl implements MockDialectService {
   private void generateDialectTree(CoreSession session) {
     //NOTE: Note entirely satisfied with this method,
     // should I handle more cases such as partially generated trees?
-    // ie only /FV/Workspaces/Data/TestLangFam or /FV/Workspaces/ exists?
+    // ie only /FV/Workspaces/Data/Test or /FV/Workspaces/ exists?
 
-    String testPath = "/FV/Workspaces/Data/TestLangFam/TestLang/";
+    String testPath = "/FV/Workspaces/Data/Test/Test/";
     //if path exists, do nothing
     if (!session.exists(new PathRef(testPath))) {
 
@@ -67,9 +67,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       if (session.exists(new PathRef("FV/Workspaces/Data/"))) {
         DocumentModel languageFamily = createDocument(session,
             session
-                .createDocumentModel("/FV/Workspaces/Data", "TestLangFam", "FVLanguageFamily"));
+                .createDocumentModel("/FV/Workspaces/Data", "Test", "FVLanguageFamily"));
         DocumentModel language = createDocument(session,
-            session.createDocumentModel("/FV/Workspaces/Data/TestLangFam", "TestLang",
+            session.createDocumentModel("/FV/Workspaces/Data/Test", "Test",
                 "FVLanguage"));
       } else {
         throw new NuxeoException("Document tree FV/Workspaces/Data/ must exist");
@@ -87,7 +87,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     DocumentModel dialect = createDocument(session,
         session
-            .createDocumentModel("/FV/Workspaces/Data/TestLangFam/TestLang/", name, "FVDialect"));
+            .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, "FVDialect"));
     DocumentModel dictionary = createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Dictionary", "FVDictionary"));
     DocumentModel alphabet = createDocument(session,

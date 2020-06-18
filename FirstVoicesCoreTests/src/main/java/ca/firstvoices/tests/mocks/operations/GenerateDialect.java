@@ -19,7 +19,7 @@ public class GenerateDialect {
   @Context
   protected CoreSession session;
 
-  @Param(name = "randomize", required = false, values = {"true", "false"},
+  @Param(name = "randomize", values = {"true", "false"},
       description = "`true` to create random data; `false` to create real demo data")
   protected boolean randomize = true;
 
