@@ -11,12 +11,12 @@ echo
 ## Stop containers
 echo -e "Stopping all containers within group 'local_docker':"
 echo
-docker stop $(docker ps --filter $LABEL)
+docker stop $(docker ps -q -a --filter $LABEL)
 echo
 
 ## Remove containers
 echo -e "Removing containers within group 'local_docker':"
-docker rm -f $(docker ps --filter $LABEL)
+docker rm -f $(docker ps -q -a --filter $LABEL)
 echo
 
 ## Remove images (Note this generally should not be needed)
