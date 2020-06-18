@@ -35,7 +35,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Typography from '@material-ui/core/Typography'
 
-
 /**
  * Explore Archive page shows all the families in the archive
  */
@@ -121,7 +120,7 @@ export class PageContent extends Component {
         page = (
           <div>
             {pageTitle && (
-              <Typography variant="headline" gutterBottom>
+              <Typography variant="h5" gutterBottom>
                 {this.props.intl.searchAndReplace(pageTitle, { case: 'first' })}
               </Typography>
             )}
@@ -129,7 +128,7 @@ export class PageContent extends Component {
             <hr style={{ backgroundColor: primary1Color, width: '100%', height: '2px', margin: '0 0 10px 0' }} />
 
             {contentTitle && (
-              <Typography variant="title" gutterBottom>
+              <Typography variant="h6" gutterBottom>
                 {this.props.intl.searchAndReplace(contentTitle, { case: 'first' })}
               </Typography>
             )}
@@ -197,7 +196,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     routeParams: route.routeParams,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 
@@ -208,7 +207,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageContent)
+export default connect(mapStateToProps, mapDispatchToProps)(PageContent)

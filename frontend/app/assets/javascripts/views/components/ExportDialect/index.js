@@ -280,7 +280,7 @@ export class ExportDialect extends Component {
     const { message } = exportLast
     return (
       <div>
-        <Typography variant="body1">{message || "Couldn't export at this time"}</Typography>
+        <Typography variant="body2">{message || "Couldn't export at this time"}</Typography>
       </div>
     )
   }

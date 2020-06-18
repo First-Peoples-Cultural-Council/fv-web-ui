@@ -149,7 +149,7 @@ export class PhrasesListView extends DataListView {
                 >
                   <FVButton
                     type="button"
-                    variant="flat"
+                    variant="text"
                     size="small"
                     component="a"
                     className="DictionaryList__linkEdit PrintHide"

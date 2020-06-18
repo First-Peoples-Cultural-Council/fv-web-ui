@@ -39,7 +39,6 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import FVLabel from '../FVLabel/index'
 
-
 const { array, func, object, bool } = PropTypes
 export class KidsNavigation extends Component {
   static propTypes = {
@@ -96,7 +95,7 @@ export class KidsNavigation extends Component {
       <div className="Navigation">
         <AppBar position="static">
           <Toolbar style={{ alignItems: 'center', backgroundColor: 'inherit' }}>
-            <Typography variant="body1" noWrap style={{ flexGrow: 1 }}>
+            <Typography variant="body2" noWrap style={{ flexGrow: 1 }}>
               <a
                 style={{ textDecoration: 'none', color: '#fff' }}
                 onClick={this._onNavigateRequest.bind(this, homeURL)}
@@ -104,9 +103,7 @@ export class KidsNavigation extends Component {
                 {avatar}
                 <span className="hidden-xs">
                   {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-                    this.props.properties.title) +
-                    ' '
-                  }
+                    this.props.properties.title) + ' '}
                   <FVLabel transKey="views.pages.explore.dialect.for_kids" defaultStr="for Kids" />
                 </span>
               </a>
@@ -137,7 +134,10 @@ export class KidsNavigation extends Component {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title={this.props.intl.trans('back_to_main_site', 'Back to Main Site', 'words')} placement="bottom-end">
+            <Tooltip
+              title={this.props.intl.trans('back_to_main_site', 'Back to Main Site', 'words')}
+              placement="bottom-end"
+            >
               <IconButton onClick={this._onNavigateRequest.bind(this, NavigationHelpers.generateStaticURL('/'))}>
                 <ClearIcon />
               </IconButton>
@@ -178,7 +178,4 @@ const mapDispatchToProps = {
   toggleMenuAction,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(KidsNavigation)
+export default connect(mapStateToProps, mapDispatchToProps)(KidsNavigation)

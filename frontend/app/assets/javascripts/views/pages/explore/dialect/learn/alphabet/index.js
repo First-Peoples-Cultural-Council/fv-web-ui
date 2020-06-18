@@ -295,7 +295,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                       return (
                         <FVButton
                           key={char.uid}
-                          variant="flat"
+                          variant="text"
                           onClick={_this._onCharAudioTouchTap.bind(this, char)}
                           //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
                           className="alphabet__character"

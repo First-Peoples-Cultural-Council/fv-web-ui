@@ -236,7 +236,7 @@ export class PageToolbar extends Component {
                     />
                   }
                   label={
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                       {documentEnabled || documentPublished ? (
                         <FVLabel transKey="enabled" defaultStr="Enabled" transform="first" />
                       ) : (
@@ -478,7 +478,7 @@ export class PageToolbar extends Component {
                 />
               }
               label={
-                <Typography variant="body1">
+                <Typography variant="body2">
                   {documentPublished ? (
                     <FVLabel transKey="published" defaultStr="Published" transform="first" />
                   ) : (

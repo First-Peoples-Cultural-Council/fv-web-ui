@@ -39,7 +39,7 @@ import '!style-loader!css-loader!./modalStyles.css'
  */
 const { func, object, string } = PropTypes
 
-const styles = (theme) => ({
+const styles = () => ({
   inputRoot: {
     padding: '0',
     marginBottom: '16px',
@@ -164,8 +164,8 @@ class ModalContent extends Component {
 
   renderTranslation = (label) => {
     if (label.type === 'phrase') return label.base
-    var translation = label.base
-    var count = 0
+    const translation = label.base
+    let count = 0
     const words = translation.split(/(%s)/g).map((word, i) => {
       if (word === '%s') {
         const chip = (
@@ -175,18 +175,17 @@ class ModalContent extends Component {
         )
         count++
         return chip
-      } else {
-        return <span key={i}>{word}</span>
       }
+      return <span key={i}>{word}</span>
     })
     return words
   }
 
   scriptTranslation = (label) => {
     const { translation } = this.state
-    var words = translation.join('')
-    label.templateStrings.forEach((string) => {
-      words = words.replace('%s', string)
+    let words = translation.join('')
+    label.templateStrings.forEach((templateString) => {
+      words = words.replace('%s', templateString)
     })
     return words
   }
@@ -242,7 +241,7 @@ class ModalContent extends Component {
             <legend>Immersive Information</legend>
             {/* need locale key */}
             <div className="alert alert-info">
-              <i>This will show for the site's 'Immersion' experience.</i>
+              <i>{"This will show for the site's 'Immersion' experience."}</i>
               {/* need locale key */}
             </div>
             <div className={error || hadError ? 'has-error' : ''}>
@@ -304,11 +303,11 @@ class ModalContent extends Component {
         </DialogContent>
         <DialogActions style={{ justifyContent: 'space-between' }}>
           <div>
-            <FVButton variant="flat" onClick={() => handleClose()} style={{ marginRight: '10px' }}>
+            <FVButton variant="text" onClick={() => handleClose()} style={{ marginRight: '10px' }}>
               <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
             </FVButton>
             {label.state === 'Published' && (
-              <FVButton variant="flat" onClick={() => handleUnpublish()} style={{ marginRight: '10px' }}>
+              <FVButton variant="text" onClick={() => handleUnpublish()} style={{ marginRight: '10px' }}>
                 <FVLabel transKey="unpublish" defaultStr="Unpublish" transform="first" />
               </FVButton>
             )}
