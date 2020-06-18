@@ -16,7 +16,8 @@ import org.nuxeo.runtime.api.Framework;
  * @author david
  */
 @Operation(id = UpdateVisibilityOperation.ID, category = Constants.CAT_DOCUMENT, label =
-    "UpdateVisibilityOperation", description = "Toggle the visiblity of a document")
+    "UpdateVisibilityOperation", description =
+    "Toggle the visiblity of a document that belongs " + "to the fv-lifecycle policy")
 public class UpdateVisibilityOperation {
 
   public static final String ID = "Document.UpdateVisibilityOperation";
