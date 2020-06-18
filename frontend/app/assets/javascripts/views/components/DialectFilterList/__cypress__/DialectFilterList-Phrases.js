@@ -28,12 +28,12 @@ describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
       clearFilter: false,
     })
 
-    cy.getByText('Create new phrase', {
+    cy.findByText('Create new phrase', {
       exact: false,
     }).click()
     cy.wait(500)
 
-    cy.getByText('Add New Phrase to', {
+    cy.findByText('Add New Phrase to', {
       exact: false,
     }).should('exist')
 
@@ -61,8 +61,8 @@ describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
 
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(500)
-    cy.getByTestId('DialectFilterList').within(() => {
-      cy.getByText(category).should('not.have.class', 'DialectFilterListLink--active')
+    cy.findByTestId('DialectFilterList').within(() => {
+      cy.findByText(category).should('not.have.class', 'DialectFilterListLink--active')
     })
   })
 
@@ -85,14 +85,14 @@ describe('DialectFilterList-Phrases.js > DialectFilterList', () => {
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('TestPhraseEight').should('exist')
+        cy.findByText('TestPhraseEight').should('exist')
       })
     cy.get('.DictionaryList__data--title .DictionaryList__colSort').click()
     cy.wait(500)
     cy.queryAllByTestId('DictionaryList__row')
       .eq(0)
       .within(() => {
-        cy.getByText('TestPhraseTwo').should('exist')
+        cy.findByText('TestPhraseTwo').should('exist')
       })
   })
 })

@@ -7,18 +7,18 @@ const waitShort = 50
 // ===============================================
 function clearWordForm() {
   cy.logger({type: 'subheader', text: 'clearWordForm'})
-  cy.getByTestId('pageContainer').within(() => {
+  cy.findByTestId('pageContainer').within(() => {
     // Clear input texts
-    cy.getByTestId('dc-title').clear()
-    cy.getByTestId('fv-word-pronunciation').clear()
-    cy.getByTestId('fv-reference').clear()
-    cy.getByTestId('fv-word-acknowledgement').clear()
+    cy.findByTestId('dc-title').clear()
+    cy.findByTestId('fv-word-pronunciation').clear()
+    cy.findByTestId('fv-reference').clear()
+    cy.findByTestId('fv-word-acknowledgement').clear()
 
     // Remove x's
     cy.formClickAllXs()
   })
   // reset select
-  cy.getByTestId('fv-word-part_of_speech').select('true')
+  cy.findByTestId('fv-word-part_of_speech').select('true')
 }
 
 // ===============================================
@@ -33,17 +33,17 @@ function populateWordForm({
 }) {
   // [POPULATE] Word
   cy.logger({type: 'subheader', text: `${prefix} Title`})
-  cy.getByTestId('dc-title')
+  cy.findByTestId('dc-title')
     .clear()
     .type(title)
 
   // [POPULATE] Part of speech
   cy.logger({type: 'subheader', text: `${prefix} Part of Speech`})
-  cy.getByTestId('fv-word-part_of_speech').select('question_word')
+  cy.findByTestId('fv-word-part_of_speech').select('question_word')
 
   // [POPULATE] Pronunciation
   cy.logger({type: 'subheader', text: `${prefix} Pronounciation`})
-  cy.getByTestId('fv-word-pronunciation')
+  cy.findByTestId('fv-word-pronunciation')
     .clear()
     .type(pronounciation)
 
@@ -53,8 +53,8 @@ function populateWordForm({
 
   // [POPULATE] Literal Translation
   cy.logger({type: 'subheader', text: `${prefix} Literal Translation`})
-  cy.getByText('+ Add literal translation', { exact: false }).click()
-  cy.getByTestId('fv-literal_translation0translation').type(literalTranslation)
+  cy.findByText('+ Add literal translation', { exact: false }).click()
+  cy.findByTestId('fv-literal_translation0translation').type(literalTranslation)
 
   // [POPULATE] Audio
   cy.logger({type: 'subheader', text: `${prefix} Audio`})
@@ -63,7 +63,7 @@ function populateWordForm({
     description: `${prefix} AUDIO > DESCRIPTION`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
 
   // [POPULATE] picture
@@ -73,7 +73,7 @@ function populateWordForm({
     description: `${prefix} Related pictures > Description`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
   // [POPULATE] video
   cy.logger({type: 'subheader', text: `${prefix} Video`})
@@ -82,17 +82,17 @@ function populateWordForm({
     description: `${prefix} Related videos > Description`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
   // [POPULATE] phrases
   cy.logger({type: 'subheader', text: `${prefix} Phrases`})
-  cy.getByText('+ Add related phrases', { exact: false }).click()
+  cy.findByText('+ Add related phrases', { exact: false }).click()
 
-  cy.getByText('create new phrase', { exact: false }).click()
+  cy.findByText('create new phrase', { exact: false }).click()
 
-  cy.getByTestId('PhrasesCreate__form').within(() => {
-    cy.getByLabelText('phrase', { exact: false }).type(`${prefix} PHRASE`)
-    cy.getByText('save', { exact: false }).click()
+  cy.findByTestId('PhrasesCreate__form').within(() => {
+    cy.findByLabelText('phrase', { exact: false }).type(`${prefix} PHRASE`)
+    cy.findByText('save', { exact: false }).click()
   })
 
   // [POPULATE] Cultural Note
@@ -126,19 +126,19 @@ function populateWordFormBrowse({
     name: browseTitleAudio,
     description: browseDescriptionAudio,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateRelatedPictures({
     name: browseTitlePicture,
     description: `${timestamp} Related pictures > Description`,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateRelatedVideos({
     name: browseTitleVideo,
     description: `${timestamp} Related videos > Description`,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateSource({name: browseTitleSource})
 
@@ -219,9 +219,9 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/words')
     // cy.wait(waitMedium)
-    cy.getByText('TestLanguageOne Words', { exact: false }).should('exist')
-    cy.getByText('Create New Word', { exact: false }).click()
-    cy.getByText('Add New Word to TestLanguageOne').should('exist')
+    cy.findByText('TestLanguageOne Words', { exact: false }).should('exist')
+    cy.findByText('Create New Word', { exact: false }).click()
+    cy.findByText('Add New Word to TestLanguageOne').should('exist')
 
     // Browse
     cy.logger({type: 'header', text: 'CREATE > BROWSE'})
@@ -247,43 +247,43 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
 
     // CREATE children's archive
     cy.logger({type: 'subheader', text: `${prefix} Childrens\'s archive`})
-    cy.getByLabelText("Available in children's archive", { exact: false }).check()
+    cy.findByLabelText("Available in children's archive", { exact: false }).check()
 
     // CREATE games
     cy.logger({type: 'subheader', text: `${prefix} Available in games`})
-    cy.getByLabelText('Available in games', { exact: false }).check()
+    cy.findByLabelText('Available in games', { exact: false }).check()
 
     cy.logger({type: 'subheader', text: `${prefix} Save`})
-    cy.getByTestId('PageDialectWordsCreate__form').within(() => {
-      cy.getByText('save', { exact: false }).click()
+    cy.findByTestId('PageDialectWordsCreate__form').within(() => {
+      cy.findByText('save', { exact: false }).click()
     })
     cy.wait(waitMedium)
 
     // Read
     cy.logger({text: 'READ'})
-    cy.getByText(title).should('exist')
-    cy.getByText(definition).should('exist')
-    cy.getByText(literalTranslation).should('exist')
-    cy.getByText(pronounciation).should('exist')
+    cy.findByText(title).should('exist')
+    cy.findByText(definition).should('exist')
+    cy.findByText(literalTranslation).should('exist')
+    cy.findByText(pronounciation).should('exist')
 
-    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
-      cy.getByLabelText('Show Audio Information', {exact: false}).each(($el) => {
+    cy.findByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.findByLabelText('Show Audio Information', {exact: false}).each(($el) => {
         cy.wrap($el)
           .click()
       })
     })
-    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
-      cy.getByText(browseDescriptionAudio).should('exist')
+    cy.findByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.findByText(browseDescriptionAudio).should('exist')
     })
-    cy.getByText(browseTitlePicture).should('exist')
-    cy.getByText(browseTitleVideo).should('exist')
+    cy.findByText(browseTitlePicture).should('exist')
+    cy.findByText(browseTitleVideo).should('exist')
 
-    cy.getByText('metadata', { exact: false }).click()
-    cy.getByText(browseTitleSource).should('exist')
+    cy.findByText('metadata', { exact: false }).click()
+    cy.findByText(browseTitleSource).should('exist')
 
     // Update
     cy.logger({text: 'UPDATE'})
-    cy.getByText('Edit', { exact: false }).click()
+    cy.findByText('Edit', { exact: false }).click()
     cy.wait(waitMedium)
     clearWordForm()
     populateWordForm({
@@ -296,30 +296,30 @@ describe('word_crud.js > PageDialectWordsCreate', () => {
 
     // UPDATE: save
     cy.logger({type: 'subheader', text: `${prefix} Save`})
-    cy.getByTestId('withForm__btnGroup2').within(() => {
-      cy.getByText('save', { exact: false }).click()
+    cy.findByTestId('withForm__btnGroup2').within(() => {
+      cy.findByText('save', { exact: false }).click()
     })
 
     cy.wait(waitMedium)
 
     // UPDATE: verify
     cy.logger({type: 'subheader', text: `${prefix} VERIFY`})
-    cy.getByText(updateTitle).should('exist')
-    cy.getByText(updateDefinition).should('exist')
-    cy.getByText(updateLiteralTranslation).should('exist')
-    cy.getByText(updatePronounciation).should('exist')
+    cy.findByText(updateTitle).should('exist')
+    cy.findByText(updateDefinition).should('exist')
+    cy.findByText(updateLiteralTranslation).should('exist')
+    cy.findByText(updatePronounciation).should('exist')
 
     // DELETE
     cy.logger({text: 'DELETE'})
 
-    cy.getByText('delete word', { exact: false }).click()
+    cy.findByText('delete word', { exact: false }).click()
 
     // TODO: need more reliable hook
-    cy.getByTestId('ViewWithActions__dialog').within(() => {
-      cy.getByText('Delete').click()
+    cy.findByTestId('ViewWithActions__dialog').within(() => {
+      cy.findByText('Delete').click()
     })
     cy.wait(waitShort)
-    cy.getByText('Delete word success', { exact: false }).should('exist')
+    cy.findByText('Delete word success', { exact: false }).should('exist')
 
     // NOTE: reload can still access page (or with saved url)
     // cy.reload()

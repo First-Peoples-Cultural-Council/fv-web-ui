@@ -11,13 +11,13 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Stories', { exact: true }).click()
+      cy.findByText('Stories', { exact: true }).click()
     })
-    cy.queryByText('TestStoryTitle').should('not.exist')
-    cy.queryByText('Continue to story').should('not.exist')
-    cy.getByText('Create Story Book', { exact: true }).click()
+    cy.findByText('TestStoryTitle').should('not.exist')
+    cy.findByText('Continue to story').should('not.exist')
+    cy.findByText('Create Story Book', { exact: true }).click()
 
     /*
                 Enter the data to create a new story book.
@@ -44,7 +44,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.queryAllByText('+ Add new')
         .eq(2)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryAudio')
@@ -53,10 +53,10 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                 Image upload
@@ -65,7 +65,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.queryAllByText('+ Add new')
         .eq(3)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryImage')
@@ -74,10 +74,10 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                 Video upload
@@ -86,7 +86,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.queryAllByText('+ Add new')
         .eq(4)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryVideo')
@@ -95,10 +95,10 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                 Finishing the story creation form and save
@@ -109,7 +109,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
         .click()
       cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestStoryCulturalNote')
     })
-    cy.getByText('Save', { exact: true }).click()
+    cy.findByText('Save', { exact: true }).click()
     cy.wait(500)
 
     /*
@@ -117,10 +117,10 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
              */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestStoryTitle').should('exist')
-      cy.getByText('TestStoryTranslation').should('exist')
-      cy.getByText('Continue to story').should('exist')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('TestStoryTitle').should('exist')
+      cy.findByText('TestStoryTranslation').should('exist')
+      cy.findByText('Continue to story').should('exist')
     })
 
     /*
@@ -137,7 +137,7 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.queryByText('TestStoryTitle').should('not.exist')
+    cy.findByText('TestStoryTitle').should('not.exist')
     cy.logout()
 
     /*
@@ -148,29 +148,29 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.queryByText('TestStoryTitle')
+    cy.findByText('TestStoryTitle')
       .should('exist')
       .click()
-    cy.getByText('Edit')
+    cy.findByText('Edit')
       .should('exist')
       .click()
 
     cy.get('fieldset.fieldset').within(() => {
       cy.get('[name="dc:title"]').type('Edited')
     })
-    cy.getByText('Save', { exact: true }).click()
+    cy.findByText('Save', { exact: true }).click()
     cy.wait(500)
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestStoryTranslation').should('exist')
-      cy.getByText('Continue to story').should('exist')
-      cy.getByText('TestStoryTitleEdited')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('TestStoryTranslation').should('exist')
+      cy.findByText('Continue to story').should('exist')
+      cy.findByText('TestStoryTitleEdited')
         .should('exist')
         .click()
     })
 
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(0)
@@ -187,10 +187,10 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestStoryTitleEdited').should('exist')
-      cy.getByText('TestStoryTranslation').should('exist')
-      cy.getByText('Continue to story').should('exist')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('TestStoryTitleEdited').should('exist')
+      cy.findByText('TestStoryTranslation').should('exist')
+      cy.findByText('Continue to story').should('exist')
     })
     cy.logout()
 
@@ -202,11 +202,11 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFour/learn/stories')
     cy.wait(500)
-    cy.queryByText('TestStoryTitleEdited')
+    cy.findByText('TestStoryTitleEdited')
       .should('exist')
       .click()
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(1)
@@ -214,8 +214,8 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
       })
     })
     cy.wait(500)
-    cy.getByTestId('ViewWithActions__buttonPublish').within(() => {
-      cy.getByText('Publish', { exact: true }).click()
+    cy.findByTestId('ViewWithActions__buttonPublish').within(() => {
+      cy.findByText('Publish', { exact: true }).click()
     })
     cy.wait(1000)
     cy.reload()
@@ -224,15 +224,15 @@ describe('RecorderCreate-Story.js > RecorderCreate-Story', () => {
     /*
         Check that the published story is visible.
      */
-    cy.getByText('Public View').click()
+    cy.findByText('Public View').click()
     cy.wait(1500)
     cy.get('[id="pageNavigation"]').within(() => {
       cy.get('div.row.Navigation__dialectContainer')
         .should('have.css', 'background-color')
         .and('eq', 'rgb(58, 104, 128)')
     })
-    cy.getByText('TestStoryTitleEdited').should('exist')
-    cy.getByText('TestStoryTranslation').should('exist')
-    cy.getByText('TestStoryBookIntroduction').should('exist')
+    cy.findByText('TestStoryTitleEdited').should('exist')
+    cy.findByText('TestStoryTranslation').should('exist')
+    cy.findByText('TestStoryBookIntroduction').should('exist')
   })
 })
