@@ -91,12 +91,7 @@ export class ToolbarNavigation extends Component {
   }
 
   _getNavigationURL = (path, appendPagination = false) => {
-    let url = ''
-    if (this.props.splitWindowPath[this.props.splitWindowPath.length - 1] === 'learn') {
-      url = `${this.props.windowPath}/${path}`
-    } else {
-      url = `${this.props.windowPath}/learn/${path}`
-    }
+    let url = `/explore${this.props.routeParams.dialect_path}/learn/${path}`
     if (appendPagination) {
       url = `${url}/${this.props.pageSize}/1`
     }

@@ -314,6 +314,7 @@ const options = {
       'fv:related_pictures',
       'fv:related_videos',
       'fv-word:related_phrases',
+      'fv:related_assets',
       'fv-word:categories',
       'fv:cultural_note',
       'fv:reference',
@@ -414,6 +415,26 @@ const options = {
         i18n: {
           ...i18nExt,
           add: `+ ${intl.trans('add_related_phrases', 'Add related phrases', 'first')}`,
+        },
+      },
+
+      'fv:related_assets': {
+        label: intl.trans('related_assets', 'Related Words', 'first'),
+        item: {
+          factory: SelectSuggestFactory,
+          // When change from Related Words -> Related Assets change type to be all FVCore Documents
+          type: 'FVWord',
+          attrs: {
+            disableCreateNewButton: true,
+            previewProps: {
+              minimal: true,
+            },
+          },
+        },
+        i18n: {
+          ...i18nExt,
+          // When change from Related Words -> Related Assets change label here
+          add: `+ ${intl.trans('add_related_asset', 'Add related word', 'first')}`,
         },
       },
       'fv-word:categories': {

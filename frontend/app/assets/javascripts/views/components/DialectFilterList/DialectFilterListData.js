@@ -8,9 +8,6 @@ import { Set } from 'immutable'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-// REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 
 class DialectFilterListData extends Component {
@@ -252,17 +249,15 @@ class DialectFilterListData extends Component {
 
   setSelected = ({ href, checkedFacetUid, childrenIds }) => {
     // 'check' new
-    this.setState(() => {
-      const selected = {
-        checkedFacetUid,
-        childrenIds,
-      }
+    const selected = {
+      checkedFacetUid,
+      childrenIds,
+    }
 
-      this.setDialectFilter({
-        facetField: this.state.facetField,
-        href,
-        selected,
-      })
+    this.setDialectFilter({
+      facetField: this.state.facetField,
+      href,
+      selected,
     })
   }
 
@@ -284,17 +279,15 @@ class DialectFilterListData extends Component {
       const selectedParams = this.historyData[_filterId]
       if (selectedParams) {
         const { href, checkedFacetUid, childrenIds } = selectedParams
-        this.setState(() => {
-          const selected = {
-            checkedFacetUid,
-            childrenIds,
-          }
-          this.setDialectFilter({
-            facetField: this.state.facetField,
-            href,
-            selected,
-            updateUrl: false,
-          })
+        const selected = {
+          checkedFacetUid,
+          childrenIds,
+        }
+        this.setDialectFilter({
+          facetField: this.state.facetField,
+          href,
+          selected,
+          updateUrl: false,
         })
       }
     }
@@ -338,12 +331,10 @@ DialectFilterListData.propTypes = {
   workspaceKey: string, // Used with facetField
   // Redux props:
   // REDUX: reducers/state
-  computeCategories: object.isRequired,
   routeParams: object.isRequired,
   splitWindowPath: array.isRequired,
-  // REDUX: actions/dispatch/func
-  fetchCategories: func.isRequired,
 }
+
 DialectFilterListData.defaultProps = {
   appliedFilterIds: new Set(),
   dialectFilterListWillUnmount: () => {},
@@ -351,19 +342,13 @@ DialectFilterListData.defaultProps = {
 
 // REDUX: reducers/state
 const mapStateToProps = (state) => {
-  const { fvCategory, navigation, windowPath } = state
-  const { computeCategories } = fvCategory
+  const { navigation, windowPath } = state
   const { route } = navigation
   const { splitWindowPath } = windowPath
   return {
-    computeCategories,
     routeParams: route.routeParams,
     splitWindowPath,
   }
 }
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchCategories,
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(DialectFilterListData)
+export default connect(mapStateToProps)(DialectFilterListData)

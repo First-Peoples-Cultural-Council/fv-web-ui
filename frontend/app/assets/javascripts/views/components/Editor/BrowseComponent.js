@@ -40,7 +40,7 @@ import CategoriesListView from 'views/pages/explore/dialect/learn/words/categori
 import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-import WordListView from 'views/pages/explore/dialect/learn/words/list-view'
+import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
 import FVLabel from '../FVLabel/index'
 const DefaultFetcherParams = {
   currentPageIndex: 1,
@@ -195,7 +195,7 @@ export class BrowseComponent extends Component {
           [selectn('properties.dc:title', dialect)]
         )}:`
         view = (
-          <WordListView
+          <WordsListView
             dialect={dialect}
             hasSorting={false}
             hasViewModeButtons={false}

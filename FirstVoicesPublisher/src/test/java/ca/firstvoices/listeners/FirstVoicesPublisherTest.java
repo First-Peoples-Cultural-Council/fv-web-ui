@@ -321,6 +321,9 @@ public class FirstVoicesPublisherTest {
     values[0] = contributor.getId();
     values[1] = contributor2.getId();
     word.setPropertyValue("fvcore:source", values);
+    values = new String[1];
+    values[0] = subcategory.getId();
+    word.setPropertyValue("fv:related_assets", values);
     word = session.createDocument(word);
   }
 
@@ -476,6 +479,9 @@ public class FirstVoicesPublisherTest {
         doc.getPathAsString().matches("/Family/Language/Dialect/Contributors/myContributor2"));
     assertEquals(contributor2.getRef().toString(), doc.getSourceId());
     property = (String[]) proxy.getPropertyValue("fvproxy:proxied_categories");
+    assertEquals(1, property.length);
+    assertNotEquals(subcategory.getRef(), new IdRef(property[0]));
+    property = (String[]) proxy.getPropertyValue("fvproxy:proxied_related_assets");
     assertEquals(1, property.length);
     assertNotEquals(subcategory.getRef(), new IdRef(property[0]));
     doc = session.getDocument(new IdRef(property[0]));

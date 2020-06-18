@@ -385,7 +385,7 @@ export class AlphabetView extends Component {
       return (
         <div className="AlphabetViewRowItem">
           <h3>
-            <FVLabel transKey="audio" defaultStr="Audio" transform="first" />:
+            <FVLabel transKey="audio" defaultStr="Audio" transform="first" />
           </h3>
           <div>
             {noAudioMessage}

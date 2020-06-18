@@ -199,6 +199,8 @@ export class DialectViewWord extends Component {
               {this._getCulturalNotes(computeWord)}
               {this._getLiteralTranslations(computeWord)}
               {this._getPronounciation(computeWord, computeDialect2)}
+              {this._getRelatedAssets(computeWord)}
+              {this._getRelatedToAssets(computeWord)}
             </div>
 
             <aside className="DialectViewWordPhraseContentSecondary">
@@ -442,6 +444,49 @@ export class DialectViewWord extends Component {
           <FVLabel transKey="related_phrases" defaultStr="Related Phrases" transform="first" />
         </h3>
         <div className="DialectViewWordPhraseContentItemGroup">{phrases}</div>
+      </div>
+    ) : null
+  }
+
+  _getRelations = (assetData) => {
+    const siteTheme = this.props.routeParams.siteTheme
+    return assetData.map((asset) => {
+      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'words')
+      return (
+        <a key={selectn('uid', asset)} href={hrefPath}>
+          <li>{selectn('dc:title', asset)}</li>
+        </a>
+      )
+    })
+  }
+
+  _getRelatedAssets = (computeWord) => {
+    const assetData = selectn('response.contextParameters.word.related_assets', computeWord) || []
+    const assets = this._getRelations(assetData)
+    return assets.length > 0 ? (
+      <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
+        <h3 className="DialectViewWordPhraseContentItemTitle">
+          {/* When change from Related Words -> Related Assets change label below */}
+          <FVLabel transKey="related_assets" defaultStr="Related Words" transform="first" />
+        </h3>
+        <div className="DialectViewWordPhraseContentItemGroup">
+          <ul>{assets}</ul>
+        </div>
+      </div>
+    ) : null
+  }
+
+  _getRelatedToAssets = (computeWord) => {
+    const relatedToAssetData = selectn('response.contextParameters.word.related_by', computeWord) || []
+    const assets = this._getRelations(relatedToAssetData)
+    return assets.length > 0 ? (
+      <div className="DialectViewWordPhraseContentItem DialectViewWordPhrasePhrase">
+        <h3 className="DialectViewWordPhraseContentItemTitle">
+          <FVLabel transKey="related_by_assets" defaultStr="See Also" transform="first" />
+        </h3>
+        <div className="DialectViewWordPhraseContentItemGroup">
+          <ul>{assets}</ul>
+        </div>
       </div>
     ) : null
   }

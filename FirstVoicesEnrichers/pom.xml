@@ -3,7 +3,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.4.5-SNAPSHOT</version>
+    <version>3.4.6-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>FirstVoicesEnrichers</artifactId>
@@ -110,9 +110,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
+      <groupId>ca.firstvoices</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesOperations</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
