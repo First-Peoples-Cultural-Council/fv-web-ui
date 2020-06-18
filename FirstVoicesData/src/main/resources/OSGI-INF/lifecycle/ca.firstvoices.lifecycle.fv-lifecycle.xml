@@ -29,6 +29,7 @@
             <transition>Unpublish</transition>
             <transition>Republish</transition>
             <transition>RevertToNew</transition>
+            <transition>Enable</transition>
             <transition>Disable</transition>
           </transitions>
         </state>

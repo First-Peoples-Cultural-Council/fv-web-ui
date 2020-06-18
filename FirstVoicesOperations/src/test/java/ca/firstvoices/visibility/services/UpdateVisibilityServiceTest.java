@@ -45,6 +45,14 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
   }
 
   @Test
+  public void testNewToPublic() {
+    firstVoicesPublisherService.publishDialect(dialect);
+    Assert.assertEquals(NEW_STATE, word.getCurrentLifeCycleState());
+    DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, PUBLIC);
+    Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
+  }
+
+  @Test
   public void testTeamToMembers() {
     word.followTransition(DISABLE_TRANSITION);
     Assert.assertEquals(DISABLED_STATE, word.getCurrentLifeCycleState());
