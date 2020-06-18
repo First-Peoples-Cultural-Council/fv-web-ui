@@ -66,7 +66,7 @@ This setup script will:
 1. Create a docker image called `nuxeo-dev` for the back-end
 2. Create volumes on your host machine (in `fv-web-ui/docker/nuxeo_dev_docker`). These will be mounted on the `nuxeo-dev` container.
 
-*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in Development Procedures -> Pushing Changes -> Method 1.
+*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in [Development Procedures -> Pushing Changes -> Method 1](#method-1-deploy-entire-zip---recommended-for-changes-in-multiple-modules).
 
 ### Step 2: Startup the environment
 

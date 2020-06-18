@@ -1,15 +1,11 @@
 #!/bin/bash
 
-# Get the path to this script and the module to be updated
-DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-MODULE=$1
-
 # Set some colors for text formatting
 RED="\e[31m"
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
-cd $DIRECTORY/../
+cd ../
 
 # Build entire FirstVoices package.
 echo 'Building entire package '
