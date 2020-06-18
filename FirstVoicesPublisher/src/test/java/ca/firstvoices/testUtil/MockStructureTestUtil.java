@@ -21,10 +21,10 @@
 package ca.firstvoices.testUtil;
 
 import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
-import static ca.firstvoices.schemas.Constants.FV_WORD;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 

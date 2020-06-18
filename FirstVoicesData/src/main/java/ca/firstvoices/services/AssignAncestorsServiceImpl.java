@@ -20,9 +20,9 @@
 
 package ca.firstvoices.services;
 
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

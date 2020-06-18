@@ -20,9 +20,9 @@
 
 package ca.firstvoices.operations;
 
-import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.Constants.FV_LINKS;
-import static ca.firstvoices.schemas.Constants.FV_RESOURCES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;

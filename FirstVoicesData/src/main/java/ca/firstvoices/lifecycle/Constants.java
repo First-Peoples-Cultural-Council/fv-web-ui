@@ -5,6 +5,10 @@ package ca.firstvoices.lifecycle;
  */
 public class Constants {
 
+  private Constants() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final String NEW_STATE = "New";
   public static final String ENABLED_STATE = "Enabled";
   public static final String DISABLED_STATE = "Disabled";
@@ -15,10 +19,5 @@ public class Constants {
   public static final String UNPUBLISH_TRANSITION = "Unpublish";
   public static final String DISABLE_TRANSITION = "Disable";
   public static final String REPUBLISH_TRANSITION = "Republish";
-  public static final String DELETE_TRANSITION = "Delete";
-
-  private Constants() {
-    throw new IllegalStateException("Utility class");
-  }
 
 }

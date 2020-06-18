@@ -21,14 +21,14 @@
 
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
-import static ca.firstvoices.schemas.Constants.FV_CHARACTER;
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
-import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
-import static ca.firstvoices.schemas.Constants.FV_PHRASE;
-import static ca.firstvoices.schemas.Constants.FV_WORD;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

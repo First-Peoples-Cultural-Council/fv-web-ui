@@ -20,9 +20,9 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
-import static ca.firstvoices.schemas.Constants.FV_AUDIO;
-import static ca.firstvoices.schemas.Constants.FV_PICTURE;
-import static ca.firstvoices.schemas.Constants.FV_VIDEO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 

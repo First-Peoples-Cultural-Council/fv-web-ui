@@ -20,7 +20,7 @@
 
 package ca.firstvoices.operations;
 
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.core.Constants;

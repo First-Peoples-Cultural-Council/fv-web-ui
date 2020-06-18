@@ -20,8 +20,8 @@
 
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

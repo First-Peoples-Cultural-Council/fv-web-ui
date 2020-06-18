@@ -21,14 +21,14 @@
 package testUtil;
 
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.schemas.Constants.FV_ALPHABET;
-import static ca.firstvoices.schemas.Constants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.Constants.FV_CATEGORY;
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
-import static ca.firstvoices.schemas.Constants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.Constants.FV_LANGUAGE_FAMILY;
-import static ca.firstvoices.schemas.Constants.FV_WORD;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;

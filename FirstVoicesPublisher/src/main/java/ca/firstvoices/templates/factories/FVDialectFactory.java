@@ -20,7 +20,7 @@
 
 package ca.firstvoices.templates.factories;
 
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.content.template.factories.SimpleTemplateBasedFactory;

@@ -20,8 +20,8 @@
 
 package ca.firstvoices.operations;
 
-import static ca.firstvoices.schemas.Constants.FV_PHRASE;
-import static ca.firstvoices.schemas.Constants.FV_WORD;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

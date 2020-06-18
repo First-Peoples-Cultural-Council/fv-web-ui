@@ -24,13 +24,12 @@
 
 package ca.firstvoices.publisher.listeners;
 
-import static ca.firstvoices.lifecycle.Constants.DELETE_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.Constants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
@@ -76,9 +75,8 @@ public class ProxyPublisherListener implements EventListener {
         service.publish(doc);
       }
 
-    } else if (UNPUBLISH_TRANSITION.equals(transition) || DISABLE_TRANSITION.equals(transition) || (
-        ("delete".equals(transition) || DELETE_TRANSITION.equals(transition)) && PUBLISHED_STATE
-            .equals(transitionFrom))) {
+    } else if (UNPUBLISH_TRANSITION.equals(transition)
+        || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom)) {
       service.unpublish(doc);
     }
 

@@ -20,7 +20,7 @@
 
 package ca.firstvoices.services;
 
-import static ca.firstvoices.schemas.Constants.FV_LINKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
