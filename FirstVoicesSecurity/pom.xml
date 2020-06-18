@@ -103,6 +103,10 @@
       <artifactId>nuxeo-invite</artifactId>
     </dependency>
     <dependency>
+      <artifactId>nuxeo-platform-task-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.webengine</groupId>
       <artifactId>nuxeo-webengine-invite</artifactId>
     </dependency>

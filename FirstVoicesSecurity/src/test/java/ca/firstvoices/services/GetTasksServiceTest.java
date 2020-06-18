@@ -28,16 +28,21 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
+import org.restlet.service.TaskService;
 
 /**
  * @author david
  */
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class, AutomationFeature.class})
-@Deploy({"FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.services.gettasksforuser.xml"})
-@PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
+@Deploy({"FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.services.gettasksforuser.xml"})
 @Deploy("FirstVoicesSecurity.tests:OSGI-INF.extensions/ca.firstvoices.fakestudio.xml")
+@Deploy("org.nuxeo.ecm.platform.content.template")
+@Deploy("org.nuxeo.ecm.automation.core")
+@Deploy("org.nuxeo.ecm.platform.task.api")
+@Deploy("org.nuxeo.ecm.platform.task.core")
+@PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class GetTasksServiceTest extends AbstractFVTest {
 
   @Inject
@@ -45,6 +50,9 @@ public class GetTasksServiceTest extends AbstractFVTest {
 
   @Inject
   private CoreSession session;
+
+  @Inject
+  protected TaskService taskService;
 
   @Inject
   ClientLoginFeature login;
@@ -82,7 +90,6 @@ public class GetTasksServiceTest extends AbstractFVTest {
     userGroups.add("members");
     currentDummy.setGroups(userGroups);
     Assert.assertTrue(service.getTasksForUser(session, currentDummy).isEmpty());
-
   }
 
 }
