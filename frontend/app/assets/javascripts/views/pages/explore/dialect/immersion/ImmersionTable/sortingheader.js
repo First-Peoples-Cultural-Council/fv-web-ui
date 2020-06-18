@@ -29,7 +29,7 @@ export default class SortingHeader extends Component {
               <TableCell
                 className={`DictionaryList__data DictionaryList__data--${column.id} DictionaryList__header`}
                 key={column.id}
-                numeric={column.numeric}
+                // numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
