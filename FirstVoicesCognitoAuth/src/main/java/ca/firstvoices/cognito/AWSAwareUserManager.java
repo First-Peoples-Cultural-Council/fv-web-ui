@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.platform.usermanager.UserManagerImpl;
 import org.nuxeo.runtime.api.Framework;
@@ -111,17 +112,24 @@ public class AWSAwareUserManager extends UserManagerImpl {
         if (super.checkUsernamePassword(username, password)) {
           // yes, so migrate them
           try {
+
+            NuxeoPrincipal currentPrincipal = this.getPrincipal(username);
+
+            if (currentPrincipal == null) {
+              throw new InvalidMigrationException("Current principal was null for " + username);
+            }
+
             getAWSAuthenticationService().migrateUser(
                 username,
                 password,
-                this.getPrincipal(username).getEmail()
+                currentPrincipal.getEmail()
             );
           } catch (InvalidMigrationException e) {
-            LOG.error("Migration failed", e);
+            LOG.error("[AWS Cognito] Migration failed", e);
 
-            // Still log the user in with basic authentication
+            // Still log the user in if migration fails
             // We need to provide alternative ways to migrate edge cases (FW-1643)
-            return super.checkUsernamePassword(username, password);
+            return true;
           }
           return true;
         }
