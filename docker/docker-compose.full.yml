@@ -22,6 +22,8 @@ services:
       ports:
           - '5432:5432'
       command: postgres -c config_file=/etc/postgresql.conf
+      labels:
+        - "ca.firstvoices.group=local_docker"
   frontend:
     image: me/fv-web-ui
     container_name: fv-web-ui
@@ -34,3 +36,5 @@ services:
       WAIT_HOSTS_TIMEOUT: 120
     depends_on:
       - nuxeo-backend
+    labels:
+      - "ca.firstvoices.group=local_docker"

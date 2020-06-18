@@ -19,3 +19,5 @@ services:
     environment:
       - discovery.type=single-node
       - cluster.name=firstvoices
+    labels:
+      - "ca.firstvoices.group=local_docker"
