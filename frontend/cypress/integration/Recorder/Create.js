@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Recorder/internationalization'
 
 describe('Recorder/Create.js > RecorderCreate', () => {
@@ -9,33 +9,33 @@ describe('Recorder/Create.js > RecorderCreate', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/create/recorder')
-    cy.queryByText(copy.create.title).should('exist')
+    cy.findByText(copy.create.title).should('exist')
 
     // Submit w/no data
-    cy.getByText(copy.create.submit).click()
+    cy.findByText(copy.create.submit).click()
 
     // Error should be displayed
-    cy.getByLabelText(copy.validation.name)
+    cy.findByLabelText(copy.validation.name)
 
     // Fill in required field
-    cy.getByLabelText(`${copy.create.name} *`).type('[CY] Recorder Name')
+    cy.findByLabelText(`${copy.create.name} *`).type('[CY] Recorder Name')
 
     // Resubmit
-    cy.getByText(copy.create.submit).click()
+    cy.findByText(copy.create.submit).click()
 
     // Should see success
-    cy.getByText(copy.create.success.title).should('exist')
+    cy.findByText(copy.create.success.title).should('exist')
 
     // Create another
-    cy.getByText(copy.create.success.linkCreateAnother).click()
+    cy.findByText(copy.create.success.linkCreateAnother).click()
 
     // Confirm
-    cy.queryByText(copy.create.title).should('exist')
+    cy.findByText(copy.create.title).should('exist')
 
     // Submit w/no data
-    cy.getByText(copy.create.submit).click()
+    cy.findByText(copy.create.submit).click()
 
     // Error should be displayed
-    cy.getByLabelText(copy.validation.name)
+    cy.findByLabelText(copy.validation.name)
   })
 })

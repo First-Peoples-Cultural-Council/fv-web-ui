@@ -17,7 +17,7 @@ describe('ContributorDelete.js > Contributor', () => {
       cy.visit(url)
       cy.deleteContributor(uid).then(() => {
         cy.visit(url)
-        cy.getByText(copy.detail.isTrashed)
+        cy.findByText(copy.detail.isTrashed)
       })
     })
   })

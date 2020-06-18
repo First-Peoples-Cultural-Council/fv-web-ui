@@ -18,23 +18,23 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: true }).click()
+    cy.findByText('Learn our Language', { exact: true }).click()
     cy.wait(500)
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Phrases', { exact: true }).click()
+      cy.findByText('Phrases', { exact: true }).click()
     })
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
-      cy.getByText('TestPhrase').should('exist')
-      cy.getByText('TestPhrase').click()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Enabled').should('exist')
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestPhrase').click()
     })
 
     /*
             Check that the edit button does not exists
         */
-    cy.queryByText('Edit').should('not.exist')
+    cy.findByText('Edit').should('not.exist')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
 
     /*
@@ -43,24 +43,24 @@ describe('MemberView-Phrase.js > MemberView-Phrase', () => {
     cy.wait(500)
     cy.get('[title="More Options"]').click()
     cy.wait(500)
-    cy.getByText('Reports', { exact: true }).click({ force: true })
-    cy.getByText('Phrases in New Status', { exact: true }).click()
+    cy.findByText('Reports', { exact: true }).click({ force: true })
+    cy.findByText('Phrases in New Status', { exact: true }).click()
     cy.wait(500)
-    cy.getByText('No Results Found', { exact: false }).should('exist')
-    cy.queryByText('TestPhrase').should('not.exist')
+    cy.findByText('No Results Found', { exact: false }).should('exist')
+    cy.findByText('TestPhrase').should('not.exist')
 
     /*
             Check that the phrase exists in "Phrases in Enabled Status" page and make sure it has "Enabled" status
         */
-    cy.getByText('reports', { exact: true }).click()
-    cy.getByText('Phrases in Enabled Status', { exact: true }).click()
+    cy.findByText('reports', { exact: true }).click()
+    cy.findByText('Phrases in Enabled Status', { exact: true }).click()
     cy.wait(3000)
-    cy.queryByText('No Results Found').should('not.exist')
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestPhrase').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Enabled').should('exist')
-      cy.queryByText('New').should('not.exist')
+    cy.findByText('No Results Found').should('not.exist')
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestPhrase').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Enabled').should('exist')
+      cy.findByText('New').should('not.exist')
     })
   })
 })
