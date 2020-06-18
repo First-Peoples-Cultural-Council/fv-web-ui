@@ -14,19 +14,19 @@ public class GetTasksServiceImpl implements GetTasksService {
   public DocumentModelList getTasksForUser(CoreSession session) {
     NuxeoPrincipal currentUser = session.getPrincipal();
     List<String> userGroups = currentUser.getGroups();
-    if (userGroups != null && userGroups.size() > 0) {
-      String query = "SELECT * FROM TaskDoc WHERE ecm:currentLifeCycleState = 'opened' AND "
-          + "nt:actors IN (";
+    if (userGroups != null && !userGroups.isEmpty()) {
+      StringBuilder query = new StringBuilder(
+          "SELECT * FROM TaskDoc WHERE ecm:currentLifeCycleState = 'opened' AND "
+              + "nt:actors IN (");
       for (int i = 0; i < userGroups.size(); i++) {
         String group = userGroups.get(i);
         if (i != 0) {
-          query += ",";
+          query.append(",");
         }
-        query += "'group:" + group + "'";
+        query.append("'group:").append(group).append("'");
       }
-      query += ")";
-      DocumentModelList documentModels = session.query(query);
-      return documentModels;
+      query.append(")");
+      return session.query(query.toString());
     } else {
       return null;
     }
