@@ -8,8 +8,8 @@ describe('PageDialectLearnStoriesAndSongs.js > PageDialectLearnStoriesAndSongs',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/songs')
 
-    cy.getByText('create song book', { exact: false }).click()
-    cy.getByText('Add new song book to', { exact: false }).should('exist')
+    cy.findByText('create song book', { exact: false }).click()
+    cy.findByText('Add new song book to', { exact: false }).should('exist')
   })
 
   it('FW-257: On the Browse > Stories page, the user can click a button to get to Create Story page', () => {
@@ -18,7 +18,7 @@ describe('PageDialectLearnStoriesAndSongs.js > PageDialectLearnStoriesAndSongs',
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/learn/stories')
 
-    cy.getByText('create story book', { exact: false }).click()
-    cy.getByText('Add new story book to', { exact: false }).should('exist')
+    cy.findByText('create story book', { exact: false }).click()
+    cy.findByText('Add new story book to', { exact: false }).should('exist')
   })
 })

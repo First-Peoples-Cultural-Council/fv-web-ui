@@ -1,6 +1,6 @@
 {
   "chromeWebSecurity": false,
-  "baseUrl": "http://fv-web-ui",
+  "baseUrl": "http://frontend",
   "video": true,
   "videoUploadOnPasses": true,
   "projectId": "CYPRESS_PROJECT_ID",

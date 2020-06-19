@@ -14,7 +14,7 @@
         <configuration>
             <useCognitoAsPrincipalDirectory>false</useCognitoAsPrincipalDirectory>
             <authenticateWithCognito>true</authenticateWithCognito>
-            <blacklistUsers>Administrator, TestAdmin</blacklistUsers>
+            <ignoreUsers>Administrator, TestAdmin</ignoreUsers>
         </configuration>
     </extension>
 

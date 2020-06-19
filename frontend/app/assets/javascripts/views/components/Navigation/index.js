@@ -67,7 +67,7 @@ import FVLabel from '../FVLabel/index'
 
 import '!style-loader!css-loader!./styles.css'
 
-const { array, func, object, string, bool, number } = PropTypes
+const { array, func, object, string, bool } = PropTypes
 
 export class Navigation extends Component {
   static defaultProps = {
@@ -293,7 +293,7 @@ export class Navigation extends Component {
                   {/* Search Button: Cancel (only on small screens) */}
                   <span className="hideLarge">
                     <FVButton
-                      variant="flat"
+                      variant="text"
                       onClick={(e) => {
                         e.preventDefault()
                         // this.navigationSearchButton.focus()
@@ -399,7 +399,7 @@ export class Navigation extends Component {
                   <MenuItem value={2}>Both Languages</MenuItem>
                 </Select> */}
               {/* </FormControl> */}
-              <Typography variant="body1" className={`${localePicker} Navigation__localeTitle`}>
+              <Typography variant="body2" className={`${localePicker} Navigation__localeTitle`}>
                 <FVLabel transKey="choose_lang" defaultStr="Choose a language" transform="first" />
               </Typography>
               <FormControl>
@@ -536,7 +536,7 @@ export class Navigation extends Component {
   popoverContent = () => {
     return (
       <div className="Navigation__popoverInner">
-        <Typography variant="title">
+        <Typography variant="h6">
           <FVLabel
             transKey="views.components.navigation.search_all"
             defaultStr="Search all languages & words at FirstVoices.com"
@@ -549,7 +549,7 @@ export class Navigation extends Component {
   popoverContentDialect = () => {
     return (
       <div className="Navigation__popoverInner">
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body2" gutterBottom>
           <FVLabel transKey="general.select_search_option" defaultStr="Select Search Option" transform="words" />
         </Typography>
 
@@ -569,7 +569,7 @@ export class Navigation extends Component {
             control={<Radio />}
             label={
               <div>
-                <Typography variant="body1" gutterBottom>
+                <Typography variant="body2" gutterBottom>
                   FirstVoices.com
                 </Typography>
                 <Typography variant="caption" gutterBottom>
@@ -589,7 +589,7 @@ export class Navigation extends Component {
             control={<Radio />}
             label={
               <div>
-                <Typography variant="body1" gutterBottom>
+                <Typography variant="body2" gutterBottom>
                   {selectn('routeParams.dialect_name', this.props) || (
                     <FVLabel
                       transKey="views.components.navigation.this_dialect"

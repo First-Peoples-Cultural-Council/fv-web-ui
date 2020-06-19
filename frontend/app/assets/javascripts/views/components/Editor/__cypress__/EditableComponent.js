@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 
 describe('EditableComponent.js > EditableComponent', () => {
   it('FW-212: Drop AlloyEditor for Quill', () => {
@@ -17,56 +17,56 @@ describe('EditableComponent.js > EditableComponent', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSeven')
     cy.wait(500)
 
-    cy.getByTestId('EditableComponent__fv-portal-about').within(() => {
-      cy.getByTestId('EditableComponent__edit').click()
+    cy.findByTestId('EditableComponent__fv-portal-about').within(() => {
+      cy.findByTestId('EditableComponent__edit').click()
 
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
 
-      cy.getByTestId('wysiwyg-fv-portal_about').within(() => {
+      cy.findByTestId('wysiwyg-fv-portal_about').within(() => {
         cy.get('.ql-editor')
           .clear()
           .type(updateMessage1)
       })
 
-      cy.getByText('Save', { exact: false }).click()
+      cy.findByText('Save', { exact: false }).click()
 
       cy.wait(500)
     })
     cy.reload()
     cy.wait(500)
-    cy.getByTestId('EditableComponent__fv-portal-about').within(() => {
-      cy.getByText(updateMessage1).should('exist')
+    cy.findByTestId('EditableComponent__fv-portal-about').within(() => {
+      cy.findByText(updateMessage1).should('exist')
     })
 
-    cy.getByTestId('EditableComponent__fv-portal-news').within(() => {
-      cy.getByTestId('EditableComponent__edit').click()
+    cy.findByTestId('EditableComponent__fv-portal-news').within(() => {
+      cy.findByTestId('EditableComponent__edit').click()
 
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
 
-      cy.getByTestId('wysiwyg-fv-portal_news').within(() => {
+      cy.findByTestId('wysiwyg-fv-portal_news').within(() => {
         cy.get('.ql-editor')
           .clear()
           .type(updateMessage2)
       })
 
-      cy.getByText('Save', { exact: false }).click()
+      cy.findByText('Save', { exact: false }).click()
 
       cy.wait(500)
     })
     cy.reload()
     cy.wait(500)
-    cy.getByTestId('EditableComponent__fv-portal-news').within(() => {
-      cy.getByText(updateMessage2).should('exist')
+    cy.findByTestId('EditableComponent__fv-portal-news').within(() => {
+      cy.findByText(updateMessage2).should('exist')
     })
 
     cy.log('■■□□□ 2/5')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSeven/learn')
     cy.wait(500)
 
-    cy.getByTestId('EditableComponent__dc-description').within(() => {
-      cy.getByTestId('EditableComponent__edit').click()
+    cy.findByTestId('EditableComponent__dc-description').within(() => {
+      cy.findByTestId('EditableComponent__edit').click()
 
       // Note: need to wait for WYSIWYG editor to init
       cy.wait(500)
@@ -75,10 +75,10 @@ describe('EditableComponent.js > EditableComponent', () => {
         .clear()
         .type(updateMessage)
     })
-    cy.getByText('SAVE', { exact: false }).click()
+    cy.findByText('SAVE', { exact: false }).click()
 
     cy.wait(500)
-    cy.getByText(updateMessage).should('exist')
+    cy.findByText(updateMessage).should('exist')
 
     cy.log('■■■□□ 3/5')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSeven/edit')
@@ -89,69 +89,69 @@ describe('EditableComponent.js > EditableComponent', () => {
       News
         wysiwyg__userInput
         */
-    cy.getByTestId('wysiwyg-fv-portal_about').within(() => {
+    cy.findByTestId('wysiwyg-fv-portal_about').within(() => {
       cy.contains('EditableComponent.js > EditableComponent')
         .clear()
         .type(updateMessage1)
     })
 
-    cy.getByTestId('wysiwyg-fv-portal_news').within(() => {
+    cy.findByTestId('wysiwyg-fv-portal_news').within(() => {
       cy.contains('EditableComponent.js > EditableComponent')
         .clear()
         .type(updateMessage2)
     })
 
-    cy.getByTestId('withForm__btnGroup2').within(() => {
-      cy.getByText('SAVE', { exact: false }).click()
+    cy.findByTestId('withForm__btnGroup2').within(() => {
+      cy.findByText('SAVE', { exact: false }).click()
     })
 
     cy.wait(500)
-    cy.getByText(updateMessage1).should('exist')
-    cy.getByText(updateMessage2).should('exist')
+    cy.findByText(updateMessage1).should('exist')
+    cy.findByText(updateMessage2).should('exist')
 
     cy.log('■■■■□ 4/5')
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSeven/learn/stories')
     cy.wait(500)
-    cy.getByText('Create Story Book', { exact: false }).click()
+    cy.findByText('Create Story Book', { exact: false }).click()
 
     cy.wait(500)
 
-    cy.getByText('Add new story book to', { exact: false }).should('exist')
+    cy.findByText('Add new story book to', { exact: false }).should('exist')
 
-    cy.getByLabelText('Book title', { exact: false }).type('[CY:SETUP] Title')
+    cy.findByLabelText('Book title', { exact: false }).type('[CY:SETUP] Title')
 
-    cy.getByTestId('wysiwyg-fvbook_introduction').within(() => {
+    cy.findByTestId('wysiwyg-fvbook_introduction').within(() => {
       // TODO: Quill 'implementation detail' hook
       cy.get('.ql-blank').type(updateMessage)
     })
 
-    cy.getByTestId('PageDialectStoriesAndSongsCreate__btnGroup').within(() => {
-      cy.getByText('SAVE', { exact: false }).click()
+    cy.findByTestId('PageDialectStoriesAndSongsCreate__btnGroup').within(() => {
+      cy.findByText('SAVE', { exact: false }).click()
     })
     cy.wait(500)
 
     cy.log('■■■■■ 5/5')
-    cy.getByText(updateMessage).should('exist')
+    cy.findByText(updateMessage).should('exist')
 
-    cy.getByText('add new page', { exact: false }).click()
+    cy.findByText('add new page', { exact: false }).click()
     cy.wait(500)
 
-    cy.getByText('Add New Entry To', { exact: false }).should('exist')
+    cy.findByText('Add New Entry To', { exact: false }).should('exist')
 
-    cy.getByTestId('wysiwyg-dc_title').within(() => {
+    cy.findByTestId('wysiwyg-dc_title').within(() => {
       // TODO: Quill 'implementation detail' hook
       cy.get('.ql-blank').type(updateMessage3)
     })
 
-    cy.getByTestId('PageDialectStoriesAndSongsBookEntryCreate__btnGroup').within(() => {
-      cy.getByText('SAVE', { exact: false }).click()
+    cy.findByTestId('PageDialectStoriesAndSongsBookEntryCreate__btnGroup').within(() => {
+      cy.findByText('SAVE', { exact: false }).click()
     })
     cy.wait(500)
     cy.reload()
     cy.wait(500)
 
-    cy.getByText('open book', { exact: false }).click()
+    cy.findByText('open book', { exact: false }).click()
 
-    cy.getByText(updateMessage3).should('exist')
+    cy.findByText(updateMessage3).should('exist')
   })
 })

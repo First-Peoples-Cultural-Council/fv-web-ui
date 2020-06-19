@@ -123,7 +123,7 @@ function FVLabel({
             <ListItem>
               <div>
                 <Typography variant="caption">{readableLocale[locale]}:</Typography>
-                <Typography variant="body1">
+                <Typography variant="body2">
                   {intl.trans(transKey, defaultStr, transform, params, prepend, append, locale)}
                 </Typography>
               </div>

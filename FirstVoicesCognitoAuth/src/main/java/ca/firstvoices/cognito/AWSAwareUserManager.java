@@ -1,6 +1,7 @@
 package ca.firstvoices.cognito;
 
 
+import ca.firstvoices.cognito.exceptions.InvalidMigrationException;
 import ca.firstvoices.cognito.exceptions.MiscellaneousFailureException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.platform.usermanager.UserManagerImpl;
 import org.nuxeo.runtime.api.Framework;
@@ -25,7 +27,7 @@ public class AWSAwareUserManager extends UserManagerImpl {
 
   private boolean awsConnectionSucceeded = false;
   private boolean awsAuthenticationEnabled;
-  private Set<String> blacklistUsers = new HashSet<>();
+  private Set<String> ignoreUsers = new HashSet<>();
 
 
   private AWSAuthenticationService getAWSAuthenticationService() {
@@ -48,16 +50,16 @@ public class AWSAwareUserManager extends UserManagerImpl {
     this.awsAuthenticationEnabled = getAWSAwareUserManagerConfigurationService()
         .getConfig().authenticateWithCognito;
 
-    String rawBlackList = getAWSAwareUserManagerConfigurationService()
+    String rawIgnoreList = getAWSAwareUserManagerConfigurationService()
         .getConfig()
-        .blacklistUsers;
-    if (rawBlackList != null) {
-      blacklistUsers.addAll(Arrays.asList(rawBlackList.split("\\s*,\\s*")));
+        .ignoreUsers;
+    if (rawIgnoreList != null) {
+      ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
     }
 
-    LOG.error("Startup. AWS Authentication is "
+    LOG.info("Startup. AWS Authentication is "
         + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
-        + "\nblacklisting users: " + String.join(", ", blacklistUsers)
+        + "\nignoring users: " + String.join(", ", ignoreUsers)
     );
 
     if (this.awsAuthenticationEnabled) {
@@ -88,8 +90,8 @@ public class AWSAwareUserManager extends UserManagerImpl {
       return super.checkUsernamePassword(username, password);
     }
 
-    if (this.blacklistUsers.contains(username)) {
-      LOG.info("skipping Cognito check for blacklisted user: " + username);
+    if (this.ignoreUsers.contains(username)) {
+      LOG.info("skipping Cognito check for ignored user: " + username);
       return super.checkUsernamePassword(username, password);
     }
 
@@ -109,11 +111,26 @@ public class AWSAwareUserManager extends UserManagerImpl {
         // the user does not exist yet in Cognito. Do they exist locally with this password?
         if (super.checkUsernamePassword(username, password)) {
           // yes, so migrate them
-          getAWSAuthenticationService().migrateUser(
-              username,
-              password,
-              this.getPrincipal(username).getEmail()
-          );
+          try {
+
+            NuxeoPrincipal currentPrincipal = this.getPrincipal(username);
+
+            if (currentPrincipal == null) {
+              throw new InvalidMigrationException("Current principal was null for " + username);
+            }
+
+            getAWSAuthenticationService().migrateUser(
+                username,
+                password,
+                currentPrincipal.getEmail()
+            );
+          } catch (InvalidMigrationException e) {
+            LOG.error("[AWS Cognito] Migration failed", e);
+
+            // Still log the user in if migration fails
+            // We need to provide alternative ways to migrate edge cases (FW-1643)
+            return true;
+          }
           return true;
         }
 
@@ -145,7 +162,7 @@ public class AWSAwareUserManager extends UserManagerImpl {
       String username = (String) userModel.getProperty(schema, userDir.getIdField());
       String password = (String) userModel.getProperty(schema, userDir.getPasswordField());
       try {
-        if (this.blacklistUsers.contains(username)) {
+        if (this.ignoreUsers.contains(username)) {
           LOG.info("skipping Cognito update for blacklisted user: " + username);
           return;
         }

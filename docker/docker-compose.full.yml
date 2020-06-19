@@ -1,0 +1,40 @@
+version: '3'
+services:
+  nuxeo-backend:
+      environment:
+        - NUXEO_DB_TYPE=postgresql
+        - NUXEO_DB_HOST=db
+        - NUXEO_DB_NAME=nuxeo
+        - NUXEO_DB_USER=nuxeo_admin
+        - NUXEO_DB_PASSWORD=nuxeo
+      depends_on:
+      - db
+  db:
+      image: postgres
+      container_name: nuxeo-db
+      restart: always
+      environment:
+          - POSTGRES_USER=nuxeo_admin
+          - POSTGRES_PASSWORD=nuxeo
+          - POSTGRES_DB=nuxeo
+      volumes:
+          - '${PWD}/postgresql.conf:/etc/postgresql.conf'
+      ports:
+          - '5432:5432'
+      command: postgres -c config_file=/etc/postgresql.conf
+      labels:
+        - "ca.firstvoices.group=local_docker"
+  frontend:
+    image: me/fv-web-ui
+    container_name: fv-web-ui
+    ports:
+      - '3001:80'
+    environment:
+      WAIT_HOSTS: nuxeo-backend:8080
+      WAIT_SLEEP_INTERVAL: 15
+      WAIT_AFTER_HOSTS: 15
+      WAIT_HOSTS_TIMEOUT: 120
+    depends_on:
+      - nuxeo-backend
+    labels:
+      - "ca.firstvoices.group=local_docker"

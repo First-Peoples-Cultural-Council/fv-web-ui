@@ -14,8 +14,8 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
             Change the website to French.
          */
     //TODO: need a better hook to click the choose language arrow.
-    cy.getByText('English').click()
-    cy.getByText('Français').click()
+    cy.findByText('English').click()
+    cy.findByText('Français').click()
     cy.wait(1000)
     cy.reload()
 
@@ -23,28 +23,28 @@ describe('SiteLanguage.js > SiteLanguageSelect.js', () => {
             Check that various parts of the website are now correctly translated to French.
          */
     cy.get('[id="pageNavigation"]').within(() => {
-      cy.getByText('Explorer Langues', { exact: false }).should('exist')
+      cy.findByText('Explorer Langues', { exact: false }).should('exist')
       cy.get('[placeholder="Rechercher:"]').should('exist')
     })
     cy.get('div.PromiseWrapper').within(() => {
       cy.get('div.row').within(() => {
-        cy.getByText('Commencer', { exact: false }).should('exist')
+        cy.findByText('Commencer', { exact: false }).should('exist')
       })
     })
 
     cy.get('div.container-fluid').within(() => {
-      cy.getByText('Avis de non-responsabilité', { exact: false }).should('exist')
-      cy.getByText('Conditions d’utilisation', { exact: false }).should('exist')
-      cy.getByText('Aide', { exact: false }).should('exist')
-      cy.getByText('Faire un don', { exact: false }).should('exist')
+      cy.findByText('Avis de non-responsabilité', { exact: false }).should('exist')
+      cy.findByText('Conditions d’utilisation', { exact: false }).should('exist')
+      cy.findByText('Aide', { exact: false }).should('exist')
+      cy.findByText('Faire un don', { exact: false }).should('exist')
     })
 
-    cy.getByTestId('Navigation__open').click()
-    cy.getByText('Accueil', { exact: false }).should('exist')
-    cy.getByText('Commencer', { exact: false }).should('exist')
-    cy.getByText('Explorer langues', { exact: false }).should('exist')
-    cy.getByText('Enfants', { exact: false }).should('exist')
-    cy.getByText('Contribuer', { exact: false }).should('exist')
+    cy.findByTestId('Navigation__open').click()
+    cy.findByText('Accueil', { exact: false }).should('exist')
+    cy.findByText('Commencer', { exact: false }).should('exist')
+    cy.findByText('Explorer langues', { exact: false }).should('exist')
+    cy.findByText('Enfants', { exact: false }).should('exist')
+    cy.findByText('Contribuer', { exact: false }).should('exist')
 
     // TODO: Add check for sign in page. Currently it doesn't change to french.
   })

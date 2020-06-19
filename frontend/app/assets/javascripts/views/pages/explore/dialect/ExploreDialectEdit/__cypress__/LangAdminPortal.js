@@ -24,7 +24,7 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
       'url("' + Cypress.env('FRONTEND') + '/explore/FV/Workspaces/Data/Test/Test/assets/images/cover.png")'
     )
 
-    cy.getByText('Edit').click()
+    cy.findByText('Edit').click()
     cy.wait(500)
 
     /*
@@ -36,36 +36,36 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
         .eq(0)
         .type('TestPortalIntroduction')
       cy.get('div.ql-editor.ql-blank').type('TestPortalNews')
-      cy.getByText('Featured words')
+      cy.findByText('Featured words')
         .parent()
         .within(() => {
-          cy.getByText('+ Add new').click()
-          cy.getByText('Browse Existing').click()
+          cy.findByText('+ Add new').click()
+          cy.findByText('Browse Existing').click()
         })
     })
     cy.wait(500)
-    cy.getByText('Dragon')
+    cy.findByText('Dragon')
       .parent()
       .parent()
       .within(() => {
-        cy.getByText('Select').click()
+        cy.findByText('Select').click()
       })
     cy.wait(500)
     cy.get('div.form-horizontal').within(() => {
-      cy.getByText('Related links')
+      cy.findByText('Related links')
         .parent()
         .within(() => {
-          cy.getByText('+ Add new').click()
-          cy.getByText('Create Link').click()
+          cy.findByText('+ Add new').click()
+          cy.findByText('Create Link').click()
         })
     })
-    cy.getByTestId('DialogCreateForm__DialogContent').within(() => {
+    cy.findByTestId('DialogCreateForm__DialogContent').within(() => {
       cy.get('[name="dc:title"]').type('TestPortalRelatedLinkTitle')
       cy.get('[name="dc:description"]').type('TestPortalRelatedLinkDescription')
       cy.get('[name="fvlink:url"]').type(
         Cypress.env('FRONTEND') + '/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix'
       )
-      cy.getByText('Save').click()
+      cy.findByText('Save').click()
     })
 
     /*
@@ -74,17 +74,17 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByTestId('AddMediaComponent').within(() => {
+    cy.findByTestId('AddMediaComponent').within(() => {
       cy.get('[name="dc:title"]').type('TestPortalAudio')
       cy.get('[name="dc:description"]').type('TestPortalAudioDescription')
       const fileName = 'TestRelatedAudio.wav'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
             Add a background image to the portal.
@@ -92,17 +92,17 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByTestId('AddMediaComponent').within(() => {
+    cy.findByTestId('AddMediaComponent').within(() => {
       cy.get('[name="dc:title"]').type('TestPortalBackgroundImage')
       cy.get('[name="dc:description"]').type('TestPortalBackgroundImageDescription')
       const fileName = 'TestBackgroundImage.jpg'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/jpg', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
             Add a logo image to the portal.
@@ -110,31 +110,31 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
     cy.queryAllByText('Upload New')
       .eq(0)
       .click()
-    cy.getByTestId('AddMediaComponent').within(() => {
+    cy.findByTestId('AddMediaComponent').within(() => {
       cy.get('[name="dc:title"]').type('TestLogoBackgroundImage')
       cy.get('[name="dc:description"]').type('TestLogoBackgroundImageDescription')
       const fileName = 'TestRelatedImage.png'
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
             Save and check that the info is now live on the home language page.
          */
-    cy.getByText('Save').click()
+    cy.findByText('Save').click()
     cy.wait(500)
     cy.reload()
     cy.wait(500)
 
     cy.get('#portalFeaturedAudio').should('exist')
-    cy.queryByText('TestPortalGreeting').should('exist')
-    cy.queryByText('TestPortalIntroduction').should('exist')
-    cy.queryByText('TestPortalNews').should('exist')
-    cy.queryByText('TestPortalRelatedLinkTitle').should('exist')
+    cy.findByText('TestPortalGreeting').should('exist')
+    cy.findByText('TestPortalIntroduction').should('exist')
+    cy.findByText('TestPortalNews').should('exist')
+    cy.findByText('TestPortalRelatedLinkTitle').should('exist')
 
     cy.get('div.Header.row').should(
       'not.have.css',
@@ -147,30 +147,30 @@ describe('LangAdminPortal.js > LangAdminPortal', () => {
      */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix')
     cy.wait(500)
-    cy.getByText('Edit').click()
+    cy.findByText('Edit').click()
     cy.wait(500)
 
     cy.get('input.form-control').type('ThisShouldNotSave')
-    cy.getByTestId('withForm__btnGroup2').within(() => {
-      cy.getByText('Cancel').click()
+    cy.findByTestId('withForm__btnGroup2').within(() => {
+      cy.findByText('Cancel').click()
     })
-    cy.getByText('Yes').click()
+    cy.findByText('Yes').click()
 
-    cy.queryByText('ThisShouldNotSave').should('not.exist')
-    cy.queryByText('TestPortalGreetingThisShouldNotSave').should('not.exist')
+    cy.findByText('ThisShouldNotSave').should('not.exist')
+    cy.findByText('TestPortalGreetingThisShouldNotSave').should('not.exist')
 
     /*
         Check that the information is visible on the public view
      */
-    cy.getByText('Publish Changes').click()
-    cy.queryByText('Portal published successfully!!').should('exist')
-    cy.getByText('Public View').click()
+    cy.findByText('Publish Changes').click()
+    cy.findByText('Portal published successfully!!').should('exist')
+    cy.findByText('Public View').click()
     cy.wait(1000)
     cy.get('#portalFeaturedAudio').should('exist')
-    cy.queryByText('TestPortalGreeting').should('exist')
-    cy.queryByText('TestPortalIntroduction').should('exist')
-    cy.queryByText('TestPortalNews').should('exist')
-    cy.queryByText('TestPortalRelatedLinkTitle').should('exist')
+    cy.findByText('TestPortalGreeting').should('exist')
+    cy.findByText('TestPortalIntroduction').should('exist')
+    cy.findByText('TestPortalNews').should('exist')
+    cy.findByText('TestPortalRelatedLinkTitle').should('exist')
 
     cy.get('div.Header.row').should(
       'not.have.css',

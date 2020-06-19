@@ -143,7 +143,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   }}
                 >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
                     <button
@@ -172,7 +172,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
                     </FVButton>
                     <button
@@ -203,7 +203,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           }}
                         />
                         <FVButton
-                          variant="flat"
+                          variant="text"
                           size="small"
                           style={confirmationButtonsStyle}
                           onClick={(e) => {
@@ -213,7 +213,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           <FVLabel transKey="yes" defaultStr="Yes" transform="first" />!
                         </FVButton>
                         <FVButton
-                          variant="flat"
+                          variant="text"
                           size="small"
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}

@@ -1,5 +1,6 @@
 package ca.firstvoices.cognito;
 
+import ca.firstvoices.cognito.exceptions.InvalidMigrationException;
 import ca.firstvoices.cognito.exceptions.MiscellaneousFailureException;
 
 /*
@@ -45,7 +46,7 @@ public interface AWSAuthenticationService {
    *
    */
   void migrateUser(String username, String password, String email)
-      throws MiscellaneousFailureException;
+      throws MiscellaneousFailureException, InvalidMigrationException;
 
   /**
    * Update the existing Cognito user to have a new password

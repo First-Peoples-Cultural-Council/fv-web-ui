@@ -18,44 +18,44 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').scrollIntoView()
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
+    cy.findByTestId('DictionaryList__row').scrollIntoView()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Noun').should('exist')
     })
     cy.wait(500)
 
     /*
       Click enable as Recorder and check that publish is not clickable.
     */
-    cy.getByText('TestWord', { exact: false }).scrollIntoView()
-    cy.getByText('TestWord').click()
+    cy.findByText('TestWord', { exact: false }).scrollIntoView()
+    cy.findByText('TestWord').click()
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('.PageToolbar__request').within(() => {
         cy.get('.PageToolbar__button')
           .eq(0)
           .within(() => {
-            cy.getByText('Enable')
-            cy.getByText('(0)').click()
+            cy.findByText('Enable')
+            cy.findByText('(0)').click()
           })
       })
     })
-    cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('.PageToolbar__request').within(() => {
         cy.get('.PageToolbar__button')
           .eq(0)
           .within(() => {
-            cy.getByText('Enable')
-            cy.getByText('(1)').should('exist')
+            cy.findByText('Enable')
+            cy.findByText('(1)').should('exist')
           })
         cy.get('.PageToolbar__button')
           .eq(2)
           .within(() => {
-            cy.getByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
-            cy.getByText('Publish').should('have.css', 'cursor', 'default')
+            cy.findByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.findByText('Publish').should('have.css', 'cursor', 'default')
           })
       })
     })
@@ -69,9 +69,9 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/')
     cy.wait(500)
-    cy.getByText('View My Tasks', { exact: false }).click()
+    cy.findByText('View My Tasks', { exact: false }).click()
     cy.wait(1000)
-    cy.getByText('Reject', { exact: true }).click()
+    cy.findByText('Reject', { exact: true }).click()
 
     cy.logout()
 
@@ -84,36 +84,36 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').scrollIntoView()
+    cy.findByTestId('DictionaryList__row').scrollIntoView()
     cy.wait(1000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').click()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').click()
     })
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('.PageToolbar__request').within(() => {
         cy.get('.PageToolbar__button')
           .eq(0)
           .within(() => {
-            cy.getByText('Enable')
-            cy.getByText('(0)').click()
+            cy.findByText('Enable')
+            cy.findByText('(0)').click()
           })
       })
     })
-    cy.getByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByText('Request to enable word successfully submitted!', { exact: true }).should('exist')
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('.PageToolbar__request').within(() => {
         cy.get('.PageToolbar__button')
           .eq(0)
           .within(() => {
-            cy.getByText('Enable')
-            cy.getByText('(1)').should('exist')
+            cy.findByText('Enable')
+            cy.findByText('(1)').should('exist')
           })
         cy.get('.PageToolbar__button')
           .eq(2)
           .within(() => {
-            cy.getByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
-            cy.getByText('Publish').should('have.css', 'cursor', 'default')
+            cy.findByText('Publish').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.findByText('Publish').should('have.css', 'cursor', 'default')
           })
       })
     })
@@ -127,8 +127,8 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(500)
-    cy.getByText('View My Tasks', { exact: true }).click()
-    cy.getByText('Approve', { exact: true }).click()
+    cy.findByText('View My Tasks', { exact: true }).click()
+    cy.findByText('Approve', { exact: true }).click()
 
     cy.logout()
 
@@ -140,12 +140,12 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').scrollIntoView()
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
-      cy.getByText('Enabled').should('exist')
+    cy.findByTestId('DictionaryList__row').scrollIntoView()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Noun').should('exist')
+      cy.findByText('Enabled').should('exist')
     })
     cy.logout()
 
@@ -158,25 +158,25 @@ describe('RecorderEnable-Word.js > RecorderEnable-Word', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive/learn/words')
     cy.wait(3500)
-    cy.getByTestId('DictionaryList__row').scrollIntoView()
+    cy.findByTestId('DictionaryList__row').scrollIntoView()
     cy.wait(1000)
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').click()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').click()
     })
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('.PageToolbar__request').within(() => {
         cy.get('.PageToolbar__button')
           .eq(0)
           .within(() => {
-            cy.getByText('Enable')
-            cy.getByText('(0)').should('have.css', 'color', 'rgb(161, 161, 161)')
-            cy.getByText('(0)').should('have.css', 'cursor', 'default')
+            cy.findByText('Enable')
+            cy.findByText('(0)').should('have.css', 'color', 'rgb(161, 161, 161)')
+            cy.findByText('(0)').should('have.css', 'cursor', 'default')
           })
         cy.get('.PageToolbar__button')
           .eq(2)
           .within(() => {
-            cy.getByText('Publish').should('have.css', 'cursor', 'pointer')
+            cy.findByText('Publish').should('have.css', 'cursor', 'pointer')
           })
       })
     })

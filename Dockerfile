@@ -1,39 +1,13 @@
-FROM node:10.19.0 AS build
+FROM ubuntu:18.04
 
-WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-ENV GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+# By default add the latest distribution (should be LTS)
+# Distribution options: Default is dev (unstable) or a specific version in the format 3.3.0(-RC)
+ARG DIST_VERSION=dev
+
 ENV DEBIAN_FRONTEND=noninteractive
-COPY frontend /app
-COPY .git /.git
-RUN apt-get update && apt-get install -y libgl1-mesa-dev
-RUN npm ci
-RUN npm run production
-
-FROM ubuntu:latest
 WORKDIR /app
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
-        perl \
-        git \
-        anacron \
-        locales \
-        pwgen \
-        imagemagick \
-        ffmpeg2theora \
-        poppler-utils \
-        libwpd-tools \
-        exiftool \
-        ghostscript \
-        libreoffice \
-        apache2 \
-        libtcnative-1 \
-        ffmpeg \
-        gnupg2 \
-        ca-certificates \
-        wget \
-        x264 &&\
-        apt remove -y libtcnative-1
+RUN apt-get update && apt-get install -y --no-install-recommends apache2
 
 RUN mkdir -p /opt/fv/www/ && chown -R 1000:0 /opt/fv/www/ && chmod -R g+rwX /opt/fv/www/
 
@@ -43,7 +17,11 @@ a2enmod rewrite && \
 a2enmod proxy_http && \
 a2enmod ssl
 
-COPY --from=build /app/public /opt/fv/www/
+# Add prebuilt version of marketplace package
+ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public.tar.gz /app/
+# Tar retains folder structure, so we need to extract 2 layers deep
+RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
+
 COPY docker/apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait

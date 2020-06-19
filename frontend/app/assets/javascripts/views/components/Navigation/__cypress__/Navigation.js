@@ -1,30 +1,30 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 
 describe('Navigation.js > Navigation side bar', () => {
   it('FW-266: Navigation: clicking between "Get Started", "Contribute", & "FirstVoices Apps" loads incorrect page content', () => {
     cy.visit('/home')
     cy.wait(1000)
-    cy.getByTestId('Navigation__open').click()
+    cy.findByTestId('Navigation__open').click()
     cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('get started', { exact: false }).click()
+    cy.findByTestId('LeftNav').within(() => {
+      cy.findByText('get started', { exact: false }).click()
     })
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.queryByText('What is FirstVoices', { exact: false }).should('exist')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('What is FirstVoices', { exact: false }).should('exist')
     })
 
-    cy.getByTestId('Navigation__open').click()
+    cy.findByTestId('Navigation__open').click()
     cy.wait(1500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('FirstVoices apps', { exact: false }).click()
+    cy.findByTestId('LeftNav').within(() => {
+      cy.findByText('FirstVoices apps', { exact: false }).click()
     })
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.queryByText('FirstVoices Apps', { exact: false }).should('exist')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('FirstVoices Apps', { exact: false }).should('exist')
     })
   })
   it('FW-280 Workspace switcher not switching from Public to Workspace in word and phrase detail views', () => {
@@ -33,17 +33,17 @@ describe('Navigation.js > Navigation side bar', () => {
     })
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/words/')
     cy.wait(3500)
-    cy.getByText('Dog').click()
+    cy.findByText('Dog').click()
     cy.wait(1500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       // should not be color
-      cy.getByText('Workspace', { exact: false })
+      cy.findByText('Workspace', { exact: false })
         .should('have.css', 'background-color')
         .and('not.eq', 'rgb(77, 148, 141)')
-      cy.getByText('Workspace', { exact: false }).click()
+      cy.findByText('Workspace', { exact: false }).click()
     })
     cy.wait(1500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       // should be color
       cy.get('Header', { exact: false })
         .should('have.css', 'background-color')
@@ -58,14 +58,14 @@ describe('Navigation.js > Navigation side bar', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix')
     cy.wait(1000)
     cy.get('[id="pageNavigation"]').within(() => {
-      cy.getByText('WELCOME', { exact: false }).should('exist')
+      cy.findByText('WELCOME', { exact: false }).should('exist')
     })
 
     // Sign out and check that the user is no longer signed out
-    cy.getByTestId('Navigation__open').click()
+    cy.findByTestId('Navigation__open').click()
     cy.wait(500)
-    cy.getByTestId('LeftNav').within(() => {
-      cy.getByText('Sign Out').click()
+    cy.findByTestId('LeftNav').within(() => {
+      cy.findByText('Sign Out').click()
     })
     cy.wait(1000)
 
@@ -74,7 +74,7 @@ describe('Navigation.js > Navigation side bar', () => {
     cy.wait(1000)
 
     cy.get('[id="pageNavigation"]').within(() => {
-      cy.getByText('SIGN IN').should('exist')
+      cy.findByText('SIGN IN').should('exist')
     })
   })
 })

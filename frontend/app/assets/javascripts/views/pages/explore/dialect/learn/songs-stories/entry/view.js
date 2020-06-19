@@ -94,10 +94,10 @@ class Cover extends Component {
 
           <div className="col-xs-12 col-md-9 fontAboriginalSans">
             <header style={{ marginBottom: '10px' }}>
-              <Typography variant="display2" component="h2">
+              <Typography variant="h3" component="h2">
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
               </Typography>
-              <Typography variant="display1" component="h3">
+              <Typography variant="h4" component="h3">
                 <div
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(selectn('[0].translation', dominant_language_title_translation)),

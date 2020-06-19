@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { withTheme } from '@material-ui/core/styles'
 
@@ -22,7 +21,6 @@ export class TextHeader extends Component {
                   {this.props.title} {this.props.appendToTitle}
                 </h2>
               )
-              break
 
             default:
               return (
@@ -35,7 +33,6 @@ export class TextHeader extends Component {
                   {this.props.title} {this.props.appendToTitle}
                 </h1>
               )
-              break
           }
         })()}
 
@@ -45,4 +42,4 @@ export class TextHeader extends Component {
   }
 }
 
-export default withTheme()(TextHeader)
+export default withTheme(TextHeader)

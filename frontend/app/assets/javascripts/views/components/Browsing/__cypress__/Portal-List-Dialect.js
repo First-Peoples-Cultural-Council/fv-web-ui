@@ -1,13 +1,13 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 describe('Portal List Dialect Test', () => {
   it('Toggles between new and old view', () => {
     cy.visit('/home')
     cy.wait(500)
-    cy.getByText('EXPLORE LANGUAGES').click()
+    cy.findByText('EXPLORE LANGUAGES').click()
     cy.wait(500)
     cy.get('[data-cy="language_group_view"]').should('not.exist')
     cy.get('[data-cy="old_view"]').should('exist')
-    cy.getByText('Organize by language').click()
+    cy.findByText('Organize by language').click()
     cy.get('[data-cy="language_group_view"]').should('exist')
     cy.get('[data-cy="old_view"]').should('not.exist')
   })
