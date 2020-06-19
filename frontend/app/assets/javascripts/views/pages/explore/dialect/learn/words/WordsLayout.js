@@ -154,7 +154,7 @@ class WordsLayout extends Component {
                 </div>
 
                 <div className="col-xs-12 col-md-9">
-                  <DictionaryListData>
+                  <DictionaryListData filterInfo={filterInfo}>
                     {({
                       columns,
                       dialect,
