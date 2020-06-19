@@ -5,7 +5,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import Immutable from 'immutable'
 /**
- * @summary useCategoriesData
+ * @summary useCategoriesCustomOrShared
  * @description Custom hook that returns categories. Dialect specific if exists, shared if they don't
  * @version 1.0.1
  *
@@ -15,7 +15,7 @@ import Immutable from 'immutable'
  * @returns {array} object.categories
  * @returns {array} object.computeEntities Immutable list, used with PromiseWrapper
  */
-function useCategoriesData(fetchLatest = false) {
+function useCategoriesCustomOrShared(fetchLatest = false) {
   const { computeCategories, fetchCategories, computeSharedCategories, fetchSharedCategories } = useCategories()
   const { routeParams } = useRoute()
   const catPath = `/api/v1/path/${routeParams.dialect_path}/Categories/@children`
@@ -68,4 +68,4 @@ function useCategoriesData(fetchLatest = false) {
   }
 }
 
-export default useCategoriesData
+export default useCategoriesCustomOrShared

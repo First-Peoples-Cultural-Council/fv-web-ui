@@ -18,7 +18,7 @@ import selectn from 'selectn'
 
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
-import useCategoriesData from 'common/useCategoriesData'
+import useCategoriesCustomOrShared from 'common/useCategoriesCustomOrShared'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
@@ -34,7 +34,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 function WordsCategoriesGridData({ children }) {
   const { routeParams } = useRoute()
   const { pushWindowPath } = useWindowPath()
-  const { categories: _categories, computeEntities } = useCategoriesData()
+  const { categories: _categories, computeEntities } = useCategoriesCustomOrShared()
 
   const categories = (_categories || []).map((category) => {
     return {
