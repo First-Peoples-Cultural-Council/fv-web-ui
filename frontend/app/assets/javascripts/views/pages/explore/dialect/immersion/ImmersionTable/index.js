@@ -58,7 +58,7 @@ function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy)
 }
 
-const styles = (theme) => ({
+const styles = () => ({
   icon: {
     color: '#b40000',
   },
@@ -95,11 +95,6 @@ class ImmersionTable extends Component {
       pageSize: pageSize,
     }
   }
-
-  componentDidMount() {}
-
-  componentDidUpdate(prevProps) {}
-
   _getURLPageProps() {
     const pageProps = { pageNumber: 1, pageSize: 10 }
     const page = selectn('page', this.props.routeParams)
@@ -145,8 +140,8 @@ class ImmersionTable extends Component {
 
   renderTranslation = (label, type = 'base') => {
     if (label.type === 'phrase') return label[type]
-    var translation = label[type]
-    var count = 0
+    const translation = label[type]
+    let count = 0
     const words = translation.split(/(%s)/g).map((word, i) => {
       if (word === '%s') {
         const chip = (
@@ -156,9 +151,8 @@ class ImmersionTable extends Component {
         )
         count++
         return chip
-      } else {
-        return <span key={i}>{word}</span>
       }
+      return <span key={i}>{word}</span>
     })
     return words
   }
@@ -266,14 +260,14 @@ class ImmersionTable extends Component {
                   })}
               </>
             ) : (
-              <TableRow style={{ background: 'white', height: '69px' }}>
+              <TableRow style={{ background: 'white' }}>
                 <TableCell colSpan={5} className="DictionaryList__data">
                   <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="words" />
                 </TableCell>
               </TableRow>
             )}
             {emptyRows > 0 && (
-              <TableRow style={{ height: 69 * emptyRows }}>
+              <TableRow>
                 <TableCell colSpan={5} />
               </TableRow>
             )}

@@ -26,7 +26,7 @@ import selectn from 'selectn'
 import AppFrontController from './AppFrontController'
 import FVSnackbar from './components/FVSnackbar'
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
 import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
@@ -99,12 +99,12 @@ class AppWrapper extends Component {
       )
 
     return (
-      <MuiThemeProvider theme={this.state.muiTheme}>
+      <ThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
           {covidAlert}
           <AppFrontController warnings={{}} />
         </div>
-      </MuiThemeProvider>
+      </ThemeProvider>
     )
   }
 }

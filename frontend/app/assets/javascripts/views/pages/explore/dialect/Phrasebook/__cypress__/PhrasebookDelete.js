@@ -12,8 +12,8 @@ const createPhraseBooks = (start, max) => {
   const phraseBookName = `[CY] A Phrase Book ${start}`
   cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
   cy.wait(2000)
-  cy.getByLabelText(copy.create.name).type(phraseBookName)
-  cy.getByText(copy.create.submit).click()
+  cy.findByLabelText(copy.create.name).type(phraseBookName)
+  cy.findByText(copy.create.submit).click()
   cy.wait(1000)
 
   const count = start + 1
@@ -26,7 +26,7 @@ const createPhraseBooks = (start, max) => {
 const performBatchDelete = () => {
   // Display 500 Entries on the screen
   cy.wait(2000)
-  cy.getByText('Per Page:')
+  cy.findByText('Per Page:')
     .siblings('div')
     .first()
     .click()
@@ -37,7 +37,7 @@ const performBatchDelete = () => {
   cy.get('.DictionaryList__data > .Confirmation > .Confirmation__initiate > .Confirmation__btnInitiate')
     .should('exist')
     .should('be.disabled')
-  cy.getByText(browseCopy.batch.select)
+  cy.findByText(browseCopy.batch.select)
     .should('exist')
     .click()
   cy.wait(2000)
@@ -72,29 +72,29 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
     createPhraseBooks(0, 1)
 
     // Edit after Creation
-    cy.getByText(copy.create.success.editView).click()
+    cy.findByText(copy.create.success.editView).click()
 
     cy.wait(2000)
-    cy.getByText(copy.create.btnInitiate)
+    cy.findByText(copy.create.btnInitiate)
       .should('exist')
       .click()
 
     cy.wait(2000)
-    cy.getByText(copy.create.btnDeny)
+    cy.findByText(copy.create.btnDeny)
       .should('exist')
       .click()
     cy.wait(2000)
-    cy.getByText(copy.create.btnInitiate).click()
+    cy.findByText(copy.create.btnInitiate).click()
     cy.wait(2000)
 
-    cy.getByText(copy.create.btnConfirm)
+    cy.findByText(copy.create.btnConfirm)
       .should('exist')
       .click()
     cy.wait(2000)
 
     // Confirmation screen
-    cy.getByText(copy.edit.successDelete.title).should('exist')
-    cy.getByText(copy.edit.success.linkCreateAnother).should('exist')
+    cy.findByText(copy.edit.successDelete.title).should('exist')
+    cy.findByText(copy.edit.success.linkCreateAnother).should('exist')
     cy.wait(500)
   })
 
@@ -107,27 +107,27 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
 
     createPhraseBooks(0, 1)
 
-    cy.getByText(copy.create.success.browseView).click()
+    cy.findByText(copy.create.success.browseView).click()
     cy.wait(3000)
 
     // Test state of phrasebook browse delete button
-    cy.getByText(phraseBookName)
+    cy.findByText(phraseBookName)
       .should('exist')
       .parent()
       .parent()
       .contains(browseCopy.btnInitiate)
       .click()
     cy.wait(1000)
-    cy.getByText(phraseBookName)
+    cy.findByText(phraseBookName)
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(browseCopy.btnDeny)
+        cy.findByText(browseCopy.btnDeny)
           .should('exist')
           .click()
       })
     cy.wait(2000)
-    cy.getByText(phraseBookName)
+    cy.findByText(phraseBookName)
       .should('exist')
       .parent()
       .parent()
@@ -135,11 +135,11 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
       .click()
 
     // Test Delete
-    cy.getByText(phraseBookName)
+    cy.findByText(phraseBookName)
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(browseCopy.btnConfirm)
+        cy.findByText(browseCopy.btnConfirm)
           .should('exist')
           .click()
       })
@@ -153,7 +153,7 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
 
     // Create 10 Phrase Books
     createPhraseBooks(0, 10)
-    cy.getByText(copy.create.success.browseView).click()
+    cy.findByText(copy.create.success.browseView).click()
     cy.wait(2000)
 
     // Perform batch delete from browse screen

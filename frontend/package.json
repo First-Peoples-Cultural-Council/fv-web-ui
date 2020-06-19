@@ -38,7 +38,8 @@
     "test:e2e:ci:schedule": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:schedule",
     "test:e2e:ci:pr": "npm run test:databaseSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:ci:pr",
     "test:watch": "jest --watch",
-    "temp": "start-server-and-test start http://127.0.0.1:3001 cy:open"
+    "temp": "start-server-and-test start http://127.0.0.1:3001 cy:open",
+    "docs": "npx jsdoc --destination qa/Documentation app/assets/javascripts/components/**/*.js"
   },
   "lint-staged": {
     "linters": {
@@ -56,7 +57,8 @@
       "/build/",
       "/cypress/",
       "**/__tests__/",
-      "**/__mocks__/*"
+      "**/__mocks__/*",
+      "**/qa/Documentation/**/*"
     ]
   },
   "husky": {
@@ -84,8 +86,8 @@
     "@fpcc/fv-game-jigsaw": "~1.0.1",
     "@fpcc/fv-game-memory": "~1.0.0",
     "@fpcc/fv-game-wordsearch": "~1.0.0",
-    "@material-ui/core": "1.5.1",
-    "@material-ui/icons": "2.0.3",
+    "@material-ui/core": "4.10.2",
+    "@material-ui/icons": "4.9.1",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "~6.26.0",
     "bootstrap": "^3.3.7",
@@ -131,6 +133,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@material-ui/codemod": "^4.3.0",
+    "@testing-library/cypress": "^6.0.0",
     "babel-eslint": "~10.0.1",
     "babel-jest": "^24.3.0",
     "babel-loader": "~8.0.5",
@@ -147,10 +150,9 @@
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
     "css-loader": "~0.14.5",
-    "cypress": "^4.2.0",
-    "cypress-file-upload": "^3.5.3",
-    "cypress-pipe": "^1.6.0",
-    "cypress-testing-library": "^2.3.6",
+    "cypress": "^4.8.0",
+    "cypress-file-upload": "^4.0.7",
+    "cypress-pipe": "^1.7.0",
     "del": "~1.2.1",
     "dom-testing-library": "^3.17.1",
     "eslint": "^5.15.1",
@@ -170,6 +172,7 @@
     "jest-dom": "^3.1.3",
     "jest-sonar-reporter": "^2.0.0",
     "jscodeshift": "^0.6.4",
+    "jsdoc": "^3.6.4",
     "json-loader": "~0.5.2",
     "jsx-loader": "~0.13.2",
     "less": "~2.5.1",

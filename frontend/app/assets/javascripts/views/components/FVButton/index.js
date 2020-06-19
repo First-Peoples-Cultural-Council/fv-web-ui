@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import Fab from '@material-ui/core/Fab'
 
 const styles = (theme) => {
   const { button } = theme
@@ -28,9 +29,24 @@ const styles = (theme) => {
 }
 
 function FVButton(props) {
-  const { children, classes } = props
+  const { children, classes, isFab = false } = props
 
-  return (
+  return isFab ? (
+    <Fab
+      variant="extended"
+      classes={{
+        contained: classes.contained,
+        containedPrimary: classes.containedPrimary,
+        containedSecondary: classes.containedSecondary,
+        outlined: classes.outlined,
+        outlinedPrimary: classes.outlinedPrimary,
+        outlinedSecondary: classes.outlinedSecondary,
+      }}
+      {...props}
+    >
+      {children}
+    </Fab>
+  ) : (
     <Button
       classes={{
         contained: classes.contained,
@@ -50,6 +66,10 @@ function FVButton(props) {
 FVButton.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.node,
+  isFab: PropTypes.bool,
+}
+FVButton.defaultProps = {
+  isFab: false,
 }
 
 export default withStyles(styles)(FVButton)

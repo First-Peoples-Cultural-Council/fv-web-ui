@@ -28,35 +28,35 @@ export class DebugTypography extends Component {
   render() {
     return (
       <div>
-        <Typography variant="display4" gutterBottom>
-          {'Display 4 [variant="display4"]'}
+        <Typography variant="h1" gutterBottom>
+          {'[variant="h1"]'}
         </Typography>
-        <Typography variant="display3" gutterBottom>
-          {'Display 3 [variant="display3"]'}
+        <Typography variant="h2" gutterBottom>
+          {'[variant="h2"]'}
         </Typography>
-        <Typography variant="display2" gutterBottom>
-          {'Display 2 [variant="display2"]'}
+        <Typography variant="h3" gutterBottom>
+          {'[variant="h3"]'}
         </Typography>
-        <Typography variant="display1" gutterBottom>
-          {'Display 1 [variant="display1"]'}
+        <Typography variant="h4" gutterBottom>
+          {'[variant="h4"]'}
         </Typography>
-        <Typography variant="headline" gutterBottom>
-          {'Headline [variant="headline"]'}
+        <Typography variant="h5" gutterBottom>
+          {'[variant="h5"]'}
         </Typography>
-        <Typography variant="title" gutterBottom>
-          {'Title [variant="title"]'}
+        <Typography variant="h6" gutterBottom>
+          {'[variant="h6"]'}
         </Typography>
-        <Typography variant="subheading" gutterBottom>
-          {'Subheading [variant="subheading"]'}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {'Body 2 [variant="body2"]'}
+        <Typography variant="subtitle1" gutterBottom>
+          {'[variant="subtitle1"]'}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          {'Body 1 [variant="body1"]'}
+          {'[variant="body1"]'}
+        </Typography>
+        <Typography variant="body2" gutterBottom>
+          {'[variant="body2"]'}
         </Typography>
         <Typography variant="caption" gutterBottom>
-          {'Caption [variant="caption"]'}
+          {'[variant="caption"]'}
         </Typography>
         <Typography gutterBottom>
           {`
@@ -64,7 +64,7 @@ export class DebugTypography extends Component {
 `}
         </Typography>
         <Typography variant="button" gutterBottom>
-          {'Button [variant="button"]'}
+          {'[variant="button"]'}
         </Typography>
       </div>
     )

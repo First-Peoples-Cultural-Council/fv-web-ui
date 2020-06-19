@@ -1,0 +1,11 @@
+version: '3'
+services:
+  nuxeo-backend:
+    environment:
+      - NUXEO_CUSTOM_PARAM=
+        fv.cognito.authenticateWithCognito=true\n
+        fv.cognito.userPool=COGNITO_USER_POOL\n
+        fv.cognito.accessKey=COGNITO_ACCESS_KEY\n
+        fv.cognito.secretKey=COGNITO_SECRET_KEY\n
+        fv.cognito.clientID=COGNITO_CLIENT_ID\n
+        fv.cognito.region=COGNITO_REGION

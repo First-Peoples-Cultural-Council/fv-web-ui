@@ -91,9 +91,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                         <p>
                           <FVLabel
                             transKey="views.hoc.view.warning1_x"
-                            defaultStr={'Publishing this ' +
-                            this.props.labels.single +
-                            ' will also publish (or republish) the following related items'}
+                            defaultStr={
+                              'Publishing this ' +
+                              this.props.labels.single +
+                              ' will also publish (or republish) the following related items'
+                            }
                             transform="first"
                             params={[this.props.labels.single]}
                           />
@@ -108,9 +110,11 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       <p>
                         <FVLabel
                           transKey="views.hoc.view.warning2_x"
-                          defaultStr={'Publishing this ' +
-                          this.props.labels.single +
-                          ' all the media and child items associated with it'}
+                          defaultStr={
+                            'Publishing this ' +
+                            this.props.labels.single +
+                            ' all the media and child items associated with it'
+                          }
                           transform="first"
                           params={[this.props.labels.single]}
                         />
@@ -134,11 +138,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     })
                   }}
                 >
-                  <FVLabel
-                    transKey="cancel"
-                    defaultStr="Cancel"
-                    transform="first"
-                  />
+                  <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
                 </FVButton>
                 <FVButton
                   data-testid="ViewWithActions__buttonPublish"
@@ -149,11 +149,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     this.state.prePublishCompleteAction()
                   }}
                 >
-                  <FVLabel
-                    transKey="publish"
-                    defaultStr="Publish"
-                    transform="first"
-                  />
+                  <FVLabel transKey="publish" defaultStr="Publish" transform="first" />
                 </FVButton>
               </DialogActions>
             </Dialog>
@@ -226,11 +222,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       this.setState({ deleteDialogOpen: false })
                     }}
                   >
-                    <FVLabel
-                      transKey="cancel"
-                      defaultStr="Cancel"
-                      transform="first"
-                    />
+                    <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
                   </FVButton>
                   <FVButton
                     data-testid="ViewWithActions__buttonDelete"
@@ -242,11 +234,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       this._delete(selectn('response', this.props.computeItem))
                     }}
                   >
-                    <FVLabel
-                      transKey="delete"
-                      defaultStr="Delete"
-                      transform="first"
-                    />
+                    <FVLabel transKey="delete" defaultStr="Delete" transform="first" />
                   </FVButton>
                 </DialogActions>
               </Dialog>
@@ -268,11 +256,13 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 <DialogContent>
                   <FVLabel
                     transKey="views.hoc.view.delete_x_success"
-                    defaultStr={'The ' +
-                    this.props.labels.single +
-                    ' <strong>' +
-                    selectn('response.title', this.props.computeItem) +
-                    '</strong> has been successfully deleted.'}
+                    defaultStr={
+                      'The ' +
+                      this.props.labels.single +
+                      ' <strong>' +
+                      selectn('response.title', this.props.computeItem) +
+                      '</strong> has been successfully deleted.'
+                    }
                     transform="first"
                     params={[this.props.labels.single, selectn('response.title', this.props.computeItem)]}
                   />
@@ -281,7 +271,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   <FVButton
                     data-testid="ViewWithActions__buttonReturn"
                     // className="FlatButton FlatButton--secondary ViewWithActions__button"
-                    variant="flat"
+                    variant="text"
                     color="secondary"
                     onClick={() => window.history.back()}
                   >
@@ -294,7 +284,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   <FVButton
                     data-testid="ViewWithActions__buttonHome"
                     // className="FlatButton FlatButton--primary ViewWithActions__button"
-                    variant="flat"
+                    variant="text"
                     color="primary"
                     onClick={this.props.onNavigateRequest.bind(
                       this,
