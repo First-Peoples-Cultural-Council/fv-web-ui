@@ -264,27 +264,27 @@ function WordsData(props) {
   }
 
   return props.children({
-    handleSearch: handleSearch,
-    changeFilter: changeFilter,
-    clearDialectFilter: clearDialectFilter,
-    computeDocument: computeDocument,
-    computeLogin: computeLogin,
+    handleSearch,
+    changeFilter,
+    clearDialectFilter,
+    computeDocument,
+    computeLogin,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     dialectFilterListWillUnmount: ({ facetField, resetUrlPagination }) => {
       handleDialectFilterList(facetField, resetUrlPagination)
     },
-    filterInfo: filterInfo,
+    filterInfo,
     flashcardMode: false,
-    handleAlphabetClick: (event) => handleAlphabetClick(event),
-    intl: intl,
+    handleAlphabetClick,
+    intl,
     isKidsTheme: routeParams.siteTheme === 'kids',
-    onNavigateRequest: onNavigateRequest,
-    pushWindowPath: pushWindowPath,
-    resetSearch: resetSearch,
-    routeParams: routeParams,
-    setDialectFilter: setDialectFilter,
-    splitWindowPath: splitWindowPath,
+    onNavigateRequest,
+    pushWindowPath,
+    resetSearch,
+    routeParams,
+    setDialectFilter,
+    splitWindowPath,
   })
 }
 
