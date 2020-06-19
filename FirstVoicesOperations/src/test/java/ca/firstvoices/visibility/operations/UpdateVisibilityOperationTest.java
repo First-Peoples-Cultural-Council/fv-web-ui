@@ -7,6 +7,7 @@ import static ca.firstvoices.lifecycle.Constants.ENABLED_STATE;
 import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
@@ -109,7 +110,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testMembersToPublic() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
+    dialect.followTransition(PUBLISH_TRANSITION);
     word.followTransition(ENABLE_TRANSITION);
     Assert.assertEquals(ENABLED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
@@ -122,7 +123,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
     Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
   }
 
-  @Test(expected = OperationException.class)
+  @Test(expected = NuxeoException.class)
   public void testToPublicOnUnpublishedDialect() throws OperationException {
     word.followTransition(ENABLE_TRANSITION);
     ctx = new OperationContext(session);
@@ -191,7 +192,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testPublicToPublic() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
+    dialect.followTransition(PUBLISH_TRANSITION);
     firstVoicesPublisherService.publish(word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
