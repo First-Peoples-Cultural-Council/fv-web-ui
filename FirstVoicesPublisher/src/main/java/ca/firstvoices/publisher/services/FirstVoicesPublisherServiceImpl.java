@@ -20,7 +20,6 @@
 
 package ca.firstvoices.publisher.services;
 
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
@@ -411,7 +410,6 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
       return;
     }
     asset.getCoreSession().removeDocument(proxy.getRef());
-    asset.followTransition(ENABLE_TRANSITION);
   }
 
   @Override

@@ -24,9 +24,12 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOKS;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL_DICTIONARY;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
 
-import ca.firstvoices.schemas.DialectTypesConstants;
 import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,10 +125,10 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
 
       if (allowedDocumentTypes.isEmpty()) {
         allowedDocumentTypes.add(FV_CATEGORIES);
-        allowedDocumentTypes.add(DialectTypesConstants.FV_CONTRIBUTORS);
-        allowedDocumentTypes.add(DialectTypesConstants.FV_DICTIONARY);
-        allowedDocumentTypes.add("FVLabelDictionary");
-        allowedDocumentTypes.add(DialectTypesConstants.FV_RESOURCES);
+        allowedDocumentTypes.add(FV_CONTRIBUTORS);
+        allowedDocumentTypes.add(FV_DICTIONARY);
+        allowedDocumentTypes.add(FV_LABEL_DICTIONARY);
+        allowedDocumentTypes.add(FV_RESOURCES);
         allowedDocumentTypes.add(FV_BOOK);
         allowedDocumentTypes.add(FV_BOOKS);
         allowedDocumentTypes.add(FV_BOOK_ENTRY);

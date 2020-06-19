@@ -35,6 +35,7 @@ import ca.firstvoices.dialect.categories.services.CategoryService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -71,6 +72,14 @@ public abstract class AbstractFirstVoicesOperationsTest {
   public void setUp() throws Exception {
     assertNotNull("Should have a valid session", session);
     createSetup(session);
+  }
+
+  @After
+  public void tearDown() {
+    if (domain != null) {
+      session.removeDocument(domain.getRef());
+      session.save();
+    }
   }
 
   public void createSetup(CoreSession session) {
