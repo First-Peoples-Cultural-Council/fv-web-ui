@@ -20,6 +20,7 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -40,7 +41,7 @@ public class AssignAncestorsServiceImplTest extends AbstractFirstVoicesDataTest 
 
     // Create a new child document
     DocumentModel TestWord = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", "FVLinks"));
+        session.createDocumentModel("/FV/Family/Language/Dialect", "TestLink", FV_LINKS));
 
     // Check that the child document does not have the parent document UUIDs in it's properties
     assertNull("Word should have no ID for parent family property",

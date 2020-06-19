@@ -20,6 +20,32 @@
 
 package ca.firstvoices.services;
 
+
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,7 +82,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     }
 
     // Check that the document is currently published
-    if (!document.getCurrentLifeCycleState().equals("Published")) {
+    if (!document.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
       return null;
     }
 
@@ -152,10 +178,10 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
   private boolean checkType(DocumentModel inputDoc) {
     DocumentType currentType = inputDoc.getDocumentType();
 
-    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
-        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
-        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
-        "FVPortal", "FVResources", "FVVideo", "FVWord",};
+    String[] types = {FV_ALPHABET, FV_AUDIO, FV_BOOK, FV_BOOK_ENTRY, FV_BOOKS, FV_CATEGORIES,
+        FV_CATEGORY, FV_CHARACTER, FV_CONTRIBUTOR, FV_CONTRIBUTORS, FV_DIALECT, FV_DICTIONARY,
+        FV_GALLERY, FV_LANGUAGE, FV_LANGUAGE_FAMILY, FV_LINK, FV_LINKS, FV_PHRASE, FV_PICTURE,
+        FV_PORTAL, FV_RESOURCES, FV_VIDEO, FV_WORD};
 
     return Arrays.stream(types).parallel().anyMatch(currentType.toString()::contains);
   }

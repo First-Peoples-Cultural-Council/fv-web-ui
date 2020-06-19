@@ -20,6 +20,8 @@
 
 package ca.firstvoices;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.dialect.assets.services.RelationsService;
 import ca.firstvoices.nuxeo.enrichers.WordEnricher;
 import javax.inject.Inject;
@@ -66,14 +68,14 @@ public class WordEnricherTest extends
   @Before
   public void setUpTest() {
     // Create a new FVWord document
-    word = session.createDocumentModel("/", "TestWord", "FVWord");
+    word = session.createDocumentModel("/", "TestWord", FV_WORD);
     word = session.createDocument(word);
   }
 
   @Test
   public void testPartOfSpeech() throws Exception {
 
-    Mockito.when(relationsService.getRelations(session, word, "FVWord")).thenReturn(null);
+    Mockito.when(relationsService.getRelations(session, word, FV_WORD)).thenReturn(null);
 
     word.setPropertyValue("fv-word:part_of_speech", "event_activity_verb_like_word");
     session.saveDocument(word);

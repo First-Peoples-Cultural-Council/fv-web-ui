@@ -20,6 +20,9 @@
 
 package ca.firstvoices;
 
+import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher;
@@ -94,7 +97,7 @@ public class UnpublishedChangesEnricherTest extends
     session.save();
 
     dialectDoc = testUtil.createDialectTree(session);
-    dialectDoc.followTransition("Enable");
+    dialectDoc.followTransition(ENABLE_TRANSITION);
   }
 
   @After
@@ -123,7 +126,7 @@ public class UnpublishedChangesEnricherTest extends
         /*
             Publish the document and make sure the enricher still returns the correct value.
          */
-    dialectDoc.followTransition("Publish");
+    dialectDoc.followTransition(PUBLISH_TRANSITION);
     ctx = RenderingContext.CtxBuilder.enrichDoc(UnpublishedChangesEnricher.NAME)
         .properties("unpublished_changes_exist").get();
     json = jsonAssert(dialectDoc, ctx);
@@ -150,7 +153,7 @@ public class UnpublishedChangesEnricherTest extends
             Republish the document and make sure the enricher now returns
             unpublished_changes_exist = false
          */
-    dialectDoc.followTransition("Republish");
+    dialectDoc.followTransition(REPUBLISH_TRANSITION);
     ctx = RenderingContext.CtxBuilder.enrichDoc(UnpublishedChangesEnricher.NAME)
         .properties("unpublished_changes_exist").get();
     json = jsonAssert(dialectDoc, ctx);

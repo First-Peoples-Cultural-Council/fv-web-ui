@@ -20,6 +20,8 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -172,7 +174,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
       Map.Entry pair = (Map.Entry) it.next();
       DocumentModel letterDoc = session
           .createDocumentModel(dialect.getPathAsString() + "/Alphabet", (String) pair.getKey(),
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
       letterDoc.setPropertyValue("fvcharacter:confusable_characters", (String[]) pair.getValue());
       createDocument(session, letterDoc);
@@ -183,7 +185,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   private void createLetterWithLowerCaseUppercaseConfusableCharacters(String title, int order,
       String uChar, String[] confusableChars, String[] uConfusableChars) {
     DocumentModel letterDoc = session
-        .createDocumentModel(dialect.getPathAsString() + "/Alphabet", title, "FVCharacter");
+        .createDocumentModel(dialect.getPathAsString() + "/Alphabet", title, FV_CHARACTER);
     letterDoc.setPropertyValue("fvcharacter:alphabet_order", order);
     letterDoc.setPropertyValue("fvcharacter:upper_case_character", uChar);
     letterDoc.setPropertyValue("fvcharacter:confusable_characters", confusableChars);
@@ -196,7 +198,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = new ArrayList<>();
     for (int i = 0; i < words.length; i++) {
       DocumentModel document = session
-          .createDocumentModel(dialect.getPathAsString() + "/Dictionary", words[i], "FVWord");
+          .createDocumentModel(dialect.getPathAsString() + "/Dictionary", words[i], FV_WORD);
       document.setPropertyValue("fv:reference", words[i]);
       document = createDocument(session, document);
       documentModels.add(document);

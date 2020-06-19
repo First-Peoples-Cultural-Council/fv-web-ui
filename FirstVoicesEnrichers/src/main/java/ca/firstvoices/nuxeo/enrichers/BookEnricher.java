@@ -20,6 +20,8 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -66,9 +68,9 @@ public class BookEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVBook / FVBookEntry
      */
-    if (documentType.equalsIgnoreCase("FVBook") || documentType.equalsIgnoreCase("FVBookEntry")) {
+    if (documentType.equalsIgnoreCase(FV_BOOK) || documentType.equalsIgnoreCase(FV_BOOK_ENTRY)) {
 
-      if (documentType.equalsIgnoreCase("FVBook")) {
+      if (documentType.equalsIgnoreCase(FV_BOOK)) {
         // Process "fvcore:source" values
         String[] sourceIds = (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "source")
             : (String[]) doc.getProperty("fvproxy", "proxied_source");

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.lifecycle.fv-request-lifecycle" version="1.0.0">
+  <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+    <lifecycle defaultInitial="waiting_for_admin" name="fv-request-lifecycle">
+      <states>
+        <state description="Waiting for Admin" initial="true" name="waiting_for_admin">
+          <transitions>
+            <transition>to_review_in_progress</transition>
+            <transition>to_escalated_to_fpcc</transition>
+            <transition>to_accepted</transition>
+            <transition>to_rejected</transition>
+          </transitions>
+        </state>
+        <state description="Review in Progress" name="review_in_progress">
+          <transitions>
+            <transition>to_missing_info</transition>
+            <transition>to_accepted</transition>
+            <transition>to_escalated_to_fpcc</transition>
+            <transition>to_waiting_for_admin</transition>
+            <transition>to_rejected</transition>
+          </transitions>
+        </state>
+        <state description="Accepted" name="accepted">
+          <transitions>
+            <transition>to_review_in_progress</transition>
+            <transition>to_rejected</transition>
+          </transitions>
+        </state>
+        <state description="Rejected" name="rejected">
+          <transitions>
+            <transition>to_review_in_progress</transition>
+            <transition>to_accepted</transition>
+          </transitions>
+        </state>
+        <state description="Missing Information" name="missing_info">
+          <transitions>
+            <transition>to_accepted</transition>
+            <transition>to_rejected</transition>
+          </transitions>
+        </state>
+        <state description="Escalated to FPCC" name="escalated_to_fpcc">
+          <transitions>
+            <transition>to_missing_info</transition>
+            <transition>to_accepted</transition>
+            <transition>to_waiting_for_admin</transition>
+            <transition>to_rejected</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="review_in_progress" name="to_review_in_progress">
+          <description></description>
+        </transition>
+        <transition destinationState="escalated_to_fpcc" name="to_escalated_to_fpcc">
+          <description></description>
+        </transition>
+        <transition destinationState="rejected" name="to_rejected">
+          <description></description>
+        </transition>
+        <transition destinationState="accepted" name="to_accepted">
+          <description></description>
+        </transition>
+        <transition destinationState="waiting_for_admin" name="to_waiting_for_admin">
+          <description></description>
+        </transition>
+        <transition destinationState="rejected" name="to_rejected">
+          <description></description>
+        </transition>
+        <transition destinationState="accepted" name="to_accepted">
+          <description></description>
+        </transition>
+        <transition destinationState="missing_info" name="to_missing_info">
+          <description></description>
+        </transition>
+        <transition destinationState="escalated_to_fpcc" name="to_escalated_to_fpcc">
+          <description></description>
+        </transition>
+        <transition destinationState="rejected" name="to_rejected">
+          <description></description>
+        </transition>
+        <transition destinationState="review_in_progress" name="to_review_in_progress">
+          <description></description>
+        </transition>
+        <transition destinationState="accepted" name="to_accepted">
+          <description></description>
+        </transition>
+        <transition destinationState="review_in_progress" name="to_review_in_progress">
+          <description></description>
+        </transition>
+        <transition destinationState="rejected" name="to_rejected">
+          <description></description>
+        </transition>
+        <transition destinationState="accepted" name="to_accepted">
+          <description></description>
+        </transition>
+        <transition destinationState="waiting_for_admin" name="to_waiting_for_admin">
+          <description></description>
+        </transition>
+        <transition destinationState="missing_info" name="to_missing_info">
+          <description></description>
+        </transition>
+        <transition destinationState="rejected" name="to_rejected">
+          <description></description>
+        </transition>
+        <transition destinationState="accepted" name="to_accepted">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
+  </extension>
+</component>

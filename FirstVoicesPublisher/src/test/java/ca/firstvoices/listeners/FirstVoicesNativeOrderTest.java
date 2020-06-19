@@ -21,6 +21,14 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -74,14 +82,14 @@ public class FirstVoicesNativeOrderTest {
   @Before
   public void setUp() {
     domain = createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
-    createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
+    createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
+    createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
     dialect = createDocument(
-        session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel("/Family/Language", "Dialect", FV_DIALECT));
     createDocument(
-        session.createDocumentModel("/Family/Language/Dialect", "Alphabet", "FVAlphabet"));
+        session.createDocumentModel("/Family/Language/Dialect", "Alphabet", FV_ALPHABET));
     createDocument(
-        session.createDocumentModel("/Family/Language/Dialect", "Dictionary", "FVDictionary"));
+        session.createDocumentModel("/Family/Language/Dialect", "Dictionary", FV_DICTIONARY));
 
   }
 
@@ -104,7 +112,7 @@ public class FirstVoicesNativeOrderTest {
         "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedWords.length - 1;
@@ -138,7 +146,7 @@ public class FirstVoicesNativeOrderTest {
         "ʕ", "ʔ"};
 
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedWords.length - 1;
@@ -189,7 +197,7 @@ public class FirstVoicesNativeOrderTest {
         "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedWords.length - 1;
@@ -233,7 +241,7 @@ public class FirstVoicesNativeOrderTest {
         "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedPhrases, "FVPhrase");
+    createWordsorPhrases(orderedPhrases, FV_PHRASE);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedPhrases.length - 1;
@@ -261,7 +269,7 @@ public class FirstVoicesNativeOrderTest {
         "y", "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     DocumentModelList characters = session
         .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
@@ -294,7 +302,7 @@ public class FirstVoicesNativeOrderTest {
     String[] unorderedAlphabet = {"d", "a", "c", "b"};
 
     createUnorderedAlphabet(unorderedAlphabet, "/Family/Language/Dialect/Alphabet");
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedWords.length - 1;
@@ -321,7 +329,7 @@ public class FirstVoicesNativeOrderTest {
     createUnorderedAlphabet(unorderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
 
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
     Integer i = orderedWords.length - 1;
@@ -412,7 +420,7 @@ public class FirstVoicesNativeOrderTest {
   private void createOrderedAlphabet(String[] alphabet, String path) {
     Integer i = 0;
     for (String letter : alphabet) {
-      DocumentModel letterDoc = session.createDocumentModel(path, letter, "FVCharacter");
+      DocumentModel letterDoc = session.createDocumentModel(path, letter, FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
       createDocument(letterDoc);
       i++;
@@ -421,7 +429,7 @@ public class FirstVoicesNativeOrderTest {
 
   private void createUnorderedAlphabet(String[] alphabet, String path) {
     for (String letter : alphabet) {
-      DocumentModel letterDoc = session.createDocumentModel(path, letter, "FVCharacter");
+      DocumentModel letterDoc = session.createDocumentModel(path, letter, FV_CHARACTER);
       createDocument(letterDoc);
     }
   }

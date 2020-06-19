@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -71,7 +72,7 @@ public class PhraseEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVPhrase
      */
-    if (documentType.equalsIgnoreCase("FVPhrase")) {
+    if (documentType.equalsIgnoreCase(FV_PHRASE)) {
 
       // Process "fv-phrase:phrase_books" values
       String[] phraseBookIds =
