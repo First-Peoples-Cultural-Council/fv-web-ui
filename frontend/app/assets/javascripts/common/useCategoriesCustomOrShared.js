@@ -11,6 +11,8 @@ import Immutable from 'immutable'
  *
  * @component
  *
+ * @param {boolean} fetchLatest When true, will always send a request to get category data instead of relying on fetchIfMissing (which could be stale after an edit)
+ *
  * @returns {object} object
  * @returns {array} object.categories
  * @returns {array} object.computeEntities Immutable list, used with PromiseWrapper
