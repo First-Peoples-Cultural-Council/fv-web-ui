@@ -16,6 +16,7 @@ limitations under the License.
 // -------------------------------------------
 import React, { Component, Suspense } from 'react'
 import selectn from 'selectn'
+// import Immutable from 'immutable'
 
 // FPCC
 // -------------------------------------------
@@ -39,6 +40,7 @@ class WordsLayout extends Component {
     return (
       <WordsData>
         {({
+          handleSearch,
           changeFilter,
           computeDocument,
           computeLogin,
@@ -185,7 +187,7 @@ class WordsLayout extends Component {
                             // ==================================================
                             // Search
                             // --------------------------------------------------
-                            handleSearch={changeFilter}
+                            handleSearch={handleSearch}
                             resetSearch={resetSearch}
                             hasSearch
                             searchUi={[
