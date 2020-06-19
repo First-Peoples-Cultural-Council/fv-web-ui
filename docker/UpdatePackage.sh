@@ -9,8 +9,8 @@ cd ../
 
 # Build entire FirstVoices package.
 echo 'Building entire package '
-if [ "$2" == "-skip-tests" ]; then
-    mvn -Dmaven.test.skip=true install -q
+if [ "$1" == "-skip-tests" ]; then
+    mvn clean install -DskipTests
     if [[ "$?" -ne 0 ]]; then
         echo
         echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
