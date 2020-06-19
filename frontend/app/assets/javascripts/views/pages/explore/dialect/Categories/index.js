@@ -236,8 +236,11 @@ export const Categories = (props) => {
           }}
           // Listview: computed data
           computedData={computedData}
+          navigationRouteSearch={props.search}
+          routeParams={props.routeParams}
+          setRouteParams={setRouteParams}
           sortHandler={async (sortData) => {
-            await props.setRouteParams({
+            await setRouteParams({
               search: {
                 page: sortData.page,
                 pageSize: sortData.pageSize,

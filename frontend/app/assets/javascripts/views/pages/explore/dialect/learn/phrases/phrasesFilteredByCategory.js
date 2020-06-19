@@ -227,6 +227,8 @@ export class PhrasesFilteredByCategory extends Component {
           }}
           fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
           metadata={selectn('response', computedPhrases)}
+          navigationRouteSearch={this.props.navigationRouteSearch}
+          routeParams={routeParams}
           // ===============================================
           // Sort
           // -----------------------------------------------

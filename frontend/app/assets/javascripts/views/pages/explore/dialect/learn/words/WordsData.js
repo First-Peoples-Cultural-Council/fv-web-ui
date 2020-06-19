@@ -42,6 +42,7 @@ function WordsData(props) {
   const { computeSearchDialect, searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
   const [filterInfo, setfilterInfo] = useState(initialFilterInfo())
+  const [filterChanged, setFilterChanged] = useState(false)
 
   useEffect(() => {
     // If no filters are applied via URL, use props
@@ -59,7 +60,7 @@ function WordsData(props) {
     }
     // Specify how to clean up after this effect:
     return searchDialectReset
-  }, [])
+  }, [filterChanged])
 
   function initialFilterInfo() {
     const routeParamsCategory = routeParams.category
@@ -118,6 +119,7 @@ function WordsData(props) {
         resetURLPagination({ preserveSearch: true })
       }
     }
+    setFilterChanged(true)
   }
 
   const clearDialectFilter = () => {

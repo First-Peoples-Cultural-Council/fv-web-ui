@@ -162,9 +162,11 @@ class WordsLayout extends Component {
                       items,
                       listViewMode,
                       metadata,
+                      navigationRouteSearch,
                       pageTitle,
                       parentId,
                       setListViewMode,
+                      setRouteParams,
                       smallScreenTemplate,
                       sortHandler,
                     }) => {
@@ -176,6 +178,10 @@ class WordsLayout extends Component {
                             dictionaryListSmallScreenTemplate={smallScreenTemplate}
                             flashcardTitle={pageTitle}
                             dialect={dialect}
+                            navigationRouteSearch={navigationRouteSearch}
+                            pushWindowPath={pushWindowPath}
+                            routeParams={routeParams}
+                            setRouteParams={setRouteParams}
                             // ==================================================
                             // Search
                             // --------------------------------------------------

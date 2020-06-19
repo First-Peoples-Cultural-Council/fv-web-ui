@@ -41,7 +41,7 @@ import {
 
 function DictionaryListData(props) {
   const { computeDocument, fetchDocument } = useDocument()
-  const { computeDialect2 } = useDialect()
+  const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
@@ -50,6 +50,25 @@ function DictionaryListData(props) {
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
+
+  useEffect(() => {
+    fetchData()
+    // Words
+    fetchListViewData()
+  }, [])
+
+  useEffect(() => {
+    if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
+      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
+    }
+  }, [
+    curFetchDocumentAction,
+    routeParams.area,
+    routeParams.category,
+    routeParams.letter,
+    routeParams.page,
+    routeParams.pageSize,
+  ])
 
   const computeDocumentkey = `${routeParams.dialect_path}/Dictionary`
   const DEFAULT_LANGUAGE = 'english'
@@ -80,30 +99,13 @@ function DictionaryListData(props) {
   const items = selectn('response.entries', computedWords)
   const metadata = selectn('response', computedWords)
 
-  useEffect(() => {
-    fetchData()
-    // Words
-    fetchListViewData()
-  }, [])
-
-  useEffect(() => {
-    if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
-      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
-    }
-  }, [
-    curFetchDocumentAction,
-    routeParams.area,
-    routeParams.category,
-    routeParams.letter,
-    routeParams.page,
-    routeParams.pageSize,
-  ])
-
   const fetchData = async () => {
     // Document
     await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
     // Portal
     await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
+    // Dialect
+    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
   }
 
   function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
@@ -141,7 +143,6 @@ function DictionaryListData(props) {
   }
 
   function getColumns() {
-    const computedDialect2Response = selectn('response', computedDialect2)
     const columnsArray = [
       {
         name: 'title',
@@ -158,7 +159,7 @@ function DictionaryListData(props) {
             isWorkspaces && hrefEdit ? (
               <AuthorizationFilter
                 filter={{
-                  entity: computedDialect2Response,
+                  entity: dialect,
                   login: computeLogin,
                   role: ['Record', 'Approve', 'Everything'],
                 }}
@@ -329,11 +330,14 @@ function DictionaryListData(props) {
     items,
     listViewMode: listView.mode,
     metadata,
+    navigationRouteSearch,
     page: parseInt(routeParams.page, 10),
     pageSize: parseInt(routeParams.pageSize, 10),
     pageTitle,
     parentId,
+    pushWindowPath,
     routeParams,
+    setRouteParams,
     setListViewMode: setListViewMode,
     smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
     sortCol: DEFAULT_SORT_COL,
