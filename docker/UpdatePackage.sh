@@ -9,7 +9,7 @@ cd ../
 
 # Build entire FirstVoices package.
 echo 'Building entire package '
-if [ "$1" == "-skip-tests" || "$2" == "-skip-tests" ]; then
+if [ "$1" == "-skip-tests" ]; then
     mvn -Dmaven.test.skip=true install -q
     if [[ "$?" -ne 0 ]]; then
         echo
