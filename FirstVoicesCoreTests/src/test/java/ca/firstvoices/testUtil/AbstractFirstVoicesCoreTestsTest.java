@@ -1,5 +1,8 @@
 package ca.firstvoices.testUtil;
 
+import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
+import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
+
 import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import java.util.Map;
 import javax.inject.Inject;
@@ -16,13 +19,36 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Features({FirstVoicesCoreTestsFeature.class})
 public abstract class AbstractFirstVoicesCoreTestsTest {
 
+  protected DocumentModel domain;
+  protected DocumentModel workspaceRoot;
+  protected DocumentModel workspace;
+  protected DocumentModel languageFamily;
+  protected DocumentModel language;
+  protected Map<String, String> params;
+
+
   @Inject
   protected CoreSession session;
 
   @Inject
   protected AutomationService automationService;
 
-  protected Map<String, String> params;
+  public void createTree(CoreSession session) {
+    startFresh(session);
+
+    domain = createDocument(session,
+        session.createDocumentModel("/", "FV", "Domain"));
+    workspaceRoot = createDocument(session,
+        session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
+    workspace = createDocument(session,
+        session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
+    languageFamily = createDocument(session,
+        session
+            .createDocumentModel("/FV/Workspaces/Data", "Test", FV_LANGUAGE_FAMILY));
+    language = createDocument(session,
+        session.createDocumentModel("/FV/Workspaces/Data/Test", "Test",
+            FV_LANGUAGE));
+  }
 
   public void startFresh(CoreSession session) {
     DocumentRef dRef = session.getRootDocument().getRef();

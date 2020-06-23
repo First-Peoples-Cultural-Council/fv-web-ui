@@ -23,4 +23,10 @@ package ca.firstvoices.tests.mocks;
 public class Constants {
 
   public static final String GROUP_NAME = "Mocks";
+  public static final String FV_LANGUAGE = "FVLanguage";
+  public static final String FV_LANGUAGE_FAMILY = "FVLanguageFamily";
+
+  private Constants() {
+    throw new IllegalStateException("Utility class");
+  }
 }

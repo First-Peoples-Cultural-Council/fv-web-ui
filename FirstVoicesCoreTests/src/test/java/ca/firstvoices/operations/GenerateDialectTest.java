@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 
 /**
@@ -42,20 +41,7 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     params.put("maxEntries", "50");
     params.put("dialectName", "Xx_Dialect_xX");
 
-    startFresh(session);
-
-    DocumentModel domain = createDocument(session,
-        session.createDocumentModel("/", "FV", "Domain"));
-    DocumentModel workspaceRoot = createDocument(session,
-        session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-    DocumentModel workspace = createDocument(session,
-        session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
-    DocumentModel languageFamily = createDocument(session,
-        session
-            .createDocumentModel("/FV/Workspaces/Data", "Test", "FVLanguageFamily"));
-    DocumentModel language = createDocument(session,
-        session.createDocumentModel("/FV/Workspaces/Data/Test", "Test",
-            "FVLanguage"));
+    createTree(session);
 
     OperationContext ctx = new OperationContext(session);
 

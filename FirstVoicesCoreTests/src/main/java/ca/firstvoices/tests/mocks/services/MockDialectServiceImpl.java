@@ -1,5 +1,8 @@
 package ca.firstvoices.tests.mocks.services;
 
+import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
+import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
@@ -12,9 +15,9 @@ public class MockDialectServiceImpl implements MockDialectService {
     // See other services, operations and InitialDatabaseSetup for inspiration
     // Feel free to create other services, utils and methods as needed
     // for reusability (for example to create a word, etc.)
-    DocumentModel dialect = generateEmptyDialect(session, name);
 
-    return dialect;
+    return generateEmptyDialect(session, name);
+
   }
 
   @Override
@@ -22,19 +25,22 @@ public class MockDialectServiceImpl implements MockDialectService {
     // See other services, operations and InitialDatabaseSetup for inspiration
     // Feel free to create other services, utils and methods as needed
     // for reusability (for example to create a word, etc.)
-    DocumentModel dialect = generateEmptyDialect(session, name);
 
-    return dialect;
+    return generateEmptyDialect(session, name);
+
   }
 
   @Override
   public void removeMockDialect(String name) {
+    //To be implemented at a later date.
+    throw new UnsupportedOperationException("Remove functions are not implemented yet.");
 
   }
 
   @Override
   public void removeMockDialects() {
-
+    //To be implemented at a later date.
+    throw new UnsupportedOperationException("Remove functions are not implemented yet.");
   }
 
   private DocumentModel createDocument(CoreSession session, DocumentModel model) {
@@ -56,21 +62,21 @@ public class MockDialectServiceImpl implements MockDialectService {
 
       // if FV domain does not exist, generate FV/Workspaces/Data
       if (!session.exists(new PathRef("/FV"))) {
-        DocumentModel domain = createDocument(session,
+        createDocument(session,
             session.createDocumentModel("/", "FV", "Domain"));
-        DocumentModel workspaceRoot = createDocument(session,
+        createDocument(session,
             session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-        DocumentModel workspace = createDocument(session,
+        createDocument(session,
             session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
       }
 
       if (session.exists(new PathRef("FV/Workspaces/Data/"))) {
-        DocumentModel languageFamily = createDocument(session,
+        createDocument(session,
             session
-                .createDocumentModel("/FV/Workspaces/Data", "Test", "FVLanguageFamily"));
-        DocumentModel language = createDocument(session,
+                .createDocumentModel("/FV/Workspaces/Data", "Test", FV_LANGUAGE_FAMILY));
+        createDocument(session,
             session.createDocumentModel("/FV/Workspaces/Data/Test", "Test",
-                "FVLanguage"));
+                FV_LANGUAGE));
       } else {
         throw new NuxeoException("Document tree FV/Workspaces/Data/ must exist");
       }
@@ -85,10 +91,9 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     generateDialectTree(session);
 
-    DocumentModel dialect = createDocument(session,
+    return createDocument(session,
         session
             .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, "FVDialect"));
-
-    return dialect;
   }
+
 }

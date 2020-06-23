@@ -8,4 +8,8 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 public class RemoveDialects {
 
   public static final String ID = Constants.GROUP_NAME + "." + "RemoveDialects";
+
+  private RemoveDialects() {
+    throw new UnsupportedOperationException("Remove functions are not implemented yet.");
+  }
 }
