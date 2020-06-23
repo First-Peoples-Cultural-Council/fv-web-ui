@@ -88,14 +88,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     DocumentModel dialect = createDocument(session,
         session
             .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, "FVDialect"));
-    DocumentModel dictionary = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", "FVDictionary"));
-    DocumentModel alphabet = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
-    DocumentModel categories = createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Categories", "FVCategories"));
 
     return dialect;
   }
-
 }

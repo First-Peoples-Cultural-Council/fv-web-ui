@@ -3,12 +3,22 @@
 
   <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.tests.mocks.operations.GenerateDialect"/>
+  </extension>
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.tests.mocks.operations.GenerateDialects"/>
+  </extension>
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.tests.mocks.operations.RemoveDialect"/>
+  </extension>
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.tests.mocks.operations.RemoveDialects"/>
   </extension>
 
-  <!-- Block Operation from being visible to non super admins -->
+
+  <!-- Block Operation from being visible to non super admins
   <extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
     <binding name="Mocks.GenerateDialect">
       <administrator>true</administrator>
@@ -23,5 +33,6 @@
       <administrator>true</administrator>
     </binding>
   </extension>
+  -->
 
 </component>
