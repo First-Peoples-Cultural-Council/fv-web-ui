@@ -12,11 +12,12 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author david
  */
-@Operation(id = GetTasksForUserOperation.ID, category = Constants.CAT_SERVICES, label =
-    "GetTasksForUserOperation", description = "Gets the tasks for a user, filtered by group")
-public class GetTasksForUserOperation {
+@Operation(id = GetTasksForUserGroupOperation.ID, category = Constants.CAT_SERVICES, label =
+    "GetTasksForUserGroupOperation", description =
+    "Gets the tasks for a user, filtered by " + "group")
+public class GetTasksForUserGroupOperation {
 
-  public static final String ID = "GetTasksForUserOperation";
+  public static final String ID = "GetTasksForUserGroupOperation";
 
   @Context
   protected CoreSession session;

@@ -69,7 +69,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.services.gettasksforuser.xml",
     "FirstVoicesSecurity.tests:OSGI-INF.extensions/ca.firstvoices.fakestudio.xml"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
-public class GetTasksForUserOperationTest extends AbstractFVTest {
+public class GetTasksForUserGroupOperationTest extends AbstractFVTest {
 
   @Inject
   protected TaskService taskService;
@@ -191,7 +191,7 @@ public class GetTasksForUserOperationTest extends AbstractFVTest {
 
     OperationContext ctx = new OperationContext(userSession);
     DocumentModelList list = (DocumentModelList) automationService
-        .run(ctx, GetTasksForUserOperation.ID);
+        .run(ctx, GetTasksForUserGroupOperation.ID);
     Assert.assertEquals(1, list.size());
 
     userSession.close();
@@ -223,7 +223,7 @@ public class GetTasksForUserOperationTest extends AbstractFVTest {
 
     OperationContext ctx = new OperationContext(userSession);
     DocumentModelList list = (DocumentModelList) automationService
-        .run(ctx, GetTasksForUserOperation.ID);
+        .run(ctx, GetTasksForUserGroupOperation.ID);
     Assert.assertEquals(1, list.size());
 
     userSession.close();
@@ -255,7 +255,7 @@ public class GetTasksForUserOperationTest extends AbstractFVTest {
 
     OperationContext ctx = new OperationContext(userSession);
     DocumentModelList list = (DocumentModelList) automationService
-        .run(ctx, GetTasksForUserOperation.ID);
+        .run(ctx, GetTasksForUserGroupOperation.ID);
     Assert.assertEquals(1, list.size());
 
     userSession.close();
