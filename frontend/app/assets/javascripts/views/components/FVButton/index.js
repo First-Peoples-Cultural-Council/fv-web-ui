@@ -29,7 +29,13 @@ const styles = (theme) => {
 }
 
 function FVButton(props) {
-  const { children, classes, isFab = false } = props
+  const {
+    children,
+    classes, // via withStyles
+    isFab = false,
+    variant,
+    ...allOtherProps
+  } = props
 
   return isFab ? (
     <Fab
@@ -42,7 +48,7 @@ function FVButton(props) {
         outlinedPrimary: classes.outlinedPrimary,
         outlinedSecondary: classes.outlinedSecondary,
       }}
-      {...props}
+      {...allOtherProps}
     >
       {children}
     </Fab>
@@ -56,17 +62,19 @@ function FVButton(props) {
         outlinedPrimary: classes.outlinedPrimary,
         outlinedSecondary: classes.outlinedSecondary,
       }}
-      {...props}
+      variant={variant}
+      {...allOtherProps}
     >
       {children}
     </Button>
   )
 }
-
+const { object, node, string, bool } = PropTypes
 FVButton.propTypes = {
-  classes: PropTypes.object.isRequired,
-  children: PropTypes.node,
-  isFab: PropTypes.bool,
+  classes: object.isRequired,
+  children: node,
+  isFab: bool,
+  variant: string,
 }
 FVButton.defaultProps = {
   isFab: false,
