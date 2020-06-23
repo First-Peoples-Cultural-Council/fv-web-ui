@@ -111,11 +111,11 @@ public class draftDocTestUtilImpl implements draftDocTestUtil {
 
   public DocumentModel createDialectTree(CoreSession session) {
     assertNotNull("Should have a valid FVLanguageFamiliy",
-        createDocument(session, session.createDocumentModel("/FV", "Family", "FVLanguageFamily")));
+        createDocument(session, session.createDocumentModel("/FV", "Family", FV_LANGUAGE_FAMILY)));
     assertNotNull("Should have a valid FVLanguage", createDocument(session,
-        session.createDocumentModel("/FV/Family", "Language", "FVLanguage")));
+        session.createDocumentModel("/FV/Family", "Language", FV_LANGUAGE)));
     dialectDoc = createDocument(session,
-        session.createDocumentModel("/FV/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel("/FV/Family/Language", "Dialect", FV_DIALECT));
     assertNotNull("Should have a valid FVDialect", dialectDoc);
 
     return dialectDoc;
@@ -134,7 +134,7 @@ public class draftDocTestUtilImpl implements draftDocTestUtil {
 
     for (String wordValue : words) {
       word = session
-          .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", wordValue, "FVWord");
+          .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", wordValue, FV_WORD);
       assertNotNull("Should have a valid FVWord model", word);
       word.setPropertyValue("fv:reference", wordValue);
       word = createDocument(session, word);

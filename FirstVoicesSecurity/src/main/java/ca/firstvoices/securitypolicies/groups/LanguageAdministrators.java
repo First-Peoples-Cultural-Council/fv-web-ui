@@ -20,6 +20,10 @@
 
 package ca.firstvoices.securitypolicies.groups;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+
 import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.Arrays;
 import java.util.List;
@@ -76,14 +80,9 @@ public class LanguageAdministrators extends AbstractSecurityPolicy {
     if (doc.isProxy()) {
 
       // TODO: Restrict language administrators from publishing to someone else's FVDialect
-      /*
-       * if ( "FVDialect".equals(docType) ) { if ( !Access.GRANT.equals(mergedAcp.getAccess
-       * (additionalPrincipals,
-       * new String[]{SecurityConstants.EVERYTHING})) ) { return Access.DENY; } }
-       */
 
       // Allow WriteSecurity on dialect so permissions can be assigned when publishing
-      if ("FVDialect".equals(docType) && SecurityConstants.WRITE_SECURITY.equals(permission)) {
+      if (FV_DIALECT.equals(docType) && SecurityConstants.WRITE_SECURITY.equals(permission)) {
         return Access.GRANT;
       }
 
@@ -91,15 +90,15 @@ public class LanguageAdministrators extends AbstractSecurityPolicy {
       // Allow ADD_CHILDREN on Families, Languages and section root (for when hierarchy needs to
       // be created from
       // scratch)
-      if ("FVLanguage".equals(docType)
-          || "FVLanguageFamily".equals(docType) && SecurityConstants.ADD_CHILDREN
+      if (FV_LANGUAGE.equals(docType)
+          || FV_LANGUAGE_FAMILY.equals(docType) && SecurityConstants.ADD_CHILDREN
           .equals(permission)) {
         return Access.GRANT;
       }
     }
 
     // Restrict deletion of FVDialect children (but not unpublishing)
-    if (doc.getParent() != null && "FVDialect".equals(doc.getParent().getType().getName())
+    if (doc.getParent() != null && FV_DIALECT.equals(doc.getParent().getType().getName())
         && "Remove".equals(permission)) {
       log.debug("Acces denied because of Dialect parent and remove permission");
       return Access.DENY;

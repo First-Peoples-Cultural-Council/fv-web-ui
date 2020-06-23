@@ -20,6 +20,9 @@
 
 package ca.firstvoices.nativeorder.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +66,7 @@ public class ComputeNativeOrderForAsset {
   public DocumentModel run(DocumentModel input) {
 
     // Check if word or phrase
-    if (input.getType().equals("FVWord") || input.getType().equals("FVPhrase")) {
+    if (input.getType().equals(FV_WORD) || input.getType().equals(FV_PHRASE)) {
       service.computeAssetNativeOrderTranslation(input);
 
       Map<String, Object> parameters = new HashMap<String, Object>();

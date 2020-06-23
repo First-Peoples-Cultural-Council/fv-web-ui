@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -71,7 +72,7 @@ public class LabelEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVLabel
      */
-    if (documentType.equalsIgnoreCase("FVLabel")) {
+    if (documentType.equalsIgnoreCase(FV_LABEL)) {
 
       // Process "fv:related_audio" values
       String[] audioIds = (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "related_audio")

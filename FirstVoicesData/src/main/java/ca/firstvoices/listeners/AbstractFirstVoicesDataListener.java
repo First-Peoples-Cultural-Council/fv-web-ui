@@ -20,6 +20,9 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -31,18 +34,18 @@ public abstract class AbstractFirstVoicesDataListener implements EventListener {
 
   protected DocumentModel getDialect(DocumentModel doc) {
     CoreSession session = doc.getCoreSession();
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       return doc; // doc is dialect
     }
     DocumentModel parent = session.getDocument(doc.getParentRef());
-    while (parent != null && !"FVDialect".equals(parent.getType())) {
+    while (parent != null && !FV_DIALECT.equals(parent.getType())) {
       parent = session.getDocument(parent.getParentRef());
     }
     return parent;
   }
 
   protected DocumentModel getAlphabet(DocumentModel doc) {
-    if ("FVAlphabet".equals(doc.getType())) {
+    if (FV_ALPHABET.equals(doc.getType())) {
       return doc;
     }
     DocumentModel dialect = getDialect(doc);

@@ -23,6 +23,9 @@ package ca.firstvoices.nativeorder.listeners;
  * Compute asset custom order when asset (Word/Phrase) modified or created.
  */
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import java.util.Iterator;
 import org.apache.commons.logging.Log;
@@ -106,7 +109,7 @@ public class ComputeNativeOrderListener implements EventListener {
     }
 
     // Handle language assets (Words and Phrases)
-    if ((doc.getType().equals("FVWord") || doc.getType().equals("FVPhrase"))) {
+    if ((doc.getType().equals(FV_WORD) || doc.getType().equals(FV_PHRASE))) {
 
       switch (event.getName()) {
 

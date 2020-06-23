@@ -24,6 +24,9 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -67,12 +70,12 @@ public class DocumentDeletedUnpublishListener implements EventListener {
       DocumentModelList proxies = session.getProxies(doc.getRef(), null);
 
       for (DocumentModel proxy : proxies) {
-        if ("Published".equals(proxy.getCurrentLifeCycleState())) {
+        if (PUBLISHED_STATE.equals(proxy.getCurrentLifeCycleState())) {
           service.unpublish(proxy);
         }
       }
 
-      if (doc.getType().equals("FVCategory")) {
+      if (doc.getType().equals(FV_CATEGORY)) {
         service.removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, doc);
       }
     }

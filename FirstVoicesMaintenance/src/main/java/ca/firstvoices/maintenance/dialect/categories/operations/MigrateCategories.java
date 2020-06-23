@@ -20,6 +20,9 @@
 
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.dialect.categories.workers.MigrateCategoriesWorker;
@@ -58,7 +61,7 @@ public class MigrateCategories {
 
     protectOperation();
 
-    if (!dialect.getType().equals("FVDialect")) {
+    if (!dialect.getType().equals(FV_DIALECT)) {
       throw new OperationException("Document type must be FVDialect");
     }
 
@@ -71,7 +74,7 @@ public class MigrateCategories {
 
       if (success) {
         // After tree has been created, publish all categories
-        if (dialect.getCurrentLifeCycleState().equals("Published")) {
+        if (dialect.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
           migrateCategoriesService.publishCategoriesTree(session, dialect);
         }
 

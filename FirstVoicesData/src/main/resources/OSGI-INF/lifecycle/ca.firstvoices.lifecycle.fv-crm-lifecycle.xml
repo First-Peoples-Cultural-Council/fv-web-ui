@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.lifecycle.fv-crm-lifecycle" version="1.0.0">
+  <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+    <lifecycle defaultInitial="new" name="fv-crm-lifecycle">
+      <states>
+        <state description="New" initial="true" name="new">
+          <transitions>
+            <transition>to_contact_info_confirmed</transition>
+          </transitions>
+        </state>
+        <state description="Contract Info Confirmed" name="contact_info_confirmed">
+          <transitions>
+            <transition>to_active_user</transition>
+            <transition>to_needs_follow_up</transition>
+            <transition>to_inactive_user</transition>
+          </transitions>
+        </state>
+        <state description="Active User" name="active_user">
+          <transitions>
+            <transition>to_needs_follow_up</transition>
+            <transition>to_inactive_user</transition>
+          </transitions>
+        </state>
+        <state description="Inactive User" name="inactive_user">
+          <transitions>
+            <transition>to_active_user</transition>
+            <transition>to_needs_follow_up</transition>
+          </transitions>
+        </state>
+        <state description="Needs Follow Up" name="needs_follow_up">
+          <transitions>
+            <transition>to_needs_contact_info</transition>
+            <transition>to_active_user</transition>
+            <transition>to_inactive_user</transition>
+          </transitions>
+        </state>
+        <state description="Needs Contact Info" name="needs_contact_info">
+          <transitions>
+            <transition>to_active_user</transition>
+            <transition>to_inactive_user</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="contact_info_confirmed" name="to_contact_info_confirmed">
+          <description></description>
+        </transition>
+        <transition destinationState="active_user" name="to_active_user">
+          <description></description>
+        </transition>
+        <transition destinationState="inactive_user" name="to_inactive_user">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_follow_up" name="to_needs_follow_up">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_follow_up" name="to_needs_follow_up">
+          <description></description>
+        </transition>
+        <transition destinationState="inactive_user" name="to_inactive_user">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_follow_up" name="to_needs_follow_up">
+          <description></description>
+        </transition>
+        <transition destinationState="active_user" name="to_active_user">
+          <description></description>
+        </transition>
+        <transition destinationState="active_user" name="to_active_user">
+          <description></description>
+        </transition>
+        <transition destinationState="inactive_user" name="to_inactive_user">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_contact_info" name="to_needs_contact_info">
+          <description></description>
+        </transition>
+        <transition destinationState="active_user" name="to_active_user">
+          <description></description>
+        </transition>
+        <transition destinationState="inactive_user" name="to_inactive_user">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
+  </extension>
+</component>
