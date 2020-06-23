@@ -1,5 +1,6 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
+import MaterialTable from 'material-table'
 
 /**
  * @summary ListPresentation
@@ -10,13 +11,20 @@ import React from 'react'
  *
  * @returns {node} jsx markup
  */
-function ListPresentation() {
-  return <div>ListPresentation</div>
+function ListPresentation({ columns, data, title }) {
+  return (
+    <div>
+      <h1>ListPresentation</h1>
+      <MaterialTable columns={columns} data={data} title={title} />
+    </div>
+  )
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { array, string } = PropTypes
 ListPresentation.propTypes = {
-  //   something: string,
+  columns: array,
+  data: array,
+  title: string,
 }
 
 export default ListPresentation

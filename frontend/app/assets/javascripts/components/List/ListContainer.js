@@ -15,11 +15,8 @@ import ListData from './ListData'
 function ListContainer() {
   return (
     <ListData>
-      {(ListDataOutput) => {
-        // TODO FW-1607
-        // eslint-disable-next-line
-        console.log('ListDataOutput', ListDataOutput)
-        return <ListPresentation />
+      {({ columns, data, title }) => {
+        return <ListPresentation title={title} data={data} columns={columns} />
       }}
     </ListData>
   )
