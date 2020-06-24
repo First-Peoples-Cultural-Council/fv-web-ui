@@ -553,7 +553,6 @@ export const SearchDialect = (props) => {
   // Search handler
   // ------------------------------------------------------------
   const _handleSearch = () => {
-    debugger
     const searchData = {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CUSTOM,
