@@ -1,5 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import ListPresentation from './ListPresentation'
 import ListData from './ListData'
 
@@ -8,23 +7,52 @@ import ListData from './ListData'
  * @version 1.0.1
  * @component
  *
- * @param {object} props
- *
  * @returns {node} jsx markup
  */
 function ListContainer() {
   return (
     <ListData>
-      {({ columns, data, title }) => {
-        return <ListPresentation title={title} data={data} columns={columns} />
+      {({
+        actions,
+        columns,
+        data,
+        detailPanel,
+        onChangeColumnHidden,
+        onChangePage,
+        onChangeRowsPerPage,
+        onColumnDragged,
+        onGroupRemoved,
+        onOrderChange,
+        onRowClick,
+        onSearchChange,
+        onSelectionChange,
+        onTreeExpandChange,
+        options,
+        title,
+      }) => {
+        return (
+          <ListPresentation
+            actions={actions}
+            columns={columns}
+            data={data}
+            detailPanel={detailPanel}
+            onChangeColumnHidden={onChangeColumnHidden}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+            onColumnDragged={onColumnDragged}
+            onGroupRemoved={onGroupRemoved}
+            onOrderChange={onOrderChange}
+            onRowClick={onRowClick}
+            onSearchChange={onSearchChange}
+            onSelectionChange={onSelectionChange}
+            onTreeExpandChange={onTreeExpandChange}
+            options={options}
+            title={title}
+          />
+        )
       }}
     </ListData>
   )
-}
-// PROPTYPES
-// const { string } = PropTypes
-ListContainer.propTypes = {
-  //   something: string,
 }
 
 export default ListContainer

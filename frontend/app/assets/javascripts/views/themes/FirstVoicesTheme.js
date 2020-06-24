@@ -28,6 +28,21 @@ rgb(89, 88, 76)
 */
 import typography from './FirstVoicesTypography'
 export default {
+  components: {
+    List: {
+      tableHeader: {
+        // background: 'linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%)',
+        borderBottom: '1px solid #a8a8a8',
+        fontWeight: 900,
+      },
+      row: {
+        backgroundColor: '#fff',
+      },
+      rowAlternate: {
+        backgroundColor: '#f2f7ff',
+      },
+    },
+  },
   typography,
   palette: {
     primary: {
