@@ -72,7 +72,7 @@ function DictionaryListData(props) {
     navigationRouteSearch,
   ])
 
-  const computeDocumentkey = `${routeParams.dialect_path}/Dictionary`
+  const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
   const DEFAULT_LANGUAGE = 'english'
   const { searchNxqlSort = {} } = computeSearchDialect
   const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
@@ -80,11 +80,11 @@ function DictionaryListData(props) {
   const [columns] = useState(getColumns())
 
   // Parsing computeDocument
-  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, computeDocumentkey)
-  const computeDocumentResponse = selectn('response', extractComputeDocument)
+  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, dictionaryKey)
   const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
-  const parentId = selectn('uid', computeDocumentResponse)
   const curFetchDocumentAction = selectn('action', extractComputeDocument)
+  const dictionary = selectn('response', extractComputeDocument)
+  const dictionaryId = selectn('uid', dictionary)
 
   // Parsing computePortal
   const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
@@ -97,18 +97,17 @@ function DictionaryListData(props) {
   const dialect = selectn('response', computedDialect2)
 
   // Parsing computeWords
-  const computedWords = ProviderHelpers.getEntry(computeWords, computeDocumentkey)
+  const computedWords = ProviderHelpers.getEntry(computeWords, dictionaryKey)
   const items = selectn('response.entries', computedWords)
   const metadata = selectn('response', computedWords)
 
   const fetchData = async () => {
-    // Document
-    await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
-    // Portal
-    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
     // Dialect
     await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
-
+    // Document
+    await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
+    // Portal
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
     // Words
     fetchListViewData()
   }
@@ -119,6 +118,7 @@ function DictionaryListData(props) {
     if (searchNxqlQuery) {
       currentAppliedFilter = ` AND ${searchNxqlQuery}`
     }
+
     if (routeParams.category) {
       // Private
       if (routeParams.area === 'Workspaces') {
@@ -135,12 +135,20 @@ function DictionaryListData(props) {
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${
-      routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
-    }`
+    const nql = `${currentAppliedFilter}
+        &currentPageIndex=${pageIndex - 1}
+        &dialectId=${dialectUid}
+        &pageSize=${pageSize}
+        &sortOrder=${sortOrder}
+        &sortBy=${sortBy}
+        &enrichment=category_children
+        ${
+          routeParams.letter
+            ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery`
+            : startsWithQuery
+        }`
 
-    fetchWords(computeDocumentkey, nql)
+    fetchWords(dictionaryKey, nql)
   }
 
   function getColumns() {
@@ -319,7 +327,7 @@ function DictionaryListData(props) {
 
   return props.children({
     columns: columns,
-    computeDocumentResponse,
+    computeSearchDialect,
     dialect,
     dialectClassName,
     dialectUid,
@@ -335,7 +343,7 @@ function DictionaryListData(props) {
     page: parseInt(routeParams.page, 10),
     pageSize: parseInt(routeParams.pageSize, 10),
     pageTitle,
-    parentId,
+    dictionaryId,
     pushWindowPath,
     routeParams,
     setRouteParams,

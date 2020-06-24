@@ -126,8 +126,7 @@ class WordsLayout extends Component {
                           <DialectFilterListData
                             appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
                             dialectFilterListWillUnmount={dialectFilterListWillUnmount}
-                            setDialectFilterCallback={changeFilter}
-                            setDialectFilter={setDialectFilter}
+                            setDialectFilterCallback={setDialectFilter}
                             facets={categoriesData}
                             facetType="category"
                             type="words"
@@ -157,6 +156,7 @@ class WordsLayout extends Component {
                   <DictionaryListData filterInfo={filterInfo}>
                     {({
                       columns,
+                      computeSearchDialect,
                       dialect,
                       dialectClassName,
                       fetcher,
@@ -166,15 +166,16 @@ class WordsLayout extends Component {
                       metadata,
                       navigationRouteSearch,
                       pageTitle,
-                      parentId,
+                      dictionaryId,
                       setListViewMode,
                       setRouteParams,
                       smallScreenTemplate,
                       sortHandler,
                     }) => {
-                      const wordsListView = parentId ? (
+                      const wordsListView = dictionaryId ? (
                         <Suspense fallback={<div>Loading...</div>}>
                           <DictionaryList
+                            computeSearchDialect={computeSearchDialect}
                             dictionaryListClickHandlerViewMode={setListViewMode}
                             dictionaryListViewMode={listViewMode}
                             dictionaryListSmallScreenTemplate={smallScreenTemplate}
