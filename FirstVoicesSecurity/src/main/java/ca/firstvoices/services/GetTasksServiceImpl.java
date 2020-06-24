@@ -22,6 +22,7 @@ public class GetTasksServiceImpl implements GetTasksService {
         if (i != 0) {
           query.append(",");
         }
+        query.append("'group:").append(group).append("', ");
         query.append("'").append(group).append("'");
       }
       query.append(")");
