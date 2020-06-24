@@ -14,12 +14,16 @@ import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
+//DataSources
+import useRoute from 'DataSource/useRoute'
+
 import withPagination from 'views/hoc/grid-list/with-pagination'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
 const DocumentListView = (props) => {
+  const { routeParams } = useRoute()
   const getContent = () => {
     if (props.gridListView) {
       const gridViewProps = Object.assign(
@@ -110,6 +114,7 @@ const DocumentListView = (props) => {
           disablePageSize={props.disablePageSize}
           fetcher={gridListFetcher}
           fetcherParams={{ currentPageIndex: props.page, pageSize: props.pageSize }}
+          routeParams={routeParams}
           flashcardTitle={props.flashcardTitle}
           gridListTile={props.gridListTile}
           items={selectn('response.entries', props.data)}
