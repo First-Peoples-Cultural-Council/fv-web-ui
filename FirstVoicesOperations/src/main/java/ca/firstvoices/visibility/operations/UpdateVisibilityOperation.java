@@ -25,11 +25,11 @@ public class UpdateVisibilityOperation {
   @Param(name = "visibility", values = {TEAM, MEMBERS, PUBLIC})
   private String visibility;
 
-  private UpdateVisibilityService service = Framework.getService(UpdateVisibilityService.class);
+  private UpdateVisibilityService service;
 
   @OperationMethod
   public DocumentModel run(DocumentModel doc) {
-
+    service = Framework.getService(UpdateVisibilityService.class);
     return service.updateVisibility(doc, visibility);
   }
 
