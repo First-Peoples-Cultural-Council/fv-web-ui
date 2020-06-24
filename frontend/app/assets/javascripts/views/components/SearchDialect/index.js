@@ -23,7 +23,7 @@ import {
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchDirectory } from 'providers/redux/reducers/directory'
-import { searchDialectUpdate, searchDialectReset } from 'providers/redux/reducers/searchDialect'
+import useSearchDialect from 'DataSource/useSearchDialect'
 
 import selectn from 'selectn'
 import classNames from 'classnames'
@@ -35,7 +35,8 @@ SearchDialect
 ------------------------------------------------------------------------------------------
 */
 export const SearchDialect = (props) => {
-  const csd = props.computeSearchDialect
+  const { computeSearchDialect, searchDialectUpdate, searchDialectReset } = useSearchDialect()
+  const csd = computeSearchDialect
   const [partsOfSpeechOptions, setPartsOfSpeechOptions] = useState(null)
   const [partsOfSpeechRequested, setPartsOfSpeechRequested] = useState(false)
 
@@ -58,7 +59,7 @@ export const SearchDialect = (props) => {
       defaultData.searchingDialectFilter = undefined
       defaultData.searchNxqlQuery = csd.searchNxqlQuery || undefined
       defaultData.searchNxqlSort = csd.searchNxqlSort || {}
-      props.searchDialectUpdate(defaultData)
+      searchDialectUpdate(defaultData)
     }
   }, [])
 
@@ -76,7 +77,7 @@ export const SearchDialect = (props) => {
       }
       letterData.searchMessage = getSearchMessage(letterData)
       letterData.searchingDialectFilter = undefined
-      props.searchDialectUpdate(letterData)
+      searchDialectUpdate(letterData)
     }
   }, [props.routeParams.letter])
 
@@ -94,7 +95,7 @@ export const SearchDialect = (props) => {
       }
       categoryData.searchMessage = getSearchMessage(categoryData)
       categoryData.searchingDialectFilter = category
-      props.searchDialectUpdate(categoryData)
+      searchDialectUpdate(categoryData)
     }
   }, [props.routeParams.category])
 
@@ -112,7 +113,7 @@ export const SearchDialect = (props) => {
       }
       phraseBookData.searchMessage = getSearchMessage(phraseBookData)
       phraseBookData.searchingDialectFilter = phraseBook
-      props.searchDialectUpdate(phraseBookData)
+      searchDialectUpdate(phraseBookData)
     }
   }, [props.routeParams.phraseBook])
 
@@ -243,7 +244,7 @@ export const SearchDialect = (props) => {
             className={`SearchDialectFormPrimaryInput ${getDialectClassname()}`}
             type="text"
             onChange={(evt) => {
-              props.searchDialectUpdate({ searchTerm: evt.target.value })
+              searchDialectUpdate({ searchTerm: evt.target.value })
             }}
             onKeyPress={handleEnterSearch}
             value={csd.searchTerm || ''}
@@ -252,7 +253,7 @@ export const SearchDialect = (props) => {
           <select
             defaultValue={csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH}
             onChange={(evt) => {
-              props.searchDialectUpdate({ searchType: evt.target.value })
+              searchDialectUpdate({ searchType: evt.target.value })
             }}
             data-testid="SearchDialectFormSelectSearchType"
             className={`SearchDialectFormSelectSearchType ${getDialectClassname()}`}
@@ -266,7 +267,7 @@ export const SearchDialect = (props) => {
             <option value={SEARCH_TYPE_WILDCARD_SEARCH}>Wildcard</option>
           </select>
 
-          <FVButton variant="contained" onClick={handleSearch} color="primary">
+          <FVButton variant="contained" onClick={_handleSearch} color="primary">
             {searchButtonText}
           </FVButton>
 
@@ -480,7 +481,7 @@ export const SearchDialect = (props) => {
   // Generates the checkboxes/selects under the search input
   // ------------------------------------------------------------
   const getSearchUi = () => {
-    const { searchUi, computeSearchDialect } = props
+    const { searchUi } = props
     const { searchBySettings = {} } = computeSearchDialect
     const classesDefault = {
       SearchDialectFormSecondaryGroup: 'SearchDialectFormSecondaryGroup',
@@ -551,17 +552,20 @@ export const SearchDialect = (props) => {
 
   // Search handler
   // ------------------------------------------------------------
-  const handleSearch = () => {
+  const _handleSearch = () => {
+    debugger
     const searchData = {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CUSTOM,
-      searchBySettings: csd.searchBySettings,
-      searchTerm: csd.searchTerm,
-      searchType: csd.searchType,
+      searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
+      searchTerm: csd.searchTerm || '',
+      searchType: csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH,
     }
     searchData.searchMessage = getSearchMessage(searchData)
-    searchData.searchingDialectFilter = ''
-    props.searchDialectUpdate(searchData)
+    searchData.searchingDialectFilter = undefined
+    searchData.searchNxqlQuery = csd.searchNxqlQuery || undefined
+    searchData.searchNxqlSort = csd.searchNxqlSort || {}
+    searchDialectUpdate(searchData)
 
     // Notify ancestors
     props.handleSearch()
@@ -586,7 +590,7 @@ export const SearchDialect = (props) => {
 
     // Save it
     const handleChangeSearchBySettingsData = Object.assign({}, csd.searchBySettings, updateState)
-    props.searchDialectUpdate({
+    searchDialectUpdate({
       searchBySettings: handleChangeSearchBySettingsData,
     })
   }
@@ -595,14 +599,14 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const handleEnterSearch = (evt) => {
     if (evt.key === 'Enter') {
-      handleSearch()
+      _handleSearch()
     }
   }
 
   // Resets search
   // ------------------------------------------------------------
   const resetSearch = () => {
-    props.searchDialectReset()
+    searchDialectReset()
 
     // Notify ancestors
     props.resetSearch()
@@ -647,20 +651,15 @@ SearchDialect.propTypes = {
 
   // REDUX: reducers/state
   computeDirectory: object.isRequired,
-  computeSearchDialect: object.isRequired,
   routeParams: object.isRequired,
   intl: object.isRequired,
   matchedPage: object.isRequired,
   // REDUX: actions/dispatch/func
-  searchDialectUpdate: func,
   fetchDirectory: func.isRequired,
-  searchDialectReset: func.isRequired,
 }
 SearchDialect.defaultProps = {
   handleSearch: () => {},
   searchDialectDataType: SEARCH_DATA_TYPE_WORD,
-  resetSearch: () => {},
-  searchDialectUpdate: () => {},
   searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
   searchUi: [
     // Sample structure:
@@ -700,16 +699,13 @@ SearchDialect.defaultProps = {
 // ------------------------------------------------------------
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { directory, searchDialect, navigation, locale } = state
-
+  const { directory, navigation, locale } = state
   const { computeDirectory } = directory
-  const { computeSearchDialect } = searchDialect
   const { intlService } = locale
   const { route } = navigation
 
   return {
     computeDirectory,
-    computeSearchDialect,
     routeParams: route.routeParams,
     matchedPage: route.matchedPage,
     intl: intlService,
@@ -719,8 +715,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchDirectory,
-  searchDialectUpdate,
-  searchDialectReset,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchDialect)
