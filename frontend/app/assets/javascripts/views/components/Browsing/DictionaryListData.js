@@ -51,8 +51,6 @@ function DictionaryListData(props) {
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
 
-  const { searchNxqlQuery = '' } = computeSearchDialect
-
   useEffect(() => {
     fetchData()
   }, [])
@@ -115,8 +113,8 @@ function DictionaryListData(props) {
   function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     let currentAppliedFilter = ''
 
-    if (searchNxqlQuery) {
-      currentAppliedFilter = ` AND ${searchNxqlQuery}`
+    if (props.filterInfo.has('currentAppliedFilter')) {
+      currentAppliedFilter = Object.values(props.filterInfo.get('currentAppliedFilter').toJS()).join('')
     }
 
     if (routeParams.category) {
