@@ -344,7 +344,7 @@ const addBrowsePhraseBook = (route) => {
       default: 'Phrases',
       case: 'words',
     })} | {$dialect_name}`,
-    page: <Pages.PageDialectLearnPhrasesByCategory />,
+    page: <Pages.PageDialectLearnPhrasesByPhrasebook />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   })
@@ -363,7 +363,7 @@ const addBrowsePhraseBookKids = (route) => {
       default: 'Phrases',
       case: 'words',
     })} | {$dialect_name}`,
-    page: <Pages.KidsPhrasesByCategory />,
+    page: <Pages.KidsPhrasesByPhrasebook />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   })

@@ -15,21 +15,21 @@ limitations under the License.
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pagination from 'components/Pagination'
-import KidsPhrasesByCategoryData from 'components/KidsPhrasesByCategory/KidsPhrasesByCategoryData'
+import KidsPhrasesByPhrasebookData from 'components/KidsPhrasesByPhrasebook/KidsPhrasesByPhrasebookData'
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
- * @summary KidsPhrasesByCategoryContainer
- * @description Note: no corresponding KidsPhrasesByCategoryPresentation component
+ * @summary KidsPhrasesByPhrasebookContainer
+ * @description Note: no corresponding KidsPhrasesByPhrasebookPresentation component
  * @version 1.0.1
  * @component
  *
  * @returns {node} jsx markup
  */
-function KidsPhrasesByCategoryContainer() {
+function KidsPhrasesByPhrasebookContainer() {
   return (
-    <KidsPhrasesByCategoryData>
+    <KidsPhrasesByPhrasebookData>
       {({ computeEntities, items, hasItems, onPaginationUpdate, page, pageSize, resultsCount }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -52,18 +52,18 @@ function KidsPhrasesByCategoryContainer() {
           </PromiseWrapper>
         )
       }}
-    </KidsPhrasesByCategoryData>
+    </KidsPhrasesByPhrasebookData>
   )
 }
 
 // PROPTYPES
 // -------------------------------------------
 const { array } = PropTypes
-KidsPhrasesByCategoryContainer.propTypes = {
+KidsPhrasesByPhrasebookContainer.propTypes = {
   items: array,
 }
-KidsPhrasesByCategoryContainer.defaultProps = {
+KidsPhrasesByPhrasebookContainer.defaultProps = {
   items: [],
 }
 
-export default KidsPhrasesByCategoryContainer
+export default KidsPhrasesByPhrasebookContainer

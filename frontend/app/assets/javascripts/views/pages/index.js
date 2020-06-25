@@ -52,7 +52,7 @@ import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categ
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
-import PageDialectLearnPhrasesByCategory from './explore/dialect/learn/phrases/phrasesFilteredByCategory'
+import PageDialectLearnPhrasesByPhrasebook from './explore/dialect/learn/phrases/phrasesFilteredByPhrasebook'
 
 import PageDialectImmersionList from './explore/dialect/immersion'
 
@@ -73,7 +73,7 @@ import PageUsersProfile from './users/profile'
 
 // KIDS
 import KidsHome from 'components/KidsHome'
-import KidsPhrasesByCategory from 'components/KidsPhrasesByCategory/KidsPhrasesByCategoryContainer'
+import KidsPhrasesByPhrasebook from 'components/KidsPhrasesByPhrasebook/KidsPhrasesByPhrasebookContainer'
 import KidsWordsByCategory from 'components/KidsWordsByCategory/KidsWordsByCategoryContainer'
 
 // EDIT
@@ -143,7 +143,7 @@ export {
   PageDialectLearnWords,
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
-  PageDialectLearnPhrasesByCategory,
+  PageDialectLearnPhrasesByPhrasebook,
   PhraseBooksGrid,
   WordsCategoriesGrid,
   PageDialectLearnStoriesAndSongs,
@@ -178,7 +178,7 @@ export {
   PageQuiz,
   // KIDS
   KidsHome,
-  KidsPhrasesByCategory,
+  KidsPhrasesByPhrasebook,
   KidsWordsByCategory,
   // EDITS
   PageExploreDialectEdit,

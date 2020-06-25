@@ -29,15 +29,15 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject, appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
 /**
- * @summary KidsPhrasesByCategoryData
- * @description Note: no corresponding KidsPhrasesByCategoryPresentation component
+ * @summary KidsPhrasesByPhrasebookData
+ * @description Note: no corresponding KidsPhrasesByPhrasebookPresentation component
  * @version 1.0.1
  * @component
  *
  * @param {object} props
  * @param {function} props.children props.children({computeEntities, items, hasItems, onPaginationUpdate, page, pageSize, resultsCount})
  */
-function KidsPhrasesByCategoryData({ children }) {
+function KidsPhrasesByPhrasebookData({ children }) {
   const [uid, setUid] = useState()
   const { routeParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
@@ -132,8 +132,8 @@ function KidsPhrasesByCategoryData({ children }) {
 // PROPTYPES
 // -------------------------------------------
 const { func } = PropTypes
-KidsPhrasesByCategoryData.propTypes = {
+KidsPhrasesByPhrasebookData.propTypes = {
   children: func.isRequired,
 }
 
-export default KidsPhrasesByCategoryData
+export default KidsPhrasesByPhrasebookData
