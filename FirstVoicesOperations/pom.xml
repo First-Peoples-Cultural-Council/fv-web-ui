@@ -52,6 +52,14 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-io</artifactId>
     </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-task-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-task-automation</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
 
     <!-- test dependencies -->
     <dependency>
