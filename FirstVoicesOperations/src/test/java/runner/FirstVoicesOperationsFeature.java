@@ -2,7 +2,6 @@ package runner;
 
 import org.nuxeo.directory.test.DirectoryFeature;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
-import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -10,10 +9,7 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
-import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
-import org.nuxeo.runtime.test.runner.RuntimeFeature;
-import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, DirectoryFeature.class,
     PlatformFeature.class})
@@ -49,10 +45,12 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/categories/categories-services.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-services.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-operations.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-operations.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-services.xml")
 
 @Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml")
 
-@Deploy("FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
+@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",

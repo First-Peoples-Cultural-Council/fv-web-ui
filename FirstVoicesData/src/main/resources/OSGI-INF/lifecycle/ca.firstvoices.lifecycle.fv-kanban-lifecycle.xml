@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.lifecycle.fv-kanban-lifecycle" version="1.0.0">
+  <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+    <lifecycle defaultInitial="todo" name="fv-kanban-lifecycle">
+      <states>
+        <state description="To Do" initial="true" name="todo">
+          <transitions>
+            <transition>to_in_progress</transition>
+          </transitions>
+        </state>
+        <state description="In Progress" name="in_progress">
+          <transitions>
+            <transition>to_done</transition>
+            <transition>to_Todo</transition>
+          </transitions>
+        </state>
+        <state description="Done" name="done">
+          <transitions>
+            <transition>to_in_progress</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="in_progress" name="to_in_progress">
+          <description></description>
+        </transition>
+        <transition destinationState="done" name="to_done">
+          <description></description>
+        </transition>
+        <transition destinationState="todo" name="to_Todo">
+          <description></description>
+        </transition>
+        <transition destinationState="in_progress" name="to_in_progress">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
+  </extension>
+</component>

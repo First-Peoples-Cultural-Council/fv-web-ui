@@ -20,6 +20,9 @@
 
 package Operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder;
 import ca.firstvoices.testUtil.AbstractFirstVoicesEnricherTest;
@@ -53,7 +56,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", wordOrder[i]);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
       createDocument(session, letterDoc);
@@ -63,7 +66,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a"};
 
-    createWordsorPhrases(orderedWords, "FVWord");
+    createWordsorPhrases(orderedWords, FV_WORD);
 
     String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + dictionaryDoc.getRef()
         + "' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ";

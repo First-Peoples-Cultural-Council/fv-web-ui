@@ -24,6 +24,8 @@
 
 package ca.firstvoices.nativeorder.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
@@ -56,7 +58,7 @@ public class ComputeNativeOrderAlphabetListener implements EventListener {
     }
 
     // Handle language assets (Words and Phrases)
-    if (doc.getType().equals("FVCharacter") && !doc.isProxy()) {
+    if (doc.getType().equals(FV_CHARACTER) && !doc.isProxy()) {
 
       // Will always run when creating
       CoreSession session = doc.getCoreSession();

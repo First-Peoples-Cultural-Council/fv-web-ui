@@ -20,6 +20,11 @@
 
 package ca.firstvoices.testUtil;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -89,7 +94,7 @@ public class MockStructureTestUtil {
 
   public void publishWords(CoreSession session) {
     IntStream.range(0, wordArray.length).forEach(i -> assertTrue("Should succesfully publish word",
-        session.followTransition(wordArray[i], "Publish")));
+        session.followTransition(wordArray[i], PUBLISH_TRANSITION)));
   }
 
   public void createSetup(CoreSession session) {
@@ -117,11 +122,11 @@ public class MockStructureTestUtil {
     assertNotNull("Should have a valid Workspace",
         createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
     assertNotNull("Should have a valid FVLanguageFamily", createDocument(session,
-        session.createDocumentModel("/FV/Workspaces", "Family", "FVLanguageFamily")));
+        session.createDocumentModel("/FV/Workspaces", "Family", FV_LANGUAGE_FAMILY)));
     assertNotNull("Should have a valid FVLanguage", createDocument(session,
-        session.createDocumentModel("/FV/Workspaces/Family", "Language", "FVLanguage")));
+        session.createDocumentModel("/FV/Workspaces/Family", "Language", FV_LANGUAGE)));
     dialectDoc = createDocument(session,
-        session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel("/FV/Workspaces/Family/Language", "Dialect", FV_DIALECT));
     assertNotNull("Should have a valid FVDialect", dialectDoc);
     session.save();
 
@@ -141,7 +146,7 @@ public class MockStructureTestUtil {
 
     for (String wordValue : words) {
       word = session
-          .createDocumentModel("/FV/Workspaces/Language/Dialect/Dictionary", wordValue, "FVWord");
+          .createDocumentModel("/FV/Workspaces/Language/Dialect/Dictionary", wordValue, FV_WORD);
       session.save();
       assertNotNull("Should have a valid FVWord model", word);
       word.setPropertyValue("dc:title", wordValue);

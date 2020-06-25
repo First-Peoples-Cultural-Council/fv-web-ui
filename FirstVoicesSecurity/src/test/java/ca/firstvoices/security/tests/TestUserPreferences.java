@@ -20,6 +20,9 @@
 
 package ca.firstvoices.security.tests;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -67,11 +70,11 @@ public class TestUserPreferences extends AbstractFVTest {
   @Before
   public void setUp() throws Exception {
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    session.createDocument(session.createDocumentModel("/", "Family", "FVLanguageFamily"));
-    session.createDocument(session.createDocumentModel("/Family", "Language", "FVLanguage"));
+    session.createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
+    session.createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
 
     dialectDoc = session
-        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", "FVDialect"));
+        .createDocument(session.createDocumentModel("/Family/Language", "Dialect", FV_DIALECT));
     dialectDoc = session.saveDocument(dialectDoc);
     assertNotNull(dialectDoc);
 

@@ -24,6 +24,12 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
@@ -62,21 +68,20 @@ public class ProxyPublisherListener implements EventListener {
 
     // Publish or unpublish depending on the transition,
     // the service filter depending on the document
-    if ("Publish".equals(transition)) {
-      if ("Republish".equals(transitionFrom)) {
+    if (PUBLISH_TRANSITION.equals(transition)) {
+      if (REPUBLISH_TRANSITION.equals(transitionFrom)) {
         service.republish(doc);
       } else {
         service.publish(doc);
       }
 
-    } else if ("Unpublish".equals(transition) || "Disable".equals(transition) || (
-        ("delete".equals(transition) || "Delete".equals(transition)) && "Published"
-            .equals(transitionFrom))) {
+    } else if (UNPUBLISH_TRANSITION.equals(transition)
+        || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom)) {
       service.unpublish(doc);
     }
 
     // If re-publishing a dialect directly (no transition)
-    if ("FVDialect".equals(doc.getType()) && "Published".equals(doc.getCurrentLifeCycleState())
+    if (FV_DIALECT.equals(doc.getType()) && PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())
         && doc.isProxy()) {
       service.setDialectProxies(doc);
     }

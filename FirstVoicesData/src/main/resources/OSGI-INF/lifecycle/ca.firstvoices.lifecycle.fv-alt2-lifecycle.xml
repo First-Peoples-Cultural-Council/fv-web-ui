@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.lifecycle.fv-alt2-lifecycle" version="1.0.0">
+  <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+    <lifecycle defaultInitial="draft" name="fv-alt2-lifecycle">
+      <states>
+        <state description="Draft" initial="true" name="draft">
+          <transitions>
+            <transition>to_needs_review</transition>
+          </transitions>
+        </state>
+        <state description="Needs Review" name="needs_review">
+          <transitions>
+            <transition>to_draft</transition>
+            <transition>to_needs_editing</transition>
+            <transition>to_complete</transition>
+          </transitions>
+        </state>
+        <state description="needs_editing" name="needs_editing">
+          <transitions>
+            <transition>to_needs_review</transition>
+            <transition>to_complete</transition>
+          </transitions>
+        </state>
+        <state description="Complete" name="complete">
+          <transitions>
+            <transition>to_needs_editing</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="needs_review" name="to_needs_review">
+          <description></description>
+        </transition>
+        <transition destinationState="draft" name="to_draft">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_editing" name="to_needs_editing">
+          <description></description>
+        </transition>
+        <transition destinationState="complete" name="to_complete">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_review" name="to_needs_review">
+          <description></description>
+        </transition>
+        <transition destinationState="complete" name="to_complete">
+          <description></description>
+        </transition>
+        <transition destinationState="needs_editing" name="to_needs_editing">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
+  </extension>
+</component>

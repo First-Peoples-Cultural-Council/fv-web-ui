@@ -1,0 +1,52 @@
+<component name="ca.firstvoices.lifecycle.types" version="1.0.0">
+<extension point="types" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+  <types>
+    <type name="Folder">default</type>
+    <type name="Domain">default</type>
+    <type name="FVAlphabet">fv-lifecycle</type>
+    <type name="FVAudio">fv-lifecycle</type>
+    <type name="FVBook">fv-lifecycle</type>
+    <type name="FVBookEntry">fv-lifecycle</type>
+    <type name="FVBooks">fv-lifecycle</type>
+    <type name="FVCategories">fv-lifecycle</type>
+    <type name="FVCategory">fv-lifecycle</type>
+      <type name="FVLabelCategory">fv-lifecycle</type>
+      <type name="FVCharacter">fv-lifecycle</type>
+      <type name="FVContributor">fv-lifecycle</type>
+      <type name="FVContributors">fv-lifecycle</type>
+    <type name="FVDialect">fv-lifecycle</type>
+      <type name="FVDictionary">fv-lifecycle</type>
+      <type name="FVLabel">fv-lifecycle</type>
+      <type name="FVLabelDictionary">fv-lifecycle</type>
+      <type name="FVDraftFolder">default</type>
+      <type name="FVGallery">fv-lifecycle</type>
+      <type name="FVGuide">default</type>
+      <type name="FVLanguage">fv-lifecycle</type>
+      <type name="FVLanguageFamily">fv-lifecycle</type>
+      <type name="FVLink">fv-lifecycle</type>
+      <type name="FVLinks">fv-lifecycle</type>i
+      <type name="File">default</type>
+      <type name="FVPage">fv-lifecycle</type>
+      <type name="FVPhrase">fv-lifecycle</type>
+      <type name="FVPicture">fv-lifecycle</type>
+      <type name="FVWord">fv-lifecycle</type>
+      <type name="FVPlaceName">fv-lifecycle</type>
+      <type name="FVPortal">fv-lifecycle</type>
+      <type name="FVResources">fv-lifecycle</type>
+      <type name="FVSong">fv-lifecycle</type>
+      <type name="FVVideo">fv-lifecycle</type>
+      <type name="INMorpheme">default</type>
+      <type name="INDemonstrative">default</type>
+      <type name="INDialect">default</type>
+      <type name="INDictionary">default</type>
+      <type name="INInfix">default</type>
+      <type name="INNounEnding">default</type>
+      <type name="INPersonalPronounce">default</type>
+      <type name="INPhrase">default</type>
+      <type name="INPlaceLocation">default</type>
+      <type name="INRoot">default</type>
+      <type name="INVerbEnding">default</type>
+      <type name="Workspace">default</type>
+    </types>
+  </extension>
+</component>

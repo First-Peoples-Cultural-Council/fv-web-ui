@@ -1,5 +1,8 @@
 package ca.firstvoices.maintenance.dialect.categories.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.io.Serializable;
@@ -120,7 +123,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         session.saveDocument(word);
 
         // If word is published and no unpublished changes exist - republish
-        if (word.getCurrentLifeCycleState().equals("Published")) {
+        if (word.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
           // Check for unpublished changes
           if (!unpublishedChangesExist) {
             publisherService.republish(word);
@@ -186,7 +189,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     // Create new category
     DocumentModel newLocalCategory = session.createDocumentModel(
-        localCategoryDirPath, category.getName(), "FVCategory");
+        localCategoryDirPath, category.getName(), FV_CATEGORY);
     newLocalCategory.setPropertyValue("dc:title", category.getTitle());
     DocumentModel newCategory = session.createDocument(newLocalCategory);
 

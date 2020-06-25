@@ -20,6 +20,8 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -49,7 +51,7 @@ public class CleanConfusablesOperation extends AbstractFirstVoicesDataOperation 
 
     CoreSession session = dialect.getCoreSession();
 
-    if (dialect.getType().equals("FVDialect")) {
+    if (dialect.getType().equals(FV_DIALECT)) {
       String wordPhraseQuery =
           "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
               + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";

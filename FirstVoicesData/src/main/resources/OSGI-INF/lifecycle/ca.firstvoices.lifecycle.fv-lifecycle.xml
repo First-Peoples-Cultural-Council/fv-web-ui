@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.lifecycle.fv-lifecycle" version="1.0.0">
+  <extension point="lifecycle" target="org.nuxeo.ecm.core.lifecycle.LifeCycleService">
+    <lifecycle defaultInitial="New" name="fv-lifecycle">
+      <states>
+        <state description="A new document is created." initial="true" name="New">
+          <transitions>
+            <transition>Enable</transition>
+            <transition>Disable</transition>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state description="Document is enabled and visible to dialect members." name="Enabled">
+          <transitions>
+            <transition>RevertToNew</transition>
+            <transition>Disable</transition>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state description="Document is only available to language administrators or recorders."
+          name="Disabled">
+          <transitions>
+            <transition>Enable</transition>
+          </transitions>
+        </state>
+        <state description="" name="Published">
+          <transitions>
+            <transition>Unpublish</transition>
+            <transition>Republish</transition>
+            <transition>RevertToNew</transition>
+            <transition>Enable</transition>
+            <transition>Disable</transition>
+          </transitions>
+        </state>
+        <state description="Temp state for legacy life cycle" name="project">
+          <transitions>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+        <state
+          description="Intermediate state before publishing again (a state can't do back to itself)."
+          name="Republish">
+          <transitions>
+            <transition>Publish</transition>
+          </transitions>
+        </state>
+      </states>
+      <transitions>
+        <transition destinationState="Disabled" name="Disable">
+          <description></description>
+        </transition>
+        <transition destinationState="Published" name="Publish">
+          <description></description>
+        </transition>
+        <transition destinationState="Disabled" name="Disable">
+          <description>Document has been disabled.</description>
+        </transition>
+        <transition destinationState="New" name="RevertToNew">
+          <description></description>
+        </transition>
+        <transition destinationState="Enabled" name="Enable">
+          <description>Make document available to members again.</description>
+        </transition>
+        <transition destinationState="Enabled" name="Unpublish">
+          <description></description>
+        </transition>
+        <transition destinationState="Disabled" name="Disable">
+          <description></description>
+        </transition>
+        <transition destinationState="Republish" name="Republish">
+          <description></description>
+        </transition>
+        <transition destinationState="New" name="RevertToNew">
+          <description></description>
+        </transition>
+      </transitions>
+    </lifecycle>
+  </extension>
+</component>

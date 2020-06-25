@@ -20,6 +20,7 @@
 
 package ca.firstvoices;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static org.junit.Assert.assertEquals;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
@@ -99,7 +100,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", wordOrder[i]);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
       createDocument(session, letterDoc);
@@ -124,7 +125,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
-              "FVCharacter");
+              FV_CHARACTER);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
       createDocument(session, letterDoc);
       session.save();

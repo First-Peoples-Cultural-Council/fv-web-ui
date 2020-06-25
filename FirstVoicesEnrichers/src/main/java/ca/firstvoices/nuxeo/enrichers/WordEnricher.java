@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -81,7 +82,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVWord
      */
-    if (documentType.equalsIgnoreCase("FVWord")) {
+    if (documentType.equalsIgnoreCase(FV_WORD)) {
 
       // Process "fv-word:categories" values
 
@@ -214,7 +215,7 @@ public class WordEnricher extends AbstractJsonEnricher<DocumentModel> {
       RelationsService relationsService = Framework.getService(RelationsService.class);
       // When this is changed to include all related assets, change to the overloaded
       // getRelations that does not take a type (relationsService.getRelations(session, doc))
-      DocumentModelList relatedTo = relationsService.getRelations(session, doc, "FVWord");
+      DocumentModelList relatedTo = relationsService.getRelations(session, doc, FV_WORD);
       if (relatedTo != null && !relatedTo.isEmpty()) {
         ArrayNode assetArray = mapper.createArrayNode();
         for (DocumentModel assetDoc : relatedTo) {

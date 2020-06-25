@@ -1,8 +1,5 @@
 package ca.firstvoices.cognito;
 
-import org.nuxeo.common.xmap.annotation.XNode;
-import org.nuxeo.common.xmap.annotation.XObject;
-
 public class AWSAwareUserManagerConfigurationService {
 
   private AWSAwareUserManagerConfigurationDescriptor config;
