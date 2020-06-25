@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { Set } from 'immutable'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
+import { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -113,15 +114,21 @@ class DialectFilterListData extends Component {
 
   // Creates url used with <Link>/<a> in Presentation layer
   generateUrlDialectFilterListItem = (filterId) => {
+    const { type } = this.props
     let href = `/${this.props.splitWindowPath.join('/')}`
-    const _splitWindowPath = [...this.props.splitWindowPath]
-    const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
-      return element === 'words' || element === 'phrases'
-    })
-    if (wordOrPhraseIndex !== -1) {
-      _splitWindowPath.splice(wordOrPhraseIndex + 1)
-      const urlFragment = this.props.type === 'words' ? 'categories' : 'book'
-      href = `/${_splitWindowPath.join('/')}/${urlFragment}/${filterId}`
+    if (type === 'words') {
+      href = `/${appendPathArrayAfterLandmark({
+        pathArray: ['categories', filterId],
+        splitWindowPath: this.props.splitWindowPath,
+        landmarkArray: ['words'],
+      })}`
+    }
+    if (type === 'phrases') {
+      href = `/${appendPathArrayAfterLandmark({
+        pathArray: ['phrases', 'book', filterId],
+        splitWindowPath: this.props.splitWindowPath,
+        landmarkArray: ['learn'],
+      })}`
     }
     return href
   }
