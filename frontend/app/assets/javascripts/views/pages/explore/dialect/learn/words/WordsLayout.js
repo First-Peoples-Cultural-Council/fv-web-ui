@@ -124,7 +124,7 @@ class WordsLayout extends Component {
                       if (categoriesData && categoriesData.length > 0) {
                         categoriesDataLayerToRender = (
                           <DialectFilterListData
-                            appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+                            selectedCategoryId={routeParams.category}
                             dialectFilterListWillUnmount={dialectFilterListWillUnmount}
                             setDialectFilterCallback={setDialectFilter}
                             facets={categoriesData}

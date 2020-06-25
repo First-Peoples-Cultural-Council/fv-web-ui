@@ -323,7 +323,7 @@ export class PhrasesFilteredByCategory extends Component {
                 if (categoriesData && categoriesData.length > 0) {
                   CategoriesDataLayerToRender = (
                     <DialectFilterListData
-                      appliedFilterIds={new Set([routeParams.phraseBook])}
+                      appliedFilterIds={routeParams.phraseBook}
                       setDialectFilterCallback={this.changeFilter} // TODO
                       facets={categoriesData}
                       facetType="phraseBook"
