@@ -20,112 +20,89 @@ const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 
 const DocumentListView = (props) => {
-  const getContent = () => {
-    if (props.gridListView) {
-      const gridViewProps = Object.assign(
-        {},
-        {
-          cellHeight: 160,
-          cols: props.gridCols,
-          // cssModifier: props.cssModifier,
-          dialect: props.dialect,
-          disablePageSize: props.disablePageSize,
-          fetcher: gridListFetcher,
-          fetcherParams: { currentPageIndex: props.page, pageSize: props.pageSize },
-          flashcardTitle: props.flashcardTitle,
-          gridListTile: props.gridListTile,
-          items: selectn('response.entries', props.data),
-          metadata: selectn('response', props.data),
-          pagination: props.pagination,
-          style: { overflowY: 'auto', maxHeight: '50vh' },
-          type: props.type,
-          // Search:
-          handleSearch: props.handleSearch,
-          hasSearch: props.hasSearch,
-          resetSearch: props.resetSearch,
-          hasViewModeButtons: props.hasViewModeButtons,
-        },
-        props.gridViewProps
-      )
+  const defaultProps = {
+    exportDialectColumns: props.exportDialectColumns,
+    exportDialectExportElement: props.exportDialectExportElement,
+    exportDialectLabel: props.exportDialectLabel,
+    exportDialectQuery: props.exportDialectQuery,
+    hasExportDialect: props.hasExportDialect,
+    // Listview
+    data: props.data,
+    hasFlashcard: props.flashcard,
+    hasPagination: props.pagination,
+    hasSearch: props.hasSearch,
+    hasViewModeButtons: props.hasViewModeButtons,
+    rowClickHandler: props.rowClickHandler,
+    dictionaryListClickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
+    dictionaryListViewMode: props.dictionaryListViewMode,
+    dictionaryListSmallScreenTemplate: props.dictionaryListSmallScreenTemplate,
+    // Listview: Batch
+    batchConfirmationAction: props.batchConfirmationAction,
+    batchTitleSelect: props.batchTitleSelect,
+    batchTitleDeselect: props.batchTitleDeselect,
+    batchFooterIsConfirmOrDenyTitle: props.batchFooterIsConfirmOrDenyTitle,
+    batchFooterBtnInitiate: props.batchFooterBtnInitiate,
+    batchFooterBtnDeny: props.batchFooterBtnDeny,
+    batchFooterBtnConfirm: props.batchFooterBtnConfirm,
+    batchSelected: props.batchSelected,
+    setBatchSelected: props.setBatchSelected,
+    batchDeletedUids: props.batchDeletedUids,
+    setBatchDeletedUids: props.setBatchDeletedUids,
+    // Listview: Sort
+    sortHandler: props.sortHandler,
+    hasSorting: props.hasSorting,
+    // Listview: computed data
+    computedData: props.computedData,
+    // Search
+    handleSearch: props.handleSearch,
+    resetSearch: props.resetSearch,
+    searchUi: props.searchUi,
+    searchByMode: props.searchByMode,
+    searchDialectDataType: props.searchDialectDataType,
+    // ==================================================
+    cellHeight: 160,
+    cols: props.gridCols,
+    columns: props.columns,
+    dialect: props.dialect,
+    disablePageSize: props.disablePageSize,
+    fetcher: (fetcherParams) => {
+      props.refetcher(props, fetcherParams.currentPageIndex, fetcherParams.pageSize)
+    },
+    fetcherParams: { currentPageIndex: props.page, pageSize: props.pageSize },
+    flashcardTitle: props.flashcardTitle,
+    gridListTile: props.gridListTile,
+    items: selectn('response.entries', props.data),
+    metadata: selectn('response', props.data),
+    style: { overflowY: 'auto', maxHeight: '50vh' },
+    type: props.type,
+  }
+
+  let toRender = null
+  if (props.gridListView) {
+    const gridViewProps = Object.assign(defaultProps, props.gridViewProps)
+
+    if (props.pagination) {
       const GridViewWithPagination = withPagination(GridView, 8)
-      return props.pagination ? (
+      toRender = (
         <Suspense fallback={<div>Loading...</div>}>
           <GridViewWithPagination {...gridViewProps} />
         </Suspense>
-      ) : (
+      )
+    } else {
+      toRender = (
         <Suspense fallback={<div>Loading...</div>}>
           <GridView {...gridViewProps} />
         </Suspense>
       )
     }
-
-    return (
+  } else {
+    toRender = (
       <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryList
-          // Export
-          exportDialectColumns={props.exportDialectColumns}
-          exportDialectExportElement={props.exportDialectExportElement}
-          exportDialectLabel={props.exportDialectLabel}
-          exportDialectQuery={props.exportDialectQuery}
-          hasExportDialect={props.hasExportDialect}
-          // Listview
-          data={props.data}
-          hasFlashcard={props.flashcard}
-          hasPagination={props.pagination}
-          hasSearch={props.hasSearch}
-          hasViewModeButtons={props.hasViewModeButtons}
-          rowClickHandler={props.rowClickHandler}
-          dictionaryListClickHandlerViewMode={props.dictionaryListClickHandlerViewMode}
-          dictionaryListViewMode={props.dictionaryListViewMode}
-          dictionaryListSmallScreenTemplate={props.dictionaryListSmallScreenTemplate}
-          // Listview: Batch
-          batchConfirmationAction={props.batchConfirmationAction}
-          batchTitleSelect={props.batchTitleSelect}
-          batchTitleDeselect={props.batchTitleDeselect}
-          batchFooterIsConfirmOrDenyTitle={props.batchFooterIsConfirmOrDenyTitle}
-          batchFooterBtnInitiate={props.batchFooterBtnInitiate}
-          batchFooterBtnDeny={props.batchFooterBtnDeny}
-          batchFooterBtnConfirm={props.batchFooterBtnConfirm}
-          batchSelected={props.batchSelected}
-          setBatchSelected={props.setBatchSelected}
-          batchDeletedUids={props.batchDeletedUids}
-          setBatchDeletedUids={props.setBatchDeletedUids}
-          // Listview: Sort
-          sortHandler={props.sortHandler}
-          hasSorting={props.hasSorting}
-          // Listview: computed data
-          computedData={props.computedData}
-          // Search
-          handleSearch={props.handleSearch}
-          resetSearch={props.resetSearch}
-          searchUi={props.searchUi}
-          searchByMode={props.searchByMode}
-          searchDialectDataType={props.searchDialectDataType}
-          // ==================================================
-          cellHeight={160}
-          cols={props.gridCols}
-          columns={props.columns}
-          // cssModifier={props.cssModifier}
-          dialect={props.dialect}
-          disablePageSize={props.disablePageSize}
-          fetcher={gridListFetcher}
-          fetcherParams={{ currentPageIndex: props.page, pageSize: props.pageSize }}
-          flashcardTitle={props.flashcardTitle}
-          gridListTile={props.gridListTile}
-          items={selectn('response.entries', props.data)}
-          metadata={selectn('response', props.data)}
-          style={{ overflowY: 'auto', maxHeight: '50vh' }}
-          type={props.type}
-        />
+        <DictionaryList {...defaultProps} />
       </Suspense>
     )
   }
-
-  const gridListFetcher = (fetcherParams) => {
-    props.refetcher(props, fetcherParams.currentPageIndex, fetcherParams.pageSize)
-  }
-
-  return getContent()
+  return toRender
 }
 
 const { any, array, bool, func, number, object, string } = PropTypes

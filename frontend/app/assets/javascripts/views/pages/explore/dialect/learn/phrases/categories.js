@@ -33,7 +33,7 @@ import CategoryList from 'views/components/Browsing/category-list'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
- * Categories page for words
+ * Categories page for phrases
  */
 
 const { array, func, object, string } = PropTypes
@@ -104,15 +104,12 @@ export class PhraseCategories extends Component {
   }
 
   _onNavigateRequest(category) {
+    const { routeParams } = this.props
     if (this.props.action) {
       this.props.action(category)
     } else {
       NavigationHelpers.navigate(
-        '/' +
-          this.props.routeParams.siteTheme +
-          this.props.routeParams.dialect_path +
-          '/learn/phrases/categories/' +
-          category.uid,
+        `/${routeParams.siteTheme}${routeParams.dialect_path}/learn/phrases/book/${category.uid}`,
         this.props.pushWindowPath,
         true
       )

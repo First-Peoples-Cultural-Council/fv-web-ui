@@ -95,7 +95,7 @@ export class KidsNavigation extends Component {
       <div className="Navigation">
         <AppBar position="static">
           <Toolbar style={{ alignItems: 'center', backgroundColor: 'inherit' }}>
-            <Typography variant="body2" noWrap style={{ flexGrow: 1 }}>
+            <Typography variant="body2" component="div" noWrap style={{ flexGrow: 1 }}>
               <a
                 style={{ textDecoration: 'none', color: '#fff' }}
                 onClick={this._onNavigateRequest.bind(this, homeURL)}
