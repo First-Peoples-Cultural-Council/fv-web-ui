@@ -18,10 +18,8 @@ limitations under the License.
 import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import { List, Map } from 'immutable'
+import { List } from 'immutable'
 import Media from 'react-media'
-// REDUX
-import { connect } from 'react-redux'
 // Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
@@ -55,7 +53,7 @@ const VIEWMODE_LARGE_SCREEN = 3
  *
  */
 
-const WordsListPresentation = (props) => {
+function WordsListPresentation(props) {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...props.columns]
@@ -106,12 +104,10 @@ const WordsListPresentation = (props) => {
 
   // ============= BATCH
 
-  const items = props.filteredItems || props.items
-
   const noResults =
-    selectn('length', items) === 0 ? (
+    selectn('length', props.items) === 0 ? (
       <div
-        className={`WordsList WordsList--noData  ${props.cssModifier}`}
+        className={'WordsList WordsList--noData'}
         dangerouslySetInnerHTML={{
           __html: intl.translate({
             key: 'no_results_found_dictionary',
@@ -134,7 +130,7 @@ const WordsListPresentation = (props) => {
           hasExportDialect: props.hasExportDialect,
            */
     // View mode
-    clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
+    clickHandlerViewMode: props.wordsListClickHandlerViewMode,
     dictionaryListViewMode: props.dictionaryListViewMode,
     hasViewModeButtons: props.hasViewModeButtons,
   }
@@ -145,8 +141,6 @@ const WordsListPresentation = (props) => {
       hasSorting: props.hasSorting,
       // withPagination
       // --------------------
-      appendControls: props.appendControls,
-      disablePageSize: props.disablePageSize,
       fetcher: props.fetcher,
       fetcherParams: props.fetcherParams,
       metadata: props.metadata,
@@ -154,7 +148,7 @@ const WordsListPresentation = (props) => {
       // --------------------
       items: props.items,
       columns: columnsEnhanced,
-      dictionaryListSmallScreenTemplate: props.dictionaryListSmallScreenTemplate,
+      dictionaryListSmallScreenTemplate: props.smallScreenTemplate,
     },
     hasPagination: props.hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
@@ -165,16 +159,12 @@ const WordsListPresentation = (props) => {
       hasSorting: props.hasSorting,
       // withPagination
       // --------------------
-      appendControls: props.appendControls,
-      disablePageSize: props.disablePageSize,
       fetcher: props.fetcher,
       fetcherParams: props.fetcherParams,
       metadata: props.metadata,
       // List: large screen
       // --------------------
       columns: columnsEnhanced,
-      cssModifier: props.cssModifier,
-      filteredItems: props.filteredItems,
       items: props.items,
     },
 
@@ -463,8 +453,6 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
 const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 WordsListPresentation.propTypes = {
   // Pagination
-  appendControls: array, // NOTE: array of elements to append just after the paging controls
-  disablePageSize: bool, // NOTE: removes the "Page #/# Per page: <select> Results #" part of pagination
   fetcher: func, // TODO
   fetcherParams: object, // NOTE: object of paging data: currentPageIndex, pageSize, filters
   hasPagination: bool,
@@ -478,24 +466,19 @@ WordsListPresentation.propTypes = {
   dialect: object, // NOTE: used to determine permissions with export dialect
   // Misc WordsList
   columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
-  computedData: object, // TODO: Define how this is used
-  cssModifier: string, // TODO: DROP?
   dialectClassName: string,
-  dictionaryListSmallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
-  dictionaryListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
+  smallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
+  wordsListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
   dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
-  fields: instanceOf(Map), // TODO: DROP?
-  filteredItems: oneOfType([array, instanceOf(List)]), // TODO: Confusing, DROP?. Alternate source of data for list.
   hasSorting: bool, // NOTE: can explicitly disable sorting if needed. EG: since we are reusing components, sometimes the `columns` prop will have a sort property within the data but where you are reusing the component it doesn't make sense to sort, `hasSorting={false}` would help you.
   hasViewModeButtons: bool, // NOTE: Toggles all of the view mode buttons (currently there is only Flashcard but there used to be more options)
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
   pageTitle: string,
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
-  type: string, // TODO: DROP?
   // <SearchDialect />
   handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
-  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: SEARCH_DATA_TYPE_WORD, SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
+  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: 6 = SEARCH_DATA_TYPE_WORD, 5 = SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
   resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
   searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
   // REDUX: reducers/state
@@ -510,25 +493,14 @@ WordsListPresentation.defaultProps = {
   hasExportDialect: false,
   // WordsList
   columns: [],
-  cssModifier: '',
-  dictionaryListClickHandlerViewMode: () => {},
+  wordsListClickHandlerViewMode: () => {},
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
   // Search
   handleSearch: () => {},
   resetSearch: () => {},
-  // REDUX: actions/dispatch/func
-  pushWindowPath: () => {},
-  setRouteParams: () => {},
+  searchDialectDataType: 6,
 }
 
-// REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { listView } = state
-  return {
-    listView,
-  }
-}
-
-export default connect(mapStateToProps)(WordsListPresentation)
+export default WordsListPresentation

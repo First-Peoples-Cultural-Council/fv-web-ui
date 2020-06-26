@@ -44,9 +44,9 @@ function WordsListContainer() {
               <WordsListPresentation
                 computeSearchDialect={computeSearchDialect}
                 dialectClassName={dialectClassName}
-                dictionaryListClickHandlerViewMode={setListViewMode}
+                wordsListClickHandlerViewMode={setListViewMode}
                 dictionaryListViewMode={listViewMode}
-                dictionaryListSmallScreenTemplate={smallScreenTemplate}
+                smallScreenTemplate={smallScreenTemplate}
                 pageTitle={pageTitle}
                 dialect={dialect}
                 navigationRouteSearch={navigationRouteSearch}
