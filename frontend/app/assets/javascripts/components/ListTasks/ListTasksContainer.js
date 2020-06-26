@@ -1,6 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-import ListTasksPresentation from './ListTasksPresentation'
+import ListPresentation from 'components/List/ListPresentation'
 import ListTasksData from './ListTasksData'
 
 /**
@@ -15,19 +14,47 @@ import ListTasksData from './ListTasksData'
 function ListTasksContainer() {
   return (
     <ListTasksData>
-      {(ListTasksDataOutput) => {
-        // TODO FW-1607
-        // eslint-disable-next-line
-        console.log('ListTasksDataOutput', ListTasksDataOutput)
-        return <ListTasksPresentation />
+      {({
+        actions,
+        columns,
+        data,
+        detailPanel,
+        onChangeColumnHidden,
+        onChangePage,
+        onChangeRowsPerPage,
+        onColumnDragged,
+        onGroupRemoved,
+        onOrderChange,
+        onRowClick,
+        onSearchChange,
+        onSelectionChange,
+        onTreeExpandChange,
+        options,
+        title,
+      }) => {
+        return (
+          <ListPresentation
+            actions={actions}
+            columns={columns}
+            data={data}
+            detailPanel={detailPanel}
+            onChangeColumnHidden={onChangeColumnHidden}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+            onColumnDragged={onColumnDragged}
+            onGroupRemoved={onGroupRemoved}
+            onOrderChange={onOrderChange}
+            onRowClick={onRowClick}
+            onSearchChange={onSearchChange}
+            onSelectionChange={onSelectionChange}
+            onTreeExpandChange={onTreeExpandChange}
+            options={options}
+            title={title}
+          />
+        )
       }}
     </ListTasksData>
   )
-}
-// PROPTYPES
-// const { string } = PropTypes
-ListTasksContainer.propTypes = {
-  //   something: string,
 }
 
 export default ListTasksContainer

@@ -1,9 +1,8 @@
 import ListTasksContainer from './ListTasksContainer'
-import ListTasksPresentation from './ListTasksPresentation'
 import ListTasksData from './ListTasksData'
 
 export default {
   Container: ListTasksContainer,
-  Presentation: ListTasksPresentation,
+  // Note: no dedicated presentation component, using ListPresentation. See ListTasksContainer
   Data: ListTasksData,
 }
