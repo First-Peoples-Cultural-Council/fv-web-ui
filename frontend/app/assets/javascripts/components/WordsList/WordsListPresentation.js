@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Libraries
-import React, { Suspense, useState } from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
@@ -23,17 +23,7 @@ import Media from 'react-media'
 // REDUX
 import { connect } from 'react-redux'
 // Components
-import {
-  batchTitle,
-  batchFooter,
-  batchRender,
-  deleteSelected,
-  getIcon,
-  getSortState,
-  sortCol,
-  getUidsFromComputedData,
-  getUidsThatAreNotDeleted,
-} from 'common/ListView'
+import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
@@ -115,20 +105,6 @@ const WordsListPresentation = (props) => {
   // ============= ROWCLICK
 
   // ============= BATCH
-  if (props.batchConfirmationAction) {
-    columnsEnhanced = generateBatchColumn({
-      batchConfirmationAction: props.batchConfirmationAction,
-      columns: columnsEnhanced,
-      computedData: props.computedData,
-      copyBtnConfirm: props.batchFooterBtnConfirm,
-      copyBtnDeny: props.batchFooterBtnDeny,
-      copyBtnInitiate: props.batchFooterBtnInitiate,
-      copyDeselect: props.batchTitleSelect,
-      copyIsConfirmOrDenyTitle: props.batchFooterIsConfirmOrDenyTitle,
-      copySelect: props.batchTitleDeselect,
-    })
-  }
-  // ============= BATCH
 
   const items = props.filteredItems || props.items
 
@@ -145,6 +121,23 @@ const WordsListPresentation = (props) => {
         }}
       />
     ) : null
+
+  const listButtonArg = {
+    // Export
+    dialect: props.dialect,
+    exportDialectColumns: props.exportDialectColumns,
+    exportDialectExportElement: props.exportDialectExportElement,
+    exportDialectLabel: props.exportDialectLabel,
+    exportDialectQuery: props.exportDialectQuery,
+    /*
+          // Commented out until export is fixed
+          hasExportDialect: props.hasExportDialect,
+           */
+    // View mode
+    clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
+    dictionaryListViewMode: props.dictionaryListViewMode,
+    hasViewModeButtons: props.hasViewModeButtons,
+  }
 
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
@@ -193,33 +186,16 @@ const WordsListPresentation = (props) => {
     <>
       <h1 className="DialectPageTitle">{props.pageTitle}</h1>
       <div className={props.dialectClassName}>
-        {props.hasSearch && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <SearchDialect
-              handleSearch={props.handleSearch}
-              resetSearch={props.resetSearch}
-              searchUi={props.searchUi}
-              searchDialectDataType={props.searchDialectDataType}
-            />
-          </Suspense>
-        )}
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchDialect
+            handleSearch={props.handleSearch}
+            resetSearch={props.resetSearch}
+            searchUi={props.searchUi}
+            searchDialectDataType={props.searchDialectDataType}
+          />
+        </Suspense>
 
-        {generateListButtons({
-          // Export
-          dialect: props.dialect,
-          exportDialectColumns: props.exportDialectColumns,
-          exportDialectExportElement: props.exportDialectExportElement,
-          exportDialectLabel: props.exportDialectLabel,
-          exportDialectQuery: props.exportDialectQuery,
-          /*
-        // Commented out until export is fixed
-        hasExportDialect: props.hasExportDialect,
-         */
-          // View mode
-          clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
-          dictionaryListViewMode: props.dictionaryListViewMode,
-          hasViewModeButtons: props.hasViewModeButtons,
-        })}
+        {generateListButtons(listButtonArg)}
 
         <Media
           queries={{
@@ -429,67 +405,6 @@ function generateSortTitleLargeSmall({ columns = [], pageSize, sortOrder, sortBy
   })
 }
 
-// generateBatchColumn
-// ------------------------------------
-function generateBatchColumn({
-  batchConfirmationAction,
-  columns,
-  computedData,
-  copyBtnConfirm,
-  copyBtnDeny,
-  copyBtnInitiate,
-  copyDeselect,
-  copyIsConfirmOrDenyTitle,
-  copySelect,
-}) {
-  const [batchSelected, setBatchSelected] = useState([])
-  const [batchDeletedUids, setBatchDeletedUids] = useState([])
-  const uids = getUidsFromComputedData({ computedData })
-  const uidsNotDeleted = getUidsThatAreNotDeleted({ computedDataUids: uids, deletedUids: batchDeletedUids })
-  return [
-    {
-      name: 'batch',
-      columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-      title: () => {
-        return batchTitle({
-          uidsNotDeleted,
-          selected: batchSelected,
-          setSelected: setBatchSelected,
-          copyDeselect,
-          copySelect,
-        })
-      },
-      footer: () => {
-        return batchFooter({
-          colSpan: columns.length + 1,
-          confirmationAction: () => {
-            deleteSelected({
-              batchConfirmationAction,
-              deletedUids: batchDeletedUids,
-              selected: batchSelected,
-              setDeletedUids: setBatchDeletedUids,
-              setSelected: setBatchSelected,
-            })
-          },
-          selected: batchSelected,
-          copyIsConfirmOrDenyTitle,
-          copyBtnInitiate,
-          copyBtnDeny,
-          copyBtnConfirm,
-        })
-      },
-      render: (value, cellData) => {
-        return batchRender({
-          dataUid: cellData.uid,
-          selected: batchSelected,
-          setSelected: setBatchSelected,
-        })
-      },
-    },
-    ...columns,
-  ]
-}
-
 // generateRowClick
 // ------------------------------------
 function generateRowClick({ rowClickHandler, columns }) {
@@ -561,18 +476,11 @@ WordsListPresentation.propTypes = {
   exportDialectLabel: string,
   exportDialectQuery: string,
   dialect: object, // NOTE: used to determine permissions with export dialect
-  // Batch
-  batchConfirmationAction: func,
-  batchFooterBtnConfirm: string,
-  batchFooterBtnDeny: string,
-  batchFooterBtnInitiate: string,
-  batchFooterIsConfirmOrDenyTitle: string,
-  batchTitleDeselect: string,
-  batchTitleSelect: string,
   // Misc WordsList
   columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
   computedData: object, // TODO: Define how this is used
   cssModifier: string, // TODO: DROP?
+  dialectClassName: string,
   dictionaryListSmallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
   dictionaryListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
   dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
@@ -581,14 +489,12 @@ WordsListPresentation.propTypes = {
   hasSorting: bool, // NOTE: can explicitly disable sorting if needed. EG: since we are reusing components, sometimes the `columns` prop will have a sort property within the data but where you are reusing the component it doesn't make sense to sort, `hasSorting={false}` would help you.
   hasViewModeButtons: bool, // NOTE: Toggles all of the view mode buttons (currently there is only Flashcard but there used to be more options)
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
+  pageTitle: string,
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
-  style: object, // TODO: DROP?
   type: string, // TODO: DROP?
-  wrapperStyle: object, // TODO: DROP?
   // <SearchDialect />
   handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
-  hasSearch: bool, // NOTE: Toggles the <SearchDialect /> component
   searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: SEARCH_DATA_TYPE_WORD, SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
   resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
   searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
@@ -602,26 +508,15 @@ WordsListPresentation.propTypes = {
 WordsListPresentation.defaultProps = {
   // Export
   hasExportDialect: false,
-  // Batch
-  batchFooterBtnConfirm: 'Yes, delete the selected items',
-  batchFooterBtnDeny: 'No, do not delete the selected items',
-  batchFooterBtnInitiate: 'Delete',
-  batchFooterIsConfirmOrDenyTitle: 'Delete selected?',
-  batchTitleDeselect: 'Select all',
-  batchTitleSelect: 'Deselect all',
   // WordsList
   columns: [],
   cssModifier: '',
   dictionaryListClickHandlerViewMode: () => {},
-  // sortHandler: () => {},
-  style: null,
-  wrapperStyle: null,
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
   // Search
   handleSearch: () => {},
-  hasSearch: false,
   resetSearch: () => {},
   // REDUX: actions/dispatch/func
   pushWindowPath: () => {},
