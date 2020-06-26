@@ -22,9 +22,6 @@ import { List, Map } from 'immutable'
 import Media from 'react-media'
 // REDUX
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
 // Components
 import {
   batchTitle,
@@ -87,7 +84,7 @@ const WordsListPresentation = (props) => {
       (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
         props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
     ) {
-      setRouteParams({
+      props.setRouteParams({
         search: {
           page: props.routeParams.page,
           pageSize: props.routeParams.pageSize,
@@ -102,7 +99,7 @@ const WordsListPresentation = (props) => {
       pageSize: props.routeParams.pageSize,
       sortOrder: props.navigationRouteSearch.sortOrder,
       sortBy: props.navigationRouteSearch.sortBy,
-      navigationFunc: pushWindowPath,
+      navigationFunc: props.pushWindowPath,
       sortHandler: props.sortHandler,
     })
   }
