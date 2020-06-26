@@ -41,34 +41,7 @@ function WordsData(props) {
     return searchDialectReset
   }, [])
 
-  const _updateUrl = ({ href, updateUrl = true } = {}) => {
-    // When facets change, pagination should be reset.
-    // In these pages (words/phrase), list views are controlled via URL
-    if (href && updateUrl) {
-      NavigationHelpers.navigate(href, pushWindowPath, false)
-    } else {
-      resetURLPagination({ preserveSearch: true })
-    }
-  }
-
-  const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
-    const urlPage = 1
-    const urlPageSize = pageSize || routeParams.pageSize || 10
-
-    const navHelperCallback = (url) => {
-      pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
-    }
-    const hasPaginationUrl = hasPagination(splitWindowPath)
-    if (hasPaginationUrl) {
-      // Replace them
-      NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    } else {
-      // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
-      NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    }
-  }
-
-  const handleCategoryClick = async ({ selected, href, updateUrl }) => {
+  const handleCategoryClick = async ({ selected }) => {
     await searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CATEGORY,
@@ -81,10 +54,9 @@ function WordsData(props) {
       searchingDialectFilter: selected.checkedFacetUid,
       searchTerm: '',
     })
-    _updateUrl({ href, updateUrl })
   }
 
-  const handleAlphabetClick = async ({ letterClicked, href, updateHistory }) => {
+  const handleAlphabetClick = async ({ letterClicked }) => {
     await searchDialectUpdate({
       searchByAlphabet: letterClicked,
       searchByMode: SEARCH_BY_ALPHABET,
@@ -96,7 +68,6 @@ function WordsData(props) {
       },
       searchTerm: '',
     })
-    _updateUrl({ href, updateUrl: updateHistory })
   }
 
   const onNavigateRequest = (path) => {
