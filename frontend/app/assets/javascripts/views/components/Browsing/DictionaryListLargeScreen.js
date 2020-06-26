@@ -96,14 +96,26 @@ const DictionaryListLargeScreen = (props) => {
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
             >
               {props.columns.map((column, j) => {
-                const cellValue = selectn(column.name, item)
+                const mapDocumentStateToVisibility = {
+                  New: `Team Only`,
+                  Disabled: `Team Only`,
+                  Enabled: `Members Only`,
+                  Published: "Public"
+                }
+
+                let cellValue = selectn(column.name, item)
+                if (column.name
+                    === 'state') {
+                  cellValue = mapDocumentStateToVisibility[cellValue]
+                }
                 const cellRender =
-                  typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+                    typeof column.render === 'function' ? column.render(
+                        cellValue, item, column) : cellValue
                 const className = columnClassNames[j] || ''
                 return (
-                  <td key={j} className={className}>
-                    {cellRender}
-                  </td>
+                    <td key={j} className={className}>
+                      {cellRender}
+                    </td>
                 )
               })}
             </tr>
