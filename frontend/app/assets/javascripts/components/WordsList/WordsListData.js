@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
+import Immutable from 'immutable'
 
 // FPCC
 
@@ -90,6 +91,17 @@ function WordsListData(props) {
   const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
 
   const [columns] = useState(getColumns())
+
+  const computeEntities = Immutable.fromJS([
+    {
+      id: routeParams.dialect_path,
+      entity: computePortal,
+    },
+    {
+      id: dictionaryKey,
+      entity: computeDocument,
+    },
+  ])
 
   // Parsing computeDocument
   const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, dictionaryKey)
@@ -384,6 +396,7 @@ function WordsListData(props) {
 
   return props.children({
     columns: columns,
+    computeEntities,
     computeSearchDialect,
     dialect,
     dialectClassName,
