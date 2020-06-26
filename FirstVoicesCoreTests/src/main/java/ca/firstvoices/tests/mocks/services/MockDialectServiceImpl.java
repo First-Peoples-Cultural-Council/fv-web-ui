@@ -1,5 +1,6 @@
 package ca.firstvoices.tests.mocks.services;
 
+import static ca.firstvoices.tests.mocks.Constants.FV_CHARACTER;
 import static ca.firstvoices.tests.mocks.Constants.FV_DIALECT;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
@@ -7,8 +8,10 @@ import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
 import java.util.concurrent.ThreadLocalRandom;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 
 public class MockDialectServiceImpl implements MockDialectService {
 
@@ -61,6 +64,42 @@ public class MockDialectServiceImpl implements MockDialectService {
     return alphabetArr;
   }
 
+  private DocumentModelList generateFVCharacters(CoreSession session, String path,
+      String[] alphabet) {
+    DocumentModelList fvAlphabet = new DocumentModelListImpl();
+
+    for (int i = 0; i < alphabet.length; i++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
+      createDocument(session, letterDoc);
+      fvAlphabet.add(letterDoc);
+
+    }
+    return fvAlphabet;
+  }
+
+  @Override
+  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
+    // See other services, operations and InitialDatabaseSetup for inspiration
+    // Feel free to create other services, utils and methods as needed
+    // for reusability (for example to create a word, etc.)
+    String name = generateRandomWord(currentAlphabet);
+
+    DocumentModel dialect = generateEmptyDialect(session, name);
+    String desc = "";
+
+    for (int i = 0; i < 30; i++) {
+      desc = desc + generateRandomWord(currentAlphabet) + " ";
+    }
+    dialect.setPropertyValue("dc:description", desc);
+    session.save();
+    generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
+    return dialect;
+
+  }
+
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
     // See other services, operations and InitialDatabaseSetup for inspiration
@@ -92,24 +131,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     return newDoc;
   }
 
-  @Override
-  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
-    // See other services, operations and InitialDatabaseSetup for inspiration
-    // Feel free to create other services, utils and methods as needed
-    // for reusability (for example to create a word, etc.)
-    String name = generateRandomWord(currentAlphabet);
-
-    DocumentModel dialect = generateEmptyDialect(session, name);
-    String desc = "";
-
-    for (int i = 0; i < 30; i++) {
-      desc = desc + generateRandomWord(currentAlphabet) + " ";
-    }
-    dialect.setPropertyValue("dc:description", desc);
-    session.save();
-    return dialect;
-
-  }
 
   private void generateDomainTree(CoreSession session) {
     //NOTE: Note entirely satisfied with this method,
@@ -141,9 +162,12 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     generateDomainTree(session);
 
-    return createDocument(session,
+    DocumentModel dialect = createDocument(session,
         session
             .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, FV_DIALECT));
+    createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+    return dialect;
 
   }
 

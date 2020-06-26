@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 
 /**
@@ -47,6 +48,9 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     String s = (String) dialect.getPropertyValue("dc:description");
     Assert.assertNotNull(s);
 
+    DocumentModelList test = session.query("SELECT * from FVCharacter");
+
+    Assert.assertEquals(30, test.size());
     Assert.assertEquals(1, session.query("SELECT * from FVDialect").size());
   }
 
