@@ -136,7 +136,7 @@ function WordsListData(props) {
     fetchListViewData()
   }
 
-  function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
+  async function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     let currentAppliedFilter = ''
 
     if (searchNxqlQuery) {
@@ -146,11 +146,11 @@ function WordsListData(props) {
     if (routeParams.category) {
       // Private
       if (routeParams.area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}")`
+        currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}") &enrichment=category_children`
       }
       // Public
       if (routeParams.area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}")`
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}") &enrichment=category_children`
       }
     }
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
@@ -164,13 +164,9 @@ function WordsListData(props) {
         &dialectId=${dialectUid}
         &pageSize=${pageSize}
         &sortOrder=${sortOrder}
-        &sortBy=${sortBy}
-        &enrichment=category_children
-        ${
-          routeParams.letter
-            ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery`
-            : startsWithQuery
-        }`
+        &sortBy=${sortBy}${
+      routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
+    }`
 
     fetchWords(dictionaryKey, nql)
   }
