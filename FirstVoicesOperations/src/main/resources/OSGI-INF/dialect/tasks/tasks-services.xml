@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.dialect.services.ApproveRejectTaskService.contrib" version="1.0">
+  <implementation class="ca.firstvoices.dialect.services.ApproveRejectTaskServiceImpl"/>
+  <service>
+    <provide interface="ca.firstvoices.dialect.services.ApproveRejectTaskService"/>
+  </service>
+</component>

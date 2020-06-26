@@ -6,10 +6,8 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -20,9 +18,6 @@ import testUtil.AbstractFirstVoicesOperationsTest;
  * @author david
  */
 public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest {
-
-  @Inject
-  AutomationService automationService;
 
   @Test
   public void getRelationsForAsset() throws OperationException {
