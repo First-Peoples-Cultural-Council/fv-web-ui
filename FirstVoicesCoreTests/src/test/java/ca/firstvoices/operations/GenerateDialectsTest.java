@@ -20,11 +20,10 @@ public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
 
     int expectedDialects = 50;
     params = new HashMap<>();
-    params.put("randomize", "true");
+    params.put("randomize", "false");
     params.put("maxDialects", "" + expectedDialects);
     params.put("maxEntries", "20");
 
-    startFresh(session);
     OperationContext ctx = new OperationContext(session);
 
     automationService.run(ctx, GenerateDialects.ID, params);

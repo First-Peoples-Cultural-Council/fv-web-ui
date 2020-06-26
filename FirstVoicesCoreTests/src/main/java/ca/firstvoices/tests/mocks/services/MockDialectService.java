@@ -10,17 +10,15 @@ public interface MockDialectService {
    *
    * @param maxEntries - max number of dialect entries to create (words, phrases, songs, audio
    *                   files)
-   * @param name       - the name of the dialect
    * @return generated dialect
    */
-  DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries, String name);
+  DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries);
 
   /**
    * Generates a dialect with demo data if one with the same name does not exist
    *
    * @param maxEntries - max number of dialect entries to create (words, phrases, songs, audio
    *                   files)
-   * @param name       - the name of the dialect
    * @return generated dialect
    */
   DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name);
@@ -28,7 +26,7 @@ public interface MockDialectService {
   /**
    * Ensure there is logic in place to remove dialects only from Test areas
    *
-   * @param name
+   * @param name - the name of the dialect
    */
   void removeMockDialect(String name);
 

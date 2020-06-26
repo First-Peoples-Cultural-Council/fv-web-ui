@@ -44,7 +44,7 @@ public class GenerateDialects {
 
       if (randomize) {
         createdDialects
-            .add(generateDialectService.generateMockRandomDialect(session, maxEntries, name));
+            .add(generateDialectService.generateMockRandomDialect(session, maxEntries));
       } else {
         createdDialects
             .add(generateDialectService.generateMockDemoDialect(session, maxEntries, name));

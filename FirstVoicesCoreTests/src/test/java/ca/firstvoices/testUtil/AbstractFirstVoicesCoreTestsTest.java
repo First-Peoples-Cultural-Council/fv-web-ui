@@ -6,6 +6,7 @@ import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
 import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import java.util.Map;
 import javax.inject.Inject;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -33,7 +34,8 @@ public abstract class AbstractFirstVoicesCoreTestsTest {
   @Inject
   protected AutomationService automationService;
 
-  public void createTree(CoreSession session) {
+  @Before
+  public void createDomain() {
     startFresh(session);
 
     domain = createDocument(session,

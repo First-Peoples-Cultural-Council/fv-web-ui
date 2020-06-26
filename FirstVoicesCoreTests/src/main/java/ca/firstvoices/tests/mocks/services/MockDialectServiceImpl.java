@@ -1,8 +1,10 @@
 package ca.firstvoices.tests.mocks.services;
 
+import static ca.firstvoices.tests.mocks.Constants.FV_DIALECT;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
 
+import java.util.concurrent.ThreadLocalRandom;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
@@ -10,14 +12,53 @@ import org.nuxeo.ecm.core.api.PathRef;
 
 public class MockDialectServiceImpl implements MockDialectService {
 
-  @Override
-  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries, String name) {
-    // See other services, operations and InitialDatabaseSetup for inspiration
-    // Feel free to create other services, utils and methods as needed
-    // for reusability (for example to create a word, etc.)
 
-    return generateEmptyDialect(session, name);
+  private static final String[] alphabetChars = new String[]{
+      //Regular alphabet
+      "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+      "t", "u", "v", "w", "x", "y", "z"};
+  private static final String[] multiChars = new String[]{
+      //Double and triple characters (Nisga'a)
+      "aa", "ee", "ii", "oo", "uu", "yy", "gw", "hl", "k'", "ḵ'", "kw", "kw'", "p'", "t'", "tl'",
+      "ts'", "xw"};
+  private static final String[] maskChars = new String[]{
+      //Maskwacis Cree alphabet
+      "ᐊ", "ᐁ", "ᐃ", "ᐅ", "ᐧ", "ᐤ", "ᐸ", "ᐯ", "ᐱ", "ᐳ",
+      "ᑊ", "ᐦ", "ᑕ", "ᑌ", "ᑎ", "ᑐ", "ᐟ", "ᑲ", "ᑫ", "ᑭ", "ᑯ", "ᐠ", "ᒐ", "ᒉ", "ᒋ", "ᒍ", "ᐨ", "ᒪ", "ᒣ",
+      "ᒥ", "ᒧ", "ᒼ", "ᓇ", "ᓀ", "ᓂ", "ᓄ", "ᐣ", "ᓴ", "ᓭ", "ᓯ", "ᓱ", "ᐢ", "ᔭ", "ᔦ", "ᔨ", "ᔪ", "ᐩ",};
+  private static final String[] uniChars = new String[]{
+      //Common Unicode characters from confusable_characters.csv
+      "ƛ", "¢", "À", "Á", "È", "É", "Ì", "Í", "Î", "Ï", "Ñ", "Ò", "Ó",
+      "Ô", "Ö", "Ù", "Ú", "Û", "Ü", "à", "á", "â", "ä", "æ", "è", "é", "ê", "ë", "ì", "í", "î",
+      "ï", "ñ", "ò", "ó", "ô", "ö", "ù", "ú", "û", "ü", "ÿ", "Ā", "ā", "Ą", "ą", "Ć", "ĉ", "Č",
+      "č", "ē", "Ę", "ę", "ě", "ĝ", "ĥ", "Ĩ", "ĩ", "ī", "Į", "į", "Ĵ", "ĵ", "ĺ", "ľ", "Ł", "ł",
+      "ŋ", "Ō", "ō", "œ", "Ś", "ś", "Ŝ", "ŝ", "Š", "š", "Ū", "ū", "Ų", "ų", "Ŵ", "ŵ", "Ÿ", "Ɣ",
+      "ƛ", "Ɵ", "ǂ", "ǎ", "Ǐ", "ǐ", "Ǒ", "ǒ", "Ǔ", "ǔ", "ǧ", "ǫ", "Ǭ", "ǭ", "ǰ", "ǳ", "Ⱥ", "Ȼ",
+      "ɔ", "ə", "ɬ", "ʔ", "ʦ", "θ", "λ", "ᒼ", "ᕀ", "Ḏ", "ḏ", "ḕ", "ḗ", "ḡ", "ḥ", "Ḵ", "ḵ", "ḷ",
+      "Ṉ", "ṉ", "Ṑ", "ṑ", "Ṓ", "ṓ", "Ṣ", "ṣ", "Ṯ", "ṯ", "Ẅ", "ẅ", "Ẑ", "ẑ", "Ẕ", "ẕ", "ị",};
 
+  private static final String[] currentAlphabet = generateRandomAlphabet();
+
+  private static String[] generateRandomAlphabet() {
+
+    String[] alphabetArr = new String[30];
+    for (int i = 0; i < 10; i++) {
+      alphabetArr[i] = alphabetChars[ThreadLocalRandom.current().nextInt(0, alphabetChars.length)];
+    }
+
+    for (int i = 10; i < 20; i++) {
+      alphabetArr[i] = multiChars[ThreadLocalRandom.current().nextInt(0, multiChars.length)];
+    }
+
+    for (int i = 20; i < 25; i++) {
+      alphabetArr[i] = maskChars[ThreadLocalRandom.current().nextInt(0, maskChars.length)];
+    }
+
+    for (int i = 25; i < alphabetArr.length; i++) {
+      alphabetArr[i] = uniChars[ThreadLocalRandom.current().nextInt(0, uniChars.length)];
+    }
+
+    return alphabetArr;
   }
 
   @Override
@@ -51,7 +92,26 @@ public class MockDialectServiceImpl implements MockDialectService {
     return newDoc;
   }
 
-  private void generateDialectTree(CoreSession session) {
+  @Override
+  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
+    // See other services, operations and InitialDatabaseSetup for inspiration
+    // Feel free to create other services, utils and methods as needed
+    // for reusability (for example to create a word, etc.)
+    String name = generateRandomWord(currentAlphabet);
+
+    DocumentModel dialect = generateEmptyDialect(session, name);
+    String desc = "";
+
+    for (int i = 0; i < 30; i++) {
+      desc = desc + generateRandomWord(currentAlphabet) + " ";
+    }
+    dialect.setPropertyValue("dc:description", desc);
+    session.save();
+    return dialect;
+
+  }
+
+  private void generateDomainTree(CoreSession session) {
     //NOTE: Note entirely satisfied with this method,
     // should I handle more cases such as partially generated trees?
     // ie only /FV/Workspaces/Data/Test or /FV/Workspaces/ exists?
@@ -59,16 +119,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     String testPath = "/FV/Workspaces/Data/Test/Test/";
     //if path exists, do nothing
     if (!session.exists(new PathRef(testPath))) {
-
-      // if FV domain does not exist, generate FV/Workspaces/Data
-      if (!session.exists(new PathRef("/FV"))) {
-        createDocument(session,
-            session.createDocumentModel("/", "FV", "Domain"));
-        createDocument(session,
-            session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot"));
-        createDocument(session,
-            session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
-      }
 
       if (session.exists(new PathRef("FV/Workspaces/Data/"))) {
         createDocument(session,
@@ -89,11 +139,21 @@ public class MockDialectServiceImpl implements MockDialectService {
     //In the current session, in the /FV/Workspaces/Data/TestLangFam/TestLang/ directory
     //create an empty dialect with all necessary children
 
-    generateDialectTree(session);
+    generateDomainTree(session);
 
     return createDocument(session,
         session
-            .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, "FVDialect"));
+            .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, FV_DIALECT));
+
+  }
+
+  private String generateRandomWord(String[] alphabet) {
+
+    String word = "";
+    for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
+      word = word + alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)];
+    }
+    return word;
   }
 
 }

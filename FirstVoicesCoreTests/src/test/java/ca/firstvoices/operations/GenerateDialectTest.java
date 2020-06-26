@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
 
 /**
@@ -16,17 +17,16 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
 
   @Test
-  public void generateEmptyDialectTreeDoesntExist() throws OperationException {
+  public void generateEmptyDemoDialect() throws OperationException {
 
     params = new HashMap<>();
-    params.put("randomize", "true");
+    params.put("randomize", "false");
     params.put("maxEntries", "50");
     params.put("dialectName", "Xx_Dialect_xX");
 
-    startFresh(session);
     OperationContext ctx = new OperationContext(session);
 
-    automationService.run(ctx, GenerateDialect.ID, params);
+    DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
 
     Assert.assertTrue(
         session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
@@ -34,22 +34,20 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
   }
 
   @Test
-  public void generateEmptyDialectTreeExists() throws OperationException {
+  public void generateEmptyRandomDialect() throws OperationException {
 
     params = new HashMap<>();
     params.put("randomize", "true");
     params.put("maxEntries", "50");
-    params.put("dialectName", "Xx_Dialect_xX");
-
-    createTree(session);
 
     OperationContext ctx = new OperationContext(session);
 
-    automationService.run(ctx, GenerateDialect.ID, params);
+    DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
 
-    Assert.assertTrue(
-        session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
+    String s = (String) dialect.getPropertyValue("dc:description");
+    Assert.assertNotNull(s);
+
+    Assert.assertEquals(1, session.query("SELECT * from FVDialect").size());
   }
-
 
 }

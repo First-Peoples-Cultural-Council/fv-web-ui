@@ -39,7 +39,7 @@ public class GenerateDialect {
 
     if (randomize) {
       createdDialect = generateDialectService
-          .generateMockRandomDialect(session, maxEntries, dialectName);
+          .generateMockRandomDialect(session, maxEntries);
     } else {
       createdDialect = generateDialectService
           .generateMockDemoDialect(session, maxEntries, dialectName);
