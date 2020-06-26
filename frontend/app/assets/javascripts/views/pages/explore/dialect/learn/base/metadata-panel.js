@@ -112,16 +112,26 @@ export class MetadataPanel extends Component {
      * Date created
      */
     metadata.push({
-      label: this.props.intl.trans('date_created', 'Date Added to FirstVoices', 'first'),
-      value: StringHelpers.formatUTCDateString(selectn('response.properties.dc:created', computeEntity)),
+      label: this.props.intl.trans('date_created', 'Date Added to FirstVoices',
+          'first'),
+      value: StringHelpers.formatUTCDateString(
+          selectn('response.properties.dc:created', computeEntity)),
     })
 
     /**
      * Status
      */
+    const mapDocumentStateToVisibility = {
+      New: "Team Only",
+      Disabled: "Team Only",
+      Enabled: "Members Only",
+      Published: "Public"
+    }
+
     metadata.push({
       label: this.props.intl.trans('status', 'Status', 'first'),
-      value: selectn('response.state', computeEntity),
+      value: mapDocumentStateToVisibility[selectn('response.state',
+          computeEntity)],
     })
 
     /**
