@@ -293,7 +293,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
                   categoriesData &&
                   categoriesData.length > 0 && (
                     <DialectFilterListData
-                      appliedFilterIds={this.props.routeParams.phraseBook}
+                      selectedCategoryId={this.props.routeParams.phraseBook}
                       setDialectFilterCallback={this.changeFilter}
                       facets={categoriesData}
                       facetType="phraseBook"
