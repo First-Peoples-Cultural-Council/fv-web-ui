@@ -113,9 +113,9 @@ class WordsContainer extends Component {
                   </AlphabetCharactersData>
                   <CategoriesData>
                     {({ categoriesData }) => {
-                      let categoriesDataLayerToRender = null
+                      let categoriesDataToRender = null
                       if (categoriesData && categoriesData.length > 0) {
-                        categoriesDataLayerToRender = (
+                        categoriesDataToRender = (
                           <DialectFilterListData
                             selectedCategoryId={routeParams.category}
                             setDialectFilterCallback={handleCategoryClick}
@@ -139,7 +139,7 @@ class WordsContainer extends Component {
                           </DialectFilterListData>
                         )
                       }
-                      return categoriesDataLayerToRender
+                      return categoriesDataToRender
                     }}
                   </CategoriesData>
                 </div>
