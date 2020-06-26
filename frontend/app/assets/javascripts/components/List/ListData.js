@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import useTheme from 'DataSource/useTheme'
+import selectn from 'selectn'
 
 /**
  * @summary ListData
@@ -68,7 +69,7 @@ function ListData({
   toolbarButtonAlignment,
 }) {
   const { theme } = useTheme()
-  const { tableHeader, row, rowAlternate } = theme.components?.List
+  const { tableHeader, row, rowAlternate } = selectn('components.List', theme) || {}
   const options = {
     actionsColumnIndex,
     debounceInterval: 500,
