@@ -52,10 +52,8 @@ class FVButton extends Component {
     ) : (
       <Button
         classes={{
-          // contained: classes.contained,
           containedPrimary: classes.containedPrimary,
           containedSecondary: classes.containedSecondary,
-          // outlined: classes.outlined,
           outlinedPrimary: classes.outlinedPrimary,
           outlinedSecondary: classes.outlinedSecondary,
         }}
