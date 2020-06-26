@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MaterialTable from 'material-table'
+import FVButton from 'views/components/FVButton'
+import useTheme from 'DataSource/useTheme'
 /**
  * @summary ListPresentation
  * @version 1.0.1
@@ -44,6 +46,31 @@ function ListPresentation({
   options,
   title,
 }) {
+  const { theme } = useTheme()
+  const { tableHeader, row, rowAlternate } = theme.components?.List
+  const defaultOptions = {
+    actionsColumnIndex: 2,
+    debounceInterval: 500,
+    detailPanelType: 'multiple',
+    draggable: false,
+    emptyRowsWhenPaging: true,
+    filtering: false,
+    headerStyle: tableHeader,
+    paging: false,
+    rowStyle: (rowData, index) => {
+      if (index % 2 === 0) {
+        return row
+      }
+      return rowAlternate
+    },
+    search: false,
+    selection: false,
+    showTextRowsSelected: false,
+    showTitle: false,
+    sorting: false,
+    toolbar: false,
+    toolbarButtonAlignment: 'left',
+  }
   return (
     <MaterialTable
       actions={actions}
@@ -59,9 +86,33 @@ function ListPresentation({
       onSearchChange={onSearchChange}
       onSelectionChange={onSelectionChange}
       onTreeExpandChange={onTreeExpandChange}
-      options={options}
+      options={Object.assign({}, defaultOptions, options)}
       title={title}
       detailPanel={detailPanel}
+      components={{
+        Actions: ({ data: _data, actions: _actions }) => {
+          return (
+            <div className="Tasks__approveRejectContainer">
+              {_actions.map(({ text, tooltip, onClick, disabled }, i) => {
+                return (
+                  <FVButton
+                    key={`action${i}`}
+                    onClick={(event) => {
+                      onClick(event, _data)
+                    }}
+                    color="secondary"
+                    variant="contained"
+                    className="Tasks__approve"
+                    disabled={disabled}
+                  >
+                    {text ? text : tooltip}
+                  </FVButton>
+                )
+              })}
+            </div>
+          )
+        },
+      }}
     />
   )
 }
@@ -84,6 +135,9 @@ ListPresentation.propTypes = {
   onTreeExpandChange: func,
   options: object,
   title: string,
+}
+ListPresentation.defaultProps = {
+  options: {},
 }
 
 export default ListPresentation
