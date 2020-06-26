@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -28,46 +28,44 @@ const styles = (theme) => {
   }
 }
 
-function FVButton(props) {
-  const {
-    children,
-    classes, // via withStyles
-    isFab = false,
-    variant,
-    ...allOtherProps
-  } = props
+class FVButton extends Component {
+  render() {
+    const {
+      children,
+      classes, // via withStyles
+      isFab = false,
+      variant,
+      ...allOtherProps
+    } = this.props
 
-  return isFab ? (
-    <Fab
-      variant="extended"
-      classes={{
-        contained: classes.contained,
-        containedPrimary: classes.containedPrimary,
-        containedSecondary: classes.containedSecondary,
-        outlined: classes.outlined,
-        outlinedPrimary: classes.outlinedPrimary,
-        outlinedSecondary: classes.outlinedSecondary,
-      }}
-      {...allOtherProps}
-    >
-      {children}
-    </Fab>
-  ) : (
-    <Button
-      classes={{
-        contained: classes.contained,
-        containedPrimary: classes.containedPrimary,
-        containedSecondary: classes.containedSecondary,
-        outlined: classes.outlined,
-        outlinedPrimary: classes.outlinedPrimary,
-        outlinedSecondary: classes.outlinedSecondary,
-      }}
-      variant={variant}
-      {...allOtherProps}
-    >
-      {children}
-    </Button>
-  )
+    return isFab ? (
+      <Fab
+        variant="extended"
+        classes={{
+          primary: classes.primary,
+          secondary: classes.secondary,
+        }}
+        {...allOtherProps}
+      >
+        {children}
+      </Fab>
+    ) : (
+      <Button
+        classes={{
+          // contained: classes.contained,
+          containedPrimary: classes.containedPrimary,
+          containedSecondary: classes.containedSecondary,
+          // outlined: classes.outlined,
+          outlinedPrimary: classes.outlinedPrimary,
+          outlinedSecondary: classes.outlinedSecondary,
+        }}
+        variant={variant}
+        {...allOtherProps}
+      >
+        {children}
+      </Button>
+    )
+  }
 }
 const { object, node, string, bool } = PropTypes
 FVButton.propTypes = {
