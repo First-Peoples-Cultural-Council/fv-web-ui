@@ -66,6 +66,9 @@ function WordsListData(props) {
   const { computeWords, fetchWords } = useWord()
 
   const { searchNxqlQuery = '' } = computeSearchDialect
+  //
+  // Prepare DialectId in state for nxql query
+  const [dialectId, setDialectId] = useState('')
 
   useEffect(() => {
     fetchData()
@@ -159,9 +162,14 @@ function WordsListData(props) {
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
+
+    // setDialectId
+    const doc = await ProviderHelpers.getEntry(computeDocument, dictionaryKey)
+    setDialectId(selectn('response.contextParameters.ancestry.dialect.uid', doc))
+
     const nql = `${currentAppliedFilter}
         &currentPageIndex=${pageIndex - 1}
-        &dialectId=${dialectUid}
+        &dialectId=${dialectId}
         &pageSize=${pageSize}
         &sortOrder=${sortOrder}
         &sortBy=${sortBy}${
