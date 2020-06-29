@@ -1,3 +1,5 @@
+// NOTE: This ListData file is just an example
+// NOTE: We are using the `List/ListPresentation` file in other List* components
 import PropTypes from 'prop-types'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'

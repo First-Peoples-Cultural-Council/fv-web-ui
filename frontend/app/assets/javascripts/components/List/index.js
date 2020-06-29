@@ -1,9 +1,8 @@
-import ListContainer from './ListContainer'
+// NOTE: This `List` component is really just the presentation layer
+// NOTE: `List/ListPresentation` is reused by other List* components
+// NOTE: `List/ListData` & `List/ListContainer` are included just as examples
 import ListPresentation from './ListPresentation'
-import ListData from './ListData'
 
 export default {
-  Container: ListContainer,
   Presentation: ListPresentation,
-  Data: ListData,
 }

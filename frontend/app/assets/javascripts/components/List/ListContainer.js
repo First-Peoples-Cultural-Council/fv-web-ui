@@ -1,3 +1,5 @@
+// NOTE: This ListContainer file is just an example
+// NOTE: We are using the `List/ListPresentation` file in other List* components
 import React from 'react'
 import ListPresentation from './ListPresentation'
 import ListData from './ListData'
