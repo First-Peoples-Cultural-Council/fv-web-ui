@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import {
   SEARCH_PART_OF_SPEECH_ANY,
-  SEARCH_BY_DEFAULT,
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
   SEARCH_BY_CUSTOM,
@@ -49,7 +48,7 @@ export const SearchDialect = (props) => {
     if (!letter && !category && !phraseBook) {
       const defaultData = {
         searchByAlphabet: '',
-        searchByMode: csd.searchByMode || SEARCH_BY_DEFAULT,
+        searchByMode: csd.searchByMode || SEARCH_BY_CUSTOM,
         // searchBySettings describes the form state, eg: "input X is checked"
         searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
         searchTerm: csd.searchTerm || '',
@@ -606,6 +605,18 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const resetSearch = () => {
     searchDialectReset()
+    const searchData = {
+      searchByAlphabet: '',
+      searchByMode: SEARCH_BY_CUSTOM,
+      searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
+      searchTerm: csd.searchTerm || '',
+      searchType: csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH,
+    }
+    searchData.searchMessage = getSearchMessage(searchData)
+    searchData.searchingDialectFilter = undefined
+    searchData.searchNxqlQuery = csd.searchNxqlQuery || undefined
+    searchData.searchNxqlSort = csd.searchNxqlSort || {}
+    searchDialectUpdate(searchData)
 
     // Notify ancestors
     props.resetSearch()
