@@ -4,7 +4,7 @@ import Immutable from 'immutable'
 // import PropTypes from 'prop-types'
 import useLogin from 'DataSource/useLogin'
 import useIntl from 'DataSource/useIntl'
-import useFvUser from 'DataSource/useFvUser'
+import useUser from 'DataSource/useUser'
 
 import selectn from 'selectn'
 
@@ -14,7 +14,7 @@ const TasksData = ({ children }) => {
   const [selectedTaskId, setSelectedTaskId] = useState(null)
   // Data/Custom hooks
   const { computeLogin } = useLogin()
-  const { computeUserDialects } = useFvUser()
+  const { computeUserDialects } = useUser()
   const { intl } = useIntl()
 
   const onCloseDialog = () => {

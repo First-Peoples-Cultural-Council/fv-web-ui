@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import useLogin from 'DataSource/useLogin'
 import useTasks from 'DataSource/useTasks'
-import useFvUser from 'DataSource/useFvUser'
+import useUser from 'DataSource/useUser'
 import useIntl from 'DataSource/useIntl'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
@@ -25,7 +25,7 @@ function ListTasksData({ children, columnRender }) {
   // Custom Hooks
   const { computeLogin } = useLogin()
   const { intl } = useIntl()
-  const { computeUserDialects, fetchUserDialects } = useFvUser()
+  const { computeUserDialects, fetchUserDialects } = useUser()
   const {
     approveTask,
     computeUserRegistrationApprove,

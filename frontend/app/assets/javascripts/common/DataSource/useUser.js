@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserDialects as _fetchUserDialects } from 'providers/redux/reducers/fvUser'
-function useFVUser() {
+function useUser() {
   const dispatch = useDispatch()
   return {
     computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
@@ -11,4 +11,4 @@ function useFVUser() {
   }
 }
 
-export default useFVUser
+export default useUser
