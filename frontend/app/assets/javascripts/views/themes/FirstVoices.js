@@ -27,7 +27,9 @@ rgb(43, 46, 52)
 rgb(89, 88, 76)
 */
 import typography from './FirstVoicesTypography'
+import components from './FirstVoicesComponents'
 export default {
+  components,
   typography,
   palette: {
     primary: {
