@@ -2576,6 +2576,12 @@ const routes = [
   addPagination(DIALECT_IMMERSION_WORDS),
   addImmersionCategory(DIALECT_IMMERSION_WORDS),
   addPagination(addImmersionCategory(DIALECT_IMMERSION_WORDS)),
+  {
+    path: ['photo-project'],
+    title: 'Mentor-Apprentice Photo Project',
+    page: <Pages.PageMAPPhotoProject />,
+    breadcrumbs: false,
+  },
 ]
 
 export default routes
