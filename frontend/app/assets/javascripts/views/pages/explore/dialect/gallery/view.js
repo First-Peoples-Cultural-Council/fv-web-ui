@@ -17,7 +17,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
-import ImageGallery from 'react-image-gallery'
+import PhotoGallery from 'react-photo-gallery'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -123,7 +123,12 @@ export class Gallery extends React.Component {
     const computeGallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
     const toMap = selectn('response.contextParameters.gallery.related_pictures', computeGallery) || []
     const images = toMap.map((picture) => {
-      return { original: UIHelpers.getThumbnail(picture, 'Medium'), description: picture['dc:description'] }
+      return {
+        src: UIHelpers.getThumbnail(picture, 'Medium'),
+        description: picture['dc:description'],
+        width: picture.views[2].width,
+        height: picture.views[2].height,
+      }
     })
 
     const computeEntities = Immutable.fromJS([
@@ -158,16 +163,9 @@ export class Gallery extends React.Component {
           <div className="col-xs-12" style={{ textAlign: 'center' }}>
             <h1>{selectn('response.title', computeGallery)}</h1>
             <p>{selectn('response.properties.dc:description', computeGallery)}</p>
-            <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-4')}>
+            <div className={classNames('col-xs-12')}>
               <div>
-                <ImageGallery
-                  ref={(i) => (this._imageGallery = i)}
-                  items={images}
-                  slideInterval={2000}
-                  showFullscreenButton
-                  showThumbnails={false}
-                  showBullets
-                />
+                <PhotoGallery photos={images} />
               </div>
             </div>
           </div>
