@@ -1,8 +1,7 @@
-import ListTasksContainer from './ListTasksContainer'
 import ListTasksData from './ListTasksData'
 
 export default {
-  Container: ListTasksContainer,
-  // Note: no dedicated presentation component, using ListPresentation. See ListTasksContainer
+  // Container: no dedicated component. Had to hook up modal event handlers that are used by multiple items. See /Tasks/TasksContainer
+  // Presentation: no dedicated component. Using /List/ListPresentation. See /Tasks/TasksContainer
   Data: ListTasksData,
 }
