@@ -22,8 +22,12 @@ package ca.firstvoices.templates.factories;
 
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
+import java.util.List;
+import java.util.Map;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.content.template.factories.SimpleTemplateBasedFactory;
+import org.nuxeo.ecm.platform.content.template.service.ACEDescriptor;
+import org.nuxeo.ecm.platform.content.template.service.TemplateItemDescriptor;
 
 /**
  * Script ignores creation of structured templates within sections
@@ -32,9 +36,12 @@ import org.nuxeo.ecm.platform.content.template.factories.SimpleTemplateBasedFact
  */
 public class FVDialectFactory extends SimpleTemplateBasedFactory {
 
+  //Set true if the Dialect creates is in the Test/Test folder
+  //Indicating that it is mock data
+
+
   @Override
   public void createContentStructure(DocumentModel eventDoc) {
-
     // Only apply to one type
     if (FV_DIALECT.equals(eventDoc.getType())) {
       if (eventDoc.isProxy()) {
@@ -43,6 +50,21 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
     }
 
     super.createContentStructure(eventDoc);
+  }
+
+  @Override
+  public boolean initFactory(Map<String, String> options, List<ACEDescriptor> rootAcl,
+      List<TemplateItemDescriptor> template) {
+
+    //If the dialect created is mock data, need to prevent alphabet from being created
+    //Need condition for mock data WIP
+    //Can't use get path, null
+
+    template.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
+
+    this.template = template;
+    this.acl = rootAcl;
+    return true;
   }
 
 }

@@ -5,6 +5,7 @@ import static ca.firstvoices.tests.mocks.Constants.FV_DIALECT;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
 import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
 
+import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -88,11 +89,13 @@ public class MockDialectServiceImpl implements MockDialectService {
     String name = generateRandomWord(currentAlphabet);
 
     DocumentModel dialect = generateEmptyDialect(session, name);
-    String desc = "";
 
+    StringJoiner join = new StringJoiner(" ");
     for (int i = 0; i < 30; i++) {
-      desc = desc + generateRandomWord(currentAlphabet) + " ";
+      join.add(generateRandomWord(currentAlphabet) + " ");
     }
+    String desc = join.toString();
+
     dialect.setPropertyValue("dc:description", desc);
     session.save();
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
@@ -173,11 +176,12 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   private String generateRandomWord(String[] alphabet) {
 
-    String word = "";
+    StringBuilder bld = new StringBuilder();
     for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
-      word = word + alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)];
+      bld.append(alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)]);
     }
-    return word;
+
+    return bld.toString();
   }
 
 }
