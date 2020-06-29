@@ -245,11 +245,16 @@ export class PageToolbar extends Component {
                       {documentEnabled || documentPublished ? (
                           <>
                             {dialectName}
-                            <FVLabel transKey="team_only" defaultStr="Team Only"
+                            <FVLabel transKey="members" defaultStr="Members"
                                      transform="first"/>
                           </>
                       ) : (
-                        <FVLabel transKey="enable" defaultStr="Enable" transform="first" />
+                          <>
+                            {dialectName}
+                            <FVLabel transKey="team_only" defaultStr="Team Only"
+                                     transform="first"/>
+                          </>
+
                       )}
                     </Typography>
                   }
@@ -492,7 +497,8 @@ export class PageToolbar extends Component {
                       <FVLabel transKey="public" defaultStr="Public"
                                transform="first"/>
                   ) : (
-                    <FVLabel transKey="publish" defaultStr="Publish" transform="first" />
+                      <FVLabel transKey="private" defaultStr="Private"
+                               transform="first"/>
                   )}
                 </Typography>
               }
