@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import selectn from 'selectn'
 import PropTypes from 'prop-types'
-import { List } from 'immutable'
+import {List} from 'immutable'
+import useRoute from 'DataSource/useRoute'
+import {getDialectClassname} from "../../pages/explore/dialect/helpers";
+
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
+  const {routeParams} = useRoute()
   useEffect(() => {
     setColumnClassNames(
-      props.columns.map((currentValue) => {
-        const name = selectn('name', currentValue)
-        const prefix = 'DictionaryList'
-        let className = ''
-        switch (name) {
+        props.columns.map((currentValue) => {
+          const name = selectn('name', currentValue)
+          const prefix = 'DictionaryList'
+          let className = ''
+          switch (name) {
           case 'title':
             className = `${prefix}__data ${prefix}__data--title `
             break
@@ -96,10 +100,11 @@ const DictionaryListLargeScreen = (props) => {
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
             >
               {props.columns.map((column, j) => {
+                const dialectName = routeParams.dialect_name
                 const mapDocumentStateToVisibility = {
-                  New: `Team Only`,
-                  Disabled: `Team Only`,
-                  Enabled: `Members Only`,
+                  New: `${dialectName} Team Only`,
+                  Disabled: `${dialectName} Team Only`,
+                  Enabled: `${dialectName} Members Only`,
                   Published: "Public"
                 }
 
