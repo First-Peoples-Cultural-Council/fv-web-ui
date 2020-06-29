@@ -67,8 +67,6 @@ function WordsListData(props) {
 
   const { searchNxqlQuery = '' } = computeSearchDialect
   //
-  // Prepare DialectId in state for nxql query
-  const [dialectId, setDialectId] = useState('')
 
   useEffect(() => {
     fetchData()
@@ -139,14 +137,14 @@ function WordsListData(props) {
     fetchListViewData()
   }
 
-  async function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
+  async function fetchListViewData({ pageIndex = 1, pageSize = 10, resetSearch = false } = {}) {
     let currentAppliedFilter = ''
 
-    if (searchNxqlQuery) {
+    if (searchNxqlQuery && !resetSearch) {
       currentAppliedFilter = ` AND ${searchNxqlQuery}`
     }
 
-    if (routeParams.category) {
+    if (routeParams.category && !resetSearch) {
       // Private
       if (routeParams.area === 'Workspaces') {
         currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}") &enrichment=category_children`
@@ -163,16 +161,8 @@ function WordsListData(props) {
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
 
-    // setDialectId
-    const doc = await ProviderHelpers.getEntry(computeDocument, dictionaryKey)
-    setDialectId(selectn('response.contextParameters.ancestry.dialect.uid', doc))
-
-    const nql = `${currentAppliedFilter}
-        &currentPageIndex=${pageIndex - 1}
-        &dialectId=${dialectId}
-        &pageSize=${pageSize}
-        &sortOrder=${sortOrder}
-        &sortBy=${sortBy}${
+    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${
       routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
     }`
 
@@ -367,6 +357,7 @@ function WordsListData(props) {
     } else {
       // When facets change, pagination should be reset.
       // In these pages (words/phrase), list views are controlled via URL
+      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize, resetSearch: true })
       resetURLPagination()
     }
   }
