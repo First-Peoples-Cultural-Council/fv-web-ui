@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Libraries
-import React, { Suspense } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List } from 'immutable'
@@ -173,20 +173,16 @@ function WordsListPresentation(props) {
   }
 
   return (
-    <>
+    <div>
       <h1 className="DialectPageTitle">{props.pageTitle}</h1>
       <div className={props.dialectClassName}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <SearchDialect
-            handleSearch={props.handleSearch}
-            resetSearch={props.resetSearch}
-            searchUi={props.searchUi}
-            searchDialectDataType={props.searchDialectDataType}
-          />
-        </Suspense>
-
+        <SearchDialect
+          handleSearch={props.handleSearch}
+          resetSearch={props.resetSearch}
+          searchUi={props.searchUi}
+          searchDialectDataType={props.searchDialectDataType}
+        />
         {generateListButtons(listButtonArg)}
-
         <Media
           queries={{
             small: '(max-width: 850px)',
@@ -201,7 +197,6 @@ function WordsListPresentation(props) {
             if (noResults) {
               return noResults
             }
-
             // =========================================
             // User specified view states
             // =========================================
@@ -217,19 +212,16 @@ function WordsListPresentation(props) {
               }
               return flashCards
             }
-
             //  Small Screen Specified: by view mode button or prop
             // -----------------------------------------
             if (props.dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
               return getListSmallScreen(getListSmallScreenArg)
             }
-
             //  Large Screen Specified: by prop
             // -----------------------------------------
             if (props.dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
               return getListLargeScreen(getListLargeScreenArg)
             }
-
             // =========================================
             // Responsive states
             // =========================================
@@ -239,19 +231,16 @@ function WordsListPresentation(props) {
             // NOTE: `matches.print` forces Chrome to print the large view for both small & large views (slightly better)
             // NOTE: But, with `matches.print` in place the only way to print the small view on Chrome is to click "Compact view"
             // NOTE: ie: small view doesn't print if it's dynamically displayed via a small screen
-
             // NOTE: Firefox behaves a bit better in that it dynamically chooses the view depending on the screen size
             // NOTE: Firefox ignores `matches.print`
             if (matches.print) {
               return getListLargeScreen(getListLargeScreenArg)
             }
-
             // Small screen: list view
             // -----------------------------------------
             if (matches.small) {
               return getListSmallScreen(getListSmallScreenArg)
             }
-
             // Large screen: list view
             // -----------------------------------------
             if (matches.medium) {
@@ -262,7 +251,7 @@ function WordsListPresentation(props) {
           }}
         </Media>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -312,14 +301,12 @@ function generateListButtons({
   if (hasExportDialect) {
     exportDialect = (
       <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ExportDialect
-            exportDialectColumns={exportDialectColumns}
-            exportDialectExportElement={exportDialectExportElement}
-            exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={exportDialectQuery}
-          />
-        </Suspense>
+        <ExportDialect
+          exportDialectColumns={exportDialectColumns}
+          exportDialectExportElement={exportDialectExportElement}
+          exportDialectLabel={exportDialectLabel}
+          exportDialectQuery={exportDialectQuery}
+        />
       </AuthorizationFilter>
     )
   }
