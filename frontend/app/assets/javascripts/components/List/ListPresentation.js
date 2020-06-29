@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import MaterialTable from 'material-table'
 import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
+import selectn from 'selectn'
 /**
  * @summary ListPresentation
  * @version 1.0.1
@@ -47,7 +48,8 @@ function ListPresentation({
   title,
 }) {
   const { theme } = useTheme()
-  const { tableHeader, row, rowAlternate } = theme.components?.List
+  const themeList = selectn('components.List', theme) || {}
+  const { tableHeader, row, rowAlternate } = themeList
   const defaultOptions = {
     actionsColumnIndex: 2,
     debounceInterval: 500,
