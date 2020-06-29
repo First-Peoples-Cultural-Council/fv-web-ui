@@ -53,7 +53,7 @@ const DictionaryList = React.lazy(() => import('views/components/Browsing/Dictio
 // Despite some duplication between Recorders & Contributors,
 // it does allow for flexibility on how we render the Recorders table.
 // ----------------------------------------
-function RecordersContainer(props) {
+function Recorders(props) {
   const { computeContributors, routeParams, search } = props
   const { dialect_path, pageSize, page, siteTheme } = routeParams
   const { sortOrder, sortBy } = search
@@ -250,7 +250,7 @@ function RecordersContainer(props) {
 }
 
 const { func, object } = PropTypes
-RecordersContainer.propTypes = {
+Recorders.propTypes = {
   // REDUX: reducers/state
   routeParams: object.isRequired,
   computeContributors: object.isRequired,
@@ -260,7 +260,7 @@ RecordersContainer.propTypes = {
   fetchContributors: func.isRequired,
   pushWindowPath: func.isRequired,
 }
-RecordersContainer.defaultProps = {
+Recorders.defaultProps = {
   fetchContributors: () => {},
   pushWindowPath: () => {},
 }
@@ -287,4 +287,4 @@ const mapDispatchToProps = {
   setRouteParams,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecordersContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(Recorders)
