@@ -185,6 +185,7 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     AdminCreateUserRequest request = new AdminCreateUserRequest();
     request.setUserPoolId(this.userPool);
     request.setUsername(username);
+    request.setMessageAction("SUPPRESS");
     request.setTemporaryPassword(password);
 
 

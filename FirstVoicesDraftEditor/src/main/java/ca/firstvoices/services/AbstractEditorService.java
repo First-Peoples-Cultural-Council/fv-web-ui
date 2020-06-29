@@ -26,7 +26,7 @@ public abstract class AbstractEditorService {
 
   protected DocumentModel getDialect(DocumentModel doc) {
     DocumentModel parent = doc;
-    while (parent != null && !"Root".equals(parent.getType()) && !"FVDialect"
+    while (parent != null && !"Root".equals(parent.getType()) && !FV_DIALECT
         .equals(parent.getType())) {
       parent = doc.getCoreSession().getDocument(parent.getParentRef());
     }

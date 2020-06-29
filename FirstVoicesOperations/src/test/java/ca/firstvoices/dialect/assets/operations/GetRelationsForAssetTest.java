@@ -1,5 +1,8 @@
 package ca.firstvoices.dialect.assets.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +29,7 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
     String[] words = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a",};
 
-    List<DocumentModel> wordDocs = createWordsorPhrases(words, "FVWord");
+    List<DocumentModel> wordDocs = createWordsorPhrases(words, FV_WORD);
 
     String[] propertyValue = new String[]{childCategory.getId()};
 
@@ -49,8 +52,8 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
     String[] phrases = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a",};
 
-    List<DocumentModel> phraseDocs = createWordsorPhrases(phrases, "FVPhrase");
-    List<DocumentModel> wordDocs = createWordsorPhrases(phrases, "FVWord");
+    List<DocumentModel> phraseDocs = createWordsorPhrases(phrases, FV_PHRASE);
+    List<DocumentModel> wordDocs = createWordsorPhrases(phrases, FV_WORD);
 
     String[] propertyValue = new String[]{childCategory.getId()};
 
@@ -69,7 +72,7 @@ public class GetRelationsForAssetTest extends AbstractFirstVoicesOperationsTest 
 
     Map<String, String> parameters = new HashMap<>();
 
-    parameters.put("type", "FVWord");
+    parameters.put("type", FV_WORD);
 
     DocumentModelList assets = (DocumentModelList) automationService
         .run(ctx, GetRelationsForAsset.ID, parameters);

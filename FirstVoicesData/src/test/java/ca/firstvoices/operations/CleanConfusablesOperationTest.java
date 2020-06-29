@@ -20,6 +20,8 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -67,8 +69,8 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
         "When it rains " + "it pours.", "You cannot teach an old dog new tricks",
         "Zeal without knowledge is fire without light."};
 
-    createWordsorPhrases(orderedWords, "FVWord");
-    createWordsorPhrases(orderedPhrases, "FVPhrase");
+    createWordsorPhrases(orderedWords, FV_WORD);
+    createWordsorPhrases(orderedPhrases, FV_PHRASE);
 
     JSONBlob blob = (JSONBlob) automationService.run(ctx, CleanConfusablesOperation.ID);
 
@@ -95,8 +97,8 @@ public class CleanConfusablesOperationTest extends AbstractFirstVoicesDataTest {
     String[] orderedPhrases = {"A way out", "Brandishing a weapon", "Come on lets go",
         "The quick brown fox jumps over the lazy dog"};
 
-    createWordsorPhrases(orderedWords, "FVWord");
-    createWordsorPhrases(orderedPhrases, "FVPhrase");
+    createWordsorPhrases(orderedWords, FV_WORD);
+    createWordsorPhrases(orderedPhrases, FV_PHRASE);
     txFeature.nextTransaction();
 
     BulkService bulkService = Framework.getService(BulkService.class);

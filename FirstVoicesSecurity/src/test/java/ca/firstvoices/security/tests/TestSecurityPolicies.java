@@ -20,6 +20,13 @@
 
 package ca.firstvoices.security.tests;
 
+import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -104,9 +111,9 @@ public class TestSecurityPolicies extends AbstractFVTest {
     session.createDocument(session.createDocumentModel("/FV/", "Workspaces", "WorkspaceRoot"));
     session.createDocument(session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data", "Family", "FVLanguageFamily"));
+        session.createDocumentModel("/FV/Workspaces/Data", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", "FVLanguage"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", FV_LANGUAGE));
 
     session.save();
 
@@ -131,23 +138,23 @@ public class TestSecurityPolicies extends AbstractFVTest {
     setACL(sectionsRoot, "members", SecurityConstants.READ);
 
     dialectSencoten = session.createDocument(session
-        .createDocumentModel("/FV/Workspaces/Data/Family/Language", "Senćoŧen", "FVDialect"));
+        .createDocumentModel("/FV/Workspaces/Data/Family/Language", "Senćoŧen", FV_DIALECT));
     dialectSencoten = session.saveDocument(dialectSencoten);
 
     dialectSencotenDictionary = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Senćoŧen", "Dictionary",
-            "FVDictionary"));
+            FV_DICTIONARY));
     dialectSencotenDictionary = session.saveDocument(dialectSencotenDictionary);
 
     assertNotNull(dialectSencoten);
 
     dialectDene = session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dene", "FVDialect"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dene", FV_DIALECT));
     dialectDene = session.saveDocument(dialectDene);
 
     dialectDeneDictionary = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dene", "Dictionary",
-            "FVDictionary"));
+            FV_DICTIONARY));
     dialectDeneDictionary = session.saveDocument(dialectDeneDictionary);
 
     assertNotNull(dialectDene);
@@ -327,13 +334,13 @@ public class TestSecurityPolicies extends AbstractFVTest {
             SecurityConstants.READ));
 
     // Members SHOULD NOT have READ access in the DISABLED state
-    dialectDene.followTransition("Disable");
+    dialectDene.followTransition(DISABLE_TRANSITION);
     assertFalse(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));
 
     // Members SHOULD have READ access in the ENABLED state
-    dialectDene.followTransition("Enable");
+    dialectDene.followTransition(ENABLE_TRANSITION);
     assertTrue(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));
@@ -344,7 +351,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
             SecurityConstants.READ));
 
     // Members SHOULD have READ access in the PUBLISHED state
-    dialectDene.followTransition("Publish");
+    dialectDene.followTransition(PUBLISH_TRANSITION);
     assertTrue(session
         .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
             SecurityConstants.READ));

@@ -112,7 +112,6 @@
     <dependency>
       <artifactId>FirstVoicesData</artifactId>
       <groupId>ca.firstvoices</groupId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>

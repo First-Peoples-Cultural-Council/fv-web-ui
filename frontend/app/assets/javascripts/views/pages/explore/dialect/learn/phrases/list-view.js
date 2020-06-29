@@ -52,66 +52,7 @@ import {
 /**
  * List view for phrases
  */
-
-const { array, bool, func, number, object, string } = PropTypes
 export class PhrasesListView extends DataListView {
-  static propTypes = {
-    action: func,
-    data: string,
-    controlViaURL: bool,
-    DEFAULT_PAGE: number,
-    DEFAULT_PAGE_SIZE: number,
-    DEFAULT_SORT_COL: string,
-    DEFAULT_SORT_TYPE: string,
-    dialect: object,
-    disableClickItem: bool,
-    // DISABLED_SORT_COLS: array,
-    ENABLED_COLS: array,
-    filter: object,
-    flashcard: bool,
-    flashcardTitle: string,
-    gridCols: number,
-    gridListView: bool,
-    parentID: string,
-    dialectID: string,
-    onPagePropertiesChange: func,
-    pageProperties: object,
-    routeParams: object.isRequired,
-    // Export
-    hasExportDialect: bool,
-    exportDialectExportElement: string,
-    exportDialectColumns: string,
-    exportDialectLabel: string,
-    exportDialectQuery: string,
-    // REDUX: reducers/state
-    computeDialect2: object.isRequired,
-    computeLogin: object.isRequired,
-    computePhrases: object.isRequired,
-    properties: object.isRequired,
-    splitWindowPath: array.isRequired,
-    windowPath: string.isRequired,
-    // REDUX: actions/dispatch/func
-    fetchDialect2: func.isRequired,
-    fetchPhrases: func.isRequired,
-    pushWindowPath: func.isRequired,
-  }
-  static defaultProps = {
-    disableClickItem: true,
-    DEFAULT_PAGE: 1,
-    DEFAULT_PAGE_SIZE: 10,
-    DEFAULT_LANGUAGE: 'english',
-    DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
-    DEFAULT_SORT_TYPE: 'asc',
-    ENABLED_COLS: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
-    dialect: null,
-    filter: new Map(),
-    gridListView: false,
-    gridCols: 4,
-    controlViaURL: false,
-    flashcard: false,
-    flashcardTitle: '',
-  }
-
   constructor(props, context) {
     super(props, context)
 
@@ -121,6 +62,7 @@ export class PhrasesListView extends DataListView {
     const searchObj = getSearchObject()
 
     this.state = {
+      phrasesPath: props.parentID ? props.parentID : `${props.routeParams.dialect_path}/Dictionary`,
       columns: [
         {
           name: 'title',
@@ -282,25 +224,45 @@ export class PhrasesListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
-      '_onEntryNavigateRequest',
-      '_handleRefetch',
-      '_handleSortChange',
-      '_handleColumnOrderChange',
-      '_getPathOrParentID',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
+      (method) => (this[method] = this[method].bind(this))
+    )
   }
 
   render() {
+    const {
+      dialect,
+      dictionaryListClickHandlerViewMode,
+      dictionaryListViewMode,
+      exportDialectColumns,
+      exportDialectExportElement,
+      exportDialectLabel,
+      exportDialectQuery,
+      flashcard,
+      flashcardTitle,
+      gridCols,
+      gridListView,
+      gridViewProps,
+      handleSearch,
+      hasSearch,
+      hasSorting,
+      hasViewModeButtons,
+      navigationRouteSearch,
+      resetSearch,
+      rowClickHandler,
+      searchByMode,
+      searchUi,
+    } = this.props
+
     const computeEntities = Immutable.fromJS([
       {
-        id: this._getPathOrParentID(this.props),
+        id: this.state.phrasesPath,
         entity: this.props.computePhrases,
       },
     ])
 
     // If dialect not supplied, promise wrapper will need to wait for compute dialect
-    if (!this.props.dialect) {
+    if (!dialect) {
       computeEntities.push(
         new Map({
           id: this.props.routeParams.dialect_path,
@@ -309,9 +271,8 @@ export class PhrasesListView extends DataListView {
       )
     }
 
-    const computePhrases = ProviderHelpers.getEntry(this.props.computePhrases, this._getPathOrParentID(this.props))
-    const computeDialect2 = this.props.dialect || this.getDialect()
-
+    const computePhrases = ProviderHelpers.getEntry(this.props.computePhrases, this.state.phrasesPath)
+    const computeDialect2 = dialect || this.getDialect()
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computePhrases) && (
@@ -324,18 +285,19 @@ export class PhrasesListView extends DataListView {
 
             // Export
             hasExportDialect
-            exportDialectExportElement={this.props.exportDialectExportElement || 'FVPhrase'}
-            exportDialectLabel={this.props.exportDialectLabel}
-            exportDialectQuery={this.props.exportDialectQuery}
-            exportDialectColumns={this.props.exportDialectColumns}
+            exportDialectExportElement={exportDialectExportElement || 'FVPhrase'}
+            exportDialectLabel={exportDialectLabel}
+            exportDialectQuery={exportDialectQuery}
+            exportDialectColumns={exportDialectColumns}
             //
             columns={this.state.columns}
             data={computePhrases}
             dialect={selectn('response', computeDialect2)}
-            flashcard={this.props.flashcard}
-            flashcardTitle={this.props.flashcardTitle}
-            gridCols={this.props.gridCols}
-            gridListView={this.props.gridListView}
+            flashcard={flashcard}
+            flashcardTitle={flashcardTitle}
+            gridCols={gridCols}
+            gridListView={gridListView}
+            gridViewProps={gridViewProps}
             page={this.state.pageInfo.page}
             pageSize={this.state.pageInfo.pageSize}
             // refetcher: this._handleRefetch,
@@ -347,9 +309,8 @@ export class PhrasesListView extends DataListView {
                 pageSize,
                 preserveSearch: true,
                 // 1st: redux values, 2nd: url search query, 3rd: defaults
-                sortOrder:
-                  this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
-                sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+                sortOrder: navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
+                sortBy: navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
               })
             }}
             sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
@@ -373,20 +334,20 @@ export class PhrasesListView extends DataListView {
               })
             }}
             type={'FVPhrase'}
-            dictionaryListClickHandlerViewMode={this.props.dictionaryListClickHandlerViewMode}
-            dictionaryListViewMode={this.props.dictionaryListViewMode}
+            dictionaryListClickHandlerViewMode={dictionaryListClickHandlerViewMode}
+            dictionaryListViewMode={dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
             // SEARCH:
-            handleSearch={this.props.handleSearch}
-            hasSearch={this.props.hasSearch}
+            handleSearch={handleSearch}
+            hasSearch={hasSearch}
             searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-            resetSearch={this.props.resetSearch}
-            searchByMode={this.props.searchByMode}
-            searchUi={this.props.searchUi}
+            resetSearch={resetSearch}
+            searchByMode={searchByMode}
+            searchUi={searchUi}
             // List view
-            hasViewModeButtons={this.props.hasViewModeButtons}
-            hasSorting={this.props.hasSorting}
-            rowClickHandler={this.props.rowClickHandler}
+            hasViewModeButtons={hasViewModeButtons}
+            hasSorting={hasSorting}
+            rowClickHandler={rowClickHandler}
           />
         )}
       </PromiseWrapper>
@@ -443,14 +404,10 @@ export class PhrasesListView extends DataListView {
           nql,
         },
         () => {
-          props.fetchPhrases(this._getPathOrParentID(props), nql)
+          props.fetchPhrases(this.state.phrasesPath, nql)
         }
       )
     }
-  }
-
-  _getPathOrParentID(newProps) {
-    return newProps.parentID ? newProps.parentID : newProps.routeParams.dialect_path + '/Dictionary'
   }
 
   _onEntryNavigateRequest(item) {
@@ -464,6 +421,65 @@ export class PhrasesListView extends DataListView {
       )
     }
   }
+}
+
+// PROPTYPES
+const { array, bool, func, number, object, string } = PropTypes
+PhrasesListView.propTypes = {
+  action: func,
+  data: string,
+  controlViaURL: bool,
+  DEFAULT_PAGE: number,
+  DEFAULT_PAGE_SIZE: number,
+  DEFAULT_SORT_COL: string,
+  DEFAULT_SORT_TYPE: string,
+  dialect: object,
+  disableClickItem: bool,
+  // DISABLED_SORT_COLS: array,
+  ENABLED_COLS: array,
+  filter: object,
+  flashcard: bool,
+  flashcardTitle: string,
+  gridCols: number,
+  gridListView: bool,
+  parentID: string,
+  dialectID: string,
+  onPagePropertiesChange: func,
+  pageProperties: object,
+  routeParams: object.isRequired,
+  // Export
+  hasExportDialect: bool,
+  exportDialectExportElement: string,
+  exportDialectColumns: string,
+  exportDialectLabel: string,
+  exportDialectQuery: string,
+  // REDUX: reducers/state
+  computeDialect2: object.isRequired,
+  computeLogin: object.isRequired,
+  computePhrases: object.isRequired,
+  properties: object.isRequired,
+  splitWindowPath: array.isRequired,
+  windowPath: string.isRequired,
+  // REDUX: actions/dispatch/func
+  fetchDialect2: func.isRequired,
+  fetchPhrases: func.isRequired,
+  pushWindowPath: func.isRequired,
+}
+PhrasesListView.defaultProps = {
+  disableClickItem: true,
+  DEFAULT_PAGE: 1,
+  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_LANGUAGE: 'english',
+  DEFAULT_SORT_COL: 'fv:custom_order', // NOTE: Used when paging
+  DEFAULT_SORT_TYPE: 'asc',
+  ENABLED_COLS: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
+  dialect: null,
+  filter: new Map(),
+  gridListView: false,
+  gridCols: 4,
+  controlViaURL: false,
+  flashcard: false,
+  flashcardTitle: '',
 }
 
 // REDUX: reducers/state

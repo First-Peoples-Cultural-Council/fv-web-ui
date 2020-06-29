@@ -1,5 +1,7 @@
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
@@ -65,7 +67,7 @@ public class MigrateCategoriesStatus {
 
     protectOperation();
 
-    if (!dialect.getType().equals("FVDialect")) {
+    if (!dialect.getType().equals(FV_DIALECT)) {
       throw new OperationException("Document type must be FVDialect");
     }
 

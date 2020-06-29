@@ -20,6 +20,8 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import ca.firstvoices.services.AddConfusablesService;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -53,7 +55,7 @@ public class AddConfusablesOperation extends AbstractFirstVoicesDataOperation {
 
     CoreSession session = ctx.getCoreSession();
 
-    if (dialect.getType().equals("FVDialect")) {
+    if (dialect.getType().equals(FV_DIALECT)) {
       DocumentModel alphabet = getAlphabet(session, dialect);
       alphabet.setPropertyValue("fv-alphabet:update_confusables_required", true);
       session.saveDocument(alphabet);

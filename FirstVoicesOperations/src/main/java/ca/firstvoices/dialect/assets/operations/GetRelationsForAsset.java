@@ -1,5 +1,7 @@
 package ca.firstvoices.dialect.assets.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.dialect.assets.services.RelationsService;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -28,7 +30,7 @@ public class GetRelationsForAsset {
 
   public static final String ID = "Document.GetRelationsForAsset";
 
-  @Param(name = "type", values = {"FVWord"}, required = false)
+  @Param(name = "type", values = {FV_WORD}, required = false)
   protected String type;
 
   @OperationMethod

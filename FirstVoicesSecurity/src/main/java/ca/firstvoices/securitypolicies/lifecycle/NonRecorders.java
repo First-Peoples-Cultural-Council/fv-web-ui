@@ -20,6 +20,9 @@
 
 package ca.firstvoices.securitypolicies.lifecycle;
 
+import static ca.firstvoices.lifecycle.Constants.DISABLED_STATE;
+import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
+
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -64,11 +67,10 @@ public class NonRecorders extends AbstractSecurityPolicy {
       if (!additionalPrincipalsList.contains("recorders") && !additionalPrincipalsList
           .contains("language_administrators")) {
         String docLifeCycle = doc.getLifeCycleState();
-        if (docLifeCycle != null) {
-          if (docLifeCycle.equals("New") || docLifeCycle.equals("Disabled")) {
-            log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
-            return Access.DENY;
-          }
+        if (docLifeCycle != null && (docLifeCycle.equals(NEW_STATE) || docLifeCycle
+            .equals(DISABLED_STATE))) {
+          log.debug("Access denied because the getLifeCycleState is " + docLifeCycle);
+          return Access.DENY;
         }
       }
     }
@@ -93,9 +95,9 @@ public class NonRecorders extends AbstractSecurityPolicy {
   public static class NotDisabledAndNotNewTransformer implements SQLQuery.Transformer {
 
     public static final Predicate NOT_DISABLED = new Predicate(
-        new Reference(NXQL.ECM_LIFECYCLESTATE), Operator.NOTEQ, new StringLiteral("Disabled"));
+        new Reference(NXQL.ECM_LIFECYCLESTATE), Operator.NOTEQ, new StringLiteral(DISABLED_STATE));
     public static final Predicate NOT_NEW = new Predicate(new Reference(NXQL.ECM_LIFECYCLESTATE),
-        Operator.NOTEQ, new StringLiteral("New"));
+        Operator.NOTEQ, new StringLiteral(NEW_STATE));
     private static final long serialVersionUID = 1L;
 
     @Override

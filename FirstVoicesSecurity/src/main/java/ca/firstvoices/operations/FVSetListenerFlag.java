@@ -20,6 +20,8 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.lifecycle.Constants.ENABLED_STATE;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -53,7 +55,7 @@ public class FVSetListenerFlag {
 
   @OperationMethod
   public void run() {
-    eventServiceAdmin.setListenerEnabledFlag(listenerName, state.equals("Enabled"));
+    eventServiceAdmin.setListenerEnabledFlag(listenerName, state.equals(ENABLED_STATE));
   }
 
 }

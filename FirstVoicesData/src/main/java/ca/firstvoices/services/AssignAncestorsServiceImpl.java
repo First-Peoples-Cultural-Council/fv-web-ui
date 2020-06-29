@@ -20,6 +20,10 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
@@ -28,9 +32,9 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
   public void assignAncestors(CoreSession session, DocumentModel currentDoc) {
 
     // Get the parent document of each type for the current document using the helper method
-    DocumentModel dialect = getParentDoc(session, currentDoc, "FVDialect");
-    DocumentModel language = getParentDoc(session, currentDoc, "FVLanguage");
-    DocumentModel languageFamily = getParentDoc(session, currentDoc, "FVLanguageFamily");
+    DocumentModel dialect = getParentDoc(session, currentDoc, FV_DIALECT);
+    DocumentModel language = getParentDoc(session, currentDoc, FV_LANGUAGE);
+    DocumentModel languageFamily = getParentDoc(session, currentDoc, FV_LANGUAGE_FAMILY);
 
     // Set the property fva:family of the new document to be the
     // UUID of the parent FVLanguageFamily document

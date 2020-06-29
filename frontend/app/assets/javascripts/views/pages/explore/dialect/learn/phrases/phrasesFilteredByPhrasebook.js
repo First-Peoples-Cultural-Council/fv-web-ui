@@ -76,9 +76,9 @@ import { WORKSPACES } from 'common/Constants'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
-// PhrasesFilteredByCategoryContainer
+// phrasesFilteredByPhrasebook
 // ====================================================
-export class PhrasesFilteredByCategoryContainer extends Component {
+export class phrasesFilteredByPhrasebook extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
 
@@ -99,12 +99,17 @@ export class PhrasesFilteredByCategoryContainer extends Component {
     const { routeParams, computePortal, computeDocument } = this.props
 
     // Portal
-    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, this.props.fetchPortal, computePortal)
     // Document
-    ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Dictionary`, this.props.fetchDocument, computeDocument)
+    await ProviderHelpers.fetchIfMissing(
+      `${routeParams.dialect_path}/Dictionary`,
+      this.props.fetchDocument,
+      computeDocument
+    )
 
-    // PHRASES
-    // ---------------------------------------------
+    // Phrases
+    // NOTE: need to wait for computeDocument to finish before calling fetchListViewData
+    // If we don't then within fetchListViewData dialectUid will be undefined and useIdOrPathFallback will use the path
     this.fetchListViewData()
   }
 
@@ -144,17 +149,11 @@ export class PhrasesFilteredByCategoryContainer extends Component {
     this.state = {
       computeEntities,
       filterInfo,
-      isKidsTheme: routeParams.siteTheme === 'kids',
     }
   }
 
   render() {
-    const {
-      computeEntities,
-      filterInfo,
-      // flashcardMode, // TODO ?
-      isKidsTheme,
-    } = this.state
+    const { computeEntities } = this.state
 
     const {
       computeDialect2,
@@ -235,25 +234,6 @@ export class PhrasesFilteredByCategoryContainer extends Component {
         />
       </Suspense>
     ) : null
-
-    // Render kids view
-    if (isKidsTheme) {
-      const clonePhraseListView = phraseListView
-        ? React.cloneElement(phraseListView, {
-            DEFAULT_PAGE_SIZE: 8,
-            disablePageSize: true,
-            filter: filterInfo.setIn(['currentAppliedFilter', 'kids'], ' AND fv:available_in_childrens_archive=1'),
-            gridListView: true,
-          })
-        : null
-      return (
-        <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="row" style={{ marginTop: '15px' }}>
-            <div className="col-xs-12 col-md-8 col-md-offset-2">{clonePhraseListView}</div>
-          </div>
-        </PromiseWrapper>
-      )
-    }
 
     const dialectClassName = getDialectClassname(computedPortal)
     return (
@@ -404,7 +384,6 @@ export class PhrasesFilteredByCategoryContainer extends Component {
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || this.DEFAULT_SORT_COL
 
     const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-    const uid = useIdOrPathFallback({ id: selectn('response.uid', extractComputeDocument), routeParams })
     const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
 
     let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
@@ -418,6 +397,7 @@ export class PhrasesFilteredByCategoryContainer extends Component {
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`
     }
 
+    const uid = useIdOrPathFallback({ id: selectn('response.uid', extractComputeDocument), routeParams })
     this.props.fetchPhrases(uid, nql)
   }
 
@@ -622,7 +602,7 @@ export class PhrasesFilteredByCategoryContainer extends Component {
 // PROPTYPES
 // -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
-PhrasesFilteredByCategoryContainer.propTypes = {
+phrasesFilteredByPhrasebook.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
@@ -631,7 +611,7 @@ PhrasesFilteredByCategoryContainer.propTypes = {
   computeLogin: object.isRequired,
   computePhrases: object.isRequired,
   computePortal: object.isRequired,
-  computeSearchDialect: object,
+  computeSearchDialect: object.isRequired,
   listView: object.isRequired,
   navigationRouteSearch: object.isRequired,
   properties: object.isRequired,
@@ -648,21 +628,21 @@ PhrasesFilteredByCategoryContainer.propTypes = {
   updatePageProperties: func.isRequired,
   searchDialectReset: func.isRequired,
 }
-PhrasesFilteredByCategoryContainer.defaultProps = {
-  computeSearchDialect: {},
+phrasesFilteredByPhrasebook.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
 }
 
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, windowPath } = state
+  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
 
   const { computeDialect2 } = fvDialect
-  const { computePhrases } = fvPhrase
-  const { computePortal } = fvPortal
   const { computeDocument } = document
   const { computeLogin } = nuxeo
+  const { computePhrases } = fvPhrase
+  const { computePortal } = fvPortal
+  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
 
@@ -672,10 +652,11 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePhrases,
     computePortal,
+    computeSearchDialect,
     listView,
     navigationRouteSearch: route.search,
-    routeParams: route.routeParams,
     properties,
+    routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,
   }
@@ -693,4 +674,4 @@ const mapDispatchToProps = {
   searchDialectReset,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategoryContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(phrasesFilteredByPhrasebook)
