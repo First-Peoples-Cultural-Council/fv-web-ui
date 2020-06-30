@@ -257,6 +257,13 @@ export const dictionaryListSmallScreenColumnDataTemplate = {
   custom: 3,
 }
 
+const mapDocumentStateToVisibility = {
+  New: `Team Only`,
+  Disabled: `Team Only`,
+  Enabled: `Members Only`,
+  Published: "Public"
+}
+
 // dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren
 // --------------------------------------------------------------
 export const dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren = ({
@@ -319,8 +326,11 @@ export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
         )}
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
-          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+          <div
+              className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
+          <div className="DictionaryListSmallScreen__groupData">
+            <strong>State: </strong>{mapDocumentStateToVisibility[templateData.state.props.children[2]]}
+          </div>
         </div>
       </div>
 
@@ -353,8 +363,11 @@ export const dictionaryListSmallScreenTemplatePhrases = ({ templateData }) => {
         )}
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
-          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+          <div
+              className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
+          <div className="DictionaryListSmallScreen__groupData">
+            <strong>State: </strong>{mapDocumentStateToVisibility[templateData.state.props.children[2]]}
+          </div>
         </div>
       </div>
 
