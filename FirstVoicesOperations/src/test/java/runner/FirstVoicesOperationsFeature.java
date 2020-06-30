@@ -7,15 +7,12 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
-import org.nuxeo.runtime.mockito.MockitoFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
-import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
-import org.nuxeo.runtime.test.runner.TargetExtensions;
 
-@Features({PlatformFeature.class, AutomationFeature.class, RepositoryElasticSearchFeature.class,
-    DirectoryFeature.class, MockitoFeature.class})
+@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, DirectoryFeature.class,
+    PlatformFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy("org.nuxeo.binary.metadata")
 @Deploy("org.nuxeo.ecm.platform.url.core")
@@ -50,8 +47,12 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-services.xml")
+
+@Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml")
+
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-services.xml")
+@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 
 @Deploy("org.nuxeo.ecm.platform.routing.core")
 
@@ -64,7 +65,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.usermanager")
 @Deploy("org.nuxeo.ecm.platform.query.api")
 @Deploy("org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml")
-@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 
 @Deploy("org.nuxeo.ecm.platform.comment.api")
 @Deploy("org.nuxeo.ecm.platform.query.api")
@@ -72,15 +72,15 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",
-    "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting",
+    "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting", "FirstVoicesData",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
         + ".ProxyPublisherListener.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
+
 @Deploy("FirstVoicesData")
-@PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesOperationsFeature implements RunnerFeature {
 
 }
