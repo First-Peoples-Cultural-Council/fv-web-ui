@@ -106,7 +106,7 @@ public abstract class AbstractFirstVoicesOperationsTest {
   protected NuxeoPrincipal administrator;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     assertNotNull("Should have a valid session", session);
     createSetup(session);
   }

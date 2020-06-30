@@ -52,7 +52,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-services.xml")
-//@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 
 @Deploy("org.nuxeo.ecm.platform.routing.core")
 
@@ -80,6 +79,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
         + ".ProxyPublisherListener.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
 
+@Deploy("FirstVoicesData")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesOperationsFeature implements RunnerFeature {
 
