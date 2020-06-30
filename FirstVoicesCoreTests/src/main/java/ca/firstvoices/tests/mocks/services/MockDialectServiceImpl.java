@@ -108,8 +108,14 @@ public class MockDialectServiceImpl implements MockDialectService {
     // See other services, operations and InitialDatabaseSetup for inspiration
     // Feel free to create other services, utils and methods as needed
     // for reusability (for example to create a word, etc.)
+    DocumentModel dialect = generateEmptyDialect(session, name);
+    String desc = "This is a generated test dialect for demo and cypress test purposes.";
 
-    return generateEmptyDialect(session, name);
+    dialect.setPropertyValue("dc:description", desc);
+    session.save();
+    generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
+
+    return dialect;
 
   }
 

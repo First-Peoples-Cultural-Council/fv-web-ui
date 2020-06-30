@@ -18,8 +18,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
 
   @Test
-  public void generateEmptyDemoDialect() throws OperationException {
-
+  public void generateDemoDialect() throws OperationException {
     params = new HashMap<>();
     params.put("randomize", "false");
     params.put("maxEntries", "50");
@@ -28,14 +27,16 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     OperationContext ctx = new OperationContext(session);
 
     DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
+    String s = (String) dialect.getPropertyValue("dc:description");
+    Assert.assertEquals("This is a generated test dialect for demo and cypress test purposes.", s);
 
     Assert.assertTrue(
         session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
-    Assert.assertEquals(0, session.query("SELECT * from FVWord, FVPhrase").size());
+    Assert.assertEquals(26, session.query("SELECT * from FVCharacter").size());
   }
 
   @Test
-  public void generateEmptyRandomDialect() throws OperationException {
+  public void generateRandomDialect() throws OperationException {
 
     params = new HashMap<>();
     params.put("randomize", "true");
