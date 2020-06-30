@@ -5,14 +5,14 @@ import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.elasticsearch.test.RepositoryElasticSearchFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.RunnerFeature;
+import org.nuxeo.runtime.test.runner.TargetExtensions;
 
-@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, DirectoryFeature.class,
-    PlatformFeature.class})
+@Features({AutomationFeature.class, RepositoryElasticSearchFeature.class, DirectoryFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy("org.nuxeo.binary.metadata")
 @Deploy("org.nuxeo.ecm.platform.url.core")
@@ -52,7 +52,7 @@ import org.nuxeo.runtime.test.runner.RunnerFeature;
 
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-services.xml")
-@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
+//@Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 
 @Deploy("org.nuxeo.ecm.platform.routing.core")
 
@@ -80,7 +80,7 @@ import org.nuxeo.runtime.test.runner.RunnerFeature;
         + ".ProxyPublisherListener.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml"})
 
-@Deploy("FirstVoicesData")
+@PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesOperationsFeature implements RunnerFeature {
 
 }
