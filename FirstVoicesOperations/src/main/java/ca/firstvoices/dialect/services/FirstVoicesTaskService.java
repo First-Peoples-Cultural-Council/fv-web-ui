@@ -9,12 +9,12 @@ import org.nuxeo.ecm.platform.task.Task;
 /**
  * @author david
  */
-public interface ApproveRejectTaskService {
+public interface FirstVoicesTaskService {
 
-  DocumentModel approveOrRejectTask(OperationContext ctx, CoreSession session, Task task,
-      String commentInput) throws OperationException;
+  DocumentModel addCommentToTask(CoreSession session, Task task, String commentInput)
+      throws OperationException;
 
-  DocumentModel completeTask(OperationContext ctx, Task task, String status)
+  DocumentModel updateTaskStatus(OperationContext ctx, Task task, String status)
       throws OperationException;
 
 }

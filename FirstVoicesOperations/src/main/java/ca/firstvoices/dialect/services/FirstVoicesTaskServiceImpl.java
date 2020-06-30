@@ -18,30 +18,28 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author david
  */
-public class ApproveRejectTaskServiceImpl implements ApproveRejectTaskService {
+public class FirstVoicesTaskServiceImpl implements FirstVoicesTaskService {
 
   @Override
-  public DocumentModel approveOrRejectTask(OperationContext ctx, CoreSession session, Task task,
-      String commentInput) {
+  public DocumentModel addCommentToTask(CoreSession session, Task task, String commentInput) {
 
     if (StringUtils.isNotEmpty(commentInput)) {
-      task.getTargetDocumentsIds().forEach(docId -> {
-        Comment comment = new CommentImpl();
-        comment.setParentId(docId);
-        comment.setAuthor(session.getPrincipal().getName());
-        comment.setText(commentInput);
-        comment.setCreationDate(Instant.now());
-        comment.setModificationDate(Instant.now());
-        CommentManager service = Framework.getService(CommentManager.class);
-        service.createComment(session, comment);
-      });
+      Comment comment = new CommentImpl();
+      comment.setParentId(task.getId());
+      comment.setAuthor(session.getPrincipal().getName());
+      comment.setText(commentInput);
+      comment.setCreationDate(Instant.now());
+      comment.setModificationDate(Instant.now());
+      CommentManager service = Framework.getService(CommentManager.class);
+      service.createComment(session, comment);
+      session.save();
     }
 
     return task.getDocument();
   }
 
   @Override
-  public DocumentModel completeTask(OperationContext ctx, Task task, String status)
+  public DocumentModel updateTaskStatus(OperationContext ctx, Task task, String status)
       throws OperationException {
     AutomationService automation = Framework.getService(AutomationService.class);
     Map<String, String> workFlowTaskParams = new HashMap<>();

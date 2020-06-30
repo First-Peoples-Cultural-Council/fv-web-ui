@@ -1,6 +1,6 @@
 package ca.firstvoices.dialect.operations;
 
-import ca.firstvoices.dialect.services.ApproveRejectTaskService;
+import ca.firstvoices.dialect.services.FirstVoicesTaskService;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
@@ -19,27 +19,27 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author david
  */
-@Operation(id = ApproveRejectTask.ID, category = Constants.CAT_DOCUMENT, label =
-    "ApproveRejectTask", description =
+@Operation(id = ApproveRejectTaskOperation.ID, category = Constants.CAT_DOCUMENT, label =
+    "ApproveRejectTaskOperation", description =
     "Approve or Reject Task for FirstVoices Documents with the "
-        + "option to create a comment for the Task's Documenti.")
-public class ApproveRejectTask {
+        + "option to create a comment for the Task.")
+public class ApproveRejectTaskOperation {
 
-  public static final String ID = "Task.ApproveRejectTask";
+  public static final String ID = "Task.ApproveRejectTaskOperation";
 
   protected AutomationService automation = Framework.getService(AutomationService.class);
 
   @Context
-  protected CoreSession session;
+  private CoreSession session;
 
   @Context
-  protected OperationContext ctx;
+  private OperationContext ctx;
 
   @Param(name = "comment", required = false)
-  protected String commentInput;
+  private String commentInput;
 
   @Param(name = "status", values = {"approve", "reject", "validate"})
-  protected String status;
+  private String status;
 
   @OperationMethod
   public DocumentModel run(DocumentModel taskDoc) throws OperationException {
@@ -55,11 +55,9 @@ public class ApproveRejectTask {
       status = "validate";
     }
 
-    ApproveRejectTaskService service = Framework.getService(ApproveRejectTaskService.class);
-    service.completeTask(ctx, task, status);
-    return service.approveOrRejectTask(ctx, session, task, commentInput);
-
+    FirstVoicesTaskService service = Framework.getService(FirstVoicesTaskService.class);
+    service.updateTaskStatus(ctx, task, status);
+    return service.addCommentToTask(session, task, commentInput);
   }
-
 
 }

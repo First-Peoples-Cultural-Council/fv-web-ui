@@ -40,6 +40,7 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.LASTNAME_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;
+import ca.firstvoices.dialect.services.FirstVoicesTaskService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,6 +90,9 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
   @Inject
   protected TaskService taskService;
+
+  @Inject
+  protected FirstVoicesTaskService firstVoicesTaskService;
 
   @Inject
   protected UserManager userManager;
