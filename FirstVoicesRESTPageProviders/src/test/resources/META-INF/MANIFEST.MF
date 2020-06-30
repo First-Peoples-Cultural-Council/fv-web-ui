@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesRESTPageProviders.test
+Bundle-Name: FirstVoicesRESTPageProviders.test
+Import-Package: org.nuxeo.ecm.core
+

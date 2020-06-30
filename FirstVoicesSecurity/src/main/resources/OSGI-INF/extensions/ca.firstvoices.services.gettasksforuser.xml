@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<component name="ca.firstvoices.services.GetTasksService.contrib">
+  <implementation class="ca.firstvoices.services.GetTasksServiceImpl"/>
+
+  <service>
+    <provide interface="ca.firstvoices.services.GetTasksService"/>
+  </service>
+
+</component>

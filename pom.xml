@@ -29,6 +29,8 @@
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
     <module>FirstVoicesHealthMonitor</module>
+    <module>FirstVoicesREST</module>
+    <module>FirstVoicesRESTPageProviders</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
     <module>FirstVoicesCognitoAuth</module>
@@ -134,6 +136,17 @@
         <groupId>ca.firstvoices</groupId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesREST</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesRESTPageProviders</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>com.amazonaws</groupId>
         <artifactId>aws-java-sdk-cognitoidp</artifactId>

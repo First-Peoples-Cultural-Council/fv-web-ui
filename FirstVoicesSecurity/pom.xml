@@ -51,6 +51,10 @@
       <artifactId>nuxeo-platform-publisher-api</artifactId>
     </dependency>
     <dependency>
+      <artifactId>nuxeo-platform-task-automation</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
       <artifactId>nuxeo-automation-core</artifactId>
     </dependency>
@@ -101,6 +105,10 @@
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-invite</artifactId>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-task-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.webengine</groupId>

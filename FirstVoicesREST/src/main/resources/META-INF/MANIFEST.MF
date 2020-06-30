@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesREST
+Bundle-Version: 1.0.qualifier
+Bundle-Name: FirstVoicesREST
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Nuxeo
+Fragment-Host: org.nuxeo.ecm.platform.restapi.server
