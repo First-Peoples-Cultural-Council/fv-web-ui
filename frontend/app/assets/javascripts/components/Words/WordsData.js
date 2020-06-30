@@ -13,15 +13,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { useEffect } from 'react'
+import Immutable from 'immutable'
 
+import useDialect from 'DataSource/useDialect'
 import useDocument from 'DataSource/useDocument'
 import useIntl from 'DataSource/useIntl'
 import useLogin from 'DataSource/useLogin'
+import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
 
 import NavigationHelpers, { hasPagination } from 'common/NavigationHelpers'
+import ProviderHelpers from 'common/ProviderHelpers'
 import {
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
@@ -29,17 +33,42 @@ import {
 } from 'views/components/SearchDialect/constants'
 
 function WordsData(props) {
-  const { computeDocument } = useDocument()
+  const { computeDialect2, fetchDialect2 } = useDialect()
+  const { computeDocument, fetchDocument } = useDocument()
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
+  const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
+  const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
+
   useEffect(() => {
+    fetchData()
     // Specify how to clean up after this effect:
     return searchDialectReset
   }, [])
+
+  const fetchData = async () => {
+    // Dialect
+    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+    // Document
+    await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
+    // Portal
+    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
+  }
+
+  const computeEntities = Immutable.fromJS([
+    {
+      id: routeParams.dialect_path,
+      entity: computePortal,
+    },
+    {
+      id: dictionaryKey,
+      entity: computeDocument,
+    },
+  ])
 
   const handleCategoryClick = async ({ selected }) => {
     await searchDialectUpdate({
@@ -80,6 +109,7 @@ function WordsData(props) {
 
   return props.children({
     computeDocument,
+    computeEntities,
     computeLogin,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,

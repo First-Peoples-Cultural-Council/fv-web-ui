@@ -14,7 +14,7 @@ limitations under the License.
 */
 // 3rd party
 // -------------------------------------------
-import React, { Component } from 'react'
+import React from 'react'
 import selectn from 'selectn'
 // import Immutable from 'immutable'
 
@@ -32,24 +32,26 @@ import WordsData from './WordsData'
 
 import NavigationHelpers, { appendPathArrayAfterLandmark, hasPagination } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
-class WordsContainer extends Component {
-  render() {
-    return (
-      <WordsData>
-        {({
-          computeDocument,
-          computeLogin,
-          handleCategoryClick,
-          handleAlphabetClick,
-          intl,
-          onNavigateRequest,
-          pushWindowPath,
-          routeParams,
-          splitWindowPath,
-        }) => {
-          const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
-          return (
+function WordsContainer() {
+  return (
+    <WordsData>
+      {({
+        computeDocument,
+        computeEntities,
+        computeLogin,
+        handleCategoryClick,
+        handleAlphabetClick,
+        intl,
+        onNavigateRequest,
+        pushWindowPath,
+        routeParams,
+        splitWindowPath,
+      }) => {
+        const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+        const wordsPage =
+          computedDocument && computedDocument.response ? (
             <>
               <div className="row row-create-wrapper">
                 <div className="col-xs-12 col-md-4 col-md-offset-8 text-right">
@@ -149,11 +151,15 @@ class WordsContainer extends Component {
                 </div>
               </div>
             </>
-          )
-        }}
-      </WordsData>
-    )
-  }
+          ) : null
+        return (
+          <PromiseWrapper renderOnError computeEntities={computeEntities}>
+            {wordsPage}
+          </PromiseWrapper>
+        )
+      }}
+    </WordsData>
+  )
 }
 
 export default WordsContainer
