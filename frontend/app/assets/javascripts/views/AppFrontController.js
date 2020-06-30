@@ -566,4 +566,4 @@ const mapDispatchToProps = {
   setIntlWorkspace,
 }
 
-export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(AppFrontController))
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(AppFrontController))

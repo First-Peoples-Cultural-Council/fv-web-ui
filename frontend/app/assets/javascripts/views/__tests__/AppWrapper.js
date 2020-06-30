@@ -12,7 +12,7 @@ import { Provider } from 'react-redux'
 import store from 'providers/redux/store'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { FirstVoicesThemeV1 as FirstVoicesTheme } from 'views/themes/FirstVoicesTheme.js'
+import FirstVoices from 'views/themes/FirstVoices.js'
 import ConfGlobal from 'conf/local.js'
 
 // Views
@@ -23,7 +23,7 @@ import AppWrapper from '../AppWrapper'
 // require('styles/main')
 
 
-const createdMuiTheme = createMuiTheme(FirstVoicesTheme)
+const createdMuiTheme = createMuiTheme(FirstVoices)
 const context = {
   providedState: {
     properties: {

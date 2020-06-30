@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -77,7 +78,7 @@ public class PortalEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for FVPortal
      */
-    if (documentType.equalsIgnoreCase("FVPortal")) {
+    if (documentType.equalsIgnoreCase(FV_PORTAL)) {
 
       // Process "fv-portal:featured_words" values
       String[] featuredWordsIds =

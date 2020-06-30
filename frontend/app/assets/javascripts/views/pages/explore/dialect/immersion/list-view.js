@@ -117,7 +117,7 @@ class ImmersionListView extends Component {
     return (
       <FVButton
         type="button"
-        variant="flat"
+        variant="text"
         size="small"
         component="a"
         className="DictionaryList__linkEdit PrintHide"
@@ -142,6 +142,7 @@ class ImmersionListView extends Component {
       return
     }
     const mappedLabels = allLabels.map((v) => {
+      // eslint-disable-next-line
       const strings = v.template_strings.split(',').map((s) => '%s')
       const templateStrings = v.template_strings.split(',')
       const label = {

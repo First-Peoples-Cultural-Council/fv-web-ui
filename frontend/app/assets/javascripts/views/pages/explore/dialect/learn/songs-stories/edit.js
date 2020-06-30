@@ -151,7 +151,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -279,14 +279,14 @@ export class PageDialectBookEdit extends Component {
           {this.state.tabValue === 0 && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
-                <Typography variant="display2">
+                <Typography variant="h3">
                   <>
-                  <FVLabel
-                    transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
-                    defaultStr={'Edit ' + title + ' Book'}
-                    transform="words"
-                    params={[title]}
-                  />
+                    <FVLabel
+                      transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
+                      defaultStr={'Edit ' + title + ' Book'}
+                      transform="words"
+                      params={[title]}
+                    />
                   </>
                 </Typography>
               )}
@@ -308,13 +308,8 @@ export class PageDialectBookEdit extends Component {
           {this.state.tabValue === 1 && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
-                <Typography variant="headline">
-                  <FVLabel
-                    transKey=""
-                    defaultStr={'Edit ' + title + ' pages'}
-                    transform="first"
-                    params={[title]}
-                  />
+                <Typography variant="h5">
+                  <FVLabel transKey="" defaultStr={'Edit ' + title + ' pages'} transform="first" params={[title]} />
                 </Typography>
               )}
               <BookEntryList
@@ -372,7 +367,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     properties,
     splitWindowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 

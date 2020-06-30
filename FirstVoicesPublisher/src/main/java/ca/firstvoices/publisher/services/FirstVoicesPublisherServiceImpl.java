@@ -20,6 +20,25 @@
 
 package ca.firstvoices.publisher.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import ca.firstvoices.services.AbstractService;
 import java.io.Serializable;
@@ -50,19 +69,19 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   private CoreSession session;
 
   protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
-    if (model == null || !model.getDocumentType().getName().equals("FVDialect")) {
+    if (model == null || !model.getDocumentType().getName().equals(FV_DIALECT)) {
       throw new InvalidParameterException("Document must be a FVDialect type");
     }
     Map<String, DocumentModel> map = new HashMap<>();
     session = model.getCoreSession();
     DocumentModel language = session.getDocument(model.getParentRef());
-    if (language == null || !language.getDocumentType().getName().equals("FVLanguage")) {
+    if (language == null || !language.getDocumentType().getName().equals(FV_LANGUAGE)) {
       throw new InvalidParameterException("Parent document must be a FVLanguage type");
     }
     map.put("Language", language);
     DocumentModel languageFamily = session.getDocument(language.getParentRef());
     if (languageFamily == null || !languageFamily.getDocumentType().getName()
-        .equals("FVLanguageFamily")) {
+        .equals(FV_LANGUAGE_FAMILY)) {
       throw new InvalidParameterException("Parent document must be a FVLanguageFamily type");
     }
     map.put("LanguageFamily", languageFamily);
@@ -180,9 +199,9 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel publishDocument(CoreSession session, DocumentModel doc,
       DocumentModel section) {
     DocumentModel proxy = session.publishDocument(doc, section, true);
-    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !"Published"
+    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !PUBLISHED_STATE
         .equals(doc.getCurrentLifeCycleState())) {
-      doc.followTransition("Publish");
+      doc.followTransition(PUBLISH_TRANSITION);
     }
     return proxy;
   }
@@ -200,7 +219,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
       throw new InvalidParameterException("Dialect should be published");
     }
     DocumentModel input = getPublication(session, asset.getRef());
-    if (input != null && input.getCurrentLifeCycleState().equals("Published")) {
+    if (input != null && input.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
       // Already published
       return input;
     }
@@ -253,10 +272,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
           DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
           DocumentModel parentDependencySection;
-          if ("FVCategory".equals(dependencyDocModel.getType())) {
+          if (FV_CATEGORY.equals(dependencyDocModel.getType())) {
             PublisherService publisherService = Framework.getService(PublisherService.class);
             publishedDep = PublisherUtils
-                .publishAncestors(session, "FVCategory", dependencyDocModel, publisherService);
+                .publishAncestors(session, FV_CATEGORY, dependencyDocModel, publisherService);
           } else {
             parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
             publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
@@ -358,10 +377,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
           DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
           DocumentModel parentDependencySection;
-          if ("FVCategory".equals(dependencyDocModel.getType())) {
+          if (FV_CATEGORY.equals(dependencyDocModel.getType())) {
             PublisherService publisherService = Framework.getService(PublisherService.class);
             publishedDep = PublisherUtils
-                .publishAncestors(session, "FVCategory", dependencyDocModel, publisherService);
+                .publishAncestors(session, FV_CATEGORY, dependencyDocModel, publisherService);
           } else {
             parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
             publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
@@ -409,7 +428,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
     if (doc == null) {
       return;
     }
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       unpublishDialect(doc);
     } else if (isAssetType(doc.getType())) {
       unpublishAsset(doc);
@@ -417,10 +436,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   }
 
   private boolean isAssetType(String type) {
-    return "FVBookEntry".equals(type) || "FVBook".equals(type) || "FVPhrase".equals(type)
-        || "FVWord".equals(type) || "FVLabel".equals(type) || "FVPicture".equals(type) || "FVVideo"
-        .equals(type) || "FVAudio".equals(type) || "FVCategory".equals(type) || "FVCharacter"
-        .equals(type) || "FVGallery".equals(type) || "FVLink".equals(type);
+    return FV_BOOK_ENTRY.equals(type) || FV_BOOK.equals(type) || FV_PHRASE.equals(type)
+        || FV_WORD.equals(type) || FV_LABEL.equals(type) || FV_PICTURE.equals(type) || FV_VIDEO
+        .equals(type) || FV_AUDIO.equals(type) || FV_CATEGORY.equals(type) || FV_CHARACTER
+        .equals(type) || FV_GALLERY.equals(type) || FV_LINK.equals(type);
   }
 
   @Override
@@ -428,9 +447,9 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
     if (doc == null) {
       return null;
     }
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       return publishDialect(doc);
-    } else if ("FVPortal".equals(doc.getType())) {
+    } else if (FV_PORTAL.equals(doc.getType())) {
       return publishPortalAssets(doc);
     } else if (isAssetType(doc.getType())) {
       return publishAsset(doc);
@@ -446,7 +465,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
     if (isAssetType(doc.getType())) {
       return republishAsset(doc);
-    } else if ("FVPortal".equals(doc.getType())) {
+    } else if (FV_PORTAL.equals(doc.getType())) {
       return publishPortalAssets(doc);
     }
 
@@ -553,7 +572,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
 
     documentModels.stream().forEach(wordOrPhrase -> {
       String propertyValue = "";
-      if (wordOrPhrase.getType().equals("FVWord")) {
+      if (wordOrPhrase.getType().equals(FV_WORD)) {
         propertyValue = "categories";
       } else {
         propertyValue = "phrase_books";

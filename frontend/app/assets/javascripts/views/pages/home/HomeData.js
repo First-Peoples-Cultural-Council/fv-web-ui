@@ -113,4 +113,4 @@ HomeData.propTypes = {
   theme: object,
 }
 
-export default withTheme()(HomeData)
+export default withTheme(HomeData)

@@ -36,6 +36,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))

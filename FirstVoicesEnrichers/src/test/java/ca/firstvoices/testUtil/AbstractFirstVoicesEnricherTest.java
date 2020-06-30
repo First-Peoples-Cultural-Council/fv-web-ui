@@ -20,6 +20,14 @@
 
 package ca.firstvoices.testUtil;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.runner.FirstVoicesEnricherFeature;
@@ -96,29 +104,29 @@ public abstract class AbstractFirstVoicesEnricherTest {
   public void createDialectTree(CoreSession session) {
     domain = createDocument(session, session.createDocumentModel("/", "FV", "Domain"));
     langFamilyDoc = createDocument(session,
-        session.createDocumentModel(domain.getPathAsString(), "Family", "FVLanguageFamily"));
+        session.createDocumentModel(domain.getPathAsString(), "Family", FV_LANGUAGE_FAMILY));
     assertNotNull("Should have a valid FVLanguageFamiliy", langFamilyDoc);
     languageDoc = createDocument(session,
-        session.createDocumentModel(langFamilyDoc.getPathAsString(), "Language", "FVLanguage"));
+        session.createDocumentModel(langFamilyDoc.getPathAsString(), "Language", FV_LANGUAGE));
     assertNotNull("Should have a valid FVLanguage", languageDoc);
     dialectDoc = createDocument(session,
-        session.createDocumentModel(languageDoc.getPathAsString(), "Dialect", "FVDialect"));
+        session.createDocumentModel(languageDoc.getPathAsString(), "Dialect", FV_DIALECT));
     assertNotNull("Should have a valid FVDialect", dialectDoc);
     dictionaryDoc = createDocument(session,
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Dictionary", "FVDictionary"));
+        session.createDocumentModel(dialectDoc.getPathAsString(), "Dictionary", FV_DICTIONARY));
     assertNotNull("Should have a valid FVDictionary", dictionaryDoc);
     alphabetDoc = createDocument(session,
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", "FVAlphabet"));
+        session.createDocumentModel(dialectDoc.getPathAsString(), "Alphabet", FV_ALPHABET));
     assertNotNull("Should have a valid FVAlphabet", alphabetDoc);
     categories = session.createDocument(
-        session.createDocumentModel(dialectDoc.getPathAsString(), "Categories", "FVCategories"));
+        session.createDocumentModel(dialectDoc.getPathAsString(), "Categories", FV_CATEGORIES));
     category = session.createDocument(
-        session.createDocumentModel(categories.getPathAsString(), "Category", "FVCategory"));
+        session.createDocumentModel(categories.getPathAsString(), "Category", FV_CATEGORY));
     subcategory = session.createDocument(
-        session.createDocumentModel(categories.getPathAsString(), "SubCategory", "FVCategory"));
+        session.createDocumentModel(categories.getPathAsString(), "SubCategory", FV_CATEGORY));
     session.move(subcategory.getRef(), category.getRef(), "SubCategory");
     session.save();
-    word = createWordorPhrase("New Word", "FVWord", null, null);
+    word = createWordorPhrase("New Word", FV_WORD, null, null);
     StringList categories = new StringList();
     categories.add(subcategory.getId());
     word.setPropertyValue("dc:title", "New Word");

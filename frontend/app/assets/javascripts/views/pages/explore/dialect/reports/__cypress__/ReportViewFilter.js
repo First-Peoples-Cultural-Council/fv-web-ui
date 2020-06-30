@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 
 describe('ReportViewFilter.js > ReportViewFilter', () => {
   it('Test to check that reports are generated properly.', () => {
@@ -19,7 +19,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.wait(500)
     cy.get('[title="More Options"]', { exact: true }).click()
     cy.wait(800)
-    cy.getByText('Reports', { exact: false }).click({ force: true })
+    cy.findByText('Reports', { exact: false }).click({ force: true })
 
     /*
             Check that the 52 different reports appear.
@@ -31,12 +31,12 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     /*
             Check to make sure that when a specific report type is clicked that it generates the proper reports for that type.
          */
-    cy.getByText('Words in Enabled Status').click()
-    cy.getByTestId('DictionaryList__row').within(() => {
-      cy.getByText('TestWord').should('exist')
-      cy.getByText('TestTranslation').should('exist')
-      cy.getByText('Noun').should('exist')
-      cy.getByText('Enabled').should('exist')
+    cy.findByText('Words in Enabled Status').click()
+    cy.findByTestId('DictionaryList__row').within(() => {
+      cy.findByText('TestWord').should('exist')
+      cy.findByText('TestTranslation').should('exist')
+      cy.findByText('Noun').should('exist')
+      cy.findByText('Enabled').should('exist')
     })
   })
 
@@ -50,7 +50,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageFive')
     cy.wait(1000)
     cy.get('[title="More Options"]', { exact: true }).click()
-    cy.getByText('Reports', { exact: true }).click({ force: true })
+    cy.findByText('Reports', { exact: true }).click({ force: true })
     cy.wait(1000)
 
     /*
@@ -67,7 +67,7 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
       cy.get('input.form-control').type('Audio')
     })
     cy.wait(500)
-    cy.getByText('Filter').click()
+    cy.findByText('Filter').click()
 
     /*
             Check that after filtering only the proper six exist.
@@ -75,9 +75,9 @@ describe('ReportViewFilter.js > ReportViewFilter', () => {
     cy.get('.FilteredGridList')
       .queryAllByText('•')
       .should('have.length', 6)
-    cy.getByText('Words without Audio', { exact: true }).should('exist')
-    cy.getByText('Phrases without Audio', { exact: true }).should('exist')
-    cy.getByText('Songs without Audio', { exact: true }).should('exist')
-    cy.getByText('Stories without Audio', { exact: true }).should('exist')
+    cy.findByText('Words without Audio', { exact: true }).should('exist')
+    cy.findByText('Phrases without Audio', { exact: true }).should('exist')
+    cy.findByText('Songs without Audio', { exact: true }).should('exist')
+    cy.findByText('Stories without Audio', { exact: true }).should('exist')
   })
 })

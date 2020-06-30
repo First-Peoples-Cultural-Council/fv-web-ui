@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -63,7 +64,7 @@ public class GalleryEnricher extends AbstractJsonEnricher<DocumentModel> {
 
     String documentType = doc.getType();
 
-    if (documentType.equalsIgnoreCase("FVGallery")) {
+    if (documentType.equalsIgnoreCase(FV_GALLERY)) {
 
       // Process "fv:related_pictures" values
       String[] pictureIds =

@@ -114,10 +114,10 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
 
       return true;
     } catch (NotAuthorizedException e) {
-      LOG.warn("Password authentication failed for user " + username);
+      LOG.warn("[AWS Cognito] Password authentication failed for user " + username);
       return false;
     } catch (Exception e) {
-      LOG.error("Caught an unexpected exception while authenticating", e);
+      LOG.error("[AWS Cognito] Caught an unexpected exception while authenticating", e);
       throw new MiscellaneousFailureException(e);
     }
   }
@@ -185,6 +185,7 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     AdminCreateUserRequest request = new AdminCreateUserRequest();
     request.setUserPoolId(this.userPool);
     request.setUsername(username);
+    request.setMessageAction("SUPPRESS");
     request.setTemporaryPassword(password);
 
 

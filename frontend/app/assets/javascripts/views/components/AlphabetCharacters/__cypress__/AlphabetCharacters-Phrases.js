@@ -1,4 +1,4 @@
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 describe('AlphabetCharacters-Phrases.js > AlphabetCharacters', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
     cy.visit('/explore/FV/sections/Data/Test/Test/TestLanguageSix/learn/phrases')
@@ -9,9 +9,9 @@ describe('AlphabetCharacters-Phrases.js > AlphabetCharacters', () => {
 
     // No message, button, or selected letters
     cy.log('No message, button, or selected letters')
-    cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
-    cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
-    cy.getByTestId('AlphabetCharacters').within(() => {
+    cy.findByText(/showing phrases that start with the letter/i).should('not.exist')
+    cy.findByText(/stop browsing alphabetically/i).should('not.exist')
+    cy.findByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
           .should('have.css', 'color')
@@ -28,26 +28,26 @@ describe('AlphabetCharacters-Phrases.js > AlphabetCharacters', () => {
 
     // Is it highlighted?
     cy.log('Is it highlighted?')
-    cy.getByTestId('AlphabetCharacters').within(() => {
-      cy.getByText(letter)
+    cy.findByTestId('AlphabetCharacters').within(() => {
+      cy.findByText(letter)
         .should('have.css', 'color')
         .and('not.eq', unselectedColor)
     })
 
     // Is the message and clear button displayed?
     cy.log('Is the message and clear button displayed?')
-    cy.queryByText(/showing phrases that start with the letter/i).should('exist')
-    cy.queryByText(/stop browsing alphabetically/i).should('exist')
+    cy.findByText(/showing phrases that start with the letter/i).should('exist')
+    cy.findByText(/stop browsing alphabetically/i).should('exist')
 
     // Reset
     cy.log('Reset')
-    cy.queryByText(/stop browsing alphabetically/i).click()
+    cy.findByText(/stop browsing alphabetically/i).click()
 
     // Ensure all is back to normal...
     cy.log('Ensure all is back to normal...')
-    cy.queryByText(/showing phrases that start with the letter/i).should('not.exist')
-    cy.queryByText(/stop browsing alphabetically/i).should('not.exist')
-    cy.getByTestId('AlphabetCharacters').within(() => {
+    cy.findByText(/showing phrases that start with the letter/i).should('not.exist')
+    cy.findByText(/stop browsing alphabetically/i).should('not.exist')
+    cy.findByTestId('AlphabetCharacters').within(() => {
       cy.get('a').each(($el) => {
         cy.wrap($el)
           .should('have.css', 'color')
@@ -62,12 +62,12 @@ describe('AlphabetCharacters-Phrases.js > AlphabetCharacters', () => {
     cy.wait(2000)
     // Message & "Stop Browsing" button displayed; a letter is selected
     cy.log('Ensure message & "Stop Browsing" button is displayed and a letter is selected')
-    cy.getByText(/showing phrases that start with the letter/i).should('exist')
-    cy.getByTestId('AlphabetCharacters').within(() => {
-      cy.getByText('t')
+    cy.findByText(/showing phrases that start with the letter/i).should('exist')
+    cy.findByTestId('AlphabetCharacters').within(() => {
+      cy.findByText('t')
         .should('have.css', 'color')
         .and('eq', 'rgb(130, 0, 0)')
     })
-    cy.getByText(/stop browsing alphabetically/i).should('exist')
+    cy.findByText(/stop browsing alphabetically/i).should('exist')
   })
 })

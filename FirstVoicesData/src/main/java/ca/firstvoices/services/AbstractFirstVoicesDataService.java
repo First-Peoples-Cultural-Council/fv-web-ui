@@ -20,6 +20,8 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -27,11 +29,11 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 public abstract class AbstractFirstVoicesDataService {
 
   protected DocumentModel getDialect(DocumentModel doc) {
-    if ("FVDialect".equals(doc.getType())) {
+    if (FV_DIALECT.equals(doc.getType())) {
       return doc; // doc is dialect
     }
     DocumentModel parent = doc.getCoreSession().getParentDocument(doc.getRef());
-    while (parent != null && !"FVDialect".equals(parent.getType())) {
+    while (parent != null && !FV_DIALECT.equals(parent.getType())) {
       parent = doc.getCoreSession().getParentDocument(parent.getRef());
     }
     return parent;

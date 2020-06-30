@@ -46,7 +46,8 @@ public class ComputeNativeOrderDialectListener implements EventListener {
 
                 String query = "SELECT * FROM FVAlphabet "
                     + "WHERE fv-alphabet:custom_order_recompute_required = 1 "
-                    + "AND fv-alphabet:update_confusables_required=0 " + "AND ecm:isProxy = 0 "
+                    + "AND (fv-alphabet:update_confusables_required=0 OR "
+                    + "fv-alphabet:update_confusables_required IS NULL)" + "AND ecm:isProxy = 0 "
                     + "AND ecm:isCheckedInVersion = 0 " + "AND ecm:isTrashed = 0";
                 DocumentModelList alphabets = session.query(query);
 

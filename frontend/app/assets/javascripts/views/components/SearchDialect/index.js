@@ -98,7 +98,7 @@ export const SearchDialect = (props) => {
     }
   }, [props.routeParams.category])
 
-  // When filtering by phrasebook
+  // When filtering by phraseBook
   // ------------------------------------------------------------
   useEffect(() => {
     const { phraseBook } = props.routeParams

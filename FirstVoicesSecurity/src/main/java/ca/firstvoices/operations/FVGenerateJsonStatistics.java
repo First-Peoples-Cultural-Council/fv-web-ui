@@ -24,6 +24,11 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -242,16 +247,16 @@ public class FVGenerateJsonStatistics {
     }
 
     if (docType.equalsIgnoreCase("words")) {
-      query = String.format(baseDocsQuery, "FVWord", dialectPath) + proxyQueryParams;
+      query = String.format(baseDocsQuery, FV_WORD, dialectPath) + proxyQueryParams;
     } else if (docType.equalsIgnoreCase("phrases")) {
-      query = String.format(baseDocsQuery, "FVPhrase", dialectPath) + proxyQueryParams;
+      query = String.format(baseDocsQuery, FV_PHRASE, dialectPath) + proxyQueryParams;
     } else if (docType.equalsIgnoreCase("characters")) {
-      query = String.format(baseDocsQuery, "FVCharacter", dialectPath) + proxyQueryParams;
+      query = String.format(baseDocsQuery, FV_CHARACTER, dialectPath) + proxyQueryParams;
     } else if (docType.equalsIgnoreCase("songs")) {
-      query = String.format(baseDocsQuery, "FVBook", dialectPath) + proxyQueryParams
+      query = String.format(baseDocsQuery, FV_BOOK, dialectPath) + proxyQueryParams
           + " AND fvbook:type = 'song'";
     } else if (docType.equalsIgnoreCase("stories")) {
-      query = String.format(baseDocsQuery, "FVBook", dialectPath) + proxyQueryParams
+      query = String.format(baseDocsQuery, FV_BOOK, dialectPath) + proxyQueryParams
           + " AND fvbook:type = 'story'";
     }
 

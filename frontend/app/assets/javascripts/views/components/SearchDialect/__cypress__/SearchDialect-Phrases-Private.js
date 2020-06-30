@@ -1,6 +1,6 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
-import 'cypress-testing-library/add-commands'
+import '@testing-library/cypress/add-commands'
 import testSearchPhrases from '../../../app/assets/javascripts/views/components/SearchDialect/__cypress__/common/testSearchPhrases.js'
 
 describe('SearchDialect-Phrases-Private.js > SearchDialect', () => {

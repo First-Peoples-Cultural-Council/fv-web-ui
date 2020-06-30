@@ -26,11 +26,11 @@ import selectn from 'selectn'
 import AppFrontController from './AppFrontController'
 import FVSnackbar from './components/FVSnackbar'
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-import FirstVoicesTheme from 'views/themes/FirstVoicesTheme.js'
-import FirstVoicesKidsTheme from 'views/themes/FirstVoicesKidsTheme.js'
-import FirstVoicesWorkspaceTheme from 'views/themes/FirstVoicesWorkspaceTheme.js'
+import FirstVoices from 'views/themes/FirstVoices.js'
+import FirstVoicesKids from 'views/themes/FirstVoicesKids.js'
+import FirstVoicesWorkspace from 'views/themes/FirstVoicesWorkspace.js'
 
 const { func, object, string } = PropTypes
 class AppWrapper extends Component {
@@ -50,7 +50,7 @@ class AppWrapper extends Component {
 
     this.state = {
       covidAlert: true,
-      muiTheme: createMuiTheme(FirstVoicesTheme),
+      muiTheme: createMuiTheme(FirstVoices),
       siteTheme: 'default',
     }
   }
@@ -61,14 +61,14 @@ class AppWrapper extends Component {
       let newTheme
       switch (theme) {
         case 'kids':
-          newTheme = createMuiTheme(FirstVoicesKidsTheme)
+          newTheme = createMuiTheme(FirstVoicesKids)
           break
 
         case 'workspace':
-          newTheme = createMuiTheme(FirstVoicesWorkspaceTheme)
+          newTheme = createMuiTheme(FirstVoicesWorkspace)
           break
         default:
-          newTheme = createMuiTheme(FirstVoicesTheme)
+          newTheme = createMuiTheme(FirstVoices)
       }
       this.setState({
         muiTheme: newTheme,
@@ -99,12 +99,12 @@ class AppWrapper extends Component {
       )
 
     return (
-      <MuiThemeProvider theme={this.state.muiTheme}>
+      <ThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
           {covidAlert}
           <AppFrontController warnings={{}} />
         </div>
-      </MuiThemeProvider>
+      </ThemeProvider>
     )
   }
 }

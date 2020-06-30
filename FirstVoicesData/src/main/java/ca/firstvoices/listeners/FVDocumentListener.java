@@ -20,6 +20,30 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+
 import ca.firstvoices.services.AssignAncestorsService;
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
@@ -106,10 +130,10 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void assignAncestors() {
-    String[] types = {"FVAlphabet", "FVAudio", "FVBook", "FVBookEntry", "FVBooks", "FVCategories",
-        "FVCategory", "FVCharacter", "FVContributor", "FVContributors", "FVDialect", "FVDictionary",
-        "FVGallery", "FVLanguage", "FVLanguageFamily", "FVLink", "FVLinks", "FVPhrase", "FVPicture",
-        "FVPortal", "FVResources", "FVVideo", "FVWord",};
+    String[] types = { FV_ALPHABET, FV_AUDIO, FV_BOOK, FV_BOOK_ENTRY, FV_BOOKS, FV_CATEGORIES,
+        FV_CATEGORY, FV_CHARACTER, FV_CONTRIBUTOR, FV_CONTRIBUTORS, FV_DIALECT, FV_DICTIONARY,
+        FV_GALLERY, FV_LANGUAGE, FV_LANGUAGE_FAMILY, FV_LINK, FV_LINKS, FV_PHRASE, FV_PICTURE,
+        FV_PORTAL, FV_RESOURCES, FV_VIDEO, FV_WORD };
 
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
@@ -120,7 +144,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void cleanupWordsAndPhrases() {
-    if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
+    if ((document.getType().equals(FV_WORD) || document.getType().equals(FV_PHRASE)) && !document
         .isProxy() && !document.isVersion()) {
       try {
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
@@ -148,14 +172,14 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   }
 
   public void sanitizeWord() {
-    if ((document.getType().equals("FVWord") || document.getType().equals("FVPhrase")) && !document
+    if ((document.getType().equals(FV_WORD) || document.getType().equals(FV_PHRASE)) && !document
         .isProxy() && !document.isVersion()) {
       sanitizeDocumentService.sanitizeDocument(session, document);
     }
   }
 
   public void validateCharacter() {
-    if (document.getDocumentType().getName().equals("FVCharacter") && !document.isProxy()
+    if (document.getDocumentType().getName().equals(FV_CHARACTER) && !document.isProxy()
         && !document.isVersion()) {
       try {
         DocumentModelList characters = getCharacters(document);

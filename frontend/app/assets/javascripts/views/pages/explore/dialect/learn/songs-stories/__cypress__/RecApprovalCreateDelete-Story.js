@@ -11,20 +11,20 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
     cy.wait(500)
-    cy.queryByText('TestStoryTitle').should('not.exist')
-    cy.queryByText('Continue to story').should('not.exist')
+    cy.findByText('TestStoryTitle').should('not.exist')
+    cy.findByText('Continue to story').should('not.exist')
 
     /*
                         Going through the steps to create a phrase
                     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree')
     cy.wait(500)
-    cy.getByText('Learn our Language', { exact: false }).click()
+    cy.findByText('Learn our Language', { exact: false }).click()
     cy.get('div.Header.row').within(() => {
-      cy.getByText('Stories', { exact: true }).click()
+      cy.findByText('Stories', { exact: true }).click()
     })
     cy.wait(500)
-    cy.getByText('Create Story Book', { exact: true }).click()
+    cy.findByText('Create Story Book', { exact: true }).click()
 
     /*
                 Enter the data to create a new story book.
@@ -51,7 +51,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.queryAllByText('+ Add new')
         .eq(2)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryAudio')
@@ -60,10 +60,10 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                         Image upload
@@ -72,7 +72,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.queryAllByText('+ Add new')
         .eq(3)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryImage')
@@ -81,10 +81,10 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                         Video upload
@@ -93,7 +93,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.queryAllByText('+ Add new')
         .eq(4)
         .click()
-      cy.getByText('Upload New').click()
+      cy.findByText('Upload New').click()
     })
     cy.get('div.form-horizontal').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryVideo')
@@ -102,10 +102,10 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       cy.fixture(fileName, 'base64').then((fileContent) => {
         cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
       })
-      cy.getByText('Upload Media', { exact: true }).click()
+      cy.findByText('Upload Media', { exact: true }).click()
     })
     cy.wait(2000)
-    cy.getByText('Insert into entry').click()
+    cy.findByText('Insert into entry').click()
 
     /*
                         Finishing the story creation form and save
@@ -116,7 +116,7 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
         .click()
       cy.get('[name="fv:cultural_note[0]"]', { exact: true }).type('TestStoryCulturalNote')
     })
-    cy.getByText('Save', { exact: true }).click()
+    cy.findByText('Save', { exact: true }).click()
     cy.wait(500)
 
     /*
@@ -124,10 +124,10 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
                     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
-      cy.getByText('TestStoryTitle').should('exist')
-      cy.getByText('TestStoryTranslation').should('exist')
-      cy.getByText('Continue to story').should('exist')
+    cy.findByTestId('pageContainer').within(() => {
+      cy.findByText('TestStoryTitle').should('exist')
+      cy.findByText('TestStoryTranslation').should('exist')
+      cy.findByText('Continue to story').should('exist')
     })
 
     /*
@@ -135,8 +135,8 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
                         Make sure that the published toggle becomes available and click it.
                     */
     cy.wait(500)
-    cy.getByText('TestStoryTitle').click()
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByText('TestStoryTitle').click()
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(0)
@@ -144,14 +144,14 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
       })
     })
     cy.wait(500)
-    cy.getByTestId('pageContainer').within(() => {
+    cy.findByTestId('pageContainer').within(() => {
       cy.get('div.hidden-xs').within(() => {
         cy.get('input[type=checkbox]')
           .eq(1)
           .click()
       })
     })
-    cy.getByTestId('ViewWithActions__buttonPublish').click()
+    cy.findByTestId('ViewWithActions__buttonPublish').click()
 
     /*
                         Check that edit book button is visible and functional.
@@ -159,36 +159,36 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
                     */
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
     cy.wait(800)
-    cy.getByText('TestStoryTitle').click()
-    cy.getByText('Edit')
+    cy.findByText('TestStoryTitle').click()
+    cy.findByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {
-      cy.getByText('Book title', { exact: true }).should('exist')
-      cy.getByText('Book title translation', { exact: true }).should('exist')
-      cy.getByText('Book introduction', { exact: true }).should('exist')
+      cy.findByText('Book title', { exact: true }).should('exist')
+      cy.findByText('Book title translation', { exact: true }).should('exist')
+      cy.findByText('Book introduction', { exact: true }).should('exist')
     })
     cy.wait(500)
-    cy.getByTestId('withForm__btnGroup1').within(() => {
-      cy.getByText('Cancel').click()
+    cy.findByTestId('withForm__btnGroup1').within(() => {
+      cy.findByText('Cancel').click()
     })
-    cy.getByText('Yes').click()
+    cy.findByText('Yes').click()
 
     /*
                         Check that edit book saves properly.
                     */
-    cy.getByText('Edit')
+    cy.findByText('Edit')
       .should('exist')
       .click()
     cy.get('fieldset.fieldset').within(() => {
       cy.get('[name="dc:title"]').type('TestStoryTitle1')
     })
-    cy.getByTestId('withForm__btnGroup1').within(() => {
-      cy.getByText('Save').click()
+    cy.findByTestId('withForm__btnGroup1').within(() => {
+      cy.findByText('Save').click()
     })
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
     cy.wait(500)
-    cy.getByText('TestStoryTitleTestStoryTitle1', { exact: true })
+    cy.findByText('TestStoryTitleTestStoryTitle1', { exact: true })
       .should('exist')
       .click()
 
@@ -200,15 +200,15 @@ describe('RecApprovalCreateDelete-Story.js > RecApprovalCreateDelete-Stories', (
     /*
                         Delete the story and check that it no longer exists.
                     */
-    cy.getByText('Delete book').click()
-    cy.getByTestId('ViewWithActions__dialog').within(() => {
-      cy.getByTestId('ViewWithActions__buttonDelete').click()
+    cy.findByText('Delete book').click()
+    cy.findByTestId('ViewWithActions__dialog').within(() => {
+      cy.findByTestId('ViewWithActions__buttonDelete').click()
     })
     cy.wait(500)
-    cy.getByText('Delete book success').should('exist')
+    cy.findByText('Delete book success').should('exist')
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageThree/learn/stories')
-    cy.queryByText('TestStoryTitleTestStoryTitle1').should('not.exist')
-    cy.queryByText('Continue to story').should('not.exist')
+    cy.findByText('TestStoryTitleTestStoryTitle1').should('not.exist')
+    cy.findByText('Continue to story').should('not.exist')
   })
 })

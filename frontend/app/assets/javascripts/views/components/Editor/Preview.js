@@ -370,7 +370,7 @@ export class Preview extends Component {
 
                 <CardHeader
                   title={
-                    <Typography variant="subheading">
+                    <Typography variant="subtitle1">
                       {selectn('title', pictureResponse) || selectn('dc:title', pictureResponse)}
                     </Typography>
                   }
@@ -389,7 +389,7 @@ export class Preview extends Component {
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="subheading"
+                      variant="subtitle1"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
@@ -500,7 +500,7 @@ export class Preview extends Component {
               <Card style={{ boxShadow: 'none' }}>
                 <CardHeader
                   title={
-                    <Typography variant="subheading">
+                    <Typography variant="subtitle1">
                       {selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
                     </Typography>
                   }
@@ -521,7 +521,7 @@ export class Preview extends Component {
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="subheading"
+                      variant="subtitle1"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
@@ -622,7 +622,7 @@ export class Preview extends Component {
                 </div>
                 <CardHeader
                   title={
-                    <Typography variant="subheading">
+                    <Typography variant="subtitle1">
                       {selectn('title', videoResponse) || selectn('dc:title', videoResponse)}
                     </Typography>
                   }
@@ -639,7 +639,7 @@ export class Preview extends Component {
                   className="card-header-custom"
                   title={
                     <Typography
-                      variant="subheading"
+                      variant="subtitle1"
                       style={{
                         color: themePalette.secondary.contrastText,
                       }}
@@ -958,4 +958,4 @@ const mapDispatchToProps = {
   fetchWord,
 }
 
-export default withTheme()(connect(mapStateToProps, mapDispatchToProps)(Preview))
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(Preview))

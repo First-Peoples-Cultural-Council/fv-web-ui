@@ -24,12 +24,15 @@ nashorn_code_cache
 *.iml
 /frontend/cypress/videos/
 /frontend/cypress/screenshots/
+*.log
+/frontend/temp/*
+*/test-report.xml
+*.scannerwork
+
+# Docker
+/docker/docker-compose.private.yml
 /docker/First-Voices-LATEST.zip
 /docker/First-Voices-marketplace-package-LATEST.zip
 /docker/nuxeo_dev_docker/
-*.log
-/frontend/temp/*
 /docker/database/*
 /docker/frontend/
-*/test-report.xml
-*.scannerwork

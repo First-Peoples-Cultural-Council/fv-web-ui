@@ -63,7 +63,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       if (formValue) {
         for (const key in formValue) {
           if (formValue.hasOwnProperty(key) && key) {
-            if (formValue[key] && formValue[key] !== '') {
+            // NOTE: we can encounter checkboxes that have formValue[key] === false.
+            // If we just used `if (formValue[key])` in the following conditional,
+            // we'd toss out unselected checkboxes
+            if (formValue[key] !== null && formValue[key] !== undefined && formValue[key] !== '') {
               // Filter out null values in an array
               if (formValue[key] instanceof Array) {
                 const formValueKey = formValue[key].filter((item) => item !== null)
@@ -74,7 +77,6 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             }
           }
         }
-        // console.log('same?', {properties,formValue})
         this.props.saveMethod(portal, properties)
 
         this.setState({
@@ -143,7 +145,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   }}
                 >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
                     <button
@@ -172,7 +174,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   <hr />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    <FVButton variant="flat" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
+                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
                     </FVButton>
                     <button
@@ -203,7 +205,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           }}
                         />
                         <FVButton
-                          variant="flat"
+                          variant="text"
                           size="small"
                           style={confirmationButtonsStyle}
                           onClick={(e) => {
@@ -213,7 +215,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                           <FVLabel transKey="yes" defaultStr="Yes" transform="first" />!
                         </FVButton>
                         <FVButton
-                          variant="flat"
+                          variant="text"
                           size="small"
                           style={confirmationButtonsStyle}
                           onClick={() => this.setState({ showCancelWarning: false })}

@@ -11,8 +11,8 @@ const createCategories = (start, max) => {
   const categoryName = `[CY] A Category ${start}`
   cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageEight/create/category')
   cy.wait(2000)
-  cy.getByLabelText(copy.create.name).type(categoryName)
-  cy.getByText(copy.create.submit).click()
+  cy.findByLabelText(copy.create.name).type(categoryName)
+  cy.findByText(copy.create.submit).click()
   cy.wait(1000)
 
   const count = start + 1
@@ -25,7 +25,7 @@ const createCategories = (start, max) => {
 const performBatchDelete = () => {
   // Display 500 Entries on the screen
   cy.wait(2000)
-  cy.getByText('Per Page:')
+  cy.findByText('Per Page:')
     .siblings('div')
     .first()
     .click()
@@ -36,7 +36,7 @@ const performBatchDelete = () => {
   cy.get('.DictionaryList__data > .Confirmation > .Confirmation__initiate > .Confirmation__btnInitiate')
     .should('exist')
     .should('be.disabled')
-  cy.getByText(copy.batch.select)
+  cy.findByText(copy.batch.select)
     .should('exist')
     .click()
   cy.wait(2000)
@@ -59,7 +59,7 @@ const performBatchDelete = () => {
   // We want to ensure that the TestDialectCategory is not deleted from the list as this is used for later testing.
   cy.get('body').then(($body) => {
     if ($body.text().includes(categoryForDialectFilterListTest)) {
-      cy.getByText(categoryForDialectFilterListTest)
+      cy.findByText(categoryForDialectFilterListTest)
         .parent()
         .parent()
         .find('.Checkbox input')
@@ -85,29 +85,29 @@ describe('CategoryCreate.js > Category', () => {
     createCategories(0, 1)
 
     // Edit after Creation
-    cy.getByText(copy.create.success.editView).click()
+    cy.findByText(copy.create.success.editView).click()
 
     cy.wait(2000)
-    cy.getByText(copy.create.btnInitiate)
+    cy.findByText(copy.create.btnInitiate)
       .should('exist')
       .click()
 
     cy.wait(2000)
-    cy.getByText(copy.create.btnDeny)
+    cy.findByText(copy.create.btnDeny)
       .should('exist')
       .click()
     cy.wait(2000)
-    cy.getByText(copy.create.btnInitiate).click()
+    cy.findByText(copy.create.btnInitiate).click()
     cy.wait(2000)
 
-    cy.getByText(copy.create.btnConfirm)
+    cy.findByText(copy.create.btnConfirm)
       .should('exist')
       .click()
     cy.wait(2000)
 
     // Confirmation screen
-    cy.getByText(copy.edit.successDelete.title).should('exist')
-    cy.getByText(copy.edit.success.linkCreateAnother).should('exist')
+    cy.findByText(copy.edit.successDelete.title).should('exist')
+    cy.findByText(copy.edit.success.linkCreateAnother).should('exist')
     cy.wait(500)
   })
 
@@ -120,27 +120,27 @@ describe('CategoryCreate.js > Category', () => {
 
     createCategories(0, 1)
 
-    cy.getByText(copy.create.success.browseView).click()
+    cy.findByText(copy.create.success.browseView).click()
     cy.wait(3000)
 
     // Test state of category browse delete button
-    cy.getByText(categoryName)
+    cy.findByText(categoryName)
       .should('exist')
       .parent()
       .parent()
       .contains(copy.create.btnInitiate)
       .click()
     cy.wait(1000)
-    cy.getByText(categoryName)
+    cy.findByText(categoryName)
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(copy.create.btnDeny)
+        cy.findByText(copy.create.btnDeny)
           .should('exist')
           .click()
       })
     cy.wait(2000)
-    cy.getByText(categoryName)
+    cy.findByText(categoryName)
       .should('exist')
       .parent()
       .parent()
@@ -148,11 +148,11 @@ describe('CategoryCreate.js > Category', () => {
       .click()
 
     // Test Delete
-    cy.getByText(categoryName)
+    cy.findByText(categoryName)
       .parent()
       .parent()
       .within(() => {
-        cy.getByText(copy.create.btnConfirm)
+        cy.findByText(copy.create.btnConfirm)
           .should('exist')
           .click()
       })
@@ -166,7 +166,7 @@ describe('CategoryCreate.js > Category', () => {
 
     // Create 5 Categories
     createCategories(0, 5)
-    cy.getByText(copy.create.success.browseView).click()
+    cy.findByText(copy.create.success.browseView).click()
     cy.wait(2000)
 
     // Perform batch delete from browse screen

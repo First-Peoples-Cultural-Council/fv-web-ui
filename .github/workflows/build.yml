@@ -80,7 +80,7 @@ jobs:
       # Build only the backend if changes are made to the backend and not frontend
     - name: Build backend with Maven
       if: steps.changed-backend.outputs.backend_files
-      run: mvn clean install -Pbackend
+      run: mvn clean install
 
       # Setup the Node modules caching (~/.npm directory) to restore from or save to
     - name: Cache node modules

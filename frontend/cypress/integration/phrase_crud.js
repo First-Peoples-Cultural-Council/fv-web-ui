@@ -8,7 +8,7 @@ const waitShort = 50
 function clearPhraseForm() {
   cy.logger({ type: 'subheader', text: 'clearPhraseForm' })
 
-  cy.getByTestId('pageContainer').within(() => {
+  cy.findByTestId('pageContainer').within(() => {
     // Clear input texts
     cy.get('input[name="dc:title"]').clear()
     cy.get('input[name="fv:reference"]').clear()
@@ -22,23 +22,23 @@ function clearPhraseForm() {
 // populatePhraseBooks
 // ===============================================
 function populatePhraseBooks({ name, description }) {
-  cy.getByText('Phrase books')
+  cy.findByText('Phrase books')
     .parents('fieldset:first')
     .within(() => {
-      cy.getByText('+ Add phrase book', { exact: false }).click()
+      cy.findByText('+ Add phrase book', { exact: false }).click()
 
-      cy.getByText('create new phrase book', { exact: false }).click()
+      cy.findByText('create new phrase book', { exact: false }).click()
     })
-  cy.getByTestId('PageDialectPhraseBooksCreate').within(() => {
-    cy.getByText('Phrase book name', { exact: false })
+  cy.findByTestId('PageDialectPhraseBooksCreate').within(() => {
+    cy.findByText('Phrase book name', { exact: false })
       .parent()
       .find('input[type=text]')
       .type(name)
-    cy.getByText('Phrase book description', { exact: false })
+    cy.findByText('Phrase book description', { exact: false })
       .parent()
       .find('textarea')
       .type(description)
-    cy.getByText('save', { exact: false }).click()
+    cy.findByText('save', { exact: false }).click()
   })
 }
 
@@ -48,7 +48,7 @@ function populatePhraseBooks({ name, description }) {
 function populatePhraseForm({ prefix, title, definition }) {
   // [POPULATE] Title
   cy.logger({ type: 'subheader', text: `${prefix} Title` })
-  cy.getByText('Phrase')
+  cy.findByText('Phrase')
     .parent()
     .find('input[type=text]')
     .type(title)
@@ -68,7 +68,7 @@ function populatePhraseForm({ prefix, title, definition }) {
     description: `${prefix} AUDIO > DESCRIPTION`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
   // [POPULATE] Related pictures
   cy.logger({ type: 'subheader', text: `${prefix} Related pictures` })
@@ -77,7 +77,7 @@ function populatePhraseForm({ prefix, title, definition }) {
     description: `${prefix} Related pictures > Description`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
   // [POPULATE] Related videos
   cy.logger({ type: 'subheader', text: `${prefix} Related videos` })
@@ -86,7 +86,7 @@ function populatePhraseForm({ prefix, title, definition }) {
     description: `${prefix} Related videos > Description`,
   })
   cy.wait(waitMedium)
-  cy.getByText('Insert into entry').click()
+  cy.findByText('Insert into entry').click()
 
   // [POPULATE] Cultural Note
   cy.logger({ type: 'subheader', text: `${prefix} Cultural Note` })
@@ -94,11 +94,11 @@ function populatePhraseForm({ prefix, title, definition }) {
 
   // [POPULATE] Reference
   cy.logger({ type: 'subheader', text: `${prefix} Reference` })
-  cy.getByLabelText('Reference', { exact: false }).type(`${prefix} Reference`)
+  cy.findByLabelText('Reference', { exact: false }).type(`${prefix} Reference`)
 
   // [POPULATE] Acknowledgement
   cy.logger({ type: 'subheader', text: `${prefix} Acknowledgement` })
-  cy.getByLabelText('Acknowledgement', { exact: false }).type(`${prefix} Acknowledgement`)
+  cy.findByLabelText('Acknowledgement', { exact: false }).type(`${prefix} Acknowledgement`)
 
   // [POPULATE] Source
   cy.logger({ type: 'subheader', text: `${prefix} Source` })
@@ -124,19 +124,19 @@ function populatePhraseFormBrowse({
     name: browseTitleAudio,
     description: browseDescriptionAudio,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateRelatedPictures({
     name: browseTitlePicture,
     description: `${timestamp} Related pictures > Description`,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateRelatedVideos({
     name: browseTitleVideo,
     description: `${timestamp} Related videos > Description`,
   })
-  cy.getByTestId('Dialog__AddMediaComponentCancel').click()
+  cy.findByTestId('Dialog__AddMediaComponentCancel').click()
 
   cy.formPopulateSource({ name: browseTitleSource })
 
@@ -222,9 +222,9 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageOne/learn/phrases')
     // cy.wait(500)
-    cy.getByText('TestLanguageOne Phrases', { exact: false }).should('exist')
-    cy.getByText('create new phrase', { exact: false }).click()
-    cy.getByText('Add New Phrase to TestLanguageOne').should('exist')
+    cy.findByText('TestLanguageOne Phrases', { exact: false }).should('exist')
+    cy.findByText('create new phrase', { exact: false }).click()
+    cy.findByText('Add New Phrase to TestLanguageOne').should('exist')
 
     // Browse
     cy.logger({ type: 'header', text: 'CREATE > BROWSE' })
@@ -249,37 +249,37 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
 
     // CREATE > children's archive
     cy.logger({ type: 'subheader', text: `${prefix} Children's archive` })
-    cy.getByLabelText("Available in children's archive", { exact: false }).check()
+    cy.findByLabelText("Available in children's archive", { exact: false }).check()
 
     // CREATE: save
     cy.logger({ type: 'subheader', text: `${prefix} Save` })
-    cy.getByText('save', { exact: false }).click()
+    cy.findByText('save', { exact: false }).click()
 
     cy.wait(waitMedium)
 
     // READ
     cy.logger({ type: 'header', text: 'READ' })
-    cy.getByText(title).should('exist')
-    cy.getByText(definition).should('exist')
+    cy.findByText(title).should('exist')
+    cy.findByText(definition).should('exist')
 
-    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
-      cy.getByLabelText('Show Audio Information', { exact: false }).each(($el) => {
+    cy.findByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.findByLabelText('Show Audio Information', { exact: false }).each(($el) => {
         cy.wrap($el).click()
       })
     })
-    cy.getByTestId('DialectViewWordPhraseAudio').within(() => {
-      cy.getByText(browseDescriptionAudio).should('exist')
+    cy.findByTestId('DialectViewWordPhraseAudio').within(() => {
+      cy.findByText(browseDescriptionAudio).should('exist')
     })
-    cy.getByText(browseTitlePhrasebooks).should('exist')
-    cy.getByText(browseTitlePicture).should('exist')
-    cy.getByText(browseTitleVideo).should('exist')
+    cy.findByText(browseTitlePhrasebooks).should('exist')
+    cy.findByText(browseTitlePicture).should('exist')
+    cy.findByText(browseTitleVideo).should('exist')
 
-    cy.getByText('metadata', { exact: false }).click()
-    cy.getByText(browseTitleSource).should('exist')
+    cy.findByText('metadata', { exact: false }).click()
+    cy.findByText(browseTitleSource).should('exist')
 
     // UPDATE
     cy.logger({ type: 'header', text: 'UPDATE' })
-    cy.getByText('Edit', { exact: false })
+    cy.findByText('Edit', { exact: false })
       .parents('button:first')
       .click()
     cy.wait(waitShort)
@@ -293,25 +293,25 @@ describe('phrase_crud.js > PageDialectPhrasesCreate', () => {
     })
 
     // UPDATE: save
-    cy.getByText('save', { exact: false }).click()
+    cy.findByText('save', { exact: false }).click()
 
     cy.wait(3000)
 
     // UPDATE: verify
-    cy.getByText(updateTitle).should('exist')
-    cy.getByText(updateDefinition).should('exist')
+    cy.findByText(updateTitle).should('exist')
+    cy.findByText(updateDefinition).should('exist')
 
     // DELETE
     cy.logger({ type: 'header', text: 'DELETE' })
 
-    cy.getByText('delete phrase', { exact: false }).click()
+    cy.findByText('delete phrase', { exact: false }).click()
     cy.wait(waitShort)
 
     // TODO: need more reliable hook
-    cy.getByTestId('ViewWithActions__dialog').within(() => {
-      cy.getByText('Delete').click()
+    cy.findByTestId('ViewWithActions__dialog').within(() => {
+      cy.findByText('Delete').click()
     })
     cy.wait(waitShort)
-    cy.getByText('Delete phrase success', { exact: false }).should('exist')
+    cy.findByText('Delete phrase success', { exact: false }).should('exist')
   })
 })

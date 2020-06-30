@@ -20,6 +20,7 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
@@ -37,7 +38,7 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     String path = dialect.getPathAsString();
 
     DocumentModel testConfusable = createDocument(session,
-        session.createDocumentModel(path, "TestChar", "FVCharacter"));
+        session.createDocumentModel(path, "TestChar", FV_CHARACTER));
     testConfusable.setPropertyValue("dc:title", "¢");
     session.saveDocument(testConfusable);
 
@@ -50,7 +51,7 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     Assert.assertTrue(property[1].equals(confusablesToAdd[1]));
 
     DocumentModel testConfusableUppercase = createDocument(session,
-        session.createDocumentModel(path, "TestChar", "FVCharacter"));
+        session.createDocumentModel(path, "TestChar", FV_CHARACTER));
     testConfusableUppercase.setPropertyValue("fvcharacter:upper_case_character", "¢");
 
     session.saveDocument(testConfusableUppercase);
