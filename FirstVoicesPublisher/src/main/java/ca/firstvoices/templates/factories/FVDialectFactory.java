@@ -22,6 +22,7 @@ package ca.firstvoices.templates.factories;
 
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -36,32 +37,44 @@ import org.nuxeo.ecm.platform.content.template.service.TemplateItemDescriptor;
  */
 public class FVDialectFactory extends SimpleTemplateBasedFactory {
 
-  //Set true if the Dialect creates is in the Test/Test folder
-  //Indicating that it is mock data
+  //Template with excluded items as they were already set in the mock data operation
+  protected List<TemplateItemDescriptor> mockTemplate;
+  //List of original template items to used to reset list
+  protected List<TemplateItemDescriptor> normalTemplate;
 
+  private void resetTemplate() {
+    this.template = this.normalTemplate;
+  }
 
   @Override
   public void createContentStructure(DocumentModel eventDoc) {
+    //re-add removed items
+    resetTemplate();
     // Only apply to one type
     if (FV_DIALECT.equals(eventDoc.getType())) {
       if (eventDoc.isProxy()) {
         return;
       }
+      //if dialect is mock data, remove items
+      if (eventDoc.getPathAsString().contains("/FV/Workspaces/Data/Test/Test/")) {
+        this.mockTemplate = this.template;
+        mockTemplate.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
+        this.template = this.mockTemplate;
+      }
+
     }
 
     super.createContentStructure(eventDoc);
   }
 
+
   @Override
   public boolean initFactory(Map<String, String> options, List<ACEDescriptor> rootAcl,
       List<TemplateItemDescriptor> template) {
-
-    //If the dialect created is mock data, need to prevent alphabet from being created
-    //Need condition for mock data WIP
-    //Can't use get path, null
-
-    template.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
-
+    //init reset list
+    if (normalTemplate == null) {
+      normalTemplate = new ArrayList<>(template);
+    }
     this.template = template;
     this.acl = rootAcl;
     return true;
