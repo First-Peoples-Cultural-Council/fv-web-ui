@@ -70,7 +70,7 @@ public class FirstVoicesTaskServiceTest extends AbstractFirstVoicesOperationsTes
     CommentManager commentManager = Framework.getService(CommentManager.class);
     List<Comment> comments = commentManager.getComments(session, task.getId());
     Assert.assertEquals(1, comments.size());
-    Assert.assertEquals(comments.get(0).getText(), "comment");
+    Assert.assertEquals("comment", comments.get(0).getText());
   }
 
 }
