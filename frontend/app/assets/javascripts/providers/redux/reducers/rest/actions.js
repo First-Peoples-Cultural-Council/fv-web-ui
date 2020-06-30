@@ -126,6 +126,12 @@ export const _delete = (key /*, type, properties = {}*/) => {
 /*
  * execute
  * --------------------------------------
+ *
+ * Initial call:
+ *  execute(key, operationName, properties)
+ *
+ * Subsequent calls:
+ *  execute(pathOrId, operationParams, messageStart, messageSuccess, messageError)
  */
 export const execute = (key, operationName, properties = {}) => {
   return (pathOrId, operationParams, messageStart = null, messageSuccess = null, messageError = null) => {
