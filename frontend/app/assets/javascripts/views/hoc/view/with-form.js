@@ -63,7 +63,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       if (formValue) {
         for (const key in formValue) {
           if (formValue.hasOwnProperty(key) && key) {
-            if (formValue[key] && formValue[key] !== '') {
+            // NOTE: we can encounter checkboxes that have formValue[key] === false.
+            // If we just used `if (formValue[key])` in the following conditional,
+            // we'd toss out unselected checkboxes
+            if (formValue[key] !== null && formValue[key] !== undefined && formValue[key] !== '') {
               // Filter out null values in an array
               if (formValue[key] instanceof Array) {
                 const formValueKey = formValue[key].filter((item) => item !== null)
@@ -74,7 +77,6 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             }
           }
         }
-        // console.log('same?', {properties,formValue})
         this.props.saveMethod(portal, properties)
 
         this.setState({
