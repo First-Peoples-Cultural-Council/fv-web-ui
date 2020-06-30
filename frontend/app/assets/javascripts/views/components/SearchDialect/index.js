@@ -269,10 +269,12 @@ export const SearchDialect = (props) => {
           <FVButton variant="contained" onClick={_handleSearch} color="primary">
             {searchButtonText}
           </FVButton>
-
-          <FVButton variant="contained" onClick={resetSearch} style={{ marginLeft: '20px' }}>
-            {resetButtonText}
-          </FVButton>
+          {/* Show/Hide reset button */}
+          {csd.searchNxqlQuery ? (
+            <FVButton variant="contained" onClick={resetSearch} style={{ marginLeft: '20px' }}>
+              {resetButtonText}
+            </FVButton>
+          ) : null}
         </div>
 
         <div className="SearchDialectFormSecondary">{getSearchUi()}</div>
@@ -608,14 +610,10 @@ export const SearchDialect = (props) => {
     const searchData = {
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CUSTOM,
-      searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
-      searchTerm: csd.searchTerm || '',
+      searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
+      searchTerm: '',
       searchType: csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH,
     }
-    searchData.searchMessage = getSearchMessage(searchData)
-    searchData.searchingDialectFilter = undefined
-    searchData.searchNxqlQuery = csd.searchNxqlQuery || undefined
-    searchData.searchNxqlSort = csd.searchNxqlSort || {}
     searchDialectUpdate(searchData)
 
     // Notify ancestors
