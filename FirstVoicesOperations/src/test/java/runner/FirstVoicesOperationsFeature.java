@@ -52,7 +52,6 @@ import org.nuxeo.runtime.test.runner.RunnerFeature;
 
 @Deploy({"FirstVoicesOperations.test:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml"})
 @Deploy("org.nuxeo.ecm.platform.usermanager")
-//@Deploy("org.nuxeo.ecm.platform.test:test-usermanagerimpl/directory-config.xml")
 
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",
