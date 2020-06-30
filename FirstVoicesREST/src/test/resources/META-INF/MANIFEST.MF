@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesREST.test
+Bundle-Name: FirstVoicesREST.test
+Import-Package: org.nuxeo.ecm.core,
+ org.nuxeo.ecm.directory
+
