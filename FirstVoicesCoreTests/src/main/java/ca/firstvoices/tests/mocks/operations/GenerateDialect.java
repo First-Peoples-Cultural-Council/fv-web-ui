@@ -21,7 +21,7 @@ public class GenerateDialect {
 
   @Param(name = "randomize", values = {"true", "false"},
       description = "`true` to create random data; `false` to create real demo data")
-  protected boolean randomize = true;
+  protected String randomize = "true";
 
   @Param(name = "maxEntries", required = false, description = "how many entries to generate"
       + " for words, phrases, etc.")
@@ -37,7 +37,7 @@ public class GenerateDialect {
   public DocumentModel run() {
     DocumentModel createdDialect;
 
-    if (randomize) {
+    if (randomize.equals("true")) {
       createdDialect = generateDialectService
           .generateMockRandomDialect(session, maxEntries);
     } else {

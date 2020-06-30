@@ -83,21 +83,15 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   @Override
   public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
-    // See other services, operations and InitialDatabaseSetup for inspiration
-    // Feel free to create other services, utils and methods as needed
-    // for reusability (for example to create a word, etc.)
     String name = generateRandomWord(currentAlphabet);
-
-    DocumentModel dialect = generateEmptyDialect(session, name);
-
     StringJoiner join = new StringJoiner(" ");
     for (int i = 0; i < 30; i++) {
       join.add(generateRandomWord(currentAlphabet) + " ");
     }
     String desc = join.toString();
 
-    dialect.setPropertyValue("dc:description", desc);
-    session.save();
+    DocumentModel dialect = generateEmptyDialect(session, name, desc);
+
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
     return dialect;
 
@@ -105,20 +99,15 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
-    // See other services, operations and InitialDatabaseSetup for inspiration
-    // Feel free to create other services, utils and methods as needed
-    // for reusability (for example to create a word, etc.)
-    DocumentModel dialect = generateEmptyDialect(session, name);
     String desc = "This is a generated test dialect for demo and cypress test purposes.";
+    DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
-    dialect.setPropertyValue("dc:description", desc);
-    session.save();
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
 
     return dialect;
 
   }
-
+  /*
   @Override
   public void removeMockDialect(String name) {
     //To be implemented at a later date.
@@ -131,9 +120,19 @@ public class MockDialectServiceImpl implements MockDialectService {
     //To be implemented at a later date.
     throw new UnsupportedOperationException("Remove functions are not implemented yet.");
   }
+   */
 
   private DocumentModel createDocument(CoreSession session, DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
+    DocumentModel newDoc = session.createDocument(model);
+    session.save();
+
+    return newDoc;
+  }
+
+  private DocumentModel createDocument(CoreSession session, DocumentModel model, String desc) {
+    model.setPropertyValue("dc:title", model.getName());
+    model.setPropertyValue("dc:description", desc);
     DocumentModel newDoc = session.createDocument(model);
     session.save();
 
@@ -165,7 +164,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   }
 
-  private DocumentModel generateEmptyDialect(CoreSession session, String name) {
+  private DocumentModel generateEmptyDialect(CoreSession session, String name, String desc) {
     //In the current session, in the /FV/Workspaces/Data/TestLangFam/TestLang/ directory
     //create an empty dialect with all necessary children
 
@@ -173,9 +172,11 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     DocumentModel dialect = createDocument(session,
         session
-            .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, FV_DIALECT));
+            .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, FV_DIALECT), desc);
+
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+
     return dialect;
 
   }

@@ -28,11 +28,11 @@ public interface MockDialectService {
    *
    * @param name - the name of the dialect
    */
-  void removeMockDialect(String name);
+  //void removeMockDialect(String name);
 
   /**
    * Should remove all test dialects completely Ensure there is logic in place to remove dialects
    * only from Test areas
    */
-  void removeMockDialects();
+  //void removeMockDialects();
 }
