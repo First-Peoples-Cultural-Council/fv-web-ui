@@ -41,7 +41,7 @@ import {
 
 function DictionaryListData(props) {
   const { computeDocument, fetchDocument } = useDocument()
-  const { computeDialect2, fetchDialect2 } = useDialect()
+  const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
@@ -51,10 +51,39 @@ function DictionaryListData(props) {
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
 
-  const { searchNxqlQuery = '' } = computeSearchDialect
+  const computeDocumentkey = `${routeParams.dialect_path}/Dictionary`
+  const DEFAULT_LANGUAGE = 'english'
+  const { searchNxqlSort = {} } = computeSearchDialect
+  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
+
+  const [columns] = useState(getColumns())
+
+  // Parsing computeDocument
+  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+  const computeDocumentResponse = selectn('response', extractComputeDocument)
+  const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
+  const parentId = selectn('uid', computeDocumentResponse)
+  const curFetchDocumentAction = selectn('action', extractComputeDocument)
+
+  // Parsing computePortal
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
+  const dialectClassName = getDialectClassname(extractComputePortal)
+  const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
+    ''} ${intl.trans('words', 'Words', 'first')}`
+
+  // Parsing computeDialect2
+  const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const dialect = selectn('response', computedDialect2)
+
+  // Parsing computeWords
+  const computedWords = ProviderHelpers.getEntry(computeWords, parentId)
+  const items = selectn('response.entries', computedWords)
+  const metadata = selectn('response', computedWords)
 
   useEffect(() => {
     fetchData()
+    // Words
+    fetchListViewData()
   }, [])
 
   useEffect(() => {
@@ -68,57 +97,17 @@ function DictionaryListData(props) {
     routeParams.letter,
     routeParams.page,
     routeParams.pageSize,
-    props.filterInfo,
-    navigationRouteSearch,
   ])
 
-  const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
-  const DEFAULT_LANGUAGE = 'english'
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
-  const [columns] = useState(getColumns())
-
-  // Parsing computeDocument
-  const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, dictionaryKey)
-  const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
-  const curFetchDocumentAction = selectn('action', extractComputeDocument)
-  const dictionary = selectn('response', extractComputeDocument)
-  const dictionaryId = selectn('uid', dictionary)
-
-  // Parsing computePortal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
-  const dialectClassName = getDialectClassname(extractComputePortal)
-  const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
-    ''} ${intl.trans('words', 'Words', 'first')}`
-
-  // Parsing computeDialect2
-  const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const dialect = selectn('response', computedDialect2)
-
-  // Parsing computeWords
-  const computedWords = ProviderHelpers.getEntry(computeWords, dictionaryKey)
-  const items = selectn('response.entries', computedWords)
-  const metadata = selectn('response', computedWords)
-
   const fetchData = async () => {
-    // Dialect
-    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
     // Document
-    await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
+    await ProviderHelpers.fetchIfMissing(computeDocumentkey, fetchDocument, computeDocument)
     // Portal
     await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
-    // Words
-    fetchListViewData()
   }
 
   function fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
     let currentAppliedFilter = ''
-
-    if (searchNxqlQuery) {
-      currentAppliedFilter = ` AND ${searchNxqlQuery}`
-    }
-
     if (routeParams.category) {
       // Private
       if (routeParams.area === 'Workspaces') {
@@ -135,23 +124,24 @@ function DictionaryListData(props) {
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
-    const nql = `${currentAppliedFilter}
-        &currentPageIndex=${pageIndex - 1}
-        &dialectId=${dialectUid}
-        &pageSize=${pageSize}
-        &sortOrder=${sortOrder}
-        &sortBy=${sortBy}
-        &enrichment=category_children
-        ${
-          routeParams.letter
-            ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery`
-            : startsWithQuery
-        }`
+    const computedDocument = ProviderHelpers.getEntry(computeDocument, `${routeParams.dialect_path}/Dictionary`)
+    const uid = useIdOrPathFallback({
+      id: selectn('response.uid', computedDocument),
+    })
+    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
+      1}&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}&enrichment=category_children${
+      routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
+    }`
 
-    fetchWords(dictionaryKey, nql)
+    fetchWords(uid, nql)
+  }
+
+  function useIdOrPathFallback({ id } = {}) {
+    return id || `${routeParams.dialect_path}/Dictionary`
   }
 
   function getColumns() {
+    const computedDialect2Response = selectn('response', computedDialect2)
     const columnsArray = [
       {
         name: 'title',
@@ -168,7 +158,7 @@ function DictionaryListData(props) {
             isWorkspaces && hrefEdit ? (
               <AuthorizationFilter
                 filter={{
-                  entity: dialect,
+                  entity: computedDialect2Response,
                   login: computeLogin,
                   role: ['Record', 'Approve', 'Everything'],
                 }}
@@ -177,7 +167,7 @@ function DictionaryListData(props) {
               >
                 <FVButton
                   type="button"
-                  variant="flat"
+                  variant="text"
                   size="small"
                   component="a"
                   className="DictionaryList__linkEdit PrintHide"
@@ -327,7 +317,7 @@ function DictionaryListData(props) {
 
   return props.children({
     columns: columns,
-    computeSearchDialect,
+    computeDocumentResponse,
     dialect,
     dialectClassName,
     dialectUid,
@@ -339,14 +329,11 @@ function DictionaryListData(props) {
     items,
     listViewMode: listView.mode,
     metadata,
-    navigationRouteSearch,
     page: parseInt(routeParams.page, 10),
     pageSize: parseInt(routeParams.pageSize, 10),
     pageTitle,
-    dictionaryId,
-    pushWindowPath,
+    parentId,
     routeParams,
-    setRouteParams,
     setListViewMode: setListViewMode,
     smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
     sortCol: DEFAULT_SORT_COL,

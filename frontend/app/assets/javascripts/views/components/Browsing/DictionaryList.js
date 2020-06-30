@@ -254,10 +254,10 @@ const DictionaryList = (props) => {
       (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
         props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
     ) {
-      setRouteParams({
+      props.setRouteParams({
         search: {
-          page: props.routeParams.page,
-          pageSize: props.routeParams.pageSize,
+          page: props.navigationRouteRouteParams.page,
+          pageSize: props.navigationRouteRouteParams.pageSize,
           sortOrder: windowLocationSearchSortOrder,
           sortBy: windowLocationSearchSortBy,
         },
@@ -266,10 +266,10 @@ const DictionaryList = (props) => {
 
     columnsEnhanced = generateSortTitleLargeSmall({
       columns: columnsEnhanced,
-      pageSize: props.routeParams.pageSize,
+      pageSize: props.navigationRouteRouteParams.pageSize,
       sortOrder: props.navigationRouteSearch.sortOrder,
       sortBy: props.navigationRouteSearch.sortBy,
-      navigationFunc: pushWindowPath,
+      navigationFunc: props.pushWindowPath,
       sortHandler: props.sortHandler,
     })
   }
@@ -760,8 +760,12 @@ DictionaryList.propTypes = {
   resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
   searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
   // REDUX: reducers/state
-  routeParams: object, // NOTE: redux saved route params, using page & pageSize
-  navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
+  navigationRouteRouteParams: object.isRequired, // NOTE: redux saved route params, using page & pageSize
+  navigationRouteSearch: object.isRequired, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
+  listView: object.isRequired,
+  // REDUX: actions/dispatch/func
+  pushWindowPath: func.isRequired,
+  setRouteParams: func.isRequired,
 }
 
 DictionaryList.defaultProps = {
@@ -791,6 +795,7 @@ DictionaryList.defaultProps = {
   // REDUX: actions/dispatch/func
   pushWindowPath: () => {},
 }
+
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
   const { navigation, listView } = state
