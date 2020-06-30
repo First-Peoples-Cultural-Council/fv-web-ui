@@ -1,7 +1,8 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 // import PropTypes from 'prop-types'
 import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
  * @summary WordsListContainer
@@ -17,6 +18,7 @@ function WordsListContainer() {
     <WordsListData>
       {({
         columns,
+        computeEntities,
         computeSearchDialect,
         dialect,
         dialectClassName,
@@ -37,7 +39,7 @@ function WordsListContainer() {
         sortHandler,
       }) => {
         return (
-          <Suspense fallback={<div>Loading...</div>}>
+          <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <WordsListPresentation
               computeSearchDialect={computeSearchDialect}
               dialectClassName={dialectClassName}
@@ -94,7 +96,7 @@ function WordsListContainer() {
               sortHandler={sortHandler}
               // ===============================================
             />
-          </Suspense>
+          </PromiseWrapper>
         )
       }}
     </WordsListData>

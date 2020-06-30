@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Libraries
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List } from 'immutable'
@@ -173,85 +173,87 @@ function WordsListPresentation(props) {
   }
 
   return (
-    <div>
-      <h1 className="DialectPageTitle">{props.pageTitle}</h1>
-      <div className={props.dialectClassName}>
-        <SearchDialect
-          handleSearch={props.handleSearch}
-          resetSearch={props.resetSearch}
-          searchUi={props.searchUi}
-          searchDialectDataType={props.searchDialectDataType}
-        />
-        {generateListButtons(listButtonArg)}
-        <Media
-          queries={{
-            small: '(max-width: 850px)',
-            medium: '(min-width: 851px)',
-            print: 'print',
-          }}
-        >
-          {(matches) => {
-            // =========================================
-            //  All screens: no results
-            // =========================================
-            if (noResults) {
-              return noResults
-            }
-            // =========================================
-            // User specified view states
-            // =========================================
-
-            //  Flashcard Specified: by view mode button or prop
-            // -----------------------------------------
-            if (props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
-              // TODO: SPECIFY FlashcardList PROPS
-              let flashCards = <FlashcardList {...props} />
-              if (props.hasPagination) {
-                const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
-                flashCards = <FlashcardsWithPagination {...props} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>
+        <h1 className="DialectPageTitle">{props.pageTitle}</h1>
+        <div className={props.dialectClassName}>
+          <SearchDialect
+            handleSearch={props.handleSearch}
+            resetSearch={props.resetSearch}
+            searchUi={props.searchUi}
+            searchDialectDataType={props.searchDialectDataType}
+          />
+          {generateListButtons(listButtonArg)}
+          <Media
+            queries={{
+              small: '(max-width: 850px)',
+              medium: '(min-width: 851px)',
+              print: 'print',
+            }}
+          >
+            {(matches) => {
+              // =========================================
+              //  All screens: no results
+              // =========================================
+              if (noResults) {
+                return noResults
               }
-              return flashCards
-            }
-            //  Small Screen Specified: by view mode button or prop
-            // -----------------------------------------
-            if (props.dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
-              return getListSmallScreen(getListSmallScreenArg)
-            }
-            //  Large Screen Specified: by prop
-            // -----------------------------------------
-            if (props.dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
-              return getListLargeScreen(getListLargeScreenArg)
-            }
-            // =========================================
-            // Responsive states
-            // =========================================
-            // Print: list view (uses large screen)
-            // -----------------------------------------
-            // NOTE: Chrome prints small screen on both small AND large views (not preferred)
-            // NOTE: `matches.print` forces Chrome to print the large view for both small & large views (slightly better)
-            // NOTE: But, with `matches.print` in place the only way to print the small view on Chrome is to click "Compact view"
-            // NOTE: ie: small view doesn't print if it's dynamically displayed via a small screen
-            // NOTE: Firefox behaves a bit better in that it dynamically chooses the view depending on the screen size
-            // NOTE: Firefox ignores `matches.print`
-            if (matches.print) {
-              return getListLargeScreen(getListLargeScreenArg)
-            }
-            // Small screen: list view
-            // -----------------------------------------
-            if (matches.small) {
-              return getListSmallScreen(getListSmallScreenArg)
-            }
-            // Large screen: list view
-            // -----------------------------------------
-            if (matches.medium) {
-              return getListLargeScreen(getListLargeScreenArg)
-            }
+              // =========================================
+              // User specified view states
+              // =========================================
 
-            return null
-          }}
-        </Media>
+              //  Flashcard Specified: by view mode button or prop
+              // -----------------------------------------
+              if (props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+                // TODO: SPECIFY FlashcardList PROPS
+                let flashCards = <FlashcardList {...props} />
+                if (props.hasPagination) {
+                  const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
+                  flashCards = <FlashcardsWithPagination {...props} />
+                }
+                return flashCards
+              }
+              //  Small Screen Specified: by view mode button or prop
+              // -----------------------------------------
+              if (props.dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
+                return getListSmallScreen(getListSmallScreenArg)
+              }
+              //  Large Screen Specified: by prop
+              // -----------------------------------------
+              if (props.dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
+                return getListLargeScreen(getListLargeScreenArg)
+              }
+              // =========================================
+              // Responsive states
+              // =========================================
+              // Print: list view (uses large screen)
+              // -----------------------------------------
+              // NOTE: Chrome prints small screen on both small AND large views (not preferred)
+              // NOTE: `matches.print` forces Chrome to print the large view for both small & large views (slightly better)
+              // NOTE: But, with `matches.print` in place the only way to print the small view on Chrome is to click "Compact view"
+              // NOTE: ie: small view doesn't print if it's dynamically displayed via a small screen
+              // NOTE: Firefox behaves a bit better in that it dynamically chooses the view depending on the screen size
+              // NOTE: Firefox ignores `matches.print`
+              if (matches.print) {
+                return getListLargeScreen(getListLargeScreenArg)
+              }
+              // Small screen: list view
+              // -----------------------------------------
+              if (matches.small) {
+                return getListSmallScreen(getListSmallScreenArg)
+              }
+              // Large screen: list view
+              // -----------------------------------------
+              if (matches.medium) {
+                return getListLargeScreen(getListLargeScreenArg)
+              }
+
+              return null
+            }}
+          </Media>
+        </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 

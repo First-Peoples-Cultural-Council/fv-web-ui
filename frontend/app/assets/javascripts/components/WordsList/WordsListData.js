@@ -93,17 +93,6 @@ function WordsListData(props) {
 
   const [columns] = useState(getColumns())
 
-  const computeEntities = Immutable.fromJS([
-    {
-      id: routeParams.dialect_path,
-      entity: computePortal,
-    },
-    {
-      id: dictionaryKey,
-      entity: computeDocument,
-    },
-  ])
-
   // Parsing computeDocument
   const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, dictionaryKey)
   const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
@@ -125,6 +114,13 @@ function WordsListData(props) {
   const computedWords = ProviderHelpers.getEntry(computeWords, dictionaryKey)
   const items = selectn('response.entries', computedWords)
   const metadata = selectn('response', computedWords)
+
+  const computeEntities = Immutable.fromJS([
+    {
+      id: dictionaryKey,
+      entity: computeWords,
+    },
+  ])
 
   const fetchData = async () => {
     // Dialect
