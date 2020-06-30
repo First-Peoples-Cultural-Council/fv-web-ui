@@ -34,7 +34,7 @@ import testUtil.AbstractFirstVoicesOperationsTest;
 public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
 
   @Inject
-  protected AutomationService automationService;
+  AutomationService automationService;
 
   @Test
   public void updateCategory() throws OperationException {
