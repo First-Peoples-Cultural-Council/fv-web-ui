@@ -103,7 +103,7 @@ CustomImage.propTypes = {
  * Mentor Apprentice Photo Project
  * Uses https://neptunian.github.io/react-photo-gallery/
  */
-const MAPPhotoProjectPath = '/FV/sections/SharedData/MAP Photo Project/'
+const MAPPhotoProjectPath = '/FV/sections/SharedData/Shared Resources/MAP Photo Project/'
 
 const { func, object } = PropTypes
 
