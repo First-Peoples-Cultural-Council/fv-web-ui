@@ -15,7 +15,9 @@ limitations under the License.
 */
 import { cyan } from '@material-ui/core/colors'
 import typography from './FirstVoicesTypography'
+import components from './FirstVoicesComponents'
 export default {
+  components,
   typography,
   palette: {
     primary: {

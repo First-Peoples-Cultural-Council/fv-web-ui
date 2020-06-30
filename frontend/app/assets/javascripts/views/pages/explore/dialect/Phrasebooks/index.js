@@ -25,6 +25,7 @@ import { setRouteParams } from 'providers/redux/reducers/navigation'
 
 // CUSTOM
 // ----------------------------------------
+
 import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'views/components/Confirmation'

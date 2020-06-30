@@ -76,9 +76,9 @@ import { WORKSPACES } from 'common/Constants'
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
-// PhrasesFilteredByCategory
+// phrasesFilteredByPhrasebook
 // ====================================================
-export class PhrasesFilteredByCategory extends Component {
+export class phrasesFilteredByPhrasebook extends Component {
   DEFAULT_SORT_COL = 'fv:custom_order' // NOTE: Used when paging
   DEFAULT_SORT_TYPE = 'asc'
 
@@ -602,7 +602,7 @@ export class PhrasesFilteredByCategory extends Component {
 // PROPTYPES
 // -------------------------------------------
 const { any, array, bool, func, object, string } = PropTypes
-PhrasesFilteredByCategory.propTypes = {
+phrasesFilteredByPhrasebook.propTypes = {
   hasPagination: bool,
   DEFAULT_LANGUAGE: any, // TODO ?
   // REDUX: reducers/state
@@ -628,7 +628,7 @@ PhrasesFilteredByCategory.propTypes = {
   updatePageProperties: func.isRequired,
   searchDialectReset: func.isRequired,
 }
-PhrasesFilteredByCategory.defaultProps = {
+phrasesFilteredByPhrasebook.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
 }
 
@@ -674,4 +674,4 @@ const mapDispatchToProps = {
   searchDialectReset,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhrasesFilteredByCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(phrasesFilteredByPhrasebook)
