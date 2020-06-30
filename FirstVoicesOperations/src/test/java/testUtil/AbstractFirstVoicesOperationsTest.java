@@ -20,7 +20,6 @@
 
 package testUtil;
 
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
@@ -40,7 +39,6 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.LASTNAME_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
 import ca.firstvoices.dialect.categories.services.CategoryService;
-import ca.firstvoices.dialect.services.FirstVoicesTaskService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,13 +49,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.platform.task.TaskService;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -84,15 +80,6 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
   @Inject
   protected CategoryService categoryService;
-
-  @Inject
-  protected AutomationService automationService;
-
-  @Inject
-  protected TaskService taskService;
-
-  @Inject
-  protected FirstVoicesTaskService firstVoicesTaskService;
 
   @Inject
   protected UserManager userManager;
@@ -253,11 +240,6 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
     session.save();
     return documentModelList;
-  }
-
-  protected Boolean isPublished(DocumentModel doc) {
-    return doc.getLifeCyclePolicy().equals("fv-lifecycle") && doc.getCurrentLifeCycleState()
-        .equals(PUBLISHED_STATE);
   }
 
   protected void createNewGroup(String groupName, String groupLabel) {

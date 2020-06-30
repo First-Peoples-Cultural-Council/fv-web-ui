@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationException;
@@ -15,16 +16,39 @@ import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.platform.comment.api.Comment;
 import org.nuxeo.ecm.platform.comment.api.CommentManager;
 import org.nuxeo.ecm.platform.task.Task;
+import org.nuxeo.ecm.platform.task.TaskService;
 import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.Deploy;
 import testUtil.AbstractFirstVoicesOperationsTest;
 
 /**
  * @author david
  */
-public class ApproveRejectTaskServiceTest extends AbstractFirstVoicesOperationsTest {
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-operations.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/dialect/tasks/tasks-services.xml")
+
+@Deploy("org.nuxeo.ecm.platform.routing.core")
+
+@Deploy("org.nuxeo.ecm.platform")
+@Deploy("org.nuxeo.ecm.platform.content.template")
+@Deploy("org.nuxeo.ecm.automation.core")
+@Deploy("org.nuxeo.ecm.platform.task.api")
+@Deploy("org.nuxeo.ecm.platform.task.core")
+@Deploy("org.nuxeo.ecm.automation.server")
+@Deploy("org.nuxeo.ecm.platform.query.api")
+
+@Deploy("org.nuxeo.ecm.platform.comment.api")
+@Deploy("org.nuxeo.ecm.platform.query.api")
+@Deploy("org.nuxeo.ecm.platform.comment")
+public class FirstVoicesTaskServiceTest extends AbstractFirstVoicesOperationsTest {
+
+  @Inject
+  protected FirstVoicesTaskService firstVoicesTaskService;
+  @Inject
+  TaskService taskService;
 
   @Test
-  public void test() throws OperationException {
+  public void addCommentToTaskTest() throws OperationException {
     ArrayList<String> actors = new ArrayList<>(
         Arrays.asList(recorder.getName(), LANGUAGE_ADMINS_GROUP));
     Calendar calendar = Calendar.getInstance();

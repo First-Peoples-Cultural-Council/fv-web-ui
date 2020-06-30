@@ -22,14 +22,19 @@ package ca.firstvoices.dialect.categories.operations;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import testUtil.AbstractFirstVoicesOperationsTest;
 
 public class TestUpdateCategory extends AbstractFirstVoicesOperationsTest {
+
+  @Inject
+  AutomationService automationService;
 
   @Test
   public void updateCategory() throws OperationException {
