@@ -53,7 +53,7 @@ import {
  *
  */
 
-function WordsListData(props) {
+function WordsListData({ children }) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -385,7 +385,7 @@ function WordsListData(props) {
     fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
   }
 
-  return props.children({
+  return children({
     columns: columns,
     computeEntities,
     computeSearchDialect,

@@ -9,7 +9,6 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  * @version 1.0.1
  * @component
  *
- * @param {object} props
  *
  * @returns {node} jsx markup
  */
