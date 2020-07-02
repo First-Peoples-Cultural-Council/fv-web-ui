@@ -38,7 +38,7 @@ import PageDialectReports from './explore/dialect/reports'
 import PageDialectReportsView from './explore/dialect/reports/view'
 import PageDialectUsers from './explore/dialect/users'
 
-import PageDialectLearnWords from './explore/dialect/learn/words/WordsLayout'
+import PageDialectLearnWords from 'components/Words/WordsContainer'
 import PageDialectLearnPhrases from './explore/dialect/learn/phrases'
 import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stories'
 

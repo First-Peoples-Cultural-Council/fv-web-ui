@@ -14,7 +14,7 @@ import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
 import Autosuggest from 'react-autosuggest'
 
 import LinearProgress from '@material-ui/core/LinearProgress'
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import CategoriesData from 'components/Categories/CategoriesData'
 const AutoSuggestTheme = {
   container: 'autosuggest dropdown',
   containerOpen: 'dropdown open',
@@ -275,7 +275,7 @@ export class AutoSuggestComponent extends Component {
     switch (this.props.type) {
       case 'FVCategory':
         return (
-          <CategoriesDataLayer
+          <CategoriesData
             fetchPhraseBooks={this.props.locals.attrs.containerType === 'FVPhrase'}
             value={this.props.value}
           >
@@ -298,7 +298,7 @@ export class AutoSuggestComponent extends Component {
                 </div>
               ) : null
             }}
-          </CategoriesDataLayer>
+          </CategoriesData>
         )
 
       default:

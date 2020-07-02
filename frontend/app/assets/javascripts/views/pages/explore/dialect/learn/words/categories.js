@@ -27,7 +27,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import CategoryList from 'views/components/Browsing/category-list'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import CategoriesData from 'components/Categories/CategoriesData'
 
 /**
  * Categories page for words
@@ -106,7 +106,7 @@ export class WordCategories extends Component {
     ])
 
     return (
-      <CategoriesDataLayer fetchLatest>
+      <CategoriesData fetchLatest>
         {({ categoriesData }) => {
           let categoriesDataLayerToRender = null
           if (categoriesData && categoriesData.length > 0) {
@@ -122,7 +122,7 @@ export class WordCategories extends Component {
           }
           return categoriesDataLayerToRender
         }}
-      </CategoriesDataLayer>
+      </CategoriesData>
     )
   }
 }

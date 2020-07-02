@@ -16,6 +16,7 @@ limitations under the License.
 import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
+import useRoute from 'DataSource/useRoute'
 
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
@@ -298,29 +299,43 @@ export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRen
 // dictionaryListSmallScreenTemplateWords
 // --------------------------------------------------------------
 export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
+  const {routeParams} = useRoute()
+  const dialectName = routeParams.dialect_name
+  const mapDocumentStateToVisibility = {
+    New: `${dialectName} Team Only`,
+    Disabled: `${dialectName} Team Only`,
+    Enabled: `${dialectName} Members Only`,
+    Published: "Public"
+  }
   return (
-    <div className="DictionaryListSmallScreen__item">
-      <div className="DictionaryListSmallScreen__groupMain">
-        {templateData.actions}
-        {templateData.rowClick}
-        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-          {templateData.title}
-          <span className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
-        </div>
-        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-          {templateData.related_audio}
-        </div>
-
-        {templateData['fv:definitions'] && (
-          <div className="DictionaryListSmallScreen__groupData">
-            <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-            {templateData['fv:definitions']}
+      <div className="DictionaryListSmallScreen__item">
+        <div className="DictionaryListSmallScreen__groupMain">
+          {templateData.actions}
+          {templateData.rowClick}
+          <div
+              className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+            {templateData.title}
+            <span
+                className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
           </div>
-        )}
+          <div
+              className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+            {templateData.related_audio}
+          </div>
+
+          {templateData['fv:definitions'] && (
+              <div className="DictionaryListSmallScreen__groupData">
+                <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+                {templateData['fv:definitions']}
+              </div>
+          )}
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
-          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+          <div
+              className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
+          <div className="DictionaryListSmallScreen__groupData">
+            <strong>State: </strong>{mapDocumentStateToVisibility[templateData.state.props.children[2]]}
+          </div>
         </div>
       </div>
 
@@ -332,29 +347,43 @@ export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
 // dictionaryListSmallScreenTemplatePhrases
 // --------------------------------------------------------------
 export const dictionaryListSmallScreenTemplatePhrases = ({ templateData }) => {
+  const {routeParams} = useRoute()
+  const dialectName = routeParams.dialect_name
+  const mapDocumentStateToVisibility = {
+    New: `${dialectName} Team Only`,
+    Disabled: `${dialectName} Team Only`,
+    Enabled: `${dialectName} Members Only`,
+    Published: "Public"
+  }
   return (
-    <div className="DictionaryListSmallScreen__item">
-      <div className="DictionaryListSmallScreen__groupMain">
-        {templateData.actions}
-        {templateData.rowClick}
-        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-          {templateData.title}
-          <span className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
-        </div>
-        <div className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
-          {templateData.related_audio}
-        </div>
-
-        {templateData['fv:definitions'] && (
-          <div className="DictionaryListSmallScreen__groupData">
-            <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
-            {templateData['fv:definitions']}
+      <div className="DictionaryListSmallScreen__item">
+        <div className="DictionaryListSmallScreen__groupMain">
+          {templateData.actions}
+          {templateData.rowClick}
+          <div
+              className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+            {templateData.title}
+            <span
+                className="DictionaryListSmallScreen__partOfSpeech">{templateData['fv-word:part_of_speech']}</span>
           </div>
-        )}
+          <div
+              className="DictionaryListSmallScreen__groupData DictionaryListSmallScreen__groupData--noHorizPad">
+            {templateData.related_audio}
+          </div>
+
+          {templateData['fv:definitions'] && (
+              <div className="DictionaryListSmallScreen__groupData">
+                <h2 className="DictionaryListSmallScreen__definitionsHeading">Definitions</h2>
+                {templateData['fv:definitions']}
+              </div>
+          )}
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
-          <div className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
-          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
+          <div
+              className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
+          <div className="DictionaryListSmallScreen__groupData">
+            <strong>State: </strong>{mapDocumentStateToVisibility[templateData.state.props.children[2]]}
+          </div>
         </div>
       </div>
 

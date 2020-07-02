@@ -4,7 +4,6 @@ May not be necessary if componentDidUpdate handles everything and/or can't we us
 */
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { Set } from 'immutable'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
@@ -59,46 +58,6 @@ class DialectFilterListData extends Component {
           }
         }
       )
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { facetType } = this.props
-
-    let facets
-    let prevFacets
-
-    // Are we using facets or internal state?
-    if (this.props.facets) {
-      facets = this.props.facets
-      prevFacets = prevProps.facets
-    } else {
-      facets = this.state.facets
-      prevFacets = prevState.facets
-    }
-    // Note: guard against undefined
-    const prevAppliedFilterIds = prevProps.appliedFilterIds || new Set()
-    const currentAppliedFilterIds = this.props.appliedFilterIds || new Set()
-
-    if (prevFacets.length !== facets.length) {
-      this.filtersSorted = this.sortDialectFilters(facets)
-    }
-
-    if (prevFacets.length !== facets.length || prevAppliedFilterIds.equals(currentAppliedFilterIds) === false) {
-      this.historyData = this.generateDataForHistoryEvents(this.filtersSorted)
-    }
-
-    // Is something selected? (via url)
-    // NOTE: could this be driven by the `appliedFilterIds` prop?
-    const selectedDialectFilter = selectn(`${facetType}`, this.props.routeParams)
-    const prevSelectedDialectFilter = selectn(`${facetType}`, prevProps.routeParams)
-
-    if (selectedDialectFilter !== prevSelectedDialectFilter) {
-      const selectedParams = this.historyData[selectedDialectFilter]
-      if (selectedParams) {
-        this.setSelected(selectedParams)
-        this.selectedDialectFilter = undefined
-      }
     }
   }
 
@@ -159,7 +118,7 @@ class DialectFilterListData extends Component {
   //   /* More top level categories... */
   // ]
   generateListItemData = (filters = this.filtersSorted) => {
-    const { appliedFilterIds } = this.props
+    const { selectedCategoryId } = this.props
 
     const listItemData = []
     filters.forEach((filter) => {
@@ -168,7 +127,7 @@ class DialectFilterListData extends Component {
 
       // Process children
       const children = selectn('contextParameters.children.entries', filter)
-      const parentIsActive = appliedFilterIds.includes(uidParent)
+      const parentIsActive = selectedCategoryId === uidParent
       let hasActiveChild = false
 
       if (children.length > 0) {
@@ -176,7 +135,7 @@ class DialectFilterListData extends Component {
           // TEMP FIX FOR: FW-1337: Filtering trashed children documents
           if (filterChild.isTrashed) return
           const uidChild = filterChild.uid
-          const childIsActive = appliedFilterIds.includes(uidChild)
+          const childIsActive = selectedCategoryId === uidChild
           // Set flag for parent processing
           hasActiveChild = childIsActive
           // Save child data
@@ -324,12 +283,12 @@ class DialectFilterListData extends Component {
 }
 
 // PROPTYPES
-const { any, array, func, instanceOf, object, string, oneOf } = PropTypes
+const { any, array, func, object, string, oneOf } = PropTypes
 DialectFilterListData.propTypes = {
   // React built-in prop:
   children: any,
   // Props applied to instance of data component:
-  appliedFilterIds: instanceOf(Set), // Selected list items, rename?
+  selectedCategoryId: string, // Selected list items, rename?
   path: string, // Used with facets
   setDialectFilterCallback: func,
   facets: array.isRequired,
@@ -343,8 +302,7 @@ DialectFilterListData.propTypes = {
 }
 
 DialectFilterListData.defaultProps = {
-  appliedFilterIds: new Set(),
-  dialectFilterListWillUnmount: () => {},
+  selectedCategoryId: '',
 }
 
 // REDUX: reducers/state

@@ -43,7 +43,7 @@ import AlphabetCharactersData from 'views/components/AlphabetCharacters/Alphabet
 
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import CategoriesData from 'components/Categories/CategoriesData'
 
 import FVLabel from 'views/components/FVLabel/index'
 
@@ -287,13 +287,13 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
               }}
             </AlphabetCharactersData>
 
-            <CategoriesDataLayer fetchPhraseBooks>
+            <CategoriesData fetchPhraseBooks>
               {({ categoriesData }) => {
                 return (
                   categoriesData &&
                   categoriesData.length > 0 && (
                     <DialectFilterListData
-                      appliedFilterIds={filterInfo.get('currentCategoryFilterIds')}
+                      selectedCategoryId={this.props.routeParams.phraseBook}
                       setDialectFilterCallback={this.changeFilter}
                       facets={categoriesData}
                       facetType="phraseBook"
@@ -316,7 +316,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
                   )
                 )
               }}
-            </CategoriesDataLayer>
+            </CategoriesData>
           </div>
           <div className={classNames('col-xs-12', 'col-md-9')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>

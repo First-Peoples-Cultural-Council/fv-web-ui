@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import selectn from 'selectn'
 import PropTypes from 'prop-types'
-import { List } from 'immutable'
+import {List} from 'immutable'
+import useRoute from 'DataSource/useRoute'
+
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
+  const {routeParams} = useRoute()
   useEffect(() => {
     setColumnClassNames(
-      props.columns.map((currentValue) => {
-        const name = selectn('name', currentValue)
-        const prefix = 'DictionaryList'
-        let className = ''
-        switch (name) {
+        props.columns.map((currentValue) => {
+          const name = selectn('name', currentValue)
+          const prefix = 'DictionaryList'
+          let className = ''
+          switch (name) {
           case 'title':
             className = `${prefix}__data ${prefix}__data--title `
             break
@@ -96,14 +99,27 @@ const DictionaryListLargeScreen = (props) => {
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
             >
               {props.columns.map((column, j) => {
-                const cellValue = selectn(column.name, item)
+                const dialectName = routeParams.dialect_name
+                const mapDocumentStateToVisibility = {
+                  New: `${dialectName} Team Only`,
+                  Disabled: `${dialectName} Team Only`,
+                  Enabled: `${dialectName} Members Only`,
+                  Published: "Public"
+                }
+
+                let cellValue = selectn(column.name, item)
+                if (column.name
+                    === 'state') {
+                  cellValue = mapDocumentStateToVisibility[cellValue]
+                }
                 const cellRender =
-                  typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue
+                    typeof column.render === 'function' ? column.render(
+                        cellValue, item, column) : cellValue
                 const className = columnClassNames[j] || ''
                 return (
-                  <td key={j} className={className}>
-                    {cellRender}
-                  </td>
+                    <td key={j} className={className}>
+                      {cellRender}
+                    </td>
                 )
               })}
             </tr>

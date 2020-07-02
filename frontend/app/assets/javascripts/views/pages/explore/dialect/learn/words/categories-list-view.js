@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'views/components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import CategoriesData from 'components/Categories/CategoriesData'
 /**
  * List view for categories
  */
@@ -171,7 +171,7 @@ class WordsCategoriesListView extends DataListView {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const isPhraseBook = this.props.containerType === 'FVPhrase'
     return (
-      <CategoriesDataLayer fetchPhraseBooks={isPhraseBook} value={this.props.value}>
+      <CategoriesData fetchPhraseBooks={isPhraseBook} value={this.props.value}>
         {({ categoriesRawData }) => {
           return (
             <DocumentListView
@@ -192,7 +192,7 @@ class WordsCategoriesListView extends DataListView {
             />
           )
         }}
-      </CategoriesDataLayer>
+      </CategoriesData>
     )
   }
 }

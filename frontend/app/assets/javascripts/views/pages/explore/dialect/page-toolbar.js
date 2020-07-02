@@ -161,22 +161,27 @@ export class PageToolbar extends Component {
   }
 
   render() {
-    const { classes, computeEntity, computePermissionEntity, computeLogin } = this.props
+    const {classes, computeEntity, computePermissionEntity, computeLogin, routeParams} = this.props
 
     const enableTasks = []
     const disableTasks = []
     const publishTasks = []
     const unpublishTasks = []
 
-    const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
-    const documentPublished = selectn('response.state', computeEntity) === 'Published'
+    const documentEnabled = selectn('response.state', computeEntity)
+        === 'Enabled'
+    const documentPublished = selectn('response.state', computeEntity)
+        === 'Published'
 
-    const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
+    const permissionEntity = selectn('response', computePermissionEntity)
+        ? computePermissionEntity : computeEntity
+
+    const dialectName = routeParams.dialect_name + ' '
 
     // Compute related tasks
     const _computeTasks = ProviderHelpers.getEntry(
-      this.props.computeTasks,
-      selectn('response.uid', this.props.computeEntity)
+        this.props.computeTasks,
+        selectn('response.uid', this.props.computeEntity)
     )
 
     if (selectn('response.entries', _computeTasks)) {
@@ -238,9 +243,18 @@ export class PageToolbar extends Component {
                   label={
                     <Typography variant="body2">
                       {documentEnabled || documentPublished ? (
-                        <FVLabel transKey="enabled" defaultStr="Enabled" transform="first" />
+                          <>
+                            {dialectName}
+                            <FVLabel transKey="members" defaultStr="Members"
+                                     transform="first"/>
+                          </>
                       ) : (
-                        <FVLabel transKey="enable" defaultStr="Enable" transform="first" />
+                          <>
+                            {dialectName}
+                            <FVLabel transKey="team_only" defaultStr="Team Only"
+                                     transform="first"/>
+                          </>
+
                       )}
                     </Typography>
                   }
@@ -480,9 +494,11 @@ export class PageToolbar extends Component {
               label={
                 <Typography variant="body2">
                   {documentPublished ? (
-                    <FVLabel transKey="published" defaultStr="Published" transform="first" />
+                      <FVLabel transKey="public" defaultStr="Public"
+                               transform="first"/>
                   ) : (
-                    <FVLabel transKey="publish" defaultStr="Publish" transform="first" />
+                      <FVLabel transKey="private" defaultStr="Private"
+                               transform="first"/>
                   )}
                 </Typography>
               }
@@ -525,6 +541,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computeTasks,
     properties,
+    routeParams: navigation.route.routeParams,
     windowPath: _windowPath,
     intl: intlService,
   }
