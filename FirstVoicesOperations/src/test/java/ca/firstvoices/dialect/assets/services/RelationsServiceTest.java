@@ -1,5 +1,7 @@
 package ca.firstvoices.dialect.assets.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,7 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
     String[] words = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a",};
 
-    createWordsorPhrases(words, "FVWord");
+    createWordsorPhrases(words, FV_WORD);
 
     DocumentModelList wordDocs = session.query(
         "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " + "ORDER BY "
@@ -54,7 +56,7 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
     String[] words = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
         "la'oo'a'a",};
 
-    createWordsorPhrases(words, "FVWord");
+    createWordsorPhrases(words, FV_WORD);
 
     DocumentModelList wordDocs = session.query(
         "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " + "ORDER BY "
@@ -67,7 +69,7 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
       session.saveDocument(word);
     });
 
-    DocumentModelList assets = relationsService.getRelations(session, childCategory, "FVWord");
+    DocumentModelList assets = relationsService.getRelations(session, childCategory, FV_WORD);
 
     Assert.assertEquals(wordDocs.size(), assets.size());
     wordDocs.forEach(word -> Assert.assertTrue(assets.contains(word)));
@@ -79,9 +81,9 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
   public void getProxiedRelationsForAsset() throws OperationException {
     String[] words = {"A", "B", "C", "D", "E", "F"};
 
-    List<DocumentModel> wordDocs = createWordsorPhrases(words, "FVWord");
+    List<DocumentModel> wordDocs = createWordsorPhrases(words, FV_WORD);
 
-    DocumentModel testWord = createWordorPhrase("test", "FVWord", "fv:reference", "100");
+    DocumentModel testWord = createWordorPhrase("test", FV_WORD, "fv:reference", "100");
 
     String[] propertyValue = new String[]{testWord.getId()};
 

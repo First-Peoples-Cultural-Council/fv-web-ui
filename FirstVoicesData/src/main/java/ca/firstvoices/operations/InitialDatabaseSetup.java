@@ -20,6 +20,9 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
@@ -62,6 +65,10 @@ public class InitialDatabaseSetup {
   // Environment variables for the admin account that will be created.
   private static final String username = System.getenv("CYPRESS_FV_USERNAME");
   private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
+  private static final String FV_WORKSPACES = "/FV/Workspaces";
+  public static final String WORKSPACES_SITE = "/FV/Workspaces/Site";
+  public static final String WORKSPACES_SHARED_DATA = "/FV/Workspaces/SharedData";
+  private static final String FV_SECTIONS = "/FV/sections";
 
   @Context
   protected CoreSession session;
@@ -75,13 +82,13 @@ public class InitialDatabaseSetup {
   @OperationMethod
   public void run() {
 
-    createNewDocument("Site", "Workspace", "/FV/Workspaces");
-    createNewDocument("Site", "Section", "/FV/sections");
-    createNewDocument("Resources", "FVResources", "/FV/Workspaces/Site");
-    createNewDocument("Pages", "Folder", "/FV/Workspaces/Site/Resources");
-    createNewDocument("Shared Categories", "FVCategories", "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Links", "FVLinks", "/FV/Workspaces/SharedData");
-    createNewDocument("Shared Resources", "FVResources", "/FV/Workspaces/SharedData");
+    createNewDocument("Site", "Workspace", FV_WORKSPACES);
+    createNewDocument("Site", "Section", FV_SECTIONS);
+    createNewDocument("Resources", FV_RESOURCES, WORKSPACES_SITE);
+    createNewDocument("Pages", "Folder", WORKSPACES_SITE + "/Resources");
+    createNewDocument("Shared Categories", FV_CATEGORIES, WORKSPACES_SHARED_DATA);
+    createNewDocument("Shared Links", FV_LINKS, WORKSPACES_SHARED_DATA);
+    createNewDocument("Shared Resources", FV_RESOURCES, WORKSPACES_SHARED_DATA);
 
     /*
         Create the user groups.
@@ -123,7 +130,7 @@ public class InitialDatabaseSetup {
     acl.add(ace);
     root.setACP(acp, false);
 
-    DocumentModel sections = session.getDocument(new PathRef("/FV/sections"));
+    DocumentModel sections = session.getDocument(new PathRef(FV_SECTIONS));
     ACPImpl acpTwo = new ACPImpl();
     ACLImpl aclTwo = new ACLImpl("ACL.LOCAL_ACL");
     acpTwo.addACL(aclTwo);
@@ -133,19 +140,19 @@ public class InitialDatabaseSetup {
     /*
     Setup publication targets.
     */
-    DocumentModel target = session.getDocument(new PathRef("/FV/sections/Data"));
+    DocumentModel target = session.getDocument(new PathRef(FV_SECTIONS + "/Data"));
     String targetSectionId = target.getId();
-    DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
+    DocumentModel sourceDoc = session.getDocument(new PathRef(FV_WORKSPACES + "/Data"));
     addSection(targetSectionId, sourceDoc);
 
-    target = session.getDocument(new PathRef("/FV/sections/SharedData"));
+    target = session.getDocument(new PathRef(FV_SECTIONS + "/SharedData"));
     targetSectionId = target.getId();
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
+    sourceDoc = session.getDocument(new PathRef(WORKSPACES_SHARED_DATA));
     addSection(targetSectionId, sourceDoc);
 
-    target = session.getDocument(new PathRef("/FV/sections/Site"));
+    target = session.getDocument(new PathRef(FV_SECTIONS + "/Site"));
     targetSectionId = target.getId();
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
+    sourceDoc = session.getDocument(new PathRef(WORKSPACES_SITE));
     addSection(targetSectionId, sourceDoc);
 
     /*

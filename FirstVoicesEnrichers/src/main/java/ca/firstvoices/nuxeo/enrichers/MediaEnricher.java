@@ -20,6 +20,9 @@
 
 package ca.firstvoices.nuxeo.enrichers;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
 import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
@@ -66,8 +69,8 @@ public class MediaEnricher extends AbstractJsonEnricher<DocumentModel> {
     /*
      * Properties for media types
      */
-    if (documentType.equalsIgnoreCase("FVPicture") || documentType.equalsIgnoreCase("FVAudio")
-        || documentType.equalsIgnoreCase("FVVideo")) {
+    if (documentType.equalsIgnoreCase(FV_PICTURE) || documentType.equalsIgnoreCase(FV_AUDIO)
+        || documentType.equalsIgnoreCase(FV_VIDEO)) {
 
       // Process "fvm:source" values
       String[] sourceIds = (!doc.isProxy()) ? (String[]) doc.getProperty("fvmedia", "source")

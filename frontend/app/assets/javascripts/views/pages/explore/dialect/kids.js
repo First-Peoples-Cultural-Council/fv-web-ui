@@ -105,7 +105,7 @@ export class Kids extends Component {
                   onClick={(e) => {
                     e.preventDefault()
                     NavigationHelpers.navigate(
-                      this.props.windowPath + '/learn/phrases/categories',
+                      `${this.props.windowPath}/learn/phrasebooks`,
                       this.props.pushWindowPath,
                       false
                     )
@@ -171,7 +171,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Kids)
+export default connect(mapStateToProps, mapDispatchToProps)(Kids)

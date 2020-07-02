@@ -20,6 +20,13 @@
 
 package ca.firstvoices.search;
 
+import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -87,23 +94,23 @@ public class TestSecurityPolicies extends AbstractFVTest {
     session.save();
 
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data", "Family", "FVLanguageFamily"));
+        session.createDocumentModel("/FV/Workspaces/Data", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", "FVLanguage"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", FV_LANGUAGE));
 
     dialectDoc = session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dialect", "FVDialect"));
+        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dialect", FV_DIALECT));
     dialectDoc = session.saveDocument(dialectDoc);
     session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Categories", "Category",
-            "FVCategory"));
+            FV_CATEGORY));
     session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Categories/Category",
-            "SubCategory", "FVCategory"));
+            "SubCategory", FV_CATEGORY));
 
     wordDoc = session.createDocument(session
         .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dialect/Dictionary", "NewWord",
-            "FVWord"));
+            FV_WORD));
     wordDoc = session.saveDocument(wordDoc);
     wordDoc.setPropertyValue("dc:title", "Test");
     wordDoc = session.saveDocument(wordDoc);
@@ -118,7 +125,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
   public void testNonRecordersSecurityPolicy() throws Exception {
     // Users who aren't at least recorders should be denied access documents with New or
     // Disabled state
-    assertEquals("New", wordDoc.getCurrentLifeCycleState());
+    assertEquals(NEW_STATE, wordDoc.getCurrentLifeCycleState());
     DocumentModelList searchResults = session.query(
         "SELECT * FROM Document WHERE ecm:path STARTSWITH '/FV/Workspaces/Data/' AND dc:title = "
             + "'Test'");
@@ -171,7 +178,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
         proxyWord.getPathAsString());
 
     wordDoc = session.getDocument(wordDoc.getRef());
-    assertEquals("Published", wordDoc.getCurrentLifeCycleState());
+    assertEquals(PUBLISHED_STATE, wordDoc.getCurrentLifeCycleState());
     searchResults = session.query(
         "SELECT * FROM Document WHERE ecm:path STARTSWITH '/FV/Workspaces/Data/' AND dc:title = "
             + "'Test'");

@@ -20,6 +20,9 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +37,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
 
-  private String[] types = {"FVPhrase", "FVWord",};
+  private String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
   public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {

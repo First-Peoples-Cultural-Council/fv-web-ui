@@ -36,6 +36,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+
 import '!style-loader!css-loader!./styles.css'
 
 const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
@@ -236,8 +237,11 @@ export const Categories = (props) => {
           }}
           // Listview: computed data
           computedData={computedData}
+          navigationRouteSearch={props.search}
+          routeParams={props.routeParams}
+          setRouteParams={setRouteParams}
           sortHandler={async (sortData) => {
-            await props.setRouteParams({
+            await setRouteParams({
               search: {
                 page: sortData.page,
                 pageSize: sortData.pageSize,

@@ -20,6 +20,9 @@
 
 package ca.firstvoices.operations;
 
+import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -81,7 +84,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
     session.save();
 
     dialectDoc = createDialectTree(session);
-    dialectDoc.followTransition("Enable");
+    dialectDoc.followTransition(ENABLE_TRANSITION);
     session.saveDocument(dialectDoc);
   }
 
@@ -112,7 +115,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
         /*
             Should return false because there are no changes since the publish.
          */
-    dialectDoc.followTransition("Publish");
+    dialectDoc.followTransition(PUBLISH_TRANSITION);
     dialectDoc = session.saveDocument(dialectDoc);
     ctx.setInput(dialectDoc);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
@@ -128,7 +131,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
         /*
             Should now return false because the changes have been published.
          */
-    dialectDoc.followTransition("Republish");
+    dialectDoc.followTransition(REPUBLISH_TRANSITION);
     dialectDoc = session.saveDocument(dialectDoc);
     ctx.setInput(dialectDoc);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));

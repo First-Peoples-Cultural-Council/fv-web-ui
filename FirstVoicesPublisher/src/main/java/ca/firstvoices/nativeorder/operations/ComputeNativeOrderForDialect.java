@@ -20,6 +20,8 @@
 
 package ca.firstvoices.nativeorder.operations;
 
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +66,7 @@ public class ComputeNativeOrderForDialect {
   public DocumentModel run(DocumentModel input) {
 
     // Check if dialect
-    if (input.getType().equals("FVDialect")) {
+    if (input.getType().equals(FV_DIALECT)) {
 
       DocumentModel alphabet = session
           .getDocument(new PathRef(input.getPathAsString() + "/Alphabet"));

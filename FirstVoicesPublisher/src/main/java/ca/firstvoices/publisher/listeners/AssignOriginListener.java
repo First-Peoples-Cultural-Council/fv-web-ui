@@ -20,6 +20,9 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -71,7 +74,7 @@ public class AssignOriginListener implements EventListener {
       return;
     }
 
-    if (doc.getType().equals("FVWord") || doc.getType().equals("FVPhrase")) {
+    if (doc.getType().equals(FV_WORD) || doc.getType().equals(FV_PHRASE)) {
       String[] relatedPictures = (String[]) doc.getPropertyValue("fvcore:related_pictures");
       String[] relatedAudio = (String[]) doc.getPropertyValue("fvcore:related_audio");
       String[] relatedVideos = (String[]) doc.getPropertyValue("fvcore:related_videos");

@@ -27,6 +27,7 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.LASTNAME_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
+import javax.inject.Inject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -38,7 +39,10 @@ import org.nuxeo.runtime.api.Framework;
 
 public abstract class AbstractFVTest {
 
-  public DocumentModel createGroup(String group) {
+  @Inject
+  protected UserManager userManager;
+
+  protected DocumentModel createGroup(String group) {
     UserManager userManager = Framework.getService(UserManager.class);
     DocumentModel groupModel = userManager.getBareGroupModel();
     groupModel.setPropertyValue(DEFAULT_ID_FIELD, group);
@@ -46,7 +50,7 @@ public abstract class AbstractFVTest {
     return groupModel;
   }
 
-  public DocumentModel createUserWithPassword(String email, String lastName, String firstName,
+  protected DocumentModel createUserWithPassword(String email, String lastName, String firstName,
       String... groups) {
     UserManager userManager = Framework.getService(UserManager.class);
     DocumentModel userModel = userManager.getBareUserModel();
@@ -66,13 +70,26 @@ public abstract class AbstractFVTest {
     return userModel;
   }
 
-  public void setACL(DocumentModel doc, String username, String permission) {
+  protected void setACL(DocumentModel doc, String username, String permission) {
     ACP acp = doc.getACP();
     ACL acl = acp.getOrCreateACL(ACL.LOCAL_ACL);
     //acl.clear();
     acl.add(new ACE(username, permission, true));
     acp.addACL(acl);
     doc.setACP(acp, true);
+  }
+
+  /*
+    Helper method to create the user groups
+ */
+  protected void createNewGroup(String groupName, String groupLabel) {
+    if (userManager.getGroup(groupName) == null) {
+      DocumentModel newGroup = userManager.getBareGroupModel();
+      newGroup.setProperty("group", "groupname", groupName);
+      newGroup.setProperty("group", "grouplabel", groupLabel);
+      userManager.createGroup(newGroup);
+    }
+
   }
 
 }
