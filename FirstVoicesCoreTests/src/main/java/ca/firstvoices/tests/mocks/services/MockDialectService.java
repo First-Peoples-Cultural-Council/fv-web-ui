@@ -2,6 +2,7 @@ package ca.firstvoices.tests.mocks.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 
 public interface MockDialectService {
 
@@ -26,13 +27,13 @@ public interface MockDialectService {
   /**
    * Ensure there is logic in place to remove dialects only from Test areas
    *
-   * @param name - the name of the dialect
+   * @param path - pathRef of the dialect to be deleted
    */
-  //void removeMockDialect(String name);
+  void removeMockDialect(CoreSession session, PathRef path);
 
   /**
    * Should remove all test dialects completely Ensure there is logic in place to remove dialects
    * only from Test areas
    */
-  //void removeMockDialects();
+  void removeMockDialects(CoreSession session);
 }

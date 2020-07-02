@@ -43,7 +43,7 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
   protected List<TemplateItemDescriptor> normalTemplate;
 
   private void resetTemplate() {
-    this.template = this.normalTemplate;
+    this.template = new ArrayList<>(this.normalTemplate);
   }
 
   @Override

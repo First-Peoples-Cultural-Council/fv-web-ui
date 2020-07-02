@@ -41,12 +41,13 @@ public class MockDialectServiceImpl implements MockDialectService {
       "ɔ", "ə", "ɬ", "ʔ", "ʦ", "θ", "λ", "ᒼ", "ᕀ", "Ḏ", "ḏ", "ḕ", "ḗ", "ḡ", "ḥ", "Ḵ", "ḵ", "ḷ",
       "Ṉ", "ṉ", "Ṑ", "ṑ", "Ṓ", "ṓ", "Ṣ", "ṣ", "Ṯ", "ṯ", "Ẅ", "ẅ", "Ẑ", "ẑ", "Ẕ", "ẕ", "ị",};
 
-  private static final String[] currentAlphabet = generateRandomAlphabet();
+  private static String[] currentAlphabet;
 
-  private static String[] generateRandomAlphabet() {
+  private static void generateRandomAlphabet() {
 
     String[] alphabetArr = new String[30];
     for (int i = 0; i < 10; i++) {
+      //NOTE: Can currently have duplicate characters, will fix in next commit
       alphabetArr[i] = alphabetChars[ThreadLocalRandom.current().nextInt(0, alphabetChars.length)];
     }
 
@@ -62,7 +63,7 @@ public class MockDialectServiceImpl implements MockDialectService {
       alphabetArr[i] = uniChars[ThreadLocalRandom.current().nextInt(0, uniChars.length)];
     }
 
-    return alphabetArr;
+    currentAlphabet = alphabetArr;
   }
 
   private DocumentModelList generateFVCharacters(CoreSession session, String path,
@@ -83,6 +84,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   @Override
   public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
+    generateRandomAlphabet();
     String name = generateRandomWord(currentAlphabet);
     StringJoiner join = new StringJoiner(" ");
     for (int i = 0; i < 30; i++) {
@@ -107,20 +109,21 @@ public class MockDialectServiceImpl implements MockDialectService {
     return dialect;
 
   }
-  /*
+
   @Override
-  public void removeMockDialect(String name) {
-    //To be implemented at a later date.
-    throw new UnsupportedOperationException("Remove functions are not implemented yet.");
+  public void removeMockDialect(CoreSession session, PathRef path) {
+    session.removeDocument(path);
 
   }
 
   @Override
-  public void removeMockDialects() {
-    //To be implemented at a later date.
-    throw new UnsupportedOperationException("Remove functions are not implemented yet.");
+  public void removeMockDialects(CoreSession session) {
+    PathRef a = new PathRef("/FV/Workspaces/Data/Test/Test");
+    PathRef b = new PathRef("/FV/Workspaces/Data/Test");
+    session.removeDocument(a);
+    session.removeDocument(b);
   }
-   */
+
 
   private DocumentModel createDocument(CoreSession session, DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
