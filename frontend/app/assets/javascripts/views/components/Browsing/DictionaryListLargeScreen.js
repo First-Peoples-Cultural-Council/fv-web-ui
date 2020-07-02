@@ -3,7 +3,6 @@ import selectn from 'selectn'
 import PropTypes from 'prop-types'
 import {List} from 'immutable'
 import useRoute from 'DataSource/useRoute'
-import {getDialectClassname} from "../../pages/explore/dialect/helpers";
 
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
