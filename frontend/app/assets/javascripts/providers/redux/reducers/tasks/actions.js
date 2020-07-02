@@ -16,6 +16,8 @@ export const fetchTasks = execute('FV_TASKS', 'Workflow.GetOpenTasks')
 
 export const fetchUserTasks = execute('FV_USER_TASKS', 'Task.GetAssigned')
 
+export const fetchUserGroupTasks = execute('FV_USER_GROUP_TASKS', 'GetTasksForUserGroupOperation')
+
 export const fetchUserRegistrationTasks = execute('FV_USER_REGISTRATION', 'FVGetPendingUserRegistrations')
 
 export const countTotalTasks = execute('FV_COUNT_TOTAL_TASKS', 'Repository.ResultSetQuery')
