@@ -25,7 +25,10 @@ import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import {
+  dictionaryListSmallScreenColumnDataTemplate,
+  dictionaryListSmallScreenTemplateWords,
+} from 'views/components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
@@ -146,13 +149,14 @@ function WordsListPresentation(props) {
       metadata: props.metadata,
       // List: small screen
       // --------------------
-      items: props.items,
       columns: columnsEnhanced,
-      dictionaryListSmallScreenTemplate: props.smallScreenTemplate,
+      items: props.items,
+      dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplateWords,
     },
     hasPagination: props.hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
+
   const getListLargeScreenArg = {
     dictionaryListLargeScreenProps: {
       rowClickHandler: props.rowClickHandler,
