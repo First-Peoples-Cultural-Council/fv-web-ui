@@ -162,7 +162,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
       // If document is published, update the field on the proxy:
       DocumentModelList proxies = session.getProxies(element.getRef(), null);
-      if (proxies.isEmpty()) {
+      if (!proxies.isEmpty()) {
         DocumentModel proxy = proxies.get(0);
         proxy.setPropertyValue("fv:custom_order", nativeTitle.toString());
         session.saveDocument(proxy);
