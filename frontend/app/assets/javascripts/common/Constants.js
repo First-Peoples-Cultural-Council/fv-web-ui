@@ -18,3 +18,5 @@ export const DEFAULT_SORT_TYPE = 'asc'
 
 export const WORKSPACES = 'Workspaces'
 export const SECTIONS = 'sections'
+
+export const CONTENT_FULL_WIDTH = 1

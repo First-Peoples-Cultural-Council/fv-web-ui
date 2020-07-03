@@ -2,7 +2,7 @@ import React from 'react'
 import Widget from 'components/Widget'
 import List from 'components/List'
 import Link from 'views/components/Link'
-
+import { CONTENT_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary WidgetTasksPresentation
  * @version 1.0.1
@@ -16,10 +16,16 @@ function WidgetTasksPresentation({ columns, onRowClick, options, data }) {
   return (
     <Widget.Presentation
       title="List of Tasks [variant]"
-      variant={1}
+      variant={CONTENT_FULL_WIDTH}
       childrenHeader={<Link href={'/dashboard/tasks'}>See all tasks</Link>}
     >
-      <List.Presentation variant={1} columns={columns} onRowClick={onRowClick} options={options} data={data} />
+      <List.Presentation
+        variant={CONTENT_FULL_WIDTH}
+        columns={columns}
+        onRowClick={onRowClick}
+        options={options}
+        data={data}
+      />
     </Widget.Presentation>
   )
 }

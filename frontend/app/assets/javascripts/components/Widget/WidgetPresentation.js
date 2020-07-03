@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./Widget.css'
+import { CONTENT_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary WidgetPresentation
  * @version 1.0.1
@@ -16,7 +17,7 @@ import '!style-loader!css-loader!./Widget.css'
 function WidgetPresentation({ children, childrenHeader, title, variant }) {
   let classNameVariant
   switch (variant) {
-    case 1:
+    case CONTENT_FULL_WIDTH:
       classNameVariant = 'Widget--ContentFullWidth'
       break
     default:

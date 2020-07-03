@@ -4,6 +4,7 @@ import MaterialTable from 'material-table'
 import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
+import { CONTENT_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary ListPresentation
  * @version 1.0.1
@@ -45,11 +46,25 @@ function ListPresentation({
   onSelectionChange,
   onTreeExpandChange,
   options,
+  style,
   title,
+  variant,
 }) {
   const { theme } = useTheme()
   const themeList = selectn('components.List', theme) || {}
   const { tableHeader, row, rowAlternate } = themeList
+
+  let styleVariant
+  let headerStyle
+  switch (variant) {
+    case CONTENT_FULL_WIDTH:
+      styleVariant = themeList.ContentFullWidth
+      headerStyle = styleVariant.tableHeader
+      break
+    default:
+      headerStyle = tableHeader
+  }
+
   const defaultOptions = {
     actionsColumnIndex: 2,
     debounceInterval: 500,
@@ -57,7 +72,7 @@ function ListPresentation({
     draggable: false,
     emptyRowsWhenPaging: true,
     filtering: false,
-    headerStyle: tableHeader,
+    headerStyle,
     paging: false,
     rowStyle: (rowData, index) => {
       if (index % 2 === 0) {
@@ -75,6 +90,7 @@ function ListPresentation({
   }
   return (
     <MaterialTable
+      style={Object.assign({}, style, styleVariant)}
       actions={actions}
       columns={columns}
       data={data}
@@ -119,7 +135,7 @@ function ListPresentation({
   )
 }
 // PROPTYPES
-const { array, func, string, object, oneOfType } = PropTypes
+const { array, func, string, object, oneOf, oneOfType } = PropTypes
 ListPresentation.propTypes = {
   actions: array,
   columns: array,
@@ -137,9 +153,12 @@ ListPresentation.propTypes = {
   onTreeExpandChange: func,
   options: object,
   title: string,
+  style: object,
+  variant: oneOf([1]),
 }
 ListPresentation.defaultProps = {
   options: {},
+  style: {},
 }
 
 export default ListPresentation
