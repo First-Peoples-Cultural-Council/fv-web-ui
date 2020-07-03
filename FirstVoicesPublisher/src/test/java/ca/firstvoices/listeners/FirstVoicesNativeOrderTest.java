@@ -21,6 +21,7 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
@@ -33,6 +34,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
@@ -67,14 +70,13 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 public class FirstVoicesNativeOrderTest {
 
   @Inject
-  protected CoreSession session;
+  private CoreSession session;
 
   @Inject
-  protected NativeOrderComputeService nativeOrderComputeService;
-
+  private NativeOrderComputeService nativeOrderComputeService;
 
   @Inject
-  protected TrashService trashService;
+  private TrashService trashService;
 
   private DocumentModel domain;
   private DocumentModel dialect;
@@ -411,6 +413,50 @@ public class FirstVoicesNativeOrderTest {
     });
   }
 
+  @Test
+  public void ComputingCustomOrderComputesonProxyDocs() {
+    String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
+        "la'oo'a'a",};
+
+    String[] orderedAlphabet = {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i",
+        "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo",
+        "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y",
+        "y̓", "'"};
+
+    createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
+    List<DocumentModel> newWords = createWordsorPhrases(orderedWords, FV_WORD);
+
+    newWords.forEach(word -> {
+      word.followTransition(PUBLISH_TRANSITION);
+    });
+
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    Integer i = orderedWords.length - 1;
+
+    DocumentModelList unpublishedDocs = session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' AND "
+            + "ecm:isProxy = 0 " + "ORDER BY fv:custom_order DESC");
+
+    for (DocumentModel doc : unpublishedDocs) {
+      String reference = (String) doc.getPropertyValue("fv:reference");
+      assertEquals(orderedWords[i], doc.getPropertyValue("dc:title"));
+      assertEquals(i, Integer.valueOf(reference));
+      i--;
+    }
+
+    DocumentModelList publishedDocs = session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' AND "
+            + "ecm:isProxy = 1 " + "ORDER BY fv:custom_order DESC");
+
+    for (DocumentModel doc : publishedDocs) {
+      String reference = (String) doc.getPropertyValue("fv:reference");
+      assertEquals(orderedWords[i], doc.getPropertyValue("dc:title"));
+      assertEquals(i, Integer.valueOf(reference));
+      i--;
+    }
+
+  }
+
 
   private DocumentModel createDocument(DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
@@ -446,13 +492,16 @@ public class FirstVoicesNativeOrderTest {
     return document;
   }
 
-  private void createWordsorPhrases(String[] orderedValues, String typeName) {
+  private List<DocumentModel> createWordsorPhrases(String[] orderedValues, String typeName) {
+    List<DocumentModel> newWordsOrPhrases = new ArrayList<>();
     Integer i = 0;
     for (String value : orderedValues) {
-      createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
+      DocumentModel doc = createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
+      newWordsOrPhrases.add(doc);
       i++;
     }
 
     session.save();
+    return newWordsOrPhrases;
   }
 }
