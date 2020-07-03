@@ -1,0 +1,57 @@
+.DashboardTasks__approveRejectContainer {
+  display: flex;
+}
+.DashboardTasks__approveRejectContainer .DashboardTasks__approve,
+.DashboardTasks__approveRejectContainer .DashboardTasks__reject {
+  margin: 5px;
+}
+.DashboardTasks__colHeader {
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #000;
+}
+.DashboardTasks__colHeader--actions {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+.DashboardTasks__taskTitle {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin: 5px;
+  background-color: #fff;
+}
+.DictionaryList__data .DashboardTasks__taskTitle {
+  background-color: #fff;
+}
+.DashboardTasks__taskType {
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+.DashboardTasks__taskDueDate {
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.DashboardTasks__taskTypeContainer,
+.DashboardTasks__taskDueDateContainer {
+  white-space: normal !important;
+  text-overflow: initial !important;
+}
+
+@media (max-width: 1000px) {
+  .DashboardTasks__approveRejectContainer {
+    flex-direction: column;
+    padding: 5px;
+    justify-content: space-between;
+  }
+  .DashboardTasks__reject {
+    margin-top: 5px;
+  }
+}
+@media (max-width: 650px) {
+  .DashboardTasks__approveRejectContainer .DashboardTasks__approve,
+  .DashboardTasks__approveRejectContainer .DashboardTasks__reject {
+    margin: 0 0 5px;
+  }
+}
