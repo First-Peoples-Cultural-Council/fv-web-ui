@@ -2576,6 +2576,22 @@ const routes = [
   addPagination(DIALECT_IMMERSION_WORDS),
   addImmersionCategory(DIALECT_IMMERSION_WORDS),
   addPagination(addImmersionCategory(DIALECT_IMMERSION_WORDS)),
+  // DASHBOARDS
+  // ==========================================================
+  {
+    id: 'dashboard',
+    path: ['dashboard'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.Dashboard.Container />,
+    breadcrumbs: false,
+  },
+  {
+    id: 'dashboard',
+    path: ['dashboard', 'tasks'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.DashboardTasks.Container />,
+    breadcrumbs: false,
+  },
 ]
 
 export default routes
