@@ -158,6 +158,16 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       if (!element.isImmutable()) {
         element.setPropertyValue("fv:custom_order", nativeTitle.toString());
       }
+      CoreSession session = element.getCoreSession();
+
+      // If document is published, update the field on the proxy:
+      DocumentModelList proxies = session.getProxies(element.getRef(), null);
+      if (!proxies.isEmpty()) {
+        DocumentModel proxy = proxies.get(0);
+        proxy.setPropertyValue("fv:custom_order", nativeTitle.toString());
+        session.saveDocument(proxy);
+      }
+
       element.getCoreSession().saveDocument(element);
     }
   }

@@ -2586,6 +2586,14 @@ const routes = [
     breadcrumbs: false,
     disableWorkspaceSectionNav: true,
   },
+  // Mentor-Apprentice Photo Project
+  // ==========================================================
+  {
+    path: ['photo-project'],
+    title: 'Mentor-Apprentice Photo Project',
+    page: <Pages.PageMAPPhotoProject />,
+    breadcrumbs: false,
+  },
 ]
 
 export default routes

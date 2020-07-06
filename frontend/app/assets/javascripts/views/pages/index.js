@@ -38,7 +38,7 @@ import PageDialectReports from './explore/dialect/reports'
 import PageDialectReportsView from './explore/dialect/reports/view'
 import PageDialectUsers from './explore/dialect/users'
 
-import PageDialectLearnWords from './explore/dialect/learn/words/WordsLayout'
+import PageDialectLearnWords from 'components/Words/WordsContainer'
 import PageDialectLearnPhrases from './explore/dialect/learn/phrases'
 import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stories'
 
@@ -127,9 +127,12 @@ import { default as RecorderCreate } from './explore/dialect/Recorder/create' //
 import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edit
 
 import Dashboard from 'components/Dashboard'
+// MENTOR-APPRENTICE PHOTO PROJECT
+import PageMAPPhotoProject from './photo-project'
 
 export {
   PageTest,
+  PageMAPPhotoProject,
   PageDebugAPI,
   PageDebugTypography,
   PageError,

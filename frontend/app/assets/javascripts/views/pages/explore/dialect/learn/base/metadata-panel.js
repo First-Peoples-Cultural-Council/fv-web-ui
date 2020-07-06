@@ -53,7 +53,7 @@ export class MetadataPanel extends Component {
   }
 
   render() {
-    const { computeEntity } = this.props
+    const { computeEntity, routeParams } = this.props
 
     const metadata = []
 
@@ -119,9 +119,18 @@ export class MetadataPanel extends Component {
     /**
      * Status
      */
+    const dialectName = routeParams.dialect_name
+
+    const mapDocumentStateToVisibility = {
+      New: `${dialectName} Team Only`,
+      Disabled: `${dialectName} Team Only`,
+      Enabled: `${dialectName} Members Only`,
+      Published: 'Public',
+    }
+
     metadata.push({
       label: this.props.intl.trans('status', 'Status', 'first'),
-      value: selectn('response.state', computeEntity),
+      value: mapDocumentStateToVisibility[selectn('response.state', computeEntity)],
     })
 
     /**
@@ -182,11 +191,12 @@ export class MetadataPanel extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { locale } = state
+  const { locale, navigation } = state
   const { intlService } = locale
 
   return {
     intl: intlService,
+    routeParams: navigation.route.routeParams,
   }
 }
 

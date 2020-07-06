@@ -52,7 +52,18 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-io</artifactId>
     </dependency>
-
+    <dependency>
+      <artifactId>nuxeo-platform-task-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-task-automation</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-comment-api</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+    </dependency>
     <!-- test dependencies -->
     <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
@@ -156,6 +167,20 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-comment-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-routing-core</artifactId>
+      <groupId>org.nuxeo.ecm.routing</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-comment</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
       <scope>test</scope>
     </dependency>
     <dependency>

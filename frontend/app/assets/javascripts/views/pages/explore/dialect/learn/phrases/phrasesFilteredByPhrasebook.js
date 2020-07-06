@@ -40,7 +40,7 @@ import AlphabetCharactersData from 'views/components/AlphabetCharacters/Alphabet
 import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 
-import CategoriesDataLayer from 'views/pages/explore/dialect/learn/words/categoriesDataLayer'
+import CategoriesData from 'components/Categories/CategoriesData'
 
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'views/components/FVButton'
@@ -226,6 +226,8 @@ export class phrasesFilteredByPhrasebook extends Component {
           }}
           fetcherParams={{ currentPageIndex: routeParams.page, pageSize: routeParams.pageSize }}
           metadata={selectn('response', computedPhrases)}
+          navigationRouteSearch={this.props.navigationRouteSearch}
+          routeParams={routeParams}
           // ===============================================
           // Sort
           // -----------------------------------------------
@@ -295,13 +297,13 @@ export class phrasesFilteredByPhrasebook extends Component {
               }}
             </AlphabetCharactersData>
 
-            <CategoriesDataLayer fetchPhraseBooks>
+            <CategoriesData fetchPhraseBooks>
               {({ categoriesData }) => {
-                let CategoriesDataLayerToRender = null
+                let CategoriesDataToRender = null
                 if (categoriesData && categoriesData.length > 0) {
-                  CategoriesDataLayerToRender = (
+                  CategoriesDataToRender = (
                     <DialectFilterListData
-                      appliedFilterIds={new Set([routeParams.phraseBook])}
+                      selectedCategoryId={routeParams.phraseBook}
                       setDialectFilterCallback={this.changeFilter} // TODO
                       facets={categoriesData}
                       facetType="phraseBook"
@@ -323,9 +325,9 @@ export class phrasesFilteredByPhrasebook extends Component {
                     </DialectFilterListData>
                   )
                 }
-                return CategoriesDataLayerToRender
+                return CategoriesDataToRender
               }}
-            </CategoriesDataLayer>
+            </CategoriesData>
           </div>
           <div className="col-xs-12 col-md-9">
             <h1 className="DialectPageTitle">{pageTitle}</h1>

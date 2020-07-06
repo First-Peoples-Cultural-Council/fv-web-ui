@@ -1,23 +1,18 @@
 [
   {
-    "name": "Words in New Status",
+    "name": "Words Visible to Team Only",
     "type": "words",
-    "query": " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='New'"
+    "query": " AND ecm:primaryType='FVWord' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')"
   },
   {
-    "name": "Words in Enabled Status",
+    "name": "Words Visible to Members Only",
     "type": "words",
     "query": " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='Enabled'"
   },
   {
-    "name": "Words in Published Status",
+    "name": "Words Visible to the Public",
     "type": "words",
     "query": " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='Published'"
-  },
-  {
-    "name": "Words in Disabled Status",
-    "type": "words",
-    "query": " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='Disabled'"
   },
   {
     "name": "Words without Audio",
@@ -91,24 +86,19 @@
     "sortOrder": "desc"
   },
   {
-    "name": "Phrases in New Status",
+    "name": "Phrases Visible to Team Only",
     "type": "phrases",
-    "query": " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='New'"
+    "query": " AND ecm:primaryType='FVPhrase' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')"
   },
   {
-    "name": "Phrases in Enabled Status",
+    "name": "Phrases Visible to Members Only",
     "type": "phrases",
     "query": " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='Enabled'"
   },
   {
-    "name": "Phrases in Published Status",
+    "name": "Phrases Visible to the Public",
     "type": "phrases",
     "query": " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='Published'"
-  },
-  {
-    "name": "Phrases in Disabled Status",
-    "type": "phrases",
-    "query": " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='Disabled'"
   },
   {
     "name": "Phrases without Audio",
@@ -162,24 +152,19 @@
     "sortOrder": "desc"
   },
   {
-    "name": "Songs in New Status",
+    "name": "Songs Visible to Team Only",
     "type": "songs",
-    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song' AND ecm:currentLifeCycleState='New'"
+    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')"
   },
   {
-    "name": "Songs in Enabled Status",
+    "name": "Songs Visible to Members Only",
     "type": "songs",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song' AND ecm:currentLifeCycleState='Enabled'"
   },
   {
-    "name": "Songs in Published Status",
+    "name": "Songs Visible to the Public",
     "type": "songs",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song' AND ecm:currentLifeCycleState='Published'"
-  },
-  {
-    "name": "Songs in Disabled Status",
-    "type": "songs",
-    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song' AND ecm:currentLifeCycleState='Disabled'"
   },
   {
     "name": "Songs without Audio",
@@ -223,24 +208,19 @@
     "sortOrder": "desc"
   },
   {
-    "name": "Stories in New Status",
+    "name": "Stories Visible to Team Only",
     "type": "stories",
-    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story' AND ecm:currentLifeCycleState='New'"
+    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')"
   },
   {
-    "name": "Stories in Enabled Status",
+    "name": "Stories Visible to Members Only",
     "type": "stories",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story' AND ecm:currentLifeCycleState='Enabled'"
   },
   {
-    "name": "Stories in Published Status",
+    "name": "Stories Visible to the Public",
     "type": "stories",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story' AND ecm:currentLifeCycleState='Published'"
-  },
-  {
-    "name": "Stories in Disabled Status",
-    "type": "stories",
-    "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story' AND ecm:currentLifeCycleState='Disabled'"
   },
   {
     "name": "Stories without Audio",

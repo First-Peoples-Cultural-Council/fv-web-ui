@@ -29,6 +29,17 @@ export class Editor extends Component {
     setRef: () => {},
   }
 
+  // https: //quilljs.com/docs/modules/toolbar/
+  modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'video'],
+      ['clean'],
+    ],
+  }
+
   // Note: aware we are ignoring prop updates (the text shouldn't change anyway)
   state = { text: this.props.initialValue }
   quillRef = null // Quill instance
@@ -62,6 +73,7 @@ export class Editor extends Component {
           ref={(el) => {
             this.reactQuillRef = el
           }}
+          modules={this.modules}
         />
       </div>
     )

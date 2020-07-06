@@ -30,7 +30,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-class CategoriesDataLayer extends Component {
+class CategoriesData extends Component {
   constructor(props) {
     super(props)
 
@@ -120,7 +120,7 @@ class CategoriesDataLayer extends Component {
 
 // PROPTYPES
 const { array, func, object, string, bool } = PropTypes
-CategoriesDataLayer.propTypes = {
+CategoriesData.propTypes = {
   routeParams: object.isRequired,
   fetchPhraseBooks: bool,
   // REDUX: reducers/state
@@ -197,4 +197,4 @@ const mapDispatchToProps = {
   setListViewMode,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoriesDataLayer)
+export default connect(mapStateToProps, mapDispatchToProps)(CategoriesData)
