@@ -10,6 +10,8 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @param {object} props
  * @param {node} props.children
+ * @param {node} props.childrenHeader Slot for jsx in the header area, initially used for adding links
+ * @param {number} props.variant Specify presentation variant/modifier
  * @param {string} props.title
  *
  * @returns {node} jsx markup
@@ -30,7 +32,7 @@ function WidgetPresentation({ children, childrenHeader, title, variant }) {
         <Typography className="Widget__title" variant="h6" component="h2">
           {title}
         </Typography>
-        <div className="Widget__headerChildren">{childrenHeader}</div>
+        {childrenHeader && <div className="Widget__headerChildren">{childrenHeader}</div>}
       </div>
       <div className="Widget__body">{children}</div>
     </div>
@@ -39,10 +41,10 @@ function WidgetPresentation({ children, childrenHeader, title, variant }) {
 // PROPTYPES
 const { string, node, oneOf } = PropTypes
 WidgetPresentation.propTypes = {
-  title: string,
-  childrenHeader: node,
   children: node,
-  variant: oneOf([1]),
+  childrenHeader: node,
+  title: string,
+  variant: oneOf([CONTENT_FULL_WIDTH]),
 }
 
 export default WidgetPresentation

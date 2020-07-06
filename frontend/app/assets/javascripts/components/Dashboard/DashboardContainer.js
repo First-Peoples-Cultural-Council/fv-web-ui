@@ -15,10 +15,7 @@ import WidgetTasks from 'components/WidgetTasks'
 function DashboardContainer() {
   return (
     <DashboardData>
-      {(DashboardDataOutput) => {
-        // TODO DashboardData somehow outputs widgets to display
-        // eslint-disable-next-line
-        console.log('DashboardDataOutput', DashboardDataOutput)
+      {() => {
         return (
           <DashboardPresentation>
             <WidgetTasks.Container />
@@ -27,11 +24,6 @@ function DashboardContainer() {
       }}
     </DashboardData>
   )
-}
-// PROPTYPES
-// const { string } = PropTypes
-DashboardContainer.propTypes = {
-  //   something: string,
 }
 
 export default DashboardContainer

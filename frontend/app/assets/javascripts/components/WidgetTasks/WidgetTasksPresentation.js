@@ -14,8 +14,10 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  * @param {object} props
  * @param {array} props.columns Data for header/columns
  * @param {array} props.data Data for rows
+ * @param {array} props.fetchMessage any fetch message from the server
+ * @param {array} props.isFetching flag for in-progress server request
  * @param {function} props.onRowClick
- * @param {object} props.options mat-table options
+ * @param {object} props.options Mat-table options
  *
  * @returns {node} jsx markup
  */

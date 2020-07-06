@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
+// TODO need to figure out how to dynamically load widgets
 function DashboardData({ children }) {
   return children({
     log: 'Output from DashboardData',
