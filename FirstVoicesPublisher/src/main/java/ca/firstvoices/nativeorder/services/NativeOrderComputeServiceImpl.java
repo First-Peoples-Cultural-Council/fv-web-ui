@@ -162,7 +162,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       }
       CoreSession session = element.getCoreSession();
 
-      element.getCoreSession().saveDocument(element);
+      session.saveDocument(element);
 
       // If document is published, update the field on the proxy:
       FirstVoicesPublisherService firstVoicesPublisherService = Framework
