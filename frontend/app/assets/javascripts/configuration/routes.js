@@ -2584,13 +2584,7 @@ const routes = [
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
     page: <Pages.Dashboard.Container />,
     breadcrumbs: false,
-  },
-  {
-    id: 'dashboard',
-    path: ['dashboard', 'tasks'],
-    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
-    page: <Pages.DashboardTasks.Container />,
-    breadcrumbs: false,
+    disableWorkspaceSectionNav: true,
   },
 ]
 

@@ -20,21 +20,6 @@ function useNavigationHelpers() {
     navigate: (url) => {
       NavigationHelpers.navigate(url, pushWindowPath, false)
     },
-    queryStringObject: () => {
-      if (window.location.search === '') {
-        return {}
-      }
-
-      const search = {}
-      const searchParams = (window.location.search || '?').replace(/^\?/, '')
-      searchParams.split('&').forEach((item) => {
-        if (item !== '' && /=/.test(item)) {
-          const propValue = item.split('=')
-          search[propValue[0]] = propValue[1]
-        }
-      })
-      return search
-    },
   }
 }
 

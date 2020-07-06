@@ -127,7 +127,6 @@ import { default as RecorderCreate } from './explore/dialect/Recorder/create' //
 import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edit
 
 import Dashboard from 'components/Dashboard'
-import DashboardTasks from 'components/DashboardTasks'
 
 export {
   PageTest,
@@ -225,5 +224,4 @@ export {
   RecorderEdit,
   //
   Dashboard,
-  DashboardTasks,
 }
