@@ -41,7 +41,7 @@ public class GetTasksServiceImpl implements GetTasksService {
       Long targetPageSize = pageSize != null ? pageSize.longValue() : null;
 
       CoreQueryDocumentPageProvider pp = (CoreQueryDocumentPageProvider) PageProviderHelper
-          .getPageProvider(session, def, null, sortBy, sortOrder, targetPageSize, targetPage, null);
+          .getPageProvider(session, def, null, sortBy, sortOrder, targetPageSize, targetPage);
 
       PaginableDocumentModelListImpl res = new PaginableDocumentModelListImpl(pp);
       if (res.hasError()) {
