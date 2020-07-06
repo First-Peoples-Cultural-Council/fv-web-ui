@@ -158,7 +158,7 @@ ListPresentation.propTypes = {
   options: object,
   title: string,
   style: object,
-  variant: oneOf([1]),
+  variant: oneOf([CONTENT_FULL_WIDTH]),
 }
 ListPresentation.defaultProps = {
   options: {},
