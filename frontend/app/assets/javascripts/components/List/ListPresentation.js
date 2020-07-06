@@ -26,6 +26,7 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  * @param {function} [props.onSelectionChange] Event handler
  * @param {function} [props.onTreeExpandChange] Event handler
  * @param {object} [props.options] All options of table
+ * @param {object} [props.localization] Localization object of strings, see: https://material-table.com/#/docs/features/localization
  * @param {string} [props.title] Title of table
  *
  * @returns {node} jsx markup
@@ -35,6 +36,7 @@ function ListPresentation({
   columns,
   data,
   detailPanel,
+  localization,
   onChangeColumnHidden,
   onChangePage,
   onChangeRowsPerPage,
@@ -131,6 +133,7 @@ function ListPresentation({
           )
         },
       }}
+      localization={localization}
     />
   )
 }
@@ -141,6 +144,7 @@ ListPresentation.propTypes = {
   columns: array,
   data: oneOfType([array, func]),
   detailPanel: oneOfType([array, func]),
+  localization: object,
   onChangeColumnHidden: func,
   onChangePage: func,
   onChangeRowsPerPage: func,

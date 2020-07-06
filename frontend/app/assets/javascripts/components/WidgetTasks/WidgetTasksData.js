@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import useLogin from 'DataSource/useLogin'
 import useTasks from 'DataSource/useTasks'
-import useUser from 'DataSource/useUser'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -25,27 +24,17 @@ function WidgetTasksData({ children }) {
   // Custom Hooks
   const { navigate } = useNavigationHelpers()
   const { computeLogin } = useLogin()
-  const { computeUserDialects, fetchUserDialects } = useUser()
-  const {
-    // computeUserTasks,
-    computeUserGroupTasks,
-    computeUserTasksApprove,
-    computeUserTasksReject,
-    fetchUserTasks,
-    fetchUserGroupTasks,
-  } = useTasks()
+  const { computeUserGroupTasks, fetchUserGroupTasks } = useTasks()
 
   useEffect(() => {
     fetchData()
-  }, [computeLogin, computeUserTasksApprove, computeUserTasksReject])
+  }, [computeLogin])
 
   const fetchData = () => {
     const _userId = selectn('response.id', computeLogin)
     if (_userId) {
       setUserId(_userId)
-      fetchUserTasks(_userId)
       fetchUserGroupTasks(_userId)
-      ProviderHelpers.fetchIfMissing(_userId, fetchUserDialects, computeUserDialects)
     }
   }
 
@@ -54,11 +43,16 @@ function WidgetTasksData({ children }) {
   }
 
   let hasTasks
+  let isFetching = false
+  let fetchMessage
   const tasks = []
   if (userId) {
-    // const _computeUserTasks = ProviderHelpers.getEntry(computeUserTasks, userId)
-
     const userGroupTasks = ProviderHelpers.getEntry(computeUserGroupTasks, userId)
+    isFetching = userGroupTasks.isFetching
+
+    if (userGroupTasks.message !== '') {
+      fetchMessage = userGroupTasks.message
+    }
     const userGroupTasksEntries = selectn('response.entries', userGroupTasks)
 
     if (userGroupTasksEntries) {
@@ -71,6 +65,7 @@ function WidgetTasksData({ children }) {
 
         if (task) {
           const { uid: taskUid, properties } = task
+          // Push if relevant:
           if (properties['nt:directive'] !== 'org.nuxeo.ecm.platform.publisher.task.CoreProxyWithWorkflowFactory') {
             tasks.push({
               requestedBy: properties['nt:initiator'],
@@ -91,24 +86,16 @@ function WidgetTasksData({ children }) {
         title: '',
         field: 'icon',
         render: () => {
-          // console.log('Icon', {rowData})
           return '[~]'
         },
       },
       {
         title: 'Entry title',
-        field: 'title' /* render: ({title}) => {
-        console.log('Title', {rowData})
-        return 'TODO'
-      }*/,
+        field: 'title',
       },
       {
         title: 'Requested by',
-        field:
-          'requestedBy' /* render: (rowData) => {
-        console.log('Requested by', {rowData})
-        return 'TODO'
-      } */,
+        field: 'requestedBy',
       },
       {
         title: 'Date submitted',
@@ -120,6 +107,8 @@ function WidgetTasksData({ children }) {
     onRowClick,
     options: { actionsColumnIndex: -1 },
     data: tasks,
+    isFetching,
+    fetchMessage,
   })
 }
 // PROPTYPES

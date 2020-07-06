@@ -14,61 +14,15 @@ import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
 function WidgetTasksContainer() {
   return (
     <WidgetTasksData>
-      {({
-        actions,
-        columns,
-        data,
-        detailPanel,
-        onChangeColumnHidden,
-        onChangePage,
-        onChangeRowsPerPage,
-        onColumnDragged,
-        onGroupRemoved,
-        onOrderChange,
-        onRowClick,
-        onSearchChange,
-        onSelectionChange,
-        onTreeExpandChange,
-        options,
-        title,
-      }) => {
-        // eslint-disable-next-line
-        console.log('WidgetTasksData LIMINAL', {
-          actions,
-          columns,
-          data,
-          detailPanel,
-          onChangeColumnHidden,
-          onChangePage,
-          onChangeRowsPerPage,
-          onColumnDragged,
-          onGroupRemoved,
-          onOrderChange,
-          onRowClick,
-          onSearchChange,
-          onSelectionChange,
-          onTreeExpandChange,
-          options,
-          title,
-        })
+      {({ columns, data, onRowClick, options, isFetching, fetchMessage }) => {
         return (
           <WidgetTasksPresentation
-            actions={actions}
             columns={columns}
             data={data}
-            detailPanel={detailPanel}
-            onChangeColumnHidden={onChangeColumnHidden}
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            onColumnDragged={onColumnDragged}
-            onGroupRemoved={onGroupRemoved}
-            onOrderChange={onOrderChange}
+            fetchMessage={fetchMessage}
+            isFetching={isFetching}
             onRowClick={onRowClick}
-            onSearchChange={onSearchChange}
-            onSelectionChange={onSelectionChange}
-            onTreeExpandChange={onTreeExpandChange}
             options={options}
-            title={title}
           />
         )
       }}
