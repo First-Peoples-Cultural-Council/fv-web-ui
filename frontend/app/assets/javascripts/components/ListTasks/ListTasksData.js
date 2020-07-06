@@ -61,7 +61,7 @@ function ListTasksData({ children, columnRender }) {
       const uid = selectn('uid', dialect)
       return {
         href: uid ? `/tasks/users/${uid}` : '#',
-        dialectName: selectn(['properites', 'dc:title'], dialect),
+        dialectName: selectn(['properties', 'dc:title'], dialect),
       }
     })
   }
