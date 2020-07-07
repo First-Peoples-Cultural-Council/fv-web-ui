@@ -20,8 +20,11 @@
 
 package ca.firstvoices.nativeorder.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.AbstractService;
+import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -164,12 +167,20 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
       session.saveDocument(element);
 
-      // If document is published, update the field on the proxy:
+      // If document is published, update the field on the proxy but only if no other changes exist
+      // in order to avoid publishing an archive's other changes prematurely.
+
       FirstVoicesPublisherService firstVoicesPublisherService = Framework
           .getService(FirstVoicesPublisherService.class);
 
-      if (firstVoicesPublisherService.getPublication(session, element.getRef()) != null) {
-        firstVoicesPublisherService.publish(element);
+      UnpublishedChangesService unpublishedChangesService = Framework
+          .getService(UnpublishedChangesService.class);
+
+      boolean unpublishedChangesExist = unpublishedChangesService
+          .checkUnpublishedChanges(session, element);
+
+      if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
+        firstVoicesPublisherService.republish(element);
       }
 
     }

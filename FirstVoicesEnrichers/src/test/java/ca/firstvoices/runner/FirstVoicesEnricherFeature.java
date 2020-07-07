@@ -47,6 +47,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
 @Deploy("FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml")
+@Deploy("FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
 public class FirstVoicesEnricherFeature implements RunnerFeature {
