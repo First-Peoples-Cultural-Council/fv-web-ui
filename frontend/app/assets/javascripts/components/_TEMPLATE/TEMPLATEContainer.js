@@ -1,7 +1,7 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import TEMPLATEPresentation from './TEMPLATEPresentation'
-import TEMPLATEData from './TEMPLATEData'
+import TEMPLATEPresentation from 'container/TEMPLATE/TEMPLATEPresentation'
+import TEMPLATEData from 'container/TEMPLATE/TEMPLATEData'
 
 /**
  * @summary TEMPLATEContainer
