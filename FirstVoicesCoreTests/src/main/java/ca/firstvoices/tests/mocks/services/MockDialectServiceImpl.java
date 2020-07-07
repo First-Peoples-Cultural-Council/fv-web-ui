@@ -43,24 +43,46 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   private static String[] currentAlphabet;
 
+  private static int alphabetCount = ThreadLocalRandom.current().nextInt(0, alphabetChars.length);
+  private static int multiCount = ThreadLocalRandom.current().nextInt(0, multiChars.length);
+  private static int maskCount = ThreadLocalRandom.current().nextInt(0, maskChars.length);
+  private static int uniCount = ThreadLocalRandom.current().nextInt(0, uniChars.length);
+
+
   private static void generateRandomAlphabet() {
 
     String[] alphabetArr = new String[30];
     for (int i = 0; i < 10; i++) {
-      //TODO: Can currently have duplicate characters, will fix in next commit
-      alphabetArr[i] = alphabetChars[ThreadLocalRandom.current().nextInt(0, alphabetChars.length)];
+      //Counter variables are a quick fix for alphabets containing two fo the same character
+      alphabetArr[i] = alphabetChars[alphabetCount];
+      alphabetCount += 1;
+      if (alphabetCount >= alphabetChars.length) {
+        alphabetCount = 0;
+      }
     }
 
     for (int i = 10; i < 20; i++) {
-      alphabetArr[i] = multiChars[ThreadLocalRandom.current().nextInt(0, multiChars.length)];
+      alphabetArr[i] = multiChars[multiCount];
+      multiCount += 1;
+      if (multiCount >= multiChars.length) {
+        multiCount = 0;
+      }
     }
 
     for (int i = 20; i < 25; i++) {
-      alphabetArr[i] = maskChars[ThreadLocalRandom.current().nextInt(0, maskChars.length)];
+      alphabetArr[i] = maskChars[maskCount];
+      maskCount += 1;
+      if (maskCount >= maskChars.length) {
+        maskCount = 0;
+      }
     }
 
     for (int i = 25; i < alphabetArr.length; i++) {
-      alphabetArr[i] = uniChars[ThreadLocalRandom.current().nextInt(0, uniChars.length)];
+      alphabetArr[i] = uniChars[uniCount];
+      uniCount += 1;
+      if (uniCount >= uniChars.length) {
+        uniCount = 0;
+      }
     }
 
     currentAlphabet = alphabetArr;

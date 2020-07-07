@@ -18,7 +18,7 @@
   </extension>
 
 
-  <!-- Block Operation from being visible to non super admins
+  <!-- Block Operation from being visible to non super admins -->
   <extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
     <binding name="Mocks.GenerateDialect">
       <administrator>true</administrator>
@@ -33,6 +33,6 @@
       <administrator>true</administrator>
     </binding>
   </extension>
-  -->
+
 
 </component>

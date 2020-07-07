@@ -16,7 +16,6 @@ import org.nuxeo.ecm.core.api.PathRef;
  */
 
 public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
-  //TODO: add remover unit tests
 
   @Test
   public void generateDemoDialect() throws OperationException {
@@ -33,7 +32,9 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
 
     Assert.assertTrue(
         session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
-    Assert.assertEquals(26, session.query("SELECT * from FVCharacter").size());
+    Assert.assertEquals(26, session
+        .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
+            + "'").size());
   }
 
   @Test
@@ -50,10 +51,14 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     String s = (String) dialect.getPropertyValue("dc:description");
     Assert.assertNotNull(s);
 
-    DocumentModelList test = session.query("SELECT * from FVCharacter");
+    DocumentModelList test = session
+        .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
+            + "'");
 
     Assert.assertEquals(30, test.size());
-    Assert.assertEquals(1, session.query("SELECT * from FVDialect").size());
+    Assert.assertEquals(1, session
+        .query("SELECT * FROM FVDialect WHERE ecm:ancestorId='" + language.getId()
+            + "'").size());
   }
 
 }

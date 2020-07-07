@@ -57,9 +57,9 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
       }
       //if dialect is mock data, remove items
       if (eventDoc.getPathAsString().contains("/FV/Workspaces/Data/Test/Test/")) {
-        this.mockTemplate = this.template;
+        this.mockTemplate = new ArrayList<>(template);
         mockTemplate.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
-        this.template = this.mockTemplate;
+        this.template = new ArrayList<>(mockTemplate);
       }
 
     }

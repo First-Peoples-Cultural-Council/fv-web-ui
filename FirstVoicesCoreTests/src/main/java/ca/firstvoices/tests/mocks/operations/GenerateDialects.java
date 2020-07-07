@@ -17,8 +17,6 @@ public class GenerateDialects {
 
   public static final String ID = Constants.GROUP_NAME + "." + "GenerateDialects";
 
-  //TODO change boolean param
-
   @Context
   protected CoreSession session;
 
