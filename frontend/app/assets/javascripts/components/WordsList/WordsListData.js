@@ -308,11 +308,26 @@ function WordsListData({ children }) {
   }
 
   function fetcher({ currentPageIndex, pageSize }) {
-    const newUrl = appendPathArrayAfterLandmark({
-      pathArray: [pageSize, currentPageIndex],
-      splitWindowPath,
-      landmarkArray: [routeParams.category, 'words'],
-    })
+    let newUrl = ''
+    if (routeParams.letter) {
+      newUrl = appendPathArrayAfterLandmark({
+        pathArray: [pageSize, currentPageIndex],
+        splitWindowPath: splitWindowPath,
+        landmarkArray: [routeParams.letter],
+      })
+    } else if (routeParams.category) {
+      newUrl = appendPathArrayAfterLandmark({
+        pathArray: [pageSize, currentPageIndex],
+        splitWindowPath: splitWindowPath,
+        landmarkArray: [routeParams.category],
+      })
+    } else {
+      newUrl = appendPathArrayAfterLandmark({
+        pathArray: [pageSize, currentPageIndex],
+        splitWindowPath: splitWindowPath,
+        landmarkArray: ['words'],
+      })
+    }
     if (newUrl) {
       NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
     }
@@ -388,7 +403,6 @@ function WordsListData({ children }) {
   return children({
     columns: columns,
     computeEntities,
-    computeSearchDialect,
     dialect,
     dialectClassName,
     dialectUid,

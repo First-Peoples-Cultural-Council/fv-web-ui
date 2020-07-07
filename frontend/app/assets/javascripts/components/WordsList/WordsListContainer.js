@@ -18,7 +18,6 @@ function WordsListContainer() {
       {({
         columns,
         computeEntities,
-        computeSearchDialect,
         dialect,
         dialectClassName,
         fetcher,
@@ -40,7 +39,6 @@ function WordsListContainer() {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <WordsListPresentation
-              computeSearchDialect={computeSearchDialect}
               dialectClassName={dialectClassName}
               wordsListClickHandlerViewMode={setListViewMode}
               dictionaryListViewMode={listViewMode}

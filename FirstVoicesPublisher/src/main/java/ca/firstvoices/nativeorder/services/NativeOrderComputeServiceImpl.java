@@ -20,7 +20,11 @@
 
 package ca.firstvoices.nativeorder.services;
 
+import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.AbstractService;
+import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +34,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author loopingz
@@ -158,7 +163,26 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       if (!element.isImmutable()) {
         element.setPropertyValue("fv:custom_order", nativeTitle.toString());
       }
-      element.getCoreSession().saveDocument(element);
+      CoreSession session = element.getCoreSession();
+
+      session.saveDocument(element);
+
+      // If document is published, update the field on the proxy but only if no other changes exist
+      // in order to avoid publishing an archive's other changes prematurely.
+
+      FirstVoicesPublisherService firstVoicesPublisherService = Framework
+          .getService(FirstVoicesPublisherService.class);
+
+      UnpublishedChangesService unpublishedChangesService = Framework
+          .getService(UnpublishedChangesService.class);
+
+      boolean unpublishedChangesExist = unpublishedChangesService
+          .checkUnpublishedChanges(session, element);
+
+      if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
+        firstVoicesPublisherService.republish(element);
+      }
+
     }
   }
 

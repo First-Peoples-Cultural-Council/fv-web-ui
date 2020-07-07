@@ -483,7 +483,7 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const getSearchUi = () => {
     const { searchUi } = props
-    const { searchBySettings = {} } = computeSearchDialect
+    const { searchBySettings = {} } = csd
     const classesDefault = {
       SearchDialectFormSecondaryGroup: 'SearchDialectFormSecondaryGroup',
       SearchDialectOption: 'SearchDialectOption',

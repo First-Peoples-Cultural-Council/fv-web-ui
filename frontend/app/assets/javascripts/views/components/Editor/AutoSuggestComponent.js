@@ -276,6 +276,7 @@ export class AutoSuggestComponent extends Component {
       case 'FVCategory':
         return (
           <CategoriesData
+            fetchLatest
             fetchPhraseBooks={this.props.locals.attrs.containerType === 'FVPhrase'}
             value={this.props.value}
           >
