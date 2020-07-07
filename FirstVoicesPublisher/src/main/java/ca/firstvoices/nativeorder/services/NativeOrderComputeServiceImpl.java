@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nativeorder.services;
 
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.AbstractService;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -30,6 +31,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author loopingz
@@ -160,15 +162,16 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       }
       CoreSession session = element.getCoreSession();
 
+      session.saveDocument(element);
+
       // If document is published, update the field on the proxy:
-      DocumentModelList proxies = session.getProxies(element.getRef(), null);
-      if (!proxies.isEmpty()) {
-        DocumentModel proxy = proxies.get(0);
-        proxy.setPropertyValue("fv:custom_order", nativeTitle.toString());
-        session.saveDocument(proxy);
+      FirstVoicesPublisherService firstVoicesPublisherService = Framework
+          .getService(FirstVoicesPublisherService.class);
+
+      if (firstVoicesPublisherService.getPublication(session, element.getRef()) != null) {
+        firstVoicesPublisherService.publish(element);
       }
 
-      element.getCoreSession().saveDocument(element);
     }
   }
 
