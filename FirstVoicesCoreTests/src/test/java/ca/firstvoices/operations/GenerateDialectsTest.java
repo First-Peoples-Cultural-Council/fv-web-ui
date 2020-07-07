@@ -15,6 +15,8 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
 
+  //TODO: add remover unit tests
+
   @Test
   public void generateDemoDialects() throws OperationException {
 

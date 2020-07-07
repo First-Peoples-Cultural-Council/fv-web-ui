@@ -17,12 +17,14 @@ public class GenerateDialects {
 
   public static final String ID = Constants.GROUP_NAME + "." + "GenerateDialects";
 
+  //TODO change boolean param
+
   @Context
   protected CoreSession session;
 
   @Param(name = "randomize", values = {"true", "false"},
       description = "`true` to create random data; `false` to create real demo data")
-  protected boolean randomize = true;
+  protected String randomize = "true";
 
   @Param(name = "maxDialects", required = false, description = "how many dialects to generate")
   protected int maxDialects = 10;
@@ -42,7 +44,7 @@ public class GenerateDialects {
 
       String name = "TestDialect" + i;
 
-      if (randomize) {
+      if (randomize.equals("true")) {
         createdDialects
             .add(generateDialectService.generateMockRandomDialect(session, maxEntries));
       } else {

@@ -47,7 +47,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     String[] alphabetArr = new String[30];
     for (int i = 0; i < 10; i++) {
-      //NOTE: Can currently have duplicate characters, will fix in next commit
+      //TODO: Can currently have duplicate characters, will fix in next commit
       alphabetArr[i] = alphabetChars[ThreadLocalRandom.current().nextInt(0, alphabetChars.length)];
     }
 

@@ -21,7 +21,6 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <artifactId>nuxeo-elasticsearch-core</artifactId>
