@@ -171,7 +171,7 @@ class WordsCategoriesListView extends DataListView {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const isPhraseBook = this.props.containerType === 'FVPhrase'
     return (
-      <CategoriesData fetchPhraseBooks={isPhraseBook} value={this.props.value}>
+      <CategoriesData fetchLatest fetchPhraseBooks={isPhraseBook} value={this.props.value}>
         {({ categoriesRawData }) => {
           return (
             <DocumentListView

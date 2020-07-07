@@ -49,7 +49,11 @@ class CategoriesData extends Component {
 
     // Fetch dialect specific categories
     if (selectn('action', categories) !== 'FV_CATEGORIES_QUERY_START') {
-      ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
+      if (this.props.fetchLatest) {
+        this.props.fetchCategories(this.catPath)
+      } else {
+        ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
+      }
     }
     if (selectn('action', sharedCategories) !== 'FV_CATEGORIES_SHARED_QUERY_START') {
       ProviderHelpers.fetchIfMissing(
@@ -135,6 +139,7 @@ CategoriesData.propTypes = {
   windowPath: string.isRequired,
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
+  fetchLatest: bool,
   fetchSharedCategories: func.isRequired,
   fetchDocument: func.isRequired,
   fetchPortal: func.isRequired,
