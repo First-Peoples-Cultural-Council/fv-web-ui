@@ -17,14 +17,9 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  * @returns {node} jsx markup
  */
 function WidgetPresentation({ children, childrenHeader, title, variant }) {
-  let classNameVariant
-  switch (variant) {
-    case CONTENT_FULL_WIDTH:
-      classNameVariant = 'Widget--ContentFullWidth'
-      break
-    default:
-      classNameVariant = ''
-      break
+  let classNameVariant = ''
+  if (variant === CONTENT_FULL_WIDTH) {
+    classNameVariant = 'Widget--ContentFullWidth'
   }
   return (
     <div className={`Widget ${classNameVariant}`}>

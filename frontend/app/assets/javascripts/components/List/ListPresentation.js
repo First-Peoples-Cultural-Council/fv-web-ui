@@ -57,14 +57,10 @@ function ListPresentation({
   const { tableHeader, row, rowAlternate } = themeList
 
   let styleVariant
-  let headerStyle
-  switch (variant) {
-    case CONTENT_FULL_WIDTH:
-      styleVariant = themeList.ContentFullWidth
-      headerStyle = styleVariant.tableHeader
-      break
-    default:
-      headerStyle = tableHeader
+  let headerStyle = tableHeader
+  if (variant === CONTENT_FULL_WIDTH) {
+    styleVariant = themeList.ContentFullWidth
+    headerStyle = styleVariant.tableHeader
   }
 
   const defaultOptions = {
