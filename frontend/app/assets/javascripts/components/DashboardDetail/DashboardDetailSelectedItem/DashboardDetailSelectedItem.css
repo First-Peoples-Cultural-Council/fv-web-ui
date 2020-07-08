@@ -1,0 +1,43 @@
+.DashboardDetailSelectedItem {
+  border-left: 1px solid black;
+  display: grid;
+  grid-template-areas:
+    'ItemOverview'
+    'TaskActions';
+  grid-template-rows: 66vh auto;
+  position: relative;
+}
+
+.DashboardDetailSelectedItem__TaskSummary {
+  grid-area: TaskSummary;
+  padding: 10px;
+}
+.DashboardDetailSelectedItem__ActivityStream {
+  grid-area: ActivityStream;
+  padding: 10px;
+}
+.DashboardDetailSelectedItem__Notes {
+  grid-area: Notes;
+  padding: 10px;
+}
+.DashboardDetailSelectedItem__ItemDetail {
+  grid-area: ItemDetail;
+  padding: 10px;
+}
+.DashboardDetailSelectedItem__TaskActions {
+  border: 1px solid black;
+  border-left: none;
+  grid-area: TaskActions;
+  padding: 10px;
+}
+
+.DashboardDetailSelectedItem__ItemOverview {
+  grid-area: ItemOverview;
+  overflow: auto;
+}
+.DashboardDetailSelectedItem__Actions {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  z-index: 10;
+}
