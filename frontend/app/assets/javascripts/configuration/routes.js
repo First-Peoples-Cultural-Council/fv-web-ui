@@ -475,6 +475,8 @@ const routes = [
     path: ['tasks'],
     title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
     page: <Pages.PageTasks />,
+    disableWorkspaceSectionNav: true,
+    breadcrumbs: false,
   },
   {
     path: ['tasks', 'users', new paramMatch('dialect', ANYTHING_BUT_SLASH)],
