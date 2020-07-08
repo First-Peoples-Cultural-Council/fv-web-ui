@@ -1,6 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-
+import '!style-loader!css-loader!./TEMPLATE.css'
 /**
  * @summary TEMPLATEPresentation
  * @version 1.0.1
@@ -11,7 +11,7 @@ import React from 'react'
  * @returns {node} jsx markup
  */
 function TEMPLATEPresentation() {
-  return <div>TEMPLATEPresentation</div>
+  return <div className="TEMPLATE">TEMPLATEPresentation</div>
 }
 // PROPTYPES
 // const { string } = PropTypes

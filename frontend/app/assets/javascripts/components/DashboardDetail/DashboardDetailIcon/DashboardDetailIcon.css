@@ -1,0 +1,13 @@
+.DashboardDetailIcon {
+  display: inline-flex;
+  padding: 6px;
+  position: relative;
+}
+
+.DashboardDetailIcon__new {
+  background-color: rgba(0, 255, 0, 0.9);
+  border-radius: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
