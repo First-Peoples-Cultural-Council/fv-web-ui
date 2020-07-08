@@ -56,4 +56,5 @@
   <xs:element name="primary" type="xs:boolean"/>
   <xs:element name="custom_order_recompute_required" type="xs:boolean"/>
   <xs:element name="update_confusables_required" type="xs:boolean"/>
+  <xs:element name="ignored_characters" type="nxs:stringList"/>
 </xs:schema>
