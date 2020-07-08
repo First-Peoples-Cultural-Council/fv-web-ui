@@ -127,6 +127,7 @@ import { default as RecorderCreate } from './explore/dialect/Recorder/create' //
 import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edit
 
 import Dashboard from 'components/Dashboard'
+import DashboardDetail from 'components/DashboardDetail'
 // MENTOR-APPRENTICE PHOTO PROJECT
 import PageMAPPhotoProject from './photo-project'
 
@@ -227,4 +228,5 @@ export {
   RecorderEdit,
   //
   Dashboard,
+  DashboardDetail,
 }
