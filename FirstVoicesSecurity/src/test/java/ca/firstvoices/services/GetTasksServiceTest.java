@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.directory.test.DirectoryFeature;
+import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -170,7 +171,7 @@ public class GetTasksServiceTest extends AbstractFVTest {
   }
 
   @Test
-  public void testGetTaskForRecorder() throws LoginException {
+  public void testGetTaskForRecorder() throws LoginException, OperationException {
     DocumentModel document = getDocument();
     assertNotNull(document);
 
@@ -189,12 +190,12 @@ public class GetTasksServiceTest extends AbstractFVTest {
     assertEquals(1, tasks.size());
 
     login.login(recorder.getName());
-    List<DocumentModel> list = service.getTasksForUser(session, recorder);
+    List<DocumentModel> list = service.getTasksForUser(session, recorder, null, null, null, null);
     Assert.assertEquals(1, list.size());
   }
 
   @Test
-  public void testGetTaskForRecorderWithApproval() throws LoginException {
+  public void testGetTaskForRecorderWithApproval() throws LoginException, OperationException {
     DocumentModel document = getDocument();
     assertNotNull(document);
 
@@ -214,12 +215,13 @@ public class GetTasksServiceTest extends AbstractFVTest {
     assertEquals(1, tasks.size());
 
     login.login(recorderWithApproval.getName());
-    List<DocumentModel> list = service.getTasksForUser(session, recorderWithApproval);
+    List<DocumentModel> list = service.getTasksForUser(session, recorderWithApproval, null, null,
+        null, null);
     Assert.assertEquals(1, list.size());
   }
 
   @Test
-  public void testGetTaskForLanguageAdmin() throws LoginException {
+  public void testGetTaskForLanguageAdmin() throws LoginException, OperationException {
     DocumentModel document = getDocument();
     assertNotNull(document);
 
@@ -239,7 +241,8 @@ public class GetTasksServiceTest extends AbstractFVTest {
     assertEquals(1, tasks.size());
 
     login.login(languageAdmin.getName());
-    List<DocumentModel> list = service.getTasksForUser(session, languageAdmin);
+    List<DocumentModel> list = service
+        .getTasksForUser(session, languageAdmin, null, null, null, null);
     Assert.assertEquals(1, list.size());
   }
 

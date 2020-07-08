@@ -17,6 +17,9 @@ function useNavigationHelpers() {
     changePagination: ({ page, pageSize }) => {
       NavigationHelpers.navigate(getNewPaginationUrl({ splitWindowPath, page, pageSize }), pushWindowPath, false)
     },
+    navigate: (url) => {
+      NavigationHelpers.navigate(url, pushWindowPath, false)
+    },
   }
 }
 

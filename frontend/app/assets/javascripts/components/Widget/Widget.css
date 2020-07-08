@@ -1,0 +1,21 @@
+/* Block */
+.Widget {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+/* Element */
+.Widget__body {
+  padding: 0 10px;
+}
+.Widget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+/* Modifiers */
+.Widget--ContentFullWidth .Widget__body {
+  padding: 0;
+}

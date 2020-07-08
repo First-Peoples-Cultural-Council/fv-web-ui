@@ -2578,6 +2578,18 @@ const routes = [
   addPagination(DIALECT_IMMERSION_WORDS),
   addImmersionCategory(DIALECT_IMMERSION_WORDS),
   addPagination(addImmersionCategory(DIALECT_IMMERSION_WORDS)),
+  // DASHBOARDS
+  // ==========================================================
+  {
+    id: 'dashboard',
+    path: ['dashboard'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.Dashboard.Container />,
+    breadcrumbs: false,
+    disableWorkspaceSectionNav: true,
+  },
+  // Mentor-Apprentice Photo Project
+  // ==========================================================
   {
     path: ['photo-project'],
     title: 'Mentor-Apprentice Photo Project',
