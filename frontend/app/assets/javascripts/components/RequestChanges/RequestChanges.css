@@ -1,3 +1,18 @@
 .RequestChanges {
   border: 1px solid green;
+  padding: 0px 5%;
 }
+
+input {
+  width: 100%;
+  padding: 30px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 25%;
+
+}
+
+

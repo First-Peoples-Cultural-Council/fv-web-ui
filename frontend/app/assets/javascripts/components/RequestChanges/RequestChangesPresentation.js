@@ -16,28 +16,37 @@ function RequestChangesPresentation() {
 
   return (
       <div className="RequestChanges">
-        <div>Comments (requested changes)</div>
+        <h2>Comments (requested changes)</h2>
         <input type="text"></input>
-        <FVButton
-            variant="outlined"
-            color="secondary"
-            className="Tasks__taskTitle"
-            onClick={() => {
-              /* ... */
-            }}
-        >
-          Approve
-        </FVButton>
-        <FVButton
-            variant="outlined"
-            color="secondary"
-            className="Tasks__taskTitle"
-            onClick={() => {
-              /* ... */
-            }}
-        >
-          Request Changes
-        </FVButton>
+        <div className="actions">
+          <select name="visibility">
+            <option value="team">Team Only</option>
+            <option value="members">Members Only</option>
+            <option value="public">Public</option>
+          </select>
+          <FVButton
+              variant="outlined"
+              color="secondary"
+              className="FVButton"
+              onClick={() => {
+                /* ... */
+              }}
+          >
+            Approve
+          </FVButton>
+          <FVButton
+              variant="outlined"
+              color="secondary"
+              className="FVButton"
+              onClick={() => {
+                /* ... */
+              }}
+          >
+            Request Changes
+          </FVButton>
+
+        </div>
+
       </div>
 
   )
