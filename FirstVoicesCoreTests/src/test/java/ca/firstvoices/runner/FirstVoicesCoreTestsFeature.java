@@ -25,6 +25,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.commandline.executor")
 @Deploy("org.nuxeo.ecm.platform.convert")
 @Deploy("org.nuxeo.ecm.platform.preview")
+@Deploy("org.nuxeo.ecm.platform.usermanager")
 
 // Audio doctype
 @Deploy("org.nuxeo.ecm.platform.audio.core")

@@ -53,7 +53,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     String[] alphabetArr = new String[30];
     for (int i = 0; i < 10; i++) {
-      //Counter variables are a quick fix for alphabets containing two fo the same character
+      //Counter variables are a quick fix for alphabets containing two of the same character
       alphabetArr[i] = alphabetChars[alphabetCount];
       alphabetCount += 1;
       if (alphabetCount >= alphabetChars.length) {
@@ -166,9 +166,6 @@ public class MockDialectServiceImpl implements MockDialectService {
 
 
   private void generateDomainTree(CoreSession session) {
-    //NOTE: Note entirely satisfied with this method,
-    // should I handle more cases such as partially generated trees?
-    // ie only /FV/Workspaces/Data/Test or /FV/Workspaces/ exists?
 
     String testPath = "/FV/Workspaces/Data/Test/Test/";
     //if path exists, do nothing
@@ -190,8 +187,8 @@ public class MockDialectServiceImpl implements MockDialectService {
   }
 
   private DocumentModel generateEmptyDialect(CoreSession session, String name, String desc) {
-    //In the current session, in the /FV/Workspaces/Data/TestLangFam/TestLang/ directory
-    //create an empty dialect with all necessary children
+    //In the current session, in the /FV/Workspaces/Data/Test/Test/ directory
+    //create an empty dialect with all necessary generated children
 
     generateDomainTree(session);
 

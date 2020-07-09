@@ -13,6 +13,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
@@ -27,6 +28,11 @@ public abstract class AbstractFirstVoicesCoreTestsTest {
   protected DocumentModel language;
   protected Map<String, String> params;
 
+  @Inject
+  protected NuxeoPrincipal administrator;
+  protected NuxeoPrincipal recorder;
+  protected NuxeoPrincipal recorderWithApproval;
+  protected NuxeoPrincipal languageAdmin;
 
   @Inject
   protected CoreSession session;
