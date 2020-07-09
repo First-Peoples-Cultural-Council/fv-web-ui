@@ -1,19 +1,19 @@
-// NOTE: This ListContainer file is just an example
-// NOTE: We are using the `List/ListPresentation` file in other List* components
+// NOTE: This TableContainer file is just an example
+// NOTE: We are using the `Table/TablePresentation` file in other Table* components
 import React from 'react'
-import ListPresentation from './ListPresentation'
-import ListData from './ListData'
+import TablePresentation from './TablePresentation'
+import TableData from './TableData'
 
 /**
- * @summary ListContainer
+ * @summary TableContainer
  * @version 1.0.1
  * @component
  *
  * @returns {node} jsx markup
  */
-function ListContainer() {
+function TableContainer() {
   return (
-    <ListData>
+    <TableData>
       {({
         actions,
         columns,
@@ -33,7 +33,7 @@ function ListContainer() {
         title,
       }) => {
         return (
-          <ListPresentation
+          <TablePresentation
             actions={actions}
             columns={columns}
             data={data}
@@ -53,8 +53,8 @@ function ListContainer() {
           />
         )
       }}
-    </ListData>
+    </TableData>
   )
 }
 
-export default ListContainer
+export default TableContainer

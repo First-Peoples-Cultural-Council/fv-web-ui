@@ -6,7 +6,7 @@ import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 /**
- * @summary ListPresentation
+ * @summary TablePresentation
  * @version 1.0.1
  * @component
  *
@@ -31,7 +31,7 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function ListPresentation({
+function TablePresentation({
   actions,
   columns,
   data,
@@ -53,13 +53,13 @@ function ListPresentation({
   variant,
 }) {
   const { theme } = useTheme()
-  const themeList = selectn('components.List', theme) || {}
-  const { tableHeader, row, rowAlternate } = themeList
+  const themeTable = selectn('components.Table', theme) || {}
+  const { tableHeader, row, rowAlternate } = themeTable
 
   let styleVariant
   let headerStyle = tableHeader
   if (variant === CONTENT_FULL_WIDTH) {
-    styleVariant = themeList.ContentFullWidth
+    styleVariant = themeTable.ContentFullWidth
     headerStyle = styleVariant.tableHeader
   }
 
@@ -135,7 +135,7 @@ function ListPresentation({
 }
 // PROPTYPES
 const { array, func, string, object, oneOf, oneOfType } = PropTypes
-ListPresentation.propTypes = {
+TablePresentation.propTypes = {
   actions: array,
   columns: array,
   data: oneOfType([array, func]),
@@ -156,9 +156,9 @@ ListPresentation.propTypes = {
   style: object,
   variant: oneOf([CONTENT_FULL_WIDTH]),
 }
-ListPresentation.defaultProps = {
+TablePresentation.defaultProps = {
   options: {},
   style: {},
 }
 
-export default ListPresentation
+export default TablePresentation

@@ -1,11 +1,11 @@
-// NOTE: This ListData file is just an example
-// NOTE: We are using the `List/ListPresentation` file in other List* components
+// NOTE: This TableData file is just an example
+// NOTE: We are using the `Table/TablePresentation` file in other Table* components
 import PropTypes from 'prop-types'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 
 /**
- * @summary ListData
+ * @summary TableData
  * @version 1.0.1
  * @component
  *
@@ -40,7 +40,7 @@ import selectn from 'selectn'
  * @param {string} [props.toolbarButtonAlignment = 'left'] Either 'left' or 'right'
  *
  */
-function ListData({
+function TableData({
   actions,
   actionsColumnIndex,
   children,
@@ -71,7 +71,7 @@ function ListData({
   toolbarButtonAlignment,
 }) {
   const { theme } = useTheme()
-  const { tableHeader, row, rowAlternate } = selectn('components.List', theme) || {}
+  const { tableHeader, row, rowAlternate } = selectn('components.Table', theme) || {}
   const options = {
     actionsColumnIndex,
     debounceInterval: 500,
@@ -116,7 +116,7 @@ function ListData({
 }
 // PROPTYPES
 const { array, bool, func, string, number, oneOf, oneOfType } = PropTypes
-ListData.propTypes = {
+TableData.propTypes = {
   actions: array,
   actionsColumnIndex: number,
   children: func,
@@ -145,7 +145,7 @@ ListData.propTypes = {
   title: string,
   toolbarButtonAlignment: oneOf(['left', 'right']),
 }
-ListData.defaultProps = {
+TableData.defaultProps = {
   actionsColumnIndex: 3,
   columns: [
     { title: 'Col 1', field: 'col1Data' },
@@ -176,4 +176,4 @@ ListData.defaultProps = {
   toolbarButtonAlignment: 'left',
 }
 
-export default ListData
+export default TableData

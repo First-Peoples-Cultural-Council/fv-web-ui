@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Widget from 'components/Widget'
-import List from 'components/List'
+import Table from 'components/Table'
 import Link from 'views/components/Link'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 
@@ -28,7 +28,7 @@ function WidgetTasksPresentation({ columns, data, fetchMessage, isFetching, onRo
       variant={CONTENT_FULL_WIDTH}
       childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks'}>See all tasks</Link>}
     >
-      <List.Presentation
+      <Table.Presentation
         variant={CONTENT_FULL_WIDTH}
         columns={columns}
         onRowClick={onRowClick}
