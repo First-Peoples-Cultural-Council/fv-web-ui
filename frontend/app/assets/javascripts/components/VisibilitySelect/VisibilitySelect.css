@@ -1,0 +1,9 @@
+.Select {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+/* Element */
+.Select__formControl {
+  display: flex;
+}
