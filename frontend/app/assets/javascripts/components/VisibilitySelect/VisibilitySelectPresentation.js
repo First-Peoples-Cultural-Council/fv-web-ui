@@ -28,8 +28,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 250,
   },
-  margin: {
-    margin: theme.spacing(1),
+  icon: {
+    // margin: theme.spacing(1),
+  },
+  item: {
+    // margin: theme.spacing(),
   },
 }))
 
@@ -40,17 +43,17 @@ function VisibilitySelectPresentation({ handleChange, visibility }) {
       <InputLabel id="select-label">Who can see this?</InputLabel>
       <FormControl variant="outlined" className={classes.formControl}>
         <Select labelId="select-outlined-label" id="select" value={visibility} onChange={handleChange}>
-          <MenuItem value={'team'}>
-            <LockIcon className={classes.margin} />
+          <MenuItem value={'team'} className={classes.item}>
+            <LockIcon className={classes.icon} />
             Language Team
           </MenuItem>
-          <MenuItem value={'members'}>
-            <GroupIcon className={classes.margin} />
+          <MenuItem value={'members'} className={classes.item}>
+            <GroupIcon className={classes.icon} />
             Members
           </MenuItem>
-          <MenuItem value={'public'}>
-            <PublicIcon className={classes.margin} />
-            Public
+          <MenuItem value={'public'} className={classes.item}>
+            <PublicIcon className={classes.icon} />
+            Everyone
           </MenuItem>
         </Select>
       </FormControl>

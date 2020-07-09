@@ -53,7 +53,7 @@ import FVLabel from 'views/components/FVLabel/index'
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
-
+import VisibilitySelect from 'components/VisibilitySelect'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
@@ -161,6 +161,8 @@ export class DialectViewWord extends Component {
     const { computeEntities, computeWord, computeDialect2 } = this.state
     const dialectClassName = getDialectClassname(computeDialect2)
     const title = selectn('response.title', computeWord)
+    const state = selectn('response.state', computeWord)
+    const uid = selectn('response.uid', computeWord)
 
     /**
      * Generate definitions body
@@ -190,6 +192,11 @@ export class DialectViewWord extends Component {
           <div className="DialectViewWordPhraseGroup">
             <div className="DialectViewWordPhraseContentPrimary">
               <div className="DialectViewWordPhraseTitleAudio">
+                <VisibilitySelect.Container
+                  docId={uid}
+                  docState={state}
+                  computeEntities={computeEntities || Immutable.List()}
+                />
                 <h2 className={`DialectViewWordPhraseTitle ${dialectClassName}`}>
                   {title} {this._getAudio(computeWord)}
                 </h2>
