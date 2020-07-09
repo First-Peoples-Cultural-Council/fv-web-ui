@@ -35,16 +35,14 @@ public class GenerateDialect {
 
   @OperationMethod
   public DocumentModel run() {
-    DocumentModel createdDialect;
 
     if (randomize.equals("true")) {
-      createdDialect = generateDialectService
+      return generateDialectService
           .generateMockRandomDialect(session, maxEntries);
     } else {
-      createdDialect = generateDialectService
+      return generateDialectService
           .generateMockDemoDialect(session, maxEntries, dialectName);
     }
 
-    return createdDialect;
   }
 }

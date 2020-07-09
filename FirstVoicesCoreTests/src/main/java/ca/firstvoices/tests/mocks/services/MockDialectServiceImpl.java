@@ -1,9 +1,10 @@
 package ca.firstvoices.tests.mocks.services;
 
-import static ca.firstvoices.tests.mocks.Constants.FV_CHARACTER;
-import static ca.firstvoices.tests.mocks.Constants.FV_DIALECT;
-import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE;
-import static ca.firstvoices.tests.mocks.Constants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -197,7 +198,7 @@ public class MockDialectServiceImpl implements MockDialectService {
             .createDocumentModel("/FV/Workspaces/Data/Test/Test/", name, FV_DIALECT), desc);
 
     createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", "FVAlphabet"));
+        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", FV_ALPHABET));
 
     return dialect;
 

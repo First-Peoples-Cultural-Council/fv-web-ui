@@ -22,17 +22,7 @@ package ca.firstvoices.tests.mocks;
 
 public class Constants {
 
-  //Should import most of these constants from FirstVoicesData when possible
   public static final String GROUP_NAME = "Mocks";
-  public static final String FV_LANGUAGE = "FVLanguage";
-  public static final String FV_LANGUAGE_FAMILY = "FVLanguageFamily";
-  public static final String FV_DIALECT = "FVDialect";
-  public static final String FV_CHARACTER = "FVCharacter";
-
-  // Groups
-  public static final String RECORDERS_GROUP = "recorders";
-  public static final String RECORDERS_APPROVERS_GROUP = "recorders_with_approval";
-  public static final String LANGUAGE_ADMINS_GROUP = "language_administrators";
 
   private Constants() {
     throw new IllegalStateException("Utility class");
