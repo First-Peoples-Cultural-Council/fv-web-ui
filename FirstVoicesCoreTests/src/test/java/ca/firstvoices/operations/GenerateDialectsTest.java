@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.DocumentSecurityException;
 
 /**
  * @author bronson
@@ -54,6 +55,36 @@ public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
     Assert.assertEquals(generatedDialects.size(), expectedDialects);
 
     Assert.assertEquals(30 * expectedDialects, session.query("SELECT * from FVCharacter").size());
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecorders() throws OperationException {
+    params = new HashMap<>();
+    params.put("randomize", "false");
+
+    setUser(recorder);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, GenerateDialects.ID, params);
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecordersWithApproval() throws OperationException {
+    params = new HashMap<>();
+    params.put("randomize", "false");
+
+    setUser(recorderWithApproval);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, GenerateDialects.ID, params);
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleBylanguageAdmins() throws OperationException {
+    params = new HashMap<>();
+    params.put("randomize", "false");
+
+    setUser(languageAdmin);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, GenerateDialects.ID, params);
   }
 
 }

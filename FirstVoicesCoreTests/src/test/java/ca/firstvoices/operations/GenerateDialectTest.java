@@ -7,13 +7,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
-import org.nuxeo.ecm.core.api.CloseableCoreSession;
-import org.nuxeo.ecm.core.api.CoreSessionService;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.DocumentSecurityException;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.repository.RepositoryManager;
-import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author bronson
@@ -65,24 +62,34 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
             + "'").size());
   }
 
-  @Test
-  public void onlyAccessibleBySuperAdmins() throws OperationException {
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecorders() throws OperationException {
     params = new HashMap<>();
     params.put("randomize", "true");
-    params.put("maxEntries", "50");
 
-    CloseableCoreSession userSession = Framework.getService(CoreSessionService.class)
-        .createCoreSession(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
-            recorder);
-
+    setUser(recorder);
     OperationContext ctx = new OperationContext(userSession);
-    DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
+    automationService.run(ctx, GenerateDialect.ID, params);
+  }
 
-    Assert.assertEquals(0, session
-        .query("SELECT * FROM FVDialect WHERE ecm:ancestorId='" + language.getId()
-            + "'").size());
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecordersWithApproval() throws OperationException {
+    params = new HashMap<>();
+    params.put("randomize", "true");
 
-    userSession.close();
+    setUser(recorderWithApproval);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, GenerateDialect.ID, params);
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleBylanguageAdmins() throws OperationException {
+    params = new HashMap<>();
+    params.put("randomize", "true");
+
+    setUser(languageAdmin);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, GenerateDialect.ID, params);
   }
 
 }

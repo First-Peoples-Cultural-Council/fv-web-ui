@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentSecurityException;
 
 /**
  * @author bronson
@@ -38,6 +39,36 @@ public class RemoveDialectTest extends AbstractFirstVoicesCoreTestsTest {
         .query("SELECT * FROM FVDialect WHERE ecm:ancestorId='" + language.getId()
             + "'").size());
 
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecorders() throws OperationException {
+    params = new HashMap<>();
+    params.put("dialectName", "");
+
+    setUser(recorder);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, RemoveDialect.ID, params);
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleByRecordersWithApproval() throws OperationException {
+    params = new HashMap<>();
+    params.put("dialectName", "");
+
+    setUser(recorderWithApproval);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, RemoveDialect.ID, params);
+  }
+
+  @Test(expected = DocumentSecurityException.class)
+  public void notAccessibleBylanguageAdmins() throws OperationException {
+    params = new HashMap<>();
+    params.put("dialectName", "");
+
+    setUser(languageAdmin);
+    OperationContext ctx = new OperationContext(userSession);
+    automationService.run(ctx, RemoveDialect.ID, params);
   }
 
 }
