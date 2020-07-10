@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesCoreTests
+Bundle-Name: FirstVoicesCoreTests
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ManifestVersion: 2
+Export-Package: FirstVoicesCoreTests
+Bundle-Vendor: Nuxeo
+Nuxeo-Component: OSGI-INF/mocks/mocks-services.xml,
+ OSGI-INF/mocks/mocks-operations.xml

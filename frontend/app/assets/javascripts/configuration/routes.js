@@ -2588,6 +2588,13 @@ const routes = [
     breadcrumbs: false,
     disableWorkspaceSectionNav: true,
   },
+  {
+    id: 'dashboard',
+    path: ['dashboard', 'tasks'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.DashboardDetail.Container />,
+    breadcrumbs: false,
+  },
   // Mentor-Apprentice Photo Project
   // ==========================================================
   {

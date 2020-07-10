@@ -20,3 +20,9 @@ export const WORKSPACES = 'Workspaces'
 export const SECTIONS = 'sections'
 
 export const CONTENT_FULL_WIDTH = 1
+
+export const UNKNOWN = 0
+export const WORD = 1
+export const PHRASE = 2
+export const SONG = 3
+export const STORY = 4

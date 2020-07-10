@@ -68,6 +68,7 @@ class SharedResourceGridTile extends Component {
     action: any, // TODO: set appropriate propType
     fileTypeTilePosition: any, // TODO: set appropriate propType
     preview: any, // TODO: set appropriate propType
+    intl: object.isRequired,
   }
   constructor(props, context) {
     super(props, context)
@@ -123,6 +124,18 @@ class SharedResourceGridTile extends Component {
   }
 }
 
+// REDUX: reducers/state
+const SharedResourceGridTileMapStateToProps = (state /*, ownProps*/) => {
+  const { locale } = state
+  const { intlService } = locale
+
+  return {
+    intl: intlService,
+  }
+}
+
+const SharedResourceGridTileConnected = connect(SharedResourceGridTileMapStateToProps, null)(SharedResourceGridTile)
+
 class SelectMediaComponent extends Component {
   static propTypes = {
     dialect: object.isRequired,
@@ -135,6 +148,7 @@ class SelectMediaComponent extends Component {
     computeSharedAudios: object.isRequired,
     computeSharedPictures: object.isRequired,
     computeSharedVideos: object.isRequired,
+    intl: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchResources: func.isRequired,
     fetchSharedAudios: func.isRequired,
@@ -197,7 +211,7 @@ class SelectMediaComponent extends Component {
     // so it needs to be a class, function or tag name string and not an object
     class SharedResourceGridTileWithDialect extends React.Component {
       render() {
-        return React.createElement(SharedResourceGridTile, { ...this.props, dialect: dialect })
+        return React.createElement(SharedResourceGridTileConnected, { ...this.props, dialect: dialect })
       }
     }
 
