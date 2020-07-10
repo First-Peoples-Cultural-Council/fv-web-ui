@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 
+//FPCC
+import useVisibility from 'DataSource/useVisibility'
+
 /**
  * @summary VisibilitySelectData
  * @version 1.0.1
@@ -11,7 +14,9 @@ import { useState, useEffect } from 'react'
  *
  */
 function VisibilitySelectData({ children, docId, docState }) {
+  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
   const [visibility, setVisibility] = useState('')
+
   useEffect(() => {
     setVisibility(convertStateToVisibility(docState))
   }, [])
@@ -33,12 +38,17 @@ function VisibilitySelectData({ children, docId, docState }) {
 
   const handleChange = (event) => {
     setVisibility(event.target.value)
-    const input = {
-      docId: docId,
-      event: event.target.value,
+
+    switch (event.target.value) {
+      case 'team':
+        return updateVisibilityToTeam(docId)
+      case 'members':
+        return updateVisibilityToMembers(docId)
+      case 'public':
+        return updateVisibilityToPublic(docId)
+      default:
+        return null
     }
-    // eslint-disable-next-line
-    console.log('input', input)
   }
 
   return children({
