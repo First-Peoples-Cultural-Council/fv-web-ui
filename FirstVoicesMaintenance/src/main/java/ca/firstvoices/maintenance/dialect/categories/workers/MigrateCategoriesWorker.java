@@ -80,7 +80,7 @@ public class MigrateCategoriesWorker extends AbstractWork {
         TransactionHelper.startTransaction();
 
         //Add real progress here when we can modify query for total words
-        setProgress(new Progress((wordsRemaining / totalWords) * 100));
+        setProgress(new Progress(((float) wordsRemaining / totalWords) * 100));
       }
     } catch (Exception e) {
       setStatus("Failed");
