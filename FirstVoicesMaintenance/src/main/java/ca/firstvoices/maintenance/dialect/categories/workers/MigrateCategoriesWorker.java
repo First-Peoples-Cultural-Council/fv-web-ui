@@ -80,14 +80,13 @@ public class MigrateCategoriesWorker extends AbstractWork {
         TransactionHelper.startTransaction();
 
         //Add real progress here when we can modify query for total words
-        setProgress(new Progress((wordsRemaining/totalWords) * 100));
+        setProgress(new Progress((wordsRemaining / totalWords) * 100));
       }
     } catch (Exception e) {
       setStatus("Failed");
       maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-      workFailed(
-          new NuxeoException("worker migration failed on " + jobContainer.getTitle() +": "
-              + e.getMessage()));
+      workFailed(new NuxeoException(
+          "worker migration failed on " + jobContainer.getTitle() + ": " + e.getMessage()));
     }
 
     maintenanceLogger.removeFromRequiredJobs(jobContainer, job, true);
