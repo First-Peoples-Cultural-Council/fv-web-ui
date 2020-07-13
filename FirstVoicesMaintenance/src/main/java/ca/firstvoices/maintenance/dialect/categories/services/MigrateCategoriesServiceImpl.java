@@ -76,8 +76,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   public int migrateWords(CoreSession session, DocumentModel dialect, int batchSize) {
 
     if (session == null) {
-      log.error("Migrate words could not run on " + dialect.getTitle() + ".");
-      return 0;
+      throw new NuxeoException(
+          "Migrate words could not run on " + dialect.getTitle() + " as " + "session is null.");
     }
 
     FirstVoicesPublisherService publisherService = Framework
@@ -127,6 +127,9 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
           // Check for unpublished changes
           if (!unpublishedChangesExist) {
             publisherService.republish(word);
+          } else {
+            log.info(word.getPathAsString() + "has unpublished changes yet the category has been "
+                + "migrated. Republish manually.");
           }
         }
       }
