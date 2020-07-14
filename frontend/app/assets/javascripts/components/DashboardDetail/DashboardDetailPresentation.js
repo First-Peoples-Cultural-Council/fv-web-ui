@@ -1,57 +1,90 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./DashboardDetail.css'
 
-import ListAltIcon from '@material-ui/icons/ListAlt'
-import ClearIcon from '@material-ui/icons/Clear'
-
+import IconClose from '@material-ui/icons/Cancel'
+import IconWidget from '@material-ui/icons/Apps'
+import IconDetail from '@material-ui/icons/VerticalSplitOutlined'
+import IconList from '@material-ui/icons/ViewHeadlineOutlined'
+import Link from 'views/components/Link'
 /**
  * @summary DashboardDetailPresentation
  * @version 1.0.1
  * @component
  *
  * @param {object} props
- * @param {node} props.children
- * @param {node} props.childrenSelectedItem
+ * @param {function} props.onClose
+ * @param {function} props.onOpen
+ * @param {node} props.childrenSelectedDetail
+ * @param {node} props.childrenSelectedSidebar
+ * @param {node} props.childrenUnselected
+ * @param {string} props.selectedId
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailPresentation({ children, childrenSelectedItem }) {
+function DashboardDetailPresentation({
+  childrenSelectedDetail,
+  childrenSelectedSidebar,
+  childrenUnselected,
+  onClose,
+  onOpen,
+  selectedId,
+}) {
+  const onKeyPressed = (event) => {
+    if (event.key === 'Escape') {
+      onClose()
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyPressed)
+    return () => {
+      document.removeEventListener('keydown', onKeyPressed)
+    }
+  }, [])
   return (
-    <div
-      className={`DashboardDetail ${
-        childrenSelectedItem ? 'DashboardDetail--Selected' : 'DashboardDetail--NothingSelected'
-      }`}
-    >
+    <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--NothingSelected'}`}>
       <div className="DashboardDetail__Header">
-        {childrenSelectedItem && (
-          <button className="DashboardDetail__ViewToggle">
-            <ListAltIcon /> Show full list view
+        <Link href="/dashboard" className="DashboardDetail__HeaderLink">
+          <IconWidget /> Back to Dashboard
+        </Link>
+
+        {selectedId && (
+          <button className="DashboardDetail__HeaderButton" onClick={onClose}>
+            <IconList /> Show full list view
           </button>
         )}
-        {!childrenSelectedItem && (
-          <button className="DashboardDetail__ViewToggle">
-            <ListAltIcon /> Show detail view
+        {!selectedId && (
+          <button className="DashboardDetail__HeaderButton" onClick={onOpen}>
+            <IconDetail /> Show detail view
           </button>
         )}
       </div>
-      <div className="DashboardDetail__List">{children}</div>
-      {childrenSelectedItem && (
-        <div className="DashboardDetail__SelectedItem">
-          <button className="DashboardDetail__SelectedItemClose">
-            <ClearIcon />
-          </button>
-          {childrenSelectedItem}
-        </div>
+
+      {!selectedId && childrenUnselected}
+
+      {selectedId && (
+        <>
+          <div className="DashboardDetail__List">{childrenSelectedSidebar}</div>
+          <div className="DashboardDetail__SelectedItem">
+            <button className="DashboardDetail__SelectedItemClose" onClick={onClose}>
+              <IconClose fontSize="large" />
+            </button>
+            {childrenSelectedDetail}
+          </div>
+        </>
       )}
     </div>
   )
 }
 // PROPTYPES
-const { node } = PropTypes
+const { func, node, string } = PropTypes
 DashboardDetailPresentation.propTypes = {
-  children: node,
-  childrenSelectedItem: node,
+  childrenSelectedDetail: node,
+  childrenSelectedSidebar: node,
+  childrenUnselected: node,
+  onClose: func,
+  onOpen: func,
+  selectedId: string,
 }
 
 export default DashboardDetailPresentation
