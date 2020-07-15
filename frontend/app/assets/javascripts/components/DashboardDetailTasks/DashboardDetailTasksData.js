@@ -20,7 +20,7 @@ function DashboardDetailTasksData({ children }) {
   const { fetchMessage, isFetching, tasks } = useUserGroupTasks()
 
   useEffect(() => {
-    if (active === '' && tasks.length > 0) {
+    if (active === 'first' && tasks.length > 0) {
       navigateReplace(`${window.location.pathname}?active=${tasks[0].id}`)
     }
   }, [tasks])
@@ -29,7 +29,7 @@ function DashboardDetailTasksData({ children }) {
     navigate(`${window.location.pathname}`)
   }
   const onOpen = (id) => {
-    navigate(`${window.location.pathname}?active=${id ? id : ''}`)
+    navigate(`${window.location.pathname}?active=${id ? id : 'first'}`)
   }
   const columns = [
     { title: '[Icon]', field: 'itemType' },

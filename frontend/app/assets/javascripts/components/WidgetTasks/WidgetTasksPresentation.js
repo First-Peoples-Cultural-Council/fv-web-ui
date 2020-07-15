@@ -26,7 +26,7 @@ function WidgetTasksPresentation({ columns, data, fetchMessage, isFetching, onRo
     <Widget.Presentation
       title="List of Tasks"
       variant={CONTENT_FULL_WIDTH}
-      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks'}>See all tasks</Link>}
+      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks?active=first'}>See all tasks</Link>}
     >
       <Table.Presentation
         variant={CONTENT_FULL_WIDTH}

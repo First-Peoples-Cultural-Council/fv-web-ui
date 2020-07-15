@@ -49,7 +49,7 @@ function DashboardDetailPresentation({
           <IconWidget /> Back to Dashboard
         </Link>
 
-        {(selectedId || selectedId === '') && (
+        {selectedId && (
           <button className="DashboardDetail__HeaderButton" onClick={onClose}>
             <IconList /> Show full list view
           </button>
@@ -61,7 +61,7 @@ function DashboardDetailPresentation({
         )}
       </div>
 
-      {!selectedId && childrenUnselected}
+      {selectedId === undefined && childrenUnselected}
 
       {selectedId && (
         <>
