@@ -129,7 +129,7 @@ import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edi
 // DASHBOARD
 // ----------------------
 import Dashboard from 'components/Dashboard'
-import DashboardDetail from 'components/DashboardDetail'
+import DashboardDetailTasks from 'components/DashboardDetailTasks'
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
@@ -232,5 +232,5 @@ export {
   RecorderEdit,
   // DASHBOARD
   Dashboard,
-  DashboardDetail,
+  DashboardDetailTasks,
 }
