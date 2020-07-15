@@ -41,6 +41,7 @@ function DashboardDetailPresentation({
       document.removeEventListener('keydown', onKeyPressed)
     }
   }, [])
+
   return (
     <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--NothingSelected'}`}>
       <div className="DashboardDetail__Header">
@@ -48,12 +49,12 @@ function DashboardDetailPresentation({
           <IconWidget /> Back to Dashboard
         </Link>
 
-        {selectedId && (
+        {(selectedId || selectedId === '') && (
           <button className="DashboardDetail__HeaderButton" onClick={onClose}>
             <IconList /> Show full list view
           </button>
         )}
-        {!selectedId && (
+        {selectedId === undefined && (
           <button className="DashboardDetail__HeaderButton" onClick={onOpen}>
             <IconDetail /> Show detail view
           </button>
