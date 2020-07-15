@@ -1,8 +1,3 @@
-/*
-import {
-  //...
-} from 'common/Constants'
-*/
 export const STATE_LOADING = 0 // component is loading (eg: getting data) or busy (eg: submitting data)
 export const STATE_DEFAULT = 1 // initial, loaded state, eg: displaying a form
 export const STATE_ERROR = 2 // component is not happy, ie: form validation (not .js errors)
@@ -26,3 +21,6 @@ export const WORD = 1
 export const PHRASE = 2
 export const SONG = 3
 export const STORY = 4
+
+export const EVEN = 0
+export const ODD = 1

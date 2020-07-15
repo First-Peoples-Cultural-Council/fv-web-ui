@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
 import '!style-loader!css-loader!./DashboardDetailList.css'
-
+import { EVEN, ODD } from 'common/Constants'
 /**
  * @summary DashboardDetailListPresentation
  * @version 1.0.1
@@ -24,9 +24,10 @@ function DashboardDetailListPresentation({ listItems, childrenHeader, onClick, s
       <div className="DashboardDetailList__ListContainer">
         <ul className="DashboardDetailList__List">
           {listItems.map(({ id, itemType, isNew, title, initiator, date }, index) => {
+            const variant = index % 2 ? ODD : EVEN
             return (
               <DashboardDetailListItem.Presentation
-                variant={index % 2}
+                variant={variant}
                 isActive={selectedId === id}
                 key={`DashboardDetailList__ListItem--${index}`}
                 title={title}

@@ -23,8 +23,7 @@ import '!style-loader!css-loader!./DashboardDetailListItem.css'
  * @returns {node} jsx markup
  */
 
-const EVEN = 0
-const ODD = 1
+import { EVEN, ODD } from 'common/Constants'
 
 function DashboardDetailListItemPresentation({ component, date, icon, initiator, isActive, onClick, title, variant }) {
   const { theme } = useTheme()
@@ -40,7 +39,9 @@ function DashboardDetailListItemPresentation({ component, date, icon, initiator,
     <Tag
       className={`DashboardDetailListItem  DashboardDetailListItem--${component} ${
         icon ? 'DashboardDetailListItem--hasIcon' : ''
-      } ${isActive ? 'DashboardDetailListItem--isActive' : ''}`}
+      } ${isActive ? 'DashboardDetailListItem--isActive' : ''} ${
+        onClick !== undefined ? 'DashboardDetailListItem--hasOnClick' : ''
+      }`}
       onClick={onClick}
       style={ItemStyle[variant]}
     >
@@ -75,7 +76,6 @@ DashboardDetailListItemPresentation.defaultProps = {
   component: 'li',
   date: '',
   initiator: '',
-  onClick: () => {},
   title: '',
 }
 

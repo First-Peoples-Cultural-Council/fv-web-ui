@@ -11,3 +11,6 @@
 .DashboardDetailListItem--isActive {
   background-color: rgba(0, 200, 0, 0.5) !important;
 }
+.DashboardDetailListItem--hasOnClick {
+  cursor: pointer;
+}
