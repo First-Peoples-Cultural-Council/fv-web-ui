@@ -1,7 +1,7 @@
-import React from 'react'
-// import PropTypes from 'prop-types'
+import React, { useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
-import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
+
 import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
 
 /**
@@ -10,20 +10,28 @@ import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
  * @component
  *
  * @param {object} props
+ * @param {string} props.date
+ * @param {node} props.icon
+ * @param {string} props.initiator
+ * @param {string} props.title
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailSelectedItemPresentation() {
+function DashboardDetailSelectedItemPresentation({ date, icon, initiator, title }) {
+  const scrollContainerRef = useRef(null)
+  useEffect(() => {
+    scrollContainerRef.current.scrollTop = 0
+  }, [title, initiator, date, icon])
   return (
     <div className="DashboardDetailSelectedItem">
-      <div className="DashboardDetailSelectedItem__ItemOverview">
+      <div ref={scrollContainerRef} className="DashboardDetailSelectedItem__ItemOverview">
         <div className="DashboardDetailSelectedItem__TaskSummary">
           <DashboardDetailListItem.Presentation
             component="div"
-            title={'title'}
-            requestedBy={'requestedBy'}
-            date={'date'}
-            icon={<DashboardDetailIcon.Presentation />}
+            title={title}
+            initiator={initiator}
+            date={date}
+            icon={icon}
           />
         </div>
         <div className="DashboardDetailSelectedItem__ActivityStream">
@@ -127,9 +135,12 @@ function DashboardDetailSelectedItemPresentation() {
   )
 }
 // PROPTYPES
-// const { node } = PropTypes
-// DashboardDetailSelectedItemPresentation.propTypes = {
-//   something: node,
-// }
+const { node, string } = PropTypes
+DashboardDetailSelectedItemPresentation.propTypes = {
+  date: string,
+  icon: node,
+  initiator: string,
+  title: string,
+}
 
 export default DashboardDetailSelectedItemPresentation
