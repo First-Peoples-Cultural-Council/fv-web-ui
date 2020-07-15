@@ -98,7 +98,6 @@ public class MigrateCategories {
       //migrateCategoriesService.migrateWords(session, dialect, 1000);
     } else if (phase.equals("syncwork")) {
       int wordsRemaining = migrateCategoriesService.migrateWords(session, dialect, batchSize);
-      int totalWords = wordsRemaining;
       while (wordsRemaining != 0) {
         int nextWordsRemaining = migrateCategoriesService.migrateWords(session, dialect, batchSize);
 
