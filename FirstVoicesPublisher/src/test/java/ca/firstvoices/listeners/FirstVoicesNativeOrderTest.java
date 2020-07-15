@@ -34,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -459,9 +460,48 @@ public class FirstVoicesNativeOrderTest {
 
   }
 
+  @Test
+  public void testignoredCharacters() {
+    session.removeDocument(new PathRef("/Family/Language/Dialect/Alphabet"));
+
+    List<String> testList = new ArrayList<>();
+    testList.add("+");
+    testList.add("&");
+
+    createAlphabetWithIgnoredChars(
+        session.createDocumentModel("/Family/Language/Dialect", "Alphabet", FV_ALPHABET), testList);
+
+    String[] orderedWords = {"Alpha", "+Bravo", "Charlie", "&Delta", "+Echo", "Foxtrot"};
+
+    String[] orderedAlphabet = {"+", "&", "a", "b", "c", "d", "e", "f"};
+
+    createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
+    createWordsorPhrases(orderedWords, FV_WORD);
+
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    Integer i = orderedWords.length - 1;
+
+    DocumentModelList docs = session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' " + "ORDER BY "
+            + "fv:custom_order DESC");
+
+    for (DocumentModel doc : docs) {
+      String reference = (String) doc.getPropertyValue("fv:reference");
+      assertEquals(orderedWords[i], doc.getPropertyValue("dc:title"));
+      assertEquals(i, Integer.valueOf(reference));
+      i--;
+    }
+  }
+
 
   private DocumentModel createDocument(DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
+    return session.createDocument(model);
+  }
+
+  private DocumentModel createAlphabetWithIgnoredChars(DocumentModel model, List<String> ign) {
+    model.setPropertyValue("dc:title", model.getName());
+    model.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) ign);
     return session.createDocument(model);
   }
 

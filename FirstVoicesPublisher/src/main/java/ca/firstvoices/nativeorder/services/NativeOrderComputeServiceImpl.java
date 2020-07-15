@@ -138,24 +138,43 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     while (title.length() > 0) {
       ArrayUtils.reverse(chars);
       String finalTitle = title;
-      DocumentModel characterDoc = Arrays.stream(chars).filter(
+      DocumentModel characterDoc;
+      characterDoc = Arrays.stream(chars).filter(
           charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
               (String) charDoc.getPropertyValue("dc:title"),
               (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
           .orElse(null);
 
+      boolean contains = false;
       if (characterDoc != null) {
-        String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
-        String computedCharacterTitle = (String) characterDoc.getPropertyValue("dc:title");
-        nativeTitle.append(computedCharacterOrder);
-        title = title.substring(computedCharacterTitle.length());
-      } else {
-        if (" ".equals(title.substring(0, 1))) {
-          nativeTitle.append(SPACE_CHARACTER);
-        } else {
-          nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
+        DocumentModel alphabet = element.getCoreSession().getDocument(characterDoc.getParentRef());
+
+        if (alphabet.getPropertyValue("fv-alphabet:ignored_characters") != null) {
+          String[] ignoredChars = (String[]) alphabet
+              .getPropertyValue("fv-alphabet:ignored_characters");
+
+          contains = Arrays.stream(ignoredChars)
+              .anyMatch(characterDoc.getPropertyValue("dc:title")::equals);
         }
+      }
+
+      if (contains) {
         title = title.substring(1);
+      } else {
+
+        if (characterDoc != null) {
+          String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
+          String computedCharacterTitle = (String) characterDoc.getPropertyValue("dc:title");
+          nativeTitle.append(computedCharacterOrder);
+          title = title.substring(computedCharacterTitle.length());
+        } else {
+          if (" ".equals(title.substring(0, 1))) {
+            nativeTitle.append(SPACE_CHARACTER);
+          } else {
+            nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
+          }
+          title = title.substring(1);
+        }
       }
     }
 
