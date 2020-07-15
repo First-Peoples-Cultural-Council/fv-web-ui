@@ -12,7 +12,7 @@ import Box from '@material-ui/core/Box'
  * @component
  *
  * @param {object} props
- * @param {array} data expects an array of objects, each object should contain a label string, and content array.
+ * @param {array} data expects an array of objects, an object for each tab containing a label string, and content array, and any other.
  * data = [
  *   {
  *     label: "any label",
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
 function TabsWithPanelsPresentation({ data }) {
   const classes = useStyles()
   const [value, setValue] = useState(0)
-  const tabs = getTabs(data)
-  const tabPanels = getTabPanels(data, value)
+  const tabs = generateTabs(data)
+  const tabPanels = generateTabPanels(data, value)
 
   // React.useEffect(() => {}, [value, tabs, tabPanels]);
 
@@ -89,7 +89,7 @@ TabPanel.propTypes = {
   value: any.isRequired,
 }
 
-function getTabPanels(dataArray, value) {
+function generateTabPanels(dataArray, value) {
   const panels = []
   function iterate(item, index) {
     panels.push(
@@ -102,7 +102,7 @@ function getTabPanels(dataArray, value) {
   return panels
 }
 
-function getTabs(dataArray) {
+function generateTabs(dataArray) {
   const tabs = []
   function iterate(item, index) {
     tabs.push(<Tab key={item.label} label={item.label} {...a11yProps(index)} />)
