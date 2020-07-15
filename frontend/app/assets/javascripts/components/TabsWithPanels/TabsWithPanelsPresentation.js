@@ -12,7 +12,13 @@ import Box from '@material-ui/core/Box'
  * @component
  *
  * @param {object} props
- * @param {array} data
+ * @param {array} data expects an array of objects, each object should contain a label string, and content array.
+ * data = [
+ *   {
+ *     label: "any label",
+ *     content: [ <h1>Whatever</h1>, <div>content</div>, <div>is wanted in your tab panels</div>, ],
+ *   },
+ * ]
  *
  * @returns {node} jsx markup
  */
