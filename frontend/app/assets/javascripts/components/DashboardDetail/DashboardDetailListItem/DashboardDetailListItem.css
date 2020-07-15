@@ -5,6 +5,9 @@
   padding: 0 10px;
 }
 .DashboardDetailListItem--li {
-  padding: 10px 0;
-  border-top: 1px solid black;
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(224, 224, 224);
+}
+.DashboardDetailListItem--isActive {
+  background-color: rgba(0, 200, 0, 0.5) !important;
 }
