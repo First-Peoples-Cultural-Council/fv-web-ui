@@ -10,25 +10,32 @@ import '!style-loader!css-loader!./DashboardDetailList.css'
  * @component
  *
  * @param {object} props
- * @param {node} props.childrenHeader
  * @param {array} props.listItems
+ * @param {function} props.onClick
+ * @param {integer} props.selectedId
+ * @param {node} props.childrenHeader
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailListPresentation({ listItems, childrenHeader }) {
+function DashboardDetailListPresentation({ listItems, childrenHeader, onClick, selectedId }) {
   return (
     <div className="DashboardDetailList">
       {childrenHeader && <div className="DashboardDetailList__HeaderContainer">{childrenHeader}</div>}
       <div className="DashboardDetailList__ListContainer">
         <ul className="DashboardDetailList__List">
-          {listItems.map(({ itemType, isNew, title, requestedBy, date }, index) => {
+          {listItems.map(({ id, itemType, isNew, title, initiator, date }, index) => {
             return (
               <DashboardDetailListItem.Presentation
+                variant={index % 2}
+                isActive={selectedId === id}
                 key={`DashboardDetailList__ListItem--${index}`}
                 title={title}
-                requestedBy={requestedBy}
+                initiator={initiator}
                 date={date}
                 icon={<DashboardDetailIcon.Presentation itemType={itemType} isNew={isNew} />}
+                onClick={() => {
+                  onClick(id)
+                }}
               />
             )
           })}
@@ -38,19 +45,25 @@ function DashboardDetailListPresentation({ listItems, childrenHeader }) {
   )
 }
 // PROPTYPES
-const { node, array } = PropTypes
+const { func, string, node, array } = PropTypes
 DashboardDetailListPresentation.propTypes = {
   childrenHeader: node,
   listItems: array,
+  onClick: func,
+  selectedId: string,
 }
 DashboardDetailListPresentation.defaultProps = {
   listItems: [
     {
-      title: '',
-      requestedBy: '',
       date: '',
+      id: '',
+      initiator: '',
+      isNew: true,
+      itemType: undefined,
+      title: '',
     },
   ],
+  onClick: () => {},
 }
 
 export default DashboardDetailListPresentation
