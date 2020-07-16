@@ -16,11 +16,10 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
 function RequestChangesContainer() {
   return (
       <RequestChangesData>
-        {(RequestChangesDataOutput) => {
-          // TODO FW-RequestChanges
-          // eslint-disable-next-line
-          console.log('RequestChangesDataOutput', RequestChangesDataOutput)
-          return <RequestChangesPresentation/>
+        {({formRef, onSubmit, errors}) => {
+          return <RequestChangesPresentation formRef={formRef}
+                                             onSubmit={onSubmit}
+                                             errors={errors}/>
         }}
       </RequestChangesData>
   )
