@@ -83,6 +83,7 @@ public class FirstVoicesNativeOrderTest {
 
   private DocumentModel domain;
   private DocumentModel dialect;
+  private DocumentModel alphabet;
 
   @Before
   public void setUp() {
@@ -91,7 +92,7 @@ public class FirstVoicesNativeOrderTest {
     createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
     dialect = createDocument(
         session.createDocumentModel("/Family/Language", "Dialect", FV_DIALECT));
-    createDocument(
+    alphabet = createDocument(
         session.createDocumentModel("/Family/Language/Dialect", "Alphabet", FV_ALPHABET));
     createDocument(
         session.createDocumentModel("/Family/Language/Dialect", "Dictionary", FV_DICTIONARY));
@@ -119,7 +120,7 @@ public class FirstVoicesNativeOrderTest {
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -153,7 +154,7 @@ public class FirstVoicesNativeOrderTest {
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -204,7 +205,7 @@ public class FirstVoicesNativeOrderTest {
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -248,7 +249,7 @@ public class FirstVoicesNativeOrderTest {
     createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createWordsorPhrases(orderedPhrases, FV_PHRASE);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedPhrases.length - 1;
 
     DocumentModelList docs = session.query(
@@ -285,7 +286,7 @@ public class FirstVoicesNativeOrderTest {
     session.saveDocument(z);
     session.save();
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -309,7 +310,7 @@ public class FirstVoicesNativeOrderTest {
     createUnorderedAlphabet(unorderedAlphabet, "/Family/Language/Dialect/Alphabet");
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -336,7 +337,7 @@ public class FirstVoicesNativeOrderTest {
 
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -433,7 +434,7 @@ public class FirstVoicesNativeOrderTest {
       word.followTransition(PUBLISH_TRANSITION);
     });
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList unpublishedDocs = session.query(
@@ -462,23 +463,24 @@ public class FirstVoicesNativeOrderTest {
 
   @Test
   public void testignoredCharacters() {
-    session.removeDocument(new PathRef("/Family/Language/Dialect/Alphabet"));
 
     List<String> testList = new ArrayList<>();
     testList.add("+");
     testList.add("&");
+    testList.add("**");
+    testList.add("-");
 
-    createAlphabetWithIgnoredChars(
-        session.createDocumentModel("/Family/Language/Dialect", "Alphabet", FV_ALPHABET), testList);
+    String[] orderedWords = {"Alpha", "+Bravo", "Charlie", "&Delta", "+Echo", "**Foxtrot", "-Golf"};
 
-    String[] orderedWords = {"Alpha", "+Bravo", "Charlie", "&Delta", "+Echo", "Foxtrot"};
+    String[] orderedAlphabet = {"a", "b", "c", "d", "e", "f"};
 
-    String[] orderedAlphabet = {"+", "&", "a", "b", "c", "d", "e", "f"};
-
-    createOrderedAlphabet(orderedAlphabet, "/Family/Language/Dialect/Alphabet");
+    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialect);
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
+    session.saveDocument(alphabet);
+
+    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -493,15 +495,8 @@ public class FirstVoicesNativeOrderTest {
     }
   }
 
-
   private DocumentModel createDocument(DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
-    return session.createDocument(model);
-  }
-
-  private DocumentModel createAlphabetWithIgnoredChars(DocumentModel model, List<String> ign) {
-    model.setPropertyValue("dc:title", model.getName());
-    model.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) ign);
     return session.createDocument(model);
   }
 
