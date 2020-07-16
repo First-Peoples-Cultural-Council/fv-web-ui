@@ -82,6 +82,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
     nativeOrderComputeService
         .computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
+    session.save();
     OperationContext ctx = new OperationContext(session);
 
     DocumentModelList documentModelList = (DocumentModelList) automationService
