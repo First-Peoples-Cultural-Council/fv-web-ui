@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types'
-import { useState, useEffect } from 'react'
-
 //FPCC
 import useVisibility from 'DataSource/useVisibility'
 
@@ -13,55 +11,30 @@ import useVisibility from 'DataSource/useVisibility'
  * @param {function} props.children
  *
  */
-function VisibilitySelectData({ children, docId, docState }) {
+function VisibilitySelectData({ children }) {
   const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
-  const [visibility, setVisibility] = useState('')
 
-  useEffect(() => {
-    setVisibility(convertStateToVisibility(docState))
-  }, [])
-
-  function convertStateToVisibility(state) {
-    switch (state) {
-      case 'New':
-        return 'team'
-      case 'Disabled':
-        return 'team'
-      case 'Enabled':
-        return 'members'
-      case 'Published':
-        return 'public'
-      default:
-        return ''
-    }
-  }
-
-  const handleChange = (event) => {
-    setVisibility(event.target.value)
-
-    switch (event.target.value) {
+  const handleVisibilityChange = (visibility, id) => {
+    switch (visibility) {
       case 'team':
-        return updateVisibilityToTeam(docId)
+        return updateVisibilityToTeam(id)
       case 'members':
-        return updateVisibilityToMembers(docId)
+        return updateVisibilityToMembers(id)
       case 'public':
-        return updateVisibilityToPublic(docId)
+        return updateVisibilityToPublic(id)
       default:
         return null
     }
   }
 
   return children({
-    handleChange,
-    visibility,
+    handleVisibilityChange,
   })
 }
 // PROPTYPES
-const { func, string } = PropTypes
+const { func } = PropTypes
 VisibilitySelectData.propTypes = {
   children: func,
-  docId: string.isRequired,
-  docState: string.isRequired,
 }
 
 export default VisibilitySelectData

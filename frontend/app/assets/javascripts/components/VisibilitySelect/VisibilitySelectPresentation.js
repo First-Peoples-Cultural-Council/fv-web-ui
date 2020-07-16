@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
-import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import LockIcon from '@material-ui/icons/Lock'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
-import { makeStyles } from '@material-ui/core/styles'
 // FPCC
 import '!style-loader!css-loader!./VisibilitySelect.css'
 
@@ -23,36 +21,51 @@ import PropTypes from 'prop-types'
  * @returns {node} jsx markup
  */
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 250,
-  },
-  icon: {
-    // margin: theme.spacing(1),
-  },
-  item: {
-    // margin: theme.spacing(),
-  },
-}))
+function VisibilitySelectPresentation({ docState, docId, handleVisibilityChange }) {
+  const [visibility, setVisibility] = useState('')
 
-function VisibilitySelectPresentation({ handleChange, visibility }) {
-  const classes = useStyles()
+  useEffect(() => {
+    setVisibility(convertStateToVisibility(docState))
+  }, [])
+
+  const handleChange = (event) => {
+    const newVisibility = event.target.value
+    setVisibility(newVisibility)
+    handleVisibilityChange(newVisibility, docId)
+  }
+
+  function convertStateToVisibility(state) {
+    switch (state) {
+      case 'New':
+        return 'team'
+      case 'Disabled':
+        return 'team'
+      case 'Enabled':
+        return 'members'
+      case 'Published':
+        return 'public'
+      default:
+        return ''
+    }
+  }
+
   return (
     <div>
-      <InputLabel id="select-label">Who can see this?</InputLabel>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <div id="select-label" className="Select">
+        Who can see this?
+      </div>
+      <FormControl variant="outlined">
         <Select labelId="select-outlined-label" id="select" value={visibility} onChange={handleChange}>
-          <MenuItem value={'team'} className={classes.item}>
-            <LockIcon className={classes.icon} />
+          <MenuItem value={'team'}>
+            <LockIcon />
             Language Team
           </MenuItem>
-          <MenuItem value={'members'} className={classes.item}>
-            <GroupIcon className={classes.icon} />
+          <MenuItem value={'members'}>
+            <GroupIcon />
             Members
           </MenuItem>
-          <MenuItem value={'public'} className={classes.item}>
-            <PublicIcon className={classes.icon} />
+          <MenuItem value={'public'}>
+            <PublicIcon />
             Everyone
           </MenuItem>
         </Select>
@@ -63,13 +76,15 @@ function VisibilitySelectPresentation({ handleChange, visibility }) {
 // PROPTYPES
 const { func, string } = PropTypes
 VisibilitySelectPresentation.propTypes = {
-  handleChange: func,
-  visibility: string,
+  docId: string.isRequired,
+  docState: string.isRequired,
+  handleVisibilityChange: func,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  handleChange: () => {},
-  visibility: '',
+  docId: '',
+  docState: '',
+  handleVisibilityChange: () => {},
 }
 
 export default VisibilitySelectPresentation
