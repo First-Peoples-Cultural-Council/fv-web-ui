@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import VisibilitySelectPresentation from './VisibilitySelectPresentation'
+import VisibilitySelectData from './VisibilitySelectData'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
- * @summary VisibilitySelectContainer
+ * @summary VisibilitySelectContainer - a simple selct menu for displaying and selecting the visibility of a document that it is passed as a prop. DOES NOT handle network calls.
  * @version 1.0.1
  * @component
  *
@@ -12,11 +13,18 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-
 function VisibilitySelectContainer({ docId, docState, handleVisibilityChange, computeEntities }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectPresentation docId={docId} docState={docState} handleVisibilityChange={handleVisibilityChange} />
+      <VisibilitySelectData docId={docId} docState={docState} handleVisibilityChange={handleVisibilityChange}>
+        {({ handleChange, visibility }) => {
+          // Getting visibility
+          if (!visibility || !docId) {
+            return null
+          }
+          return <VisibilitySelectPresentation visibility={visibility} handleChange={handleChange} />
+        }}
+      </VisibilitySelectData>
     </PromiseWrapper>
   )
 }
@@ -25,8 +33,8 @@ const { string, object, func } = PropTypes
 VisibilitySelectContainer.propTypes = {
   docId: string,
   docState: string,
-  computeEntities: object,
   handleVisibilityChange: func,
+  computeEntities: object,
 }
 
 VisibilitySelectContainer.defaultProps = {

@@ -1,5 +1,5 @@
 .Select {
   text-align: center;
-  display: inline-block;
+  float: left;
   padding: 10px;
 }

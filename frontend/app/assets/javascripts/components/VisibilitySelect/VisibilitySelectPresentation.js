@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
@@ -21,34 +21,7 @@ import PropTypes from 'prop-types'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ docState, docId, handleVisibilityChange }) {
-  const [visibility, setVisibility] = useState('')
-
-  useEffect(() => {
-    setVisibility(convertStateToVisibility(docState))
-  }, [])
-
-  const handleChange = (event) => {
-    const newVisibility = event.target.value
-    setVisibility(newVisibility)
-    handleVisibilityChange(newVisibility, docId)
-  }
-
-  function convertStateToVisibility(state) {
-    switch (state) {
-      case 'New':
-        return 'team'
-      case 'Disabled':
-        return 'team'
-      case 'Enabled':
-        return 'members'
-      case 'Published':
-        return 'public'
-      default:
-        return ''
-    }
-  }
-
+function VisibilitySelectPresentation({ handleChange, visibility }) {
   return (
     <div>
       <div id="select-label" className="Select">
@@ -76,15 +49,13 @@ function VisibilitySelectPresentation({ docState, docId, handleVisibilityChange 
 // PROPTYPES
 const { func, string } = PropTypes
 VisibilitySelectPresentation.propTypes = {
-  docId: string.isRequired,
-  docState: string.isRequired,
-  handleVisibilityChange: func,
+  handleChange: func,
+  visibility: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  docId: '',
-  docState: '',
-  handleVisibilityChange: () => {},
+  handleChange: () => {},
+  visibility: '',
 }
 
 export default VisibilitySelectPresentation
