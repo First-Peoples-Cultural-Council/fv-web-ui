@@ -45,21 +45,8 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   public static final String SPACE_CHARACTER = "!";
 
   @Override
-  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
-    chars.forEach(c -> {
-      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
-      String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
-      String updatedCustomOrder =
-          alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
-              : "" + ((char) (BASE + alphabetOrder));
-      if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
-        c.setPropertyValue("fv:custom_order", updatedCustomOrder);
-        session.saveDocument(c);
-      }
-    });
-  }
-
-  @Override
+  // Called when a document is created or updated
+  // TODO: BUG?: Don't update the characters custom order char
   public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
     if (!asset.isImmutable()) {
       DocumentModel dialect = getDialect(asset);
@@ -71,6 +58,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   }
 
   @Override
+  // Called when a we are updating all words and phrases on a dialect
   public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
       DocumentModel alphabet) {
     DocumentModel[] chars = loadCharacters(session, dialect);
@@ -96,33 +84,35 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
         .map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character"))
         .collect(Collectors.toList());
 
-    String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
-
     while (title.length() > 0) {
       ArrayUtils.reverse(chars);
 
       String finalTitle = title;
 
-      DocumentModel characterDoc = Arrays.stream(chars).filter(
-          charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
-              (String) charDoc.getPropertyValue("dc:title"),
-              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
-          .orElse(null);
-
       String ignoredCharacter = getIgnoredCharacter(alphabet, title);
 
       if (ignoredCharacter != null) {
+        // We're ignoring this character intentionally
         title = title.substring(ignoredCharacter.length());
       } else {
+        // Check if the character exists in the archive:
+        DocumentModel characterDoc = Arrays.stream(chars).filter(
+            charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
+                (String) charDoc.getPropertyValue("dc:title"),
+                (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
+            .orElse(null);
         if (characterDoc != null) {
+          // The character exists in the archive:
           String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
           nativeTitle.append(computedCharacterOrder);
           String charDocTitle = (String) characterDoc.getPropertyValue("dc:title");
           title = title.substring(charDocTitle.length());
         } else {
           if (!" ".equals(title.substring(0, 1))) {
+            // Character does not exist in the Archive's Alphabet
             nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
           } else {
+            // Character is a space
             nativeTitle.append(SPACE_CHARACTER);
           }
           title = title.substring(1);
@@ -130,6 +120,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       }
     }
 
+    String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
     if (!nativeTitle.toString().equals(originalCustomSort)) {
       element.setPropertyValue("fv:custom_order", nativeTitle.toString());
       session.saveDocument(element);
@@ -138,14 +129,14 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   }
 
   @Nullable
-  private String getIgnoredCharacter(DocumentModel alphabet, String finalTitle) {
+  private String getIgnoredCharacter(DocumentModel alphabet, String title) {
     String[] ignoredChars = (String[]) alphabet.getPropertyValue("fv-alphabet:ignored_characters");
 
     String ignoredCharacter = null;
 
     if (ignoredChars != null) {
-      ignoredCharacter = Arrays.stream(ignoredChars).filter(i -> finalTitle.startsWith(i))
-          .findFirst().orElse(null);
+      ignoredCharacter = Arrays.stream(ignoredChars).filter(i -> title.startsWith(i)).findFirst()
+          .orElse(null);
     }
     return ignoredCharacter;
   }
@@ -213,5 +204,20 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
         && character.getPropertyValue("fvcharacter:alphabet_order") != null)
         .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
         .toArray(DocumentModel[]::new);
+  }
+
+  @Override
+  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
+    chars.forEach(c -> {
+      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
+      String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
+      String updatedCustomOrder =
+          alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
+              : "" + ((char) (BASE + alphabetOrder));
+      if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
+        c.setPropertyValue("fv:custom_order", updatedCustomOrder);
+        session.saveDocument(c);
+      }
+    });
   }
 }
