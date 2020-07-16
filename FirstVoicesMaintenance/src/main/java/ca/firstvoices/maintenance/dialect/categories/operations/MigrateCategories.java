@@ -34,6 +34,7 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
@@ -48,7 +49,7 @@ public class MigrateCategories {
   protected CoreSession session;
   @Context
   protected WorkManager workManager;
-  @Param(name = "phase", values = {"init", "work"})
+  @Param(name = "phase", values = {"init", "work", "syncwork"})
   protected String phase = "init";
   @Param(name = "batchSize")
   protected int batchSize = 1000;
@@ -95,6 +96,20 @@ public class MigrateCategories {
 
       // Alternatively, we can call the service directly (not async)
       //migrateCategoriesService.migrateWords(session, dialect, 1000);
+    } else if (phase.equals("syncwork")) {
+      int wordsRemaining = migrateCategoriesService.migrateWords(session, dialect, batchSize);
+      while (wordsRemaining != 0) {
+        int nextWordsRemaining = migrateCategoriesService.migrateWords(session, dialect, batchSize);
+
+        // No progress, worker is stuck
+        if (nextWordsRemaining == wordsRemaining) {
+          throw new NuxeoException(
+              "Progress is stuck synchronously migrating words on " + dialect.getTitle());
+        }
+
+        wordsRemaining = nextWordsRemaining;
+
+      }
     }
   }
 
