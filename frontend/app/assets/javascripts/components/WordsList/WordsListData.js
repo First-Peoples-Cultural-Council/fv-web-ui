@@ -41,6 +41,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenTemplateWords,
+  dictionaryListSmallScreenColumnDataTemplateCustomState,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 
 /**
@@ -302,6 +303,8 @@ function WordsListData({ children }) {
       columnsArray.push({
         name: 'state',
         title: intl.trans('state', 'State', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
       })
     }
     return columnsArray

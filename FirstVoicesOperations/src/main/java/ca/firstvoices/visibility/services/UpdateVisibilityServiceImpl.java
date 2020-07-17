@@ -69,6 +69,11 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
           }
         }
 
+        // Ensure doc is enabled to be able to transition from disabled:
+        if (currentLifeCycleState.equals(DISABLED_STATE)) {
+          doc.followTransition(ENABLE_TRANSITION);
+        }
+
         if (!currentLifeCycleState.equals(PUBLISHED_STATE)) {
           // Publish Transition will trigure the ProxyPublisherListener and move documents to
           // published state
