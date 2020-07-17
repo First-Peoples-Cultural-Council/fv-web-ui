@@ -205,6 +205,22 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
     Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
   }
 
+  @Test
+  public void testPrivateToPublic() throws OperationException {
+    word.followTransition(DISABLE_TRANSITION);
+    dialect.followTransition(PUBLISH_TRANSITION);
+    session.saveDocument(word);
+    Assert.assertEquals(DISABLED_STATE, word.getCurrentLifeCycleState());
+    ctx = new OperationContext(session);
+    ctx.setInput(word);
+    Map<String, String> params = new HashMap<>();
+    params.put(VISIBILITY, PUBLIC);
+    DocumentModel returnDoc = (DocumentModel) service
+        .run(ctx, UpdateVisibilityOperation.ID, params);
+
+    Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
+  }
+
   @Test(expected = NuxeoException.class)
   public void testNonFvLifecycleDocument() throws OperationException {
     ctx = new OperationContext(session);

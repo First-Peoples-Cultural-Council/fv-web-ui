@@ -110,6 +110,7 @@ const DictionaryListSmallScreen = (props) => {
         }
       })
 
+      // First & Last Name
       templateData[firstLastName] =
         _firstName || _lastName ? (
           <div className={`${classNameDataItem} ${classNameDataItem}--firstNameLastName`}>
@@ -296,9 +297,9 @@ export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRen
   return cellRender ? <div className={`DictionaryListSmallScreen__audioGroup ${className}`}>{cellRender}</div> : null
 }
 
-// dictionaryListSmallScreenTemplateWords
+// dictionaryListSmallScreenColumnDataTemplateCustomState
 // --------------------------------------------------------------
-export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
+export const dictionaryListSmallScreenColumnDataTemplateCustomState = ({ cellRender, className = '' }) => {
   const { routeParams } = useRoute()
   const dialectName = routeParams.dialect_name
   const mapDocumentStateToVisibility = {
@@ -307,6 +308,18 @@ export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
     Enabled: `${dialectName} Members Only`,
     Published: 'Public',
   }
+  const stateVisibilityText = mapDocumentStateToVisibility[cellRender]
+  return cellRender ? (
+    <div className={`DictionaryListSmallScreen__stateGroup ${className}`}>
+      <strong>State: </strong>
+      {stateVisibilityText ? stateVisibilityText : ''}
+    </div>
+  ) : null
+}
+
+// dictionaryListSmallScreenTemplateWords
+// --------------------------------------------------------------
+export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
   return (
     <div className="DictionaryListSmallScreen__item">
       <div className="DictionaryListSmallScreen__groupMain">
@@ -329,10 +342,7 @@ export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
           <div className="DictionaryListSmallScreen__groupData">{templateData['fv-word:categories']}</div>
-          <div className="DictionaryListSmallScreen__groupData">
-            <strong>State: </strong>
-            {mapDocumentStateToVisibility[templateData.state.props.children[2]]}
-          </div>
+          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
         </div>
       </div>
 
