@@ -55,7 +55,7 @@ public class MigrateCategoriesWorker extends AbstractWork {
     try {
       // Run first iteration
       int wordsRemaining = service.migrateWords(session, jobContainer, batchSize);
-
+      int totalWords = wordsRemaining;
       while (wordsRemaining != 0) {
         setStatus("Migrating next batch on `" + jobContainer.getTitle() + "` ( " + wordsRemaining
             + " words remaining).");
@@ -80,15 +80,13 @@ public class MigrateCategoriesWorker extends AbstractWork {
         TransactionHelper.startTransaction();
 
         //Add real progress here when we can modify query for total words
-        //setProgress(new Progress((wordsFound/totalWords)*100));
+        setProgress(new Progress(((float) wordsRemaining / totalWords) * 100));
       }
-      // Save session (in case it wasn't saved in migrate words)
-      session.save();
     } catch (Exception e) {
       setStatus("Failed");
       maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-      workFailed(
-          new NuxeoException("worker unable to save session on " + jobContainer.getTitle()));
+      workFailed(new NuxeoException(
+          "worker migration failed on " + jobContainer.getTitle() + ": " + e.getMessage()));
     }
 
     maintenanceLogger.removeFromRequiredJobs(jobContainer, job, true);

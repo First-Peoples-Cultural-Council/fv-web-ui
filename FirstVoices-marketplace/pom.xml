@@ -61,6 +61,10 @@
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesRESTPageProviders</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCoreTests</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

@@ -32,6 +32,7 @@ import { reportsReducer } from './reports'
 import { searchReducer } from './search'
 import { searchDialectReducer } from './searchDialect'
 import { tasksReducer } from './tasks'
+import { visibilityReducer } from './visibility'
 import { windowPathReducer } from './windowPath'
 
 export default combineReducers({
@@ -67,5 +68,6 @@ export default combineReducers({
   search: searchReducer,
   searchDialect: searchDialectReducer,
   tasks: tasksReducer,
+  visibility: visibilityReducer,
   windowPath: windowPathReducer,
 })
