@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 //FPCC
+import useLogin from 'DataSource/useLogin'
 import useRoute from 'DataSource/useRoute'
 import useVisibility from 'DataSource/useVisibility'
+import ProviderHelpers from 'common/ProviderHelpers'
+import { WORKSPACES } from 'common/Constants'
 
 /**
  * @summary VisibilityInlineData
@@ -14,15 +17,24 @@ import useVisibility from 'DataSource/useVisibility'
  *
  */
 function VisibilityInlineData({ children, docId, docState }) {
-  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
-  const [docVisibility, setDocVisibility] = useState('')
+  const { computeLogin } = useLogin()
   const { routeParams } = useRoute()
+  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
+
+  const workspaces = routeParams.area === WORKSPACES
   const dialectName = routeParams.dialect_name
+
+  // Check to see if user is an Admin or Recorder with approval
+  const writePrivileges = ProviderHelpers.isRecorderWithApproval(computeLogin) || ProviderHelpers.isAdmin(computeLogin)
+
+  // Set local state for visibility
+  const [docVisibility, setDocVisibility] = useState('')
 
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
   }, [])
 
+  // Handle change from select menu
   const handleVisibilityChange = (event) => {
     const newVisibility = event.target.value
     // Set visibility for local state
@@ -56,9 +68,11 @@ function VisibilityInlineData({ children, docId, docState }) {
   }
 
   return children({
-    handleVisibilityChange,
     docVisibility,
     dialectName,
+    handleVisibilityChange,
+    workspaces,
+    writePrivileges,
   })
 }
 // PROPTYPES

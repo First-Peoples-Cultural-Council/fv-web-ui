@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 // FPCC
 import VisibilityInlinePresentation from 'components/VisibilityInline/VisibilityInlinePresentation'
 import VisibilityInlineData from 'components/VisibilityInline/VisibilityInlineData'
-import VisibilitySelect from 'components/VisibilitySelect'
 
 /**
  * @summary VisibilityInlineContainer
@@ -18,17 +17,26 @@ import VisibilitySelect from 'components/VisibilitySelect'
 function VisibilityInlineContainer({ docId, docState, computeEntities }) {
   return (
     <VisibilityInlineData docId={docId} docState={docState}>
-      {({ dialectName, docVisibility, handleVisibilityChange }) => {
-        return (
+      {({
+        workspaces,
+        dialectName,
+        docVisibility,
+        handleVisibilityChange,
+        isRecorderWithApproval,
+        writePrivileges,
+      }) => {
+        return workspaces ? (
           <div>
-            <VisibilityInlinePresentation dialectName={dialectName} docVisibility={docVisibility} />
-            <VisibilitySelect.Container
+            <VisibilityInlinePresentation
+              computeEntities={computeEntities}
+              dialectName={dialectName}
               docVisibility={docVisibility}
               handleVisibilityChange={handleVisibilityChange}
-              computeEntities={computeEntities}
+              isRecorderWithApproval={isRecorderWithApproval}
+              writePrivileges={writePrivileges}
             />
           </div>
-        )
+        ) : null
       }}
     </VisibilityInlineData>
   )

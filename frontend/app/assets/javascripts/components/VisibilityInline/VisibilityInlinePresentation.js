@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 // FPCC
 import '!style-loader!css-loader!./VisibilityInline.css'
 import FVLabel from 'views/components/FVLabel'
+import VisibilitySelect from 'components/VisibilitySelect'
 
 /**
  * @summary VisibilityInlinePresentation
@@ -16,7 +17,13 @@ import FVLabel from 'views/components/FVLabel'
  *
  * @returns {node} jsx markup
  */
-function VisibilityInlinePresentation({ dialectName, docVisibility }) {
+function VisibilityInlinePresentation({
+  computeEntities,
+  dialectName,
+  docVisibility,
+  handleVisibilityChange,
+  writePrivileges,
+}) {
   function generateVisibilityLabel(visibility) {
     switch (visibility) {
       case 'team':
@@ -40,7 +47,13 @@ function VisibilityInlinePresentation({ dialectName, docVisibility }) {
     }
   }
 
-  return (
+  return writePrivileges ? (
+    <VisibilitySelect.Container
+      docVisibility={docVisibility}
+      handleVisibilityChange={handleVisibilityChange}
+      computeEntities={computeEntities}
+    />
+  ) : (
     <div className="VisibilityInline">
       <div className="VisibilityInline__label">Who can see this word?</div>
       <Typography variant="body2">{generateVisibilityLabel(docVisibility)}</Typography>
@@ -49,15 +62,20 @@ function VisibilityInlinePresentation({ dialectName, docVisibility }) {
 }
 
 // PROPTYPES
-const { string } = PropTypes
+const { string, object, func, bool } = PropTypes
 VisibilityInlinePresentation.propTypes = {
+  computeEntities: object,
   dialectName: string,
   docVisibility: string,
+  handleVisibilityChange: func,
+  writePrivileges: bool,
 }
 
 VisibilityInlinePresentation.defaultProps = {
   dialectName: '',
   docVisibility: '',
+  handleVisibilityChange: () => {},
+  writePrivileges: false,
 }
 
 export default VisibilityInlinePresentation
