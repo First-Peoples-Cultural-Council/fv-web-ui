@@ -4,6 +4,8 @@ import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
 import Textarea from 'views/components/Form/Common/Textarea'
 import {getError, getErrorFeedback} from 'common/FormHelpers'
+import VisibilitySelect from 'components/VisibilitySelect'
+import PropTypes from "prop-types";
 
 /**
  * @summary RequestChangesPresentation
@@ -14,7 +16,7 @@ import {getError, getErrorFeedback} from 'common/FormHelpers'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesPresentation({formRef, onSubmit, errors}) {
+function RequestChangesPresentation({formRef, onSubmit, errors, docVisibility, handleVisibilityChange, computeEntities}) {
 
   return (
       <div className="RequestChanges">
@@ -25,13 +27,14 @@ function RequestChangesPresentation({formRef, onSubmit, errors}) {
               name="commentField"
               error={getError({errors, fieldName: 'commentField'})}>
           </Textarea>
+          <VisibilitySelect.Container
+              docVisibility={docVisibility}
+              handleVisibilityChange={handleVisibilityChange}
+              computeEntities={computeEntities}
+          />
           {getErrorFeedback({errors})}
           <div className="actions">
-            <select name="visibility">
-              <option value="team">Team Only</option>
-              <option value="members">Members Only</option>
-              <option value="public">Public</option>
-            </select>
+
             <FVButton
                 variant="outlined"
                 type="submit"
@@ -63,9 +66,11 @@ function RequestChangesPresentation({formRef, onSubmit, errors}) {
 }
 
 // PROPTYPES
-// const { string } = PropTypes
+const {string, object} = PropTypes
 RequestChangesPresentation.propTypes = {
-  //   something: string,
+  docId: string,
+  docState: string,
+  computeEntities: object,
 }
 
 export default RequestChangesPresentation

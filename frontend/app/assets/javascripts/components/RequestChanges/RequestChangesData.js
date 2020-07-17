@@ -2,6 +2,9 @@ import PropTypes from 'prop-types'
 import {getFormData, handleSubmit} from 'common/FormHelpers'
 import * as yup from 'yup'
 import {useRef, useState} from 'react'
+import Immutable from "immutable";
+import usePortal from 'DataSource/usePortal'
+import useRoute from 'DataSource/useRoute'
 
 /**
  * @summary RequestChangesData
@@ -13,9 +16,20 @@ import {useRef, useState} from 'react'
  *
  */
 function RequestChangesData({children}) {
-  console.log("First line")
+  const {computePortal, fetchPortal} = usePortal()
+  const {routeParams} = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
+
+  const handleVisibilityChange = "A"
+  const docVisibility = "Public"
+
+  const computeEntities = Immutable.fromJS([
+    {
+      id: routeParams.dialect_path,
+      entity: computePortal,
+    },
+  ])
 
   const validator = yup.object().shape({
     'commentField': yup
@@ -23,6 +37,7 @@ function RequestChangesData({children}) {
     .label('Comment label')
     .required('ERROR: Comment field is required'),
   })
+
   const onSubmit = (event) => {
     console.log("hello")
     event.preventDefault()
@@ -51,6 +66,9 @@ function RequestChangesData({children}) {
     formRef,
     onSubmit,
     errors,
+    computeEntities,
+    handleVisibilityChange,
+    docVisibility,
   })
 }
 
