@@ -48,7 +48,6 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
   @Override
   // Called when a document is created or updated
-  // TODO: BUG?: Don't update the characters custom order char
   public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
     if (!asset.isImmutable()) {
       DocumentModel dialect = getDialect(asset);
