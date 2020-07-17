@@ -17,14 +17,13 @@ import VisibilitySelect from 'components/VisibilitySelect'
  */
 function VisibilityInlineContainer({ docId, docState, computeEntities }) {
   return (
-    <VisibilityInlineData>
-      {({ handleVisibilityChange }) => {
+    <VisibilityInlineData docId={docId} docState={docState}>
+      {({ dialectName, docVisibility, handleVisibilityChange }) => {
         return (
           <div>
-            <VisibilityInlinePresentation />
+            <VisibilityInlinePresentation dialectName={dialectName} docVisibility={docVisibility} />
             <VisibilitySelect.Container
-              docId={docId}
-              docState={docState}
+              docVisibility={docVisibility}
               handleVisibilityChange={handleVisibilityChange}
               computeEntities={computeEntities}
             />

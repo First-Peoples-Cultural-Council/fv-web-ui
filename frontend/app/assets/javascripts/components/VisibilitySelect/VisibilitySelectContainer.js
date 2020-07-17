@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import VisibilitySelectPresentation from './VisibilitySelectPresentation'
-import VisibilitySelectData from './VisibilitySelectData'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
@@ -13,33 +12,23 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function VisibilitySelectContainer({ docId, docState, handleVisibilityChange, computeEntities }) {
+function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectData docId={docId} docState={docState} handleVisibilityChange={handleVisibilityChange}>
-        {({ handleChange, visibility }) => {
-          // Getting visibility
-          if (!visibility || !docId) {
-            return null
-          }
-          return <VisibilitySelectPresentation visibility={visibility} handleChange={handleChange} />
-        }}
-      </VisibilitySelectData>
+      <VisibilitySelectPresentation visibility={docVisibility} handleChange={handleVisibilityChange} />
     </PromiseWrapper>
   )
 }
 // PROPTYPES
 const { string, object, func } = PropTypes
 VisibilitySelectContainer.propTypes = {
-  docId: string,
-  docState: string,
+  docVisibility: string,
   handleVisibilityChange: func,
   computeEntities: object,
 }
 
 VisibilitySelectContainer.defaultProps = {
-  docId: '',
-  docState: '',
+  docVisibility: '',
   handleVisibilityChange: () => {},
 }
 

@@ -3,3 +3,12 @@
   float: left;
   padding: 10px;
 }
+/* Element */
+.VisibilityInline__label {
+  float: left;
+}
+
+.VisibilityInline__value {
+  float: left;
+  text-transform: capitalize;
+}

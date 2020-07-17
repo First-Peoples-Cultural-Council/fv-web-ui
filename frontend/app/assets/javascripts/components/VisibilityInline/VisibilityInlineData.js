@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 //FPCC
+import useRoute from 'DataSource/useRoute'
 import useVisibility from 'DataSource/useVisibility'
 
 /**
@@ -11,30 +13,60 @@ import useVisibility from 'DataSource/useVisibility'
  * @param {function} props.children
  *
  */
-function VisibilityInlineData({ children }) {
+function VisibilityInlineData({ children, docId, docState }) {
   const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
+  const [docVisibility, setDocVisibility] = useState('')
+  const { routeParams } = useRoute()
+  const dialectName = routeParams.dialect_name
 
-  const handleVisibilityChange = (visibility, id) => {
-    switch (visibility) {
+  useEffect(() => {
+    setDocVisibility(convertStateToVisibility(docState))
+  }, [])
+
+  const handleVisibilityChange = (event) => {
+    const newVisibility = event.target.value
+    // Set visibility for local state
+    setDocVisibility(newVisibility)
+    // Send request to the server to set visibility on the document
+    switch (newVisibility) {
       case 'team':
-        return updateVisibilityToTeam(id)
+        return updateVisibilityToTeam(docId)
       case 'members':
-        return updateVisibilityToMembers(id)
+        return updateVisibilityToMembers(docId)
       case 'public':
-        return updateVisibilityToPublic(id)
+        return updateVisibilityToPublic(docId)
       default:
         return null
     }
   }
 
+  function convertStateToVisibility(state) {
+    switch (state) {
+      case 'New':
+        return 'team'
+      case 'Disabled':
+        return 'team'
+      case 'Enabled':
+        return 'members'
+      case 'Published':
+        return 'public'
+      default:
+        return ''
+    }
+  }
+
   return children({
     handleVisibilityChange,
+    docVisibility,
+    dialectName,
   })
 }
 // PROPTYPES
-const { func } = PropTypes
+const { func, string } = PropTypes
 VisibilityInlineData.propTypes = {
   children: func,
+  docId: string,
+  docState: string,
 }
 
 export default VisibilityInlineData

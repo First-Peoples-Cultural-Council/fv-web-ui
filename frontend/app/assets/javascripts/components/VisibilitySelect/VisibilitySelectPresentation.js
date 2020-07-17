@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
@@ -7,9 +8,7 @@ import LockIcon from '@material-ui/icons/Lock'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
 // FPCC
-import '!style-loader!css-loader!./VisibilitySelect.css'
-
-import PropTypes from 'prop-types'
+import { VisibilitySelectStyles } from './VisibilitySelectStyles'
 
 /**
  * @summary VisibilitySelectPresentation
@@ -22,23 +21,24 @@ import PropTypes from 'prop-types'
  */
 
 function VisibilitySelectPresentation({ handleChange, visibility }) {
+  const classes = VisibilitySelectStyles()
   return (
     <div>
-      <div id="select-label" className="Select">
+      <div id="select-label" className={classes.Select}>
         Who can see this?
       </div>
       <FormControl variant="outlined">
         <Select labelId="select-outlined-label" id="select" value={visibility} onChange={handleChange}>
           <MenuItem value={'team'}>
-            <LockIcon />
+            <LockIcon className={classes.icon} />
             Language Team
           </MenuItem>
           <MenuItem value={'members'}>
-            <GroupIcon />
+            <GroupIcon className={classes.icon} />
             Members
           </MenuItem>
           <MenuItem value={'public'}>
-            <PublicIcon />
+            <PublicIcon className={classes.icon} />
             Everyone
           </MenuItem>
         </Select>
