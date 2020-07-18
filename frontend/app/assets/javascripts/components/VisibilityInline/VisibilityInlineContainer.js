@@ -22,7 +22,9 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
         dialectName,
         docVisibility,
         handleVisibilityChange,
-        isRecorderWithApproval,
+        handleDialogCancel,
+        handleDialogOk,
+        isDialogOpen,
         writePrivileges,
       }) => {
         return workspaces ? (
@@ -32,7 +34,9 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
               dialectName={dialectName}
               docVisibility={docVisibility}
               handleVisibilityChange={handleVisibilityChange}
-              isRecorderWithApproval={isRecorderWithApproval}
+              handleDialogCancel={handleDialogCancel}
+              handleDialogOk={handleDialogOk}
+              isDialogOpen={isDialogOpen}
               writePrivileges={writePrivileges}
             />
           </div>

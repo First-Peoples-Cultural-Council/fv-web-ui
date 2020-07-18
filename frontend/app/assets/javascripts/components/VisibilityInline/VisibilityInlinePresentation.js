@@ -2,9 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Typography from '@material-ui/core/Typography'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
 
 // FPCC
 import '!style-loader!css-loader!./VisibilityInline.css'
+import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
 import VisibilitySelect from 'components/VisibilitySelect'
 
@@ -22,6 +27,9 @@ function VisibilityInlinePresentation({
   dialectName,
   docVisibility,
   handleVisibilityChange,
+  handleDialogCancel,
+  handleDialogOk,
+  isDialogOpen,
   writePrivileges,
 }) {
   function generateVisibilityLabel(visibility) {
@@ -48,11 +56,37 @@ function VisibilityInlinePresentation({
   }
 
   return writePrivileges ? (
-    <VisibilitySelect.Container
-      docVisibility={docVisibility}
-      handleVisibilityChange={handleVisibilityChange}
-      computeEntities={computeEntities}
-    />
+    <div>
+      <VisibilitySelect.Container
+        docVisibility={docVisibility}
+        handleVisibilityChange={handleVisibilityChange}
+        computeEntities={computeEntities}
+      />
+
+      <Dialog
+        fullWidth
+        maxWidth="xs"
+        open={isDialogOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to change who can see this?
+            <br />
+            <strong>{generateVisibilityLabel(docVisibility)}</strong>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <FVButton onClick={handleDialogCancel} variant="text" color="secondary">
+            Cancel
+          </FVButton>
+          <FVButton onClick={handleDialogOk} variant="contained" color="secondary" autoFocus>
+            Ok
+          </FVButton>
+        </DialogActions>
+      </Dialog>
+    </div>
   ) : (
     <div className="VisibilityInline">
       <div className="VisibilityInline__label">Who can see this word?</div>
@@ -68,6 +102,9 @@ VisibilityInlinePresentation.propTypes = {
   dialectName: string,
   docVisibility: string,
   handleVisibilityChange: func,
+  handleDialogCancel: func,
+  handleDialogOk: func,
+  isDialogOpen: bool,
   writePrivileges: bool,
 }
 
@@ -75,6 +112,9 @@ VisibilityInlinePresentation.defaultProps = {
   dialectName: '',
   docVisibility: '',
   handleVisibilityChange: () => {},
+  handleDialogCancel: () => {},
+  handleDialogOk: () => {},
+  isDialogOpen: false,
   writePrivileges: false,
 }
 

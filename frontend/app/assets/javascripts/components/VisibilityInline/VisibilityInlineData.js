@@ -30,15 +30,33 @@ function VisibilityInlineData({ children, docId, docState }) {
   // Set local state for visibility
   const [docVisibility, setDocVisibility] = useState('')
 
+  // Set up Dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
   }, [])
 
-  // Handle change from select menu
+  // triggered by OnChange from VisibilitySelect
   const handleVisibilityChange = (event) => {
     const newVisibility = event.target.value
-    // Set visibility for local state
+    // Set visibility in local state
     setDocVisibility(newVisibility)
+    // Open confirmation dialog
+    setIsDialogOpen(true)
+  }
+
+  const handleDialogCancel = () => {
+    setIsDialogOpen(false)
+    setDocVisibility(convertStateToVisibility(docState))
+  }
+
+  const handleDialogOk = () => {
+    setIsDialogOpen(false)
+    updateVisibility(docVisibility)
+  }
+
+  const updateVisibility = (newVisibility) => {
     // Send request to the server to set visibility on the document
     switch (newVisibility) {
       case 'team':
@@ -71,6 +89,9 @@ function VisibilityInlineData({ children, docId, docState }) {
     docVisibility,
     dialectName,
     handleVisibilityChange,
+    handleDialogCancel,
+    handleDialogOk,
+    isDialogOpen,
     workspaces,
     writePrivileges,
   })
