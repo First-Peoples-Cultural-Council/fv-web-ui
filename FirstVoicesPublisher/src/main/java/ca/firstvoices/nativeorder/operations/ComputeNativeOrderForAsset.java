@@ -67,9 +67,9 @@ public class ComputeNativeOrderForAsset {
 
     // Check if word or phrase
     if (input.getType().equals(FV_WORD) || input.getType().equals(FV_PHRASE)) {
-      service.computeAssetNativeOrderTranslation(input);
+      service.computeAssetNativeOrderTranslation(session, input);
 
-      Map<String, Object> parameters = new HashMap<String, Object>();
+      Map<String, Object> parameters = new HashMap<>();
       parameters.put("message", "Word/Phrase sort order updated. Republish if needed.");
 
       try {

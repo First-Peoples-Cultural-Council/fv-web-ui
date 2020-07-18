@@ -30,165 +30,133 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Nullable;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
-/**
- * @author loopingz
- */
 public class NativeOrderComputeServiceImpl extends AbstractService implements
     NativeOrderComputeService {
 
   public static final int BASE = 34;
   public static final String NO_ORDER_STARTING_CHARACTER = "~";
   public static final String SPACE_CHARACTER = "!";
-
-  private DocumentModel[] loadCharacters(DocumentModel dialect) {
-    DocumentModelList chars = dialect.getCoreSession()
-        .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    updateCustomOrderCharacters(dialect.getCoreSession(), chars);
-    return chars.stream().filter(character -> !character.isTrashed()
-        && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-        .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
-        .toArray(DocumentModel[]::new);
-  }
+  public static final String DOCUMENT_TITLE = "dc:title";
+  public static final String FV_CUSTOM_ORDER = "fv:custom_order";
 
   @Override
-  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
-    chars.forEach(c -> updateCustomOrderForCharacter(session, c));
-  }
-
-  @Override
-  public String updateCustomOrderForCharacter(CoreSession session, DocumentModel c) {
-    Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
-    String originalCustomOrder = (String) c.getPropertyValue("fv:custom_order");
-    String updatedCustomOrder =
-        alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue("dc:title")
-            : "" + ((char) (BASE + alphabetOrder));
-    if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
-      c.setPropertyValue("fv:custom_order", updatedCustomOrder);
-      session.saveDocument(c);
-    }
-    return (String) c.getPropertyValue("fv:custom_order");
-  }
-
-  /* (non-Javadoc)
-   * @see ca.firstvoices.publisher.services.
-   * NativeOrderComputeService#computeAssetNativeOrderTranslation(org.nuxeo
-   * .ecm.core.api.DocumentModel)
-   */
-  @Override
-  public void computeAssetNativeOrderTranslation(DocumentModel asset) {
-    // appears that there's a lot of processing going on within the following methods
-    // last of which, computeNativeOrderTranslation will just return if the asset is immutable
-    // so, instead of processing all the dialect data, and the alphabet only to do nothing,
-    // lets check that here
+  // Called when a document is created or updated
+  public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
     if (!asset.isImmutable()) {
       DocumentModel dialect = getDialect(asset);
-      CoreSession session = asset.getCoreSession();
-      // First get the native alphabet
-      DocumentModel[] chars = loadCharacters(dialect);
-      computeNativeOrderTranslation(chars, asset);
+      DocumentModel[] chars = loadCharacters(session, dialect);
+      DocumentModel alphabet = session
+          .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+      computeCustomOrder(session, asset, alphabet, chars);
     }
   }
 
-  /* (non-Javadoc)
-   * @see ca.firstvoices.publisher.services
-   * .NativeOrderComputeService#computeDialectNativeOrderTranslation(org
-   * .nuxeo.ecm.core.api.DocumentModel)
-   */
   @Override
-  public void computeDialectNativeOrderTranslation(DocumentModel dialect) {
-    CoreSession session = dialect.getCoreSession();
-    // First get the native alphabet
-    DocumentModel[] chars = loadCharacters(dialect);
-    computeNativeOrderTranslation(chars, session.query(
-        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
-            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
-    computeNativeOrderTranslation(chars, session.query(
-        "SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0"));
-    DocumentModel alphabet = session
-        .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    alphabet.setPropertyValue("custom_order_recompute_required", false);
-    session.saveDocument(alphabet);
-    session.save();
+  // Called when a we are updating all words and phrases on a dialect
+  public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
+      DocumentModel alphabet) {
+    DocumentModel[] chars = loadCharacters(session, dialect);
+    DocumentModelList wordsAndPhrases = session.query(
+        "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
+            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
+    wordsAndPhrases.forEach(doc -> computeCustomOrder(session, doc, alphabet, chars));
   }
 
-  protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModel element) {
+  private void computeCustomOrder(CoreSession session, DocumentModel element,
+      DocumentModel alphabet, DocumentModel[] chars) {
+
     if (element.isImmutable()) {
-      // We cannot update this element, no point in going any further
       return;
     }
 
-    String title = (String) element.getPropertyValue("dc:title");
+    String title = (String) element.getPropertyValue(DOCUMENT_TITLE);
     StringBuilder nativeTitle = new StringBuilder();
     List<String> fvChars = Arrays.stream(chars)
-        .map(character -> (String) character.getPropertyValue("dc:title"))
+        .map(character -> (String) character.getPropertyValue(DOCUMENT_TITLE))
         .collect(Collectors.toList());
     List<String> upperChars = Arrays.stream(chars)
         .map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character"))
         .collect(Collectors.toList());
 
-    String originalCustomSort = (String) element.getPropertyValue("fv:custom_order");
-
     while (title.length() > 0) {
       ArrayUtils.reverse(chars);
-      String finalTitle = title;
-      DocumentModel characterDoc = Arrays.stream(chars).filter(
-          charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
-              (String) charDoc.getPropertyValue("dc:title"),
-              (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
-          .orElse(null);
 
-      if (characterDoc != null) {
-        String computedCharacterOrder = (String) characterDoc.getPropertyValue("fv:custom_order");
-        String computedCharacterTitle = (String) characterDoc.getPropertyValue("dc:title");
-        nativeTitle.append(computedCharacterOrder);
-        title = title.substring(computedCharacterTitle.length());
+      String finalTitle = title;
+
+      String ignoredCharacter = getIgnoredCharacter(alphabet, title);
+
+      if (ignoredCharacter != null) {
+        // We're ignoring this character intentionally
+        title = title.substring(ignoredCharacter.length());
       } else {
-        if (" ".equals(title.substring(0, 1))) {
-          nativeTitle.append(SPACE_CHARACTER);
+        // Check if the character exists in the archive:
+        DocumentModel characterDoc = Arrays.stream(chars).filter(
+            charDoc -> isCorrectCharacter(finalTitle, fvChars, upperChars,
+                (String) charDoc.getPropertyValue(DOCUMENT_TITLE),
+                (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
+            .orElse(null);
+        if (characterDoc != null) {
+          // The character exists in the archive:
+          String computedCharacterOrder = (String) characterDoc
+              .getPropertyValue(FV_CUSTOM_ORDER);
+          nativeTitle.append(computedCharacterOrder);
+          String charDocTitle = (String) characterDoc.getPropertyValue(DOCUMENT_TITLE);
+          title = title.substring(charDocTitle.length());
         } else {
-          nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
+          if (!" ".equals(title.substring(0, 1))) {
+            // Character does not exist in the Archive's Alphabet
+            nativeTitle.append(NO_ORDER_STARTING_CHARACTER).append(title, 0, 1);
+          } else {
+            // Character is a space
+            nativeTitle.append(SPACE_CHARACTER);
+          }
+          title = title.substring(1);
         }
-        title = title.substring(1);
       }
     }
 
+    String originalCustomSort = (String) element.getPropertyValue(FV_CUSTOM_ORDER);
     if (!nativeTitle.toString().equals(originalCustomSort)) {
-      if (!element.isImmutable()) {
-        element.setPropertyValue("fv:custom_order", nativeTitle.toString());
-      }
-      CoreSession session = element.getCoreSession();
-
+      element.setPropertyValue(FV_CUSTOM_ORDER, nativeTitle.toString());
       session.saveDocument(element);
-
-      // If document is published, update the field on the proxy but only if no other changes exist
-      // in order to avoid publishing an archive's other changes prematurely.
-
-      FirstVoicesPublisherService firstVoicesPublisherService = Framework
-          .getService(FirstVoicesPublisherService.class);
-
-      UnpublishedChangesService unpublishedChangesService = Framework
-          .getService(UnpublishedChangesService.class);
-
-      boolean unpublishedChangesExist = unpublishedChangesService
-          .checkUnpublishedChanges(session, element);
-
-      if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
-        firstVoicesPublisherService.republish(element);
-      }
-
+      updateProxyIfPublished(session, element);
     }
   }
 
-  protected void computeNativeOrderTranslation(DocumentModel[] chars, DocumentModelList elements) {
-    for (DocumentModel doc : elements) {
-      computeNativeOrderTranslation(chars, doc);
+  @Nullable
+  private String getIgnoredCharacter(DocumentModel alphabet, String title) {
+    String[] ignoredChars = (String[]) alphabet.getPropertyValue("fv-alphabet:ignored_characters");
+
+    String ignoredCharacter = null;
+
+    if (ignoredChars != null) {
+      ignoredCharacter = Arrays.stream(ignoredChars).filter(title::startsWith).findFirst()
+          .orElse(null);
+    }
+    return ignoredCharacter;
+  }
+
+  private void updateProxyIfPublished(CoreSession session, DocumentModel element) {
+    // If document is published, update the field on the proxy but only if no other changes
+    // exist in order to avoid publishing an archive's other changes prematurely.
+    FirstVoicesPublisherService firstVoicesPublisherService = Framework
+        .getService(FirstVoicesPublisherService.class);
+
+    UnpublishedChangesService unpublishedChangesService = Framework
+        .getService(UnpublishedChangesService.class);
+
+    boolean unpublishedChangesExist = unpublishedChangesService
+        .checkUnpublishedChanges(session, element);
+
+    if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
+      firstVoicesPublisherService.republish(element);
     }
   }
 
@@ -228,5 +196,30 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
       return !incorrect;
     }
     return false;
+  }
+
+  private DocumentModel[] loadCharacters(CoreSession session, DocumentModel dialect) {
+    DocumentModelList chars = session
+        .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    updateCustomOrderCharacters(session, chars);
+    return chars.stream().filter(character -> !character.isTrashed()
+        && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+        .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+        .toArray(DocumentModel[]::new);
+  }
+
+  @Override
+  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
+    chars.forEach(c -> {
+      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
+      String originalCustomOrder = (String) c.getPropertyValue(FV_CUSTOM_ORDER);
+      String updatedCustomOrder =
+          alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue(DOCUMENT_TITLE)
+              : "" + ((char) (BASE + alphabetOrder));
+      if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
+        c.setPropertyValue(FV_CUSTOM_ORDER, updatedCustomOrder);
+        session.saveDocument(c);
+      }
+    });
   }
 }
