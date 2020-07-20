@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // FPCC
-import VisibilityInlinePresentation from 'components/VisibilityInline/VisibilityInlinePresentation'
-import VisibilityInlineData from 'components/VisibilityInline/VisibilityInlineData'
+import VisibilityMinimalPresentation from 'components/VisibilityMinimal/VisibilityMinimalPresentation'
+import VisibilityMinimalData from 'components/VisibilityMinimal/VisibilityMinimalData'
 
 /**
- * @summary VisibilityInlineContainer
+ * @summary VisibilityMinimalContainer
  * @version 1.0.1
  * @component
  *
@@ -14,9 +14,9 @@ import VisibilityInlineData from 'components/VisibilityInline/VisibilityInlineDa
  *
  * @returns {node} jsx markup
  */
-function VisibilityInlineContainer({ docId, docState, computeEntities }) {
+function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
   return (
-    <VisibilityInlineData docId={docId} docState={docState}>
+    <VisibilityMinimalData docId={docId} docState={docState}>
       {({
         workspaces,
         dialectName,
@@ -30,7 +30,7 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
       }) => {
         return workspaces ? (
           <div>
-            <VisibilityInlinePresentation
+            <VisibilityMinimalPresentation
               computeEntities={computeEntities}
               dialectName={dialectName}
               dialogContent={dialogContent}
@@ -44,20 +44,20 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
           </div>
         ) : null
       }}
-    </VisibilityInlineData>
+    </VisibilityMinimalData>
   )
 }
 // PROPTYPES
 const { string, object } = PropTypes
-VisibilityInlineContainer.propTypes = {
+VisibilityMinimalContainer.propTypes = {
   docId: string,
   docState: string,
   computeEntities: object,
 }
 
-VisibilityInlineContainer.defaultProps = {
+VisibilityMinimalContainer.defaultProps = {
   docId: '',
   docState: '',
 }
 
-export default VisibilityInlineContainer
+export default VisibilityMinimalContainer

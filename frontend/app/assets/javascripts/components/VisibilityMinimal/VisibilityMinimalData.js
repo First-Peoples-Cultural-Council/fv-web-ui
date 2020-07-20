@@ -8,7 +8,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 
 /**
- * @summary VisibilityInlineData
+ * @summary VisibilityMinimalData
  * @version 1.0.1
  * @component
  *
@@ -16,7 +16,7 @@ import { WORKSPACES } from 'common/Constants'
  * @param {function} props.children
  *
  */
-function VisibilityInlineData({ children, docId, docState }) {
+function VisibilityMinimalData({ children, docId, docState }) {
   const { computeLogin } = useLogin()
   const { routeParams } = useRoute()
   const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
@@ -101,10 +101,10 @@ function VisibilityInlineData({ children, docId, docState }) {
 }
 // PROPTYPES
 const { func, string } = PropTypes
-VisibilityInlineData.propTypes = {
+VisibilityMinimalData.propTypes = {
   children: func,
   docId: string,
   docState: string,
 }
 
-export default VisibilityInlineData
+export default VisibilityMinimalData

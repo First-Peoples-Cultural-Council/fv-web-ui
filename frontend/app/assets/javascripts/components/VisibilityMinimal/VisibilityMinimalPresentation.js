@@ -11,10 +11,10 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
 import VisibilitySelect from 'components/VisibilitySelect'
-import { VisibilityInlineStyles } from './VisibilityInlineStyles'
+import { VisibilityMinimalStyles } from './VisibilityMinimalStyles'
 
 /**
- * @summary VisibilityInlinePresentation
+ * @summary VisibilityMinimalPresentation
  * @version 1.0.1
  * @component
  *
@@ -22,7 +22,7 @@ import { VisibilityInlineStyles } from './VisibilityInlineStyles'
  *
  * @returns {node} jsx markup
  */
-function VisibilityInlinePresentation({
+function VisibilityMinimalPresentation({
   computeEntities,
   dialectName,
   dialogContent,
@@ -33,7 +33,7 @@ function VisibilityInlinePresentation({
   isDialogOpen,
   writePrivileges,
 }) {
-  const classes = VisibilityInlineStyles()
+  const classes = VisibilityMinimalStyles()
   function generateVisibilityLabel(visibility) {
     switch (visibility) {
       case 'team':
@@ -100,7 +100,7 @@ function VisibilityInlinePresentation({
 
 // PROPTYPES
 const { string, object, func, bool } = PropTypes
-VisibilityInlinePresentation.propTypes = {
+VisibilityMinimalPresentation.propTypes = {
   computeEntities: object,
   dialectName: string,
   dialogContent: string,
@@ -112,7 +112,7 @@ VisibilityInlinePresentation.propTypes = {
   writePrivileges: bool,
 }
 
-VisibilityInlinePresentation.defaultProps = {
+VisibilityMinimalPresentation.defaultProps = {
   dialectName: '',
   dialogContent: '',
   docVisibility: '',
@@ -123,4 +123,4 @@ VisibilityInlinePresentation.defaultProps = {
   writePrivileges: false,
 }
 
-export default VisibilityInlinePresentation
+export default VisibilityMinimalPresentation

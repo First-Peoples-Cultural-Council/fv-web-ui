@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-export const VisibilityInlineStyles = makeStyles({
+export const VisibilityMinimalStyles = makeStyles({
   base: {
     float: 'right',
     padding: '10px',
