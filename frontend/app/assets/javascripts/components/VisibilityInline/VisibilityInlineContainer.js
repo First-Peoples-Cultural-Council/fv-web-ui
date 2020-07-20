@@ -20,6 +20,7 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
       {({
         workspaces,
         dialectName,
+        dialogContent,
         docVisibility,
         handleVisibilityChange,
         handleDialogCancel,
@@ -32,6 +33,7 @@ function VisibilityInlineContainer({ docId, docState, computeEntities }) {
             <VisibilityInlinePresentation
               computeEntities={computeEntities}
               dialectName={dialectName}
+              dialogContent={dialogContent}
               docVisibility={docVisibility}
               handleVisibilityChange={handleVisibilityChange}
               handleDialogCancel={handleDialogCancel}

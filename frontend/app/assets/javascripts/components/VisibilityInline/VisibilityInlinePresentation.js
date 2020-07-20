@@ -25,6 +25,7 @@ import { VisibilityInlineStyles } from './VisibilityInlineStyles'
 function VisibilityInlinePresentation({
   computeEntities,
   dialectName,
+  dialogContent,
   docVisibility,
   handleVisibilityChange,
   handleDialogCancel,
@@ -72,18 +73,19 @@ function VisibilityInlinePresentation({
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to change who can see this?
-            <br />
-            <strong>{generateVisibilityLabel(docVisibility)}</strong>
+          <DialogContentText id="alert-dialog-description" className={classes.dialogDescription}>
+            Do you want to change who can see this to
           </DialogContentText>
+          <div className={classes.dialogContent}>
+            <strong>{generateVisibilityLabel(dialogContent)}</strong>?
+          </div>
         </DialogContent>
         <DialogActions>
           <FVButton onClick={handleDialogCancel} variant="text" color="secondary">
             <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
           </FVButton>
           <FVButton onClick={handleDialogOk} variant="contained" color="secondary" autoFocus>
-            <FVLabel transKey="ok" defaultStr="Ok" transform="first" />
+            <FVLabel transKey="yes" defaultStr="Yes" transform="first" />
           </FVButton>
         </DialogActions>
       </Dialog>
@@ -101,6 +103,7 @@ const { string, object, func, bool } = PropTypes
 VisibilityInlinePresentation.propTypes = {
   computeEntities: object,
   dialectName: string,
+  dialogContent: string,
   docVisibility: string,
   handleVisibilityChange: func,
   handleDialogCancel: func,
@@ -111,6 +114,7 @@ VisibilityInlinePresentation.propTypes = {
 
 VisibilityInlinePresentation.defaultProps = {
   dialectName: '',
+  dialogContent: '',
   docVisibility: '',
   handleVisibilityChange: () => {},
   handleDialogCancel: () => {},

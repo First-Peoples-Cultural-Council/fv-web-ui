@@ -29,6 +29,7 @@ function VisibilityInlineData({ children, docId, docState }) {
 
   // Set local state for visibility
   const [docVisibility, setDocVisibility] = useState('')
+  const [dialogContent, setDialogContent] = useState('')
 
   // Set up Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -42,7 +43,8 @@ function VisibilityInlineData({ children, docId, docState }) {
     const newVisibility = event.target.value
     // Set visibility in local state
     setDocVisibility(newVisibility)
-    // Open confirmation dialog
+    // Open confirmation dialog and set content (setting the content separately from the docVisibility prevents the content from changing before the dialog closes)
+    setDialogContent(newVisibility)
     setIsDialogOpen(true)
   }
 
@@ -88,6 +90,7 @@ function VisibilityInlineData({ children, docId, docState }) {
   return children({
     docVisibility,
     dialectName,
+    dialogContent,
     handleVisibilityChange,
     handleDialogCancel,
     handleDialogOk,

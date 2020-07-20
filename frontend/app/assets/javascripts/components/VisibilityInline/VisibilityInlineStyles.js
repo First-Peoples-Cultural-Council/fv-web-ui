@@ -8,4 +8,12 @@ export const VisibilityInlineStyles = makeStyles({
   label: {
     float: 'right',
   },
+  dialogDescription: {
+    textAlign: 'center',
+    paddingTop: '10px',
+  },
+  dialogContent: {
+    textAlign: 'center',
+    paddingBottom: '10px',
+  },
 })
