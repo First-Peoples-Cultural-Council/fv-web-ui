@@ -9,13 +9,16 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  * @component
  *
  * @param {object} props
+ * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public
+ * @param {function} handleVisibilityChange A function to handle the onChange of the select component
+ * @param {object} computeEntities An Immutable.List() required by the PromiseWrapper
  *
  * @returns {node} jsx markup
  */
 function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectPresentation visibility={docVisibility} handleChange={handleVisibilityChange} />
+      <VisibilitySelectPresentation docVisibility={docVisibility} handleVisibilityChange={handleVisibilityChange} />
     </PromiseWrapper>
   )
 }

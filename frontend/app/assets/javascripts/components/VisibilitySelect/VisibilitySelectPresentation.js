@@ -16,29 +16,31 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @component
  *
  * @param {object} props
+ * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public
+ * @param {function} handleVisibilityChange A function to handle the onChange of the select component
  *
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleChange, visibility }) {
+function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility }) {
   const classes = VisibilitySelectStyles()
   return (
-    <div>
-      <div id="select-label" className={classes.Select}>
+    <div className={classes.selectBase}>
+      <div id="select-label" className={classes.selectLabel}>
         Who can see this?
       </div>
       <FormControl variant="outlined">
-        <Select labelId="select-outlined-label" id="select" value={visibility} onChange={handleChange}>
+        <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
           <MenuItem value={'team'}>
-            <LockIcon className={classes.icon} />
+            <LockIcon className={classes.selectIcon} color="secondary" />
             Language Team
           </MenuItem>
           <MenuItem value={'members'}>
-            <GroupIcon className={classes.icon} />
+            <GroupIcon className={classes.selectIcon} />
             Members
           </MenuItem>
           <MenuItem value={'public'}>
-            <PublicIcon className={classes.icon} />
+            <PublicIcon className={classes.selectIcon} />
             Everyone
           </MenuItem>
         </Select>
@@ -49,13 +51,13 @@ function VisibilitySelectPresentation({ handleChange, visibility }) {
 // PROPTYPES
 const { func, string } = PropTypes
 VisibilitySelectPresentation.propTypes = {
-  handleChange: func,
-  visibility: string,
+  handleVisibilityChange: func,
+  docVisibility: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  handleChange: () => {},
-  visibility: '',
+  handleVisibilityChange: () => {},
+  docVisibility: '',
 }
 
 export default VisibilitySelectPresentation

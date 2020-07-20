@@ -8,10 +8,10 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 
 // FPCC
-import '!style-loader!css-loader!./VisibilityInline.css'
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
 import VisibilitySelect from 'components/VisibilitySelect'
+import { VisibilityInlineStyles } from './VisibilityInlineStyles'
 
 /**
  * @summary VisibilityInlinePresentation
@@ -32,6 +32,7 @@ function VisibilityInlinePresentation({
   isDialogOpen,
   writePrivileges,
 }) {
+  const classes = VisibilityInlineStyles()
   function generateVisibilityLabel(visibility) {
     switch (visibility) {
       case 'team':
@@ -56,7 +57,7 @@ function VisibilityInlinePresentation({
   }
 
   return writePrivileges ? (
-    <div>
+    <div className={classes.base}>
       <VisibilitySelect.Container
         docVisibility={docVisibility}
         handleVisibilityChange={handleVisibilityChange}
@@ -88,8 +89,8 @@ function VisibilityInlinePresentation({
       </Dialog>
     </div>
   ) : (
-    <div className="VisibilityInline">
-      <div className="VisibilityInline__label">Who can see this word?</div>
+    <div className={classes.base}>
+      <div className={classes.label}>Who can see this word?</div>
       <Typography variant="body2">{generateVisibilityLabel(docVisibility)}</Typography>
     </div>
   )
