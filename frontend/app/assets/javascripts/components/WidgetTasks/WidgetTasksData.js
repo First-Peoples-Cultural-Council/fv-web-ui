@@ -18,16 +18,15 @@ function WidgetTasksData({ children }) {
     navigate(`/dashboard/tasks?active=${id}`)
   }
 
-  // NOTE: Works on July 20
-  const dataPromised = ({
-    // filters
-    orderBy: sortBy = 'dc:created',
-    orderDirection: sortOrder = 'ASC',
-    page: currentPageIndex = 0,
-    pageSize = 100,
-    // search
-    // totalCount
-  }) => {
+  const friendlyNamePropertyNameLookup = {
+    date: 'nt:dueDate',
+    id: 'uid',
+    initiator: 'nt:initiator',
+    title: 'nt:name',
+  }
+
+  const dataPromised = ({ orderBy = {}, orderDirection: sortOrder, page: currentPageIndex = 0, pageSize = 100 }) => {
+    const { field: sortBy = 'date' } = orderBy
     return fetch(`${URLHelpers.getBaseURL()}/site/automation/GetTasksForUserGroupOperation`, {
       method: 'POST',
       mode: 'cors',
@@ -39,7 +38,15 @@ function WidgetTasksData({ children }) {
         'X-NXVoidOperation': false,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ params: { sortOrder, currentPageIndex, pageSize, sortBy }, context: {} }),
+      body: JSON.stringify({
+        params: {
+          currentPageIndex,
+          pageSize,
+          sortBy: friendlyNamePropertyNameLookup[sortBy],
+          sortOrder: sortOrder === '' ? 'DESC' : sortOrder,
+        },
+        context: {},
+      }),
     })
       .then((data) => {
         return data.json()
@@ -48,7 +55,7 @@ function WidgetTasksData({ children }) {
         return {
           data: entries.map(({ uid: id, properties }) => {
             return {
-              date: properties['dc:created'],
+              date: properties['nt:dueDate'],
               id,
               initiator: properties['nt:initiator'],
               title: properties['nt:name'],
@@ -59,7 +66,6 @@ function WidgetTasksData({ children }) {
         }
       })
   }
-
   return children({
     columns: [
       {
@@ -68,6 +74,7 @@ function WidgetTasksData({ children }) {
         render: () => {
           return '[~]'
         },
+        sorting: false,
       },
       {
         title: 'Entry title',
@@ -87,6 +94,7 @@ function WidgetTasksData({ children }) {
     options: {
       paging: true,
       pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
+      sorting: true,
     },
     data: dataPromised,
   })
