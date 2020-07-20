@@ -14,13 +14,15 @@ import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
 function WidgetTasksContainer() {
   return (
     <WidgetTasksData>
-      {({ columns, data, onRowClick, options, isFetching, fetchMessage }) => {
+      {({ columns, data, fetchMessage, isFetching, onChangePage, onChangeRowsPerPage, onRowClick, options }) => {
         return (
           <WidgetTasksPresentation
             columns={columns}
             data={data}
             fetchMessage={fetchMessage}
             isFetching={isFetching}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
             onRowClick={onRowClick}
             options={options}
           />

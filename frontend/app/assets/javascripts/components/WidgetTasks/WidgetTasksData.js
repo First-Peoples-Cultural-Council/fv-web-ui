@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types'
 import StringHelpers from 'common/StringHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
-
+import URLHelpers from 'common/URLHelpers'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -14,12 +12,52 @@ import useUserGroupTasks from 'DataSource/useUserGroupTasks'
  *
  */
 function WidgetTasksData({ children }) {
-  // Custom Hooks
-  const { fetchMessage, hasTasks, isFetching, tasks } = useUserGroupTasks(5)
   const { navigate } = useNavigationHelpers()
 
   const onRowClick = (event, { id }) => {
     navigate(`/dashboard/tasks?active=${id}`)
+  }
+
+  // NOTE: Works on July 20
+  const dataPromised = ({
+    // filters
+    orderBy: sortBy = 'dc:created',
+    orderDirection: sortOrder = 'ASC',
+    page: currentPageIndex = 0,
+    pageSize = 100,
+    // search
+    // totalCount
+  }) => {
+    return fetch(`${URLHelpers.getBaseURL()}/site/automation/GetTasksForUserGroupOperation`, {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Nuxeo-Transaction-Timeout': 3,
+        'X-NXproperties': '*',
+        'X-NXRepository': 'default',
+        'X-NXVoidOperation': false,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ params: { sortOrder, currentPageIndex, pageSize, sortBy }, context: {} }),
+    })
+      .then((data) => {
+        return data.json()
+      })
+      .then(({ entries, pageIndex, resultsCount }) => {
+        return {
+          data: entries.map(({ uid: id, properties }) => {
+            return {
+              date: properties['dc:created'],
+              id,
+              initiator: properties['nt:initiator'],
+              title: properties['nt:name'],
+            }
+          }),
+          page: pageIndex,
+          totalCount: resultsCount,
+        }
+      })
   }
 
   return children({
@@ -45,12 +83,12 @@ function WidgetTasksData({ children }) {
         render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
       },
     ],
-    hasTasks,
     onRowClick,
-    options: { actionsColumnIndex: -1 },
-    data: tasks,
-    isFetching,
-    fetchMessage,
+    options: {
+      paging: true,
+      pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
+    },
+    data: dataPromised,
   })
 }
 // PROPTYPES
