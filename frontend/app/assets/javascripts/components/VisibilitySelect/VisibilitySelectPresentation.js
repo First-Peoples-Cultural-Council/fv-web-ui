@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import LockIcon from '@material-ui/icons/Lock'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
 // FPCC
@@ -32,7 +32,7 @@ function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility })
       <FormControl variant="outlined">
         <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
           <MenuItem value={'team'}>
-            <LockIcon className={classes.selectIcon} color="secondary" />
+            <VisibilityOffIcon className={classes.selectIcon} />
             Language Team
           </MenuItem>
           <MenuItem value={'members'}>
