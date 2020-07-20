@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography'
 function DashboardPresentation({ children }) {
   return (
     <>
-      <Typography variant="h4" component="h1">
+      <Typography variant="h4" component="h1" gutterBottom>
         Dashboard
       </Typography>
       {children}
