@@ -80,10 +80,10 @@ function VisibilityInlinePresentation({
         </DialogContent>
         <DialogActions>
           <FVButton onClick={handleDialogCancel} variant="text" color="secondary">
-            Cancel
+            <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
           </FVButton>
           <FVButton onClick={handleDialogOk} variant="contained" color="secondary" autoFocus>
-            Ok
+            <FVLabel transKey="ok" defaultStr="Ok" transform="first" />
           </FVButton>
         </DialogActions>
       </Dialog>
