@@ -31,8 +31,9 @@ function VisibilityMinimalData({ children, docId, docState }) {
   const [docVisibility, setDocVisibility] = useState('')
   const [dialogContent, setDialogContent] = useState('')
 
-  // Set up Dialog state
+  // Set up Dialog and Snackbar state
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
 
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
@@ -56,6 +57,14 @@ function VisibilityMinimalData({ children, docId, docState }) {
   const handleDialogOk = () => {
     setIsDialogOpen(false)
     updateVisibility(docVisibility)
+    setSnackbarOpen(true)
+  }
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
   }
 
   const updateVisibility = (newVisibility) => {
@@ -94,7 +103,9 @@ function VisibilityMinimalData({ children, docId, docState }) {
     handleVisibilityChange,
     handleDialogCancel,
     handleDialogOk,
+    handleSnackbarClose,
     isDialogOpen,
+    snackbarOpen,
     workspaces,
     writePrivileges,
   })

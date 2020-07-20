@@ -25,6 +25,8 @@ function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
         handleVisibilityChange,
         handleDialogCancel,
         handleDialogOk,
+        handleSnackbarClose,
+        snackbarOpen,
         isDialogOpen,
         writePrivileges,
       }) => {
@@ -38,6 +40,8 @@ function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
               handleVisibilityChange={handleVisibilityChange}
               handleDialogCancel={handleDialogCancel}
               handleDialogOk={handleDialogOk}
+              handleSnackbarClose={handleSnackbarClose}
+              snackbarOpen={snackbarOpen}
               isDialogOpen={isDialogOpen}
               writePrivileges={writePrivileges}
             />

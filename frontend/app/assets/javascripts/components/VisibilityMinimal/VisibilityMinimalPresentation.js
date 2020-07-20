@@ -6,10 +6,13 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 // FPCC
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
+import FVSnackbar from 'views/components/FVSnackbar'
 import VisibilitySelect from 'components/VisibilitySelect'
 import { VisibilityMinimalStyles } from './VisibilityMinimalStyles'
 
@@ -31,6 +34,8 @@ function VisibilityMinimalPresentation({
   handleDialogCancel,
   handleDialogOk,
   isDialogOpen,
+  snackbarOpen,
+  handleSnackbarClose,
   writePrivileges,
 }) {
   const classes = VisibilityMinimalStyles()
@@ -89,6 +94,19 @@ function VisibilityMinimalPresentation({
           </FVButton>
         </DialogActions>
       </Dialog>
+
+      <FVSnackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message={'Your entry can be seen by the ' + dialectName + ' ' + docVisibility}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        action={
+          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </div>
   ) : (
     <div className={classes.base}>
@@ -109,6 +127,8 @@ VisibilityMinimalPresentation.propTypes = {
   handleDialogCancel: func,
   handleDialogOk: func,
   isDialogOpen: bool,
+  snackbarOpen: bool,
+  handleSnackbarClose: func,
   writePrivileges: bool,
 }
 
@@ -120,6 +140,8 @@ VisibilityMinimalPresentation.defaultProps = {
   handleDialogCancel: () => {},
   handleDialogOk: () => {},
   isDialogOpen: false,
+  snackbarOpen: false,
+  handleSnackbarClose: () => {},
   writePrivileges: false,
 }
 
