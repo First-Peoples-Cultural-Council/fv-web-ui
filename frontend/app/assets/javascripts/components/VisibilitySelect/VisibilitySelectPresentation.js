@@ -29,7 +29,7 @@ function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility })
       <div id="select-label" className={classes.selectLabel}>
         Who can see this?
       </div>
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" size="small">
         <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
           <MenuItem value={'team'}>
             <VisibilityOffIcon className={classes.selectIcon} />
