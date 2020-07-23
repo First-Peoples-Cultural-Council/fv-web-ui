@@ -1,7 +1,3 @@
-.Dashboard > div {
-  border: 1px solid black;
-}
-
 .Dashboard {
   display: grid;
   grid-template-columns: 1fr 1fr;

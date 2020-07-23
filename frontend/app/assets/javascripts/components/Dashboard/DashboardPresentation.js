@@ -23,6 +23,7 @@ function DashboardPresentation({ children }) {
       <div className="Dashboard">
         <div>{children}</div>
         <div>{children}</div>
+        {/*Remove line before release, for testing multiple columns*/}
       </div>
     </>
   )
