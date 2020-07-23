@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { List } from 'immutable'
+import Immutable, { List } from 'immutable'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -30,24 +30,19 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import Switch from '@material-ui/core/Switch'
 import Toolbar from '@material-ui/core/Toolbar'
-import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 
-// import MenuIcon from '@material-ui/icons/Menu'
-import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
-
 import FVButton from 'views/components/FVButton'
+import FVLabel from 'views/components/FVLabel'
+import VisibilityMinimal from 'components/VisibilityMinimal'
+import AdminMenu from 'components/AdminMenu'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import '!style-loader!css-loader!./PageToolbar.css'
-import FVLabel from '../../../components/FVLabel/index'
 
 const { array, bool, func, node, object, string } = PropTypes
 
@@ -214,6 +209,13 @@ export class PageToolbar extends Component {
       <FVLabel transKey="request" defaultStr="Request" transform="first" />
     )
 
+    const computeEntities = Immutable.fromJS([
+      {
+        id: selectn('response.uid', computeEntity),
+        entity: computeEntity,
+      },
+    ])
+
     return (
       <AppBar color="primary" position="static" className="PageToolbar" classes={classes}>
         <Toolbar>
@@ -223,7 +225,11 @@ export class PageToolbar extends Component {
             })}
           >
             {this.props.children}
-
+            <VisibilityMinimal.Container
+              docId={selectn('response.uid', computeEntity)}
+              docState={selectn('response.state', computeEntity)}
+              computeEntities={computeEntities || Immutable.List()}
+            />
             {/* Toggle: Enable */}
             {this.props.actions.includes('enable-toggle') ? (
               <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
@@ -255,9 +261,7 @@ export class PageToolbar extends Component {
                 />
               </AuthorizationFilter>
             ) : null}
-
             {this.getPublishUi()}
-
             {this.props.actions.includes('workflow') ? (
               <AuthorizationFilter
                 filter={{
@@ -376,92 +380,13 @@ export class PageToolbar extends Component {
             </div>
 
             {/* Menu */}
-            {this.getMenu()}
+            <AdminMenu.Container />
           </div>
         </Toolbar>
       </AppBar>
     )
   }
-  getMenu = () => {
-    if (this.props.actions.includes('more-options')) {
-      const children = [
-        <MenuItem
-          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/reports')}
-          key="reports"
-        >
-          <FVLabel transKey="reports" defaultStr="Reports" transform="first" />
-        </MenuItem>,
-        <MenuItem onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/media')} key="media">
-          <FVLabel transKey="views.pages.explore.dialect.media_browser" defaultStr="Media Browser" transform="words" />
-        </MenuItem>,
-        // <MenuItem
-        //   key="contributors"
-        //   primaryText={intl.trans('views.pages.explore.dialect.nav_contributors', 'Contributors', 'words')}
-        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/contributors')}
-        // />,
-        // <MenuItem
-        //   key="recorders"
-        //   primaryText={intl.trans('views.pages.explore.dialect.nav_recorders', 'Recorders', 'words')}
-        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/recorders')}
-        // />,
-        <MenuItem
-          key="phrasebooks"
-          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/phrasebooks')}
-        >
-          <FVLabel
-            transKey="views.pages.explore.dialect.nav_phrase_books"
-            defaultStr="Phrase books"
-            transform="words"
-          />
-        </MenuItem>,
-        // <MenuItem
-        //   key="immersionPortal"
-        //   onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/immersion')}
-        // >
-        //   <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
-        // </MenuItem>,
-        <MenuItem
-          key="categories"
-          onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/categories')}
-        >
-          {this.props.intl.trans('views.pages.explore.dialect.nav_categories', 'Categories', 'words')}
-        </MenuItem>,
-      ]
 
-      return (
-        <div className="PageToolbar__menuMore">
-          <Tooltip
-            title={this.props.intl.trans('views.pages.explore.dialect.more_options', 'More Options', 'words')}
-            placement="top"
-          >
-            <IconButton
-              className={classNames({ 'hidden-xs': !this.state.showActionsMobile })}
-              onClick={(event) => {
-                this.setState({
-                  anchorEl: event.currentTarget,
-                })
-              }}
-            >
-              {' '}
-              <NavigationExpandMoreIcon />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            anchorEl={this.state.anchorEl}
-            open={this.state.anchorEl ? true : false}
-            onClose={() => {
-              this.setState({
-                anchorEl: null,
-              })
-            }}
-          >
-            {children}
-          </Menu>
-        </div>
-      )
-    }
-    return null
-  }
   getPublishUi = () => {
     const { computeEntity, computePermissionEntity } = this.props
     const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
