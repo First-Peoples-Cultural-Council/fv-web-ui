@@ -22,6 +22,8 @@ function WordsListContainer() {
         dialectClassName,
         fetcher,
         fetcherParams,
+        filter,
+        handleCreateClick,
         handleSearch,
         items,
         listViewMode,
@@ -40,6 +42,8 @@ function WordsListContainer() {
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <WordsListPresentation
               dialectClassName={dialectClassName}
+              filter={filter}
+              handleCreateClick={handleCreateClick}
               wordsListClickHandlerViewMode={setListViewMode}
               dictionaryListViewMode={listViewMode}
               smallScreenTemplate={smallScreenTemplate}

@@ -25,6 +25,7 @@ import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
+import FVLabel from 'views/components/FVLabel/index'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,
@@ -180,6 +181,23 @@ function WordsListPresentation(props) {
     <Suspense fallback={<div>Loading...</div>}>
       <div>
         <h1 className="DialectPageTitle">{props.pageTitle}</h1>
+        <div id="CreateNewWord" className="text-right">
+          <AuthorizationFilter filter={props.filter} hideFromSections routeParams={props.routeParams}>
+            <button
+              type="button"
+              onClick={(event) => {
+                props.handleCreateClick(event)
+              }}
+              className="PrintHide buttonRaised"
+            >
+              <FVLabel
+                transKey="views.pages.explore.dialect.learn.words.create_new_word"
+                defaultStr="Create New Word"
+                transform="words"
+              />
+            </button>
+          </AuthorizationFilter>
+        </div>
         <div className={props.dialectClassName}>
           <SearchDialect
             handleSearch={props.handleSearch}
@@ -460,6 +478,8 @@ WordsListPresentation.propTypes = {
   // Misc WordsList
   columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
   dialectClassName: string,
+  filter: object,
+  handleCreateClick: func,
   smallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
   wordsListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
   dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
@@ -486,6 +506,7 @@ WordsListPresentation.defaultProps = {
   hasExportDialect: false,
   // WordsList
   columns: [],
+  handleCreateClick: () => {},
   wordsListClickHandlerViewMode: () => {},
   // General List
   hasSorting: true,
