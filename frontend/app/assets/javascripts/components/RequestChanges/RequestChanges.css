@@ -9,9 +9,12 @@ input {
 
 .actions {
   display: flex;
-  justify-content: space-around;
-  padding: 15px 25%;
-
+  justify-content: space-evenly;
 }
 
+.FVButton {
+}
 
+.visibilitySelector {
+  padding: 10px;
+}

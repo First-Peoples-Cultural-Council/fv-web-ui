@@ -16,13 +16,15 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
 function RequestChangesContainer() {
   return (
       <RequestChangesData>
-        {({formRef, onSubmit, errors, computeEntities, handleVisibilityChange, docVisibility}) => {
+        {({formRef, onSubmit, errors, computeEntities, handleVisibilityChange, docVisibility, docState, docId}) => {
           return <RequestChangesPresentation formRef={formRef}
                                              onSubmit={onSubmit}
                                              errors={errors}
                                              computeEntities={computeEntities}
                                              handleVisibilityChange={handleVisibilityChange}
                                              docVisibility={docVisibility}
+                                             docState={docState}
+                                             docId={docId}
           />
         }}
       </RequestChangesData>
