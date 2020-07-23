@@ -188,7 +188,7 @@ export class MediaView extends Component {
                 <PageToolbar
                   label={this.props.intl.trans('media', 'Media', 'first')}
                   handleNavigateRequest={this.onNavigateRequest}
-                  actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
+                  actions={['workflow', 'edit', 'visibility', 'publish']}
                   computeEntity={computeResource}
                   computePermissionEntity={computeDialect2}
                   computeLogin={this.props.computeLogin}

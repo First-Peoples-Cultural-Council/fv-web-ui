@@ -29,10 +29,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
@@ -74,7 +71,7 @@ export class PageToolbar extends Component {
     handleNavigateRequest: null,
     showPublish: true,
     actions: [],
-    // actions: ['workflow', 'edit', 'add-child', 'publish-toggle', 'enable-toggle', 'publish', 'more-options'],
+    // actions: ['workflow', 'edit', 'add-child', 'visibility', 'publish', 'more-options'],
   }
 
   constructor(props, context) {
@@ -239,7 +236,7 @@ export class PageToolbar extends Component {
                 <div className="PageToolbar__publishUiContainer">{dialectPublishedMessage}</div>
               </AuthorizationFilter>
             ) : null}
-            {this.props.actions.includes('publish-toggle') ? (
+            {this.props.actions.includes('visibility') ? (
               <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
                 <VisibilityMinimal.Container
                   docId={selectn('response.uid', computeEntity)}
@@ -248,7 +245,6 @@ export class PageToolbar extends Component {
                 />
               </AuthorizationFilter>
             ) : null}
-            {this.getStateToggles()}
             {this.props.actions.includes('workflow') ? (
               <AuthorizationFilter
                 filter={{
@@ -371,84 +367,6 @@ export class PageToolbar extends Component {
           </div>
         </Toolbar>
       </AppBar>
-    )
-  }
-
-  getStateToggles = () => {
-    const { computeEntity, computePermissionEntity, routeParams } = this.props
-    const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
-    const documentPublished = selectn('response.state', computeEntity) === 'Published'
-    const dialectName = routeParams.dialect_name + ' '
-
-    const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
-
-    let enableToggle = null
-    let publishToggle = null
-
-    if (this.props.actions.includes('enable-toggle')) {
-      enableToggle = (
-        <FormControlLabel
-          control={
-            <Switch
-              checked={documentEnabled || documentPublished}
-              onChange={this._documentActionsToggleEnabled}
-              disabled={documentPublished}
-              name="enabled"
-              value="enabled"
-            />
-          }
-          label={
-            <Typography variant="body2">
-              {documentEnabled || documentPublished ? (
-                <>
-                  {dialectName}
-                  <FVLabel transKey="members" defaultStr="Members" transform="first" />
-                </>
-              ) : (
-                <>
-                  {dialectName}
-                  <FVLabel transKey="team_only" defaultStr="Team Only" transform="first" />
-                </>
-              )}
-            </Typography>
-          }
-        />
-      )
-    }
-    if (this.props.actions.includes('publish-toggle')) {
-      if (this.props.showPublish) {
-        publishToggle = (
-          <FormControlLabel
-            control={
-              <Switch
-                checked={documentPublished === true}
-                onChange={this._documentActionsTogglePublished}
-                disabled={!documentEnabled && !documentPublished}
-                name="published"
-                value="published"
-              />
-            }
-            label={
-              <Typography variant="body2">
-                {documentPublished ? (
-                  <FVLabel transKey="public" defaultStr="Public" transform="first" />
-                ) : (
-                  <FVLabel transKey="private" defaultStr="Private" transform="first" />
-                )}
-              </Typography>
-            }
-          />
-        )
-      }
-    }
-
-    return (
-      <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
-        <div className="PageToolbar__publishUiContainer">
-          {enableToggle}
-          {publishToggle}
-        </div>
-      </AuthorizationFilter>
     )
   }
 }

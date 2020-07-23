@@ -244,7 +244,7 @@ export class SongsStoriesView extends Component {
       <DetailsViewWithActions
         labels={{ single: 'Book' }}
         itemPath={this._getBookPath()}
-        actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish', 'add-child']}
+        actions={['workflow', 'edit', 'visibility', 'publish', 'add-child']}
         publishAction={this.props.publishBook}
         unpublishAction={this.props.unpublishBook}
         askToPublishAction={this.props.askToPublishBook}
@@ -307,7 +307,4 @@ const mapDispatchToProps = {
   unpublishBook,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SongsStoriesView)
+export default connect(mapStateToProps, mapDispatchToProps)(SongsStoriesView)
