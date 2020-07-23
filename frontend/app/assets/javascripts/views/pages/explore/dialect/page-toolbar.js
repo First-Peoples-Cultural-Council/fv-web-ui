@@ -55,6 +55,7 @@ export class PageToolbar extends Component {
     computePermissionEntity: object,
     enableToggleAction: func,
     handleNavigateRequest: func,
+    intl: object.isRequired,
     label: string,
     publishChangesAction: func,
     publishToggleAction: func,
@@ -64,6 +65,7 @@ export class PageToolbar extends Component {
     computeTasks: object.isRequired,
     properties: object.isRequired,
     windowPath: string.isRequired,
+    routeParams: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchTasks: func.isRequired,
   }
@@ -156,19 +158,16 @@ export class PageToolbar extends Component {
   }
 
   render() {
-    const { classes, computeEntity, computePermissionEntity, computeLogin, routeParams } = this.props
+    const { classes, computeEntity, computePermissionEntity, computeLogin } = this.props
 
     const enableTasks = []
     const disableTasks = []
     const publishTasks = []
     const unpublishTasks = []
 
-    const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
     const documentPublished = selectn('response.state', computeEntity) === 'Published'
 
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
-
-    const dialectName = routeParams.dialect_name + ' '
 
     // Compute related tasks
     const _computeTasks = ProviderHelpers.getEntry(
@@ -216,6 +215,16 @@ export class PageToolbar extends Component {
       },
     ])
 
+    const dialectPublishedMessage = documentPublished ? (
+      <div>
+        This dialect is <strong>public</strong>. Contact us to make it private.
+      </div>
+    ) : (
+      <div>
+        This dialect is <strong>private</strong>. Contact hello@firstvoices.com to make it public.
+      </div>
+    )
+
     return (
       <AppBar color="primary" position="static" className="PageToolbar" classes={classes}>
         <Toolbar>
@@ -225,43 +234,21 @@ export class PageToolbar extends Component {
             })}
           >
             {this.props.children}
-            <VisibilityMinimal.Container
-              docId={selectn('response.uid', computeEntity)}
-              docState={selectn('response.state', computeEntity)}
-              computeEntities={computeEntities || Immutable.List()}
-            />
-            {/* Toggle: Enable */}
-            {this.props.actions.includes('enable-toggle') ? (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={documentEnabled || documentPublished}
-                      onChange={this._documentActionsToggleEnabled}
-                      disabled={documentPublished}
-                      name="enabled"
-                      value="enabled"
-                    />
-                  }
-                  label={
-                    <Typography variant="body2">
-                      {documentEnabled || documentPublished ? (
-                        <>
-                          {dialectName}
-                          <FVLabel transKey="members" defaultStr="Members" transform="first" />
-                        </>
-                      ) : (
-                        <>
-                          {dialectName}
-                          <FVLabel transKey="team_only" defaultStr="Team Only" transform="first" />
-                        </>
-                      )}
-                    </Typography>
-                  }
+            {this.props.actions.includes('dialect') ? (
+              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                <div className="PageToolbar__publishUiContainer">{dialectPublishedMessage}</div>
+              </AuthorizationFilter>
+            ) : null}
+            {this.props.actions.includes('publish-toggle') ? (
+              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                <VisibilityMinimal.Container
+                  docId={selectn('response.uid', computeEntity)}
+                  docState={selectn('response.state', computeEntity)}
+                  computeEntities={computeEntities || Immutable.List()}
                 />
               </AuthorizationFilter>
             ) : null}
-            {this.getPublishUi()}
+            {this.getStateToggles()}
             {this.props.actions.includes('workflow') ? (
               <AuthorizationFilter
                 filter={{
@@ -329,7 +316,7 @@ export class PageToolbar extends Component {
           </div>
           <div className={classNames({ 'hidden-xs': !this.state.showActionsMobile, PageToolbar__menuGroup: true })}>
             <div>
-              {/* Button: Publish */}
+              {/* Button: Publish Changes */}
               {this.props.actions.includes('publish') ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
                   <FVButton
@@ -380,66 +367,88 @@ export class PageToolbar extends Component {
             </div>
 
             {/* Menu */}
-            <AdminMenu.Container />
+            {this.props.actions.includes('more-options') ? <AdminMenu.Container /> : null}
           </div>
         </Toolbar>
       </AppBar>
     )
   }
 
-  getPublishUi = () => {
-    const { computeEntity, computePermissionEntity } = this.props
+  getStateToggles = () => {
+    const { computeEntity, computePermissionEntity, routeParams } = this.props
     const documentEnabled = selectn('response.state', computeEntity) === 'Enabled'
     const documentPublished = selectn('response.state', computeEntity) === 'Published'
+    const dialectName = routeParams.dialect_name + ' '
 
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
 
-    let publishMessage = null
+    let enableToggle = null
     let publishToggle = null
+
+    if (this.props.actions.includes('enable-toggle')) {
+      enableToggle = (
+        <FormControlLabel
+          control={
+            <Switch
+              checked={documentEnabled || documentPublished}
+              onChange={this._documentActionsToggleEnabled}
+              disabled={documentPublished}
+              name="enabled"
+              value="enabled"
+            />
+          }
+          label={
+            <Typography variant="body2">
+              {documentEnabled || documentPublished ? (
+                <>
+                  {dialectName}
+                  <FVLabel transKey="members" defaultStr="Members" transform="first" />
+                </>
+              ) : (
+                <>
+                  {dialectName}
+                  <FVLabel transKey="team_only" defaultStr="Team Only" transform="first" />
+                </>
+              )}
+            </Typography>
+          }
+        />
+      )
+    }
     if (this.props.actions.includes('publish-toggle')) {
       if (this.props.showPublish) {
         publishToggle = (
-          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={documentPublished === true}
-                  onChange={this._documentActionsTogglePublished}
-                  disabled={!documentEnabled && !documentPublished}
-                  name="published"
-                  value="published"
-                />
-              }
-              label={
-                <Typography variant="body2">
-                  {documentPublished ? (
-                    <FVLabel transKey="public" defaultStr="Public" transform="first" />
-                  ) : (
-                    <FVLabel transKey="private" defaultStr="Private" transform="first" />
-                  )}
-                </Typography>
-              }
-            />
-          </AuthorizationFilter>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={documentPublished === true}
+                onChange={this._documentActionsTogglePublished}
+                disabled={!documentEnabled && !documentPublished}
+                name="published"
+                value="published"
+              />
+            }
+            label={
+              <Typography variant="body2">
+                {documentPublished ? (
+                  <FVLabel transKey="public" defaultStr="Public" transform="first" />
+                ) : (
+                  <FVLabel transKey="private" defaultStr="Private" transform="first" />
+                )}
+              </Typography>
+            }
+          />
         )
       }
-
-      publishMessage = documentPublished ? (
-        <div>
-          This dialect is <strong>public</strong>. Contact us to make it private.
-        </div>
-      ) : (
-        <div>
-          This dialect is <strong>private</strong>. Contact us to make it public.
-        </div>
-      )
     }
 
     return (
-      <div className="PageToolbar__publishUiContainer">
-        {publishToggle}
-        {publishMessage}
-      </div>
+      <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+        <div className="PageToolbar__publishUiContainer">
+          {enableToggle}
+          {publishToggle}
+        </div>
+      </AuthorizationFilter>
     )
   }
 }
