@@ -9,9 +9,9 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  * @component
  *
  * @param {object} props
- * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public
+ * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public that reflects the visibility of the document being viewed.
  * @param {function} handleVisibilityChange A function to handle the onChange of the select component
- * @param {object} computeEntities An Immutable.List() required by the PromiseWrapper
+ * @param {object} computeEntities An Immutable.fromJS object required by the PromiseWrapper Component
  *
  * @returns {node} jsx markup
  */

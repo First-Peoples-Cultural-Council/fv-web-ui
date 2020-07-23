@@ -11,6 +11,9 @@ import VisibilityMinimalData from 'components/VisibilityMinimal/VisibilityMinima
  * @component
  *
  * @param {object} props
+ * @param {string} docId UID of the document that is being viewed
+ * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'.
+ * @param {object} computeEntities Immutable.fromJS object for the PromiseWrapper component which is rendered by the VisibilitySelectContainer
  *
  * @returns {node} jsx markup
  */
