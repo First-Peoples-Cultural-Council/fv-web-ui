@@ -1,11 +1,11 @@
-// NOTE: This ListData file is just an example
-// NOTE: We are using the `List/ListPresentation` file in other List* components
+// NOTE: This TableData file is just an example
+// NOTE: We are using the `Table/TablePresentation` file in other Table* components
 import PropTypes from 'prop-types'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 
 /**
- * @summary ListData
+ * @summary TableData
  * @version 1.0.1
  * @component
  *
@@ -15,7 +15,6 @@ import selectn from 'selectn'
  * @param {array} [props.actions = undefined] Array for action icons/buttons
  * @param {array} [props.columns = [{ title: 'Col 1', field: 'col1Data' }, { title: 'Col 2', field: 'col2Data' }]] Array for column header
  * @param {boolean} [props.emptyRowsWhenPaging = true] Adds extra rows to pagination
- * @param {boolean} [props.isDraggable = false] Enables column dragging
  * @param {boolean} [props.showFiltering = false] Show filtering
  * @param {boolean} [props.showPaging = false] Show paging
  * @param {boolean} [props.showSearch = false] Show search in Toolbar
@@ -40,7 +39,7 @@ import selectn from 'selectn'
  * @param {string} [props.toolbarButtonAlignment = 'left'] Either 'left' or 'right'
  *
  */
-function ListData({
+function TableData({
   actions,
   actionsColumnIndex,
   children,
@@ -48,13 +47,11 @@ function ListData({
   data,
   detailPanel,
   emptyRowsWhenPaging,
-  isDraggable,
   onChangeColumnHidden,
   onChangePage,
   onChangeRowsPerPage,
   onColumnDragged,
   onGroupRemoved,
-  onOrderChange,
   onRowClick,
   onSearchChange,
   onSelectionChange,
@@ -71,12 +68,12 @@ function ListData({
   toolbarButtonAlignment,
 }) {
   const { theme } = useTheme()
-  const { tableHeader, row, rowAlternate } = selectn('components.List', theme) || {}
+  const { tableHeader, row, rowAlternate } = selectn('components.Table', theme) || {}
   const options = {
     actionsColumnIndex,
     debounceInterval: 500,
     detailPanelType: 'multiple',
-    draggable: isDraggable,
+    draggable: false,
     emptyRowsWhenPaging,
     filtering: showFiltering,
     headerStyle: tableHeader,
@@ -105,7 +102,6 @@ function ListData({
     onChangeRowsPerPage,
     onColumnDragged,
     onGroupRemoved,
-    onOrderChange,
     onRowClick,
     onSearchChange,
     onSelectionChange,
@@ -116,7 +112,7 @@ function ListData({
 }
 // PROPTYPES
 const { array, bool, func, string, number, oneOf, oneOfType } = PropTypes
-ListData.propTypes = {
+TableData.propTypes = {
   actions: array,
   actionsColumnIndex: number,
   children: func,
@@ -124,7 +120,6 @@ ListData.propTypes = {
   data: oneOfType([array, func]),
   detailPanel: oneOfType([array, func]),
   emptyRowsWhenPaging: bool,
-  isDraggable: bool,
   onChangeColumnHidden: func,
   onChangePage: func,
   onChangeRowsPerPage: func,
@@ -145,7 +140,7 @@ ListData.propTypes = {
   title: string,
   toolbarButtonAlignment: oneOf(['left', 'right']),
 }
-ListData.defaultProps = {
+TableData.defaultProps = {
   actionsColumnIndex: 3,
   columns: [
     { title: 'Col 1', field: 'col1Data' },
@@ -153,7 +148,6 @@ ListData.defaultProps = {
   ],
   data: [{ col1Data: 'Col 1 data', col2Data: 'Col 2 data' }],
   emptyRowsWhenPaging: true,
-  isDraggable: false,
   onChangeColumnHidden: () => {},
   onChangePage: () => {},
   onChangeRowsPerPage: () => {},
@@ -176,4 +170,4 @@ ListData.defaultProps = {
   toolbarButtonAlignment: 'left',
 }
 
-export default ListData
+export default TableData

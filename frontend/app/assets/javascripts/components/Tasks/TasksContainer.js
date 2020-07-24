@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DocumentView from 'views/components/Document/view'
 import FVButton from 'views/components/FVButton'
 import Link from 'views/components/Link'
-import ListPresentation from 'components/List/ListPresentation'
-import ListTasksData from 'components/ListTasks/ListTasksData'
+import TablePresentation from 'components/Table/TablePresentation'
+import TableTasksData from 'components/TableTasks/TableTasksData'
 import TasksData from './TasksData'
 import StringHelpers from 'common/StringHelpers'
 
@@ -26,7 +26,7 @@ function TasksContainer() {
           <>
             <h1>{intl.trans('tasks', 'Tasks', 'first')}</h1>
 
-            <ListTasksData
+            <TableTasksData
               columnRender={{
                 documentTitle: ({ docref, documentTitle }) => {
                   return (
@@ -88,7 +88,7 @@ function TasksContainer() {
 
                     {hasTasks && (
                       <>
-                        <ListPresentation
+                        <TablePresentation
                           actions={[
                             {
                               actionType: 'approve',
@@ -118,7 +118,7 @@ function TasksContainer() {
                   </>
                 )
               }}
-            </ListTasksData>
+            </TableTasksData>
           </>
         )
       }}

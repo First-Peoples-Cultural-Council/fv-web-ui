@@ -32,7 +32,8 @@ function useTasks() {
     },
     fetchUserGroupTasks: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _fetchUserGroupTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
-      dispatch(dispatchObj)
+      // NOTE: Returning a promise for use with Material-Table
+      return dispatch(dispatchObj)
     },
     rejectRegistration: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _rejectRegistration(pathOrId, operationParams, messageStart, messageSuccess, messageError)

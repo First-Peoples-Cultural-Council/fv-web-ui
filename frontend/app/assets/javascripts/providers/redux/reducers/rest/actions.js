@@ -134,6 +134,8 @@ export const _delete = (key /*, type, properties = {}*/) => {
  *  execute(pathOrId, operationParams, messageStart, messageSuccess, messageError)
  */
 export const execute = (key, operationName, properties = {}) => {
+  // Initial call
+  // Subsequent call
   return (pathOrId, operationParams, messageStart = null, messageSuccess = null, messageError = null) => {
     return (dispatch) => {
       dispatch({
@@ -158,14 +160,21 @@ export const execute = (key, operationName, properties = {}) => {
             response: response,
             pathOrId: pathOrId,
           })
+          // NOTE: Returning a response for other functions
+          // Initially added to work with Material-Table
+          return response
         })
         .catch((error) => {
+          const errorMessage =
+            IntlService.instance.searchAndReplace(messageError) || IntlService.instance.searchAndReplace(error)
           dispatch({
             type: key + '_EXECUTE_ERROR',
-            message:
-              IntlService.instance.searchAndReplace(messageError) || IntlService.instance.searchAndReplace(error),
+            message: errorMessage,
             pathOrId: pathOrId,
           })
+          // NOTE: Returning a response for other functions
+          // Initially added to work with Material-Table
+          return errorMessage
         })
     }
   }
