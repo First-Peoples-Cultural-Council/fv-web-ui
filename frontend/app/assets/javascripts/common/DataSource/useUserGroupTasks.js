@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import selectn from 'selectn'
+
+import ProviderHelpers from 'common/ProviderHelpers'
+
 import useLogin from 'DataSource/useLogin'
 import useTasks from 'DataSource/useTasks'
-import selectn from 'selectn'
-import ProviderHelpers from 'common/ProviderHelpers'
 /**
  * @summary useUserGroupTasks
  * @description Custom hook that returns user tasks
@@ -10,66 +12,68 @@ import ProviderHelpers from 'common/ProviderHelpers'
  *
  * @component
  */
-function useUserGroupTasks(limit) {
+function useUserGroupTasks(fetchOnLoad = true) {
   // State Hooks
   const [userId, setUserId] = useState()
+  const [isFetching, setIsFetching] = useState(false)
+  const [fetchMessage, setFetchMessage] = useState()
+  const [page, setPage] = useState()
+  const [totalCount, setTotalCount] = useState()
+  const [tasks, setTasks] = useState([])
 
   // Custom Hooks
   const { computeLogin } = useLogin()
   const { computeUserGroupTasks, fetchUserGroupTasks } = useTasks()
 
+  const formatTasksData = (_tasks) => {
+    return _tasks.map(({ uid: id, properties }) => {
+      return {
+        date: properties['nt:dueDate'],
+        id,
+        initiator: properties['nt:initiator'],
+        title: properties['nt:name'],
+      }
+    })
+  }
+  const _userId = selectn('response.id', computeLogin)
   useEffect(() => {
-    fetchData()
-  }, [computeLogin])
-
-  const fetchData = () => {
-    const _userId = selectn('response.id', computeLogin)
-    if (_userId) {
-      setUserId(_userId)
+    setUserId(_userId)
+    if (fetchOnLoad) {
       fetchUserGroupTasks(_userId)
     }
-  }
+  }, [_userId])
 
-  let hasTasks
-  let isFetching = false
-  let fetchMessage
-  const tasks = []
-  if (userId) {
-    const userGroupTasks = ProviderHelpers.getEntry(computeUserGroupTasks, userId)
-    isFetching = userGroupTasks.isFetching
+  useEffect(() => {
+    if (userId) {
+      const userGroupTasks = ProviderHelpers.getEntry(computeUserGroupTasks, userId)
 
-    if (userGroupTasks.message !== '') {
-      fetchMessage = userGroupTasks.message
-    }
-    const userGroupTasksEntries = selectn('response.entries', userGroupTasks)
+      const _isFetching = selectn('isFetching', userGroupTasks)
+      const _message = selectn('message', userGroupTasks)
+      const _page = selectn('response.pageIndex', userGroupTasks)
+      const _tasks = selectn('response.entries', userGroupTasks)
+      const _totalCount = selectn('response.resultsCount', userGroupTasks)
 
-    if (userGroupTasksEntries) {
-      for (let i = 0; i < userGroupTasksEntries.length; i++) {
-        if (limit && tasks.length === limit) {
-          break
-        }
-
-        const task = userGroupTasksEntries[i]
-
-        if (task) {
-          const { uid: id, properties } = task
-          tasks.push({
-            initiator: properties['nt:initiator'],
-            title: properties['nt:name'],
-            date: properties['dc:created'],
-            id,
-          })
-        }
+      if (_tasks) {
+        setTasks(formatTasksData(_tasks))
+        setFetchMessage(_message)
+        setIsFetching(_isFetching)
+        setPage(_page)
+        setTotalCount(_totalCount)
       }
     }
-    hasTasks = (tasks || []).length > 0
-  }
+  }, [userId, computeUserGroupTasks])
 
   return {
-    tasks,
-    hasTasks,
-    isFetching,
+    computeUserGroupTasks,
     fetchMessage,
+    fetchUserGroupTasks,
+    formatTasksData,
+    hasTasks: tasks.length > 0,
+    isFetching,
+    page,
+    tasks,
+    totalCount,
+    userId,
   }
 }
 
