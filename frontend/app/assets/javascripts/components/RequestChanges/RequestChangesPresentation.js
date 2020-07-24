@@ -1,5 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
 import Textarea from 'views/components/Form/Common/Textarea'
@@ -27,9 +26,11 @@ function RequestChangesPresentation({formRef, onSubmit, errors, docVisibility, h
               error={getError({errors, fieldName: 'commentField'})}/>
           <div className="visibilitySelector">
             <VisibilitySelect.Container
+                selectNameAndId='visibilitySelect'
                 docVisibility={docVisibility}
                 handleVisibilityChange={handleVisibilityChange}
                 computeEntities={computeEntities}
+                error={getError({errors, fieldName: 'commentField'})}
             />
           </div>
           {getErrorFeedback({errors})}

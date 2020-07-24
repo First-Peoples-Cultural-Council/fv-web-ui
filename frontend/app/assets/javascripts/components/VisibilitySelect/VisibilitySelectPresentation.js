@@ -20,25 +20,28 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleChange, visibility }) {
+function VisibilitySelectPresentation({handleChange, selectNameAndId, visibility}) {
   const classes = VisibilitySelectStyles()
+  const selectLabel = selectNameAndId
   return (
-    <div>
-      <div id="select-label" className={classes.Select}>
-        Who can see this?
-      </div>
-      <FormControl variant="outlined">
-        <Select labelId="select-outlined-label" id="select" value={visibility} onChange={handleChange}>
-          <MenuItem value={'team'}>
-            <LockIcon className={classes.icon} />
-            Language Team
-          </MenuItem>
-          <MenuItem value={'members'}>
-            <GroupIcon className={classes.icon} />
-            Members
-          </MenuItem>
-          <MenuItem value={'public'}>
-            <PublicIcon className={classes.icon} />
+      <div>
+        <div id="select-label" className={classes.Select}>
+          Who can see this?
+        </div>
+        <FormControl variant="outlined">
+          <Select labelId="select-outlined-label" id={selectLabel}
+                  value={visibility} onChange={handleChange}
+                  inputProps={{name: selectLabel}}>
+            <MenuItem value={'team'}>
+              <LockIcon className={classes.icon}/>
+              Language Team
+            </MenuItem>
+            <MenuItem value={'members'}>
+              <GroupIcon className={classes.icon}/>
+              Members
+            </MenuItem>
+            <MenuItem value={'public'}>
+              <PublicIcon className={classes.icon}/>
             Everyone
           </MenuItem>
         </Select>
@@ -51,11 +54,13 @@ const { func, string } = PropTypes
 VisibilitySelectPresentation.propTypes = {
   handleChange: func,
   visibility: string,
+  selectNameAndId: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
   handleChange: () => {},
   visibility: '',
+  selectNameAndId: 'select'
 }
 
 export default VisibilitySelectPresentation

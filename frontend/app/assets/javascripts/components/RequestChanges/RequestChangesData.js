@@ -5,6 +5,7 @@ import {useRef, useState, useEffect} from 'react'
 import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
+import useVisibility from "../../common/DataSource/useVisibility";
 
 /**
  * @summary RequestChangesData
@@ -16,12 +17,13 @@ import useRoute from 'DataSource/useRoute'
  *
  */
 function RequestChangesData({children, docId, docState}) {
-  const {computePortal, fetchPortal} = usePortal()
+  const {computePortal} = usePortal()
   const {routeParams} = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
 
   const [docVisibility, setDocVisibility] = useState('')
+  const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
 
   const handleVisibilityChange = (event) => {
     const newVisibility = event.target.value
@@ -70,14 +72,18 @@ function RequestChangesData({children, docId, docState}) {
   ])
 
   const validator = yup.object().shape({
-    'commentField': yup
+    commentField: yup
     .string()
     .label('Comment label')
     .required('ERROR: Comment field is required'),
+    visibilitySelect: yup
+    .string()
+    .label('Document visibility')
+    .required('ERROR: Word visibility is required'),
   })
 
   const onSubmit = (event) => {
-    console.log('hello')
+    console.log('hello from submit')
     event.preventDefault()
 
     const formData = getFormData({
@@ -98,6 +104,7 @@ function RequestChangesData({children, docId, docState}) {
         setErrors(response.errors)
       },
     })
+
   }
 
   return children({

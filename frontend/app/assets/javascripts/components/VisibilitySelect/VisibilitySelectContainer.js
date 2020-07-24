@@ -12,11 +12,13 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities }) {
+function VisibilitySelectContainer({docVisibility, handleVisibilityChange, computeEntities, selectNameAndId}) {
   return (
-    <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectPresentation visibility={docVisibility} handleChange={handleVisibilityChange} />
-    </PromiseWrapper>
+      <PromiseWrapper renderOnError computeEntities={computeEntities}>
+        <VisibilitySelectPresentation visibility={docVisibility}
+                                      handleChange={handleVisibilityChange}
+                                      selectNameAndId={selectNameAndId}/>
+      </PromiseWrapper>
   )
 }
 // PROPTYPES
@@ -25,6 +27,7 @@ VisibilitySelectContainer.propTypes = {
   docVisibility: string,
   handleVisibilityChange: func,
   computeEntities: object,
+  selectNameAndId: string,
 }
 
 VisibilitySelectContainer.defaultProps = {
