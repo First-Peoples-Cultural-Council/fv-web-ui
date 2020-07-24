@@ -15,7 +15,6 @@ import selectn from 'selectn'
  * @param {array} [props.actions = undefined] Array for action icons/buttons
  * @param {array} [props.columns = [{ title: 'Col 1', field: 'col1Data' }, { title: 'Col 2', field: 'col2Data' }]] Array for column header
  * @param {boolean} [props.emptyRowsWhenPaging = true] Adds extra rows to pagination
- * @param {boolean} [props.isDraggable = false] Enables column dragging
  * @param {boolean} [props.showFiltering = false] Show filtering
  * @param {boolean} [props.showPaging = false] Show paging
  * @param {boolean} [props.showSearch = false] Show search in Toolbar
@@ -48,13 +47,11 @@ function TableData({
   data,
   detailPanel,
   emptyRowsWhenPaging,
-  isDraggable,
   onChangeColumnHidden,
   onChangePage,
   onChangeRowsPerPage,
   onColumnDragged,
   onGroupRemoved,
-  onOrderChange,
   onRowClick,
   onSearchChange,
   onSelectionChange,
@@ -76,7 +73,7 @@ function TableData({
     actionsColumnIndex,
     debounceInterval: 500,
     detailPanelType: 'multiple',
-    draggable: isDraggable,
+    draggable: false,
     emptyRowsWhenPaging,
     filtering: showFiltering,
     headerStyle: tableHeader,
@@ -105,7 +102,6 @@ function TableData({
     onChangeRowsPerPage,
     onColumnDragged,
     onGroupRemoved,
-    onOrderChange,
     onRowClick,
     onSearchChange,
     onSelectionChange,
@@ -124,7 +120,6 @@ TableData.propTypes = {
   data: oneOfType([array, func]),
   detailPanel: oneOfType([array, func]),
   emptyRowsWhenPaging: bool,
-  isDraggable: bool,
   onChangeColumnHidden: func,
   onChangePage: func,
   onChangeRowsPerPage: func,
@@ -153,7 +148,6 @@ TableData.defaultProps = {
   ],
   data: [{ col1Data: 'Col 1 data', col2Data: 'Col 2 data' }],
   emptyRowsWhenPaging: true,
-  isDraggable: false,
   onChangeColumnHidden: () => {},
   onChangePage: () => {},
   onChangeRowsPerPage: () => {},

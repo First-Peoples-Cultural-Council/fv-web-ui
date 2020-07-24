@@ -5,6 +5,10 @@ import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import TableHeader from './TableHeader'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+
 /**
  * @summary TablePresentation
  * @version 1.0.1
@@ -51,6 +55,7 @@ function TablePresentation({
   style,
   title,
   variant,
+  sortDirection,
 }) {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
@@ -61,6 +66,9 @@ function TablePresentation({
   if (variant === CONTENT_FULL_WIDTH) {
     styleVariant = themeTable.ContentFullWidth
     headerStyle = styleVariant.tableHeader
+  }
+  const icons = {
+    SortArrow: sortDirection === 'desc' ? ArrowUpwardIcon : ArrowDownwardIcon,
   }
 
   const defaultOptions = {
@@ -105,6 +113,7 @@ function TablePresentation({
       options={Object.assign({}, defaultOptions, options)}
       title={title}
       detailPanel={detailPanel}
+      icons={icons}
       components={{
         Actions: ({ data: _data, actions: _actions }) => {
           return (
@@ -128,6 +137,7 @@ function TablePresentation({
             </div>
           )
         },
+        Header: TableHeader,
       }}
       localization={localization}
     />
@@ -155,7 +165,9 @@ TablePresentation.propTypes = {
   title: string,
   style: object,
   variant: oneOf([CONTENT_FULL_WIDTH]),
+  sortDirection: string,
 }
+
 TablePresentation.defaultProps = {
   options: {},
   style: {},
