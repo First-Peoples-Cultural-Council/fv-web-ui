@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import StringHelpers from 'common/StringHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import URLHelpers from 'common/URLHelpers'
+import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -12,10 +13,16 @@ import URLHelpers from 'common/URLHelpers'
  *
  */
 function WidgetTasksData({ children }) {
+  const [sortDirection, setSortDirection] = useState('desc')
   const { navigate } = useNavigationHelpers()
+  const { fetchUserGroupTasks, userId, formatTasksData } = useUserGroupTasks(false)
 
   const onRowClick = (event, { id }) => {
     navigate(`/dashboard/tasks?active=${id}`)
+  }
+
+  const onOrderChange = (/*columnId, orderDirection*/) => {
+    setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
   }
 
   const friendlyNamePropertyNameLookup = {
@@ -25,46 +32,24 @@ function WidgetTasksData({ children }) {
     title: 'nt:name',
   }
 
-  const dataPromised = ({ orderBy = {}, orderDirection: sortOrder, page: currentPageIndex = 0, pageSize = 100 }) => {
+  // Note: Library has a sort bug when using remote data
+  // see: https://github.com/mbrn/material-table/issues/2177
+  const remoteData = (data) => {
+    const { orderBy = {}, orderDirection: sortOrder, page: currentPageIndex = 0, pageSize = 100 } = data
     const { field: sortBy = 'date' } = orderBy
-    return fetch(`${URLHelpers.getBaseURL()}/site/automation/GetTasksForUserGroupOperation`, {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Nuxeo-Transaction-Timeout': 3,
-        'X-NXproperties': '*',
-        'X-NXRepository': 'default',
-        'X-NXVoidOperation': false,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        params: {
-          currentPageIndex,
-          pageSize,
-          sortBy: friendlyNamePropertyNameLookup[sortBy],
-          sortOrder: sortOrder === '' ? 'DESC' : sortOrder,
-        },
-        context: {},
-      }),
+    const requestParams = {
+      currentPageIndex,
+      pageSize,
+      sortBy: friendlyNamePropertyNameLookup[sortBy],
+      sortOrder,
+    }
+    return fetchUserGroupTasks(userId, requestParams).then(({ entries, resultsCount, pageIndex }) => {
+      return {
+        data: formatTasksData(entries),
+        page: pageIndex,
+        totalCount: resultsCount,
+      }
     })
-      .then((data) => {
-        return data.json()
-      })
-      .then(({ entries, pageIndex, resultsCount }) => {
-        return {
-          data: entries.map(({ uid: id, properties }) => {
-            return {
-              date: properties['nt:dueDate'],
-              id,
-              initiator: properties['nt:initiator'],
-              title: properties['nt:name'],
-            }
-          }),
-          page: pageIndex,
-          totalCount: resultsCount,
-        }
-      })
   }
   return children({
     columns: [
@@ -96,7 +81,10 @@ function WidgetTasksData({ children }) {
       pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
       sorting: true,
     },
-    data: dataPromised,
+    // NOTE: when not logged in, show an empty data set
+    data: userId === 'Guest' ? [] : remoteData,
+    sortDirection,
+    onOrderChange,
   })
 }
 // PROPTYPES

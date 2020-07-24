@@ -27,9 +27,10 @@ function WidgetTasksPresentation({
   fetchMessage,
   isFetching,
   onChangePage,
-  onChangeRowsPerPage,
+  onOrderChange,
   onRowClick,
   options,
+  sortDirection,
 }) {
   return (
     <Widget.Presentation
@@ -46,10 +47,11 @@ function WidgetTasksPresentation({
           },
         }}
         onChangePage={onChangePage}
-        onChangeRowsPerPage={onChangeRowsPerPage}
+        onOrderChange={onOrderChange}
         onRowClick={onRowClick}
         options={options}
         variant={CONTENT_FULL_WIDTH}
+        sortDirection={sortDirection}
       />
     </Widget.Presentation>
   )
@@ -64,7 +66,9 @@ WidgetTasksPresentation.propTypes = {
   onChangePage: func,
   onChangeRowsPerPage: func,
   onRowClick: func,
+  onOrderChange: func,
   options: object,
+  sortDirection: string,
 }
 
 export default WidgetTasksPresentation

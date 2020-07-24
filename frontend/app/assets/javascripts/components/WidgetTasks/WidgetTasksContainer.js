@@ -1,6 +1,7 @@
 import React from 'react'
 import WidgetTasksPresentation from 'components/WidgetTasks/WidgetTasksPresentation'
 import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
+import TableContextSort from 'components/Table/TableContextSort'
 
 /**
  * @summary WidgetTasksContainer
@@ -14,18 +15,31 @@ import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
 function WidgetTasksContainer() {
   return (
     <WidgetTasksData>
-      {({ columns, data, fetchMessage, isFetching, onChangePage, onChangeRowsPerPage, onRowClick, options }) => {
+      {({
+        columns,
+        data,
+        fetchMessage,
+        isFetching,
+        onChangePage,
+        onOrderChange,
+        onRowClick,
+        options,
+        sortDirection,
+      }) => {
         return (
-          <WidgetTasksPresentation
-            columns={columns}
-            data={data}
-            fetchMessage={fetchMessage}
-            isFetching={isFetching}
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            onRowClick={onRowClick}
-            options={options}
-          />
+          <TableContextSort.Provider value={sortDirection}>
+            <WidgetTasksPresentation
+              columns={columns}
+              data={data}
+              fetchMessage={fetchMessage}
+              isFetching={isFetching}
+              onChangePage={onChangePage}
+              onOrderChange={onOrderChange}
+              onRowClick={onRowClick}
+              options={options}
+              sortDirection={sortDirection}
+            />
+          </TableContextSort.Provider>
         )
       }}
     </WidgetTasksData>
