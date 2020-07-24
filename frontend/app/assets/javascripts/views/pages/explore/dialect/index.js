@@ -142,35 +142,7 @@ export class ExploreDialect extends Component {
   }
 
   /**
-   * Toggle dialect (enabled/disabled)
-   */
-  _enableToggleAction = (toggled) => {
-    if (toggled) {
-      this.props.enableDialect(
-        this.props.routeParams.dialect_path,
-        null,
-        null,
-        this.props.intl.trans('views.pages.explore.dialect.dialect_enabled', 'Dialect enabled!', 'first', [], null, '!')
-      )
-    } else {
-      this.props.disableDialect(
-        this.props.routeParams.dialect_path,
-        null,
-        null,
-        this.props.intl.trans(
-          'views.pages.explore.dialect.dialect_disabled',
-          'Dialect disabled!',
-          'first',
-          [],
-          null,
-          '!'
-        )
-      )
-    }
-  }
-
-  /**
-   * Toggle published dialect
+   * Publish changes
    */
   _publishChangesAction = () => {
     this.props.publishPortal(
@@ -192,48 +164,6 @@ export class ExploreDialect extends Component {
       null,
       null
     )
-  }
-
-  /**
-   * Toggle published dialect
-   */
-  _publishToggleAction = (toggled) => {
-    if (toggled) {
-      this.props.publishDialect(
-        this.props.routeParams.dialect_path,
-        null,
-        null,
-        this.props.intl.trans(
-          'views.pages.explore.dialect.dialect_published_successfully',
-          'Dialect published successfully!',
-          'first',
-          [],
-          null,
-          '!'
-        )
-      )
-    } else {
-      this.props.unpublishDialect(
-        this.props.routeParams.dialect_path,
-        null,
-        null,
-        this.props.intl.trans(
-          'views.pages.explore.dialect.dialect_unpublished_successfully',
-          'Dialect unpublished successfully',
-          'first',
-          [],
-          null,
-          '!'
-        )
-      )
-    }
-  }
-
-  _handleGalleryDropDownChange = (event, key, payload) => {
-    //console.log(payload);
-    if (payload !== 'dropDownLabel') {
-      this.props.pushWindowPath(payload)
-    }
   }
 
   _handleSelectionChange = (itemId, item) => {
@@ -318,9 +248,7 @@ export class ExploreDialect extends Component {
             computeEntity={computeDialect2}
             showPublish={false}
             actions={['edit', 'publish', 'more-options']}
-            publishToggleAction={this._publishToggleAction}
             publishChangesAction={this._publishChangesAction}
-            enableToggleAction={this._enableToggleAction}
             {...this.props}
           />
         )
@@ -534,22 +462,6 @@ export class ExploreDialect extends Component {
 
                 <div className={classNames('dialect-info-banner')}>
                   <div>
-                    {/* <div className="dib-body-row">
-                  <strong>{this.props.intl.trans("name_of_archive", "Name of Archive")}: </strong>
-                  <AuthorizationFilter
-                    filter={{ permission: "Write", entity: selectn("response", computeDialect2) }}
-                    renderPartial
-                  >
-                    <EditableComponentHelper
-                    dataTestid="EditableComponent__dc-title"
-                      isSection={isSection}
-                      computeEntity={computeDialect2}
-                      updateEntity={this.props.updateDialect2}
-                      property="dc:title"
-                      entity={selectn("response", computeDialect2)}
-                    />
-                  </AuthorizationFilter>
-                </div> */}
                     <div className="dib-body-row">
                       <strong>
                         <FVLabel transKey="country" defaultStr="Country" />:{' '}
