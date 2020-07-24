@@ -2583,13 +2583,13 @@
                 <properties mode="any">
                   <property name="nxl_colspan_0">1</property>
                 </properties>
-                <widget>ignored_characters</widget>
+                <widget>primary</widget>
               </row>
               <row>
                 <properties mode="any">
                   <property name="nxl_colspan_0">1</property>
                 </properties>
-                <widget>primary</widget>
+                <widget>ignored_characters</widget>
               </row>
             </rows>
             <widget name="title" type="text">
@@ -2607,6 +2607,15 @@
                 <property name="styleClass">dataInputText</property>
               </properties>
             </widget>
+          <widget name="primary" type="checkbox">
+            <labels>
+              <label mode="any">Primary</label>
+            </labels>
+            <translated>false</translated>
+            <fields>
+              <field>fv-alphabet:primary</field>
+            </fields>
+          </widget>
           <widget name="ignored_characters" type="list">
             <fields>
               <field>fv-alphabet:ignored_characters</field>
@@ -2632,15 +2641,6 @@
               </widget>
             </subWidgets>
             <translated>false</translated>
-          </widget>
-          <widget name="primary" type="checkbox">
-            <labels>
-              <label mode="any">Primary</label>
-            </labels>
-            <translated>false</translated>
-            <fields>
-              <field>fv-alphabet:primary</field>
-            </fields>
           </widget>
         </layout>
         <layout name="layout@FVAlphabet-edit">
@@ -2658,13 +2658,13 @@
               <properties mode="any">
                 <property name="nxl_colspan_0">1</property>
               </properties>
-              <widget>ignored_characters</widget>
+              <widget>primary</widget>
             </row>
             <row>
               <properties mode="any">
                 <property name="nxl_colspan_0">1</property>
               </properties>
-              <widget>primary</widget>
+              <widget>ignored_characters</widget>
             </row>
           </rows>
             <widget name="title" type="text">
@@ -2682,6 +2682,18 @@
                 <property name="styleClass">dataInputText</property>
               </properties>
             </widget>
+          <widget name="primary" type="checkbox">
+            <fields>
+              <field>fv-alphabet:primary</field>
+            </fields>
+            <helpLabels>
+              <label mode="any">Whether this is the primary alphabet</label>
+            </helpLabels>
+            <labels>
+              <label mode="any">Primary</label>
+            </labels>
+            <translated>false</translated>
+          </widget>
           <widget name="ignored_characters" type="list">
             <fields>
               <field>fv-alphabet:ignored_characters</field>
@@ -2708,18 +2720,6 @@
             </subWidgets>
             <translated>false</translated>
           </widget>
-          <widget name="primary" type="checkbox">
-            <labels>
-              <label mode="any">Primary</label>
-            </labels>
-            <helpLabels>
-              <label mode="any">Whether this is the primary alphabet</label>
-            </helpLabels>
-            <translated>false</translated>
-            <fields>
-              <field>fv-alphabet:primary</field>
-                </fields>
-            </widget>
         </layout>
         <layout name="layout@FVAlphabet-view">
             <templates>
