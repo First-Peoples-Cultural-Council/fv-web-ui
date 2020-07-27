@@ -37,7 +37,7 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
 
-  private String[] types = {FV_PHRASE, FV_WORD};
+  private final String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
   public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
@@ -137,6 +137,58 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     }
     return confusables;
   }
+
+  @Override
+  public boolean validateIgnoredCharacters(List<DocumentModel> characters,
+      DocumentModel alphabet) throws FVCharacterInvalidException {
+    List<String> ignoredCharacters = Arrays
+        .asList((String[]) alphabet.getPropertyValue("fv-alphabet:ignored_characters"));
+
+    if (ignoredCharacters.isEmpty()) {
+      //nothing to be done
+      return true;
+    }
+
+    for (DocumentModel d : characters) {
+      String lowerChar = (String) d.getPropertyValue("dc:title");
+      String upperChar = (String) d.getPropertyValue("fvcharacter:upper_case_character");
+      List<String> lowercaseConfusableList = Arrays.asList((String[]) d
+          .getPropertyValue("fvcharacter:confusable_characters"));
+      List<String> uppercaseConfusableList = Arrays.asList((String[]) d
+          .getPropertyValue("fvcharacter:upper_case_confusable_characters"));
+
+      for (String ignoredCharacter : ignoredCharacters) {
+
+        if (ignoredCharacter.equals(lowerChar)) {
+          throw new FVCharacterInvalidException(
+              "Can't have ignored character " + ignoredCharacter
+                  + " as it is already a lower case character in the dialect's alphabet.", 400);
+        }
+
+        if (ignoredCharacter.equals(upperChar)) {
+          throw new FVCharacterInvalidException(
+              "Can't have ignored character " + ignoredCharacter
+                  + " as it is already an upper case character in the dialect's alphabet.", 400);
+        }
+
+        if (lowercaseConfusableList.contains(ignoredCharacter)) {
+          throw new FVCharacterInvalidException(
+              "Can't have ignored character " + ignoredCharacter
+                  + " as it is already a lower case confusable "
+                  + "character to another alphabet character", 400);
+        }
+
+        if (uppercaseConfusableList.contains(ignoredCharacter)) {
+          throw new FVCharacterInvalidException(
+              "Can't have ignored character " + ignoredCharacter
+                  + " as it is already an upper case confusable "
+                  + "character to another alphabet character", 400);
+        }
+      }
+    }
+    return true;
+  }
+
 
   private String replaceConfusables(Map<String, String> confusables, String current,
       String updatedPropertyValue) {

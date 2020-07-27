@@ -75,9 +75,9 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   protected SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
   private CoreSession session;
-  private AssignAncestorsService assignAncestorsService = Framework
+  private final AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-  private CleanupCharactersService cleanupCharactersService = Framework
+  private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
   private Event event;
