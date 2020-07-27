@@ -183,16 +183,19 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
         && !document.isVersion()) {
       try {
         DocumentModelList characters = getCharacters(document);
+        DocumentModel alphabet = getAlphabet(document);
 
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           List<DocumentModel> results = characters.stream()
               .map(c -> c.getId().equals(document.getId()) ? document : c)
               .collect(Collectors.toList());
           cleanupCharactersService.mapAndValidateConfusableCharacters(results);
+          cleanupCharactersService.validateIgnoredCharacters(characters, alphabet);
         }
 
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
           cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+          cleanupCharactersService.validateIgnoredCharacters(characters, alphabet);
         }
 
       } catch (Exception exception) {

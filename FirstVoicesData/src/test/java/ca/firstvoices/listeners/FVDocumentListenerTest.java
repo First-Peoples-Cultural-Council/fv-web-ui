@@ -72,4 +72,9 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
   }
 
+  @Test
+  public void ignoredCharacterValidationTest() {
+    //TODO: Add tests
+  }
+
 }

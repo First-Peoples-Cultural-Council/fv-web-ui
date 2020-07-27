@@ -30,4 +30,7 @@ public interface CleanupCharactersService {
   DocumentModel cleanConfusables(CoreSession session, DocumentModel document);
 
   Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters);
+
+  boolean validateIgnoredCharacters(List<DocumentModel> characters,
+      DocumentModel alphabet);
 }
