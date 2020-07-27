@@ -114,11 +114,11 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = createWords(words);
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
-      assertEquals(documentModel.getPropertyValue("fv:update_confusables_required"), true);
+      assertEquals(true, documentModel.getPropertyValue("fv:update_confusables_required"));
       cleanupCharactersService.cleanConfusables(session, documentModel);
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
-      assertEquals(documentModel.getPropertyValue("fv:update_confusables_required"), false);
+      assertEquals(false, documentModel.getPropertyValue("fv:update_confusables_required"));
     }
 
   }
