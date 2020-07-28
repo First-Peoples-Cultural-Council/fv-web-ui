@@ -8,7 +8,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 /**
- * @summary ListTasksData
+ * @summary TableTasksData
  * @version 1.0.1
  * @component
  *
@@ -17,7 +17,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
  * @param {object} [props.columnRender = undefined] Object that customizes how cell data is rendered. Prop names need to match values in columns[#].field
  *
  */
-function ListTasksData({ children, columnRender }) {
+function TableTasksData({ children, columnRender }) {
   // State Hooks
   const [userId, setUserId] = useState()
   const [isActingOnATask, setIsActingOnATask] = useState(false)
@@ -126,9 +126,9 @@ function ListTasksData({ children, columnRender }) {
 }
 // PROPTYPES
 const { func, object } = PropTypes
-ListTasksData.propTypes = {
+TableTasksData.propTypes = {
   children: func,
   columnRender: object,
 }
 
-export default ListTasksData
+export default TableTasksData

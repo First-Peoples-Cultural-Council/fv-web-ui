@@ -62,9 +62,8 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = createWords(words);
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
-      DocumentModel updatedDocument = cleanupCharactersService
-          .cleanConfusables(session, documentModel);
-      String title = (String) updatedDocument.getPropertyValue("dc:title");
+      cleanupCharactersService.cleanConfusables(session, documentModel);
+      String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
     }
   }
@@ -115,10 +114,11 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = createWords(words);
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
-      DocumentModel updatedDocument = cleanupCharactersService
-          .cleanConfusables(session, documentModel);
-      String title = (String) updatedDocument.getPropertyValue("dc:title");
+      assertEquals(true, documentModel.getPropertyValue("fv:update_confusables_required"));
+      cleanupCharactersService.cleanConfusables(session, documentModel);
+      String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
+      assertEquals(false, documentModel.getPropertyValue("fv:update_confusables_required"));
     }
 
   }
@@ -200,6 +200,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
       DocumentModel document = session
           .createDocumentModel(dialect.getPathAsString() + "/Dictionary", words[i], FV_WORD);
       document.setPropertyValue("fv:reference", words[i]);
+      document.setPropertyValue("fv:update_confusables_required", true);
       document = createDocument(session, document);
       documentModels.add(document);
     }

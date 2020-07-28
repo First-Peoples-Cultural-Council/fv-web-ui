@@ -99,7 +99,7 @@
     "dompurify": "~0.8.3",
     "fuse.js": "3.4.6",
     "immutable": "~3.8.2",
-    "material-table": "^1.62.0",
+    "material-table": "^1.66.0",
     "memoize-one": "^5.0.0",
     "merge-stream": "~0.1.8",
     "normalize.css": "~3.0.3",

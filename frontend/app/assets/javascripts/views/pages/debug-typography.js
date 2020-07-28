@@ -29,42 +29,37 @@ export class DebugTypography extends Component {
     return (
       <div>
         <Typography variant="h1" gutterBottom>
-          {'[variant="h1"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h1
         </Typography>
         <Typography variant="h2" gutterBottom>
-          {'[variant="h2"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h2
         </Typography>
         <Typography variant="h3" gutterBottom>
-          {'[variant="h3"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h3
         </Typography>
         <Typography variant="h4" gutterBottom>
-          {'[variant="h4"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h4
         </Typography>
         <Typography variant="h5" gutterBottom>
-          {'[variant="h5"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h5
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {'[variant="h6"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // h6
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
-          {'[variant="subtitle1"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // subtitle1
         </Typography>
         <Typography variant="body1" gutterBottom>
-          {'[variant="body1"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // body1
         </Typography>
         <Typography variant="body2" gutterBottom>
-          {'[variant="body2"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // body2
         </Typography>
-        <Typography variant="caption" gutterBottom>
-          {'[variant="caption"]'}
-        </Typography>
-        <Typography gutterBottom>
-          {`
-    Lorem ipsum dolor sit amet. [No variant set]
-`}
+        <Typography variant="caption" gutterBottom display="block">
+          A quick brown fox jumps over the lazy dog. 1234567890 // caption
         </Typography>
         <Typography variant="button" gutterBottom>
-          {'[variant="button"]'}
+          A quick brown fox jumps over the lazy dog. 1234567890 // button
         </Typography>
       </div>
     )
