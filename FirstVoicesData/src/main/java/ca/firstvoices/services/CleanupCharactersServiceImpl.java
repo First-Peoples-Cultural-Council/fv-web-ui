@@ -66,10 +66,10 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
       if (!updatedPropertyValue.equals(propertyValue)) {
         document.setPropertyValue("dc:title", updatedPropertyValue);
-        return document;
       }
     }
-    return document;
+    document.setPropertyValue("fv:update_confusables_required", false);
+    return session.saveDocument(document);
   }
 
   @Override
