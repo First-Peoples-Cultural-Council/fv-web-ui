@@ -35,6 +35,7 @@
     <module>FVUserRegistration</module>
     <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesMaintenance</module>
+    <module>FirstVoicesCoreTests</module>
     <module>migration-contributions</module>
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
@@ -80,6 +81,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FVUserRegistration</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCoreTests</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import selectn from 'selectn'
+import { connect } from 'react-redux'
 import StringHelpers from 'common/StringHelpers'
 
 import AppBar from '@material-ui/core/AppBar'
@@ -9,7 +10,6 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import Tabs from '@material-ui/core/Tabs'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
@@ -17,7 +17,8 @@ import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWithActions.css'
 import FVLabel from '../../components/FVLabel/index'
-import { connect } from 'react-redux'
+
+import TabsWithPanels from 'components/TabsWithPanels'
 
 export default function withActions(ComposedFilter, publishWarningEnabled = false) {
   class ViewWithActions extends Component {
@@ -85,7 +86,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </DialogTitle>
               <DialogContent>
                 {(() => {
-                  if (this.props.tabs && this.props.tabs.length > 0) {
+                  if (this.props.tabsData && this.props.tabsData.length > 0) {
                     return (
                       <div>
                         <p>
@@ -101,7 +102,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                           />
                           :
                         </p>
-                        <Tabs>{this.props.tabs}</Tabs>
+                        <TabsWithPanels.Presentation data={this.props.tabsData} />
                       </div>
                     )
                   }

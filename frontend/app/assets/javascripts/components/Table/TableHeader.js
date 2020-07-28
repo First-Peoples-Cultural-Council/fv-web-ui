@@ -1,8 +1,8 @@
 // NOTE
 // ------------------------------------------------------------
-// Material-Table supports component overriding.
-// To get around a bug where sort doesn't work with remote data,
-// We have cloned the default Table Header components and psuedo-monkey-patched a fix.
+// To get around a bug where sorting doesn't work with remote data,
+// we cloned the default Table Header component and psuedo monkey patched a fix.
+// ('psuedo' since Material-Table supports component overriding)
 //
 // This file is based on m-table-header in v1.66.0:
 // https://github.com/mbrn/material-table/blob/599f8562c6ea653bd7154c59d4e2b6cd9effbaa8/src/components/m-table-header.js
@@ -11,7 +11,7 @@
 // IMPORTANT NOTE
 // ------------------------------------------------------------
 // This patched file doesn't support the `draggable` feature.
-// Didn't want to add 'react-beautiful-dnd'
+// Didn't want to import the 'react-beautiful-dnd' library
 //
 import React from 'react'
 import PropTypes from 'prop-types'

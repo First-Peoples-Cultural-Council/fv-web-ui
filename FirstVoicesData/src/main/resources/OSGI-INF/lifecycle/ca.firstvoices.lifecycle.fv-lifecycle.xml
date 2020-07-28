@@ -22,6 +22,7 @@
           name="Disabled">
           <transitions>
             <transition>Enable</transition>
+            <transition>Publish</transition>
           </transitions>
         </state>
         <state description="" name="Published">

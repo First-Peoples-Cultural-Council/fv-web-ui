@@ -1,5 +1,5 @@
 import React from 'react'
 
-const TableSortContext = React.createContext()
+const TableContextSort = React.createContext()
 
-export default TableSortContext
+export default TableContextSort
