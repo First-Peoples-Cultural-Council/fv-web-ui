@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
+import ActivityStream from 'components/ActivityStream'
+import ApprovalNotes from 'components/ApprovalNotes'
 
 import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
 
@@ -34,33 +36,10 @@ function DashboardDetailSelectedItemPresentation({ date, icon, initiator, title 
             icon={icon}
           />
         </div>
-        <div className="DashboardDetailSelectedItem__ActivityStream">
-          <h2>ActivityStream</h2>
-          <p>Lorem ipsum dolor sit amet</p>
-          <p>consectetur adipiscing elit</p>
-          <p>sed do eiusmod tempor incididunt ut labore</p>
-          <p>et dolore magna aliqua. Elit ut aliquam purus</p>
-          <p>sit amet. Id leo in vitae turpis massa sed</p>
-        </div>
-        <div className="DashboardDetailSelectedItem__Notes">
-          <h2>Notes</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Elit ut aliquam purus sit amet. Id leo in vitae turpis massa sed. Accumsan tortor
-            posuere ac ut consequat semper viverra nam. Sociis natoque penatibus et magnis dis parturient montes
-            nascetur.
-          </p>
-          <p>
-            Maecenas accumsan lacus vel facilisis volutpat est. Laoreet suspendisse interdum consectetur libero id
-            faucibus nisl tincidunt. Egestas diam in arcu cursus euismod quis. Pharetra massa massa ultricies mi quis
-            hendrerit dolor magna. Lorem ipsum dolor sit amet.
-          </p>
-          <p>
-            Arcu cursus vitae congue mauris rhoncus. Ut ornare lectus sit amet est. Mi eget mauris pharetra et ultrices
-            neque ornare. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Ipsum dolor sit amet consectetur
-            adipiscing elit ut. Elementum nibh tellus molestie nunc non blandit.
-          </p>
-        </div>
+        <ActivityStream.Presentation className="DashboardDetailSelectedItem__ActivityStream" id="" />
+
+        <ApprovalNotes.Presentation className="DashboardDetailSelectedItem__Notes" id="" />
+
         <div className="DashboardDetailSelectedItem__ItemDetail">
           <h2>ItemDetail</h2>
           <p>
