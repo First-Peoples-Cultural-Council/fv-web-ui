@@ -141,13 +141,16 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   @Override
   public boolean validateIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet) throws FVCharacterInvalidException {
-    List<String> ignoredCharacters = Arrays
-        .asList((String[]) alphabet.getPropertyValue("fv-alphabet:ignored_characters"));
 
-    if (ignoredCharacters.isEmpty()) {
+    //TODO: This validation is not functional, will ask for assistance
+
+    if (alphabet.getPropertyValue("fv-alphabet:ignored_characters") == null) {
       //nothing to be done
       return true;
     }
+
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
 
     for (DocumentModel d : characters) {
       String lowerChar = (String) d.getPropertyValue("dc:title");

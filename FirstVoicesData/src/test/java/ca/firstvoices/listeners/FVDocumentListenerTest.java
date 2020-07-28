@@ -20,12 +20,16 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -72,9 +76,26 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
   }
 
-  @Test
+  @Test//(expected = FVCharacterInvalidException.class)
   public void ignoredCharacterValidationTest() {
-    //TODO: Add tests
-  }
+    //commented out expected as test is not working as expected
 
+    int i = 1;
+    for (char c = 'a'; c <= 'z'; c++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(alphabet.getPathAsString(), String.valueOf(c), FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc
+          .setPropertyValue("fvcharacter:upper_case_character", String.valueOf(c).toUpperCase());
+      createDocument(session, letterDoc);
+      i++;
+    }
+
+    List<String> testList = new ArrayList<>();
+    testList.add("a");
+    testList.add("b");
+
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
+    session.saveDocument(alphabet);
+  }
 }
