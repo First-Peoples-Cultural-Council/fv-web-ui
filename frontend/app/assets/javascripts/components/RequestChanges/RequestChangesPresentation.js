@@ -5,6 +5,9 @@ import Textarea from 'views/components/Form/Common/Textarea'
 import {getError, getErrorFeedback} from 'common/FormHelpers'
 import VisibilitySelect from 'components/VisibilitySelect'
 import PropTypes from 'prop-types'
+import FVSnackbar from "../../views/components/FVSnackbar"
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 /**
  * @summary RequestChangesPresentation
@@ -15,7 +18,16 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesPresentation({formRef, onSubmit, errors, docVisibility, handleVisibilityChange, computeEntities}) {
+function RequestChangesPresentation({
+  formRef,
+  onSubmit,
+  errors,
+  docVisibility,
+  handleVisibilityChange,
+  handleSnackbarClose,
+  computeEntities,
+  snackbarOpen
+}) {
   return (
       <div className="RequestChanges">
         <form name="requestChanges" onSubmit={onSubmit} ref={formRef}>
@@ -58,6 +70,19 @@ function RequestChangesPresentation({formRef, onSubmit, errors, docVisibility, h
               Request Changes
             </FVButton>
           </div>
+          <FVSnackbar
+              open={snackbarOpen}
+              autoHideDuration={3000}
+              onClose={handleSnackbarClose}
+              message={'Document Submitted Successfully'}
+              anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+              action={
+                <IconButton size="small" aria-label="close" color="inherit"
+                            onClick={handleSnackbarClose}>
+                  <CloseIcon fontSize="small"/>
+                </IconButton>
+              }
+          />
         </form>
       </div>
 
@@ -65,16 +90,18 @@ function RequestChangesPresentation({formRef, onSubmit, errors, docVisibility, h
 }
 
 // PROPTYPES
-const {string, object} = PropTypes
+const {string, object, bool} = PropTypes
 RequestChangesPresentation.propTypes = {
+  computeEntities: object,
   docId: string,
   docState: string,
-  computeEntities: object,
+  snackbarOpen: bool,
 }
 
 RequestChangesPresentation.defaultProps = {
   docId: '',
   docState: '',
+  snackbarOpen: true,
 }
 
 export default RequestChangesPresentation

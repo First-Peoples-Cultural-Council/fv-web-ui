@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 import {getFormData, handleSubmit} from 'common/FormHelpers'
 import * as yup from 'yup'
@@ -6,6 +7,7 @@ import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import useVisibility from "../../common/DataSource/useVisibility";
+import FVSnackbar from "../../views/components/FVSnackbar";
 
 /**
  * @summary RequestChangesData
@@ -21,6 +23,7 @@ function RequestChangesData({children, docId, docState}) {
   const {routeParams} = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
+  let [snackbarOpen, setSnackbarOpen] = useState(true)
 
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
@@ -75,11 +78,11 @@ function RequestChangesData({children, docId, docState}) {
     commentField: yup
     .string()
     .label('Comment label')
-    .required('ERROR: Comment field is required'),
+    .required('Please add a comment for these changes'),
     visibilitySelect: yup
     .string()
     .label('Document visibility')
-    .required('ERROR: Word visibility is required'),
+    .required('Please specify the audience for this document'),
   })
 
   const onSubmit = (event) => {
@@ -98,12 +101,24 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         console.log('onSubmit > form is valid')
         setErrors(undefined)
+        setSnackbarOpen(true)
       },
       invalid: (response) => {
         console.log('onSubmit > form is invalid', {errorsHere: response.errors})
         setErrors(response.errors)
       },
     })
+
+    const handleSnackbarClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return
+      }
+      setSnackbarOpen(false)
+    }
+
+    function setSnackbarOpen(visibility) {
+      snackbarOpen = useState(visibility)
+    }
 
   }
 
@@ -114,6 +129,7 @@ function RequestChangesData({children, docId, docState}) {
     computeEntities,
     handleVisibilityChange,
     docVisibility,
+    snackbarOpen,
   })
 }
 
