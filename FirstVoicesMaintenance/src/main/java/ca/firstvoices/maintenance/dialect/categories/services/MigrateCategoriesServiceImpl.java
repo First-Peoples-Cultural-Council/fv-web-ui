@@ -97,12 +97,9 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
       // This would benefit greatly from an ES query using ElasticSearchService
       // Get all words that reference shared categories
-      String query = "SELECT * FROM FVWord"
-          + " WHERE fva:dialect = '" + dialect.getId() + "' "
-          + " AND fv-word:categories/* IN ( " + ids + ")"
-          + " AND ecm:isTrashed = 0"
-          + " AND ecm:isProxy = 0"
-          + " AND ecm:isVersion = 0";
+      String query = "SELECT * FROM FVWord" + " WHERE fva:dialect = '" + dialect.getId() + "' "
+          + " AND fv-word:categories/* IN ( " + ids + ")" + " AND ecm:isTrashed = 0"
+          + " AND ecm:isProxy = 0" + " AND ecm:isVersion = 0";
       DocumentModelList words = session.query(query, null, batchSize, 0, true);
 
       for (DocumentModel word : words) {
@@ -161,8 +158,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   private DocumentModel getExistingCategory(DocumentModel category) {
     return localCategories.stream()
-        .filter(localCategory -> localCategory.getTitle().equals(category.getTitle()))
-        .findFirst()
+        .filter(localCategory -> localCategory.getTitle().equals(category.getTitle())).findFirst()
         .orElse(null);
   }
 
@@ -174,7 +170,10 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   private DocumentModel copyCategory(CoreSession session, DocumentModel category) {
     String localCategoryDirPath = localCategoriesDirectory.getPathAsString();
 
-    if (!isParent(session, category)) {
+    DocumentModel parent = session.getParentDocument(category.getRef());
+    boolean isParent = parent != null && parent.getTitle().equals("Shared Categories");
+
+    if (!isParent) {
 
       // For child categories, create parent if it does not exist
       DocumentModel parentCategory = session.getParentDocument(category.getRef());
@@ -191,8 +190,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     }
 
     // Create new category
-    DocumentModel newLocalCategory = session.createDocumentModel(
-        localCategoryDirPath, category.getName(), FV_CATEGORY);
+    DocumentModel newLocalCategory = session
+        .createDocumentModel(localCategoryDirPath, category.getName(), FV_CATEGORY);
     newLocalCategory.setPropertyValue("dc:title", category.getTitle());
     DocumentModel newCategory = session.createDocument(newLocalCategory);
 
@@ -242,11 +241,9 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       categoriesDirectory = getLocalCategoriesDirectory(session, dialect);
     }
 
-    String query = "SELECT * FROM FVCategory"
-        + " WHERE ecm:ancestorId = '" + categoriesDirectory.getId() + "'"
-        + " AND ecm:isTrashed = 0"
-        + " AND ecm:isProxy = 0"
-        + " AND ecm:isVersion = 0";
+    String query =
+        "SELECT * FROM FVCategory" + " WHERE ecm:ancestorId = '" + categoriesDirectory.getId() + "'"
+            + " AND ecm:isTrashed = 0" + " AND ecm:isProxy = 0" + " AND ecm:isVersion = 0";
 
     if (dialect == null && includeProxies) {
       // Override query to get both 'workspace' and 'sections' categories
@@ -254,8 +251,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       query = "SELECT * FROM FVCategory"
           + " WHERE (ecm:path STARTSWITH '/FV/Workspaces/SharedData/Shared Categories'"
           + " OR ecm:path STARTSWITH '/FV/sections/SharedData/Shared Categories') "
-          + " AND ecm:isTrashed = 0"
-          + " AND ecm:isVersion = 0";
+          + " AND ecm:isTrashed = 0" + " AND ecm:isVersion = 0";
     }
 
     try {
@@ -269,11 +265,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   public String getUniqueCategoriesQuery(String dialectId) {
     return "SELECT DISTINCT fv-word:categories/* FROM FVWord "
-        + "WHERE fv-word:categories/* IS NOT NULL "
-        + "AND fva:dialect = '" + dialectId + "' "
-        + "AND ecm:isTrashed = 0 "
-        + "AND ecm:isProxy = 0 "
-        + "AND ecm:isVersion = 0";
+        + "WHERE fv-word:categories/* IS NOT NULL " + "AND fva:dialect = '" + dialectId + "' "
+        + "AND ecm:isTrashed = 0 " + "AND ecm:isProxy = 0 " + "AND ecm:isVersion = 0";
   }
 
   private DocumentModel getSharedCategoriesDirectory(CoreSession session) {
@@ -282,11 +275,6 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   private DocumentModel getLocalCategoriesDirectory(CoreSession session, DocumentModel dialect) {
     return session.getChild(dialect.getRef(), "Categories");
-  }
-
-  private boolean isParent(CoreSession session, DocumentModel category) {
-    DocumentModel parent = session.getParentDocument(category.getRef());
-    return parent.getTitle().equals("Shared Categories");
   }
 
 }
