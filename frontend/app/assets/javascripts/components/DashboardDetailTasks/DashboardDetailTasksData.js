@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 
+import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
+
 /**
  * @summary DashboardDetailTasksData
  * @version 1.0.1
@@ -18,9 +20,8 @@ function DashboardDetailTasksData({ children }) {
   const { active } = getSearchObject()
 
   const { fetchMessage, isFetching, tasks } = useUserGroupTasks()
-
   useEffect(() => {
-    if (active === 'first' && tasks.length > 0) {
+    if (active === URL_QUERY_PLACEHOLDER && tasks.length > 0) {
       navigateReplace(`${window.location.pathname}?active=${tasks[0].id}`)
     }
   }, [tasks])
@@ -29,7 +30,7 @@ function DashboardDetailTasksData({ children }) {
     navigate(`${window.location.pathname}`)
   }
   const onOpen = (id) => {
-    navigate(`${window.location.pathname}?active=${id ? id : 'first'}`)
+    navigate(`${window.location.pathname}?active=${id ? id : URL_QUERY_PLACEHOLDER}`)
   }
   const columns = [
     { title: '[Icon]', field: 'itemType' },

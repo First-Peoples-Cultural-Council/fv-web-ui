@@ -10,10 +10,10 @@ import '!style-loader!css-loader!./ApprovalNotes.css'
  *
  * @returns {node} jsx markup
  */
-function ApprovalNotesPresentation({ className }) {
+function ApprovalNotesPresentation({ className, id }) {
   return (
     <div className={`ApprovalNotes ${className ? className : ''}`}>
-      <h2>Notes</h2>
+      <h2>Notes (ID: {id})</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Elit ut aliquam purus sit amet. Id leo in vitae turpis massa sed. Accumsan tortor posuere ac ut
@@ -36,6 +36,7 @@ function ApprovalNotesPresentation({ className }) {
 const { string } = PropTypes
 ApprovalNotesPresentation.propTypes = {
   className: string,
+  id: string,
 }
 
 export default ApprovalNotesPresentation

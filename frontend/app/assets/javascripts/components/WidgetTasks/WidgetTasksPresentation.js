@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Widget from 'components/Widget'
 import Table from 'components/Table'
 import Link from 'views/components/Link'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import { CONTENT_FULL_WIDTH, URL_QUERY_PLACEHOLDER } from 'common/Constants'
 
 /**
  * @summary WidgetTasksPresentation
@@ -21,6 +21,7 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
+
 function WidgetTasksPresentation({
   columns,
   data,
@@ -36,7 +37,9 @@ function WidgetTasksPresentation({
     <Widget.Presentation
       title="List of Tasks"
       variant={CONTENT_FULL_WIDTH}
-      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks?active=first'}>See all tasks</Link>}
+      childrenHeader={
+        data.length !== 0 && <Link href={`/dashboard/tasks?active=${URL_QUERY_PLACEHOLDER}`}>See all tasks</Link>
+      }
     >
       <Table.Presentation
         columns={columns}

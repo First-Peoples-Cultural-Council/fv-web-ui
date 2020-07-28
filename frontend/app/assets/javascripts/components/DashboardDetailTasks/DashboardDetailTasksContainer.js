@@ -53,6 +53,7 @@ function DashboardDetailTasksContainer() {
                 initiator={selectedData.initiator}
                 date={selectedData.date}
                 icon={<DashboardDetailIcon.Presentation itemType={selectedData.itemType} isNew={selectedData.isNew} />}
+                id={selectedTaskId}
               />
             }
             onClose={onClose}

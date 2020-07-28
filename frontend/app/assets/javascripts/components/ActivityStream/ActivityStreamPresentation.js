@@ -10,10 +10,10 @@ import '!style-loader!css-loader!./ActivityStream.css'
  *
  * @returns {node} jsx markup
  */
-function ActivityStreamPresentation({ className }) {
+function ActivityStreamPresentation({ className, id }) {
   return (
     <div className={`ActivityStream ${className ? className : ''}`}>
-      <h2>ActivityStream</h2>
+      <h2>ActivityStream (ID: {id})</h2>
       <p>Lorem ipsum dolor sit amet</p>
       <p>consectetur adipiscing elit</p>
       <p>sed do eiusmod tempor incididunt ut labore</p>
@@ -26,6 +26,7 @@ function ActivityStreamPresentation({ className }) {
 const { string } = PropTypes
 ActivityStreamPresentation.propTypes = {
   className: string,
+  id: string,
 }
 
 export default ActivityStreamPresentation

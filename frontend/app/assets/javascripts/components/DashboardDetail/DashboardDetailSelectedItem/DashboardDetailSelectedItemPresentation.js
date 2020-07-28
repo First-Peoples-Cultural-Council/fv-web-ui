@@ -19,7 +19,7 @@ import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailSelectedItemPresentation({ date, icon, initiator, title }) {
+function DashboardDetailSelectedItemPresentation({ date, icon, initiator, title, id }) {
   const scrollContainerRef = useRef(null)
   useEffect(() => {
     scrollContainerRef.current.scrollTop = 0
@@ -36,12 +36,12 @@ function DashboardDetailSelectedItemPresentation({ date, icon, initiator, title 
             icon={icon}
           />
         </div>
-        <ActivityStream.Presentation className="DashboardDetailSelectedItem__ActivityStream" id="" />
+        <ActivityStream.Presentation className="DashboardDetailSelectedItem__ActivityStream" id={id} />
 
-        <ApprovalNotes.Presentation className="DashboardDetailSelectedItem__Notes" id="" />
+        <ApprovalNotes.Presentation className="DashboardDetailSelectedItem__Notes" id={id} />
 
         <div className="DashboardDetailSelectedItem__ItemDetail">
-          <h2>ItemDetail</h2>
+          <h2>ItemDetail (ID: {id})</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Elit ut aliquam purus sit amet. Id leo in vitae turpis massa sed. Accumsan tortor
@@ -120,6 +120,7 @@ DashboardDetailSelectedItemPresentation.propTypes = {
   icon: node,
   initiator: string,
   title: string,
+  id: string,
 }
 
 export default DashboardDetailSelectedItemPresentation

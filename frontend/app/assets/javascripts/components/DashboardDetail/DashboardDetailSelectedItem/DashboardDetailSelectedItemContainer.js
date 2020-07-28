@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import DashboardDetailSelectedItemPresentation from './DashboardDetailSelectedItemPresentation'
 import DashboardDetailSelectedItemData from './DashboardDetailSelectedItemData'
 
@@ -12,19 +12,19 @@ import DashboardDetailSelectedItemData from './DashboardDetailSelectedItemData'
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailSelectedItemContainer() {
+function DashboardDetailSelectedItemContainer({ id }) {
   return (
-    <DashboardDetailSelectedItemData>
+    <DashboardDetailSelectedItemData id={id}>
       {() => {
-        return <DashboardDetailSelectedItemPresentation />
+        return <DashboardDetailSelectedItemPresentation id={id} />
       }}
     </DashboardDetailSelectedItemData>
   )
 }
 // PROPTYPES
-// const { node } = PropTypes
-// DashboardDetailSelectedItemContainer.propTypes = {
-//   closeButton: node,
-// }
+const { string } = PropTypes
+DashboardDetailSelectedItemContainer.propTypes = {
+  id: string,
+}
 
 export default DashboardDetailSelectedItemContainer

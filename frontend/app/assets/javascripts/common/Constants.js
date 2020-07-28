@@ -24,3 +24,5 @@ export const STORY = 4
 
 export const EVEN = 0
 export const ODD = 1
+
+export const URL_QUERY_PLACEHOLDER = 'first'
