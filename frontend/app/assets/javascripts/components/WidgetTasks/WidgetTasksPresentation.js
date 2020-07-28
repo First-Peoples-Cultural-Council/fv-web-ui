@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Widget from 'components/Widget'
-import List from 'components/List'
+import Table from 'components/Table'
 import Link from 'views/components/Link'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 
@@ -21,37 +21,54 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function WidgetTasksPresentation({ columns, data, fetchMessage, isFetching, onRowClick, options }) {
+function WidgetTasksPresentation({
+  columns,
+  data,
+  fetchMessage,
+  isFetching,
+  onChangePage,
+  onOrderChange,
+  onRowClick,
+  options,
+  sortDirection,
+}) {
   return (
     <Widget.Presentation
       title="List of Tasks"
       variant={CONTENT_FULL_WIDTH}
-      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks'}>See all tasks</Link>}
+      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks?active=first'}>See all tasks</Link>}
     >
-      <List.Presentation
-        variant={CONTENT_FULL_WIDTH}
+      <Table.Presentation
         columns={columns}
-        onRowClick={onRowClick}
-        options={options}
         data={data}
         localization={{
           body: {
             emptyDataSourceMessage: isFetching ? fetchMessage : 'No tasks pending',
           },
         }}
+        onChangePage={onChangePage}
+        onOrderChange={onOrderChange}
+        onRowClick={onRowClick}
+        options={options}
+        variant={CONTENT_FULL_WIDTH}
+        sortDirection={sortDirection}
       />
     </Widget.Presentation>
   )
 }
 // PROPTYPES
-const { array, bool, func, object, string } = PropTypes
+const { array, bool, func, object, string, oneOfType } = PropTypes
 WidgetTasksPresentation.propTypes = {
   columns: array,
-  data: array,
-  onRowClick: func,
-  options: object,
-  isFetching: bool,
+  data: oneOfType([array, func]),
   fetchMessage: string,
+  isFetching: bool,
+  onChangePage: func,
+  onChangeRowsPerPage: func,
+  onRowClick: func,
+  onOrderChange: func,
+  options: object,
+  sortDirection: string,
 }
 
 export default WidgetTasksPresentation

@@ -192,7 +192,7 @@ function WordsListData({ children }) {
               >
                 <FVButton
                   type="button"
-                  variant="flat"
+                  disableElevation
                   size="small"
                   component="a"
                   className="WordsList__linkEdit PrintHide"

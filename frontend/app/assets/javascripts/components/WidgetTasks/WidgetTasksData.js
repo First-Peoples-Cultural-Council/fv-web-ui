@@ -1,13 +1,8 @@
-import { useState, useEffect } from 'react'
-import useLogin from 'DataSource/useLogin'
-import useTasks from 'DataSource/useTasks'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
-import selectn from 'selectn'
-import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-
 import useNavigationHelpers from 'common/useNavigationHelpers'
-
+import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -18,68 +13,44 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
  *
  */
 function WidgetTasksData({ children }) {
-  // State Hooks
-  const [userId, setUserId] = useState()
-
-  // Custom Hooks
+  const [sortDirection, setSortDirection] = useState('desc')
   const { navigate } = useNavigationHelpers()
-  const { computeLogin } = useLogin()
-  const { computeUserGroupTasks, fetchUserGroupTasks } = useTasks()
+  const { fetchUserGroupTasks, userId, formatTasksData } = useUserGroupTasks(false)
 
-  useEffect(() => {
-    fetchData()
-  }, [computeLogin])
-
-  const fetchData = () => {
-    const _userId = selectn('response.id', computeLogin)
-    if (_userId) {
-      setUserId(_userId)
-      fetchUserGroupTasks(_userId)
-    }
+  const onRowClick = (event, { id }) => {
+    navigate(`/dashboard/tasks?active=${id}`)
   }
 
-  const onRowClick = (event, { taskUid }) => {
-    navigate(`/dashboard/tasks?taskId=${taskUid}`)
+  const onOrderChange = (/*columnId, orderDirection*/) => {
+    setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
   }
 
-  let hasTasks
-  let isFetching = false
-  let fetchMessage
-  const tasks = []
-  if (userId) {
-    const userGroupTasks = ProviderHelpers.getEntry(computeUserGroupTasks, userId)
-    isFetching = userGroupTasks.isFetching
+  const friendlyNamePropertyNameLookup = {
+    date: 'nt:dueDate',
+    id: 'uid',
+    initiator: 'nt:initiator',
+    title: 'nt:name',
+  }
 
-    if (userGroupTasks.message !== '') {
-      fetchMessage = userGroupTasks.message
+  // Note: Library has a sort bug when using remote data
+  // see: https://github.com/mbrn/material-table/issues/2177
+  const remoteData = (data) => {
+    const { orderBy = {}, orderDirection: sortOrder, page: currentPageIndex = 0, pageSize = 100 } = data
+    const { field: sortBy = 'date' } = orderBy
+    const requestParams = {
+      currentPageIndex,
+      pageSize,
+      sortBy: friendlyNamePropertyNameLookup[sortBy],
+      sortOrder,
     }
-    const userGroupTasksEntries = selectn('response.entries', userGroupTasks)
-
-    if (userGroupTasksEntries) {
-      for (let i = 0; i < userGroupTasksEntries.length; i++) {
-        if (tasks.length === 5) {
-          break
-        }
-
-        const task = userGroupTasksEntries[i]
-
-        if (task) {
-          const { uid: taskUid, properties } = task
-          // Push if relevant:
-          if (properties['nt:directive'] !== 'org.nuxeo.ecm.platform.publisher.task.CoreProxyWithWorkflowFactory') {
-            tasks.push({
-              requestedBy: properties['nt:initiator'],
-              title: properties['nt:name'],
-              startDate: properties['dc:created'],
-              taskUid,
-            })
-          }
-        }
+    return fetchUserGroupTasks(userId, requestParams).then(({ entries, resultsCount, pageIndex }) => {
+      return {
+        data: formatTasksData(entries),
+        page: pageIndex,
+        totalCount: resultsCount,
       }
-    }
-    hasTasks = (tasks || []).length > 0
+    })
   }
-
   return children({
     columns: [
       {
@@ -88,6 +59,7 @@ function WidgetTasksData({ children }) {
         render: () => {
           return '[~]'
         },
+        sorting: false,
       },
       {
         title: 'Entry title',
@@ -95,20 +67,24 @@ function WidgetTasksData({ children }) {
       },
       {
         title: 'Requested by',
-        field: 'requestedBy',
+        field: 'initiator',
       },
       {
         title: 'Date submitted',
-        field: 'startDate',
-        render: ({ startDate }) => StringHelpers.formatUTCDateString(new Date(startDate)),
+        field: 'date',
+        render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
       },
     ],
-    hasTasks,
     onRowClick,
-    options: { actionsColumnIndex: -1 },
-    data: tasks,
-    isFetching,
-    fetchMessage,
+    options: {
+      paging: true,
+      pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
+      sorting: true,
+    },
+    // NOTE: when not logged in, show an empty data set
+    data: userId === 'Guest' ? [] : remoteData,
+    sortDirection,
+    onOrderChange,
   })
 }
 // PROPTYPES

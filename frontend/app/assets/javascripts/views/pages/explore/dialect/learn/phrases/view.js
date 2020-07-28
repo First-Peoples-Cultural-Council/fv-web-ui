@@ -48,7 +48,6 @@ import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import FVLabel from 'views/components/FVLabel/index'
-import Tab from '@material-ui/core/Tab'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
@@ -182,7 +181,7 @@ export class DialectViewPhrase extends Component {
         onNavigateRequest={this._onNavigateRequest}
         computeItem={computePhrase}
         permissionEntry={computeDialect2}
-        tabs={this._getTabs(computePhrase)}
+        tabsData={this._getTabs(computePhrase)}
         computeEntities={computeEntities || Immutable.List()}
         {...this.props}
       >
@@ -374,7 +373,6 @@ export class DialectViewPhrase extends Component {
 
   _getTabs = (computePhrase) => {
     const tabs = []
-
     // Photos
     const photosThumbnailsData = selectn('response.contextParameters.phrase.related_pictures', computePhrase) || []
     const photosThumbnails = photosThumbnailsData.map((picture) => {
@@ -388,13 +386,12 @@ export class DialectViewPhrase extends Component {
       )
     })
     if (photosThumbnails.length > 0) {
-      tabs.push(
-        <Tab key="pictures" label={this.props.intl.trans('pictures', 'Pictures', 'first')}>
-          <div style={{ maxHeight: '400px' }}>{photosThumbnails}</div>
-        </Tab>
-      )
+      tabs.push({
+        key: 'pictures',
+        label: this.props.intl.trans('pictures', 'Pictures', 'first'),
+        content: photosThumbnails,
+      })
     }
-
     // Videos
     const videoThumbnailsData = selectn('response.contextParameters.phrase.related_videos', computePhrase) || []
     const videoThumbnails = videoThumbnailsData.map((video) => {
@@ -408,24 +405,15 @@ export class DialectViewPhrase extends Component {
       )
     })
     if (videoThumbnails.length > 0) {
-      tabs.push(
-        <Tab key="videos" label={this.props.intl.trans('videos', 'Videos', 'first')}>
-          <div>{videoThumbnails}</div>
-        </Tab>
-      )
+      tabs.push({ key: 'videos', label: this.props.intl.trans('videos', 'Videos', 'first'), content: videoThumbnails })
     }
-
     // Audio
     const audiosData = selectn('response.contextParameters.phrase.related_audio', computePhrase) || []
-    const audios = audiosData.map((audio) => {
+    const audioPreviews = audiosData.map((audio) => {
       return <Preview key={selectn('uid', audio)} expandedValue={audio} minimal type="FVAudio" />
     })
-    if (audios.length > 0) {
-      tabs.push(
-        <Tab key="audio" label={this.props.intl.trans('audio', 'Audio', 'first')}>
-          <div>{audios}</div>
-        </Tab>
-      )
+    if (audioPreviews.length > 0) {
+      tabs.push({ key: 'videos', label: this.props.intl.trans('audio', 'Audio', 'first'), content: audioPreviews })
     }
 
     return tabs

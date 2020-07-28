@@ -47,13 +47,11 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import Tab from '@material-ui/core/Tab'
 import FVLabel from 'views/components/FVLabel/index'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 import withActions from 'views/hoc/view/with-actions'
-
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
@@ -182,7 +180,7 @@ export class DialectViewWord extends Component {
         onNavigateRequest={this._onNavigateRequest}
         computeItem={computeWord}
         permissionEntry={computeDialect2}
-        tabs={this._getTabs(computeWord)}
+        tabsData={this._getTabs(computeWord)}
         computeEntities={computeEntities || Immutable.List()}
         {...this.props}
       >
@@ -510,13 +508,11 @@ export class DialectViewWord extends Component {
   }
 
   _getTabs = (computeWord) => {
-    const tabsData = selectn('response.contextParameters.word.related_pictures', computeWord) || []
     const tabs = []
-
     // Photos
-    const photosThumbnails = []
-    tabsData.forEach((picture) => {
-      photosThumbnails.push(
+    const photoThumbnailsData = selectn('response.contextParameters.word.related_pictures', computeWord) || []
+    const photosThumbnails = photoThumbnailsData.map((picture) => {
+      return (
         <img
           key={picture.uid}
           src={selectn('views[0].url', picture) || 'assets/images/cover.png'}
@@ -526,13 +522,12 @@ export class DialectViewWord extends Component {
       )
     })
     if (photosThumbnails.length > 0) {
-      tabs.push(
-        <Tab key="pictures" label={this.props.intl.trans('pictures', 'Pictures', 'first')}>
-          <div style={{ maxHeight: '400px' }}>{photosThumbnails}</div>
-        </Tab>
-      )
+      tabs.push({
+        key: 'pictures',
+        label: this.props.intl.trans('pictures', 'Pictures', 'first'),
+        content: photosThumbnails,
+      })
     }
-
     // Videos
     const videoThumbnailsData = selectn('response.contextParameters.word.related_videos', computeWord) || []
     const videoThumbnails = videoThumbnailsData.map((video) => {
@@ -546,71 +541,38 @@ export class DialectViewWord extends Component {
       )
     })
     if (videoThumbnails.length > 0) {
-      tabs.push(
-        <Tab key="videos" label={this.props.intl.trans('videos', 'Videos', 'first')}>
-          <div>{videoThumbnails}</div>
-        </Tab>
-      )
+      tabs.push({ key: 'videos', label: this.props.intl.trans('videos', 'Videos', 'first'), content: videoThumbnails })
     }
-
     // Audio
     const audiosData = selectn('response.contextParameters.word.related_audio', computeWord) || []
-    const audios = audiosData.map((audio) => {
+    const audioPreviews = audiosData.map((audio) => {
       return <Preview key={selectn('uid', audio)} expandedValue={audio} minimal type="FVAudio" />
     })
-    if (audios.length > 0) {
-      tabs.push(
-        <Tab key="audio" label={this.props.intl.trans('audio', 'Audio', 'first')}>
-          <div>{audios}</div>
-        </Tab>
-      )
+    if (audioPreviews.length > 0) {
+      tabs.push({ key: 'videos', label: this.props.intl.trans('audio', 'Audio', 'first'), content: audioPreviews })
     }
-
     // Phrases
     const phrasesData = selectn('response.contextParameters.word.related_phrases', computeWord) || []
     const siteTheme = this.props.routeParams.siteTheme
     const phrases = phrasesData.map((phrase, key) => {
-      const phraseDefinitions = selectn('fv:definitions', phrase)
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
-      const phraseLink = (
-        // <Link key={selectn('uid', phrase)} href={NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')}>
-        //   {selectn('dc:title', phrase)}
-        // </Link>
-        <a
-          key={selectn('uid', phrase)}
-          href={hrefPath}
-          onClick={(e) => {
-            e.preventDefault()
-            NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
-          }}
-        >
-          COPY
-        </a>
-      )
-      if (phraseDefinitions.length === 0) {
-        return <p key={key}>{phraseLink}</p>
-      }
       return (
-        <div key={key}>
-          <p>{phraseLink}</p>{' '}
-          <ul>
-            {phraseDefinitions.map((groupValue, innerKey) => {
-              return (
-                <li key={innerKey}>
-                  {groupValue.translation} ({groupValue.language})
-                </li>
-              )
-            })}
-          </ul>
-        </div>
+        <p key={key}>
+          <a
+            key={selectn('uid', phrase)}
+            href={hrefPath}
+            onClick={(e) => {
+              e.preventDefault()
+              NavigationHelpers.navigate(hrefPath, this.props.pushWindowPath, false)
+            }}
+          >
+            {selectn('dc:title', phrase)}
+          </a>
+        </p>
       )
     })
     if (phrases.length > 0) {
-      tabs.push(
-        <Tab key="phrases" label={this.props.intl.trans('phrases', 'Phrases', 'first')}>
-          <div>{phrases}</div>
-        </Tab>
-      )
+      tabs.push({ key: 'phrases', label: this.props.intl.trans('phrases', 'Phrases', 'first'), content: phrases })
     }
 
     return tabs
