@@ -91,7 +91,6 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
   @Test(expected = FVCharacterInvalidException.class)
   public void ignoredCharacterValidationTest() {
-    //commented out expected as test is not working as expected
 
     int i = 1;
     for (char c = 'a'; c <= 'z'; c++) {
@@ -112,9 +111,39 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
     session.saveDocument(alphabet);
   }
 
+  @Test
+  public void ignoredCharacterTest() {
+    //Test that ignored characters are properly set.
+    //Order recompute is tested in FirstVoicesNativeOrderTest
+
+    int i = 1;
+    for (char c = 'a'; c <= 'z'; c++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(alphabet.getPathAsString(), String.valueOf(c), FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc
+          .setPropertyValue("fvcharacter:upper_case_character", String.valueOf(c).toUpperCase());
+      createDocument(session, letterDoc);
+      i++;
+    }
+
+    List<String> testList = new ArrayList<>();
+    testList.add("+");
+    testList.add("&&");
+    testList.add("-");
+    testList.add("-^");
+
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
+    session.saveDocument(alphabet);
+
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    assertEquals(4, ignoredCharacters.length);
+
+  }
+
   @Test(expected = FVCharacterInvalidException.class)
   public void confusableCharacterValidationTest() {
-    //commented out expected as test is not working as expected
 
     int i = 1;
     for (char c = 'a'; c <= 'z'; c++) {
@@ -138,7 +167,6 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
   @Test(expected = FVCharacterInvalidException.class)
   public void upperConfusableCharacterValidationTest() {
-    //commented out expected as test is not working as expected
 
     int i = 1;
     for (char c = 'a'; c <= 'z'; c++) {
