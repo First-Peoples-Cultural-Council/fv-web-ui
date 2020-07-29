@@ -41,6 +41,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     CleanupCharactersService {
 
   private final String[] types = {FV_PHRASE, FV_WORD};
+  private static final String DOCUMENT_TITLE = "dc:title";
 
   @Override
   public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
@@ -59,7 +60,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       return document;
     }
 
-    String propertyValue = (String) document.getPropertyValue("dc:title");
+    String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
 
     characters = characters.stream().filter(c -> !c.isTrashed())
         .map(c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
@@ -68,7 +69,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
       String updatedPropertyValue = replaceConfusables(confusables, "", propertyValue);
       if (!updatedPropertyValue.equals(propertyValue)) {
-        document.setPropertyValue("dc:title", updatedPropertyValue);
+        document.setPropertyValue(DOCUMENT_TITLE, updatedPropertyValue);
       }
     }
     document.setPropertyValue("fv:update_confusables_required", false);
@@ -81,7 +82,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       throws FVCharacterInvalidException {
     Map<String, String> confusables = new HashMap<>();
     List<String> characterValues = characters.stream().filter(c -> !c.isTrashed())
-        .map(c -> (String) c.getPropertyValue("dc:title")).collect(Collectors.toList());
+        .map(c -> (String) c.getPropertyValue(DOCUMENT_TITLE)).collect(Collectors.toList());
     for (DocumentModel d : characters) {
       String[] lowercaseConfusableList = (String[]) d
           .getPropertyValue("fvcharacter:confusable_characters");
@@ -89,7 +90,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
           .getPropertyValue("fvcharacter:upper_case_confusable_characters");
       if (lowercaseConfusableList != null) {
         for (String confusableCharacter : lowercaseConfusableList) {
-          String characterTitle = (String) d.getPropertyValue("dc:title");
+          String characterTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
           if (confusables.put(confusableCharacter, characterTitle) != null) {
             throw new FVCharacterInvalidException(
                 "Can't have confusable character " + confusableCharacter + " on " + characterTitle
@@ -144,14 +145,15 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
 
   @Override
   public boolean validateCharacters(List<DocumentModel> filteredCharacters,
-      DocumentModel alphabet, DocumentModel updated) throws FVCharacterInvalidException {
+      DocumentModel alphabet, DocumentModel updated) {
     //This method only covers characters, alphabet is covered separately
 
     //confirm that the updated document's
     //lower case char, upper case char, lower confusable list and upper confusable list are unique
     Set<String> updatedDocumentCharacters = new HashSet<>();
 
-    boolean lower = updatedDocumentCharacters.add((String) updated.getPropertyValue("dc:title"));
+    boolean lower = updatedDocumentCharacters
+        .add((String) updated.getPropertyValue(DOCUMENT_TITLE));
     boolean upper = updatedDocumentCharacters
         .add((String) updated.getPropertyValue("fvcharacter:upper_case_character"));
 
@@ -256,7 +258,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     Set<String> collectedCharacters = new HashSet<>();
 
     for (DocumentModel d : characters) {
-      collectedCharacters.add((String) d.getPropertyValue("dc:title"));
+      collectedCharacters.add((String) d.getPropertyValue(DOCUMENT_TITLE));
       collectedCharacters.add((String) d.getPropertyValue("fvcharacter:upper_case_character"));
 
       if (d
