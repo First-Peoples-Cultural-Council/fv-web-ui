@@ -81,6 +81,12 @@ function RequestReviewData({ children, docId, docState, docType }) {
     setSnackbarOpen(false)
   }
 
+  // NB The following actions trigger tasks with the following property values for 'nt:type':
+  // 'Task2300' which correlates to enableTask
+  // 'Task297b' which correlates to disableTask
+  // 'Task6b8' which correlates to publishTask
+  // 'Task11b1' which correlates to unpublishTask
+
   const askToPublishAction = () => {
     createTask(
       docId,
