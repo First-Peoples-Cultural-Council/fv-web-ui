@@ -23,7 +23,7 @@ function RequestChangesData({children, docId, docState}) {
   const {routeParams} = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
-  let [snackbarOpen, setSnackbarOpen] = useState(true)
+  let [snackbarStatus, setSnackbarStatus] = useState(false)
 
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
@@ -101,7 +101,7 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         console.log('onSubmit > form is valid')
         setErrors(undefined)
-        setSnackbarOpen(true)
+        setSnackbarStatus(true)
       },
       invalid: (response) => {
         console.log('onSubmit > form is invalid', {errorsHere: response.errors})
@@ -109,27 +109,23 @@ function RequestChangesData({children, docId, docState}) {
       },
     })
 
-    const handleSnackbarClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return
-      }
-      setSnackbarOpen(false)
+  }
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
     }
-
-    function setSnackbarOpen(visibility) {
-      snackbarOpen = useState(visibility)
-    }
-
+    setSnackbarStatus(false)
   }
 
   return children({
-    formRef,
-    onSubmit,
-    errors,
     computeEntities,
-    handleVisibilityChange,
     docVisibility,
-    snackbarOpen,
+    errors,
+    formRef,
+    handleVisibilityChange,
+    handleSnackbarClose,
+    onSubmit,
+    snackbarStatus,
   })
 }
 

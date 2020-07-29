@@ -26,7 +26,7 @@ function RequestChangesPresentation({
   handleVisibilityChange,
   handleSnackbarClose,
   computeEntities,
-  snackbarOpen
+  snackbarStatus
 }) {
   return (
       <div className="RequestChanges">
@@ -71,10 +71,10 @@ function RequestChangesPresentation({
             </FVButton>
           </div>
           <FVSnackbar
-              open={snackbarOpen}
+              open={snackbarStatus}
               autoHideDuration={3000}
               onClose={handleSnackbarClose}
-              message={'Document Submitted Successfully'}
+              message="Document submitted"
               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
               action={
                 <IconButton size="small" aria-label="close" color="inherit"
@@ -90,18 +90,19 @@ function RequestChangesPresentation({
 }
 
 // PROPTYPES
-const {string, object, bool} = PropTypes
+const {string, object, bool, func} = PropTypes
 RequestChangesPresentation.propTypes = {
   computeEntities: object,
   docId: string,
   docState: string,
-  snackbarOpen: bool,
+  handleSnackbarClose: func,
+  snackbarStatus: bool,
 }
 
 RequestChangesPresentation.defaultProps = {
   docId: '',
   docState: '',
-  snackbarOpen: true,
+  snackbarStatus: false,
 }
 
 export default RequestChangesPresentation
