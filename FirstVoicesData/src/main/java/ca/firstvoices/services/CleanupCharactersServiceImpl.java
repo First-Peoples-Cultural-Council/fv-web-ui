@@ -153,9 +153,9 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     //lower case char, upper case char, lower confusable list and upper confusable list are unique
     Set<String> updatedDocumentCharacters = new HashSet<>();
 
-    boolean lower = updatedDocumentCharacters
+    updatedDocumentCharacters
         .add((String) updated.getPropertyValue(DOCUMENT_TITLE));
-    boolean upper = updatedDocumentCharacters
+    updatedDocumentCharacters
         .add((String) updated.getPropertyValue("fvcharacter:upper_case_character"));
 
     //must loop through each confusable individually
