@@ -25,9 +25,12 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -73,6 +76,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   }
 
   @Override
+  //Keeping method as it is used elsewhere in cleanConfusables
   public Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters)
       throws FVCharacterInvalidException {
     Map<String, String> confusables = new HashMap<>();
@@ -139,57 +143,136 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   }
 
   @Override
-  public boolean validateIgnoredCharacters(List<DocumentModel> characters,
-      DocumentModel alphabet) throws FVCharacterInvalidException {
+  public boolean validateCharacters(List<DocumentModel> filteredCharacters,
+      DocumentModel alphabet, DocumentModel updated) throws FVCharacterInvalidException {
+    //This method only covers characters, alphabet is covered separately
 
-    //TODO: This validation is not functional, will ask for assistance
+    //confirm that the updated document's
+    //lower case char, upper case char, lower confusable list and upper confusable list are unique
+    Set<String> updatedDocumentCharacters = new HashSet<>();
 
-    if (alphabet.getPropertyValue("fv-alphabet:ignored_characters") == null) {
-      //nothing to be done
-      return true;
-    }
+    boolean lower = updatedDocumentCharacters.add((String) updated.getPropertyValue("dc:title"));
+    boolean upper = updatedDocumentCharacters
+        .add((String) updated.getPropertyValue("fvcharacter:upper_case_character"));
 
-    String[] ignoredCharacters = (String[]) alphabet
-        .getPropertyValue("fv-alphabet:ignored_characters");
-
-    for (DocumentModel d : characters) {
-      String lowerChar = (String) d.getPropertyValue("dc:title");
-      String upperChar = (String) d.getPropertyValue("fvcharacter:upper_case_character");
-      List<String> lowercaseConfusableList = Arrays.asList((String[]) d
-          .getPropertyValue("fvcharacter:confusable_characters"));
-      List<String> uppercaseConfusableList = Arrays.asList((String[]) d
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters"));
-
-      for (String ignoredCharacter : ignoredCharacters) {
-
-        if (ignoredCharacter.equals(lowerChar)) {
-          throw new FVCharacterInvalidException(
-              "Can't have ignored character " + ignoredCharacter
-                  + " as it is already a lower case character in the dialect's alphabet.", 400);
-        }
-
-        if (ignoredCharacter.equals(upperChar)) {
-          throw new FVCharacterInvalidException(
-              "Can't have ignored character " + ignoredCharacter
-                  + " as it is already an upper case character in the dialect's alphabet.", 400);
-        }
-
-        if (lowercaseConfusableList.contains(ignoredCharacter)) {
-          throw new FVCharacterInvalidException(
-              "Can't have ignored character " + ignoredCharacter
-                  + " as it is already a lower case confusable "
-                  + "character to another alphabet character", 400);
-        }
-
-        if (uppercaseConfusableList.contains(ignoredCharacter)) {
-          throw new FVCharacterInvalidException(
-              "Can't have ignored character " + ignoredCharacter
-                  + " as it is already an upper case confusable "
-                  + "character to another alphabet character", 400);
+    //must loop through each confusable individually
+    //as addAll would return true if the confusable string list had duplicates AND new values
+    boolean lowerConfusable = false;
+    String[] lowerConfusableStrArr = (String[]) updated
+        .getPropertyValue("fvcharacter:confusable_characters");
+    if (lowerConfusableStrArr != null) {
+      for (String str : lowerConfusableStrArr) {
+        boolean unique = updatedDocumentCharacters.add(str);
+        if (!unique) {
+          lowerConfusable = false;
+          break;
+        } else {
+          lowerConfusable = true;
         }
       }
+    } else {
+      lowerConfusable = true;
+    }
+
+    boolean upperConfusable = false;
+    String[] upperConfusableStrArr = (String[]) updated
+        .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+    if (upperConfusableStrArr != null) {
+      for (String str : upperConfusableStrArr) {
+        boolean unique = updatedDocumentCharacters.add(str);
+        if (!unique) {
+          upperConfusable = false;
+          break;
+        } else {
+          upperConfusable = true;
+        }
+      }
+    } else {
+      upperConfusable = true;
+    }
+
+    if (!(lower && upper && lowerConfusable && upperConfusable)) {
+      throw new FVCharacterInvalidException(
+          "A character is duplicated somewhere in this document's uppercase, "
+              + "lowercase or confusable characters ",
+          400);
+    }
+
+    //Updated character is validated internally, check all other characters
+    Set<String> collectedCharacters = createCharacterHashMap(filteredCharacters);
+
+    if (alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters") != null) {
+      collectedCharacters.addAll(Arrays.asList((String[]) alphabet
+          .getPropertyValue("fv-alphabet:ignored_characters")));
+    }
+
+    //Confirm that updated character set is unique from all other characters
+    boolean setsUnique = Collections.disjoint(updatedDocumentCharacters, collectedCharacters);
+    if (!setsUnique) {
+      throw new FVCharacterInvalidException(
+          "The updated character includes a duplicate character "
+              + "found in another character document",
+          400);
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
+      DocumentModel alphabet) {
+    //This method only covers alphabets, characters are covered separately
+
+    Set<String> collectedCharacters = createCharacterHashMap(characters);
+
+    boolean ignoredCharsUnique = false;
+    String[] ignoredCharsArr = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    if (ignoredCharsArr != null) {
+      for (String str : ignoredCharsArr) {
+        boolean unique = collectedCharacters.add(str);
+        if (!unique) {
+          ignoredCharsUnique = false;
+          break;
+        } else {
+          ignoredCharsUnique = true;
+        }
+      }
+    } else {
+      ignoredCharsUnique = true;
+    }
+
+    if (!ignoredCharsUnique) {
+      throw new FVCharacterInvalidException(
+          "The ignored characters list includes a duplicate character "
+              + "found in another character document",
+          400);
     }
     return true;
+  }
+
+  private Set<String> createCharacterHashMap(List<DocumentModel> characters) {
+    Set<String> collectedCharacters = new HashSet<>();
+
+    for (DocumentModel d : characters) {
+      collectedCharacters.add((String) d.getPropertyValue("dc:title"));
+      collectedCharacters.add((String) d.getPropertyValue("fvcharacter:upper_case_character"));
+
+      if (d
+          .getPropertyValue("fvcharacter:confusable_characters") != null) {
+        collectedCharacters.addAll(Arrays.asList((String[]) d
+            .getPropertyValue("fvcharacter:confusable_characters")));
+      }
+      if (d
+          .getPropertyValue("fvcharacter:upper_case_confusable_characters") != null) {
+        collectedCharacters.addAll(Arrays.asList((String[]) d
+            .getPropertyValue("fvcharacter:upper_case_confusable_characters")));
+      }
+
+    }
+
+    return collectedCharacters;
   }
 
 

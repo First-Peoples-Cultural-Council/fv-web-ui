@@ -26,6 +26,7 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,7 +77,19 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
   }
 
-  @Test//(expected = FVCharacterInvalidException.class)
+  @Test(expected = FVCharacterInvalidException.class)
+  public void internalCharacterValidationTest() {
+    DocumentModel letterDoc = session
+        .createDocumentModel(alphabet.getPathAsString(), "a", FV_CHARACTER);
+    letterDoc.setPropertyValue("fvcharacter:alphabet_order", 1);
+    letterDoc
+        .setPropertyValue("fvcharacter:upper_case_character", "a".toUpperCase());
+    letterDoc
+        .setPropertyValue("fvcharacter:confusable_characters", new String[]{"a", "b"});
+    createDocument(session, letterDoc);
+  }
+
+  @Test(expected = FVCharacterInvalidException.class)
   public void ignoredCharacterValidationTest() {
     //commented out expected as test is not working as expected
 
@@ -97,5 +110,53 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
 
     alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
     session.saveDocument(alphabet);
+  }
+
+  @Test(expected = FVCharacterInvalidException.class)
+  public void confusableCharacterValidationTest() {
+    //commented out expected as test is not working as expected
+
+    int i = 1;
+    for (char c = 'a'; c <= 'z'; c++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(alphabet.getPathAsString(), String.valueOf(c), FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc
+          .setPropertyValue("fvcharacter:upper_case_character", String.valueOf(c).toUpperCase());
+      createDocument(session, letterDoc);
+      i++;
+    }
+
+    List<String> testList = new ArrayList<>();
+    testList.add("a");
+    testList.add("b");
+
+    DocumentModel d = session.getChildren(alphabet.getRef()).get(0);
+    d.setPropertyValue("fvcharacter:confusable_characters", (Serializable) testList);
+    session.saveDocument(d);
+  }
+
+  @Test(expected = FVCharacterInvalidException.class)
+  public void upperConfusableCharacterValidationTest() {
+    //commented out expected as test is not working as expected
+
+    int i = 1;
+    for (char c = 'a'; c <= 'z'; c++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(alphabet.getPathAsString(), String.valueOf(c), FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc
+          .setPropertyValue("fvcharacter:upper_case_character", String.valueOf(c).toUpperCase());
+      createDocument(session, letterDoc);
+      i++;
+    }
+
+    List<String> testList = new ArrayList<>();
+    testList.add("a");
+    testList.add("b");
+
+    DocumentModel d = session.getChildren(alphabet.getRef()).get(0);
+    d.setPropertyValue("fvcharacter:upper_case_confusable_characters", (Serializable) testList);
+    session.saveDocument(d);
   }
 }

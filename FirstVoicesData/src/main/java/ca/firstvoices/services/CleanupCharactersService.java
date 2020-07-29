@@ -31,6 +31,9 @@ public interface CleanupCharactersService {
 
   Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters);
 
-  boolean validateIgnoredCharacters(List<DocumentModel> characters,
+  boolean validateCharacters(List<DocumentModel> characters,
+      DocumentModel alphabet, DocumentModel updated);
+
+  boolean validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet);
 }
