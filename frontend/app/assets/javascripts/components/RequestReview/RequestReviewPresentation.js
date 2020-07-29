@@ -71,6 +71,7 @@ function RequestReviewPresentation({
             docVisibility={requestVisibilityType}
             handleVisibilityChange={handleVisibilityChange}
             computeEntities={computeEntities}
+            hideLabel
           />
         </DialogContent>
         <DialogActions>

@@ -15,24 +15,30 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities }) {
+function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities, hideLabel }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectPresentation docVisibility={docVisibility} handleVisibilityChange={handleVisibilityChange} />
+      <VisibilitySelectPresentation
+        docVisibility={docVisibility}
+        handleVisibilityChange={handleVisibilityChange}
+        hideLabel={hideLabel}
+      />
     </PromiseWrapper>
   )
 }
 // PROPTYPES
-const { string, object, func } = PropTypes
+const { string, object, func, bool } = PropTypes
 VisibilitySelectContainer.propTypes = {
-  docVisibility: string,
-  handleVisibilityChange: func,
-  computeEntities: object,
+  docVisibility: string.isRequired,
+  handleVisibilityChange: func.isRequired,
+  hideLabel: bool,
+  computeEntities: object.isRequired,
 }
 
 VisibilitySelectContainer.defaultProps = {
   docVisibility: '',
   handleVisibilityChange: () => {},
+  hideLabel: false,
 }
 
 export default VisibilitySelectContainer
