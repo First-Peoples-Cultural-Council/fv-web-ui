@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
@@ -25,56 +26,32 @@ import { RequestReviewStyles } from './RequestReviewStyles'
  * @returns {node} jsx markup
  */
 function RequestReviewPresentation({
-  computeEntities,
   dialectName,
-  //   dialogContent,
   docTypeName,
-  docVisibility,
+  handleRequestReview,
+  hasRelatedTasks,
+  /* Props for Dialog */
+  isDialogOpen,
   handleDialogCancel,
   handleDialogOk,
-  handleRequestReview,
-  handleVisibilityChange,
-  isDialogOpen,
-  snackbarOpen,
+  requestVisibilityType,
+  /* Props for Snackbar */
   handleSnackbarClose,
-  //   writePrivileges,
+  snackbarOpen,
+  /* Props for VisibilitySelect */
+  handleVisibilityChange,
+  computeEntities,
 }) {
   const classes = RequestReviewStyles()
-  function generateVisibilityLabel(visibility) {
-    switch (visibility) {
-      case 'team':
-        return (
-          <>
-            <span>
-              This {docTypeName} can currently be seen by {dialectName}&nbsp;
-            </span>
-            <FVLabel transKey="team_only" defaultStr="Team Only" transform="first" />
-          </>
-        )
-      case 'members':
-        return (
-          <>
-            <span>
-              This {docTypeName} can currently be seen by {dialectName}&nbsp;
-            </span>
-            <FVLabel transKey="members" defaultStr="Members" transform="first" />
-          </>
-        )
-      case 'public':
-        return (
-          <>
-            <span>This {docTypeName} can currently be seen by the&nbsp;</span>
-            <FVLabel transKey="public" defaultStr="Public" transform="first" />
-          </>
-        )
-      default:
-        return null
-    }
-  }
-
   return (
     <>
-      <FVButton className={classes.button} onClick={handleRequestReview} variant="contained" color="primary">
+      <FVButton
+        className={classes.button}
+        onClick={handleRequestReview}
+        variant="contained"
+        color="primary"
+        disabled={hasRelatedTasks}
+      >
         <FVLabel transKey="request_review" defaultStr="Request review" transform="first" />
       </FVButton>
 
@@ -86,17 +63,15 @@ function RequestReviewPresentation({
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
+          <DialogTitle>Is the {docTypeName} ready to be reviewed by the Language Administrator?</DialogTitle>
           <DialogContentText id="alert-dialog-description" className={classes.dialogDescription}>
-            Is the {docTypeName} ready to be reviewed by the Language Administrator?
+            If you would also like to request a change to the visibility of this {docTypeName}, select below.
           </DialogContentText>
           <VisibilitySelect.Container
-            docVisibility={docVisibility}
+            docVisibility={requestVisibilityType}
             handleVisibilityChange={handleVisibilityChange}
             computeEntities={computeEntities}
           />
-          <div className={classes.dialogContent}>
-            <strong>{generateVisibilityLabel(docVisibility)}</strong>
-          </div>
         </DialogContent>
         <DialogActions>
           <FVButton onClick={handleDialogCancel} variant="text" color="secondary">
@@ -134,31 +109,31 @@ const { string, object, func, bool } = PropTypes
 RequestReviewPresentation.propTypes = {
   computeEntities: object,
   dialectName: string,
-  dialogContent: string,
   docTypeName: string,
-  docVisibility: string,
   handleDialogCancel: func,
   handleDialogOk: func,
   handleRequestReview: func,
   handleVisibilityChange: func,
+  hasRelatedTasks: bool,
   isDialogOpen: bool,
   snackbarOpen: bool,
   handleSnackbarClose: func,
+  requestVisibilityType: string,
   writePrivileges: bool,
 }
 
 RequestReviewPresentation.defaultProps = {
   dialectName: '',
-  dialogContent: '',
   docTypeName: '',
-  docVisibility: '',
   handleDialogCancel: () => {},
   handleDialogOk: () => {},
   handleRequestReview: () => {},
   handleVisibilityChange: () => {},
+  hasRelatedTasks: false,
   isDialogOpen: false,
   snackbarOpen: false,
   handleSnackbarClose: () => {},
+  requestVisibilityType: '',
   writePrivileges: false,
 }
 

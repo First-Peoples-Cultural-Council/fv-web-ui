@@ -21,35 +21,36 @@ function RequestReviewContainer({ docId, docState, docType, computeEntities }) {
   return (
     <RequestReviewData docId={docId} docState={docState} docType={docType}>
       {({
-        workspaces,
         dialectName,
-        dialogContent,
         docTypeName,
-        docVisibility,
         handleDialogCancel,
         handleDialogOk,
         handleRequestReview,
         handleSnackbarClose,
         handleVisibilityChange,
+        hasRelatedTasks,
+        hideButton,
         snackbarOpen,
         isDialogOpen,
+        requestVisibilityType,
         writePrivileges,
+        workspaces,
       }) => {
-        return workspaces ? (
+        return workspaces && !hideButton ? (
           <div>
             <RequestReviewPresentation
               computeEntities={computeEntities}
               dialectName={dialectName}
-              dialogContent={dialogContent}
               docTypeName={docTypeName}
-              docVisibility={docVisibility}
               handleDialogCancel={handleDialogCancel}
               handleDialogOk={handleDialogOk}
               handleRequestReview={handleRequestReview}
               handleSnackbarClose={handleSnackbarClose}
               handleVisibilityChange={handleVisibilityChange}
-              snackbarOpen={snackbarOpen}
+              hasRelatedTasks={hasRelatedTasks}
               isDialogOpen={isDialogOpen}
+              requestVisibilityType={requestVisibilityType}
+              snackbarOpen={snackbarOpen}
               writePrivileges={writePrivileges}
             />
           </div>

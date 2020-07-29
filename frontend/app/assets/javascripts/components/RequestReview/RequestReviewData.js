@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import selectn from 'selectn'
 //FPCC
-// import useIntl from 'DataSource/useIntl'
+import useIntl from 'DataSource/useIntl'
 import useLogin from 'DataSource/useLogin'
 import useRoute from 'DataSource/useRoute'
-import useVisibility from 'DataSource/useVisibility'
+import useTasks from 'DataSource/useTasks'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 
@@ -20,21 +21,22 @@ import { WORKSPACES } from 'common/Constants'
  *
  */
 function RequestReviewData({ children, docId, docState, docType }) {
-  //   const { intl } = useIntl()
+  const { intl } = useIntl()
   const { computeLogin } = useLogin()
   const { routeParams } = useRoute()
-  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
+  const { createTask, computeTasks, fetchTasks } = useTasks()
 
   const workspaces = routeParams.area === WORKSPACES
   const dialectName = routeParams.dialect_name
 
-  // Check to see if user is an Admin or Recorder with approval
-  const writePrivileges = ProviderHelpers.isRecorderWithApproval(computeLogin) || ProviderHelpers.isAdmin(computeLogin)
+  // Check if user is an Admin and if so, hide "Request review" button
+  const hideButton = ProviderHelpers.isAdmin(computeLogin)
 
   // Set local state for visibility
   const [docVisibility, setDocVisibility] = useState('')
-  const [dialogContent] = useState('')
+  const [requestVisibilityType, setRequestVisibilityType] = useState('')
   const [docTypeName, setDocTypeName] = useState('')
+  const [hasRelatedTasks, setHasRelatedTasks] = useState(false)
 
   // Set up Dialog and Snackbar state
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -42,7 +44,13 @@ function RequestReviewData({ children, docId, docState, docType }) {
 
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
+    setRequestVisibilityType(convertStateToVisibility(docState))
     setDocTypeName(convertToFriendlyType(docType))
+    fetchTasks(docId)
+    const relatedTasks = ProviderHelpers.getEntry(computeTasks, docId)
+    if (selectn('response.entries', relatedTasks)) {
+      setHasRelatedTasks(true)
+    }
   }, [])
 
   const handleRequestReview = () => {
@@ -51,19 +59,18 @@ function RequestReviewData({ children, docId, docState, docType }) {
 
   // triggered by OnChange from VisibilitySelect
   const handleVisibilityChange = (event) => {
-    const newVisibility = event.target.value
-    // Set visibility in local state
-    setDocVisibility(newVisibility)
+    // Set requested visibility in local state
+    setRequestVisibilityType(event.target.value)
   }
 
   const handleDialogCancel = () => {
     setIsDialogOpen(false)
-    setDocVisibility(convertStateToVisibility(docState))
+    setRequestVisibilityType(convertStateToVisibility(docState))
   }
 
   const handleDialogOk = () => {
     setIsDialogOpen(false)
-    sendRequest(docVisibility)
+    sendReviewRequest()
     setSnackbarOpen(true)
   }
 
@@ -74,89 +81,90 @@ function RequestReviewData({ children, docId, docState, docType }) {
     setSnackbarOpen(false)
   }
 
-  //   const askToPublishToggleAction = () => {
-  //     this.props.askToPublishAction(
-  //       docId,
-  //       {
-  //         id: 'FVPublishLanguageAsset',
-  //         start: 'true',
-  //       },
-  //       null,
-  //       intl.trans(
-  //         'views.hoc.view.request_to_publish_x_successfully_submitted',
-  //         'Request to publish ' + docTypeName + ' successfully submitted!',
-  //         'first',
-  //         [docTypeName]
-  //       ),
-  //       null
-  //     )
-  //   }
+  const askToPublishAction = () => {
+    createTask(
+      docId,
+      {
+        id: 'FVPublishLanguageAsset',
+        start: 'true',
+      },
+      null,
+      intl.trans(
+        'views.hoc.view.request_to_publish_x_successfully_submitted',
+        'Request to publish ' + docTypeName + ' successfully submitted!',
+        'first',
+        [docTypeName]
+      ),
+      null
+    )
+  }
 
-  //   const askToUnpublishToggleAction = () => {
-  //     this.props.askToUnpublishAction(
-  //       docId,
-  //       {
-  //         id: 'FVUnpublishLanguageAsset',
-  //         start: 'true',
-  //       },
-  //       null,
-  //       intl.trans(
-  //         'views.hoc.view.request_to_unpublish_x_successfully_submitted',
-  //         'Request to unpublish ' + docTypeName + ' successfully submitted!',
-  //         'first',
-  //         [docTypeName]
-  //       ),
-  //       null
-  //     )
-  //   }
+  const askToUnpublishAction = () => {
+    createTask(
+      docId,
+      { id: 'FVUnpublishLanguageAsset', start: 'true' },
+      null,
+      intl.trans(
+        'views.hoc.view.request_to_unpublish_x_successfully_submitted',
+        'Request to unpublish ' + docTypeName + ' successfully submitted!',
+        'first',
+        [docTypeName]
+      ),
+      null
+    )
+  }
 
-  //   const askToEnableAction = () => {
-  //     this.props.askToEnableAction(
-  //       docId,
-  //       {
-  //         id: 'FVEnableLanguageAsset',
-  //         start: 'true',
-  //       },
-  //       null,
-  //       intl.trans(
-  //         'views.hoc.view.request_to_enable_x_successfully_submitted',
-  //         'Request to enable ' + docTypeName + ' successfully submitted!',
-  //         'first',
-  //         [docTypeName]
-  //       ),
-  //       null
-  //     )
-  //   }
+  const askToEnableAction = () => {
+    createTask(
+      docId,
+      { id: 'FVEnableLanguageAsset', start: 'true' },
+      null,
+      intl.trans(
+        'views.hoc.view.request_to_enable_x_successfully_submitted',
+        'Request to enable ' + docTypeName + ' successfully submitted!',
+        'first',
+        [docTypeName]
+      ),
+      null
+    )
+  }
 
-  //   const askToDisableAction = () => {
-  //     this.props.askToDisableAction(
-  //       docId,
-  //       {
-  //         id: 'FVDisableLanguageAsset',
-  //         start: 'true',
-  //       },
-  //       null,
-  //       intl.trans(
-  //         'views.hoc.view.request_to_disable_x_successfully_submitted',
-  //         'Request to disable ' + docTypeName + ' successfully submitted!',
-  //         'first',
-  //         [docTypeName]
-  //       ),
-  //       null
-  //     )
-  //   }
+  const askToDisableAction = () => {
+    createTask(
+      docId,
+      { id: 'FVDisableLanguageAsset', start: 'true' },
+      null,
+      intl.trans(
+        'views.hoc.view.request_to_disable_x_successfully_submitted',
+        'Request to disable ' + docTypeName + ' successfully submitted!',
+        'first',
+        [docTypeName]
+      ),
+      null
+    )
+  }
 
-  const sendRequest = (type) => {
-    // Send request to the server to set visibility on the document
-    switch (type) {
-      case 'FVWord':
-        return updateVisibilityToTeam(docId)
-      case 'FVPhrase':
-        return updateVisibilityToMembers(docId)
-      case 'FVBook':
-        return updateVisibilityToPublic(docId)
-      case 'FVCharacter':
-        return updateVisibilityToPublic(docId)
+  const sendReviewRequest = () => {
+    // Send request to the server to set related task for the document
+    switch (true) {
+      case docVisibility === 'team' && requestVisibilityType === 'team':
+        return askToDisableAction()
+      case docVisibility === 'team' && requestVisibilityType === 'members':
+        return askToEnableAction()
+      case docVisibility === 'team' && requestVisibilityType === 'public':
+        return askToEnableAction()
+      case docVisibility === 'members' && requestVisibilityType === 'team':
+        return askToDisableAction()
+      case docVisibility === 'members' && requestVisibilityType === 'members':
+        return askToEnableAction()
+      case docVisibility === 'members' && requestVisibilityType === 'public':
+        return askToPublishAction()
+      case docVisibility === 'public' && requestVisibilityType === 'team':
+        return askToUnpublishAction()
+      case docVisibility === 'public' && requestVisibilityType === 'members':
+        return askToUnpublishAction()
+      case docVisibility === 'public' && requestVisibilityType === 'public':
+        return askToPublishAction()
       default:
         return null
     }
@@ -197,13 +205,14 @@ function RequestReviewData({ children, docId, docState, docType }) {
     docVisibility,
     docTypeName,
     handleRequestReview,
+    hasRelatedTasks,
+    hideButton,
     workspaces,
-    writePrivileges,
     // Dialog
-    dialogContent,
     isDialogOpen,
     handleDialogCancel,
     handleDialogOk,
+    requestVisibilityType,
     // Snackbar
     handleSnackbarClose,
     snackbarOpen,
