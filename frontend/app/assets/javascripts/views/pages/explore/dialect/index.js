@@ -247,7 +247,7 @@ export class ExploreDialect extends Component {
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             showPublish={false}
-            actions={['edit', 'publish', 'more-options']}
+            actions={['dialect', 'edit', 'publish', 'more-options']}
             publishChangesAction={this._publishChangesAction}
             {...this.props}
           />
@@ -318,8 +318,7 @@ export class ExploreDialect extends Component {
     }
     return (
       <PromiseWrapper computeEntities={computeEntities}>
-        {toolbar}
-
+        <div className="row">{toolbar}</div>
         <Header
           portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}

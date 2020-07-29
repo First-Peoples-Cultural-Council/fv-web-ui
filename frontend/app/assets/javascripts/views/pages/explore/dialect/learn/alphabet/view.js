@@ -216,8 +216,7 @@ export class AlphabetView extends Component {
      */
     return (
       <PromiseWrapper computeEntities={computeEntities}>
-        {pageToolbar}
-
+        <div className="row">{pageToolbar}</div>
         <div className="row">
           <div className="col-xs-12">
             <div>
