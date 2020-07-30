@@ -75,10 +75,6 @@ function RequestChangesData({children, docId, docState}) {
   ])
 
   const validator = yup.object().shape({
-    commentField: yup
-    .string()
-    .label('Comment label')
-    .required('Please add a comment for these changes'),
     visibilitySelect: yup
     .string()
     .label('Document visibility')

@@ -31,11 +31,6 @@ function RequestChangesPresentation({
   return (
       <div className="RequestChanges">
         <form name="requestChanges" onSubmit={onSubmit} ref={formRef}>
-          <Textarea
-              labelText="Comments (requested changes)"
-              id="commentField"
-              name="commentField"
-              error={getError({errors, fieldName: 'commentField'})}/>
           <div className="visibilitySelector">
             <VisibilitySelect.Container
                 selectNameAndId='visibilitySelect'
