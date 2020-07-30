@@ -24,6 +24,7 @@ function RequestChangesData({children, docId, docState}) {
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
   let [snackbarStatus, setSnackbarStatus] = useState(false)
+  const [approveSubmit, setApproveSubmit] = useState(null)
 
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
@@ -81,6 +82,7 @@ function RequestChangesData({children, docId, docState}) {
     .required('Please specify the audience for this document'),
   })
 
+
   const onSubmit = (event) => {
     console.log('hello from submit')
     event.preventDefault()
@@ -106,6 +108,14 @@ function RequestChangesData({children, docId, docState}) {
     })
 
   }
+  const handleApprove = () => {
+    setApproveSubmit('approve')
+  }
+
+  const handleRequestChanges = () => {
+    setApproveSubmit('requestChanges')
+  }
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
@@ -118,6 +128,8 @@ function RequestChangesData({children, docId, docState}) {
     docVisibility,
     errors,
     formRef,
+    handleApprove,
+    handleRequestChanges,
     handleVisibilityChange,
     handleSnackbarClose,
     onSubmit,

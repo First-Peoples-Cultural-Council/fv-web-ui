@@ -23,10 +23,12 @@ function RequestChangesPresentation({
   onSubmit,
   errors,
   docVisibility,
+  handleApprove,
+  handleRequestChanges,
   handleVisibilityChange,
   handleSnackbarClose,
   computeEntities,
-  snackbarStatus
+  snackbarStatus,
 }) {
   return (
       <div className="RequestChanges">
@@ -47,9 +49,7 @@ function RequestChangesPresentation({
                 type="submit"
                 color="secondary"
                 className="FVButton"
-                onClick={() => {
-                  console.log('hi from onclick')
-                }}
+                onClick={handleApprove}
             >
               Approve
             </FVButton>
@@ -58,9 +58,8 @@ function RequestChangesPresentation({
                 type="submit"
                 color="secondary"
                 className="FVButton"
-                onClick={() => {
-                  console.log('hi from onclick')
-                }}
+                onClick={handleRequestChanges}
+
             >
               Request Changes
             </FVButton>
@@ -87,11 +86,15 @@ function RequestChangesPresentation({
 // PROPTYPES
 const {string, object, bool, func} = PropTypes
 RequestChangesPresentation.propTypes = {
+  approveSubmit: string,
   computeEntities: object,
   docId: string,
   docState: string,
+  handleApprove: func,
+  handleRequestChanges: func,
   handleSnackbarClose: func,
   snackbarStatus: bool,
+
 }
 
 RequestChangesPresentation.defaultProps = {
