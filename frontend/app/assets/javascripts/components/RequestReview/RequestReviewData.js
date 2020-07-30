@@ -18,7 +18,7 @@ import { WORKSPACES } from 'common/Constants'
  * @param {function} props.children
  * @param {string} docId UID of the document that is being viewed
  * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'.
- *
+ * @param {string} docType The type of document: 'FVWord', 'FVPhrase', 'FVBook', or 'FVCharacter'.
  */
 function RequestReviewData({ children, docId, docState, docType }) {
   const { intl } = useIntl()
