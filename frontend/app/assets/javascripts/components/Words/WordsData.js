@@ -18,13 +18,11 @@ import Immutable from 'immutable'
 import useDialect from 'DataSource/useDialect'
 import useDocument from 'DataSource/useDocument'
 import useIntl from 'DataSource/useIntl'
-import useLogin from 'DataSource/useLogin'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import useSearchDialect from 'DataSource/useSearchDialect'
 import useWindowPath from 'DataSource/useWindowPath'
 
-import NavigationHelpers, { hasPagination } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import {
   SEARCH_BY_ALPHABET,
@@ -36,10 +34,9 @@ function WordsData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { computeDocument, fetchDocument } = useDocument()
   const { intl } = useIntl()
-  const { computeLogin } = useLogin()
   const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
-  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { splitWindowPath } = useWindowPath()
   const { searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
@@ -99,26 +96,14 @@ function WordsData(props) {
     })
   }
 
-  const onNavigateRequest = (path) => {
-    if (hasPagination) {
-      NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
-    } else {
-      NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
-    }
-  }
-
   return props.children({
-    computeDocument,
     computeEntities,
-    computeLogin,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     flashcardMode: false,
     handleCategoryClick,
     handleAlphabetClick,
     intl,
-    onNavigateRequest,
-    pushWindowPath,
     routeParams,
     splitWindowPath,
   })

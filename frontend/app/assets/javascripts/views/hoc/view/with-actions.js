@@ -37,7 +37,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
       return (
         <div className="ViewWithActions row">
-          <div className="col-xs-12">
+          <div>
             {(() => {
               if (selectn('response', this.props.computeItem)) {
                 return (

@@ -51,9 +51,9 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
     if (!asset.isImmutable()) {
       DocumentModel dialect = getDialect(asset);
-      DocumentModel[] chars = loadCharacters(session, dialect);
       DocumentModel alphabet = session
           .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+      DocumentModel[] chars = loadCharacters(session, alphabet);
       computeCustomOrder(session, asset, alphabet, chars);
     }
   }
@@ -62,11 +62,12 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   // Called when a we are updating all words and phrases on a dialect
   public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
       DocumentModel alphabet) {
-    DocumentModel[] chars = loadCharacters(session, dialect);
+    DocumentModel[] chars = loadCharacters(session, alphabet);
     DocumentModelList wordsAndPhrases = session.query(
         "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
     wordsAndPhrases.forEach(doc -> computeCustomOrder(session, doc, alphabet, chars));
+    session.save();
   }
 
   private void computeCustomOrder(CoreSession session, DocumentModel element,
@@ -198,9 +199,8 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
     return false;
   }
 
-  private DocumentModel[] loadCharacters(CoreSession session, DocumentModel dialect) {
-    DocumentModelList chars = session
-        .getChildren(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+  private DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet) {
+    DocumentModelList chars = session.getChildren(alphabet.getRef());
     updateCustomOrderCharacters(session, chars);
     return chars.stream().filter(character -> !character.isTrashed()
         && character.getPropertyValue("fvcharacter:alphabet_order") != null)

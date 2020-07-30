@@ -49,8 +49,6 @@ public class CleanConfusablesForWordsAndPhrasesWorker extends AbstractWork {
             session -> {
               DocumentModel documentModel = session.getDocument(document);
               service.cleanConfusables(session, documentModel);
-              documentModel.setPropertyValue("fv:update_confusables_required", false);
-              session.saveDocument(documentModel);
             });
   }
 

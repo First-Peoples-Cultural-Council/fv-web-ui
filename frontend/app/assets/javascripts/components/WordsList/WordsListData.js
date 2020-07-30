@@ -166,6 +166,38 @@ function WordsListData({ children }) {
     fetchWords(dictionaryKey, nql)
   }
 
+  const onNavigateRequest = (path) => {
+    if (hasPagination) {
+      NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
+    } else {
+      NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
+    }
+  }
+
+  const handleCreateClick = () => {
+    const url = appendPathArrayAfterLandmark({
+      pathArray: ['create'],
+      splitWindowPath: splitWindowPath,
+    })
+    if (url) {
+      NavigationHelpers.navigate(`/${url}`, pushWindowPath, false)
+    } else {
+      onNavigateRequest({
+        hasPagination,
+        path: 'create',
+        pushWindowPath,
+        splitWindowPath,
+      })
+    }
+  }
+
+  // Filter for AuthorizationFilter
+  const filter = {
+    entity: dictionary,
+    login: computeLogin,
+    role: ['Record', 'Approve', 'Everything'],
+  }
+
   function getColumns() {
     const columnsArray = [
       {
@@ -414,6 +446,8 @@ function WordsListData({ children }) {
       currentPageIndex: routeParams.page,
       pageSize: routeParams.pageSize,
     },
+    filter,
+    handleCreateClick,
     handleSearch,
     isKidsTheme: routeParams.siteTheme === 'kids',
     items,

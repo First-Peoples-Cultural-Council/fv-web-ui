@@ -35,42 +35,50 @@ body {
 @medium-screen: 991px;
 @font-family: Arial, sans-serif;
 @font-family-aboriginal-sans: "Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium,
-  Code2001;
+  Code2001, Arial, sans-serif;
 
 // FONTS
+// ===================================================
+.fontAboriginalSans {
+  font-family: @font-family-aboriginal-sans !important;
+}
 
 // OskiDakelh
-
+// ---------------------------------------------------
 @font-face {
   font-family: "OskiDakelhWeb";
   src: url("assets/fonts/oskidakelh/oskidakelh1.ttf");
 }
-
 @font-face {
   font-family: "OskiDakelhWeb";
   src: url("assets/fonts/oskidakelh/oskidakelhbold1.ttf");
   font-weight: bold;
 }
-
 .OskiDakelh {
   font-family: "OskiDakelh", @font-family-aboriginal-sans;
 }
 .OskiDakelhWeb {
   font-family: "OskiDakelh", "OskiDakelhWeb", @font-family-aboriginal-sans;
 }
-
 // Noto Sans Canadian Aboriginal
-
+// ---------------------------------------------------
 @font-face {
   font-family: "NotoSansCanadianAboriginal";
   src: url("assets/fonts/noto/NotoSansCanadianAboriginal-Regular.ttf");
 }
-
 .NotoSansCanadianAboriginal {
-  font-family: "NotoSansCanadianAboriginal";
+  font-family: "NotoSansCanadianAboriginal", @font-family-aboriginal-sans;
 }
-.fontAboriginalSans {
-  font-family: @font-family-aboriginal-sans !important;
+// BC Sans
+// ---------------------------------------------------
+@font-face {
+  font-family: "BCSans";
+  font-style: normal;
+  src: url("assets/fonts/BCSans/BCSans-Regular.woff2") format("woff2"),
+    url("assets/fonts/BCSans/BCSans-Regular.woff") format('woff');
+}
+.fontBCSans {
+  font-family: "BCSans", @font-family-aboriginal-sans;
 }
 
 
