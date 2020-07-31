@@ -14,6 +14,8 @@ import { WORKSPACES } from 'common/Constants'
  *
  * @param {object} props
  * @param {function} props.children
+ * @param {string} docId UID of the document that is being viewed
+ * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'.
  *
  */
 function VisibilityMinimalData({ children, docId, docState }) {

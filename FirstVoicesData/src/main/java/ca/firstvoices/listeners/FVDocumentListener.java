@@ -75,9 +75,9 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
   protected SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
   private CoreSession session;
-  private AssignAncestorsService assignAncestorsService = Framework
+  private final AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-  private CleanupCharactersService cleanupCharactersService = Framework
+  private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
   private Event event;
@@ -183,22 +183,45 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
         && !document.isVersion()) {
       try {
         DocumentModelList characters = getCharacters(document);
+        DocumentModel alphabet = getAlphabet(document);
 
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-          List<DocumentModel> results = characters.stream()
-              .map(c -> c.getId().equals(document.getId()) ? document : c)
+          //All character documents except for the modified doc
+          List<DocumentModel> filteredCharacters = characters.stream()
+              .filter(c -> !c.getId().equals(document.getId()))
               .collect(Collectors.toList());
-          cleanupCharactersService.mapAndValidateConfusableCharacters(results);
+          cleanupCharactersService.validateCharacters(filteredCharacters, alphabet, document);
         }
 
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-          cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+          cleanupCharactersService.validateCharacters(characters, alphabet, document);
+
         }
 
       } catch (Exception exception) {
         rollBackEvent(event);
         throw exception;
       }
+    }
+
+    //If doc is alphabet, do another operation for ignored characters
+    if (document.getDocumentType().getName().equals(FV_ALPHABET) && !document.isProxy()
+        && !document.isVersion()) {
+      try {
+
+        //only test on update, not creation as characters will not exist during creation
+        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
+          DocumentModelList characters = getCharacters(document);
+          DocumentModel alphabet = getAlphabet(document);
+          cleanupCharactersService.validateAlphabetIgnoredCharacters(characters, alphabet);
+
+        }
+
+      } catch (Exception exception) {
+        rollBackEvent(event);
+        throw exception;
+      }
+
     }
   }
 

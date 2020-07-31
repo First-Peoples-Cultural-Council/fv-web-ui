@@ -142,7 +142,7 @@ export class Gallery extends React.Component {
       <DetailsViewWithActions
         labels={{ single: 'Gallery' }}
         itemPath={this._getGalleryPath()}
-        actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
+        actions={['workflow', 'edit', 'visibility', 'publish']}
         publishAction={this.props.publishGallery}
         unpublishAction={this.props.unpublishGallery}
         askToPublishAction={this.props.askToPublishGallery}

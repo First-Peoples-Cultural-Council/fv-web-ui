@@ -22,14 +22,19 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility }) {
+function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel }) {
   const classes = VisibilitySelectStyles()
+
+  const label = hideLabel ? null : (
+    <div id="select-label" className={classes.selectLabel}>
+      Who can see this?
+    </div>
+  )
+
   return (
     <div className={classes.selectBase}>
-      <div id="select-label" className={classes.selectLabel}>
-        Who can see this?
-      </div>
-      <FormControl variant="outlined">
+      {label}
+      <FormControl variant="outlined" size="small">
         <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
           <MenuItem value={'team'}>
             <VisibilityOffIcon className={classes.selectIcon} />
@@ -49,15 +54,17 @@ function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility })
   )
 }
 // PROPTYPES
-const { func, string } = PropTypes
+const { func, string, bool } = PropTypes
 VisibilitySelectPresentation.propTypes = {
   handleVisibilityChange: func,
   docVisibility: string,
+  hideLabel: bool,
 }
 
 VisibilitySelectPresentation.defaultProps = {
   handleVisibilityChange: () => {},
   docVisibility: '',
+  hideLabel: false,
 }
 
 export default VisibilitySelectPresentation

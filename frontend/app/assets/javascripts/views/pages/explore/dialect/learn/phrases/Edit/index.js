@@ -316,7 +316,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
-  const { splitWindowPath } = windowPath
+  const { _windowPath, splitWindowPath } = windowPath
   const { properties, route } = navigation
   const { computeLogin } = nuxeo
   return {
@@ -326,6 +326,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     routeParams: route.routeParams,
     properties,
     splitWindowPath,
+    windowPath: _windowPath,
   }
 }
 
