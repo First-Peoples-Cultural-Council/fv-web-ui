@@ -205,7 +205,6 @@ export class DialectViewWord extends Component {
           culturalNotes={culturalNotes}
           definitions={definitions}
           dialectClassName={dialectClassName}
-          intl={this.props.intl}
           literalTranslations={literalTranslations}
           metadata={metadata}
           partOfSpeech={partOfSpeech}

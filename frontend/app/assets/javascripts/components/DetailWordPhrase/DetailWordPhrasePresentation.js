@@ -9,6 +9,7 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import useWindowPath from 'DataSource/useWindowPath'
 import useRoute from 'DataSource/useRoute'
+import useIntl from 'DataSource/useIntl'
 
 /**
  * @summary DetailWordPhrasePresentation
@@ -26,7 +27,6 @@ function DetailWordPhrasePresentation({
   culturalNotes,
   definitions,
   dialectClassName,
-  intl,
   literalTranslations,
   metadata,
   partOfSpeech,
@@ -40,6 +40,7 @@ function DetailWordPhrasePresentation({
 }) {
   const { pushWindowPath } = useWindowPath()
   const { routeParams } = useRoute()
+  const { intl } = useIntl()
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
     const _arrOfObj = [...arrOfObj]
@@ -363,7 +364,7 @@ function DetailWordPhrasePresentation({
   )
 }
 // PROPTYPES
-const { array, node, object, string } = PropTypes
+const { array, node, string } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
@@ -371,7 +372,6 @@ DetailWordPhrasePresentation.propTypes = {
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
-  intl: object,
   literalTranslations: array,
   metadata: node,
   partOfSpeech: string,

@@ -32,6 +32,7 @@ function useUserGroupTasks(fetchOnLoad = true) {
         id,
         initiator: properties['nt:initiator'],
         title: properties['nt:name'],
+        targetDocumentsIds: properties['nt:targetDocumentsIds'],
       }
     })
   }

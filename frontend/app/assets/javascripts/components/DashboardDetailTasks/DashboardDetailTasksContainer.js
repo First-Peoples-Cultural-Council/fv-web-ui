@@ -5,7 +5,8 @@ import DashboardDetailList from 'components/DashboardDetail/DashboardDetailList'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
 import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardDetailTasksData'
 import Table from 'components/Table'
-
+import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
+import DetailWordPhrase from 'components/DetailWordPhrase'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary DashboardDetailTasksContainer
@@ -19,9 +20,26 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
 function DashboardDetailTasksContainer() {
   return (
     <DashboardDetailTasksData>
-      {({ columns, fetchMessage, isFetching, listItems, onClose, onOpen, selectedTaskId }) => {
-        const filteredData = listItems.filter(({ id }) => id === selectedTaskId)
-        const selectedData = filteredData.length > 0 ? { ...filteredData[0] } : {}
+      {({ columns, fetchMessage, idSelectedTask, isFetching, listItems, onClose, onOpen, selectedItemData }) => {
+        const filteredData = listItems.filter(({ id }) => id === idSelectedTask)
+        const selectedTaskData = filteredData.length > 0 ? { ...filteredData[0] } : {}
+        const { title, initiator, date, itemType, isNew } = selectedTaskData
+        const {
+          culturalNotes,
+          definitions,
+          title: itemTitle,
+          literalTranslations,
+          acknowledgement,
+          audio,
+          categories,
+          partOfSpeech,
+          photos,
+          phrases,
+          pronunciation,
+          relatedAssets,
+          relatedToAssets,
+          videos,
+        } = selectedItemData
         return (
           <DashboardDetail.Presentation
             childrenUnselected={
@@ -41,7 +59,7 @@ function DashboardDetailTasksContainer() {
             }
             childrenSelectedSidebar={
               <DashboardDetailList.Container
-                selectedId={selectedTaskId}
+                selectedId={idSelectedTask}
                 onClick={onOpen}
                 listItems={listItems}
                 title="Tasks"
@@ -49,18 +67,59 @@ function DashboardDetailTasksContainer() {
             }
             childrenSelectedDetail={
               <DashboardDetailSelectedItem.Presentation
-                title={selectedData.title}
-                initiator={selectedData.initiator}
-                date={selectedData.date}
-                icon={<DashboardDetailIcon.Presentation itemType={selectedData.itemType} isNew={selectedData.isNew} />}
-                id={selectedTaskId}
+                idTask={idSelectedTask}
+                childrenTaskSummary={
+                  <DashboardDetailListItem.Presentation
+                    component="div"
+                    title={title}
+                    initiator={initiator}
+                    date={date}
+                    icon={<DashboardDetailIcon.Presentation itemType={itemType} isNew={isNew} />}
+                  />
+                }
+                // TODO:
+                /*
+                childrenActivityStream={(
+                  <ActivityStream.Presentation
+                    className="DashboardDetailSelectedItem__ActivityStream"
+                    id={idSelectedTask}
+                  />
+                )}
+                */
+                // TODO:
+                /*
+                childrenApprovalNotes={(
+                  <ApprovalNotes.Presentation
+                    className="DashboardDetailSelectedItem__Notes"
+                    id={idSelectedTask}
+                  />
+                )}
+                */
+                childrenItemDetail={
+                  <DetailWordPhrase.Presentation
+                    acknowledgement={acknowledgement}
+                    audio={audio}
+                    categories={categories}
+                    culturalNotes={culturalNotes}
+                    definitions={definitions}
+                    title={itemTitle}
+                    literalTranslations={literalTranslations}
+                    partOfSpeech={partOfSpeech}
+                    photos={photos}
+                    phrases={phrases}
+                    pronunciation={pronunciation}
+                    relatedAssets={relatedAssets}
+                    relatedToAssets={relatedToAssets}
+                    videos={videos}
+                  />
+                }
               />
             }
             onClose={onClose}
             onOpen={() => {
               onOpen()
             }}
-            selectedId={selectedTaskId}
+            selectedId={idSelectedTask}
           />
         )
       }}
