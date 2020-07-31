@@ -32,7 +32,7 @@ function RequestChangesPresentation({
 }) {
   return (
       <div className="RequestChanges">
-        <form name="requestChanges" onSubmit={onSubmit} ref={formRef}>
+        <form name="requestChanges" ref={formRef}>
           <div className="visibilitySelector">
             <VisibilitySelect.Container
                 selectNameAndId='visibilitySelect'
@@ -86,7 +86,7 @@ function RequestChangesPresentation({
 // PROPTYPES
 const {string, object, bool, func} = PropTypes
 RequestChangesPresentation.propTypes = {
-  approveSubmit: string,
+  submitMethod: string,
   computeEntities: object,
   docId: string,
   docState: string,

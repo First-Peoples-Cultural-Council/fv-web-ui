@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import RequestChangesPresentation
   from 'components/RequestChanges/RequestChangesPresentation'
 import RequestChangesData from 'components/RequestChanges/RequestChangesData'
@@ -13,11 +13,11 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer() {
+function RequestChangesContainer({docId, docState}) {
   return (
-      <RequestChangesData>
-        {({approveSubmit, computeEntities, docId, docState, docVisibility, errors, formRef, handleApprove, handleRequestChanges, handleSnackbarClose, handleVisibilityChange, onSubmit, snackbarStatus}) => {
-          return <RequestChangesPresentation approveSubmit={approveSubmit}
+      <RequestChangesData docId={docId} docState={docState}>
+        {({submitMethod, computeEntities, docId, docState, docVisibility, errors, formRef, handleApprove, handleRequestChanges, handleSnackbarClose, handleVisibilityChange, onSubmit, snackbarStatus}) => {
+          return <RequestChangesPresentation submitMethod={submitMethod}
                                              computeEntities={computeEntities}
                                              docId={docId}
                                              docState={docState}
@@ -39,9 +39,12 @@ function RequestChangesContainer() {
 }
 
 // PROPTYPES
-// const { string } = PropTypes
+const {string} = PropTypes
 RequestChangesContainer.propTypes = {
+  docId: string,
+  docState: string,
   //   something: string,
+
 }
 
 export default RequestChangesContainer

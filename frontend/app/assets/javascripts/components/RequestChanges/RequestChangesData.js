@@ -24,7 +24,7 @@ function RequestChangesData({children, docId, docState}) {
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
   let [snackbarStatus, setSnackbarStatus] = useState(false)
-  const [approveSubmit, setApproveSubmit] = useState(null)
+  const [submitMethod, setSubmitMethod] = useState(null)
 
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
@@ -108,12 +108,56 @@ function RequestChangesData({children, docId, docState}) {
     })
 
   }
-  const handleApprove = () => {
-    setApproveSubmit('approve')
+  const handleApprove = (event) => {
+    setSubmitMethod('approve')
+    console.log('hello from submit')
+    event.preventDefault()
+
+    const formData = getFormData({
+      formReference: formRef,
+    })
+
+    console.log('onSubmit > here is the form data:', {formData})
+
+    handleSubmit({
+      validator,
+      formData,
+      valid: () => {
+        console.log('onSubmit > form is valid')
+        setErrors(undefined)
+        setSnackbarStatus(true)
+      },
+      invalid: (response) => {
+        console.log('onSubmit > form is invalid', {errorsHere: response.errors})
+        setErrors(response.errors)
+      },
+    })
   }
 
-  const handleRequestChanges = () => {
-    setApproveSubmit('requestChanges')
+  const handleRequestChanges = (event) => {
+    setSubmitMethod('requestChanges')
+    console.log('hello from requestChanges')
+    event.preventDefault()
+
+    const formData = getFormData({
+      formReference: formRef,
+    })
+
+    console.log('onSubmit > here is the form data:', {formData})
+
+    handleSubmit({
+      validator,
+      formData,
+      valid: () => {
+        console.log('onSubmit > form is valid')
+        setErrors(undefined)
+        setSnackbarStatus(true)
+      },
+      invalid: (response) => {
+        console.log('onSubmit > form is invalid', {errorsHere: response.errors})
+        setErrors(response.errors)
+      },
+    })
   }
 
   const handleSnackbarClose = (event, reason) => {
