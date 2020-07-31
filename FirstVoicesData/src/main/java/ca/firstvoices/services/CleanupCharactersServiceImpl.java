@@ -159,10 +159,15 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     //lower case char, upper case char, lower confusable list and upper confusable list are unique
     Set<String> updatedDocumentCharacters = new HashSet<>();
 
-    updatedDocumentCharacters
-        .add((String) updated.getPropertyValue(DOCUMENT_TITLE));
-    updatedDocumentCharacters
-        .add((String) updated.getPropertyValue("fvcharacter:upper_case_character"));
+    String docTitle = (String) updated.getPropertyValue(DOCUMENT_TITLE);
+    if (docTitle != null) {
+      updatedDocumentCharacters.add(docTitle);
+    }
+
+    String upperChar = (String) updated.getPropertyValue("fvcharacter:upper_case_character");
+    if (upperChar != null) {
+      updatedDocumentCharacters.add(upperChar);
+    }
 
     //must loop through each confusable individually
     //as addAll would return true if the confusable string list had duplicates AND new values
@@ -236,9 +241,15 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     Set<String> collectedCharacters = new HashSet<>();
 
     for (DocumentModel d : characters) {
-      collectedCharacters.add((String) d.getPropertyValue(DOCUMENT_TITLE));
-      collectedCharacters.add((String) d.getPropertyValue("fvcharacter:upper_case_character"));
+      String docTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
+      if (docTitle != null) {
+        collectedCharacters.add(docTitle);
+      }
 
+      String upperChar = (String) d.getPropertyValue("fvcharacter:upper_case_character");
+      if (upperChar != null) {
+        collectedCharacters.add(upperChar);
+      }
 
       String[] lowerConfusablesArr = (String[]) d
           .getPropertyValue("fvcharacter:confusable_characters");
