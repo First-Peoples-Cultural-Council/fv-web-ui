@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import LockIcon from '@material-ui/icons/Lock'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
 // FPCC
@@ -16,32 +16,36 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @component
  *
  * @param {object} props
+ * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public
+ * @param {function} handleVisibilityChange A function to handle the onChange of the select component
  *
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({handleChange, selectNameAndId, visibility}) {
+function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel }) {
   const classes = VisibilitySelectStyles()
-  const selectLabel = selectNameAndId
+
+  const label = hideLabel ? null : (
+    <div id="select-label" className={classes.selectLabel}>
+      Who can see this?
+    </div>
+  )
+
   return (
-      <div>
-        <div id="select-label" className={classes.Select}>
-          Who can see this?
-        </div>
-        <FormControl variant="outlined">
-          <Select labelId="select-outlined-label" id={selectLabel}
-                  value={visibility} onChange={handleChange}
-                  inputProps={{name: selectLabel}}>
-            <MenuItem value={'team'}>
-              <LockIcon className={classes.icon}/>
-              Language Team
-            </MenuItem>
-            <MenuItem value={'members'}>
-              <GroupIcon className={classes.icon}/>
-              Members
-            </MenuItem>
-            <MenuItem value={'public'}>
-              <PublicIcon className={classes.icon}/>
+    <div className={classes.selectBase}>
+      {label}
+      <FormControl variant="outlined" size="small">
+        <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
+          <MenuItem value={'team'}>
+            <VisibilityOffIcon className={classes.selectIcon} />
+            Language Team
+          </MenuItem>
+          <MenuItem value={'members'}>
+            <GroupIcon className={classes.selectIcon} />
+            Members
+          </MenuItem>
+          <MenuItem value={'public'}>
+            <PublicIcon className={classes.selectIcon} />
             Everyone
           </MenuItem>
         </Select>
@@ -50,17 +54,17 @@ function VisibilitySelectPresentation({handleChange, selectNameAndId, visibility
   )
 }
 // PROPTYPES
-const { func, string } = PropTypes
+const { func, string, bool } = PropTypes
 VisibilitySelectPresentation.propTypes = {
-  handleChange: func,
-  visibility: string,
-  selectNameAndId: string,
+  handleVisibilityChange: func,
+  docVisibility: string,
+  hideLabel: bool,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  handleChange: () => {},
-  visibility: '',
-  selectNameAndId: 'select'
+  handleVisibilityChange: () => {},
+  docVisibility: '',
+  hideLabel: false,
 }
 
 export default VisibilitySelectPresentation

@@ -19,4 +19,4 @@ wait-on $CYPRESS_BASE_URL/nuxeo/api/v1/path/FV/sections/Data/Test/Test/TestLangu
     npm ci --quiet && \
     npm run --silent cy:trashCopy && \
     npm run --silent cy:copy && \
-    cypress run --browser chrome --headless --tag "Jenkins"  --record true
+    cypress run --browser chrome --headless --tag "Jenkins"  --record true --parallel

@@ -5,8 +5,12 @@ import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import TableHeader from './TableHeader'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+
 /**
- * @summary ListPresentation
+ * @summary TablePresentation
  * @version 1.0.1
  * @component
  *
@@ -31,7 +35,7 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function ListPresentation({
+function TablePresentation({
   actions,
   columns,
   data,
@@ -51,16 +55,20 @@ function ListPresentation({
   style,
   title,
   variant,
+  sortDirection,
 }) {
   const { theme } = useTheme()
-  const themeList = selectn('components.List', theme) || {}
-  const { tableHeader, row, rowAlternate } = themeList
+  const themeTable = selectn('components.Table', theme) || {}
+  const { tableHeader, row, rowAlternate } = themeTable
 
   let styleVariant
   let headerStyle = tableHeader
   if (variant === CONTENT_FULL_WIDTH) {
-    styleVariant = themeList.ContentFullWidth
+    styleVariant = themeTable.ContentFullWidth
     headerStyle = styleVariant.tableHeader
+  }
+  const icons = {
+    SortArrow: sortDirection === 'desc' ? ArrowUpwardIcon : ArrowDownwardIcon,
   }
 
   const defaultOptions = {
@@ -105,6 +113,7 @@ function ListPresentation({
       options={Object.assign({}, defaultOptions, options)}
       title={title}
       detailPanel={detailPanel}
+      icons={icons}
       components={{
         Actions: ({ data: _data, actions: _actions }) => {
           return (
@@ -128,6 +137,7 @@ function ListPresentation({
             </div>
           )
         },
+        Header: TableHeader,
       }}
       localization={localization}
     />
@@ -135,7 +145,7 @@ function ListPresentation({
 }
 // PROPTYPES
 const { array, func, string, object, oneOf, oneOfType } = PropTypes
-ListPresentation.propTypes = {
+TablePresentation.propTypes = {
   actions: array,
   columns: array,
   data: oneOfType([array, func]),
@@ -155,10 +165,12 @@ ListPresentation.propTypes = {
   title: string,
   style: object,
   variant: oneOf([CONTENT_FULL_WIDTH]),
+  sortDirection: string,
 }
-ListPresentation.defaultProps = {
+
+TablePresentation.defaultProps = {
   options: {},
   style: {},
 }
 
-export default ListPresentation
+export default TablePresentation

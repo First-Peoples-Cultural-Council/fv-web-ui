@@ -168,7 +168,7 @@ export class DialectViewPhrase extends Component {
       <DetailsViewWithActions
         labels={{ single: 'phrase' }}
         itemPath={this._getPhrasePath()}
-        actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
+        actions={['workflow', 'edit', 'visibility', 'publish']}
         publishAction={this.props.publishPhrase}
         unpublishAction={this.props.unpublishPhrase}
         askToPublishAction={this.props.askToPublishPhrase}

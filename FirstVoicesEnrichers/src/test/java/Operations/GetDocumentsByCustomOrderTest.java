@@ -80,7 +80,9 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
   @Test
   public void DocumentsByCustomOrderOperationTest() throws OperationException {
     NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(dialectDoc);
+    nativeOrderComputeService
+        .computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
+    session.save();
     OperationContext ctx = new OperationContext(session);
 
     DocumentModelList documentModelList = (DocumentModelList) automationService

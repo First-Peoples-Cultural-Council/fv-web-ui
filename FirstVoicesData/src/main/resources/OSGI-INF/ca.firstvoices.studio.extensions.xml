@@ -1705,7 +1705,7 @@
             </layouts>
 
         </type>
-        
+
         <type id="FVLabel">
             <label>Label</label>
             <category>SimpleDocument</category>
@@ -1723,7 +1723,7 @@
                 <layout>layout@FVLabel-view</layout>
             </layouts>
         </type>
-        
+
         <type id="FVLabelDictionary">
             <label>FVLabelDictionary</label>
             <category>LanguageAssets</category>
@@ -2573,117 +2573,209 @@
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
             </templates>
             <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>title</widget>
-                </row>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>primary</widget>
-                </row>
+              <row>
+                <properties mode="any">
+                  <property name="nxl_colspan_0">1</property>
+                </properties>
+                <widget>title</widget>
+              </row>
+              <row>
+                <properties mode="any">
+                  <property name="nxl_colspan_0">1</property>
+                </properties>
+                <widget>primary</widget>
+              </row>
+              <row>
+                <properties mode="any">
+                  <property name="nxl_colspan_0">1</property>
+                </properties>
+                <widget>ignored_characters</widget>
+              </row>
             </rows>
             <widget name="title" type="text">
                 <labels>
                     <label mode="any">Title</label>
                 </labels>
                 <translated>false</translated>
-                <fields>
-                    <field>dc:title</field>
-                </fields>
-                <properties widgetMode="edit">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
-                <properties widgetMode="view">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
+              <fields>
+                <field>dc:title</field>
+              </fields>
+              <properties widgetMode="edit">
+                <property name="styleClass">dataInputText</property>
+              </properties>
+              <properties widgetMode="view">
+                <property name="styleClass">dataInputText</property>
+              </properties>
             </widget>
-            <widget name="primary" type="checkbox">
+          <widget name="primary" type="checkbox">
+            <labels>
+              <label mode="any">Primary</label>
+            </labels>
+            <translated>false</translated>
+            <fields>
+              <field>fv-alphabet:primary</field>
+            </fields>
+          </widget>
+          <widget name="ignored_characters" type="list">
+            <fields>
+              <field>fv-alphabet:ignored_characters</field>
+            </fields>
+            <helpLabels>
+              <label mode="any">Sets characters to be ignored in custom order compute.
+              </label>
+            </helpLabels>
+            <labels>
+              <label mode="any">Ignored Characters</label>
+            </labels>
+            <subWidgets>
+              <widget name="ignored_characters_li" type="text">
+                <fields>
+                  <field></field>
+                </fields>
                 <labels>
-                    <label mode="any">Primary</label>
+                  <label mode="any"></label>
                 </labels>
-                <translated>false</translated>
-                <fields>
-                    <field>fv-alphabet:primary</field>
-                </fields>
-            </widget>
+                <properties widgetMode="edit">
+                  <property name="required">true</property>
+                </properties>
+              </widget>
+            </subWidgets>
+            <translated>false</translated>
+          </widget>
         </layout>
         <layout name="layout@FVAlphabet-edit">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
             </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>title</widget>
-                </row>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>primary</widget>
-                </row>
-            </rows>
+          <rows>
+            <row>
+              <properties mode="any">
+                <property name="nxl_colspan_0">1</property>
+              </properties>
+              <widget>title</widget>
+            </row>
+            <row>
+              <properties mode="any">
+                <property name="nxl_colspan_0">1</property>
+              </properties>
+              <widget>primary</widget>
+            </row>
+            <row>
+              <properties mode="any">
+                <property name="nxl_colspan_0">1</property>
+              </properties>
+              <widget>ignored_characters</widget>
+            </row>
+          </rows>
             <widget name="title" type="text">
                 <labels>
                     <label mode="any">Title</label>
                 </labels>
                 <translated>false</translated>
-                <fields>
-                    <field>dc:title</field>
-                </fields>
-                <properties widgetMode="edit">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
-                <properties widgetMode="view">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
+              <fields>
+                <field>dc:title</field>
+              </fields>
+              <properties widgetMode="edit">
+                <property name="styleClass">dataInputText</property>
+              </properties>
+              <properties widgetMode="view">
+                <property name="styleClass">dataInputText</property>
+              </properties>
             </widget>
-            <widget name="primary" type="checkbox">
+          <widget name="primary" type="checkbox">
+            <fields>
+              <field>fv-alphabet:primary</field>
+            </fields>
+            <helpLabels>
+              <label mode="any">Whether this is the primary alphabet</label>
+            </helpLabels>
+            <labels>
+              <label mode="any">Primary</label>
+            </labels>
+            <translated>false</translated>
+          </widget>
+          <widget name="ignored_characters" type="list">
+            <fields>
+              <field>fv-alphabet:ignored_characters</field>
+            </fields>
+            <helpLabels>
+              <label mode="any">Sets characters to be ignored in custom order compute.
+              </label>
+            </helpLabels>
+            <labels>
+              <label mode="any">Ignored Characters</label>
+            </labels>
+            <subWidgets>
+              <widget name="ignored_characters_li" type="text">
+                <fields>
+                  <field></field>
+                </fields>
                 <labels>
-                    <label mode="any">Primary</label>
+                  <label mode="any"></label>
                 </labels>
-                <helpLabels>
-                    <label mode="any">Whether this is the primary alphabet</label>
-                </helpLabels>
-                <translated>false</translated>
-                <fields>
-                    <field>fv-alphabet:primary</field>
-                </fields>
-            </widget>
+                <properties widgetMode="edit">
+                  <property name="required">true</property>
+                </properties>
+              </widget>
+            </subWidgets>
+            <translated>false</translated>
+          </widget>
         </layout>
         <layout name="layout@FVAlphabet-view">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
             </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>title</widget>
-                </row>
-            </rows>
+          <rows>
+            <row>
+              <properties mode="any">
+                <property name="nxl_colspan_0">1</property>
+              </properties>
+              <widget>title</widget>
+            </row>
+            <row>
+              <properties mode="any">
+                <property name="nxl_colspan_0">1</property>
+              </properties>
+              <widget>ignored_characters</widget>
+            </row>
+          </rows>
             <widget name="title" type="text">
                 <labels>
                     <label mode="any">Title</label>
                 </labels>
                 <translated>false</translated>
-                <fields>
-                    <field>dc:title</field>
-                </fields>
-                <properties widgetMode="edit">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
-                <properties widgetMode="view">
-                    <property name="styleClass">dataInputText</property>
-                </properties>
+              <fields>
+                <field>dc:title</field>
+              </fields>
+              <properties widgetMode="edit">
+                <property name="styleClass">dataInputText</property>
+              </properties>
+              <properties widgetMode="view">
+                <property name="styleClass">dataInputText</property>
+              </properties>
             </widget>
+          <widget name="ignored_characters" type="list">
+            <fields>
+              <field>fv-alphabet:ignored_characters</field>
+            </fields>
+            <labels>
+              <label mode="any">Ignored Characters</label>
+            </labels>
+            <subWidgets>
+              <widget name="ignored_characters_li" type="text">
+                <fields>
+                  <field></field>
+                </fields>
+                <labels>
+                  <label mode="any"></label>
+                </labels>
+                <properties widgetMode="edit">
+                  <property name="required">true</property>
+                </properties>
+              </widget>
+            </subWidgets>
+            <translated>false</translated>
+          </widget>
         </layout>
         <layout name="layout@FVAudio-create">
             <templates>
@@ -22575,8 +22667,8 @@
                 </properties>
             </widget>
         </layout>
-        
-        <layout name="layout@FVPhrase-edit">
+
+      <layout name="layout@FVPhrase-edit">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
             </templates>
@@ -22675,8 +22767,8 @@
                 </properties>
             </widget>
         </layout>
-        
-        <layout name="layout@FVLabelDictionary-create">
+
+      <layout name="layout@FVLabelDictionary-create">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
             </templates>

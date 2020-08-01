@@ -108,7 +108,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     }
 
     NativeOrderComputeService service = new NativeOrderComputeServiceImpl();
-    service.computeDialectNativeOrderTranslation(dialectDoc);
+    service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
 
     for (int i = 0; i < letterArray.length; i++) {
       String customOrder = EnricherUtils
@@ -132,7 +132,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     }
 
     NativeOrderComputeService service = new NativeOrderComputeServiceImpl();
-    service.computeDialectNativeOrderTranslation(dialectDoc);
+    service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
 
     for (int i = 0; i < letterArray.length; i++) {
       String customOrder = EnricherUtils

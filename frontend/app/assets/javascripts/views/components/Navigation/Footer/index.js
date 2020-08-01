@@ -62,7 +62,7 @@ export default class Footer extends React.Component {
                     />
                   </Link>
                   {' | '}
-                  <a href="https://firstvoices.atlassian.net/servicedesk/customer/portals">
+                  <a href="https://support.firstvoices.com/servicedesk/customer/portal/1">
                     <FVLabel transKey="general.help" defaultStr="Help" transform="first" />
                   </a>
                   {' | '}

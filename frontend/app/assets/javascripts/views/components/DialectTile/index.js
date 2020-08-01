@@ -46,7 +46,7 @@ function DialectTile(props) {
         <CardMedia className={`${classes.cover} DialectCover`} image={dialectCoverImage} title={dialectTitle} />
         <div className={classes.details}>
           <CardContent className={classes.content}>
-            <span className="DialectTitle fontAboriginalSans">
+            <span className="DialectTitle fontBCSans">
               {dialectTitle}
               {actionIcon}
             </span>

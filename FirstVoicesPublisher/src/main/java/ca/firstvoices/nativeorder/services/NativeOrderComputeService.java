@@ -26,12 +26,11 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public interface NativeOrderComputeService {
 
-  void computeAssetNativeOrderTranslation(DocumentModel asset);
+  void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset);
 
-  void computeDialectNativeOrderTranslation(DocumentModel dialect);
+  void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
+      DocumentModel alphabet);
 
   void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars);
-
-  String updateCustomOrderForCharacter(CoreSession session, DocumentModel c);
 
 }

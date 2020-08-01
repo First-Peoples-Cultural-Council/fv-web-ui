@@ -240,7 +240,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-7')}>
-            <div className="fontAboriginalSans">
+            <div className="fontBCSans">
               <TextHeader
                 title={this.props.intl.trans(
                   'views.pages.explore.dialect.learn.alphabet.x_alphabet',
@@ -262,7 +262,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
               if (this.state.current_char !== null) {
                 return (
                   <FVButton
-                    className="fontAboriginalSans"
+                    className="fontBCSans"
                     variant="contained"
                     color="primary"
                     onClick={this._onNavigateRequest.bind(
@@ -289,7 +289,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                 return (
                   <div style={{ marginBottom: '20px' }}>
                     {selectn('response.entries', _computeCharacters).map((char) => {
-                      const text = <span className="fontAboriginalSans">{char.title}</span>
+                      const text = <span className="fontBCSans">{char.title}</span>
                       const audioFile = selectn('contextParameters.character.related_audio[0].path', char)
 
                       return (

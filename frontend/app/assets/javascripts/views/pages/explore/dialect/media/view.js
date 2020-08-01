@@ -185,18 +185,20 @@ export class MediaView extends Component {
           if (this.props.routeParams.area === WORKSPACES) {
             if (selectn('response', computeResource))
               return (
-                <PageToolbar
-                  label={this.props.intl.trans('media', 'Media', 'first')}
-                  handleNavigateRequest={this.onNavigateRequest}
-                  actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
-                  computeEntity={computeResource}
-                  computePermissionEntity={computeDialect2}
-                  computeLogin={this.props.computeLogin}
-                  publishToggleAction={this.publishToggleAction}
-                  publishChangesAction={this.publishChangesAction}
-                  enableToggleAction={this.enableToggleAction}
-                  {...this.props}
-                />
+                <div className="row">
+                  <PageToolbar
+                    label={this.props.intl.trans('media', 'Media', 'first')}
+                    handleNavigateRequest={this.onNavigateRequest}
+                    actions={['workflow', 'edit', 'visibility', 'publish']}
+                    computeEntity={computeResource}
+                    computePermissionEntity={computeDialect2}
+                    computeLogin={this.props.computeLogin}
+                    publishToggleAction={this.publishToggleAction}
+                    publishChangesAction={this.publishChangesAction}
+                    enableToggleAction={this.enableToggleAction}
+                    {...this.props}
+                  />
+                </div>
               )
           }
         })()}

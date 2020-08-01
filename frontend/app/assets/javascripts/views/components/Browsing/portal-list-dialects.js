@@ -139,11 +139,7 @@ export class PortalListDialects extends Component {
   _oldView = () => {
     const items = this.props.filteredItems || this.props.items
     return (
-      <div
-        className="languageGroup fontAboriginalSans"
-        data-cy="old_view"
-        style={{ display: 'flex', flexFlow: 'row wrap' }}
-      >
+      <div className="languageGroup fontBCSans" data-cy="old_view" style={{ display: 'flex', flexFlow: 'row wrap' }}>
         {items.map((tile) => this._createTile(tile))}
       </div>
     )
@@ -200,7 +196,7 @@ export class PortalListDialects extends Component {
   _tile = (key, color, archives) => {
     return (
       <div
-        className="languageGroup fontAboriginalSans"
+        className="languageGroup fontBCSans"
         data-cy="language_group_view"
         key={key}
         style={{ borderLeft: `4px ${color} solid` }}

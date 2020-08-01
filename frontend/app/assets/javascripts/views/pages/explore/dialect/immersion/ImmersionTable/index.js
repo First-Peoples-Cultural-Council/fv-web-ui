@@ -180,7 +180,7 @@ class ImmersionTable extends Component {
 
     return (
       <div style={{ flexShrink: 0, overflowX: 'scroll' }}>
-        <Table className="DictionaryList data-table fontAboriginalSans">
+        <Table className="DictionaryList data-table fontBCSans">
           <SortingHeader
             order={order}
             orderBy={orderBy}

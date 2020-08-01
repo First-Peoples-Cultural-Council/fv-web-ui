@@ -37,7 +37,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
 
       return (
         <div className="ViewWithActions row">
-          <div className="col-xs-12">
+          <div>
             {(() => {
               if (selectn('response', this.props.computeItem)) {
                 return (
@@ -156,7 +156,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             </Dialog>
           </AuthorizationFilter>
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <div className="col-xs-12">
+            <div>
               <AppBar position="static" className="PageToolbar__secondary">
                 <Toolbar style={{ justifyContent: 'flex-end' }}>
                   <FVButton

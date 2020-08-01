@@ -32,17 +32,7 @@ import AVStop from '@material-ui/icons/Stop'
 
 import UIHelpers from 'common/UIHelpers'
 import { connect } from 'react-redux'
-// const WhiteAVPlayArrow = withStyles({
-//   root: {
-//     color: 'white'
-//   }
-// })(AVPlayArrow)
 
-// const WhiteAVStop = withStyles({
-//   root: {
-//     color: 'white'
-//   }
-// })(AVStop)
 class GridView extends Component {
   static propTypes = {
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
@@ -127,9 +117,9 @@ class GridView extends Component {
                 audioIcon =
                   decodeURIComponent(selectn('src', this.state.nowPlaying)) !==
                   NavigationHelpers.getBaseURL() + audio ? (
-                    <AVPlayArrow color="white" />
+                    <AVPlayArrow style={{ fill: 'white' }} />
                   ) : (
-                    <AVStop color="white" />
+                    <AVStop style={{ fill: 'white' }} />
                   )
                 audioCallback =
                   decodeURIComponent(selectn('src', this.state.nowPlaying)) !== NavigationHelpers.getBaseURL() + audio

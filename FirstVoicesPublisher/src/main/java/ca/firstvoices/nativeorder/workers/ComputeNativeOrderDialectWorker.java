@@ -24,6 +24,7 @@ import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
@@ -48,7 +49,11 @@ public class ComputeNativeOrderDialectWorker extends AbstractWork {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               DocumentModel dialectWithSession = session.getDocument(dialect);
-              service.computeDialectNativeOrderTranslation(dialectWithSession);
+              DocumentModel alphabet = session
+                  .getDocument(new PathRef(dialectWithSession.getPathAsString() + "/Alphabet"));
+              service.computeDialectNativeOrderTranslation(session, dialectWithSession, alphabet);
+              alphabet.setPropertyValue("custom_order_recompute_required", false);
+              session.saveDocument(alphabet);
             });
   }
 
