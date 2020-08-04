@@ -1,7 +1,6 @@
 import React from 'react'
 import WidgetTasksPresentation from 'components/WidgetTasks/WidgetTasksPresentation'
 import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
-import TableContextSort from 'components/Table/TableContextSort'
 
 /**
  * @summary WidgetTasksContainer
@@ -27,19 +26,17 @@ function WidgetTasksContainer() {
         sortDirection,
       }) => {
         return (
-          <TableContextSort.Provider value={sortDirection}>
-            <WidgetTasksPresentation
-              columns={columns}
-              data={data}
-              fetchMessage={fetchMessage}
-              isFetching={isFetching}
-              onChangePage={onChangePage}
-              onOrderChange={onOrderChange}
-              onRowClick={onRowClick}
-              options={options}
-              sortDirection={sortDirection}
-            />
-          </TableContextSort.Provider>
+          <WidgetTasksPresentation
+            columns={columns}
+            data={data}
+            fetchMessage={fetchMessage}
+            isFetching={isFetching}
+            onChangePage={onChangePage}
+            onOrderChange={onOrderChange}
+            onRowClick={onRowClick}
+            options={options}
+            sortDirection={sortDirection}
+          />
         )
       }}
     </WidgetTasksData>

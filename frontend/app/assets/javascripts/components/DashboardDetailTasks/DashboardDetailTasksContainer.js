@@ -20,7 +20,21 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
 function DashboardDetailTasksContainer() {
   return (
     <DashboardDetailTasksData>
-      {({ columns, fetchMessage, idSelectedTask, isFetching, listItems, onClose, onOpen, selectedItemData }) => {
+      {({
+        columns,
+        idSelectedTask,
+        listItems,
+        onClose,
+        onOpen,
+        selectedItemData,
+        // NEW
+        data,
+        onOrderChange,
+        onRowClick,
+        options,
+        sortDirection,
+        onChangeRowsPerPage,
+      }) => {
         const filteredData = listItems.filter(({ id }) => id === idSelectedTask)
         const selectedTaskData = filteredData.length > 0 ? { ...filteredData[0] } : {}
         const { title, initiator, date, itemType, isNew } = selectedTaskData
@@ -44,17 +58,19 @@ function DashboardDetailTasksContainer() {
           <DashboardDetail.Presentation
             childrenUnselected={
               <Table.Presentation
-                variant={CONTENT_FULL_WIDTH}
                 columns={columns}
-                data={listItems}
-                onRowClick={(event, { id }) => {
-                  onOpen(id)
-                }}
-                localization={{
-                  body: {
-                    emptyDataSourceMessage: isFetching ? fetchMessage : 'No tasks pending',
-                  },
-                }}
+                data={data}
+                // localization={{
+                //   body: {
+                //     emptyDataSourceMessage: isFetching ? fetchMessage : 'No tasks pending',
+                //   },
+                // }}
+                onOrderChange={onOrderChange}
+                onRowClick={onRowClick}
+                options={options}
+                sortDirection={sortDirection}
+                variant={CONTENT_FULL_WIDTH}
+                onChangeRowsPerPage={onChangeRowsPerPage}
               />
             }
             childrenSelectedSidebar={

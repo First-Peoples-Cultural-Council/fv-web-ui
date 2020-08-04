@@ -53,8 +53,8 @@ function WidgetTasksPresentation({
         onOrderChange={onOrderChange}
         onRowClick={onRowClick}
         options={options}
-        variant={CONTENT_FULL_WIDTH}
         sortDirection={sortDirection}
+        variant={CONTENT_FULL_WIDTH}
       />
     </Widget.Presentation>
   )

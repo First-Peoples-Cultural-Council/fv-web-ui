@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import selectn from 'selectn'
 
-import ProviderHelpers from 'common/ProviderHelpers'
-
 import useLogin from 'DataSource/useLogin'
 import useTasks from 'DataSource/useTasks'
 /**
@@ -12,18 +10,19 @@ import useTasks from 'DataSource/useTasks'
  *
  * @component
  */
-function useUserGroupTasks(fetchOnLoad = true) {
+function useUserGroupTasks() {
   // State Hooks
   const [userId, setUserId] = useState()
-  const [isFetching, setIsFetching] = useState(false)
-  const [fetchMessage, setFetchMessage] = useState()
-  const [page, setPage] = useState()
-  const [totalCount, setTotalCount] = useState()
   const [tasks, setTasks] = useState([])
 
   // Custom Hooks
   const { computeLogin } = useLogin()
-  const { computeUserGroupTasks, fetchUserGroupTasks } = useTasks()
+  const { /*computeUserGroupTasks, */ fetchUserGroupTasks } = useTasks()
+
+  const _userId = selectn('response.id', computeLogin)
+  useEffect(() => {
+    setUserId(_userId)
+  }, [_userId])
 
   const formatTasksData = (_tasks) => {
     return _tasks.map(({ uid: id, properties }) => {
@@ -31,49 +30,47 @@ function useUserGroupTasks(fetchOnLoad = true) {
         date: properties['nt:dueDate'],
         id,
         initiator: properties['nt:initiator'],
-        title: properties['nt:name'],
         targetDocumentsIds: properties['nt:targetDocumentsIds'],
+        title: properties['nt:name'],
       }
     })
   }
-  const _userId = selectn('response.id', computeLogin)
-  useEffect(() => {
-    setUserId(_userId)
-    if (fetchOnLoad) {
-      fetchUserGroupTasks(_userId)
+
+  // Note: Material-Table has a `sort` bug when using the `remote data` feature
+  // see: https://github.com/mbrn/material-table/issues/2177
+  const fetchUserGroupTasksRemoteData = ({
+    pageIndex = 0,
+    pageSize = 100,
+    sortBy = 'date',
+    sortOrder,
+    userId: _id,
+  }) => {
+    const friendlyNamePropertyNameLookup = {
+      date: 'nt:dueDate',
+      id: 'uid',
+      initiator: 'nt:initiator',
+      title: 'nt:name',
     }
-  }, [_userId])
 
-  useEffect(() => {
-    if (userId) {
-      const userGroupTasks = ProviderHelpers.getEntry(computeUserGroupTasks, userId)
-
-      const _isFetching = selectn('isFetching', userGroupTasks)
-      const _message = selectn('message', userGroupTasks)
-      const _page = selectn('response.pageIndex', userGroupTasks)
-      const _tasks = selectn('response.entries', userGroupTasks)
-      const _totalCount = selectn('response.resultsCount', userGroupTasks)
-
-      if (_tasks) {
-        setTasks(formatTasksData(_tasks))
-        setFetchMessage(_message)
-        setIsFetching(_isFetching)
-        setPage(_page)
-        setTotalCount(_totalCount)
+    return fetchUserGroupTasks(_id, {
+      currentPageIndex: pageIndex,
+      pageSize,
+      sortBy: friendlyNamePropertyNameLookup[sortBy],
+      sortOrder,
+    }).then(({ entries, resultsCount, pageIndex: _pageIndex }) => {
+      const data = formatTasksData(entries)
+      setTasks(data)
+      return {
+        data,
+        page: _pageIndex,
+        totalCount: resultsCount,
       }
-    }
-  }, [userId, computeUserGroupTasks])
+    })
+  }
 
   return {
-    computeUserGroupTasks,
-    fetchMessage,
-    fetchUserGroupTasks,
-    formatTasksData,
-    hasTasks: tasks.length > 0,
-    isFetching,
-    page,
+    fetchUserGroupTasksRemoteData,
     tasks,
-    totalCount,
     userId,
   }
 }
