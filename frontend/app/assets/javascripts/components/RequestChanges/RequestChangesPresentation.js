@@ -23,6 +23,8 @@ function RequestChangesPresentation({
   onSubmit,
   errors,
   docVisibility,
+  disableApproveButton,
+  disableRequestChangesButton,
   handleApprove,
   handleRequestChanges,
   handleVisibilityChange,
@@ -45,18 +47,20 @@ function RequestChangesPresentation({
           {getErrorFeedback({errors})}
           <div className="actions">
             <FVButton
-                variant="outlined"
+                disabled={disableApproveButton()}
+                variant="contained"
                 type="submit"
-                color="secondary"
+                color="primary"
                 className="FVButton"
                 onClick={handleApprove}
             >
               Approve
             </FVButton>
             <FVButton
-                variant="outlined"
+                disabled={disableRequestChangesButton()}
+                variant="contained"
                 type="submit"
-                color="secondary"
+                color="primary"
                 className="FVButton"
                 onClick={handleRequestChanges}
 
@@ -88,6 +92,8 @@ const {string, object, bool, func} = PropTypes
 RequestChangesPresentation.propTypes = {
   submitMethod: string,
   computeEntities: object,
+  disableApproveButton: func,
+  disableRequestChangesButton: func,
   docId: string,
   docState: string,
   handleApprove: func,
@@ -98,6 +104,8 @@ RequestChangesPresentation.propTypes = {
 }
 
 RequestChangesPresentation.defaultProps = {
+  disableApproveButton: true,
+  disableRequestChangesButton: true,
   docId: '',
   docState: '',
   snackbarStatus: false,

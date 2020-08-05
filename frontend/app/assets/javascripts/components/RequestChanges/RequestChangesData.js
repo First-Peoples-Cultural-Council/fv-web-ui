@@ -75,40 +75,25 @@ function RequestChangesData({children, docId, docState}) {
     },
   ])
 
-  const validator = yup.object().shape({
-    visibilitySelect: yup
-    .string()
-    .label('Document visibility')
-    .required('Please specify the audience for this document'),
-  })
-
-
-  const onSubmit = (event) => {
-    console.log('hello from submit')
-    event.preventDefault()
-
-    const formData = getFormData({
-      formReference: formRef,
-    })
-
-    console.log('onSubmit > here is the form data:', {formData})
-
-    handleSubmit({
-      validator,
-      formData,
-      valid: () => {
-        console.log('onSubmit > form is valid')
-        setErrors(undefined)
-        setSnackbarStatus(true)
-      },
-      invalid: (response) => {
-        console.log('onSubmit > form is invalid', {errorsHere: response.errors})
-        setErrors(response.errors)
-      },
-    })
-
+  const disableApproveButton = () => {
+    if (docVisibility == "") {
+      return true
+    }
+    return false
   }
+
+  const disableRequestChangesButton = () => {
+    return false
+  }
+
   const handleApprove = (event) => {
+    const validator = yup.object().shape({
+      visibilitySelect: yup
+      .string()
+      .label('Document visibility')
+      .required('Please specify the audience for this document'),
+    })
+
     setSubmitMethod('approve')
     console.log('hello from submit')
     event.preventDefault()
@@ -135,6 +120,11 @@ function RequestChangesData({children, docId, docState}) {
   }
 
   const handleRequestChanges = (event) => {
+    const validator = yup.object().shape({
+      visibilitySelect: yup
+      .string()
+      .label('Document visibility'),
+    })
     setSubmitMethod('requestChanges')
     console.log('hello from requestChanges')
     event.preventDefault()
@@ -169,6 +159,8 @@ function RequestChangesData({children, docId, docState}) {
 
   return children({
     computeEntities,
+    disableApproveButton,
+    disableRequestChangesButton,
     docVisibility,
     errors,
     formRef,
@@ -176,7 +168,7 @@ function RequestChangesData({children, docId, docState}) {
     handleRequestChanges,
     handleVisibilityChange,
     handleSnackbarClose,
-    onSubmit,
+    // onSubmit,
     snackbarStatus,
   })
 }
