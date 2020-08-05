@@ -395,6 +395,7 @@ export class DialectLearn extends Component {
                       'words'
                     )}
                     computeEntity={computeDialect2}
+                    computeLogin={this.props.computeLogin}
                     actions={['publish']}
                     publishChangesAction={this._publishChangesAction}
                     {...this.props}
