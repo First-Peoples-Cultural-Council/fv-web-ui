@@ -77,7 +77,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     }
     document.setPropertyValue("fv:update_confusables_required", false);
 
-    if (saveDocument) {
+    if (Boolean.TRUE.equals(saveDocument)) {
       return session.saveDocument(document);
     }
 
