@@ -32,10 +32,12 @@ function RequestReviewData({ children, docId, docState, docType }) {
   // Check if user is an Admin and if so, hide "Request review" button
   const hideButton = ProviderHelpers.isAdmin(computeLogin)
 
+  const docVisibility = convertStateToVisibility(docState)
+  const docTypeName = convertToFriendlyType(docType)
+
   // Set local state for visibility
-  const [docVisibility, setDocVisibility] = useState('')
-  const [requestVisibilityType, setRequestVisibilityType] = useState('')
-  const [docTypeName, setDocTypeName] = useState('')
+  const [requestVisibilityType, setRequestVisibilityType] = useState(convertStateToVisibility(docState))
+
   const [hasRelatedTasks, setHasRelatedTasks] = useState(false)
 
   // Set up Dialog and Snackbar state
@@ -43,15 +45,20 @@ function RequestReviewData({ children, docId, docState, docType }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
   useEffect(() => {
-    setDocVisibility(convertStateToVisibility(docState))
-    setRequestVisibilityType(convertStateToVisibility(docState))
-    setDocTypeName(convertToFriendlyType(docType))
-    fetchTasks(docId)
-    const relatedTasks = ProviderHelpers.getEntry(computeTasks, docId)
-    if (selectn('response.entries', relatedTasks)) {
+    ProviderHelpers.fetchIfMissing(docId, fetchTasks, computeTasks)
+  }, [])
+
+  // Compute related tasks
+  const extractComputeTasks = ProviderHelpers.getEntry(computeTasks, docId)
+  const fetchDocumentAction = selectn('action', extractComputeTasks)
+  const relatedTasks = selectn('response.entries', extractComputeTasks)
+
+  // Check for relatedTasks when computeTasks finishes
+  useEffect(() => {
+    if (fetchDocumentAction === 'FV_TASKS_EXECUTE_SUCCESS' && relatedTasks.length) {
       setHasRelatedTasks(true)
     }
-  }, [])
+  }, [fetchDocumentAction])
 
   const handleRequestReview = () => {
     setIsDialogOpen(true)
@@ -72,6 +79,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
     setIsDialogOpen(false)
     sendReviewRequest()
     setSnackbarOpen(true)
+    setHasRelatedTasks(true)
   }
 
   const handleSnackbarClose = (event, reason) => {
