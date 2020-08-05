@@ -26,7 +26,14 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface CleanupCharactersService {
 
-  DocumentModel cleanConfusables(CoreSession session, DocumentModel document);
+  /**
+   * @param session
+   * @param document
+   * @param saveDocument whether or not to save the document. not necessary if saving is done later
+   *                     (e.g. aboutToCreate)
+   * @return
+   */
+  DocumentModel cleanConfusables(CoreSession session, DocumentModel document, Boolean saveDocument);
 
   void validateCharacters(List<DocumentModel> characters,
       DocumentModel alphabet, DocumentModel updated);

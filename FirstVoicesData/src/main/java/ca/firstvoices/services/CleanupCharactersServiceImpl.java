@@ -40,13 +40,14 @@ import org.nuxeo.ecm.core.api.PathRef;
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
 
-  private final String[] types = {FV_PHRASE, FV_WORD};
   //In the future, all dublincore (and other schema) property values
   //should be kept in a constants file in FVData.
   private static final String DOCUMENT_TITLE = "dc:title";
+  private final String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
-  public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
+  public DocumentModel cleanConfusables(CoreSession session, DocumentModel document,
+      Boolean saveDocument) {
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
       return document;
@@ -75,7 +76,12 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       }
     }
     document.setPropertyValue("fv:update_confusables_required", false);
-    return session.saveDocument(document);
+
+    if (saveDocument) {
+      return session.saveDocument(document);
+    }
+
+    return document;
   }
 
   //Helper method for cleanConfusables

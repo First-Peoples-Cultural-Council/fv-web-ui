@@ -156,13 +156,13 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
               Property property = dirtyChildrenIterator.next();
               String propertyName = property.getField().getName().toString();
               if (property.isDirty() && propertyName.equals("dc:title")) {
-                cleanupCharactersService.cleanConfusables(session, document);
+                cleanupCharactersService.cleanConfusables(session, document, false);
               }
             }
           }
         }
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-          cleanupCharactersService.cleanConfusables(session, document);
+          cleanupCharactersService.cleanConfusables(session, document, false);
         }
       } catch (Exception exception) {
         rollBackEvent(event);

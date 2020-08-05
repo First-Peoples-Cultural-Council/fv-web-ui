@@ -48,7 +48,7 @@ public class CleanConfusablesForWordsAndPhrasesWorker extends AbstractWork {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               DocumentModel documentModel = session.getDocument(document);
-              service.cleanConfusables(session, documentModel);
+              service.cleanConfusables(session, documentModel, true);
             });
   }
 
