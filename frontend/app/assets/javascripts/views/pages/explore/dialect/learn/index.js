@@ -387,17 +387,19 @@ export class DialectLearn extends Component {
           if (this.props.routeParams.area === WORKSPACES) {
             if (selectn('response', computeDialect2))
               return (
-                <PageToolbar
-                  label={this.props.intl.trans(
-                    'views.pages.explore.dialect.learn.language_portal',
-                    'Language Portal',
-                    'words'
-                  )}
-                  computeEntity={computeDialect2}
-                  actions={['publish']}
-                  publishChangesAction={this._publishChangesAction}
-                  {...this.props}
-                />
+                <div className="row">
+                  <PageToolbar
+                    label={this.props.intl.trans(
+                      'views.pages.explore.dialect.learn.language_portal',
+                      'Language Portal',
+                      'words'
+                    )}
+                    computeEntity={computeDialect2}
+                    actions={['publish']}
+                    publishChangesAction={this._publishChangesAction}
+                    {...this.props}
+                  />
+                </div>
               )
           }
         })()}

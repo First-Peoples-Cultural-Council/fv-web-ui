@@ -24,10 +24,10 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,7 +44,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   private Map<String, String[]> alphabetAndConfusableCharacters;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     assertNotNull("Should have a valid session", session);
     createSetup(session);
   }
@@ -62,45 +62,9 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = createWords(words);
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
-      cleanupCharactersService.cleanConfusables(session, documentModel);
+      cleanupCharactersService.cleanConfusables(session, documentModel, false);
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
-    }
-  }
-
-  @Test
-  public void mapAndValidateConfusableCharactersTest() {
-    setupCharacters();
-    DocumentModelList characters = session.getChildren(alphabet.getRef());
-    Map<String, String> charMap = cleanupCharactersService
-        .mapAndValidateConfusableCharacters(characters);
-    assertEquals(13, charMap.size());
-    for (Map.Entry<String, String> pair : charMap.entrySet()) {
-      if ("∀".equals(pair.getKey())) {
-        assertEquals("a", pair.getValue());
-      } else if ("ᑳ".equals(pair.getKey())) {
-        assertEquals("b", pair.getValue());
-      } else if ("ɓ".equals(pair.getKey())) {
-        assertEquals("b", pair.getValue());
-      } else if ("ｃ".equals(pair.getKey())) {
-        assertEquals("c", pair.getValue());
-      } else if ("ᗄ".equals(pair.getKey())) {
-        assertEquals("a", pair.getValue());
-      } else if ("Ҍ".equals(pair.getKey())) {
-        assertEquals("b", pair.getValue());
-      } else if ("ⅽ".equals(pair.getKey())) {
-        assertEquals("c", pair.getValue());
-      } else if ("ℭ".equals(pair.getKey())) {
-        assertEquals("c", pair.getValue());
-      } else if ("ꓯ".equals(pair.getKey())) {
-        assertEquals("a", pair.getValue());
-      } else if ("ŷ".equals(pair.getKey()) || "γ".equals(pair.getKey())) {
-        assertEquals("y", pair.getValue());
-      } else if ("Ŷ".equals(pair.getKey()) || "Υ".equals(pair.getKey())) {
-        assertEquals("Y", pair.getValue());
-      } else {
-        fail();
-      }
     }
   }
 
@@ -115,7 +79,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
       assertEquals(true, documentModel.getPropertyValue("fv:update_confusables_required"));
-      cleanupCharactersService.cleanConfusables(session, documentModel);
+      cleanupCharactersService.cleanConfusables(session, documentModel, false);
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
       assertEquals(false, documentModel.getPropertyValue("fv:update_confusables_required"));
@@ -124,23 +88,55 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   }
 
   @Test(expected = FVCharacterInvalidException.class)
-  public void mapAndValidateConfusableCharactersThrowsExceptionWhenMappedConfusableToAlphabetCharacterTest() {
+  public void validateConfusableCharactersThrowsExceptionWhenMappedConfusableToAlphabetCharacterTest() {
     setupCharacters();
     alphabetAndConfusableCharacters.clear();
     alphabetAndConfusableCharacters.put("e", new String[]{"f"});
     alphabetAndConfusableCharacters.put("f", new String[]{"e"});
     createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
     DocumentModelList characters = session.getChildren(alphabet.getRef());
-    cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+    for (DocumentModel doc : characters) {
+      cleanupCharactersService.validateCharacters(characters, alphabet, doc);
+    }
+
   }
 
   @Test(expected = FVCharacterInvalidException.class)
-  public void mapAndValidateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
+  public void validateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
     setupCharacters();
     createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "", new String[]{"ŷ", "γ"},
         new String[]{"Ŷ", "Υ"});
     DocumentModelList characters = session.getChildren(alphabet.getRef());
-    cleanupCharactersService.mapAndValidateConfusableCharacters(characters);
+    for (DocumentModel doc : characters) {
+      cleanupCharactersService.validateCharacters(characters, alphabet, doc);
+    }
+  }
+
+  @Test(expected = FVCharacterInvalidException.class)
+  public void validateCharactersInternally() {
+    setupCharacters();
+    session.createDocumentModel(alphabet.getPathAsString(), "a", FV_CHARACTER);
+
+    DocumentModelList characters = session.getChildren(alphabet.getRef());
+    for (DocumentModel doc : characters) {
+      cleanupCharactersService.validateCharacters(characters, alphabet, doc);
+    }
+  }
+
+  @Test(expected = FVCharacterInvalidException.class)
+  public void validateIgnoredCharacters() {
+    setupCharacters();
+
+    List<String> testList = new ArrayList<>();
+    testList.add("a");
+    testList.add("b");
+
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
+
+    DocumentModelList characters = session.getChildren(alphabet.getRef());
+    for (DocumentModel doc : characters) {
+      cleanupCharactersService.validateCharacters(characters, alphabet, doc);
+    }
   }
 
   private void setupCharacters() {
@@ -196,10 +192,10 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   private List<DocumentModel> createWords(String[] words) {
     List<DocumentModel> documentModels = new ArrayList<>();
-    for (int i = 0; i < words.length; i++) {
+    for (String word : words) {
       DocumentModel document = session
-          .createDocumentModel(dialect.getPathAsString() + "/Dictionary", words[i], FV_WORD);
-      document.setPropertyValue("fv:reference", words[i]);
+          .createDocumentModel(dialect.getPathAsString() + "/Dictionary", word, FV_WORD);
+      document.setPropertyValue("fv:reference", word);
       document.setPropertyValue("fv:update_confusables_required", true);
       document = createDocument(session, document);
       documentModels.add(document);

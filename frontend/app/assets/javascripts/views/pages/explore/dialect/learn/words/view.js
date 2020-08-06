@@ -167,7 +167,7 @@ export class DialectViewWord extends Component {
       <DetailsViewWithActions
         labels={{ single: 'word' }}
         itemPath={this._getWordPath()}
-        actions={['workflow', 'edit', 'publish-toggle', 'enable-toggle', 'publish']}
+        actions={['workflow', 'edit', 'visibility', 'publish']}
         publishAction={this.props.publishWord}
         unpublishAction={this.props.unpublishWord}
         askToPublishAction={this.props.askToPublishWord}
