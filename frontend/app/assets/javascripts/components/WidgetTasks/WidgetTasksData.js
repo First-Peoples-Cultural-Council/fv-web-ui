@@ -15,11 +15,16 @@ import TableContextSort from 'components/Table/TableContextSort'
  */
 function WidgetTasksData({ children }) {
   const [sortDirection, setSortDirection] = useState('desc')
+  const [sortBy, setSortBy] = useState('date')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
   const { fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
 
   const onRowClick = (event, { id }) => {
-    navigate(`/dashboard/tasks?task=${id}`)
+    navigate(
+      `/dashboard/tasks?task=${id}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortDirection}`
+    )
   }
 
   const onOrderChange = (/*columnId, orderDirection*/) => {
@@ -29,13 +34,18 @@ function WidgetTasksData({ children }) {
   // Note: Material-Table has a `sort` bug when using the `remote data` feature
   // see: https://github.com/mbrn/material-table/issues/2177
   const remoteData = (data) => {
-    const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize } = data
+    const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
 
-    const { field: sortBy } = orderBy
+    const { field: _sortBy } = orderBy
+
+    setSortBy(_sortBy)
+    setPage(pageIndex)
+    setPageSize(_pageSize)
+
     return fetchUserGroupTasksRemoteData({
       pageIndex,
-      pageSize,
-      sortBy,
+      pageSize: _pageSize,
+      sortBy: _sortBy,
       sortOrder,
       userId,
     })
