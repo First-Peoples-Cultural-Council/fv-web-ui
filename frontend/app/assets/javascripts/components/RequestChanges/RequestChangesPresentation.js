@@ -1,7 +1,6 @@
 import React from 'react'
 import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
-import Textarea from 'views/components/Form/Common/Textarea'
 import {getError, getErrorFeedback} from 'common/FormHelpers'
 import VisibilitySelect from 'components/VisibilitySelect'
 import PropTypes from 'prop-types'
@@ -19,17 +18,16 @@ import CloseIcon from '@material-ui/icons/Close'
  * @returns {node} jsx markup
  */
 function RequestChangesPresentation({
-  formRef,
-  onSubmit,
-  errors,
+  computeEntities,
   docVisibility,
   disableApproveButton,
   disableRequestChangesButton,
+  errors,
+  formRef,
   handleApprove,
   handleRequestChanges,
   handleVisibilityChange,
   handleSnackbarClose,
-  computeEntities,
   snackbarMessage,
   snackbarStatus,
 }) {
@@ -64,7 +62,6 @@ function RequestChangesPresentation({
                 color="primary"
                 className="FVButton"
                 onClick={handleRequestChanges}
-
             >
               Request Changes
             </FVButton>
@@ -84,14 +81,11 @@ function RequestChangesPresentation({
           />
         </form>
       </div>
-
   )
 }
 
-// PROPTYPES
 const {string, object, bool, func} = PropTypes
 RequestChangesPresentation.propTypes = {
-  submitMethod: string,
   computeEntities: object,
   disableApproveButton: func,
   disableRequestChangesButton: func,
@@ -102,7 +96,7 @@ RequestChangesPresentation.propTypes = {
   handleSnackbarClose: func,
   snackbarMessage: string,
   snackbarStatus: bool,
-
+  submitMethod: string,
 }
 
 RequestChangesPresentation.defaultProps = {

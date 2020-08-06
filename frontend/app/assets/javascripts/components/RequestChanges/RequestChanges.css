@@ -10,9 +10,7 @@ input {
 .actions {
   display: flex;
   justify-content: space-evenly;
-}
-
-.FVButton {
+  padding: 5px
 }
 
 .visibilitySelector {

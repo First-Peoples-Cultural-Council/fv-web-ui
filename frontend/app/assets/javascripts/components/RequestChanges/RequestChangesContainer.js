@@ -10,15 +10,33 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  * @component
  *
  * @param {object} props
+ * @param {string} docId UID of the document that is being reviewed
+ * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'
  *
  * @returns {node} jsx markup
  */
 function RequestChangesContainer({docId, docState}) {
   return (
       <RequestChangesData docId={docId} docState={docState}>
-        {({submitMethod, computeEntities, disableApproveButton, disableRequestChangesButton, docId, docState, docVisibility, errors, formRef, handleApprove, handleRequestChanges, handleSnackbarClose, handleVisibilityChange, onSubmit, snackbarMessage, snackbarStatus}) => {
-          return <RequestChangesPresentation submitMethod={submitMethod}
-                                             computeEntities={computeEntities}
+        {({
+          computeEntities,
+          disableApproveButton,
+          disableRequestChangesButton,
+          docId,
+          docState,
+          docVisibility,
+          errors,
+          formRef,
+          handleApprove,
+          handleRequestChanges,
+          handleSnackbarClose,
+          handleVisibilityChange,
+          onSubmit,
+          snackbarMessage,
+          snackbarStatus,
+          submitMethod
+        }) => {
+          return <RequestChangesPresentation computeEntities={computeEntities}
                                              disableApproveButton={disableApproveButton}
                                              disableRequestChangesButton={disableRequestChangesButton}
                                              docId={docId}
@@ -33,6 +51,7 @@ function RequestChangesContainer({docId, docState}) {
                                              onSubmit={onSubmit}
                                              snackbarMessage={snackbarMessage}
                                              snackbarStatus={snackbarStatus}
+                                             submitMethod={submitMethod}
 
 
           />
@@ -41,13 +60,10 @@ function RequestChangesContainer({docId, docState}) {
   )
 }
 
-// PROPTYPES
 const {string} = PropTypes
 RequestChangesContainer.propTypes = {
   docId: string,
   docState: string,
-  //   something: string,
-
 }
 
 export default RequestChangesContainer

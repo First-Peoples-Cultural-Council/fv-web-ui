@@ -22,18 +22,11 @@ function RequestChangesData({children, docId, docState}) {
   const {routeParams} = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
-  let [snackbarStatus, setSnackbarStatus] = useState(false)
+  const [snackbarStatus, setSnackbarStatus] = useState(false)
   const [submitMethod, setSubmitMethod] = useState(null)
   const [snackbarMessage, setSnackbarMessage] = useState(null)
-
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
-
-  const handleVisibilityChange = (event) => {
-    const newVisibility = event.target.value
-    // Set visibility in local state
-    setDocVisibility(newVisibility)
-  }
 
   const computeEntities = Immutable.fromJS([
     {
@@ -41,6 +34,12 @@ function RequestChangesData({children, docId, docState}) {
       entity: computePortal,
     },
   ])
+
+  const handleVisibilityChange = (event) => {
+    const newVisibility = event.target.value
+    // Set visibility in local state
+    setDocVisibility(newVisibility)
+  }
 
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
@@ -76,6 +75,7 @@ function RequestChangesData({children, docId, docState}) {
   }
 
   const handleApprove = (event) => {
+    // Validates the form data and updates the visibility
     const validator = yup.object().shape({
       visibilitySelect: yup
       .string()
@@ -106,11 +106,13 @@ function RequestChangesData({children, docId, docState}) {
   }
 
   const handleRequestChanges = (event) => {
+    // Validates the form data and updates the visibility
     const validator = yup.object().shape({
       visibilitySelect: yup
       .string()
       .label('Document visibility'),
     })
+
     setSubmitMethod('requestChanges')
     event.preventDefault()
 
@@ -134,6 +136,7 @@ function RequestChangesData({children, docId, docState}) {
   }
 
   const disableApproveButton = () => {
+    // The approve button is greyed out if a visibility is not selected
     if (docVisibility == "") {
       return true
     }
@@ -141,6 +144,8 @@ function RequestChangesData({children, docId, docState}) {
   }
 
   const disableRequestChangesButton = () => {
+    // In future iterations, the request changes button will be greyed out
+    // if comments are not provided
     return false
   }
 
@@ -167,7 +172,6 @@ function RequestChangesData({children, docId, docState}) {
   })
 }
 
-// PROPTYPES
 const {func} = PropTypes
 RequestChangesData.propTypes = {
   children: func,
