@@ -32,7 +32,6 @@ export default class FlashcardList extends Component {
     flashcardTitle: '',
   }
 
-
   constructor(props, context) {
     super(props, context)
     ;['_generateFlashcards'].forEach((method) => (this[method] = this[method].bind(this)))
@@ -51,12 +50,7 @@ export default class FlashcardList extends Component {
     if (selectn('length', items) === 0) {
       return (
         <div style={{ margin: '20px 0' }}>
-          <FVLabel
-            transKey="no_results_found"
-            defaultStr="No Results Found"
-            transform="first"
-            append="."
-          />
+          <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="first" append="." />
         </div>
       )
     }
@@ -86,7 +80,7 @@ export default class FlashcardList extends Component {
 
           if (column.name === 'title') {
             return (
-              <div key={j} className="FlashcardTitle FlashcardData fontAboriginalSans">
+              <div key={j} className="FlashcardTitle FlashcardData fontBCSans">
                 {cellRender}
               </div>
             )
@@ -95,9 +89,9 @@ export default class FlashcardList extends Component {
             return (
               <div key={j} className="FlashcardDefinitions FlashcardData">
                 <div className="FlashcardDefinitionsMeta">
-                  <div className="FlashcardDefinitionsDialect fontAboriginalSans">{this.props.flashcardTitle}</div>
+                  <div className="FlashcardDefinitionsDialect fontBCSans">{this.props.flashcardTitle}</div>
                 </div>
-                <div className="FlashcardDefinition fontAboriginalSans">{cellRender}</div>
+                <div className="FlashcardDefinition fontBCSans">{cellRender}</div>
                 <div className="FlashcardDefinitionsMeta">
                   <div className="FlashcardDefinitionsUrl">www.firstvoices.com</div>
                 </div>

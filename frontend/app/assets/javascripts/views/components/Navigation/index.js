@@ -438,7 +438,7 @@ export class Navigation extends Component {
                 className={`${dialectContainer} Navigation__dialectLink`}
               >
                 <Avatar src={avatarSrc} size={50} />
-                <span className="Navigation__dialectName fontAboriginalSans">
+                <span className="Navigation__dialectName fontBCSans">
                   {this.props.intl.searchAndReplace(portalTitle)}
                   {/* TODO: What is this? */}
                 </span>

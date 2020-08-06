@@ -234,7 +234,7 @@ export class AlphabetView extends Component {
                             [character]
                           ),
                       id: 'find_words',
-                      className: 'fontAboriginalSans',
+                      className: 'fontBCSans',
                     },
                     {
                       label: UIHelpers.isViewSize('xs')
@@ -246,7 +246,7 @@ export class AlphabetView extends Component {
                             [character]
                           ),
                       id: 'find_phrases',
-                      className: 'fontAboriginalSans',
+                      className: 'fontBCSans',
                     },
                   ]}
                   tabsValue={this.state.tabValue}
@@ -257,7 +257,7 @@ export class AlphabetView extends Component {
                 {this.state.tabValue === 0 && (
                   <Typography component="div">
                     <CardContent>
-                      <div className={`${hasMedia ? 'col-xs-8' : ''} fontAboriginalSans`}>
+                      <div className={`${hasMedia ? 'col-xs-8' : ''} fontBCSans`}>
                         <div className="AlphabetViewRow">
                           <div className="AlphabetViewRowItem">
                             <Typography component="h2" variant="h5">
@@ -305,7 +305,7 @@ export class AlphabetView extends Component {
                 {/* TAB: WORDS */}
                 {this.state.tabValue === 1 && (
                   <Typography component="div" style={{ padding: 8 * 3 }}>
-                    <div className="fontAboriginalSans">
+                    <div className="fontBCSans">
                       <CardContent>
                         <h2>
                           <FVLabel
@@ -329,7 +329,7 @@ export class AlphabetView extends Component {
 
                 {this.state.tabValue === 2 && (
                   <Typography component="div" style={{ padding: 8 * 3 }}>
-                    <div className="fontAboriginalSans">
+                    <div className="fontBCSans">
                       <CardContent>
                         <h2>
                           <FVLabel

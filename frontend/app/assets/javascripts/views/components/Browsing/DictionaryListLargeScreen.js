@@ -87,7 +87,7 @@ const DictionaryListLargeScreen = (props) => {
     ) : null
 
   return (
-    <table className={`DictionaryList data-table fontAboriginalSans ${props.cssModifier}`}>
+    <table className={`DictionaryList data-table fontBCSans ${props.cssModifier}`}>
       <tbody>
         {trHeader}
 

@@ -114,7 +114,7 @@ export class Search extends DataListView {
           <div className={classNames('search-results', 'col-xs-12', 'col-md-12')}>
             <h1>
               <FVLabel transKey="search_results" defaultStr="Search results" transform="first" /> -{' '}
-              <span className="fontAboriginalSans">{this.props.routeParams.searchTerm}</span>
+              <span className="fontBCSans">{this.props.routeParams.searchTerm}</span>
             </h1>
 
             <PromiseWrapper renderOnError computeEntities={computeEntities}>

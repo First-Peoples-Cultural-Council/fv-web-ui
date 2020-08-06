@@ -57,36 +57,38 @@ class SearchResultTile extends Component {
         const definitions = selectn('properties.fv:definitions', tile) || []
         definitions.length > 0
           ? output.push(
-            '<em>' +
+              '<em>' +
                 this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 definitions.map((v) => v.translation).join(', ')
-          )
+            )
           : null
 
         const part_of_speech = selectn('properties.fv-word:part_of_speech', tile)
         part_of_speech
           ? output.push(
-            '<em>' +
+              '<em>' +
                 this.props.intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
                 '</em>: ' +
                 part_of_speech
-          )
+            )
           : null
 
         const pronunciation = selectn('properties.fv-word:pronunciation', tile)
         pronunciation
-          ? output.push('<em>' + this.props.intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation)
+          ? output.push(
+              '<em>' + this.props.intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation
+            )
           : null
 
         const categories = selectn('contextParameters.word.categories', tile) || []
         categories.length > 0
           ? output.push(
-            '<em>' +
+              '<em>' +
                 this.props.intl.trans('categories', 'Categories', 'first') +
                 '</em>: ' +
                 categories.map((v) => selectn('dc:title', v)).join(', ')
-          )
+            )
           : null
 
         desc = output.join(', ')
@@ -110,21 +112,21 @@ class SearchResultTile extends Component {
         const p_definitions = selectn('properties.fv:definitions', tile) || []
         p_definitions.length > 0
           ? p_output.push(
-            '<em>' +
+              '<em>' +
                 this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
                 '</em>: ' +
                 p_definitions.map((v) => v.translation).join(', ')
-          )
+            )
           : null
 
         const p_categories = selectn('contextParameters.phrase.phrase_books', tile) || []
         p_categories.length > 0
           ? p_output.push(
-            '<em>' +
+              '<em>' +
                 this.props.intl.trans('phrase_bookes', 'Phrase Books', 'words') +
                 '</em>: ' +
                 p_categories.map((v) => selectn('dc:title', v)).join(', ')
-          )
+            )
           : null
 
         desc = p_output.join(', ')
@@ -170,7 +172,7 @@ class SearchResultTile extends Component {
     if (desc) {
       desc = desc.replace(
         new RegExp(this.props.searchTerm.replace(/[()]/gi, ''), 'gi'),
-        '<strong className="fontAboriginalSans">' + this.props.searchTerm + '</strong>'
+        '<strong className="fontBCSans">' + this.props.searchTerm + '</strong>'
       )
     }
     title = DOMPurify.sanitize(title)
@@ -182,8 +184,8 @@ class SearchResultTile extends Component {
         style={{ borderBottom: '1px solid #e0e0e0', margin: '20px 0', paddingTop: '65px' }}
         key={selectn('uid', tile)}
       >
-        <div className="SearchResultTileMain fontAboriginalSans" style={{ marginLeft: '16px', width: '80%' }}>
-          <a href={targetPath} className="SearchResultTileTitle fontAboriginalSans">
+        <div className="SearchResultTileMain fontBCSans" style={{ marginLeft: '16px', width: '80%' }}>
+          <a href={targetPath} className="SearchResultTileTitle fontBCSans">
             {title}
             <small className="SearchResultTileTitleType">[{SearchResultTileTitleType}]</small>
           </a>

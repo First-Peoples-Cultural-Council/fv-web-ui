@@ -197,7 +197,7 @@ export class Breadcrumb extends Component {
         )
       }
     })
-    return <ul className={`Breadcrumb breadcrumb fontAboriginalSans ${this.props.className}`}>{breadcrumbs}</ul>
+    return <ul className={`Breadcrumb breadcrumb fontBCSans ${this.props.className}`}>{breadcrumbs}</ul>
   }
 }
 
