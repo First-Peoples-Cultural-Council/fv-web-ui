@@ -38,7 +38,11 @@ function WidgetTasksPresentation({
       title="List of Tasks"
       variant={CONTENT_FULL_WIDTH}
       childrenHeader={
-        data.length !== 0 && <Link href={`/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}`}>See all tasks</Link>
+        data.length !== 0 && (
+          <Link href={`/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}&page=1&pageSize=10&sortBy=date&sortOrder=desc`}>
+            See all tasks
+          </Link>
+        )
       }
     >
       <Table.Presentation
