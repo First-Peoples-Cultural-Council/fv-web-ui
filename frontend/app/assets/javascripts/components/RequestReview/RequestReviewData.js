@@ -166,7 +166,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
       case docVisibility === 'team' && requestVisibilityType === 'members':
         return askToEnableAction()
       case docVisibility === 'team' && requestVisibilityType === 'public':
-        return askToEnableAction()
+        return askToPublishAction()
       case docVisibility === 'members' && requestVisibilityType === 'team':
         return askToDisableAction()
       case docVisibility === 'members' && requestVisibilityType === 'members':
@@ -174,7 +174,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
       case docVisibility === 'members' && requestVisibilityType === 'public':
         return askToPublishAction()
       case docVisibility === 'public' && requestVisibilityType === 'team':
-        return askToUnpublishAction()
+        return askToDisableAction()
       case docVisibility === 'public' && requestVisibilityType === 'members':
         return askToUnpublishAction()
       case docVisibility === 'public' && requestVisibilityType === 'public':
