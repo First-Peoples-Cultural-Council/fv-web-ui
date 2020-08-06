@@ -43,6 +43,11 @@ function RequestReviewPresentation({
   computeEntities,
 }) {
   const classes = RequestReviewStyles()
+  const buttonLabel = hasRelatedTasks ? (
+    <FVLabel transKey="review_requested" defaultStr="Review requested" transform="first" />
+  ) : (
+    <FVLabel transKey="request_review" defaultStr="Request review" transform="first" />
+  )
   return (
     <>
       <FVButton
@@ -52,7 +57,7 @@ function RequestReviewPresentation({
         color="primary"
         disabled={hasRelatedTasks}
       >
-        <FVLabel transKey="request_review" defaultStr="Request review" transform="first" />
+        {buttonLabel}
       </FVButton>
 
       <Dialog
@@ -130,7 +135,6 @@ RequestReviewPresentation.defaultProps = {
   handleDialogOk: () => {},
   handleRequestReview: () => {},
   handleVisibilityChange: () => {},
-  hasRelatedTasks: false,
   isDialogOpen: false,
   snackbarOpen: false,
   handleSnackbarClose: () => {},

@@ -2,11 +2,14 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const VisibilityMinimalStyles = makeStyles({
   base: {
-    float: 'right',
     paddingBottom: '10px',
   },
   label: {
-    float: 'right',
+    display: 'inline',
+  },
+  labelContents: {
+    fontSize: '1.5rem',
+    display: 'inline',
   },
   dialogDescription: {
     textAlign: 'center',

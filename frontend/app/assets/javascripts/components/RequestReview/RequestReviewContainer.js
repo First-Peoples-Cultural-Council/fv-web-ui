@@ -37,23 +37,21 @@ function RequestReviewContainer({ docId, docState, docType, computeEntities }) {
         workspaces,
       }) => {
         return workspaces && !hideButton ? (
-          <div>
-            <RequestReviewPresentation
-              computeEntities={computeEntities}
-              dialectName={dialectName}
-              docTypeName={docTypeName}
-              handleDialogCancel={handleDialogCancel}
-              handleDialogOk={handleDialogOk}
-              handleRequestReview={handleRequestReview}
-              handleSnackbarClose={handleSnackbarClose}
-              handleVisibilityChange={handleVisibilityChange}
-              hasRelatedTasks={hasRelatedTasks}
-              isDialogOpen={isDialogOpen}
-              requestVisibilityType={requestVisibilityType}
-              snackbarOpen={snackbarOpen}
-              writePrivileges={writePrivileges}
-            />
-          </div>
+          <RequestReviewPresentation
+            computeEntities={computeEntities}
+            dialectName={dialectName}
+            docTypeName={docTypeName}
+            handleDialogCancel={handleDialogCancel}
+            handleDialogOk={handleDialogOk}
+            handleRequestReview={handleRequestReview}
+            handleSnackbarClose={handleSnackbarClose}
+            handleVisibilityChange={handleVisibilityChange}
+            hasRelatedTasks={hasRelatedTasks}
+            isDialogOpen={isDialogOpen}
+            requestVisibilityType={requestVisibilityType}
+            snackbarOpen={snackbarOpen}
+            writePrivileges={writePrivileges}
+          />
         ) : null
       }}
     </RequestReviewData>
