@@ -16,14 +16,14 @@ import TableContextSort from 'components/Table/TableContextSort'
 function WidgetTasksData({ children }) {
   const [sortDirection, setSortDirection] = useState('desc')
   const [sortBy, setSortBy] = useState('date')
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
   const { fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
 
   const onRowClick = (event, { id }) => {
     navigate(
-      `/dashboard/tasks?task=${id}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortDirection}`
+      `/dashboard/tasks?task=${id}&page=${page + 1}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortDirection}`
     )
   }
 
@@ -36,8 +36,7 @@ function WidgetTasksData({ children }) {
   const remoteData = (data) => {
     const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
 
-    const { field: _sortBy } = orderBy
-
+    const { field: _sortBy = 'date' } = orderBy
     setSortBy(_sortBy)
     setPage(pageIndex)
     setPageSize(_pageSize)
