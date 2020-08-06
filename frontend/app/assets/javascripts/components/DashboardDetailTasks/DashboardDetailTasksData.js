@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
@@ -21,39 +21,62 @@ import TableContextSort from 'components/Table/TableContextSort'
 function DashboardDetailTasksData({ children }) {
   const [pageSize, setPageSize] = useState(5)
   const [sortDirection, setSortDirection] = useState('desc')
-  const idSelectedItem = useRef()
   const [selectedItemData, setSelectedItemData] = useState({})
-  const { getSearchObject, navigate /*, navigateReplace*/ } = useNavigationHelpers()
+  const [selectedTaskData, setSelectedTaskData] = useState({})
+  const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
   const { computeDocument, fetchDocument } = useDocument()
-  const { active } = getSearchObject()
+  const {
+    task: queryTask,
+    item: queryItem,
+    page: queryPage = 1,
+    pageSize: queryPageSize = 10,
+    sortBy: querySortBy = 'date',
+    sortOrder: querySortOrder = 'desc',
+  } = getSearchObject()
 
   const { fetchUserGroupTasksRemoteData, userId, tasks } = useUserGroupTasks()
-  useEffect(() => {
-    if (active === URL_QUERY_PLACEHOLDER && tasks.length > 0) {
-      // navigateReplace(`${window.location.pathname}?active=${tasks[0].id}`)
-    }
-  }, [])
 
+  // Get data when we have userId
   useEffect(() => {
-    if (active && active !== URL_QUERY_PLACEHOLDER && tasks.length > 0) {
-      const selectedTask = tasks.filter(({ id }) => {
-        return id === active
-      })
-      const firstTargetDocumentId = selectn([0, 'targetDocumentsIds', 0], selectedTask)
-      idSelectedItem.current = firstTargetDocumentId
-      fetchDocument(idSelectedItem.current)
-    }
-  }, [active, tasks])
+    const _queryPage = Number(queryPage)
+    remoteData({
+      orderBy: { field: querySortBy },
+      orderDirection: querySortOrder,
+      page: _queryPage === 0 ? _queryPage : _queryPage - 1,
+      pageSize: queryPageSize,
+    })
+  }, [userId])
 
+  // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
-    const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, idSelectedItem.current)
-    const _selectedItemData = selectn(['response'], extractComputeDocument)
+    if (queryTask && tasks.length > 0) {
+      navigateReplace(
+        getUrlWithQuery({
+          task: queryTask === URL_QUERY_PLACEHOLDER ? tasks[0].id : queryTask,
+          item: queryItem ? queryItem : selectn([0, 'targetDocumentsIds', 0], tasks), // TODO: NOT SELECTING CORRECTLY?
+        })
+      )
+    }
+  }, [queryItem, queryTask, tasks, userId])
+
+  // Get Item Details
+  useEffect(() => {
+    if (queryItem) {
+      fetchDocument(queryItem)
+    }
+  }, [queryItem])
+
+  // TODO: Curently only handling words
+  useEffect(() => {
+    const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
+    const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
+
     // General
-    // const dialectClassName = getDialectClassname(computeDialect2)
+    // const dialectClassName = getDialectClassname(computeDialect2) // TODO
 
     // const metadata = selectn('response', _selectedItemData) ? (
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
-    // ) : null
+    // ) : null  // TODO
     setSelectedItemData({
       itemType: selectn('type', _selectedItemData),
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
@@ -71,14 +94,56 @@ function DashboardDetailTasksData({ children }) {
       relatedToAssets: selectn('contextParameters.word.related_by', _selectedItemData) || [],
       videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
     })
-  }, [computeDocument])
+  }, [computeDocument, queryItem])
+
+  // Get Task Details
+  useEffect(() => {
+    if (queryTask) {
+      fetchDocument(queryTask)
+    }
+  }, [queryTask])
+
+  useEffect(() => {
+    const extractComputeDocumentTask = ProviderHelpers.getEntry(computeDocument, queryTask)
+    const _selectedTaskData = selectn(['response'], extractComputeDocumentTask)
+    if (_selectedTaskData) {
+      setSelectedTaskData({
+        date: selectn(['properties', 'nt:dueDate'], _selectedTaskData),
+        id: 'uid',
+        initiator: selectn(['properties', 'nt:initiator'], _selectedTaskData),
+        title: selectn(['properties', 'nt:name'], _selectedTaskData),
+        itemType: selectedItemData.itemType,
+        isNew: selectedItemData.isNew,
+      })
+    }
+  }, [computeDocument, queryTask])
 
   const onClose = () => {
     navigate(`${window.location.pathname}`)
   }
 
   const onOpen = (id) => {
-    navigate(`${window.location.pathname}?active=${id ? id : URL_QUERY_PLACEHOLDER}`)
+    let selectedTargetDocumentId
+    if (tasks && tasks.length > 0) {
+      const selectedTask = tasks.filter((task) => {
+        return task.id === id
+      })
+      selectedTargetDocumentId = selectn([0, 'targetDocumentsIds', 0], selectedTask)
+    }
+
+    const url =
+      id === undefined
+        ? `/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}`
+        : getUrlWithQuery({
+            task: id,
+            item: selectedTargetDocumentId,
+          })
+
+    navigate(url)
+  }
+
+  const getUrlWithQuery = ({ task, item }) => {
+    return `${window.location.pathname}?task=${task}&item=${item}&page=${queryPage}&pageSize=${queryPageSize}&sortBy=${querySortBy}&sortOrder=${querySortOrder}`
   }
 
   const onRowClick = (event, { id }) => {
@@ -91,7 +156,7 @@ function DashboardDetailTasksData({ children }) {
 
   // Note: Material-Table has a `sort` bug when using the `remote data` feature
   // see: https://github.com/mbrn/material-table/issues/2177
-  const remoteData = (data) => {
+  const remoteData = (data = {}) => {
     const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
 
     const { field: sortBy } = orderBy
@@ -131,8 +196,8 @@ function DashboardDetailTasksData({ children }) {
             render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
           },
         ],
-        idSelectedItem: idSelectedItem.current,
-        idSelectedTask: active !== URL_QUERY_PLACEHOLDER ? active : undefined,
+        idSelectedItem: queryItem,
+        idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
         listItems: tasks,
         onClose,
         onOpen,
@@ -151,6 +216,7 @@ function DashboardDetailTasksData({ children }) {
           sorting: true,
         },
         sortDirection,
+        selectedTaskData,
       })}
     </TableContextSort.Provider>
   )

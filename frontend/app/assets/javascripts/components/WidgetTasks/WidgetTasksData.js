@@ -19,7 +19,7 @@ function WidgetTasksData({ children }) {
   const { fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
 
   const onRowClick = (event, { id }) => {
-    navigate(`/dashboard/tasks?active=${id}`)
+    navigate(`/dashboard/tasks?task=${id}`)
   }
 
   const onOrderChange = (/*columnId, orderDirection*/) => {

@@ -34,10 +34,15 @@ function DashboardDetailTasksContainer() {
         options,
         sortDirection,
         onChangeRowsPerPage,
+        selectedTaskData,
       }) => {
-        const filteredData = listItems.filter(({ id }) => id === idSelectedTask)
-        const selectedTaskData = filteredData.length > 0 ? { ...filteredData[0] } : {}
-        const { title, initiator, date, itemType, isNew } = selectedTaskData
+        const {
+          title: taskTitle,
+          initiator: taskInitiator,
+          date: taskDate,
+          itemType: taskItemType,
+          isNew: taskIsNew,
+        } = selectedTaskData
         const {
           culturalNotes,
           definitions,
@@ -87,10 +92,10 @@ function DashboardDetailTasksContainer() {
                 childrenTaskSummary={
                   <DashboardDetailListItem.Presentation
                     component="div"
-                    title={title}
-                    initiator={initiator}
-                    date={date}
-                    icon={<DashboardDetailIcon.Presentation itemType={itemType} isNew={isNew} />}
+                    title={taskTitle}
+                    initiator={taskInitiator}
+                    date={taskDate}
+                    icon={<DashboardDetailIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
                 }
                 // TODO:
