@@ -6,8 +6,7 @@ import {useRef, useState, useEffect} from 'react'
 import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
-import useVisibility from "../../common/DataSource/useVisibility";
-import FVSnackbar from "../../views/components/FVSnackbar";
+import useVisibility from 'DataSource/useVisibility'
 
 /**
  * @summary RequestChangesData
@@ -34,6 +33,13 @@ function RequestChangesData({children, docId, docState}) {
     // Set visibility in local state
     setDocVisibility(newVisibility)
   }
+
+  const computeEntities = Immutable.fromJS([
+    {
+      id: routeParams.dialect_path,
+      entity: computePortal,
+    },
+  ])
 
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
@@ -68,24 +74,6 @@ function RequestChangesData({children, docId, docState}) {
     }
   }
 
-  const computeEntities = Immutable.fromJS([
-    {
-      id: routeParams.dialect_path,
-      entity: computePortal,
-    },
-  ])
-
-  const disableApproveButton = () => {
-    if (docVisibility == "") {
-      return true
-    }
-    return false
-  }
-
-  const disableRequestChangesButton = () => {
-    return false
-  }
-
   const handleApprove = (event) => {
     const validator = yup.object().shape({
       visibilitySelect: yup
@@ -95,25 +83,21 @@ function RequestChangesData({children, docId, docState}) {
     })
 
     setSubmitMethod('approve')
-    console.log('hello from submit')
     event.preventDefault()
 
     const formData = getFormData({
       formReference: formRef,
     })
 
-    console.log('onSubmit > here is the form data:', {formData})
-
     handleSubmit({
       validator,
       formData,
       valid: () => {
-        console.log('onSubmit > form is valid')
         setErrors(undefined)
+        updateVisibility(docVisibility)
         setSnackbarStatus(true)
       },
       invalid: (response) => {
-        console.log('onSubmit > form is invalid', {errorsHere: response.errors})
         setErrors(response.errors)
       },
     })
@@ -126,28 +110,35 @@ function RequestChangesData({children, docId, docState}) {
       .label('Document visibility'),
     })
     setSubmitMethod('requestChanges')
-    console.log('hello from requestChanges')
     event.preventDefault()
 
     const formData = getFormData({
       formReference: formRef,
     })
 
-    console.log('onSubmit > here is the form data:', {formData})
-
     handleSubmit({
       validator,
       formData,
       valid: () => {
-        console.log('onSubmit > form is valid')
         setErrors(undefined)
+        updateVisibility(docVisibility)
         setSnackbarStatus(true)
       },
       invalid: (response) => {
-        console.log('onSubmit > form is invalid', {errorsHere: response.errors})
         setErrors(response.errors)
       },
     })
+  }
+
+  const disableApproveButton = () => {
+    if (docVisibility == "") {
+      return true
+    }
+    return false
+  }
+
+  const disableRequestChangesButton = () => {
+    return false
   }
 
   const handleSnackbarClose = (event, reason) => {
