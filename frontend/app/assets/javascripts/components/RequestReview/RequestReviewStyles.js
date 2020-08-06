@@ -11,7 +11,8 @@ export const RequestReviewStyles = makeStyles({
     alignItems: 'center',
   },
   label: {
-    float: 'right',
+    fontSize: '1.5rem',
+    display: 'inline',
   },
   dialogDescription: {
     textAlign: 'left',

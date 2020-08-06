@@ -43,8 +43,12 @@ function RequestReviewPresentation({
   computeEntities,
 }) {
   const classes = RequestReviewStyles()
+  const requestInProgress = hasRelatedTasks ? (
+    <div className={classes.label}>A request for review is pending</div>
+  ) : null
   return (
     <>
+      {requestInProgress}
       <FVButton
         className={classes.button}
         onClick={handleRequestReview}
@@ -130,7 +134,6 @@ RequestReviewPresentation.defaultProps = {
   handleDialogOk: () => {},
   handleRequestReview: () => {},
   handleVisibilityChange: () => {},
-  hasRelatedTasks: false,
   isDialogOpen: false,
   snackbarOpen: false,
   handleSnackbarClose: () => {},
