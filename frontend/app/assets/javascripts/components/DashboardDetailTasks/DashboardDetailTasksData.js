@@ -98,7 +98,7 @@ function DashboardDetailTasksData({ children }) {
 
   // Get Task Details
   useEffect(() => {
-    if (queryTask) {
+    if (queryTask && queryTask !== URL_QUERY_PLACEHOLDER) {
       fetchDocument(queryTask)
     }
   }, [queryTask])
