@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Typography from '@material-ui/core/Typography'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -110,8 +109,8 @@ function VisibilityMinimalPresentation({
     </div>
   ) : (
     <div className={classes.base}>
-      <div className={classes.label}>Who can see this word?</div>
-      <Typography variant="body2">{generateVisibilityLabel(docVisibility)}</Typography>
+      <div className={classes.label}>Who can see this word?&nbsp;&nbsp;</div>
+      <div className={classes.labelContents}>{generateVisibilityLabel(docVisibility)}</div>
     </div>
   )
 }
