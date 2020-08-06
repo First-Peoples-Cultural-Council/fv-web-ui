@@ -24,6 +24,7 @@ function RequestChangesData({children, docId, docState}) {
   const [errors, setErrors] = useState()
   let [snackbarStatus, setSnackbarStatus] = useState(false)
   const [submitMethod, setSubmitMethod] = useState(null)
+  const [snackbarMessage, setSnackbarMessage] = useState(null)
 
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
@@ -95,6 +96,7 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
+        setSnackbarMessage("Document approved")
         setSnackbarStatus(true)
       },
       invalid: (response) => {
@@ -122,6 +124,7 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
+        setSnackbarMessage("Changes requested")
         setSnackbarStatus(true)
       },
       invalid: (response) => {
@@ -159,7 +162,7 @@ function RequestChangesData({children, docId, docState}) {
     handleRequestChanges,
     handleVisibilityChange,
     handleSnackbarClose,
-    // onSubmit,
+    snackbarMessage,
     snackbarStatus,
   })
 }

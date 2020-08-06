@@ -30,6 +30,7 @@ function RequestChangesPresentation({
   handleVisibilityChange,
   handleSnackbarClose,
   computeEntities,
+  snackbarMessage,
   snackbarStatus,
 }) {
   return (
@@ -72,7 +73,7 @@ function RequestChangesPresentation({
               open={snackbarStatus}
               autoHideDuration={3000}
               onClose={handleSnackbarClose}
-              message="Document submitted"
+              message={snackbarMessage}
               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
               action={
                 <IconButton size="small" aria-label="close" color="inherit"
@@ -99,6 +100,7 @@ RequestChangesPresentation.propTypes = {
   handleApprove: func,
   handleRequestChanges: func,
   handleSnackbarClose: func,
+  snackbarMessage: string,
   snackbarStatus: bool,
 
 }

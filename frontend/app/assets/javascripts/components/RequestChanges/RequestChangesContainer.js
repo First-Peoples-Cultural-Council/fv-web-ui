@@ -16,7 +16,7 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
 function RequestChangesContainer({docId, docState}) {
   return (
       <RequestChangesData docId={docId} docState={docState}>
-        {({submitMethod, computeEntities, disableApproveButton, disableRequestChangesButton, docId, docState, docVisibility, errors, formRef, handleApprove, handleRequestChanges, handleSnackbarClose, handleVisibilityChange, onSubmit, snackbarStatus}) => {
+        {({submitMethod, computeEntities, disableApproveButton, disableRequestChangesButton, docId, docState, docVisibility, errors, formRef, handleApprove, handleRequestChanges, handleSnackbarClose, handleVisibilityChange, onSubmit, snackbarMessage, snackbarStatus}) => {
           return <RequestChangesPresentation submitMethod={submitMethod}
                                              computeEntities={computeEntities}
                                              disableApproveButton={disableApproveButton}
@@ -31,6 +31,7 @@ function RequestChangesContainer({docId, docState}) {
                                              handleSnackbarClose={handleSnackbarClose}
                                              handleVisibilityChange={handleVisibilityChange}
                                              onSubmit={onSubmit}
+                                             snackbarMessage={snackbarMessage}
                                              snackbarStatus={snackbarStatus}
 
 
