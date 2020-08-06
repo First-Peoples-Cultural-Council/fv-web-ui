@@ -195,10 +195,10 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     //Updated character is validated internally, check all other characters
     Set<String> collectedCharacters = createCharacterHashMap(filteredCharacters);
 
-    if (alphabet
-        .getPropertyValue("fv-alphabet:ignored_characters") != null) {
-      collectedCharacters.addAll(Arrays.asList((String[]) alphabet
-          .getPropertyValue("fv-alphabet:ignored_characters")));
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    if (ignoredCharacters != null) {
+      collectedCharacters.addAll(Arrays.asList(ignoredCharacters));
     }
 
     //Confirm that updated character set is unique from all other characters
@@ -239,15 +239,17 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       collectedCharacters.add((String) d.getPropertyValue(DOCUMENT_TITLE));
       collectedCharacters.add((String) d.getPropertyValue("fvcharacter:upper_case_character"));
 
-      if (d
-          .getPropertyValue("fvcharacter:confusable_characters") != null) {
-        collectedCharacters.addAll(Arrays.asList((String[]) d
-            .getPropertyValue("fvcharacter:confusable_characters")));
+
+      String[] lowerConfusablesArr = (String[]) d
+          .getPropertyValue("fvcharacter:confusable_characters");
+      if (lowerConfusablesArr != null) {
+        collectedCharacters.addAll(Arrays.asList(lowerConfusablesArr));
       }
-      if (d
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters") != null) {
-        collectedCharacters.addAll(Arrays.asList((String[]) d
-            .getPropertyValue("fvcharacter:upper_case_confusable_characters")));
+
+      String[] upperConfusablesArr = (String[]) d
+          .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+      if (upperConfusablesArr != null) {
+        collectedCharacters.addAll(Arrays.asList(upperConfusablesArr));
       }
 
     }

@@ -49,6 +49,7 @@ export class PageToolbar extends Component {
     actions: array,
     children: node,
     computeEntity: object.isRequired,
+    computeLogin: object.isRequired,
     computePermissionEntity: object,
     enableToggleAction: func,
     handleNavigateRequest: func,
@@ -137,7 +138,14 @@ export class PageToolbar extends Component {
             <div>
               {/* Button: Request Review */}
               {actions.includes('workflow') ? (
-                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+                <AuthorizationFilter
+                  filter={{
+                    role: 'Record',
+                    entity: selectn('response', permissionEntity),
+                    secondaryPermission: 'Write',
+                    login: this.props.computeLogin,
+                  }}
+                >
                   <RequestReview.Container
                     docId={selectn('response.uid', computeEntity)}
                     docState={selectn('response.state', computeEntity)}
