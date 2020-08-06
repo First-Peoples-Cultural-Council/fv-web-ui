@@ -43,12 +43,13 @@ function RequestReviewPresentation({
   computeEntities,
 }) {
   const classes = RequestReviewStyles()
-  const requestInProgress = hasRelatedTasks ? (
-    <div className={classes.label}>A request for review is pending</div>
-  ) : null
+  const buttonLabel = hasRelatedTasks ? (
+    <FVLabel transKey="review_requested" defaultStr="Review requested" transform="first" />
+  ) : (
+    <FVLabel transKey="request_review" defaultStr="Request review" transform="first" />
+  )
   return (
     <>
-      {requestInProgress}
       <FVButton
         className={classes.button}
         onClick={handleRequestReview}
@@ -56,7 +57,7 @@ function RequestReviewPresentation({
         color="primary"
         disabled={hasRelatedTasks}
       >
-        <FVLabel transKey="request_review" defaultStr="Request review" transform="first" />
+        {buttonLabel}
       </FVButton>
 
       <Dialog
