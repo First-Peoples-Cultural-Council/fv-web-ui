@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import VisibilitySelectData from './VisibilitySelectData'
 import VisibilitySelectPresentation from './VisibilitySelectPresentation'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
@@ -18,11 +19,19 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, computeEntities, hideLabel }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
-      <VisibilitySelectPresentation
-        docVisibility={docVisibility}
-        handleVisibilityChange={handleVisibilityChange}
-        hideLabel={hideLabel}
-      />
+      <VisibilitySelectData>
+        {({ publicDialect, dialect }) => {
+          return (
+            <VisibilitySelectPresentation
+              docVisibility={docVisibility}
+              handleVisibilityChange={handleVisibilityChange}
+              hideLabel={hideLabel}
+              publicDialect={publicDialect}
+              dialect={dialect}
+            />
+          )
+        }}
+      </VisibilitySelectData>
     </PromiseWrapper>
   )
 }

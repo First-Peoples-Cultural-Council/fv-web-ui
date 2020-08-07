@@ -34,21 +34,19 @@ function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
         writePrivileges,
       }) => {
         return workspaces ? (
-          <div>
-            <VisibilityMinimalPresentation
-              computeEntities={computeEntities}
-              dialectName={dialectName}
-              dialogContent={dialogContent}
-              docVisibility={docVisibility}
-              handleVisibilityChange={handleVisibilityChange}
-              handleDialogCancel={handleDialogCancel}
-              handleDialogOk={handleDialogOk}
-              handleSnackbarClose={handleSnackbarClose}
-              snackbarOpen={snackbarOpen}
-              isDialogOpen={isDialogOpen}
-              writePrivileges={writePrivileges}
-            />
-          </div>
+          <VisibilityMinimalPresentation
+            computeEntities={computeEntities}
+            dialectName={dialectName}
+            dialogContent={dialogContent}
+            docVisibility={docVisibility}
+            handleVisibilityChange={handleVisibilityChange}
+            handleDialogCancel={handleDialogCancel}
+            handleDialogOk={handleDialogOk}
+            handleSnackbarClose={handleSnackbarClose}
+            snackbarOpen={snackbarOpen}
+            isDialogOpen={isDialogOpen}
+            writePrivileges={writePrivileges}
+          />
         ) : null
       }}
     </VisibilityMinimalData>
