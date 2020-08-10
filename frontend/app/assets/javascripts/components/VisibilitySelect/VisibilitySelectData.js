@@ -24,17 +24,20 @@ function VisibilitySelectData({ children }) {
   const [publicDialect, setPublicDialect] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    setIsLoading(true)
-    fetchDialect2(routeParams.dialect_path)
-  }, [])
-
   // Compute related tasks
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const fetchDocumentAction = selectn('action', extractComputeDialect)
   const dialectState = selectn('response.state', extractComputeDialect)
 
-  // Check for dialect state when fetch finishes finishes
+  useEffect(() => {
+    setIsLoading(true)
+    if (dialectState === 'Published') {
+      setPublicDialect(true)
+    }
+    ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+  }, [])
+
+  // Set dialect state if/when fetch finishes
   useEffect(() => {
     if (fetchDocumentAction === 'FV_DIALECT2_FETCH_SUCCESS') {
       if (dialectState === 'Published') {
