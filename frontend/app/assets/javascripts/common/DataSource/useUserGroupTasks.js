@@ -14,6 +14,7 @@ function useUserGroupTasks() {
   // State Hooks
   const [userId, setUserId] = useState()
   const [tasks, setTasks] = useState([])
+  const [count, setCount] = useState()
 
   // Custom Hooks
   const { computeLogin } = useLogin()
@@ -60,6 +61,7 @@ function useUserGroupTasks() {
     }).then(({ entries, resultsCount, pageIndex: _pageIndex }) => {
       const data = formatTasksData(entries)
       setTasks(data)
+      setCount(resultsCount)
       return {
         data,
         page: _pageIndex,
@@ -72,6 +74,7 @@ function useUserGroupTasks() {
     fetchUserGroupTasksRemoteData,
     tasks,
     userId,
+    count,
   }
 }
 
