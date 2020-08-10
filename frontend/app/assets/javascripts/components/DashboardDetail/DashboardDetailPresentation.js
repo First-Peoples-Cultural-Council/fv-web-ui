@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./DashboardDetail.css'
 
@@ -30,18 +30,6 @@ function DashboardDetailPresentation({
   onOpen,
   selectedId,
 }) {
-  const onKeyPressed = (event) => {
-    if (event.key === 'Escape') {
-      onClose()
-    }
-  }
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyPressed)
-    return () => {
-      document.removeEventListener('keydown', onKeyPressed)
-    }
-  }, [])
-
   return (
     <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--NothingSelected'}`}>
       <div className="DashboardDetail__Header">
