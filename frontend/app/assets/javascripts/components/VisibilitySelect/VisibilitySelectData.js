@@ -18,34 +18,35 @@ import ProviderHelpers from 'common/ProviderHelpers'
  *
  */
 function VisibilitySelectData({ children }) {
-  const { fetchDialect, fetchDialect2, computeDialect2 } = useDialect()
+  const { fetchDialect2, computeDialect2 } = useDialect()
   const { routeParams } = useRoute()
-  const [dialect, setDialect] = useState('')
+
+  const [publicDialect, setPublicDialect] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    fetchData()
+    setIsLoading(true)
+    fetchDialect2(routeParams.dialect_path)
   }, [])
 
-  const fetchData = async () => {
-    // Dialect
-    // await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect, computeDialect)
-    // await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+  // Compute related tasks
+  const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const fetchDocumentAction = selectn('action', extractComputeDialect)
+  const dialectState = selectn('response.state', extractComputeDialect)
 
-    await fetchDialect(`/${routeParams.dialect_path}`)
-    await fetchDialect2(routeParams.dialect_path)
-
-    // const _computeDialect = await ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    // const _dialect = await selectn('response', _computeDialect)
-
-    const _computeDialect2 = await ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-    const _dialect2 = await selectn('response', _computeDialect2)
-
-    setDialect(_dialect2)
-  }
+  // Check for dialect state when fetch finishes finishes
+  useEffect(() => {
+    if (fetchDocumentAction === 'FV_DIALECT2_FETCH_SUCCESS') {
+      if (dialectState === 'Published') {
+        setPublicDialect(true)
+      }
+      setIsLoading(false)
+    }
+  }, [fetchDocumentAction])
 
   return children({
-    publicDialect: false,
-    dialect,
+    isLoading,
+    publicDialect,
   })
 }
 // PROPTYPES

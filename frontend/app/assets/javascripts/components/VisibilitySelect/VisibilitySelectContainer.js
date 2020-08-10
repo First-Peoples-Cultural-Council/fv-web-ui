@@ -13,6 +13,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public that reflects the visibility of the document being viewed.
  * @param {function} handleVisibilityChange A function to handle the onChange of the select component
  * @param {object} computeEntities An Immutable.fromJS object required by the PromiseWrapper Component
+ * @param {boolean} hideLabel If true the label: "Who can see this?", will be hidden
  *
  * @returns {node} jsx markup
  */
@@ -20,14 +21,15 @@ function VisibilitySelectContainer({ docVisibility, handleVisibilityChange, comp
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
       <VisibilitySelectData>
-        {({ publicDialect, dialect }) => {
-          return (
+        {({ publicDialect, isLoading }) => {
+          return isLoading ? (
+            <div>Loading...</div>
+          ) : (
             <VisibilitySelectPresentation
               docVisibility={docVisibility}
               handleVisibilityChange={handleVisibilityChange}
               hideLabel={hideLabel}
               publicDialect={publicDialect}
-              dialect={dialect}
             />
           )
         }}
