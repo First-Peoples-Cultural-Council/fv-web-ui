@@ -19,22 +19,37 @@ import TableContextSort from 'components/Table/TableContextSort'
  *
  */
 function DashboardDetailTasksData({ children }) {
-  const [pageSize, setPageSize] = useState(5)
-  const [sortDirection, setSortDirection] = useState('desc')
+  // const [pageSize, setPageSize] = useState(10)
+  // const [sortDirection, setSortDirection] = useState('desc')
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
+
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
   const { computeDocument, fetchDocument } = useDocument()
+
   const {
-    task: queryTask,
     item: queryItem,
     page: queryPage = 1,
     pageSize: queryPageSize = 10,
     sortBy: querySortBy = 'date',
     sortOrder: querySortOrder = 'desc',
+    task: queryTask,
   } = getSearchObject()
 
-  const { fetchUserGroupTasksRemoteData, userId, tasks } = useUserGroupTasks()
+  const { count: tasksCount, fetchUserGroupTasksRemoteData, tasks, userId } = useUserGroupTasks()
+
+  // Escape key binding
+  const onKeyPressed = (event) => {
+    if (event.key === 'Escape') {
+      onClose()
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyPressed)
+    return () => {
+      document.removeEventListener('keydown', onKeyPressed)
+    }
+  }, [])
 
   // Get data when we have userId
   useEffect(() => {
@@ -78,20 +93,21 @@ function DashboardDetailTasksData({ children }) {
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
     // ) : null  // TODO
     setSelectedItemData({
-      itemType: selectn('type', _selectedItemData),
-      culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
-      definitions: selectn('properties.fv:definitions', _selectedItemData),
-      title: selectn('title', _selectedItemData),
-      literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
       acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
       audio: selectn('contextParameters.word.related_audio', _selectedItemData) || [],
       categories: selectn('contextParameters.word.categories', _selectedItemData) || [],
+      culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
+      definitions: selectn('properties.fv:definitions', _selectedItemData),
+      id: selectn(['uid'], _selectedItemData),
+      itemType: selectn('type', _selectedItemData),
+      literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
       partOfSpeech: selectn('contextParameters.word.part_of_speech', _selectedItemData),
       photos: selectn('contextParameters.word.related_pictures', _selectedItemData) || [],
       phrases: selectn('contextParameters.word.related_phrases', _selectedItemData) || [],
       pronunciation: selectn('properties.fv-word:pronunciation', _selectedItemData),
       relatedAssets: selectn('contextParameters.word.related_assets', _selectedItemData) || [],
       relatedToAssets: selectn('contextParameters.word.related_by', _selectedItemData) || [],
+      title: selectn('title', _selectedItemData),
       videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
     })
   }, [computeDocument, queryItem])
@@ -109,7 +125,7 @@ function DashboardDetailTasksData({ children }) {
     if (_selectedTaskData) {
       setSelectedTaskData({
         date: selectn(['properties', 'nt:dueDate'], _selectedTaskData),
-        id: 'uid',
+        id: selectn(['uid'], _selectedTaskData),
         initiator: selectn(['properties', 'nt:initiator'], _selectedTaskData),
         title: selectn(['properties', 'nt:name'], _selectedTaskData),
         itemType: selectedItemData.itemType,
@@ -142,16 +158,27 @@ function DashboardDetailTasksData({ children }) {
     navigate(url)
   }
 
-  const getUrlWithQuery = ({ task, item }) => {
-    return `${window.location.pathname}?task=${task}&item=${item}&page=${queryPage}&pageSize=${queryPageSize}&sortBy=${querySortBy}&sortOrder=${querySortOrder}`
+  const getUrlWithQuery = ({
+    item = queryItem,
+    page = queryPage,
+    pageSize = queryPageSize,
+    sortBy = querySortBy,
+    sortOrder = querySortOrder,
+    task = queryTask,
+  }) => {
+    return `${window.location.pathname}?task=${task}&item=${item}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`
   }
 
   const onRowClick = (event, { id }) => {
     onOpen(id)
   }
 
-  const onOrderChange = (/*columnId, orderDirection*/) => {
-    setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
+  const onOrderChange = () => {
+    navigate(
+      getUrlWithQuery({
+        sortOrder: querySortOrder === 'desc' ? 'asc' : 'desc',
+      })
+    )
   }
 
   // Note: Material-Table has a `sort` bug when using the `remote data` feature
@@ -160,6 +187,13 @@ function DashboardDetailTasksData({ children }) {
     const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
 
     const { field: sortBy } = orderBy
+
+    // console.log(getUrlWithQuery({
+    //   page: pageIndex,
+    //   pageSize: _pageSize,
+    //   sortBy: orderBy,
+    //   sortOrder,
+    // }))
 
     return fetchUserGroupTasksRemoteData({
       pageIndex,
@@ -170,8 +204,16 @@ function DashboardDetailTasksData({ children }) {
     })
   }
 
+  const onChangeRowsPerPage = (_pageSize) => {
+    navigate(
+      getUrlWithQuery({
+        pageSize: _pageSize,
+      })
+    )
+  }
+
   return (
-    <TableContextSort.Provider value={sortDirection}>
+    <TableContextSort.Provider value={querySortOrder}>
       {children({
         columns: [
           {
@@ -196,27 +238,31 @@ function DashboardDetailTasksData({ children }) {
             render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
           },
         ],
+        data: userId === 'Guest' ? [] : remoteData,
         idSelectedItem: queryItem,
         idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
         listItems: tasks,
+        onChangeRowsPerPage,
         onClose,
         onOpen,
-        selectedItemData,
-        // NEW
-        data: userId === 'Guest' ? [] : remoteData,
-        onChangeRowsPerPage: (_pageSize) => {
-          setPageSize(_pageSize)
-        },
         onOrderChange,
         onRowClick,
         options: {
-          pageSize,
+          pageSize: Number(queryPageSize),
           pageSizeOptions: [5, 10, 20],
           paging: true,
           sorting: true,
         },
-        sortDirection,
+        pagination: {
+          count: Number(tasksCount),
+          page: Number(queryPage),
+          pageSize: Number(queryPageSize),
+          sortBy: querySortBy,
+          sortOrder: querySortOrder,
+        },
+        selectedItemData,
         selectedTaskData,
+        sortDirection: querySortOrder,
       })}
     </TableContextSort.Provider>
   )

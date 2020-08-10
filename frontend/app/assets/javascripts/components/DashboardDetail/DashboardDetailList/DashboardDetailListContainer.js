@@ -17,27 +17,37 @@ import { WORD, PHRASE, SONG, STORY } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailListContainer({ listItems, onClick, selectedId, title }) {
+function DashboardDetailListContainer({ listItems, onClick, selectedId, title, page, pageSize, count }) {
   return (
     <DashboardDetailListPresentation
-      selectedId={selectedId}
-      listItems={listItems}
       childrenHeader={
         <Typography variant="h4" component="h1">
           {title}
         </Typography>
       }
+      childrenPagination={
+        <>
+          <div>{`Page: ${page}/${Math.ceil(count / pageSize)}`}</div>
+          <div>{`Per Page: ${pageSize}`}</div>
+          <div>{`Total: ${count}`}</div>
+        </>
+      }
+      listItems={listItems}
       onClick={onClick}
+      selectedId={selectedId}
     />
   )
 }
 // PROPTYPES
-const { array, func, string } = PropTypes
+const { array, func, number, string } = PropTypes
 DashboardDetailListContainer.propTypes = {
   listItems: array,
   onClick: func,
   selectedId: string,
   title: string,
+  page: number,
+  pageSize: number,
+  count: number,
 }
 DashboardDetailListContainer.defaultProps = {
   listItems: [

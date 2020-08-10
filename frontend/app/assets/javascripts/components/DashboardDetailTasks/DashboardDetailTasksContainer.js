@@ -22,20 +22,21 @@ function DashboardDetailTasksContainer() {
     <DashboardDetailTasksData>
       {({
         columns,
+        data,
         idSelectedTask,
         listItems,
+        onChangeRowsPerPage,
         onClose,
         onOpen,
-        selectedItemData,
-        // NEW
-        data,
         onOrderChange,
         onRowClick,
         options,
-        sortDirection,
-        onChangeRowsPerPage,
+        pagination = {},
+        selectedItemData,
         selectedTaskData,
+        sortDirection,
       }) => {
+        const { page, pageSize, count } = pagination
         const {
           title: taskTitle,
           initiator: taskInitiator,
@@ -84,6 +85,9 @@ function DashboardDetailTasksContainer() {
                 onClick={onOpen}
                 listItems={listItems}
                 title="Tasks"
+                page={page}
+                pageSize={pageSize}
+                count={count}
               />
             }
             childrenSelectedDetail={

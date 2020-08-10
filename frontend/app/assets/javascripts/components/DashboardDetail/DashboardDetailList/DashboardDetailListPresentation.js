@@ -17,7 +17,7 @@ import { EVEN, ODD } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailListPresentation({ listItems, childrenHeader, onClick, selectedId }) {
+function DashboardDetailListPresentation({ childrenHeader, childrenPagination, listItems, onClick, selectedId }) {
   return (
     <div className="DashboardDetailList">
       {childrenHeader && <div className="DashboardDetailList__HeaderContainer">{childrenHeader}</div>}
@@ -42,6 +42,7 @@ function DashboardDetailListPresentation({ listItems, childrenHeader, onClick, s
           })}
         </ul>
       </div>
+      {childrenPagination}
     </div>
   )
 }
@@ -52,6 +53,7 @@ DashboardDetailListPresentation.propTypes = {
   listItems: array,
   onClick: func,
   selectedId: string,
+  childrenPagination: node,
 }
 DashboardDetailListPresentation.defaultProps = {
   listItems: [
