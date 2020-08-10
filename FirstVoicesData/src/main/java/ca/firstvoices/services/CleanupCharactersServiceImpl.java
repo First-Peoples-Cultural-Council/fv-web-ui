@@ -177,7 +177,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : lowerConfusableStrArr) {
         if (!updatedDocumentCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "A character is duplicated somewhere in this document's uppercase, "
+              "The character " + str + " is duplicated somewhere in this document's uppercase,"
                   + "lowercase or confusable characters ",
               400);
         }
@@ -190,7 +190,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : upperConfusableStrArr) {
         if (!updatedDocumentCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "A character is duplicated somewhere in this document's uppercase, "
+              "The character " + str + " is duplicated somewhere in this document's uppercase,"
                   + "lowercase or confusable characters ",
               400);
         }
@@ -206,11 +206,13 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       collectedCharacters.addAll(Arrays.asList(ignoredCharacters));
     }
 
+    String updatedCharacterSet = String.join(",", updatedDocumentCharacters);
+    String collectedCharacterSet = String.join(",", collectedCharacters);
     //Confirm that updated character set is unique from all other characters
     if (!Collections.disjoint(updatedDocumentCharacters, collectedCharacters)) {
       throw new FVCharacterInvalidException(
-          "The updated character includes a duplicate character "
-              + "found in another character document",
+          "The updated character set:\n" + updatedCharacterSet + "\nincludes a duplicate character"
+              + " found in the character set:\n" + collectedCharacterSet,
           400);
     }
   }
@@ -229,7 +231,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : ignoredCharsArr) {
         if (!collectedCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "The ignored characters list includes a duplicate character "
+              "The ignored character " + str + " is a duplicate character "
                   + "found in another character document",
               400);
         }
