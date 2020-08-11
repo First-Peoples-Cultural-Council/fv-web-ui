@@ -22,7 +22,7 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel }) {
+function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel, publicDialect }) {
   const classes = VisibilitySelectStyles()
 
   const label = hideLabel ? null : (
@@ -44,10 +44,12 @@ function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, h
             <GroupIcon className={classes.selectIcon} />
             Members
           </MenuItem>
-          <MenuItem value={'public'}>
-            <PublicIcon className={classes.selectIcon} />
-            Everyone
-          </MenuItem>
+          {publicDialect ? (
+            <MenuItem value={'public'}>
+              <PublicIcon className={classes.selectIcon} />
+              Everyone
+            </MenuItem>
+          ) : null}
         </Select>
       </FormControl>
     </div>
@@ -59,12 +61,14 @@ VisibilitySelectPresentation.propTypes = {
   handleVisibilityChange: func,
   docVisibility: string,
   hideLabel: bool,
+  publicDialect: bool,
 }
 
 VisibilitySelectPresentation.defaultProps = {
   handleVisibilityChange: () => {},
   docVisibility: '',
   hideLabel: false,
+  publicDialect: false,
 }
 
 export default VisibilitySelectPresentation
