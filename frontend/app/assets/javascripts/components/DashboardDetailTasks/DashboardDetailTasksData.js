@@ -51,7 +51,6 @@ function DashboardDetailTasksData({ children }) {
     }
   }, [])
 
-  // Get data when we have userId
   useEffect(() => {
     const _queryPage = Number(queryPage)
     remoteData({
@@ -60,7 +59,7 @@ function DashboardDetailTasksData({ children }) {
       page: _queryPage === 0 ? _queryPage : _queryPage - 1,
       pageSize: queryPageSize,
     })
-  }, [userId])
+  }, [userId, queryPage, queryPageSize, querySortBy, querySortOrder])
 
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {

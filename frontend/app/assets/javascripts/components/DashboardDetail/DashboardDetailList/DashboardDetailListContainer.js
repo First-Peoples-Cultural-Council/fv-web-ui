@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardDetailListPresentation from 'components/DashboardDetail/DashboardDetailList/DashboardDetailListPresentation'
+import DashboardDetailListPaginationPresentation from 'components/DashboardDetail/DashboardDetailList/DashboardDetailListPaginationPresentation'
+
 import Typography from '@material-ui/core/Typography'
 import { WORD, PHRASE, SONG, STORY } from 'common/Constants'
 
@@ -26,11 +28,7 @@ function DashboardDetailListContainer({ listItems, onClick, selectedId, title, p
         </Typography>
       }
       childrenPagination={
-        <>
-          <div>{`Page: ${page}/${Math.ceil(count / pageSize)}`}</div>
-          <div>{`Per Page: ${pageSize}`}</div>
-          <div>{`Total: ${count}`}</div>
-        </>
+        <DashboardDetailListPaginationPresentation count={count} page={page - 1} rowsPerPage={pageSize} />
       }
       listItems={listItems}
       onClick={onClick}
