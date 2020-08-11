@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardDetailListPresentation from 'components/DashboardDetail/DashboardDetailList/DashboardDetailListPresentation'
-import DashboardDetailListPaginationPresentation from 'components/DashboardDetail/DashboardDetailList/DashboardDetailListPaginationPresentation'
+import TablePagination from 'components/Table/TablePagination'
 
 import Typography from '@material-ui/core/Typography'
 import { WORD, PHRASE, SONG, STORY } from 'common/Constants'
@@ -27,9 +27,7 @@ function DashboardDetailListContainer({ listItems, onClick, selectedId, title, p
           {title}
         </Typography>
       }
-      childrenPagination={
-        <DashboardDetailListPaginationPresentation count={count} page={page - 1} rowsPerPage={pageSize} />
-      }
+      childrenPagination={<TablePagination count={count} page={page - 1} rowsPerPage={pageSize} />}
       listItems={listItems}
       onClick={onClick}
       selectedId={selectedId}

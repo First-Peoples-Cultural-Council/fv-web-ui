@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import StringHelpers from 'common/StringHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
-import TableContextSort from 'components/Table/TableContextSort'
+import { TableContextSort } from 'components/Table/TableContext'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1

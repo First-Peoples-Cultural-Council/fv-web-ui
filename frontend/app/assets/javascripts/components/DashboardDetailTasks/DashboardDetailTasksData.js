@@ -8,7 +8,7 @@ import useDocument from 'DataSource/useDocument'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import StringHelpers from 'common/StringHelpers'
-import TableContextSort from 'components/Table/TableContextSort'
+import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 /**
  * @summary DashboardDetailTasksData
  * @version 1.0.1
@@ -53,13 +53,14 @@ function DashboardDetailTasksData({ children }) {
 
   useEffect(() => {
     const _queryPage = Number(queryPage)
-    remoteData({
-      orderBy: { field: querySortBy },
-      orderDirection: querySortOrder,
-      page: _queryPage === 0 ? _queryPage : _queryPage - 1,
+    fetchUserGroupTasksRemoteData({
+      pageIndex: _queryPage === 0 ? _queryPage : _queryPage - 1,
       pageSize: queryPageSize,
+      sortBy: querySortBy,
+      sortOrder: querySortOrder,
+      userId,
     })
-  }, [userId, queryPage, queryPageSize, querySortBy, querySortOrder])
+  }, [queryPage, queryPageSize, querySortBy, querySortOrder])
 
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
@@ -182,88 +183,83 @@ function DashboardDetailTasksData({ children }) {
 
   // Note: Material-Table has a `sort` bug when using the `remote data` feature
   // see: https://github.com/mbrn/material-table/issues/2177
-  const remoteData = (data = {}) => {
-    const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
+  // const remoteData = (data = {}) => {
+  //   const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
 
-    const { field: sortBy } = orderBy
+  //   const { field: sortBy } = orderBy
 
-    // console.log(getUrlWithQuery({
-    //   page: pageIndex,
-    //   pageSize: _pageSize,
-    //   sortBy: orderBy,
-    //   sortOrder,
-    // }))
+  //   return fetchUserGroupTasksRemoteData({
+  //     pageIndex,
+  //     pageSize: _pageSize,
+  //     sortBy,
+  //     sortOrder,
+  //     userId,
+  //   })
+  // }
 
-    return fetchUserGroupTasksRemoteData({
-      pageIndex,
-      pageSize: _pageSize,
-      sortBy,
-      sortOrder,
-      userId,
-    })
-  }
-
-  const onChangeRowsPerPage = (_pageSize) => {
-    navigate(
-      getUrlWithQuery({
-        pageSize: _pageSize,
-      })
-    )
-  }
-
+  // const onChangeRowsPerPage = (_pageSize) => {
+  //   navigate(
+  //     getUrlWithQuery({
+  //       pageSize: _pageSize,
+  //     })
+  //   )
+  // }
   return (
-    <TableContextSort.Provider value={querySortOrder}>
-      {children({
-        columns: [
-          {
-            title: '',
-            field: 'icon',
-            render: () => {
-              return '[~]'
+    <TableContextCount.Provider value={Number(tasksCount)}>
+      <TableContextSort.Provider value={querySortOrder}>
+        {children({
+          columns: [
+            {
+              title: '',
+              field: 'icon',
+              render: () => {
+                return '[~]'
+              },
+              sorting: false,
             },
-            sorting: false,
+            {
+              title: 'Entry title',
+              field: 'title',
+            },
+            {
+              title: 'Requested by',
+              field: 'initiator',
+            },
+            {
+              title: 'Date submitted',
+              field: 'date',
+              render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
+            },
+          ],
+          // data: userId === 'Guest' ? [] : remoteData,
+          data: tasks,
+          idSelectedItem: queryItem,
+          idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
+          listItems: tasks,
+          // onChangeRowsPerPage,
+          onClose,
+          onOpen,
+          onOrderChange,
+          onRowClick,
+          options: {
+            pageSize: Number(queryPageSize),
+            pageSizeOptions: [5, 10, 20],
+            paging: true,
+            sorting: true,
           },
-          {
-            title: 'Entry title',
-            field: 'title',
+          pagination: {
+            count: Number(tasksCount),
+            page: Number(queryPage),
+            pageSize: Number(queryPageSize),
+            sortBy: querySortBy,
+            sortOrder: querySortOrder,
           },
-          {
-            title: 'Requested by',
-            field: 'initiator',
-          },
-          {
-            title: 'Date submitted',
-            field: 'date',
-            render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
-          },
-        ],
-        data: userId === 'Guest' ? [] : remoteData,
-        idSelectedItem: queryItem,
-        idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
-        listItems: tasks,
-        onChangeRowsPerPage,
-        onClose,
-        onOpen,
-        onOrderChange,
-        onRowClick,
-        options: {
-          pageSize: Number(queryPageSize),
-          pageSizeOptions: [5, 10, 20],
-          paging: true,
-          sorting: true,
-        },
-        pagination: {
-          count: Number(tasksCount),
-          page: Number(queryPage),
-          pageSize: Number(queryPageSize),
-          sortBy: querySortBy,
-          sortOrder: querySortOrder,
-        },
-        selectedItemData,
-        selectedTaskData,
-        sortDirection: querySortOrder,
-      })}
-    </TableContextSort.Provider>
+          selectedItemData,
+          selectedTaskData,
+          sortDirection: querySortOrder,
+        })}
+      </TableContextSort.Provider>
+    </TableContextCount.Provider>
   )
 }
 // PROPTYPES

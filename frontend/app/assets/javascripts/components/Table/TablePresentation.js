@@ -6,6 +6,7 @@ import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 import TableHeader from './TableHeader'
+import TablePagination from './TablePagination'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
@@ -94,8 +95,10 @@ function TablePresentation({
     toolbar: false,
     toolbarButtonAlignment: 'left',
   }
+  const _options = Object.assign({}, defaultOptions, options)
   return (
     <MaterialTable
+      key={`materialTable-${_options.pageSize}`}
       style={Object.assign({}, style, styleVariant)}
       actions={actions}
       columns={columns}
@@ -110,7 +113,7 @@ function TablePresentation({
       onSearchChange={onSearchChange}
       onSelectionChange={onSelectionChange}
       onTreeExpandChange={onTreeExpandChange}
-      options={Object.assign({}, defaultOptions, options)}
+      options={_options}
       title={title}
       detailPanel={detailPanel}
       icons={icons}
@@ -138,6 +141,7 @@ function TablePresentation({
           )
         },
         Header: TableHeader,
+        Pagination: TablePagination,
       }}
       localization={localization}
     />
