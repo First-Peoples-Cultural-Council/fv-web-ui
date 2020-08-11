@@ -20,6 +20,7 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
@@ -217,6 +219,20 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     }
   }
 
+  @Override
+  public Set<String> getCharactersToSkipForDialect(DocumentModel dialect) {
+    DocumentModelList characters = getCharacters(dialect);
+    DocumentModel alphabet = getAlphabet(dialect);
+
+    Set<String> charactersToSkip = createCharacterHashMap(characters);
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    if (ignoredCharacters != null) {
+      charactersToSkip.addAll(Arrays.asList(ignoredCharacters));
+    }
+
+    return charactersToSkip;
+  }
 
   @Override
   public void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
@@ -289,6 +305,22 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     char charAt = updatedPropertyValue.charAt(0);
 
     return replaceConfusables(confusables, current + charAt, updatedPropertyValue.substring(1));
+  }
+
+  private DocumentModel getAlphabet(DocumentModel doc) {
+    if (FV_ALPHABET.equals(doc.getType())) {
+      return doc;
+    }
+    DocumentModel dialect = getDialect(doc);
+    if (dialect == null) {
+      return null;
+    }
+    return doc.getCoreSession().getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+  }
+
+  private DocumentModelList getCharacters(DocumentModel doc) {
+    DocumentModel alphabet = getAlphabet(doc);
+    return doc.getCoreSession().getChildren(alphabet.getRef());
   }
 
 }

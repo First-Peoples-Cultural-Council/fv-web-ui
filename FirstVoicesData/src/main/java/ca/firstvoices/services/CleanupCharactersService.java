@@ -21,6 +21,7 @@
 package ca.firstvoices.services;
 
 import java.util.List;
+import java.util.Set;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
@@ -35,9 +36,31 @@ public interface CleanupCharactersService {
    */
   DocumentModel cleanConfusables(CoreSession session, DocumentModel document, Boolean saveDocument);
 
+  /**
+   * Ensures all characters and confusables are unique.
+   *
+   * @param characters
+   * @param alphabet
+   * @param updated    The character document being updated.
+   */
   void validateCharacters(List<DocumentModel> characters,
       DocumentModel alphabet, DocumentModel updated);
 
+  /**
+   * Ensures ignored characters are unique from characters and confusables.
+   *
+   * @param characters
+   * @param alphabet
+   */
   void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet);
+
+  /**
+   * A map of all upper/lowercase characters, upper/lowercase confusables and ignored characters
+   * currently in the dialect.
+   *
+   * @param dialect
+   * @return
+   */
+  Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
 }

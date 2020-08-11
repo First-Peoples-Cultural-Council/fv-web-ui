@@ -25,6 +25,12 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface AddConfusablesService {
 
+  /**
+   * Add confusables will copy values from the default list of confusables to each character
+   *
+   * @param session
+   * @param dialect
+   */
   void addConfusables(CoreSession session, DocumentModel dialect);
 
   DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument,
