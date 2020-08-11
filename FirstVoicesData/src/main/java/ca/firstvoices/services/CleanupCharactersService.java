@@ -28,19 +28,19 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 public interface CleanupCharactersService {
 
   /**
-   * @param session
-   * @param document
+   * @param session      Nuxeo session.
+   * @param document     Document to be cleaned.
    * @param saveDocument whether or not to save the document. not necessary if saving is done later
    *                     (e.g. aboutToCreate)
-   * @return
+   * @return Cleaned document
    */
   DocumentModel cleanConfusables(CoreSession session, DocumentModel document, Boolean saveDocument);
 
   /**
    * Ensures all characters and confusables are unique.
    *
-   * @param characters
-   * @param alphabet
+   * @param characters List of FVCharacter documents that are not the document being updated.
+   * @param alphabet   The alphabet document corresponding to the characters.
    * @param updated    The character document being updated.
    */
   void validateCharacters(List<DocumentModel> characters,
@@ -49,8 +49,8 @@ public interface CleanupCharactersService {
   /**
    * Ensures ignored characters are unique from characters and confusables.
    *
-   * @param characters
-   * @param alphabet
+   * @param characters List of FVCharacter documents for the alphabet.
+   * @param alphabet   Alphabet document.
    */
   void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet);
@@ -59,8 +59,8 @@ public interface CleanupCharactersService {
    * A map of all upper/lowercase characters, upper/lowercase confusables and ignored characters
    * currently in the dialect.
    *
-   * @param dialect
-   * @return
+   * @param dialect Dialect containing desired documents
+   * @return Map of all upper/lowercase characters, confusables and ignored characters
    */
   Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
 }

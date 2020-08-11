@@ -223,6 +223,8 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   public Set<String> getCharactersToSkipForDialect(DocumentModel dialect) {
     DocumentModelList characters = getCharacters(dialect);
     DocumentModel alphabet = getAlphabet(dialect);
+    //Alphabet must not be null.
+    assert alphabet != null;
 
     Set<String> charactersToSkip = createCharacterHashMap(characters);
     String[] ignoredCharacters = (String[]) alphabet
@@ -320,6 +322,8 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
 
   private DocumentModelList getCharacters(DocumentModel doc) {
     DocumentModel alphabet = getAlphabet(doc);
+    //Alphabet must not be null
+    assert alphabet != null;
     return doc.getCoreSession().getChildren(alphabet.getRef());
   }
 

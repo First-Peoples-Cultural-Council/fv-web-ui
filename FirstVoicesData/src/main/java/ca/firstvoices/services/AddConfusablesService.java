@@ -28,8 +28,8 @@ public interface AddConfusablesService {
   /**
    * Add confusables will copy values from the default list of confusables to each character
    *
-   * @param session
-   * @param dialect
+   * @param session Nuxeo session.
+   * @param dialect Dialect to add confusables to.
    */
   void addConfusables(CoreSession session, DocumentModel dialect);
 
