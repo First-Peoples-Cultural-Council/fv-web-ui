@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary DetailStoryData
+ * @summary StoryData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function DetailStoryData({ children }) {
+function StoryData({ children }) {
   return children({
-    content: 'Output from DetailStoryData',
+    content: 'Output from StoryData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-DetailStoryData.propTypes = {
+StoryData.propTypes = {
   children: func,
 }
 
-export default DetailStoryData
+export default StoryData
