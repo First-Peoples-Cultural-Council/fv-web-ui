@@ -45,7 +45,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
   useEffect(() => {
-    ProviderHelpers.fetchIfMissing(docId, fetchTasks, computeTasks)
+    fetchTasks(docId)
   }, [])
 
   // Compute related tasks
