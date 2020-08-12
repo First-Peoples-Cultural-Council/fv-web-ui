@@ -22,30 +22,33 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel, publicDialect }) {
+function VisibilitySelectPresentation({handleVisibilityChange, docVisibility, hideLabel, publicDialect, selectNameAndId}) {
   const classes = VisibilitySelectStyles()
+  const selectNameId = selectNameAndId
 
   const label = hideLabel ? null : (
-    <div id="select-label" className={classes.selectLabel}>
-      Who can see this?
-    </div>
+      <div id="select-label" className={classes.selectLabel}>
+        Who can see this?
+      </div>
   )
 
   return (
     <div className={classes.selectBase}>
       {label}
       <FormControl variant="outlined" size="small">
-        <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
+        <Select labelId="select-outlined-label" id={selectNameId}
+                value={docVisibility} onChange={handleVisibilityChange}
+                inputProps={{name: selectNameId}}>
           <MenuItem value={'team'}>
-            <VisibilityOffIcon className={classes.selectIcon} />
+            <VisibilityOffIcon className={classes.selectIcon}/>
             Language Team
           </MenuItem>
           <MenuItem value={'members'}>
-            <GroupIcon className={classes.selectIcon} />
+            <GroupIcon className={classes.selectIcon}/>
             Members
           </MenuItem>
           {publicDialect ? (
-            <MenuItem value={'public'}>
+              <MenuItem value={'public'}>
               <PublicIcon className={classes.selectIcon} />
               Everyone
             </MenuItem>
@@ -62,13 +65,16 @@ VisibilitySelectPresentation.propTypes = {
   docVisibility: string,
   hideLabel: bool,
   publicDialect: bool,
+  selectNameAndId: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  handleVisibilityChange: () => {},
+  handleVisibilityChange: () => {
+  },
   docVisibility: '',
   hideLabel: false,
   publicDialect: false,
+  selectNameAndId: 'select',
 }
 
 export default VisibilitySelectPresentation
