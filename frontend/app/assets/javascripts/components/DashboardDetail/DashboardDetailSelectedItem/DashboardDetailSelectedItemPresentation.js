@@ -1,4 +1,6 @@
 import React from 'react'
+import RequestChangesContainer
+  from 'components/RequestChanges/RequestChangesContainer'
 // import PropTypes from 'prop-types'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
@@ -117,12 +119,16 @@ function DashboardDetailSelectedItemPresentation() {
       </div>
       <div className="DashboardDetailSelectedItem__TaskActions">
         <div>
-          <h2 style={{ margin: 0, padding: 0 }}>TaskActions</h2>
+          <h2 style={{margin: 0, padding: 0}}>TaskActions</h2>
           <p>Lorem ipsum dolor sit amet</p>
           <p>consectetur adipiscing elit, sed do eiusmod tempor</p>
           <p>incididunt ut labore et dolore magna aliqua</p>
         </div>
       </div>
+      <RequestChangesContainer
+          docId={'fcf0dcf9-6a60-4a01-92cf-b495b6da758d'}
+          // docState={'Team'}
+      />
     </div>
   )
 }
