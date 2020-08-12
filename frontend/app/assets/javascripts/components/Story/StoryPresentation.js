@@ -1,6 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
+//FPCC
 import { StoryStyles } from './StoryStyles'
+// import StoryCover from 'components/StoryCover'
+// import StoryPage from 'components/StoryPage'
+
 /**
  * @summary StoryPresentation
  * @version 1.0.1
@@ -10,14 +15,14 @@ import { StoryStyles } from './StoryStyles'
  *
  * @returns {node} jsx markup
  */
-function StoryPresentation({ content }) {
+function StoryPresentation() {
   const classes = StoryStyles()
-  return <div className={classes.base}>StoryPresentation{content}</div>
+  return <div className={classes.base}>StoryPresentation</div>
 }
 // PROPTYPES
-const { string } = PropTypes
+const { object } = PropTypes
 StoryPresentation.propTypes = {
-  content: string,
+  bookEntries: object,
 }
 
 export default StoryPresentation
