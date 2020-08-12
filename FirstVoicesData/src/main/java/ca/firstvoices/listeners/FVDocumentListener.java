@@ -111,7 +111,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
     if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
       cleanupWordsAndPhrases();
-      validateCharacter();
+      validateCharacter(document);
     }
 
     if (event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED)) {
@@ -120,7 +120,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
 
     if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
       cleanupWordsAndPhrases();
-      validateCharacter();
+      validateCharacter(document);
     }
 
     if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
@@ -178,23 +178,23 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     }
   }
 
-  public void validateCharacter() {
-    if (document.getDocumentType().getName().equals(FV_CHARACTER) && !document.isProxy()
-        && !document.isVersion()) {
+  public void validateCharacter(DocumentModel characterDoc) {
+    if (characterDoc.getDocumentType().getName().equals(FV_CHARACTER) && !characterDoc.isProxy()
+        && !characterDoc.isVersion()) {
       try {
-        DocumentModelList characters = getCharacters(document);
-        DocumentModel alphabet = getAlphabet(document);
+        DocumentModelList characters = getCharacters(characterDoc);
+        DocumentModel alphabet = getAlphabet(characterDoc);
 
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
           //All character documents except for the modified doc
           List<DocumentModel> filteredCharacters = characters.stream()
-              .filter(c -> !c.getId().equals(document.getId()))
+              .filter(c -> !c.getId().equals(characterDoc.getId()))
               .collect(Collectors.toList());
-          cleanupCharactersService.validateCharacters(filteredCharacters, alphabet, document);
+          cleanupCharactersService.validateCharacters(filteredCharacters, alphabet, characterDoc);
         }
 
         if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-          cleanupCharactersService.validateCharacters(characters, alphabet, document);
+          cleanupCharactersService.validateCharacters(characters, alphabet, characterDoc);
 
         }
 
@@ -205,14 +205,14 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     }
 
     //If doc is alphabet, do another operation for ignored characters
-    if (document.getDocumentType().getName().equals(FV_ALPHABET) && !document.isProxy()
-        && !document.isVersion()) {
+    if (characterDoc.getDocumentType().getName().equals(FV_ALPHABET) && !characterDoc.isProxy()
+        && !characterDoc.isVersion()) {
       try {
 
         //only test on update, not creation as characters will not exist during creation
         if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-          DocumentModelList characters = getCharacters(document);
-          DocumentModel alphabet = getAlphabet(document);
+          DocumentModelList characters = getCharacters(characterDoc);
+          DocumentModel alphabet = getAlphabet(characterDoc);
           cleanupCharactersService.validateAlphabetIgnoredCharacters(characters, alphabet);
 
         }

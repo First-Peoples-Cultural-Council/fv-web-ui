@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -137,6 +138,13 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     for (DocumentModel doc : characters) {
       cleanupCharactersService.validateCharacters(characters, alphabet, doc);
     }
+  }
+
+  @Test
+  public void getCharactersToSkip() {
+    setupCharacters();
+    Set<String> collectedMap = cleanupCharactersService.getCharactersToSkipForDialect(dialect);
+    assertEquals(18, collectedMap.size());
   }
 
   private void setupCharacters() {
