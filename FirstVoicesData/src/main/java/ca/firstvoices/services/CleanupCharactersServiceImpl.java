@@ -21,6 +21,7 @@
 package ca.firstvoices.services;
 
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
@@ -37,6 +38,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.Filter;
 import org.nuxeo.ecm.core.api.PathRef;
 
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
@@ -317,14 +319,20 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     if (dialect == null) {
       return null;
     }
-    return doc.getCoreSession().getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+    String alphabetQuery = "SELECT * FROM FVAlphabet WHERE ecm:ancestorId='" + dialect.getId()
+        + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
+
+    DocumentModelList results = doc.getCoreSession().query(alphabetQuery);
+
+    return results.get(0);
   }
 
   private DocumentModelList getCharacters(DocumentModel doc) {
     DocumentModel alphabet = getAlphabet(doc);
     //Alphabet must not be null
     assert alphabet != null;
-    return doc.getCoreSession().getChildren(alphabet.getRef());
+    Filter trashedFilter = docModel -> !docModel.isTrashed();
+    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
   }
 
 }
