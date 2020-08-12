@@ -20,14 +20,10 @@
 
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.Filter;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 
@@ -43,30 +39,6 @@ public abstract class AbstractFirstVoicesDataListener implements EventListener {
       parent = session.getDocument(parent.getParentRef());
     }
     return parent;
-  }
-
-  protected DocumentModel getAlphabet(DocumentModel doc) {
-    if (FV_ALPHABET.equals(doc.getType())) {
-      return doc;
-    }
-    DocumentModel dialect = getDialect(doc);
-    if (dialect == null) {
-      return null;
-    }
-    String alphabetQuery = "SELECT * FROM FVAlphabet WHERE ecm:ancestorId='" + dialect.getId()
-        + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
-
-    DocumentModelList results = doc.getCoreSession().query(alphabetQuery);
-
-    return results.get(0);
-  }
-
-  protected DocumentModelList getCharacters(DocumentModel doc) {
-    DocumentModel alphabet = getAlphabet(doc);
-    //Alphabet must not be null
-    assert alphabet != null;
-    Filter trashedFilter = docModel -> !docModel.isTrashed();
-    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
   }
 
   protected void rollBackEvent(Event event) {

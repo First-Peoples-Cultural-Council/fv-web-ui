@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public interface CleanupCharactersService {
 
@@ -63,4 +64,18 @@ public interface CleanupCharactersService {
    * @return Map of all upper/lowercase characters, confusables and ignored characters
    */
   Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
+
+  /**
+   * Return a list of characters in a document's associated alphabet
+   *
+   * @param doc Document model
+   * @return Document model list of associated characters
+   */
+  DocumentModelList getCharacters(DocumentModel doc);
+
+  /**
+   * @param doc Document model
+   * @return The associated alphabet document for the given document
+   */
+  DocumentModel getAlphabet(DocumentModel doc);
 }
