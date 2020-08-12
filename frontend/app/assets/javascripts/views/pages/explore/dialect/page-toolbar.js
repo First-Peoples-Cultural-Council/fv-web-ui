@@ -52,12 +52,10 @@ export class PageToolbar extends Component {
     computeEntity: object.isRequired,
     computeLogin: object.isRequired,
     computePermissionEntity: object,
-    enableToggleAction: func,
     handleNavigateRequest: func,
     intl: object.isRequired,
     label: string,
     publishChangesAction: func,
-    publishToggleAction: func,
     showPublish: bool,
     // REDUX: reducers/state
     properties: object.isRequired,
@@ -88,8 +86,6 @@ export class PageToolbar extends Component {
    */
   _publishChanges() {
     if (this.props.publishChangesAction === null) {
-      this.props.publishToggleAction(true, false, selectn('response.path', this.props.computeEntity))
-    } else {
       this.props.publishChangesAction()
     }
   }
