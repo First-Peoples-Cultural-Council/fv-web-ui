@@ -93,7 +93,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
           .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
               session -> {
                 addConfusableCharactersToAlphabets(session);
-                cleanConfusablesFromWordsAndPhrases(session);
+                cleanConfusablesFromWordsAndPhrases();
               });
     }
 
@@ -248,7 +248,7 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     }
   }
 
-  private void cleanConfusablesFromWordsAndPhrases(CoreSession session) {
+  private void cleanConfusablesFromWordsAndPhrases() {
     // Process 100 cleanups on words/phrases within worker
     WorkManager workManager = Framework.getService(WorkManager.class);
     CleanConfusablesForDictionaryWorker worker = new CleanConfusablesForDictionaryWorker();

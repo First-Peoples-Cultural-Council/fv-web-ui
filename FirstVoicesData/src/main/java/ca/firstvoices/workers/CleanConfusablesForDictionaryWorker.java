@@ -36,7 +36,7 @@ import org.nuxeo.runtime.api.Framework;
 public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
   private static final String CLEAN_CONFUSABLES_ID = "cleanConfusablesForWordsAndPhrases";
-  private final CleanupCharactersService service = Framework
+  private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
   public CleanConfusablesForDictionaryWorker() {
@@ -56,7 +56,7 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
               Map<String, Boolean> requiresUpdate = new HashMap<>();
 
-              if (wordsAndPhrases.size() > 0) {
+              if (wordsAndPhrases.isEmpty()) {
                 for (DocumentModel documentModel : wordsAndPhrases) {
 
                   String dialect = (String) documentModel.getPropertyValue("fva:dialect");
@@ -66,7 +66,8 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
                   if (requiresUpdate.containsKey(dialect)) {
                     alphabetRequiresUpdate = requiresUpdate.get(dialect);
                   } else {
-                    alphabetRequiresUpdate = (Boolean) service.getAlphabet(documentModel)
+                    alphabetRequiresUpdate = (Boolean) cleanupCharactersService
+                        .getAlphabet(documentModel)
                         .getPropertyValue("fv-alphabet:update_confusables_required");
                     if (alphabetRequiresUpdate == null) {
                       alphabetRequiresUpdate = false;
@@ -74,8 +75,8 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
                     requiresUpdate.put(dialect, alphabetRequiresUpdate);
                   }
 
-                  if (alphabetRequiresUpdate.equals(false)) {
-                    service.cleanConfusables(session, documentModel, true);
+                  if (alphabetRequiresUpdate == false) {
+                    cleanupCharactersService.cleanConfusables(session, documentModel, true);
                   }
                 }
               }
