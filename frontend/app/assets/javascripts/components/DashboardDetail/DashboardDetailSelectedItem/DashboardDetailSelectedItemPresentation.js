@@ -1,6 +1,4 @@
 import React from 'react'
-import RequestChangesContainer
-  from 'components/RequestChanges/RequestChangesContainer'
 // import PropTypes from 'prop-types'
 import DashboardDetailListItem
   from 'components/DashboardDetail/DashboardDetailListItem'
@@ -171,7 +169,6 @@ function DashboardDetailSelectedItemPresentation() {
       </div>
   )
 }
-
 // PROPTYPES
 // const { node } = PropTypes
 // DashboardDetailSelectedItemPresentation.propTypes = {
