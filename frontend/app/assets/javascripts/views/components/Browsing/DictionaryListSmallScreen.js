@@ -354,14 +354,6 @@ export const dictionaryListSmallScreenTemplateWords = ({ templateData }) => {
 // dictionaryListSmallScreenTemplatePhrases
 // --------------------------------------------------------------
 export const dictionaryListSmallScreenTemplatePhrases = ({ templateData }) => {
-  const { routeParams } = useRoute()
-  const dialectName = routeParams.dialect_name
-  const mapDocumentStateToVisibility = {
-    New: `${dialectName} Team Only`,
-    Disabled: `${dialectName} Team Only`,
-    Enabled: `${dialectName} Members Only`,
-    Published: 'Public',
-  }
   return (
     <div className="DictionaryListSmallScreen__item">
       <div className="DictionaryListSmallScreen__groupMain">
@@ -384,10 +376,7 @@ export const dictionaryListSmallScreenTemplatePhrases = ({ templateData }) => {
 
         <div className="DictionaryListSmallScreen__groupMainMiscellaneous">
           <div className="DictionaryListSmallScreen__groupData">{templateData['fv-phrase:phrase_books']}</div>
-          <div className="DictionaryListSmallScreen__groupData">
-            <strong>State: </strong>
-            {mapDocumentStateToVisibility[templateData.state.props.children[2]]}
-          </div>
+          <div className="DictionaryListSmallScreen__groupData">{templateData.state}</div>
         </div>
       </div>
 
