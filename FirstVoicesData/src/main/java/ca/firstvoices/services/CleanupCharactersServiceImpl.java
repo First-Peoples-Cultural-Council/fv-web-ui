@@ -54,17 +54,19 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       Boolean saveDocument) {
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
-      return document;
+      return saveAndSetDocument(document, saveDocument, session);
     }
 
     DocumentModel dictionary = session.getDocument(document.getParentRef());
     DocumentModel dialect = session.getDocument(dictionary.getParentRef());
     DocumentModel alphabet = session
         .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    List<DocumentModel> characters = session.getChildren(alphabet.getRef());
+    Filter trashedFilter = docModel -> !docModel.isTrashed();
+    List<DocumentModel> characters = session
+        .getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
 
     if (characters.size() == 0) {
-      return document;
+      return saveAndSetDocument(document, saveDocument, session);
     }
 
     String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
@@ -79,13 +81,17 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
         document.setPropertyValue(DOCUMENT_TITLE, updatedPropertyValue);
       }
     }
-    document.setPropertyValue("fv:update_confusables_required", false);
+    return saveAndSetDocument(document, saveDocument, session);
+  }
 
-    if (Boolean.TRUE.equals(saveDocument)) {
-      return session.saveDocument(document);
+  private DocumentModel saveAndSetDocument(DocumentModel d, Boolean b, CoreSession session) {
+    d.setPropertyValue("fv:update_confusables_required", false);
+    if (Boolean.TRUE.equals(b)) {
+      d.getContextData().put("clean_confusables_update", true);
+      return session.saveDocument(d);
+    } else {
+      return d;
     }
-
-    return document;
   }
 
   //Helper method for cleanConfusables
@@ -311,7 +317,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     return replaceConfusables(confusables, current + charAt, updatedPropertyValue.substring(1));
   }
 
-  private DocumentModel getAlphabet(DocumentModel doc) {
+  public DocumentModel getAlphabet(DocumentModel doc) {
     if (FV_ALPHABET.equals(doc.getType())) {
       return doc;
     }
@@ -327,7 +333,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     return results.get(0);
   }
 
-  private DocumentModelList getCharacters(DocumentModel doc) {
+  public DocumentModelList getCharacters(DocumentModel doc) {
     DocumentModel alphabet = getAlphabet(doc);
     //Alphabet must not be null
     assert alphabet != null;
