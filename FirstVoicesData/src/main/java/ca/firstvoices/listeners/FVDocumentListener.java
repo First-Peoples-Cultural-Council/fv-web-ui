@@ -63,12 +63,13 @@ import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
+import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
 
-public class FVDocumentListener extends AbstractFirstVoicesDataListener {
+public class FVDocumentListener implements EventListener {
 
   protected SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
@@ -253,6 +254,11 @@ public class FVDocumentListener extends AbstractFirstVoicesDataListener {
     WorkManager workManager = Framework.getService(WorkManager.class);
     CleanConfusablesForDictionaryWorker worker = new CleanConfusablesForDictionaryWorker();
     workManager.schedule(worker);
+  }
+
+  protected void rollBackEvent(Event event) {
+    event.markBubbleException();
+    event.markRollBack();
   }
 
 }
