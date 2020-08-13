@@ -36,7 +36,7 @@ import org.nuxeo.runtime.api.Framework;
 public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
   private static final String CLEAN_CONFUSABLES_ID = "cleanConfusablesForWordsAndPhrases";
-  private final CleanupCharactersService cleanupCharactersService = Framework
+  private transient CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
   public CleanConfusablesForDictionaryWorker() {
@@ -75,7 +75,7 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
                     requiresUpdate.put(dialect, alphabetRequiresUpdate);
                   }
 
-                  if (alphabetRequiresUpdate == false) {
+                  if (Boolean.FALSE.equals(alphabetRequiresUpdate)) {
                     cleanupCharactersService.cleanConfusables(session, documentModel, true);
                   }
                 }
@@ -92,5 +92,14 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
   public String getCategory() {
     return CLEAN_CONFUSABLES_ID;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (! super.equals(obj)) {
+      return false;
+    }
+    return true;
+  }
 }
+
 
