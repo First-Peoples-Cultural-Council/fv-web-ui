@@ -125,10 +125,6 @@ function DashboardDetailSelectedItemPresentation() {
           <p>incididunt ut labore et dolore magna aliqua</p>
         </div>
       </div>
-      <RequestChangesContainer
-          docId={'fcf0dcf9-6a60-4a01-92cf-b495b6da758d'}
-          // docState={'Team'}
-      />
     </div>
   )
 }

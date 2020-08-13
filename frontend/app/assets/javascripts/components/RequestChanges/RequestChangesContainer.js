@@ -52,8 +52,6 @@ function RequestChangesContainer({docId, docState}) {
                                              snackbarMessage={snackbarMessage}
                                              snackbarStatus={snackbarStatus}
                                              submitMethod={submitMethod}
-
-
           />
         }}
       </RequestChangesData>
