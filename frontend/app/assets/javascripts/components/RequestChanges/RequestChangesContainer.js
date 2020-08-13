@@ -22,8 +22,6 @@ function RequestChangesContainer({docId, docState}) {
           computeEntities,
           disableApproveButton,
           disableRequestChangesButton,
-          docId,
-          docState,
           docVisibility,
           errors,
           formRef,

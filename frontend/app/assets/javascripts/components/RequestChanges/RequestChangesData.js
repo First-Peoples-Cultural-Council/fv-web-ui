@@ -23,7 +23,7 @@ function RequestChangesData({children, docId, docState}) {
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
   const [snackbarStatus, setSnackbarStatus] = useState(false)
-  const [submitMethod, setSubmitMethod] = useState(null)
+  const [setSubmitMethod] = useState(null)
   const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
   const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
