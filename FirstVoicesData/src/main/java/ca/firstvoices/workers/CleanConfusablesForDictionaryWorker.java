@@ -35,6 +35,7 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
+  private static final String CLEAN_CONFUSABLES_TITLE = "Clean Dictionary Confusables";
   private static final String CLEAN_CONFUSABLES_ID = "cleanConfusablesForWordsAndPhrases";
   private transient CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
@@ -85,7 +86,7 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
   @Override
   public String getTitle() {
-    return CLEAN_CONFUSABLES_ID;
+    return CLEAN_CONFUSABLES_TITLE;
   }
 
   @Override
