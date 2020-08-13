@@ -14,10 +14,7 @@ import React, { Component } from 'react' // eslint-disable-line
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-
-const intl = IntlService.instance
 
 /**
  * Data List View
@@ -78,7 +75,7 @@ export default class DataListView extends Component {
 
   // Fetch data on initial render
   componentDidMount() {
-    this._resetColumns(this.props)
+    this._resetColumns()
     this.fetchData(this.props)
   }
 
@@ -115,7 +112,7 @@ export default class DataListView extends Component {
     }
 
     if (this.props.routeParams.area !== prevProps.routeParams.area) {
-      this._resetColumns(this.props)
+      this._resetColumns()
       this._resetPagination(this.props)
     }
 
@@ -307,23 +304,9 @@ export default class DataListView extends Component {
     this.setState({})
   }
 
-  _resetColumns(props) {
+  _resetColumns() {
     if (this.state.fixedCols || this.state.hideStateColumn) {
       return
-    }
-
-    // Toggle 'state' column for section/workspaces view
-    if (this.state.hasOwnProperty('columns')) {
-      if (props.routeParams.area === SECTIONS) {
-        const stateCol = this.state.columns.findIndex((item) => item.name === 'state')
-
-        this.state.columns.splice(stateCol, 1)
-      } else {
-        this.state.columns.push({
-          name: 'state',
-          title: intl.trans('state', 'State', 'first'),
-        })
-      }
     }
   }
 
