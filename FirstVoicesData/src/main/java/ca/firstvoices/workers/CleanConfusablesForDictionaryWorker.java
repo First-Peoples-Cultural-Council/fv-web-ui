@@ -95,10 +95,12 @@ public class CleanConfusablesForDictionaryWorker extends AbstractWork {
 
   @Override
   public boolean equals(Object obj) {
-    if (! super.equals(obj)) {
-      return false;
-    }
-    return true;
+    return super.equals((obj));
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }
 
