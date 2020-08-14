@@ -70,11 +70,16 @@ function useUserGroupTasks() {
     })
   }
 
+  const resetTasks = () => {
+    setTasks([])
+  }
+
   return {
     fetchUserGroupTasksRemoteData,
     tasks,
     userId,
     count,
+    resetTasks,
   }
 }
 
