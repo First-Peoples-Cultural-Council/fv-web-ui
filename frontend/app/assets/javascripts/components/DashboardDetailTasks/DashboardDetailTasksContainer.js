@@ -8,6 +8,7 @@ import Table from 'components/Table'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
 import DetailWordPhrase from 'components/DetailWordPhrase'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import TablePagination from 'components/Table/TablePagination'
 /**
  * @summary DashboardDetailTasksContainer
  * @version 1.0.1
@@ -78,6 +79,7 @@ function DashboardDetailTasksContainer() {
                 sortDirection={sortDirection}
                 variant={CONTENT_FULL_WIDTH}
                 onChangeRowsPerPage={onChangeRowsPerPage}
+                componentsPagination={TablePagination}
               />
             }
             childrenSelectedSidebar={

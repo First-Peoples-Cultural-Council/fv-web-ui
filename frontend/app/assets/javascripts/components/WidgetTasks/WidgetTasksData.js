@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import StringHelpers from 'common/StringHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
-import { TableContextSort } from 'components/Table/TableContext'
+import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -19,7 +19,7 @@ function WidgetTasksData({ children }) {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
-  const { fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
+  const { count: tasksCount, fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
 
   const onRowClick = (event, { id }) => {
     navigate(
@@ -40,7 +40,6 @@ function WidgetTasksData({ children }) {
     setSortBy(_sortBy)
     setPage(pageIndex)
     setPageSize(_pageSize)
-
     return fetchUserGroupTasksRemoteData({
       pageIndex,
       pageSize: _pageSize,
@@ -51,43 +50,45 @@ function WidgetTasksData({ children }) {
   }
 
   return (
-    <TableContextSort.Provider value={sortDirection}>
-      {children({
-        columns: [
-          {
-            title: '',
-            field: 'icon',
-            render: () => {
-              return '[~]'
+    <TableContextCount.Provider value={Number(tasksCount)}>
+      <TableContextSort.Provider value={sortDirection}>
+        {children({
+          columns: [
+            {
+              title: '',
+              field: 'icon',
+              render: () => {
+                return '[~]'
+              },
+              sorting: false,
             },
-            sorting: false,
+            {
+              title: 'Entry title',
+              field: 'title',
+            },
+            {
+              title: 'Requested by',
+              field: 'initiator',
+            },
+            {
+              title: 'Date submitted',
+              field: 'date',
+              render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
+            },
+          ],
+          // NOTE: when not logged in, show an empty data set
+          data: userId === 'Guest' ? [] : remoteData,
+          onOrderChange,
+          onRowClick,
+          options: {
+            paging: true,
+            pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
+            sorting: true,
           },
-          {
-            title: 'Entry title',
-            field: 'title',
-          },
-          {
-            title: 'Requested by',
-            field: 'initiator',
-          },
-          {
-            title: 'Date submitted',
-            field: 'date',
-            render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
-          },
-        ],
-        // NOTE: when not logged in, show an empty data set
-        data: userId === 'Guest' ? [] : remoteData,
-        onOrderChange,
-        onRowClick,
-        options: {
-          paging: true,
-          pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
-          sorting: true,
-        },
-        sortDirection,
-      })}
-    </TableContextSort.Provider>
+          sortDirection,
+        })}
+      </TableContextSort.Provider>
+    </TableContextCount.Provider>
   )
 }
 // PROPTYPES
