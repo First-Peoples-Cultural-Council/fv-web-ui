@@ -12,11 +12,11 @@ import StoryCoverData from 'components/StoryCover/StoryCoverData'
  *
  * @returns {node} jsx markup
  */
-function StoryCoverContainer() {
+function StoryCoverContainer({ book, openBookAction }) {
   return (
-    <StoryCoverData>
-      {({ content }) => {
-        return <StoryCoverPresentation content={content} />
+    <StoryCoverData book={book}>
+      {() => {
+        return <StoryCoverPresentation book={book} openBookAction={openBookAction} />
       }}
     </StoryCoverData>
   )

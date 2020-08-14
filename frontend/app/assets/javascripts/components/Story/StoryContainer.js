@@ -25,15 +25,26 @@ function StoryContainer() {
         bookPath,
         book,
         bookEntries,
+        bookOpen,
+        closeBookAction,
         computeEntities,
         dialect,
         deleteBook,
         isKidsTheme,
+        openBookAction,
+        pageCount,
         publishBook,
         pushWindowPath,
       }) => {
         return isKidsTheme ? (
-          <StoryPresentation bookEntries={bookEntries} />
+          <StoryPresentation
+            book={book}
+            bookEntries={bookEntries}
+            bookOpen={bookOpen}
+            closeBookAction={closeBookAction}
+            openBookAction={openBookAction}
+            pageCount={pageCount}
+          />
         ) : (
           <DetailsViewWithActions
             labels={{ single: 'Book' }}
@@ -46,7 +57,14 @@ function StoryContainer() {
             permissionEntry={dialect}
             computeEntities={computeEntities}
           >
-            <StoryPresentation bookEntries={bookEntries} />
+            <StoryPresentation
+              book={book}
+              bookEntries={bookEntries}
+              bookOpen={bookOpen}
+              closeBookAction={closeBookAction}
+              openBookAction={openBookAction}
+              pageCount={pageCount}
+            />
           </DetailsViewWithActions>
         )
       }}

@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Paper from '@material-ui/core/Paper'
+
 //FPCC
-import { StoryStyles } from './StoryStyles'
-// import StoryCover from 'components/StoryCover'
-// import StoryPage from 'components/StoryPage'
+// import { StoryStyles } from './StoryStyles'
+import StoryCover from 'components/StoryCover'
+import StoryPage from 'components/StoryPage'
 
 /**
  * @summary StoryPresentation
@@ -15,14 +17,30 @@ import { StoryStyles } from './StoryStyles'
  *
  * @returns {node} jsx markup
  */
-function StoryPresentation() {
-  const classes = StoryStyles()
-  return <div className={classes.base}>StoryPresentation</div>
+function StoryPresentation({ book, bookOpen, closeBookAction, openBookAction, pageCount }) {
+  //   const classes = StoryStyles()
+
+  return (
+    <div className="row" style={{ marginBottom: '20px' }}>
+      <div className="col-xs-12">
+        <Paper>
+          {!bookOpen ? (
+            <StoryCover.Container book={book} openBookAction={openBookAction} pageCount={pageCount} />
+          ) : (
+            <StoryPage.Container book={book} closeBookAction={closeBookAction} />
+          )}
+        </Paper>
+      </div>
+    </div>
+  )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { array, bool, func, object } = PropTypes
 StoryPresentation.propTypes = {
-  bookEntries: object,
+  book: object,
+  bookEntries: array,
+  bookOpen: bool,
+  openBookAction: func,
 }
 
 export default StoryPresentation

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import Immutable from 'immutable'
+import DOMPurify from 'dompurify'
 
 // FPCC
 import useBook from 'DataSource/useBook'
@@ -29,76 +30,90 @@ function StoryData({ children }) {
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
-  const { pushWindowPath, windowPath } = useWindowPath()
+  const { pushWindowPath } = useWindowPath()
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [bookOpen, setBookOpen] = useState(false)
   const fetcherParams = { currentPageIndex: 1, pageSize: 1 }
+  const DEFAULT_LANGUAGE = 'english'
 
   // Compute dialect
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const fetchDocumentAction = selectn('action', extractComputeDialect)
 
-  const book = ProviderHelpers.getEntry(computeBook, getBookPath())
-  const bookEntries = ProviderHelpers.getEntry(computeBookEntries, getBookPath())
+  const bookPath = StringHelpers.isUUID(routeParams.bookName)
+    ? routeParams.bookName
+    : routeParams.dialect_path + '/Stories & Songs/' + StringHelpers.clean(routeParams.bookName)
+
+  const extractBook = ProviderHelpers.getEntry(computeBook, bookPath)
+  const extractBookEntries = ProviderHelpers.getEntry(computeBookEntries, bookPath)
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const pageCount = selectn('response.resultsCount', extractBookEntries)
+  const metadata = selectn('response', extractBookEntries) || {}
+  const bookRawData = selectn('response', extractBook)
+  const bookEntries = selectn('response.entries', extractBookEntries) || []
+  const title = selectn('properties.dc:title', book)
+  const uid = selectn('uid', book)
+
+  const dominantLanguageTitleTranslation = (
+    selectn('properties.fvbook:title_literal_translation', bookRawData) || []
+  ).filter(function getTranslation(translation) {
+    return translation.language === DEFAULT_LANGUAGE
+  })
+
+  const book = {
+    title: DOMPurify.sanitize(selectn('title', bookRawData)),
+    titleTranslation: DOMPurify.sanitize(selectn('[0].translation', dominantLanguageTitleTranslation)),
+    authors: (selectn('contextParameters.book.authors', bookRawData) || []).map(function extractAuthors(author) {
+      return selectn('dc:title', author)
+    }),
+  }
 
   useEffect(() => {
-    setIsLoading(true)
     fetchData()
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
   }, [])
 
   // Set dialect state if/when fetch finishes
   useEffect(() => {
-    if (fetchDocumentAction === 'FV_DIALECT2_FETCH_SUCCESS') {
-      setIsLoading(false)
-    }
-  }, [fetchDocumentAction])
-
-  useEffect(() => {
-    fetchData()
-    const extractBook = selectn('response', ProviderHelpers.getEntry(computeBook, getBookPath()))
-    const title = selectn('properties.dc:title', extractBook)
-    const uid = selectn('uid', extractBook)
-
     if (title && selectn('pageTitleParams.bookName', properties) !== title) {
       changeTitleParams({ bookName: title })
       overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.bookName' })
     }
-  }, [windowPath])
+  }, [fetchDocumentAction, title])
 
-  const fetchData = () => {
-    fetchBook(getBookPath())
+  const fetchData = async () => {
+    fetchBook(bookPath)
     fetchListViewData(fetcherParams)
     fetchDialect2(routeParams.dialect_path)
   }
 
-  const fetchListViewData = () => {
+  const fetchListViewData = async (params) => {
     fetchBookEntries(
-      getBookPath(),
+      bookPath,
       '&currentPageIndex=' +
-        (fetcherParams.currentPageIndex - 1) +
+        (params.currentPageIndex - 1) +
         '&pageSize=' +
-        fetcherParams.pageSize +
+        params.pageSize +
         '&sortOrder=asc,asc' +
         '&sortBy=fvbookentry:sort_map,dc:created'
     )
   }
 
-  function getBookPath() {
-    if (StringHelpers.isUUID(routeParams.bookName)) {
-      return routeParams.bookName
-    }
-    return routeParams.dialect_path + '/Stories & Songs/' + StringHelpers.clean(routeParams.bookName)
+  function openBookAction() {
+    setBookOpen(true)
+  }
+
+  function closeBookAction() {
+    setBookOpen(false)
   }
 
   const computeEntities = Immutable.fromJS([
     {
-      id: getBookPath(),
+      id: bookPath,
       entity: computeBook,
     },
     {
-      id: getBookPath(),
+      id: bookPath,
       entity: computeBookEntries,
     },
     {
@@ -110,14 +125,19 @@ function StoryData({ children }) {
   const isKidsTheme = routeParams.siteTheme === 'kids'
 
   return children({
-    isLoading,
-    bookPath: getBookPath(),
+    // isLoading,
+    bookPath: bookPath,
     book,
     bookEntries,
+    bookOpen,
     computeEntities,
     dialect,
     deleteBook,
     isKidsTheme,
+    metadata,
+    openBookAction,
+    closeBookAction,
+    pageCount,
     publishBook,
     pushWindowPath,
   })
