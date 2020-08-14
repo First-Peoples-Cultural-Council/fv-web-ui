@@ -44,7 +44,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import Preview from 'views/components/Editor/Preview'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import DetailWordPhrase from 'components/DetailWordPhrase'
 
@@ -163,9 +162,6 @@ export class DialectViewWord extends Component {
     const definitions = selectn('response.properties.fv:definitions', computeWord)
     const dialectClassName = getDialectClassname(computeDialect2)
     const literalTranslations = selectn('response.properties.fv:literal_translation', computeWord)
-    const metadata = selectn('response', computeWord) ? (
-      <MetadataPanel properties={this.props.properties} computeEntity={computeWord} />
-    ) : null
     const partOfSpeech = selectn('response.contextParameters.word.part_of_speech', computeWord)
     const photos = selectn('response.contextParameters.word.related_pictures', computeWord) || []
     const phrases = selectn('response.contextParameters.word.related_phrases', computeWord) || []
@@ -208,12 +204,13 @@ export class DialectViewWord extends Component {
           definitions={definitions}
           dialectClassName={dialectClassName}
           literalTranslations={literalTranslations}
-          metadata={metadata}
+          metadata={computeWord}
           partOfSpeech={partOfSpeech}
           photos={photos}
           phrases={phrases}
           pushWindowPath={this.props.pushWindowPath}
           pronunciation={pronunciation}
+          properties={this.props.properties}
           relatedAssets={relatedAssets}
           relatedToAssets={relatedToAssets}
           siteTheme={this.props.routeParams.siteTheme}

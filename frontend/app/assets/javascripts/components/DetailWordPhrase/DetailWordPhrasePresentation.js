@@ -5,6 +5,7 @@ import selectn from 'selectn'
 import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
@@ -29,6 +30,7 @@ function DetailWordPhrasePresentation({
   photos,
   phrases,
   pronunciation,
+  properties,
   pushWindowPath,
   relatedAssets,
   relatedToAssets,
@@ -165,6 +167,13 @@ function DetailWordPhrasePresentation({
         <div className="DialectViewWordPhraseContentItemGroup">{_literalTranslations}</div>
       </div>
     ) : null
+  }
+
+  const _getMetadata = (wordData) => {
+    if (wordData) {
+      return <MetadataPanel properties={properties} computeEntity={wordData} />
+    }
+    return null
   }
 
   const _getPartOfSpeech = (_partOfSpeech) => {
@@ -350,14 +359,14 @@ function DetailWordPhrasePresentation({
           {_getAcknowledgement(acknowledgement)}
 
           {/* METADATA PANEL */}
-          {metadata}
+          {_getMetadata(metadata)}
         </aside>
       </div>
     </div>
   )
 }
 // PROPTYPES
-const { array, func, node, string } = PropTypes
+const { array, func, object, string } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
@@ -366,11 +375,12 @@ DetailWordPhrasePresentation.propTypes = {
   definitions: array,
   dialectClassName: string,
   literalTranslations: array,
-  metadata: node,
+  metadata: object,
   partOfSpeech: string,
   photos: array,
   phrases: array,
   pronunciation: string,
+  properties: object.isRequired,
   pushWindowPath: func,
   relatedAssets: array,
   relatedToAssets: array,
