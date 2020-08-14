@@ -6,9 +6,6 @@ import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
-import useWindowPath from 'DataSource/useWindowPath'
-import useRoute from 'DataSource/useRoute'
-import useIntl from 'DataSource/useIntl'
 
 /**
  * @summary DetailWordPhrasePresentation
@@ -32,14 +29,13 @@ function DetailWordPhrasePresentation({
   photos,
   phrases,
   pronunciation,
+  pushWindowPath,
   relatedAssets,
   relatedToAssets,
+  siteTheme,
   title,
   videos,
 }) {
-  const { pushWindowPath } = useWindowPath()
-  const { routeParams } = useRoute()
-  const { intl } = useIntl()
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
     const _arrOfObj = [...arrOfObj]
@@ -96,7 +92,7 @@ function DetailWordPhrasePresentation({
 
   const _getCulturalNotes = (cultNotes) => {
     const _culturalNotes = cultNotes.map((culturalNote, key) => {
-      return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
+      return <div key={key}>{culturalNote}</div>
     })
     return _culturalNotes.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCulturalNote">
@@ -207,7 +203,6 @@ function DetailWordPhrasePresentation({
   }
 
   const _getPhrases = (phrasesData) => {
-    const siteTheme = routeParams.siteTheme
     const _phrases = phrasesData.map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
@@ -253,7 +248,6 @@ function DetailWordPhrasePresentation({
   }
 
   const _getRelations = (assetData) => {
-    const siteTheme = routeParams.siteTheme
     return assetData.map((asset) => {
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'words')
       return (
@@ -363,7 +357,7 @@ function DetailWordPhrasePresentation({
   )
 }
 // PROPTYPES
-const { array, node, string } = PropTypes
+const { array, func, node, string } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
@@ -377,8 +371,10 @@ DetailWordPhrasePresentation.propTypes = {
   photos: array,
   phrases: array,
   pronunciation: string,
+  pushWindowPath: func,
   relatedAssets: array,
   relatedToAssets: array,
+  siteTheme: string,
   title: string,
   videos: array,
 }
@@ -392,8 +388,10 @@ DetailWordPhrasePresentation.defaultProps = {
   literalTranslations: [],
   photos: [],
   phrases: [],
+  pushWindowPath: () => {},
   relatedAssets: [],
   relatedToAssets: [],
+  siteTheme: 'explore',
   videos: [],
 }
 

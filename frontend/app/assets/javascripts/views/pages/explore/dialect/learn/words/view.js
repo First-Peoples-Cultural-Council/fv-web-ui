@@ -212,9 +212,11 @@ export class DialectViewWord extends Component {
           partOfSpeech={partOfSpeech}
           photos={photos}
           phrases={phrases}
+          pushWindowPath={this.props.pushWindowPath}
           pronunciation={pronunciation}
           relatedAssets={relatedAssets}
           relatedToAssets={relatedToAssets}
+          siteTheme={this.props.routeParams.siteTheme}
           title={title}
           videos={videos}
         />
