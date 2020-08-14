@@ -19,8 +19,6 @@ import { TableContextSort, TableContextCount } from 'components/Table/TableConte
  *
  */
 function DashboardDetailTasksData({ children }) {
-  // const [pageSize, setPageSize] = useState(10)
-  // const [sortDirection, setSortDirection] = useState('desc')
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
 
@@ -36,7 +34,7 @@ function DashboardDetailTasksData({ children }) {
     task: queryTask,
   } = getSearchObject()
 
-  const { count: tasksCount, fetchUserGroupTasksRemoteData, tasks, userId } = useUserGroupTasks()
+  const { count: tasksCount, fetchUserGroupTasksRemoteData, tasks, userId, resetTasks } = useUserGroupTasks()
 
   // Escape key binding
   const onKeyPressed = (event) => {
@@ -66,9 +64,9 @@ function DashboardDetailTasksData({ children }) {
   useEffect(() => {
     if (queryTask && tasks.length > 0) {
       navigateReplace(
-        getUrlWithQuery({
-          task: queryTask === URL_QUERY_PLACEHOLDER ? tasks[0].id : queryTask,
-          item: queryItem ? queryItem : selectn([0, 'targetDocumentsIds', 0], tasks), // TODO: NOT SELECTING CORRECTLY?
+        getUrlDetailView({
+          task: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'id'], tasks) : queryTask,
+          item: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'targetDocumentsIds', 0], tasks) : queryItem, // TODO: NOT SELECTING CORRECTLY?
         })
       )
     }
@@ -135,7 +133,29 @@ function DashboardDetailTasksData({ children }) {
   }, [computeDocument, queryTask])
 
   const onClose = () => {
-    navigate(`${window.location.pathname}`)
+    navigate(getUrlFullListView())
+  }
+
+  const onOpenNoId = () => {
+    // Clear out old tasks data. Could be paged and so first entry won't necessarily be task 1 on page 1.
+    resetTasks()
+
+    // Update url with placeholder task id, reseting to page 1
+    navigate(
+      getUrlDetailView({
+        task: URL_QUERY_PLACEHOLDER,
+        page: 1,
+      })
+    )
+
+    // Since we cleared out tasks, need to refetch data
+    fetchUserGroupTasksRemoteData({
+      pageIndex: 0,
+      pageSize: queryPageSize,
+      sortBy: querySortBy,
+      sortOrder: querySortOrder,
+      userId,
+    })
   }
 
   const onOpen = (id) => {
@@ -147,26 +167,34 @@ function DashboardDetailTasksData({ children }) {
       selectedTargetDocumentId = selectn([0, 'targetDocumentsIds', 0], selectedTask)
     }
 
-    const url =
-      id === undefined
-        ? `/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}`
-        : getUrlWithQuery({
-            task: id,
-            item: selectedTargetDocumentId,
-          })
-
-    navigate(url)
+    navigate(
+      getUrlDetailView({
+        task: id,
+        item: selectedTargetDocumentId,
+      })
+    )
   }
 
-  const getUrlWithQuery = ({
+  const getUrlDetailView = ({
     item = queryItem,
     page = queryPage,
     pageSize = queryPageSize,
     sortBy = querySortBy,
     sortOrder = querySortOrder,
     task = queryTask,
-  }) => {
-    return `${window.location.pathname}?task=${task}&item=${item}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+  } = {}) => {
+    return `${window.location.pathname}?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}${
+      task ? `&task=${task}` : ''
+    }${item ? `&item=${item}` : ''}`
+  }
+
+  const getUrlFullListView = ({
+    page = queryPage,
+    pageSize = queryPageSize,
+    sortBy = querySortBy,
+    sortOrder = querySortOrder,
+  } = {}) => {
+    return `${window.location.pathname}?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`
   }
 
   const onRowClick = (event, { id }) => {
@@ -175,35 +203,13 @@ function DashboardDetailTasksData({ children }) {
 
   const onOrderChange = () => {
     navigate(
-      getUrlWithQuery({
+      getUrlDetailView({
         sortOrder: querySortOrder === 'desc' ? 'asc' : 'desc',
+        page: 1,
       })
     )
   }
 
-  // Note: Material-Table has a `sort` bug when using the `remote data` feature
-  // see: https://github.com/mbrn/material-table/issues/2177
-  // const remoteData = (data = {}) => {
-  //   const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
-
-  //   const { field: sortBy } = orderBy
-
-  //   return fetchUserGroupTasksRemoteData({
-  //     pageIndex,
-  //     pageSize: _pageSize,
-  //     sortBy,
-  //     sortOrder,
-  //     userId,
-  //   })
-  // }
-
-  // const onChangeRowsPerPage = (_pageSize) => {
-  //   navigate(
-  //     getUrlWithQuery({
-  //       pageSize: _pageSize,
-  //     })
-  //   )
-  // }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
       <TableContextSort.Provider value={querySortOrder}>
@@ -239,6 +245,7 @@ function DashboardDetailTasksData({ children }) {
           // onChangeRowsPerPage,
           onClose,
           onOpen,
+          onOpenNoId,
           onOrderChange,
           onRowClick,
           options: {

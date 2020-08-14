@@ -28,6 +28,7 @@ function DashboardDetailTasksContainer() {
         onChangeRowsPerPage,
         onClose,
         onOpen,
+        onOpenNoId,
         onOrderChange,
         onRowClick,
         options,
@@ -141,9 +142,7 @@ function DashboardDetailTasksContainer() {
               />
             }
             onClose={onClose}
-            onOpen={() => {
-              onOpen()
-            }}
+            onOpen={onOpenNoId}
             selectedId={idSelectedTask}
           />
         )
