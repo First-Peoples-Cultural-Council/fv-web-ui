@@ -20,9 +20,11 @@ import org.nuxeo.ecm.platform.query.api.PageProviderDefinition;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskService;
+import org.nuxeo.ecm.platform.task.core.service.DocumentTaskProvider;
 import org.nuxeo.ecm.platform.task.dashboard.DashBoardItem;
 import org.nuxeo.ecm.platform.task.dashboard.DashBoardItemImpl;
 import org.nuxeo.runtime.api.Framework;
+
 
 /**
  * @author david
@@ -65,6 +67,13 @@ public class GetTasksServiceImpl implements GetTasksService {
   public DocumentModelList getTasksForUser(CoreSession session, NuxeoPrincipal principal,
       Integer currentPageIndex, Integer pageSize, List<String> sortBy, List<String> sortOrder)
       throws OperationException {
+
+    TaskService taskService = Framework.getService(TaskService.class);
+
+    List<Task> test = DocumentTaskProvider.getTasks("", session, false, null);
+
+    //wrapDocModelInTask
+
     List<String> userGroups = principal.getGroups();
     if (userGroups != null && !userGroups.isEmpty()) {
       StringBuilder query = new StringBuilder(

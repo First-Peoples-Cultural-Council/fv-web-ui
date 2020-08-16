@@ -141,13 +141,8 @@
       <artifactId>nuxeo-platform-audit-core</artifactId>
     </dependency>
     <dependency>
-      <artifactId>nuxeo-platform-comment-parent</artifactId>
       <groupId>org.nuxeo.ecm.platform</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>nuxeo-platform-comment-core</artifactId>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <scope>test</scope>
+      <artifactId>nuxeo-platform-comment</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat</groupId>
@@ -178,13 +173,8 @@
       <artifactId>FirstVoicesData</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-comment-core</artifactId>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <artifactId>nuxeo-platform-comment</artifactId>
-      <groupId>org.nuxeo.ecm.platform</groupId>
       <scope>test</scope>
     </dependency>
     <dependency>
