@@ -169,9 +169,9 @@ function DetailWordPhrasePresentation({
     ) : null
   }
 
-  const _getMetadata = (wordData) => {
-    if (wordData) {
-      return <MetadataPanel properties={properties} computeEntity={wordData} />
+  const _getMetadata = (data) => {
+    if (data) {
+      return <MetadataPanel properties={properties} computeEntity={data} />
     }
     return null
   }

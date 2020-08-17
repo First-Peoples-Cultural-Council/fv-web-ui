@@ -23,11 +23,13 @@ function PhraseContainer() {
       {({
         // Actions
         computeEntities,
+        computeLogin,
+        computeWord,
         deleteWord,
         dialect,
         publishWord,
+        routeParams,
         tabData,
-        computeWord,
         wordPath,
         // DetailView
         acknowledgement,
@@ -46,21 +48,25 @@ function PhraseContainer() {
         relatedAssets,
         relatedToAssets,
         siteTheme,
+        splitWindowPath,
         title,
         videos,
       }) => {
         return (
           <DetailsViewWithActions
-            labels={{ single: 'word' }}
-            itemPath={wordPath}
             actions={['workflow', 'edit', 'visibility', 'publish']}
-            publishAction={publishWord}
-            deleteAction={deleteWord}
-            onNavigateRequest={pushWindowPath}
-            computeItem={computeWord}
-            permissionEntry={dialect}
-            tabsData={tabData}
             computeEntities={computeEntities}
+            computeItem={computeWord}
+            computeLogin={computeLogin}
+            deleteAction={deleteWord}
+            itemPath={wordPath}
+            labels={{ single: 'word' }}
+            onNavigateRequest={pushWindowPath}
+            permissionEntry={dialect}
+            publishAction={publishWord}
+            routeParams={routeParams}
+            splitWindowPath={splitWindowPath}
+            tabsData={tabData}
           >
             <DetailWordPhrase.Presentation
               acknowledgement={acknowledgement}

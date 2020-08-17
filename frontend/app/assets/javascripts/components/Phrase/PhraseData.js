@@ -4,12 +4,13 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 
 // FPCC
-import useWord from 'DataSource/useWord'
 import useDialect from 'DataSource/useDialect'
+import useLogin from 'DataSource/useLogin'
 import useNavigation from 'DataSource/useNavigation'
 import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
+import useWord from 'DataSource/useWord'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -25,12 +26,13 @@ import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
  *
  */
 function PhraseData({ children }) {
-  const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
   const { fetchDialect2, computeDialect2 } = useDialect()
+  const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
-  const { pushWindowPath } = useWindowPath()
+  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
 
   // Compute dialect
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
@@ -40,9 +42,9 @@ function PhraseData({ children }) {
     ? routeParams.word
     : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.word)
 
-  const extractWord = ProviderHelpers.getEntry(computeWord, wordPath)
+  const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const wordRawData = selectn('response', extractWord)
+  const wordRawData = selectn('response', _computeWord)
 
   const acknowledgement = selectn('properties.fv-word:acknowledgement', wordRawData)
   const audio = selectn('contextParameters.word.related_audio', wordRawData) || []
@@ -63,7 +65,7 @@ function PhraseData({ children }) {
   const uid = selectn('uid', wordRawData)
 
   //   const tabData = getTabs({ phrases, photos, videos, audio })
-  const tabData = 'Need to add function to generate tab data' // TODO
+  const tabData = [] // TODO
 
   useEffect(() => {
     fetchData()
@@ -97,11 +99,14 @@ function PhraseData({ children }) {
   return children({
     // Actions
     computeEntities,
+    computeLogin,
+    computeWord: _computeWord,
     deleteWord,
     dialect,
     publishWord,
+    routeParams,
+    splitWindowPath,
     tabData,
-    computeWord,
     wordPath,
     // DetailView
     acknowledgement,

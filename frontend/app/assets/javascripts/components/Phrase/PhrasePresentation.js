@@ -1,6 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import PhraseStyles from './PhraseStyles.js'
+import { PhraseStyles } from './PhraseStyles.js'
 /**
  * @summary PhrasePresentation
  * @version 1.0.1
