@@ -122,7 +122,8 @@ function DashboardDetailTasksData({ children }) {
     const _selectedTaskData = selectn(['response'], extractComputeDocumentTask)
     if (_selectedTaskData) {
       setSelectedTaskData({
-        date: selectn(['properties', 'nt:dueDate'], _selectedTaskData),
+        // Note: this comes directly from the server so need to do the date formatting step
+        date: StringHelpers.formatUTCDateString(selectn(['properties', 'nt:dueDate'], _selectedTaskData)),
         id: selectn(['uid'], _selectedTaskData),
         initiator: selectn(['properties', 'nt:initiator'], _selectedTaskData),
         title: selectn(['properties', 'nt:name'], _selectedTaskData),
@@ -234,7 +235,6 @@ function DashboardDetailTasksData({ children }) {
             {
               title: 'Date submitted',
               field: 'date',
-              render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
             },
           ],
           // data: userId === 'Guest' ? [] : remoteData,

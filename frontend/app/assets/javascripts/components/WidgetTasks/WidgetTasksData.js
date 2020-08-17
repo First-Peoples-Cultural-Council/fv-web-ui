@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import StringHelpers from 'common/StringHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
@@ -73,7 +72,6 @@ function WidgetTasksData({ children }) {
             {
               title: 'Date submitted',
               field: 'date',
-              render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
             },
           ],
           // NOTE: when not logged in, show an empty data set

@@ -3,6 +3,8 @@ import selectn from 'selectn'
 
 import useLogin from 'DataSource/useLogin'
 import useTasks from 'DataSource/useTasks'
+
+import StringHelpers from 'common/StringHelpers'
 /**
  * @summary useUserGroupTasks
  * @description Custom hook that returns user tasks
@@ -28,7 +30,7 @@ function useUserGroupTasks() {
   const formatTasksData = (_tasks) => {
     return _tasks.map(({ uid: id, properties }) => {
       return {
-        date: properties['nt:dueDate'],
+        date: StringHelpers.formatUTCDateString(properties['nt:dueDate']),
         id,
         initiator: properties['nt:initiator'],
         targetDocumentsIds: properties['nt:targetDocumentsIds'],
