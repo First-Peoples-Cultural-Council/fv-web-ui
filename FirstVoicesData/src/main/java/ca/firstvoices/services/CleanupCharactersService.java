@@ -21,16 +21,61 @@
 package ca.firstvoices.services;
 
 import java.util.List;
+import java.util.Set;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public interface CleanupCharactersService {
 
-  DocumentModel cleanConfusables(CoreSession session, DocumentModel document);
+  /**
+   * @param session      Nuxeo session.
+   * @param document     Document to be cleaned.
+   * @param saveDocument whether or not to save the document. not necessary if saving is done later
+   *                     (e.g. aboutToCreate)
+   * @return Cleaned document
+   */
+  DocumentModel cleanConfusables(CoreSession session, DocumentModel document, Boolean saveDocument);
 
+  /**
+   * Ensures all characters and confusables are unique.
+   *
+   * @param characters List of FVCharacter documents that are not the document being updated.
+   * @param alphabet   The alphabet document corresponding to the characters.
+   * @param updated    The character document being updated.
+   */
   void validateCharacters(List<DocumentModel> characters,
       DocumentModel alphabet, DocumentModel updated);
 
+  /**
+   * Ensures ignored characters are unique from characters and confusables.
+   *
+   * @param characters List of FVCharacter documents for the alphabet.
+   * @param alphabet   Alphabet document.
+   */
   void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet);
+
+  /**
+   * A map of all upper/lowercase characters, upper/lowercase confusables and ignored characters
+   * currently in the dialect.
+   *
+   * @param dialect Dialect containing desired documents
+   * @return Map of all upper/lowercase characters, confusables and ignored characters
+   */
+  Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
+
+  /**
+   * Return a list of characters in a document's associated alphabet
+   *
+   * @param doc Document model
+   * @return Document model list of associated characters
+   */
+  DocumentModelList getCharacters(DocumentModel doc);
+
+  /**
+   * @param doc Document model
+   * @return The associated alphabet document for the given document
+   */
+  DocumentModel getAlphabet(DocumentModel doc);
 }

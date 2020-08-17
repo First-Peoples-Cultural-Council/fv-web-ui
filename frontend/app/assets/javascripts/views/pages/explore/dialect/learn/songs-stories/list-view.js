@@ -267,10 +267,7 @@ class _SongsStoriesCardView extends Component {
           {this.state.showIntro && cardViewPopover}
           <CardContent style={{ padding: '4px' }}>
             <div className="CardViewTitles">
-              <h2
-                className={classNames('CardViewTitle', 'fontAboriginalSans')}
-                onClick={this.props.action.bind(this, item)}
-              >
+              <h2 className={classNames('CardViewTitle', 'fontBCSans')} onClick={this.props.action.bind(this, item)}>
                 {title}
               </h2>
               <h3 className="CardViewSubtitle" onClick={this.props.action.bind(this, item)}>

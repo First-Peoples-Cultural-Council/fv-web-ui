@@ -31,6 +31,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
+import ProviderHelpers from 'common/ProviderHelpers'
 
 import AdminMenu from 'components/AdminMenu'
 import RequestReview from 'components/RequestReview'
@@ -49,6 +50,7 @@ export class PageToolbar extends Component {
     actions: array,
     children: node,
     computeEntity: object.isRequired,
+    computeLogin: object.isRequired,
     computePermissionEntity: object,
     enableToggleAction: func,
     handleNavigateRequest: func,
@@ -97,6 +99,9 @@ export class PageToolbar extends Component {
     const documentPublished = selectn('response.state', computeEntity) === 'Published'
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
+    const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
+    const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
+    const hasWritePriveleges = isRecorderWithApproval || isAdmin
     const dialectPublishedMessage = documentPublished ? (
       <div>
         This site is <strong>public</strong>. Contact hello@firstvoices.com to make it private.
@@ -117,10 +122,8 @@ export class PageToolbar extends Component {
           >
             {this.props.children}
             {/* Dialect Message */}
-            {actions.includes('dialect') ? (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
-                <div className="PageToolbar__publishUiContainer">{dialectPublishedMessage}</div>
-              </AuthorizationFilter>
+            {actions.includes('dialect') && hasWritePriveleges ? (
+              <div className="PageToolbar__publishUiContainer">{dialectPublishedMessage}</div>
             ) : null}
             {/* Select: Visibility */}
             {actions.includes('visibility') ? (
@@ -137,7 +140,14 @@ export class PageToolbar extends Component {
             <div>
               {/* Button: Request Review */}
               {actions.includes('workflow') ? (
-                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
+                <AuthorizationFilter
+                  filter={{
+                    role: 'Record',
+                    entity: selectn('response', permissionEntity),
+                    secondaryPermission: 'Write',
+                    login: this.props.computeLogin,
+                  }}
+                >
                   <RequestReview.Container
                     docId={selectn('response.uid', computeEntity)}
                     docState={selectn('response.state', computeEntity)}
@@ -195,7 +205,7 @@ export class PageToolbar extends Component {
               ) : null}
             </div>
             {/* Menu */}
-            {actions.includes('more-options') ? <AdminMenu.Container /> : null}
+            {actions.includes('more-options') && isAdmin ? <AdminMenu.Container /> : null}
           </div>
         </Toolbar>
       </AppBar>

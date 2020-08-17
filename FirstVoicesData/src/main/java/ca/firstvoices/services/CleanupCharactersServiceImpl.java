@@ -20,6 +20,8 @@
 
 package ca.firstvoices.services;
 
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
@@ -35,31 +37,36 @@ import java.util.stream.Collectors;
 import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.Filter;
 import org.nuxeo.ecm.core.api.PathRef;
 
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
 
-  private final String[] types = {FV_PHRASE, FV_WORD};
   //In the future, all dublincore (and other schema) property values
   //should be kept in a constants file in FVData.
   private static final String DOCUMENT_TITLE = "dc:title";
+  private final String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
-  public DocumentModel cleanConfusables(CoreSession session, DocumentModel document) {
+  public DocumentModel cleanConfusables(CoreSession session, DocumentModel document,
+      Boolean saveDocument) {
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
-      return document;
+      return saveAndSetDocument(document, saveDocument, session);
     }
 
     DocumentModel dictionary = session.getDocument(document.getParentRef());
     DocumentModel dialect = session.getDocument(dictionary.getParentRef());
     DocumentModel alphabet = session
         .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    List<DocumentModel> characters = session.getChildren(alphabet.getRef());
+    Filter trashedFilter = docModel -> !docModel.isTrashed();
+    List<DocumentModel> characters = session
+        .getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
 
     if (characters.size() == 0) {
-      return document;
+      return saveAndSetDocument(document, saveDocument, session);
     }
 
     String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
@@ -74,8 +81,17 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
         document.setPropertyValue(DOCUMENT_TITLE, updatedPropertyValue);
       }
     }
-    document.setPropertyValue("fv:update_confusables_required", false);
-    return session.saveDocument(document);
+    return saveAndSetDocument(document, saveDocument, session);
+  }
+
+  private DocumentModel saveAndSetDocument(DocumentModel d, Boolean b, CoreSession session) {
+    d.setPropertyValue("fv:update_confusables_required", false);
+    if (Boolean.TRUE.equals(b)) {
+      d.getContextData().put("clean_confusables_update", true);
+      return session.saveDocument(d);
+    } else {
+      return d;
+    }
   }
 
   //Helper method for cleanConfusables
@@ -153,10 +169,15 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     //lower case char, upper case char, lower confusable list and upper confusable list are unique
     Set<String> updatedDocumentCharacters = new HashSet<>();
 
-    updatedDocumentCharacters
-        .add((String) updated.getPropertyValue(DOCUMENT_TITLE));
-    updatedDocumentCharacters
-        .add((String) updated.getPropertyValue("fvcharacter:upper_case_character"));
+    String docTitle = (String) updated.getPropertyValue(DOCUMENT_TITLE);
+    if (docTitle != null) {
+      updatedDocumentCharacters.add(docTitle);
+    }
+
+    String upperChar = (String) updated.getPropertyValue("fvcharacter:upper_case_character");
+    if (upperChar != null) {
+      updatedDocumentCharacters.add(upperChar);
+    }
 
     //must loop through each confusable individually
     //as addAll would return true if the confusable string list had duplicates AND new values
@@ -166,7 +187,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : lowerConfusableStrArr) {
         if (!updatedDocumentCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "A character is duplicated somewhere in this document's uppercase, "
+              "The character " + str + " is duplicated somewhere in this document's uppercase,"
                   + "lowercase or confusable characters ",
               400);
         }
@@ -179,7 +200,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : upperConfusableStrArr) {
         if (!updatedDocumentCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "A character is duplicated somewhere in this document's uppercase, "
+              "The character " + str + " is duplicated somewhere in this document's uppercase,"
                   + "lowercase or confusable characters ",
               400);
         }
@@ -189,21 +210,39 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     //Updated character is validated internally, check all other characters
     Set<String> collectedCharacters = createCharacterHashMap(filteredCharacters);
 
-    if (alphabet
-        .getPropertyValue("fv-alphabet:ignored_characters") != null) {
-      collectedCharacters.addAll(Arrays.asList((String[]) alphabet
-          .getPropertyValue("fv-alphabet:ignored_characters")));
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    if (ignoredCharacters != null) {
+      collectedCharacters.addAll(Arrays.asList(ignoredCharacters));
     }
 
+    String updatedCharacterSet = String.join(",", updatedDocumentCharacters);
+    String collectedCharacterSet = String.join(",", collectedCharacters);
     //Confirm that updated character set is unique from all other characters
     if (!Collections.disjoint(updatedDocumentCharacters, collectedCharacters)) {
       throw new FVCharacterInvalidException(
-          "The updated character includes a duplicate character "
-              + "found in another character document",
+          "The updated character set:\n" + updatedCharacterSet + "\nincludes a duplicate character"
+              + " found in the character set:\n" + collectedCharacterSet,
           400);
     }
   }
 
+  @Override
+  public Set<String> getCharactersToSkipForDialect(DocumentModel dialect) {
+    DocumentModelList characters = getCharacters(dialect);
+    DocumentModel alphabet = getAlphabet(dialect);
+    //Alphabet must not be null.
+    assert alphabet != null;
+
+    Set<String> charactersToSkip = createCharacterHashMap(characters);
+    String[] ignoredCharacters = (String[]) alphabet
+        .getPropertyValue("fv-alphabet:ignored_characters");
+    if (ignoredCharacters != null) {
+      charactersToSkip.addAll(Arrays.asList(ignoredCharacters));
+    }
+
+    return charactersToSkip;
+  }
 
   @Override
   public void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
@@ -218,7 +257,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       for (String str : ignoredCharsArr) {
         if (!collectedCharacters.add(str)) {
           throw new FVCharacterInvalidException(
-              "The ignored characters list includes a duplicate character "
+              "The ignored character " + str + " is a duplicate character "
                   + "found in another character document",
               400);
         }
@@ -230,18 +269,26 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     Set<String> collectedCharacters = new HashSet<>();
 
     for (DocumentModel d : characters) {
-      collectedCharacters.add((String) d.getPropertyValue(DOCUMENT_TITLE));
-      collectedCharacters.add((String) d.getPropertyValue("fvcharacter:upper_case_character"));
-
-      if (d
-          .getPropertyValue("fvcharacter:confusable_characters") != null) {
-        collectedCharacters.addAll(Arrays.asList((String[]) d
-            .getPropertyValue("fvcharacter:confusable_characters")));
+      String docTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
+      if (docTitle != null) {
+        collectedCharacters.add(docTitle);
       }
-      if (d
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters") != null) {
-        collectedCharacters.addAll(Arrays.asList((String[]) d
-            .getPropertyValue("fvcharacter:upper_case_confusable_characters")));
+
+      String upperChar = (String) d.getPropertyValue("fvcharacter:upper_case_character");
+      if (upperChar != null) {
+        collectedCharacters.add(upperChar);
+      }
+
+      String[] lowerConfusablesArr = (String[]) d
+          .getPropertyValue("fvcharacter:confusable_characters");
+      if (lowerConfusablesArr != null) {
+        collectedCharacters.addAll(Arrays.asList(lowerConfusablesArr));
+      }
+
+      String[] upperConfusablesArr = (String[]) d
+          .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+      if (upperConfusablesArr != null) {
+        collectedCharacters.addAll(Arrays.asList(upperConfusablesArr));
       }
 
     }
@@ -268,6 +315,30 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     char charAt = updatedPropertyValue.charAt(0);
 
     return replaceConfusables(confusables, current + charAt, updatedPropertyValue.substring(1));
+  }
+
+  public DocumentModel getAlphabet(DocumentModel doc) {
+    if (FV_ALPHABET.equals(doc.getType())) {
+      return doc;
+    }
+    DocumentModel dialect = getDialect(doc);
+    if (dialect == null) {
+      return null;
+    }
+    String alphabetQuery = "SELECT * FROM FVAlphabet WHERE ecm:ancestorId='" + dialect.getId()
+        + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
+
+    DocumentModelList results = doc.getCoreSession().query(alphabetQuery);
+
+    return results.get(0);
+  }
+
+  public DocumentModelList getCharacters(DocumentModel doc) {
+    DocumentModel alphabet = getAlphabet(doc);
+    //Alphabet must not be null
+    assert alphabet != null;
+    Filter trashedFilter = docModel -> !docModel.isTrashed();
+    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
   }
 
 }

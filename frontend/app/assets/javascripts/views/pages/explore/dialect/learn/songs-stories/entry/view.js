@@ -92,7 +92,7 @@ class Cover extends Component {
             <MediaThumbnail videos={this.props.videos} photos={this.props.photos} />
           </div>
 
-          <div className="col-xs-12 col-md-9 fontAboriginalSans">
+          <div className="col-xs-12 col-md-9 fontBCSans">
             <header style={{ marginBottom: '10px' }}>
               <Typography variant="h3" component="h2">
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectn('title', this.props.entry)) }} />
@@ -171,7 +171,7 @@ class Page extends Component {
           </div>
 
           <div className="col-xs-12 col-md-9">
-            <div className={classNames('col-xs-6', 'fontAboriginalSans')}>
+            <div className={classNames('col-xs-6', 'fontBCSans')}>
               <div
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(selectn('properties.dc:title', this.props.entry)),

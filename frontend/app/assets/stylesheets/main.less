@@ -8,6 +8,14 @@
 // Box sizing partial styles:
 // Apply a natural box layout model to all elements
 
+// Variables
+@primary-color: #b40000;
+@primary-header-color: #666666;
+@mobile-xs-width: 480px;
+@small-screen: 650px;
+@medium-screen: 991px;
+@font-family: "Lucida Grande", "Lucida Sans Unicode", Gentium, Code2001, Arial, sans-serif;
+
 *,
 *:before,
 *:after {
@@ -27,21 +35,7 @@ body {
   line-height: 1.2;
 }
 
-// Variables
-@primary-color: #b40000;
-@primary-header-color: #666666;
-@mobile-xs-width: 480px;
-@small-screen: 650px;
-@medium-screen: 991px;
-@font-family: Arial, sans-serif;
-@font-family-aboriginal-sans: "Aboriginal Sans", "Aboriginal Serif", "Lucida Grande", "Lucida Sans Unicode", Gentium,
-  Code2001, Arial, sans-serif;
 
-// FONTS
-// ===================================================
-.fontAboriginalSans {
-  font-family: @font-family-aboriginal-sans !important;
-}
 
 // OskiDakelh
 // ---------------------------------------------------
@@ -55,10 +49,10 @@ body {
   font-weight: bold;
 }
 .OskiDakelh {
-  font-family: "OskiDakelh", @font-family-aboriginal-sans;
+  font-family: "OskiDakelh", @font-family;
 }
 .OskiDakelhWeb {
-  font-family: "OskiDakelh", "OskiDakelhWeb", @font-family-aboriginal-sans;
+  font-family: "OskiDakelh", "OskiDakelhWeb", @font-family;
 }
 // Noto Sans Canadian Aboriginal
 // ---------------------------------------------------
@@ -67,7 +61,7 @@ body {
   src: url("assets/fonts/noto/NotoSansCanadianAboriginal-Regular.ttf");
 }
 .NotoSansCanadianAboriginal {
-  font-family: "NotoSansCanadianAboriginal", @font-family-aboriginal-sans;
+  font-family: "NotoSansCanadianAboriginal", @font-family;
 }
 // BC Sans
 // ---------------------------------------------------
@@ -78,7 +72,7 @@ body {
     url("assets/fonts/BCSans/BCSans-Regular.woff") format('woff');
 }
 .fontBCSans {
-  font-family: "BCSans", @font-family-aboriginal-sans;
+  font-family: "BCSans", @font-family;
 }
 
 

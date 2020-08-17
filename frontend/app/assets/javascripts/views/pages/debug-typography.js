@@ -34,7 +34,7 @@ function DebugTypography() {
 
   return (
     <div style={{ margin: '20px' }}>
-      <p className="fontAboriginalSans">ÍȻX̱Ŧ, ÍY, C̸NES QENOṈE ṮÁ, U, EUQ C̸NES QENOṈE HÁLE // fontAboriginalSans</p>
+      <p className="fontBCSans">ÍȻX̱Ŧ, ÍY, C̸NES QENOṈE ṮÁ, U, EUQ C̸NES QENOṈE HÁLE // fontBCSans</p>
       <p className="fontBCSans">ÍȻX̱Ŧ, ÍY, C̸NES QENOṈE ṮÁ, U, EUQ C̸NES QENOṈE HÁLE // fontBCSans</p>
       <p className="NotoSansCanadianAboriginal">
         ÍȻX̱Ŧ, ÍY, C̸NES QENOṈE ṮÁ, U, EUQ C̸NES QENOṈE HÁLE // NotoSansCanadianAboriginal

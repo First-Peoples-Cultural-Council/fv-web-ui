@@ -156,7 +156,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             </Dialog>
           </AuthorizationFilter>
           <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
-            <div className="col-xs-12">
+            <div>
               <AppBar position="static" className="PageToolbar__secondary">
                 <Toolbar style={{ justifyContent: 'flex-end' }}>
                   <FVButton

@@ -246,6 +246,7 @@ export class ExploreDialect extends Component {
             label={this.props.intl.trans('portal', 'Portal', 'first')}
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
+            computeLogin={this.props.computeLogin}
             showPublish={false}
             actions={['dialect', 'edit', 'publish', 'more-options']}
             publishChangesAction={this._publishChangesAction}

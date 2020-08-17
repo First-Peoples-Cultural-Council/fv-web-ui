@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = createWords(words);
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
-      cleanupCharactersService.cleanConfusables(session, documentModel);
+      cleanupCharactersService.cleanConfusables(session, documentModel, false);
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
     }
@@ -79,7 +80,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     for (int i = 0; i < documentModels.size(); i++) {
       DocumentModel documentModel = documentModels.get(i);
       assertEquals(true, documentModel.getPropertyValue("fv:update_confusables_required"));
-      cleanupCharactersService.cleanConfusables(session, documentModel);
+      cleanupCharactersService.cleanConfusables(session, documentModel, false);
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
       assertEquals(false, documentModel.getPropertyValue("fv:update_confusables_required"));
@@ -137,6 +138,13 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     for (DocumentModel doc : characters) {
       cleanupCharactersService.validateCharacters(characters, alphabet, doc);
     }
+  }
+
+  @Test
+  public void getCharactersToSkip() {
+    setupCharacters();
+    Set<String> collectedMap = cleanupCharactersService.getCharactersToSkipForDialect(dialect);
+    assertEquals(18, collectedMap.size());
   }
 
   private void setupCharacters() {

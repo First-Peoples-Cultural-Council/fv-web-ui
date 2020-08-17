@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import '!style-loader!css-loader!./DetailWordPhrase.css'
 import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
