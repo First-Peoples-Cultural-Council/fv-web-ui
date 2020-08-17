@@ -37,8 +37,6 @@ function RequestChangesContainer({docId, docState}) {
           return <RequestChangesPresentation computeEntities={computeEntities}
                                              disableApproveButton={disableApproveButton}
                                              disableRequestChangesButton={disableRequestChangesButton}
-                                             docId={docId}
-                                             docState={docState}
                                              docVisibility={docVisibility}
                                              errors={errors}
                                              formRef={formRef}

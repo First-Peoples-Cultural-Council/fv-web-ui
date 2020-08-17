@@ -24,7 +24,6 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
 
 function VisibilitySelectPresentation({handleVisibilityChange, docVisibility, hideLabel, publicDialect, selectNameAndId}) {
   const classes = VisibilitySelectStyles()
-  const selectNameId = selectNameAndId
 
   const label = hideLabel ? null : (
       <div id="select-label" className={classes.selectLabel}>
@@ -36,9 +35,9 @@ function VisibilitySelectPresentation({handleVisibilityChange, docVisibility, hi
     <div className={classes.selectBase}>
       {label}
       <FormControl variant="outlined" size="small">
-        <Select labelId="select-outlined-label" id={selectNameId}
+        <Select labelId="select-outlined-label" id={selectNameAndId}
                 value={docVisibility} onChange={handleVisibilityChange}
-                inputProps={{name: selectNameId}}>
+                inputProps={{name: selectNameAndId}}>
           <MenuItem value={'team'}>
             <VisibilityOffIcon className={classes.selectIcon}/>
             Language Team

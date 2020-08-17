@@ -172,9 +172,11 @@ function RequestChangesData({children, docId, docState}) {
   })
 }
 
-const {func} = PropTypes
+const {func, string} = PropTypes
 RequestChangesData.propTypes = {
   children: func,
+  docId: string,
+  docState: string,
 }
 
 export default RequestChangesData

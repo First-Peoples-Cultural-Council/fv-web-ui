@@ -89,8 +89,6 @@ RequestChangesPresentation.propTypes = {
   computeEntities: object,
   disableApproveButton: func,
   disableRequestChangesButton: func,
-  docId: string,
-  docState: string,
   handleApprove: func,
   handleRequestChanges: func,
   handleSnackbarClose: func,
@@ -102,8 +100,6 @@ RequestChangesPresentation.propTypes = {
 RequestChangesPresentation.defaultProps = {
   disableApproveButton: true,
   disableRequestChangesButton: true,
-  docId: '',
-  docState: '',
   snackbarStatus: false,
 }
 
