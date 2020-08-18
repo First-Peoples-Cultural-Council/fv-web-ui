@@ -4,7 +4,6 @@ import selectn from 'selectn'
 
 import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 
@@ -206,7 +205,13 @@ function DetailWordPhrasePresentation({
         <h4 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="photo_s" defaultStr="PHOTO(S)" transform="first" />
         </h4>
-        <MediaPanel type="FVPicture" items={_photos} />
+        <div className="row media-panel media-panel-FVPicture">
+          <div className="col-xs-12">
+            {_photos.map((photo) => (
+              <Preview key={photo.id} expandedValue={photo.object} type="FVPicture" />
+            ))}
+          </div>
+        </div>
       </div>
     ) : null
   }
@@ -328,7 +333,13 @@ function DetailWordPhrasePresentation({
         <h4 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="video_s" defaultStr="VIDEO(S)" transform="first" />
         </h4>
-        <MediaPanel type="FVVideo" items={_videos} />
+        <div className="row media-panel media-panel-FVVideo">
+          <div className="col-xs-12">
+            {_videos.map((video) => (
+              <Preview key={video.id} expandedValue={video.object} type="FVVideo" />
+            ))}
+          </div>
+        </div>
       </div>
     ) : null
   }
