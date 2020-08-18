@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesSimplifiedAPI.test
+Bundle-Name: FirstVoicesSimplifiedAPI.test
+Import-Package: org.nuxeo.ecm.core,
+ org.nuxeo.ecm.directory
+Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.simpleapi.mocks.keyresolver.xml

@@ -86,7 +86,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
         .map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character"))
         .collect(Collectors.toList());
 
-    while (title.length() > 0) {
+    while (title != null && title.length() > 0) {
       ArrayUtils.reverse(chars);
 
       String finalTitle = title;
