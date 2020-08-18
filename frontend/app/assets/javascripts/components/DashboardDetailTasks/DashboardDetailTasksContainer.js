@@ -48,22 +48,22 @@ function DashboardDetailTasksContainer() {
           isNew: taskIsNew,
         } = selectedTaskData
         const {
-          culturalNotes,
-          definitions,
-          id: itemId,
-          title: itemTitle,
-          literalTranslations,
           acknowledgement,
           audio,
           categories,
+          culturalNotes,
+          definitions,
+          dialectPath: itemDialectPath,
+          id: itemId,
+          literalTranslations,
           partOfSpeech,
           photos,
           phrases,
           pronunciation,
           relatedAssets,
           relatedToAssets,
+          title: itemTitle,
           videos,
-          isPublicDialect,
         } = selectedItemData
         return (
           <DashboardDetail.Presentation
@@ -146,7 +146,7 @@ function DashboardDetailTasksContainer() {
                 }
                 childrenTaskApproval={
                   // TODO: NEED TO SET `docState`
-                  <RequestChanges.Container docId={itemId} docState="New" isPublicDialect={isPublicDialect} />
+                  <RequestChanges.Container docId={itemId} docState="New" docDialectPath={itemDialectPath} />
                 }
               />
             }

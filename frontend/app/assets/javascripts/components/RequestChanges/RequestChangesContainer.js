@@ -14,9 +14,9 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState, isPublicDialect }) {
+function RequestChangesContainer({ docId, docState, docDialectPath }) {
   return (
-    <RequestChangesData docId={docId} docState={docState}>
+    <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState}>
       {({
         computeEntities,
         disableApproveButton,
@@ -28,6 +28,7 @@ function RequestChangesContainer({ docId, docState, isPublicDialect }) {
         handleRequestChanges,
         handleSnackbarClose,
         handleVisibilityChange,
+        isPublicDialect,
         onSubmit,
         snackbarMessage,
         snackbarStatus,
@@ -44,10 +45,10 @@ function RequestChangesContainer({ docId, docState, isPublicDialect }) {
             handleRequestChanges={handleRequestChanges}
             handleSnackbarClose={handleSnackbarClose}
             handleVisibilityChange={handleVisibilityChange}
+            isPublicDialect={isPublicDialect}
             onSubmit={onSubmit}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
-            isPublicDialect={isPublicDialect}
           />
         )
       }}
@@ -55,11 +56,11 @@ function RequestChangesContainer({ docId, docState, isPublicDialect }) {
   )
 }
 
-const { string, bool } = PropTypes
+const { string } = PropTypes
 RequestChangesContainer.propTypes = {
+  docDialectPath: string,
   docId: string,
   docState: string,
-  isPublicDialect: bool,
 }
 
 export default RequestChangesContainer

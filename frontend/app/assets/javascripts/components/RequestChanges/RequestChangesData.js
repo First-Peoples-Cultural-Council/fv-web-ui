@@ -6,8 +6,9 @@ import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import useVisibility from 'DataSource/useVisibility'
-// import ProviderHelpers from 'common/ProviderHelpers'
-// import selectn from 'selectn'
+import useDialect from 'DataSource/useDialect'
+import ProviderHelpers from 'common/ProviderHelpers'
+import selectn from 'selectn'
 
 /**
  * @summary RequestChangesData
@@ -18,7 +19,7 @@ import useVisibility from 'DataSource/useVisibility'
  * @param {function} props.children
  *
  */
-function RequestChangesData({ children, docId, docState }) {
+function RequestChangesData({ children, docDialectPath, docId, docState }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRef = useRef(null)
@@ -26,6 +27,8 @@ function RequestChangesData({ children, docId, docState }) {
   const [snackbarStatus, setSnackbarStatus] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
+  const { fetchDialect2, computeDialect2 } = useDialect()
+
   const {
     updateVisibilityToTeam,
     updateVisibilityToMembers,
@@ -60,6 +63,10 @@ function RequestChangesData({ children, docId, docState }) {
   useEffect(() => {
     setDocVisibility(convertStateToVisibility(docState))
   }, [])
+
+  useEffect(() => {
+    ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
+  }, [docDialectPath])
 
   const updateVisibility = (newVisibility) => {
     // Send request to the server to set visibility on the document
@@ -170,6 +177,7 @@ function RequestChangesData({ children, docId, docState }) {
     setSnackbarStatus(false)
   }
 
+  const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, docDialectPath)
   return children({
     computeEntities,
     disableApproveButton,
@@ -183,6 +191,7 @@ function RequestChangesData({ children, docId, docState }) {
     handleSnackbarClose,
     snackbarMessage,
     snackbarStatus,
+    isPublicDialect: selectn('response.state', extractComputeDialect) === 'Published',
   })
 }
 
