@@ -5,6 +5,7 @@ import selectn from 'selectn'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 import useDocument from 'DataSource/useDocument'
+import useDialect from 'DataSource/useDialect'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import StringHelpers from 'common/StringHelpers'
@@ -21,9 +22,9 @@ import { TableContextSort, TableContextCount } from 'components/Table/TableConte
 function DashboardDetailTasksData({ children }) {
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
-
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
   const { computeDocument, fetchDocument } = useDocument()
+  const { fetchDialect2, computeDialect2 } = useDialect()
 
   const {
     item: queryItem,
@@ -79,10 +80,28 @@ function DashboardDetailTasksData({ children }) {
     }
   }, [queryItem])
 
+  // TODO: move this to RequestChangesData layer
+  const _dialectPath = selectn('dialectPath', selectedItemData)
+  const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, _dialectPath)
+  useEffect(() => {
+    const dialectState = selectn('response.state', extractComputeDialect)
+    if (dialectState === 'Published' && selectn('isPublicDialect', selectedItemData) !== true) {
+      setSelectedItemData({
+        ...selectedItemData,
+        isPublicDialect: true,
+      })
+    }
+  }, [extractComputeDialect])
+
   // TODO: Curently only handling words
   useEffect(() => {
     const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
+
+    const dialectPath = selectn('contextParameters.ancestry.dialect.path', _selectedItemData)
+
+    // TODO: move this to RequestChangesData layer
+    ProviderHelpers.fetchIfMissing(dialectPath, fetchDialect2, computeDialect2)
 
     // General
     // const dialectClassName = getDialectClassname(computeDialect2) // TODO
@@ -90,12 +109,14 @@ function DashboardDetailTasksData({ children }) {
     // const metadata = selectn('response', _selectedItemData) ? (
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
     // ) : null  // TODO
+
     setSelectedItemData({
       acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
       audio: selectn('contextParameters.word.related_audio', _selectedItemData) || [],
       categories: selectn('contextParameters.word.categories', _selectedItemData) || [],
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
       definitions: selectn('properties.fv:definitions', _selectedItemData),
+      dialectPath,
       id: selectn(['uid'], _selectedItemData),
       itemType: selectn('type', _selectedItemData),
       literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),

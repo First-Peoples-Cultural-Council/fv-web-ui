@@ -18,9 +18,9 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  * @returns {node} jsx markup
  */
 function VisibilitySelectContainer({
+  computeEntities,
   docVisibility,
   handleVisibilityChange,
-  computeEntities,
   hideLabel,
   selectNameAndId,
 }) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
-import { getError, getErrorFeedback } from 'common/FormHelpers'
+import { /*getError, */ getErrorFeedback } from 'common/FormHelpers'
 import VisibilitySelect from 'components/VisibilitySelect'
 import PropTypes from 'prop-types'
 import FVSnackbar from '../../views/components/FVSnackbar'
@@ -18,16 +18,17 @@ import CloseIcon from '@material-ui/icons/Close'
  * @returns {node} jsx markup
  */
 function RequestChangesPresentation({
-  computeEntities,
-  docVisibility,
+  // computeEntities,
   disableApproveButton,
   disableRequestChangesButton,
+  docVisibility,
+  isPublicDialect,
   errors,
   formRef,
   handleApprove,
   handleRequestChanges,
-  handleVisibilityChange,
   handleSnackbarClose,
+  handleVisibilityChange,
   snackbarMessage,
   snackbarStatus,
 }) {
@@ -35,12 +36,13 @@ function RequestChangesPresentation({
     <div className="RequestChanges">
       <form name="requestChanges" ref={formRef}>
         <div className="visibilitySelector">
-          <VisibilitySelect.Container
-            selectNameAndId="visibilitySelect"
+          <VisibilitySelect.Presentation
+            // computeEntities={computeEntities}
+            // error={getError({ errors, fieldName: 'commentField' })} // Not used in VisibilitySelectContainer
             docVisibility={docVisibility}
             handleVisibilityChange={handleVisibilityChange}
-            computeEntities={computeEntities}
-            error={getError({ errors, fieldName: 'commentField' })}
+            publicDialect={isPublicDialect}
+            selectNameAndId="visibilitySelect"
           />
         </div>
         {getErrorFeedback({ errors })}
@@ -91,14 +93,15 @@ RequestChangesPresentation.propTypes = {
   handleApprove: func,
   handleRequestChanges: func,
   handleSnackbarClose: func,
+  isPublicDialect: bool,
   snackbarMessage: string,
   snackbarStatus: bool,
-  submitMethod: string,
 }
 
 RequestChangesPresentation.defaultProps = {
   disableApproveButton: true,
   disableRequestChangesButton: true,
+  isPublicDialect: false,
   snackbarStatus: false,
 }
 

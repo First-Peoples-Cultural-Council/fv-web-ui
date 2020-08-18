@@ -23,8 +23,8 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  */
 
 function VisibilitySelectPresentation({
-  handleVisibilityChange,
   docVisibility,
+  handleVisibilityChange,
   hideLabel,
   publicDialect,
   selectNameAndId,

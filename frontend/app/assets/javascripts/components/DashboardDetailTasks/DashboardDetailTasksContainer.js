@@ -9,6 +9,7 @@ import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailL
 import DetailWordPhrase from 'components/DetailWordPhrase'
 import { CONTENT_FULL_WIDTH } from 'common/Constants'
 import TablePagination from 'components/Table/TablePagination'
+import RequestChanges from 'components/RequestChanges'
 /**
  * @summary DashboardDetailTasksContainer
  * @version 1.0.1
@@ -49,6 +50,7 @@ function DashboardDetailTasksContainer() {
         const {
           culturalNotes,
           definitions,
+          id: itemId,
           title: itemTitle,
           literalTranslations,
           acknowledgement,
@@ -61,6 +63,7 @@ function DashboardDetailTasksContainer() {
           relatedAssets,
           relatedToAssets,
           videos,
+          isPublicDialect,
         } = selectedItemData
         return (
           <DashboardDetail.Presentation
@@ -140,6 +143,10 @@ function DashboardDetailTasksContainer() {
                     relatedToAssets={relatedToAssets}
                     videos={videos}
                   />
+                }
+                childrenTaskApproval={
+                  // TODO: NEED TO SET `docState`
+                  <RequestChanges.Container docId={itemId} docState="New" isPublicDialect={isPublicDialect} />
                 }
               />
             }

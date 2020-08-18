@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
-
 import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
 
 /**
@@ -22,6 +21,7 @@ function DashboardDetailSelectedItemPresentation({
   childrenActivityStream,
   childrenApprovalNotes,
   childrenItemDetail,
+  childrenTaskApproval,
 }) {
   const scrollContainerRef = useRef(null)
   useEffect(() => {
@@ -37,14 +37,7 @@ function DashboardDetailSelectedItemPresentation({
 
         {childrenItemDetail && <div className="DashboardDetailSelectedItem__ItemDetail">{childrenItemDetail}</div>}
       </div>
-      <div className="DashboardDetailSelectedItem__TaskActions">
-        <div>
-          <h2 style={{ margin: 0, padding: 0 }}>TaskActions</h2>
-          <p>Lorem ipsum dolor sit amet</p>
-          <p>consectetur adipiscing elit, sed do eiusmod tempor</p>
-          <p>incididunt ut labore et dolore magna aliqua</p>
-        </div>
-      </div>
+      {childrenTaskApproval && <div className="DashboardDetailSelectedItem__TaskActions">{childrenTaskApproval}</div>}
     </div>
   )
 }
@@ -56,6 +49,7 @@ DashboardDetailSelectedItemPresentation.propTypes = {
   childrenActivityStream: node,
   childrenApprovalNotes: node,
   childrenItemDetail: node,
+  childrenTaskApproval: node,
 }
 
 export default DashboardDetailSelectedItemPresentation

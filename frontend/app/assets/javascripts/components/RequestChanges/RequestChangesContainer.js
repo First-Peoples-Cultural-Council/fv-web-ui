@@ -14,7 +14,7 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState }) {
+function RequestChangesContainer({ docId, docState, isPublicDialect }) {
   return (
     <RequestChangesData docId={docId} docState={docState}>
       {({
@@ -31,7 +31,6 @@ function RequestChangesContainer({ docId, docState }) {
         onSubmit,
         snackbarMessage,
         snackbarStatus,
-        submitMethod,
       }) => {
         return (
           <RequestChangesPresentation
@@ -48,7 +47,7 @@ function RequestChangesContainer({ docId, docState }) {
             onSubmit={onSubmit}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
-            submitMethod={submitMethod}
+            isPublicDialect={isPublicDialect}
           />
         )
       }}
@@ -56,10 +55,11 @@ function RequestChangesContainer({ docId, docState }) {
   )
 }
 
-const { string } = PropTypes
+const { string, bool } = PropTypes
 RequestChangesContainer.propTypes = {
   docId: string,
   docState: string,
+  isPublicDialect: bool,
 }
 
 export default RequestChangesContainer

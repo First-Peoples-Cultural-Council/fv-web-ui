@@ -6,6 +6,8 @@ import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import useVisibility from 'DataSource/useVisibility'
+// import ProviderHelpers from 'common/ProviderHelpers'
+// import selectn from 'selectn'
 
 /**
  * @summary RequestChangesData
@@ -22,10 +24,25 @@ function RequestChangesData({ children, docId, docState }) {
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
   const [snackbarStatus, setSnackbarStatus] = useState(false)
-  const [setSubmitMethod] = useState(null)
   const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
-  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
+  const {
+    updateVisibilityToTeam,
+    updateVisibilityToMembers,
+    updateVisibilityToPublic /*, computeUpdateVisibility */,
+  } = useVisibility()
+
+  // PRO: doesn't infinite loop
+  // TODO: displays error message when re-entering page
+  //
+  // const extractComputeUpdateVisibility = ProviderHelpers.getEntry(computeUpdateVisibility, docId)
+  // useEffect(() => {
+  //   const newSnackbarMessage = selectn('message', extractComputeUpdateVisibility) || 'Sorry we encountered a problem'
+  //   if (selectn('isError', extractComputeUpdateVisibility) && snackbarMessage !== newSnackbarMessage) {
+  //     setSnackbarMessage(newSnackbarMessage)
+  //     setSnackbarStatus(true)
+  //   }
+  // }, [extractComputeUpdateVisibility])
 
   const computeEntities = Immutable.fromJS([
     {
@@ -82,7 +99,6 @@ function RequestChangesData({ children, docId, docState }) {
         .required('Please specify the audience for this document'),
     })
 
-    setSubmitMethod('approve')
     event.preventDefault()
 
     const formData = getFormData({
@@ -95,8 +111,10 @@ function RequestChangesData({ children, docId, docState }) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
-        setSnackbarMessage('Document approved')
-        setSnackbarStatus(true)
+
+        // TODO: re-enable the following. Disabled because: "how to handle error originating from server?"
+        // setSnackbarMessage('Document approved')
+        // setSnackbarStatus(true)
       },
       invalid: (response) => {
         setErrors(response.errors)
@@ -110,7 +128,6 @@ function RequestChangesData({ children, docId, docState }) {
       visibilitySelect: yup.string().label('Document visibility'),
     })
 
-    setSubmitMethod('requestChanges')
     event.preventDefault()
 
     const formData = getFormData({
@@ -134,7 +151,7 @@ function RequestChangesData({ children, docId, docState }) {
 
   const disableApproveButton = () => {
     // The approve button is greyed out if a visibility is not selected
-    if (docVisibility == '') {
+    if (docVisibility === '') {
       return true
     }
     return false
