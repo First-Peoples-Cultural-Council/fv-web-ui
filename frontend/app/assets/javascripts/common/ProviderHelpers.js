@@ -210,8 +210,9 @@ function isActiveRole(roles) {
  * - undefined
  */
 function isAdmin(computeLogin) {
-  const userGroups = selectn('response.properties.groups', computeLogin)
-  return userGroups && userGroups.indexOf('administrators') != -1
+  const extendedGroups = selectn('response.extendedGroups', computeLogin)
+  const extendGroupsFiltered = (extendedGroups || []).filter((group) => group.name === 'language_administrators')
+  return extendGroupsFiltered.length > 0
 }
 
 /**
