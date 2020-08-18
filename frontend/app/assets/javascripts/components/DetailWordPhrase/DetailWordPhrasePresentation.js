@@ -328,7 +328,7 @@ function DetailWordPhrasePresentation({
         <h4 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="video_s" defaultStr="VIDEO(S)" transform="first" />
         </h4>
-        <MediaPanel type="FVVideo" items={videos} />
+        <MediaPanel type="FVVideo" items={_videos} />
       </div>
     ) : null
   }
