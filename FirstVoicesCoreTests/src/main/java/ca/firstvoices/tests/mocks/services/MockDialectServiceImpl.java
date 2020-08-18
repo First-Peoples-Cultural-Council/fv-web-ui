@@ -6,6 +6,8 @@ import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -50,61 +52,6 @@ public class MockDialectServiceImpl implements MockDialectService {
   private static int uniCount = ThreadLocalRandom.current().nextInt(0, uniChars.length);
 
 
-  private static void generateRandomAlphabet() {
-
-    String[] alphabetArr = new String[30];
-    for (int i = 0; i < 10; i++) {
-      //Counter variables are a quick fix for alphabets containing two of the same character
-      alphabetArr[i] = alphabetChars[alphabetCount];
-      alphabetCount += 1;
-      if (alphabetCount >= alphabetChars.length) {
-        alphabetCount = 0;
-      }
-    }
-
-    for (int i = 10; i < 20; i++) {
-      alphabetArr[i] = multiChars[multiCount];
-      multiCount += 1;
-      if (multiCount >= multiChars.length) {
-        multiCount = 0;
-      }
-    }
-
-    for (int i = 20; i < 25; i++) {
-      alphabetArr[i] = maskChars[maskCount];
-      maskCount += 1;
-      if (maskCount >= maskChars.length) {
-        maskCount = 0;
-      }
-    }
-
-    for (int i = 25; i < alphabetArr.length; i++) {
-      alphabetArr[i] = uniChars[uniCount];
-      uniCount += 1;
-      if (uniCount >= uniChars.length) {
-        uniCount = 0;
-      }
-    }
-
-    currentAlphabet = alphabetArr;
-  }
-
-  private DocumentModelList generateFVCharacters(CoreSession session, String path,
-      String[] alphabet) {
-    DocumentModelList fvAlphabet = new DocumentModelListImpl();
-
-    for (int i = 0; i < alphabet.length; i++) {
-      DocumentModel letterDoc = session
-          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
-      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
-      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
-      createDocument(session, letterDoc);
-      fvAlphabet.add(letterDoc);
-
-    }
-    return fvAlphabet;
-  }
-
   @Override
   public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
     generateRandomAlphabet();
@@ -147,7 +94,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     session.removeDocument(b);
   }
 
-
   private DocumentModel createDocument(CoreSession session, DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
     DocumentModel newDoc = session.createDocument(model);
@@ -165,7 +111,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     return newDoc;
   }
 
-
   private void generateDomainTree(CoreSession session) {
 
     String testPath = "/FV/Workspaces/Data/Test/Test/";
@@ -182,9 +127,7 @@ public class MockDialectServiceImpl implements MockDialectService {
       } else {
         throw new NuxeoException("Document tree FV/Workspaces/Data/ must exist");
       }
-
     }
-
   }
 
   private DocumentModel generateEmptyDialect(CoreSession session, String name, String desc) {
@@ -201,8 +144,81 @@ public class MockDialectServiceImpl implements MockDialectService {
         session.createDocumentModel(dialect.getPathAsString(), "Alphabet", FV_ALPHABET));
 
     return dialect;
-
   }
+
+  private static void generateRandomAlphabet() {
+
+    Set<String> alphabetSet = new HashSet<>();
+
+    while (alphabetSet.size() < 10) {
+      String toAdd = alphabetChars[alphabetCount];
+      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+        alphabetSet.add(toAdd);
+      }
+      alphabetCount += 1;
+      if (alphabetCount >= alphabetChars.length) {
+        alphabetCount = 0;
+      }
+    }
+
+    while (alphabetSet.size() < 15) {
+      String toAdd = multiChars[multiCount];
+      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+        alphabetSet.add(toAdd);
+      }
+      multiCount += 1;
+      if (multiCount >= multiChars.length) {
+        multiCount = 0;
+      }
+    }
+
+    while (alphabetSet.size() < 20) {
+      String toAdd = maskChars[maskCount];
+      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+        alphabetSet.add(toAdd);
+      }
+      maskCount += 1;
+      if (maskCount >= maskChars.length) {
+        maskCount = 0;
+      }
+    }
+
+    while (alphabetSet.size() < 30) {
+      String toAdd = uniChars[uniCount];
+      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+        alphabetSet.add(toAdd);
+      }
+      uniCount += 1;
+      if (uniCount >= uniChars.length) {
+        uniCount = 0;
+      }
+    }
+
+    String[] alphabetArr = new String[30];
+    int i = 0;
+    for (String s : alphabetSet) {
+      alphabetArr[i++] = s;
+    }
+
+    currentAlphabet = alphabetArr;
+  }
+
+  private DocumentModelList generateFVCharacters(CoreSession session, String path,
+      String[] alphabet) {
+    DocumentModelList fvAlphabet = new DocumentModelListImpl();
+
+    for (int i = 0; i < alphabet.length; i++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
+      createDocument(session, letterDoc);
+      fvAlphabet.add(letterDoc);
+
+    }
+    return fvAlphabet;
+  }
+
 
   private String generateRandomWord(String[] alphabet) {
 
@@ -212,6 +228,22 @@ public class MockDialectServiceImpl implements MockDialectService {
     }
 
     return bld.toString();
+  }
+
+  private DocumentModelList generateFVWords(CoreSession session, String path,
+      String[] alphabet) {
+    DocumentModelList fvAlphabet = new DocumentModelListImpl();
+
+    for (int i = 0; i < alphabet.length; i++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
+      createDocument(session, letterDoc);
+      fvAlphabet.add(letterDoc);
+
+    }
+    return fvAlphabet;
   }
 
 }
