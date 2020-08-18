@@ -65,7 +65,9 @@ function RequestChangesData({ children, docDialectPath, docId, docState }) {
   }, [])
 
   useEffect(() => {
-    ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
+    if (docDialectPath) {
+      ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
+    }
   }, [docDialectPath])
 
   const updateVisibility = (newVisibility) => {
