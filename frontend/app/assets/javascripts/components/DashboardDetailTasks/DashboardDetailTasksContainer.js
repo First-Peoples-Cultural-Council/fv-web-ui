@@ -146,7 +146,12 @@ function DashboardDetailTasksContainer() {
                 }
                 childrenTaskApproval={
                   // TODO: NEED TO SET `docState`
-                  <RequestChanges.Container docId={itemId} docState="New" docDialectPath={itemDialectPath} />
+                  <RequestChanges.Container
+                    docId={itemId}
+                    docState="New"
+                    docDialectPath={itemDialectPath}
+                    key={itemId}
+                  />
                 }
               />
             }
