@@ -1,0 +1,8 @@
+<component name="ca.firstvoices.simpleapi.service">
+
+    <implementation class="ca.firstvoices.simpleapi.services.NuxeoFirstVoicesServiceImplementation"/>
+
+    <service>
+        <provide interface="ca.firstvoices.simpleapi.services.FirstVoicesService"/>
+    </service>
+</component>

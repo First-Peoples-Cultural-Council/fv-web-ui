@@ -1,0 +1,44 @@
+# The structure of this file is defined by the TestDataYAML type
+type: FVLanguageFamily
+path: /FV/Workspaces/Data
+name: "Test Language Family"
+publish: true
+publishPath: /FV/sections/Data
+children:
+  - type: FVLanguage
+    name: "Test Language"
+    children:
+      - type: FVDialect
+        name: "Test Dialect 1"
+        key: testArchive              # will be saved for reference in tests
+        properties:
+          "greeting": "Welcome to the test language"
+          "region": "Javaland"
+          "country": "CA"
+        children:
+          - type: FVSong
+            name: "A test song"
+          - type: FVSong
+            name: "Another test song"
+          - type: FVPicture
+            name: "Picture!"
+            properties:
+#              description: "A picture is worth a thousand words"
+          - type: FVWord
+            name: "Word"
+            properties:
+              part_of_speech: "noun"
+          - type: FVWord
+            name: "Another Word"
+            properties:
+              part_of_speech: "noun"
+          - type: FVPhrase
+            name: "A phrase in dialect 1"
+          - type: FVLink
+            name: "A test link"
+            properties:
+              url: https://firstvoices.io
+      - type: FVDialect
+        name: "Test Dialect 2"
+      - type: FVDialect
+        name: "Test Dialect 3"
