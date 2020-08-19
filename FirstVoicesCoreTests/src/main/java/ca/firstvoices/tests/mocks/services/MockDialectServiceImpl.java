@@ -112,6 +112,34 @@ public class MockDialectServiceImpl implements MockDialectService {
     currentAlphabet = alphabetList.toArray(alphabetList.toArray(new String[0]));
   }
 
+  private static String generateRandomWord(String[] alphabet) {
+
+    StringBuilder bld = new StringBuilder();
+    for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
+      bld.append(alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)]);
+    }
+
+    return bld.toString();
+  }
+
+  private static void generateWordArr(int wordEntries) {
+    List<String> wordList = new ArrayList<>();
+
+    for (int i = 0; i < wordEntries; i++) {
+      wordList.add(generateRandomWord(currentAlphabet));
+    }
+
+    //have at least 1 word starting with each letter
+    if (wordEntries >= currentAlphabet.length) {
+      for (int i = 0; i < currentAlphabet.length; i++) {
+        wordList.set(i, currentAlphabet[i] + wordList.get(i).substring(1));
+      }
+    }
+    Collections.shuffle(wordList);
+
+    currentWords = wordList.toArray(wordList.toArray(new String[0]));
+  }
+
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
     String desc = "This is a generated test dialect for demo and cypress test purposes.";
@@ -124,6 +152,34 @@ public class MockDialectServiceImpl implements MockDialectService {
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
     generateFVWords(session, dialect.getPathAsString(), words);
     generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words);
+
+    return dialect;
+
+  }
+
+  @Override
+  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
+    int wordEntries;
+    int phraseEntries;
+    //Split max entries 50/50 for words and phrases
+    if (maxEntries % 2 == 0) {
+      wordEntries = maxEntries / 2;
+    } else {
+      wordEntries = maxEntries / 2 + 1;
+    }
+    phraseEntries = maxEntries / 2;
+
+    generateRandomAlphabet();
+    generateWordArr(wordEntries);
+    String name = generateRandomWord(currentAlphabet);
+    String desc = generateRandomPhrase(30, currentWords);
+
+    DocumentModel dialect = generateEmptyDialect(session, name, desc);
+
+    generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
+    generateFVPhrases(session, dialect.getPathAsString(),
+        phraseEntries, currentWords);
+    generateFVWords(session, dialect.getPathAsString(), currentWords);
 
     return dialect;
 
@@ -179,35 +235,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     }
   }
 
-  @Override
-  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
-    int wordEntries;
-    int phraseEntries;
-    //Split max entries 50/50 for words and phrases
-    if (maxEntries % 2 == 0) {
-      wordEntries = maxEntries / 2;
-    } else {
-      wordEntries = maxEntries / 2 + 1;
-    }
-    phraseEntries = maxEntries / 2;
-    assert wordEntries + phraseEntries == maxEntries;
-
-    generateRandomAlphabet();
-    generateWordArr(wordEntries);
-    String name = generateRandomWord(currentAlphabet);
-    String desc = generateRandomPhrase(30, currentWords);
-
-    DocumentModel dialect = generateEmptyDialect(session, name, desc);
-
-    generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
-    generateFVPhrases(session, dialect.getPathAsString(),
-        phraseEntries, currentWords);
-    generateFVWords(session, dialect.getPathAsString(), currentWords);
-
-    return dialect;
-
-  }
-
   private DocumentModel generateEmptyDialect(CoreSession session, String name, String desc) {
     //In the current session, in the /FV/Workspaces/Data/Test/Test/ directory
     //create an empty dialect with all necessary generated children
@@ -240,35 +267,6 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     }
     return fvAlphabet;
-  }
-
-
-  private String generateRandomWord(String[] alphabet) {
-
-    StringBuilder bld = new StringBuilder();
-    for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
-      bld.append(alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)]);
-    }
-
-    return bld.toString();
-  }
-
-  private void generateWordArr(int wordEntries) {
-    List<String> wordList = new ArrayList<>();
-
-    for (int i = 0; i < wordEntries; i++) {
-      wordList.add(generateRandomWord(currentAlphabet));
-    }
-
-    //have at least 1 word starting with each letter
-    if (wordEntries >= currentAlphabet.length) {
-      for (int i = 0; i < currentAlphabet.length; i++) {
-        wordList.set(i, currentAlphabet[i] + wordList.get(i).substring(1));
-      }
-    }
-    Collections.shuffle(wordList);
-
-    currentWords = wordList.toArray(wordList.toArray(new String[0]));
   }
 
   private String generateRandomPhrase(int numberOfWords, String[] wordsToUse) {
