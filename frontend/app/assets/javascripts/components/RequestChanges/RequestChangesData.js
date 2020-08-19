@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from 'react'
 import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
+import usePrevious from 'DataSource/usePrevious'
 import useVisibility from 'DataSource/useVisibility'
 import useDialect from 'DataSource/useDialect'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -19,7 +20,7 @@ import selectn from 'selectn'
  * @param {function} props.children
  *
  */
-function RequestChangesData({ children, docDialectPath, docId, docState }) {
+function RequestChangesData({ onApproval, children, docDialectPath, docId, docState }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRef = useRef(null)
@@ -32,20 +33,10 @@ function RequestChangesData({ children, docDialectPath, docId, docState }) {
   const {
     updateVisibilityToTeam,
     updateVisibilityToMembers,
-    updateVisibilityToPublic /*, computeUpdateVisibility */,
+    updateVisibilityToPublic,
+    extractComputeUpdateVisibility,
   } = useVisibility()
-
-  // PRO: doesn't infinite loop
-  // TODO: displays error message when re-entering page
-  //
-  // const extractComputeUpdateVisibility = ProviderHelpers.getEntry(computeUpdateVisibility, docId)
-  // useEffect(() => {
-  //   const newSnackbarMessage = selectn('message', extractComputeUpdateVisibility) || 'Sorry we encountered a problem'
-  //   if (selectn('isError', extractComputeUpdateVisibility) && snackbarMessage !== newSnackbarMessage) {
-  //     setSnackbarMessage(newSnackbarMessage)
-  //     setSnackbarStatus(true)
-  //   }
-  // }, [extractComputeUpdateVisibility])
+  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
 
   const computeEntities = Immutable.fromJS([
     {
@@ -69,6 +60,30 @@ function RequestChangesData({ children, docDialectPath, docId, docState }) {
       ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
     }
   }, [docDialectPath])
+
+  const updateSnackbar = ({ message }) => {
+    setSnackbarMessage(message)
+    setSnackbarStatus(true)
+  }
+
+  useEffect(() => {
+    if (selectn('action', extractComputeUpdateVisibility) !== prevAction) {
+      if (selectn('isFetching', extractComputeUpdateVisibility) === false) {
+        const success = selectn('success', extractComputeUpdateVisibility)
+        updateSnackbar({
+          message:
+            success === false
+              ? selectn('message', extractComputeUpdateVisibility) ||
+                'Sorry, we encounterd a temporary problem. Please try again later.'
+              : 'Document approved',
+        })
+
+        if (success) {
+          onApproval()
+        }
+      }
+    }
+  }, [extractComputeUpdateVisibility])
 
   const updateVisibility = (newVisibility) => {
     // Send request to the server to set visibility on the document
@@ -120,10 +135,6 @@ function RequestChangesData({ children, docDialectPath, docId, docState }) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
-
-        // TODO: re-enable the following. Disabled because: "how to handle error originating from server?"
-        // setSnackbarMessage('Document approved')
-        // setSnackbarStatus(true)
       },
       invalid: (response) => {
         setErrors(response.errors)
@@ -199,9 +210,13 @@ function RequestChangesData({ children, docDialectPath, docId, docState }) {
 
 const { func, string } = PropTypes
 RequestChangesData.propTypes = {
+  onApproval: func,
   children: func,
   docId: string,
   docState: string,
+}
+RequestChangesData.defaultProps = {
+  onApproval: () => {},
 }
 
 export default RequestChangesData

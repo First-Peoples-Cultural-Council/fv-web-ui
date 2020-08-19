@@ -14,9 +14,9 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState, docDialectPath }) {
+function RequestChangesContainer({ docId, docState, docDialectPath, onApproval }) {
   return (
-    <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState}>
+    <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState} onApproval={onApproval}>
       {({
         computeEntities,
         disableApproveButton,
@@ -56,11 +56,12 @@ function RequestChangesContainer({ docId, docState, docDialectPath }) {
   )
 }
 
-const { string } = PropTypes
+const { func, string } = PropTypes
 RequestChangesContainer.propTypes = {
   docDialectPath: string,
   docId: string,
   docState: string,
+  onApproval: func,
 }
 
 export default RequestChangesContainer
