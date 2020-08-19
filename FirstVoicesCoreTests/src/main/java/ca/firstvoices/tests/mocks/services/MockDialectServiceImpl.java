@@ -115,9 +115,15 @@ public class MockDialectServiceImpl implements MockDialectService {
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
     String desc = "This is a generated test dialect for demo and cypress test purposes.";
+    String[] words = {"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel",
+        "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec"
+        , "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu"};
+
     DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
+    generateFVWords(session, dialect.getPathAsString(), words);
+    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words);
 
     return dialect;
 
@@ -189,13 +195,13 @@ public class MockDialectServiceImpl implements MockDialectService {
     generateRandomAlphabet();
     generateWordArr(wordEntries);
     String name = generateRandomWord(currentAlphabet);
-    String desc = generateRandomPhrase(30);
+    String desc = generateRandomPhrase(30, currentWords);
 
     DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
     generateFVPhrases(session, dialect.getPathAsString(),
-        phraseEntries);
+        phraseEntries, currentWords);
     generateFVWords(session, dialect.getPathAsString(), currentWords);
 
     return dialect;
@@ -265,10 +271,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     currentWords = wordList.toArray(wordList.toArray(new String[0]));
   }
 
-  private String generateRandomPhrase(int numberOfWords) {
+  private String generateRandomPhrase(int numberOfWords, String[] wordsToUse) {
     StringJoiner join = new StringJoiner(" ");
     for (int i = 0; i < numberOfWords; i++) {
-      join.add(currentWords[ThreadLocalRandom.current().nextInt(0, currentWords.length)]);
+      join.add(wordsToUse[ThreadLocalRandom.current().nextInt(0, wordsToUse.length)]);
     }
     return join.toString();
   }
@@ -293,12 +299,14 @@ public class MockDialectServiceImpl implements MockDialectService {
     return fvWords;
   }
 
-  private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries) {
+  private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
+      String[] wordsToUse) {
     //Generate phrase documents
     DocumentModelList fvPhrases = new DocumentModelListImpl();
 
     for (int i = 0; i < phraseEntries; i++) {
-      String newPhrase = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10));
+      String newPhrase = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+          wordsToUse);
       DocumentModel phraseDoc = session
           .createDocumentModel(path + "/Dictionary", newPhrase, FV_PHRASE);
       createDocument(session, phraseDoc);

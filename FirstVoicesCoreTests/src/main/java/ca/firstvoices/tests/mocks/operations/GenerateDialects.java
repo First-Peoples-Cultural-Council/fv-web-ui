@@ -30,7 +30,7 @@ public class GenerateDialects {
 
   @Param(name = "maxEntries", required = false, description = "sets the number of words/phrases, "
       + "split 50/50.")
-  protected int maxEntries = 100;
+  protected int maxEntries = 60;
 
   MockDialectService generateDialectService = Framework
       .getService(MockDialectService.class);

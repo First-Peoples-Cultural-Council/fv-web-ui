@@ -26,7 +26,7 @@ public class GenerateDialect {
 
   @Param(name = "maxEntries", required = false, description = "sets the number of words/phrases, "
       + "split 50/50.")
-  protected int maxEntries = 100;
+  protected int maxEntries = 60;
 
   @Param(name = "dialectName", required = false)
   protected String dialectName = "TestDialect1";
