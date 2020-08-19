@@ -38,8 +38,11 @@ function WordData({ children }) {
     ? routeParams.word
     : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.word)
 
-  const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
+  // Dialect
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const dialectClassName = getDialectClassname(computeDialect2)
+  // Word
+  const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
   const wordRawData = selectn('response', _computeWord)
 
   const acknowledgement = selectn('properties.fv-word:acknowledgement', wordRawData)
@@ -47,9 +50,8 @@ function WordData({ children }) {
   const categories = selectn('contextParameters.word.categories', wordRawData) || []
   const culturalNotes = selectn('properties.fv:cultural_note', wordRawData) || []
   const definitions = selectn('properties.fv:definitions', wordRawData)
-  const dialectClassName = getDialectClassname(computeDialect2)
+  const docType = selectn('type', wordRawData)
   const literalTranslations = selectn('properties.fv:literal_translation', wordRawData)
-
   const partOfSpeech = selectn('contextParameters.word.part_of_speech', wordRawData)
   const photos = selectn('contextParameters.word.related_pictures', wordRawData) || []
   const phrases = selectn('contextParameters.word.related_phrases', wordRawData) || []
@@ -65,7 +67,6 @@ function WordData({ children }) {
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
   }, [])
 
-  // Set dialect state if/when fetch finishes
   useEffect(() => {
     if (title && selectn('pageTitleParams.word', properties) !== title) {
       changeTitleParams({ word: title })
@@ -96,6 +97,7 @@ function WordData({ children }) {
     computeWord: _computeWord,
     deleteWord,
     dialect,
+    docType,
     publishWord,
     routeParams,
     splitWindowPath,

@@ -31,13 +31,13 @@ function PhraseContainer() {
         // DetailView
         acknowledgement,
         audio,
-        categories,
         culturalNotes,
         definitions,
+        docType,
         dialectClassName,
         literalTranslations,
         photos,
-        pronunciation,
+        phrasebooks,
         properties,
         pushWindowPath,
         relatedAssets,
@@ -66,14 +66,14 @@ function PhraseContainer() {
             <DetailWordPhrase.Presentation
               acknowledgement={acknowledgement}
               audio={audio}
-              categories={categories}
+              categories={phrasebooks}
               culturalNotes={culturalNotes}
               definitions={definitions}
               dialectClassName={dialectClassName}
+              docType={docType}
               literalTranslations={literalTranslations}
               metadata={computePhrase}
               photos={photos}
-              pronunciation={pronunciation}
               properties={properties}
               pushWindowPath={pushWindowPath}
               relatedAssets={relatedAssets}

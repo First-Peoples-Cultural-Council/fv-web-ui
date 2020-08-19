@@ -48,12 +48,12 @@ function PhraseData({ children }) {
 
   const acknowledgement = selectn('properties.fv-phrase:acknowledgement', phraseRawData)
   const audio = selectn('contextParameters.phrase.related_audio', phraseRawData) || []
-  const categories = selectn('contextParameters.phrase.categories', phraseRawData) || []
   const culturalNotes = selectn('properties.fv:cultural_note', phraseRawData) || []
   const definitions = selectn('properties.fv:definitions', phraseRawData)
+  const docType = selectn('type', phraseRawData)
   const literalTranslations = selectn('properties.fv:literal_translation', phraseRawData)
   const photos = selectn('contextParameters.phrase.related_pictures', phraseRawData) || []
-  const pronunciation = selectn('properties.fv-phrase:pronunciation', phraseRawData)
+  const phrasebooks = selectn('contextParameters.phrase.phrase_books', phraseRawData) || []
   const relatedAssets = selectn('contextParameters.phrase.related_assets', phraseRawData) || []
   const relatedToAssets = selectn('contextParameters.phrase.related_by', phraseRawData) || []
   const title = selectn('properties.dc:title', phraseRawData)
@@ -65,7 +65,6 @@ function PhraseData({ children }) {
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
   }, [])
 
-  // Set dialect state if/when fetch finishes
   useEffect(() => {
     if (title && selectn('pageTitleParams.phrase', properties) !== title) {
       changeTitleParams({ phrase: title })
@@ -96,6 +95,7 @@ function PhraseData({ children }) {
     computePhrase: _computePhrase,
     deletePhrase,
     dialect,
+    docType,
     publishPhrase,
     routeParams,
     splitWindowPath,
@@ -103,13 +103,12 @@ function PhraseData({ children }) {
     // DetailView
     acknowledgement,
     audio,
-    categories,
+    phrasebooks,
     culturalNotes,
     definitions,
     dialectClassName,
     literalTranslations,
     photos,
-    pronunciation,
     properties,
     pushWindowPath,
     relatedAssets,

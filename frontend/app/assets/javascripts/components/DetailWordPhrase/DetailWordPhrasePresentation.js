@@ -7,6 +7,8 @@ import FVLabel from 'views/components/FVLabel/index'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
+
 /**
  * @summary DetailWordPhrasePresentation
  * @version 1.0.1
@@ -23,6 +25,7 @@ function DetailWordPhrasePresentation({
   culturalNotes,
   definitions,
   dialectClassName,
+  docType,
   literalTranslations,
   metadata,
   partOfSpeech,
@@ -78,13 +81,15 @@ function DetailWordPhrasePresentation({
   }
 
   const _getCategories = (cats) => {
+    const transKey = docType === 'FVPhrase' ? 'phrase books' : 'categories'
+    const defaultStr = docType === 'FVPhrase' ? 'Phrase books' : 'Categories'
     const _categories = cats.map((category, key) => {
       return <li key={key}>{selectn('dc:title', category)}</li>
     })
     return _categories.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCategory">
         <h4 className="DialectViewWordPhraseContentItemTitle">
-          <FVLabel transKey="categories" defaultStr="Categories" transform="first" />
+          <FVLabel transKey={transKey} defaultStr={defaultStr} transform="first" />
         </h4>
         <ul>{_categories}</ul>
       </div>
@@ -385,6 +390,7 @@ DetailWordPhrasePresentation.propTypes = {
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
+  docType: string,
   literalTranslations: array,
   metadata: object,
   partOfSpeech: string,
@@ -406,6 +412,7 @@ DetailWordPhrasePresentation.defaultProps = {
   categories: [],
   culturalNotes: [],
   definitions: [],
+  docType: '',
   literalTranslations: [],
   photos: [],
   phrases: [],
