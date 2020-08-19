@@ -17,3 +17,7 @@ fv.cognito.secretKey=SECRET_KEY_PLACEHOLDER
 fv.cognito.clientID=CLIENT_ID_PLACEHOLDER
 fv.cognito.region=ca-central-1
 fv.cognito.ignoreUsers=FPCCAdmin, Administrator, system
+
+fv.simplifiedapi.jwksUrl=JWKS_URL_PLACEHOLDER
+fv.simplifiedapi.disabledEndpoints=search,authorization
+

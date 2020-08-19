@@ -34,6 +34,7 @@
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
     <module>FirstVoicesCognitoAuth</module>
+    <module>FirstVoicesSimplifiedAPI</module>
     <module>FirstVoicesMaintenance</module>
     <module>FirstVoicesCoreTests</module>
     <module>migration-contributions</module>
@@ -87,6 +88,12 @@
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesCoreTests</artifactId>
         <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCoreTests</artifactId>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
@@ -129,6 +136,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesData</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesSimplifiedAPI</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
