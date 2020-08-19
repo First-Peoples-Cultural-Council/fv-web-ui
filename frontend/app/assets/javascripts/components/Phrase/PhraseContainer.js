@@ -55,7 +55,7 @@ function PhraseContainer() {
             computeLogin={computeLogin}
             deleteAction={deletePhrase}
             itemPath={wordPath}
-            labels={{ single: 'word' }}
+            labels={{ single: 'phrase' }}
             onNavigateRequest={pushWindowPath}
             permissionEntry={dialect}
             publishAction={publishPhrase}

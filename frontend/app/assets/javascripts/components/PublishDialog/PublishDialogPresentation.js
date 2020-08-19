@@ -82,23 +82,25 @@ function PublishDialogPresentation({ intl, data, siteTheme, pushWindowPath }) {
       elementArray.push({ key: 'videos', label: intl.trans('audio', 'Audio', 'first'), content: audioPreviews })
     }
     // Phrases
-    const _phrases = phrasesData.map((phrase, key) => {
-      const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
-      return (
-        <p key={key}>
-          <a
-            key={selectn('uid', phrase)}
-            href={hrefPath}
-            onClick={(e) => {
-              e.preventDefault()
-              NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
-            }}
-          >
-            {selectn('dc:title', phrase)}
-          </a>
-        </p>
-      )
-    })
+    const _phrases = phrasesData
+      ? phrasesData.map((phrase, key) => {
+          const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
+          return (
+            <p key={key}>
+              <a
+                key={selectn('uid', phrase)}
+                href={hrefPath}
+                onClick={(e) => {
+                  e.preventDefault()
+                  NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
+                }}
+              >
+                {selectn('dc:title', phrase)}
+              </a>
+            </p>
+          )
+        })
+      : []
     if (_phrases.length > 0) {
       elementArray.push({ key: 'phrases', label: intl.trans('phrases', 'Phrases', 'first'), content: _phrases })
     }
