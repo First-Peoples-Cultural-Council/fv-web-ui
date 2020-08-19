@@ -64,7 +64,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     while (alphabetSet.size() < 10) {
       String toAdd = alphabetChars[alphabetCount];
-      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+      if (setDoesNotContain(alphabetSet, toAdd)) {
         alphabetSet.add(toAdd);
       }
       alphabetCount += 1;
@@ -75,7 +75,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     while (alphabetSet.size() < 15) {
       String toAdd = multiChars[multiCount];
-      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+      if (setDoesNotContain(alphabetSet, toAdd)) {
         alphabetSet.add(toAdd);
       }
       multiCount += 1;
@@ -86,7 +86,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     while (alphabetSet.size() < 20) {
       String toAdd = maskChars[maskCount];
-      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+      if (setDoesNotContain(alphabetSet, toAdd)) {
         alphabetSet.add(toAdd);
       }
       maskCount += 1;
@@ -97,7 +97,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     while (alphabetSet.size() < 30) {
       String toAdd = uniChars[uniCount];
-      if (!alphabetSet.contains(toAdd) && !alphabetSet.contains(toAdd.toUpperCase())) {
+      if (setDoesNotContain(alphabetSet, toAdd)) {
         alphabetSet.add(toAdd);
       }
       uniCount += 1;
@@ -110,6 +110,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     Collections.shuffle(alphabetList);
 
     currentAlphabet = alphabetList.toArray(alphabetList.toArray(new String[0]));
+  }
+
+  private static boolean setDoesNotContain(Set<String> set, String toAdd){
+    return !set.contains(toAdd) && !set.contains(toAdd.toUpperCase());
   }
 
   private static String generateRandomWord(String[] alphabet) {
