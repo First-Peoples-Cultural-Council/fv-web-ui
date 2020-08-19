@@ -91,8 +91,8 @@ function DashboardDetailTasksData({ children }) {
     // const metadata = selectn('response', _selectedItemData) ? (
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
     // ) : null
-
     setSelectedItemData({
+      state: selectn('state', _selectedItemData),
       acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
       audio: selectn('contextParameters.word.related_audio', _selectedItemData) || [],
       categories: selectn('contextParameters.word.categories', _selectedItemData) || [],

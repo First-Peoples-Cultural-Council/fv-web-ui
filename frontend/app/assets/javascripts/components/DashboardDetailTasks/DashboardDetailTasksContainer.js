@@ -63,6 +63,7 @@ function DashboardDetailTasksContainer() {
           pronunciation,
           relatedAssets,
           relatedToAssets,
+          state: docState,
           title: itemTitle,
           videos,
         } = selectedItemData
@@ -149,7 +150,7 @@ function DashboardDetailTasksContainer() {
                   // TODO: NEED TO SET `docState`
                   <RequestChanges.Container
                     docId={itemId}
-                    docState="New"
+                    docState={docState}
                     docDialectPath={itemDialectPath}
                     key={itemId}
                     onApproval={onApproval}

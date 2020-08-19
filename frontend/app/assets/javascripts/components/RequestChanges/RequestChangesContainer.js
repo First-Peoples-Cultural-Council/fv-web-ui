@@ -56,11 +56,11 @@ function RequestChangesContainer({ docId, docState, docDialectPath, onApproval }
   )
 }
 
-const { func, string } = PropTypes
+const { func, string, oneOf } = PropTypes
 RequestChangesContainer.propTypes = {
   docDialectPath: string,
   docId: string,
-  docState: string,
+  docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   onApproval: func,
 }
 

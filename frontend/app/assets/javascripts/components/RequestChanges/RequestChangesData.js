@@ -36,8 +36,6 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
     updateVisibilityToPublic,
     extractComputeUpdateVisibility,
   } = useVisibility()
-  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
-
   const computeEntities = Immutable.fromJS([
     {
       id: routeParams.dialect_path,
@@ -61,11 +59,12 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
     }
   }, [docDialectPath])
 
+  // Approval flow:
+  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
   const updateSnackbar = ({ message }) => {
     setSnackbarMessage(message)
     setSnackbarStatus(true)
   }
-
   useEffect(() => {
     if (selectn('action', extractComputeUpdateVisibility) !== prevAction) {
       if (selectn('isFetching', extractComputeUpdateVisibility) === false) {
