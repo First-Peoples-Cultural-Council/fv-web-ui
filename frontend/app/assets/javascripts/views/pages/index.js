@@ -43,7 +43,7 @@ import PageDialectLearnPhrases from './explore/dialect/learn/phrases'
 import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stories'
 
 import PageDialectViewMedia from './explore/dialect/media/view'
-import PageDialectViewWord from './explore/dialect/learn/words/view'
+import PageDialectViewWord from 'components/Word/WordContainer'
 import PageDialectViewPhrase from './explore/dialect/learn/phrases/view'
 import PageDialectViewBook from './explore/dialect/learn/songs-stories/view'
 import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'

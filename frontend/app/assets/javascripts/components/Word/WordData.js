@@ -34,10 +34,6 @@ function WordData({ children }) {
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
 
-  // Compute dialect
-  const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const fetchDocumentAction = selectn('action', extractComputeDialect)
-
   const wordPath = StringHelpers.isUUID(routeParams.word)
     ? routeParams.word
     : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.word)
@@ -71,11 +67,11 @@ function WordData({ children }) {
 
   // Set dialect state if/when fetch finishes
   useEffect(() => {
-    if (title && selectn('pageTitleParams.wordName', properties) !== title) {
+    if (title && selectn('pageTitleParams.word', properties) !== title) {
       changeTitleParams({ word: title })
-      overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.wordName' })
+      overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.word' })
     }
-  }, [fetchDocumentAction, title])
+  }, [properties, title])
 
   const fetchData = async () => {
     fetchWord(wordPath)
