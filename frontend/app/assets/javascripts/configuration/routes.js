@@ -393,6 +393,7 @@ const addBrowsePhraseBookByAlphabet = (route) => {
 
 const routes = [
   {
+    siteTheme: SECTIONS,
     id: 'home',
     path: [],
     alias: ['home'],
@@ -471,6 +472,7 @@ const routes = [
     page: <Pages.PagePlay />,
   },
   {
+    siteTheme: WORKSPACES,
     id: 'tasks',
     path: ['tasks'],
     title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
@@ -479,6 +481,7 @@ const routes = [
     breadcrumbs: false,
   },
   {
+    siteTheme: WORKSPACES,
     path: ['tasks', 'users', new paramMatch('dialect', ANYTHING_BUT_SLASH)],
     title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
     page: <Pages.PageUserTasks type="users" />,
@@ -2581,6 +2584,7 @@ const routes = [
   // DASHBOARDS
   // ==========================================================
   {
+    siteTheme: WORKSPACES,
     id: 'dashboard',
     path: ['dashboard'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
@@ -2589,6 +2593,7 @@ const routes = [
     disableWorkspaceSectionNav: true,
   },
   {
+    siteTheme: WORKSPACES,
     id: 'dashboard',
     path: ['dashboard', 'tasks'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),

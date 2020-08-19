@@ -22,7 +22,13 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  * @returns {node} jsx markup
  */
 
-function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, hideLabel, publicDialect }) {
+function VisibilitySelectPresentation({
+  handleVisibilityChange,
+  docVisibility,
+  hideLabel,
+  publicDialect,
+  selectNameAndId,
+}) {
   const classes = VisibilitySelectStyles()
 
   const label = hideLabel ? null : (
@@ -35,7 +41,13 @@ function VisibilitySelectPresentation({ handleVisibilityChange, docVisibility, h
     <div className={classes.selectBase}>
       {label}
       <FormControl variant="outlined" size="small">
-        <Select labelId="select-outlined-label" id="select" value={docVisibility} onChange={handleVisibilityChange}>
+        <Select
+          labelId="select-outlined-label"
+          id={selectNameAndId}
+          value={docVisibility}
+          onChange={handleVisibilityChange}
+          inputProps={{ name: selectNameAndId }}
+        >
           <MenuItem value={'team'}>
             <VisibilityOffIcon className={classes.selectIcon} />
             Language Team
@@ -62,6 +74,7 @@ VisibilitySelectPresentation.propTypes = {
   docVisibility: string,
   hideLabel: bool,
   publicDialect: bool,
+  selectNameAndId: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
@@ -69,6 +82,7 @@ VisibilitySelectPresentation.defaultProps = {
   docVisibility: '',
   hideLabel: false,
   publicDialect: false,
+  selectNameAndId: 'select',
 }
 
 export default VisibilitySelectPresentation

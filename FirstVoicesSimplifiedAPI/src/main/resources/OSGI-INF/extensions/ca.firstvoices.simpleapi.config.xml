@@ -1,0 +1,26 @@
+<component name="ca.firstvoices.simpleapi.config">
+
+    <documentation>
+        Simple API Configuration Parameters
+    </documentation>
+
+    <implementation class="ca.firstvoices.simpleapi.nuxeo.SimpleAPINuxeoConfigurationFactory"/>
+
+    <extension-point name="configuration">
+        <object class="ca.firstvoices.simpleapi.nuxeo.SimpleAPINuxeoConfigurationDescriptorImpl"/>
+    </extension-point>
+
+    <extension target="ca.firstvoices.simpleapi.config" point="configuration">
+
+        <configuration>
+            <jwksUrl>${fv.simplifiedapi.jwksUrl}</jwksUrl>
+            <disabledEndpoints>${fv.simplifiedapi.disabledEndpoints}</disabledEndpoints>
+        </configuration>
+
+    </extension>
+
+    <service>
+        <provide interface="ca.firstvoices.simpleapi.nuxeo.SimpleAPINuxeoConfiguration"/>
+    </service>
+
+</component>
