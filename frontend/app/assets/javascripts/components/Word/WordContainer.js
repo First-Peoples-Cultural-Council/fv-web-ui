@@ -27,7 +27,6 @@ function WordContainer() {
         dialect,
         publishWord,
         routeParams,
-        tabData,
         wordPath,
         // DetailView
         acknowledgement,
@@ -64,7 +63,7 @@ function WordContainer() {
             publishAction={publishWord}
             routeParams={routeParams}
             splitWindowPath={splitWindowPath}
-            tabsData={tabData}
+            tabsData={{ phrases, photos, videos, audio }}
           >
             <DetailWordPhrase.Presentation
               acknowledgement={acknowledgement}

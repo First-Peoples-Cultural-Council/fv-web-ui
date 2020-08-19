@@ -64,9 +64,6 @@ function WordData({ children }) {
   const videos = selectn('contextParameters.word.related_videos', wordRawData) || []
   const uid = selectn('uid', wordRawData)
 
-  //   const tabData = getTabs({ phrases, photos, videos, audio })
-  const tabData = [] // TODO
-
   useEffect(() => {
     fetchData()
     ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
@@ -106,7 +103,6 @@ function WordData({ children }) {
     publishWord,
     routeParams,
     splitWindowPath,
-    tabData,
     wordPath,
     // DetailView
     acknowledgement,
