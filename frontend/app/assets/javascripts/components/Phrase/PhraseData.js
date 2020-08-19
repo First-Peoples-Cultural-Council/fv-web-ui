@@ -10,7 +10,7 @@ import useNavigation from 'DataSource/useNavigation'
 import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
-import useWord from 'DataSource/useWord'
+import usePhrase from 'DataSource/usePhrase'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -32,40 +32,33 @@ function PhraseData({ children }) {
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
-  const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
+  const { computePhrase, deletePhrase, fetchPhrase, publishPhrase } = usePhrase()
 
-  // Compute dialect
-  const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const fetchDocumentAction = selectn('action', extractComputeDialect)
+  const phrasePath = StringHelpers.isUUID(routeParams.phrase)
+    ? routeParams.phrase
+    : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.phrase)
 
-  const wordPath = StringHelpers.isUUID(routeParams.word)
-    ? routeParams.word
-    : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.word)
-
-  const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
+  // Dialect
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const wordRawData = selectn('response', _computeWord)
-
-  const acknowledgement = selectn('properties.fv-word:acknowledgement', wordRawData)
-  const audio = selectn('contextParameters.word.related_audio', wordRawData) || []
-  const categories = selectn('contextParameters.word.categories', wordRawData) || []
-  const culturalNotes = selectn('properties.fv:cultural_note', wordRawData) || []
-  const definitions = selectn('properties.fv:definitions', wordRawData)
   const dialectClassName = getDialectClassname(computeDialect2)
-  const literalTranslations = selectn('properties.fv:literal_translation', wordRawData)
 
-  const partOfSpeech = selectn('contextParameters.word.part_of_speech', wordRawData)
-  const photos = selectn('contextParameters.word.related_pictures', wordRawData) || []
-  const phrases = selectn('contextParameters.word.related_phrases', wordRawData) || []
-  const pronunciation = selectn('properties.fv-word:pronunciation', wordRawData)
-  const relatedAssets = selectn('contextParameters.word.related_assets', wordRawData) || []
-  const relatedToAssets = selectn('contextParameters.word.related_by', wordRawData) || []
-  const title = selectn('properties.dc:title', wordRawData)
-  const videos = selectn('contextParameters.word.related_videos', wordRawData) || []
-  const uid = selectn('uid', wordRawData)
+  // Phrase
+  const _computePhrase = ProviderHelpers.getEntry(computePhrase, phrasePath)
+  const phraseRawData = selectn('response', _computePhrase)
 
-  //   const tabData = getTabs({ phrases, photos, videos, audio })
-  const tabData = [] // TODO
+  const acknowledgement = selectn('properties.fv-phrase:acknowledgement', phraseRawData)
+  const audio = selectn('contextParameters.phrase.related_audio', phraseRawData) || []
+  const categories = selectn('contextParameters.phrase.categories', phraseRawData) || []
+  const culturalNotes = selectn('properties.fv:cultural_note', phraseRawData) || []
+  const definitions = selectn('properties.fv:definitions', phraseRawData)
+  const literalTranslations = selectn('properties.fv:literal_translation', phraseRawData)
+  const photos = selectn('contextParameters.phrase.related_pictures', phraseRawData) || []
+  const pronunciation = selectn('properties.fv-phrase:pronunciation', phraseRawData)
+  const relatedAssets = selectn('contextParameters.phrase.related_assets', phraseRawData) || []
+  const relatedToAssets = selectn('contextParameters.phrase.related_by', phraseRawData) || []
+  const title = selectn('properties.dc:title', phraseRawData)
+  const videos = selectn('contextParameters.phrase.related_videos', phraseRawData) || []
+  const uid = selectn('uid', phraseRawData)
 
   useEffect(() => {
     fetchData()
@@ -74,21 +67,21 @@ function PhraseData({ children }) {
 
   // Set dialect state if/when fetch finishes
   useEffect(() => {
-    if (title && selectn('pageTitleParams.wordName', properties) !== title) {
-      changeTitleParams({ word: title })
-      overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.wordName' })
+    if (title && selectn('pageTitleParams.phrase', properties) !== title) {
+      changeTitleParams({ phrase: title })
+      overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.phrase' })
     }
-  }, [fetchDocumentAction, title])
+  }, [properties, title])
 
   const fetchData = async () => {
-    fetchWord(wordPath)
+    fetchPhrase(phrasePath)
     fetchDialect2(routeParams.dialect_path)
   }
 
   const computeEntities = Immutable.fromJS([
     {
-      id: wordPath,
-      entity: computeWord,
+      id: phrasePath,
+      entity: computePhrase,
     },
     {
       id: routeParams.dialect_path,
@@ -100,14 +93,13 @@ function PhraseData({ children }) {
     // Actions
     computeEntities,
     computeLogin,
-    computeWord: _computeWord,
-    deleteWord,
+    computePhrase: _computePhrase,
+    deletePhrase,
     dialect,
-    publishWord,
+    publishPhrase,
     routeParams,
     splitWindowPath,
-    tabData,
-    wordPath,
+    phrasePath,
     // DetailView
     acknowledgement,
     audio,
@@ -116,9 +108,7 @@ function PhraseData({ children }) {
     definitions,
     dialectClassName,
     literalTranslations,
-    partOfSpeech,
     photos,
-    phrases,
     pronunciation,
     properties,
     pushWindowPath,

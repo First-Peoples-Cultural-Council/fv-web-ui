@@ -1,6 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-// import PhrasePresentation from 'components/Phrase/PhrasePresentation'
 import PhraseData from 'components/Phrase/PhraseData'
 
 import DetailWordPhrase from 'components/DetailWordPhrase'
@@ -24,12 +22,11 @@ function PhraseContainer() {
         // Actions
         computeEntities,
         computeLogin,
-        computeWord,
-        deleteWord,
+        computePhrase,
+        deletePhrase,
         dialect,
-        publishWord,
+        publishPhrase,
         routeParams,
-        tabData,
         wordPath,
         // DetailView
         acknowledgement,
@@ -39,9 +36,7 @@ function PhraseContainer() {
         definitions,
         dialectClassName,
         literalTranslations,
-        partOfSpeech,
         photos,
-        phrases,
         pronunciation,
         properties,
         pushWindowPath,
@@ -56,17 +51,17 @@ function PhraseContainer() {
           <DetailsViewWithActions
             actions={['workflow', 'edit', 'visibility', 'publish']}
             computeEntities={computeEntities}
-            computeItem={computeWord}
+            computeItem={computePhrase}
             computeLogin={computeLogin}
-            deleteAction={deleteWord}
+            deleteAction={deletePhrase}
             itemPath={wordPath}
             labels={{ single: 'word' }}
             onNavigateRequest={pushWindowPath}
             permissionEntry={dialect}
-            publishAction={publishWord}
+            publishAction={publishPhrase}
             routeParams={routeParams}
             splitWindowPath={splitWindowPath}
-            tabsData={tabData}
+            tabsData={{ photos, videos, audio }}
           >
             <DetailWordPhrase.Presentation
               acknowledgement={acknowledgement}
@@ -76,10 +71,8 @@ function PhraseContainer() {
               definitions={definitions}
               dialectClassName={dialectClassName}
               literalTranslations={literalTranslations}
-              metadata={computeWord}
-              partOfSpeech={partOfSpeech}
+              metadata={computePhrase}
               photos={photos}
-              phrases={phrases}
               pronunciation={pronunciation}
               properties={properties}
               pushWindowPath={pushWindowPath}
@@ -94,11 +87,6 @@ function PhraseContainer() {
       }}
     </PhraseData>
   )
-}
-// PROPTYPES
-// const { string } = PropTypes
-PhraseContainer.propTypes = {
-  //   something: string,
 }
 
 export default PhraseContainer
