@@ -31,6 +31,18 @@
       <artifactId>nuxeo-core-query</artifactId>
     </dependency>
     <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesData</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-rest-api-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-rest-api-io</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-schema</artifactId>
     </dependency>
@@ -57,6 +69,10 @@
     <dependency>
       <groupId>org.nuxeo.ecm.automation</groupId>
       <artifactId>nuxeo-automation-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-task-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
@@ -178,22 +194,12 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesData</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesOperations</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesPublisher</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
