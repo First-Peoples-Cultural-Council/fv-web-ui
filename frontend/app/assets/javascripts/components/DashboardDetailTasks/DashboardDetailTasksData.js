@@ -46,8 +46,7 @@ function DashboardDetailTasksData({ children }) {
       document.removeEventListener('keydown', onKeyPressed)
     }
   }, [])
-
-  useEffect(() => {
+  const fetchTasksUsingQueries = () => {
     const _queryPage = Number(queryPage)
     fetchUserGroupTasksRemoteData({
       pageIndex: _queryPage === 0 ? _queryPage : _queryPage - 1,
@@ -56,6 +55,9 @@ function DashboardDetailTasksData({ children }) {
       sortOrder: querySortOrder,
       userId,
     })
+  }
+  useEffect(() => {
+    fetchTasksUsingQueries()
   }, [queryPage, queryPageSize, querySortBy, querySortOrder])
 
   // Redirect when http://...?task=[ID] and we have tasks + userId
@@ -82,12 +84,13 @@ function DashboardDetailTasksData({ children }) {
     const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
 
-    // General
-    // const dialectClassName = getDialectClassname(computeDialect2) // TODO
+    // TODO: Should we be getting dialectClassName? Perhaps a different location?
+    // const dialectClassName = getDialectClassname(computeDialect2)
 
+    // TODO: Handle metadata
     // const metadata = selectn('response', _selectedItemData) ? (
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
-    // ) : null  // TODO
+    // ) : null
 
     setSelectedItemData({
       acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
@@ -242,7 +245,11 @@ function DashboardDetailTasksData({ children }) {
           idSelectedItem: queryItem,
           idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
           listItems: tasks,
-          // onChangeRowsPerPage,
+          onApproval: () => {
+            // TODO: Enable tasks refresh after BE has been updated to clear tasks after approval
+            // NOTE: the following should refresh the list
+            // fetchTasksUsingQueries()
+          },
           onClose,
           onOpen,
           onOpenNoId,

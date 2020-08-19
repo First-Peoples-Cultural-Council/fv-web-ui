@@ -33,6 +33,7 @@ function DashboardDetailTasksContainer() {
         onOpenNoId,
         onOrderChange,
         onRowClick,
+        onApproval,
         options,
         pagination = {},
         selectedItemData,
@@ -151,6 +152,7 @@ function DashboardDetailTasksContainer() {
                     docState="New"
                     docDialectPath={itemDialectPath}
                     key={itemId}
+                    onApproval={onApproval}
                   />
                 }
               />
