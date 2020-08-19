@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -86,7 +87,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
         .map(character -> (String) character.getPropertyValue("fvcharacter:upper_case_character"))
         .collect(Collectors.toList());
 
-    while (title.length() > 0) {
+    while (StringUtils.isNotBlank(title)) {
       ArrayUtils.reverse(chars);
 
       String finalTitle = title;
