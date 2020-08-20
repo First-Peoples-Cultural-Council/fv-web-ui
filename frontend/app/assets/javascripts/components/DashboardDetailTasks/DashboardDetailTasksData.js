@@ -32,7 +32,7 @@ function DashboardDetailTasksData({ children }) {
     task: queryTask,
   } = getSearchObject()
 
-  const { count: tasksCount, fetchUserGroupTasksRemoteData, tasks, userId, resetTasks } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, tasks = [], userId, resetTasks } = useUserGroupTasks()
 
   // Escape key binding
   const onKeyPressed = (event) => {

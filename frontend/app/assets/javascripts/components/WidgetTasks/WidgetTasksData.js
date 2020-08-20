@@ -18,7 +18,7 @@ function WidgetTasksData({ children }) {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
-  const { count: tasksCount, fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
 
   const onRowClick = (event, { id }) => {
     navigate(
