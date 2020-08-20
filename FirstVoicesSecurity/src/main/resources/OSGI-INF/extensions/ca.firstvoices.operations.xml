@@ -10,7 +10,6 @@
 		<operation class="ca.firstvoices.operations.FVSetListenerFlag" replace="true"/>
 		<operation class="ca.firstvoices.operations.FVGetDialectsForUser"/>
 		<operation class="ca.firstvoices.operations.FVGetUserStartPage"/>
-		<operation class="ca.firstvoices.operations.GetTasksForUserGroupOperation"/>
 	</extension>
 
 </component>

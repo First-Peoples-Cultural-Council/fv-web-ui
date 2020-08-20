@@ -1,8 +1,7 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import {getFormData, handleSubmit} from 'common/FormHelpers'
+import { getFormData, handleSubmit } from 'common/FormHelpers'
 import * as yup from 'yup'
-import {useRef, useState, useEffect} from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
@@ -17,16 +16,16 @@ import useVisibility from 'DataSource/useVisibility'
  * @param {function} props.children
  *
  */
-function RequestChangesData({children, docId, docState}) {
-  const {computePortal} = usePortal()
-  const {routeParams} = useRoute()
+function RequestChangesData({ children, docId, docState }) {
+  const { computePortal } = usePortal()
+  const { routeParams } = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
   const [snackbarStatus, setSnackbarStatus] = useState(false)
   const [setSubmitMethod] = useState(null)
   const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
-  const {updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic} = useVisibility()
+  const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
 
   const computeEntities = Immutable.fromJS([
     {
@@ -78,9 +77,9 @@ function RequestChangesData({children, docId, docState}) {
     // Validates the form data and updates the visibility
     const validator = yup.object().shape({
       visibilitySelect: yup
-      .string()
-      .label('Document visibility')
-      .required('Please specify the audience for this document'),
+        .string()
+        .label('Document visibility')
+        .required('Please specify the audience for this document'),
     })
 
     setSubmitMethod('approve')
@@ -96,7 +95,7 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
-        setSnackbarMessage("Document approved")
+        setSnackbarMessage('Document approved')
         setSnackbarStatus(true)
       },
       invalid: (response) => {
@@ -108,9 +107,7 @@ function RequestChangesData({children, docId, docState}) {
   const handleRequestChanges = (event) => {
     // Validates the form data and updates the visibility
     const validator = yup.object().shape({
-      visibilitySelect: yup
-      .string()
-      .label('Document visibility'),
+      visibilitySelect: yup.string().label('Document visibility'),
     })
 
     setSubmitMethod('requestChanges')
@@ -126,7 +123,7 @@ function RequestChangesData({children, docId, docState}) {
       valid: () => {
         setErrors(undefined)
         updateVisibility(docVisibility)
-        setSnackbarMessage("Changes requested")
+        setSnackbarMessage('Changes requested')
         setSnackbarStatus(true)
       },
       invalid: (response) => {
@@ -137,7 +134,7 @@ function RequestChangesData({children, docId, docState}) {
 
   const disableApproveButton = () => {
     // The approve button is greyed out if a visibility is not selected
-    if (docVisibility == "") {
+    if (docVisibility == '') {
       return true
     }
     return false
@@ -172,7 +169,7 @@ function RequestChangesData({children, docId, docState}) {
   })
 }
 
-const {func, string} = PropTypes
+const { func, string } = PropTypes
 RequestChangesData.propTypes = {
   children: func,
   docId: string,

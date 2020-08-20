@@ -3,7 +3,7 @@
   <parent>
     <artifactId>firstvoices-modules-parent</artifactId>
     <groupId>ca.firstvoices</groupId>
-    <version>3.4.7-SNAPSHOT</version>
+    <version>3.4.7</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>FirstVoicesSimplifiedAPI</artifactId>
@@ -222,6 +222,26 @@
       <exclusions>
         <exclusion>
           <artifactId>grizzly-http</artifactId>
+          <groupId>org.glassfish.grizzly</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-grizzly2-servlet</artifactId>
+      <version>2.25.1</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>jersey-container-servlet</artifactId>
+          <groupId>org.glassfish.jersey.containers</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jersey-container-grizzly2-http</artifactId>
+          <groupId>org.glassfish.jersey.containers</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>grizzly-http-servlet</artifactId>
           <groupId>org.glassfish.grizzly</groupId>
         </exclusion>
       </exclusions>
@@ -591,7 +611,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -607,17 +627,9 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>nuxeo-platform-task-automation</artifactId>
-          <groupId>org.nuxeo.ecm.platform</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>nuxeo-platform-task-core</artifactId>
-          <groupId>org.nuxeo.ecm.platform</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>FVUserRegistration</artifactId>
           <groupId>ca.firstvoices</groupId>
@@ -629,6 +641,14 @@
         <exclusion>
           <artifactId>nuxeo-platform-audit-core</artifactId>
           <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-comment</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>gson</artifactId>
+          <groupId>com.google.code.gson</groupId>
         </exclusion>
         <exclusion>
           <artifactId>nuxeo-automation-client</artifactId>
@@ -651,36 +671,36 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesOperations</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>nuxeo-routing-core</artifactId>
-          <groupId>org.nuxeo.ecm.routing</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>nuxeo-platform-rendition-core</artifactId>
-          <groupId>org.nuxeo.ecm.platform</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>nuxeo-platform-task-core</artifactId>
           <groupId>org.nuxeo.ecm.platform</groupId>
         </exclusion>
         <exclusion>
           <artifactId>nuxeo-platform-task-automation</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-routing-core</artifactId>
+          <groupId>org.nuxeo.ecm.routing</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-rendition-core</artifactId>
           <groupId>org.nuxeo.ecm.platform</groupId>
         </exclusion>
         <exclusion>
@@ -696,7 +716,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesPublisher</artifactId>
-      <version>3.4.7-SNAPSHOT</version>
+      <version>3.4.7</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -737,6 +757,62 @@
         </exclusion>
         <exclusion>
           <artifactId>nuxeo-features-test</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-video-api</artifactId>
+      <version>10.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-video-core</artifactId>
+      <version>10.10</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>nuxeo-platform-video-convert</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-filemanager-core</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-rendition-api</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-imaging-api</artifactId>
+      <version>10.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-imaging-core</artifactId>
+      <version>10.10</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>nuxeo-platform-imaging-convert</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-filemanager-core</artifactId>
+          <groupId>org.nuxeo.ecm.platform</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-core-storage-sql</artifactId>
+          <groupId>org.nuxeo.ecm.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>nuxeo-platform-rendition-api</artifactId>
           <groupId>org.nuxeo.ecm.platform</groupId>
         </exclusion>
       </exclusions>
