@@ -201,7 +201,7 @@ export class PageToolbar extends Component {
               ) : null}
             </div>
             {/* Menu */}
-            {actions.includes('more-options') && isAdmin ? <AdminMenu.Container /> : null}
+            {actions.includes('more-options') && hasWritePriveleges ? <AdminMenu.Container /> : null}
           </div>
         </Toolbar>
       </AppBar>

@@ -1,0 +1,7 @@
+<component name="ca.firstvoices.simpleapi.usercontext">
+    <implementation class="ca.firstvoices.simpleapi.security.UserContextStoreImpl"/>
+
+    <service>
+        <provide interface="ca.firstvoices.simpleapi.security.UserContextStore"/>
+    </service>
+</component>

@@ -48,6 +48,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
+  dictionaryListSmallScreenColumnDataTemplateCustomState,
 } from 'views/components/Browsing/DictionaryListSmallScreen'
 /**
  * List view for phrases
@@ -221,6 +222,15 @@ export class PhrasesListView extends DataListView {
     // Only show enabled cols if specified
     if (this.props.ENABLED_COLS.length > 0) {
       this.state.columns = this.state.columns.filter((v) => this.props.ENABLED_COLS.indexOf(v.name) !== -1)
+    }
+
+    if (this.props.routeParams.area === WORKSPACES) {
+      this.state.columns.push({
+        name: 'state',
+        title: this.props.intl.trans('state', 'State', 'first'),
+        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
+      })
     }
 
     // Bind methods to 'this'

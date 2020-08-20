@@ -1,0 +1,14 @@
+<component name="ca.firstvoices.simpleapi.mocks.keyresolver">
+
+    <!-- Rather than using JWKS to validate tokens, create a service that
+    allows us to sign and verify JWT tokens for test purposes-->
+
+    <require>ca.firstvoices.simpleapi.keyresolver</require>
+
+    <implementation class="ca.firstvoices.simpleapi.mocks.MockSigningKeyResolver"/>
+
+    <service>
+        <provide interface="io.jsonwebtoken.SigningKeyResolver"/>
+    </service>
+
+</component>

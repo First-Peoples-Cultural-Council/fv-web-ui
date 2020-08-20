@@ -38,6 +38,8 @@ import org.nuxeo.runtime.api.Framework;
 public class AddConfusablesServiceImpl implements AddConfusablesService {
 
   private static final Log log = LogFactory.getLog(AddConfusablesServiceImpl.class);
+  private final CleanupCharactersService cleanupCharactersService = Framework
+      .getService(CleanupCharactersService.class);
 
   @Override
   public void addConfusables(CoreSession session, DocumentModel dialect) {
@@ -87,6 +89,11 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   public DocumentModel updateConfusableCharacters(CoreSession session,
       DocumentModel characterDocument, DocumentModel dialect, String characterToUpdate,
       String[] newConfusables) {
+
+    //Map used to validate confusables
+    Set<String> charactersToSkip = cleanupCharactersService
+        .getCharactersToSkipForDialect(dialect);
+
     String dialectName = dialect.getPropertyValue("dc:title").toString();
 
     // If a character was matched by title then update the lowercase confusable characters
@@ -94,14 +101,21 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
       String[] existing = (String[]) characterDocument
           .getPropertyValue("fvcharacter:confusable_characters");
       if (existing != null) {
-        ArrayList<String> newArrayList = new ArrayList<>(Arrays.asList(existing));
-        characterDocument.setPropertyValue("fvcharacter:confusable_characters",
+        String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             getNewConfusables(existing, newConfusables));
-        log.info(dialectName + ": Added " + Arrays.toString(newArrayList.toArray()) + " to "
+
+        characterDocument.setPropertyValue("fvcharacter:confusable_characters",
+            confusablesToAdd);
+
+        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
       } else {
-        characterDocument.setPropertyValue("fvcharacter:confusable_characters", newConfusables);
-        log.info(dialectName + ": Added " + Arrays.toString(newConfusables) + " to "
+        String[] confusablesToAdd = validatedConfusables(charactersToSkip,
+            newConfusables);
+
+        characterDocument.setPropertyValue("fvcharacter:confusable_characters", confusablesToAdd);
+
+        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
       }
       // If a characterToUpdate was matched to an uppercase characterToUpdate
@@ -110,15 +124,22 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
       String[] existing = (String[]) characterDocument
           .getPropertyValue("fvcharacter:upper_case_confusable_characters");
       if (existing != null) {
-        ArrayList<String> newArrayList = new ArrayList<>(Arrays.asList(existing));
-        characterDocument.setPropertyValue("fvcharacter:upper_case_confusable_characters",
+        String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             getNewConfusables(existing, newConfusables));
-        log.info(dialectName + ": Added " + Arrays.toString(newArrayList.toArray()) + " to "
+
+        characterDocument.setPropertyValue("fvcharacter:upper_case_confusable_characters",
+            confusablesToAdd);
+
+        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
       } else {
+        String[] confusablesToAdd = validatedConfusables(charactersToSkip,
+            newConfusables);
+
         characterDocument
-            .setPropertyValue("fvcharacter:upper_case_confusable_characters", newConfusables);
-        log.info(dialectName + ": Added " + Arrays.toString(newConfusables) + " to "
+            .setPropertyValue("fvcharacter:upper_case_confusable_characters", confusablesToAdd);
+
+        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
       }
     }
@@ -127,11 +148,25 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   }
 
   // Helper method to check existing confusables and only add new ones if they don't already exist
-  private ArrayList<String> getNewConfusables(String[] existing, String[] confusables) {
+  private String[] getNewConfusables(String[] existing, String[] confusables) {
     Set<String> set = new HashSet<>();
     set.addAll(Arrays.asList(existing));
     set.addAll(Arrays.asList(confusables));
-    return new ArrayList<>(set);
+    ArrayList<String> newConfusables = new ArrayList<>(set);
+
+    return newConfusables.toArray(new String[0]);
+  }
+
+  //Helper method that ensures the added confusables are not duplicates or included in the alphabet
+  private String[] validatedConfusables(Set<String> validationMap, String[] confusablesToAdd) {
+    ArrayList<String> validatedConfusables = new ArrayList<>();
+    for (String confusable : confusablesToAdd) {
+      if (!validationMap.contains(confusable)) {
+        validatedConfusables.add(confusable);
+      }
+    }
+
+    return validatedConfusables.toArray(new String[0]);
   }
 
 }

@@ -427,14 +427,30 @@ export class AppFrontController extends Component {
       }
 
       // Switch siteThemes based on route params
-      if (_routeParams.hasOwnProperty('siteTheme')) {
-        let newTheme = _routeParams.siteTheme
+      const _siteTheme = _routeParams.hasOwnProperty('siteTheme') || matchedPage.get('siteTheme')
+      if (_siteTheme) {
+        let newTheme = _siteTheme
 
-        // Switch to workspace siteTheme if available
+        /*
+        When to switch to workspace theme:
+
+              routeParams has area=WORKSPACES
+                or
+              matchedPage.path contains WORKSPACES
+                or
+              matchedPage.siteTheme=WORKSPACES
+
+                AND
+
+              current theme is not 'workspace'
+
+          TODO: investigate if statecharts would simplify matters
+        */
         if (
           ((_routeParams.hasOwnProperty('area') && _routeParams.area === WORKSPACES) ||
-            matchedPage.get('path').indexOf(WORKSPACES) !== -1) &&
-          _routeParams.siteTheme === 'explore'
+            matchedPage.get('path').indexOf(WORKSPACES) !== -1 ||
+            matchedPage.get('siteTheme') === WORKSPACES) &&
+          _routeParams.siteTheme !== 'workspace'
         ) {
           newTheme = 'workspace'
           // Note: Also updating routeParams.area
