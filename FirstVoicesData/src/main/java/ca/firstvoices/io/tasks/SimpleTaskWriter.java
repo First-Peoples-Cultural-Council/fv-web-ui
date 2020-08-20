@@ -54,7 +54,7 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
         jg.writeObjectField("targetDoc", simpleTargetDoc);
 
         // `dateCreated` property
-        Calendar cal = (Calendar) task.getDateCreated();
+        Calendar cal = task.getDateCreated();
         if (cal != null) {
           jg.writeStringField("dateCreated", DateParser.formatW3CDateTime(cal.getTime()));
         }

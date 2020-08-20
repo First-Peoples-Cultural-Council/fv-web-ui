@@ -44,6 +44,7 @@ public class AncestryMarshaller extends DocumentModelJsonWriter {
 
   private static final Log log = LogFactory.getLog(AncestryMarshaller.class);
 
+  @Override
   public void extend(DocumentModel document, JsonGenerator jg) throws IOException {
     super.extend(document, jg);
 

@@ -11,12 +11,12 @@ import org.nuxeo.ecm.core.api.model.impl.ListProperty;
  */
 public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
 
-  public String id = null;
-  public String targetDocId = null;
-  public GregorianCalendar dateCreated;
-  public String requestedVisibility;
-  public String requestedBy;
-  public List<?> taskComments;
+  private String id = null;
+  private String targetDocId = null;
+  private GregorianCalendar dateCreated;
+  private String requestedVisibility;
+  private String requestedBy;
+  private List<String> taskComments;
 
   /**
    * Convert a document model to a simple task model
@@ -45,7 +45,7 @@ public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
     this.setRequestedBy(String.valueOf(doc.getPropertyValue("nt:initiator")));
 
     // Any comments that may exist on the task, provided by the initiator
-    this.setTaskComments((List<?>) doc.getPropertyValue("nt:taskComments"));
+    this.setTaskComments((List<String>) doc.getPropertyValue("nt:taskComments"));
   }
 
   @Override
@@ -99,12 +99,12 @@ public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
   }
 
   @Override
-  public List<?> getTaskComments() {
+  public List<String> getTaskComments() {
     return taskComments;
   }
 
   @Override
-  public void setTaskComments(List<?> taskComments) {
+  public void setTaskComments(List<String> taskComments) {
     this.taskComments = taskComments;
   }
 }

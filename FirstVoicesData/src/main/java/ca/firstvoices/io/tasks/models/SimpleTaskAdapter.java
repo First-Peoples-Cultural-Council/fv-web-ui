@@ -28,7 +28,7 @@ public interface SimpleTaskAdapter {
 
   void setRequestedBy(String requestedBy);
 
-  List<?> getTaskComments();
+  List<String> getTaskComments();
 
-  void setTaskComments(List<?> taskComments);
+  void setTaskComments(List<String> taskComments);
 }

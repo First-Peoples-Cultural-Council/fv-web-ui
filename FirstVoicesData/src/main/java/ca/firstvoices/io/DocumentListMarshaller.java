@@ -21,7 +21,7 @@ public class DocumentListMarshaller extends DocumentModelListJsonWriter {
   @Override
   public void write(List<DocumentModel> docs, JsonGenerator jg) throws IOException {
     // Output specific type of list if the list is of type: "SampleSingleType"
-    if (docs.size() > 0 && "SampleSingleType".equals(docs.get(0).getType())) {
+    if (!docs.isEmpty() && "SampleSingleType".equals(docs.get(0).getType())) {
       jg.writeEndArray();
       extend(docs, jg);
       jg.writeEndObject();

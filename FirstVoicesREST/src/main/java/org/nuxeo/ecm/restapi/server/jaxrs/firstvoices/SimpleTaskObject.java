@@ -86,7 +86,7 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
     }
 
     PageProviderService pps = Framework.getService(PageProviderService.class);
-    Map<String, Serializable> props = new HashMap<String, Serializable>();
+    Map<String, Serializable> props = new HashMap<>();
     props.put(CoreQueryDocumentPageProvider.CORE_SESSION_PROPERTY,
         (Serializable) ctx.getCoreSession());
 
