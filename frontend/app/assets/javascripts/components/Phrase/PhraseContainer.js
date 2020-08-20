@@ -25,9 +25,9 @@ function PhraseContainer() {
         computePhrase,
         deletePhrase,
         dialect,
+        phrasePath,
         publishPhrase,
         routeParams,
-        wordPath,
         // DetailView
         acknowledgement,
         audio,
@@ -54,7 +54,7 @@ function PhraseContainer() {
             computeItem={computePhrase}
             computeLogin={computeLogin}
             deleteAction={deletePhrase}
-            itemPath={wordPath}
+            itemPath={phrasePath}
             labels={{ single: 'phrase' }}
             onNavigateRequest={pushWindowPath}
             permissionEntry={dialect}

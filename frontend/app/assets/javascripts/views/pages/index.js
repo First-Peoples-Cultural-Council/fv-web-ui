@@ -44,7 +44,7 @@ import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stori
 
 import PageDialectViewMedia from './explore/dialect/media/view'
 import PageDialectViewWord from 'components/Word/WordContainer'
-import PageDialectViewPhrase from './explore/dialect/learn/phrases/view'
+import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
 import PageDialectViewBook from './explore/dialect/learn/songs-stories/view'
 import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'
 import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
