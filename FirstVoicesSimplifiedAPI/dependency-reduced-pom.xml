@@ -3,7 +3,7 @@
   <parent>
     <artifactId>firstvoices-modules-parent</artifactId>
     <groupId>ca.firstvoices</groupId>
-    <version>3.4.7</version>
+    <version>3.4.8-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>FirstVoicesSimplifiedAPI</artifactId>
@@ -611,7 +611,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -627,7 +627,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -645,10 +645,6 @@
         <exclusion>
           <artifactId>nuxeo-platform-comment</artifactId>
           <groupId>org.nuxeo.ecm.platform</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
         </exclusion>
         <exclusion>
           <artifactId>nuxeo-automation-client</artifactId>
@@ -671,20 +667,20 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesOperations</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -716,7 +712,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesPublisher</artifactId>
-      <version>3.4.7</version>
+      <version>3.4.8-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
