@@ -112,7 +112,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     currentAlphabet = alphabetList.toArray(alphabetList.toArray(new String[0]));
   }
 
-  private static boolean setDoesNotContain(Set<String> set, String toAdd){
+  private static boolean setDoesNotContain(Set<String> set, String toAdd) {
     return !set.contains(toAdd) && !set.contains(toAdd.toUpperCase());
   }
 
