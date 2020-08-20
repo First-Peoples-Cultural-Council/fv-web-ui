@@ -17,20 +17,26 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function VisibilitySelectContainer({docVisibility, handleVisibilityChange, computeEntities, hideLabel, selectNameAndId}) {
+function VisibilitySelectContainer({
+  docVisibility,
+  handleVisibilityChange,
+  computeEntities,
+  hideLabel,
+  selectNameAndId,
+}) {
   return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <VisibilitySelectData>
-          {({publicDialect, isLoading}) => {
-            return isLoading ? (
-                <div>Loading...</div>
-            ) : (
-                <VisibilitySelectPresentation
-                    docVisibility={docVisibility}
-                    handleVisibilityChange={handleVisibilityChange}
-                    hideLabel={hideLabel}
-                    publicDialect={publicDialect}
-                    selectNameAndId={selectNameAndId}
+    <PromiseWrapper renderOnError computeEntities={computeEntities}>
+      <VisibilitySelectData>
+        {({ publicDialect, isLoading }) => {
+          return isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <VisibilitySelectPresentation
+              docVisibility={docVisibility}
+              handleVisibilityChange={handleVisibilityChange}
+              hideLabel={hideLabel}
+              publicDialect={publicDialect}
+              selectNameAndId={selectNameAndId}
             />
           )
         }}

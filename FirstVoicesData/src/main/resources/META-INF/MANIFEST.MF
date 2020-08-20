@@ -24,4 +24,5 @@ Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-kanban-lifecycle.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-lifecycle.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-request-lifecycle.xml,
- OSGI-INF/lifecycle/ca.firstvoices.lifecycle.types.xml
+ OSGI-INF/lifecycle/ca.firstvoices.lifecycle.types.xml,
+ OSGI-INF/ca.firstvoices.io.xml
