@@ -264,7 +264,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     for (int i = 0; i < alphabet.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
-      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i + 1);
       letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
       createDocument(session, letterDoc);
       fvAlphabet.add(letterDoc);
