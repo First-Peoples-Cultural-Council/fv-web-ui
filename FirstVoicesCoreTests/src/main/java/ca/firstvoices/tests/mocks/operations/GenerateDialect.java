@@ -11,7 +11,8 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = GenerateDialect.ID, category = Constants.GROUP_NAME, label =
-    "Generate Dialect", description = "Operation to create 1 test dialect.")
+    "Generate Dialect", description = "Operation to create 1 test dialect. "
+    + "maxEntries sets the number of words/phrases, split 50/50.")
 public class GenerateDialect {
 
   public static final String ID = Constants.GROUP_NAME + "." + "GenerateDialect";
@@ -23,9 +24,9 @@ public class GenerateDialect {
       description = "`true` to create random data; `false` to create real demo data")
   protected String randomize = "true";
 
-  @Param(name = "maxEntries", required = false, description = "how many entries to generate"
-      + " for words, phrases, etc.")
-  protected int maxEntries = 100;
+  @Param(name = "maxEntries", required = false, description = "sets the number of words/phrases, "
+      + "split 50/50.")
+  protected int maxEntries = 60;
 
   @Param(name = "dialectName", required = false)
   protected String dialectName = "TestDialect1";

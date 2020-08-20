@@ -2,10 +2,18 @@ package ca.firstvoices.tests.mocks.services;
 
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -43,91 +51,139 @@ public class MockDialectServiceImpl implements MockDialectService {
       "Ṉ", "ṉ", "Ṑ", "ṑ", "Ṓ", "ṓ", "Ṣ", "ṣ", "Ṯ", "ṯ", "Ẅ", "ẅ", "Ẑ", "ẑ", "Ẕ", "ẕ", "ị",};
 
   private static String[] currentAlphabet;
+  private static String[] currentWords;
 
   private static int alphabetCount = ThreadLocalRandom.current().nextInt(0, alphabetChars.length);
   private static int multiCount = ThreadLocalRandom.current().nextInt(0, multiChars.length);
   private static int maskCount = ThreadLocalRandom.current().nextInt(0, maskChars.length);
   private static int uniCount = ThreadLocalRandom.current().nextInt(0, uniChars.length);
 
-
   private static void generateRandomAlphabet() {
 
-    String[] alphabetArr = new String[30];
-    for (int i = 0; i < 10; i++) {
-      //Counter variables are a quick fix for alphabets containing two of the same character
-      alphabetArr[i] = alphabetChars[alphabetCount];
+    Set<String> alphabetSet = new HashSet<>();
+
+    while (alphabetSet.size() < 10) {
+      String toAdd = alphabetChars[alphabetCount];
+      if (setDoesNotContain(alphabetSet, toAdd)) {
+        alphabetSet.add(toAdd);
+      }
       alphabetCount += 1;
       if (alphabetCount >= alphabetChars.length) {
         alphabetCount = 0;
       }
     }
 
-    for (int i = 10; i < 20; i++) {
-      alphabetArr[i] = multiChars[multiCount];
+    while (alphabetSet.size() < 15) {
+      String toAdd = multiChars[multiCount];
+      if (setDoesNotContain(alphabetSet, toAdd)) {
+        alphabetSet.add(toAdd);
+      }
       multiCount += 1;
       if (multiCount >= multiChars.length) {
         multiCount = 0;
       }
     }
 
-    for (int i = 20; i < 25; i++) {
-      alphabetArr[i] = maskChars[maskCount];
+    while (alphabetSet.size() < 20) {
+      String toAdd = maskChars[maskCount];
+      if (setDoesNotContain(alphabetSet, toAdd)) {
+        alphabetSet.add(toAdd);
+      }
       maskCount += 1;
       if (maskCount >= maskChars.length) {
         maskCount = 0;
       }
     }
 
-    for (int i = 25; i < alphabetArr.length; i++) {
-      alphabetArr[i] = uniChars[uniCount];
+    while (alphabetSet.size() < 30) {
+      String toAdd = uniChars[uniCount];
+      if (setDoesNotContain(alphabetSet, toAdd)) {
+        alphabetSet.add(toAdd);
+      }
       uniCount += 1;
       if (uniCount >= uniChars.length) {
         uniCount = 0;
       }
     }
 
-    currentAlphabet = alphabetArr;
+    List<String> alphabetList = new ArrayList<>(alphabetSet);
+    Collections.shuffle(alphabetList);
+
+    currentAlphabet = alphabetList.toArray(alphabetList.toArray(new String[0]));
   }
 
-  private DocumentModelList generateFVCharacters(CoreSession session, String path,
-      String[] alphabet) {
-    DocumentModelList fvAlphabet = new DocumentModelListImpl();
-
-    for (int i = 0; i < alphabet.length; i++) {
-      DocumentModel letterDoc = session
-          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
-      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
-      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
-      createDocument(session, letterDoc);
-      fvAlphabet.add(letterDoc);
-
-    }
-    return fvAlphabet;
+  private static boolean setDoesNotContain(Set<String> set, String toAdd) {
+    return !set.contains(toAdd) && !set.contains(toAdd.toUpperCase());
   }
 
-  @Override
-  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
-    generateRandomAlphabet();
-    String name = generateRandomWord(currentAlphabet);
-    StringJoiner join = new StringJoiner(" ");
-    for (int i = 0; i < 30; i++) {
-      join.add(generateRandomWord(currentAlphabet) + " ");
+  private static String generateRandomWord(String[] alphabet) {
+
+    StringBuilder bld = new StringBuilder();
+    for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
+      bld.append(alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)]);
     }
-    String desc = join.toString();
 
-    DocumentModel dialect = generateEmptyDialect(session, name, desc);
+    return bld.toString();
+  }
 
-    generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
-    return dialect;
+  private static void generateWordArr(int wordEntries) {
+    List<String> wordList = new ArrayList<>();
 
+    for (int i = 0; i < wordEntries; i++) {
+      wordList.add(generateRandomWord(currentAlphabet));
+    }
+
+    //have at least 1 word starting with each letter
+    if (wordEntries >= currentAlphabet.length) {
+      for (int i = 0; i < currentAlphabet.length; i++) {
+        wordList.set(i, currentAlphabet[i] + wordList.get(i).substring(1));
+      }
+    }
+    Collections.shuffle(wordList);
+
+    currentWords = wordList.toArray(wordList.toArray(new String[0]));
   }
 
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
     String desc = "This is a generated test dialect for demo and cypress test purposes.";
+    String[] words = {"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel",
+        "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec"
+        , "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu"};
+
     DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
+    generateFVWords(session, dialect.getPathAsString(), words);
+    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words);
+
+    return dialect;
+
+  }
+
+  @Override
+  public DocumentModel generateMockRandomDialect(CoreSession session, int maxEntries) {
+    int wordEntries;
+    int phraseEntries;
+    //Split max entries 50/50 for words and phrases
+    if (maxEntries % 2 == 0) {
+      wordEntries = maxEntries / 2;
+    } else {
+      wordEntries = maxEntries / 2 + 1;
+    }
+    phraseEntries = maxEntries / 2;
+
+    generateRandomAlphabet();
+    generateWordArr(wordEntries);
+    String name = generateRandomWord(currentAlphabet);
+    String desc = generateRandomPhrase(30, currentWords);
+
+    DocumentModel dialect = generateEmptyDialect(session, name, desc);
+
+    generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
+    generateFVPhrases(session, dialect.getPathAsString(),
+        phraseEntries, currentWords);
+    generateFVWords(session, dialect.getPathAsString(), currentWords);
 
     return dialect;
 
@@ -147,7 +203,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     session.removeDocument(b);
   }
 
-
   private DocumentModel createDocument(CoreSession session, DocumentModel model) {
     model.setPropertyValue("dc:title", model.getName());
     DocumentModel newDoc = session.createDocument(model);
@@ -165,7 +220,6 @@ public class MockDialectServiceImpl implements MockDialectService {
     return newDoc;
   }
 
-
   private void generateDomainTree(CoreSession session) {
 
     String testPath = "/FV/Workspaces/Data/Test/Test/";
@@ -182,9 +236,7 @@ public class MockDialectServiceImpl implements MockDialectService {
       } else {
         throw new NuxeoException("Document tree FV/Workspaces/Data/ must exist");
       }
-
     }
-
   }
 
   private DocumentModel generateEmptyDialect(CoreSession session, String name, String desc) {
@@ -199,19 +251,71 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Alphabet", FV_ALPHABET));
+    createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", FV_DICTIONARY));
 
     return dialect;
-
   }
 
-  private String generateRandomWord(String[] alphabet) {
+  private DocumentModelList generateFVCharacters(CoreSession session, String path,
+      String[] alphabet) {
+    DocumentModelList fvAlphabet = new DocumentModelListImpl();
 
-    StringBuilder bld = new StringBuilder();
-    for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 13); i++) {
-      bld.append(alphabet[ThreadLocalRandom.current().nextInt(0, alphabet.length)]);
+    for (int i = 0; i < alphabet.length; i++) {
+      DocumentModel letterDoc = session
+          .createDocumentModel(path + "/Alphabet", alphabet[i], FV_CHARACTER);
+      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
+      letterDoc.setPropertyValue("fvcharacter:upper_case_character", alphabet[i].toUpperCase());
+      createDocument(session, letterDoc);
+      fvAlphabet.add(letterDoc);
+
+    }
+    return fvAlphabet;
+  }
+
+  private String generateRandomPhrase(int numberOfWords, String[] wordsToUse) {
+    StringJoiner join = new StringJoiner(" ");
+    for (int i = 0; i < numberOfWords; i++) {
+      join.add(wordsToUse[ThreadLocalRandom.current().nextInt(0, wordsToUse.length)]);
+    }
+    return join.toString();
+  }
+
+  private DocumentModelList generateFVWords(CoreSession session, String path,
+      String[] words) {
+    //Generate word documents and set appropriate properties
+    String[] samplePartsOfSpeech = {"noun", "pronoun", "adjective", "verb", "adverb"};
+    DocumentModelList fvWords = new DocumentModelListImpl();
+
+    for (String word : words) {
+      DocumentModel wordDoc = session
+          .createDocumentModel(path + "/Dictionary", word, FV_WORD);
+      wordDoc.setPropertyValue("fv-word:part_of_speech",
+          samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
+      wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
+
+      createDocument(session, wordDoc);
+      fvWords.add(wordDoc);
     }
 
-    return bld.toString();
+    return fvWords;
+  }
+
+  private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
+      String[] wordsToUse) {
+    //Generate phrase documents
+    DocumentModelList fvPhrases = new DocumentModelListImpl();
+
+    for (int i = 0; i < phraseEntries; i++) {
+      String newPhrase = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+          wordsToUse);
+      DocumentModel phraseDoc = session
+          .createDocumentModel(path + "/Dictionary", newPhrase, FV_PHRASE);
+      createDocument(session, phraseDoc);
+      fvPhrases.add(phraseDoc);
+    }
+
+    return fvPhrases;
   }
 
 }
