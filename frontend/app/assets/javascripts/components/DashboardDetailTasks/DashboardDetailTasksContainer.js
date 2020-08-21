@@ -7,7 +7,7 @@ import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardD
 import Table from 'components/Table'
 import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
 import DetailWordPhrase from 'components/DetailWordPhrase'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import { TABLE_FULL_WIDTH } from 'common/Constants'
 import TablePagination from 'components/Table/TablePagination'
 import RequestChanges from 'components/RequestChanges'
 /**
@@ -82,7 +82,7 @@ function DashboardDetailTasksContainer() {
                 onRowClick={onRowClick}
                 options={options}
                 sortDirection={sortDirection}
-                variant={CONTENT_FULL_WIDTH}
+                variant={TABLE_FULL_WIDTH}
                 onChangeRowsPerPage={onChangeRowsPerPage}
                 componentsPagination={TablePagination}
               />

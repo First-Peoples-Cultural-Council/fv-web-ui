@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import selectn from 'selectn'
+
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useUserGroupTasks from 'DataSource/useUserGroupTasks'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
+import useTheme from 'DataSource/useTheme'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -13,6 +16,7 @@ import { TableContextSort, TableContextCount } from 'components/Table/TableConte
  *
  */
 function WidgetTasksData({ children }) {
+  const { theme } = useTheme()
   const [sortDirection, setSortDirection] = useState('desc')
   const [sortBy, setSortBy] = useState('date')
   const [page, setPage] = useState(0)
@@ -47,7 +51,7 @@ function WidgetTasksData({ children }) {
       userId,
     })
   }
-
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
       <TableContextSort.Provider value={sortDirection}>
@@ -60,18 +64,22 @@ function WidgetTasksData({ children }) {
                 return '[~]'
               },
               sorting: false,
+              cellStyle,
             },
             {
               title: 'Entry title',
               field: 'title',
+              cellStyle,
             },
             {
               title: 'Requested by',
               field: 'initiator',
+              cellStyle,
             },
             {
               title: 'Date submitted',
               field: 'date',
+              cellStyle,
             },
           ],
           // NOTE: when not logged in, show an empty data set

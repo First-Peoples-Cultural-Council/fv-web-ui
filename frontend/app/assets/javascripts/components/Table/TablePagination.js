@@ -12,6 +12,7 @@ import TableCell from '@material-ui/core/TableCell'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 
+import { TABLEPAGINATION_DIV } from 'common/Constants'
 import { TableContextCount } from 'components/Table/TableContext'
 
 function TablePagination({
@@ -22,6 +23,7 @@ function TablePagination({
   showFirstLastPageButtons,
   style,
   localization,
+  variant,
 }) {
   const { getSearchObject, navigate } = useNavigationHelpers()
   const {
@@ -80,6 +82,7 @@ function TablePagination({
 
   const labelId = 'labelId'
   const selectId = 'selectId'
+  const Component = variant === TABLEPAGINATION_DIV ? 'div' : TableCell
   return (
     <TableContextCount.Consumer>
       {(count) => {
@@ -100,7 +103,7 @@ function TablePagination({
           .replace('{to}', Math.min(queryPageNum * queryPageSizeNum, count))
           .replace('{count}', count)
         return (
-          <TableCell colSpan="1000">
+          <Component>
             <div style={style}>
               {rowsPerPageOptions.length > 1 && (
                 <Typography color="inherit" variant="body2" id={labelId}>
@@ -181,13 +184,13 @@ function TablePagination({
                 </Tooltip>
               )}
             </div>
-          </TableCell>
+          </Component>
         )
       }}
     </TableContextCount.Consumer>
   )
 }
-const { array, number, object, bool } = PropTypes
+const { array, number, object, oneOf, bool } = PropTypes
 TablePagination.propTypes = {
   // count: number,
   localization: object,
@@ -196,6 +199,7 @@ TablePagination.propTypes = {
   rowsPerPageOptions: array,
   showFirstLastPageButtons: bool,
   style: object,
+  variant: oneOf([TABLEPAGINATION_DIV]),
 }
 
 TablePagination.defaultProps = {

@@ -4,7 +4,7 @@ import DashboardDetailListPresentation from 'components/DashboardDetail/Dashboar
 import TablePagination from 'components/Table/TablePagination'
 
 import Typography from '@material-ui/core/Typography'
-import { WORD, PHRASE, SONG, STORY } from 'common/Constants'
+import { WORD, PHRASE, SONG, STORY, TABLEPAGINATION_DIV } from 'common/Constants'
 
 /**
  * @summary DashboardDetailListContainer
@@ -27,7 +27,9 @@ function DashboardDetailListContainer({ listItems, onClick, selectedId, title, p
           {title}
         </Typography>
       }
-      childrenPagination={<TablePagination count={count} page={page - 1} rowsPerPage={pageSize} />}
+      childrenPagination={
+        <TablePagination variant={TABLEPAGINATION_DIV} count={count} page={page - 1} rowsPerPage={pageSize} />
+      }
       listItems={listItems}
       onClick={onClick}
       selectedId={selectedId}

@@ -15,14 +15,13 @@ limitations under the License.
 */
 export default {
   Table: {
-    ContentFullWidth: {
+    fullWidth: {
       boxShadow: 'none',
       tableHeader: {
         background: '#efefef',
       },
     },
     tableHeader: {
-      // background: 'linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%)',
       borderBottom: '1px solid #a8a8a8',
       fontWeight: 900,
     },

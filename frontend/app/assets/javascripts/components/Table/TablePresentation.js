@@ -4,7 +4,7 @@ import MaterialTable from 'material-table'
 import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE } from 'common/Constants'
 import TableHeader from './TableHeader'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
@@ -35,7 +35,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
  *
  * @returns {node} jsx markup
  */
-function TablePresentation({
+const TablePresentation = ({
   actions,
   columns,
   componentsPagination,
@@ -57,16 +57,31 @@ function TablePresentation({
   style,
   title,
   variant,
-}) {
+}) => {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
-  const { tableHeader, row, rowAlternate } = themeTable
 
   let styleVariant
-  let headerStyle = tableHeader
-  if (variant === CONTENT_FULL_WIDTH) {
-    styleVariant = themeTable.ContentFullWidth
-    headerStyle = styleVariant.tableHeader
+
+  let headerStyle = themeTable.tableHeader
+  let row = themeTable.row
+  let rowAlternate = themeTable.rowAlternate
+
+  switch (variant) {
+    case TABLE_FULL_WIDTH:
+      styleVariant = themeTable.fullWidth
+      headerStyle = styleVariant.tableHeader
+      break
+    case WIDGET_WORKSPACE:
+      styleVariant = selectn('widget', theme)
+      row = styleVariant.row
+      rowAlternate = styleVariant.rowAlternate
+      headerStyle = styleVariant.tableHeader
+      break
+
+    default: {
+      break
+    }
   }
   const icons = {
     SortArrow: sortDirection === 'desc' ? ArrowUpwardIcon : ArrowDownwardIcon,
@@ -151,11 +166,11 @@ function TablePresentation({
   )
 }
 // PROPTYPES
-const { array, node, func, string, object, oneOf, oneOfType } = PropTypes
+const { array, elementType, func, string, object, oneOf, oneOfType } = PropTypes
 TablePresentation.propTypes = {
   actions: array,
   columns: array,
-  componentsPagination: node,
+  componentsPagination: elementType,
   data: oneOfType([array, func]),
   detailPanel: oneOfType([array, func]),
   localization: object,
@@ -173,7 +188,7 @@ TablePresentation.propTypes = {
   sortDirection: string,
   style: object,
   title: string,
-  variant: oneOf([CONTENT_FULL_WIDTH]),
+  variant: oneOf([TABLE_FULL_WIDTH, WIDGET_WORKSPACE]),
 }
 
 TablePresentation.defaultProps = {
