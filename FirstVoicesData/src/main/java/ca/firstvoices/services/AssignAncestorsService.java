@@ -27,4 +27,5 @@ public interface AssignAncestorsService {
 
   void assignAncestors(CoreSession session, DocumentModel currentDoc);
 
+  DocumentModel getDialect(CoreSession session, DocumentModel currentDoc);
 }
