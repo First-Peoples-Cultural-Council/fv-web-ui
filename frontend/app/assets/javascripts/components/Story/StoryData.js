@@ -12,6 +12,7 @@ import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
 
+import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
@@ -67,6 +68,52 @@ function StoryData({ children }) {
       return selectn('dc:title', author)
     }),
   }
+
+  // Images
+  const imagesData = selectn('contextParameters.book.related_pictures', bookRawData) || []
+  const images = []
+  imagesData.forEach((image, key) => {
+    const img = {
+      original: selectn('views[2].url', image),
+      thumbnail: selectn('views[0].url', image) || 'assets/images/cover.png',
+      description: image['dc:description'],
+      key: key,
+      id: image.uid,
+      object: image,
+    }
+    images.push(img)
+  })
+
+  // Videos
+  const videosData = selectn('contextParameters.book.related_videos', bookRawData) || []
+  const videos = []
+  videosData.forEach((video, key) => {
+    const vid = {
+      original: NavigationHelpers.getBaseURL() + video.path,
+      thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
+      description: video['dc:description'],
+      key: key,
+      id: video.uid,
+      object: video,
+    }
+    videos.push(vid)
+  })
+
+  // Audio
+  const audioData = selectn('contextParameters.book.related_audio', bookRawData) || []
+  const audio = []
+  audioData.forEach((audioDoc, key) => {
+    const aud = {
+      original: NavigationHelpers.getBaseURL() + audioDoc.path,
+      thumbnail: selectn('views[0].url', audioDoc) || 'assets/images/cover.png',
+      description: audioDoc['dc:description'],
+      key: key,
+      id: audioDoc.uid,
+      object: audioDoc,
+      type: 'FVAudio',
+    }
+    audio.push(aud)
+  })
 
   useEffect(() => {
     fetchData()
@@ -125,7 +172,6 @@ function StoryData({ children }) {
   const isKidsTheme = routeParams.siteTheme === 'kids'
 
   return children({
-    // isLoading,
     bookPath: bookPath,
     book,
     bookEntries,
@@ -140,6 +186,10 @@ function StoryData({ children }) {
     pageCount,
     publishBook,
     pushWindowPath,
+    //Media
+    audio,
+    images,
+    videos,
   })
 }
 // PROPTYPES

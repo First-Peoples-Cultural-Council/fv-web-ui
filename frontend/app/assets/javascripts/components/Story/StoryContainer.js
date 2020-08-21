@@ -7,6 +7,7 @@ import StoryData from 'components/Story/StoryData'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import withActions from 'views/hoc/view/with-actions'
+const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
  * @summary StoryContainer
@@ -18,7 +19,6 @@ import withActions from 'views/hoc/view/with-actions'
  * @returns {node} jsx markup
  */
 function StoryContainer() {
-  const DetailsViewWithActions = withActions(PromiseWrapper, true)
   return (
     <StoryData>
       {({
@@ -35,6 +35,10 @@ function StoryContainer() {
         pageCount,
         publishBook,
         pushWindowPath,
+        //Media
+        audio,
+        images,
+        videos,
       }) => {
         return isKidsTheme ? (
           <StoryPresentation
@@ -44,6 +48,10 @@ function StoryContainer() {
             closeBookAction={closeBookAction}
             openBookAction={openBookAction}
             pageCount={pageCount}
+            //Media
+            audio={audio}
+            images={images}
+            videos={videos}
           />
         ) : (
           <DetailsViewWithActions
@@ -64,6 +72,10 @@ function StoryContainer() {
               closeBookAction={closeBookAction}
               openBookAction={openBookAction}
               pageCount={pageCount}
+              //Media
+              audio={audio}
+              images={images}
+              videos={videos}
             />
           </DetailsViewWithActions>
         )

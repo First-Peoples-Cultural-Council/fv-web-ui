@@ -17,7 +17,18 @@ import StoryPage from 'components/StoryPage'
  *
  * @returns {node} jsx markup
  */
-function StoryPresentation({ book, bookOpen, closeBookAction, openBookAction, pageCount }) {
+function StoryPresentation({
+  book,
+  bookEntries,
+  bookOpen,
+  closeBookAction,
+  openBookAction,
+  pageCount,
+  // Media
+  audio,
+  images,
+  videos,
+}) {
   //   const classes = StoryStyles()
 
   return (
@@ -25,9 +36,25 @@ function StoryPresentation({ book, bookOpen, closeBookAction, openBookAction, pa
       <div className="col-xs-12">
         <Paper>
           {!bookOpen ? (
-            <StoryCover.Container book={book} openBookAction={openBookAction} pageCount={pageCount} />
+            <StoryCover.Presentation
+              book={book}
+              openBookAction={openBookAction}
+              pageCount={pageCount}
+              //Media
+              audio={audio}
+              images={images}
+              videos={videos}
+            />
           ) : (
-            <StoryPage.Container book={book} closeBookAction={closeBookAction} />
+            <StoryPage.Presentation
+              book={book}
+              bookEntries={bookEntries}
+              closeBookAction={closeBookAction}
+              //Media
+              audio={audio}
+              images={images}
+              videos={videos}
+            />
           )}
         </Paper>
       </div>
