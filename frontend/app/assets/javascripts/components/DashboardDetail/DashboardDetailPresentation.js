@@ -7,6 +7,10 @@ import IconWidget from '@material-ui/icons/Apps'
 import IconDetail from '@material-ui/icons/VerticalSplitOutlined'
 import IconList from '@material-ui/icons/ViewHeadlineOutlined'
 import Link from 'views/components/Link'
+
+import useTheme from 'DataSource/useTheme'
+import selectn from 'selectn'
+import Typography from '@material-ui/core/Typography'
 /**
  * @summary DashboardDetailPresentation
  * @version 1.0.1
@@ -30,21 +34,43 @@ function DashboardDetailPresentation({
   onOpen,
   selectedId,
 }) {
+  const { theme } = useTheme()
+  const workshopDark = selectn(['palette', 'primary', 'dark'], theme)
   return (
-    <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--NothingSelected'}`}>
-      <div className="DashboardDetail__Header">
-        <Link href="/dashboard" className="DashboardDetail__HeaderLink">
-          <IconWidget /> Back to Dashboard
+    <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--nothingSelected'}`}>
+      <div
+        className="DashboardDetail__header"
+        style={{
+          backgroundColor: workshopDark,
+        }}
+      >
+        <Link href="/dashboard" className="DashboardDetail__headerLink">
+          <span className="DashboardDetail__iconButton">
+            <IconWidget fontSize="large" />{' '}
+          </span>
+          <Typography variant="h5" component="span">
+            Back to Dashboard
+          </Typography>
         </Link>
 
         {selectedId && (
-          <button className="DashboardDetail__HeaderButton" onClick={onClose}>
-            <IconList /> Show full list view
+          <button className="DashboardDetail__headerButton" onClick={onClose}>
+            <span className="DashboardDetail__iconButton">
+              <IconList fontSize="large" />
+            </span>
+            <Typography variant="h5" component="span">
+              Show full list view
+            </Typography>
           </button>
         )}
         {selectedId === undefined && (
-          <button className="DashboardDetail__HeaderButton" onClick={onOpen}>
-            <IconDetail /> Show detail view
+          <button className="DashboardDetail__headerButton" onClick={onOpen}>
+            <span className="DashboardDetail__iconButton">
+              <IconDetail fontSize="large" />
+            </span>
+            <Typography variant="h5" component="span">
+              Show detail view
+            </Typography>
           </button>
         )}
       </div>
@@ -53,9 +79,9 @@ function DashboardDetailPresentation({
 
       {selectedId && (
         <>
-          <div className="DashboardDetail__List">{childrenSelectedSidebar}</div>
-          <div className="DashboardDetail__SelectedItem">
-            <button className="DashboardDetail__SelectedItemClose" onClick={onClose}>
+          <div className="DashboardDetail__list">{childrenSelectedSidebar}</div>
+          <div className="DashboardDetail__selectedItem">
+            <button className="DashboardDetail__selectedItemClose" onClick={onClose}>
               <IconClose fontSize="large" />
             </button>
             {childrenSelectedDetail}

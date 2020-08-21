@@ -4,27 +4,31 @@
   grid-template-areas:
     'Header Header'
     'List SelectedItem';
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
-.DashboardDetail__Header {
+.DashboardDetail__header {
   border-bottom: 1px solid black;
   grid-area: Header;
   padding: 20px;
 }
 
-.DashboardDetail__List {
+.DashboardDetail__list {
   grid-area: List;
 }
 
-.DashboardDetail__SelectedItem {
+.DashboardDetail__selectedItem {
   grid-area: SelectedItem;
   overflow: auto;
   position: relative;
 }
-.DashboardDetail__SelectedItemClose {
+.DashboardDetail__selectedItemClose {
   align-items: center;
-  background: transparent;
+  background: black;
+  border-radius: 100%;
   border: none;
+  color: #d6d2d2;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -34,7 +38,14 @@
   top: 10px;
   z-index: 10;
 }
-.DashboardDetail__HeaderButton {
+
+.DashboardDetail__header {
+  display: flex;
+  padding: 10px 0;
+  min-height: 115px;
+}
+
+.DashboardDetail__headerButton {
   align-items: center;
   background-color: transparent;
   border: none;
@@ -42,21 +53,37 @@
   display: inline-flex;
   justify-content: space-between;
   padding: 10px;
+  color: #fff;
+  text-decoration: underline;
 }
-.DashboardDetail__HeaderLink {
+.DashboardDetail__headerLink {
   align-items: center;
   display: inline-flex;
   justify-content: space-between;
   padding: 10px;
   text-decoration: none;
+  color: #fff;
 }
-.DashboardDetail--NothingSelected {
+.DashboardDetail__headerLink:visited,
+.DashboardDetail__headerButton:visited {
+  color: #fff;
+}
+.DashboardDetail--nothingSelected {
   grid-template-columns: 1fr;
   grid-template-areas:
     'Header'
     'List'
     'SelectedItem';
 }
-.DashboardDetail--NothingSelected .DashboardDetail__List {
+.DashboardDetail--nothingSelected .DashboardDetail__list {
   border-right: 1px solid black;
+}
+
+.DashboardDetail__iconButton {
+  background-color: #c4503c;
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 15px;
+  margin-right: 20px;
 }

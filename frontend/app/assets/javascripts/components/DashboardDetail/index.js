@@ -2,6 +2,7 @@ import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailL
 import DashboardDetailList from 'components/DashboardDetail/DashboardDetailList'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
+import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
 import DashboardDetailPresentation from 'components/DashboardDetail/DashboardDetailPresentation'
 
 export default {
@@ -11,4 +12,5 @@ export default {
   DashboardDetailList,
   DashboardDetailListItem,
   DashboardDetailSelectedItem,
+  DashboardDetailSelectedItemTask,
 }

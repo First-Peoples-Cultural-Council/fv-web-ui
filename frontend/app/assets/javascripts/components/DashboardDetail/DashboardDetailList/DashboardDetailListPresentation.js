@@ -20,16 +20,16 @@ import { EVEN, ODD } from 'common/Constants'
 function DashboardDetailListPresentation({ childrenHeader, childrenPagination, listItems, onClick, selectedId }) {
   return (
     <div className="DashboardDetailList">
-      {childrenHeader && <div className="DashboardDetailList__HeaderContainer">{childrenHeader}</div>}
-      <div className="DashboardDetailList__ListContainer">
-        <ul className="DashboardDetailList__List">
+      {childrenHeader && <div className="DashboardDetailList__headerContainer">{childrenHeader}</div>}
+      <div className="DashboardDetailList__listContainer">
+        <ul className="DashboardDetailList__list">
           {listItems.map(({ id, itemType, isNew, title, initiator, date }, index) => {
             const variant = index % 2 ? ODD : EVEN
             return (
               <DashboardDetailListItem.Presentation
                 variant={variant}
                 isActive={selectedId === id}
-                key={`DashboardDetailList__ListItem--${index}`}
+                key={`DashboardDetailList__listItem--${index}`}
                 title={title}
                 initiator={initiator}
                 date={date}
@@ -42,7 +42,7 @@ function DashboardDetailListPresentation({ childrenHeader, childrenPagination, l
           })}
         </ul>
       </div>
-      {childrenPagination}
+      {childrenPagination && <div className="DashboardDetailList__pagination">{childrenPagination}</div>}
     </div>
   )
 }

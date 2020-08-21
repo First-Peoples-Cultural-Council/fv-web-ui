@@ -3,9 +3,9 @@ import DashboardDetail from 'components/DashboardDetail'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
 import DashboardDetailList from 'components/DashboardDetail/DashboardDetailList'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
+import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
 import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardDetailTasksData'
 import Table from 'components/Table'
-import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
 import DetailWordPhrase from 'components/DetailWordPhrase'
 import { TABLE_FULL_WIDTH } from 'common/Constants'
 import TablePagination from 'components/Table/TablePagination'
@@ -102,8 +102,7 @@ function DashboardDetailTasksContainer() {
               <DashboardDetailSelectedItem.Presentation
                 idTask={idSelectedTask}
                 childrenTaskSummary={
-                  <DashboardDetailListItem.Presentation
-                    component="div"
+                  <DashboardDetailSelectedItemTask.Presentation
                     title={taskTitle}
                     initiator={taskInitiator}
                     date={taskDate}
