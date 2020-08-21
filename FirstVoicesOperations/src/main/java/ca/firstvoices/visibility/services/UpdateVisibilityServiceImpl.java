@@ -64,7 +64,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
         // Public ===> "Published"
         if (doc.hasSchema("fvancestry")) {
           CoreSession session = doc.getCoreSession();
-          String dialectId = (String) doc.getPropertyValue("fva:dialect");
+          String dialectId = String.valueOf(doc.getPropertyValue("fva:dialect"));
 
           if (dialectId == null) {
             // Try to get dialect via parent, in case fva:dialect is not present for some reason
@@ -73,7 +73,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
 
             DocumentModel dialect = ancestorsService.getDialect(session, doc);
             if (Objects.nonNull(dialect)) {
-              dialectId = String.valueOf(doc.getPropertyValue("fva:dialect"));
+              dialectId = dialect.getId();
             }
           }
 
