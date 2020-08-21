@@ -41,7 +41,7 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
    * @return whether the criteria was met or not
    */
   private boolean listenerCriteria() {
-    return (doc != null && !doc.isProxy() && doc.hasSchema("fvancestry"));
+    return (doc != null && !doc.isProxy() && !doc.isVersion() && doc.hasSchema("fvancestry"));
   }
 
   @Override
@@ -55,18 +55,16 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
       return;
     }
 
-    if (doc.hasSchema("fvancestry") && !doc.isProxy()) {
-      CoreInstance.doPrivileged(doc.getRepositoryName(), (CoreSession session) -> {
+    CoreInstance.doPrivileged(doc.getRepositoryName(), (CoreSession session) -> {
 
-        // Disable event so other listeners don't fire for this system update
-        disableDefaultEvents(doc);
+      // Disable event so other listeners don't fire for this system update
+      disableDefaultEvents(doc);
 
-        // Assign ancestors; saving is done in service
-        assignAncestorsService.assignAncestors(session, doc);
+      // Assign ancestors; saving is done in service
+      assignAncestorsService.assignAncestors(session, doc);
 
-        // Renable default events for future runs
-        enableDefaultEvents(doc);
-      });
-    }
+      // Renable default events for future runs
+      enableDefaultEvents(doc);
+    });
   }
 }
