@@ -60,6 +60,7 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
         this.mockTemplate = new ArrayList<>(template);
         mockTemplate.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
         mockTemplate.removeIf(t -> t.getTypeName().equals("FVDictionary"));
+        mockTemplate.removeIf(t -> t.getTypeName().equals("FVCategories"));
         this.template = new ArrayList<>(mockTemplate);
       }
 
