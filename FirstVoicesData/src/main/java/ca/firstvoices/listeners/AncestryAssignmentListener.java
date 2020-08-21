@@ -21,8 +21,6 @@
 package ca.firstvoices.listeners;
 
 import ca.firstvoices.services.AssignAncestorsService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.event.Event;
@@ -37,8 +35,6 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
 
   private final AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
-
-  private static final Log log = LogFactory.getLog(AncestryAssignmentListener.class);
 
   /**
    * Specific criteria that must be true for this event to run
