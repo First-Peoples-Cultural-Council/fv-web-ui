@@ -57,7 +57,7 @@ public class AncestryAssignmentListenerTest extends AbstractFirstVoicesDataTest 
     assertEquals("Word should have ID of parent dialect property", dialect.getId(),
         TestWord.getPropertyValue("fva:dialect"));
 
-    // Ensure word title isn't changed (i.e. FVDocumentListener did not remove spaces)
-    assertEquals(TestWord.getTitle(), " Test Word ");
+    // Ensure word has been sanitized in FVDocumentListener
+    assertEquals("Test Word", TestWord.getTitle());
   }
 }

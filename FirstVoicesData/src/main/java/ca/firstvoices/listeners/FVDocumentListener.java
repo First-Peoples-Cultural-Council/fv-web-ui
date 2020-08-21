@@ -98,6 +98,7 @@ public class FVDocumentListener implements EventListener {
     if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
       cleanupWordsAndPhrases();
       validateCharacter(document);
+      sanitizeWord();
     }
 
     // Cleanup words and phrases unless update was triggered within CleanupCharacterService
@@ -107,12 +108,9 @@ public class FVDocumentListener implements EventListener {
         cleanupWordsAndPhrases();
       }
       validateCharacter(document);
-    }
 
-    if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
       sanitizeWord();
     }
-
   }
 
   public void cleanupWordsAndPhrases() {

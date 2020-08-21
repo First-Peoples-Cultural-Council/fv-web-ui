@@ -14,7 +14,7 @@
         </listener>
 
         <listener name="ancestryAssignmentListener" async="false" postCommit="false"
-          class="ca.firstvoices.listeners.AncestryAssignmentListener" priority="90">
+          class="ca.firstvoices.listeners.AncestryAssignmentListener" priority="500">
             <event>documentCreated</event>
         </listener>
 

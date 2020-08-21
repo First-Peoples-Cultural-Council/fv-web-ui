@@ -25,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -49,11 +48,6 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
     return (doc != null && !doc.isProxy() && doc.hasSchema("fvancestry"));
   }
 
-  private static void disableEvents(DocumentModel doc) {
-    // Avoid firing FVDocumentListener for this change
-    doc.putContextData(FVDocumentListener.DISABLE_FVDOCUMENT_LISTENER, true);
-  }
-
   @Override
   public void handleEvent(Event event) {
 
@@ -70,9 +64,6 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
 
         // Disable event so other listeners don't fire for this system update
         disableDefaultEvents(doc);
-
-        // Disable non-default events
-        disableEvents(doc);
 
         // Assign ancestors; saving is done in service
         assignAncestorsService.assignAncestors(session, doc);
