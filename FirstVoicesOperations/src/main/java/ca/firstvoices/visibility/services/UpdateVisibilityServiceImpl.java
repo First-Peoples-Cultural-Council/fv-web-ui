@@ -11,9 +11,13 @@ import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
 
+import ca.firstvoices.services.AssignAncestorsService;
+import java.util.Objects;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author david
@@ -39,7 +43,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
             .equals(DISABLED_STATE)) {
           doc.followTransition(ENABLE_TRANSITION);
         } else if (currentLifeCycleState.equals(PUBLISHED_STATE)) {
-          // Unpublish Transition will trigure the ProxyPublisherListener and move
+          // Unpublish Transition will trigger the ProxyPublisherListener and move
           // document to enabled state
           doc.followTransition(UNPUBLISH_TRANSITION);
         }
@@ -50,7 +54,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
         if (currentLifeCycleState.equals(DISABLED_STATE)) {
           break;
         } else if (currentLifeCycleState.equals(PUBLISHED_STATE)) {
-          // Unpublish Transition will trigure the ProxyPublisherListener and move
+          // Unpublish Transition will trigger the ProxyPublisherListener and move
           // document to enabled state
           doc.followTransition(UNPUBLISH_TRANSITION);
         }
@@ -59,11 +63,26 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
       case PUBLIC:
         // Public ===> "Published"
         if (doc.hasSchema("fvancestry")) {
+          CoreSession session = doc.getCoreSession();
           String dialectId = (String) doc.getPropertyValue("fva:dialect");
+
+          if (dialectId == null) {
+            // Try to get dialect via parent, in case fva:dialect is not present for some reason
+            AssignAncestorsService ancestorsService = Framework
+                .getService(AssignAncestorsService.class);
+
+            DocumentModel dialect = ancestorsService.getDialect(session, doc);
+            if (Objects.nonNull(dialect)) {
+              dialectId = String.valueOf(doc.getPropertyValue("fva:dialect"));
+            }
+          }
+
+          // If dialect still not retrieved via parent
           if (dialectId == null) {
             throw new NuxeoException("document must have a dialect");
           }
-          if (!doc.getCoreSession().getDocument(new IdRef(dialectId)).getCurrentLifeCycleState()
+
+          if (!session.getDocument(new IdRef(dialectId)).getCurrentLifeCycleState()
               .equals(PUBLISHED_STATE)) {
             throw new NuxeoException("dialect must be published.");
           }
