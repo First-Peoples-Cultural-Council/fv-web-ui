@@ -63,7 +63,7 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
         if (Objects.nonNull(task.getRequestedVisibility())) {
           String requestedVisibility = convertToVisibilityString(task.getRequestedVisibility());
 
-          if ("".equals(requestedVisibility)) {
+          if (!"".equals(requestedVisibility)) {
             jg.writeStringField("requestedVisibility", requestedVisibility);
 
             boolean visibilityChanged = !targetDoc.getCurrentLifeCycleState()
