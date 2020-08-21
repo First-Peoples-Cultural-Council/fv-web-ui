@@ -32,6 +32,7 @@ function RequestChangesContainer({ docId, docState, docDialectPath, onApproval }
         onSubmit,
         snackbarMessage,
         snackbarStatus,
+        submitMethod,
       }) => {
         return (
           <RequestChangesPresentation
@@ -49,6 +50,7 @@ function RequestChangesContainer({ docId, docState, docDialectPath, onApproval }
             onSubmit={onSubmit}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
+            submitMethod={submitMethod}
           />
         )
       }}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.simpleapi.pageproviders">
+
+  <require>org.nuxeo.runtime.started</require>
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+             point="providers">
+
+    <coreQueryPageProvider name="LIST_ARCHIVES_PP">
+      <pattern>
+        SELECT * FROM FVDialect, FVLanguage, FVLanguageFamily where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:path
+        STARTSWITH '/FV/sections/Data'
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVDialect, FVLanguage, FVLanguageFamily where ecm:isTrashed = 0 and ecm:isVersion = 0 and
+        ecm:path STARTSWITH '/FV/sections/Data' and ecm:uuid = ?
+      </pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="WORDS_IN_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVWord where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="LINKS_IN_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVLink where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="PHRASES_IN_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVPhrase where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="STORIES_IN_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVStory where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="SONGS_IN_ARCHIVE_PP">
+      <pattern>SELECT * FROM FVSong where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="LIST_SHARED_CATEGORIES_PP">
+      <pattern>SELECT * FROM Document where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:path STARTSWITH
+        '/FV/sections/SharedData/Shared Categories'
+      </pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="LIST_SHARED_LINKS_PP">
+      <pattern>SELECT * FROM FVLink where ecm:isTrashed = 0 and ecm:path STARTSWITH '/FV/sections/SharedData/Shared
+        Links'
+      </pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="LIST_SHARED_ASSETS_PP">
+      <pattern>SELECT * FROM FVAudio,FVPicture,FVVideo where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:path
+        STARTSWITH '/FV/sections/SharedData/Shared Resources/'
+      </pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_SHARED_ASSET_PP">
+      <pattern>SELECT * FROM FVAudio,FVPicture,FVVideo where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:uuid = ?
+      </pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_STORY_PP">
+      <pattern>SELECT * FROM FVStory where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:uuid = ?</pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_SONG_PP">
+      <pattern>SELECT * FROM FVSong where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:uuid = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_PHRASE_PP">
+      <pattern>SELECT * FROM FVPhrase where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:uuid = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+    <coreQueryPageProvider name="GET_WORD_PP">
+      <pattern>SELECT * FROM FVWord where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:uuid = ?</pattern>
+      <pageSize>50</pageSize>
+    </coreQueryPageProvider>
+  </extension>
+</component>

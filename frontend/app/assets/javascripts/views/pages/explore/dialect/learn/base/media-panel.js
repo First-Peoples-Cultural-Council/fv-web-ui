@@ -53,24 +53,15 @@ export default class MediaPanel extends Component {
             />
           ) : (
             <ImageGallery
-              showNav={false}
-              ref={(i) => (this._imageGallery = i)}
               items={items}
-              renderItem={function(item) {
-                //console.log(item);
+              renderItem={function createPreview(item) {
                 return (
                   <div className="image-gallery-image">
-                    <Preview
-                      key={selectn('id', item)}
-                      expandedValue={items[selectn('key', item)].object}
-                      type={type}
-                      minimal={minimal}
-                    />
+                    <Preview key={item.id} expandedValue={item.object} type={type} minimal={minimal} />
                   </div>
                 )
               }}
-              showThumbnails
-              showBullets={false}
+              showNav={false}
             />
           )}
         </div>

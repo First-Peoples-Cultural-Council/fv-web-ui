@@ -12,7 +12,8 @@ import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = GenerateDialects.ID, category = Constants.GROUP_NAME, label =
-    "Generate Dialects", description = "Operation to create multiple test dialects.")
+    "Generate Dialects", description = "Operation to create multiple test dialects. "
+    + "maxEntries sets the number of words/phrases, split 50/50.")
 public class GenerateDialects {
 
   public static final String ID = Constants.GROUP_NAME + "." + "GenerateDialects";
@@ -27,9 +28,9 @@ public class GenerateDialects {
   @Param(name = "maxDialects", required = false, description = "how many dialects to generate")
   protected int maxDialects = 10;
 
-  @Param(name = "maxEntries", required = false, description = "how many entries to generate"
-      + " for words, phrases, etc.")
-  protected int maxEntries = 100;
+  @Param(name = "maxEntries", required = false, description = "sets the number of words/phrases, "
+      + "split 50/50.")
+  protected int maxEntries = 60;
 
   MockDialectService generateDialectService = Framework
       .getService(MockDialectService.class);
