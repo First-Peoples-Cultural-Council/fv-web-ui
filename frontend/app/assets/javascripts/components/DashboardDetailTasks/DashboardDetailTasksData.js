@@ -214,6 +214,12 @@ function DashboardDetailTasksData({ children }) {
     )
   }
 
+  const refreshData = () => {
+    // Refreshes list in the sidebar
+    fetchTasksUsingQueries()
+    // TODO: May need to do something with any opened detail panel
+  }
+
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
       <TableContextSort.Provider value={querySortOrder}>
@@ -245,11 +251,7 @@ function DashboardDetailTasksData({ children }) {
           idSelectedItem: queryItem,
           idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
           listItems: tasks,
-          onApproval: () => {
-            // TODO: Enable tasks refresh after BE has been updated to clear tasks after approval
-            // NOTE: the following should refresh the list
-            // fetchTasksUsingQueries()
-          },
+          refreshData,
           onClose,
           onOpen,
           onOpenNoId,

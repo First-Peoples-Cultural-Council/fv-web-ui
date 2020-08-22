@@ -10,7 +10,8 @@ import useVisibility from 'DataSource/useVisibility'
 import useDialect from 'DataSource/useDialect'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
-
+import useTasks from 'DataSource/useTasks'
+import useIntl from 'DataSource/useIntl'
 /**
  * @summary RequestChangesData
  * @version 1.0.1
@@ -20,7 +21,7 @@ import selectn from 'selectn'
  * @param {function} props.children
  *
  */
-function RequestChangesData({ onApproval, children, docDialectPath, docId, docState }) {
+function RequestChangesData({ refreshData, children, docDialectPath, docId, docState, taskId }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRef = useRef(null)
@@ -29,6 +30,8 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
   const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
   const { fetchDialect2, computeDialect2 } = useDialect()
+  const { intl } = useIntl()
+  const { rejectTask } = useTasks()
 
   const {
     updateVisibilityToTeam,
@@ -78,7 +81,7 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
         })
 
         if (success) {
-          onApproval()
+          refreshData()
         }
       }
     }
@@ -141,6 +144,22 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
     })
   }
 
+  const onReject = ({ id, comment }) => {
+    rejectTask(
+      id,
+      {
+        comment,
+        status: 'reject',
+      },
+      null,
+      intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
+    )
+
+    setSnackbarMessage('Changes requested')
+    setSnackbarStatus(true)
+
+    refreshData()
+  }
   const handleRequestChanges = (event) => {
     // Validates the form data and updates the visibility
     const validator = yup.object().shape({
@@ -158,9 +177,7 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
       formData,
       valid: () => {
         setErrors(undefined)
-        updateVisibility(docVisibility)
-        setSnackbarMessage('Changes requested')
-        setSnackbarStatus(true)
+        onReject({ id: taskId })
       },
       invalid: (response) => {
         setErrors(response.errors)
@@ -209,13 +226,14 @@ function RequestChangesData({ onApproval, children, docDialectPath, docId, docSt
 
 const { func, string } = PropTypes
 RequestChangesData.propTypes = {
-  onApproval: func,
+  refreshData: func,
   children: func,
   docId: string,
   docState: string,
+  taskId: string,
 }
 RequestChangesData.defaultProps = {
-  onApproval: () => {},
+  refreshData: () => {},
 }
 
 export default RequestChangesData

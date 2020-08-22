@@ -33,7 +33,7 @@ function DashboardDetailTasksContainer() {
         onOpenNoId,
         onOrderChange,
         onRowClick,
-        onApproval,
+        refreshData,
         options,
         pagination = {},
         selectedItemData,
@@ -47,6 +47,7 @@ function DashboardDetailTasksContainer() {
           date: taskDate,
           itemType: taskItemType,
           isNew: taskIsNew,
+          id: taskId,
         } = selectedTaskData
         const {
           acknowledgement,
@@ -149,10 +150,11 @@ function DashboardDetailTasksContainer() {
                   // TODO: NEED TO SET `docState`
                   <RequestChanges.Container
                     docId={itemId}
+                    taskId={taskId}
                     docState={docState}
                     docDialectPath={itemDialectPath}
                     key={itemId}
-                    onApproval={onApproval}
+                    refreshData={refreshData}
                   />
                 }
               />
