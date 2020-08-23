@@ -4,7 +4,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.4.8</version>
+    <version>3.4.9-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>FirstVoicesHealthMonitor</name>
