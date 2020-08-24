@@ -7,6 +7,7 @@ import DOMPurify from 'dompurify'
 // FPCC
 import useBook from 'DataSource/useBook'
 import useDialect from 'DataSource/useDialect'
+import useIntl from 'DataSource/useIntl'
 import useNavigation from 'DataSource/useNavigation'
 import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
@@ -28,6 +29,7 @@ import StringHelpers from 'common/StringHelpers'
 function StoryData({ children }) {
   const { computeBook, computeBookEntries, deleteBook, fetchBook, fetchBookEntries, publishBook } = useBook()
   const { fetchDialect2, computeDialect2 } = useDialect()
+  const { intl } = useIntl()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
@@ -35,7 +37,7 @@ function StoryData({ children }) {
 
   const [bookOpen, setBookOpen] = useState(false)
   const fetcherParams = { currentPageIndex: 1, pageSize: 1 }
-  const DEFAULT_LANGUAGE = 'english'
+  const defaultLanguage = 'english'
 
   // Compute dialect
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
@@ -52,13 +54,19 @@ function StoryData({ children }) {
   const metadata = selectn('response', extractBookEntries) || {}
   const bookRawData = selectn('response', extractBook)
   const bookEntries = selectn('response.entries', extractBookEntries) || []
-  const title = selectn('properties.dc:title', book)
-  const uid = selectn('uid', book)
+  const title = selectn('properties.dc:title', bookRawData)
+  const uid = selectn('uid', bookRawData)
 
   const dominantLanguageTitleTranslation = (
     selectn('properties.fvbook:title_literal_translation', bookRawData) || []
   ).filter(function getTranslation(translation) {
-    return translation.language === DEFAULT_LANGUAGE
+    return translation.language === defaultLanguage
+  })
+
+  const dominantLanguageIntroductionTranslation = (
+    selectn('properties.fvbook:introduction_literal_translation', bookRawData) || []
+  ).filter(function getTranslation(translation) {
+    return translation.language === defaultLanguage
   })
 
   const book = {
@@ -67,6 +75,16 @@ function StoryData({ children }) {
     authors: (selectn('contextParameters.book.authors', bookRawData) || []).map(function extractAuthors(author) {
       return selectn('dc:title', author)
     }),
+    introductionTabData: [
+      {
+        label: intl.trans('introduction', 'Introduction', 'first'),
+        content: [selectn('properties.fvbook:introduction', bookRawData)],
+      },
+      {
+        label: intl.searchAndReplace(defaultLanguage),
+        content: [selectn('[0].translation', dominantLanguageIntroductionTranslation)],
+      },
+    ],
   }
 
   // Images
@@ -177,8 +195,10 @@ function StoryData({ children }) {
     bookEntries,
     bookOpen,
     computeEntities,
-    dialect,
+    defaultLanguage,
     deleteBook,
+    dialect,
+    intl,
     isKidsTheme,
     metadata,
     openBookAction,

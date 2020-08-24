@@ -22,6 +22,8 @@ function StoryPresentation({
   bookEntries,
   bookOpen,
   closeBookAction,
+  defaultLanguage,
+  intl,
   openBookAction,
   pageCount,
   // Media
@@ -38,6 +40,8 @@ function StoryPresentation({
           {!bookOpen ? (
             <StoryCover.Presentation
               book={book}
+              defaultLanguage={defaultLanguage}
+              intl={intl}
               openBookAction={openBookAction}
               pageCount={pageCount}
               //Media

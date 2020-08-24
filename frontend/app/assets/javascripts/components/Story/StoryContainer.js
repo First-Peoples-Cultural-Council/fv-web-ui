@@ -28,8 +28,10 @@ function StoryContainer() {
         bookOpen,
         closeBookAction,
         computeEntities,
-        dialect,
+        defaultLanguage,
         deleteBook,
+        dialect,
+        intl,
         isKidsTheme,
         openBookAction,
         pageCount,
@@ -46,6 +48,8 @@ function StoryContainer() {
             bookEntries={bookEntries}
             bookOpen={bookOpen}
             closeBookAction={closeBookAction}
+            defaultLanguage={defaultLanguage}
+            intl={intl}
             openBookAction={openBookAction}
             pageCount={pageCount}
             //Media
@@ -70,6 +74,8 @@ function StoryContainer() {
               bookEntries={bookEntries}
               bookOpen={bookOpen}
               closeBookAction={closeBookAction}
+              defaultLanguage={defaultLanguage}
+              intl={intl}
               openBookAction={openBookAction}
               pageCount={pageCount}
               //Media

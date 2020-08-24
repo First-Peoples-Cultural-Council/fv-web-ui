@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Typography from '@material-ui/core/Typography'
@@ -6,6 +6,10 @@ import ActionLaunch from '@material-ui/icons/Launch'
 
 import { StoryCoverStyles } from './StoryCoverStyles'
 import FVButton from 'views/components/FVButton'
+import FVTab from 'views/components/FVTab'
+import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import Preview from 'views/components/Editor/Preview'
+import TabsWithPanels from 'components/TabsWithPanels'
 /**
  * @summary StoryCoverPresentation
  * @version 1.0.1
@@ -15,13 +19,52 @@ import FVButton from 'views/components/FVButton'
  *
  * @returns {node} jsx markup
  */
-function StoryCoverPresentation({ book, openBookAction, pageCount }) {
+function StoryCoverPresentation({
+  book,
+  openBookAction,
+  pageCount,
+  // Media
+  audio,
+  images,
+  videos,
+}) {
   const classes = StoryCoverStyles()
+
+  // Audio
+  const audioElements = audio.map((audioDoc) => {
+    return <Preview minimal key={audioDoc.id} expandedValue={audioDoc.object} type="FVAudio" />
+  })
+
+  const MediaThumbnail = () => {
+    const [tabValue, setTabValue] = useState(0)
+    const imageMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={images} />
+    const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={videos} />
+
+    if (images.length > 0 && videos.length > 0) {
+      return (
+        <div>
+          <FVTab
+            tabItems={[{ label: 'Photo(s)' }, { label: 'Video(s)' }]}
+            tabsValue={tabValue}
+            tabsOnChange={(e, value) => setTabValue(value)}
+          />
+          {tabValue === 0 && imageMediaPanel}
+          {tabValue === 1 && videoMediaPanel}
+        </div>
+      )
+    } else if (images.length > 0) {
+      return imageMediaPanel
+    } else if (this.props.videos.length > 0) {
+      return videoMediaPanel
+    }
+    return null
+  }
+
   return (
     <div className="row">
       <div className="col-xs-12">
         <div className="col-xs-12 col-md-3">
-          {/* <MediaThumbnail videos={this.props.videos} photos={this.props.photos} /> */}
+          <MediaThumbnail />
         </div>
 
         <div className="col-xs-12 col-md-9 fontBCSans">
@@ -43,14 +86,10 @@ function StoryCoverPresentation({ book, openBookAction, pageCount }) {
             </div>
           </header>
 
-          {/* <div>
-            <Introduction
-              item={book}
-              defaultLanguage={this.props.defaultLanguage}
-              style={{ height: '16vh', padding: '5px' }}
-            />
-            {this.props.audios}
-          </div> */}
+          <div className={classes.introductionTranslations}>
+            <TabsWithPanels.Presentation data={book.introductionTabData} />
+            {audioElements}
+          </div>
         </div>
       </div>
 
@@ -70,9 +109,17 @@ function StoryCoverPresentation({ book, openBookAction, pageCount }) {
   )
 }
 // PROPTYPES
-const { string } = PropTypes
+const { array, func, number, object, string } = PropTypes
 StoryCoverPresentation.propTypes = {
-  content: string,
+  book: object.isRequired,
+  defaultLanguage: string,
+  intl: object,
+  openBookAction: func,
+  pageCount: number,
+  // Media
+  audio: array.isRequired,
+  images: array.isRequired,
+  videos: array.isRequired,
 }
 
 export default StoryCoverPresentation
