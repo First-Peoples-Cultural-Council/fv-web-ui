@@ -32,9 +32,9 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
   public void assignAncestors(CoreSession session, DocumentModel currentDoc) {
 
     // Get the parent document of each type for the current document using the helper method
-    DocumentModel dialect = getParentDoc(session, currentDoc, FV_DIALECT);
-    DocumentModel language = getParentDoc(session, currentDoc, FV_LANGUAGE);
-    DocumentModel languageFamily = getParentDoc(session, currentDoc, FV_LANGUAGE_FAMILY);
+    DocumentModel dialect = getDialect(session, currentDoc);
+    DocumentModel language = getLanguage(session, currentDoc);
+    DocumentModel languageFamily = getLanguageFamily(session, currentDoc);
 
     // Set the property fva:family of the new document to be the
     // UUID of the parent FVLanguageFamily document
@@ -58,8 +58,27 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
 
   }
 
-  // Method to get the parent doc of type "currentType" for the current document
-  private DocumentModel getParentDoc(CoreSession session, DocumentModel currentDoc,
+  public DocumentModel getDialect(CoreSession session, DocumentModel currentDoc) {
+    return getParentDoc(session, currentDoc, FV_DIALECT);
+  }
+
+  public DocumentModel getLanguage(CoreSession session, DocumentModel currentDoc) {
+    return getParentDoc(session, currentDoc, FV_LANGUAGE);
+  }
+
+
+  public DocumentModel getLanguageFamily(CoreSession session, DocumentModel currentDoc) {
+    return getParentDoc(session, currentDoc, FV_LANGUAGE_FAMILY);
+  }
+
+  /**
+   * Get parent doc of the specified type
+   * @param session
+   * @param currentDoc
+   * @param currentType
+   * @return
+   */
+  public DocumentModel getParentDoc(CoreSession session, DocumentModel currentDoc,
       String currentType) {
     DocumentModel parent = session.getParentDocument(currentDoc.getRef());
     while (parent != null && !currentType.equals(parent.getType())) {
