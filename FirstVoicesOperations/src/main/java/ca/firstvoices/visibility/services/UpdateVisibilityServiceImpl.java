@@ -73,7 +73,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
 
             DocumentModel dialect = ancestorsService.getDialect(session, doc);
             if (Objects.nonNull(dialect)) {
-              dialectId = String.valueOf(doc.getPropertyValue("fva:dialect"));
+              dialectId = dialect.getId();
             }
           }
 
