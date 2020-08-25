@@ -108,9 +108,10 @@ function _getMediaPanels(imageData, videoData) {
 }
 
 function _getIntroduction(introduction, introductionTranslation) {
+  const classes = StoryCoverStyles()
   const [tabValue, setTabValue] = useState(0)
   const introductionDiv = (
-    <div className="IntroductionContent">
+    <div className={classes.introductionContent}>
       <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(introduction.content) }} />
     </div>
   )
@@ -121,9 +122,9 @@ function _getIntroduction(introduction, introductionTranslation) {
     }
 
     return (
-      <div className="IntroductionTranslations">
+      <div className={classes.introductionTranslation}>
         <div>
-          <h1 className="IntroductionTitle">
+          <h1 className={classes.introductionTitle}>
             <FVLabel transKey="introduction" defaultStr="Introduction" transform="first" />
           </h1>
         </div>
@@ -147,7 +148,7 @@ function _getIntroduction(introduction, introductionTranslation) {
       )}
       {tabValue === 1 && (
         <Typography variant="h5" component="div" style={{ padding: 8 * 3 }}>
-          <div className="IntroductionContent">
+          <div className={classes.introductionContent}>
             <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(introductionTranslation.content) }} />
           </div>
         </Typography>

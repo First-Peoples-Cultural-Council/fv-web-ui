@@ -11,7 +11,7 @@ export const StoryCoverStyles = makeStyles({
     fontSize: '1.2em',
     marginTop: 0,
   },
-  introductionTranslations: {
+  introductionTranslation: {
     padding: '10px',
   },
 
