@@ -75,16 +75,14 @@ function StoryData({ children }) {
     authors: (selectn('contextParameters.book.authors', bookRawData) || []).map(function extractAuthors(author) {
       return selectn('dc:title', author)
     }),
-    introductionTabData: [
-      {
-        label: intl.trans('introduction', 'Introduction', 'first'),
-        content: [selectn('properties.fvbook:introduction', bookRawData)],
-      },
-      {
-        label: intl.searchAndReplace(defaultLanguage),
-        content: [selectn('[0].translation', dominantLanguageIntroductionTranslation)],
-      },
-    ],
+    introduction: {
+      label: intl.trans('introduction', 'Introduction', 'first'),
+      content: selectn('properties.fvbook:introduction', bookRawData) || '',
+    },
+    introductionTranslation: {
+      label: intl.searchAndReplace(defaultLanguage),
+      content: selectn('[0].translation', dominantLanguageIntroductionTranslation) || '',
+    },
   }
 
   // Images
