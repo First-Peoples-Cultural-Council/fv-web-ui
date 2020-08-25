@@ -8,6 +8,7 @@ import DOMPurify from 'dompurify'
 import useBook from 'DataSource/useBook'
 import useDialect from 'DataSource/useDialect'
 import useIntl from 'DataSource/useIntl'
+import useLogin from 'DataSource/useLogin'
 import useNavigation from 'DataSource/useNavigation'
 import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
@@ -30,10 +31,11 @@ function StoryData({ children }) {
   const { computeBook, computeBookEntries, deleteBook, fetchBook, fetchBookEntries, publishBook } = useBook()
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
+  const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
-  const { pushWindowPath } = useWindowPath()
+  const { pushWindowPath, splitWindowPath } = useWindowPath()
 
   const [bookOpen, setBookOpen] = useState(false)
   const fetcherParams = { currentPageIndex: 1, pageSize: 1 }
@@ -47,12 +49,12 @@ function StoryData({ children }) {
     ? routeParams.bookName
     : routeParams.dialect_path + '/Stories & Songs/' + StringHelpers.clean(routeParams.bookName)
 
-  const extractBook = ProviderHelpers.getEntry(computeBook, bookPath)
+  const _computeBook = ProviderHelpers.getEntry(computeBook, bookPath)
   const extractBookEntries = ProviderHelpers.getEntry(computeBookEntries, bookPath)
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const pageCount = selectn('response.resultsCount', extractBookEntries)
   const metadata = selectn('response', extractBookEntries) || {}
-  const bookRawData = selectn('response', extractBook)
+  const bookRawData = selectn('response', _computeBook)
   const bookEntries = selectn('response.entries', extractBookEntries) || []
   const title = selectn('properties.dc:title', bookRawData)
   const uid = selectn('uid', bookRawData)
@@ -188,11 +190,13 @@ function StoryData({ children }) {
   const isKidsTheme = routeParams.siteTheme === 'kids'
 
   return children({
-    bookPath: bookPath,
+    bookPath,
     book,
     bookEntries,
     bookOpen,
+    computeBook: _computeBook,
     computeEntities,
+    computeLogin,
     defaultLanguage,
     deleteBook,
     dialect,
@@ -204,6 +208,8 @@ function StoryData({ children }) {
     pageCount,
     publishBook,
     pushWindowPath,
+    routeParams,
+    splitWindowPath,
     //Media
     audio,
     images,

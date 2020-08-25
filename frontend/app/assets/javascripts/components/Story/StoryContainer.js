@@ -27,7 +27,9 @@ function StoryContainer() {
         bookEntries,
         bookOpen,
         closeBookAction,
+        computeBook,
         computeEntities,
+        computeLogin,
         defaultLanguage,
         deleteBook,
         dialect,
@@ -37,6 +39,8 @@ function StoryContainer() {
         pageCount,
         publishBook,
         pushWindowPath,
+        routeParams,
+        splitWindowPath,
         //Media
         audio,
         images,
@@ -65,9 +69,13 @@ function StoryContainer() {
             publishAction={publishBook}
             deleteAction={deleteBook}
             onNavigateRequest={pushWindowPath}
-            computeItem={book}
+            computeItem={computeBook}
             permissionEntry={dialect}
             computeEntities={computeEntities}
+            computeLogin={computeLogin}
+            routeParams={routeParams}
+            splitWindowPath={splitWindowPath}
+            tabsData={{ photos: images, videos, audio }}
           >
             <StoryPresentation
               book={book}

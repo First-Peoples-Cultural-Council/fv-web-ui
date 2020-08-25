@@ -36,8 +36,8 @@ function StoryPresentation({
   return (
     <div className="row" style={{ marginBottom: '20px' }}>
       <div className="col-xs-12">
-        <Paper>
-          {!bookOpen ? (
+        {!bookOpen ? (
+          <Paper style={{ padding: '15px', margin: '15px 0' }}>
             <StoryCover.Presentation
               book={book}
               defaultLanguage={defaultLanguage}
@@ -49,7 +49,9 @@ function StoryPresentation({
               images={images}
               videos={videos}
             />
-          ) : (
+          </Paper>
+        ) : (
+          <Paper style={{ padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }}>
             <StoryPage.Presentation
               book={book}
               bookEntries={bookEntries}
@@ -59,8 +61,8 @@ function StoryPresentation({
               images={images}
               videos={videos}
             />
-          )}
-        </Paper>
+          </Paper>
+        )}
       </div>
     </div>
   )
