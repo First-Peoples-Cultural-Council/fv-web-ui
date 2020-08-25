@@ -36,7 +36,7 @@ public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
     Assert.assertEquals(26 * expectedDialects, session.query("SELECT * from FVCharacter").size());
     Assert.assertEquals((26 * expectedDialects) + (10 * expectedDialects),
         session.query("SELECT * from FVWord, FVPhrase").size());
-    Assert.assertEquals(9 * expectedDialects, session.query("SELECT * from FVCategory").size());
+    Assert.assertEquals(12 * expectedDialects, session.query("SELECT * from FVCategory").size());
   }
 
   @Test
@@ -60,7 +60,7 @@ public class GenerateDialectsTest extends AbstractFirstVoicesCoreTestsTest {
     Assert.assertEquals(30 * expectedDialects, session.query("SELECT * from FVCharacter").size());
     Assert.assertEquals(20 * expectedDialects,
         session.query("SELECT * from FVWord, FVPhrase").size());
-    Assert.assertEquals(9 * expectedDialects, session.query("SELECT * from FVCategory").size());
+    Assert.assertEquals(12 * expectedDialects, session.query("SELECT * from FVCategory").size());
   }
 
   @Test(expected = DocumentSecurityException.class)

@@ -114,6 +114,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     currentAlphabet = alphabetList.toArray(alphabetList.toArray(new String[0]));
   }
 
+  private static void setDemoAlphabet(String[] alphabet) {
+    currentAlphabet = alphabet;
+  }
+
   private static boolean setDoesNotContain(Set<String> set, String toAdd) {
     return !set.contains(toAdd) && !set.contains(toAdd.toUpperCase());
   }
@@ -156,11 +160,12 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
-    currentAlphabet = alphabetChars;
+    setDemoAlphabet(alphabetChars);
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
     DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
+    DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
     generateFVWords(session, dialect.getPathAsString(), words, categories);
-    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words);
+    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words, phraseBooks);
 
     return dialect;
 
@@ -187,7 +192,8 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
     DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
-    generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords);
+    DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
+    generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords, phraseBooks);
     generateFVWords(session, dialect.getPathAsString(), currentWords, categories);
 
     return dialect;
@@ -260,6 +266,8 @@ public class MockDialectServiceImpl implements MockDialectService {
         session.createDocumentModel(dialect.getPathAsString(), "Dictionary", FV_DICTIONARY));
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Categories", FV_CATEGORIES));
+    createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Phrase Books", FV_CATEGORIES));
 
     return dialect;
   }
@@ -312,7 +320,7 @@ public class MockDialectServiceImpl implements MockDialectService {
   }
 
   private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
-      String[] wordsToUse) {
+      String[] wordsToUse, DocumentModelList phraseBooks) {
     //Generate phrase documents
     DocumentModelList fvPhrases = new DocumentModelListImpl();
 
@@ -321,6 +329,10 @@ public class MockDialectServiceImpl implements MockDialectService {
           wordsToUse);
       DocumentModel phraseDoc = session
           .createDocumentModel(path + "/Dictionary", newPhrase, FV_PHRASE);
+      String randomPhraseBook = phraseBooks
+          .get(ThreadLocalRandom.current().nextInt(0, phraseBooks.size())).getId();
+      String[] phraseBookArr = {randomPhraseBook};
+      phraseDoc.setPropertyValue("fv-phrase:phrase_books", phraseBookArr);
 
       fvPhrases.add(createDocument(session, phraseDoc));
     }
@@ -353,6 +365,20 @@ public class MockDialectServiceImpl implements MockDialectService {
     }
 
     return fvCategories;
+  }
+
+  private DocumentModelList generateFVPhraseBooks(CoreSession session, String path) {
+    //Generate phrase book documents
+    DocumentModelList fvPhraseBooks = new DocumentModelListImpl();
+
+    for (int i = 0; i < 3; i++) {
+      String phraseBookName = "Phrase Book " + currentAlphabet[i].toUpperCase();
+      DocumentModel phraseBookDoc = session
+          .createDocumentModel(path + "/Phrase Books", phraseBookName, FV_CATEGORY);
+      fvPhraseBooks.add(createDocument(session, phraseBookDoc));
+    }
+
+    return fvPhraseBooks;
   }
 
 }
