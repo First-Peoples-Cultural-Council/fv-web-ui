@@ -158,8 +158,8 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     currentAlphabet = alphabetChars;
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
-    generateFVCategories(session, dialect.getPathAsString());
-    generateFVWords(session, dialect.getPathAsString(), words);
+    DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
+    generateFVWords(session, dialect.getPathAsString(), words, categories);
     generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words);
 
     return dialect;
@@ -186,10 +186,9 @@ public class MockDialectServiceImpl implements MockDialectService {
     DocumentModel dialect = generateEmptyDialect(session, name, desc);
 
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
-    generateFVCategories(session, dialect.getPathAsString());
-    generateFVPhrases(session, dialect.getPathAsString(),
-        phraseEntries, currentWords);
-    generateFVWords(session, dialect.getPathAsString(), currentWords);
+    DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
+    generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords);
+    generateFVWords(session, dialect.getPathAsString(), currentWords, categories);
 
     return dialect;
 
@@ -290,7 +289,7 @@ public class MockDialectServiceImpl implements MockDialectService {
   }
 
   private DocumentModelList generateFVWords(CoreSession session, String path,
-      String[] words) {
+      String[] words, DocumentModelList categories) {
     //Generate word documents and set appropriate properties
     String[] samplePartsOfSpeech = {"noun", "pronoun", "adjective", "verb", "adverb"};
     DocumentModelList fvWords = new DocumentModelListImpl();
@@ -301,9 +300,12 @@ public class MockDialectServiceImpl implements MockDialectService {
       wordDoc.setPropertyValue("fv-word:part_of_speech",
           samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
       wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
+      String randomCategory = categories
+          .get(ThreadLocalRandom.current().nextInt(0, categories.size())).getId();
+      String[] categoryArr = {randomCategory};
+      wordDoc.setPropertyValue("fv-word:categories", categoryArr);
 
-      createDocument(session, wordDoc);
-      fvWords.add(wordDoc);
+      fvWords.add(createDocument(session, wordDoc));
     }
 
     return fvWords;
@@ -319,8 +321,8 @@ public class MockDialectServiceImpl implements MockDialectService {
           wordsToUse);
       DocumentModel phraseDoc = session
           .createDocumentModel(path + "/Dictionary", newPhrase, FV_PHRASE);
-      createDocument(session, phraseDoc);
-      fvPhrases.add(phraseDoc);
+
+      fvPhrases.add(createDocument(session, phraseDoc));
     }
 
     return fvPhrases;
@@ -336,8 +338,7 @@ public class MockDialectServiceImpl implements MockDialectService {
       String parentCategoryName = "Parent Category " + currentAlphabet[i].toUpperCase();
       DocumentModel categoryDoc = session
           .createDocumentModel(path + "/Categories", parentCategoryName, FV_CATEGORY);
-      createDocument(session, categoryDoc);
-      fvCategories.add(categoryDoc);
+      fvCategories.add(createDocument(session, categoryDoc));
 
       for (int j = 0; j < 2; j++) {
         //Add child categories
@@ -347,8 +348,7 @@ public class MockDialectServiceImpl implements MockDialectService {
         DocumentModel childCategoryDoc = session
             .createDocumentModel(path + "/Categories/" + parentCategoryName, childCategoryName,
                 FV_CATEGORY);
-        createDocument(session, childCategoryDoc);
-        fvCategories.add(childCategoryDoc);
+        fvCategories.add(createDocument(session, childCategoryDoc));
       }
     }
 
