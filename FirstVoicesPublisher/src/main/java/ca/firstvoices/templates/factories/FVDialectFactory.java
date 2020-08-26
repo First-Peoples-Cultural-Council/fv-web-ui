@@ -56,6 +56,8 @@ public class FVDialectFactory extends SimpleTemplateBasedFactory {
         return;
       }
       //if dialect is mock data, remove items
+      //Documents removed from template ->alphabet, dictionary, etc. are removed since mock data
+      //already creates these documents and the ones made by the factory would just be duplicates
       if (eventDoc.getPathAsString().contains("/FV/Workspaces/Data/Test/Test/")) {
         this.mockTemplate = new ArrayList<>(template);
         mockTemplate.removeIf(t -> t.getTypeName().equals("FVAlphabet"));
