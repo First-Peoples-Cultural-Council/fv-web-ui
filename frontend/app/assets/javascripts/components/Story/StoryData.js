@@ -50,36 +50,36 @@ function StoryData({ children }) {
     : routeParams.dialect_path + '/Stories & Songs/' + StringHelpers.clean(routeParams.bookName)
 
   const _computeBook = ProviderHelpers.getEntry(computeBook, bookPath)
-  const extractBookEntries = ProviderHelpers.getEntry(computeBookEntries, bookPath)
+  const _computeBookEntries = ProviderHelpers.getEntry(computeBookEntries, bookPath)
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const pageCount = selectn('response.resultsCount', extractBookEntries)
-  const metadata = selectn('response', extractBookEntries) || {}
-  const bookRawData = selectn('response', _computeBook)
-  const bookEntries = selectn('response.entries', extractBookEntries) || []
-  const title = selectn('properties.dc:title', bookRawData)
-  const uid = selectn('uid', bookRawData)
+  const pageCount = selectn('response.resultsCount', _computeBookEntries)
+  const bookEntriesMetadata = selectn('response', _computeBookEntries) || {}
+  const bookMetadata = selectn('response', _computeBook)
+  const bookEntries = selectn('response.entries', _computeBookEntries) || []
+  const title = selectn('properties.dc:title', bookMetadata)
+  const uid = selectn('uid', bookMetadata)
 
   const dominantLanguageTitleTranslation = (
-    selectn('properties.fvbook:title_literal_translation', bookRawData) || []
+    selectn('properties.fvbook:title_literal_translation', bookMetadata) || []
   ).filter(function getTranslation(translation) {
     return translation.language === defaultLanguage
   })
 
   const dominantLanguageIntroductionTranslation = (
-    selectn('properties.fvbook:introduction_literal_translation', bookRawData) || []
+    selectn('properties.fvbook:introduction_literal_translation', bookMetadata) || []
   ).filter(function getTranslation(translation) {
     return translation.language === defaultLanguage
   })
 
   const book = {
-    title: DOMPurify.sanitize(selectn('title', bookRawData)),
+    title: DOMPurify.sanitize(selectn('title', bookMetadata)),
     titleTranslation: DOMPurify.sanitize(selectn('[0].translation', dominantLanguageTitleTranslation)),
-    authors: (selectn('contextParameters.book.authors', bookRawData) || []).map(function extractAuthors(author) {
+    authors: (selectn('contextParameters.book.authors', bookMetadata) || []).map(function extractAuthors(author) {
       return selectn('dc:title', author)
     }),
     introduction: {
       label: intl.trans('introduction', 'Introduction', 'first'),
-      content: selectn('properties.fvbook:introduction', bookRawData) || '',
+      content: selectn('properties.fvbook:introduction', bookMetadata) || '',
     },
     introductionTranslation: {
       label: intl.searchAndReplace(defaultLanguage),
@@ -88,7 +88,7 @@ function StoryData({ children }) {
   }
 
   // Images
-  const imagesData = selectn('contextParameters.book.related_pictures', bookRawData) || []
+  const imagesData = selectn('contextParameters.book.related_pictures', bookMetadata) || []
   const images = []
   imagesData.forEach((image, key) => {
     const img = {
@@ -103,7 +103,7 @@ function StoryData({ children }) {
   })
 
   // Videos
-  const videosData = selectn('contextParameters.book.related_videos', bookRawData) || []
+  const videosData = selectn('contextParameters.book.related_videos', bookMetadata) || []
   const videos = []
   videosData.forEach((video, key) => {
     const vid = {
@@ -118,7 +118,7 @@ function StoryData({ children }) {
   })
 
   // Audio
-  const audioData = selectn('contextParameters.book.related_audio', bookRawData) || []
+  const audioData = selectn('contextParameters.book.related_audio', bookMetadata) || []
   const audio = []
   audioData.forEach((audioDoc, key) => {
     const aud = {
@@ -200,9 +200,10 @@ function StoryData({ children }) {
     defaultLanguage,
     deleteBook,
     dialect,
+    fetchListViewData,
     intl,
     isKidsTheme,
-    metadata,
+    metadata: bookEntriesMetadata,
     openBookAction,
     closeBookAction,
     pageCount,

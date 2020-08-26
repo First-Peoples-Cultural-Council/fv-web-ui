@@ -35,6 +35,7 @@ function StoryContainer() {
         dialect,
         intl,
         isKidsTheme,
+        metadata,
         openBookAction,
         pageCount,
         publishBook,
@@ -54,6 +55,7 @@ function StoryContainer() {
             closeBookAction={closeBookAction}
             defaultLanguage={defaultLanguage}
             intl={intl}
+            metadata={metadata}
             openBookAction={openBookAction}
             pageCount={pageCount}
             //Media
@@ -84,6 +86,7 @@ function StoryContainer() {
               closeBookAction={closeBookAction}
               defaultLanguage={defaultLanguage}
               intl={intl}
+              metadata={metadata}
               openBookAction={openBookAction}
               pageCount={pageCount}
               //Media

@@ -6,10 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'
 
 import { StoryCoverStyles } from './StoryCoverStyles'
+import MediaPanels from 'components/MediaPanels'
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel/index'
 import FVTab from 'views/components/FVTab'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import Preview from 'views/components/Editor/Preview'
 /**
  * @summary StoryCoverPresentation
@@ -39,7 +39,7 @@ function StoryCoverPresentation({
   return (
     <div className="row">
       <div className="col-xs-12">
-        {_getMediaPanels(images, videos)}
+        <MediaPanels.Presentation images={images} videos={videos} />
         <div className="col-xs-12 col-md-9 fontBCSans">
           <header className={classes.header}>
             <Typography variant="h3" component="h2">
@@ -80,31 +80,6 @@ function StoryCoverPresentation({
       </div>
     </div>
   )
-}
-
-function _getMediaPanels(imageData, videoData) {
-  const [tabValue, setTabValue] = useState(0)
-  const imageMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={imageData} />
-  const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={videoData} />
-
-  if (imageData.length > 0 && videoData.length > 0) {
-    return (
-      <div className="col-xs-12 col-md-3">
-        <FVTab
-          tabItems={[{ label: 'Photo(s)' }, { label: 'Video(s)' }]}
-          tabsValue={tabValue}
-          tabsOnChange={(e, value) => setTabValue(value)}
-        />
-        {tabValue === 0 && imageMediaPanel}
-        {tabValue === 1 && videoMediaPanel}
-      </div>
-    )
-  } else if (imageData.length > 0) {
-    return imageMediaPanel
-  } else if (videoData.length > 0) {
-    return videoMediaPanel
-  }
-  return null
 }
 
 function _getIntroduction(introduction, introductionTranslation) {
