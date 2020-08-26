@@ -12,12 +12,15 @@ import NavigationHelpers from 'common/NavigationHelpers'
  *
  * @param {object} props
  * @param {function} props.children
+ * @param {array} bookEntries the response from fetchBookEntries/computeBookEntries
+ * @param {string} defaultLanguage the default language for translation/definition of the dialect
  *
  */
 function StoryPagesData({ children, bookEntries, defaultLanguage }) {
   const bookPages = []
+  bookEntries.forEach(createPage)
 
-  for (const entry in bookEntries) {
+  function createPage(entry, index) {
     const dominantLanguageText = (selectn('properties.fvbookentry:dominant_language_text', entry) || []).filter(
       function getTranslation(translation) {
         return translation.language === defaultLanguage
@@ -53,6 +56,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
     const videos = _getMediaArray(videosData)
 
     bookPages.push({
+      key: index,
       uid: selectn('uid', entry) || '',
       title: DOMPurify.sanitize(selectn('properties.dc:title', entry)) || '',
       dominantLanguageText: selectn('[0].translation', dominantLanguageText) || '',
@@ -63,7 +67,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
     })
   }
 
-  const _getMediaArray = (data) => {
+  function _getMediaArray(data) {
     const mediaArray = []
     data.forEach((doc, key) => {
       const extractedData = {
@@ -84,9 +88,9 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
   })
 }
 // PROPTYPES
-const { object, string } = PropTypes
+const { array, string } = PropTypes
 StoryPagesData.propTypes = {
-  bookEntries: object,
+  bookEntries: array,
   defaultLanguage: string,
 }
 

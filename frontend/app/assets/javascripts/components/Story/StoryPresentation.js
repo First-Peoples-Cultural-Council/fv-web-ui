@@ -12,7 +12,7 @@ import FVLabel from 'views/components/FVLabel'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 1 }
-const StoryPagesWithPagination = withPagination(StoryPages, DefaultFetcherParams.pageSize, 100)
+const StoryPagesWithPagination = withPagination(StoryPages.Container, DefaultFetcherParams.pageSize, 100)
 
 /**
  * @summary StoryPresentation
@@ -66,10 +66,8 @@ function StoryPresentation({
               cellHeight={150}
               disablePageSize
               defaultLanguage={defaultLanguage}
-              fetcher={fetchListViewData}
-              fetcherParams={DefaultFetcherParams}
-              metadata={metadata || {}}
               items={bookEntries || []}
+              // Props for WithPagination
               appendControls={[
                 bookOpen ? (
                   <FVButton variant="contained" key="close" onClick={closeBookAction}>
@@ -83,6 +81,9 @@ function StoryPresentation({
                   ''
                 ),
               ]}
+              fetcher={fetchListViewData}
+              fetcherParams={DefaultFetcherParams}
+              metadata={metadata || {}}
             />
           </Paper>
         )}
@@ -91,12 +92,22 @@ function StoryPresentation({
   )
 }
 // PROPTYPES
-const { array, bool, func, object } = PropTypes
+const { array, bool, func, number, object, string } = PropTypes
 StoryPresentation.propTypes = {
   book: object,
   bookEntries: array,
   bookOpen: bool,
+  closeBookAction: func,
+  defaultLanguage: string,
+  fetchListViewData: func,
+  intl: object,
+  metadata: object,
   openBookAction: func,
+  pageCount: number,
+  // Media
+  audio: array,
+  images: array,
+  videos: array,
 }
 
 export default StoryPresentation

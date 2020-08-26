@@ -1,7 +1,7 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-import StoryPagesPresentation from 'components/StoryPage/StoryPagePresentation'
-import StoryPagesData from 'components/StoryPage/StoryPagesData'
+import PropTypes from 'prop-types'
+import StoryPagesPresentation from 'components/StoryPages/StoryPagesPresentation'
+import StoryPagesData from 'components/StoryPages/StoryPagesData'
 
 /**
  * @summary StoryPagesContainer
@@ -9,12 +9,14 @@ import StoryPagesData from 'components/StoryPage/StoryPagesData'
  * @component
  *
  * @param {object} props
+ * @param {array} items the response from fetchBookEntries/computeBookEntries
+ * @param {string} defaultLanguage the default language for translation/definition of the dialect
  *
  * @returns {node} jsx markup
  */
-function StoryPagesContainer({ bookEntries, defaultLanguage }) {
+function StoryPagesContainer({ items, defaultLanguage }) {
   return (
-    <StoryPagesData bookEntries={bookEntries} defaultLanguage={defaultLanguage}>
+    <StoryPagesData bookEntries={items} defaultLanguage={defaultLanguage}>
       {({ bookPages }) => {
         return <StoryPagesPresentation bookPages={bookPages} />
       }}
@@ -22,9 +24,10 @@ function StoryPagesContainer({ bookEntries, defaultLanguage }) {
   )
 }
 // PROPTYPES
-// const { object } = PropTypes
+const { array, string } = PropTypes
 StoryPagesContainer.propTypes = {
-  //   something: object,
+  items: array,
+  defaultLanguage: string,
 }
 
 export default StoryPagesContainer

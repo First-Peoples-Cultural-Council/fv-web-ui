@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import selectn from 'selectn'
 
-// import { StoryPagesStyles } from './StoryPagesStyles'
-// import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel/index'
 import MediaPanels from 'components/MediaPanels'
 import Preview from 'views/components/Editor/Preview'
@@ -14,20 +11,19 @@ import Preview from 'views/components/Editor/Preview'
  * @component
  *
  * @param {object} props
+ * @param {array} bookPages an array of the bookEntries reformatted by StoryPagesData for consumption by this layer
  *
  * @returns {node} jsx markup
  */
 function StoryPagesPresentation({ bookPages }) {
-  //   const classes = StoryPagesStyles()
-
-  const StoryPage = (page) => {
+  const StoryPage = ({ page }) => {
     // Audio
     const audio = page.audio.map((audioDoc) => {
-      return <Preview minimal key={selectn('uid', audioDoc)} expandedValue={audioDoc} type="FVAudio" />
+      return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc} type="FVAudio" />
     })
 
     return (
-      <div>
+      <div key={page.key}>
         <div className="row">
           <div className="col-xs-12">
             <MediaPanels.Presentation videos={page.videos} images={page.images} />
@@ -49,18 +45,6 @@ function StoryPagesPresentation({ bookPages }) {
               </span>
             </div>
           </div>
-        </div>
-        <div className="row">
-          {/* <div className={classNames('col-xs-12', 'text-right')}>
-            {this.props.editAction ? (
-              <FVButton variant="contained" onClick={editAction.bind(this, page)}>
-                <FVLabel transKey="edit" defaultStr="Edit" transform="first" />
-              </FVButton>
-            ) : (
-              ''
-            )}
-            <div className="pull-right">{appendEntryControls}</div>
-          </div> */}
         </div>
       </div>
     )
