@@ -135,7 +135,7 @@ export class Login extends Component {
 
     return (
       <div className="Login Login--signIn">
-        <a className={`nav_link ${className}`} href={NavigationHelpers.getBaseURL() + 'logout'}>
+        <a className={`nav_link ${className}`} href={NavigationHelpers.getBaseURL() + 'logout?requestedUrl=login.jsp'}>
           SIGN IN
         </a>
       </div>

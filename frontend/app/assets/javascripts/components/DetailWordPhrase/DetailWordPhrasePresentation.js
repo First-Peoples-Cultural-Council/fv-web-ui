@@ -4,11 +4,10 @@ import selectn from 'selectn'
 
 import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
-import useWindowPath from 'DataSource/useWindowPath'
-import useRoute from 'DataSource/useRoute'
-import useIntl from 'DataSource/useIntl'
+
+import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
 /**
  * @summary DetailWordPhrasePresentation
@@ -26,20 +25,21 @@ function DetailWordPhrasePresentation({
   culturalNotes,
   definitions,
   dialectClassName,
+  docType,
   literalTranslations,
   metadata,
   partOfSpeech,
   photos,
   phrases,
   pronunciation,
+  properties,
+  pushWindowPath,
   relatedAssets,
   relatedToAssets,
+  siteTheme,
   title,
   videos,
 }) {
-  const { pushWindowPath } = useWindowPath()
-  const { routeParams } = useRoute()
-  const { intl } = useIntl()
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
     const _arrOfObj = [...arrOfObj]
@@ -81,13 +81,15 @@ function DetailWordPhrasePresentation({
   }
 
   const _getCategories = (cats) => {
+    const transKey = docType === 'FVPhrase' ? 'phrase books' : 'categories'
+    const defaultStr = docType === 'FVPhrase' ? 'Phrase books' : 'Categories'
     const _categories = cats.map((category, key) => {
       return <li key={key}>{selectn('dc:title', category)}</li>
     })
     return _categories.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCategory">
         <h4 className="DialectViewWordPhraseContentItemTitle">
-          <FVLabel transKey="categories" defaultStr="Categories" transform="first" />
+          <FVLabel transKey={transKey} defaultStr={defaultStr} transform="first" />
         </h4>
         <ul>{_categories}</ul>
       </div>
@@ -96,7 +98,7 @@ function DetailWordPhrasePresentation({
 
   const _getCulturalNotes = (cultNotes) => {
     const _culturalNotes = cultNotes.map((culturalNote, key) => {
-      return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
+      return <div key={key}>{culturalNote}</div>
     })
     return _culturalNotes.length > 0 ? (
       <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCulturalNote">
@@ -171,6 +173,13 @@ function DetailWordPhrasePresentation({
     ) : null
   }
 
+  const _getMetadata = (data) => {
+    if (data) {
+      return <MetadataPanel properties={properties} computeEntity={data} />
+    }
+    return null
+  }
+
   const _getPartOfSpeech = (_partOfSpeech) => {
     return _partOfSpeech ? (
       <div className="DialectViewWordPhraseContentItem">
@@ -201,13 +210,18 @@ function DetailWordPhrasePresentation({
         <h4 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="photo_s" defaultStr="PHOTO(S)" transform="first" />
         </h4>
-        <MediaPanel type="FVPicture" items={_photos} />
+        <div className="row media-panel media-panel-FVPicture">
+          <div className="col-xs-12">
+            {_photos.map((photo) => (
+              <Preview key={photo.id} expandedValue={photo.object} type="FVPicture" />
+            ))}
+          </div>
+        </div>
       </div>
     ) : null
   }
 
   const _getPhrases = (phrasesData) => {
-    const siteTheme = routeParams.siteTheme
     const _phrases = phrasesData.map((phrase, key) => {
       const phraseDefinitions = selectn('fv:definitions', phrase)
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
@@ -253,7 +267,6 @@ function DetailWordPhrasePresentation({
   }
 
   const _getRelations = (assetData) => {
-    const siteTheme = routeParams.siteTheme
     return assetData.map((asset) => {
       const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, asset, 'words')
       return (
@@ -325,7 +338,13 @@ function DetailWordPhrasePresentation({
         <h4 className="DialectViewWordPhraseContentItemTitle">
           <FVLabel transKey="video_s" defaultStr="VIDEO(S)" transform="first" />
         </h4>
-        <MediaPanel type="FVVideo" items={videos} />
+        <div className="row media-panel media-panel-FVVideo">
+          <div className="col-xs-12">
+            {_videos.map((video) => (
+              <Preview key={video.id} expandedValue={video.object} type="FVVideo" />
+            ))}
+          </div>
+        </div>
       </div>
     ) : null
   }
@@ -356,14 +375,14 @@ function DetailWordPhrasePresentation({
           {_getAcknowledgement(acknowledgement)}
 
           {/* METADATA PANEL */}
-          {metadata}
+          {_getMetadata(metadata)}
         </aside>
       </div>
     </div>
   )
 }
 // PROPTYPES
-const { array, node, string } = PropTypes
+const { array, func, object, string } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
@@ -371,14 +390,18 @@ DetailWordPhrasePresentation.propTypes = {
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
+  docType: string,
   literalTranslations: array,
-  metadata: node,
+  metadata: object,
   partOfSpeech: string,
   photos: array,
   phrases: array,
   pronunciation: string,
+  properties: object.isRequired,
+  pushWindowPath: func,
   relatedAssets: array,
   relatedToAssets: array,
+  siteTheme: string,
   title: string,
   videos: array,
 }
@@ -389,11 +412,14 @@ DetailWordPhrasePresentation.defaultProps = {
   categories: [],
   culturalNotes: [],
   definitions: [],
+  docType: '',
   literalTranslations: [],
   photos: [],
   phrases: [],
+  pushWindowPath: () => {},
   relatedAssets: [],
   relatedToAssets: [],
+  siteTheme: 'explore',
   videos: [],
 }
 

@@ -18,7 +18,7 @@ import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWithActions.css'
 import FVLabel from '../../components/FVLabel/index'
 
-import TabsWithPanels from 'components/TabsWithPanels'
+import PublishDialog from 'components/PublishDialog'
 
 export default function withActions(ComposedFilter, publishWarningEnabled = false) {
   class ViewWithActions extends Component {
@@ -86,7 +86,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </DialogTitle>
               <DialogContent>
                 {(() => {
-                  if (this.props.tabsData && this.props.tabsData.length > 0) {
+                  if (this.props.tabsData) {
                     return (
                       <div>
                         <p>
@@ -102,7 +102,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                           />
                           :
                         </p>
-                        <TabsWithPanels.Presentation data={this.props.tabsData} />
+                        <PublishDialog.Container data={this.props.tabsData} />
                       </div>
                     )
                   }

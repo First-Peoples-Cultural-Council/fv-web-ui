@@ -1,0 +1,18 @@
+type: Domain
+path: /
+name: FV
+children:
+  - type: WorkspaceRoot
+    name: Workspaces
+    children:
+      - type: Workspace
+        name: Data
+      - type: Section
+        name: SharedData
+  - type: WorkspaceRoot
+    name: sections
+    children:
+      - type: Workspace
+        name: Data
+      - type: Section
+        name: SharedData

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<fragment version="1">
+
+  <!-- API Servlet mapping -->
+  <extension target="web#SERVLET">
+    <servlet>
+      <servlet-name>simpleapi-servlet</servlet-name>
+      <servlet-class>ca.firstvoices.simpleapi.SimpleAPIServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>simpleapi-servlet</servlet-name>
+      <url-pattern>/simple/*</url-pattern>
+    </servlet-mapping>
+  </extension>
+
+  <require>org.nuxeo.ecm.platform.web.common</require>
+  <install>
+
+    <unzip from="${bundle.fileName}" to="/nuxeo.war" prefix="web">
+      <include>web/redoc-static.html</include>
+    </unzip>
+  </install>
+
+
+</fragment>
