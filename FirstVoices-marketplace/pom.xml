@@ -70,6 +70,10 @@
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSimplifiedAPI</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCharacters</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

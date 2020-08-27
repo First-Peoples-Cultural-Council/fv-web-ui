@@ -25,6 +25,8 @@ import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
@@ -38,6 +40,12 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.runtime.api.Framework;
 
 public class RequiredJobsListener implements EventListener {
+
+  // Maximum amount of jobs to execute per dialect
+  private static final int REQUIRED_JOB_LIMIT = 3;
+
+  // Get logger
+  private static final Log log = LogFactory.getLog(RequiredJobsListener.class);
 
   @Override
   public void handleEvent(Event event) {
@@ -62,7 +70,7 @@ public class RequiredJobsListener implements EventListener {
               DocumentModelList dialects = session.query(query);
 
               // Nothing to process
-              if (dialects == null || dialects.size() == 0) {
+              if (dialects == null || dialects.isEmpty()) {
                 return;
               }
 
@@ -72,19 +80,29 @@ public class RequiredJobsListener implements EventListener {
               for (DocumentModel dialect : dialects) {
 
                 Set<String> requiredJobs = maintenanceLogger.getRequiredJobs(dialect);
-                if (requiredJobs != null && requiredJobs.size() > 0) {
+                if (requiredJobs != null && !requiredJobs.isEmpty()) {
                   try {
                     // Trigger Phase 2 (work) of related operation
                     OperationContext operation = new OperationContext(session);
                     operation.setInput(dialect);
 
-                    Map<String, Object> params = new HashMap<String, Object>();
+                    Map<String, Object> params = new HashMap<>();
                     params.put("phase", "work");
                     params.put("batchSize", 1000);
 
-                    // For now, just handle the first required job
-                    String firstRequiredJob = requiredJobs.iterator().next();
-                    automation.run(operation, firstRequiredJob, params);
+                    int jobsExecuted = 0;
+
+                    // Execute `work` phases for required jobs, up to maximum
+                    while (requiredJobs.iterator().hasNext() && jobsExecuted < REQUIRED_JOB_LIMIT) {
+                      String nextRequiredJob = requiredJobs.iterator().next();
+                      automation.run(operation, nextRequiredJob, params);
+
+                      ++jobsExecuted;
+                    }
+
+                    if (jobsExecuted == (REQUIRED_JOB_LIMIT - 1)) {
+                      log.warn("Reached required job limit for dialect " + dialect.getTitle());
+                    }
 
                   } catch (OperationException e) {
                     event.markBubbleException();

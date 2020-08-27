@@ -8,7 +8,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
-    <it.failsafe.argLine></it.failsafe.argLine>
+    <it.failsafe.argLine />
   </properties>
 
   <parent>
@@ -40,6 +40,7 @@
     <module>migration-contributions</module>
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
+    <module>FirstVoicesCharacters</module>
   </modules>
 
   <dependencyManagement>
@@ -158,6 +159,11 @@
         <artifactId>FirstVoicesRESTPageProviders</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCharacters</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.amazonaws</groupId>
@@ -168,6 +174,16 @@
         <groupId>com.amazonaws</groupId>
         <artifactId>aws-java-sdk-core</artifactId>
         <version>${aws.sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCharacters</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>fv-web-ui-Characters</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -10,7 +10,6 @@
             <event>beforeDocumentModification</event>
             <event>aboutToCreate</event>
             <event>documentModified</event>
-            <event>computeAlphabetProcesses</event>
         </listener>
 
         <listener name="ancestryAssignmentListener" async="false" postCommit="false"

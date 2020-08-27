@@ -1,11 +1,14 @@
 package ca.firstvoices.maintenance.services;
 
+import ca.firstvoices.listeners.AbstractSyncListener;
 import ca.firstvoices.maintenance.Constants;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventProducer;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -33,42 +36,55 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
   @Override
   public void addToRequiredJobs(DocumentModel jobContainer, String job) {
     if (jobContainer != null) {
-      // Use a SET to ensure we don't add duplicates
-      Set<String> requiredJobs = getRequiredJobs(jobContainer);
-      requiredJobs.add(job);
-      jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
+      CoreInstance
+          .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+              session -> {
+                // Use a SET to ensure we don't add duplicates
+                Set<String> requiredJobs = getRequiredJobs(jobContainer);
+                requiredJobs.add(job);
+                jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
 
-      // Update dialect
-      CoreSession session = jobContainer.getCoreSession();
-      session.saveDocument(jobContainer);
+                // Avoid firing other events with this update
+                AbstractSyncListener.disableAllEvents(jobContainer);
 
-      sendEvent("Job Queued", job + " queued for `" + jobContainer.getTitle() + "`",
-          Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainer);
+                // Update dialect
+                session.saveDocument(jobContainer);
+
+                sendEvent("Job Queued", job + " queued for `" + jobContainer.getTitle() + "`",
+                    Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainer);
+              });
     }
   }
 
   @Override
   public void removeFromRequiredJobs(DocumentModel jobContainer, String job, boolean success) {
     if (jobContainer != null) {
-      Set<String> requiredJobs = getRequiredJobs(jobContainer);
+      CoreInstance
+          .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+              session -> {
+                Set<String> requiredJobs = getRequiredJobs(jobContainer);
 
-      if (requiredJobs != null && requiredJobs.size() > 0) {
-        requiredJobs.remove(job);
-        jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
+                if (requiredJobs != null && !requiredJobs.isEmpty() && requiredJobs.contains(job)) {
+                  requiredJobs.remove(job);
+                  jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
 
-        // Update dialect
-        CoreSession session = jobContainer.getCoreSession();
-        session.saveDocument(jobContainer);
+                  // Avoid firing other events with this update
+                  AbstractSyncListener.disableAllEvents(jobContainer);
 
-        String reason = Constants.EXECUTE_REQUIRED_JOBS_COMPLETE;
+                  // Update dialect
+                  session.saveDocument(jobContainer);
 
-        if (!success) {
-          reason = Constants.EXECUTE_REQUIRED_JOBS_FAILED;
-        }
+                  String reason = Constants.EXECUTE_REQUIRED_JOBS_COMPLETE;
 
-        sendEvent("Job Complete", job + " completed for `" + jobContainer.getTitle() + "`", reason,
-            session, jobContainer);
-      }
+                  if (!success) {
+                    reason = Constants.EXECUTE_REQUIRED_JOBS_FAILED;
+                  }
+
+                  sendEvent("Job Complete",
+                      job + " completed for `" + jobContainer.getTitle() + "`", reason,
+                      session, jobContainer);
+                }
+              });
     }
   }
 

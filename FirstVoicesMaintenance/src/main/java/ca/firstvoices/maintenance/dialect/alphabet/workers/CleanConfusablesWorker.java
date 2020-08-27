@@ -7,6 +7,11 @@ import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.UnpublishedChangesService;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -17,20 +22,27 @@ import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
+/**
+ * Clean Confusables worker will search for words and phrases that contain confusable characters,
+ * and clean them
+ */
 public class CleanConfusablesWorker extends AbstractWork {
+
+  private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
+  private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
 
   private static final long serialVersionUID = 1L;
 
+  private static final Log log = LogFactory.getLog(CleanConfusablesWorker.class);
   private final String job;
   private final DocumentRef jobContainerRef;
   private final int batchSize;
-
   private final transient CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
-  public CleanConfusablesWorker(DocumentRef jobContainerRef, String job, int batchSize) {
+  public CleanConfusablesWorker(DocumentRef dialectRef, String job, int batchSize) {
     super(Constants.CLEAN_CONFUSABLES_JOB_ID);
-    this.jobContainerRef = jobContainerRef;
+    this.jobContainerRef = dialectRef;
     this.job = job;
     this.batchSize = batchSize;
 
@@ -43,111 +55,95 @@ public class CleanConfusablesWorker extends AbstractWork {
   @Override
   public void work() {
 
-    MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
-
-    if (isSuspending()) {
-      // don't run anything if we're being started while a suspend
-      // has been requested
-      suspended();
-      return;
-    }
-
     if (!TransactionHelper.isTransactionActive()) {
       TransactionHelper.startTransaction();
     }
 
-    openSystemSession();
+    CoreInstance
+        .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+            session -> {
+              DocumentModel dialect = session.getDocument(jobContainerRef);
+              setStatus("Cleaning confusables `" + dialect.getTitle() + "`");
 
-    DocumentModel jobContainer = session.getDocument(jobContainerRef);
-    setStatus("Starting migrate category for words in `" + jobContainer.getTitle() + "`");
+              MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
 
-    try {
-      DocumentModel alphabet = cleanupCharactersService.getAlphabet(jobContainer);
-      DocumentModelList characters = cleanupCharactersService.getCharacters(alphabet);
+              try {
+                DocumentModelList characters = cleanupCharactersService
+                    .getCharactersWithConfusables(dialect);
 
-      // Replace with a select (!) of just the chars that have confusables defined
+                setProgress(new Progress(0, characters.size()));
 
-      /// DO NOT DO ANY OF THIS IF A ADDCONFUSABLES task is pending
+                int i = 1;
 
-      for (DocumentModel character : characters) {
+                for (DocumentModel character : characters) {
+                  String[] confusables = ArrayUtils
+                      .addAll((String[]) character.getPropertyValue(LC_CONFUSABLES),
+                          (String[]) character.getPropertyValue(UC_CONFUSABLES));
 
-        String[] confusableLowercaseChars = (String[]) character
-            .getPropertyValue("fvcharacter:confusable_characters");
-        String[] uppercaseConfusableChars = (String[]) character
-            .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+                  if (ArrayUtils.isNotEmpty(confusables)) {
+                    for (String confusableChar : confusables) {
+                      processWordsForConfusable(session, confusableChar);
+                    }
+                  }
 
-        for (String confusableChar : confusableLowercaseChars) {
+                  // Create transaction for next batch
+                  TransactionHelper.commitOrRollbackTransaction();
+                  TransactionHelper.startTransaction();
 
-          String query = "SELECT * FROM FVWord, FVPhrase WHERE "
-              + "dc:title LIKE '%" + NXQL.escapeStringInner(confusableChar) + "%'"
-              + " AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
+                  setProgress(new Progress(i, characters.size()));
+                  ++i;
+                }
 
-          DocumentModelList dictionaryItems = session.query(query);
+                // NOTE!!!! CleanConfusables should be added to required jobs
+                // when a confusable is added directly in the alphabet....
 
-          for (DocumentModel dictionaryItem : dictionaryItems) {
-
-            // Check for unpublished changes (before we clean confusables)
-
-            FirstVoicesPublisherService firstVoicesPublisherService = Framework
-                .getService(FirstVoicesPublisherService.class);
-
-            UnpublishedChangesService unpublishedChangesService = Framework
-                .getService(UnpublishedChangesService.class);
-
-            boolean unpublishedChangesExist = unpublishedChangesService
-                .checkUnpublishedChanges(session, dictionaryItem);
-
-            // Clean confusables for document
-            cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
-
-            if (!unpublishedChangesExist && dictionaryItem.getCurrentLifeCycleState()
-                .equals(PUBLISHED_STATE)) {
-              firstVoicesPublisherService.republish(dictionaryItem);
-            }
-
-
-          }
-
-        }
-      }
-
-      // Get alphabet characters that have confusables
-      // Find words that have those confusables
-
-      int wordsRemaining = 1;
-
-      while (wordsRemaining != 0) {
-
-        // DO WORK!
-        --wordsRemaining;
-
-        // Create transaction for next batch
-        // See examples:
-        // nuxeo @ org/nuxeo/ecm/core/BatchProcessorWork.java
-        // nuxeo @ org/nuxeo/elasticsearch/work/BucketIndexingWorker.java
-        // nuxeo @ org/nuxeo/ai/transcribe/TranscribeWork
-        TransactionHelper.commitOrRollbackTransaction();
-        TransactionHelper.startTransaction();
-
-        //Add real progress here when we can modify query for total words
-        //setProgress(new Progress(((float) wordsRemaining / totalWords) * 100));
-      }
-    } catch (Exception e) {
-      setStatus("Failed");
-      maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-      workFailed(new NuxeoException(
-          "worker migration failed on " + jobContainer.getTitle() + ": " + e.getMessage()));
-    }
-
-    maintenanceLogger.removeFromRequiredJobs(jobContainer, job, true);
-    setStatus("No more words to migrate in `" + jobContainer.getTitle() + "`");
-
+                setStatus("Done");
+                maintenanceLogger.removeFromRequiredJobs(dialect, job, true);
+              } catch (Exception e) {
+                setStatus("Failed");
+                maintenanceLogger.removeFromRequiredJobs(dialect, job, false);
+                workFailed(new NuxeoException(
+                    "worker" + job + " failed on " + dialect.getTitle() + ": " + e.getMessage()));
+              }
+            });
   }
 
-  @Override
-  public void cleanUp(boolean ok, Exception e) {
-    setStatus("Worker done for `" + jobContainerRef + "`");
-    super.cleanUp(ok, e);
+  /**
+   * Method will find all the dictionary items that contain a confusable character
+   * Clean those confusables (i.e. convert to the correct character), then publish,
+   * If no changes exist on the document
+   *
+   * @param session
+   * @param confusableChar
+   */
+  private void processWordsForConfusable(CoreSession session, String confusableChar) {
+
+    String query = "SELECT * FROM FVWord, FVPhrase WHERE "
+        + "dc:title LIKE '%" + NXQL.escapeStringInner(confusableChar) + "%'"
+        + " AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
+
+    DocumentModelList dictionaryItems = session.query(query, null, batchSize, 0, true);
+
+    for (DocumentModel dictionaryItem : dictionaryItems) {
+
+      // Check for unpublished changes (before we clean)
+      FirstVoicesPublisherService firstVoicesPublisherService = Framework
+          .getService(FirstVoicesPublisherService.class);
+
+      UnpublishedChangesService unpublishedChangesService = Framework
+          .getService(UnpublishedChangesService.class);
+
+      boolean unpublishedChangesExist = unpublishedChangesService
+          .checkUnpublishedChanges(session, dictionaryItem);
+
+      // Clean confusables for document
+      cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
+
+      if (!unpublishedChangesExist && dictionaryItem.getCurrentLifeCycleState()
+          .equals(PUBLISHED_STATE)) {
+        firstVoicesPublisherService.republish(dictionaryItem);
+      }
+    }
   }
 
   @Override

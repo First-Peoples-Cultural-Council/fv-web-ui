@@ -22,8 +22,7 @@ package ca.firstvoices.maintenance.dialect.alphabet.operations;
 
 import ca.firstvoices.maintenance.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.dialect.alphabet.Constants;
-import ca.firstvoices.maintenance.dialect.alphabet.workers.CleanConfusablesWorker;
-import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.dialect.alphabet.workers.AddConfusablesWorker;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -32,51 +31,48 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.work.api.WorkManager;
+import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = CleanConfusables.ID, category = Constants.GROUP_NAME, label =
-    Constants.CLEAN_CONFUSABLES_ACTION_ID, description =
-    "Operation to clean confusables on dictionary items")
-public class CleanConfusables extends AbstractMaintenanceOperation {
+@Operation(id = AddConfusables.ID, category = Constants.GROUP_NAME, label =
+    Constants.ADD_CONFUSABLES_ACTION_ID, description =
+    "Operation to queue/work on adding confusables to an alphabet.")
+public class AddConfusables extends AbstractMaintenanceOperation {
 
-  public static final String ID = Constants.CLEAN_CONFUSABLES_ACTION_ID;
+  public static final String ID = Constants.ADD_CONFUSABLES_ACTION_ID;
+
+  /**
+   * Init phase will add the operation`ID`
+   */
+  @Param(name = "phase", values = {"init", "work"})
+  protected String phase = "init";
 
   @Context
   protected CoreSession session;
 
-  @Context
-  protected WorkManager workManager;
-
-  @Context
-  protected MaintenanceLogger maintenanceLogger;
-
-  @Param(name = "phase", values = {"init", "work"})
-  protected String phase = "init";
-
-  @Param(name = "batchSize")
-  protected int batchSize = 1000;
-
   @OperationMethod
   public void run(DocumentModel dialect) throws OperationException {
-
     limitToSuperAdmin(session);
     limitToDialect(dialect);
-
-    // We should only clean if AddConfusables is not in the queue
-    if (!maintenanceLogger.getRequiredJobs(dialect).contains(Constants.ADD_CONFUSABLES_JOB_ID)) {
-      executePhases(dialect, phase);
-    }
+    executePhases(dialect, phase);
   }
 
   @Override
   protected void executeInitPhase(DocumentModel dialect) {
-    maintenanceLogger.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
+    getMaintenanceLogger().addToRequiredJobs(dialect, Constants.ADD_CONFUSABLES_JOB_ID);
   }
 
+  /**
+   * Will add and clean confusables for the specified dialect
+   * @param dialect
+   */
   @Override
   protected void executeWorkPhase(DocumentModel dialect) {
-    // Initiate worker to perform operation
-    CleanConfusablesWorker worker = new CleanConfusablesWorker(dialect.getRef(),
-        Constants.CLEAN_CONFUSABLES_JOB_ID, batchSize);
-    workManager.schedule(worker, true);
+    WorkManager workManager = Framework.getService(WorkManager.class);
+
+    // Add confusables to the alphabet
+    // Note: AddConfusablesWorker will `init` job to clean confusables
+    AddConfusablesWorker worker = new AddConfusablesWorker(dialect.getRef(),
+        Constants.ADD_CONFUSABLES_JOB_ID);
+    workManager.schedule(worker);
   }
 }

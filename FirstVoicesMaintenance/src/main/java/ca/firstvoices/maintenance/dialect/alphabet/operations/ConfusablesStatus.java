@@ -2,7 +2,7 @@ package ca.firstvoices.maintenance.dialect.alphabet.operations;
 
 import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
-import ca.firstvoices.maintenance.dialect.categories.Constants;
+import ca.firstvoices.maintenance.dialect.alphabet.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -32,12 +32,12 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
 
-@Operation(id = CleanConfusablesStatus.ID, category = Constants.GROUP_NAME,
-    label = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID,
-    description = "Operation to show the status of the migration for categories")
-public class CleanConfusablesStatus {
+@Operation(id = ConfusablesStatus.ID, category = Constants.GROUP_NAME,
+    label = Constants.CONFUSABLES_STATUS_ACTION_ID,
+    description = "Operation to show the status of confusables on a dialect")
+public class ConfusablesStatus {
 
-  public static final String ID = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID;
+  public static final String ID = Constants.CONFUSABLES_STATUS_ACTION_ID;
 
   @Context
   protected CoreSession session;

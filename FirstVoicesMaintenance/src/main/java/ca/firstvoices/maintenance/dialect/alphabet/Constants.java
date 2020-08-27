@@ -28,9 +28,14 @@ public class Constants {
 
   public static final String GROUP_NAME = "Alphabet";
 
-  // Clean confusables JOB ID
+  // Clean Confusables Operations
   public static final String CLEAN_CONFUSABLES_JOB_ID = GROUP_NAME + ".CleanConfusables";
-
-  // Clean confusables ACTION ID
   public static final String CLEAN_CONFUSABLES_ACTION_ID = CLEAN_CONFUSABLES_JOB_ID;
+
+  // Add Confusables  Operations
+  public static final String ADD_CONFUSABLES_JOB_ID = GROUP_NAME + ".AddConfusables";
+  public static final String ADD_CONFUSABLES_ACTION_ID = ADD_CONFUSABLES_JOB_ID;
+
+  // Confusables Status Operation
+  public static final String CONFUSABLES_STATUS_ACTION_ID = GROUP_NAME + ".ConfusablesStatus";
 }

@@ -1,0 +1,10 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: ca.firstvoices
+Bundle-Version: 1.0.0
+Bundle-Name: FirstVoicesCharacters
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ca.firstvoices.firstvoicescharacters;singleton=true
+Nuxeo-Component: OSGI-INF/ca.firstvoices.schedules.xml,
+ OSGI-INF/ca.firstvoices.workers.xml

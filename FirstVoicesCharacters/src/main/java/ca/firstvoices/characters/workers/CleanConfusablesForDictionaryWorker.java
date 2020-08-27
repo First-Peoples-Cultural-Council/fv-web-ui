@@ -18,7 +18,7 @@
  *
  */
 
-package ca.firstvoices.workers;
+package ca.firstvoices.characters.workers;
 
 import ca.firstvoices.services.CleanupCharactersService;
 import java.util.HashMap;

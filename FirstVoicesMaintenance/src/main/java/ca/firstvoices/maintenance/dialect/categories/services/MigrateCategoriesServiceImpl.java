@@ -56,7 +56,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     // Get the unique categories from all the words in this dialect
     for (String categoryId : getUniqueCategories(session, dialect.getId())) {
-      DocumentModel category = session.getDocument(new IdRef(categoryId));
+      DocumentModel category = session.getDocument(new IdRef(categoryId));// check for trashed here
       DocumentModel parentCategory = session.getParentDocument(category.getRef());
 
       // check if category exists. If so, skip.

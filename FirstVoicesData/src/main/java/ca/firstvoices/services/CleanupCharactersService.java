@@ -74,6 +74,14 @@ public interface CleanupCharactersService {
   DocumentModelList getCharacters(DocumentModel doc);
 
   /**
+   * Return a list of characters that have confusables defined
+   *
+   * @param doc Document model
+   * @return Document model list of associated characters
+   */
+  DocumentModelList getCharactersWithConfusables(DocumentModel doc);
+
+  /**
    * @param doc Document model
    * @return The associated alphabet document for the given document
    */

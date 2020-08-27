@@ -28,7 +28,8 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.dublincore.listener.DublinCoreListener;
 
 /**
- * Listener to assign value to ancestry fields (fva:dialect, fva:language, fva:language_family)
+ * An abstract sync listener
+ * See here for details: https://doc.nuxeo.com/nxdoc/events-and-messages/
  */
 public class AbstractSyncListener {
 
@@ -40,6 +41,14 @@ public class AbstractSyncListener {
 
   protected boolean defaultEventCriteria() {
     return (eventCtx instanceof DocumentEventContext);
+  }
+
+  public static void disableDefaultFVEvents(final DocumentModel doc) {
+    doc.putContextData(FVDocumentListener.DISABLE_FVDOCUMENT_LISTENER, true);
+  }
+
+  public static void enableDefaultFVEvents(final DocumentModel doc) {
+    doc.putContextData(FVDocumentListener.DISABLE_FVDOCUMENT_LISTENER, null);
   }
 
   public static void disableDefaultEvents(final DocumentModel doc) {
@@ -54,5 +63,15 @@ public class AbstractSyncListener {
     doc.putContextData(CollectionConstants.DISABLE_NOTIFICATION_SERVICE, null);
     doc.putContextData(CollectionConstants.DISABLE_AUDIT_LOGGER, null);
     doc.putContextData(VersioningService.DISABLE_AUTO_CHECKOUT, null);
+  }
+
+  public static void disableAllEvents(final DocumentModel doc) {
+    disableDefaultFVEvents(doc);
+    disableDefaultEvents(doc);
+  }
+
+  public static void enableAllEvents(final DocumentModel doc) {
+    enableDefaultFVEvents(doc);
+    enableDefaultEvents(doc);
   }
 }

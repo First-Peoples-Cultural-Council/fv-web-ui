@@ -25,6 +25,7 @@
             <eventCategory>maintenance</eventCategory>
             <!-- every 5 minutes between 5pm and 23pm -->
             <cronExpression>0 0/5 17-23 ? * *</cronExpression>
+            <timezone>PST</timezone>
         </schedule>
     </extension>
 
@@ -46,16 +47,21 @@
         </queue>
     </extension>
 
-    <!-- Log these events in the audit log -->
     <!-- To do: add more details to the log -->
     <!-- See: https://doc.nuxeo.com/nxdoc/audit/#extended-info -->
     <extension target="org.nuxeo.ecm.platform.audit.service.NXAuditEventsService" point="event">
+        <documentation>Log required jobs events</documentation>
         <event name="executeRequiredJobs_queued">
             <extendedInfos>
                 <extendedInfo expression="${status}" key="status" />
             </extendedInfos>
         </event>
         <event name="executeRequiredJobs_completed">
+            <extendedInfos>
+                <extendedInfo expression="${status}" key="status" />
+            </extendedInfos>
+        </event>
+        <event name="executeRequiredJobs_failed">
             <extendedInfos>
                 <extendedInfo expression="${status}" key="status" />
             </extendedInfos>

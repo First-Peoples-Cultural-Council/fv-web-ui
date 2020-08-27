@@ -27,24 +27,19 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
-import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
-import ca.firstvoices.workers.CleanConfusablesForDictionaryWorker;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.model.DocumentPart;
 import org.nuxeo.ecm.core.api.model.Property;
-import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
 
@@ -73,21 +68,9 @@ public class FVDocumentListener implements EventListener {
       return;
     }
 
-    // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a
-    // session.
-    if (event.getName().equals("computeAlphabetProcesses")) {
-      CoreInstance
-          .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
-              session -> {
-                addConfusableCharactersToAlphabets(session);
-                cleanConfusablesFromWordsAndPhrases();
-              });
-    }
-
     if (!(ctx instanceof DocumentEventContext)) {
       return;
     }
-
 
     session = ctx.getCoreSession();
     document = ((DocumentEventContext) ctx).getSourceDocument();
@@ -113,6 +96,9 @@ public class FVDocumentListener implements EventListener {
     }
   }
 
+  /**
+   * TODO: This can be part of the sanitization task
+   */
   public void cleanupWordsAndPhrases() {
     if ((document.getType().equals(FV_WORD) || document.getType().equals(FV_PHRASE)) && !document
         .isProxy() && !document.isVersion()) {
@@ -193,34 +179,6 @@ public class FVDocumentListener implements EventListener {
       }
 
     }
-  }
-
-  // This adds confusable characters to any alphabet WHERE
-  // fv-alphabet:update_confusables_required = 1
-  private void addConfusableCharactersToAlphabets(CoreSession session) {
-    String query = "SELECT * FROM FVAlphabet WHERE fv-alphabet:update_confusables_required = 1 "
-        + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-    // Only process 100 documents at a time
-    DocumentModelList alphabets = session.query(query, 100);
-
-    if (alphabets != null && alphabets.size() > 0) {
-      WorkManager workManager = Framework.getService(WorkManager.class);
-      for (DocumentModel alphabet : alphabets) {
-        DocumentModel dialect = session.getParentDocument(alphabet.getRef());
-
-        AddConfusablesToAlphabetWorker worker = new AddConfusablesToAlphabetWorker(dialect.getRef(),
-            alphabet.getRef());
-
-        workManager.schedule(worker);
-      }
-    }
-  }
-
-  private void cleanConfusablesFromWordsAndPhrases() {
-    // Process 100 cleanups on words/phrases within worker
-    WorkManager workManager = Framework.getService(WorkManager.class);
-    CleanConfusablesForDictionaryWorker worker = new CleanConfusablesForDictionaryWorker();
-    workManager.schedule(worker);
   }
 
   protected void rollBackEvent(Event event) {

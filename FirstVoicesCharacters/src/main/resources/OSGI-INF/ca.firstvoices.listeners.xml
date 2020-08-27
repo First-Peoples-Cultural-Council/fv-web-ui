@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.listeners.contrib" version="1.0">
+  <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+    <listener async="true" class="ca.firstvoices.characters.listeners.AlphabetProcessesListener"
+      name="alphabet_processes_listener">
+      <event>computeAlphabetProcesses</event>
+    </listener>
+  </extension>
+</component>

@@ -26,6 +26,7 @@ import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.exceptions.FVCharacterInvalidException;
+import ca.firstvoices.listeners.AbstractSyncListener;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,12 +35,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.Filter;
-import org.nuxeo.ecm.core.api.PathRef;
 
 public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
     CleanupCharactersService {
@@ -47,6 +48,8 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   //In the future, all dublincore (and other schema) property values
   //should be kept in a constants file in FVData.
   private static final String DOCUMENT_TITLE = "dc:title";
+  private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
+  private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
   private final String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
@@ -54,19 +57,16 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       Boolean saveDocument) {
     if (Arrays.stream(types).parallel()
         .noneMatch(document.getDocumentType().toString()::contains)) {
-      return saveAndSetDocument(document, saveDocument, session);
+      return document;
     }
 
     DocumentModel dictionary = session.getDocument(document.getParentRef());
     DocumentModel dialect = session.getDocument(dictionary.getParentRef());
-    DocumentModel alphabet = session
-        .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
-    Filter trashedFilter = docModel -> !docModel.isTrashed();
-    List<DocumentModel> characters = session
-        .getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
 
-    if (characters.size() == 0) {
-      return saveAndSetDocument(document, saveDocument, session);
+    List<DocumentModel> characters = getCharacters(dialect);
+
+    if (characters.isEmpty()) {
+      return document;
     }
 
     String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
@@ -81,17 +81,15 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
         document.setPropertyValue(DOCUMENT_TITLE, updatedPropertyValue);
       }
     }
-    return saveAndSetDocument(document, saveDocument, session);
-  }
 
-  private DocumentModel saveAndSetDocument(DocumentModel d, Boolean b, CoreSession session) {
-    d.setPropertyValue("fv:update_confusables_required", false);
-    if (Boolean.TRUE.equals(b)) {
-      d.getContextData().put("clean_confusables_update", true);
-      return session.saveDocument(d);
-    } else {
-      return d;
+    if (Boolean.TRUE.equals(saveDocument)) {
+      // Do not execute further events for this
+      // Note: custom order recompute listener will execute
+      AbstractSyncListener.disableAllEvents(document);
+      return session.saveDocument(document);
     }
+
+    return document;
   }
 
   //Helper method for cleanConfusables
@@ -101,10 +99,8 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     List<String> characterValues = characters.stream().filter(c -> !c.isTrashed())
         .map(c -> (String) c.getPropertyValue(DOCUMENT_TITLE)).collect(Collectors.toList());
     for (DocumentModel d : characters) {
-      String[] lowercaseConfusableList = (String[]) d
-          .getPropertyValue("fvcharacter:confusable_characters");
-      String[] uppercaseConfusableList = (String[]) d
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+      String[] lowercaseConfusableList = (String[]) d.getPropertyValue(LC_CONFUSABLES);
+      String[] uppercaseConfusableList = (String[]) d.getPropertyValue(UC_CONFUSABLES);
       if (lowercaseConfusableList != null) {
         for (String confusableCharacter : lowercaseConfusableList) {
           String characterTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
@@ -194,8 +190,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       }
     }
 
-    String[] upperConfusableStrArr = (String[]) updated
-        .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+    String[] upperConfusableStrArr = (String[]) updated.getPropertyValue(UC_CONFUSABLES);
     if (upperConfusableStrArr != null) {
       for (String str : upperConfusableStrArr) {
         if (!updatedDocumentCharacters.add(str)) {
@@ -279,14 +274,12 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
         collectedCharacters.add(upperChar);
       }
 
-      String[] lowerConfusablesArr = (String[]) d
-          .getPropertyValue("fvcharacter:confusable_characters");
+      String[] lowerConfusablesArr = (String[]) d.getPropertyValue(LC_CONFUSABLES);
       if (lowerConfusablesArr != null) {
         collectedCharacters.addAll(Arrays.asList(lowerConfusablesArr));
       }
 
-      String[] upperConfusablesArr = (String[]) d
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+      String[] upperConfusablesArr = (String[]) d.getPropertyValue(UC_CONFUSABLES);
       if (upperConfusablesArr != null) {
         collectedCharacters.addAll(Arrays.asList(upperConfusablesArr));
       }
@@ -339,6 +332,22 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     assert alphabet != null;
     Filter trashedFilter = docModel -> !docModel.isTrashed();
     return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
+  }
+
+  public DocumentModelList getCharactersWithConfusables(DocumentModel doc) {
+    DocumentModel alphabet = getAlphabet(doc);
+    assert alphabet != null;
+    Filter trashedFilter = docModel -> !docModel.isTrashed() && hasConfusableCharacters(docModel);
+    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
+  }
+
+  private boolean hasConfusableCharacters(DocumentModel charDoc) {
+    boolean lcConfusableNotEmpty = ArrayUtils
+        .isNotEmpty((String[]) charDoc.getPropertyValue(LC_CONFUSABLES));
+    boolean ucConfusableNotEmpty = ArrayUtils
+        .isNotEmpty((String[]) charDoc.getPropertyValue(UC_CONFUSABLES));
+
+    return lcConfusableNotEmpty || ucConfusableNotEmpty;
   }
 
 }

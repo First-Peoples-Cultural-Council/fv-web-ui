@@ -20,17 +20,22 @@
 
 package ca.firstvoices.services;
 
+import ca.firstvoices.listeners.AbstractSyncListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.model.Property;
+import org.nuxeo.ecm.core.api.model.impl.ArrayProperty;
 import org.nuxeo.ecm.directory.Session;
 import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.runtime.api.Framework;
@@ -47,7 +52,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
     try (Session directorySession = directoryService.open("confusable_characters")) {
 
       // Get all rows in the confusable_characters vocabulary
-      DocumentModelList entries = directorySession.getEntries();
+      DocumentModelList entries = directorySession.query(Collections.emptyMap());
 
       // Iterate through each entry
       for (DocumentModel entry : entries) {
@@ -63,22 +68,17 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
         // Do a query for the alphabet characters that match the spreadsheet
         String query = "SELECT * FROM FVCharacter " + "WHERE fva:dialect='" + dialectUID + "' "
-            + "AND dc:title='" + character + "' " + "AND fva:dialect='" + dialectUID + "' "
-            + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+            + "AND (dc:title='" + character + "' OR fvcharacter:upper_case_character='" + character
+            + "') AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
 
-        String upperCharacterQuery =
-            "SELECT * FROM FVCharacter " + "WHERE fva:dialect='" + dialectUID + "' "
-                + "AND fvcharacter:upper_case_character='" + character + "' "
-                + "AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
-
-        DocumentModelList lowerCharDocs = session.query(query);
-        DocumentModelList upperCharDocs = session.query(upperCharacterQuery);
-        List<DocumentModel> charactersDocs = new ArrayList<>();
-        charactersDocs.addAll(lowerCharDocs);
-        charactersDocs.addAll(upperCharDocs);
+        DocumentModelList charactersDocs = session.query(query);
 
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {
+          // Do not execute further listeners for these updates
+          AbstractSyncListener.disableAllEvents(doc);
+
+          // Update confusables
           updateConfusableCharacters(session, doc, dialect, character, confusables);
         }
       }
@@ -96,39 +96,44 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
     String dialectName = dialect.getPropertyValue("dc:title").toString();
 
+    Property characterTitle = characterDocument.getProperty("dc:title");
+
     // If a character was matched by title then update the lowercase confusable characters
-    if (characterDocument.getPropertyValue("dc:title").equals(characterToUpdate)) {
-      String[] existing = (String[]) characterDocument
-          .getPropertyValue("fvcharacter:confusable_characters");
+    if (characterToUpdate.equals(characterTitle.getValue())) {
+
+      ArrayProperty lcConfusableCharactersProp = (ArrayProperty) characterDocument
+          .getProperty("fvcharacter:confusable_characters");
+
+      String[] existing = (String[]) lcConfusableCharactersProp.getValue();
       if (existing != null) {
         String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             getNewConfusables(existing, newConfusables));
-
-        characterDocument.setPropertyValue("fvcharacter:confusable_characters",
-            confusablesToAdd);
-
-        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
+        String[] combinedList = ArrayUtils.addAll(existing, confusablesToAdd);
+        lcConfusableCharactersProp.setValue((Serializable) combinedList);
+        log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd)
+            + " to "
             + characterToUpdate);
       } else {
         String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             newConfusables);
-
-        characterDocument.setPropertyValue("fvcharacter:confusable_characters", confusablesToAdd);
-
+        lcConfusableCharactersProp.setValue(confusablesToAdd);
         log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
       }
       // If a characterToUpdate was matched to an uppercase characterToUpdate
       // then update the uppercase confusable characters
     } else {
-      String[] existing = (String[]) characterDocument
-          .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+      ArrayProperty ucConfusableCharactersProp = (ArrayProperty) characterDocument
+          .getProperty("fvcharacter:upper_case_confusable_characters");
+
+      String[] existing = (String[]) ucConfusableCharactersProp.getValue();
+
       if (existing != null) {
         String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             getNewConfusables(existing, newConfusables));
 
-        characterDocument.setPropertyValue("fvcharacter:upper_case_confusable_characters",
-            confusablesToAdd);
+        String[] combinedList = ArrayUtils.addAll(existing, confusablesToAdd);
+        ucConfusableCharactersProp.setValue((Serializable) combinedList);
 
         log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
@@ -136,8 +141,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         String[] confusablesToAdd = validatedConfusables(charactersToSkip,
             newConfusables);
 
-        characterDocument
-            .setPropertyValue("fvcharacter:upper_case_confusable_characters", confusablesToAdd);
+        ucConfusableCharactersProp.setValue(confusablesToAdd);
 
         log.info(dialectName + ": Added " + Arrays.toString(confusablesToAdd) + " to "
             + characterToUpdate);
@@ -158,7 +162,8 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   }
 
   //Helper method that ensures the added confusables are not duplicates or included in the alphabet
-  private String[] validatedConfusables(Set<String> validationMap, String[] confusablesToAdd) {
+  private String[] validatedConfusables(Set<String> validationMap,
+      String[] confusablesToAdd) {
     ArrayList<String> validatedConfusables = new ArrayList<>();
     for (String confusable : confusablesToAdd) {
       if (!validationMap.contains(confusable)) {

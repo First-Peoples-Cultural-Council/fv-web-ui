@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.schedules.contrib">
+  <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
+    <schedule id="computeAlphabetProcesses">
+      <eventId>computeAlphabetProcesses</eventId>
+      <eventCategory>default</eventCategory>
+      <!-- every 30 minutes between 01am and 06am PST -->
+      <cronExpression>0 0/30 1-6 ? * *</cronExpression>
+      <timezone>PST</timezone>
+    </schedule>
+  </extension>
+</component>
