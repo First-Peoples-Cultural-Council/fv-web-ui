@@ -85,7 +85,7 @@ export class PageToolbar extends Component {
    * Publish changes directly
    */
   _publishChanges() {
-    if (this.props.publishChangesAction === null) {
+    if (this.props.publishChangesAction !== null) {
       this.props.publishChangesAction()
     }
   }
