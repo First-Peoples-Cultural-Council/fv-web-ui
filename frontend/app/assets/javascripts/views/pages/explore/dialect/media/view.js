@@ -193,9 +193,7 @@ export class MediaView extends Component {
                     computeEntity={computeResource}
                     computePermissionEntity={computeDialect2}
                     computeLogin={this.props.computeLogin}
-                    publishToggleAction={this.publishToggleAction}
                     publishChangesAction={this.publishChangesAction}
-                    enableToggleAction={this.enableToggleAction}
                     {...this.props}
                   />
                 </div>
@@ -354,59 +352,6 @@ export class MediaView extends Component {
   }
 
   /**
-   * Toggle dialect (enabled/disabled)
-   */
-  enableToggleAction = (toggled, workflow) => {
-    if (toggled) {
-      if (workflow) {
-        this.props.askToEnableResource(
-          this._getMediaPath(),
-          {
-            id: 'FVEnableLanguageAsset',
-            start: 'true',
-          },
-          null,
-          this.props.intl.trans(
-            'views.pages.explore.dialect.media.request_to_enable_success',
-            'Request to enable resource successfully submitted!'
-          ),
-          null
-        )
-      } else {
-        this.props.enableResource(
-          this._getMediaPath(),
-          null,
-          null,
-          this.props.intl.trans('views.pages.explore.dialect.media.resource_enabled', 'Resource enabled!')
-        )
-      }
-    } else {
-      if (workflow) {
-        this.props.askToDisableResource(
-          this._getMediaPath(),
-          {
-            id: 'FVDisableLanguageAsset',
-            start: 'true',
-          },
-          null,
-          this.props.intl.trans(
-            'views.pages.explore.dialect.media.request_to_disable_success',
-            'Request to disable resource successfully submitted!'
-          ),
-          null
-        )
-      } else {
-        this.props.disableResource(
-          this._getMediaPath(),
-          null,
-          null,
-          this.props.intl.trans('views.pages.explore.dialect.media.resource_disabled', 'Resource disabled!')
-        )
-      }
-    }
-  }
-
-  /**
    * onNavigateRequest
    */
   onNavigateRequest = (path) => {
@@ -426,65 +371,6 @@ export class MediaView extends Component {
         'Resource published successfully!'
       )
     )
-  }
-
-  /**
-   * Toggle published dialect
-   */
-  publishToggleAction = (toggled, workflow) => {
-    if (toggled) {
-      if (workflow) {
-        this.props.askToPublishResource(
-          this._getMediaPath(),
-          {
-            id: 'FVPublishLanguageAsset',
-            start: 'true',
-          },
-          null,
-          this.props.intl(
-            'views.pages.explore.dialect.media.request_to_publish_success',
-            'Request to publish resource successfully submitted!'
-          ),
-          null
-        )
-      } else {
-        this.props.publishResource(
-          this._getMediaPath(),
-          null,
-          null,
-          this.props.intl.trans(
-            'views.pages.explore.dialect.media.resource_published_success',
-            'Resource published successfully!'
-          )
-        )
-      }
-    } else {
-      if (workflow) {
-        this.props.askToUnpublishResource(
-          this._getMediaPath(),
-          {
-            id: 'FVUnpublishLanguageAsset',
-            start: 'true',
-          },
-          null,
-          this.props.intl.trans(
-            'views.pages.explore.dialect.media.request_to_unpublic_success',
-            'Request to unpublish resource successfully submitted!'
-          ),
-          null
-        )
-      } else {
-        this.props.unpublishResource(
-          this._getMediaPath(),
-          null,
-          null,
-          this.props.intl.trans(
-            'views.pages.explore.dialect.media.resource_unpublished_success',
-            'Resource unpublished successfully!'
-          )
-        )
-      }
-    }
   }
 
   // _internal methods
