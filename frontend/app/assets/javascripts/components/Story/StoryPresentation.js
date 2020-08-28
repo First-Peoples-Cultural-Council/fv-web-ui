@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Paper from '@material-ui/core/Paper'
-
 //FPCC
 import StoryCover from 'components/StoryCover'
 import StoryPages from 'components/StoryPages'
@@ -38,29 +36,25 @@ function StoryPresentation({
     <div className="row" style={{ marginBottom: '20px' }}>
       <div className="col-xs-12">
         {!bookOpen ? (
-          <Paper style={{ padding: '15px', margin: '15px 0' }}>
-            <StoryCover.Presentation
-              book={book}
-              defaultLanguage={defaultLanguage}
-              intl={intl}
-              openBookAction={openBookAction}
-              pageCount={pageCount}
-              //Media
-              audio={audio}
-              images={images}
-              videos={videos}
-            />
-          </Paper>
+          <StoryCover.Presentation
+            book={book}
+            defaultLanguage={defaultLanguage}
+            intl={intl}
+            openBookAction={openBookAction}
+            pageCount={pageCount}
+            //Media
+            audio={audio}
+            images={images}
+            videos={videos}
+          />
         ) : (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             {bookEntries && bookEntries.length !== 0 ? (
-              <Paper style={{ padding: '15px', margin: '15px 0' }}>
-                <StoryPages.Container
-                  bookEntries={bookEntries}
-                  closeBookAction={closeBookAction}
-                  defaultLanguage={defaultLanguage}
-                />
-              </Paper>
+              <StoryPages.Container
+                bookEntries={bookEntries}
+                closeBookAction={closeBookAction}
+                defaultLanguage={defaultLanguage}
+              />
             ) : (
               <div>No results</div>
             )}

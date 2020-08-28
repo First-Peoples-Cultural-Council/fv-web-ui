@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 
 import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'
+import Paper from '@material-ui/core/Paper'
 
 import { StoryCoverStyles } from './StoryCoverStyles'
 import MediaPanels from 'components/MediaPanels'
@@ -37,50 +38,52 @@ function StoryCoverPresentation({
 
   // Main component
   return (
-    <div className="row">
-      <div className="col-xs-12">
-        <div className="col-xs-12 col-md-3">
-          <MediaPanels.Presentation images={images} videos={videos} />
-        </div>
-        <div className="col-xs-12 col-md-9 fontBCSans">
-          <header className={classes.header}>
-            <Typography variant="h3" component="h2">
-              <div>{book.title}</div>
-            </Typography>
-            <Typography variant="h4" component="h3">
-              <div>{book.titleTranslation}</div>
-            </Typography>
-            <div className="subheader">
-              {book.authors.map(function renderAuthors(author, i) {
-                return (
-                  <span className="label label-default" key={i}>
-                    {author}
-                  </span>
-                )
-              })}
-            </div>
-          </header>
+    <Paper elevation={3} style={{ padding: '15px', margin: '15px 0' }}>
+      <div className="row">
+        <div className="col-xs-12">
+          <div className="col-xs-12 col-md-3">
+            <MediaPanels.Presentation images={images} videos={videos} />
+          </div>
+          <div className="col-xs-12 col-md-9 fontBCSans">
+            <header className={classes.header}>
+              <Typography variant="h3" component="h2">
+                <div>{book.title}</div>
+              </Typography>
+              <Typography variant="h4" component="h3">
+                <div>{book.titleTranslation}</div>
+              </Typography>
+              <div className="subheader">
+                {book.authors.map(function renderAuthors(author, i) {
+                  return (
+                    <span className="label label-default" key={i}>
+                      {author}
+                    </span>
+                  )
+                })}
+              </div>
+            </header>
 
-          <div className={classes.introductionTranslations}>
-            {_getIntroduction(book.introduction, book.introductionTranslation)}
-            {audioElements}
+            <div className={classes.introductionTranslations}>
+              {_getIntroduction(book.introduction, book.introductionTranslation)}
+              {audioElements}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-xs-12">
+          <div className="col-xs-12 text-right">
+            {openBookAction && pageCount > 0 ? (
+              <FVButton variant="contained" style={{ marginRight: '10px' }} color="primary" onClick={openBookAction}>
+                <ActionLaunch />
+                {'Open Book'}
+              </FVButton>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>
-
-      <div className="col-xs-12">
-        <div className="col-xs-12 text-right">
-          {openBookAction && pageCount > 0 ? (
-            <FVButton variant="contained" style={{ marginRight: '10px' }} color="primary" onClick={openBookAction}>
-              <ActionLaunch />
-              {'Open Book'}
-            </FVButton>
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    </div>
+    </Paper>
   )
 }
 

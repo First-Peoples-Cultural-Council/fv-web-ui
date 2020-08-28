@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
+// Material-UI
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+
 //FPCC
-import FVTab from 'views/components/FVTab'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 
 /**
@@ -15,7 +18,6 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
  * @returns {node} jsx markup
  */
 function MediaPanelsPresentation({ images, videos }) {
-  //   const classes = MediaPanelsStyles()
   function _getMediaPanels() {
     const [tabValue, setTabValue] = useState(0)
     const imageMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={images} />
@@ -24,8 +26,8 @@ function MediaPanelsPresentation({ images, videos }) {
     if (images.length > 0 && videos.length > 0) {
       return (
         <div>
-          <FVTab
-            tabItems={[{ label: 'Photo(s)' }, { label: 'Video(s)' }]}
+          <MediaTab
+            tabItems={[{ label: 'Picture(s)' }, { label: 'Video(s)' }]}
             tabsValue={tabValue}
             tabsOnChange={(e, value) => setTabValue(value)}
           />
@@ -42,6 +44,20 @@ function MediaPanelsPresentation({ images, videos }) {
   }
 
   return _getMediaPanels()
+}
+
+function MediaTab(props) {
+  const { tabsValue, tabsOnChange, tabItems } = props
+  const _tabItems = tabItems.map((item, i) => {
+    const { label, id, dataTestId, className } = item
+    return <Tab key={i} label={label} id={id} data-testid={dataTestId} className={className} />
+  })
+
+  return (
+    <Tabs value={tabsValue} onChange={tabsOnChange}>
+      {_tabItems}
+    </Tabs>
+  )
 }
 // PROPTYPES
 const { array } = PropTypes

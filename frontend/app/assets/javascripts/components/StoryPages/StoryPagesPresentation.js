@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import DOMPurify from 'dompurify'
 
 import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
 
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
@@ -27,32 +28,41 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
     const audio = page.audio.map((audioDoc) => {
       return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc} type="FVAudio" />
     })
-
-    return (
-      <Grid key={page.uid} container className={classes.root} spacing={2}>
-        <Grid container justify="center" spacing={2}>
-          <Grid key={page.uid + 0} item xs={3}>
-            <div className={classes.media}>
-              <MediaPanels.Presentation videos={page.videos} images={page.images} />
-            </div>
-          </Grid>
-          <Grid key={page.uid + 2} item xs={3}>
-            <div className={classes.textLanguage}>
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.title) }} />
-              {audio}
-            </div>
-          </Grid>
-          <Grid key={page.uid + 3} item xs={3}>
-            <div className={classes.textTranslation}>
-              {' '}
+    const literalTranslation =
+      page.literalTranslation || page.dominantLanguageText ? (
+        <Grid key={page.uid + 3} item xs={4} className={classes.translation}>
+          <div className={classes.dominantTranslation}>
+            <div>{page.dominantLanguageText}</div>
+            <div className={classes.literalTranslation}>
+              {page.literalTranslation !== ''}{' '}
               <strong>
                 <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
               </strong>{' '}
               : <span>{page.literalTranslation}</span>
             </div>
+          </div>
+        </Grid>
+      ) : null
+
+    return (
+      <Paper elevation={3} style={{ padding: '30px', margin: '30px' }}>
+        <Grid key={page.uid} container className={classes.root} spacing={2}>
+          <Grid container justify="center" spacing={2}>
+            <Grid key={page.uid + 0} item xs={4}>
+              <div className={classes.media}>
+                <MediaPanels.Presentation videos={page.videos} images={page.images} />
+              </div>
+            </Grid>
+            <Grid key={page.uid + 2} item xs={4}>
+              <div className={classes.textLanguage}>
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.title) }} />
+                {audio}
+              </div>
+            </Grid>
+            {literalTranslation}
           </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     )
   }
 
@@ -61,13 +71,22 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
       {bookPages.map(function createPageElements(page, index) {
         return <StoryPage key={index} page={page} />
       })}
-      <FVButton variant="contained" key="close" onClick={closeBookAction}>
-        <FVLabel
-          transKey="views.pages.explore.dialect.learn.songs_stories.close_book"
-          defaultStr="Close Book"
-          transform="first"
-        />
-      </FVButton>
+
+      <div className="col-xs-12">
+        <div className="col-xs-12 text-right">
+          {closeBookAction ? (
+            <FVButton variant="contained" style={{ marginRight: '10px' }} key="close" onClick={closeBookAction}>
+              <FVLabel
+                transKey="views.pages.explore.dialect.learn.songs_stories.close_book"
+                defaultStr="Close Book"
+                transform="first"
+              />
+            </FVButton>
+          ) : (
+            ''
+          )}
+        </div>
+      </div>
     </div>
   )
 }
