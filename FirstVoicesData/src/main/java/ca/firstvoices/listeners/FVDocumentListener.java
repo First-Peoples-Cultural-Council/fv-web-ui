@@ -21,35 +21,14 @@
 package ca.firstvoices.listeners;
 
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOKS;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINKS;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
 import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
-import ca.firstvoices.services.AssignAncestorsService;
 import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.SanitizeDocumentService;
 import ca.firstvoices.workers.AddConfusablesToAlphabetWorker;
 import ca.firstvoices.workers.CleanConfusablesForDictionaryWorker;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,11 +50,12 @@ import org.nuxeo.runtime.api.Framework;
 
 public class FVDocumentListener implements EventListener {
 
+
+  public static final String DISABLE_FVDOCUMENT_LISTENER = "disableFVDocumentListener";
+
   protected SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
   private CoreSession session;
-  private final AssignAncestorsService assignAncestorsService = Framework
-      .getService(AssignAncestorsService.class);
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
   private EventContext ctx;
@@ -86,6 +66,12 @@ public class FVDocumentListener implements EventListener {
   public void handleEvent(Event event) {
     this.event = event;
     ctx = this.event.getContext();
+
+    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_FVDOCUMENT_LISTENER);
+    if (Boolean.TRUE.equals(block)) {
+      // ignore the event - we are blocked by the caller
+      return;
+    }
 
     // computeAlphabetProcesses is not an instance of DocumentEventContext and does not carry a
     // session.
@@ -102,6 +88,7 @@ public class FVDocumentListener implements EventListener {
       return;
     }
 
+
     session = ctx.getCoreSession();
     document = ((DocumentEventContext) ctx).getSourceDocument();
     if (document == null || document.isImmutable()) {
@@ -111,10 +98,7 @@ public class FVDocumentListener implements EventListener {
     if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
       cleanupWordsAndPhrases();
       validateCharacter(document);
-    }
-
-    if (event.getName().equals(DocumentEventTypes.DOCUMENT_CREATED)) {
-      assignAncestors();
+      sanitizeWord();
     }
 
     // Cleanup words and phrases unless update was triggered within CleanupCharacterService
@@ -124,26 +108,9 @@ public class FVDocumentListener implements EventListener {
         cleanupWordsAndPhrases();
       }
       validateCharacter(document);
-    }
 
-    if (event.getName().equals(DocumentEventTypes.DOCUMENT_UPDATED)) {
       sanitizeWord();
     }
-
-  }
-
-  public void assignAncestors() {
-    String[] types = {FV_ALPHABET, FV_AUDIO, FV_BOOK, FV_BOOK_ENTRY, FV_BOOKS, FV_CATEGORIES,
-        FV_CATEGORY, FV_CHARACTER, FV_CONTRIBUTOR, FV_CONTRIBUTORS, FV_DIALECT, FV_DICTIONARY,
-        FV_GALLERY, FV_LANGUAGE, FV_LANGUAGE_FAMILY, FV_LINK, FV_LINKS, FV_PHRASE, FV_PICTURE,
-        FV_PORTAL, FV_RESOURCES, FV_VIDEO, FV_WORD};
-
-    if (Arrays.stream(types).parallel()
-        .noneMatch(document.getDocumentType().toString()::contains)) {
-      return;
-    }
-
-    assignAncestorsService.assignAncestors(session, document);
   }
 
   public void cleanupWordsAndPhrases() {

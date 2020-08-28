@@ -52,12 +52,10 @@ export class PageToolbar extends Component {
     computeEntity: object.isRequired,
     computeLogin: object.isRequired,
     computePermissionEntity: object,
-    enableToggleAction: func,
     handleNavigateRequest: func,
     intl: object.isRequired,
     label: string,
     publishChangesAction: func,
-    publishToggleAction: func,
     showPublish: bool,
     // REDUX: reducers/state
     properties: object.isRequired,
@@ -87,9 +85,7 @@ export class PageToolbar extends Component {
    * Publish changes directly
    */
   _publishChanges() {
-    if (this.props.publishChangesAction === null) {
-      this.props.publishToggleAction(true, false, selectn('response.path', this.props.computeEntity))
-    } else {
+    if (this.props.publishChangesAction !== null) {
       this.props.publishChangesAction()
     }
   }
@@ -205,7 +201,7 @@ export class PageToolbar extends Component {
               ) : null}
             </div>
             {/* Menu */}
-            {actions.includes('more-options') && isAdmin ? <AdminMenu.Container /> : null}
+            {actions.includes('more-options') && hasWritePriveleges ? <AdminMenu.Container /> : null}
           </div>
         </Toolbar>
       </AppBar>

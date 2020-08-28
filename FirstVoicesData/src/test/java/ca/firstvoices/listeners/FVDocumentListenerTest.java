@@ -59,21 +59,12 @@ public class FVDocumentListenerTest extends AbstractFirstVoicesDataTest {
     assertNotNull(TestWord);
     assertNotNull(TestPhrase);
 
-    assertEquals(TestWord.getTitle(), " Test Word ");
-    assertEquals(TestPhrase.getTitle(), "  Test Phrase  ");
-
     TestWord = session.getDocument(TestWord.getRef());
     TestPhrase = session.getDocument(TestPhrase.getRef());
 
-    assertEquals("Word should have ID of parent family property", languageFamily.getId(),
-        TestWord.getPropertyValue("fva:family"));
-    assertEquals("Word should have ID of parent language property", language.getId(),
-        TestWord.getPropertyValue("fva:language"));
-    assertEquals("Word should have ID of parent dialect property", dialect.getId(),
-        TestWord.getPropertyValue("fva:dialect"));
-
-    assertEquals("Test Word", TestWord.getTitle());
-    assertEquals("Test Phrase", TestPhrase.getTitle());
+    // Ensure sanitization ran
+    assertEquals(TestWord.getTitle(), "Test Word");
+    assertEquals(TestPhrase.getTitle(), "Test Phrase");
 
   }
 

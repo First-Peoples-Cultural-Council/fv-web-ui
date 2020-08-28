@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<!--
+  Marshaller extensions allow you to easily modify return values for objects. This can be:
+    - extend or override existing marshallers
+    - aggregate a marshaller from another
+    - configure the rendered JSON
+
+  details: https://doc.nuxeo.com/nxdoc/json-marshalling/
+-->
+
+<component name="ca.firstvoices.io.contrib" version="1.0.0">
+
+  <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
+    <!-- tasks -->
+    <register class="ca.firstvoices.io.tasks.SimpleTaskListJsonWriter" enable="true" />
+    <register class="ca.firstvoices.io.tasks.SimpleTaskWriter" enable="true" />
+
+    <!-- general -->
+    <!-- these are disabled examples for now -->
+    <register class="ca.firstvoices.io.AncestryMarshaller" enable="false" />
+    <register class="ca.firstvoices.io.DocumentListMarshaller" enable="false" />
+  </extension>
+
+  <extension point="adapters" target="org.nuxeo.ecm.core.api.DocumentAdapterService">
+    <adapter class="ca.firstvoices.io.tasks.models.SimpleTaskAdapter" factory="ca.firstvoices.io.tasks.SimpleTaskAdapterFactory"/>
+  </extension>
+
+</component>

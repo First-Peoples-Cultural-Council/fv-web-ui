@@ -1,0 +1,11 @@
+<component name="ca.firstvoices.simpleapi.keyresolver">
+
+    <require>ca.firstvoices.simpleapi.config</require>
+
+    <implementation class="ca.firstvoices.simpleapi.security.JWKSKeyResolver"/>
+
+    <service>
+        <provide interface="io.jsonwebtoken.SigningKeyResolver"/>
+    </service>
+
+</component>

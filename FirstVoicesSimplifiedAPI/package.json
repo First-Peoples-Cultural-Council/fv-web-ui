@@ -1,0 +1,13 @@
+{
+  "name": "FVSimplifiedAPI",
+  "description": "FirstVoices Simplified API Documentation",
+  "version": "1.0.0",
+  "scripts": {
+    "initialize": "npm install",
+    "compile": "redoc-cli bundle target/openapi/openapi.json",
+    "help": "redoc-cli --help"
+  },
+  "dependencies": {
+    "redoc-cli": "^0.9.8"
+  }
+}

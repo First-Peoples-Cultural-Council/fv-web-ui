@@ -3,6 +3,7 @@ package ca.firstvoices.operations;
 import ca.firstvoices.testUtil.AbstractFirstVoicesCoreTestsTest;
 import ca.firstvoices.tests.mocks.operations.GenerateDialect;
 import java.util.HashMap;
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -28,15 +29,51 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     OperationContext ctx = new OperationContext(session);
 
     DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
+
+    //Check that dialect exists
+    Assert.assertEquals(1, session
+        .query("SELECT * FROM FVDialect WHERE ecm:ancestorId='" + language.getId()
+            + "'").size());
+    Assert.assertTrue(
+        session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
+
+    //Check for description
     String s = (String) dialect.getPropertyValue("dc:description");
     Assert.assertEquals("This is a generated test dialect for demo and cypress test purposes.", s);
 
-    Assert.assertTrue(
-        session.exists(new PathRef("/FV/Workspaces/Data/Test/Test/Xx_Dialect_xX")));
+    //Check for characters
     Assert.assertEquals(26, session
         .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
             + "'").size());
+
+    //Check for categories / phrase books
+    Assert.assertEquals(12, session
+        .query("SELECT * FROM FVCategory WHERE ecm:ancestorId='" + dialect.getId()
+            + "'").size());
+
+    //Check for words and their properties
+    DocumentModelList words = session
+        .query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(26, words.size());
+    for (DocumentModel word : words) {
+      String partOfSpeech = (String) word.getPropertyValue("fv-word:part_of_speech");
+      String pronunciation = (String) word.getPropertyValue("fv-word:pronunciation");
+      String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
+      Assert.assertNotNull(partOfSpeech);
+      Assert.assertNotNull(pronunciation);
+      Assert.assertFalse(ArrayUtils.isEmpty(categories));
+    }
+
+    //Check for phrases, phrase books set
+    DocumentModelList phrases = session
+        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(25, phrases.size());
+    for (DocumentModel phrase : phrases) {
+      String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
+      Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+    }
   }
+
 
   @Test
   public void generateRandomDialect() throws OperationException {
@@ -49,17 +86,47 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
 
     DocumentModel dialect = (DocumentModel) automationService.run(ctx, GenerateDialect.ID, params);
 
-    String s = (String) dialect.getPropertyValue("dc:description");
-    Assert.assertNotNull(s);
-
-    DocumentModelList test = session
-        .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
-            + "'");
-
-    Assert.assertEquals(30, test.size());
+    //Check that dialect exists
     Assert.assertEquals(1, session
         .query("SELECT * FROM FVDialect WHERE ecm:ancestorId='" + language.getId()
             + "'").size());
+    //Check for description
+    String s = (String) dialect.getPropertyValue("dc:description");
+    Assert.assertNotNull(s);
+
+    //Check for characters
+    DocumentModelList characters = session
+        .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
+            + "'");
+    Assert.assertEquals(30, characters.size());
+
+    //Check for categories / phrase books
+    Assert.assertEquals(12, session
+        .query("SELECT * FROM FVCategory WHERE ecm:ancestorId='" + dialect.getId()
+            + "'").size());
+
+    //Check for words and their properties
+    DocumentModelList words = session
+        .query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
+            + "'");
+    Assert.assertEquals(25, words.size());
+    for (DocumentModel word : words) {
+      String partOfSpeech = (String) word.getPropertyValue("fv-word:part_of_speech");
+      String pronunciation = (String) word.getPropertyValue("fv-word:pronunciation");
+      String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
+      Assert.assertNotNull(partOfSpeech);
+      Assert.assertNotNull(pronunciation);
+      Assert.assertFalse(ArrayUtils.isEmpty(categories));
+    }
+
+    //Check for phrases, phrase books set
+    DocumentModelList phrases = session
+        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(25, phrases.size());
+    for (DocumentModel phrase : phrases) {
+      String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
+      Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+    }
   }
 
   @Test(expected = DocumentSecurityException.class)
