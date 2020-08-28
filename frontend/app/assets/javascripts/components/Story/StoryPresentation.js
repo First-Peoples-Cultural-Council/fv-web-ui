@@ -27,7 +27,7 @@ function StoryPresentation({
   pageCount,
   // Media
   audio,
-  images,
+  pictures,
   videos,
 }) {
   //   const classes = StoryStyles()
@@ -44,7 +44,7 @@ function StoryPresentation({
             pageCount={pageCount}
             //Media
             audio={audio}
-            images={images}
+            pictures={pictures}
             videos={videos}
           />
         ) : (
@@ -80,7 +80,7 @@ StoryPresentation.propTypes = {
   pageCount: number,
   // Media
   audio: array,
-  images: array,
+  pictures: array.isRequired,
   videos: array,
 }
 

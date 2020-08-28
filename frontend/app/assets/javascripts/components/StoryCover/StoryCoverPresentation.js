@@ -27,13 +27,13 @@ function StoryCoverPresentation({
   pageCount,
   // Media
   audio,
-  images,
+  pictures,
   videos,
 }) {
   const classes = StoryCoverStyles()
   // Audio
   const audioElements = audio.map((audioDoc) => {
-    return <Preview minimal key={audioDoc.id} expandedValue={audioDoc.object} type="FVAudio" />
+    return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
   })
 
   // Main component
@@ -42,7 +42,7 @@ function StoryCoverPresentation({
       <div className="row">
         <div className="col-xs-12">
           <div className="col-xs-12 col-md-3">
-            <MediaPanels.Presentation images={images} videos={videos} />
+            <MediaPanels.Presentation pictures={pictures} videos={videos} />
           </div>
           <div className="col-xs-12 col-md-9 fontBCSans">
             <header className={classes.header}>
@@ -146,7 +146,7 @@ StoryCoverPresentation.propTypes = {
   pageCount: number,
   // Media
   audio: array.isRequired,
-  images: array.isRequired,
+  pictures: array.isRequired,
   videos: array.isRequired,
 }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 
 // FPCC
 import StoryPresentation from 'components/Story/StoryPresentation'
@@ -35,7 +34,6 @@ function StoryContainer() {
         dialect,
         intl,
         isKidsTheme,
-        metadata,
         openBookAction,
         pageCount,
         publishBook,
@@ -44,7 +42,7 @@ function StoryContainer() {
         splitWindowPath,
         //Media
         audio,
-        images,
+        pictures,
         videos,
       }) => {
         return isKidsTheme ? (
@@ -55,12 +53,11 @@ function StoryContainer() {
             closeBookAction={closeBookAction}
             defaultLanguage={defaultLanguage}
             intl={intl}
-            metadata={metadata}
             openBookAction={openBookAction}
             pageCount={pageCount}
             //Media
             audio={audio}
-            images={images}
+            pictures={pictures}
             videos={videos}
           />
         ) : (
@@ -77,7 +74,7 @@ function StoryContainer() {
             computeLogin={computeLogin}
             routeParams={routeParams}
             splitWindowPath={splitWindowPath}
-            tabsData={{ photos: images, videos, audio }}
+            tabsData={{ photos: pictures, videos, audio }}
           >
             <StoryPresentation
               book={book}
@@ -87,12 +84,11 @@ function StoryContainer() {
               closeBookAction={closeBookAction}
               defaultLanguage={defaultLanguage}
               intl={intl}
-              metadata={metadata}
               openBookAction={openBookAction}
               pageCount={pageCount}
               //Media
               audio={audio}
-              images={images}
+              pictures={pictures}
               videos={videos}
             />
           </DetailsViewWithActions>
@@ -100,11 +96,6 @@ function StoryContainer() {
       }}
     </StoryData>
   )
-}
-// PROPTYPES
-// const { object } = PropTypes
-StoryContainer.propTypes = {
-  //   something: object,
 }
 
 export default StoryContainer

@@ -35,9 +35,9 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
             <div>{page.dominantLanguageText}</div>
             <div className={classes.literalTranslation}>
               {page.literalTranslation !== ''}{' '}
-              <strong>
+              <em>
                 <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
-              </strong>{' '}
+              </em>{' '}
               : <span>{page.literalTranslation}</span>
             </div>
           </div>
@@ -50,7 +50,7 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
           <Grid container justify="center" spacing={2}>
             <Grid key={page.uid + 0} item xs={4}>
               <div className={classes.media}>
-                <MediaPanels.Presentation videos={page.videos} images={page.images} />
+                <MediaPanels.Presentation videos={page.videos} pictures={page.pictures} />
               </div>
             </Grid>
             <Grid key={page.uid + 2} item xs={4}>

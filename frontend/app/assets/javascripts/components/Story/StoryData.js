@@ -59,6 +59,7 @@ function StoryData({ children }) {
   const title = selectn('properties.dc:title', bookMetadata)
   const uid = selectn('uid', bookMetadata)
 
+  // Data for Cover
   const dominantLanguageTitleTranslation = (
     selectn('properties.fvbook:title_literal_translation', bookMetadata) || []
   ).filter(function getTranslation(translation) {
@@ -87,53 +88,46 @@ function StoryData({ children }) {
     },
   }
 
-  // Images
-  const imagesData = selectn('contextParameters.book.related_pictures', bookMetadata) || []
-  const images = []
-  imagesData.forEach((image, key) => {
-    const img = {
-      original: selectn('views[2].url', image),
-      thumbnail: selectn('views[0].url', image) || 'assets/images/cover.png',
-      description: image['dc:description'],
+  // Pictures
+  const picturesData = selectn('contextParameters.book.related_pictures', bookMetadata) || []
+  const pictures = []
+  picturesData.forEach((picture, key) => {
+    const pic = {
+      original: selectn('views[4].url', picture) || 'assets/images/cover.png',
+      thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
+      description: picture['dc:description'],
       key: key,
-      id: image.uid,
-      object: image,
+      id: picture.uid,
+      object: picture,
       type: 'FVPicture',
     }
-    images.push(img)
+    pictures.push(pic)
   })
 
   // Videos
   const videosData = selectn('contextParameters.book.related_videos', bookMetadata) || []
-  const videos = []
-  videosData.forEach((video, key) => {
-    const vid = {
-      original: getBaseURL() + video.path,
-      thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
-      description: video['dc:description'],
-      key: key,
-      id: video.uid,
-      object: video,
-      type: 'FVVideo',
-    }
-    videos.push(vid)
-  })
+  const videos = _getMediaArray(videosData, 'FVVideo')
 
   // Audio
   const audioData = selectn('contextParameters.book.related_audio', bookMetadata) || []
-  const audio = []
-  audioData.forEach((audioDoc, key) => {
-    const aud = {
-      original: getBaseURL() + audioDoc.path,
-      thumbnail: selectn('views[0].url', audioDoc) || 'assets/images/cover.png',
-      description: audioDoc['dc:description'],
-      key: key,
-      id: audioDoc.uid,
-      object: audioDoc,
-      type: 'FVAudio',
-    }
-    audio.push(aud)
-  })
+  const audio = _getMediaArray(audioData, 'FVAudio')
+
+  function _getMediaArray(data, type) {
+    const mediaArray = []
+    data.forEach((doc, key) => {
+      const extractedData = {
+        original: getBaseURL() + doc.path,
+        thumbnail: selectn('views[0].url', doc) || 'assets/images/cover.png',
+        description: doc['dc:description'],
+        key: key,
+        uid: doc.uid,
+        object: doc,
+        type: type,
+      }
+      mediaArray.push(extractedData)
+    })
+    return mediaArray
+  }
 
   useEffect(() => {
     fetchData()
@@ -207,7 +201,7 @@ function StoryData({ children }) {
     splitWindowPath,
     //Media
     audio,
-    images,
+    pictures,
     videos,
   })
 }

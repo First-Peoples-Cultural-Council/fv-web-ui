@@ -32,18 +32,18 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
     )
 
     // Images
-    const imagesData = selectn('contextParameters.book.related_pictures', entry) || []
-    const images = []
-    imagesData.forEach((image, key) => {
+    const picturesData = selectn('contextParameters.book.related_pictures', entry) || []
+    const pictures = []
+    picturesData.forEach((picture, key) => {
       const img = {
-        original: selectn('views[2].url', image),
-        thumbnail: selectn('views[0].url', image) || 'assets/images/cover.png',
-        description: image['dc:description'],
+        original: selectn('views[4].url', picture) || 'assets/images/cover.png',
+        thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
+        description: picture['dc:description'],
         key: key,
-        uid: image.uid,
-        object: image,
+        uid: picture.uid,
+        object: picture,
       }
-      images.push(img)
+      pictures.push(img)
     })
 
     // Audio
@@ -60,7 +60,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
       dominantLanguageText: selectn('[0].translation', dominantLanguageText) || '',
       literalTranslation: selectn('[0].translation', literalTranslation) || '',
       audio: audio,
-      images: images,
+      pictures: pictures,
       videos: videos,
     })
   }
@@ -82,7 +82,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
   }
 
   return children({
-    bookPages,
+    bookPages: bookPages.reverse(), // Reversed to ensure display in correct order,
   })
 }
 // PROPTYPES
