@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 // Material-UI
+import Paper from '@material-ui/core/Paper'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 
 //FPCC
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import { MediaPanelsStyles } from './MediaPanelsStyles'
 
 /**
  * @summary MediaPanelsPresentation
@@ -17,26 +19,27 @@ import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
  *
  * @returns {node} jsx markup
  */
-function MediaPanelsPresentation({ images, videos }) {
+
+function MediaPanelsPresentation({ pictures, videos }) {
   function _getMediaPanels() {
     const [tabValue, setTabValue] = useState(0)
-    const imageMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={images} />
+    const pictureMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={pictures} />
     const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={videos} />
 
-    if (images.length > 0 && videos.length > 0) {
+    if (pictures.length > 0 && videos.length > 0) {
       return (
-        <div>
+        <Paper square elevation={2}>
           <MediaTab
             tabItems={[{ label: 'Picture(s)' }, { label: 'Video(s)' }]}
             tabsValue={tabValue}
             tabsOnChange={(e, value) => setTabValue(value)}
           />
-          {tabValue === 0 && imageMediaPanel}
+          {tabValue === 0 && pictureMediaPanel}
           {tabValue === 1 && videoMediaPanel}
-        </div>
+        </Paper>
       )
-    } else if (images.length > 0) {
-      return <div>{imageMediaPanel}</div>
+    } else if (pictures.length > 0) {
+      return <div>{pictureMediaPanel}</div>
     } else if (videos.length > 0) {
       return <div>{videoMediaPanel}</div>
     }
@@ -48,13 +51,27 @@ function MediaPanelsPresentation({ images, videos }) {
 
 function MediaTab(props) {
   const { tabsValue, tabsOnChange, tabItems } = props
+  const classes = MediaPanelsStyles()
   const _tabItems = tabItems.map((item, i) => {
     const { label, id, dataTestId, className } = item
-    return <Tab key={i} label={label} id={id} data-testid={dataTestId} className={className} />
+    return (
+      <Tab
+        key={i}
+        label={label}
+        id={id}
+        data-testid={dataTestId}
+        className={className}
+        classes={{ root: classes.tabRoot, selected: classes.tabSelected, labelIcon: classes.label }}
+      />
+    )
   })
 
   return (
-    <Tabs value={tabsValue} onChange={tabsOnChange}>
+    <Tabs
+      value={tabsValue}
+      onChange={tabsOnChange}
+      classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+    >
       {_tabItems}
     </Tabs>
   )
@@ -62,7 +79,7 @@ function MediaTab(props) {
 // PROPTYPES
 const { array } = PropTypes
 MediaPanelsPresentation.propTypes = {
-  images: array,
+  pictures: array,
   videos: array,
 }
 
