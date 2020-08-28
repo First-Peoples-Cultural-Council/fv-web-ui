@@ -6,13 +6,7 @@ import Paper from '@material-ui/core/Paper'
 //FPCC
 import StoryCover from 'components/StoryCover'
 import StoryPages from 'components/StoryPages'
-
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
-import withPagination from 'views/hoc/grid-list/with-pagination'
-
-const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 1 }
-const StoryPagesWithPagination = withPagination(StoryPages.Container, DefaultFetcherParams.pageSize, 100)
+import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
  * @summary StoryPresentation
@@ -28,10 +22,9 @@ function StoryPresentation({
   bookEntries,
   bookOpen,
   closeBookAction,
+  computeEntities,
   defaultLanguage,
-  fetchListViewData,
   intl,
-  metadata,
   openBookAction,
   pageCount,
   // Media
@@ -59,33 +52,19 @@ function StoryPresentation({
             />
           </Paper>
         ) : (
-          <Paper style={{ padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }}>
-            <StoryPagesWithPagination
-              style={{ overflowY: 'auto', maxHeight: '50vh' }}
-              cols={5}
-              cellHeight={150}
-              disablePageSize
-              defaultLanguage={defaultLanguage}
-              items={bookEntries || []}
-              // Props for WithPagination
-              appendControls={[
-                bookOpen ? (
-                  <FVButton variant="contained" key="close" onClick={closeBookAction}>
-                    <FVLabel
-                      transKey="views.pages.explore.dialect.learn.songs_stories.close_book"
-                      defaultStr="Close Book"
-                      transform="first"
-                    />
-                  </FVButton>
-                ) : (
-                  ''
-                ),
-              ]}
-              fetcher={fetchListViewData}
-              fetcherParams={DefaultFetcherParams}
-              metadata={metadata || {}}
-            />
-          </Paper>
+          <PromiseWrapper renderOnError computeEntities={computeEntities}>
+            {bookEntries && bookEntries.length !== 0 ? (
+              <Paper style={{ padding: '15px', margin: '15px 0' }}>
+                <StoryPages.Container
+                  bookEntries={bookEntries}
+                  closeBookAction={closeBookAction}
+                  defaultLanguage={defaultLanguage}
+                />
+              </Paper>
+            ) : (
+              <div>No results</div>
+            )}
+          </PromiseWrapper>
         )}
       </div>
     </div>
@@ -98,6 +77,7 @@ StoryPresentation.propTypes = {
   bookEntries: array,
   bookOpen: bool,
   closeBookAction: func,
+  computeEntities: object,
   defaultLanguage: string,
   fetchListViewData: func,
   intl: object,

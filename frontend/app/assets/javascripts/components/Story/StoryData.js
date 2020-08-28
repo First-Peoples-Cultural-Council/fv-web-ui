@@ -10,11 +10,11 @@ import useDialect from 'DataSource/useDialect'
 import useIntl from 'DataSource/useIntl'
 import useLogin from 'DataSource/useLogin'
 import useNavigation from 'DataSource/useNavigation'
+import useNavigationHelpers from 'common/useNavigationHelpers'
 import useProperties from 'DataSource/useProperties'
 import useRoute from 'DataSource/useRoute'
 import useWindowPath from 'DataSource/useWindowPath'
 
-import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
@@ -33,12 +33,12 @@ function StoryData({ children }) {
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
+  const { getBaseURL } = useNavigationHelpers()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
 
   const [bookOpen, setBookOpen] = useState(false)
-  const fetcherParams = { currentPageIndex: 1, pageSize: 1 }
   const defaultLanguage = 'english'
 
   // Compute dialect
@@ -98,6 +98,7 @@ function StoryData({ children }) {
       key: key,
       id: image.uid,
       object: image,
+      type: 'FVPicture',
     }
     images.push(img)
   })
@@ -107,12 +108,13 @@ function StoryData({ children }) {
   const videos = []
   videosData.forEach((video, key) => {
     const vid = {
-      original: NavigationHelpers.getBaseURL() + video.path,
+      original: getBaseURL() + video.path,
       thumbnail: selectn('views[0].url', video) || 'assets/images/cover.png',
       description: video['dc:description'],
       key: key,
       id: video.uid,
       object: video,
+      type: 'FVVideo',
     }
     videos.push(vid)
   })
@@ -122,7 +124,7 @@ function StoryData({ children }) {
   const audio = []
   audioData.forEach((audioDoc, key) => {
     const aud = {
-      original: NavigationHelpers.getBaseURL() + audioDoc.path,
+      original: getBaseURL() + audioDoc.path,
       thumbnail: selectn('views[0].url', audioDoc) || 'assets/images/cover.png',
       description: audioDoc['dc:description'],
       key: key,
@@ -148,20 +150,12 @@ function StoryData({ children }) {
 
   const fetchData = async () => {
     fetchBook(bookPath)
-    fetchListViewData(fetcherParams)
+    fetchBookEntries(bookPath)
     fetchDialect2(routeParams.dialect_path)
   }
 
-  const fetchListViewData = async (params) => {
-    fetchBookEntries(
-      bookPath,
-      '&currentPageIndex=' +
-        (params.currentPageIndex - 1) +
-        '&pageSize=' +
-        params.pageSize +
-        '&sortOrder=asc,asc' +
-        '&sortBy=fvbookentry:sort_map,dc:created'
-    )
+  const fetchListViewData = async () => {
+    fetchBookEntries(bookPath)
   }
 
   function openBookAction() {

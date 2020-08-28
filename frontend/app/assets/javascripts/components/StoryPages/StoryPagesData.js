@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import DOMPurify from 'dompurify'
 
 // FPCC
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -20,7 +19,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
   const bookPages = []
   bookEntries.forEach(createPage)
 
-  function createPage(entry, index) {
+  function createPage(entry) {
     const dominantLanguageText = (selectn('properties.fvbookentry:dominant_language_text', entry) || []).filter(
       function getTranslation(translation) {
         return translation.language === defaultLanguage
@@ -41,7 +40,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
         thumbnail: selectn('views[0].url', image) || 'assets/images/cover.png',
         description: image['dc:description'],
         key: key,
-        id: image.uid,
+        uid: image.uid,
         object: image,
       }
       images.push(img)
@@ -56,9 +55,8 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
     const videos = _getMediaArray(videosData)
 
     bookPages.push({
-      key: index,
       uid: selectn('uid', entry) || '',
-      title: DOMPurify.sanitize(selectn('properties.dc:title', entry)) || '',
+      title: selectn('properties.dc:title', entry) || '',
       dominantLanguageText: selectn('[0].translation', dominantLanguageText) || '',
       literalTranslation: selectn('[0].translation', literalTranslation) || '',
       audio: audio,
@@ -75,7 +73,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
         thumbnail: selectn('views[0].url', doc) || 'assets/images/cover.png',
         description: doc['dc:description'],
         key: key,
-        id: doc.uid,
+        uid: doc.uid,
         object: doc,
       }
       mediaArray.push(extractedData)

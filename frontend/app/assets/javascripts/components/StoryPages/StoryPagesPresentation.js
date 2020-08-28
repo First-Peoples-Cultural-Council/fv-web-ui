@@ -1,10 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import DOMPurify from 'dompurify'
 
-import FVLabel from 'views/components/FVLabel/index'
+import Grid from '@material-ui/core/Grid'
+
+import FVButton from 'views/components/FVButton'
+import FVLabel from 'views/components/FVLabel'
 import MediaPanels from 'components/MediaPanels'
 import Preview from 'views/components/Editor/Preview'
+
+import { StoryPagesStyles } from './StoryPagesStyles'
 /**
  * @summary StoryPagesPresentation
  * @version 1.0.1
@@ -15,53 +20,62 @@ import Preview from 'views/components/Editor/Preview'
  *
  * @returns {node} jsx markup
  */
-function StoryPagesPresentation({ bookPages }) {
+function StoryPagesPresentation({ bookPages, closeBookAction }) {
   const StoryPage = ({ page }) => {
+    const classes = StoryPagesStyles()
     // Audio
     const audio = page.audio.map((audioDoc) => {
       return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc} type="FVAudio" />
     })
 
     return (
-      <div key={page.key}>
-        <div className="row">
-          <div className="col-xs-12">
-            <MediaPanels.Presentation videos={page.videos} images={page.images} />
-          </div>
-          <div className="col-xs-12 col-md-9">
-            <div className={classNames('col-xs-6', 'fontBCSans')}>
-              <div>{page.title}</div>
+      <Grid key={page.uid} container className={classes.root} spacing={2}>
+        <Grid container justify="center" spacing={2}>
+          <Grid key={page.uid + 0} item xs={3}>
+            <div className={classes.media}>
+              <MediaPanels.Presentation videos={page.videos} images={page.images} />
+            </div>
+          </Grid>
+          <Grid key={page.uid + 2} item xs={3}>
+            <div className={classes.textLanguage}>
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.title) }} />
               {audio}
             </div>
-            <div className={classNames('col-xs-6')} style={{ borderLeft: '1px solid #e1e1e1' }}>
-              {page.dominantLanguageText}
+          </Grid>
+          <Grid key={page.uid + 3} item xs={3}>
+            <div className={classes.textTranslation}>
+              {' '}
+              <strong>
+                <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
+              </strong>{' '}
+              : <span>{page.literalTranslation}</span>
             </div>
-            <div className={classNames('col-xs-12')} style={{ marginTop: '15px' }}>
-              <span key={page.uid}>
-                <strong>
-                  <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
-                </strong>{' '}
-                : <span>{page.literalTranslation}</span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+          </Grid>
+        </Grid>
+      </Grid>
     )
   }
 
   return (
     <div>
-      {bookPages.map(function createPageElements(page, i) {
-        return <StoryPage key={i} page={page} />
+      {bookPages.map(function createPageElements(page, index) {
+        return <StoryPage key={index} page={page} />
       })}
+      <FVButton variant="contained" key="close" onClick={closeBookAction}>
+        <FVLabel
+          transKey="views.pages.explore.dialect.learn.songs_stories.close_book"
+          defaultStr="Close Book"
+          transform="first"
+        />
+      </FVButton>
     </div>
   )
 }
 // PROPTYPES
-const { array } = PropTypes
+const { array, func } = PropTypes
 StoryPagesPresentation.propTypes = {
   bookPages: array,
+  closeBookAction: func,
 }
 
 export default StoryPagesPresentation

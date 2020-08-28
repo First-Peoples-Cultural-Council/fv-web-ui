@@ -14,20 +14,21 @@ import StoryPagesData from 'components/StoryPages/StoryPagesData'
  *
  * @returns {node} jsx markup
  */
-function StoryPagesContainer({ items, defaultLanguage }) {
+function StoryPagesContainer({ bookEntries, closeBookAction, defaultLanguage }) {
   return (
-    <StoryPagesData bookEntries={items} defaultLanguage={defaultLanguage}>
+    <StoryPagesData bookEntries={bookEntries} defaultLanguage={defaultLanguage}>
       {({ bookPages }) => {
-        return <StoryPagesPresentation bookPages={bookPages} />
+        return <StoryPagesPresentation bookPages={bookPages} closeBookAction={closeBookAction} />
       }}
     </StoryPagesData>
   )
 }
 // PROPTYPES
-const { array, string } = PropTypes
+const { array, func, string } = PropTypes
 StoryPagesContainer.propTypes = {
-  items: array,
+  bookEntries: array,
   defaultLanguage: string,
+  closeBookAction: func,
 }
 
 export default StoryPagesContainer

@@ -83,6 +83,7 @@ function StoryContainer() {
               book={book}
               bookEntries={bookEntries}
               bookOpen={bookOpen}
+              computeEntities={computeEntities}
               closeBookAction={closeBookAction}
               defaultLanguage={defaultLanguage}
               intl={intl}

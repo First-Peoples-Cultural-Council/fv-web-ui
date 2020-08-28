@@ -39,7 +39,9 @@ function StoryCoverPresentation({
   return (
     <div className="row">
       <div className="col-xs-12">
-        <MediaPanels.Presentation images={images} videos={videos} />
+        <div className="col-xs-12 col-md-3">
+          <MediaPanels.Presentation images={images} videos={videos} />
+        </div>
         <div className="col-xs-12 col-md-9 fontBCSans">
           <header className={classes.header}>
             <Typography variant="h3" component="h2">

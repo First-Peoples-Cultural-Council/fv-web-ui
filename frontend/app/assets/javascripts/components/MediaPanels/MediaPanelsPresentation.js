@@ -23,7 +23,7 @@ function MediaPanelsPresentation({ images, videos }) {
 
     if (images.length > 0 && videos.length > 0) {
       return (
-        <div className="col-xs-12 col-md-3">
+        <div>
           <FVTab
             tabItems={[{ label: 'Photo(s)' }, { label: 'Video(s)' }]}
             tabsValue={tabValue}
@@ -34,9 +34,9 @@ function MediaPanelsPresentation({ images, videos }) {
         </div>
       )
     } else if (images.length > 0) {
-      return imageMediaPanel
+      return <div>{imageMediaPanel}</div>
     } else if (videos.length > 0) {
-      return videoMediaPanel
+      return <div>{videoMediaPanel}</div>
     }
     return null
   }

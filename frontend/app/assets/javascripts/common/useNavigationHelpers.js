@@ -20,6 +20,9 @@ function useNavigationHelpers() {
     navigate: (url) => {
       NavigationHelpers.navigate(url, pushWindowPath, false)
     },
+    getBaseURL: () => {
+      NavigationHelpers.getBaseURL()
+    },
   }
 }
 
