@@ -2,10 +2,10 @@ package ca.firstvoices.maintenance.dialect.alphabet.workers;
 
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 
-import ca.firstvoices.maintenance.dialect.alphabet.Constants;
+import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import ca.firstvoices.services.CleanupCharactersService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
@@ -17,7 +17,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
-import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
@@ -34,9 +33,13 @@ public class CleanConfusablesWorker extends AbstractWork {
   private static final long serialVersionUID = 1L;
 
   private static final Log log = LogFactory.getLog(CleanConfusablesWorker.class);
+
   private final String job;
+
   private final DocumentRef jobContainerRef;
+
   private final int batchSize;
+
   private final transient CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
@@ -76,6 +79,7 @@ public class CleanConfusablesWorker extends AbstractWork {
                 int i = 1;
 
                 for (DocumentModel character : characters) {
+
                   String[] confusables = ArrayUtils
                       .addAll((String[]) character.getPropertyValue(LC_CONFUSABLES),
                           (String[]) character.getPropertyValue(UC_CONFUSABLES));
@@ -94,9 +98,6 @@ public class CleanConfusablesWorker extends AbstractWork {
                   ++i;
                 }
 
-                // NOTE!!!! CleanConfusables should be added to required jobs
-                // when a confusable is added directly in the alphabet....
-
                 setStatus("Done");
                 maintenanceLogger.removeFromRequiredJobs(dialect, job, true);
               } catch (Exception e) {
@@ -109,22 +110,17 @@ public class CleanConfusablesWorker extends AbstractWork {
   }
 
   /**
-   * Method will find all the dictionary items that contain a confusable character
-   * Clean those confusables (i.e. convert to the correct character), then publish,
-   * If no changes exist on the document
+   * Method will find all the dictionary items that contain a confusable character Clean those
+   * confusables (i.e. convert to the correct character), then publish, If no changes exist on the
+   * document
    *
    * @param session
    * @param confusableChar
    */
   private void processWordsForConfusable(CoreSession session, String confusableChar) {
 
-    String query = "SELECT * FROM FVWord, FVPhrase WHERE "
-        + "dc:title LIKE '%" + NXQL.escapeStringInner(confusableChar) + "%'"
-        + " AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
-
-    DocumentModelList dictionaryItems = session.query(query, null, batchSize, 0, true);
-
-    for (DocumentModel dictionaryItem : dictionaryItems) {
+    for (DocumentModel dictionaryItem : cleanupCharactersService
+        .getAllWordsPhrasesForConfusable(session, confusableChar, batchSize)) {
 
       // Check for unpublished changes (before we clean)
       FirstVoicesPublisherService firstVoicesPublisherService = Framework

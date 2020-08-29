@@ -20,8 +20,8 @@
 
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;

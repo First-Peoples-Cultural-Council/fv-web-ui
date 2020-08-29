@@ -27,7 +27,8 @@
     </listener>
 
     <listener name="ComputeNativeOrderAlphabetListener" postCommit="false" async="false"
-              class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderAlphabetListener" priority="250">
+      class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderAlphabetListener"
+      priority="250">
       <event>beforeDocumentModification</event>
       <event>documentModified</event>
       <event>documentTrashed</event>
@@ -35,7 +36,8 @@
     </listener>
 
     <listener name="ComputeNativeOrderScheduler" async="true" postCommit="false"
-              priority="1000" class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderDialectListener">
+      priority="1000"
+      class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderDialectListener">
       <event>computeAlphabetProcesses</event>
     </listener>
   </extension>

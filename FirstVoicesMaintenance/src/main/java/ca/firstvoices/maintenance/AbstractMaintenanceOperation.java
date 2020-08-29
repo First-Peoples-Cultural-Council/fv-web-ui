@@ -1,6 +1,6 @@
 package ca.firstvoices.maintenance;
 
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import org.nuxeo.ecm.automation.OperationException;
@@ -10,7 +10,8 @@ import org.nuxeo.ecm.webengine.model.exceptions.WebSecurityException;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- *
+ * An abstract maintenace task that requires an `init` and `work` phase Provides some common methods
+ * for maintenance tasks
  */
 public abstract class AbstractMaintenanceOperation {
 
@@ -31,6 +32,7 @@ public abstract class AbstractMaintenanceOperation {
 
   /**
    * Will limit the operation to a dialect type
+   *
    * @param dialect
    */
   protected void limitToDialect(DocumentModel dialect) throws OperationException {
@@ -39,10 +41,23 @@ public abstract class AbstractMaintenanceOperation {
     }
   }
 
+  /**
+   * Gets the maintenace logger service
+   *
+   * @return maintenace logger
+   */
   protected MaintenanceLogger getMaintenanceLogger() {
     return ml;
   }
 
+  /**
+   * Main method to execute phases based on input `executeInitPhase` and `executeWorkPhase` must be
+   * defined in child class Override to add more phases or modify logic
+   *
+   * @param doc   the input document
+   * @param phase the phase to execute
+   * @throws OperationException
+   */
   protected void executePhases(DocumentModel doc, String phase) throws OperationException {
     switch (String.valueOf(phase)) {
       case "init":
@@ -59,14 +74,17 @@ public abstract class AbstractMaintenanceOperation {
   }
 
   /**
-   * Init phase to queue a required job.
-   * Called manually or via listeners.
+   * Init phase to queue a required job. Most of the time will simple add the job to the list of the
+   * document. Called manually (directly via the operation) or can be called via listeners.
+   *
    * @param doc
    */
   protected abstract void executeInitPhase(DocumentModel doc);
 
   /**
-   * Work phase called by required jobs in overnight process.
+   * Work phase is called by the required jobs in overnight process. It can be called directly if
+   * work needs to be done on outside of nightly windows
+   *
    * @param doc
    */
   protected abstract void executeWorkPhase(DocumentModel doc);

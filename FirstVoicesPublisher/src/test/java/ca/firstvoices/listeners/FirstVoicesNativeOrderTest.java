@@ -21,14 +21,14 @@
 
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -68,7 +68,6 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.computealphabetschedule.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml",
     "org.nuxeo.ecm.platform.publisher.core",})

@@ -24,12 +24,12 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 

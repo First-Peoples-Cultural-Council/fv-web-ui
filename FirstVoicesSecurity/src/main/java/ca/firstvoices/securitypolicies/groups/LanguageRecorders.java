@@ -20,15 +20,15 @@
 
 package ca.firstvoices.securitypolicies.groups;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOKS;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_RESOURCES;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOKS;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LABEL_DICTIONARY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_RESOURCES;
 
 import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.ArrayList;

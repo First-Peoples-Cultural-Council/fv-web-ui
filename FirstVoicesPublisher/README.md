@@ -7,6 +7,7 @@ These `sections` follow a similar structure to `Workspaces`, which contain the w
 
 ## ToDo
 * Move Custom Order logic/operations from this module
+* Ensure that the only purpose of publisher is to handle Workspace->Sections syncing, other operations (e.g. UpdateVisibility) should be done in Operations.
 
 ## Notes
 * FirstVoices publishing logic expands on the existing Nuxeo publishing logic. 

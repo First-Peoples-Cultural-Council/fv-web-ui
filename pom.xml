@@ -41,6 +41,7 @@
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
     <module>FirstVoicesCharacters</module>
+    <module>FirstVoicesCoreIO</module>
   </modules>
 
   <dependencyManagement>
@@ -164,7 +165,6 @@
         <artifactId>FirstVoicesCharacters</artifactId>
         <version>${project.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.amazonaws</groupId>
         <artifactId>aws-java-sdk-cognitoidp</artifactId>
@@ -177,12 +177,12 @@
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCharacters</artifactId>
+        <artifactId>FirstVoicesCoreIO</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>fv-web-ui-Characters</artifactId>
+        <groupId>org.nuxeo</groupId>
+        <artifactId>fv-web-ui-core</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

@@ -20,7 +20,7 @@
 
 package ca.firstvoices;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static org.junit.Assert.assertEquals;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeService;

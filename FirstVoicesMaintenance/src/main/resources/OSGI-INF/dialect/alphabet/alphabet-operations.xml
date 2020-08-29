@@ -17,6 +17,9 @@
     <binding name="Alphabet.AddConfusables">
       <administrator>true</administrator>
     </binding>
+    <binding name="Alphabet.ConfusablesStatus">
+      <administrator>true</administrator>
+    </binding>
   </extension>
 
 </component>

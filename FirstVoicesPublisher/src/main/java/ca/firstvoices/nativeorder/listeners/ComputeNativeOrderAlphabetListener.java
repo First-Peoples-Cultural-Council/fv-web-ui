@@ -24,7 +24,7 @@
 
 package ca.firstvoices.nativeorder.listeners;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

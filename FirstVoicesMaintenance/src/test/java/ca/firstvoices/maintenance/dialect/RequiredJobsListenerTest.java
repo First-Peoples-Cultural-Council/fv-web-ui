@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import ca.firstvoices.maintenance.dialect.alphabet.Constants;
+import ca.firstvoices.characters.Constants;
 import ca.firstvoices.maintenance.dialect.alphabet.workers.CleanConfusablesWorker;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;

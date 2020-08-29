@@ -20,8 +20,8 @@
 
 package Operations;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder;

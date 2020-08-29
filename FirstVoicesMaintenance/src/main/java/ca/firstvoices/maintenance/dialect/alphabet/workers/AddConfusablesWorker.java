@@ -1,8 +1,8 @@
 package ca.firstvoices.maintenance.dialect.alphabet.workers;
 
-import ca.firstvoices.maintenance.dialect.alphabet.Constants;
+import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.services.AddConfusablesService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
-import ca.firstvoices.services.AddConfusablesService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -11,8 +11,8 @@ import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Add Confusables will execute the service to grab confusables
- * from a directory and apply them to a local alphabet
+ * Add Confusables will execute the service to grab confusables from a directory and apply them to a
+ * local alphabet
  */
 public class AddConfusablesWorker extends AbstractWork {
 

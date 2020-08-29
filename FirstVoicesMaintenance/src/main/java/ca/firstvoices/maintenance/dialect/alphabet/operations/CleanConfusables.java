@@ -20,8 +20,8 @@
 
 package ca.firstvoices.maintenance.dialect.alphabet.operations;
 
+import ca.firstvoices.characters.Constants;
 import ca.firstvoices.maintenance.AbstractMaintenanceOperation;
-import ca.firstvoices.maintenance.dialect.alphabet.Constants;
 import ca.firstvoices.maintenance.dialect.alphabet.workers.CleanConfusablesWorker;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import org.nuxeo.ecm.automation.OperationException;
@@ -35,7 +35,7 @@ import org.nuxeo.ecm.core.work.api.WorkManager;
 
 @Operation(id = CleanConfusables.ID, category = Constants.GROUP_NAME, label =
     Constants.CLEAN_CONFUSABLES_ACTION_ID, description =
-    "Operation to clean confusables on dictionary items")
+    "Operation to queue/work on `clean confusables` on dictionary items")
 public class CleanConfusables extends AbstractMaintenanceOperation {
 
   public static final String ID = Constants.CLEAN_CONFUSABLES_ACTION_ID;

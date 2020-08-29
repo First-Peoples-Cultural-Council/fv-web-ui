@@ -1,9 +1,23 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.characters.listeners.contrib" version="1.0">
+
+  <require>ca.firstvoices.characters.services.addConfusables.contrib</require>
+  <require>ca.firstvoices.characters.services.cleanupCharacters.contrib</require>
+
   <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-    <listener async="true" class="ca.firstvoices.characters.listeners.AlphabetProcessesListener"
-      name="alphabet_processes_listener">
-      <event>computeAlphabetProcesses</event>
+
+    <listener postCommit="true" class="ca.firstvoices.characters.listeners.CharacterListener"
+      name="character_listener" priority="500">
+      <event>documentCreated</event>
+      <event>beforeDocumentModification</event>
     </listener>
+
+    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.ConfusableCleanupListener"
+      name="confusable_cleanup_listener" priority="50">
+      <event>aboutToCreate</event>
+      <event>beforeDocumentModification</event>
+    </listener>
+
   </extension>
+
 </component>

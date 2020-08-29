@@ -20,7 +20,7 @@
 
 package ca.firstvoices.listeners;
 
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import org.jboss.seam.core.Events;
 import org.nuxeo.ecm.core.api.CoreSession;

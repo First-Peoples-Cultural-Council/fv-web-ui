@@ -1,6 +1,6 @@
 package ca.firstvoices.dialect.assets.services;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Arrays;

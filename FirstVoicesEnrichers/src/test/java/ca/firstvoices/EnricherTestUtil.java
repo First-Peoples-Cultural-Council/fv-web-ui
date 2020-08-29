@@ -20,9 +20,9 @@
 
 package ca.firstvoices;
 
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 
 import org.nuxeo.ecm.core.api.CoreSession;

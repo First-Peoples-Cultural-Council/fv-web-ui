@@ -1,6 +1,6 @@
 package ca.firstvoices.maintenance.services;
 
-import ca.firstvoices.listeners.AbstractSyncListener;
+import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.maintenance.Constants;
 import java.util.Arrays;
 import java.util.HashSet;

@@ -24,8 +24,8 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.apache.commons.logging.Log;

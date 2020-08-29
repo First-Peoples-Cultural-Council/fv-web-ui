@@ -20,7 +20,7 @@
 
 package ca.firstvoices;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.dialect.assets.services.RelationsService;
 import ca.firstvoices.nuxeo.enrichers.WordEnricher;

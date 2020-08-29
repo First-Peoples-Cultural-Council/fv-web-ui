@@ -20,24 +20,24 @@
 
 package ca.firstvoices.publisher.services;
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_GALLERY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LABEL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_VIDEO;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import ca.firstvoices.services.AbstractService;

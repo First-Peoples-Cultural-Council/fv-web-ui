@@ -1,6 +1,6 @@
 package ca.firstvoices.characters.workers;
 
-import ca.firstvoices.services.AddConfusablesService;
+import ca.firstvoices.characters.services.AddConfusablesService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;

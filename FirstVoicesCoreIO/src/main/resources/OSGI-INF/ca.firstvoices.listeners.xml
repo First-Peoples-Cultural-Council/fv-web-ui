@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.listeners.contrib" version="1.0">
+    <require>ca.firstvoices.core.io.services.assignAncestors.contrib</require>
+    <require>ca.firstvoices.core.io.services.sanitizeDocument.contrib</require>
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener name="fvdocumentlistener" async="false" postCommit="false"
+          class="ca.firstvoices.core.io.listeners.FVDocumentListener" priority="100">
+            <event>documentCreated</event>
+            <event>beforeDocumentModification</event>
+            <event>aboutToCreate</event>
+            <event>documentModified</event>
+        </listener>
+
+        <listener name="ancestryAssignmentListener" async="false" postCommit="false"
+          class="ca.firstvoices.core.io.listeners.AncestryAssignmentListener" priority="500">
+            <event>documentCreated</event>
+        </listener>
+
+    </extension>
+
+</component>

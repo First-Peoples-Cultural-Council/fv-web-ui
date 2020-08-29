@@ -29,9 +29,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
     @Deploy("org.nuxeo.ecm.platform.publisher.core"),
     @Deploy("org.nuxeo.ecm.platform.video.core"),
     @Deploy("org.nuxeo.ecm.platform.picture.core"),
-    @Deploy("FirstVoicesCoreTests"),
-    @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml"),
-    @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
+    @Deploy("FirstVoicesCoreTests")
 })
 
 

@@ -20,7 +20,7 @@
 
 package ca.firstvoices.characters.workers;
 
-import ca.firstvoices.services.CleanupCharactersService;
+import ca.firstvoices.characters.services.CleanupCharactersService;
 import java.util.HashMap;
 import java.util.Map;
 import org.nuxeo.ecm.core.api.CoreInstance;

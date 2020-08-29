@@ -1,7 +1,7 @@
 package ca.firstvoices.maintenance.dialect.categories.services;
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;

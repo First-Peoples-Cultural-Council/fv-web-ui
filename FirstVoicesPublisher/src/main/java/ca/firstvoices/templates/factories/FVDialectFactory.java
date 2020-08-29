@@ -20,7 +20,7 @@
 
 package ca.firstvoices.templates.factories;
 
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import java.util.ArrayList;
 import java.util.List;

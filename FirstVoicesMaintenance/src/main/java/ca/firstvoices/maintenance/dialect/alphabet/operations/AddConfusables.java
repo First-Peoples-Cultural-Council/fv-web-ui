@@ -20,8 +20,8 @@
 
 package ca.firstvoices.maintenance.dialect.alphabet.operations;
 
+import ca.firstvoices.characters.Constants;
 import ca.firstvoices.maintenance.AbstractMaintenanceOperation;
-import ca.firstvoices.maintenance.dialect.alphabet.Constants;
 import ca.firstvoices.maintenance.dialect.alphabet.workers.AddConfusablesWorker;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -63,6 +63,7 @@ public class AddConfusables extends AbstractMaintenanceOperation {
 
   /**
    * Will add and clean confusables for the specified dialect
+   *
    * @param dialect
    */
   @Override
@@ -70,7 +71,7 @@ public class AddConfusables extends AbstractMaintenanceOperation {
     WorkManager workManager = Framework.getService(WorkManager.class);
 
     // Add confusables to the alphabet
-    // Note: AddConfusablesWorker will `init` job to clean confusables
+    // Note: AddConfusablesWorker will trigger `init` job to clean confusables
     AddConfusablesWorker worker = new AddConfusablesWorker(dialect.getRef(),
         Constants.ADD_CONFUSABLES_JOB_ID);
     workManager.schedule(worker);

@@ -11,7 +11,8 @@ import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
 
-import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.core.io.services.AssignAncestorsService;
+import ca.firstvoices.core.io.services.AssignAncestorsServiceImpl;
 import java.util.Objects;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -69,9 +70,9 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
           if (dialectId == null) {
             // Try to get dialect via parent, in case fva:dialect is not present for some reason
             AssignAncestorsService ancestorsService = Framework
-                .getService(AssignAncestorsService.class);
+                .getService(AssignAncestorsServiceImpl.class);
 
-            DocumentModel dialect = ancestorsService.getDialect(session, doc);
+            DocumentModel dialect = ancestorsService.getDialect(doc);
             if (Objects.nonNull(dialect)) {
               dialectId = dialect.getId();
             }

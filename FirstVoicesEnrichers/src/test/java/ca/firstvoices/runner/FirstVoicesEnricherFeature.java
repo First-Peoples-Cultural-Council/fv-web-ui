@@ -37,11 +37,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("org.nuxeo.ecm.platform.types.api")
 @Deploy("org.nuxeo.ecm.platform.types.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
-
-@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.sanitize.xml")
-@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml")
-@Deploy("FirstVoicesData:OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.pageproviders.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
