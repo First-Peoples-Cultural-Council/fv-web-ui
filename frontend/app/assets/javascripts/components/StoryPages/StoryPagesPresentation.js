@@ -26,8 +26,10 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
     const classes = StoryPagesStyles()
     // Audio
     const audio = page.audio.map((audioDoc) => {
-      return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc} type="FVAudio" />
+      return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
     })
+    const audioElements = audio && audio.length !== 0 ? audio : null
+
     const literalTranslation =
       page.literalTranslation || page.dominantLanguageText ? (
         <Grid key={page.uid + 3} item xs={4} className={classes.translation}>
@@ -56,7 +58,7 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
             <Grid key={page.uid + 2} item xs={4}>
               <div className={classes.textLanguage}>
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.title) }} />
-                {audio}
+                {audioElements}
               </div>
             </Grid>
             {literalTranslation}

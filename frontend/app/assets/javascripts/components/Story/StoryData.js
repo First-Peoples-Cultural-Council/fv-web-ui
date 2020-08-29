@@ -116,7 +116,7 @@ function StoryData({ children }) {
     const mediaArray = []
     data.forEach((doc, key) => {
       const extractedData = {
-        original: getBaseURL() + doc.path,
+        original: getBaseURL() + doc.path || 'assets/images/cover.png',
         thumbnail: selectn('views[0].url', doc) || 'assets/images/cover.png',
         description: doc['dc:description'],
         key: key,
@@ -146,10 +146,6 @@ function StoryData({ children }) {
     fetchBook(bookPath)
     fetchBookEntries(bookPath)
     fetchDialect2(routeParams.dialect_path)
-  }
-
-  const fetchListViewData = async () => {
-    fetchBookEntries(bookPath)
   }
 
   function openBookAction() {
@@ -188,7 +184,6 @@ function StoryData({ children }) {
     defaultLanguage,
     deleteBook,
     dialect,
-    fetchListViewData,
     intl,
     isKidsTheme,
     metadata: bookEntriesMetadata,

@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // FPCC
-import NavigationHelpers from 'common/NavigationHelpers'
+import useNavigationHelpers from 'common/useNavigationHelpers'
 
 /**
  * @summary StoryPagesData
@@ -16,61 +17,67 @@ import NavigationHelpers from 'common/NavigationHelpers'
  *
  */
 function StoryPagesData({ children, bookEntries, defaultLanguage }) {
-  const bookPages = []
-  bookEntries.forEach(createPage)
+  const { getBaseURL } = useNavigationHelpers()
+  const [bookPages, setBookPages] = useState([])
 
-  function createPage(entry) {
-    const dominantLanguageText = (selectn('properties.fvbookentry:dominant_language_text', entry) || []).filter(
-      function getTranslation(translation) {
-        return translation.language === defaultLanguage
-      }
-    )
-    const literalTranslation = (selectn('properties.fv:literal_translation', entry) || []).filter(
-      function getTranslation(translation) {
-        return translation.language === defaultLanguage
-      }
-    )
+  const getPages = async () => {
+    const bookPagesArray = []
+    bookEntries.forEach(createPage)
 
-    // Images
-    const picturesData = selectn('contextParameters.book.related_pictures', entry) || []
-    const pictures = []
-    picturesData.forEach((picture, key) => {
-      const img = {
-        original: selectn('views[4].url', picture) || 'assets/images/cover.png',
-        thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
-        description: picture['dc:description'],
-        key: key,
-        uid: picture.uid,
-        object: picture,
-      }
-      pictures.push(img)
-    })
+    function createPage(entry) {
+      const dominantLanguageText = (selectn('properties.fvbookentry:dominant_language_text', entry) || []).filter(
+        function getTranslation(translation) {
+          return translation.language === defaultLanguage
+        }
+      )
+      const literalTranslation = (selectn('properties.fv:literal_translation', entry) || []).filter(
+        function getTranslation(translation) {
+          return translation.language === defaultLanguage
+        }
+      )
 
-    // Audio
-    const audioData = selectn('contextParameters.book.related_audio', entry) || []
-    const audio = _getMediaArray(audioData)
+      // Images
+      const picturesData = selectn('contextParameters.book.related_pictures', entry) || []
+      const pictures = []
+      picturesData.forEach((picture, key) => {
+        const img = {
+          original: selectn('views[4].url', picture) || 'assets/images/cover.png',
+          thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
+          description: picture['dc:description'],
+          key: key,
+          uid: picture.uid,
+          object: picture,
+        }
+        pictures.push(img)
+      })
 
-    // Videos
-    const videosData = selectn('contextParameters.book.related_videos', entry) || []
-    const videos = _getMediaArray(videosData)
+      // Audio
+      const audioData = selectn('contextParameters.book.related_audio', entry) || []
+      const audio = _getMediaArray(audioData)
 
-    bookPages.push({
-      uid: selectn('uid', entry) || '',
-      title: selectn('properties.dc:title', entry) || '',
-      dominantLanguageText: selectn('[0].translation', dominantLanguageText) || '',
-      literalTranslation: selectn('[0].translation', literalTranslation) || '',
-      audio: audio,
-      pictures: pictures,
-      videos: videos,
-    })
+      // Videos
+      const videosData = selectn('contextParameters.book.related_videos', entry) || []
+      const videos = _getMediaArray(videosData)
+
+      bookPagesArray.push({
+        uid: selectn('uid', entry) || '',
+        title: selectn('properties.dc:title', entry) || '',
+        dominantLanguageText: selectn('[0].translation', dominantLanguageText) || '',
+        literalTranslation: selectn('[0].translation', literalTranslation) || '',
+        audio: audio,
+        pictures: pictures,
+        videos: videos,
+      })
+    }
+    setBookPages(bookPagesArray)
   }
 
   function _getMediaArray(data) {
     const mediaArray = []
     data.forEach((doc, key) => {
       const extractedData = {
-        original: NavigationHelpers.getBaseURL() + doc.path,
-        thumbnail: selectn('views[0].url', doc) || 'assets/images/cover.png',
+        original: getBaseURL() + doc.path,
+        thumbnail: 'assets/images/cover.png',
         description: doc['dc:description'],
         key: key,
         uid: doc.uid,
@@ -80,6 +87,10 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
     })
     return mediaArray
   }
+
+  useEffect(() => {
+    getPages()
+  }, [])
 
   return children({
     bookPages: bookPages.reverse(), // Reversed to ensure display in correct order,

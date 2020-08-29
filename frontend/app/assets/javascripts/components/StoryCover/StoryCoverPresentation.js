@@ -32,9 +32,10 @@ function StoryCoverPresentation({
 }) {
   const classes = StoryCoverStyles()
   // Audio
-  const audioElements = audio.map((audioDoc) => {
+  const audioMapped = audio.map((audioDoc) => {
     return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
   })
+  const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
   // Main component
   return (
@@ -65,7 +66,7 @@ function StoryCoverPresentation({
 
             <div className={classes.introductionTranslations}>
               {_getIntroduction(book.introduction, book.introductionTranslation)}
-              {audioElements}
+              <div className="col-xs-12 col-md-3">{audioElements}</div>
             </div>
           </div>
         </div>
