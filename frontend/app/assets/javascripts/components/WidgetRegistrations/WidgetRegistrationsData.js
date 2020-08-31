@@ -32,7 +32,7 @@ function WidgetRegistrationsData({ children, columnRender }) {
   const onRowClick = (event, { id }) => {
     navigate(
       dialectId
-        ? `${urlUserRegistration}?task=${id}&page=${page +
+        ? `${urlUserRegistration}?id=${id}&page=${page +
             1}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortDirection}`
         : '#'
     )
@@ -67,6 +67,7 @@ function WidgetRegistrationsData({ children, columnRender }) {
             name: 'name 1',
             email: 'email@one.com',
             date: Date.now(),
+            id: '07d51b18-f6a3-4ba0-9e44-3e557fc30a07',
           },
         ],
         page: 0,
@@ -110,6 +111,7 @@ function WidgetRegistrationsData({ children, columnRender }) {
       sorting: true,
     },
     sortDirection,
+    urlAllItems: urlUserRegistration,
   }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>

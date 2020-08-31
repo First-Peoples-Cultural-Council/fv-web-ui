@@ -35,6 +35,7 @@ function WidgetRegistrationsContainer() {
         onRowClick,
         options,
         sortDirection,
+        urlAllItems,
       }) => {
         return (
           <WidgetRegistrationsPresentation
@@ -47,6 +48,7 @@ function WidgetRegistrationsContainer() {
             onRowClick={onRowClick}
             options={options}
             sortDirection={sortDirection}
+            urlAllItems={urlAllItems}
           />
         )
       }}

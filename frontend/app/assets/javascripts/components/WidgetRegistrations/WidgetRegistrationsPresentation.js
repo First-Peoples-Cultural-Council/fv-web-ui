@@ -6,7 +6,7 @@ import Table from 'components/Table'
 import Link from 'views/components/Link'
 import '!style-loader!css-loader!./WidgetRegistrations.css'
 
-import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE, URL_QUERY_PLACEHOLDER } from 'common/Constants'
+import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE /*, URL_QUERY_PLACEHOLDER*/ } from 'common/Constants'
 /**
  * @summary WidgetRegistrationsPresentation
  * @version 1.0.1
@@ -33,6 +33,7 @@ function WidgetRegistrationsPresentation({
   onRowClick,
   options,
   sortDirection,
+  urlAllItems,
 }) {
   return (
     <Widget.Presentation
@@ -40,12 +41,13 @@ function WidgetRegistrationsPresentation({
       title="Registrations"
       variant={TABLE_FULL_WIDTH}
       childrenHeader={
-        <Link
-          className="Widget__headerLink"
-          href={`/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}&page=1&pageSize=10&sortBy=date&sortOrder=desc`}
-        >
-          View full list
-        </Link>
+        urlAllItems ? (
+          <Link className="Widget__headerLink" href={`${urlAllItems}?page=1&pageSize=10&sortBy=date&sortOrder=desc`}>
+            View full list
+          </Link>
+        ) : (
+          undefined
+        )
       }
     >
       <Table.Presentation
@@ -79,6 +81,7 @@ WidgetRegistrationsPresentation.propTypes = {
   onOrderChange: func,
   options: object,
   sortDirection: string,
+  urlAllItems: string,
 }
 
 export default WidgetRegistrationsPresentation
