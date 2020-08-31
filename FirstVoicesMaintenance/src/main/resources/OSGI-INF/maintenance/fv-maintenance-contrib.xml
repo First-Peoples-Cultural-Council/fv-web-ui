@@ -31,14 +31,14 @@
 
     <!-- Listener will execute required jobs -->
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener name="queueRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ExecuteRequiredJobsListener">
+        <listener name="executeRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ExecuteRequiredJobsListener">
             <event>executeRequiredJobs</event>
         </listener>
     </extension>
 
     <!-- Listener will manage required jobs: adding, removing -->
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener name="queueRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ManageRequiredJobsListener">
+        <listener name="manageRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ManageRequiredJobsListener">
             <event>addToRequiredJobs</event>
             <event>removeFromRequiredJobs</event>
         </listener>

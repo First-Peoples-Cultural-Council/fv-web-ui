@@ -1,8 +1,9 @@
 package ca.firstvoices.maintenance.services;
 
 import ca.firstvoices.core.io.listeners.AbstractSyncListener;
+import ca.firstvoices.data.utils.PropertyUtils;
 import ca.firstvoices.maintenance.Constants;
-import java.util.Arrays;
+import ca.firstvoices.maintenance.common.CommonConstants;
 import java.util.HashSet;
 import java.util.Set;
 import org.nuxeo.ecm.core.api.CoreInstance;
@@ -18,19 +19,8 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
 
   @Override
   public Set<String> getRequiredJobs(DocumentModel jobContainer) {
-
-    if (jobContainer == null) {
-      return new HashSet<>();
-    }
-
-    // Get current required jobs
-    String[] requiredJobsRawList = (String[]) jobContainer
-        .getPropertyValue("fv-maintenance:required_jobs");
-    if (requiredJobsRawList != null) {
-      return new HashSet<>(Arrays.asList(requiredJobsRawList));
-    }
-
-    return new HashSet<>();
+    return new HashSet<>(
+        PropertyUtils.getValuesAsList(jobContainer, CommonConstants.REQUIRED_JOBS_FULL_FIELD));
   }
 
   @Override
@@ -42,10 +32,11 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
                 // Use a SET to ensure we don't add duplicates
                 Set<String> requiredJobs = getRequiredJobs(jobContainer);
                 requiredJobs.add(job);
-                jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
+                jobContainer.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
+                    CommonConstants.REQUIRED_JOBS_FIELD, requiredJobs);
 
                 // Avoid firing other events with this update
-                AbstractSyncListener.disableAllEvents(jobContainer);
+                AbstractSyncListener.disableDefaultEvents(jobContainer);
 
                 // Update dialect
                 session.saveDocument(jobContainer);
@@ -66,10 +57,11 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
 
                 if (requiredJobs != null && !requiredJobs.isEmpty() && requiredJobs.contains(job)) {
                   requiredJobs.remove(job);
-                  jobContainer.setProperty("fv-maintenance", "required_jobs", requiredJobs);
+                  jobContainer.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
+                      CommonConstants.REQUIRED_JOBS_FIELD, requiredJobs);
 
                   // Avoid firing other events with this update
-                  AbstractSyncListener.disableAllEvents(jobContainer);
+                  AbstractSyncListener.disableDefaultEvents(jobContainer);
 
                   // Update dialect
                   session.saveDocument(jobContainer);

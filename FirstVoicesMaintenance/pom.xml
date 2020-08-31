@@ -34,6 +34,10 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesMaintenanceCommon</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreIO</artifactId>
     </dependency>
     <dependency>

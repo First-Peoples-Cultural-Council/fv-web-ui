@@ -20,36 +20,33 @@
 
 package ca.firstvoices.maintenance.listeners;
 
-import ca.firstvoices.maintenance.Constants;
+import ca.firstvoices.maintenance.common.CommonConstants;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.automation.OperationException;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.core.CoreService;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener will be called by schedule (see fv-maintenace-contrib.xml)
- * Will execute `work` phases for up to 2 jobs for every dialect that has pending jobs
+ * Listener to manage adding and removing required jobs from other events
+ * This is meant for packages outside of fv-maintenance (or that cannot include it as a dependency)
+ * `addToRequiredJobs`/`removeFromRequiredJobs` may also be called directly when package is included
  */
 public class ManageRequiredJobsListener implements EventListener {
 
-  // Maximum amount of jobs to execute per dialect
-  private static final int REQUIRED_JOB_LIMIT = 2;
+  private static final String JOB_CONTAINER_PROP = "jobContainer";
+  private static final String JOB_IDS_PROP = "jobIds";
+  private static final String SUCCESS_PROP = "success";
 
-  // Get logger
-  private static final Log log = LogFactory.getLog(ManageRequiredJobsListener.class);
+  private final MaintenanceLogger ml = Framework.getService(MaintenanceLogger.class);
+
+  private static final Logger log =
+      Logger.getLogger(ManageRequiredJobsListener.class.getCanonicalName());
 
   @Override
   public void handleEvent(Event event) {
@@ -59,64 +56,49 @@ public class ManageRequiredJobsListener implements EventListener {
       return;
     }
 
-    if (!event.getName().equals(Constants.EXECUTE_REQUIRED_JOBS_EVENT_ID)) {
+    String eventId = event.getName();
+    EventContext eventContext = event.getContext();
+
+    if (!eventId.equals(CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID) && !eventId
+        .equals(CommonConstants.REMOVE_FROM_REQUIRED_JOBS_EVENT_ID)) {
       return;
     }
 
-    CoreInstance
-        .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
-            session -> {
-              // Get all dialects that need jobs to execute
-              String query = "SELECT * FROM FVDialect WHERE "
-                  + " fv-maintenance:required_jobs/* IS NOT NULL AND" + " ecm:isVersion = 0 AND "
-                  + " ecm:isProxy = 0 AND " + " ecm:isTrashed = 0 " + " ORDER BY dc:modified ASC";
+    if (!eventContext.hasProperty(JOB_CONTAINER_PROP) || !eventContext.hasProperty(JOB_IDS_PROP)) {
+      log.warning("Required job listener not supplied with a required props: " + eventId);
+      return;
+    }
 
-              DocumentModelList dialects = session.query(query);
+    // container likely to be a dialect type, but can be used for other types
+    DocumentModel container = (DocumentModel) eventContext.getProperty(JOB_CONTAINER_PROP);
+    Set<String> jobs = (HashSet<String>) eventContext.getProperty(JOB_IDS_PROP);
 
-              // Nothing to process
-              if (dialects == null || dialects.isEmpty()) {
-                return;
-              }
+    switch (eventId) {
 
-              AutomationService automation = Framework.getService(AutomationService.class);
-              MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
+      case CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID:
+        for (String job : jobs) {
+          ml.addToRequiredJobs(container, job);
+        }
+        break;
 
-              for (DocumentModel dialect : dialects) {
+      case CommonConstants.REMOVE_FROM_REQUIRED_JOBS_EVENT_ID:
 
-                Set<String> requiredJobs = maintenanceLogger.getRequiredJobs(dialect);
-                if (requiredJobs != null && !requiredJobs.isEmpty()) {
-                  try {
-                    // Trigger Phase 2 (work) of related operation
-                    OperationContext operation = new OperationContext(session);
-                    operation.setInput(dialect);
+        boolean success = false;
 
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("phase", "work");
-                    params.put("batchSize", 1000);
+        if (eventContext.hasProperty(SUCCESS_PROP)) {
+          success = (boolean) eventContext.getProperty(SUCCESS_PROP);
+        }
 
-                    int jobsExecuted = 0;
+        for (String job : jobs) {
+          ml.removeFromRequiredJobs(container, job, success);
+        }
 
-                    // Execute `work` phases for required jobs, up to maximum
-                    while (requiredJobs.iterator().hasNext() && jobsExecuted < REQUIRED_JOB_LIMIT) {
-                      String nextRequiredJob = requiredJobs.iterator().next();
-                      automation.run(operation, nextRequiredJob, params);
+        break;
 
-                      ++jobsExecuted;
-                    }
-
-                    if (jobsExecuted == (REQUIRED_JOB_LIMIT - 1)) {
-                      log.warn("Reached required job limit for dialect " + dialect.getTitle());
-                    }
-
-                  } catch (OperationException e) {
-                    event.markBubbleException();
-                    e.printStackTrace();
-                  }
-                }
-              }
-
-            });
-
+      default:
+        log.warning("Tried to handle unknown event: " + eventId);
+        break;
+    }
   }
 }
 
