@@ -1,4 +1,4 @@
-package ca.firstvoices.lifecycle;
+package ca.firstvoices.data.lifecycle;
 
 /**
  * @author david
