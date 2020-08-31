@@ -33,7 +33,8 @@ public class RequiredJobsUtils {
 
   public static void removeFromRequiredJobs(DocumentModel jobContainer, String jobId,
       boolean success) {
-    Event event = createEvent(CommonConstants.REMOVE_FROM_REQUIRED_JOBS_EVENT_ID, jobContainer, jobId);
+    Event event = createEvent(CommonConstants.REMOVE_FROM_REQUIRED_JOBS_EVENT_ID, jobContainer,
+        jobId);
     event.getContext().setProperty("success", success);
 
     Framework.getService(EventProducer.class).fireEvent(event);

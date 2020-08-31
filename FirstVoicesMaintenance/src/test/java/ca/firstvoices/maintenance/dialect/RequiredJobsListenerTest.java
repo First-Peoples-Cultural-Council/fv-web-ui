@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import ca.firstvoices.characters.Constants;
-import ca.firstvoices.maintenance.dialect.alphabet.workers.CleanConfusablesWorker;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
@@ -60,7 +58,7 @@ public class RequiredJobsListenerTest extends AbstractTestDataCreatorTest {
     assertTrue(docs.size() > 1);
   }
 
-  @Ignore
+  @Ignore("Need to add worker test")
   @Test
   public void workerTest() {
 
@@ -68,12 +66,5 @@ public class RequiredJobsListenerTest extends AbstractTestDataCreatorTest {
 
     DocumentModelList docs = session.getChildren(testDialect.getRef(), "FVAlphabet");
     assertEquals(1, docs.size());
-
-    // Initiate worker to perform operation
-    CleanConfusablesWorker worker = new CleanConfusablesWorker(testDialect.getRef(),
-        Constants.CLEAN_CONFUSABLES_JOB_ID, 1000);
-    workManager.schedule(worker, true);
-
-    assertNotNull(worker);
   }
 }
