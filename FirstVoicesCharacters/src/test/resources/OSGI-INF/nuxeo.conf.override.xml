@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<extension point="configuration" target="org.nuxeo.runtime.ConfigurationService">
+  <property name="nuxeo.picture.migration.enabled" override="true">false</property>
+</extension>
