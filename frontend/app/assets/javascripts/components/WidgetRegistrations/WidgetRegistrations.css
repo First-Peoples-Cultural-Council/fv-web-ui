@@ -1,0 +1,11 @@
+.WidgetRegistrations__name {
+  display: flex;
+  align-items: center;
+}
+.WidgetRegistrations__nameIcon {
+  color: #a2583c;
+}
+.WidgetRegistrations__nameIconContainer {
+  display: flex;
+  justify-content: flex-end;
+}
