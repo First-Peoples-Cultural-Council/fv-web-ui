@@ -36,6 +36,7 @@
     <module>FirstVoicesCognitoAuth</module>
     <module>FirstVoicesSimplifiedAPI</module>
     <module>FirstVoicesMaintenance</module>
+    <module>FirstVoicesMaintenanceCommon</module>
     <module>FirstVoicesCoreTests</module>
     <module>migration-contributions</module>
     <module>FirstVoicesData</module>
@@ -59,6 +60,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesMaintenance</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesMaintenanceCommon</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -20,8 +20,8 @@
 
 package ca.firstvoices.securitypolicies.lifecycle;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
 
 import java.util.Arrays;
 import java.util.List;

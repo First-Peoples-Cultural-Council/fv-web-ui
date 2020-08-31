@@ -20,9 +20,9 @@
 
 package ca.firstvoices;
 
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher;
@@ -65,7 +65,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
         + ".ProxyPublisherListener.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml,",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml", "org.nuxeo.ecm.platform",
     "org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",

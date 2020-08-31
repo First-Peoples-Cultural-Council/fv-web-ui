@@ -5,8 +5,8 @@ import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
 import ca.firstvoices.core.io.marshallers.tasks.models.SimpleTaskAdapter;
-import ca.firstvoices.models.SimpleCoreEntity;
-import ca.firstvoices.models.SimplePrincipalEntity;
+import ca.firstvoices.data.models.SimpleCoreEntity;
+import ca.firstvoices.data.models.SimplePrincipalEntity;
 import com.fasterxml.jackson.core.JsonGenerator;
 import java.io.IOException;
 import java.util.Calendar;

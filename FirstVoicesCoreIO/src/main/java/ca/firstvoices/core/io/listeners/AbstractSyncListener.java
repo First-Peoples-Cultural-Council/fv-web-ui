@@ -43,14 +43,6 @@ public class AbstractSyncListener {
     return (eventCtx instanceof DocumentEventContext);
   }
 
-  public static void disableDefaultFVEvents(final DocumentModel doc) {
-    doc.putContextData(FVDocumentListener.DISABLE_FVDOCUMENT_LISTENER, true);
-  }
-
-  public static void enableDefaultFVEvents(final DocumentModel doc) {
-    doc.putContextData(FVDocumentListener.DISABLE_FVDOCUMENT_LISTENER, null);
-  }
-
   public static void disableDefaultEvents(final DocumentModel doc) {
     doc.putContextData(DublinCoreListener.DISABLE_DUBLINCORE_LISTENER, true);
     doc.putContextData(CollectionConstants.DISABLE_NOTIFICATION_SERVICE, true);
@@ -63,15 +55,5 @@ public class AbstractSyncListener {
     doc.putContextData(CollectionConstants.DISABLE_NOTIFICATION_SERVICE, null);
     doc.putContextData(CollectionConstants.DISABLE_AUDIT_LOGGER, null);
     doc.putContextData(VersioningService.DISABLE_AUTO_CHECKOUT, null);
-  }
-
-  public static void disableAllEvents(final DocumentModel doc) {
-    disableDefaultFVEvents(doc);
-    disableDefaultEvents(doc);
-  }
-
-  public static void enableAllEvents(final DocumentModel doc) {
-    enableDefaultFVEvents(doc);
-    enableDefaultEvents(doc);
   }
 }

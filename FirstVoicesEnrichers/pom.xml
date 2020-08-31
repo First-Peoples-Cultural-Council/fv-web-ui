@@ -47,6 +47,10 @@
       <artifactId>FirstVoicesPublisher</artifactId>
     </dependency>
     <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCharacters</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <scope>test</scope>

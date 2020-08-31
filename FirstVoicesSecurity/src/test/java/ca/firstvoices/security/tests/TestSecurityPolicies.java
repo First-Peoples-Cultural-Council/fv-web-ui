@@ -20,9 +20,9 @@
 
 package ca.firstvoices.security.tests;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;

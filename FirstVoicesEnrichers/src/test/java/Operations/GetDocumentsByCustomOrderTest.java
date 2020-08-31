@@ -23,7 +23,7 @@ package Operations;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
+import ca.firstvoices.characters.services.CustomOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder;
 import ca.firstvoices.testUtil.AbstractFirstVoicesEnricherTest;
 import java.util.Arrays;
@@ -79,7 +79,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
 
   @Test
   public void DocumentsByCustomOrderOperationTest() throws OperationException {
-    NativeOrderComputeServiceImpl nativeOrderComputeService = new NativeOrderComputeServiceImpl();
+    CustomOrderComputeServiceImpl nativeOrderComputeService = new CustomOrderComputeServiceImpl();
     nativeOrderComputeService
         .computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
     session.save();

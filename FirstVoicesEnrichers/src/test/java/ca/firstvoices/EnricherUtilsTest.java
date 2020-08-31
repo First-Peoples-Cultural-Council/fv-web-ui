@@ -23,8 +23,8 @@ package ca.firstvoices;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static org.junit.Assert.assertEquals;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
-import ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl;
+import ca.firstvoices.characters.services.CustomOrderComputeService;
+import ca.firstvoices.characters.services.CustomOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.DocumentEnrichedQuery;
 import ca.firstvoices.nuxeo.utils.EnricherUtils;
 import ca.firstvoices.testUtil.AbstractFirstVoicesEnricherTest;
@@ -65,14 +65,8 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     assertEquals(subcategory.getId(), categories[0]);
   }
 
-  /**
-   * TODO Fix test. Does it fail due to elastic search not indexing the word fast enough? Calling
-   * operation directly works.
-   *
-   * @throws OperationException
-   */
   @Test
-  @Ignore
+  @Ignore("Fix test. Does it fail due to elastic search not indexing the word fast enough? Calling operation directly works.")
   public void shouldReturnWordFromSubCategory() throws OperationException {
 
     String categoryQuery =
@@ -95,7 +89,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void testLettertoCustomOrder() {
     String[] letterArray = {"a", "aa", "ae", "b", "c", "d", "e", "'"};
     int[] wordOrder = {1, 3, 5, 8, 58, 61, 1, 91};
-    int customOrderBase = NativeOrderComputeServiceImpl.BASE;
+    int customOrderBase = CustomOrderComputeServiceImpl.BASE;
 
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
@@ -107,7 +101,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
       session.save();
     }
 
-    NativeOrderComputeService service = new NativeOrderComputeServiceImpl();
+    CustomOrderComputeService service = new CustomOrderComputeServiceImpl();
     service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
 
     for (int i = 0; i < letterArray.length; i++) {
@@ -131,7 +125,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
       session.save();
     }
 
-    NativeOrderComputeService service = new NativeOrderComputeServiceImpl();
+    CustomOrderComputeService service = new CustomOrderComputeServiceImpl();
     service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
 
     for (int i = 0; i < letterArray.length; i++) {

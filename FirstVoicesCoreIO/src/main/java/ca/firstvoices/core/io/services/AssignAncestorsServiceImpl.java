@@ -20,10 +20,11 @@
 
 package ca.firstvoices.core.io.services;
 
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.data.utils.DocumentUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -34,7 +35,7 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
     // Do privileged since we are reading info outside of a dialect
     CoreInstance.doPrivileged(currentDoc.getCoreSession(), s -> {
       // Get the parent document of each type for the current document using the helper method
-      DocumentModel dialect = getDialect(currentDoc);
+      DocumentModel dialect = DialectUtils.getDialect(currentDoc);
       DocumentModel language = getLanguage(s, currentDoc);
       DocumentModel languageFamily = getLanguageFamily(s, currentDoc);
 
@@ -60,36 +61,12 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
     });
   }
 
-  public DocumentModel getDialect(DocumentModel currentDoc) {
-    return CoreInstance.doPrivileged(currentDoc.getCoreSession(), s -> {
-      return getParentDoc(s, currentDoc, FV_DIALECT);
-    });
-  }
-
   private DocumentModel getLanguage(CoreSession session, DocumentModel currentDoc) {
-    return getParentDoc(session, currentDoc, FV_LANGUAGE);
+    return DocumentUtils.getParentDoc(session, currentDoc, FV_LANGUAGE);
   }
 
 
   private DocumentModel getLanguageFamily(CoreSession session, DocumentModel currentDoc) {
-    return getParentDoc(session, currentDoc, FV_LANGUAGE_FAMILY);
+    return DocumentUtils.getParentDoc(session, currentDoc, FV_LANGUAGE_FAMILY);
   }
-
-  /**
-   * Get parent doc of the specified type
-   *
-   * @param session
-   * @param currentDoc
-   * @param currentType
-   * @return
-   */
-  private DocumentModel getParentDoc(CoreSession session, DocumentModel currentDoc,
-      String currentType) {
-    DocumentModel parent = session.getParentDocument(currentDoc.getRef());
-    while (parent != null && !currentType.equals(parent.getType())) {
-      parent = session.getParentDocument(parent.getRef());
-    }
-    return parent;
-  }
-
 }

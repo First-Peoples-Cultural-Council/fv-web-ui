@@ -23,8 +23,5 @@ package ca.firstvoices.core.io.services;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface AssignAncestorsService {
-
   void assignAncestors(DocumentModel currentDoc);
-
-  DocumentModel getDialect(DocumentModel currentDoc);
 }

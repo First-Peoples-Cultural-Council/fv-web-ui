@@ -1,6 +1,6 @@
 package ca.firstvoices.core.io.marshallers;
 
-import ca.firstvoices.models.SimpleCoreEntity;
+import ca.firstvoices.data.models.SimpleCoreEntity;
 import com.fasterxml.jackson.core.JsonGenerator;
 import java.io.IOException;
 import java.io.Serializable;
