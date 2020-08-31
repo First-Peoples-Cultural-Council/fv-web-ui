@@ -22,18 +22,18 @@ public class RequiredJobsUtils {
   }
 
   public static void addToRequiredJobs(DocumentModel jobContainer, String jobId) {
-    Event event = createEvent("addToRequiredJobs", jobContainer, jobId);
+    Event event = createEvent(CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID, jobContainer, jobId);
     Framework.getService(EventProducer.class).fireEvent(event);
   }
 
   public static void addToRequiredJobs(DocumentModel jobContainer, Set<String> jobIds) {
-    Event event = createEvent("addToRequiredJobs", jobContainer, jobIds);
+    Event event = createEvent(CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID, jobContainer, jobIds);
     Framework.getService(EventProducer.class).fireEvent(event);
   }
 
   public static void removeFromRequiredJobs(DocumentModel jobContainer, String jobId,
       boolean success) {
-    Event event = createEvent("removeFromRequiredJobs", jobContainer, jobId);
+    Event event = createEvent(CommonConstants.REMOVE_FROM_REQUIRED_JOBS_EVENT_ID, jobContainer, jobId);
     event.getContext().setProperty("success", success);
 
     Framework.getService(EventProducer.class).fireEvent(event);
