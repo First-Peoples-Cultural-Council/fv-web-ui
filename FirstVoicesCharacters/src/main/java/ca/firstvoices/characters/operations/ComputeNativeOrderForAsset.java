@@ -18,7 +18,7 @@
  *
  */
 
-package ca.firstvoices.characters.nativeorder.operations;
+package ca.firstvoices.characters.operations;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;

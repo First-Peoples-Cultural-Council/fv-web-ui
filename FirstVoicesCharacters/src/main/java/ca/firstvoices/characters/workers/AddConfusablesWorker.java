@@ -1,8 +1,8 @@
-package ca.firstvoices.maintenance.dialect.alphabet.workers;
+package ca.firstvoices.characters.workers;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.AddConfusablesService;
-import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -29,8 +29,6 @@ public class AddConfusablesWorker extends AbstractWork {
 
   @Override
   public void work() {
-    MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
-
     CoreInstance
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
@@ -39,10 +37,10 @@ public class AddConfusablesWorker extends AbstractWork {
               service.addConfusables(session, dialect);
 
               // Remove job from required jobs
-              maintenanceLogger.removeFromRequiredJobs(dialect, job, true);
+              RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
 
               // Add job to clean confusables to be picked up later
-              maintenanceLogger.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
+              RequiredJobsUtils.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
             });
   }
 
@@ -53,6 +51,6 @@ public class AddConfusablesWorker extends AbstractWork {
 
   @Override
   public String getCategory() {
-    return ca.firstvoices.maintenance.Constants.EXECUTE_REQUIRED_JOBS_EVENT_ID;
+    return Constants.CHARACTER_WORKERS_QUEUE;
   }
 }

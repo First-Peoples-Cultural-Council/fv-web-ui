@@ -18,9 +18,10 @@
  *
  */
 
-package ca.firstvoices.nativeorder.workers;
+package ca.firstvoices.characters.nativeorder.workers;
 
-import ca.firstvoices.nativeorder.services.NativeOrderComputeService;
+import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.services.CustomOrderComputeService;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -36,7 +37,7 @@ public class ComputeNativeOrderDialectWorker extends AbstractWork {
 
   private static final String COMPUTE_NATIVE_ORDER_DIALECT = "computeNativeOrderDialect";
   private DocumentRef dialect;
-  private NativeOrderComputeService service = Framework.getService(NativeOrderComputeService.class);
+  private transient CustomOrderComputeService service = Framework.getService(CustomOrderComputeService.class);
 
   public ComputeNativeOrderDialectWorker(DocumentRef dialectRef) {
     super(COMPUTE_NATIVE_ORDER_DIALECT);
@@ -64,7 +65,7 @@ public class ComputeNativeOrderDialectWorker extends AbstractWork {
 
   @Override
   public String getTitle() {
-    return COMPUTE_NATIVE_ORDER_DIALECT;
+    return Constants.CHARACTER_WORKERS_QUEUE;
   }
 
 

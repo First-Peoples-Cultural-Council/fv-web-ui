@@ -21,13 +21,12 @@
 package ca.firstvoices.characters.listeners;
 
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.characters.services.CustomOrderComputeService;
+import ca.firstvoices.characters.services.SanitizeDocumentService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import java.util.Iterator;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
-import org.nuxeo.ecm.core.api.model.DocumentPart;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
@@ -35,27 +34,27 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Cleanup a word or phrase of confusables before saving
+ * Handles character related operatoins (e.g. cleanup, custom order) before saving currently applies
+ * to a word or phrase
  */
-public class ConfusableCleanupListener implements EventListener {
+public class AssetListener implements EventListener {
 
+  public static final String DISABLE_CHAR_ASSET_LISTENER = "disableCharacterAssetListener";
 
-  public static final String DISABLE_CLEANUP_LISTENER = "disableConfusableCleanupListener";
+  private final SanitizeDocumentService sanitizeDocumentService = Framework
+      .getService(SanitizeDocumentService.class);
 
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
-  private CoreSession session;
-  private EventContext ctx;
-  private Event event;
-  private DocumentModel document;
+  private final CustomOrderComputeService customOrderComputeService = Framework
+      .getService(CustomOrderComputeService.class);
 
   @Override
   public void handleEvent(Event event) {
-    this.event = event;
-    ctx = this.event.getContext();
+    EventContext ctx = event.getContext();
 
-    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_CLEANUP_LISTENER);
+    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_CHAR_ASSET_LISTENER);
     if (Boolean.TRUE.equals(block)) {
       return;
     }
@@ -64,46 +63,25 @@ public class ConfusableCleanupListener implements EventListener {
       return;
     }
 
-    session = ctx.getCoreSession();
-    document = ((DocumentEventContext) ctx).getSourceDocument();
+    CoreSession session = ctx.getCoreSession();
+    DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
     if (document == null || document.isImmutable()) {
       return;
     }
 
-    if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE) || event.getName()
-        .equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-      cleanupWordsAndPhrases();
+    // Only apply to word and phrase
+    if (!document.getType().equals(DialectTypesConstants.FV_WORD) && !document.getType().equals(
+        DialectTypesConstants.FV_PHRASE)) {
+      return;
     }
-  }
 
-  public void cleanupWordsAndPhrases() {
-    if ((document.getType().equals(DialectTypesConstants.FV_WORD) || document.getType().equals(
-        DialectTypesConstants.FV_PHRASE)) && !document
-        .isProxy() && !document.isVersion()) {
-      try {
-        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-          DocumentPart[] docParts = document.getParts();
-          for (DocumentPart docPart : docParts) {
-            Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
-
-            while (dirtyChildrenIterator.hasNext()) {
-              Property property = dirtyChildrenIterator.next();
-              String propertyName = property.getField().getName().toString();
-              if (property.isDirty() && propertyName.equals("dc:title")) {
-                cleanupCharactersService.cleanConfusables(session, document, false);
-              }
-            }
-          }
-        }
-        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-          cleanupCharactersService.cleanConfusables(session, document, false);
-        }
-      } catch (Exception exception) {
-        event.markBubbleException();
-        event.markRollBack();
-
-        throw exception;
-      }
+    if ((DocumentEventTypes.BEFORE_DOC_UPDATE.equals(event.getName()) && document
+        .getProperty("dc:title").isDirty()) || DocumentEventTypes.ABOUT_TO_CREATE
+        .equals(event.getName())) {
+      document = sanitizeDocumentService.sanitizeDocument(session, document);
+      document = cleanupCharactersService.cleanConfusables(session, document, false);
+      customOrderComputeService
+          .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document);
     }
   }
 }

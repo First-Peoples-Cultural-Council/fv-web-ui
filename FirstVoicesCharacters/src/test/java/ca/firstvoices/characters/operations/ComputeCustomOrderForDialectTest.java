@@ -23,7 +23,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 
-import ca.firstvoices.characters.nativeorder.operations.ComputeNativeOrderForDialect;
+import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -40,14 +40,13 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-
 @RunWith(FeaturesRunner.class)
-@Features({PlatformFeature.class, AutomationFeature.class})
-@Deploy({"org.nuxeo.ecm.automation.jsf", "org.nuxeo.ecm.platform.types.core",
+@Features({PlatformFeature.class, AutomationFeature.class, FirstVoicesDataFeature.class})
+@Deploy({"org.nuxeo.ecm.platform.types.core",
+    "FirstVoicesCharacters:OSGI-INF/ca.firstvoices.operations.xml",
     "org.nuxeo.ecm.platform.publisher.core", "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting", "FirstVoicesData", "FirstVoicesNuxeoPublisher",
-    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 public class ComputeCustomOrderForDialectTest {
 

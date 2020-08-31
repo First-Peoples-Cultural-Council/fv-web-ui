@@ -31,8 +31,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import ca.firstvoices.characters.nativeorder.services.NativeOrderComputeService;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,27 +55,25 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  * @author loopingz
  */
 @RunWith(FeaturesRunner.class)
-@Features({PlatformFeature.class})
+@Features({PlatformFeature.class, FirstVoicesDataFeature.class})
 @Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml",
+    "FirstVoicesCharacters.test:OSGI-INF/nuxeo.conf.override.xml",
     "org.nuxeo.ecm.platform.publisher.core",})
-public class FirstVoicesNativeOrderTest {
+public class ComputeCustomOrderServiceImplTest {
 
   @Inject
   private CoreSession session;
 
   @Inject
-  private NativeOrderComputeService nativeOrderComputeService;
+  private CustomOrderComputeService nativeOrderComputeService;
 
   @Inject
   private FirstVoicesPublisherService firstVoicesPublisherService;

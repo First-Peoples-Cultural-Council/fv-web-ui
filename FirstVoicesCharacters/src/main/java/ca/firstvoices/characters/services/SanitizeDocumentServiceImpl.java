@@ -18,7 +18,7 @@
  *
  */
 
-package ca.firstvoices.core.io.services;
+package ca.firstvoices.characters.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

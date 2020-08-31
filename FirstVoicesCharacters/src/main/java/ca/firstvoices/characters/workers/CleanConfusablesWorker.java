@@ -1,10 +1,10 @@
-package ca.firstvoices.maintenance.dialect.alphabet.workers;
+package ca.firstvoices.characters.workers;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
-import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -64,8 +64,6 @@ public class CleanConfusablesWorker extends AbstractWork {
               DocumentModel dialect = session.getDocument(jobContainerRef);
               setStatus("Cleaning confusables `" + dialect.getTitle() + "`");
 
-              MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
-
               try {
                 DocumentModelList characters = cleanupCharactersService
                     .getCharactersWithConfusables(dialect);
@@ -95,14 +93,14 @@ public class CleanConfusablesWorker extends AbstractWork {
                 }
 
                 setStatus("Done");
-                maintenanceLogger.removeFromRequiredJobs(dialect, job, true);
+                RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
 
                 // Queue custom sort order
-                maintenanceLogger.addToRequiredJobs(dialect, Constants.COMPUTE_ORDER_JOB_ID);
+                RequiredJobsUtils.addToRequiredJobs(dialect, Constants.COMPUTE_ORDER_JOB_ID);
 
               } catch (Exception e) {
                 setStatus("Failed");
-                maintenanceLogger.removeFromRequiredJobs(dialect, job, false);
+                RequiredJobsUtils.removeFromRequiredJobs(dialect, job, false);
                 workFailed(new NuxeoException(
                     "worker" + job + " failed on " + dialect.getTitle() + ": " + e.getMessage()));
               }
@@ -149,6 +147,6 @@ public class CleanConfusablesWorker extends AbstractWork {
 
   @Override
   public String getCategory() {
-    return ca.firstvoices.maintenance.Constants.EXECUTE_REQUIRED_JOBS_EVENT_ID;
+    return Constants.CHARACTER_WORKERS_QUEUE;
   }
 }

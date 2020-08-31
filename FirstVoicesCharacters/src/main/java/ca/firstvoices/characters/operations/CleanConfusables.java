@@ -21,9 +21,9 @@
 package ca.firstvoices.characters.operations;
 
 import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.workers.CleanConfusablesWorker;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
-import ca.firstvoices.maintenance.dialect.alphabet.workers.CleanConfusablesWorker;
-import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -46,9 +46,6 @@ public class CleanConfusables extends AbstractMaintenanceOperation {
   @Context
   protected WorkManager workManager;
 
-  @Context
-  protected MaintenanceLogger maintenanceLogger;
-
   @Param(name = "phase", values = {"init", "work"})
   protected String phase = "init";
 
@@ -62,14 +59,14 @@ public class CleanConfusables extends AbstractMaintenanceOperation {
     limitToDialect(dialect);
 
     // We should only clean if AddConfusables is not in the queue
-    if (!maintenanceLogger.getRequiredJobs(dialect).contains(Constants.ADD_CONFUSABLES_JOB_ID)) {
+    if (!RequiredJobsUtils.hasRequiredJobs(dialect, Constants.ADD_CONFUSABLES_JOB_ID)) {
       executePhases(dialect, phase);
     }
   }
 
   @Override
   protected void executeInitPhase(DocumentModel dialect) {
-    maintenanceLogger.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
+    RequiredJobsUtils.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
   }
 
   @Override

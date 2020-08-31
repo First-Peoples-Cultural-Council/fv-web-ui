@@ -16,28 +16,13 @@
   ~ */
   -->
 
-<component name="ca.firstvoices.nativeorder.listeners.listener.contrib.ComputeNativeOrderListener">
-  <require>ca.firstvoices.nativeorder.services.NativeOrderComputeServiceImpl</require>
+<component name="ca.firstvoices.characters.nativeorder.listeners.listener.contrib.ComputeNativeOrderListener">
+  <require>ca.firstvoices.characters.services.CustomOrderComputeServiceImpl</require>
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
-
-    <listener name="ComputeNativeOrderListener" postCommit="false" async="false"
-      class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderListener" priority="150">
-      <event>beforeDocumentModification</event>
-      <event>documentCreated</event>
-    </listener>
-
-    <listener name="ComputeNativeOrderAlphabetListener" postCommit="false" async="false"
-      class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderAlphabetListener"
-      priority="250">
-      <event>beforeDocumentModification</event>
-      <event>documentModified</event>
-      <event>documentTrashed</event>
-      <event>documentUntrashed</event>
-    </listener>
 
     <listener name="ComputeNativeOrderScheduler" async="true" postCommit="false"
       priority="1000"
-      class="ca.firstvoices.nativeorder.listeners.ComputeNativeOrderDialectListener">
+      class="ca.firstvoices.characters.nativeorder.listeners.ComputeNativeOrderDialectListener">
       <event>computeAlphabetProcesses</event>
     </listener>
   </extension>

@@ -20,40 +20,36 @@
 
 package ca.firstvoices.characters.listeners;
 
+import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import java.util.Iterator;
-import org.nuxeo.ecm.core.api.CoreSession;
+import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
-import org.nuxeo.ecm.core.api.model.DocumentPart;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
+/**
+ * Listener will validate ignored characters on an alphabet Will queue an order recompute if ignored
+ * characters have changed
+ */
+public class AlphabetListener implements EventListener {
 
-public class ConfusableCleanupListener implements EventListener {
-
-
-  public static final String DISABLE_CLEANUP_LISTENER = "disableConfusableCleanupListener";
-
+  public static final String DISABLE_ALPHABET_LISTENER = "disableAlphabetListener";
+  private static final String IGNORED_CHARS = "fv-alphabet:ignored_characters";
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
-  private CoreSession session;
-  private EventContext ctx;
-  private Event event;
-  private DocumentModel document;
-
   @Override
   public void handleEvent(Event event) {
-    this.event = event;
-    ctx = this.event.getContext();
+    EventContext ctx = event.getContext();
 
-    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_CLEANUP_LISTENER);
+    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_ALPHABET_LISTENER);
     if (Boolean.TRUE.equals(block)) {
       return;
     }
@@ -62,45 +58,25 @@ public class ConfusableCleanupListener implements EventListener {
       return;
     }
 
-    session = ctx.getCoreSession();
-    document = ((DocumentEventContext) ctx).getSourceDocument();
-    if (document == null || document.isImmutable()) {
+    DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
+    if (document == null || document.isImmutable() || !DialectTypesConstants.FV_ALPHABET.equals(
+        document.getType())) {
       return;
     }
 
-    if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE) || event.getName()
-        .equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-      cleanupWordsAndPhrases();
-    }
-  }
+    if ((event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE) || event.getName()
+        .equals(DocumentEventTypes.BEFORE_DOC_UPDATE))) {
 
-  public void cleanupWordsAndPhrases() {
-    if ((document.getType().equals(DialectTypesConstants.FV_WORD) || document.getType().equals(
-        DialectTypesConstants.FV_PHRASE)) && !document
-        .isProxy() && !document.isVersion()) {
-      try {
-        if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-          DocumentPart[] docParts = document.getParts();
-          for (DocumentPart docPart : docParts) {
-            Iterator<Property> dirtyChildrenIterator = docPart.getDirtyChildren();
+      // Validation for ignored characters
+      DocumentModelList characters = cleanupCharactersService.getCharacters(document);
 
-            while (dirtyChildrenIterator.hasNext()) {
-              Property property = dirtyChildrenIterator.next();
-              String propertyName = property.getField().getName().toString();
-              if (property.isDirty() && propertyName.equals("dc:title")) {
-                cleanupCharactersService.cleanConfusables(session, document, false);
-              }
-            }
-          }
-        }
-        if (event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
-          cleanupCharactersService.cleanConfusables(session, document, false);
-        }
-      } catch (Exception exception) {
-        event.markBubbleException();
-        event.markRollBack();
+      // Will throw exception if ignore characters are not valid
+      cleanupCharactersService.validateAlphabetIgnoredCharacters(characters, document);
 
-        throw exception;
+      if (document.getProperty(IGNORED_CHARS).isDirty()) {
+        // Queue custom order recompute if ignored characters changed
+        RequiredJobsUtils
+            .addToRequiredJobs(DialectUtils.getDialect(document), Constants.COMPUTE_ORDER_JOB_ID);
       }
     }
   }

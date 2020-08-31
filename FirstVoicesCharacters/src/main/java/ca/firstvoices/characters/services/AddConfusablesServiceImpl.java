@@ -76,7 +76,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {
           // Do not execute further listeners for these updates
-          AbstractSyncListener.disableAllEvents(doc);
+          AbstractSyncListener.disableDefaultEvents(doc);
 
           // Update confusables
           updateConfusableCharacters(session, doc, dialect, character, confusables);

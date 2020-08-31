@@ -18,12 +18,13 @@
  *
  */
 
-package ca.firstvoices.characters.nativeorder.services;
+package ca.firstvoices.characters.services;
 
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
+import ca.firstvoices.characters.listeners.AssetListener;
+import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import ca.firstvoices.services.AbstractService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -37,8 +38,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
-public class NativeOrderComputeServiceImpl extends AbstractService implements
-    NativeOrderComputeService {
+public class CustomOrderComputeServiceImpl implements CustomOrderComputeService {
 
   public static final int BASE = 34;
   public static final String NO_ORDER_STARTING_CHARACTER = "~";
@@ -50,7 +50,7 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
   // Called when a document is created or updated
   public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
     if (!asset.isImmutable()) {
-      DocumentModel dialect = getDialect(asset);
+      DocumentModel dialect = DialectUtils.getDialect(asset);
       DocumentModel alphabet = session
           .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
       DocumentModel[] chars = loadCharacters(session, alphabet);
@@ -72,6 +72,9 @@ public class NativeOrderComputeServiceImpl extends AbstractService implements
 
   private void computeCustomOrder(CoreSession session, DocumentModel element,
       DocumentModel alphabet, DocumentModel[] chars) {
+
+    // Make sure we avoid triggering events that trigger custom order recompute
+    element.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
 
     if (element.isImmutable()) {
       return;

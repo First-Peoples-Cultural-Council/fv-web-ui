@@ -25,27 +25,23 @@ import static ca.firstvoices.characters.Constants.COMPUTE_ORDER_JOB_ID;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.ABOUT_TO_CREATE;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.BEFORE_DOC_UPDATE;
 import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
+import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_TRASHED;
+import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_UNTRASHED;
 
 import ca.firstvoices.characters.services.CleanupCharactersService;
-import ca.firstvoices.core.io.services.AssignAncestorsService;
-import java.io.Serializable;
-import java.util.HashMap;
+import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.SystemPrincipal;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.EventProducer;
 import org.nuxeo.ecm.core.event.PostCommitFilteringEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.core.event.impl.InlineEventContext;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -62,6 +58,7 @@ public class CharacterListener implements PostCommitFilteringEventListener {
   private static final String CHAR_ORDER = "fvcharacter:alphabet_order";
   private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
   private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
+  private static final String UC_CHAR = "fvcharacter:upper_case_character";
 
   private static final String CHARACTER_TYPE = "FVCharacter";
 
@@ -86,73 +83,56 @@ public class CharacterListener implements PostCommitFilteringEventListener {
         return;
       }
 
-      AssignAncestorsService ancestorsService = Framework
-          .getService(AssignAncestorsService.class);
-
-      DocumentModel dialect = ancestorsService.getDialect(characterDoc);
-
       // Set of required jobs to set
       HashSet<String> requiredJobsToSet = new HashSet<>();
 
-      if (event.getName().equals(DOCUMENT_CREATED)) {
+      switch (event.getName()) {
+        case DOCUMENT_CREATED:
 
-        if (cleanupCharactersService.hasConfusableCharacters(characterDoc)) {
-          // If confusables are defined upon creation, queue a cleanup
-          requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
-        }
+          if (cleanupCharactersService.hasConfusableCharacters(characterDoc)) {
+            // If confusables are defined upon creation, queue a cleanup
+            requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
+          }
 
-        // Always queue an order recompute
-        requiredJobsToSet.add(COMPUTE_ORDER_JOB_ID);
-
-      } else if (event.getName().equals(ABOUT_TO_CREATE)) {
-        // Validate character ensuring only valid character entries are added
-        validateCharacter(event, characterDoc);
-      } else if (event.getName().equals(BEFORE_DOC_UPDATE)) {
-
-        // Validate character ensuring only valid character entries are added
-        validateCharacter(event, characterDoc);
-
-        if (confusablePropertyChanged(characterDoc)) {
-          // If confusables property changed, queue a cleanup
-          requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
-        }
-
-        if (sortRelatedPropertyChanged(characterDoc)) {
-          // If sort order, title has changed, queue an order recompute
+          // Always queue an order recompute
           requiredJobsToSet.add(COMPUTE_ORDER_JOB_ID);
-        }
+
+          break;
+        case ABOUT_TO_CREATE:
+          // Validate character ensuring only valid character entries are added
+          validateCharacter(event, characterDoc);
+          break;
+        case BEFORE_DOC_UPDATE:
+          // Validate character ensuring only valid character entries are added
+          validateCharacter(event, characterDoc);
+
+          if (confusablePropertyChanged(characterDoc)) {
+            // If confusables property changed, queue a cleanup
+            requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
+          }
+
+          if (sortRelatedPropertyChanged(characterDoc)) {
+            // If sort order, title has changed, queue an order recompute
+            requiredJobsToSet.add(COMPUTE_ORDER_JOB_ID);
+          }
+          break;
+
+        case DOCUMENT_TRASHED:
+        case DOCUMENT_UNTRASHED:
+          // If a document is removed or restored, the sort order is impacted
+          requiredJobsToSet.add(COMPUTE_ORDER_JOB_ID);
+          break;
+
+        default:
+          // Do nothing
+          break;
       }
 
       // Send event to add to required jobs
       if (!requiredJobsToSet.isEmpty()) {
-        sendEvent("addToRequiredJobs", requiredJobsToSet);
+        DocumentModel dialect = DialectUtils.getDialect(characterDoc);
+        RequiredJobsUtils.addToRequiredJobs(dialect, requiredJobsToSet);
       }
-
-      // This should be in an alphabet listener
-      //If doc is alphabet, do another operation for ignored characters
-      //      if (characterDoc.getDocumentType().getName().equals(DialectTypesConstants.FV_ALPHABET)
-      //          && !characterDoc.isProxy()
-      //          && !characterDoc.isVersion()) {
-      //        try {
-      //
-      //          //only test on update, not creation as characters will not exist during creation
-      //          if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE)) {
-      //            DocumentModelList characters =
-      //            cleanupCharactersService.getCharacters(characterDoc);
-      //            DocumentModel alphabet = cleanupCharactersService.getAlphabet(characterDoc);
-      //            cleanupCharactersService.validateAlphabetIgnoredCharacters(
-      //            characters, alphabet);
-      //
-      //          }
-      //
-      //        } catch (Exception exception) {
-      //          event.markBubbleException();
-      //          event.markRollBack();
-      //          throw exception;
-      //        }
-      //
-      //      }
-
     }
   }
 
@@ -169,7 +149,7 @@ public class CharacterListener implements PostCommitFilteringEventListener {
    */
   private boolean sortRelatedPropertyChanged(DocumentModel characterDoc) {
     return characterDoc.getProperty(DC_TITLE).isDirty() || characterDoc.getProperty(CHAR_ORDER)
-        .isDirty();
+        .isDirty() || characterDoc.getProperty(UC_CHAR).isDirty();
   }
 
 
@@ -223,15 +203,4 @@ public class CharacterListener implements PostCommitFilteringEventListener {
     return (DOCUMENT_CREATED.equals(event.getName()) || BEFORE_DOC_UPDATE.equals(event.getName()))
         && CHARACTER_TYPE.equals(doc.getType());
   }
-
-  // This is sent for audit purposes at the moment
-  // In the future Listeners could catch these events to send emails, and turn on features
-  private void sendEvent(String eventId, Set<String> jobIds) {
-    Map<String, Serializable> eventProperties = new HashMap<>();
-    eventProperties.put("jobIds", (Serializable) jobIds);
-
-    EventContext ctx = new InlineEventContext(new SystemPrincipal(null), eventProperties);
-    Framework.getService(EventProducer.class).fireEvent(ctx.newEvent(eventId));
-  }
-
 }

@@ -25,21 +25,22 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import ca.firstvoices.core.io.services.SanitizeDocumentService;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import javax.inject.Inject;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesDataFeature.class})
-@Ignore
+@Deploy({
+    "FirstVoicesCharacters:OSGI-INF/services/sanitizeDocument-contrib.xml"
+})
 public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest {
 
   @Inject
@@ -65,15 +66,15 @@ public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest
     assertNotNull(TestWord);
     assertNotNull(TestPhrase);
 
-    assertEquals(TestWord.getTitle(), " Test Word ");
-    assertEquals(TestPhrase.getTitle(), "  Test Phrase  ");
+    assertEquals(" Test Word ", TestWord.getTitle());
+    assertEquals("  Test Phrase  ", TestPhrase.getTitle());
 
     // Run the service against the word & phrase documents
     sanitizeDocumentService.sanitizeDocument(session, TestWord);
     sanitizeDocumentService.sanitizeDocument(session, TestPhrase);
 
-    assertEquals(TestWord.getTitle(), "Test Word");
-    assertEquals(TestPhrase.getTitle(), "Test Phrase");
+    assertEquals("Test Word", TestWord.getTitle());
+    assertEquals("Test Phrase", TestPhrase.getTitle());
 
   }
 

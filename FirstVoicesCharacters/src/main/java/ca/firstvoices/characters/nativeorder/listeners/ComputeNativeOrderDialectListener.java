@@ -18,9 +18,9 @@
  *
  */
 
-package ca.firstvoices.nativeorder.listeners;
+package ca.firstvoices.characters.nativeorder.listeners;
 
-import ca.firstvoices.nativeorder.workers.ComputeNativeOrderDialectWorker;
+import ca.firstvoices.characters.nativeorder.workers.ComputeNativeOrderDialectWorker;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -51,7 +51,7 @@ public class ComputeNativeOrderDialectListener implements EventListener {
                     + "AND ecm:isCheckedInVersion = 0 " + "AND ecm:isTrashed = 0";
                 DocumentModelList alphabets = session.query(query);
 
-                if (alphabets != null && alphabets.size() > 0) {
+                if (alphabets != null && !alphabets.isEmpty()) {
                   WorkManager workManager = Framework.getService(WorkManager.class);
                   for (DocumentModel alphabet : alphabets) {
                     DocumentModel dialect = session.getParentDocument(alphabet.getRef());

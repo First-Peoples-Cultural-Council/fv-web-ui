@@ -26,8 +26,10 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.characters.exceptions.FVCharacterInvalidException;
+import ca.firstvoices.characters.listeners.AssetListener;
 import ca.firstvoices.core.io.listeners.AbstractSyncListener;
-import ca.firstvoices.services.AbstractFirstVoicesDataService;
+import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.data.utils.PropertyUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,14 +49,15 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.Filter;
 import org.nuxeo.ecm.core.query.sql.NXQL;
 
-public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService implements
-    CleanupCharactersService {
+public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
   //In the future, all dublincore (and other schema) property values
   //should be kept in a constants file in FVData.
   private static final String DOCUMENT_TITLE = "dc:title";
   private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
   private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
+  private static final String DEFAULT_WARNING = "Can't have confusable character ";
+
   private final String[] types = {FV_PHRASE, FV_WORD};
 
   @Override
@@ -87,14 +90,14 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
       }
     }
 
+    // Do not execute further events for this
+    // Note: custom order recompute listener will execute
+    AbstractSyncListener.disableDefaultEvents(document);
+
+    // Disable asset listener for further events
+    document.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
+
     if (Boolean.TRUE.equals(saveDocument)) {
-      // Do not execute further events for this
-      // Note: custom order recompute listener will execute
-      AbstractSyncListener.disableAllEvents(document);
-
-      // Make sure to disable: disableConfusableCleanupListener
-
-
       return session.saveDocument(document);
     }
 
@@ -102,65 +105,61 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
   }
 
   //Helper method for cleanConfusables
-  private Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters)
-      throws FVCharacterInvalidException {
+  private Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) {
     Map<String, String> confusables = new HashMap<>();
     List<String> characterValues = characters.stream().filter(c -> !c.isTrashed())
         .map(c -> (String) c.getPropertyValue(DOCUMENT_TITLE)).collect(Collectors.toList());
     for (DocumentModel d : characters) {
-      String[] lowercaseConfusableList = (String[]) d.getPropertyValue(LC_CONFUSABLES);
-      String[] uppercaseConfusableList = (String[]) d.getPropertyValue(UC_CONFUSABLES);
-      if (lowercaseConfusableList != null) {
-        for (String confusableCharacter : lowercaseConfusableList) {
-          String characterTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
-          if (confusables.put(confusableCharacter, characterTitle) != null) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on " + characterTitle
-                    + " as it is mapped as a confusable character to another alphabet character.",
-                400);
-          }
-          if (confusables.containsKey(characterTitle)) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on " + characterTitle
-                    + " as it is mapped as a confusable character to another alphabet character.",
-                400);
-          }
-          if (characterValues.contains(confusableCharacter)) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on " + characterTitle
-                    + "as it is found in the dialect's alphabet.", 400);
-          }
+
+      for (String confusableCharacter : PropertyUtils.getValuesAsList(d, LC_CONFUSABLES)) {
+        String characterTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
+        if (confusables.put(confusableCharacter, characterTitle) != null) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                  + " as it is mapped as a confusable character to another alphabet character.",
+              400);
+        }
+        if (confusables.containsKey(characterTitle)) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                  + " as it is mapped as a confusable character to another alphabet character.",
+              400);
+        }
+        if (characterValues.contains(confusableCharacter)) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                  + "as it is found in the dialect's alphabet.", 400);
         }
       }
-      if (uppercaseConfusableList != null) {
-        for (String confusableCharacter : uppercaseConfusableList) {
-          String characterTitle = (String) d.getPropertyValue("fvcharacter:upper_case_character");
-          if (StringUtils.isEmpty(characterTitle)) {
-            throw new FVCharacterInvalidException(
-                "Can't have uppercase confusable character if there is no uppercase character.",
-                400);
-          }
-          if (confusables.put(confusableCharacter, characterTitle) != null) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on uppercase"
-                    + characterTitle
-                    + " as it is mapped as a confusable character to another alphabet character.",
-                400);
-          }
-          if (confusables.containsKey(characterTitle)) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on uppercase"
-                    + characterTitle
-                    + " as it is mapped as a confusable character to another alphabet character.",
-                400);
-          }
-          if (characterValues.contains(confusableCharacter)) {
-            throw new FVCharacterInvalidException(
-                "Can't have confusable character " + confusableCharacter + " on uppercase"
-                    + characterTitle + " as it is found in the dialect's alphabet.", 400);
-          }
+
+      for (String confusableCharacter : PropertyUtils.getValuesAsList(d, UC_CONFUSABLES)) {
+        String characterTitle = (String) d.getPropertyValue("fvcharacter:upper_case_character");
+        if (StringUtils.isEmpty(characterTitle)) {
+          throw new FVCharacterInvalidException(
+              "Can't have uppercase confusable character if there is no uppercase character.",
+              400);
+        }
+        if (confusables.put(confusableCharacter, characterTitle) != null) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                  + characterTitle
+                  + " as it is mapped as a confusable character to another alphabet character.",
+              400);
+        }
+        if (confusables.containsKey(characterTitle)) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                  + characterTitle
+                  + " as it is mapped as a confusable character to another alphabet character.",
+              400);
+        }
+        if (characterValues.contains(confusableCharacter)) {
+          throw new FVCharacterInvalidException(
+              DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                  + characterTitle + " as it is found in the dialect's alphabet.", 400);
         }
       }
+
     }
     return confusables;
   }
@@ -186,28 +185,16 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
 
     //must loop through each confusable individually
     //as addAll would return true if the confusable string list had duplicates AND new values
-    String[] lowerConfusableStrArr = (String[]) updated
-        .getPropertyValue("fvcharacter:confusable_characters");
-    if (lowerConfusableStrArr != null) {
-      for (String str : lowerConfusableStrArr) {
-        if (!updatedDocumentCharacters.add(str)) {
-          throw new FVCharacterInvalidException(
-              "The character " + str + " is duplicated somewhere in this document's uppercase,"
-                  + "lowercase or confusable characters ",
-              400);
-        }
-      }
-    }
+    ArrayList<String> allConfusables = new ArrayList<>();
+    allConfusables.addAll(PropertyUtils.getValuesAsList(updated, LC_CONFUSABLES));
+    allConfusables.addAll(PropertyUtils.getValuesAsList(updated, UC_CONFUSABLES));
 
-    String[] upperConfusableStrArr = (String[]) updated.getPropertyValue(UC_CONFUSABLES);
-    if (upperConfusableStrArr != null) {
-      for (String str : upperConfusableStrArr) {
-        if (!updatedDocumentCharacters.add(str)) {
-          throw new FVCharacterInvalidException(
-              "The character " + str + " is duplicated somewhere in this document's uppercase,"
-                  + "lowercase or confusable characters ",
-              400);
-        }
+    for (String str : allConfusables) {
+      if (!updatedDocumentCharacters.add(str)) {
+        throw new FVCharacterInvalidException(
+            "The character " + str + " is duplicated somewhere in this document's uppercase,"
+                + "lowercase or confusable characters ",
+            400);
       }
     }
 
@@ -323,7 +310,7 @@ public class CleanupCharactersServiceImpl extends AbstractFirstVoicesDataService
     if (FV_ALPHABET.equals(doc.getType())) {
       return doc;
     }
-    DocumentModel dialect = getDialect(doc);
+    DocumentModel dialect = DialectUtils.getDialect(doc);
     if (dialect == null) {
       return null;
     }

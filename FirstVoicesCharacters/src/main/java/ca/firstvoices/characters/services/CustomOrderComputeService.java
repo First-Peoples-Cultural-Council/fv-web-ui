@@ -18,13 +18,13 @@
  *
  */
 
-package ca.firstvoices.characters.nativeorder.services;
+package ca.firstvoices.characters.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 
-public interface NativeOrderComputeService {
+public interface CustomOrderComputeService {
 
   void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset);
 

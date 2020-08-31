@@ -10,10 +10,12 @@
       name="character_listener" priority="500">
       <event>documentCreated</event>
       <event>beforeDocumentModification</event>
+      <event>documentTrashed</event>
+      <event>documentUntrashed</event>
     </listener>
 
-    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.ConfusableCleanupListener"
-      name="confusable_cleanup_listener" priority="50">
+    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.AssetListener"
+      name="asset_listener" priority="50">
       <event>aboutToCreate</event>
       <event>beforeDocumentModification</event>
     </listener>

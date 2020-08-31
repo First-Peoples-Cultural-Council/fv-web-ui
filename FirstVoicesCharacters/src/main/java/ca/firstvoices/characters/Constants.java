@@ -24,6 +24,9 @@ public class Constants {
 
   public static final String GROUP_NAME = "Alphabet";
 
+  // Character workers queue
+  public static final String CHARACTER_WORKERS_QUEUE = "CharactersWorkerQueue";
+
   // Clean Confusables Operations
   public static final String CLEAN_CONFUSABLES_JOB_ID = GROUP_NAME + ".CleanConfusables";
   public static final String CLEAN_CONFUSABLES_ACTION_ID = CLEAN_CONFUSABLES_JOB_ID;
