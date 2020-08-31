@@ -17,7 +17,7 @@ import '!style-loader!css-loader!./Dashboard.css'
  *
  * @returns {node} jsx markup
  */
-function DashboardPresentation({ children }) {
+function DashboardPresentation({ widgets }) {
   const { theme } = useTheme()
   const workshopDark = selectn(['palette', 'primary', 'dark'], theme)
   return (
@@ -33,18 +33,18 @@ function DashboardPresentation({ children }) {
         </Typography>
       </div>
       <div className="Dashboard__widgetsContainer">
-        <div>{children}</div>
-        {/*TODO: Remove line below before releasing to PROD. Added for testing multiple columns*/}
-        <div>{children}</div>
+        {widgets.map((widget, index) => {
+          return <div key={`Dashboard__widgetsContainer--${index}`}>{widget}</div>
+        })}
       </div>
     </div>
   )
 }
 
 // PROPTYPES
-const { node } = PropTypes
+const { array } = PropTypes
 DashboardPresentation.propTypes = {
-  children: node,
+  widgets: array,
 }
 
 export default DashboardPresentation
