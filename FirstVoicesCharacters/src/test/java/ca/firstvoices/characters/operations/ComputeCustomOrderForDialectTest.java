@@ -59,7 +59,7 @@ public class ComputeCustomOrderForDialectTest {
   DocumentModel dialectDoc = null;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
     session.createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
@@ -75,12 +75,12 @@ public class ComputeCustomOrderForDialectTest {
     OperationContext ctx = new OperationContext(session);
     ctx.setInput(dialectDoc);
 
-    DocumentModel doc = (DocumentModel) automationService.run(ctx, ComputeNativeOrderForDialect.ID);
+    DocumentModel doc = (DocumentModel) automationService.run(ctx, ComputeCustomOrder.ID);
     assertEquals("/Family/Language/Dialect", doc.getPathAsString());
 
     Map<String, Object> params = new HashMap<>();
     params.put("path", path);
-    doc = (DocumentModel) automationService.run(ctx, ComputeNativeOrderForDialect.ID, params);
+    doc = (DocumentModel) automationService.run(ctx, ComputeCustomOrder.ID, params);
     assertEquals("/Family/Language/Dialect", doc.getPathAsString());
   }
 }

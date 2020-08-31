@@ -23,6 +23,7 @@ package ca.firstvoices.characters.services;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.listeners.AssetListener;
+import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
@@ -35,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.api.Framework;
 
 public class CustomOrderComputeServiceImpl implements CustomOrderComputeService {
@@ -52,7 +52,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     if (!asset.isImmutable()) {
       DocumentModel dialect = DialectUtils.getDialect(asset);
       DocumentModel alphabet = session
-          .getDocument(new PathRef(dialect.getPathAsString() + "/Alphabet"));
+          .getChild(dialect.getRef(), DialectTypesConstants.FV_ALPHABET_NAME);
       DocumentModel[] chars = loadCharacters(session, alphabet);
       computeCustomOrder(session, asset, alphabet, chars);
     }

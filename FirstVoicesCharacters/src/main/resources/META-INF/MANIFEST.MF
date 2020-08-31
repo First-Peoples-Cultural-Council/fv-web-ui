@@ -14,5 +14,3 @@ Nuxeo-Component: OSGI-INF/ca.firstvoices.listeners.xml,
  OSGI-INF/services/sanitizeDocument-contrib.xml,
  OSGI-INF/ca.firstvoices.workers.xml,
  OSGI-INF/ca.firstvoices.operations.xml
- OSGI-INF/ca.firstvoices.nativeorder.listeners.xml,
- OSGI-INF/ca.firstvoices.nativeorder.actions.xml,

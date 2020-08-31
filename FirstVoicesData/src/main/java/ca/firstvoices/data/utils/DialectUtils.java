@@ -13,8 +13,12 @@ public final class DialectUtils {
     throw new IllegalStateException("Utility class");
   }
 
+  public static boolean isDialect(DocumentModel currentDoc) {
+    return FV_DIALECT.equals(currentDoc.getType());
+  }
+
   public static DocumentModel getDialect(DocumentModel currentDoc) {
-    if (FV_DIALECT.equals(currentDoc.getType())) {
+    if (isDialect(currentDoc)) {
       return currentDoc;
     }
 
@@ -25,7 +29,7 @@ public final class DialectUtils {
   }
 
   public static DocumentModel getDialect(CoreSession session, DocumentModel currentDoc) {
-    if (FV_DIALECT.equals(currentDoc.getType())) {
+    if (isDialect(currentDoc)) {
       return currentDoc;
     }
 

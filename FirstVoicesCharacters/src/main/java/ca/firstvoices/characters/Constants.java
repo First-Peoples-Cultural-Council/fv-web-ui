@@ -37,7 +37,7 @@ public class Constants {
 
   // Add Custom Reorder Operations
   public static final String COMPUTE_ORDER_JOB_ID = GROUP_NAME + ".ComputeCustomOrder";
-  public static final String COMPUTE_ORDER_ACTION_ID = "Document.ComputeNativeOrderForDialect";
+  public static final String COMPUTE_ORDER_ACTION_ID = "Document.ComputeCustomOrder";
 
   // Confusables Status Operation
   public static final String CONFUSABLES_STATUS_ACTION_ID = GROUP_NAME + ".ConfusablesStatus";

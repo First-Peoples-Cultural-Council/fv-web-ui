@@ -7,11 +7,13 @@ public class DialectTypesConstants {
 
   // Dictionary Container, and sub-types
   public static final String FV_DICTIONARY = "FVDictionary";
+  public static final String FV_DICTIONARY_NAME = "Dictionary";
   public static final String FV_WORD = "FVWord";
   public static final String FV_PHRASE = "FVPhrase";
 
   // Alphabet Container, and sub-types
   public static final String FV_ALPHABET = "FVAlphabet";
+  public static final String FV_ALPHABET_NAME = "Alphabet";
   public static final String FV_CHARACTER = "FVCharacter";
 
   // Categories Container, and sub-types
