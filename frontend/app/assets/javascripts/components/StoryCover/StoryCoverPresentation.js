@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 
 import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'
+import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 
 import { StoryCoverStyles } from './StoryCoverStyles'
@@ -39,13 +40,15 @@ function StoryCoverPresentation({
 
   // Main component
   return (
-    <Paper elevation={3} style={{ padding: '15px', margin: '15px 0' }}>
-      <div className="row">
-        <div className="col-xs-12">
-          <div className="col-xs-12 col-md-3">
-            <MediaPanels.Presentation pictures={pictures} videos={videos} />
-          </div>
-          <div className="col-xs-12 col-md-9 fontBCSans">
+    <Paper elevation={3} className={classes.cover}>
+      <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
+        <Grid container justify="center" spacing={2}>
+          <Grid key={book.uid + 0} item xs={5}>
+            <div className={classes.media}>
+              <MediaPanels.Presentation pictures={pictures} videos={videos} />
+            </div>
+          </Grid>
+          <Grid key={book.uid + 2} item xs={5}>
             <header className={classes.header}>
               <Typography variant="h3" component="h2">
                 <div>{book.title}</div>
@@ -63,27 +66,25 @@ function StoryCoverPresentation({
                 })}
               </div>
             </header>
-
-            <div className={classes.introductionTranslations}>
+            <div className={classes.introduction}>
               {_getIntroduction(book.introduction, book.introductionTranslation)}
-              <div className="col-xs-12 col-md-3">{audioElements}</div>
+              <div>{audioElements}</div>
             </div>
-          </div>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <div className="text-right">
+          {openBookAction && pageCount > 0 ? (
+            <FVButton variant="contained" style={{ marginRight: '10px' }} color="primary" onClick={openBookAction}>
+              <ActionLaunch />
+              {'Open Book'}
+            </FVButton>
+          ) : (
+            ''
+          )}
         </div>
-
-        <div className="col-xs-12">
-          <div className="col-xs-12 text-right">
-            {openBookAction && pageCount > 0 ? (
-              <FVButton variant="contained" style={{ marginRight: '10px' }} color="primary" onClick={openBookAction}>
-                <ActionLaunch />
-                {'Open Book'}
-              </FVButton>
-            ) : (
-              ''
-            )}
-          </div>
-        </div>
-      </div>
+      </Grid>
     </Paper>
   )
 }

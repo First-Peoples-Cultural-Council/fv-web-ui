@@ -47,8 +47,8 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
       ) : null
 
     return (
-      <Paper elevation={3} style={{ padding: '30px', margin: '30px' }}>
-        <Grid key={page.uid} container className={classes.root} spacing={2}>
+      <Paper elevation={3} className={classes.page}>
+        <Grid key={page.uid} container className={classes.gridRoot} spacing={2}>
           <Grid container justify="center" spacing={2}>
             <Grid key={page.uid + 0} item xs={4}>
               <div className={classes.media}>

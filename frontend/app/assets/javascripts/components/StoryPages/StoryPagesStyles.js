@@ -1,10 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 export const StoryPagesStyles = makeStyles({
-  root: {
+  page: {
+    padding: '30px',
+    margin: '30px',
+  },
+  gridRoot: {
     flexGrow: 1,
     flexWrap: 'wrap',
-    // margin: '10%',
   },
   media: {
     margin: 4,

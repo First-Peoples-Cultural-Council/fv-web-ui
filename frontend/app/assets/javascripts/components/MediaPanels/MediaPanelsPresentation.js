@@ -28,7 +28,7 @@ function MediaPanelsPresentation({ pictures, videos }) {
 
     if (pictures.length > 0 && videos.length > 0) {
       return (
-        <Paper square elevation={2}>
+        <Paper>
           <MediaTab
             tabItems={[{ label: 'Picture(s)' }, { label: 'Video(s)' }]}
             tabsValue={tabValue}

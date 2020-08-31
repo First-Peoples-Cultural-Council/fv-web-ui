@@ -73,6 +73,7 @@ function StoryData({ children }) {
   })
 
   const book = {
+    uid: uid,
     title: DOMPurify.sanitize(selectn('title', bookMetadata)),
     titleTranslation: DOMPurify.sanitize(selectn('[0].translation', dominantLanguageTitleTranslation)),
     authors: (selectn('contextParameters.book.authors', bookMetadata) || []).map(function extractAuthors(author) {
