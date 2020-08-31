@@ -35,29 +35,29 @@ function StoryPresentation({
   return (
     <div className="row" style={{ marginBottom: '20px' }}>
       <div className="col-xs-12">
-        {!bookOpen ? (
-          <StoryCover.Presentation
-            book={book}
-            defaultLanguage={defaultLanguage}
-            intl={intl}
-            openBookAction={openBookAction}
-            pageCount={pageCount}
-            //Media
-            audio={audio}
-            pictures={pictures}
-            videos={videos}
-          />
+        {!bookOpen && book.uid ? (
+          <PromiseWrapper computeEntities={computeEntities}>
+            <StoryCover.Presentation
+              book={book}
+              defaultLanguage={defaultLanguage}
+              intl={intl}
+              openBookAction={openBookAction}
+              pageCount={pageCount}
+              //Media
+              audio={audio}
+              pictures={pictures}
+              videos={videos}
+            />
+          </PromiseWrapper>
         ) : (
-          <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <PromiseWrapper computeEntities={computeEntities}>
             {bookEntries && bookEntries.length !== 0 ? (
               <StoryPages.Container
                 bookEntries={bookEntries}
                 closeBookAction={closeBookAction}
                 defaultLanguage={defaultLanguage}
               />
-            ) : (
-              <div>No results</div>
-            )}
+            ) : null}
           </PromiseWrapper>
         )}
       </div>

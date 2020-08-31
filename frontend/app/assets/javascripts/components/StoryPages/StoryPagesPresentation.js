@@ -11,6 +11,7 @@ import MediaPanels from 'components/MediaPanels'
 import Preview from 'views/components/Editor/Preview'
 
 import { StoryPagesStyles } from './StoryPagesStyles'
+
 /**
  * @summary StoryPagesPresentation
  * @version 1.0.1
@@ -22,7 +23,29 @@ import { StoryPagesStyles } from './StoryPagesStyles'
  * @returns {node} jsx markup
  */
 function StoryPagesPresentation({ bookPages, closeBookAction }) {
-  const StoryPage = ({ page }) => {
+  function getPages() {
+    const classes = StoryPagesStyles()
+    const pageLinks = []
+    const pages = []
+    bookPages.forEach(createPage)
+    function createPage(page, index) {
+      const pageLinkId = 'page_' + (index + 1)
+      pageLinks.push(
+        <div key={'page-link' + page.uid} className={classes.pageLink}>
+          <a href={'#' + pageLinkId}>Page {index + 1}</a>
+        </div>
+      )
+      pages.push(<StoryPage key={page.uid} page={page} pageLinkId={pageLinkId} pageNumber={index + 1} />)
+    }
+    return (
+      <div>
+        <div className={classes.pageLinks}>{pageLinks}</div>
+        {pages}
+      </div>
+    )
+  }
+
+  const StoryPage = ({ page, pageNumber, pageLinkId }) => {
     const classes = StoryPagesStyles()
     // Audio
     const audio = page.audio.map((audioDoc) => {
@@ -46,15 +69,24 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
         </Grid>
       ) : null
 
+    const mediaPanels =
+      page.videos.length > 0 || page.pictures.length > 0 ? (
+        <Grid key={page.uid + 1} item xs={4}>
+          <div className={classes.media}>
+            <MediaPanels.Presentation videos={page.videos} pictures={page.pictures} />
+          </div>
+        </Grid>
+      ) : null
+
     return (
       <Paper elevation={3} className={classes.page}>
-        <Grid key={page.uid} container className={classes.gridRoot} spacing={2}>
+        <div id={pageLinkId} className={classes.pageNumber}>
+          {' '}
+          Page {pageNumber}
+        </div>
+        <Grid key={page.uid + 0} container className={classes.gridRoot} spacing={2}>
           <Grid container justify="center" spacing={2}>
-            <Grid key={page.uid + 0} item xs={4}>
-              <div className={classes.media}>
-                <MediaPanels.Presentation videos={page.videos} pictures={page.pictures} />
-              </div>
-            </Grid>
+            {mediaPanels}
             <Grid key={page.uid + 2} item xs={4}>
               <div className={classes.textLanguage}>
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.title) }} />
@@ -68,12 +100,11 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
     )
   }
 
+  const pagesElements = getPages()
+
   return (
     <div>
-      {bookPages.map(function createPageElements(page, index) {
-        return <StoryPage key={index} page={page} />
-      })}
-
+      {pagesElements}
       <div className="col-xs-12">
         <div className="col-xs-12 text-right">
           {closeBookAction ? (

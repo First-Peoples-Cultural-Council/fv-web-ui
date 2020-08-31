@@ -145,30 +145,32 @@ function StoryData({ children }) {
 
   const fetchData = async () => {
     fetchBook(bookPath)
-    fetchBookEntries(bookPath)
+    fetchBookEntries(bookPath, '&sortOrder=asc,asc' + '&sortBy=fvbookentry:sort_map,dc:created')
     fetchDialect2(routeParams.dialect_path)
   }
 
   function openBookAction() {
     setBookOpen(true)
+    window.scrollTo(0, 0)
   }
 
   function closeBookAction() {
     setBookOpen(false)
+    window.scrollTo(0, 0)
   }
 
   const computeEntities = Immutable.fromJS([
     {
       id: bookPath,
-      entity: computeBook,
+      entity: _computeBook,
     },
     {
       id: bookPath,
-      entity: computeBookEntries,
+      entity: _computeBookEntries,
     },
     {
       id: routeParams.dialect_path,
-      entity: computeDialect2,
+      entity: extractComputeDialect,
     },
   ])
 

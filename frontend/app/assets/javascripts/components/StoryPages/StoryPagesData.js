@@ -93,7 +93,7 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
   }, [])
 
   return children({
-    bookPages: bookPages.reverse(), // Reversed to ensure display in correct order,
+    bookPages,
   })
 }
 // PROPTYPES

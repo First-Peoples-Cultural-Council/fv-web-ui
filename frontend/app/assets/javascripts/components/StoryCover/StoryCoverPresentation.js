@@ -38,17 +38,22 @@ function StoryCoverPresentation({
   })
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
+  const mediaPanels =
+    videos.length > 0 || pictures.length > 0 ? (
+      <Grid key={'media-' + book.uid} item xs={5}>
+        <div className={classes.media}>
+          <MediaPanels.Presentation pictures={pictures} videos={videos} />
+        </div>
+      </Grid>
+    ) : null
+
   // Main component
   return (
     <Paper elevation={3} className={classes.cover}>
       <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
         <Grid container justify="center" spacing={2}>
-          <Grid key={book.uid + 0} item xs={5}>
-            <div className={classes.media}>
-              <MediaPanels.Presentation pictures={pictures} videos={videos} />
-            </div>
-          </Grid>
-          <Grid key={book.uid + 2} item xs={5}>
+          {mediaPanels}
+          <Grid key={'text-' + book.uid} item xs={5}>
             <header className={classes.header}>
               <Typography variant="h3" component="h2">
                 <div>{book.title}</div>
