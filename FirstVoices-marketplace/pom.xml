@@ -51,6 +51,10 @@
       <artifactId>FirstVoicesMaintenance</artifactId>
     </dependency>
     <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesMaintenanceCommon</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>FirstVoicesOperations</artifactId>
       <groupId>ca.firstvoices</groupId>
     </dependency>

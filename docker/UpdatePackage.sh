@@ -27,6 +27,11 @@ else
     echo ''
 fi
 
+# Remove any old modules from the docker container if they exists
+echo 'Removing old module from docker container if it exists.'
+docker exec nuxeo-dev sh -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices-*.jar" > /dev/null 2>&1
+echo ''
+
 echo 'Copying build package into shared docker volume.'
 cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker
 
