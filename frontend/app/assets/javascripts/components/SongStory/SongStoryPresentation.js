@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 //FPCC
-import StoryCover from 'components/StoryCover'
-import StoryPages from 'components/StoryPages'
+import SongStoryCover from 'components/SongStoryCover'
+import SongStoryPages from 'components/SongStoryPages'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 /**
- * @summary StoryPresentation
+ * @summary SongStoryPresentation
  * @version 1.0.1
  * @component
  *
@@ -15,7 +15,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function StoryPresentation({
+function SongStoryPresentation({
   book,
   bookEntries,
   bookOpen,
@@ -30,14 +30,14 @@ function StoryPresentation({
   pictures,
   videos,
 }) {
-  //   const classes = StoryStyles()
+  //   const classes = SongStoryStyles()
 
   return (
     <div className="row" style={{ marginBottom: '20px' }}>
       <div className="col-xs-12">
         {!bookOpen && book.uid ? (
           <PromiseWrapper computeEntities={computeEntities}>
-            <StoryCover.Presentation
+            <SongStoryCover.Presentation
               book={book}
               defaultLanguage={defaultLanguage}
               intl={intl}
@@ -52,7 +52,7 @@ function StoryPresentation({
         ) : (
           <PromiseWrapper computeEntities={computeEntities}>
             {bookEntries && bookEntries.length !== 0 ? (
-              <StoryPages.Container
+              <SongStoryPages.Container
                 bookEntries={bookEntries}
                 closeBookAction={closeBookAction}
                 defaultLanguage={defaultLanguage}
@@ -66,7 +66,7 @@ function StoryPresentation({
 }
 // PROPTYPES
 const { array, bool, func, number, object, string } = PropTypes
-StoryPresentation.propTypes = {
+SongStoryPresentation.propTypes = {
   book: object,
   bookEntries: array,
   bookOpen: bool,
@@ -84,4 +84,4 @@ StoryPresentation.propTypes = {
   videos: array,
 }
 
-export default StoryPresentation
+export default SongStoryPresentation

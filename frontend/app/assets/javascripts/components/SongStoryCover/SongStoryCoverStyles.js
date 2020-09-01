@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-export const StoryCoverStyles = makeStyles({
+export const SongStoryCoverStyles = makeStyles({
   cover: {
     padding: '15px',
     margin: '15px 0',

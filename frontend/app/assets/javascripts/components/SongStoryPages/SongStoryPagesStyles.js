@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-export const StoryPagesStyles = makeStyles({
+export const SongStoryPagesStyles = makeStyles({
   page: {
     padding: '30px',
     margin: '30px',

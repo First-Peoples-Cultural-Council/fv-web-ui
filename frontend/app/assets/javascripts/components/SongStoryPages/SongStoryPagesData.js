@@ -6,7 +6,7 @@ import selectn from 'selectn'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 
 /**
- * @summary StoryPagesData
+ * @summary SongStoryPagesData
  * @version 1.0.1
  * @component
  *
@@ -16,7 +16,7 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
  * @param {string} defaultLanguage the default language for translation/definition of the dialect
  *
  */
-function StoryPagesData({ children, bookEntries, defaultLanguage }) {
+function SongStoryPagesData({ children, bookEntries, defaultLanguage }) {
   const { getBaseURL } = useNavigationHelpers()
   const [bookPages, setBookPages] = useState([])
 
@@ -98,9 +98,9 @@ function StoryPagesData({ children, bookEntries, defaultLanguage }) {
 }
 // PROPTYPES
 const { array, string } = PropTypes
-StoryPagesData.propTypes = {
+SongStoryPagesData.propTypes = {
   bookEntries: array,
   defaultLanguage: string,
 }
 
-export default StoryPagesData
+export default SongStoryPagesData

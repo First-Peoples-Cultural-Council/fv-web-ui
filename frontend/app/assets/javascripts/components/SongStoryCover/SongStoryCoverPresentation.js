@@ -7,14 +7,14 @@ import ActionLaunch from '@material-ui/icons/Launch'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 
-import { StoryCoverStyles } from './StoryCoverStyles'
+import { SongStoryCoverStyles } from './SongStoryCoverStyles'
 import MediaPanels from 'components/MediaPanels'
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel/index'
 import FVTab from 'views/components/FVTab'
 import Preview from 'views/components/Editor/Preview'
 /**
- * @summary StoryCoverPresentation
+ * @summary SongStoryCoverPresentation
  * @version 1.0.1
  * @component
  *
@@ -22,7 +22,7 @@ import Preview from 'views/components/Editor/Preview'
  *
  * @returns {node} jsx markup
  */
-function StoryCoverPresentation({
+function SongStoryCoverPresentation({
   book,
   openBookAction,
   pageCount,
@@ -31,7 +31,7 @@ function StoryCoverPresentation({
   pictures,
   videos,
 }) {
-  const classes = StoryCoverStyles()
+  const classes = SongStoryCoverStyles()
   // Audio
   const audioMapped = audio.map((audioDoc) => {
     return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
@@ -95,7 +95,7 @@ function StoryCoverPresentation({
 }
 
 function _getIntroduction(introduction, introductionTranslation) {
-  const classes = StoryCoverStyles()
+  const classes = SongStoryCoverStyles()
   const [tabValue, setTabValue] = useState(0)
   const introductionDiv = (
     <div className={classes.introductionContent}>
@@ -145,7 +145,7 @@ function _getIntroduction(introduction, introductionTranslation) {
 }
 // PROPTYPES
 const { array, func, number, object, string } = PropTypes
-StoryCoverPresentation.propTypes = {
+SongStoryCoverPresentation.propTypes = {
   book: object.isRequired,
   defaultLanguage: string,
   intl: object,
@@ -157,4 +157,4 @@ StoryCoverPresentation.propTypes = {
   videos: array.isRequired,
 }
 
-export default StoryCoverPresentation
+export default SongStoryCoverPresentation

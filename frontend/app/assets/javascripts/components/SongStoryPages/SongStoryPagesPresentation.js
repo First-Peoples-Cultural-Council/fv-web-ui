@@ -10,21 +10,21 @@ import FVLabel from 'views/components/FVLabel'
 import MediaPanels from 'components/MediaPanels'
 import Preview from 'views/components/Editor/Preview'
 
-import { StoryPagesStyles } from './StoryPagesStyles'
+import { SongStoryPagesStyles } from './SongStoryPagesStyles'
 
 /**
- * @summary StoryPagesPresentation
+ * @summary SongStoryPagesPresentation
  * @version 1.0.1
  * @component
  *
  * @param {object} props
- * @param {array} bookPages an array of the bookEntries reformatted by StoryPagesData for consumption by this layer
+ * @param {array} bookPages an array of the bookEntries reformatted by SongStoryPagesData for consumption by this layer
  *
  * @returns {node} jsx markup
  */
-function StoryPagesPresentation({ bookPages, closeBookAction }) {
+function SongStoryPagesPresentation({ bookPages, closeBookAction }) {
   function getPages() {
-    const classes = StoryPagesStyles()
+    const classes = SongStoryPagesStyles()
     const pageLinks = []
     const pages = []
     bookPages.forEach(createPage)
@@ -35,7 +35,7 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
           <a href={'#' + pageLinkId}>Page {index + 1}</a>
         </div>
       )
-      pages.push(<StoryPage key={page.uid} page={page} pageLinkId={pageLinkId} pageNumber={index + 1} />)
+      pages.push(<SongStoryPage key={page.uid} page={page} pageLinkId={pageLinkId} pageNumber={index + 1} />)
     }
     return (
       <div>
@@ -45,8 +45,8 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
     )
   }
 
-  const StoryPage = ({ page, pageNumber, pageLinkId }) => {
-    const classes = StoryPagesStyles()
+  const SongStoryPage = ({ page, pageNumber, pageLinkId }) => {
+    const classes = SongStoryPagesStyles()
     // Audio
     const audio = page.audio.map((audioDoc) => {
       return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
@@ -125,9 +125,9 @@ function StoryPagesPresentation({ bookPages, closeBookAction }) {
 }
 // PROPTYPES
 const { array, func } = PropTypes
-StoryPagesPresentation.propTypes = {
+SongStoryPagesPresentation.propTypes = {
   bookPages: array,
   closeBookAction: func,
 }
 
-export default StoryPagesPresentation
+export default SongStoryPagesPresentation

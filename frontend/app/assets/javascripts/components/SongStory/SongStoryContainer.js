@@ -1,15 +1,15 @@
 import React from 'react'
 
 // FPCC
-import StoryPresentation from 'components/Story/StoryPresentation'
-import StoryData from 'components/Story/StoryData'
+import SongStoryPresentation from 'components/SongStory/SongStoryPresentation'
+import SongStoryData from 'components/SongStory/SongStoryData'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import withActions from 'views/hoc/view/with-actions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**
- * @summary StoryContainer
+ * @summary SongStoryContainer
  * @version 1.0.1
  * @component
  *
@@ -17,9 +17,9 @@ const DetailsViewWithActions = withActions(PromiseWrapper, true)
  *
  * @returns {node} jsx markup
  */
-function StoryContainer() {
+function SongStoryContainer() {
   return (
-    <StoryData>
+    <SongStoryData>
       {({
         bookPath,
         book,
@@ -46,7 +46,7 @@ function StoryContainer() {
         videos,
       }) => {
         return isKidsTheme ? (
-          <StoryPresentation
+          <SongStoryPresentation
             book={book}
             bookEntries={bookEntries}
             bookOpen={bookOpen}
@@ -76,7 +76,7 @@ function StoryContainer() {
             splitWindowPath={splitWindowPath}
             tabsData={{ photos: pictures, videos, audio }}
           >
-            <StoryPresentation
+            <SongStoryPresentation
               book={book}
               bookEntries={bookEntries}
               bookOpen={bookOpen}
@@ -94,8 +94,8 @@ function StoryContainer() {
           </DetailsViewWithActions>
         )
       }}
-    </StoryData>
+    </SongStoryData>
   )
 }
 
-export default StoryContainer
+export default SongStoryContainer

@@ -19,7 +19,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
 /**
- * @summary StoryData
+ * @summary SongStoryData
  * @version 1.0.1
  * @component
  *
@@ -27,7 +27,7 @@ import StringHelpers from 'common/StringHelpers'
  * @param {function} props.children
  *
  */
-function StoryData({ children }) {
+function SongStoryData({ children }) {
   const { computeBook, computeBookEntries, deleteBook, fetchBook, fetchBookEntries, publishBook } = useBook()
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -205,8 +205,8 @@ function StoryData({ children }) {
 }
 // PROPTYPES
 const { func } = PropTypes
-StoryData.propTypes = {
+SongStoryData.propTypes = {
   children: func,
 }
 
-export default StoryData
+export default SongStoryData
