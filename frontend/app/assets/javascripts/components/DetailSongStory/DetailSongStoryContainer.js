@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DetailSongStoryPresentation
   from 'components/DetailSongStory/DetailSongStoryPresentation'
-import DetailSongStoryData from 'components/DetailSongStory/DetailSongStoryData'
+import SongStoryData from 'components/SongStory/SongStoryData'
 
 /**
  * @summary DetailSongStoryContainer
@@ -23,55 +23,34 @@ function DetailSongStoryContainer({
   pushWindowPath,
 }) {
   return (
-      <DetailSongStoryData
-          docId={docId}
-          docState={docState}
-          computeBook={computeBook}
-          computeDialect2={computeDialect2}
-          fetchBook={fetchBook}
-          fetchDialect2={fetchDialect2}
-          pushWindowPath={pushWindowPath}
-      >
+      <SongStoryData>
         {({
-          acknowledgement,
+          book,
+          openBookAction,
+          pageCount,
+          //Media
           audio,
-          culturalNotes,
-          dialectClassName,
-          literalTranslations,
-          metadata,
-          photos,
-          relatedAssets,
-          relatedToAssets,
-          title,
+          pictures,
           videos,
         }) => {
           return <DetailSongStoryPresentation
-              acknowledgement={acknowledgement}
+              book={book}
+              openBookAction={openBookAction}
+              pageCount={pageCount}
+              // Media
               audio={audio}
-              culturalNotes={culturalNotes}
-              dialectClassName={dialectClassName}
-              literalTranslations={literalTranslations}
-              metadata={metadata}
-              photos={photos}
-              relatedAssets={relatedAssets}
-              relatedToAssets={relatedToAssets}
-              title={title}
+              pictures={pictures}
               videos={videos}
           />
         }}
-      </DetailSongStoryData>
+      </SongStoryData>
   )
 }
 
 // PROPTYPES
 const {string, object, func} = PropTypes
 DetailSongStoryContainer.propTypes = {
-  docId: string,
-  docState: string,
-  computeBook: object,
-  fetchBook: func,
-  fetchDialect2: func,
-  pushWindowPath: func,
+  //delete
 }
 
 export default DetailSongStoryContainer
