@@ -6,8 +6,8 @@
 
   <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
 
-    <listener postCommit="true" class="ca.firstvoices.characters.listeners.CharacterListener"
-      name="character_listener" priority="500">
+    <listener class="ca.firstvoices.characters.listeners.CharacterListener"
+      name="character_listener" priority="150">
       <event>documentCreated</event>
       <event>beforeDocumentModification</event>
       <event>documentTrashed</event>

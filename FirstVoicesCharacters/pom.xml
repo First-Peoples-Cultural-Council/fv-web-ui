@@ -34,6 +34,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesMaintenanceCommon</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Test dependencies -->

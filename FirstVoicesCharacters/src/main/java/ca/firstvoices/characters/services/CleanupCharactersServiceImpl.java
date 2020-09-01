@@ -79,7 +79,7 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
     String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
 
-    characters = characters.stream().filter(c -> !c.isTrashed())
+    characters = characters.stream()
         .map(c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
 
     if (propertyValue != null) {
@@ -106,61 +106,73 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
   //Helper method for cleanConfusables
   private Map<String, String> mapAndValidateConfusableCharacters(List<DocumentModel> characters) {
+
     Map<String, String> confusables = new HashMap<>();
-    List<String> characterValues = characters.stream().filter(c -> !c.isTrashed())
-        .map(c -> (String) c.getPropertyValue(DOCUMENT_TITLE)).collect(Collectors.toList());
-    for (DocumentModel d : characters) {
 
-      for (String confusableCharacter : PropertyUtils.getValuesAsList(d, LC_CONFUSABLES)) {
-        String characterTitle = (String) d.getPropertyValue(DOCUMENT_TITLE);
-        if (confusables.put(confusableCharacter, characterTitle) != null) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
-                  + " as it is mapped as a confusable character to another alphabet character.",
-              400);
-        }
-        if (confusables.containsKey(characterTitle)) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
-                  + " as it is mapped as a confusable character to another alphabet character.",
-              400);
-        }
-        if (characterValues.contains(confusableCharacter)) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
-                  + "as it is found in the dialect's alphabet.", 400);
-        }
-      }
-
-      for (String confusableCharacter : PropertyUtils.getValuesAsList(d, UC_CONFUSABLES)) {
-        String characterTitle = (String) d.getPropertyValue("fvcharacter:upper_case_character");
-        if (StringUtils.isEmpty(characterTitle)) {
-          throw new FVCharacterInvalidException(
-              "Can't have uppercase confusable character if there is no uppercase character.",
-              400);
-        }
-        if (confusables.put(confusableCharacter, characterTitle) != null) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on uppercase"
-                  + characterTitle
-                  + " as it is mapped as a confusable character to another alphabet character.",
-              400);
-        }
-        if (confusables.containsKey(characterTitle)) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on uppercase"
-                  + characterTitle
-                  + " as it is mapped as a confusable character to another alphabet character.",
-              400);
-        }
-        if (characterValues.contains(confusableCharacter)) {
-          throw new FVCharacterInvalidException(
-              DEFAULT_WARNING + confusableCharacter + " on uppercase"
-                  + characterTitle + " as it is found in the dialect's alphabet.", 400);
-        }
-      }
-
+    for (DocumentModel character : characters) {
+      confusables.putAll(validateConfusableCharacter(character, characters));
     }
+    return confusables;
+  }
+
+  public Map<String, String> validateConfusableCharacter(DocumentModel character,
+      List<DocumentModel> characters) {
+
+    Map<String, String> confusables = new HashMap<>();
+
+    List<String> characterValues = characters.stream()
+        .map(c -> (String) c.getPropertyValue(DOCUMENT_TITLE)).collect(Collectors.toList());
+
+    for (String confusableCharacter : PropertyUtils.getValuesAsList(character, LC_CONFUSABLES)) {
+      String characterTitle = (String) character.getPropertyValue(DOCUMENT_TITLE);
+      if (confusables.put(confusableCharacter, characterTitle) != null) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                + " as it is mapped as a confusable character to another alphabet character.",
+            400);
+      }
+      if (confusables.containsKey(characterTitle)) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                + " as it is mapped as a confusable character to another alphabet character.",
+            400);
+      }
+      if (characterValues.contains(confusableCharacter)) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on " + characterTitle
+                + "as it is found in the dialect's alphabet.", 400);
+      }
+    }
+
+    for (String confusableCharacter : PropertyUtils.getValuesAsList(character, UC_CONFUSABLES)) {
+      String characterTitle = (String) character
+          .getPropertyValue("fvcharacter:upper_case_character");
+      if (StringUtils.isEmpty(characterTitle)) {
+        throw new FVCharacterInvalidException(
+            "Can't have uppercase confusable character if there is no uppercase character.",
+            400);
+      }
+      if (confusables.put(confusableCharacter, characterTitle) != null) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                + characterTitle
+                + " as it is mapped as a confusable character to another alphabet character.",
+            400);
+      }
+      if (confusables.containsKey(characterTitle)) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                + characterTitle
+                + " as it is mapped as a confusable character to another alphabet character.",
+            400);
+      }
+      if (characterValues.contains(confusableCharacter)) {
+        throw new FVCharacterInvalidException(
+            DEFAULT_WARNING + confusableCharacter + " on uppercase"
+                + characterTitle + " as it is found in the dialect's alphabet.", 400);
+      }
+    }
+
     return confusables;
   }
 

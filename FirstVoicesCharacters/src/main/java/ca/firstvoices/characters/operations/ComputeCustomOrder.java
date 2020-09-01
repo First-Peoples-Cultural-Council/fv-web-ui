@@ -33,7 +33,6 @@ import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.work.api.WorkManager;
@@ -86,14 +85,10 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
   protected void executeWorkPhase(DocumentModel doc) {
     if (DialectUtils.isDialect(doc)) {
       // Run worker to do computation for dialect
-      CoreInstance
-          .doPrivileged(doc.getRepositoryName(),
-              s -> {
-                WorkManager workManager = Framework.getService(WorkManager.class);
-                ComputeCustomOrderWorker worker = new ComputeCustomOrderWorker(doc.getRef(),
-                    batchSize);
-                workManager.schedule(worker);
-              });
+      WorkManager workManager = Framework.getService(WorkManager.class);
+      ComputeCustomOrderWorker worker = new ComputeCustomOrderWorker(doc.getRef(),
+          batchSize);
+      workManager.schedule(worker);
     } else {
       try {
         // compute for asset

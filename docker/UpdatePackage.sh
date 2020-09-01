@@ -27,9 +27,8 @@ else
     echo ''
 fi
 
-# Remove any old modules from the docker container if they exists
-echo 'Removing old module from docker container if it exists.'
-docker exec nuxeo-dev sh -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices-*.jar" > /dev/null 2>&1
+echo 'Removing old modules from docker container if they exist.'
+docker exec nuxeo-dev /bin/bash -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices*.jar" > /dev/null 2>&1
 echo ''
 
 echo 'Copying build package into shared docker volume.'

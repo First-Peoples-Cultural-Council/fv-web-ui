@@ -25,6 +25,7 @@ import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -85,7 +86,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
                 setProgress(new Progress(0, totalSize));
 
                 // Do work on first batch
-                updateCustomOrderForEntries(docs);
+                updateCustomOrderForEntries(session, docs);
                 session.save();
 
                 // commit the first batch
@@ -97,7 +98,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
                   // start a new transaction
                   TransactionHelper.runInTransaction(() -> {
                     DocumentModelList nextDocs = session.query(query, null, batchSize, i, false);
-                    updateCustomOrderForEntries(nextDocs);
+                    updateCustomOrderForEntries(session, nextDocs);
                     session.save();
                   });
 
@@ -122,7 +123,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
             });
   }
 
-  private void updateCustomOrderForEntries(DocumentModelList docs) {
+  private void updateCustomOrderForEntries(CoreSession session, DocumentModelList docs) {
     for (DocumentModel doc : docs) {
       service.computeAssetNativeOrderTranslation(session, doc);
     }

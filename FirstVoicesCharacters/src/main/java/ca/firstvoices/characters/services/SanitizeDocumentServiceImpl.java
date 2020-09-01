@@ -32,8 +32,7 @@ public class SanitizeDocumentServiceImpl implements SanitizeDocumentService {
    * @return
    */
   public DocumentModel sanitizeDocument(CoreSession session, DocumentModel currentDoc) {
-    currentDoc = trimWhitespace(currentDoc, "dc:title");
-    return currentDoc;
+    return trimWhitespace(currentDoc, "dc:title");
   }
 
   /**
@@ -44,7 +43,7 @@ public class SanitizeDocumentServiceImpl implements SanitizeDocumentService {
    */
   private DocumentModel trimWhitespace(DocumentModel currentDoc, String propertyName) {
     if (currentDoc == null || propertyName == null) {
-      return null;
+      return currentDoc;
     }
 
     Object property = currentDoc.getPropertyValue(propertyName);
@@ -57,7 +56,7 @@ public class SanitizeDocumentServiceImpl implements SanitizeDocumentService {
         return currentDoc;
       }
     }
-    return null;
+    return currentDoc;
   }
 
 }

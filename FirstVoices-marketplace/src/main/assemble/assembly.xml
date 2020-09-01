@@ -31,6 +31,14 @@
         <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
         <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
 
+            <artifact:file artifactId="FirstVoicesMaintenanceCommon"/>
+            <artifact:dependencies artifactId="FirstVoicesMaintenanceCommon">
+                <excludes>
+                    <artifact scope="test"/>
+                    <artifact scope="provided"/>
+                </excludes>
+            </artifact:dependencies>
+
             <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
             <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
                 <excludes>

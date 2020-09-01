@@ -21,6 +21,7 @@
 package ca.firstvoices.characters.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -56,6 +57,17 @@ public interface CleanupCharactersService {
   void validateAlphabetIgnoredCharacters(List<DocumentModel> characters,
       DocumentModel alphabet);
 
+
+  /**
+   * Ensures that confusables set on the current character are valid
+   *
+   * @param character the character to validate
+   * @param characterValues a list of other characters in the alphabet
+   * @return map of the valid confusables
+   */
+  Map<String, String> validateConfusableCharacter(DocumentModel character,
+      List<DocumentModel> characterValues);
+
   /**
    * A map of all upper/lowercase characters, upper/lowercase confusables and ignored characters
    * currently in the dialect.
@@ -66,7 +78,7 @@ public interface CleanupCharactersService {
   Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
 
   /**
-   * Return a list of characters in a document's associated alphabet
+   * Return a list of all non-trashed characters in a document's associated alphabet
    *
    * @param doc Document model
    * @return Document model list of associated characters

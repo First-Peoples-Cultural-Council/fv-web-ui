@@ -25,4 +25,14 @@ public final class DocumentUtils {
     }
     return parent;
   }
+
+  /**
+   * Checks if the document is an active workspace document
+   * Excludes proxies and versions (via isImmutable) and trashed docs
+   * @param currentDoc
+   * @return
+   */
+  public static boolean isActiveDoc(DocumentModel currentDoc) {
+    return !currentDoc.isImmutable() && !currentDoc.isTrashed();
+  }
 }

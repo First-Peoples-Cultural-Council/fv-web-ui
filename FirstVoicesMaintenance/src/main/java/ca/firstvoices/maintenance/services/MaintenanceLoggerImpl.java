@@ -30,16 +30,19 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
           .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
               session -> {
                 // Use a SET to ensure we don't add duplicates
-                Set<String> requiredJobs = getRequiredJobs(jobContainer);
+                DocumentModel jobContainerWithSession = session.getDocument(jobContainer.getRef());
+
+                Set<String> requiredJobs = getRequiredJobs(jobContainerWithSession);
                 requiredJobs.add(job);
-                jobContainer.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
+
+                jobContainerWithSession.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
                     CommonConstants.REQUIRED_JOBS_FIELD, requiredJobs);
 
                 // Avoid firing other events with this update
-                AbstractSyncListener.disableDefaultEvents(jobContainer);
+                AbstractSyncListener.disableDefaultEvents(jobContainerWithSession);
 
                 // Update dialect
-                session.saveDocument(jobContainer);
+                session.saveDocument(jobContainerWithSession);
 
                 sendEvent("Job Queued", job + " queued for `" + jobContainer.getTitle() + "`",
                     Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainer);
