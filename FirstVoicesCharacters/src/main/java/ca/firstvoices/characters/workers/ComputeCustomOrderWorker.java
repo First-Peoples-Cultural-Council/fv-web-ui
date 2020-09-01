@@ -125,7 +125,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
 
   private void updateCustomOrderForEntries(CoreSession session, DocumentModelList docs) {
     for (DocumentModel doc : docs) {
-      service.computeAssetNativeOrderTranslation(session, doc);
+      service.computeAssetNativeOrderTranslation(session, doc, true, true);
     }
   }
 

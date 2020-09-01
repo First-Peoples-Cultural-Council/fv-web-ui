@@ -48,6 +48,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.Filter;
 import org.nuxeo.ecm.core.query.sql.NXQL;
+import org.nuxeo.runtime.api.Framework;
 
 public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
@@ -79,8 +80,12 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
     String propertyValue = (String) document.getPropertyValue(DOCUMENT_TITLE);
 
+    // Ensure lambda uses final document
+    DocumentModel filterDocument = document;
+
     characters = characters.stream()
-        .map(c -> c.getId().equals(document.getId()) ? document : c).collect(Collectors.toList());
+        .map(c -> c.getId().equals(filterDocument.getId()) ? filterDocument : c)
+        .collect(Collectors.toList());
 
     if (propertyValue != null) {
       Map<String, String> confusables = mapAndValidateConfusableCharacters(characters);
@@ -90,12 +95,19 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
       }
     }
 
-    // Do not execute further events for this
-    // Note: custom order recompute listener will execute
+    // Do not execute further events for this change
     AbstractSyncListener.disableDefaultEvents(document);
 
-    // Disable asset listener for further events
+    // Disable asset listener for further events (i.e. another cleanup, sanitization)
     document.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
+
+    // We can recompute the custom order on the asset here
+    // to avoid recomputing the entire dialect
+    CustomOrderComputeService customOrderComputeService =
+        Framework.getService(CustomOrderComputeService.class);
+
+    document = customOrderComputeService
+        .computeAssetNativeOrderTranslation(session, document, false, false);
 
     if (Boolean.TRUE.equals(saveDocument)) {
       return session.saveDocument(document);

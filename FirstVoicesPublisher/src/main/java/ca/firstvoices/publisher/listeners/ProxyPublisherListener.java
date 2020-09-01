@@ -66,7 +66,7 @@ public class ProxyPublisherListener implements EventListener {
     // the service filter depending on the document
     if (PUBLISH_TRANSITION.equals(transition)) {
       if (REPUBLISH_TRANSITION.equals(transitionFrom)) {
-        service.republish(doc);
+        service.doRepublish(doc);
       } else {
         service.publish(doc);
       }

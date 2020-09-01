@@ -22,6 +22,7 @@ package ca.firstvoices.publisher.services;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
@@ -454,7 +455,21 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
   }
 
   @Override
-  public DocumentModel republish(DocumentModel doc) {
+  public DocumentModel queueRepublish(DocumentModel doc) {
+    // On republish juggle states from so publish listener is activated
+    if (PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())) {
+      doc.followTransition(REPUBLISH_TRANSITION);
+      doc.followTransition(PUBLISH_TRANSITION);
+    } else {
+      // When publishing for the first time, follow formal transition
+      doc.followTransition(PUBLISH_TRANSITION);
+    }
+
+    return doc;
+  }
+
+  @Override
+  public DocumentModel doRepublish(DocumentModel doc) {
     if (doc == null) {
       return null;
     }
@@ -599,7 +614,7 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
     if (StateUtils.isPublished(dialect)) {
       if (StateUtils.isPublished(doc)) {
-        republish(doc);
+        doRepublish(doc);
       } else {
         publish(doc);
       }

@@ -166,7 +166,7 @@ public class MigrateCategoriesStatus {
               wordsFailedPublishingDueToDeleted.put(workingCopy.getId(), sharedCategoryTitle);
             } else {
               // Try to republish
-              publisherService.republish(workingCopy);
+              publisherService.queueRepublish(workingCopy);
 
               // Document under words that failed to publish for other reasons
               wordsFailedPublishing.put(workingCopy.getId(), sharedCategoryTitle);

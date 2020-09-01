@@ -81,7 +81,7 @@ public class AssetListener implements EventListener {
       document = sanitizeDocumentService.sanitizeDocument(session, document);
       document = cleanupCharactersService.cleanConfusables(session, document, false);
       customOrderComputeService
-          .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document);
+          .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document, false, false);
     }
   }
 }

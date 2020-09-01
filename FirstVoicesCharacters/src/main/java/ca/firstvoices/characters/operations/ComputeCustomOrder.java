@@ -111,7 +111,7 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
           .getService(CustomOrderComputeService.class);
 
       // Will compute, save and update proxy if needed
-      customOrderComputeService.computeAssetNativeOrderTranslation(session, doc);
+      customOrderComputeService.computeAssetNativeOrderTranslation(session, doc, true, true);
     } else {
       throw new OperationException(
           "Cannot calculate custom order on non `fvcore` type for " + doc.getType());

@@ -123,7 +123,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         if (word.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
           // Check for unpublished changes
           if (!unpublishedChangesExist) {
-            publisherService.republish(word);
+            publisherService.queueRepublish(word);
           } else {
             log.info(word.getPathAsString() + "has unpublished changes yet the category has been "
                 + "migrated. Republish manually.");

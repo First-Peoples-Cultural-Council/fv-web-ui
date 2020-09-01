@@ -78,7 +78,22 @@ public interface FirstVoicesPublisherService {
    */
   DocumentModel publish(DocumentModel doc);
 
-  DocumentModel republish(DocumentModel doc);
+  /**
+   * Method to transition lifecycle states to be picked up by ProxyPublisherListener
+   * To replace scriptedOperation -> javascript.FVPublishOrRepublish in extensions.xml
+   * @param doc
+   * @return
+   */
+  DocumentModel queueRepublish(DocumentModel doc);
+
+  /**
+   * Performs the publishing operation. Called via a listener.
+   * It is preferred to not call this directly to give documents an opportunity
+   * to save properly. Call queueRepublish instead.
+   * @param doc
+   * @return
+   */
+  DocumentModel doRepublish(DocumentModel doc);
 
   DocumentModel getPublication(CoreSession session, DocumentRef docRef);
 

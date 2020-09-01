@@ -23,6 +23,7 @@ package ca.firstvoices.characters.services;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.listeners.AssetListener;
+import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -48,15 +49,34 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
 
   @Override
   // Called when a document is created or updated
-  public void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset) {
+  public DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
+      boolean save, boolean publish) {
+
+    // Disable deafult events
+    AbstractSyncListener.disableDefaultEvents(asset);
+
+    // Make sure we avoid triggering events that trigger custom order recompute
+    asset.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
+
     if (!asset.isImmutable()) {
       DocumentModel dialect = DialectUtils.getDialect(asset);
       DocumentModel alphabet = session
           .getChild(dialect.getRef(), DialectTypesConstants.FV_ALPHABET_NAME);
       DocumentModel[] chars = loadCharacters(session, alphabet);
-      computeCustomOrder(session, asset, alphabet, chars);
+      computeCustomOrder(asset, alphabet, chars);
+
+      if (Boolean.TRUE.equals(save)) {
+        session.saveDocument(asset);
+      }
+
+      if (Boolean.TRUE.equals(publish)) {
+        updateProxyIfPublished(session, asset);
+      }
     }
+
+    return asset;
   }
+
 
   @Override
   // Called when a we are updating all words and phrases on a dialect
@@ -66,19 +86,12 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     DocumentModelList wordsAndPhrases = session.query(
         "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
             + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
-    wordsAndPhrases.forEach(doc -> computeCustomOrder(session, doc, alphabet, chars));
+    wordsAndPhrases.forEach(doc -> computeCustomOrder(doc, alphabet, chars));
     session.save();
   }
 
-  private void computeCustomOrder(CoreSession session, DocumentModel element,
+  private DocumentModel computeCustomOrder(DocumentModel element,
       DocumentModel alphabet, DocumentModel[] chars) {
-
-    // Make sure we avoid triggering events that trigger custom order recompute
-    element.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
-
-    if (element.isImmutable()) {
-      return;
-    }
 
     String title = (String) element.getPropertyValue(DOCUMENT_TITLE);
     StringBuilder nativeTitle = new StringBuilder();
@@ -129,9 +142,9 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     String originalCustomSort = (String) element.getPropertyValue(FV_CUSTOM_ORDER);
     if (!nativeTitle.toString().equals(originalCustomSort)) {
       element.setPropertyValue(FV_CUSTOM_ORDER, nativeTitle.toString());
-      session.saveDocument(element);
-      updateProxyIfPublished(session, element);
     }
+
+    return element;
   }
 
   @Nullable
@@ -160,7 +173,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
         .checkUnpublishedChanges(session, element);
 
     if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
-      firstVoicesPublisherService.republish(element);
+      firstVoicesPublisherService.queueRepublish(element);
     }
   }
 

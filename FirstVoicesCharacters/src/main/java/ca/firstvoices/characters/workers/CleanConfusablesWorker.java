@@ -21,7 +21,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 
 /**
  * Clean Confusables worker will search for words and phrases that contain confusable characters,
- * and clean them
+ * and clean them. While this worker could potentially queue a full custom order recompute on the
+ * dialect, it does not since a new custom order is calculated for each entry in the clean service
  */
 public class CleanConfusablesWorker extends AbstractWork {
 
@@ -94,10 +95,6 @@ public class CleanConfusablesWorker extends AbstractWork {
 
                 setStatus("Done");
                 RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
-
-                // Queue custom sort order
-                RequiredJobsUtils.addToRequiredJobs(dialect, Constants.COMPUTE_ORDER_JOB_ID);
-
               } catch (Exception e) {
                 setStatus("Failed");
                 RequiredJobsUtils.removeFromRequiredJobs(dialect, job, false);
@@ -135,7 +132,7 @@ public class CleanConfusablesWorker extends AbstractWork {
 
       if (!unpublishedChangesExist && dictionaryItem.getCurrentLifeCycleState()
           .equals(PUBLISHED_STATE)) {
-        firstVoicesPublisherService.republish(dictionaryItem);
+        firstVoicesPublisherService.queueRepublish(dictionaryItem);
       }
     }
   }

@@ -26,8 +26,16 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public interface CustomOrderComputeService {
 
-  void computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset);
+  DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
+      boolean save, boolean publish);
 
+  /**
+   * Note: this method is currently only used in tests. Tests should use worker and this
+   * method should be removed. Large updates should always happen in a worker.
+   * @param session
+   * @param dialect
+   * @param alphabet
+   */
   void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
       DocumentModel alphabet);
 
