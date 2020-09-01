@@ -25,6 +25,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 
 public interface SanitizeDocumentService {
 
-  void sanitizeDocument(CoreSession session, DocumentModel currentDoc);
+  DocumentModel sanitizeDocument(CoreSession session, DocumentModel currentDoc);
 
 }

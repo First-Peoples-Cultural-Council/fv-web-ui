@@ -3,6 +3,7 @@ package ca.firstvoices.operations;
 import ca.firstvoices.testUtil.AbstractFirstVoicesCoreTestsTest;
 import ca.firstvoices.tests.mocks.operations.GenerateDialect;
 import java.util.HashMap;
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -45,22 +46,32 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
         .query("SELECT * FROM FVCharacter WHERE ecm:ancestorId='" + dialect.getId()
             + "'").size());
 
+    //Check for categories / phrase books
+    Assert.assertEquals(12, session
+        .query("SELECT * FROM FVCategory WHERE ecm:ancestorId='" + dialect.getId()
+            + "'").size());
+
     //Check for words and their properties
     DocumentModelList words = session
-        .query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
-            + "'");
+        .query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "'");
     Assert.assertEquals(26, words.size());
     for (DocumentModel word : words) {
       String partOfSpeech = (String) word.getPropertyValue("fv-word:part_of_speech");
       String pronunciation = (String) word.getPropertyValue("fv-word:pronunciation");
+      String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
       Assert.assertNotNull(partOfSpeech);
       Assert.assertNotNull(pronunciation);
+      Assert.assertFalse(ArrayUtils.isEmpty(categories));
     }
 
-    //Check for phrases
-    Assert.assertEquals(25, session
-        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-            + "'").size());
+    //Check for phrases, phrase books set
+    DocumentModelList phrases = session
+        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(25, phrases.size());
+    for (DocumentModel phrase : phrases) {
+      String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
+      Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+    }
   }
 
 
@@ -89,6 +100,11 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
             + "'");
     Assert.assertEquals(30, characters.size());
 
+    //Check for categories / phrase books
+    Assert.assertEquals(12, session
+        .query("SELECT * FROM FVCategory WHERE ecm:ancestorId='" + dialect.getId()
+            + "'").size());
+
     //Check for words and their properties
     DocumentModelList words = session
         .query("SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId()
@@ -97,14 +113,20 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     for (DocumentModel word : words) {
       String partOfSpeech = (String) word.getPropertyValue("fv-word:part_of_speech");
       String pronunciation = (String) word.getPropertyValue("fv-word:pronunciation");
+      String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
       Assert.assertNotNull(partOfSpeech);
       Assert.assertNotNull(pronunciation);
+      Assert.assertFalse(ArrayUtils.isEmpty(categories));
     }
 
-    //Check for phrases
-    Assert.assertEquals(25, session
-        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-            + "'").size());
+    //Check for phrases, phrase books set
+    DocumentModelList phrases = session
+        .query("SELECT * FROM FVPhrase WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(25, phrases.size());
+    for (DocumentModel phrase : phrases) {
+      String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
+      Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+    }
   }
 
   @Test(expected = DocumentSecurityException.class)
