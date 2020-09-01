@@ -23,7 +23,6 @@ function DetailSongPresentation({
   acknowledgement,
   audio,
   culturalNotes,
-  definitions,
   dialectClassName,
   literalTranslations,
   metadata,
@@ -59,67 +58,45 @@ function DetailSongPresentation({
     return null
   }
   const _getAudio = (audioData) => {
-    // const audioPreviews = audioData.map((_audio) => {
-    //   return (
-    //       <Preview
-    //           key={selectn('uid', _audio)}
-    //           expandedValue={_audio}
-    //           optimal
-    //           type="FVAudio"
-    //           styles={{ padding: 0, display: 'inline' }}
-    //       />
-    //   )
-    // })
-    // return audioPreviews.length > 0 ? (
-    //     <div data-testid="DialectViewWordPhraseAudio" className="DialectViewWordPhraseAudio">
-    //       {audioPreviews}
-    //     </div>
-    // ) : null
+    const audioPreviews = audioData.map((_audio) => {
+      return (
+          <Preview
+              key={selectn('uid', _audio)}
+              expandedValue={_audio}
+              optimal
+              type="FVAudio"
+              styles={{padding: 0, display: 'inline'}}
+          />
+      )
+    })
+    return audioPreviews.length > 0 ? (
+        <div data-testid="DialectViewWordPhraseAudio"
+             className="DialectViewWordPhraseAudio">
+          {audioPreviews}
+        </div>
+    ) : null
   }
 
   const _getCulturalNotes = (cultNotes) => {
-    // const _culturalNotes = cultNotes.map((culturalNote, key) => {
-    //   return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
-    // })
-    // return _culturalNotes.length > 0 ? (
-    //     <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseCulturalNote">
-    //       <h3 className="DialectViewWordPhraseContentItemTitle">
-    //         <FVLabel
-    //             transKey="views.pages.explore.dialect.learn.words.cultural_notes"
-    //             defaultStr="Cultural Notes"
-    //             transform="first"
-    //         />
-    //       </h3>
-    //       <div className="DialectViewWordPhraseContentItemGroup">{_culturalNotes}</div>
-    //     </div>
-    // ) : null
+    const _culturalNotes = cultNotes.map((culturalNote, key) => {
+      return <div key={key}>{intl.searchAndReplace(culturalNote)}</div>
+    })
+    return _culturalNotes.length > 0 ? (
+        <div
+            className="DialectViewWordPhraseContentItem DialectViewWordPhraseCulturalNote">
+          <h3 className="DialectViewWordPhraseContentItemTitle">
+            <FVLabel
+                transKey="views.pages.explore.dialect.learn.words.cultural_notes"
+                defaultStr="Cultural Notes"
+                transform="first"
+            />
+          </h3>
+          <div
+              className="DialectViewWordPhraseContentItemGroup">{_culturalNotes}</div>
+        </div>
+    ) : null
   }
 
-  const _getDefinitions = (defs) => {
-    // let _definitions = []
-    // if (defs) {
-    //   const groupedDefinitions = _groupBy(defs)
-    //
-    //   for (const property in groupedDefinitions) {
-    //     if (groupedDefinitions.hasOwnProperty(property)) {
-    //       const definition = groupedDefinitions[property]
-    //       _definitions = definition.map((entry, index) => {
-    //         return (
-    //             <div key={index} className="DialectViewWordPhraseDefinitionSet">
-    //               <h4 className="DialectViewWordPhraseDefinitionLanguage">{entry.language}</h4>
-    //               <p className="DialectViewWordPhraseDefinitionEntry">{entry.translation}</p>
-    //             </div>
-    //         )
-    //       })
-    //     }
-    //   }
-    // }
-    // return _definitions.length > 0 ? (
-    //     <div className="DialectViewWordPhraseContentItem DialectViewWordPhraseDefinition">
-    //       <div className="DialectViewWordPhraseContentItemGroup">{_definitions}</div>
-    //     </div>
-    // ) : null
-  }
 
   const _getLiteralTranslations = (litTrans) => {
     // let _literalTranslations = []
@@ -247,7 +224,6 @@ function DetailSongPresentation({
                 {title} {_getAudio(audio)}
               </h2>
             </div>
-            {_getDefinitions(definitions)}
             {_getCulturalNotes(culturalNotes)}
             {_getLiteralTranslations(literalTranslations)}
             {_getRelatedAssets(relatedAssets)}
@@ -273,7 +249,6 @@ DetailSongPresentation.propTypes = {
   acknowledgement: string,
   audio: array,
   culturalNotes: array,
-  definitions: array,
   dialectClassName: string,
   literalTranslations: array,
   metadata: node,
@@ -282,13 +257,13 @@ DetailSongPresentation.propTypes = {
   relatedToAssets: array,
   title: string,
   videos: array,
+  test: string,
 }
 
 DetailSongPresentation.defaultProps = {
   dialectClassName: '',
   audio: [],
   culturalNotes: [],
-  definitions: [],
   literalTranslations: [],
   photos: [],
   relatedAssets: [],

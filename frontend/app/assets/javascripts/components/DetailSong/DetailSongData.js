@@ -5,10 +5,15 @@ import Immutable from 'immutable'
 // REDUX
 import {connect} from 'react-redux'
 // REDUX: actions/dispatch/func
+import {fetchBook} from 'providers/redux/reducers/fvBook'
 import {fetchBooks} from 'providers/redux/reducers/fvBook'
 import {fetchDialect2} from 'providers/redux/reducers/fvDialect'
 import {fetchPortal} from 'providers/redux/reducers/fvPortal'
 import {pushWindowPath} from 'providers/redux/reducers/windowPath'
+import selectn from "selectn";
+import ProviderHelpers from 'common/ProviderHelpers'
+import StringHelpers from 'common/StringHelpers'
+import useRoute from 'DataSource/useRoute'
 
 /**
  * @summary DetailSongData
@@ -19,12 +24,11 @@ import {pushWindowPath} from 'providers/redux/reducers/windowPath'
  * @param {function} props.children
  *
  */
-function DetailSongData({children}) {
+function DetailSongData({children, docId, docState}) {
   const title = 'Song Title'
   const acknowledgement = 'We acknowledge the creator of this song'
-  const audio = ['audio1', 'audio2']
-  const culturalNotes = ['cultural notes']
-  const definitions = ['defs']
+  const audio = [{uid: '30444f23-3783-4f36-98b8-d86aea105553'}]
+  const culturalNotes = ['A cultural note', 'Another cultural note']
   const dialectClassName = 'ElysseTestDialect'
   const literalTranslations = ['literal translations']
   const metadata = ''
@@ -33,27 +37,10 @@ function DetailSongData({children}) {
   const relatedToAssets = ['']
   const videos = ['']
 
-  // const computeProps= () => {
-  //   const title = 'song title here'
-  //   const acknowledgement = 'acknowledgement here'
-  //   const audio = 'audio'
-  //   const culturalNotes = 'cultural notes'
-  //   const definitions = 'defs'
-  //   const dialectClassName = 'ElysseDialect'
-  //   const literalTranslations = 'literal translations'
-  //   const metadata = ''
-  //   const photos = ''
-  //   const relatedAssets = ''
-  //   const relatedToAssets = ''
-  //   const videos = ''
-  //   return true
-  // }
-
   return children({
     acknowledgement,
     audio,
     culturalNotes,
-    definitions,
     dialectClassName,
     literalTranslations,
     metadata,
@@ -66,7 +53,14 @@ function DetailSongData({children}) {
 }
 
 // PROPTYPES
-const {array, func, string} = PropTypes
-DetailSongData.propTypes = {}
+const {array, func, string, object} = PropTypes
+DetailSongData.propTypes = {
+  docId: string,
+  docState: string,
+  computeBook: object,
+  fetchBook: func,
+  fetchDialect2: func,
+  pushWindowPath: func,
+}
 
 export default DetailSongData

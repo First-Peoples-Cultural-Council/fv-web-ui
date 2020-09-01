@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import DetailSongPresentation
   from 'components/DetailSong/DetailSongPresentation'
 import DetailSongData from 'components/DetailSong/DetailSongData'
@@ -13,14 +13,29 @@ import DetailSongData from 'components/DetailSong/DetailSongData'
  *
  * @returns {node} jsx markup
  */
-function DetailSongContainer() {
+function DetailSongContainer({
+  docId,
+  docState,
+  computeBook,
+  computeDialect2,
+  fetchBook,
+  fetchDialect2,
+  pushWindowPath,
+}) {
   return (
-      <DetailSongData>
+      <DetailSongData
+          docId={docId}
+          docState={docState}
+          computeBook={computeBook}
+          computeDialect2={computeDialect2}
+          fetchBook={fetchBook}
+          fetchDialect2={fetchDialect2}
+          pushWindowPath={pushWindowPath}
+      >
         {({
           acknowledgement,
           audio,
           culturalNotes,
-          definitions,
           dialectClassName,
           literalTranslations,
           metadata,
@@ -34,7 +49,6 @@ function DetailSongContainer() {
               acknowledgement={acknowledgement}
               audio={audio}
               culturalNotes={culturalNotes}
-              definitions={definitions}
               dialectClassName={dialectClassName}
               literalTranslations={literalTranslations}
               metadata={metadata}
@@ -50,9 +64,14 @@ function DetailSongContainer() {
 }
 
 // PROPTYPES
-// const { string } = PropTypes
+const {string, object, func} = PropTypes
 DetailSongContainer.propTypes = {
-  //   something: string,
+  docId: string,
+  docState: string,
+  computeBook: object,
+  fetchBook: func,
+  fetchDialect2: func,
+  pushWindowPath: func,
 }
 
 export default DetailSongContainer
