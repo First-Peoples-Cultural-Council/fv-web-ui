@@ -26,7 +26,7 @@ import Typography from '@material-ui/core/Typography'
 
 import ActionLaunch from '@material-ui/icons/Launch'
 
-import { Introduction } from '../list-view'
+import { Introduction } from 'views/pages/explore/dialect/learn/songs-stories/list-view'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'

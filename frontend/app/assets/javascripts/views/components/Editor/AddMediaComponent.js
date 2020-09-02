@@ -44,11 +44,11 @@ import FVLabel from '../FVLabel/index'
 
 // TODO: Cleanup class
 
-const { func, object, string } = PropTypes
+const { func, object, string, oneOfType } = PropTypes
 export class AddMediaComponent extends Component {
   static propTypes = {
     onComplete: func.isRequired,
-    label: string.isRequired,
+    label: oneOfType([object, string]).isRequired,
     type: string.isRequired,
     dialect: object.isRequired,
     // REDUX: reducers/state

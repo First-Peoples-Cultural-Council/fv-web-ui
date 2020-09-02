@@ -2,16 +2,11 @@
   padding: 10px 5%;
 }
 
-input {
-  width: 100%;
-  padding: 30px;
-}
-
-.visibilitySelector {
+.RequestChanges__visibility {
   padding: 10px;
 }
 
-.actions {
+.RequestChanges__actions {
   display: flex;
   justify-content: space-evenly;
   padding: 5px;
