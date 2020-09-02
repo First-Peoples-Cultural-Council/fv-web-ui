@@ -2,11 +2,11 @@
   padding: 10px 5%;
 }
 
-.visibilitySelector {
+.RequestChanges__visibility {
   padding: 10px;
 }
 
-.actions {
+.RequestChanges__actions {
   display: flex;
   justify-content: space-evenly;
   padding: 5px;
