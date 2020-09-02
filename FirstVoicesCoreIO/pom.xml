@@ -19,6 +19,11 @@
       <artifactId>FirstVoicesData</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.nuxeo.runtime</groupId>
+      <artifactId>nuxeo-runtime-jtajca</artifactId>
+    </dependency>
+
     <!-- Test Dependencies -->
 
     <dependency>
@@ -34,11 +39,6 @@
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
       <artifactId>nuxeo-runtime-datasource</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.runtime</groupId>
-      <artifactId>nuxeo-runtime-jtajca</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

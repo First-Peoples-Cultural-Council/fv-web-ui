@@ -28,37 +28,39 @@ import ca.firstvoices.data.utils.DocumentUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 public class AssignAncestorsServiceImpl implements AssignAncestorsService {
 
-  public void assignAncestors(DocumentModel currentDoc) {
+  public DocumentModel assignAncestors(DocumentModel currentDoc) {
     // Do privileged since we are reading info outside of a dialect
-    CoreInstance.doPrivileged(currentDoc.getCoreSession(), s -> {
-      // Get the parent document of each type for the current document using the helper method
-      DocumentModel dialect = DialectUtils.getDialect(currentDoc);
-      DocumentModel language = getLanguage(s, currentDoc);
-      DocumentModel languageFamily = getLanguageFamily(s, currentDoc);
+    TransactionHelper.runInTransaction(() ->
+        CoreInstance.doPrivileged(currentDoc.getCoreSession(), s -> {
+          // Get the parent document of each type for the current document using the helper method
+          DocumentModel dialect = DialectUtils.getDialect(currentDoc);
+          DocumentModel language = getLanguage(s, currentDoc);
+          DocumentModel languageFamily = getLanguageFamily(s, currentDoc);
 
-      // Set the property fva:family of the new document to be the
-      // UUID of the parent FVLanguageFamily document
-      if (languageFamily != null) {
-        currentDoc.setPropertyValue("fva:family", languageFamily.getId());
-      }
+          // Set the property fva:family of the new document to be the
+          // UUID of the parent FVLanguageFamily document
+          if (languageFamily != null) {
+            currentDoc.setPropertyValue("fva:family", languageFamily.getId());
+          }
 
-      // Set the property fva:language of the new document
-      // to be the UUID of the parent FVLanguage document
-      if (language != null) {
-        currentDoc.setPropertyValue("fva:language", language.getId());
-      }
+          // Set the property fva:language of the new document
+          // to be the UUID of the parent FVLanguage document
+          if (language != null) {
+            currentDoc.setPropertyValue("fva:language", language.getId());
+          }
 
-      // Set the property fva:dialect of the new document to be the
-      // UUID of the parent FVDialect document
-      if (dialect != null) {
-        currentDoc.setPropertyValue("fva:dialect", dialect.getId());
-      }
+          // Set the property fva:dialect of the new document to be the
+          // UUID of the parent FVDialect document
+          if (dialect != null) {
+            currentDoc.setPropertyValue("fva:dialect", dialect.getId());
+          }
+        }));
 
-      s.saveDocument(currentDoc);
-    });
+    return currentDoc;
   }
 
   private DocumentModel getLanguage(CoreSession session, DocumentModel currentDoc) {
