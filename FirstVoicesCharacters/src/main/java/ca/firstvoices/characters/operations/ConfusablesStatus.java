@@ -24,7 +24,7 @@ public class ConfusablesStatus {
 
   public static final String ID = Constants.CONFUSABLES_STATUS_ACTION_ID;
 
-  private final transient CleanupCharactersService cleanupCharactersService = Framework
+  private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
   @OperationMethod
