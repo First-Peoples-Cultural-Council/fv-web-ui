@@ -24,7 +24,9 @@ import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.data.utils.filters.NotTrashedFilter;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
@@ -58,25 +60,28 @@ public class AlphabetListener implements EventListener {
       return;
     }
 
-    DocumentModel document = ((DocumentEventContext) ctx).getSourceDocument();
-    if (document == null || document.isImmutable() || !DialectTypesConstants.FV_ALPHABET.equals(
-        document.getType())) {
+    DocumentModel alphabet = ((DocumentEventContext) ctx).getSourceDocument();
+    if (alphabet == null || alphabet.isImmutable() || !DialectTypesConstants.FV_ALPHABET.equals(
+        alphabet.getType())) {
       return;
     }
 
-    if ((event.getName().equals(DocumentEventTypes.ABOUT_TO_CREATE) || event.getName()
-        .equals(DocumentEventTypes.BEFORE_DOC_UPDATE))) {
+    CoreSession session = ctx.getCoreSession();
 
-      // Validation for ignored characters
-      DocumentModelList characters = cleanupCharactersService.getCharacters(document);
+    // Get non trashed characters
+    DocumentModelList characters = session
+        .getChildren(alphabet.getRef(), DialectTypesConstants.FV_CHARACTER, new NotTrashedFilter(),
+            null);
+
+    if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE) && !characters.isEmpty()) {
 
       // Will throw exception if ignore characters are not valid
-      cleanupCharactersService.validateAlphabetIgnoredCharacters(characters, document);
+      cleanupCharactersService.validateAlphabetIgnoredCharacters(characters, alphabet);
 
-      if (document.getProperty(IGNORED_CHARS).isDirty()) {
+      if (alphabet.getProperty(IGNORED_CHARS).isDirty()) {
         // Queue custom order recompute if ignored characters changed
         RequiredJobsUtils
-            .addToRequiredJobs(DialectUtils.getDialect(document), Constants.COMPUTE_ORDER_JOB_ID);
+            .addToRequiredJobs(DialectUtils.getDialect(alphabet), Constants.COMPUTE_ORDER_JOB_ID);
       }
     }
   }

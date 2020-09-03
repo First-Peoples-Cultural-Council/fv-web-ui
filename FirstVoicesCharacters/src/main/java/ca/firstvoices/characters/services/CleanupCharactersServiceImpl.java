@@ -30,6 +30,7 @@ import ca.firstvoices.characters.listeners.AssetListener;
 import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.data.utils.PropertyUtils;
+import ca.firstvoices.data.utils.filters.NotTrashedFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -351,15 +352,17 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
     DocumentModel alphabet = getAlphabet(doc);
     //Alphabet must not be null
     assert alphabet != null;
-    Filter trashedFilter = docModel -> !docModel.isTrashed();
-    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
+    return doc.getCoreSession()
+        .getChildren(alphabet.getRef(), FV_CHARACTER, new NotTrashedFilter(), null);
   }
 
   public DocumentModelList getCharactersWithConfusables(DocumentModel doc) {
     DocumentModel alphabet = getAlphabet(doc);
     assert alphabet != null;
-    Filter trashedFilter = docModel -> !docModel.isTrashed() && hasConfusableCharacters(docModel);
-    return doc.getCoreSession().getChildren(alphabet.getRef(), FV_CHARACTER, trashedFilter, null);
+    Filter hasConfusableFilter = docModel -> !docModel.isTrashed() && hasConfusableCharacters(
+        docModel);
+    return doc.getCoreSession()
+        .getChildren(alphabet.getRef(), FV_CHARACTER, hasConfusableFilter, null);
   }
 
   private List<String> getAllLCConfusables(DocumentModel doc) {

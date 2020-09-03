@@ -16,3 +16,4 @@ children:
         name: Data
       - type: Section
         name: SharedData
+        key: sectionsSharedData

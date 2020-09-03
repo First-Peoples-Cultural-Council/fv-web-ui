@@ -20,6 +20,11 @@
       <event>beforeDocumentModification</event>
     </listener>
 
+    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.AlphabetListener"
+      name="alphabet_listener" priority="200">
+      <event>beforeDocumentModification</event>
+    </listener>
+
   </extension>
 
 </component>
