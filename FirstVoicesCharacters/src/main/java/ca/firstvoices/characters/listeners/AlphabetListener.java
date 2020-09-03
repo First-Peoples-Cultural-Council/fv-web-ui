@@ -41,7 +41,7 @@ import org.nuxeo.runtime.api.Framework;
 public class AlphabetListener implements EventListener {
 
   public static final String DISABLE_ALPHABET_LISTENER = "disableAlphabetListener";
-  private static final String IGNORED_CHARS = "fv-alphabet:ignored_characters";
+  public static final String IGNORED_CHARS = "fv-alphabet:ignored_characters";
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
