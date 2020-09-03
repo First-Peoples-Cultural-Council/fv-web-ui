@@ -41,6 +41,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.pageproviders.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml")
+@Deploy("FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml")
 @Deploy("FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml")
 @Deploy("FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml")
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})

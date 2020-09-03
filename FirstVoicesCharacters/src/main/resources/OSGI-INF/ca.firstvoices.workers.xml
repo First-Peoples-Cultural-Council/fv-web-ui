@@ -1,18 +1,12 @@
 <?xml version="1.0"?>
-<component name="ca.firstvoices.workers.fvdataworkmanagers">
+<component name="ca.firstvoices.characters.workers-contrib">
   <extension point="queues" target="org.nuxeo.ecm.core.work.service">
-    <queue id="addConfusablesToAlphabet">
-      <category>addConfusablesToAlphabet</category>
+    <queue id="CharactersWorkerQueue">
+      <category>charactersWorkerQueue</category>
       <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
       <maxThreads>1</maxThreads>
-      <name>Queue for adding confusables to archive's alphabet</name>
-    </queue>
-
-    <queue id="cleanConfusablesForWordsAndPhrases">
-      <category>cleanConfusablesForWordsAndPhrases</category>
-      <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
-      <maxThreads>1</maxThreads>
-      <name>Queue for cleaning confusables for words and phrases</name>
+      <capacity>20</capacity>
+      <name>Queue for character operations</name>
     </queue>
   </extension>
 </component>

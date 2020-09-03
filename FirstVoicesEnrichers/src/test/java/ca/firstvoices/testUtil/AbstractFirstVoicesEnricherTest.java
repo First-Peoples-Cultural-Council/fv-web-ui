@@ -30,6 +30,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertNotNull;
 
+import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.runner.FirstVoicesEnricherFeature;
 import javax.inject.Inject;
 import org.junit.Before;
@@ -40,6 +41,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
@@ -150,10 +152,16 @@ public abstract class AbstractFirstVoicesEnricherTest {
     return document;
   }
 
-  protected void createWordsorPhrases(String[] orderedValues, String typeName) {
+  protected void createWordsorPhrases(String[] orderedValues, String typeName, boolean computeOrder) {
     Integer i = 0;
     for (String value : orderedValues) {
-      createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
+      DocumentModel createdDoc = createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
+
+      if (computeOrder) {
+        CustomOrderComputeService customOrder = Framework.getService(CustomOrderComputeService.class);
+        customOrder.computeAssetNativeOrderTranslation(session, createdDoc, true, false);
+      }
+
       i++;
     }
 

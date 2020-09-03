@@ -23,13 +23,13 @@ package Operations;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
-import ca.firstvoices.characters.services.CustomOrderComputeServiceImpl;
 import ca.firstvoices.nuxeo.operations.GetDocumentsByCustomOrder;
 import ca.firstvoices.testUtil.AbstractFirstVoicesEnricherTest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +37,7 @@ import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.work.api.WorkManager;
 
 /**
  * @author david
@@ -45,6 +46,11 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
 
   private Map<String, String> params;
 
+  @Inject
+  WorkManager workManager;
+
+  private static final String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
+      "la'oo'a'a"};
 
   @Before
   public void setup() {
@@ -63,11 +69,6 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
       session.save();
     }
 
-    String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
-        "la'oo'a'a"};
-
-    createWordsorPhrases(orderedWords, FV_WORD);
-
     String query = "SELECT * FROM FVWord WHERE ecm:parentId = '" + dictionaryDoc.getRef()
         + "' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 ";
 
@@ -75,14 +76,16 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
     params.put("query", query);
     params.put("dialectId", dialectDoc.getId());
     params.put("letter", "a");
+
+    session.save();
   }
 
   @Test
   public void DocumentsByCustomOrderOperationTest() throws OperationException {
-    CustomOrderComputeServiceImpl nativeOrderComputeService = new CustomOrderComputeServiceImpl();
-    nativeOrderComputeService
-        .computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
-    session.save();
+
+    // Create words and compute custom order
+    createWordsorPhrases(orderedWords, FV_WORD, true);
+
     OperationContext ctx = new OperationContext(session);
 
     DocumentModelList documentModelList = (DocumentModelList) automationService
@@ -97,6 +100,11 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesEnricherTe
 
   @Test
   public void GetDocumentsByCustomOrderWithoutComputedWordsTest() throws OperationException {
+    // Clear dictionary
+    session.removeChildren(dictionaryDoc.getRef());
+
+    createWordsorPhrases(orderedWords, FV_WORD, false);
+
     OperationContext ctx = new OperationContext(session);
     DocumentModelList documentModelList = (DocumentModelList) automationService
         .run(ctx, GetDocumentsByCustomOrder.ID, params);

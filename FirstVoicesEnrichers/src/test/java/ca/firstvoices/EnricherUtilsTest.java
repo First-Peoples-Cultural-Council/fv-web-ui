@@ -38,6 +38,8 @@ import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
+import org.nuxeo.runtime.api.Framework;
 
 public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
 
@@ -91,18 +93,20 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
     int[] wordOrder = {1, 3, 5, 8, 58, 61, 1, 91};
     int customOrderBase = CustomOrderComputeServiceImpl.BASE;
 
+    DocumentModelList allChars = new DocumentModelListImpl();
+
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
               FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", wordOrder[i]);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
-      createDocument(session, letterDoc);
+      allChars.add(createDocument(session, letterDoc));
       session.save();
     }
 
-    CustomOrderComputeService service = new CustomOrderComputeServiceImpl();
-    service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
+    CustomOrderComputeService customOrderComputeService = Framework.getService(CustomOrderComputeService.class);
+    customOrderComputeService.updateCustomOrderCharacters(session, allChars);
 
     for (int i = 0; i < letterArray.length; i++) {
       String customOrder = EnricherUtils
@@ -116,17 +120,19 @@ public class EnricherUtilsTest extends AbstractFirstVoicesEnricherTest {
   public void testLetterNoCustomOrder() {
     String[] letterArray = {"a", "aa", "ae", "b", "c", "d", "e", "'"};
 
+    DocumentModelList allChars = new DocumentModelListImpl();
+
     for (int i = 0; i < letterArray.length; i++) {
       DocumentModel letterDoc = session
           .createDocumentModel(dialectDoc.getPathAsString() + "/Alphabet", letterArray[i],
               FV_CHARACTER);
       letterDoc.setPropertyValue("fva:dialect", dialectDoc.getId());
-      createDocument(session, letterDoc);
+      allChars.add(createDocument(session, letterDoc));
       session.save();
     }
 
-    CustomOrderComputeService service = new CustomOrderComputeServiceImpl();
-    service.computeDialectNativeOrderTranslation(session, dialectDoc, alphabetDoc);
+    CustomOrderComputeService customOrderComputeService = Framework.getService(CustomOrderComputeService.class);
+    customOrderComputeService.updateCustomOrderCharacters(session, allChars);
 
     for (int i = 0; i < letterArray.length; i++) {
       String customOrder = EnricherUtils
