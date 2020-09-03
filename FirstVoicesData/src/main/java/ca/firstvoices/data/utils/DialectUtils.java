@@ -2,6 +2,7 @@ package ca.firstvoices.data.utils;
 
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
+import ca.firstvoices.data.exceptions.FVDocumentHierarchyException;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -22,10 +23,15 @@ public final class DialectUtils {
       return currentDoc;
     }
 
-    return TransactionHelper.runInTransaction(() ->
-      CoreInstance.doPrivileged(currentDoc.getRepositoryName(), (CoreSession session) ->
-          DocumentUtils.getParentDoc(session, currentDoc, FV_DIALECT)
-    ));
+    DocumentModel dialect = TransactionHelper.runInTransaction(() ->
+        CoreInstance.doPrivileged(currentDoc.getRepositoryName(), (CoreSession session) ->
+            DocumentUtils.getParentDoc(session, currentDoc, FV_DIALECT)));
+
+    if (dialect == null) {
+      throw new FVDocumentHierarchyException(
+          "Get dialect should not be called on a document that is above a dialect.", 400);
+    }
+    return dialect;
   }
 
   public static DocumentModel getDialect(CoreSession session, DocumentModel currentDoc) {
@@ -36,7 +42,12 @@ public final class DialectUtils {
     if (session == null) {
       return getDialect(currentDoc);
     } else {
-      return DocumentUtils.getParentDoc(session, currentDoc, FV_DIALECT);
+      DocumentModel dialect = DocumentUtils.getParentDoc(session, currentDoc, FV_DIALECT);
+      if (dialect == null) {
+        throw new FVDocumentHierarchyException(
+            "Get dialect should not be called on a document that is above a dialect.", 400);
+      }
+      return dialect;
     }
   }
 
