@@ -21,6 +21,7 @@
 package ca.firstvoices.core.io.listeners;
 
 import ca.firstvoices.core.io.services.AssignAncestorsService;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -31,11 +32,15 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class AncestryAssignmentListener extends AbstractSyncListener implements EventListener {
 
+  private static final Logger log = Logger
+      .getLogger(AncestryAssignmentListener.class.getCanonicalName());
+
   private final AssignAncestorsService assignAncestorsService = Framework
       .getService(AssignAncestorsService.class);
 
   /**
    * Specific criteria that must be true for this event to run
+   *
    * @return whether the criteria was met or not
    */
   private boolean listenerCriteria() {
@@ -53,13 +58,19 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
       return;
     }
 
-    // Disable event so other listeners don't fire for this system update
-    disableDefaultEvents(doc);
+    try {
+      // Disable event so other listeners don't fire for this system update
+      disableDefaultEvents(doc);
 
-    // Assign ancestors; saving is done in service
-    assignAncestorsService.assignAncestors(doc);
-
-    // Renable default events for future runs
-    enableDefaultEvents(doc);
+      // Assign ancestors; no need to save, since this is run before creation
+      assignAncestorsService.assignAncestors(doc);
+    } catch (Exception e) {
+      // Fail silently so that we can still capture the asset being created
+      log.severe("Failed during listener; document with Path " + doc.getPathAsString()
+          + "| Exception:" + e.toString());
+    } finally {
+      // Renable default events for future runs
+      enableDefaultEvents(doc);
+    }
   }
 }

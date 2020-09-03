@@ -49,7 +49,9 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesDataFeature.class})
 @Deploy({
-    "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml"
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml",
+    "FirstVoicesCharacters.test:OSGI-INF/nuxeo.conf.override.xml"
 })
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
 
@@ -184,15 +186,15 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   }
 
   private void createAlphabetWithConfusableCharacters(Map<String, String[]> alphabet) {
-    Iterator it = alphabet.entrySet().iterator();
+    Iterator<Map.Entry<String, String[]>> it = alphabet.entrySet().iterator();
     int i = 0;
     while (it.hasNext()) {
-      Map.Entry pair = (Map.Entry) it.next();
+      Map.Entry<String, String[]> pair = it.next();
       DocumentModel letterDoc = session
-          .createDocumentModel(dialect.getPathAsString() + "/Alphabet", (String) pair.getKey(),
+          .createDocumentModel(dialect.getPathAsString() + "/Alphabet", pair.getKey(),
               FV_CHARACTER);
       letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
-      letterDoc.setPropertyValue("fvcharacter:confusable_characters", (String[]) pair.getValue());
+      letterDoc.setPropertyValue("fvcharacter:confusable_characters", pair.getValue());
       createDocument(session, letterDoc);
       i++;
     }

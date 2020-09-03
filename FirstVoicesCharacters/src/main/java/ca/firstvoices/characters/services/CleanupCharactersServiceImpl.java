@@ -47,6 +47,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.Filter;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.runtime.api.Framework;
 
@@ -365,7 +366,7 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
     return getCharactersWithConfusables(doc).stream()
         .flatMap(charDoc ->
-            ((String[]) charDoc.getPropertyValue(LC_CONFUSABLES) == null) ? Stream
+            (charDoc.getPropertyValue(LC_CONFUSABLES) == null) ? Stream
                 .empty() : Arrays.stream((String[]) charDoc.getPropertyValue(LC_CONFUSABLES)))
         .collect(Collectors.toList());
   }
@@ -374,7 +375,7 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
     return getCharactersWithConfusables(doc).stream()
         .flatMap(charDoc ->
-            ((String[]) charDoc.getPropertyValue(UC_CONFUSABLES) == null) ? Stream
+            (charDoc.getPropertyValue(UC_CONFUSABLES) == null) ? Stream
                 .empty() : Arrays.stream((String[]) charDoc.getPropertyValue(UC_CONFUSABLES)))
         .collect(Collectors.toList());
   }
@@ -394,7 +395,8 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
         + "dc:title LIKE '%" + NXQL.escapeStringInner(confusableChar) + "%'"
         + " AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
 
-    return session.query(query, null, batchSize, 0, true);
+    DocumentModelList docs = session.query(query, null, batchSize, 0, true);
+    return (docs == null) ? new DocumentModelListImpl() : docs;
   }
 
   @Override

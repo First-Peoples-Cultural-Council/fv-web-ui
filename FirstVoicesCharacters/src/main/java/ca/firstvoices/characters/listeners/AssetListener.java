@@ -24,6 +24,7 @@ import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.services.SanitizeDocumentService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
@@ -40,6 +41,8 @@ import org.nuxeo.runtime.api.Framework;
 public class AssetListener implements EventListener {
 
   public static final String DISABLE_CHAR_ASSET_LISTENER = "disableCharacterAssetListener";
+
+  private static final Logger log = Logger.getLogger(AssetListener.class.getCanonicalName());
 
   private final SanitizeDocumentService sanitizeDocumentService = Framework
       .getService(SanitizeDocumentService.class);
@@ -78,10 +81,16 @@ public class AssetListener implements EventListener {
     if ((DocumentEventTypes.BEFORE_DOC_UPDATE.equals(event.getName()) && document
         .getProperty("dc:title").isDirty()) || DocumentEventTypes.ABOUT_TO_CREATE
         .equals(event.getName())) {
-      document = sanitizeDocumentService.sanitizeDocument(session, document);
-      document = cleanupCharactersService.cleanConfusables(session, document, false);
-      customOrderComputeService
-          .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document, false, false);
+      try {
+        document = sanitizeDocumentService.sanitizeDocument(session, document);
+        document = cleanupCharactersService.cleanConfusables(session, document, false);
+        customOrderComputeService
+            .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document, false, false);
+      } catch (Exception e) {
+        // Fail silently so that we can still capture the asset being created
+        log.severe("Failed during listener; document with Path " + document.getPathAsString()
+            + "| Exception:" + e.toString());
+      }
     }
   }
 }
