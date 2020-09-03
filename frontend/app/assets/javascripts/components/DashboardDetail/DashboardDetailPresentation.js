@@ -38,6 +38,8 @@ function DashboardDetailPresentation({
   const workshopDark = selectn(['palette', 'primary', 'dark'], theme)
   return (
     <div className={`DashboardDetail ${selectedId ? 'DashboardDetail--Selected' : 'DashboardDetail--nothingSelected'}`}>
+      {/* DashboardDetail__header
+      ------------------------------------------ */}
       <div
         className="DashboardDetail__header"
         style={{
@@ -75,11 +77,19 @@ function DashboardDetailPresentation({
         )}
       </div>
 
+      {/* Full list view (no item selected)
+      ------------------------------------------ */}
       {selectedId === undefined && childrenUnselected}
 
+      {/* Detail view (item is selected)
+      ------------------------------------------ */}
       {selectedId && (
         <>
-          <div className="DashboardDetail__list">{childrenSelectedSidebar}</div>
+          {/* Sidebar
+          ------------------------------------------ */}
+          <div className="DashboardDetail__sidebar">{childrenSelectedSidebar}</div>
+          {/* Selected item details/admin
+          ------------------------------------------ */}
           <div className="DashboardDetail__selectedItem">
             <button className="DashboardDetail__selectedItemClose" onClick={onClose}>
               <IconClose fontSize="large" />
