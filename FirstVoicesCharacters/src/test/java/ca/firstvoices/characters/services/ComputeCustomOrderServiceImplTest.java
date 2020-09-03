@@ -45,6 +45,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.trash.TrashService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -106,11 +107,13 @@ public class ComputeCustomOrderServiceImplTest {
     dialect = createDocument(
         session.createDocumentModel(language.getPathAsString(), "Dialect", FV_DIALECT));
     assertNotNull("Should have a valid FVDialect", dialect);
-    dictionary = createDocument(
-        session.createDocumentModel(dialect.getPathAsString(), "Dictionary", FV_DICTIONARY));
+
+    // Dictionary is created automatically
+    dictionary = session.getChildren(dialect.getRef(), FV_DICTIONARY).get(0);
     assertNotNull("Should have a valid FVDictionary", dictionary);
-    alphabet = createDocument(
-        session.createDocumentModel(dialect.getPathAsString(), "Alphabet", FV_ALPHABET));
+
+    // Alphabet is created automatically
+    alphabet = session.getChildren(dialect.getRef(), FV_ALPHABET).get(0);
     assertNotNull("Should have a valid FVAlphabet", alphabet);
     session.save();
   }
@@ -134,9 +137,11 @@ public class ComputeCustomOrderServiceImplTest {
         "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
+    computeDialectNativeOrderTranslation(session, createdWords);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    session.save();
+
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -168,9 +173,8 @@ public class ComputeCustomOrderServiceImplTest {
         "ʕ", "ʔ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
-
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -219,9 +223,8 @@ public class ComputeCustomOrderServiceImplTest {
         "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
-
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -263,9 +266,8 @@ public class ComputeCustomOrderServiceImplTest {
         "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedPhrases, FV_PHRASE);
-
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    DocumentModelList createdPhrases = createWordsorPhrases(orderedPhrases, FV_PHRASE);
+    computeDialectNativeOrderTranslation(session, createdPhrases);
     Integer i = orderedPhrases.length - 1;
 
     DocumentModelList docs = session.query(
@@ -291,7 +293,9 @@ public class ComputeCustomOrderServiceImplTest {
         "y", "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
+
+    session.save();
 
     DocumentModelList characters = session.getChildren(new PathRef(alphabet.getPathAsString()));
 
@@ -299,9 +303,8 @@ public class ComputeCustomOrderServiceImplTest {
 
     trashService.trashDocument(z);
     session.saveDocument(z);
-    session.save();
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -323,9 +326,8 @@ public class ComputeCustomOrderServiceImplTest {
     String[] unorderedAlphabet = {"d", "a", "c", "b"};
 
     createUnorderedAlphabet(unorderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
-
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -349,10 +351,9 @@ public class ComputeCustomOrderServiceImplTest {
 
     createUnorderedAlphabet(unorderedAlphabet, alphabet.getPathAsString());
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
 
-    createWordsorPhrases(orderedWords, FV_WORD);
-
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -441,15 +442,23 @@ public class ComputeCustomOrderServiceImplTest {
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
-
     firstVoicesPublisherService.publishDialect(dialect);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
-    Integer i = orderedWords.length - 1;
+    session.save();
+
+    DocumentModelList docsToCompute = session.query(
+        "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' AND "
+            + "ecm:isProxy = 0 AND ecm:isVersion = 0");
+
+    computeDialectNativeOrderTranslation(session, docsToCompute);
+
+    session.save();
 
     DocumentModelList unpublishedDocs = session.query(
         "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' AND "
-            + "ecm:isProxy = 0 " + "ORDER BY fv:custom_order DESC");
+            + "ecm:isProxy = 0 AND ecm:isVersion = 0" + "ORDER BY fv:custom_order DESC");
+
+    Integer i = orderedWords.length - 1;
 
     for (DocumentModel doc : unpublishedDocs) {
       String reference = (String) doc.getPropertyValue("fv:reference");
@@ -460,7 +469,7 @@ public class ComputeCustomOrderServiceImplTest {
 
     DocumentModelList publishedDocs = session.query(
         "SELECT * FROM FVWord WHERE ecm:ancestorId='" + dialect.getId() + "' AND "
-            + "ecm:isProxy = 1 " + "ORDER BY fv:custom_order DESC");
+            + "ecm:isProxy = 1 AND ecm:isVersion = 0 " + "ORDER BY fv:custom_order DESC");
 
     for (DocumentModel doc : publishedDocs) {
       String reference = (String) doc.getPropertyValue("fv:reference");
@@ -485,12 +494,12 @@ public class ComputeCustomOrderServiceImplTest {
     String[] orderedAlphabet = {"a", "b", "c", "d", "e", "f"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    createWordsorPhrases(orderedWords, FV_WORD);
+    DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
 
     alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
     session.saveDocument(alphabet);
 
-    nativeOrderComputeService.computeDialectNativeOrderTranslation(session, dialect, alphabet);
+    computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
 
     DocumentModelList docs = session.query(
@@ -530,18 +539,23 @@ public class ComputeCustomOrderServiceImplTest {
     }
   }
 
-  private List<DocumentModel> createWordsorPhrases(String[] words, String typeName) {
-    List<DocumentModel> documentModels = new ArrayList<>();
-    for (int i = 0; i < words.length; i++) {
+  private DocumentModelList createWordsorPhrases(String[] docs, String typeName) {
+    DocumentModelList createdDocs = new DocumentModelListImpl();
+    for (int i = 0; i < docs.length; i++) {
       DocumentModel document = session
-          .createDocumentModel(dictionary.getPathAsString(), words[i], typeName);
+          .createDocumentModel(dictionary.getPathAsString(), docs[i], typeName);
       document.setPropertyValue("fv:reference", "" + i);
       document.setPropertyValue("fv:update_confusables_required", true);
       document = createDocument(document);
-      documentModels.add(document);
+      createdDocs.add(document);
     }
-    return documentModels;
+    return createdDocs;
   }
 
+  private void computeDialectNativeOrderTranslation(CoreSession session, DocumentModelList docs) {
+    docs.forEach(doc -> {
+      nativeOrderComputeService.computeAssetNativeOrderTranslation(session, doc, true, true);
+    });
+  }
 
 }

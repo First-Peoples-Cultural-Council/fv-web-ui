@@ -29,16 +29,26 @@ public interface CustomOrderComputeService {
   DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
       boolean save, boolean publish);
 
-  /**
-   * Note: this method is currently only used in tests. Tests should use worker and this
-   * method should be removed. Large updates should always happen in a worker.
-   * @param session
-   * @param dialect
-   * @param alphabet
-   */
-  void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
-      DocumentModel alphabet);
-
   void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars);
 
+  /**
+   * Generates the custom order string and applies it to the element Core logic of custom order
+   * recompute
+   *
+   * @param element
+   * @param alphabet
+   * @param chars
+   * @return
+   */
+  DocumentModel computeCustomOrder(DocumentModel element, DocumentModel alphabet,
+      DocumentModel[] chars);
+
+  /**
+   * Returns characters in order
+   *
+   * @param session
+   * @param alphabet
+   * @return
+   */
+  DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet);
 }

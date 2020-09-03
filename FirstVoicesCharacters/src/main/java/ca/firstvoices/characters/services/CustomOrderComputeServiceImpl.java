@@ -77,20 +77,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     return asset;
   }
 
-
-  @Override
-  // Called when a we are updating all words and phrases on a dialect
-  public void computeDialectNativeOrderTranslation(CoreSession session, DocumentModel dialect,
-      DocumentModel alphabet) {
-    DocumentModel[] chars = loadCharacters(session, alphabet);
-    DocumentModelList wordsAndPhrases = session.query(
-        "SELECT * FROM FVWord, FVPhrase WHERE ecm:ancestorId='" + dialect.getId()
-            + "' AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0");
-    wordsAndPhrases.forEach(doc -> computeCustomOrder(doc, alphabet, chars));
-    session.save();
-  }
-
-  private DocumentModel computeCustomOrder(DocumentModel element,
+  public DocumentModel computeCustomOrder(DocumentModel element,
       DocumentModel alphabet, DocumentModel[] chars) {
 
     String title = (String) element.getPropertyValue(DOCUMENT_TITLE);
@@ -215,7 +202,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     return false;
   }
 
-  private DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet) {
+  public DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet) {
     DocumentModelList chars = session.getChildren(alphabet.getRef());
     updateCustomOrderCharacters(session, chars);
     return chars.stream().filter(character -> !character.isTrashed()
