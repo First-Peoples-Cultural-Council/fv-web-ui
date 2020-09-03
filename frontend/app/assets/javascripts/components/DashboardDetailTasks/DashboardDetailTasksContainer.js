@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardDetail from 'components/DashboardDetail'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
-import DashboardDetailList from 'components/DashboardDetail/DashboardDetailList'
+import DashboardDetailSidebar from 'components/DashboardDetail/DashboardDetailSidebar'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
 import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
 import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardDetailTasksData'
@@ -89,7 +89,7 @@ function DashboardDetailTasksContainer() {
               />
             }
             childrenSelectedSidebar={
-              <DashboardDetailList.Container
+              <DashboardDetailSidebar.Container
                 selectedId={idSelectedTask}
                 onClick={onOpen}
                 listItems={listItems}

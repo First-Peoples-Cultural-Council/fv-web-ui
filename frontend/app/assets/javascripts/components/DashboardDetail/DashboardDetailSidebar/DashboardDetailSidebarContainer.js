@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DashboardDetailListPresentation from 'components/DashboardDetail/DashboardDetailList/DashboardDetailListPresentation'
+import DashboardDetailSidebarPresentation from 'components/DashboardDetail/DashboardDetailSidebar/DashboardDetailSidebarPresentation'
 import TablePagination from 'components/Table/TablePagination'
 
 import Typography from '@material-ui/core/Typography'
 import { WORD, PHRASE, SONG, STORY, TABLEPAGINATION_DIV } from 'common/Constants'
 
 /**
- * @summary DashboardDetailListContainer
+ * @summary DashboardDetailSidebarContainer
  * @version 1.0.1
  * @component
  *
@@ -19,9 +19,9 @@ import { WORD, PHRASE, SONG, STORY, TABLEPAGINATION_DIV } from 'common/Constants
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailListContainer({ listItems, onClick, selectedId, title, page, pageSize, count }) {
+function DashboardDetailSidebarContainer({ listItems, onClick, selectedId, title, page, pageSize, count }) {
   return (
-    <DashboardDetailListPresentation
+    <DashboardDetailSidebarPresentation
       childrenHeader={
         <Typography variant="h4" component="h1">
           {title}
@@ -38,7 +38,7 @@ function DashboardDetailListContainer({ listItems, onClick, selectedId, title, p
 }
 // PROPTYPES
 const { array, func, number, string } = PropTypes
-DashboardDetailListContainer.propTypes = {
+DashboardDetailSidebarContainer.propTypes = {
   listItems: array,
   onClick: func,
   selectedId: string,
@@ -47,7 +47,7 @@ DashboardDetailListContainer.propTypes = {
   pageSize: number,
   count: number,
 }
-DashboardDetailListContainer.defaultProps = {
+DashboardDetailSidebarContainer.defaultProps = {
   listItems: [
     {
       title: 'Unknown Title',
@@ -86,4 +86,4 @@ DashboardDetailListContainer.defaultProps = {
   ],
 }
 
-export default DashboardDetailListContainer
+export default DashboardDetailSidebarContainer
