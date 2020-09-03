@@ -31,12 +31,14 @@ function DashboardDetailSelectedItemPresentation({
     <div className="DashboardDetailSelectedItem">
       <div ref={scrollContainerRef} className="DashboardDetailSelectedItem__ItemOverview">
         {childrenTaskSummary && <div className="DashboardDetailSelectedItem__TaskSummary">{childrenTaskSummary}</div>}
+
         {childrenActivityStream}
 
         {childrenApprovalNotes}
 
         {childrenItemDetail && <div className="DashboardDetailSelectedItem__ItemDetail">{childrenItemDetail}</div>}
       </div>
+
       {childrenTaskApproval && <div className="DashboardDetailSelectedItem__TaskActions">{childrenTaskApproval}</div>}
     </div>
   )
