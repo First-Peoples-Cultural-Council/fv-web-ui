@@ -23,23 +23,29 @@
 
 .DashboardDetail__selectedItem {
   grid-area: DashboardDetail__selectedItem;
-  overflow: auto;
+  overflow: visible;
   position: relative;
 }
 .DashboardDetail__selectedItemClose {
   align-items: center;
-  background: black;
+  background: #d5d2d2;
   border-radius: 100%;
   border: none;
-  color: #d6d2d2;
+  color: #090909;
   cursor: pointer;
   display: flex;
   justify-content: center;
   padding: 0;
   position: absolute;
-  right: 20px;
-  top: 10px;
+  left: -15px;
+  top: 25px;
+  width: 30px;
+  height: 30px;
   z-index: 10;
+}
+.DashboardDetail__selectedItemCloseIcon {
+  position: relative;
+  left: 2px;
 }
 
 .DashboardDetail__header {

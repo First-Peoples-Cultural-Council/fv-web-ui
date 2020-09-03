@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./DashboardDetail.css'
 
-import IconClose from '@material-ui/icons/Cancel'
+import IconClose from '@material-ui/icons/ArrowForwardIos'
 import IconWidget from '@material-ui/icons/Apps'
 import IconDetail from '@material-ui/icons/VerticalSplitOutlined'
 import IconList from '@material-ui/icons/ViewHeadlineOutlined'
@@ -92,7 +92,7 @@ function DashboardDetailPresentation({
           ------------------------------------------ */}
           <div className="DashboardDetail__selectedItem">
             <button className="DashboardDetail__selectedItemClose" onClick={onClose}>
-              <IconClose fontSize="large" />
+              <IconClose className="DashboardDetail__selectedItemCloseIcon" fontSize="small" />
             </button>
             {childrenSelectedDetail}
           </div>
