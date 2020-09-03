@@ -47,6 +47,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 // -
 @Deploy("FirstVoicesCoreTests:OSGI-INF/mocks/mocks-operations.xml")
 @Deploy("FirstVoicesCoreTests:OSGI-INF/mocks/mocks-services.xml")
+@Deploy("FirstVoicesCoreTests:OSGI-INF/mocks/mocks-user-service.xml")
 
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class FirstVoicesCoreTestsFeature implements RunnerFeature {
