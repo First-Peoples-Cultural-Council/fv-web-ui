@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.characters.services.cleanupCharacters.contrib" version="1.0">
 
+    <require>ca.firstvoices.characters.services.customOrderComputeServiceImpl</require>
+
     <implementation class="ca.firstvoices.characters.services.CleanupCharactersServiceImpl"/>
 
     <service>

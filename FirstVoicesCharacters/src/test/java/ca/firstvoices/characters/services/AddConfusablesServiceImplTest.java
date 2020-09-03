@@ -21,6 +21,7 @@
 package ca.firstvoices.characters.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
@@ -39,6 +40,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesDataFeature.class})
 @Deploy({
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/addConfusables-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml"
 })
@@ -63,8 +65,8 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
 
     String[] property = (String[]) updated.getPropertyValue("fvcharacter:confusable_characters");
 
-    Assert.assertTrue(property[0].equals(confusablesToAdd[0]));
-    Assert.assertTrue(property[1].equals(confusablesToAdd[1]));
+    assertEquals(confusablesToAdd[0], property[0]);
+    assertEquals(confusablesToAdd[1], property[1]);
 
     DocumentModel testConfusableUppercase = createDocument(session,
         session.createDocumentModel(path, "TestChar", FV_CHARACTER));
@@ -79,8 +81,8 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     String[] uProperty = (String[]) updated
         .getPropertyValue("fvcharacter:upper_case_confusable_characters");
 
-    Assert.assertTrue(uProperty[0].equals(confusablesToAdd[0]));
-    Assert.assertTrue(uProperty[1].equals(confusablesToAdd[1]));
+    assertEquals(confusablesToAdd[0], uProperty[0]);
+    assertEquals(confusablesToAdd[1], uProperty[1]);
   }
 
   @Test
