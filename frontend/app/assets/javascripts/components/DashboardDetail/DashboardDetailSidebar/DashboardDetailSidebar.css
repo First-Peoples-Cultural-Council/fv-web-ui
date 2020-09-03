@@ -1,13 +1,9 @@
 .DashboardDetailSidebar {
-  display: grid;
-  grid-template-rows: 83px auto 270px;
-  grid-template-areas:
-    'DashboardDetailSidebar__headerContainer'
-    'DashboardDetailSidebar__listContainer'
-    'DashboardDetailSidebar__pagination';
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .DashboardDetailSidebar__headerContainer {
-  grid-area: DashboardDetailSidebar__headerContainer;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -15,8 +11,7 @@
   background-color: rgb(239, 239, 239);
 }
 .DashboardDetailSidebar__listContainer {
-  grid-area: DashboardDetailSidebar__listContainer;
-  /* max-height: 75vh; */
+  flex-grow: 1;
   overflow: auto;
   border-top: 1px solid #e6e6e6;
 }
@@ -28,7 +23,6 @@
   border-top: none;
 }
 .DashboardDetailSidebar__pagination {
-  grid-area: DashboardDetailSidebar__pagination;
   align-items: center;
   display: flex;
   justify-content: center;

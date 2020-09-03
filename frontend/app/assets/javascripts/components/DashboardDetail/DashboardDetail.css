@@ -1,25 +1,28 @@
 .DashboardDetail {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-template-areas:
-    'Header Header'
-    'List SelectedItem';
   margin-right: -15px;
   margin-left: -15px;
+
+  display: grid;
+  grid-template-rows: 115px minmax(auto, 75vh);
+  grid-template-columns: 1fr 3fr;
+  grid-template-areas:
+    'DashboardDetail__header DashboardDetail__header'
+    'DashboardDetail__sidebar DashboardDetail__selectedItem';
 }
 
 .DashboardDetail__header {
-  border-bottom: 1px solid black;
-  grid-area: Header;
+  /* border-bottom: 1px solid black; */
+  grid-area: DashboardDetail__header;
   padding: 20px;
 }
 
-.DashboardDetail__list {
-  grid-area: List;
+.DashboardDetail__sidebar {
+  grid-area: DashboardDetail__sidebar;
+  overflow: auto;
 }
 
 .DashboardDetail__selectedItem {
-  grid-area: SelectedItem;
+  grid-area: DashboardDetail__selectedItem;
   overflow: auto;
   position: relative;
 }
@@ -42,7 +45,6 @@
 .DashboardDetail__header {
   display: flex;
   padding: 10px 0;
-  min-height: 115px;
 }
 
 .DashboardDetail__headerButton {
@@ -71,11 +73,11 @@
 .DashboardDetail--nothingSelected {
   grid-template-columns: 1fr;
   grid-template-areas:
-    'Header'
-    'List'
-    'SelectedItem';
+    'DashboardDetail__header'
+    'DashboardDetail__sidebar'
+    'DashboardDetail__selectedItem';
 }
-.DashboardDetail--nothingSelected .DashboardDetail__list {
+.DashboardDetail--nothingSelected .DashboardDetail__sidebar {
   border-right: 1px solid black;
 }
 
