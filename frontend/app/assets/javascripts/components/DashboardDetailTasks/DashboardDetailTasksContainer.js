@@ -110,7 +110,7 @@ function DashboardDetailTasksContainer() {
                     icon={<DashboardDetailIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
                 }
-                // TODO:
+                // TODO: future feature
                 /*
                 childrenActivityStream={(
                   <ActivityStream.Presentation
@@ -119,7 +119,7 @@ function DashboardDetailTasksContainer() {
                   />
                 )}
                 */
-                // TODO:
+                // TODO: future feature
                 /*
                 childrenApprovalNotes={(
                   <ApprovalNotes.Presentation
