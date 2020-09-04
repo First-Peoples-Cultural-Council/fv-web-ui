@@ -34,24 +34,24 @@ function RequestChangesPresentation({
   return (
     <div className="RequestChanges">
       <form name="requestChanges" ref={formRef}>
-        <div className="visibilitySelector">
+        <div className="RequestChanges__visibility">
           <VisibilitySelect.Container
-            selectNameAndId="visibilitySelect"
-            docVisibility={docVisibility}
-            handleVisibilityChange={handleVisibilityChange}
-            computeEntities={computeEntities}
-            error={getError({ errors, fieldName: 'commentField' })}
+              selectNameAndId="visibilitySelect"
+              docVisibility={docVisibility}
+              handleVisibilityChange={handleVisibilityChange}
+              computeEntities={computeEntities}
+              error={getError({errors, fieldName: 'commentField'})}
           />
         </div>
         {getErrorFeedback({ errors })}
-        <div className="actions">
+        <div className="RequestChanges__actions">
           <FVButton
-            disabled={disableApproveButton()}
-            variant="contained"
-            type="submit"
-            color="primary"
-            className="FVButton"
-            onClick={handleApprove}
+              disabled={disableApproveButton()}
+              variant="contained"
+              type="submit"
+              color="primary"
+              className="FVButton"
+              onClick={handleApprove}
           >
             Approve
           </FVButton>
