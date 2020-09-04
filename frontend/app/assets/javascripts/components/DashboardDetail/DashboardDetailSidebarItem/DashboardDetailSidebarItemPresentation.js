@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
-import '!style-loader!css-loader!./DashboardDetailListItem.css'
+import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
 
 /**
- * @summary DashboardDetailListItemPresentation
+ * @summary DashboardDetailSidebarItemPresentation
  * @version 1.0.1
  * @component
  *
@@ -25,7 +25,16 @@ import '!style-loader!css-loader!./DashboardDetailListItem.css'
 
 import { EVEN, ODD } from 'common/Constants'
 
-function DashboardDetailListItemPresentation({ component, date, icon, initiator, isActive, onClick, title, variant }) {
+function DashboardDetailSidebarItemPresentation({
+  component,
+  date,
+  icon,
+  initiator,
+  isActive,
+  onClick,
+  title,
+  variant,
+}) {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
   const { row, rowAlternate } = themeTable
@@ -37,16 +46,16 @@ function DashboardDetailListItemPresentation({ component, date, icon, initiator,
   const Tag = component
   return (
     <Tag
-      className={`DashboardDetailListItem  DashboardDetailListItem--${component} ${
-        icon ? 'DashboardDetailListItem--hasIcon' : ''
-      } ${isActive ? 'DashboardDetailListItem--isActive' : ''} ${
-        onClick !== undefined ? 'DashboardDetailListItem--hasOnClick' : ''
+      className={`DashboardDetailSidebarItem  DashboardDetailSidebarItem--${component} ${
+        icon ? 'DashboardDetailSidebarItem--hasIcon' : ''
+      } ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
+        onClick !== undefined ? 'DashboardDetailSidebarItem--hasOnClick' : ''
       }`}
       onClick={onClick}
       style={ItemStyle[variant]}
     >
-      {icon && <div className="DashboardDetailListItem__icon">{icon}</div>}
-      <div className="DashboardDetailListItem__main">
+      {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
+      <div className="DashboardDetailSidebarItem__main">
         <Typography variant="body1" component="h3">
           {title}
         </Typography>
@@ -62,7 +71,7 @@ function DashboardDetailListItemPresentation({ component, date, icon, initiator,
 }
 // PROPTYPES
 const { func, node, oneOf, string, bool } = PropTypes
-DashboardDetailListItemPresentation.propTypes = {
+DashboardDetailSidebarItemPresentation.propTypes = {
   component: oneOf(['div', 'li']),
   date: string,
   icon: node,
@@ -72,11 +81,11 @@ DashboardDetailListItemPresentation.propTypes = {
   title: string,
   variant: oneOf([EVEN, ODD]),
 }
-DashboardDetailListItemPresentation.defaultProps = {
+DashboardDetailSidebarItemPresentation.defaultProps = {
   component: 'li',
   date: '',
   initiator: '',
   title: '',
 }
 
-export default DashboardDetailListItemPresentation
+export default DashboardDetailSidebarItemPresentation

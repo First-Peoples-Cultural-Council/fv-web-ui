@@ -103,7 +103,11 @@ function TablePagination({
           .replace('{to}', Math.min(queryPageNum * queryPageSizeNum, count))
           .replace('{count}', count)
         return (
-          <Component>
+          <Component
+            className={`TablePagination ${
+              variant === TABLEPAGINATION_DIV ? 'TablePagination--div' : 'TablePagination--td'
+            }`}
+          >
             <div style={style}>
               {rowsPerPageOptions.length > 1 && (
                 <Typography color="inherit" variant="body2" id={labelId}>

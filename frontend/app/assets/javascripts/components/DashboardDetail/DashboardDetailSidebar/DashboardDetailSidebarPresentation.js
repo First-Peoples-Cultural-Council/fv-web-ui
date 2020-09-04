@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DashboardDetailListItem from 'components/DashboardDetail/DashboardDetailListItem'
+import DashboardDetailSidebarItem from 'components/DashboardDetail/DashboardDetailSidebarItem'
 import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
-import '!style-loader!css-loader!./DashboardDetailList.css'
+import '!style-loader!css-loader!./DashboardDetailSidebar.css'
 import { EVEN, ODD } from 'common/Constants'
 /**
- * @summary DashboardDetailListPresentation
+ * @summary DashboardDetailSidebarPresentation
  * @version 1.0.1
  * @component
  *
@@ -17,19 +17,19 @@ import { EVEN, ODD } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailListPresentation({ childrenHeader, childrenPagination, listItems, onClick, selectedId }) {
+function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination, listItems, onClick, selectedId }) {
   return (
-    <div className="DashboardDetailList">
-      {childrenHeader && <div className="DashboardDetailList__headerContainer">{childrenHeader}</div>}
-      <div className="DashboardDetailList__listContainer">
-        <ul className="DashboardDetailList__list">
+    <div className="DashboardDetailSidebar">
+      {childrenHeader && <div className="DashboardDetailSidebar__headerContainer">{childrenHeader}</div>}
+      <div className="DashboardDetailSidebar__listContainer">
+        <ul className="DashboardDetailSidebar__list">
           {listItems.map(({ id, itemType, isNew, title, initiator, date }, index) => {
             const variant = index % 2 ? ODD : EVEN
             return (
-              <DashboardDetailListItem.Presentation
+              <DashboardDetailSidebarItem.Presentation
                 variant={variant}
                 isActive={selectedId === id}
-                key={`DashboardDetailList__listItem--${index}`}
+                key={`DashboardDetailSidebar__listItem--${index}`}
                 title={title}
                 initiator={initiator}
                 date={date}
@@ -42,20 +42,20 @@ function DashboardDetailListPresentation({ childrenHeader, childrenPagination, l
           })}
         </ul>
       </div>
-      {childrenPagination && <div className="DashboardDetailList__pagination">{childrenPagination}</div>}
+      {childrenPagination && <div className="DashboardDetailSidebar__pagination">{childrenPagination}</div>}
     </div>
   )
 }
 // PROPTYPES
 const { func, string, node, array } = PropTypes
-DashboardDetailListPresentation.propTypes = {
+DashboardDetailSidebarPresentation.propTypes = {
   childrenHeader: node,
   listItems: array,
   onClick: func,
   selectedId: string,
   childrenPagination: node,
 }
-DashboardDetailListPresentation.defaultProps = {
+DashboardDetailSidebarPresentation.defaultProps = {
   listItems: [
     {
       date: '',
@@ -69,4 +69,4 @@ DashboardDetailListPresentation.defaultProps = {
   onClick: () => {},
 }
 
-export default DashboardDetailListPresentation
+export default DashboardDetailSidebarPresentation

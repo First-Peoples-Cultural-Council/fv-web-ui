@@ -24,7 +24,7 @@ function VisibilitySelectData({ children }) {
   const [publicDialect, setPublicDialect] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Compute related tasks
+  // Compute dialect to get dialect state
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const fetchDocumentAction = selectn('action', extractComputeDialect)
   const dialectState = selectn('response.state', extractComputeDialect)

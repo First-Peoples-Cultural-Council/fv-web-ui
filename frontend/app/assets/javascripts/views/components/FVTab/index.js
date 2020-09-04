@@ -25,7 +25,7 @@ function FVTab(props) {
       <Tab
         style={tabsStyle}
         key={i}
-        classes={{ root: classes.tabRoot, selected: classes.tabSelected, label: classes.label }}
+        classes={{ root: classes.tabRoot, selected: classes.tabSelected, labelIcon: classes.label }}
         label={label}
         id={id}
         data-testid={dataTestId}

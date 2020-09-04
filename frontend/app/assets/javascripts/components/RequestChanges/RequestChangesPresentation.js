@@ -1,7 +1,7 @@
 import React from 'react'
 import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
-import { /*getError, */ getErrorFeedback } from 'common/FormHelpers'
+import { /*getError,*/ getErrorFeedback } from 'common/FormHelpers'
 import VisibilitySelect from 'components/VisibilitySelect'
 import PropTypes from 'prop-types'
 import FVSnackbar from '../../views/components/FVSnackbar'
@@ -22,23 +22,26 @@ function RequestChangesPresentation({
   disableApproveButton,
   disableRequestChangesButton,
   docVisibility,
-  isPublicDialect,
   errors,
   formRef,
   handleApprove,
   handleRequestChanges,
   handleSnackbarClose,
   handleVisibilityChange,
+  isPublicDialect,
   snackbarMessage,
   snackbarStatus,
 }) {
   return (
-    <div className="RequestChanges">
-      <form name="requestChanges" ref={formRef}>
-        <div className="visibilitySelector">
+    <>
+      <form className="RequestChanges" name="requestChanges" ref={formRef}>
+        <div className="RequestChanges__visibility">
           <VisibilitySelect.Presentation
+            classes={{
+              root: 'VisibilitySelect--dashboardDetail',
+            }}
             // computeEntities={computeEntities}
-            // error={getError({ errors, fieldName: 'commentField' })} // Not used in VisibilitySelectContainer
+            // error={getError({ errors, fieldName: 'commentField' })}
             docVisibility={docVisibility}
             handleVisibilityChange={handleVisibilityChange}
             publicDialect={isPublicDialect}
@@ -46,14 +49,15 @@ function RequestChangesPresentation({
           />
         </div>
         {getErrorFeedback({ errors })}
-        <div className="actions">
+        <div className="RequestChanges__actions">
           <FVButton
             disabled={disableApproveButton()}
             variant="contained"
             type="submit"
             color="primary"
-            className="FVButton"
+            className="FVButton RequestChanges__actionButton"
             onClick={handleApprove}
+            size="large"
           >
             Approve
           </FVButton>
@@ -62,8 +66,9 @@ function RequestChangesPresentation({
             variant="contained"
             type="submit"
             color="primary"
-            className="FVButton"
+            className="FVButton RequestChanges__actionButton"
             onClick={handleRequestChanges}
+            size="large"
           >
             Request Changes
           </FVButton>
@@ -81,7 +86,7 @@ function RequestChangesPresentation({
           }
         />
       </form>
-    </div>
+    </>
   )
 }
 
@@ -96,6 +101,7 @@ RequestChangesPresentation.propTypes = {
   isPublicDialect: bool,
   snackbarMessage: string,
   snackbarStatus: bool,
+  submitMethod: string,
 }
 
 RequestChangesPresentation.defaultProps = {

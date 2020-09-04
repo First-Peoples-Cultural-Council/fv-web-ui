@@ -1,16 +1,16 @@
-.DashboardDetailListItem {
+.DashboardDetailSidebarItem {
   display: flex;
 }
-.DashboardDetailListItem__icon {
+.DashboardDetailSidebarItem__icon {
   padding: 0 10px;
 }
-.DashboardDetailListItem--li {
+.DashboardDetailSidebarItem--li {
   padding: 5px 0;
   border-bottom: 1px solid rgb(224, 224, 224);
 }
-.DashboardDetailListItem--isActive {
+.DashboardDetailSidebarItem--isActive {
   background-color: rgba(0, 200, 0, 0.5) !important;
 }
-.DashboardDetailListItem--hasOnClick {
+.DashboardDetailSidebarItem--hasOnClick {
   cursor: pointer;
 }
