@@ -1,0 +1,11 @@
+.IconChat {
+  width: 34px;
+  height: 34px;
+}
+.IconChat__bg {
+  fill: #a2583c;
+}
+
+.IconChat__path {
+  fill: #fff;
+}
