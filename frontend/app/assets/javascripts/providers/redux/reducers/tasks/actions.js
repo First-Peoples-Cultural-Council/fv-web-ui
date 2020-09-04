@@ -2,7 +2,7 @@ import { execute } from 'providers/redux/reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import IntlService from 'views/services/intl'
 import URLHelpers from 'common/URLHelpers'
-
+import { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
 import {
   FV_SIMPLE_TASKS_GET_START,
   FV_SIMPLE_TASKS_GET_SUCCESS,
@@ -36,7 +36,7 @@ export const fetchUserRegistrationTasks = execute('FV_USER_REGISTRATION', 'FVGet
 
 export const countTotalTasks = execute('FV_COUNT_TOTAL_TASKS', 'Repository.ResultSetQuery')
 
-export const getSimpleTasks = (queryParams = '') => {
+export const getSimpleTasks = (queryParams) => {
   return (dispatch) => {
     dispatch({
       type: FV_SIMPLE_TASKS_GET_START,
@@ -48,12 +48,17 @@ export const getSimpleTasks = (queryParams = '') => {
           case: 'tasks',
         }) + '...',
     })
-    return DirectoryOperations.getFromAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${queryParams}`)
+
+    return DirectoryOperations.getFromAPI(
+      `${URLHelpers.getBaseURL()}api/v1/simpleTask${queryParams ? `?${getSearchObjectAsUrlQuery(queryParams)}` : ''}`
+    )
       .then((response) => {
         dispatch({ type: FV_SIMPLE_TASKS_GET_SUCCESS, document: response })
+        return response
       })
       .catch((error) => {
         dispatch({ type: FV_SIMPLE_TASKS_GET_ERROR, error: error })
+        return error
       })
   }
 }
