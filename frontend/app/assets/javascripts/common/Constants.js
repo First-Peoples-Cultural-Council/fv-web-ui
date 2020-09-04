@@ -19,6 +19,7 @@ export const WORD = 1
 export const PHRASE = 2
 export const SONG = 3
 export const STORY = 4
+export const BOOK = 5
 
 export const EVEN = 0
 export const ODD = 1
