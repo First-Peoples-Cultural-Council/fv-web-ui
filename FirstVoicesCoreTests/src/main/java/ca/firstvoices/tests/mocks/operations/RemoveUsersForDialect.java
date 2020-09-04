@@ -7,17 +7,21 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = RemoveUsersForDialect.ID, category = Constants.GROUP_NAME, label =
-    "Remove Users for Dialect", description = "Operation to remove users given 1 mock data test dialect")
+    "Remove Users for Dialect", description = "Operation to remove users given "
+    + "1 mock data test dialect")
 public class RemoveUsersForDialect {
 
   public static final String ID = Constants.GROUP_NAME + "." + "RemoveUsersForDialect";
 
   @Context
   protected CoreSession session;
+
+  @Context
+  protected UserManager userManager;
 
   @Param(name = "dialectName",
       description = "Name of the dialect to remove users from")
@@ -28,16 +32,6 @@ public class RemoveUsersForDialect {
 
   @OperationMethod
   public void run() {
-    //if name exists, call remove users
-    //else throw exception
-
-    PathRef path = new PathRef("/FV/Workspaces/Data/Test/Test/" + dialectName);
-
-    if (session.exists(path)) {
-      generateDialectUsersService.removeUsersForDialect(session, path);
-    } else {
-      throw new IllegalArgumentException("Dialect must exist in /FV/Workspaces/Data/Test/Test/");
-    }
-
+    generateDialectUsersService.removeUsersForDialect(session, userManager, dialectName);
   }
 }

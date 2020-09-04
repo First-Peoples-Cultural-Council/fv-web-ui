@@ -7,6 +7,7 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = GenerateUsersForDialects.ID, category = Constants.GROUP_NAME, label =
@@ -19,6 +20,9 @@ public class GenerateUsersForDialects {
   @Context
   protected CoreSession session;
 
+  @Context
+  protected UserManager userManager;
+
   MockUserService generateDialectUsersService = Framework
       .getService(MockUserService.class);
 
@@ -29,7 +33,7 @@ public class GenerateUsersForDialects {
     PathRef b = new PathRef("/FV/Workspaces/Data/Test");
 
     if (session.exists(a) || session.exists(b)) {
-      generateDialectUsersService.generateUsersForDialects(session);
+      generateDialectUsersService.generateUsersForDialects(session, userManager);
     } else {
       throw new IllegalArgumentException("/FV/Workspaces/Data/Test/Test/ must exist");
     }
