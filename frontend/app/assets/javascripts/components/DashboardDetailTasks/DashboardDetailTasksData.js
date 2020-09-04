@@ -219,63 +219,61 @@ function DashboardDetailTasksData({ children }) {
     fetchTasksUsingQueries()
     // TODO: May need to do something with any opened detail panel
   }
-
+  const childrenData = {
+    columns: [
+      {
+        title: '',
+        field: 'icon',
+        render: () => {
+          return '[~]'
+        },
+        sorting: false,
+      },
+      {
+        title: 'Entry title',
+        field: 'title',
+      },
+      {
+        title: 'Requested by',
+        field: 'initiator',
+      },
+      {
+        title: 'Date submitted',
+        field: 'date',
+      },
+    ],
+    // data: userId === 'Guest' ? [] : remoteData,
+    data: tasks,
+    idSelectedItem: queryItem,
+    idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
+    listItems: tasks,
+    refreshData,
+    onClose,
+    onOpen,
+    onOpenNoId,
+    onOrderChange,
+    onRowClick,
+    options: {
+      pageSize: Number(queryPageSize),
+      pageSizeOptions: [5, 10, 20],
+      paging: true,
+      sorting: true,
+      emptyRowsWhenPaging: false,
+    },
+    pagination: {
+      count: Number(tasksCount),
+      page: Number(queryPage),
+      pageSize: Number(queryPageSize),
+      sortBy: querySortBy,
+      sortOrder: querySortOrder,
+    },
+    selectedItemData,
+    selectedTaskData,
+    sortDirection: querySortOrder,
+  }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
-      <TableContextSort.Provider value={querySortOrder}>
-        {children({
-          columns: [
-            {
-              title: '',
-              field: 'icon',
-              render: () => {
-                return '[~]'
-              },
-              sorting: false,
-            },
-            {
-              title: 'Entry title',
-              field: 'title',
-            },
-            {
-              title: 'Requested by',
-              field: 'initiator',
-            },
-            {
-              title: 'Date submitted',
-              field: 'date',
-            },
-          ],
-          // data: userId === 'Guest' ? [] : remoteData,
-          data: tasks,
-          idSelectedItem: queryItem,
-          idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
-          listItems: tasks,
-          refreshData,
-          onClose,
-          onOpen,
-          onOpenNoId,
-          onOrderChange,
-          onRowClick,
-          options: {
-            pageSize: Number(queryPageSize),
-            pageSizeOptions: [5, 10, 20],
-            paging: true,
-            sorting: true,
-            emptyRowsWhenPaging: false,
-          },
-          pagination: {
-            count: Number(tasksCount),
-            page: Number(queryPage),
-            pageSize: Number(queryPageSize),
-            sortBy: querySortBy,
-            sortOrder: querySortOrder,
-          },
-          selectedItemData,
-          selectedTaskData,
-          sortDirection: querySortOrder,
-        })}
-      </TableContextSort.Provider>
+      <TableContextSort.Provider value={querySortOrder}>{children(childrenData)}</TableContextSort.Provider>
     </TableContextCount.Provider>
   )
 }
