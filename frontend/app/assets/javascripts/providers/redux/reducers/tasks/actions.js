@@ -1,6 +1,7 @@
 import { execute } from 'providers/redux/reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import IntlService from 'views/services/intl'
+import URLHelpers from 'common/URLHelpers'
 
 import {
   FV_SIMPLE_TASKS_GET_START,
@@ -47,8 +48,7 @@ export const getSimpleTasks = (queryParams = '') => {
           case: 'tasks',
         }) + '...',
     })
-
-    return DirectoryOperations.getFromAPI('http://localhost:3001/nuxeo/api/v1/simpleTask/' + queryParams)
+    return DirectoryOperations.getFromAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${queryParams}`)
       .then((response) => {
         dispatch({ type: FV_SIMPLE_TASKS_GET_SUCCESS, document: response })
       })
@@ -71,7 +71,7 @@ export const getSimpleTask = (uid) => {
         }) + '...',
     })
 
-    return DirectoryOperations.getFromAPI('http://localhost:3001/nuxeo/api/v1/simpleTask/' + uid)
+    return DirectoryOperations.getFromAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${uid}`)
       .then((response) => {
         dispatch({ type: FV_SIMPLE_TASK_GET_SUCCESS, document: response })
       })
