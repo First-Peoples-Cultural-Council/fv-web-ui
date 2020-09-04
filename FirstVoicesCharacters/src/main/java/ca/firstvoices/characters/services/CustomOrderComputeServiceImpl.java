@@ -23,12 +23,13 @@ package ca.firstvoices.characters.services;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.listeners.AssetListener;
-import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.data.utils.SessionUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,13 +52,6 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
   // Called when a document is created or updated
   public DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
       boolean save, boolean publish) {
-
-    // Disable deafult events
-    AbstractSyncListener.disableDefaultEvents(asset);
-
-    // Make sure we avoid triggering events that trigger custom order recompute
-    asset.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
-
     if (!asset.isImmutable()) {
       DocumentModel dialect = DialectUtils.getDialect(asset);
       DocumentModel alphabet = session
@@ -66,7 +60,8 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
       computeCustomOrder(asset, alphabet, chars);
 
       if (Boolean.TRUE.equals(save)) {
-        session.saveDocument(asset);
+        SessionUtils.saveDocumentWithoutEvents(session, asset, true,
+            Collections.singletonList(AssetListener.DISABLE_CHAR_ASSET_LISTENER));
       }
 
       if (Boolean.TRUE.equals(publish)) {

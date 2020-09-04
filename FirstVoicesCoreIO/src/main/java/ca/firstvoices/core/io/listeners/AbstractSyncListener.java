@@ -30,6 +30,7 @@ import org.nuxeo.ecm.platform.dublincore.listener.DublinCoreListener;
 /**
  * An abstract sync listener
  * See here for details: https://doc.nuxeo.com/nxdoc/events-and-messages/
+ * TODO: determine if this is needed?
  */
 public class AbstractSyncListener {
 

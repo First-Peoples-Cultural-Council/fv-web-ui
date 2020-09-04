@@ -46,7 +46,7 @@ import org.nuxeo.runtime.api.Framework;
 public class ExecuteRequiredJobsListener implements EventListener {
 
   // Maximum amount of jobs to execute per dialect
-  private static final int REQUIRED_JOB_LIMIT = 2;
+  public static final int REQUIRED_JOB_LIMIT = 2;
 
   // Get logger
   private static final Log log = LogFactory.getLog(ExecuteRequiredJobsListener.class);

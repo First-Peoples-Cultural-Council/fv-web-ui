@@ -25,10 +25,6 @@
       <artifactId>nuxeo-runtime</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.nuxeo.elasticsearch</groupId>
-      <artifactId>nuxeo-elasticsearch-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesPublisher</artifactId>
     </dependency>
@@ -52,6 +48,11 @@
     </dependency>
 
     <!-- Test dependencies -->
+    <dependency>
+      <artifactId>nuxeo-automation-test</artifactId>
+      <groupId>org.nuxeo.ecm.automation</groupId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
       <artifactId>nuxeo-runtime-test</artifactId>
@@ -118,6 +119,101 @@
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
+
   </dependencies>
+
+
+
+
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-dam</artifactId>-->
+<!--      <groupId>org.nuxeo.dam</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-platform-tag-core</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-platform-audio-core</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-preview-core</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-platform-convert</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-core-convert-plugins</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.core</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-search-core</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-platform-url-core</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>junit</artifactId>-->
+<!--      <groupId>junit</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.nuxeo.elasticsearch</groupId>-->
+<!--      <artifactId>nuxeo-elasticsearch-core</artifactId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.nuxeo.elasticsearch</groupId>-->
+<!--      <artifactId>nuxeo-elasticsearch-core</artifactId>-->
+<!--      <type>test-jar</type>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>nuxeo-features-test</artifactId>-->
+<!--      <groupId>org.nuxeo.ecm.platform</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <artifactId>FirstVoicesSecurity</artifactId>-->
+<!--      <groupId>ca.firstvoices</groupId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.yaml</groupId>-->
+<!--      <artifactId>snakeyaml</artifactId>-->
+<!--      <version>1.26</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+
+<!--  </dependencies>-->
+<!--  <build>-->
+<!--    <plugins>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-jar-plugin</artifactId>-->
+<!--        <version>3.2.0</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <goals>-->
+<!--              <goal>test-jar</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+<!--    </plugins>-->
+<!--  </build>-->
 
 </project>

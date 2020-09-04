@@ -71,7 +71,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "org.nuxeo.ecm.platform.publisher.core", "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting", "FirstVoicesData", "FirstVoicesNuxeoPublisher",
-    "FirstVoicesCharacters.test:OSGI-INF/nuxeo.conf.override.xml",
+    "FirstVoicesCoreTests.tests:OSGI-INF/nuxeo.conf.override.xml",
     "FirstVoicesMaintenance",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml"})
 public class OperationsTests {

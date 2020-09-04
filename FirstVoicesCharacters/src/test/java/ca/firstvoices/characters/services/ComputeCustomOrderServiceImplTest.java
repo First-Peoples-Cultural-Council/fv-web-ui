@@ -66,7 +66,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
-    "FirstVoicesCharacters.test:OSGI-INF/nuxeo.conf.override.xml",
+    "FirstVoicesCoreTests.tests:OSGI-INF/nuxeo.conf.override.xml",
     "org.nuxeo.ecm.platform.publisher.core",})
 public class ComputeCustomOrderServiceImplTest {
 

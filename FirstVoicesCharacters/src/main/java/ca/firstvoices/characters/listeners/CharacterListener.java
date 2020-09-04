@@ -29,10 +29,8 @@ import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_TRASHED;
 import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_UNTRASHED;
 
 import ca.firstvoices.characters.services.CleanupCharactersService;
-import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.DocumentUtils;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +51,13 @@ import org.nuxeo.runtime.api.Framework;
  * Listener will validate alphabet characters and queue custom order recompute, or cleanup of
  * confusables as needed
  */
-public class CharacterListener extends AbstractSyncListener implements EventListener {
+public class CharacterListener implements EventListener {
+
+  protected EventContext eventCtx;
+
+  protected DocumentEventContext docCtx;
+
+  protected DocumentModel doc;
 
   public static final String DISABLE_CHARACTER_LISTENER = "disableCharacterListener";
 
@@ -82,7 +86,8 @@ public class CharacterListener extends AbstractSyncListener implements EventList
       return false;
     }
 
-    return (doc != null && ACCEPTED_TYPE.equals(doc.getType()) && DocumentUtils.isActiveDoc(doc));
+    return (doc != null && ACCEPTED_TYPE.equals(doc.getType())
+        && !doc.isProxy() && !doc.isVersion());
   }
 
   @Override
@@ -91,7 +96,7 @@ public class CharacterListener extends AbstractSyncListener implements EventList
     docCtx = (DocumentEventContext) eventCtx;
     doc = docCtx.getSourceDocument();
 
-    if (!defaultEventCriteria() || !listenerCriteria(eventCtx, doc)) {
+    if (!(eventCtx instanceof DocumentEventContext) || !listenerCriteria(eventCtx, doc)) {
       return;
     }
 

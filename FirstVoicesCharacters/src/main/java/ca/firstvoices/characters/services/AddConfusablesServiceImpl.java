@@ -20,7 +20,7 @@
 
 package ca.firstvoices.characters.services;
 
-import ca.firstvoices.core.io.listeners.AbstractSyncListener;
+import ca.firstvoices.data.utils.SessionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,9 +75,6 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
         // Iterate over each alphabet character returned by the query
         for (DocumentModel doc : charactersDocs) {
-          // Do not execute further listeners for these updates
-          AbstractSyncListener.disableDefaultEvents(doc);
-
           // Update confusables
           updateConfusableCharacters(session, doc, dialect, character, confusables);
         }
@@ -148,7 +145,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
       }
     }
 
-    return session.saveDocument(characterDocument);
+    return SessionUtils.saveDocumentWithoutEvents(session, characterDocument, true, null);
   }
 
   // Helper method to check existing confusables and only add new ones if they don't already exist

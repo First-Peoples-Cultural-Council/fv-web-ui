@@ -39,9 +39,9 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class ManageRequiredJobsListener implements EventListener {
 
-  private static final String JOB_CONTAINER_PROP = "jobContainer";
-  private static final String JOB_IDS_PROP = "jobIds";
-  private static final String SUCCESS_PROP = "success";
+  public static final String JOB_CONTAINER_PROP = "jobContainer";
+  public static final String JOB_IDS_PROP = "jobIds";
+  public static final String SUCCESS_PROP = "success";
 
   private final MaintenanceLogger ml = Framework.getService(MaintenanceLogger.class);
 
@@ -71,6 +71,13 @@ public class ManageRequiredJobsListener implements EventListener {
 
     // container likely to be a dialect type, but can be used for other types
     DocumentModel container = (DocumentModel) eventContext.getProperty(JOB_CONTAINER_PROP);
+
+    if (!(eventContext.getProperty(JOB_IDS_PROP) instanceof Set)) {
+      log.severe("Illegal job format sent. Expected Set but got " + eventContext.getProperty(JOB_IDS_PROP).getClass());
+      return;
+    }
+
+    @SuppressWarnings("unchecked")
     Set<String> jobs = (HashSet<String>) eventContext.getProperty(JOB_IDS_PROP);
 
     switch (eventId) {

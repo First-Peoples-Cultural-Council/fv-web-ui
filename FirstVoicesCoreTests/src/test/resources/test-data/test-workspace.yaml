@@ -12,6 +12,9 @@ children:
         name: "Test Dialect 1"
         key: testDialect
         children:
+          - type: FVDictionary
+            name: "Dictionary"
+            key: testDictionary
           - type: FVAlphabet
             name: "Alphabet"
             key: testAlphabet

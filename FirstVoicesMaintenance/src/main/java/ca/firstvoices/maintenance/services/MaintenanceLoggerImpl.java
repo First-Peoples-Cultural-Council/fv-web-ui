@@ -1,7 +1,7 @@
 package ca.firstvoices.maintenance.services;
 
-import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.utils.PropertyUtils;
+import ca.firstvoices.data.utils.SessionUtils;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.maintenance.common.CommonConstants;
 import java.util.HashSet;
@@ -38,14 +38,12 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
                 jobContainerWithSession.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
                     CommonConstants.REQUIRED_JOBS_FIELD, requiredJobs);
 
-                // Avoid firing other events with this update
-                AbstractSyncListener.disableDefaultEvents(jobContainerWithSession);
+                SessionUtils.saveDocumentWithoutEvents(session, jobContainerWithSession,
+                    true, null);
 
-                // Update dialect
-                session.saveDocument(jobContainerWithSession);
-
-                sendEvent("Job Queued", job + " queued for `" + jobContainer.getTitle() + "`",
-                    Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainer);
+                sendEvent("Job Queued",
+                    job + " queued for `" + jobContainerWithSession.getTitle() + "`",
+                    Constants.EXECUTE_REQUIRED_JOBS_QUEUED, session, jobContainerWithSession);
               });
     }
   }
@@ -56,18 +54,17 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
       CoreInstance
           .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
               session -> {
-                Set<String> requiredJobs = getRequiredJobs(jobContainer);
+                DocumentModel jobContainerWithSession = session.getDocument(jobContainer.getRef());
+
+                Set<String> requiredJobs = getRequiredJobs(jobContainerWithSession);
 
                 if (requiredJobs != null && !requiredJobs.isEmpty() && requiredJobs.contains(job)) {
                   requiredJobs.remove(job);
-                  jobContainer.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
+                  jobContainerWithSession.setProperty(CommonConstants.MAINTENANCE_SCHEMA,
                       CommonConstants.REQUIRED_JOBS_FIELD, requiredJobs);
 
-                  // Avoid firing other events with this update
-                  AbstractSyncListener.disableDefaultEvents(jobContainer);
-
-                  // Update dialect
-                  session.saveDocument(jobContainer);
+                  SessionUtils.saveDocumentWithoutEvents(session, jobContainerWithSession,
+                      true, null);
 
                   String reason = Constants.EXECUTE_REQUIRED_JOBS_COMPLETE;
 
@@ -76,8 +73,8 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
                   }
 
                   sendEvent("Job Complete",
-                      job + " completed for `" + jobContainer.getTitle() + "`", reason,
-                      session, jobContainer);
+                      job + " completed for `" + jobContainerWithSession.getTitle() + "`", reason,
+                      session, jobContainerWithSession);
                 }
               });
     }

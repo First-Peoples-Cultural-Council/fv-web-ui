@@ -21,8 +21,11 @@
 package ca.firstvoices.core.io.listeners;
 
 import ca.firstvoices.core.io.services.AssignAncestorsService;
+import ca.firstvoices.data.utils.SessionUtils;
 import java.util.logging.Logger;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
@@ -30,7 +33,13 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Listener to assign value to ancestry fields (fva:dialect, fva:language, fva:language_family)
  */
-public class AncestryAssignmentListener extends AbstractSyncListener implements EventListener {
+public class AncestryAssignmentListener implements EventListener {
+
+  protected EventContext eventCtx;
+
+  protected DocumentEventContext docCtx;
+
+  protected DocumentModel doc;
 
   private static final Logger log = Logger
       .getLogger(AncestryAssignmentListener.class.getCanonicalName());
@@ -54,13 +63,13 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
     docCtx = (DocumentEventContext) eventCtx;
     doc = docCtx.getSourceDocument();
 
-    if (!defaultEventCriteria() || !listenerCriteria()) {
+    if (!(eventCtx instanceof DocumentEventContext) || !listenerCriteria()) {
       return;
     }
 
     try {
       // Disable event so other listeners don't fire for this system update
-      disableDefaultEvents(doc);
+      SessionUtils.disableDefaultEvents(doc);
 
       // Assign ancestors; no need to save, since this is run before creation
       assignAncestorsService.assignAncestors(doc);
@@ -70,7 +79,7 @@ public class AncestryAssignmentListener extends AbstractSyncListener implements 
           + "| Exception:" + e.toString());
     } finally {
       // Renable default events for future runs
-      enableDefaultEvents(doc);
+      SessionUtils.enableDefaultEvents(doc);
     }
   }
 }

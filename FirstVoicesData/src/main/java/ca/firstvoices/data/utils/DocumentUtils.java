@@ -32,12 +32,13 @@ public final class DocumentUtils {
 
   /**
    * Checks if the document is an active workspace document Excludes proxies and versions (via
-   * isImmutable) and trashed docs
+   * isImmutable) and trashed docs. See https://doc.nuxeo.com/studio/filtering-options-reference-page/
+   * for why !isImmutable + !isProxy
    *
    * @param currentDoc
    * @return
    */
   public static boolean isActiveDoc(DocumentModel currentDoc) {
-    return !currentDoc.isImmutable() && !currentDoc.isTrashed();
+    return !currentDoc.isImmutable() && !currentDoc.isProxy() && !currentDoc.isTrashed();
   }
 }

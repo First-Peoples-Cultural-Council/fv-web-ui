@@ -27,9 +27,9 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.characters.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.characters.listeners.AssetListener;
-import ca.firstvoices.core.io.listeners.AbstractSyncListener;
 import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.data.utils.PropertyUtils;
+import ca.firstvoices.data.utils.SessionUtils;
 import ca.firstvoices.data.utils.filters.NotTrashedFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +57,8 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
   //In the future, all dublincore (and other schema) property values
   //should be kept in a constants file in FVData.
   private static final String DOCUMENT_TITLE = "dc:title";
-  private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
-  private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
+  public static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
+  public static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
   private static final String DEFAULT_WARNING = "Can't have confusable character ";
 
   private final String[] types = {FV_PHRASE, FV_WORD};
@@ -97,12 +97,6 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
       }
     }
 
-    // Do not execute further events for this change
-    AbstractSyncListener.disableDefaultEvents(document);
-
-    // Disable asset listener for further events (i.e. another cleanup, sanitization)
-    document.putContextData(AssetListener.DISABLE_CHAR_ASSET_LISTENER, true);
-
     // We can recompute the custom order on the asset here
     // to avoid recomputing the entire dialect
     CustomOrderComputeService customOrderComputeService =
@@ -112,6 +106,9 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
         .computeAssetNativeOrderTranslation(session, document, false, false);
 
     if (Boolean.TRUE.equals(saveDocument)) {
+      SessionUtils.saveDocumentWithoutEvents(session, document,
+          true, Collections.singletonList(AssetListener.DISABLE_CHAR_ASSET_LISTENER));
+
       return session.saveDocument(document);
     }
 

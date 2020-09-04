@@ -35,7 +35,7 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Handles character related operatoins (e.g. cleanup, custom order) before saving currently applies
+ * Handles character related operations (e.g. cleanup, custom order) before saving currently applies
  * to a word or phrase
  */
 public class AssetListener implements EventListener {

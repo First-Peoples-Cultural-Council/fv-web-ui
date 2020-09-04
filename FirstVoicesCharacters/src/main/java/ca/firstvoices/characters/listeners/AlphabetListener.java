@@ -24,6 +24,7 @@ import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.data.utils.DocumentUtils;
 import ca.firstvoices.data.utils.filters.NotTrashedFilter;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -61,8 +62,8 @@ public class AlphabetListener implements EventListener {
     }
 
     DocumentModel alphabet = ((DocumentEventContext) ctx).getSourceDocument();
-    if (alphabet == null || alphabet.isImmutable() || !DialectTypesConstants.FV_ALPHABET.equals(
-        alphabet.getType())) {
+    if (alphabet == null || !DocumentUtils.isActiveDoc(alphabet)
+        || !DialectTypesConstants.FV_ALPHABET.equals(alphabet.getType())) {
       return;
     }
 
