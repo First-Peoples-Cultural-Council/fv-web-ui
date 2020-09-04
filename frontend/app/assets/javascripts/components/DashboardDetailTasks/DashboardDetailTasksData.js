@@ -262,6 +262,7 @@ function DashboardDetailTasksData({ children }) {
             pageSizeOptions: [5, 10, 20],
             paging: true,
             sorting: true,
+            emptyRowsWhenPaging: false,
           },
           pagination: {
             count: Number(tasksCount),
