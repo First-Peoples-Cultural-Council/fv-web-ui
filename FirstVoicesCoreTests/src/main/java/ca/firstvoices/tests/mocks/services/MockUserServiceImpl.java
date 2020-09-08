@@ -19,29 +19,10 @@ public class MockUserServiceImpl implements MockUserService {
   public void generateUsersForDialect(CoreSession session, UserManager userManager, PathRef path) {
     DocumentModel dialect = session.getDocument(path);
 
-    DocumentModel membersUserDoc = generateUserDocAtAccessLevel(userManager, dialect, "members");
-    if (membersUserDoc != null) {
-      membersUserDoc = userManager.createUser(membersUserDoc);
-    }
-
-    DocumentModel recordersUserDoc = generateUserDocAtAccessLevel(userManager, dialect,
-        "recorders");
-    if (recordersUserDoc != null) {
-      recordersUserDoc = userManager.createUser(recordersUserDoc);
-    }
-
-    DocumentModel recordersWithApprovalUserDoc = generateUserDocAtAccessLevel(userManager, dialect,
-        "recorders_with_approval");
-    if (recordersWithApprovalUserDoc != null) {
-      recordersWithApprovalUserDoc = userManager.createUser(recordersWithApprovalUserDoc);
-    }
-
-    DocumentModel languageAdministratorsUserDoc = generateUserDocAtAccessLevel(userManager, dialect,
-        "language_administrators");
-    if (languageAdministratorsUserDoc != null) {
-      languageAdministratorsUserDoc = userManager.createUser(languageAdministratorsUserDoc);
-    }
-
+    generateUserDocAtAccessLevel(userManager, dialect, "members");
+    generateUserDocAtAccessLevel(userManager, dialect,"recorders");
+    generateUserDocAtAccessLevel(userManager, dialect,"recorders_with_approval");
+    generateUserDocAtAccessLevel(userManager, dialect,"language_administrators");
   }
 
   @Override
@@ -75,7 +56,7 @@ public class MockUserServiceImpl implements MockUserService {
 
   }
 
-  private DocumentModel generateUserDocAtAccessLevel(UserManager userManager, DocumentModel dialect,
+  private void generateUserDocAtAccessLevel(UserManager userManager, DocumentModel dialect,
       String accessLevel) {
 
     String username = dialect.getName() + "_" + accessLevel;
@@ -90,9 +71,8 @@ public class MockUserServiceImpl implements MockUserService {
       userDoc.setProperty(SCHEMA_NAME, PASSWORD_COLUMN, username);
       userDoc.setPropertyValue(GROUPS_COLUMN, groups);
       userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
-      return userDoc;
-    } else {
-      return null;
+
+      userManager.createUser(userDoc);
     }
   }
 }
