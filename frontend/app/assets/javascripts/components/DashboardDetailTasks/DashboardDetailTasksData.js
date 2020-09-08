@@ -9,6 +9,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import StringHelpers from 'common/StringHelpers'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
+import useTheme from 'DataSource/useTheme'
 /**
  * @summary DashboardDetailTasksData
  * @version 1.0.1
@@ -18,7 +19,8 @@ import { TableContextSort, TableContextCount } from 'components/Table/TableConte
  * @param {function} props.children
  *
  */
-function DashboardDetailTasksData({ children }) {
+function DashboardDetailTasksData({ children, columnRender }) {
+  const { theme } = useTheme()
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
@@ -219,27 +221,35 @@ function DashboardDetailTasksData({ children }) {
     fetchTasksUsingQueries()
     // TODO: May need to do something with any opened detail panel
   }
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: [
       {
         title: '',
-        field: 'icon',
-        render: () => {
-          return '[~]'
-        },
+        field: 'itemType',
+        render: columnRender.itemType,
         sorting: false,
+        cellStyle,
       },
       {
         title: 'Entry title',
-        field: 'title',
+        field: 'titleItem',
+        cellStyle,
+      },
+      {
+        title: 'Change requested',
+        field: 'titleTask',
+        cellStyle,
       },
       {
         title: 'Requested by',
         field: 'initiator',
+        cellStyle,
       },
       {
         title: 'Date submitted',
         field: 'date',
+        cellStyle,
       },
     ],
     // data: userId === 'Guest' ? [] : remoteData,
@@ -278,9 +288,15 @@ function DashboardDetailTasksData({ children }) {
   )
 }
 // PROPTYPES
-const { func } = PropTypes
+const { func, object } = PropTypes
 DashboardDetailTasksData.propTypes = {
   children: func,
+  columnRender: object,
+}
+DashboardDetailTasksData.defaultProps = {
+  columnRender: {
+    itemType: () => '',
+  },
 }
 
 export default DashboardDetailTasksData

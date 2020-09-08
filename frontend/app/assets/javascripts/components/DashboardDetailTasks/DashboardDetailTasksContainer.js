@@ -10,6 +10,7 @@ import DetailWordPhrase from 'components/DetailWordPhrase'
 import { TABLE_FULL_WIDTH } from 'common/Constants'
 import TablePagination from 'components/Table/TablePagination'
 import RequestChanges from 'components/RequestChanges'
+import ItemIcon from 'components/ItemIcon'
 /**
  * @summary DashboardDetailTasksContainer
  * @version 1.0.1
@@ -21,7 +22,11 @@ import RequestChanges from 'components/RequestChanges'
  */
 function DashboardDetailTasksContainer() {
   return (
-    <DashboardDetailTasksData>
+    <DashboardDetailTasksData
+      columnRender={{
+        itemType: ItemIcon.Presentation,
+      }}
+    >
       {({
         columns,
         data,
