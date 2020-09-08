@@ -6,7 +6,8 @@ import {
   createTask as _createTask,
   fetchTasks as _fetchTasks,
   fetchUserTasks as _fetchUserTasks,
-  fetchUserGroupTasks as _fetchUserGroupTasks,
+  getSimpleTasks as _getSimpleTasks,
+  getSimpleTask as _getSimpleTask,
   rejectRegistration as _rejectRegistration,
   rejectTask as _rejectTask,
 } from 'providers/redux/reducers/tasks'
@@ -15,10 +16,11 @@ function useTasks() {
   const dispatch = useDispatch()
   return {
     computeTasks: useSelector((state) => state.tasks.computeTasks),
+    computeSimpleTask: useSelector((state) => state.tasks.computeSimpleTask),
+    computeSimpleTasks: useSelector((state) => state.tasks.computeSimpleTasks),
     computeUserRegistrationApprove: useSelector((state) => state.tasks.computeUserRegistrationApprove),
     computeUserRegistrationReject: useSelector((state) => state.tasks.computeUserRegistrationReject),
     computeUserTasks: useSelector((state) => state.tasks.computeUserTasks),
-    computeUserGroupTasks: useSelector((state) => state.tasks.computeUserGroupTasks),
     computeUserTasksApprove: useSelector((state) => state.tasks.computeUserTasksApprove),
     computeUserTasksReject: useSelector((state) => state.tasks.computeUserTasksReject),
     approveRegistration: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
@@ -41,9 +43,12 @@ function useTasks() {
       const dispatchObj = _fetchUserTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
     },
-    fetchUserGroupTasks: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
-      const dispatchObj = _fetchUserGroupTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
-      // NOTE: Returning a promise for use with Material-Table
+    getSimpleTask: (uid) => {
+      const dispatchObj = _getSimpleTask(uid)
+      return dispatch(dispatchObj)
+    },
+    getSimpleTasks: (queryParams) => {
+      const dispatchObj = _getSimpleTasks(queryParams)
       return dispatch(dispatchObj)
     },
     rejectRegistration: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
