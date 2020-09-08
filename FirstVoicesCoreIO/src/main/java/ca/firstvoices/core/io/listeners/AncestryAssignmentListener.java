@@ -21,7 +21,7 @@
 package ca.firstvoices.core.io.listeners;
 
 import ca.firstvoices.core.io.services.AssignAncestorsService;
-import ca.firstvoices.data.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import java.util.logging.Logger;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;

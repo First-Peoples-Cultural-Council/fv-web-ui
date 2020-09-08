@@ -23,9 +23,9 @@ package ca.firstvoices.characters.services;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.listeners.AssetListener;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.SessionUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;

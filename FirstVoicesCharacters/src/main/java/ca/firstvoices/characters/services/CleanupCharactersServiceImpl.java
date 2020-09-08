@@ -27,10 +27,10 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.characters.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.characters.listeners.AssetListener;
-import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.PropertyUtils;
-import ca.firstvoices.data.utils.SessionUtils;
-import ca.firstvoices.data.utils.filters.NotTrashedFilter;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.filters.NotTrashedFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

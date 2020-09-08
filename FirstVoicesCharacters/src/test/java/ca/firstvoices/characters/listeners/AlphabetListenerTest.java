@@ -27,7 +27,6 @@ import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @RunWith(FeaturesRunner.class)
 @Features({CoreFeature.class})
@@ -57,10 +56,6 @@ public class AlphabetListenerTest extends AbstractTestDataCreatorTest {
 
   @Before
   public void initAlphabetTests() {
-    if (!TransactionHelper.isTransactionActive()) {
-      TransactionHelper.startTransaction();
-    }
-
     assertNotNull("Alphabet listener registered", eventService.getEventListener("alphabet_listener"));
 
     // Children containers will be created in FVDialectFactory

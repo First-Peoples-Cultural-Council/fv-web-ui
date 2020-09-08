@@ -51,7 +51,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Deploy({
     "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml",
-    "FirstVoicesCoreTests.tests:OSGI-INF/nuxeo.conf.override.xml"
+    "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"
 })
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
 

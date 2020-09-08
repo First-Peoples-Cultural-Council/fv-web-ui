@@ -38,7 +38,6 @@
     <module>FirstVoicesMaintenance</module>
     <module>FirstVoicesMaintenanceCommon</module>
     <module>FirstVoicesCoreTests</module>
-    <module>migration-contributions</module>
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
     <module>FirstVoicesCharacters</module>

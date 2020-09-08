@@ -73,7 +73,8 @@ public class ManageRequiredJobsListener implements EventListener {
     DocumentModel container = (DocumentModel) eventContext.getProperty(JOB_CONTAINER_PROP);
 
     if (!(eventContext.getProperty(JOB_IDS_PROP) instanceof Set)) {
-      log.severe("Illegal job format sent. Expected Set but got " + eventContext.getProperty(JOB_IDS_PROP).getClass());
+      log.severe("Illegal job format sent. Expected Set but got "
+          + eventContext.getProperty(JOB_IDS_PROP).getClass());
       return;
     }
 

@@ -125,11 +125,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>FirstVoicesPublisher</artifactId>
-      <groupId>ca.firstvoices</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>1.26</version>

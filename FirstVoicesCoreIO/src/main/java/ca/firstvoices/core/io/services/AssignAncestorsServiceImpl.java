@@ -23,8 +23,9 @@ package ca.firstvoices.core.io.services;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
-import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.DocumentUtils;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.data.exceptions.FVDocumentHierarchyException;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -37,7 +38,16 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
     TransactionHelper.runInTransaction(() ->
         CoreInstance.doPrivileged(currentDoc.getCoreSession(), s -> {
           // Get the parent document of each type for the current document using the helper method
-          DocumentModel dialect = DialectUtils.getDialect(currentDoc);
+          try {
+            DocumentModel dialect = DialectUtils.getDialect(currentDoc);
+
+            if (dialect != null) {
+              currentDoc.setPropertyValue("fva:dialect", dialect.getId());
+            }
+          } catch (FVDocumentHierarchyException e) {
+            // No need to do anything, just leave "fva:dialect" as is
+          }
+
           DocumentModel language = getLanguage(s, currentDoc);
           DocumentModel languageFamily = getLanguageFamily(s, currentDoc);
 
@@ -51,12 +61,6 @@ public class AssignAncestorsServiceImpl implements AssignAncestorsService {
           // to be the UUID of the parent FVLanguage document
           if (language != null) {
             currentDoc.setPropertyValue("fva:language", language.getId());
-          }
-
-          // Set the property fva:dialect of the new document to be the
-          // UUID of the parent FVDialect document
-          if (dialect != null) {
-            currentDoc.setPropertyValue("fva:dialect", dialect.getId());
           }
         }));
 

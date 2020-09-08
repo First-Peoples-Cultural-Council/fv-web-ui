@@ -20,7 +20,7 @@
 
 package ca.firstvoices.characters.services;
 
-import ca.firstvoices.data.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

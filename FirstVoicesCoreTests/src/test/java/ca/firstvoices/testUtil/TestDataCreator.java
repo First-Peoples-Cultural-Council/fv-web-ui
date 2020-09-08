@@ -1,13 +1,13 @@
 package ca.firstvoices.testUtil;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+
 import ca.firstvoices.testUtil.helpers.TestDataYAMLBean;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -17,9 +17,6 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @Singleton
 public class TestDataCreator {
-
-  @Inject
-  FirstVoicesPublisherService publisherService;
 
   Map<String, String> savedReferences = new HashMap<>();
 
@@ -58,9 +55,10 @@ public class TestDataCreator {
 
       String savedID = document.getId();
       if (input.isPublish()) {
+        document.followTransition(PUBLISH_TRANSITION);
         DocumentModel section = session.getDocument(new PathRef(input.getPublishPath()));
-        DocumentModel published = publisherService.publishDocument(session, document, section);
-        savedID = published.getId();
+        DocumentModel proxy = session.publishDocument(document, section, true);
+        savedReferences.put(input.getKey() + "_proxy", proxy.getId());
       }
       session.save();
       if (input.getKey() != null) {

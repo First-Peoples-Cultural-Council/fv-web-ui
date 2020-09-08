@@ -11,7 +11,7 @@ import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
 
-import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DialectUtils;
 import java.util.Objects;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

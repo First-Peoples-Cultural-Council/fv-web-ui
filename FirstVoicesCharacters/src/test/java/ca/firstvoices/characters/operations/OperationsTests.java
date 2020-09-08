@@ -31,7 +31,7 @@ import static org.mockito.Mockito.anyInt;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
-import ca.firstvoices.data.utils.PropertyUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.maintenance.common.CommonConstants;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +71,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "org.nuxeo.ecm.platform.publisher.core", "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting", "FirstVoicesData", "FirstVoicesNuxeoPublisher",
-    "FirstVoicesCoreTests.tests:OSGI-INF/nuxeo.conf.override.xml",
+    "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml",
     "FirstVoicesMaintenance",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml"})
 public class OperationsTests {

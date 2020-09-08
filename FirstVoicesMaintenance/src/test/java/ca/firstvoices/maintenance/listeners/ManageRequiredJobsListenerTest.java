@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import ca.firstvoices.data.utils.PropertyUtils;
-import ca.firstvoices.data.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.maintenance.common.CommonConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
@@ -39,12 +39,11 @@ import org.nuxeo.runtime.mockito.RuntimeService;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @RunWith(FeaturesRunner.class)
 @Features({CoreFeature.class, AutomationFeature.class, MockitoFeature.class})
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy({"FirstVoicesMaintenance", "FirstVoicesCoreTests.tests:OSGI-INF/nuxeo.conf.override.xml"})
+@Deploy({"FirstVoicesMaintenance", "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"})
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})
 public class ManageRequiredJobsListenerTest extends AbstractTestDataCreatorTest {
 
@@ -81,10 +80,6 @@ public class ManageRequiredJobsListenerTest extends AbstractTestDataCreatorTest 
 
   @Before
   public void setUp() {
-    if (!TransactionHelper.isTransactionActive()) {
-      TransactionHelper.startTransaction();
-    }
-
     assertNotNull("Manage required job listener registered", eventService.getEventListener("manageRequiredJobsListener"));
 
     dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));

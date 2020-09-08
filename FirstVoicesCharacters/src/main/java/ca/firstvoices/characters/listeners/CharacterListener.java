@@ -29,8 +29,8 @@ import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_TRASHED;
 import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_UNTRASHED;
 
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import ca.firstvoices.data.utils.DialectUtils;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.util.HashSet;
 import java.util.List;
@@ -53,23 +53,16 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class CharacterListener implements EventListener {
 
-  protected EventContext eventCtx;
-
-  protected DocumentEventContext docCtx;
-
-  protected DocumentModel doc;
-
   public static final String DISABLE_CHARACTER_LISTENER = "disableCharacterListener";
-
   private static final String DC_TITLE = "dc:title";
-
   private static final String CHAR_ORDER = "fvcharacter:alphabet_order";
   private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
   private static final String UC_CONFUSABLES = "fvcharacter:upper_case_confusable_characters";
   private static final String UC_CHAR = "fvcharacter:upper_case_character";
-
   private static final String ACCEPTED_TYPE = DialectTypesConstants.FV_CHARACTER;
-
+  protected EventContext eventCtx;
+  protected DocumentEventContext docCtx;
+  protected DocumentModel doc;
   CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 

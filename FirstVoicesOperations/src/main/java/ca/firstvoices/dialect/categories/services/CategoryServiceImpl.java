@@ -2,7 +2,7 @@ package ca.firstvoices.dialect.categories.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
-import ca.firstvoices.data.utils.StateUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Map;

@@ -22,10 +22,10 @@ package ca.firstvoices.characters.listeners;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.core.io.utils.filters.NotTrashedFilter;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.DocumentUtils;
-import ca.firstvoices.data.utils.filters.NotTrashedFilter;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;

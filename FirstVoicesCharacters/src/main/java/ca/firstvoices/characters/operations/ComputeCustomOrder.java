@@ -23,7 +23,7 @@ package ca.firstvoices.characters.operations;
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.workers.ComputeCustomOrderWorker;
-import ca.firstvoices.data.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.util.logging.Logger;

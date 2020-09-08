@@ -1,7 +1,7 @@
 package ca.firstvoices.maintenance.services;
 
-import ca.firstvoices.data.utils.PropertyUtils;
-import ca.firstvoices.data.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.maintenance.common.CommonConstants;
 import java.util.HashSet;

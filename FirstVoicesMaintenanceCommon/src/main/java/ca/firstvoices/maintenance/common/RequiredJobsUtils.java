@@ -1,6 +1,6 @@
 package ca.firstvoices.maintenance.common;
 
-import ca.firstvoices.data.utils.PropertyUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;

@@ -127,24 +127,15 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesPublisher</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
-
-
   </dependencies>
 
 </project>

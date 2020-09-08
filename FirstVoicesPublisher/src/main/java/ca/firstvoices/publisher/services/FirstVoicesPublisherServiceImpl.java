@@ -40,8 +40,8 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
-import ca.firstvoices.data.utils.DialectUtils;
-import ca.firstvoices.data.utils.StateUtils;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import java.io.Serializable;
 import java.security.InvalidParameterException;

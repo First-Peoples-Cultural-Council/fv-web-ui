@@ -49,6 +49,7 @@
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCharacters</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -229,11 +230,6 @@
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
