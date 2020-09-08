@@ -25,7 +25,7 @@ public class GenerateUsers {
   protected UserManager userManager;
 
   @Param(name = "dialectName",
-      description = "Optional name of the dialect to add users to")
+      description = "Optional name of the dialect to add users to", required = false)
   protected String dialectName = null;
 
   MockUserService generateDialectUsersService = Framework

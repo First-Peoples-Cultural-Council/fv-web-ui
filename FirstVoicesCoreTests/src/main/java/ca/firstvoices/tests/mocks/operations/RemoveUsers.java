@@ -25,7 +25,7 @@ public class RemoveUsers {
   protected UserManager userManager;
 
   @Param(name = "dialectName",
-      description = "Optional name of the dialect to remove users from")
+      description = "Optional name of the dialect to remove users from", required = false)
   protected String dialectName = null;
 
   MockUserService generateDialectUsersService = Framework
