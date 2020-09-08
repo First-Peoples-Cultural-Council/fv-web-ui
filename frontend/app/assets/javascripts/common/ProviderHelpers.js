@@ -211,7 +211,7 @@ function isActiveRole(roles) {
  */
 function isAdmin(computeLogin) {
   const extendedGroups = selectn('response.extendedGroups', computeLogin)
-  const extendGroupsFiltered = (extendedGroups || []).filter((group) => group.name === 'language_administrators')
+  const extendGroupsFiltered = (extendedGroups || []).filter((group) => group.name.includes('administrators'))
   return extendGroupsFiltered.length > 0
 }
 

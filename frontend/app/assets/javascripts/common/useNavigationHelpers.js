@@ -1,5 +1,6 @@
 import useWindowPath from 'DataSource/useWindowPath'
 import NavigationHelpers, { getNewPaginationUrl } from 'common/NavigationHelpers'
+import URLHelpers from 'common/URLHelpers'
 /**
  * @summary useNavigationHelpers
  * @description Custom hook to make working with NavigationHelpers easier
@@ -19,6 +20,9 @@ function useNavigationHelpers() {
     },
     navigate: (url) => {
       NavigationHelpers.navigate(url, pushWindowPath, false)
+    },
+    getBaseURL: () => {
+      return URLHelpers.getBaseURL()
     },
   }
 }

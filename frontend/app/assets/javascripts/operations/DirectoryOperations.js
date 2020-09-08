@@ -75,6 +75,26 @@ export default class DirectoryOperations {
     })
   }
 
+  static getFromAPI(path) {
+    return new Promise((resolve, reject) => {
+      request.get(path, function handleResponse(error, response, body) {
+        if (error) {
+          if (error.hasOwnProperty('response')) {
+            error.response.json().then((jsonError) => {
+              return reject(StringHelpers.extractErrorMessage(jsonError))
+            })
+          } else {
+            return reject(error)
+          }
+        }
+        return resolve(body)
+      })
+      setTimeout(() => {
+        reject('Server timeout while attempting to get documents.')
+      }, TIMEOUT)
+    })
+  }
+
   /**
    * Gets one or more documents based on a path or id.
    * Allows for additional complex queries to be executed.

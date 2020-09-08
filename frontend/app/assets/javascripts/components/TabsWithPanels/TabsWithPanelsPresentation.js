@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import DOMPurify from 'dompurify'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
@@ -24,11 +25,11 @@ import Box from '@material-ui/core/Box'
  */
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
+  label: theme.tab.label,
+  tabsIndicator: theme.tab.tabsIndicator,
+  tabRoot: theme.tab.tabRoot,
+  tabsRoot: theme.tab.tabsRoot,
+  tabSelected: theme.tab.tabSelected,
 }))
 
 function TabsWithPanelsPresentation({ data }) {
@@ -44,13 +45,12 @@ function TabsWithPanelsPresentation({ data }) {
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static" color="default">
         <Tabs
           value={value}
+          classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
           onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
@@ -74,7 +74,9 @@ function TabPanel({ children, value, index, ...other }) {
     >
       {value === index && (
         <Box>
-          <Typography component={'span'}>{children}</Typography>
+          <Typography variant="h5" component={'div'} style={{ padding: 8 * 3 }}>
+            {children}
+          </Typography>
         </Box>
       )}
     </div>
@@ -92,9 +94,20 @@ TabPanel.propTypes = {
 function generateTabPanels(dataArray, value) {
   const panels = []
   function iterate(item, index) {
+    if (React.isValidElement(item.content)) {
+      panels.push(
+        <TabPanel key={item.label + index} value={value} index={index}>
+          {item.content}
+        </TabPanel>
+      )
+    }
     panels.push(
       <TabPanel key={item.label + index} value={value} index={index}>
-        {item.content}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(item.content),
+          }}
+        />
       </TabPanel>
     )
   }
@@ -103,9 +116,17 @@ function generateTabPanels(dataArray, value) {
 }
 
 function generateTabs(dataArray) {
+  const classes = useStyles()
   const tabs = []
   function iterate(item, index) {
-    tabs.push(<Tab key={item.label} label={item.label} {...a11yProps(index)} />)
+    tabs.push(
+      <Tab
+        key={item.label}
+        classes={{ root: classes.tabRoot, selected: classes.tabSelected, labelIcon: classes.label }}
+        label={item.label}
+        {...a11yProps(index)}
+      />
+    )
   }
   dataArray.forEach(iterate)
   return tabs
