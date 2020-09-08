@@ -94,7 +94,7 @@ public class RemoveUsersTest extends AbstractFirstVoicesCoreTestsTest {
     createNewGroup(dialectB.getName().toLowerCase() + "_language_administrators",
         dialectB.getName() + " Language Administrators");
 
-    automationService.run(ctx, RemoveUsers.ID);
+    automationService.run(ctx, GenerateUsers.ID);
 
     List<String> existingUsers = userManager.getUserIds();
     Assert.assertTrue(existingUsers.contains(dialectA.getName() + "_members"));
