@@ -26,13 +26,13 @@ import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
 import { EVEN, ODD } from 'common/Constants'
 
 function DashboardDetailSidebarItemPresentation({
-  component,
   date,
   icon,
   initiator,
   isActive,
   onClick,
-  title,
+  titleItem,
+  titleTask,
   variant,
 }) {
   const { theme } = useTheme()
@@ -43,10 +43,9 @@ function DashboardDetailSidebarItemPresentation({
   ItemStyle[EVEN] = row
   ItemStyle[ODD] = rowAlternate
 
-  const Tag = component
   return (
-    <Tag
-      className={`DashboardDetailSidebarItem  DashboardDetailSidebarItem--${component} ${
+    <li
+      className={`DashboardDetailSidebarItem  DashboardDetailSidebarItem--li ${
         icon ? 'DashboardDetailSidebarItem--hasIcon' : ''
       } ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
         onClick !== undefined ? 'DashboardDetailSidebarItem--hasOnClick' : ''
@@ -57,7 +56,10 @@ function DashboardDetailSidebarItemPresentation({
       {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
       <div className="DashboardDetailSidebarItem__main">
         <Typography variant="body1" component="h3">
-          {title}
+          {titleItem}
+        </Typography>
+        <Typography variant="body2" component="h4">
+          {titleTask}
         </Typography>
         <Typography variant="body2" component="div">
           Requested by {initiator}
@@ -66,26 +68,28 @@ function DashboardDetailSidebarItemPresentation({
           {date}
         </Typography>
       </div>
-    </Tag>
+    </li>
   )
 }
 // PROPTYPES
 const { func, node, oneOf, string, bool } = PropTypes
 DashboardDetailSidebarItemPresentation.propTypes = {
-  component: oneOf(['div', 'li']),
   date: string,
   icon: node,
   initiator: string,
   isActive: bool,
   onClick: func,
   title: string,
+  titleItem: string,
+  titleTask: string,
   variant: oneOf([EVEN, ODD]),
 }
 DashboardDetailSidebarItemPresentation.defaultProps = {
-  component: 'li',
   date: '',
   initiator: '',
   title: '',
+  titleItem: '',
+  titleTask: '',
 }
 
 export default DashboardDetailSidebarItemPresentation

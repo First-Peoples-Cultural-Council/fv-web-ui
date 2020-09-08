@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardDetailSidebarItem from 'components/DashboardDetail/DashboardDetailSidebarItem'
-import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
+import ItemIcon from 'components/ItemIcon'
 import '!style-loader!css-loader!./DashboardDetailSidebar.css'
 import { EVEN, ODD } from 'common/Constants'
 /**
@@ -23,20 +23,21 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
       {childrenHeader && <div className="DashboardDetailSidebar__headerContainer">{childrenHeader}</div>}
       <div className="DashboardDetailSidebar__listContainer">
         <ul className="DashboardDetailSidebar__list">
-          {listItems.map(({ id, itemType, isNew, title, initiator, date }, index) => {
+          {listItems.map(({ id, itemType, isNew, titleItem, titleTask, initiator, date }, index) => {
             const variant = index % 2 ? ODD : EVEN
             return (
               <DashboardDetailSidebarItem.Presentation
-                variant={variant}
-                isActive={selectedId === id}
                 key={`DashboardDetailSidebar__listItem--${index}`}
-                title={title}
-                initiator={initiator}
                 date={date}
-                icon={<DashboardDetailIcon.Presentation itemType={itemType} isNew={isNew} />}
+                icon={<ItemIcon.Presentation itemType={itemType} isNew={isNew} />}
+                initiator={initiator}
+                isActive={selectedId === id}
                 onClick={() => {
                   onClick(id)
                 }}
+                titleItem={titleItem}
+                titleTask={titleTask}
+                variant={variant}
               />
             )
           })}
