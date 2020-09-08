@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
+import useDashboard from 'DataSource/useDashboard'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 /**
@@ -22,7 +22,7 @@ function WidgetTasksData({ children, columnRender }) {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
-  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchTasksRemoteData, userId } = useDashboard()
 
   const onRowClick = (event, { id }) => {
     navigate(
@@ -43,7 +43,7 @@ function WidgetTasksData({ children, columnRender }) {
     setSortBy(_sortBy)
     setPage(pageIndex)
     setPageSize(_pageSize)
-    return fetchUserGroupTasksRemoteData({
+    return fetchTasksRemoteData({
       pageIndex,
       pageSize: _pageSize,
       sortBy: _sortBy,

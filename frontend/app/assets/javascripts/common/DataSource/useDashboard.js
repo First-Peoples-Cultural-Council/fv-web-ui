@@ -13,13 +13,13 @@ import useTasks from 'DataSource/useTasks'
 
 import StringHelpers from 'common/StringHelpers'
 /**
- * @summary useUserGroupTasks
+ * @summary useDashboard
  * @description Custom hook that returns user tasks
  * @version 1.0.1
  *
  * @component
  */
-function useUserGroupTasks() {
+function useDashboard() {
   // State Hooks
   const [userId, setUserId] = useState()
   const [tasks, setTasks] = useState([])
@@ -35,29 +35,6 @@ function useUserGroupTasks() {
   }, [_userId])
 
   const formatTasksData = (_tasks) => {
-    /*
-
-"entries":
-
-[{
-    "entity-type":"simple-task",
-    "uid":"3bc2a9f5-8a41-4667-aabb-d1ca9060fffe",
-    "targetDoc":{
-        "uid":"f0e2abeb-46d9-4559-b525-57067ccd420e",
-        "title":"Word",
-        "type":"FVWord",
-        "isNew":true
-    },
-    "dateCreated":"2020-09-04T20:53:02.289Z",
-    "requestedVisibility":"members",
-    "visibilityChanged":true,
-    "requestedBy":{
-        "firstName":"Dialect",
-        "lastName":"recorder_approval",
-        "email":"chad.oakenfold+1@gmail.com"
-    }
-}]
-*/
     const formatDate = (date) => StringHelpers.formatUTCDateString(date)
     const formatInitator = ({ firstName, lastName }) => `${firstName} ${lastName}`
 
@@ -90,9 +67,16 @@ function useUserGroupTasks() {
     })
   }
 
-  // Note: Material-Table has a `sort` bug when using the `remote data` feature
-  // see: https://github.com/mbrn/material-table/issues/2177
-  const fetchUserGroupTasksRemoteData = ({ pageIndex = 0, pageSize = 100, sortBy = 'date', sortOrder = 'desc' }) => {
+  const fetchTasksRemoteData = ({ pageIndex = 0, pageSize = 100, sortBy = 'date', sortOrder = 'desc' }) => {
+    /* TODO: how to sort by...
+      - Requested By? = entries[0].requestedBy.firstName + entries[0].requestedBy.lastName
+      - Entry title? = entries[0].targetDoc.title
+    */
+
+    // NOTE: The component consumes data that isn't a 1:1 match of the server's output
+    // It is meant to limit coupling between the server & FE and make working with the
+    // data easier in the FE. The following `friendlyNamePropertyNameLookup` converts
+    // component names back to the server names
     const friendlyNamePropertyNameLookup = {
       date: 'nt:dueDate',
       id: 'uid',
@@ -123,7 +107,7 @@ function useUserGroupTasks() {
   }
 
   return {
-    fetchUserGroupTasksRemoteData,
+    fetchTasksRemoteData,
     tasks,
     userId,
     count,
@@ -131,4 +115,4 @@ function useUserGroupTasks() {
   }
 }
 
-export default useUserGroupTasks
+export default useDashboard

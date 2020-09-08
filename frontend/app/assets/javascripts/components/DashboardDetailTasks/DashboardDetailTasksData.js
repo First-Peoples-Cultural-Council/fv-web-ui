@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
+import useDashboard from 'DataSource/useDashboard'
 import useDocument from 'DataSource/useDocument'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
@@ -34,7 +34,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     task: queryTask,
   } = getSearchObject()
 
-  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, tasks = [], userId, resetTasks } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchTasksRemoteData, tasks = [], userId, resetTasks } = useDashboard()
 
   // Escape key binding
   const onKeyPressed = (event) => {
@@ -50,7 +50,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }, [])
   const fetchTasksUsingQueries = () => {
     const _queryPage = Number(queryPage)
-    fetchUserGroupTasksRemoteData({
+    fetchTasksRemoteData({
       pageIndex: _queryPage === 0 ? _queryPage : _queryPage - 1,
       pageSize: queryPageSize,
       sortBy: querySortBy,
@@ -155,7 +155,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     )
 
     // Since we cleared out tasks, need to refetch data
-    fetchUserGroupTasksRemoteData({
+    fetchTasksRemoteData({
       pageIndex: 0,
       pageSize: queryPageSize,
       sortBy: querySortBy,
