@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import StringHelpers from 'common/StringHelpers'
+import selectn from 'selectn'
+
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
+import useDashboard from 'DataSource/useDashboard'
+import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
+import useTheme from 'DataSource/useTheme'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1
@@ -12,85 +15,99 @@ import useUserGroupTasks from 'DataSource/useUserGroupTasks'
  * @param {function} props.children Render prop technique
  *
  */
-function WidgetTasksData({ children }) {
+function WidgetTasksData({ children, columnRender }) {
+  const { theme } = useTheme()
   const [sortDirection, setSortDirection] = useState('desc')
+  const [sortBy, setSortBy] = useState('date')
+  const [page, setPage] = useState(0)
+  const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
-  const { fetchUserGroupTasks, userId, formatTasksData } = useUserGroupTasks(false)
+  const { count: tasksCount = 0, fetchTasksRemoteData, userId } = useDashboard()
 
   const onRowClick = (event, { id }) => {
-    navigate(`/dashboard/tasks?active=${id}`)
+    navigate(
+      `/dashboard/tasks?task=${id}&page=${page + 1}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortDirection}`
+    )
   }
 
   const onOrderChange = (/*columnId, orderDirection*/) => {
     setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
   }
 
-  const friendlyNamePropertyNameLookup = {
-    date: 'nt:dueDate',
-    id: 'uid',
-    initiator: 'nt:initiator',
-    title: 'nt:name',
-  }
-
-  // Note: Library has a sort bug when using remote data
+  // Note: Material-Table has a `sort` bug when using the `remote data` feature
   // see: https://github.com/mbrn/material-table/issues/2177
   const remoteData = (data) => {
-    const { orderBy = {}, orderDirection: sortOrder, page: currentPageIndex = 0, pageSize = 100 } = data
-    const { field: sortBy = 'date' } = orderBy
-    const requestParams = {
-      currentPageIndex,
-      pageSize,
-      sortBy: friendlyNamePropertyNameLookup[sortBy],
+    const { orderBy = {}, orderDirection: sortOrder, page: pageIndex, pageSize: _pageSize } = data
+
+    const { field: _sortBy = 'date' } = orderBy
+    setSortBy(_sortBy)
+    setPage(pageIndex)
+    setPageSize(_pageSize)
+    return fetchTasksRemoteData({
+      pageIndex,
+      pageSize: _pageSize,
+      sortBy: _sortBy,
       sortOrder,
-    }
-    return fetchUserGroupTasks(userId, requestParams).then(({ entries, resultsCount, pageIndex }) => {
-      return {
-        data: formatTasksData(entries),
-        page: pageIndex,
-        totalCount: resultsCount,
-      }
+      userId,
     })
   }
-  return children({
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
+  const childrenData = {
     columns: [
       {
         title: '',
-        field: 'icon',
-        render: () => {
-          return '[~]'
-        },
+        field: 'itemType',
+        render: columnRender.itemType,
         sorting: false,
+        cellStyle,
       },
       {
         title: 'Entry title',
-        field: 'title',
+        field: 'titleItem',
+        cellStyle,
+      },
+      {
+        title: 'Change requested',
+        field: 'titleTask',
+        cellStyle,
       },
       {
         title: 'Requested by',
         field: 'initiator',
+        cellStyle,
       },
       {
         title: 'Date submitted',
         field: 'date',
-        render: ({ date }) => StringHelpers.formatUTCDateString(new Date(date)),
+        cellStyle,
       },
     ],
+    // NOTE: when not logged in, show an empty data set
+    data: userId === 'Guest' ? [] : remoteData,
+    onOrderChange,
     onRowClick,
     options: {
       paging: true,
       pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
       sorting: true,
     },
-    // NOTE: when not logged in, show an empty data set
-    data: userId === 'Guest' ? [] : remoteData,
     sortDirection,
-    onOrderChange,
-  })
+  }
+  return (
+    <TableContextCount.Provider value={Number(tasksCount)}>
+      <TableContextSort.Provider value={sortDirection}>{children(childrenData)}</TableContextSort.Provider>
+    </TableContextCount.Provider>
+  )
 }
 // PROPTYPES
-const { func } = PropTypes
+const { func, object } = PropTypes
 WidgetTasksData.propTypes = {
   children: func,
+  columnRender: object,
 }
-
+WidgetTasksData.defaultProps = {
+  columnRender: {
+    itemType: () => '',
+  },
+}
 export default WidgetTasksData

@@ -1,13 +1,15 @@
 .RequestChanges {
-  padding: 10px 5%;
-}
-
-.RequestChanges__visibility {
-  padding: 10px;
+  padding: 30px 5%;
+  display: flex;
+  align-items: center;
 }
 
 .RequestChanges__actions {
   display: flex;
   justify-content: space-evenly;
   padding: 5px;
+}
+
+.RequestChanges .RequestChanges__actionButton {
+  margin-left: 25px;
 }

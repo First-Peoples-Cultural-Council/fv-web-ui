@@ -1,0 +1,15 @@
+.IconBook {
+  width: 36px;
+  height: 34px;
+}
+.IconBook__bg {
+  fill: #87aa13;
+}
+
+.IconBook__path {
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+}

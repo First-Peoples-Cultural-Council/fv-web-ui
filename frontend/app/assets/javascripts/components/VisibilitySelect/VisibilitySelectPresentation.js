@@ -8,7 +8,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
 // FPCC
-import { VisibilitySelectStyles } from './VisibilitySelectStyles'
+import '!style-loader!css-loader!./VisibilitySelect.css'
 
 /**
  * @summary VisibilitySelectPresentation
@@ -23,25 +23,23 @@ import { VisibilitySelectStyles } from './VisibilitySelectStyles'
  */
 
 function VisibilitySelectPresentation({
-  handleVisibilityChange,
+  classes,
   docVisibility,
+  handleVisibilityChange,
   hideLabel,
   publicDialect,
   selectNameAndId,
 }) {
-  const classes = VisibilitySelectStyles()
-
-  const label = hideLabel ? null : (
-    <div id="select-label" className={classes.selectLabel}>
-      Who can see this?
-    </div>
-  )
-
   return (
-    <div className={classes.selectBase}>
-      {label}
+    <div className={`VisibilitySelect ${classes.root}`}>
+      {!hideLabel && (
+        <div id="select-label" className="VisibilitySelect__label">
+          Who can see this?
+        </div>
+      )}
       <FormControl variant="outlined" size="small">
         <Select
+          className="VisibilitySelect__select"
           labelId="select-outlined-label"
           id={selectNameAndId}
           value={docVisibility}
@@ -49,17 +47,23 @@ function VisibilitySelectPresentation({
           inputProps={{ name: selectNameAndId }}
         >
           <MenuItem value={'team'}>
-            <VisibilityOffIcon className={classes.selectIcon} />
-            Language Team
+            <span className="VisibilitySelect__menuItemGroup">
+              <VisibilityOffIcon className="VisibilitySelect__icon" />
+              Language Team
+            </span>
           </MenuItem>
           <MenuItem value={'members'}>
-            <GroupIcon className={classes.selectIcon} />
-            Members
+            <span className="VisibilitySelect__menuItemGroup">
+              <GroupIcon className="VisibilitySelect__icon" />
+              Members
+            </span>
           </MenuItem>
           {publicDialect ? (
             <MenuItem value={'public'}>
-              <PublicIcon className={classes.selectIcon} />
-              Everyone
+              <span className="VisibilitySelect__menuItemGroup">
+                <PublicIcon className="VisibilitySelect__icon" />
+                Everyone
+              </span>
             </MenuItem>
           ) : null}
         </Select>
@@ -68,21 +72,25 @@ function VisibilitySelectPresentation({
   )
 }
 // PROPTYPES
-const { func, string, bool } = PropTypes
+const { func, string, object, bool } = PropTypes
 VisibilitySelectPresentation.propTypes = {
-  handleVisibilityChange: func,
+  classes: object,
   docVisibility: string,
+  handleVisibilityChange: func,
   hideLabel: bool,
   publicDialect: bool,
   selectNameAndId: string,
 }
 
 VisibilitySelectPresentation.defaultProps = {
-  handleVisibilityChange: () => {},
   docVisibility: '',
+  handleVisibilityChange: () => {},
   hideLabel: false,
   publicDialect: false,
   selectNameAndId: 'select',
+  classes: {
+    root: '',
+  },
 }
 
 export default VisibilitySelectPresentation

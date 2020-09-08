@@ -1,0 +1,11 @@
+.IconQuote {
+  width: 35px;
+  height: 35px;
+}
+.IconQuote__bg {
+  fill: #209de0;
+}
+
+.IconQuote__path {
+  fill: #fff;
+}

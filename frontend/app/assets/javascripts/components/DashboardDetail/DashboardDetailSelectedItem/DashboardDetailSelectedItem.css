@@ -1,19 +1,14 @@
 .DashboardDetailSelectedItem {
-  border-left: 1px solid black;
-  display: grid;
-  grid-template-areas:
-    'ItemOverview'
-    'TaskActions';
-  grid-template-rows: 66vh auto;
+  display: flex;
+  flex-direction: column;
   position: relative;
+  height: 100%;
 }
 
 .DashboardDetailSelectedItem__TaskSummary {
-  grid-area: TaskSummary;
   padding: 10px;
 }
 .DashboardDetailSelectedItem__ActivityStream {
-  grid-area: ActivityStream;
   padding: 10px;
 }
 .DashboardDetailSelectedItem__Notes {
@@ -21,18 +16,15 @@
   padding: 10px;
 }
 .DashboardDetailSelectedItem__ItemDetail {
-  grid-area: ItemDetail;
   padding: 10px;
 }
 .DashboardDetailSelectedItem__TaskActions {
-  border: 1px solid black;
-  border-left: none;
-  grid-area: TaskActions;
-  padding: 10px;
+  background-color: rgb(239, 239, 239);
+  border: 1px solid #e5e5e5;
 }
 
 .DashboardDetailSelectedItem__ItemOverview {
-  grid-area: ItemOverview;
+  flex-grow: 2;
   overflow: auto;
 }
 .DashboardDetailSelectedItem__Actions {
