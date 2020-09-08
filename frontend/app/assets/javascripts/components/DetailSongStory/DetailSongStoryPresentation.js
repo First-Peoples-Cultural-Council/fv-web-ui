@@ -1,23 +1,14 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import selectn from 'selectn'
-
 import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
-import NavigationHelpers from 'common/NavigationHelpers'
-import useWindowPath from 'DataSource/useWindowPath'
-import useRoute from 'DataSource/useRoute'
-import useIntl from 'DataSource/useIntl'
-import {SongStoryCoverStyles} from "../SongStoryCover/SongStoryCoverStyles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import ActionLaunch from "@material-ui/icons/Launch";
-import DOMPurify from "dompurify";
-import SongStoryCover from 'components/SongStoryCover'
-import SongStoryPages from 'components/SongStoryPages'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import {SongStoryCoverStyles} from '../SongStoryCover/SongStoryCoverStyles'
+import '!style-loader!css-loader!./DetailSongStory.css'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import ActionLaunch from '@material-ui/icons/Launch'
+import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
 import FVButton from 'views/components/FVButton'
 import FVTab from 'views/components/FVTab'
@@ -34,7 +25,6 @@ import FVTab from 'views/components/FVTab'
 function DetailSongStoryPresentation({
   book,
   openBookAction,
-  pageCount,
   // Media
   audio,
   pictures,
@@ -51,7 +41,7 @@ function DetailSongStoryPresentation({
 
   const mediaPanels =
       videos.length > 0 || pictures.length > 0 ? (
-          <Grid key={'media-' + book.uid} item xs={5}>
+          <Grid key={'media-' + book.uid} item xs={2}>
             <div className={classes.media}>
               <MediaPanels.Presentation pictures={pictures} videos={videos}/>
             </div>
@@ -66,41 +56,42 @@ function DetailSongStoryPresentation({
             {mediaPanels}
             <Grid key={'text-' + book.uid} item xs={5}>
               <header className={classes.header}>
-                <Typography variant="h3" component="h2">
-                  <div>{book.title}</div>
-                </Typography>
-                <Typography variant="h4" component="h3">
-                  <div>{book.titleTranslation}</div>
-                </Typography>
-                <div className="subheader">
-                  {book.authors.map(function renderAuthors(author, i) {
-                    return (
-                        <span className="label label-default" key={i}>
-                      {author}
-                    </span>
-                    )
-                  })}
+                <div className="DetailSongStory__heading">
+                  <Typography variant="h4" component="h3">
+                    <div>{book.title}</div>
+                  </Typography>
+                  <Typography variant="h5" component="h4">
+                    <div>{book.titleTranslation}</div>
+                  </Typography>
+                  <div className="subheader">
+                    {book.authors.map(function renderAuthors(author, i) {
+                      return (
+                          <span className="label label-default" key={i}>
+                        {author}
+                      </span>
+                      )
+                    })}
+                  </div>
                 </div>
+
+                <div
+                    className="DetailSongStory__audioPlayer">{audioElements}</div>
               </header>
               <div className={classes.introduction}>
                 {_getIntroduction(book.introduction,
                     book.introductionTranslation)}
-                <div>{audioElements}</div>
+
               </div>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <div className="text-right">
-            {openBookAction && pageCount > 0 ? (
-                <FVButton variant="contained" style={{marginRight: '10px'}}
-                          color="primary" onClick={openBookAction}>
-                  <ActionLaunch/>
-                  {'Open Book'}
-                </FVButton>
-            ) : (
-                ''
-            )}
+            <FVButton variant="contained" style={{marginRight: '10px'}}
+                      color="primary" onClick={openBookAction}>
+              <ActionLaunch/>
+              {'View full '} {book.type}
+            </FVButton>
           </div>
         </Grid>
       </Paper>
@@ -113,7 +104,7 @@ function _getIntroduction(introduction, introductionTranslation) {
   const introductionDiv = (
       <div className={classes.introductionContent}>
         <div dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(introduction.content)
+          __html: DOMPurify.sanitize(introduction.content),
         }}/>
       </div>
   )
@@ -154,7 +145,7 @@ function _getIntroduction(introduction, introductionTranslation) {
             <Typography variant="h5" component="div" style={{padding: 8 * 3}}>
               <div className={classes.introductionContent}>
                 <div dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(introductionTranslation.content)
+                  __html: DOMPurify.sanitize(introductionTranslation.content),
                 }}/>
               </div>
             </Typography>
