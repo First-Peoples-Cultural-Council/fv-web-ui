@@ -164,17 +164,14 @@ export default {
     boxShadow: 'none',
     backgroundColor: 'transparent',
     tableHeader: {
+      backgroundColor: '#c4d5d3',
       borderBottom: 'none',
       fontWeight: 900,
       fontSize: '1.7rem',
       color: '#5f5d5d',
-      backgroundColor: '#c4d5d3',
-      width: '1px',
-      whiteSpace: 'nowrap',
     },
     cellStyle: {
       border: 'none',
-      width: '1px',
     },
     row: {
       backgroundColor: '#fff',

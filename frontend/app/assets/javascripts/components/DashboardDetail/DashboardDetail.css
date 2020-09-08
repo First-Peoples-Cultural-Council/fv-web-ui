@@ -11,9 +11,9 @@
 }
 
 .DashboardDetail__header {
-  /* border-bottom: 1px solid black; */
   grid-area: DashboardDetail__header;
-  padding: 20px;
+  display: flex;
+  padding: 10px 0;
 }
 
 .DashboardDetail__sidebar {
@@ -46,11 +46,6 @@
 .DashboardDetail__selectedItemCloseIcon {
   position: relative;
   left: 2px;
-}
-
-.DashboardDetail__header {
-  display: flex;
-  padding: 10px 0;
 }
 
 .DashboardDetail__headerButton {

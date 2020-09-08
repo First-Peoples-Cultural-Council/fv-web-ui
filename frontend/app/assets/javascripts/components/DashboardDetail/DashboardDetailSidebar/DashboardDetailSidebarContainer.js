@@ -4,7 +4,7 @@ import DashboardDetailSidebarPresentation from 'components/DashboardDetail/Dashb
 import TablePagination from 'components/Table/TablePagination'
 
 import Typography from '@material-ui/core/Typography'
-import { WORD, PHRASE, SONG, STORY, TABLEPAGINATION_DIV } from 'common/Constants'
+import { TABLEPAGINATION_DIV } from 'common/Constants'
 
 /**
  * @summary DashboardDetailSidebarContainer
@@ -48,42 +48,7 @@ DashboardDetailSidebarContainer.propTypes = {
   count: number,
 }
 DashboardDetailSidebarContainer.defaultProps = {
-  listItems: [
-    {
-      title: 'Unknown Title',
-      initiator: 'John Doe',
-      date: '09/09/2020',
-      isNew: true,
-    },
-    {
-      title: 'Word Title',
-      initiator: 'John Doe',
-      date: '09/09/2020',
-      itemType: WORD,
-      isNew: true,
-    },
-    {
-      title: 'Phrase Title',
-      initiator: 'John Doe',
-      date: '09/09/2020',
-      itemType: PHRASE,
-      isNew: true,
-    },
-    {
-      title: 'Song Title',
-      initiator: 'John Doe',
-      date: '09/09/2020',
-      itemType: SONG,
-      isNew: true,
-    },
-    {
-      title: 'Story Title',
-      initiator: 'John Doe',
-      date: '09/09/2020',
-      itemType: STORY,
-      isNew: true,
-    },
-  ],
+  listItems: [],
 }
 
 export default DashboardDetailSidebarContainer

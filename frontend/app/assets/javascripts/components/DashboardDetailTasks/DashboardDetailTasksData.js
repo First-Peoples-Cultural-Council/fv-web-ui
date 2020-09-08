@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
+import useDashboard from 'DataSource/useDashboard'
 import useDocument from 'DataSource/useDocument'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import StringHelpers from 'common/StringHelpers'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
+import useTheme from 'DataSource/useTheme'
 /**
  * @summary DashboardDetailTasksData
  * @version 1.0.1
@@ -18,7 +19,8 @@ import { TableContextSort, TableContextCount } from 'components/Table/TableConte
  * @param {function} props.children
  *
  */
-function DashboardDetailTasksData({ children }) {
+function DashboardDetailTasksData({ children, columnRender }) {
+  const { theme } = useTheme()
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
@@ -32,7 +34,7 @@ function DashboardDetailTasksData({ children }) {
     task: queryTask,
   } = getSearchObject()
 
-  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, tasks = [], userId, resetTasks } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchTasksRemoteData, tasks = [], userId, resetTasks } = useDashboard()
 
   // Escape key binding
   const onKeyPressed = (event) => {
@@ -48,7 +50,7 @@ function DashboardDetailTasksData({ children }) {
   }, [])
   const fetchTasksUsingQueries = () => {
     const _queryPage = Number(queryPage)
-    fetchUserGroupTasksRemoteData({
+    fetchTasksRemoteData({
       pageIndex: _queryPage === 0 ? _queryPage : _queryPage - 1,
       pageSize: queryPageSize,
       sortBy: querySortBy,
@@ -153,7 +155,7 @@ function DashboardDetailTasksData({ children }) {
     )
 
     // Since we cleared out tasks, need to refetch data
-    fetchUserGroupTasksRemoteData({
+    fetchTasksRemoteData({
       pageIndex: 0,
       pageSize: queryPageSize,
       sortBy: querySortBy,
@@ -219,70 +221,82 @@ function DashboardDetailTasksData({ children }) {
     fetchTasksUsingQueries()
     // TODO: May need to do something with any opened detail panel
   }
-
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
+  const childrenData = {
+    columns: [
+      {
+        title: '',
+        field: 'itemType',
+        render: columnRender.itemType,
+        sorting: false,
+        cellStyle,
+      },
+      {
+        title: 'Entry title',
+        field: 'titleItem',
+        cellStyle,
+      },
+      {
+        title: 'Change requested',
+        field: 'titleTask',
+        cellStyle,
+      },
+      {
+        title: 'Requested by',
+        field: 'initiator',
+        cellStyle,
+      },
+      {
+        title: 'Date submitted',
+        field: 'date',
+        cellStyle,
+      },
+    ],
+    // data: userId === 'Guest' ? [] : remoteData,
+    data: tasks,
+    idSelectedItem: queryItem,
+    idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
+    listItems: tasks,
+    refreshData,
+    onClose,
+    onOpen,
+    onOpenNoId,
+    onOrderChange,
+    onRowClick,
+    options: {
+      pageSize: Number(queryPageSize),
+      pageSizeOptions: [5, 10, 20],
+      paging: true,
+      sorting: true,
+      emptyRowsWhenPaging: false,
+    },
+    pagination: {
+      count: Number(tasksCount),
+      page: Number(queryPage),
+      pageSize: Number(queryPageSize),
+      sortBy: querySortBy,
+      sortOrder: querySortOrder,
+    },
+    selectedItemData,
+    selectedTaskData,
+    sortDirection: querySortOrder,
+  }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
-      <TableContextSort.Provider value={querySortOrder}>
-        {children({
-          columns: [
-            {
-              title: '',
-              field: 'icon',
-              render: () => {
-                return '[~]'
-              },
-              sorting: false,
-            },
-            {
-              title: 'Entry title',
-              field: 'title',
-            },
-            {
-              title: 'Requested by',
-              field: 'initiator',
-            },
-            {
-              title: 'Date submitted',
-              field: 'date',
-            },
-          ],
-          // data: userId === 'Guest' ? [] : remoteData,
-          data: tasks,
-          idSelectedItem: queryItem,
-          idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
-          listItems: tasks,
-          refreshData,
-          onClose,
-          onOpen,
-          onOpenNoId,
-          onOrderChange,
-          onRowClick,
-          options: {
-            pageSize: Number(queryPageSize),
-            pageSizeOptions: [5, 10, 20],
-            paging: true,
-            sorting: true,
-            emptyRowsWhenPaging: false,
-          },
-          pagination: {
-            count: Number(tasksCount),
-            page: Number(queryPage),
-            pageSize: Number(queryPageSize),
-            sortBy: querySortBy,
-            sortOrder: querySortOrder,
-          },
-          selectedItemData,
-          selectedTaskData,
-          sortDirection: querySortOrder,
-        })}
-      </TableContextSort.Provider>
+      <TableContextSort.Provider value={querySortOrder}>{children(childrenData)}</TableContextSort.Provider>
     </TableContextCount.Provider>
   )
 }
 // PROPTYPES
-const { func } = PropTypes
+const { func, object } = PropTypes
 DashboardDetailTasksData.propTypes = {
   children: func,
+  columnRender: object,
+}
+DashboardDetailTasksData.defaultProps = {
+  columnRender: {
+    itemType: () => '',
+  },
 }
 
 export default DashboardDetailTasksData

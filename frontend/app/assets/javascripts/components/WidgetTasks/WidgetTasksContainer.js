@@ -1,6 +1,7 @@
 import React from 'react'
 import WidgetTasksPresentation from 'components/WidgetTasks/WidgetTasksPresentation'
 import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
+import ItemIcon from 'components/ItemIcon'
 
 /**
  * @summary WidgetTasksContainer
@@ -13,7 +14,11 @@ import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
  */
 function WidgetTasksContainer() {
   return (
-    <WidgetTasksData>
+    <WidgetTasksData
+      columnRender={{
+        itemType: ItemIcon.Presentation,
+      }}
+    >
       {({
         columns,
         data,

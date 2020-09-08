@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useUserGroupTasks from 'DataSource/useUserGroupTasks'
+import useDashboard from 'DataSource/useDashboard'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 /**
@@ -15,14 +15,14 @@ import useTheme from 'DataSource/useTheme'
  * @param {function} props.children Render prop technique
  *
  */
-function WidgetTasksData({ children }) {
+function WidgetTasksData({ children, columnRender }) {
   const { theme } = useTheme()
   const [sortDirection, setSortDirection] = useState('desc')
   const [sortBy, setSortBy] = useState('date')
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const { navigate } = useNavigationHelpers()
-  const { count: tasksCount = 0, fetchUserGroupTasksRemoteData, userId } = useUserGroupTasks()
+  const { count: tasksCount = 0, fetchTasksRemoteData, userId } = useDashboard()
 
   const onRowClick = (event, { id }) => {
     navigate(
@@ -43,7 +43,7 @@ function WidgetTasksData({ children }) {
     setSortBy(_sortBy)
     setPage(pageIndex)
     setPageSize(_pageSize)
-    return fetchUserGroupTasksRemoteData({
+    return fetchTasksRemoteData({
       pageIndex,
       pageSize: _pageSize,
       sortBy: _sortBy,
@@ -52,55 +52,62 @@ function WidgetTasksData({ children }) {
     })
   }
   const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
+  const childrenData = {
+    columns: [
+      {
+        title: '',
+        field: 'itemType',
+        render: columnRender.itemType,
+        sorting: false,
+        cellStyle,
+      },
+      {
+        title: 'Entry title',
+        field: 'titleItem',
+        cellStyle,
+      },
+      {
+        title: 'Change requested',
+        field: 'titleTask',
+        cellStyle,
+      },
+      {
+        title: 'Requested by',
+        field: 'initiator',
+        cellStyle,
+      },
+      {
+        title: 'Date submitted',
+        field: 'date',
+        cellStyle,
+      },
+    ],
+    // NOTE: when not logged in, show an empty data set
+    data: userId === 'Guest' ? [] : remoteData,
+    onOrderChange,
+    onRowClick,
+    options: {
+      paging: true,
+      pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
+      sorting: true,
+    },
+    sortDirection,
+  }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
-      <TableContextSort.Provider value={sortDirection}>
-        {children({
-          columns: [
-            {
-              title: '',
-              field: 'icon',
-              render: () => {
-                return '[~]'
-              },
-              sorting: false,
-              cellStyle,
-            },
-            {
-              title: 'Entry title',
-              field: 'title',
-              cellStyle,
-            },
-            {
-              title: 'Requested by',
-              field: 'initiator',
-              cellStyle,
-            },
-            {
-              title: 'Date submitted',
-              field: 'date',
-              cellStyle,
-            },
-          ],
-          // NOTE: when not logged in, show an empty data set
-          data: userId === 'Guest' ? [] : remoteData,
-          onOrderChange,
-          onRowClick,
-          options: {
-            paging: true,
-            pageSizeOptions: [5], // NOTE: with only one option the Per Page Select is hidden
-            sorting: true,
-          },
-          sortDirection,
-        })}
-      </TableContextSort.Provider>
+      <TableContextSort.Provider value={sortDirection}>{children(childrenData)}</TableContextSort.Provider>
     </TableContextCount.Provider>
   )
 }
 // PROPTYPES
-const { func } = PropTypes
+const { func, object } = PropTypes
 WidgetTasksData.propTypes = {
   children: func,
+  columnRender: object,
 }
-
+WidgetTasksData.defaultProps = {
+  columnRender: {
+    itemType: () => '',
+  },
+}
 export default WidgetTasksData
