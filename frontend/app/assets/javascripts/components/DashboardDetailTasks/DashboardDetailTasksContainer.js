@@ -47,7 +47,7 @@ function DashboardDetailTasksContainer() {
       }) => {
         const { page, pageSize, count } = pagination
         const {
-          title: taskTitle,
+          titleTask: taskTitle,
           initiator: taskInitiator,
           date: taskDate,
           itemType: taskItemType,
