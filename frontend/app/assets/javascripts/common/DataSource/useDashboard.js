@@ -27,7 +27,7 @@ function useDashboard() {
 
   // Custom Hooks
   const { computeLogin } = useLogin()
-  const { /*computeUserGroupTasks, */ getSimpleTasks } = useTasks()
+  const { getSimpleTasks, getSimpleTask } = useTasks()
 
   const _userId = selectn('response.id', computeLogin)
   useEffect(() => {
@@ -67,6 +67,10 @@ function useDashboard() {
     })
   }
 
+  const formatTaskData = (taskData) => {
+    return formatTasksData([taskData])
+  }
+
   const fetchTasksRemoteData = ({ pageIndex = 0, pageSize = 100, sortBy = 'date', sortOrder = 'desc' }) => {
     /* TODO: how to sort by...
       - Requested By? = entries[0].requestedBy.firstName + entries[0].requestedBy.lastName
@@ -102,12 +106,23 @@ function useDashboard() {
     })
   }
 
+  const fetchTask = (taskId) => {
+    return getSimpleTask(taskId)
+      .then((data) => {
+        return formatTaskData(data)
+      })
+      .then((tasksArray) => {
+        return tasksArray.length ? tasksArray[0] : {}
+      })
+  }
+
   const resetTasks = () => {
     setTasks([])
   }
 
   return {
     fetchTasksRemoteData,
+    fetchTask,
     tasks,
     userId,
     count,
