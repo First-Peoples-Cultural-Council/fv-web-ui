@@ -30,6 +30,29 @@ public class AWSAwareUserManager extends UserManagerImpl {
   private Set<String> ignoreUsers = new HashSet<>();
 
 
+  public AWSAwareUserManager() {
+    this.awsAuthenticationEnabled =
+        getAWSAwareUserManagerConfigurationService().getConfig().authenticateWithCognito;
+
+    String rawIgnoreList = getAWSAwareUserManagerConfigurationService().getConfig().ignoreUsers;
+    if (rawIgnoreList != null) {
+      ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
+    }
+
+    LOG.info(
+        "Startup. AWS Authentication is " + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
+            + "\nignoring users: " + String.join(", ", ignoreUsers));
+
+    if (this.awsAuthenticationEnabled) {
+      try {
+        getAWSAuthenticationService().testConnection();
+        this.awsConnectionSucceeded = true;
+      } catch (MiscellaneousFailureException e) {
+        LOG.error("AWS Connection failed. Authentication will fallback to local for this session");
+      }
+    }
+  }
+
   private AWSAuthenticationService getAWSAuthenticationService() {
     if (this.aws != null) {
       return this.aws;
@@ -46,40 +69,14 @@ public class AWSAwareUserManager extends UserManagerImpl {
     return Framework.getService(AWSAwareUserManagerConfigurationService.class);
   }
 
-  public AWSAwareUserManager() {
-    this.awsAuthenticationEnabled = getAWSAwareUserManagerConfigurationService()
-        .getConfig().authenticateWithCognito;
-
-    String rawIgnoreList = getAWSAwareUserManagerConfigurationService()
-        .getConfig()
-        .ignoreUsers;
-    if (rawIgnoreList != null) {
-      ignoreUsers.addAll(Arrays.asList(rawIgnoreList.split("\\s*,\\s*")));
-    }
-
-    LOG.info("Startup. AWS Authentication is "
-        + (this.awsAuthenticationEnabled ? "enabled" : "disabled")
-        + "\nignoring users: " + String.join(", ", ignoreUsers)
-    );
-
-    if (this.awsAuthenticationEnabled) {
-      try {
-        getAWSAuthenticationService().testConnection();
-        this.awsConnectionSucceeded = true;
-      } catch (MiscellaneousFailureException e) {
-        LOG.error("AWS Connection failed. Authentication will fallback to local for this session");
-      }
-    }
-  }
-
-  @Override
-  /** If the config option `authenticateWithCognito` is false, this simply delegates to the
+  /* If the config option `authenticateWithCognito` is false, this simply delegates to the
    * default functionality (local auth)
    *
    * Otherwise, attempt to authenticate with Cognito. If the user exists (or was migrated),
    * also check that it exists locally (since this code does not yet provide a method to retrieve
    * a NuxeoPrincipal from Cognito directory data)
    */
+  @Override
   public boolean checkUsernamePassword(String username, String password) {
 
     if (!this.awsAuthenticationEnabled) {
@@ -119,11 +116,9 @@ public class AWSAwareUserManager extends UserManagerImpl {
               throw new InvalidMigrationException("Current principal was null for " + username);
             }
 
-            getAWSAuthenticationService().migrateUser(
-                username,
+            getAWSAuthenticationService().migrateUser(username,
                 password,
-                currentPrincipal.getEmail()
-            );
+                currentPrincipal.getEmail());
           } catch (InvalidMigrationException e) {
             LOG.error("[AWS Cognito] Migration failed", e);
 

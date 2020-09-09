@@ -13,8 +13,7 @@ public class AWSAuthenticationServiceFactory extends DefaultComponent {
   private AWSAuthenticationServiceConfigurationDescriptor config;
   private AWSAuthenticationService authenticationService;
 
-  @Override
-  public <T> T getAdapter(Class<T> adapter) {
+  @Override public <T> T getAdapter(Class<T> adapter) {
 
     if (AWSAuthenticationService.class.isAssignableFrom(adapter)) {
       if (this.authenticationService == null) {
@@ -33,13 +32,11 @@ public class AWSAuthenticationServiceFactory extends DefaultComponent {
 
       this.config = (AWSAuthenticationServiceConfigurationDescriptor) contribution;
 
-      this.authenticationService = new AWSAuthenticationServiceImpl(
-          this.config.accessKey,
+      this.authenticationService = new AWSAuthenticationServiceImpl(this.config.accessKey,
           this.config.secretKey,
           this.config.userPool,
           this.config.region,
-          this.config.clientID
-      );
+          this.config.clientID);
       try {
         this.authenticationService.testConnection();
       } catch (MiscellaneousFailureException e) {

@@ -36,7 +36,7 @@ function useDashboard() {
 
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatUTCDateString(date)
-    const formatInitator = ({ firstName, lastName }) => `${firstName} ${lastName}`
+    const formatInitator = ({ firstName, lastName }) => `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
 
     const formatTitleTask = (requestedVisibility) => `Requests visibility set to "${requestedVisibility}"`
     const formatTitleItem = (title = '-') => title

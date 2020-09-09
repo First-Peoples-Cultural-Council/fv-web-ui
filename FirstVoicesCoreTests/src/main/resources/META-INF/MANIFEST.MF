@@ -9,4 +9,5 @@ Bundle-ManifestVersion: 2
 Export-Package: FirstVoicesCoreTests
 Bundle-Vendor: Nuxeo
 Nuxeo-Component: OSGI-INF/mocks/mocks-services.xml,
+ OSGI-INF/mocks/mocks-user-service.xml,
  OSGI-INF/mocks/mocks-operations.xml

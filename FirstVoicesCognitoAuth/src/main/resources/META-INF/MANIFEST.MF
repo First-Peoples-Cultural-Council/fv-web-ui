@@ -10,4 +10,9 @@ Bundle-Vendor: Nuxeo
 Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.cognito.xml,
     OSGI-INF/extensions/ca.firstvoices.cognito.service.xml,
     OSGI-INF/extensions/ca.firstvoices.cognito.usermanager.xml
+    OSGI-INF/extensions/ca.firstvoices.auth.cognito.xml,
+    OSGI-INF/auth-contrib.xml,
+    OSGI-INF/openid-connect-provider-registry.xml,
+    OSGI-INF/schema-contrib.xml,
+    OSGI-INF/directory-contrib.xml
 

@@ -34,8 +34,7 @@ public interface AWSAuthenticationService {
    *                                       script threw an Exception (possible when attempting to
    *                                       migrate a user that does not exist in Nuxeo)
    **/
-  boolean authenticate(String username, String password)
-      throws MiscellaneousFailureException;
+  boolean authenticate(String username, String password) throws MiscellaneousFailureException;
 
   /**
    * Create a user with this username and password in the Cognito database
@@ -43,7 +42,6 @@ public interface AWSAuthenticationService {
    * @param username
    * @param password
    * @param email
-   *
    */
   void migrateUser(String username, String password, String email)
       throws MiscellaneousFailureException, InvalidMigrationException;
