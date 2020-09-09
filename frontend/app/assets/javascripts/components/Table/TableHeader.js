@@ -98,7 +98,8 @@ export class MTableHeader extends React.Component {
               ...this.props.headerStyle,
               ...columnDef.headerStyle,
               boxSizing: 'border-box',
-              width: columnDef.tableData.width,
+              // From original:
+              // width: columnDef.tableData.width,
             }}
             size={size}
           >
