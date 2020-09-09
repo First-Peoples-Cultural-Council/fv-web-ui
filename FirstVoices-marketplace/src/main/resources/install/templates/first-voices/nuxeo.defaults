@@ -21,3 +21,8 @@ fv.cognito.ignoreUsers=FPCCAdmin, Administrator, system
 fv.simplifiedapi.jwksUrl=JWKS_URL_PLACEHOLDER
 fv.simplifiedapi.disabledEndpoints=search,authorization
 
+nuxeo.openid.cognito.domain=
+nuxeo.openid.cognito.id=
+nuxeo.openid.cognito.secret=
+
+

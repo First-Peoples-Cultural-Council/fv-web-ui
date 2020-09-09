@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.auth.cognito.config">
+    <#if "${nuxeo.openid.cognito.domain}" != "replace_me_with_cognito_domain">
+
+        <require>ca.firstvoices.auth.cognito</require>
+
+        <extension point="providers" target="org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry">
+            <provider>
+                <name>CognitoOpenIDConnect</name>
+                <label>Cognito</label>
+                <description>Login using Cognito</description>
+                <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.CognitoUserInfo</userInfoClass>
+                <userResolverClass>org.nuxeo.ecm.platform.oauth2.openid.auth.UserThenEmailBasedUserResolver</userResolverClass>
+                <scope>openid profile email</scope>
+                <icon>/icons/openid.png</icon>
+                <authenticationMethod>bearer</authenticationMethod> <!-- could be "bearer", default is "url" -->
+                <userMapper>cognito_mapper</userMapper>
+
+                <clientId>${nuxeo.openid.cognito.id}</clientId>
+                <clientSecret>${nuxeo.openid.cognito.secret}</clientSecret>
+                <authorizationServerURL>${nuxeo.openid.cognito.domain}/oauth2/authorize</authorizationServerURL>
+                <userInfoURL>${nuxeo.openid.cognito.domain}/oauth2/userInfo</userInfoURL>
+                <tokenServerURL>${nuxeo.openid.cognito.domain}/oauth2/token</tokenServerURL>
+            </provider>
+        </extension>
+    </#if>
+
+</component>

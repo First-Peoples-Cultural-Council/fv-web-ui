@@ -13,8 +13,7 @@ public class AWSAwareUserManagerFactory extends DefaultComponent {
   private AWSAwareUserManagerConfigurationDescriptor config;
   private AWSAwareUserManagerConfigurationService service;
 
-  @Override
-  public <T> T getAdapter(Class<T> adapter) {
+  @Override public <T> T getAdapter(Class<T> adapter) {
 
     if (AWSAwareUserManagerConfigurationService.class.isAssignableFrom(adapter)) {
       if (this.service == null) {
