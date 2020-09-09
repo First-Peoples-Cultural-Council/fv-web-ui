@@ -28,13 +28,10 @@
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
-    <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesREST</module>
     <module>FirstVoicesRESTPageProviders</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
-    <module>FirstVoicesCognitoAuth</module>
-    <module>FirstVoicesSimplifiedAPI</module>
     <module>FirstVoicesMaintenance</module>
     <module>FirstVoicesCoreTests</module>
     <module>migration-contributions</module>
@@ -44,11 +41,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCognitoAuth</artifactId>
-        <version>${project.version}</version>
-      </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesPublisher</artifactId>
@@ -67,11 +59,6 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesSecurity</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesHealthMonitor</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -139,11 +126,6 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesSimplifiedAPI</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
         <artifactId>FirstVoicesOperations</artifactId>
         <groupId>ca.firstvoices</groupId>
         <version>${project.version}</version>
@@ -158,28 +140,10 @@
         <artifactId>FirstVoicesRESTPageProviders</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-cognitoidp</artifactId>
-        <version>${aws.sdk.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-core</artifactId>
-        <version>${aws.sdk.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>com.allogy.maven.wagon</groupId>
-        <artifactId>maven-s3-wagon</artifactId>
-        <version>1.1.0</version>
-      </extension>
-    </extensions>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -230,15 +194,50 @@
   </repositories>
 
   <profiles>
+
     <profile>
-      <id>release</id>
-      <distributionManagement>
-        <repository>
-          <id>external-releases</id>
-          <name>External Releases</name>
-          <url>${external.releases.url}</url>
-        </repository>
-      </distributionManagement>
+      <id>full</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <modules>
+        <module>FirstVoicesHealthMonitor</module>
+        <module>FirstVoicesCognitoAuth</module>
+        <module>FirstVoicesSimplifiedAPI</module>
+      </modules>
+
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesCognitoAuth</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesHealthMonitor</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesSimplifiedAPI</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-cognitoidp</artifactId>
+            <version>${aws.sdk.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws.sdk.version}</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+
     </profile>
     <profile>
       <id>sonar</id>
@@ -264,5 +263,6 @@
         </plugins>
       </build>
     </profile>
+
   </profiles>
 </project>
