@@ -17,6 +17,13 @@
     <operation class="ca.firstvoices.tests.mocks.operations.RemoveDialects"/>
   </extension>
 
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.tests.mocks.operations.GenerateUsers"/>
+  </extension>
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.tests.mocks.operations.RemoveUsers"/>
+  </extension>
 
   <!-- Block Operation from being visible to non super admins -->
   <extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
@@ -30,6 +37,12 @@
       <administrator>true</administrator>
     </binding>
     <binding name="Mocks.RemoveDialects">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Mocks.GenerateUsers">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Mocks.RemoveUsers">
       <administrator>true</administrator>
     </binding>
   </extension>

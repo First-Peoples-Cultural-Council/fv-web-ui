@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import Widget from 'components/Widget'
 import Table from 'components/Table'
 import Link from 'views/components/Link'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
 
+import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE, URL_QUERY_PLACEHOLDER } from 'common/Constants'
 /**
  * @summary WidgetTasksPresentation
  * @version 1.0.1
@@ -21,6 +21,7 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  *
  * @returns {node} jsx markup
  */
+
 function WidgetTasksPresentation({
   columns,
   data,
@@ -35,8 +36,15 @@ function WidgetTasksPresentation({
   return (
     <Widget.Presentation
       title="List of Tasks"
-      variant={CONTENT_FULL_WIDTH}
-      childrenHeader={data.length !== 0 && <Link href={'/dashboard/tasks?active=first'}>See all tasks</Link>}
+      variant={TABLE_FULL_WIDTH}
+      childrenHeader={
+        <Link
+          className="Widget__headerLink"
+          href={`/dashboard/tasks?task=${URL_QUERY_PLACEHOLDER}&page=1&pageSize=10&sortBy=date&sortOrder=desc`}
+        >
+          View full list
+        </Link>
+      }
     >
       <Table.Presentation
         columns={columns}
@@ -50,8 +58,8 @@ function WidgetTasksPresentation({
         onOrderChange={onOrderChange}
         onRowClick={onRowClick}
         options={options}
-        variant={CONTENT_FULL_WIDTH}
         sortDirection={sortDirection}
+        variant={WIDGET_WORKSPACE}
       />
     </Widget.Presentation>
   )

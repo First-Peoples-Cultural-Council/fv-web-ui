@@ -27,8 +27,7 @@ import { Tooltip } from '@material-ui/core'
 // import { Draggable } from 'react-beautiful-dnd'
 // import * as CommonValues from '../utils/common-values'
 
-import TableContextSort from './TableContextSort'
-
+import { TableContextSort } from 'components/Table/TableContext'
 export class MTableHeader extends React.Component {
   renderHeader(sortDirection) {
     const size = this.props.options.padding === 'default' ? 'medium' : 'small'

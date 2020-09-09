@@ -14,9 +14,15 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState }) {
+function RequestChangesContainer({ docId, docState, docDialectPath, refreshData, taskId }) {
   return (
-    <RequestChangesData docId={docId} docState={docState}>
+    <RequestChangesData
+      docDialectPath={docDialectPath}
+      docId={docId}
+      docState={docState}
+      refreshData={refreshData}
+      taskId={taskId}
+    >
       {({
         computeEntities,
         disableApproveButton,
@@ -28,6 +34,7 @@ function RequestChangesContainer({ docId, docState }) {
         handleRequestChanges,
         handleSnackbarClose,
         handleVisibilityChange,
+        isPublicDialect,
         onSubmit,
         snackbarMessage,
         snackbarStatus,
@@ -45,6 +52,7 @@ function RequestChangesContainer({ docId, docState }) {
             handleRequestChanges={handleRequestChanges}
             handleSnackbarClose={handleSnackbarClose}
             handleVisibilityChange={handleVisibilityChange}
+            isPublicDialect={isPublicDialect}
             onSubmit={onSubmit}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
@@ -56,10 +64,13 @@ function RequestChangesContainer({ docId, docState }) {
   )
 }
 
-const { string } = PropTypes
+const { func, string, oneOf } = PropTypes
 RequestChangesContainer.propTypes = {
+  docDialectPath: string,
   docId: string,
-  docState: string,
+  docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
+  refreshData: func,
+  taskId: string,
 }
 
 export default RequestChangesContainer

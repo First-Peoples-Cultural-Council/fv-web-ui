@@ -6,30 +6,21 @@ import org.nuxeo.common.xmap.annotation.XObject;
 @XObject("configuration")
 public class AWSAuthenticationServiceConfigurationDescriptor {
 
-  @XNode("userPool")
-  public String userPool;
+  @XNode("userPool") public String userPool;
 
-  @XNode("accessKey")
-  public String accessKey;
+  @XNode("accessKey") public String accessKey;
 
-  @XNode("secretKey")
-  public String secretKey;
+  @XNode("secretKey") public String secretKey;
 
-  @XNode("clientID")
-  public String clientID;
+  @XNode("clientID") public String clientID;
 
-  @XNode("region")
-  public String region;
+  @XNode("region") public String region;
 
   @Override
   public String toString() {
-    return "AWSAuthenticationServiceConfigurationDescriptor{"
-        + "userPool='" + userPool + '\''
-        + ", accessKey='" + accessKey + '\''
-        + ", secretKey='" + "REDACTED, length="
-        + (secretKey != null ? secretKey.length() : "NULL") + '\''
-        + ", clientID='" + clientID + '\''
-        + ", region='" + region + '\''
-        + '}';
+    return "AWSAuthenticationServiceConfigurationDescriptor{" + "userPool='" + userPool + '\''
+        + ", accessKey='" + accessKey + '\'' + ", secretKey='" + "REDACTED, length=" + (
+        secretKey != null ? secretKey.length() : "NULL") + '\'' + ", clientID='" + clientID + '\''
+        + ", region='" + region + '\'' + '}';
   }
 }

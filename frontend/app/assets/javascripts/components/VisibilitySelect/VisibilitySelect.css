@@ -1,0 +1,23 @@
+.VisibilitySelect {
+  float: left;
+  padding-bottom: 10px;
+}
+.VisibilitySelect__icon {
+  margin-right: 16px;
+}
+.VisibilitySelect__label {
+  float: left;
+  padding: 10px;
+}
+
+.VisibilitySelect--dashboardDetail {
+  padding-bottom: 0;
+  float: none;
+}
+.VisibilitySelect--dashboardDetail .VisibilitySelect__select {
+  background-color: #fff;
+}
+.VisibilitySelect__menuItemGroup {
+  display: flex;
+  align-items: center;
+}

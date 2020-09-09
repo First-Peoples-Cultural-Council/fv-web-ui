@@ -44,34 +44,41 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
   private AWSPasswordValidator passwordValidator;
 
 
-  public AWSAuthenticationServiceImpl(
-      String accessKey,
-      String secretKey,
-      String userPool,
-      String region,
-      String clientID) {
+  public AWSAuthenticationServiceImpl(String accessKey,
+                                      String secretKey,
+                                      String userPool,
+                                      String region,
+                                      String clientID) {
     this.accessKey = accessKey;
     this.secretKey = secretKey;
     this.userPool = userPool;
     this.region = region;
     this.clientID = clientID;
 
-    this.identityProvider = AWSCognitoIdentityProviderClientBuilder
-        .standard()
+    this.identityProvider = AWSCognitoIdentityProviderClientBuilder.standard()
         .withRegion(region)
-        .withCredentials(new AWSStaticCredentialsProvider(
-            new BasicAWSCredentials(this.accessKey, this.secretKey)
-        ))
+        .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKey,
+            this.secretKey)))
         .build();
   }
 
-  @Override
-  public void testConnection() throws MiscellaneousFailureException {
+  private static boolean validateEmailAddress(String email) {
+    //could also use commons validation here rather than builtin
+    try {
+      InternetAddress ia = new InternetAddress(email);
+      ia.validate();
+    } catch (AddressException e) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override public void testConnection() throws MiscellaneousFailureException {
     try {
       LOG.info("Testing connection to AWS Cognito by requesting user pool metadata");
-      DescribeUserPoolResult result = this.identityProvider.describeUserPool(
-          new DescribeUserPoolRequest().withUserPoolId(userPool)
-      );
+      DescribeUserPoolResult result =
+          this.identityProvider.describeUserPool(new DescribeUserPoolRequest().withUserPoolId(
+              userPool));
       PasswordPolicyType passwordPolicy = result.getUserPool().getPolicies().getPasswordPolicy();
       this.passwordValidator = new AWSPasswordValidator(passwordPolicy);
 
@@ -82,31 +89,26 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  @Override
-  public boolean userExists(String username) {
-    ListUsersResult usersResult = this.identityProvider
-        .listUsers(
-            new ListUsersRequest()
-                .withUserPoolId(userPool)
-                .withLimit(1)
-                .withFilter("username = \"" + username + "\"")
-        );
+  @Override public boolean userExists(String username) {
+    ListUsersResult usersResult =
+        this.identityProvider.listUsers(new ListUsersRequest().withUserPoolId(userPool)
+            .withLimit(1)
+            .withFilter("username = \"" + username + "\""));
 
     return usersResult.getUsers().size() != 0;
   }
 
-  @Override
-  public boolean authenticate(String username, String password)
+  @Override public boolean authenticate(String username, String password)
       throws MiscellaneousFailureException {
     try {
       Map<String, String> authParams = new HashMap<>();
       authParams.put("USERNAME", username);
       authParams.put("PASSWORD", password);
 
-      InitiateAuthRequest authRequest = new InitiateAuthRequest()
-          .withAuthFlow(AuthFlowType.USER_PASSWORD_AUTH)
-          .withClientId(this.clientID)
-          .withAuthParameters(authParams);
+      InitiateAuthRequest authRequest =
+          new InitiateAuthRequest().withAuthFlow(AuthFlowType.USER_PASSWORD_AUTH)
+              .withClientId(this.clientID)
+              .withAuthParameters(authParams);
 
       InitiateAuthResult initiateAuthResult = this.identityProvider.initiateAuth(authRequest);
 
@@ -122,16 +124,15 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  @Override
-  public void updatePassword(String username, String password)
+  @Override public void updatePassword(String username, String password)
       throws MiscellaneousFailureException {
     if (password != null && userExists(username)) {
 
-      AdminSetUserPasswordRequest passwordRequest = new AdminSetUserPasswordRequest()
-          .withUserPoolId(userPool)
-          .withPermanent(true)
-          .withUsername(username)
-          .withPassword(password);
+      AdminSetUserPasswordRequest passwordRequest =
+          new AdminSetUserPasswordRequest().withUserPoolId(userPool)
+              .withPermanent(true)
+              .withUsername(username)
+              .withPassword(password);
 
       try {
         this.identityProvider.adminSetUserPassword(passwordRequest);
@@ -142,33 +143,21 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  private static boolean validateEmailAddress(String email) {
-    //could also use commons validation here rather than builtin
-    try {
-      InternetAddress ia = new InternetAddress(email);
-      ia.validate();
-    } catch (AddressException e) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public void migrateUser(String username, String password, String email)
+  @Override public void migrateUser(String username, String password, String email)
       throws MiscellaneousFailureException, InvalidMigrationException {
 
 
     if (!validateEmailAddress(email)) {
-      throw new InvalidMigrationException(
-          String.format("Username %s has no valid email address (have %s) "
-              + "and will not be migrated", username, email)
-      );
+      throw new InvalidMigrationException(String.format(
+          "Username %s has no valid email address (have %s) " + "and will not be migrated",
+          username,
+          email));
     }
 
     if (!validateEmailAddress(username)) {
-      throw new InvalidMigrationException(
-          String.format("Username %s is not an email and will not be migrated", username)
-      );
+      throw new InvalidMigrationException(String.format(
+          "Username %s is not an email and will not be migrated",
+          username));
     }
 
     if (this.passwordValidator == null) {
@@ -176,10 +165,9 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
 
     if (!this.passwordValidator.validatePassword(password)) {
-      throw new InvalidMigrationException(
-          String.format("Username %s has password failing complexity requirements."
-              + " Will not migrate.", username)
-      );
+      throw new InvalidMigrationException(String.format(
+          "Username %s has password failing complexity requirements." + " Will not migrate.",
+          username));
     }
 
     AdminCreateUserRequest request = new AdminCreateUserRequest();
@@ -198,11 +186,11 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
       this.identityProvider.adminCreateUser(request);
 
       //mark the password as permanent
-      AdminSetUserPasswordRequest passwordRequest = new AdminSetUserPasswordRequest()
-          .withUserPoolId(this.userPool)
-          .withPermanent(true)
-          .withUsername(username)
-          .withPassword(password);
+      AdminSetUserPasswordRequest passwordRequest =
+          new AdminSetUserPasswordRequest().withUserPoolId(this.userPool)
+              .withPermanent(true)
+              .withUsername(username)
+              .withPassword(password);
 
       this.identityProvider.adminSetUserPassword(passwordRequest);
 

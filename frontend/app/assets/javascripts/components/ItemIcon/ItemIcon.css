@@ -1,0 +1,15 @@
+.ItemIcon {
+  display: flex;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  justify-content: center;
+  align-items: center;
+}
+.ItemIcon__new {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: rgb(247 207 5);
+  filter: drop-shadow(0 0 2px rgba(255, 213, 0, 0.5));
+}

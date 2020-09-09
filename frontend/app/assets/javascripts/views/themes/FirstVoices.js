@@ -173,4 +173,23 @@ export default {
       },
     },
   },
+  widget: {
+    boxShadow: 'none',
+    tableHeader: {
+      backgroundColor: '#c4d5d3',
+      borderBottom: 'none',
+      fontWeight: 900,
+      fontSize: '1.7rem',
+      color: '#5f5d5d',
+    },
+    cellStyle: {
+      border: 'none',
+    },
+    row: {
+      backgroundColor: '#fff',
+    },
+    rowAlternate: {
+      backgroundColor: '#f3f4f3',
+    },
+  },
 }

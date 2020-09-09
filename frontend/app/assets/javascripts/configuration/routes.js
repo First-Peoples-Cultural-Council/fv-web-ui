@@ -2597,7 +2597,7 @@ const routes = [
     id: 'dashboard',
     path: ['dashboard', 'tasks'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
-    page: <Pages.DashboardDetail.Container />,
+    page: <Pages.DashboardDetailTasks.Container />,
     breadcrumbs: false,
   },
   // Mentor-Apprentice Photo Project
