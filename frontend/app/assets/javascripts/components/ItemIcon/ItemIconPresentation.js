@@ -4,7 +4,7 @@ import IconChat from './IconChat'
 import IconQuote from './IconQuote'
 import IconBook from './IconBook'
 import IconGenericItem from './IconGenericItem'
-import IconNew from '@material-ui/icons/Star'
+import IconNew from './IconStarburst'
 import {
   // UNKNOWN,
   BOOK,
