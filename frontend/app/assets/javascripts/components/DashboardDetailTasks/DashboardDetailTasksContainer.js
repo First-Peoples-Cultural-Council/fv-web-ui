@@ -1,6 +1,5 @@
 import React from 'react'
 import DashboardDetail from 'components/DashboardDetail'
-import DashboardDetailIcon from 'components/DashboardDetail/DashboardDetailIcon'
 import DashboardDetailSidebar from 'components/DashboardDetail/DashboardDetailSidebar'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
 import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
@@ -112,7 +111,7 @@ function DashboardDetailTasksContainer() {
                     title={taskTitle}
                     initiator={taskInitiator}
                     date={taskDate}
-                    icon={<DashboardDetailIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
+                    icon={<ItemIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
                 }
                 // TODO: future feature
