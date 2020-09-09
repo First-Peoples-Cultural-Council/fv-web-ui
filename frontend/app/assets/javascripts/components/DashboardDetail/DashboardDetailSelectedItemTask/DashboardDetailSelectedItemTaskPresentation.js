@@ -45,13 +45,13 @@ function DashboardDetailSelectedItemTaskPresentation({ date, icon, initiator, is
       {icon && <div className="DashboardDetailSelectedItemTask__icon">{icon}</div>}
       <div className="DashboardDetailSelectedItemTask__main">
         <Typography variant="body1" component="h3">
-          {title}
+          {title ? title : '···'}
         </Typography>
         <Typography variant="body2" component="div">
-          {initiator}
+          {initiator ? initiator : '···'}
         </Typography>
         <Typography variant="caption" component="div">
-          Date added: {date}
+          Date added: {date ? date : '...'}
         </Typography>
       </div>
     </div>
