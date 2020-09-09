@@ -24,7 +24,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
 
-  const { computeDocument } = useDocument()
+  const { computeDocument, fetchDocument } = useDocument()
   const { count: tasksCount = 0, fetchTasksRemoteData, fetchTask, tasks = [], userId, resetTasks } = useDashboard()
 
   const {
@@ -76,11 +76,18 @@ function DashboardDetailTasksData({ children, columnRender }) {
       navigateReplace(
         getUrlDetailView({
           task: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'id'], tasks) : queryTask,
-          item: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'targetDocumentsIds', 0], tasks) : queryItem, // TODO: NOT SELECTING CORRECTLY?
+          item: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'targetDocumentsIds'], tasks) : queryItem,
         })
       )
     }
   }, [queryItem, queryTask, tasks, userId])
+
+  // Get Item Details
+  useEffect(() => {
+    if (queryItem) {
+      fetchDocument(queryItem)
+    }
+  }, [queryItem])
 
   // TODO: Curently only handling words
   useEffect(() => {
@@ -114,7 +121,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
       title: selectn('title', _selectedItemData),
       videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
     })
-  }, [queryItem])
+  }, [computeDocument, queryItem])
 
   // Get Task Details
   useEffect(() => {
@@ -157,7 +164,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
       const selectedTask = tasks.filter((task) => {
         return task.id === id
       })
-      selectedTargetDocumentId = selectn([0, 'targetDocumentsIds', 0], selectedTask)
+      selectedTargetDocumentId = selectn([0, 'targetDocumentsIds'], selectedTask)
     }
 
     navigate(
