@@ -38,16 +38,13 @@ import org.nuxeo.runtime.api.Framework;
 public class MigrateCategoriesStatus {
 
   public static final String ID = Constants.MIGRATE_CATEGORIES_STATUS_ACTION_ID;
-
   @Context
   protected CoreSession session;
-
   @Context
   protected WorkManager workManager;
-
   @Param(name = "publishAction", required = false, values = {"force", "ignore"})
   protected String publishAction = "ignore";
-
+  DocumentModel dictionary = null;
   MigrateCategoriesService migrateCategoriesService = Framework.getService(
       MigrateCategoriesService.class);
 
@@ -74,23 +71,39 @@ public class MigrateCategoriesStatus {
     // Count total shared and local categories that are used by words
     int sharedCategoriesCount = 0;
     int localCategoriesCount = 0;
+    int trashedCategoriesCount = 0;
+    int deletedCategoriesCount = 0;
 
     IterableQueryResult results = null;
 
     try {
+      dictionary = session.getChild(dialect.getRef(), "Dictionary");
+
       results = session.queryAndFetch(
-          migrateCategoriesService.getUniqueCategoriesQuery(dialect.getId()), "NXQL", true, null);
+          migrateCategoriesService.getUniqueCategoriesQuery(dictionary.getId()), "NXQL", true,
+          null);
       Iterator<Map<String, Serializable>> it = results.iterator();
 
       while (it.hasNext()) {
         Map<String, Serializable> item = it.next();
         String uid = (String) item.get("fv-word:categories/*");
+        IdRef categoryId = new IdRef(uid);
+
+        if (!session.exists(categoryId)) {
+          ++deletedCategoriesCount;
+          continue;
+        }
+
         DocumentModel category = session.getDocument(new IdRef(uid));
 
         if (category.getPathAsString().contains("Shared Categories")) {
           ++sharedCategoriesCount;
         } else {
           ++localCategoriesCount;
+        }
+
+        if (category.isTrashed()) {
+          ++trashedCategoriesCount;
         }
       }
     } catch (Exception e) {
@@ -136,7 +149,7 @@ public class MigrateCategoriesStatus {
 
       if (sharedCategoryProxy != null) {
         String query = "SELECT * FROM FVWord WHERE "
-            + "fva:dialect = '" + dialect.getId() + "' "
+            + "ecm:parentId = '" + dictionary.getId() + "' "
             + "AND ecm:isTrashed = 0 "
             + "AND ecm:isVersion = 0 "
             + "AND ecm:isProxy = 1 "
@@ -186,6 +199,8 @@ public class MigrateCategoriesStatus {
       json.put("total_referenced_shared_categories", new Integer(sharedCategoriesCount));
       json.put("total_shared_categories", new Double(sharedCategoriesCreated));
       json.put("total_referenced_local_categories", new Integer(localCategoriesCount));
+      json.put("total_referenced_trashed_categories", new Integer(trashedCategoriesCount));
+      json.put("total_referenced_deleted_categories", new Integer(deletedCategoriesCount));
       json.put("required_category_migration_job_exists", Boolean.valueOf(requiredJobExists));
       json.put("local_categories_created", new Double(localCategoriesCreated));
       json.put("shared_categories_in_proxies", sharedCategoriesInProxies);

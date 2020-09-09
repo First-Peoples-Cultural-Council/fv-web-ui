@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +32,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   private static final Log log = LogFactory.getLog(MigrateCategoriesService.class);
 
   DocumentModelList localCategories = null;
+
   DocumentModel localCategoriesDirectory = null;
 
   /**
@@ -44,27 +46,33 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   @Override
   public boolean migrateCategoriesTree(CoreSession session, DocumentModel dialect) {
 
-    FirstVoicesPublisherService publisherService = Framework
-        .getService(FirstVoicesPublisherService.class);
-
     int copiedCategories = 0;
 
+    DocumentModel dictionary = session.getChild(dialect.getRef(), "Dictionary");
     localCategoriesDirectory = session.getChild(dialect.getRef(), "Categories");
 
     // Get the local categories that already exist
     localCategories = getCategories(session, dialect, false);
 
     // Get the unique categories from all the words in this dialect
-    for (String categoryId : getUniqueCategories(session, dialect.getId())) {
-      DocumentModel category = session.getDocument(new IdRef(categoryId));
-      DocumentModel parentCategory = session.getParentDocument(category.getRef());
+    for (String categoryId : getUniqueCategories(session, dictionary.getId())) {
+      IdRef categoryRef = new IdRef(categoryId);
 
-      // check if category exists. If so, skip.
+      if (!session.exists(categoryRef)) {
+        // If the category is permanently deleted, error to log. Do not migrate.
+        log.error("Referenced category " + categoryId + " does not exist in dialect " + dialect
+            .getTitle());
+        continue;
+      }
+
+      DocumentModel category = session.getDocument(categoryRef);
+
+      // check if category exists locally. If so, skip - no need to migrate
       if (categoryExists(category)) {
         continue;
       }
 
-      DocumentModel copiedCategory = copyCategory(session, category);
+      copyCategory(session, category);
       ++copiedCategories;
     }
 
@@ -95,9 +103,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
       String ids = "'" + sharedCategories.stream().map(DocumentModel::getId)
           .collect(Collectors.joining("','")) + "'";
 
+      DocumentModel dictionary = session.getChild(dialect.getRef(), "Dictionary");
+
       // This would benefit greatly from an ES query using ElasticSearchService
       // Get all words that reference shared categories
-      String query = "SELECT * FROM FVWord" + " WHERE fva:dialect = '" + dialect.getId() + "' "
+      String query = "SELECT * FROM FVWord" + " WHERE ecm:parentId = '" + dictionary.getId() + "' "
           + " AND fv-word:categories/* IN ( " + ids + ")" + " AND ecm:isTrashed = 0"
           + " AND ecm:isProxy = 0" + " AND ecm:isVersion = 0";
       DocumentModelList words = session.query(query, null, batchSize, 0, true);
@@ -113,6 +123,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         List<String> categoryIds = Arrays
             .asList((String[]) word.getPropertyValue("fv-word:categories"));
         categoryIds = categoryIds.stream().map(id -> getLocalCategory(session, id))
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
         word.setProperty("fv-word", "categories", categoryIds);
 
@@ -190,8 +201,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     }
 
     // Create new category
+    // Replace `.trashed` in name if the shared category is trashed
+    String newCategoryName = category.getName().replace(".trashed", "");
+
     DocumentModel newLocalCategory = session
-        .createDocumentModel(localCategoryDirPath, category.getName(), FV_CATEGORY);
+        .createDocumentModel(localCategoryDirPath, newCategoryName, FV_CATEGORY);
     newLocalCategory.setPropertyValue("dc:title", category.getTitle());
     DocumentModel newCategory = session.createDocument(newLocalCategory);
 
@@ -201,12 +215,12 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     return newCategory;
   }
 
-  private ArrayList<String> getUniqueCategories(CoreSession session, String dialectId) {
+  private ArrayList<String> getUniqueCategories(CoreSession session, String dictionaryId) {
 
     ArrayList<String> categoryIds = new ArrayList<>();
 
     IterableQueryResult results = session
-        .queryAndFetch(getUniqueCategoriesQuery(dialectId), "NXQL", true, null);
+        .queryAndFetch(getUniqueCategoriesQuery(dictionaryId), "NXQL", true, null);
     Iterator<Map<String, Serializable>> it = results.iterator();
 
     while (it.hasNext()) {
@@ -221,6 +235,13 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
   }
 
   private String getLocalCategory(CoreSession session, String sharedCategoryId) {
+    IdRef sharedCategoryIdRef = new IdRef(sharedCategoryId);
+
+    if (!session.exists(sharedCategoryIdRef)) {
+      // If the category is permanently deleted, skip reference
+      return null;
+    }
+
     DocumentModel sharedCategory = session.getDocument(new IdRef(sharedCategoryId));
     return localCategories.stream()
         .filter(localCategory -> localCategory.getTitle().equals(sharedCategory.getTitle()))
@@ -263,9 +284,9 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     return categories;
   }
 
-  public String getUniqueCategoriesQuery(String dialectId) {
+  public String getUniqueCategoriesQuery(String dictionaryId) {
     return "SELECT DISTINCT fv-word:categories/* FROM FVWord "
-        + "WHERE fv-word:categories/* IS NOT NULL " + "AND fva:dialect = '" + dialectId + "' "
+        + "WHERE fv-word:categories/* IS NOT NULL " + "AND ecm:parentId = '" + dictionaryId + "' "
         + "AND ecm:isTrashed = 0 " + "AND ecm:isProxy = 0 " + "AND ecm:isVersion = 0";
   }
 
