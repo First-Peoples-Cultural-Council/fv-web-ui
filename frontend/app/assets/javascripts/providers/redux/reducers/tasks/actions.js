@@ -79,9 +79,11 @@ export const getSimpleTask = (uid) => {
     return DirectoryOperations.getFromAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${uid}`)
       .then((response) => {
         dispatch({ type: FV_SIMPLE_TASK_GET_SUCCESS, document: response })
+        return response
       })
       .catch((error) => {
         dispatch({ type: FV_SIMPLE_TASK_GET_ERROR, error: error })
+        return error
       })
   }
 }
