@@ -29,7 +29,7 @@ import org.nuxeo.runtime.api.Framework;
 
 public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
-  private static final Log log = LogFactory.getLog(MigrateCategoriesService.class);
+  private static final Log log = LogFactory.getLog(MigrateCategoriesServiceImpl.class);
 
   DocumentModelList localCategories = null;
 
@@ -57,20 +57,19 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     // Get the unique categories from all the words in this dialect
     for (String categoryId : getUniqueCategories(session, dictionary.getId())) {
       IdRef categoryRef = new IdRef(categoryId);
+      boolean categoryDeleted = !session.exists(categoryRef);
 
-      if (!session.exists(categoryRef)) {
-        // If the category is permanently deleted, error to log. Do not migrate.
-        log.error("Referenced category " + categoryId + " does not exist in dialect " + dialect
-            .getTitle());
+      if (categoryDeleted || categoryExists(session.getDocument(categoryRef))) {
+        if (categoryDeleted) {
+          // If the category is permanently deleted, error to log. Do not migrate.
+          log.error("Referenced category " + categoryId + " does not exist in dialect " + dialect
+              .getTitle());
+        }
+
         continue;
       }
 
       DocumentModel category = session.getDocument(categoryRef);
-
-      // check if category exists locally. If so, skip - no need to migrate
-      if (categoryExists(category)) {
-        continue;
-      }
 
       copyCategory(session, category);
       ++copiedCategories;
@@ -99,7 +98,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     // Get the shared categories
     DocumentModelList sharedCategories = getCategories(session, null, true);
 
-    if (sharedCategories != null && sharedCategories.size() > 0) {
+    if (sharedCategories != null && !sharedCategories.isEmpty()) {
       String ids = "'" + sharedCategories.stream().map(DocumentModel::getId)
           .collect(Collectors.joining("','")) + "'";
 
@@ -197,7 +196,11 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         newLocalParent = getExistingCategory(parentCategory);
       }
 
-      localCategoryDirPath = newLocalParent.getPathAsString();
+      if (newLocalParent != null) {
+        localCategoryDirPath = newLocalParent.getPathAsString();
+      } else {
+        throw new NuxeoException("newLocalParent is null in Migrate Categories service/worker");
+      }
     }
 
     // Create new category
@@ -220,7 +223,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
     ArrayList<String> categoryIds = new ArrayList<>();
 
     IterableQueryResult results = session
-        .queryAndFetch(getUniqueCategoriesQuery(dictionaryId), "NXQL", true, null);
+        .queryAndFetch(getUniqueCategoriesQuery(dictionaryId), "NXQL", true, (Object[]) null);
     Iterator<Map<String, Serializable>> it = results.iterator();
 
     while (it.hasNext()) {

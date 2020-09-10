@@ -81,7 +81,7 @@ public class MigrateCategoriesStatus {
 
       results = session.queryAndFetch(
           migrateCategoriesService.getUniqueCategoriesQuery(dictionary.getId()), "NXQL", true,
-          null);
+          (Object[]) null);
       Iterator<Map<String, Serializable>> it = results.iterator();
 
       while (it.hasNext()) {
@@ -136,7 +136,7 @@ public class MigrateCategoriesStatus {
     // Do a survey of Shared Categories
     // Do a survey of all shared categories referenced by proxies (i.e. unpublished changes).
 
-    HashMap<String, Double> sharedCategoriesInProxies = new HashMap<>();
+    HashMap<String, String> sharedCategoriesInProxies = new HashMap<>();
     HashMap<String, String> wordsFailedPublishing = new HashMap<>();
     HashMap<String, String> wordsFailedPublishingDueToDeleted = new HashMap<>();
 
@@ -189,20 +189,20 @@ public class MigrateCategoriesStatus {
 
         sharedCategoriesInProxies
             .put(sharedCategoryTitle + " - " + sharedCategoryProxy.getId(),
-                new Double(sections.totalSize()));
+                String.valueOf((double) sections.totalSize()));
       }
     }
 
     JSONObject json = new JSONObject();
 
     try {
-      json.put("total_referenced_shared_categories", new Integer(sharedCategoriesCount));
-      json.put("total_shared_categories", new Double(sharedCategoriesCreated));
-      json.put("total_referenced_local_categories", new Integer(localCategoriesCount));
-      json.put("total_referenced_trashed_categories", new Integer(trashedCategoriesCount));
-      json.put("total_referenced_deleted_categories", new Integer(deletedCategoriesCount));
+      json.put("total_referenced_shared_categories", String.valueOf(sharedCategoriesCount));
+      json.put("total_shared_categories", String.valueOf(sharedCategoriesCreated));
+      json.put("total_referenced_local_categories", String.valueOf(localCategoriesCount));
+      json.put("total_referenced_trashed_categories", String.valueOf(trashedCategoriesCount));
+      json.put("total_referenced_deleted_categories", String.valueOf(deletedCategoriesCount));
       json.put("required_category_migration_job_exists", Boolean.valueOf(requiredJobExists));
-      json.put("local_categories_created", new Double(localCategoriesCreated));
+      json.put("local_categories_created", String.valueOf(localCategoriesCreated));
       json.put("shared_categories_in_proxies", sharedCategoriesInProxies);
       json.put("words_failed_publishing_general", wordsFailedPublishing);
       json.put("words_failed_publishing_deleted", wordsFailedPublishingDueToDeleted);
