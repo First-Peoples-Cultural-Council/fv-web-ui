@@ -73,12 +73,29 @@ function DashboardDetailTasksData({ children, columnRender }) {
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
     if (queryTask && tasks.length > 0) {
-      navigateReplace(
-        getUrlDetailView({
-          task: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'id'], tasks) : queryTask,
-          item: queryTask === URL_QUERY_PLACEHOLDER ? selectn([0, 'targetDocumentsIds'], tasks) : queryItem,
-        })
-      )
+      if (queryTask === URL_QUERY_PLACEHOLDER) {
+        navigateReplace(
+          getUrlDetailView({
+            task: selectn([0, 'id'], tasks),
+            item: selectn([0, 'targetDocumentsIds'], tasks),
+          })
+        )
+      } else if (queryItem === undefined) {
+        // Task selected but no Item. So pick the first item....
+        navigateReplace(
+          getUrlDetailView({
+            task: queryTask,
+            item: selectn([0, 'targetDocumentsIds'], tasks),
+          })
+        )
+      } else {
+        navigateReplace(
+          getUrlDetailView({
+            task: queryTask,
+            item: queryItem,
+          })
+        )
+      }
     }
   }, [queryItem, queryTask, tasks, userId])
 
