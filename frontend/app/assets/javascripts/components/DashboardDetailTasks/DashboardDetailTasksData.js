@@ -136,6 +136,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
       literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
       state: selectn('state', _selectedItemData),
       title: selectn('title', _selectedItemData),
+      metadata: { response: _selectedItemData },
     }
     let itemTypeSpecificData = {}
     switch (type) {

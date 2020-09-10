@@ -63,6 +63,7 @@ function DashboardDetailTasksContainer() {
           id: itemId,
           itemType,
           literalTranslations,
+          metadata,
           partOfSpeech,
           photos,
           phrases,
@@ -148,6 +149,7 @@ function DashboardDetailTasksContainer() {
                     pronunciation={pronunciation}
                     relatedAssets={relatedAssets}
                     relatedToAssets={relatedToAssets}
+                    metadata={metadata}
                     videos={videos}
                     docType={itemType}
                   />
