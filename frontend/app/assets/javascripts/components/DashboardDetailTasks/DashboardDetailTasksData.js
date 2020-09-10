@@ -93,7 +93,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
   useEffect(() => {
     const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
-
     // TODO: Should we be getting dialectClassName? Perhaps a different location?
     // const dialectClassName = getDialectClassname(computeDialect2)
 
@@ -101,25 +100,37 @@ function DashboardDetailTasksData({ children, columnRender }) {
     // const metadata = selectn('response', _selectedItemData) ? (
     //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
     // ) : null
+
+    // type
+    // properties["fv-phrase:acknowledgement"]
+    // properties["fv-phrase:phrase_books"][0]
+
+    let itemType = 'word'
+    const type = selectn('type', _selectedItemData)
+    if (type === 'FVPhrase') {
+      itemType = 'phrase'
+    }
+
     setSelectedItemData({
       state: selectn('state', _selectedItemData),
-      acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
-      audio: selectn('contextParameters.word.related_audio', _selectedItemData) || [],
-      categories: selectn('contextParameters.word.categories', _selectedItemData) || [],
+      acknowledgement: selectn(`properties.fv-${itemType}:acknowledgement`, _selectedItemData),
+      audio: selectn(`contextParameters.${itemType}.related_audio`, _selectedItemData) || [],
+      categories: selectn('contextParameters.phrase:phrase_books', _selectedItemData) || [], // selectn(`contextParameters.${itemType}.categories`, _selectedItemData) || [],
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
       definitions: selectn('properties.fv:definitions', _selectedItemData),
       dialectPath: selectn('contextParameters.ancestry.dialect.path', _selectedItemData),
       id: selectn(['uid'], _selectedItemData),
       itemType: selectn('type', _selectedItemData),
       literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
-      partOfSpeech: selectn('contextParameters.word.part_of_speech', _selectedItemData),
-      photos: selectn('contextParameters.word.related_pictures', _selectedItemData) || [],
-      phrases: selectn('contextParameters.word.related_phrases', _selectedItemData) || [],
-      pronunciation: selectn('properties.fv-word:pronunciation', _selectedItemData),
-      relatedAssets: selectn('contextParameters.word.related_assets', _selectedItemData) || [],
-      relatedToAssets: selectn('contextParameters.word.related_by', _selectedItemData) || [],
+      partOfSpeech: selectn(`contextParameters.${itemType}.part_of_speech`, _selectedItemData),
+      photos: selectn(`contextParameters.${itemType}.related_pictures`, _selectedItemData) || [],
+      phrases: selectn(`contextParameters.${itemType}.related_phrases`, _selectedItemData) || [],
+      phraseBooks: selectn('properties.fv-phrase:phrase_books', _selectedItemData) || [],
+      pronunciation: selectn(`properties.fv-${itemType}:pronunciation`, _selectedItemData),
+      relatedAssets: selectn(`contextParameters.${itemType}.related_assets`, _selectedItemData) || [],
+      relatedToAssets: selectn(`contextParameters.${itemType}.related_by`, _selectedItemData) || [],
       title: selectn('title', _selectedItemData),
-      videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
+      videos: selectn('contextParameters.${itemType}.related_videos', _selectedItemData) || [],
     })
   }, [computeDocument, queryItem])
 
