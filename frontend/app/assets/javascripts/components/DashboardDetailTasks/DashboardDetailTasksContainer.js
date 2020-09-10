@@ -161,6 +161,7 @@ function DashboardDetailTasksContainer() {
                     docDialectPath={itemDialectPath}
                     key={itemId}
                     refreshData={refreshData}
+                    requestChangesText="Reject"
                   />
                 }
               />
