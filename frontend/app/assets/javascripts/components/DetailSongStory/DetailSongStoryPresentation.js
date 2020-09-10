@@ -55,7 +55,7 @@ function DetailSongStoryPresentation({
       ) : null
   // Main component
   return (
-    <Paper elevation={3} className={classes.cover}>
+    <div className="DetailSongStory">
       <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
         <Grid container justify="center" spacing={2}>
           {mediaPanels}
@@ -79,7 +79,7 @@ function DetailSongStoryPresentation({
             </div>
             <div
               className="DetailSongStory__audioPlayer">{audioElements}</div>
-            <div className={classes.introduction}>
+            <div>
               {_getIntroduction(book.introduction,
                 book.introductionTranslation)}
             </div>
@@ -95,15 +95,15 @@ function DetailSongStoryPresentation({
           </FVButton>
         </div>
       </Grid>
-    </Paper>
+    </div>
   )
 }
 
 function _getIntroduction(introduction, introductionTranslation) {
   const introductionDiv = (
     <div className="DetailSongStory__introduction">
-      <Typography variant="h5" component="h4">
-        <div>Introduction</div>
+      <Typography variant="h6">
+        <div><b>Introduction</b></div>
       </Typography>
       <div dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(introduction.content),
@@ -113,8 +113,8 @@ function _getIntroduction(introduction, introductionTranslation) {
 
   const translationDiv = introductionTranslation.content ? (
     <div className="DetailSongStory__translation">
-      <Typography variant="h5" component="h4">
-        <div>Translation</div>
+      <Typography variant="h6">
+        <div><b>Translation</b></div>
       </Typography>
       <div dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(introductionTranslation.content),
@@ -133,11 +133,11 @@ function _getIntroduction(introduction, introductionTranslation) {
   }
 
   return (
-    <Paper>
+    <div>
       {introductionDiv}
       {displayDivider}
       {translationDiv}
-    </Paper>
+    </div>
   )
 }
 
