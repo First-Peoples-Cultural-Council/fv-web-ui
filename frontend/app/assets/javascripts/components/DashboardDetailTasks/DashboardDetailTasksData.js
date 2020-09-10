@@ -5,6 +5,7 @@ import selectn from 'selectn'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useDashboard from 'DataSource/useDashboard'
 import useDocument from 'DataSource/useDocument'
+
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
@@ -24,7 +25,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
 
-  const { computeDocument, fetchDocument } = useDocument()
+  const { computeDocument, fetchDocumentSingleArg } = useDocument()
   const { count: tasksCount = 0, fetchTasksRemoteData, fetchTask, tasks = [], userId, resetTasks } = useDashboard()
 
   const {
@@ -65,9 +66,10 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }, [queryPage, queryPageSize, querySortBy, querySortOrder])
 
   const refreshData = () => {
-    // Refreshes list in the sidebar
+    // TODO: if single item is displayed, need to move to back a page
+    // TODO: if reject, close open panel
+    // TODO: Refresh list in the sidebar
     fetchTasksUsingQueries()
-    // TODO: May need to do something with any opened detail panel
   }
 
   // Redirect when http://...?task=[ID] and we have tasks + userId
@@ -102,14 +104,17 @@ function DashboardDetailTasksData({ children, columnRender }) {
   // Get Item Details
   useEffect(() => {
     if (queryItem) {
-      fetchDocument(queryItem)
+      fetchDocumentSingleArg({
+        pathOrId: queryItem,
+        headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
+      })
     }
   }, [queryItem])
 
-  // TODO: Curently only handling words
   useEffect(() => {
     const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
+
     // TODO: Should we be getting dialectClassName? Perhaps a different location?
     // const dialectClassName = getDialectClassname(computeDialect2)
 
@@ -121,34 +126,51 @@ function DashboardDetailTasksData({ children, columnRender }) {
     // type
     // properties["fv-phrase:acknowledgement"]
     // properties["fv-phrase:phrase_books"][0]
-
-    let itemType = 'word'
     const type = selectn('type', _selectedItemData)
-    if (type === 'FVPhrase') {
-      itemType = 'phrase'
-    }
-
-    setSelectedItemData({
-      state: selectn('state', _selectedItemData),
-      acknowledgement: selectn(`properties.fv-${itemType}:acknowledgement`, _selectedItemData),
-      audio: selectn(`contextParameters.${itemType}.related_audio`, _selectedItemData) || [],
-      categories: selectn('contextParameters.phrase:phrase_books', _selectedItemData) || [], // selectn(`contextParameters.${itemType}.categories`, _selectedItemData) || [],
+    const commonData = {
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
       definitions: selectn('properties.fv:definitions', _selectedItemData),
       dialectPath: selectn('contextParameters.ancestry.dialect.path', _selectedItemData),
       id: selectn(['uid'], _selectedItemData),
-      itemType: selectn('type', _selectedItemData),
+      itemType: type,
       literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
-      partOfSpeech: selectn(`contextParameters.${itemType}.part_of_speech`, _selectedItemData),
-      photos: selectn(`contextParameters.${itemType}.related_pictures`, _selectedItemData) || [],
-      phrases: selectn(`contextParameters.${itemType}.related_phrases`, _selectedItemData) || [],
-      phraseBooks: selectn('properties.fv-phrase:phrase_books', _selectedItemData) || [],
-      pronunciation: selectn(`properties.fv-${itemType}:pronunciation`, _selectedItemData),
-      relatedAssets: selectn(`contextParameters.${itemType}.related_assets`, _selectedItemData) || [],
-      relatedToAssets: selectn(`contextParameters.${itemType}.related_by`, _selectedItemData) || [],
+      state: selectn('state', _selectedItemData),
       title: selectn('title', _selectedItemData),
-      videos: selectn('contextParameters.${itemType}.related_videos', _selectedItemData) || [],
-    })
+    }
+    let itemTypeSpecificData = {}
+    switch (type) {
+      case 'FVPhrase':
+        itemTypeSpecificData = {
+          acknowledgement: selectn('properties.fv-phrase:acknowledgement', _selectedItemData),
+          audio: selectn('contextParameters.phrase.related_audio', _selectedItemData) || [],
+          categories: selectn('contextParameters.phrase.phrase_books', _selectedItemData) || [],
+          partOfSpeech: selectn('contextParameters.phrase.part_of_speech', _selectedItemData),
+          photos: selectn('contextParameters.phrase.related_pictures', _selectedItemData) || [],
+          phrases: selectn('contextParameters.phrase.related_phrases', _selectedItemData) || [],
+          pronunciation: selectn('properties.fv-phrase:pronunciation', _selectedItemData),
+          relatedAssets: selectn('contextParameters.phrase.related_assets', _selectedItemData) || [],
+          relatedToAssets: selectn('contextParameters.phrase.related_by', _selectedItemData) || [],
+          videos: selectn('contextParameters.phrase.related_videos', _selectedItemData) || [],
+        }
+        break
+
+      default:
+        // FVWord
+        itemTypeSpecificData = {
+          acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
+          audio: selectn('contextParameters.word.related_audio', _selectedItemData) || [],
+          categories: selectn('contextParameters.word.categories', _selectedItemData) || [],
+          partOfSpeech: selectn('contextParameters.word.part_of_speech', _selectedItemData),
+          photos: selectn('contextParameters.word.related_pictures', _selectedItemData) || [],
+          phrases: selectn('contextParameters.word.related_phrases', _selectedItemData) || [],
+          pronunciation: selectn('properties.fv-word:pronunciation', _selectedItemData),
+          relatedAssets: selectn('contextParameters.word.related_assets', _selectedItemData) || [],
+          relatedToAssets: selectn('contextParameters.word.related_by', _selectedItemData) || [],
+          videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
+        }
+        break
+    }
+    setSelectedItemData({ ...commonData, ...itemTypeSpecificData })
   }, [computeDocument, queryItem])
 
   // Get Task Details

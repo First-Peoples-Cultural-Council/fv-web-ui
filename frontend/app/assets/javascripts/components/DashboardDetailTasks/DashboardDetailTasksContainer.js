@@ -61,6 +61,7 @@ function DashboardDetailTasksContainer() {
           definitions,
           dialectPath: itemDialectPath,
           id: itemId,
+          itemType,
           literalTranslations,
           partOfSpeech,
           photos,
@@ -136,7 +137,7 @@ function DashboardDetailTasksContainer() {
                   <DetailWordPhrase.Presentation
                     acknowledgement={acknowledgement}
                     audio={audio}
-                    categories={categories}
+                    categories={categories} // NOTE: also handles phrase books
                     culturalNotes={culturalNotes}
                     definitions={definitions}
                     title={itemTitle}
@@ -148,6 +149,7 @@ function DashboardDetailTasksContainer() {
                     relatedAssets={relatedAssets}
                     relatedToAssets={relatedToAssets}
                     videos={videos}
+                    docType={itemType}
                   />
                 }
                 childrenTaskApproval={
