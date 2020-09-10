@@ -5,3 +5,15 @@
 .DetailSongStory__audioPlayer {
   padding-top: 10px
 }
+
+.DetailSongStory__header {
+  padding-top: 20px;
+}
+
+.DetailSongStory__introduction {
+  padding: 10px;
+}
+
+.DetailSongStory__translation {
+  padding: 10px;
+}
