@@ -76,10 +76,8 @@ function SongStoryData({ children }) {
     uid: uid,
     type: selectn('properties.fvbook:type', bookMetadata) || '',
     title: DOMPurify.sanitize(selectn('title', bookMetadata)),
-    titleTranslation: DOMPurify.sanitize(
-        selectn('[0].translation', dominantLanguageTitleTranslation)),
-    authors: (selectn('contextParameters.book.authors', bookMetadata)
-        || []).map(function extractAuthors(author) {
+    titleTranslation: DOMPurify.sanitize(selectn('[0].translation', dominantLanguageTitleTranslation)),
+    authors: (selectn('contextParameters.book.authors', bookMetadata) || []).map(function extractAuthors(author) {
       return selectn('dc:title', author)
     }),
     introduction: {
@@ -148,8 +146,7 @@ function SongStoryData({ children }) {
 
   const fetchData = async () => {
     fetchBook(bookPath)
-    fetchBookEntries(bookPath,
-        '&sortOrder=asc,asc' + '&sortBy=fvbookentry:sort_map,dc:created')
+    fetchBookEntries(bookPath, '&sortOrder=asc,asc' + '&sortBy=fvbookentry:sort_map,dc:created')
     fetchDialect2(routeParams.dialect_path)
   }
 
