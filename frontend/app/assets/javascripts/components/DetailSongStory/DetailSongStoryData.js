@@ -1,19 +1,5 @@
 import PropTypes from 'prop-types'
-import React, {Component} from 'react'
-import Immutable from 'immutable'
-
-// REDUX
-import {connect} from 'react-redux'
-// REDUX: actions/dispatch/func
-import {fetchBook} from 'providers/redux/reducers/fvBook'
-import {fetchBooks} from 'providers/redux/reducers/fvBook'
-import {fetchDialect2} from 'providers/redux/reducers/fvDialect'
-import {fetchPortal} from 'providers/redux/reducers/fvPortal'
-import {pushWindowPath} from 'providers/redux/reducers/windowPath'
-import selectn from "selectn";
-import ProviderHelpers from 'common/ProviderHelpers'
-import StringHelpers from 'common/StringHelpers'
-import useRoute from 'DataSource/useRoute'
+import React from 'react'
 
 /**
  * @summary DetailSongStoryData

@@ -1,6 +1,6 @@
-import DetailSongStoryStoryContainer
+import DetailSongStoryContainer
   from 'components/DetailSongStoryStory/DetailSongStoryStoryContainer'
-import DetailSongStoryStoryPresentation
+import DetailSongStoryPresentation
   from 'components/DetailSongStoryStory/DetailSongStoryPresentation'
 import DetailSongStoryData from 'components/DetailSongStory/DetailSongStoryData'
 
