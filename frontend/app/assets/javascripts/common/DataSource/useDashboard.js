@@ -36,7 +36,10 @@ function useDashboard() {
 
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatUTCDateString(date)
-    const formatInitator = ({ firstName, lastName }) => `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
+    const formatInitator = ({ email, firstName, lastName }) => {
+      const fullName = `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
+      return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
+    }
 
     const formatTitleTask = (requestedVisibility) => `Requests visibility set to "${requestedVisibility}"`
     const formatTitleItem = (title = '-') => title
@@ -57,7 +60,11 @@ function useDashboard() {
       return {
         date: formatDate(dateCreated),
         id,
-        initiator: formatInitator({ firstName: requestedBy.firstName, lastName: requestedBy.lastName }),
+        initiator: formatInitator({
+          email: requestedBy.email,
+          firstName: requestedBy.firstName,
+          lastName: requestedBy.lastName,
+        }),
         targetDocumentsIds: targetDoc.uid,
         itemType: formatItemType(targetDoc.type),
         isNew: targetDoc.isNew,
