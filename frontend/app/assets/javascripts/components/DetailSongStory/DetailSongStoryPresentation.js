@@ -130,18 +130,16 @@ function _getIntroduction(introduction, introductionTranslation) {
 }
 
 // PROPTYPES
-const {array, func, string, object, number} = PropTypes
+const {array, string, object, number} = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
   defaultLanguage: string,
   intl: object,
-  openBookAction: func,
   pageCount: number,
   // Media
   audio: array.isRequired,
   pictures: array.isRequired,
   videos: array.isRequired,
-  visitFullBook: func,
 }
 
 export default DetailSongStoryPresentation
