@@ -1,0 +1,45 @@
+<component name="ca.firstvoices.auth.cognito">
+
+  <require>org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService</require>
+  <require>org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry</require>
+  <require>org.nuxeo.ecm.platform.oauth2.openid.auth.contrib</require>
+  <require>ca.firstvoices.security.auth.contrib</require>
+  <require>ca.firstvoices.studio.extensions</require>
+  <require>org.nuxeo.ecm.user.registration.core.types.contrib.override</require>
+  <require>org.nuxeo.usermapper.service.UserMapperComponent</require>
+
+  <extension
+      target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
+      point="chain">
+
+    <authenticationChain>
+      <plugins>
+        <plugin>BASIC_AUTH</plugin>
+        <plugin>FORM_AUTH</plugin>
+        <plugin>WEBENGINE_FORM_AUTH</plugin>
+        <plugin>OPENID_CONNECT_AUTH</plugin>
+        <plugin>ANONYMOUS_AUTH</plugin>
+      </plugins>
+    </authenticationChain>
+  </extension>
+
+  <extension target="org.nuxeo.usermapper.service.UserMapperComponent" point="mapper">
+    <mapper name="cognito_mapper" type="js">
+      <mapperScript>
+        searchAttributes.put("username", userObject.email);
+        userAttributes.put("firstName", userObject.name);
+        userAttributes.put("email", userObject.email);
+      </mapperScript>
+    </mapper>
+  </extension>
+
+  <extension point="startURL" target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService">
+    <startURLPattern>
+      <patterns>
+        <pattern>nxstartup.faces</pattern>
+        <pattern>oauth2Callback</pattern>
+      </patterns>
+    </startURLPattern>
+  </extension>
+
+</component>

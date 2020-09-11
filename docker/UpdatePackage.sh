@@ -10,7 +10,13 @@ cd ../
 # Build entire FirstVoices package.
 echo 'Building entire package '
 if [ "$1" == "-skip-tests" ]; then
-    mvn clean install -DskipTests
+
+    if [ "$2" == "-minimal" ]; then
+      mvn clean install -DskipTests -P '!full,!full-marketplace'
+    else
+      mvn clean install -DskipTests
+    fi
+
     if [[ "$?" -ne 0 ]]; then
         echo
         echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
@@ -18,7 +24,13 @@ if [ "$1" == "-skip-tests" ]; then
     fi
     echo ''
 else
-    mvn clean install
+
+    if [ "$2" == "-minimal" ]; then
+      mvn clean install -DskipTests -P '!full,!full-marketplace'
+    else
+      mvn clean install
+    fi
+
     if [[ "$?" -ne 0 ]]; then
         echo
         echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1
@@ -26,6 +38,10 @@ else
     fi
     echo ''
 fi
+
+echo 'Removing old modules from docker container if they exist.'
+docker exec nuxeo-dev /bin/bash -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices*.jar" > /dev/null 2>&1
+echo ''
 
 echo 'Copying build package into shared docker volume.'
 cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker

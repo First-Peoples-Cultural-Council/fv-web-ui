@@ -237,7 +237,7 @@ if (selectedLanguage != null) { %>
           <input  onBlur="return validateUserNameForCommonIssues();" class="login_input type="text" name="user_name" id="username"
             placeholder="<fmt:message bundle="${messages}" key="label.login.username" />"/>
             <i class="icon-key"></i>
-        </div>  
+        </div>
         <div>
           <input class="login_input" type="password" name="user_password" id="password"
             placeholder="<fmt:message bundle="${messages}" key="label.login.password" />"/>

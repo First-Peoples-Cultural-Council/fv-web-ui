@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./Widget.css'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import { TABLE_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary WidgetPresentation
  * @version 1.0.1
@@ -18,8 +18,8 @@ import { CONTENT_FULL_WIDTH } from 'common/Constants'
  */
 function WidgetPresentation({ children, childrenHeader, title, variant }) {
   let classNameVariant = ''
-  if (variant === CONTENT_FULL_WIDTH) {
-    classNameVariant = 'Widget--ContentFullWidth'
+  if (variant === TABLE_FULL_WIDTH) {
+    classNameVariant = 'Widget--fullWidth'
   }
   return (
     <div className={`Widget ${classNameVariant}`}>
@@ -39,7 +39,7 @@ WidgetPresentation.propTypes = {
   children: node,
   childrenHeader: node,
   title: string,
-  variant: oneOf([CONTENT_FULL_WIDTH]),
+  variant: oneOf([TABLE_FULL_WIDTH]),
 }
 
 export default WidgetPresentation

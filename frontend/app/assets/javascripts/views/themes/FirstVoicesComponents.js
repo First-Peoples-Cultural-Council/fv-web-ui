@@ -15,22 +15,28 @@ limitations under the License.
 */
 export default {
   Table: {
-    ContentFullWidth: {
+    fullWidth: {
       boxShadow: 'none',
       tableHeader: {
         background: '#efefef',
+        width: '1px',
+        whiteSpace: 'nowrap',
       },
     },
     tableHeader: {
-      // background: 'linear-gradient(to bottom, #f7f7f7 0%, #efefef 13%, #e6e6e6 100%)',
       borderBottom: '1px solid #a8a8a8',
       fontWeight: 900,
+      width: '1px',
+      whiteSpace: 'nowrap',
     },
     row: {
       backgroundColor: '#fff',
     },
     rowAlternate: {
       backgroundColor: '#f2f7ff',
+    },
+    cellStyle: {
+      width: '1px',
     },
   },
 }

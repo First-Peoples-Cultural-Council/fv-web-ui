@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>ca.firstvoices</groupId>
@@ -104,15 +105,19 @@
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-platform-web-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-invite</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.webengine</groupId>
       <artifactId>nuxeo-webengine-invite</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-oauth</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-login</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -136,9 +141,9 @@
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-audit-core</artifactId>
     </dependency>
-     <dependency>
-       <groupId>org.apache.tomcat</groupId>
-       <artifactId>tomcat-catalina</artifactId>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
@@ -155,7 +160,7 @@
       <artifactId>nuxeo-automation-test</artifactId>
       <scope>test</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
       <scope>test</scope>

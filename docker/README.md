@@ -208,11 +208,11 @@ After making a change to a Nuxeo module, you can deploy your change to the docke
 
 To build the entire project and deploy it to your local container, run:
 ```
-./docker/UpdatePackage.sh
+./docker/UpdatePackage.sh -minimal
 ```
 
 You can skip tests by using the `-skip-tests` flag.
-
+The `minimal` flag will skip building modules that are more relevant to server deployments (e.g. API, Cognito). You can remove this property if you wish to include these locally.
 
 #### Method 2 (deploy a single module):
 

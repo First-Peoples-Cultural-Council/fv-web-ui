@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import selectn from 'selectn'
+
 import Typography from '@material-ui/core/Typography'
 
+import useTheme from 'DataSource/useTheme'
 import '!style-loader!css-loader!./Dashboard.css'
 
 /**
@@ -14,25 +17,34 @@ import '!style-loader!css-loader!./Dashboard.css'
  *
  * @returns {node} jsx markup
  */
-function DashboardPresentation({ children }) {
+function DashboardPresentation({ widgets }) {
+  const { theme } = useTheme()
+  const workshopDark = selectn(['palette', 'primary', 'dark'], theme)
   return (
-    <>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Dashboard
-      </Typography>
-      <div className="Dashboard">
-        <div>{children}</div>
-        <div>{children}</div>
-        {/*Remove line before release, for testing multiple columns*/}
+    <div className="Dashboard">
+      <div
+        className="Dashboard__header"
+        style={{
+          backgroundColor: workshopDark,
+        }}
+      >
+        <Typography variant="h4" component="h1" classes={{ root: 'Dashboard__headerText' }}>
+          Admin Dashboard
+        </Typography>
       </div>
-    </>
+      <div className="Dashboard__widgetsContainer">
+        {widgets.map((widget, index) => {
+          return <div key={`Dashboard__widgetsContainer--${index}`}>{widget}</div>
+        })}
+      </div>
+    </div>
   )
 }
 
 // PROPTYPES
-const { node } = PropTypes
+const { array } = PropTypes
 DashboardPresentation.propTypes = {
-  children: node,
+  widgets: array,
 }
 
 export default DashboardPresentation

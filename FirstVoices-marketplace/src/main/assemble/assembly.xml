@@ -28,24 +28,29 @@
         </copy>
 
         <!-- Third-party libraries -->
-        <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
-        <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
-
+        <!-- include these dependencies when the `full-marketplace` profile is active -->
+        <nx:profile name="full-marketplace">
+          <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
             <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
             <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
-                <excludes>
-                    <artifact scope="test"/>
-                    <artifact scope="provided"/>
-                </excludes>
+              <excludes>
+                <artifact scope="test"/>
+                <artifact scope="provided"/>
+              </excludes>
             </artifact:dependencies>
 
             <artifact:file artifactId="aws-java-sdk-core"/>
             <artifact:dependencies artifactId="aws-java-sdk-core">
-                <excludes>
-                    <artifact scope="test"/>
-                    <artifact scope="provided"/>
-                </excludes>
+              <excludes>
+                <artifact scope="test"/>
+                <artifact scope="provided"/>
+              </excludes>
             </artifact:dependencies>
+          </copy>
+        </nx:profile>
+
+        <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
+        <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
 
 <!--            <artifact:file artifactId="jersey-json"/>-->
 <!--            <artifact:dependencies artifactId="jersey-json">-->

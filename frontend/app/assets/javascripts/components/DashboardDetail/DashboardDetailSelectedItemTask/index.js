@@ -1,0 +1,4 @@
+import DashboardDetailSelectedItemTaskPresentation from 'components/DashboardDetail/DashboardDetailSelectedItemTask/DashboardDetailSelectedItemTaskPresentation'
+export default {
+  Presentation: DashboardDetailSelectedItemTaskPresentation,
+}
