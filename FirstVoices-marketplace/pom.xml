@@ -20,19 +20,11 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesCognitoAuth</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesEnrichers</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesHealthMonitor</artifactId>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
@@ -66,11 +58,8 @@
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesCoreTests</artifactId>
     </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesSimplifiedAPI</artifactId>
-    </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -84,5 +73,34 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <!-- Full install includes Cognito, SimpleAPI and Health Monitor; locally we usually do not need them -->
+      <id>full-marketplace</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesCognitoAuth</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesHealthMonitor</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesSimplifiedAPI</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>
