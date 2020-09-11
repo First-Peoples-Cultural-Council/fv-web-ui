@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Preview from 'views/components/Editor/Preview'
-import {SongStoryCoverStyles} from '../SongStoryCover/SongStoryCoverStyles'
+import { SongStoryCoverStyles } from '../SongStoryCover/SongStoryCoverStyles'
 import '!style-loader!css-loader!./DetailSongStory.css'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -28,27 +28,28 @@ function DetailSongStoryPresentation({
   const classes = SongStoryCoverStyles()
   // Audio
   const audioMapped = audio.map((audioDoc) => {
-    return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object}
-      type="FVAudio"/>
+    return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
   })
-  const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped
-    : null
+  const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
-  const mediaPanels =
-      // If both videos and pictures are present, only include pictures
-      pictures.length > 0 ? (
-        <Grid key={'media-' + book.uid} item xs={2}>
-          <div className={classes.media}>
-            <MediaPanels.Presentation pictures={pictures} videos={[]}/>
-          </div>
-        </Grid>
-      ) : videos.length > 0 ? (
-        <Grid key={'media-' + book.uid} item xs={2}>
-          <div className={classes.media}>
-            <MediaPanels.Presentation pictures={[]} videos={videos}/>
-          </div>
-        </Grid>
-      ) : null
+  let mediaPanels = null
+  if (pictures.length > 0) {
+    mediaPanels = (
+      <Grid key={'media-' + book.uid} item xs={2}>
+        <div className={classes.media}>
+          <MediaPanels.Presentation pictures={pictures} videos={[]} />
+        </div>
+      </Grid>
+    )
+  } else if (videos.length > 0) {
+    mediaPanels = (
+      <Grid key={'media-' + book.uid} item xs={2}>
+        <div className={classes.media}>
+          <MediaPanels.Presentation pictures={[]} videos={videos} />
+        </div>
+      </Grid>
+    )
+  }
 
   // Main component
   return (
@@ -74,12 +75,8 @@ function DetailSongStoryPresentation({
                 })}
               </div>
             </div>
-            <div
-              className="DetailSongStory__audioPlayer">{audioElements}</div>
-            <div>
-              {_getIntroduction(book.introduction,
-                book.introductionTranslation)}
-            </div>
+            <div className="DetailSongStory__audioPlayer">{audioElements}</div>
+            <div>{_getIntroduction(book.introduction, book.introductionTranslation)}</div>
           </Grid>
         </Grid>
       </Grid>
@@ -91,28 +88,34 @@ function _getIntroduction(introduction, introductionTranslation) {
   const introductionDiv = (
     <div className="DetailSongStory__introduction">
       <Typography variant="h6">
-        <div><b>Introduction</b></div>
+        <div>
+          <b>Introduction</b>
+        </div>
       </Typography>
-      <div dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(introduction.content),
-      }}/>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(introduction.content),
+        }}
+      />
     </div>
   )
 
   const translationDiv = introductionTranslation.content ? (
     <div className="DetailSongStory__translation">
       <Typography variant="h6">
-        <div><b>Translation</b></div>
+        <div>
+          <b>Translation</b>
+        </div>
       </Typography>
-      <div dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(introductionTranslation.content),
-      }}/>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(introductionTranslation.content),
+        }}
+      />
     </div>
   ) : null
 
-  const displayDivider = introductionTranslation.content ? (
-    <Divider variant="middle"/>
-  ) : null
+  const displayDivider = introductionTranslation.content ? <Divider variant="middle" /> : null
 
   if (!introductionTranslation.content) {
     if (!introduction.content) {
@@ -130,7 +133,7 @@ function _getIntroduction(introduction, introductionTranslation) {
 }
 
 // PROPTYPES
-const {array, string, object, number} = PropTypes
+const { array, string, object, number } = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
   defaultLanguage: string,
