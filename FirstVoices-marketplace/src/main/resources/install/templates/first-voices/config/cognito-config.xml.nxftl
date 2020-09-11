@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.auth.cognito.config">
-    <#if "${nuxeo.openid.cognito.domain}" != "replace_me_with_cognito_domain">
+    <#if "${nuxeo.openid.cognito.domain}" != "fplm-dev.auth.ca-central-1.amazoncognito.com">
 
         <require>ca.firstvoices.auth.cognito</require>
 
