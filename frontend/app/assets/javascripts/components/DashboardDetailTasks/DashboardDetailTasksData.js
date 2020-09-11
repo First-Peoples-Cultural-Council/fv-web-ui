@@ -251,10 +251,40 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const onRowClick = (event, { id }) => {
     onOpen(id)
   }
-
-  const onOrderChange = () => {
+  const columns = [
+    {
+      title: '',
+      field: 'itemType',
+      render: columnRender.itemType,
+      sorting: false,
+      cellStyle,
+    },
+    {
+      title: 'Entry title',
+      field: 'titleItem',
+      sorting: false,
+      cellStyle,
+    },
+    {
+      title: 'Change requested',
+      field: 'titleTask',
+      cellStyle,
+    },
+    {
+      title: 'Requested by',
+      field: 'initiator',
+      cellStyle,
+    },
+    {
+      title: 'Date submitted',
+      field: 'date',
+      cellStyle,
+    },
+  ]
+  const onOrderChange = (index) => {
     navigate(
       getUrlDetailView({
+        sortBy: columns[index].field,
         sortOrder: querySortOrder === 'desc' ? 'asc' : 'desc',
         page: 1,
       })
@@ -263,35 +293,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
 
   const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
-    columns: [
-      {
-        title: '',
-        field: 'itemType',
-        render: columnRender.itemType,
-        sorting: false,
-        cellStyle,
-      },
-      {
-        title: 'Entry title',
-        field: 'titleItem',
-        cellStyle,
-      },
-      {
-        title: 'Change requested',
-        field: 'titleTask',
-        cellStyle,
-      },
-      {
-        title: 'Requested by',
-        field: 'initiator',
-        cellStyle,
-      },
-      {
-        title: 'Date submitted',
-        field: 'date',
-        cellStyle,
-      },
-    ],
+    columns: columns,
     // data: userId === 'Guest' ? [] : remoteData,
     data: tasks,
     idSelectedItem: queryItem,

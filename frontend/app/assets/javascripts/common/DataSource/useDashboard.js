@@ -78,10 +78,10 @@ function useDashboard() {
     // data easier in the FE. The following `friendlyNamePropertyNameLookup` converts
     // component names back to the server names
     const friendlyNamePropertyNameLookup = {
-      date: 'nt:dueDate',
+      date: 'dc:created',
       id: 'uid',
-      initiator: 'nt:initiator',
-      title: 'nt:name',
+      initiator: 'nt:initiator', // aka requested by person's email
+      titleTask: 'nt:directive', // aka requested visibility
     }
 
     return getSimpleTasks({
