@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import Immutable from 'immutable'
-import DOMPurify from 'dompurify'
 
 // FPCC
 import useBook from 'DataSource/useBook'
@@ -17,6 +16,7 @@ import useWindowPath from 'DataSource/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
+import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
 
 /**
  * @summary SongStoryData
@@ -34,6 +34,7 @@ function SongStoryData({ children }) {
   const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
   const { getBaseURL } = useNavigationHelpers()
+  const baseUrl = getBaseURL()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -59,77 +60,19 @@ function SongStoryData({ children }) {
   const title = selectn('properties.dc:title', bookMetadata)
   const uid = selectn('uid', bookMetadata)
 
-  // Data for Cover
-  const dominantLanguageTitleTranslation = (
-    selectn('properties.fvbook:title_literal_translation', bookMetadata) || []
-  ).filter(function getTranslation(translation) {
-    return translation.language === defaultLanguage
-  })
-
-  const dominantLanguageIntroductionTranslation = (
-    selectn('properties.fvbook:introduction_literal_translation', bookMetadata) || []
-  ).filter(function getTranslation(translation) {
-    return translation.language === defaultLanguage
-  })
-
-  const book = {
-    uid: uid,
-    type: selectn('properties.fvbook:type', bookMetadata) || '',
-    title: DOMPurify.sanitize(selectn('title', bookMetadata)),
-    titleTranslation: DOMPurify.sanitize(selectn('[0].translation', dominantLanguageTitleTranslation)),
-    authors: (selectn('contextParameters.book.authors', bookMetadata) || []).map(function extractAuthors(author) {
-      return selectn('dc:title', author)
-    }),
-    introduction: {
-      label: intl.trans('introduction', 'Introduction', 'first'),
-      content: selectn('properties.fvbook:introduction', bookMetadata) || '',
-    },
-    introductionTranslation: {
-      label: intl.searchAndReplace(defaultLanguage),
-      content: selectn('[0].translation', dominantLanguageIntroductionTranslation) || '',
-    },
-  }
+  const book = getBookData({ computeBookData: bookMetadata, intl })
 
   // Pictures
   const picturesData = selectn('contextParameters.book.related_pictures', bookMetadata) || []
-  const pictures = []
-  picturesData.forEach((picture, key) => {
-    const pic = {
-      original: selectn('views[4].url', picture) || 'assets/images/cover.png',
-      thumbnail: selectn('views[0].url', picture) || 'assets/images/cover.png',
-      description: picture['dc:description'],
-      key: key,
-      id: picture.uid,
-      object: picture,
-      type: 'FVPicture',
-    }
-    pictures.push(pic)
-  })
+  const pictures = getBookPictures({ data: picturesData })
 
   // Videos
   const videosData = selectn('contextParameters.book.related_videos', bookMetadata) || []
-  const videos = _getMediaArray(videosData, 'FVVideo')
+  const videos = getBookAudioVideo({ data: videosData, type: 'FVVideo', baseUrl })
 
   // Audio
   const audioData = selectn('contextParameters.book.related_audio', bookMetadata) || []
-  const audio = _getMediaArray(audioData, 'FVAudio')
-
-  function _getMediaArray(data, type) {
-    const mediaArray = []
-    data.forEach((doc, key) => {
-      const extractedData = {
-        original: getBaseURL() + doc.path || 'assets/images/cover.png',
-        thumbnail: selectn('views[0].url', doc) || 'assets/images/cover.png',
-        description: doc['dc:description'],
-        key: key,
-        uid: doc.uid,
-        object: doc,
-        type: type,
-      }
-      mediaArray.push(extractedData)
-    })
-    return mediaArray
-  }
+  const audio = getBookAudioVideo({ data: audioData, type: 'FVAudio', baseUrl })
 
   useEffect(() => {
     fetchData()

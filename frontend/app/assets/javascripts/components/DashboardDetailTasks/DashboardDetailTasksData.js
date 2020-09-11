@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
+import DOMPurify from 'dompurify'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useDashboard from 'DataSource/useDashboard'
 import useDocument from 'DataSource/useDocument'
-
+import useIntl from 'DataSource/useIntl'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
+import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
+
 /**
  * @summary DashboardDetailTasksData
  * @version 1.0.1
@@ -21,9 +24,11 @@ import useTheme from 'DataSource/useTheme'
  */
 function DashboardDetailTasksData({ children, columnRender }) {
   const { theme } = useTheme()
+  const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
-  const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
+  const { getSearchObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
+  const baseUrl = getBaseURL()
 
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
   const { count: tasksCount = 0, fetchTasksRemoteData, fetchTask, tasks = [], userId, resetTasks } = useDashboard()
@@ -106,7 +111,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     if (queryItem) {
       fetchDocumentSingleArg({
         pathOrId: queryItem,
-        headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
+        headers: { 'enrichers.document': 'ancestry,phrase,book,permissions' },
       })
     }
   }, [queryItem])
@@ -127,15 +132,17 @@ function DashboardDetailTasksData({ children, columnRender }) {
     // properties["fv-phrase:acknowledgement"]
     // properties["fv-phrase:phrase_books"][0]
     const type = selectn('type', _selectedItemData)
+    const uid = selectn(['uid'], _selectedItemData)
+    const title = DOMPurify.sanitize(selectn('title', _selectedItemData))
     const commonData = {
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
       definitions: selectn('properties.fv:definitions', _selectedItemData),
       dialectPath: selectn('contextParameters.ancestry.dialect.path', _selectedItemData),
-      id: selectn(['uid'], _selectedItemData),
+      id: uid,
       itemType: type,
       literalTranslations: selectn('properties.fv:literal_translation', _selectedItemData),
       state: selectn('state', _selectedItemData),
-      title: selectn('title', _selectedItemData),
+      title,
       metadata: { response: _selectedItemData },
     }
     let itemTypeSpecificData = {}
@@ -154,8 +161,20 @@ function DashboardDetailTasksData({ children, columnRender }) {
           videos: selectn('contextParameters.phrase.related_videos', _selectedItemData) || [],
         }
         break
-
-      default:
+      case 'FVBook': {
+        const videosData = selectn('contextParameters.book.related_videos', _selectedItemData) || []
+        const audioData = selectn('contextParameters.book.related_audio', _selectedItemData) || []
+        const picturesData = selectn('contextParameters.book.related_pictures', _selectedItemData) || []
+        itemTypeSpecificData = {
+          book: _selectedItemData ? getBookData({ computeBookData: _selectedItemData, intl }) : {},
+          audio: getBookAudioVideo({ data: audioData, type: 'FVAudio', baseUrl }),
+          videos: getBookAudioVideo({ data: videosData, type: 'FVVideo', baseUrl }),
+          pictures: getBookPictures({ data: picturesData }),
+          metadata: undefined,
+        }
+        break
+      }
+      case 'FVWord':
         // FVWord
         itemTypeSpecificData = {
           acknowledgement: selectn('properties.fv-word:acknowledgement', _selectedItemData),
@@ -169,6 +188,10 @@ function DashboardDetailTasksData({ children, columnRender }) {
           relatedToAssets: selectn('contextParameters.word.related_by', _selectedItemData) || [],
           videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
         }
+        break
+
+      default:
+        // Do nothing
         break
     }
     setSelectedItemData({ ...commonData, ...itemTypeSpecificData })
