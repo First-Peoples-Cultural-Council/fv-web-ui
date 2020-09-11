@@ -4,12 +4,9 @@ import Preview from 'views/components/Editor/Preview'
 import {SongStoryCoverStyles} from '../SongStoryCover/SongStoryCoverStyles'
 import '!style-loader!css-loader!./DetailSongStory.css'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import ActionLaunch from '@material-ui/icons/Launch'
 import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
-import FVButton from 'views/components/FVButton'
 import Divider from '@material-ui/core/Divider'
 
 /**
@@ -23,7 +20,6 @@ import Divider from '@material-ui/core/Divider'
  */
 function DetailSongStoryPresentation({
   book,
-  openBookAction,
   // Media
   audio,
   pictures,
@@ -53,6 +49,7 @@ function DetailSongStoryPresentation({
           </div>
         </Grid>
       ) : null
+
   // Main component
   return (
     <div className="DetailSongStory">
@@ -85,15 +82,6 @@ function DetailSongStoryPresentation({
             </div>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <div className="text-right">
-          <FVButton variant="contained" style={{marginRight: '10px'}}
-            color="primary" onClick={openBookAction}>
-            <ActionLaunch/>
-            {'View full '} {book.type}
-          </FVButton>
-        </div>
       </Grid>
     </div>
   )
@@ -153,6 +141,7 @@ DetailSongStoryPresentation.propTypes = {
   audio: array.isRequired,
   pictures: array.isRequired,
   videos: array.isRequired,
+  visitFullBook: func,
 }
 
 export default DetailSongStoryPresentation
