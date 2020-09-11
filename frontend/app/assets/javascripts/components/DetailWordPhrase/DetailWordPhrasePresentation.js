@@ -397,7 +397,7 @@ DetailWordPhrasePresentation.propTypes = {
   photos: array,
   phrases: array,
   pronunciation: string,
-  properties: object.isRequired,
+  properties: object,
   pushWindowPath: func,
   relatedAssets: array,
   relatedToAssets: array,
@@ -407,15 +407,16 @@ DetailWordPhrasePresentation.propTypes = {
 }
 
 DetailWordPhrasePresentation.defaultProps = {
-  dialectClassName: '',
   audio: [],
   categories: [],
   culturalNotes: [],
   definitions: [],
+  dialectClassName: '',
   docType: '',
   literalTranslations: [],
   photos: [],
   phrases: [],
+  properties: {},
   pushWindowPath: () => {},
   relatedAssets: [],
   relatedToAssets: [],

@@ -4,8 +4,6 @@ import '!style-loader!css-loader!./DashboardDetail.css'
 
 import IconClose from '@material-ui/icons/ArrowForwardIos'
 import IconWidget from '@material-ui/icons/Apps'
-import IconDetail from '@material-ui/icons/VerticalSplitOutlined'
-import IconList from '@material-ui/icons/ViewHeadlineOutlined'
 import Link from 'views/components/Link'
 
 import useTheme from 'DataSource/useTheme'
@@ -31,7 +29,6 @@ function DashboardDetailPresentation({
   childrenSelectedSidebar,
   childrenUnselected,
   onClose,
-  onOpen,
   selectedId,
 }) {
   const { theme } = useTheme()
@@ -54,27 +51,6 @@ function DashboardDetailPresentation({
             Back to Dashboard
           </Typography>
         </Link>
-
-        {selectedId && (
-          <button className="DashboardDetail__headerButton" onClick={onClose}>
-            <span className="DashboardDetail__iconButton">
-              <IconList fontSize="large" />
-            </span>
-            <Typography variant="h5" component="span">
-              Show full list view
-            </Typography>
-          </button>
-        )}
-        {selectedId === undefined && (
-          <button className="DashboardDetail__headerButton" onClick={onOpen}>
-            <span className="DashboardDetail__iconButton">
-              <IconDetail fontSize="large" />
-            </span>
-            <Typography variant="h5" component="span">
-              Show detail view
-            </Typography>
-          </button>
-        )}
       </div>
 
       {/* Full list view (no item selected)

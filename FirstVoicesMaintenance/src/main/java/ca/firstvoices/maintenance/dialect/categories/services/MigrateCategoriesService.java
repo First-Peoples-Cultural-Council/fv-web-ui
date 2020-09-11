@@ -18,7 +18,7 @@ public interface MigrateCategoriesService {
 
   public void publishCategoriesTree(CoreSession session, DocumentModel dialect);
 
-  public String getUniqueCategoriesQuery(String dialectId);
+  public String getUniqueCategoriesQuery(String dictionaryId);
 
   public DocumentModelList getCategories(CoreSession session, DocumentModel container,
       boolean includeProxies);

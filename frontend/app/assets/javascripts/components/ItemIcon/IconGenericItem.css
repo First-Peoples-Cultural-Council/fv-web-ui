@@ -1,0 +1,11 @@
+.IconGenericItem {
+  width: 59px;
+  height: 59px;
+}
+.IconGenericItem__bg {
+  fill: #51a49a;
+}
+
+.IconGenericItem__fg {
+  fill: #fff;
+}

@@ -7,7 +7,6 @@ import useDashboard from 'DataSource/useDashboard'
 import useDocument from 'DataSource/useDocument'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
-import StringHelpers from 'common/StringHelpers'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 /**
@@ -24,7 +23,10 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace } = useNavigationHelpers()
-  const { computeDocument, fetchDocument } = useDocument()
+
+  const { computeDocument } = useDocument()
+  const { count: tasksCount = 0, fetchTasksRemoteData, fetchTask, tasks = [], userId, resetTasks } = useDashboard()
+
   const {
     item: queryItem,
     page: queryPage = 1,
@@ -33,8 +35,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
     sortOrder: querySortOrder = 'desc',
     task: queryTask,
   } = getSearchObject()
-
-  const { count: tasksCount = 0, fetchTasksRemoteData, tasks = [], userId, resetTasks } = useDashboard()
 
   // Escape key binding
   const onKeyPressed = (event) => {
@@ -48,6 +48,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
       document.removeEventListener('keydown', onKeyPressed)
     }
   }, [])
+
   const fetchTasksUsingQueries = () => {
     const _queryPage = Number(queryPage)
     fetchTasksRemoteData({
@@ -58,9 +59,16 @@ function DashboardDetailTasksData({ children, columnRender }) {
       userId,
     })
   }
+
   useEffect(() => {
     fetchTasksUsingQueries()
   }, [queryPage, queryPageSize, querySortBy, querySortOrder])
+
+  const refreshData = () => {
+    // Refreshes list in the sidebar
+    fetchTasksUsingQueries()
+    // TODO: May need to do something with any opened detail panel
+  }
 
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
@@ -73,13 +81,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
       )
     }
   }, [queryItem, queryTask, tasks, userId])
-
-  // Get Item Details
-  useEffect(() => {
-    if (queryItem) {
-      fetchDocument(queryItem)
-    }
-  }, [queryItem])
 
   // TODO: Curently only handling words
   useEffect(() => {
@@ -113,30 +114,16 @@ function DashboardDetailTasksData({ children, columnRender }) {
       title: selectn('title', _selectedItemData),
       videos: selectn('contextParameters.word.related_videos', _selectedItemData) || [],
     })
-  }, [computeDocument, queryItem])
+  }, [queryItem])
 
   // Get Task Details
   useEffect(() => {
     if (queryTask && queryTask !== URL_QUERY_PLACEHOLDER) {
-      fetchDocument(queryTask)
-    }
-  }, [queryTask])
-
-  useEffect(() => {
-    const extractComputeDocumentTask = ProviderHelpers.getEntry(computeDocument, queryTask)
-    const _selectedTaskData = selectn(['response'], extractComputeDocumentTask)
-    if (_selectedTaskData) {
-      setSelectedTaskData({
-        // Note: this comes directly from the server so need to do the date formatting step
-        date: StringHelpers.formatUTCDateString(selectn(['properties', 'nt:dueDate'], _selectedTaskData)),
-        id: selectn(['uid'], _selectedTaskData),
-        initiator: selectn(['properties', 'nt:initiator'], _selectedTaskData),
-        title: selectn(['properties', 'nt:name'], _selectedTaskData),
-        itemType: selectedItemData.itemType,
-        isNew: selectedItemData.isNew,
+      fetchTask(queryTask).then((taskData) => {
+        setSelectedTaskData(taskData)
       })
     }
-  }, [computeDocument, queryTask])
+  }, [queryTask])
 
   const onClose = () => {
     navigate(getUrlFullListView())
@@ -216,11 +203,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
     )
   }
 
-  const refreshData = () => {
-    // Refreshes list in the sidebar
-    fetchTasksUsingQueries()
-    // TODO: May need to do something with any opened detail panel
-  }
   const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: [

@@ -2,19 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import IconChat from './IconChat'
 import IconQuote from './IconQuote'
-import IconNew from '@material-ui/icons/Star'
-import IconUnknown from '@material-ui/icons/InsertDriveFile'
+import IconBook from './IconBook'
+import IconGenericItem from './IconGenericItem'
+import IconNew from './IconStarburst'
 import {
   // UNKNOWN,
   BOOK,
   WORD,
   PHRASE,
+  UNKNOWN,
   // SONG,
   // STORY,
 } from 'common/Constants'
+
 import '!style-loader!css-loader!./ItemIcon.css'
-import IconBook from './IconBook'
-// import IconMusic from './IconMusic'
 
 /**
  * @summary ItemIconPresentation
@@ -27,7 +28,6 @@ import IconBook from './IconBook'
  */
 function ItemIconPresentation({ itemType, isNew }) {
   let IconItemType = null
-  const IconIsNew = isNew ? IconNew : null
   switch (itemType) {
     case WORD:
       IconItemType = IconChat
@@ -45,15 +45,18 @@ function ItemIconPresentation({ itemType, isNew }) {
     // case SONG:
     //   IconItemType = IconMusic
     //   break
+    case UNKNOWN:
+      IconItemType = IconGenericItem
+      break
 
     default:
-      IconItemType = IconUnknown
+      /* IconItemType = IconGenericItem */
       break
   }
   return (
     <span className="ItemIcon">
-      <IconItemType className="ItemIcon__type" />
-      <IconIsNew className="ItemIcon__new" />
+      {IconItemType && <IconItemType className="ItemIcon__type" />}
+      {isNew && <IconNew className="ItemIcon__new" />}
     </span>
   )
 }
