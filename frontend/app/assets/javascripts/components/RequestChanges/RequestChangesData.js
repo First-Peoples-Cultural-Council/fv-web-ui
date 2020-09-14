@@ -31,14 +31,14 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
   const [docVisibility, setDocVisibility] = useState('')
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
-  const { rejectTask } = useTasks()
-
+  const { rejectTask, extractComputeUserTasksReject = {} } = useTasks()
   const {
     updateVisibilityToTeam,
     updateVisibilityToMembers,
     updateVisibilityToPublic,
     extractComputeUpdateVisibility,
   } = useVisibility()
+
   const computeEntities = Immutable.fromJS([
     {
       id: routeParams.dialect_path,
@@ -61,6 +61,23 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
       ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
     }
   }, [docDialectPath])
+
+  const prevRejectAction = usePrevious(selectn('action', extractComputeUserTasksReject))
+  useEffect(() => {
+    if (selectn('action', extractComputeUserTasksReject) !== prevRejectAction) {
+      const { isError, isFetching, message, success } = extractComputeUserTasksReject
+
+      if (isError === true && isFetching === false && success === false) {
+        setSnackbarMessage(message || 'We encountered a problem rejecting this task')
+        setSnackbarStatus(true)
+      }
+      if (isError !== true && isFetching === false && success === true) {
+        setSnackbarMessage(message || 'Rejected the request')
+        setSnackbarStatus(true)
+        refreshData()
+      }
+    }
+  }, [extractComputeUserTasksReject])
 
   // Approval flow:
   const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
@@ -154,11 +171,6 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
       null,
       intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
     )
-
-    setSnackbarMessage('Changes requested')
-    setSnackbarStatus(true)
-
-    refreshData()
   }
   const handleRequestChanges = (event) => {
     // Validates the form data and updates the visibility
