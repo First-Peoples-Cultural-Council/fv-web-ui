@@ -36,7 +36,10 @@ function useDashboard() {
 
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatUTCDateString(date)
-    const formatInitator = ({ firstName, lastName }) => `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
+    const formatInitator = ({ email, firstName, lastName }) => {
+      const fullName = `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
+      return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
+    }
 
     const formatTitleTask = (requestedVisibility) => `Requests visibility set to "${requestedVisibility}"`
     const formatTitleItem = (title = '-') => title
@@ -57,7 +60,11 @@ function useDashboard() {
       return {
         date: formatDate(dateCreated),
         id,
-        initiator: formatInitator({ firstName: requestedBy.firstName, lastName: requestedBy.lastName }),
+        initiator: formatInitator({
+          email: requestedBy.email,
+          firstName: requestedBy.firstName,
+          lastName: requestedBy.lastName,
+        }),
         targetDocumentsIds: targetDoc.uid,
         itemType: formatItemType(targetDoc.type),
         isNew: targetDoc.isNew,
@@ -78,10 +85,10 @@ function useDashboard() {
     // data easier in the FE. The following `friendlyNamePropertyNameLookup` converts
     // component names back to the server names
     const friendlyNamePropertyNameLookup = {
-      date: 'nt:dueDate',
+      date: 'dc:created',
       id: 'uid',
-      initiator: 'nt:initiator',
-      title: 'nt:name',
+      initiator: 'nt:initiator', // aka requested by person's email
+      titleTask: 'nt:directive', // aka requested visibility
     }
 
     return getSimpleTasks({

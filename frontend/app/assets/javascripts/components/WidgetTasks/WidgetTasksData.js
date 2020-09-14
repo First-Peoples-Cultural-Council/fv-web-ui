@@ -65,6 +65,7 @@ function WidgetTasksData({ children, columnRender }) {
         title: 'Entry title',
         field: 'titleItem',
         cellStyle,
+        sorting: false,
       },
       {
         title: 'Change requested',
