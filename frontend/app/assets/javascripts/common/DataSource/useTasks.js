@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ProviderHelpers from 'common/ProviderHelpers'
 
 import {
   approveRegistration as _approveRegistration,
@@ -14,6 +16,8 @@ import {
 
 function useTasks() {
   const dispatch = useDispatch()
+  const [lastRejectTaskId, setLastRejectTaskId] = useState()
+
   return {
     computeTasks: useSelector((state) => state.tasks.computeTasks),
     computeSimpleTask: useSelector((state) => state.tasks.computeSimpleTask),
@@ -23,6 +27,9 @@ function useTasks() {
     computeUserTasks: useSelector((state) => state.tasks.computeUserTasks),
     computeUserTasksApprove: useSelector((state) => state.tasks.computeUserTasksApprove),
     computeUserTasksReject: useSelector((state) => state.tasks.computeUserTasksReject),
+    extractComputeUserTasksReject: useSelector((state) =>
+      ProviderHelpers.getEntry(state.tasks.computeUserTasksReject, lastRejectTaskId)
+    ),
     approveRegistration: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _approveRegistration(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
@@ -57,7 +64,8 @@ function useTasks() {
     },
     rejectTask: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _rejectTask(pathOrId, operationParams, messageStart, messageSuccess, messageError)
-      dispatch(dispatchObj)
+      setLastRejectTaskId(pathOrId)
+      return dispatch(dispatchObj)
     },
   }
 }
