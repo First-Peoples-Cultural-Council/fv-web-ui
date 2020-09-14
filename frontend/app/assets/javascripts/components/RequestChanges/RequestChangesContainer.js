@@ -14,7 +14,7 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState, docDialectPath, refreshData, taskId }) {
+function RequestChangesContainer({ docId, docState, docDialectPath, refreshData, taskId, requestChangesText }) {
   return (
     <RequestChangesData
       docDialectPath={docDialectPath}
@@ -52,6 +52,7 @@ function RequestChangesContainer({ docId, docState, docDialectPath, refreshData,
             handleRequestChanges={handleRequestChanges}
             handleSnackbarClose={handleSnackbarClose}
             handleVisibilityChange={handleVisibilityChange}
+            requestChangesText={requestChangesText}
             isPublicDialect={isPublicDialect}
             onSubmit={onSubmit}
             snackbarMessage={snackbarMessage}
@@ -71,6 +72,7 @@ RequestChangesContainer.propTypes = {
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   refreshData: func,
   taskId: string,
+  requestChangesText: string,
 }
 
 export default RequestChangesContainer

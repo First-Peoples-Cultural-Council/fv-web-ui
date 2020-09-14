@@ -29,6 +29,7 @@ function RequestChangesPresentation({
   handleSnackbarClose,
   handleVisibilityChange,
   isPublicDialect,
+  requestChangesText,
   snackbarMessage,
   snackbarStatus,
 }) {
@@ -70,7 +71,7 @@ function RequestChangesPresentation({
             onClick={handleRequestChanges}
             size="large"
           >
-            Request Changes
+            {requestChangesText ? requestChangesText : 'Request Changes'}
           </FVButton>
         </div>
         <FVSnackbar
@@ -99,6 +100,7 @@ RequestChangesPresentation.propTypes = {
   handleRequestChanges: func,
   handleSnackbarClose: func,
   isPublicDialect: bool,
+  requestChangesText: string,
   snackbarMessage: string,
   snackbarStatus: bool,
   submitMethod: string,

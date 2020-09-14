@@ -53,11 +53,11 @@ function SongStoryPagesData({ children, bookEntries, defaultLanguage }) {
 
       // Audio
       const audioData = selectn('contextParameters.book.related_audio', entry) || []
-      const audio = _getMediaArray(audioData)
+      const audio = _getBookAudioVideo(audioData)
 
       // Videos
       const videosData = selectn('contextParameters.book.related_videos', entry) || []
-      const videos = _getMediaArray(videosData)
+      const videos = _getBookAudioVideo(videosData)
 
       bookPagesArray.push({
         uid: selectn('uid', entry) || '',
@@ -72,7 +72,7 @@ function SongStoryPagesData({ children, bookEntries, defaultLanguage }) {
     setBookPages(bookPagesArray)
   }
 
-  function _getMediaArray(data) {
+  function _getBookAudioVideo(data) {
     const mediaArray = []
     data.forEach((doc, key) => {
       const extractedData = {

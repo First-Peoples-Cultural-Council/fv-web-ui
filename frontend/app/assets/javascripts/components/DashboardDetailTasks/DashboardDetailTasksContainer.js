@@ -4,6 +4,7 @@ import DashboardDetailSidebar from 'components/DashboardDetail/DashboardDetailSi
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
 import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
 import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardDetailTasksData'
+import DetailSongStoryPresentation from 'components/DetailSongStory/DetailSongStoryPresentation'
 import Table from 'components/Table'
 import DetailWordPhrase from 'components/DetailWordPhrase'
 import { TABLE_FULL_WIDTH } from 'common/Constants'
@@ -56,14 +57,18 @@ function DashboardDetailTasksContainer() {
         const {
           acknowledgement,
           audio,
+          book,
           categories,
           culturalNotes,
           definitions,
           dialectPath: itemDialectPath,
           id: itemId,
+          itemType,
           literalTranslations,
+          metadata,
           partOfSpeech,
           photos,
+          pictures,
           phrases,
           pronunciation,
           relatedAssets,
@@ -72,6 +77,42 @@ function DashboardDetailTasksContainer() {
           title: itemTitle,
           videos,
         } = selectedItemData
+
+        let childrenItemDetail = null
+        if (itemType === 'FVBook') {
+          childrenItemDetail = (
+            <DetailSongStoryPresentation
+              book={book}
+              // openBookAction={openBookAction}
+              // pageCount={pageCount}
+              audio={audio}
+              pictures={pictures}
+              videos={videos}
+            />
+          )
+        }
+        if (itemType === 'FVPhrase' || itemType === 'FVWord') {
+          childrenItemDetail = (
+            <DetailWordPhrase.Presentation
+              acknowledgement={acknowledgement}
+              audio={audio}
+              categories={categories} // NOTE: also handles phrase books
+              culturalNotes={culturalNotes}
+              definitions={definitions}
+              title={itemTitle}
+              literalTranslations={literalTranslations}
+              partOfSpeech={partOfSpeech}
+              photos={photos}
+              phrases={phrases}
+              pronunciation={pronunciation}
+              relatedAssets={relatedAssets}
+              relatedToAssets={relatedToAssets}
+              metadata={metadata}
+              videos={videos}
+              docType={itemType}
+            />
+          )
+        }
         return (
           <DashboardDetail.Presentation
             childrenUnselected={
@@ -132,24 +173,7 @@ function DashboardDetailTasksContainer() {
                   />
                 )}
                 */
-                childrenItemDetail={
-                  <DetailWordPhrase.Presentation
-                    acknowledgement={acknowledgement}
-                    audio={audio}
-                    categories={categories}
-                    culturalNotes={culturalNotes}
-                    definitions={definitions}
-                    title={itemTitle}
-                    literalTranslations={literalTranslations}
-                    partOfSpeech={partOfSpeech}
-                    photos={photos}
-                    phrases={phrases}
-                    pronunciation={pronunciation}
-                    relatedAssets={relatedAssets}
-                    relatedToAssets={relatedToAssets}
-                    videos={videos}
-                  />
-                }
+                childrenItemDetail={childrenItemDetail}
                 childrenTaskApproval={
                   // TODO: NEED TO SET `docState`
                   <RequestChanges.Container
@@ -159,6 +183,7 @@ function DashboardDetailTasksContainer() {
                     docDialectPath={itemDialectPath}
                     key={itemId}
                     refreshData={refreshData}
+                    requestChangesText="Reject"
                   />
                 }
               />
