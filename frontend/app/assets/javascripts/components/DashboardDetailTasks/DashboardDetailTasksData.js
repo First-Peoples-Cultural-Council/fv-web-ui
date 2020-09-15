@@ -23,6 +23,7 @@ import { getBookData, getBookAudioVideo, getBookPictures } from 'components/Song
  *
  */
 function DashboardDetailTasksData({ children, columnRender }) {
+  const REMOVE = 'REMOVE'
   const { theme } = useTheme()
   const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
@@ -71,12 +72,59 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }, [queryPage, queryPageSize, querySortBy, querySortOrder])
 
   const refreshData = () => {
-    // TODO: if single item is displayed, need to move to back a page
-    // TODO: if reject, close open panel
-    // TODO: Refresh list in the sidebar
+    // refreshes side bar list
     fetchTasksUsingQueries()
-  }
 
+    const count = Number(tasksCount)
+    const pageSize = Number(queryPageSize)
+    const page = Number(queryPage)
+    // NOTE: if on a page that only has one item, switch to the table view & move back a page
+    if (count % pageSize === 1) {
+      navigateReplace(
+        getUrlDetailView({
+          sortBy: querySortBy,
+          sortOrder: querySortOrder,
+          page: page - 1,
+          task: REMOVE,
+          item: REMOVE,
+        })
+      )
+    } else {
+      // Get item from tasks that is before where the current task ID lives
+      // task: selectn([0, 'id'], tasks),
+      // item: selectn([0, 'targetDocumentsIds'], tasks),
+      const taskIndex = tasks.findIndex(({ id }) => {
+        return id === queryTask
+      })
+      if (taskIndex === 0) {
+        // select next item?
+        const nextTaskId = tasks[taskIndex + 1].id
+        if (nextTaskId) {
+          navigateReplace(
+            getUrlDetailView({
+              sortBy: querySortBy,
+              sortOrder: querySortOrder,
+              page: queryPage,
+              task: nextTaskId,
+              item: tasks[taskIndex + 1].targetDocumentsIds,
+            })
+          )
+        }
+      }
+      if (taskIndex > 0) {
+        // select previous item
+        navigateReplace(
+          getUrlDetailView({
+            sortBy: querySortBy,
+            sortOrder: querySortOrder,
+            page: queryPage,
+            task: tasks[taskIndex - 1].id,
+            item: tasks[taskIndex - 1].targetDocumentsIds,
+          })
+        )
+      }
+    }
+  }
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
     if (queryTask && tasks.length > 0) {
@@ -258,8 +306,8 @@ function DashboardDetailTasksData({ children, columnRender }) {
     task = queryTask,
   } = {}) => {
     return `${window.location.pathname}?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}${
-      task ? `&task=${task}` : ''
-    }${item ? `&item=${item}` : ''}`
+      task && task !== REMOVE ? `&task=${task}` : ''
+    }${item && item !== REMOVE ? `&item=${item}` : ''}`
   }
 
   const getUrlFullListView = ({
