@@ -21,7 +21,8 @@ public class MigrateCategoriesWorker extends AbstractWork {
   private final transient MigrateCategoriesService service = Framework
       .getService(MigrateCategoriesService.class);
 
-  private final transient MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
+  private final transient MaintenanceLogger maintenanceLogger = Framework
+      .getService(MaintenanceLogger.class);
 
   private final transient RepositoryManager rpm = Framework.getService(RepositoryManager.class);
 
