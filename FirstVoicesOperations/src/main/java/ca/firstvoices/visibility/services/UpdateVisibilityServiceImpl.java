@@ -33,6 +33,10 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
       throw new NuxeoException("Document Must not be a version or proxy'");
     }
 
+    if (visibility == null) {
+      throw new NuxeoException("You must provide a visibility value to update to.");
+    }
+
     String currentLifeCycleState = doc.getCurrentLifeCycleState();
 
     switch (visibility) {
@@ -100,5 +104,10 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
     }
 
     return doc;
+  }
+
+  @Override
+  public boolean isValidVisibility(String visibility) {
+    return MEMBERS.equals(visibility) || PUBLIC.equals(visibility) || TEAM.equals(visibility);
   }
 }

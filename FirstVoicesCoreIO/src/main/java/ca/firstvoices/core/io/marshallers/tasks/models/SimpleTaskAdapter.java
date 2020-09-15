@@ -1,6 +1,7 @@
 package ca.firstvoices.core.io.marshallers.tasks.models;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public interface SimpleTaskAdapter {
 
   void setRequestedBy(String requestedBy);
 
-  List<String> getTaskComments();
+  List<HashMap<String, String>> getTaskComments();
 
-  void setTaskComments(List<String> taskComments);
+  void setTaskComments(List<HashMap<String, String>> taskComments);
 }

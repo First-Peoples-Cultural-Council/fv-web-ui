@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.pageproviders.tasks">
+
+    <require>org.nuxeo.runtime.started</require>
+
+    <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+               point="providers">
+
+        <coreQueryPageProvider name="GET_NON_DELEGATED_TASKS_FOR_ACTORS">
+            <pattern>
+              SELECT * FROM Document WHERE ecm:mixinType = 'Task' AND
+              ecm:currentLifeCycleState
+              NOT IN ('ended', 'cancelled') AND ecm:isProxy = 0
+              AND nt:delegatedActors/* IS NULL
+              AND (nt:actors/* IN ?)
+            </pattern>
+            <pageSize>0</pageSize>
+            <maxPageSize>0</maxPageSize>
+        </coreQueryPageProvider>
+    </extension>
+</component>

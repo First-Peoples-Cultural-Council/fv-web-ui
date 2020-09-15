@@ -81,6 +81,9 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
         } else if (Objects.nonNull(task.getRequestedBy())) {
           jg.writeObjectField("requestedBy", new SimplePrincipalEntity(task.getRequestedBy()));
         }
+
+        // comments on task
+        jg.writeObjectField("comments", task.getTaskComments());
       }
     }
 
@@ -90,13 +93,16 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
   private String convertToVisibilityString(String directive) {
     switch (directive) {
       case "Approval to Disable required":
+      case "team":
         return "team";
 
       case "Approval to Enable required":
       case "Approval to Unpublish required":
+      case "members":
         return "members";
 
       case "Approval to Publish required":
+      case "public":
         return "public";
 
       default:
