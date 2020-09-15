@@ -24,6 +24,7 @@ import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.workers.AddConfusablesWorker;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;

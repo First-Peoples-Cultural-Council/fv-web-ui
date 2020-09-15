@@ -33,20 +33,19 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener to manage adding and removing required jobs from other events
- * This is meant for packages outside of fv-maintenance (or that cannot include it as a dependency)
- * `addToRequiredJobs`/`removeFromRequiredJobs` may also be called directly when package is included
+ * Listener to manage adding and removing required jobs from other events This is meant for packages
+ * outside of fv-maintenance (or that cannot include it as a dependency)
+ * `addToRequiredJobs`/`removeFromRequiredJobs` may also be called directly when package is
+ * included
  */
 public class ManageRequiredJobsListener implements EventListener {
 
   public static final String JOB_CONTAINER_PROP = "jobContainer";
   public static final String JOB_IDS_PROP = "jobIds";
   public static final String SUCCESS_PROP = "success";
-
-  private final MaintenanceLogger ml = Framework.getService(MaintenanceLogger.class);
-
   private static final Logger log =
       Logger.getLogger(ManageRequiredJobsListener.class.getCanonicalName());
+  private final MaintenanceLogger ml = Framework.getService(MaintenanceLogger.class);
 
   @Override
   public void handleEvent(Event event) {
@@ -65,7 +64,7 @@ public class ManageRequiredJobsListener implements EventListener {
     }
 
     if (!eventContext.hasProperty(JOB_CONTAINER_PROP) || !eventContext.hasProperty(JOB_IDS_PROP)) {
-      log.warning("Required job listener not supplied with a required props: " + eventId);
+      log.warning(() -> "event " + eventId + " in required job listener not given required props");
       return;
     }
 
@@ -73,8 +72,8 @@ public class ManageRequiredJobsListener implements EventListener {
     DocumentModel container = (DocumentModel) eventContext.getProperty(JOB_CONTAINER_PROP);
 
     if (!(eventContext.getProperty(JOB_IDS_PROP) instanceof Set)) {
-      log.severe("Illegal job format sent. Expected Set but got "
-          + eventContext.getProperty(JOB_IDS_PROP).getClass());
+      log.severe(() -> "Illegal job format sent. Expected Set but got " + eventContext
+          .getProperty(JOB_IDS_PROP).getClass());
       return;
     }
 
@@ -104,7 +103,7 @@ public class ManageRequiredJobsListener implements EventListener {
         break;
 
       default:
-        log.warning("Tried to handle unknown event: " + eventId);
+        log.warning(() -> "Tried to handle unknown event: " + eventId);
         break;
     }
   }

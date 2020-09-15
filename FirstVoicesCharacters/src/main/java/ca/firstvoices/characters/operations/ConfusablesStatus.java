@@ -5,6 +5,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import java.util.List;
+import java.util.logging.Logger;
 import org.json.JSONObject;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -23,7 +24,7 @@ import org.nuxeo.runtime.api.Framework;
 public class ConfusablesStatus {
 
   public static final String ID = Constants.CONFUSABLES_STATUS_ACTION_ID;
-
+  private static final Logger log = Logger.getLogger(ConfusablesStatus.class.getCanonicalName());
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
@@ -48,7 +49,9 @@ public class ConfusablesStatus {
                   json.put(confusable, "Words/Phrases: " + dictionaryItems.size());
                 }
               } catch (Exception e) {
-                e.printStackTrace();
+                log.severe(
+                    () -> "Exception caught while trying to get confusable status message:" + e
+                        .getMessage());
               }
             });
 

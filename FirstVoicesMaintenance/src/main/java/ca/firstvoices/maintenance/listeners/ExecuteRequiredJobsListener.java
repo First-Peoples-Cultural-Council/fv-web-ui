@@ -25,8 +25,7 @@ import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
@@ -40,8 +39,8 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Listener will be called by schedule (see fv-maintenace-contrib.xml)
- * Will execute `work` phases for up to 2 jobs for every dialect that has pending jobs
+ * Listener will be called by schedule (see fv-maintenace-contrib.xml) Will execute `work` phases
+ * for up to 2 jobs for every dialect that has pending jobs
  */
 public class ExecuteRequiredJobsListener implements EventListener {
 
@@ -49,7 +48,8 @@ public class ExecuteRequiredJobsListener implements EventListener {
   public static final int REQUIRED_JOB_LIMIT = 2;
 
   // Get logger
-  private static final Log log = LogFactory.getLog(ExecuteRequiredJobsListener.class);
+  private static final Logger log = Logger
+      .getLogger(ExecuteRequiredJobsListener.class.getCanonicalName());
 
   @Override
   public void handleEvent(Event event) {
@@ -105,12 +105,15 @@ public class ExecuteRequiredJobsListener implements EventListener {
                     }
 
                     if (jobsExecuted == (REQUIRED_JOB_LIMIT - 1)) {
-                      log.warn("Reached required job limit for dialect " + dialect.getTitle());
+                      log.warning(
+                          () -> "Reached required job limit for dialect " + dialect.getTitle());
                     }
 
                   } catch (OperationException e) {
                     event.markBubbleException();
-                    e.printStackTrace();
+                    log.severe(
+                        () -> "Failed when trying to execute required jobs with message: " + e
+                            .getMessage());
                   }
                 }
               }

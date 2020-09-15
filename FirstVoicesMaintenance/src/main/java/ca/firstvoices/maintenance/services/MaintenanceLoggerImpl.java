@@ -82,22 +82,22 @@ public class MaintenanceLoggerImpl implements MaintenanceLogger {
 
   @Override
   public void addToJobHistory() {
-
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public void logError() {
-
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public void logWarning() {
-
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public void logInsight() {
-
+    throw new UnsupportedOperationException();
   }
 
   // This is sent for audit purposes at the moment

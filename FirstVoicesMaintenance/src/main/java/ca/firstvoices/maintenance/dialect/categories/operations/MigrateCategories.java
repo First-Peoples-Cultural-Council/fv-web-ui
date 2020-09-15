@@ -95,7 +95,6 @@ public class MigrateCategories {
       workManager.schedule(worker, true);
 
       // Alternatively, we can call the service directly (not async)
-      //migrateCategoriesService.migrateWords(session, dialect, 1000);
     } else if (phase.equals("syncwork")) {
       int wordsRemaining = migrateCategoriesService.migrateWords(session, dialect, batchSize);
       while (wordsRemaining != 0) {
