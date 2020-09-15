@@ -37,9 +37,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 
 /**
  * @author david
- * Note: Warning about overriding equals method suppressed since Nuxeo does not seem to do this
  */
-@SuppressWarnings("java:S2160")
+@SuppressWarnings("java:S2160") // Nuxeo does not override equals in workers
 public class ComputeCustomOrderWorker extends AbstractWork {
 
   private static final long serialVersionUID = 1L;

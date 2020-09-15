@@ -23,9 +23,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
  * Clean Confusables worker will search for words and phrases that contain confusable characters,
  * and clean them. While this worker could potentially queue a full custom order recompute on the
  * dialect, it does not since a new custom order is calculated for each entry in the clean service
- * Note: Warning about overriding equals method suppressed since Nuxeo does not seem to do this
  */
-@SuppressWarnings("java:S2160")
+@SuppressWarnings("java:S2160") // Nuxeo does not override equals in workers
 public class CleanConfusablesWorker extends AbstractWork {
 
   private static final String LC_CONFUSABLES = "fvcharacter:confusable_characters";
