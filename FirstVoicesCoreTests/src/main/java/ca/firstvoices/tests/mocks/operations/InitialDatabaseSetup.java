@@ -61,13 +61,12 @@ public class InitialDatabaseSetup {
   public static final String SCHEMA_PUBLISHING = "publishing";
 
   public static final String SECTIONS_PROPERTY_NAME = "publish:sections";
-
-  // Environment variables for the admin account that will be created.
-  private static final String username = System.getenv("CYPRESS_FV_USERNAME");
-  private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
-  private static final String FV_WORKSPACES = "/FV/Workspaces";
   public static final String WORKSPACES_SITE = "/FV/Workspaces/Site";
   public static final String WORKSPACES_SHARED_DATA = "/FV/Workspaces/SharedData";
+  // Environment variables for the admin account that will be created.
+  private static final String CYPRESS_FV_USERNAME = System.getenv("CYPRESS_FV_USERNAME");
+  private static final String CYPRESS_FV_PASSWORD = System.getenv("CYPRESS_FV_PASSWORD");
+  private static final String FV_WORKSPACES = "/FV/Workspaces";
   private static final String FV_SECTIONS = "/FV/sections";
 
   @Context
@@ -158,16 +157,15 @@ public class InitialDatabaseSetup {
     /*
         Create admin user.
      */
-    if (username != null || password != null) {
-      if (userManager.getUserModel(username) == null) {
-        String[] groups = {"administrators"};
-        DocumentModel userDoc = userManager.getBareUserModel();
-        userDoc.setProperty(SCHEMA_NAME, USERNAME_COLUMN, username);
-        userDoc.setProperty(SCHEMA_NAME, PASSWORD_COLUMN, password);
-        userDoc.setPropertyValue(GROUPS_COLUMN, groups);
-        userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
-        userDoc = userManager.createUser(userDoc);
-      }
+    if ((CYPRESS_FV_USERNAME != null || CYPRESS_FV_PASSWORD != null)
+        && userManager.getUserModel(CYPRESS_FV_USERNAME) == null) {
+      String[] groups = {"administrators"};
+      DocumentModel userDoc = userManager.getBareUserModel();
+      userDoc.setProperty(SCHEMA_NAME, USERNAME_COLUMN, CYPRESS_FV_USERNAME);
+      userDoc.setProperty(SCHEMA_NAME, PASSWORD_COLUMN, CYPRESS_FV_PASSWORD);
+      userDoc.setPropertyValue(GROUPS_COLUMN, groups);
+      userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
+      userManager.createUser(userDoc);
     }
   }
 
@@ -179,12 +177,12 @@ public class InitialDatabaseSetup {
     if (targetSectionId != null && sourceDocument.hasSchema(SCHEMA_PUBLISHING)) {
       String[] sectionIdsArray = (String[]) sourceDocument.getPropertyValue(SECTIONS_PROPERTY_NAME);
 
-      List<String> sectionIdsList = new ArrayList<String>();
+      List<String> sectionIdsList = new ArrayList<>();
 
       if (sectionIdsArray != null && sectionIdsArray.length > 0) {
         sectionIdsList = Arrays.asList(sectionIdsArray);
         // make it resizable
-        sectionIdsList = new ArrayList<String>(sectionIdsList);
+        sectionIdsList = new ArrayList<>(sectionIdsList);
       }
 
       sectionIdsList.add(targetSectionId);

@@ -112,6 +112,8 @@ public class UnpublishedChangesEnricherTest extends
   @Test
   public void testUnpublishedChanges() throws Exception {
 
+    assertNotNull(dialectDoc);
+
         /*
             Run the enricher on the document and check that it returns the proper value.
          */

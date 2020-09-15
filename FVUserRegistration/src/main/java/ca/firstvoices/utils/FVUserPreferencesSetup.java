@@ -71,7 +71,7 @@ public class FVUserPreferencesSetup {
    * @throws Exception
    */
   public DocumentModel updateUserPreferencesWithRegistration(DocumentModel existingUserObject,
-      DocumentModel registration) throws NuxeoException {
+      DocumentModel registration) {
     String modifiedPreferencesString = createDefaultUserPreferencesWithRegistration(registration);
     existingUserObject.setPropertyValue("user:preferences", modifiedPreferencesString);
 

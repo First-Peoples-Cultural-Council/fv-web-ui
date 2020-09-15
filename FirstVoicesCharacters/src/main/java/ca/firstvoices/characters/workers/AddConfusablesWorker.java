@@ -13,7 +13,9 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * Add Confusables will execute the service to grab confusables from a directory and apply them to a
  * local alphabet
+ * Note: Warning about overriding equals method suppressed since Nuxeo does not seem to do this
  */
+@SuppressWarnings("java:S2160")
 public class AddConfusablesWorker extends AbstractWork {
 
   private static final long serialVersionUID = 1L;
