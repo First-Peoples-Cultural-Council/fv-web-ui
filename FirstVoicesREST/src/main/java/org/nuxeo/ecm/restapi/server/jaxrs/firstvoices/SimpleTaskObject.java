@@ -3,7 +3,7 @@ package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 import static javax.mail.internet.MimeMessage.RecipientType.TO;
 import static org.nuxeo.ecm.automation.core.operations.services.query.DocumentPaginatedQuery.ASC;
 
-import ca.firstvoices.io.tasks.models.SimpleTaskAdapter;
+import ca.firstvoices.core.io.marshallers.tasks.models.SimpleTaskAdapter;
 import ca.firstvoices.utils.CustomSecurityConstants;
 import ca.firstvoices.visibility.services.UpdateVisibilityService;
 import com.fasterxml.jackson.databind.JsonNode;
