@@ -303,7 +303,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     )
   }
   const setProcessedTasks = (taskData) => {
-    const toReturn = taskData.map((task) => {
+    return taskData.map((task) => {
       const isProcessed = processedTasks.find((processedTask) => {
         return processedTask.id === task.targetDocumentsIds
       })
@@ -314,7 +314,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
         processedMessage: selectn('message', isProcessed),
       }
     })
-    return toReturn
   }
   const setProcessedItem = (taskData) => {
     const isProcessed = processedTasks.find((processedTask) => {
