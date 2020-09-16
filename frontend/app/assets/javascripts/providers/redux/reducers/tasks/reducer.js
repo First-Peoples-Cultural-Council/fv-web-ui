@@ -8,6 +8,7 @@ import {
   FV_SIMPLE_TASK_GET_START,
   FV_SIMPLE_TASK_GET_SUCCESS,
   FV_SIMPLE_TASK_GET_ERROR,
+  FV_PROCESSED_TASK,
 } from './actionTypes'
 
 const initialState = {
@@ -72,6 +73,15 @@ export const tasksReducer = combineReducers({
 
       default:
         return { ...state, isFetching: false }
+    }
+  },
+  processedTasks(state = [], action) {
+    switch (action.type) {
+      case FV_PROCESSED_TASK:
+        return [...state, action.id]
+
+      default:
+        return state
     }
   },
   computeTasks: computeTasksOperation.computeTasks,
