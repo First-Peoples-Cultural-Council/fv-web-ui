@@ -23,7 +23,6 @@ import { getBookData, getBookAudioVideo, getBookPictures } from 'components/Song
  *
  */
 function DashboardDetailTasksData({ children, columnRender }) {
-  const REMOVE = 'REMOVE'
   const { theme } = useTheme()
   const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
@@ -248,8 +247,8 @@ function DashboardDetailTasksData({ children, columnRender }) {
     task = queryTask,
   } = {}) => {
     return `${window.location.pathname}?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}${
-      task && task !== REMOVE ? `&task=${task}` : ''
-    }${item && item !== REMOVE ? `&item=${item}` : ''}`
+      task ? `&task=${task}` : ''
+    }${item ? `&item=${item}` : ''}`
   }
 
   const getUrlFullListView = ({

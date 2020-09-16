@@ -75,7 +75,6 @@ function DashboardDetailTasksContainer() {
           state: docState,
           title: itemTitle,
           videos,
-          // isProcessed: itemIsProcessed,
           processedWasSuccessful: itemProcessedWasSuccessful,
           processedMessage: itemProcessedMessage,
         } = selectedItemData
@@ -117,7 +116,6 @@ function DashboardDetailTasksContainer() {
         }
         return (
           <DashboardDetail.Presentation
-            key={itemId}
             childrenUnselected={
               <Table.Presentation
                 columns={columns}
