@@ -12,6 +12,7 @@ import {
   getSimpleTask as _getSimpleTask,
   rejectRegistration as _rejectRegistration,
   rejectTask as _rejectTask,
+  setProcessedTask as _setProcessedTask,
 } from 'providers/redux/reducers/tasks'
 
 function useTasks() {
@@ -66,6 +67,10 @@ function useTasks() {
       const dispatchObj = _rejectTask(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       setLastRejectTaskId(pathOrId)
       return dispatch(dispatchObj)
+    },
+    processedTasks: useSelector((state) => state.tasks.processedTasks),
+    setProcessedTask: (id) => {
+      dispatch(_setProcessedTask(id))
     },
   }
 }
