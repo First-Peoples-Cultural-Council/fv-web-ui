@@ -16,6 +16,7 @@ import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
  * @param {node} props.icon JSX for the icon
  * @param {string} props.initiator
  * @param {boolean} props.isActive
+ * @param {boolean} props.isProcessed Session level flag set after admin acts on a task
  * @param {function} props.onClick
  * @param {string} props.title
  * @param {number} props.variant
@@ -30,6 +31,7 @@ function DashboardDetailSidebarItemPresentation({
   icon,
   initiator,
   isActive,
+  isProcessed,
   onClick,
   titleItem,
   titleTask,
@@ -55,6 +57,11 @@ function DashboardDetailSidebarItemPresentation({
     >
       {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
       <div className="DashboardDetailSidebarItem__main">
+        {isProcessed === true && (
+          <Typography variant="caption" component="div">
+            Done!
+          </Typography>
+        )}
         <Typography variant="body1" component="h3">
           {titleItem}
         </Typography>
@@ -78,6 +85,7 @@ DashboardDetailSidebarItemPresentation.propTypes = {
   icon: node,
   initiator: string,
   isActive: bool,
+  isProcessed: bool,
   onClick: func,
   title: string,
   titleItem: string,

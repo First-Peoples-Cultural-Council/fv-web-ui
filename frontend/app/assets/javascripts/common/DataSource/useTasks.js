@@ -69,8 +69,8 @@ function useTasks() {
       return dispatch(dispatchObj)
     },
     processedTasks: useSelector((state) => state.tasks.processedTasks),
-    setProcessedTask: (id) => {
-      dispatch(_setProcessedTask(id))
+    setProcessedTask: ({ id, message, isSuccess }) => {
+      dispatch(_setProcessedTask({ id, message, isSuccess }))
     },
   }
 }

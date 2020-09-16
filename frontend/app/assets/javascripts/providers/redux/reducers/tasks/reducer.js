@@ -75,10 +75,10 @@ export const tasksReducer = combineReducers({
         return { ...state, isFetching: false }
     }
   },
-  processedTasks(state = [], action) {
-    switch (action.type) {
+  processedTasks(state = [], { type, id, message, isSuccess }) {
+    switch (type) {
       case FV_PROCESSED_TASK:
-        return [...state, action.id]
+        return [...state, { id, message, isSuccess }]
 
       default:
         return state

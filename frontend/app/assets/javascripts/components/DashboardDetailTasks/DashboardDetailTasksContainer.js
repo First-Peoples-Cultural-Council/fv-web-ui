@@ -38,7 +38,6 @@ function DashboardDetailTasksContainer() {
         onOpenNoId,
         onOrderChange,
         onRowClick,
-        refreshData,
         options,
         pagination = {},
         selectedItemData,
@@ -76,6 +75,9 @@ function DashboardDetailTasksContainer() {
           state: docState,
           title: itemTitle,
           videos,
+          // isProcessed: itemIsProcessed,
+          processedWasSuccessful: itemProcessedWasSuccessful,
+          processedMessage: itemProcessedMessage,
         } = selectedItemData
 
         let childrenItemDetail = null
@@ -115,6 +117,7 @@ function DashboardDetailTasksContainer() {
         }
         return (
           <DashboardDetail.Presentation
+            key={itemId}
             childrenUnselected={
               <Table.Presentation
                 columns={columns}
@@ -175,15 +178,15 @@ function DashboardDetailTasksContainer() {
                 */
                 childrenItemDetail={childrenItemDetail}
                 childrenTaskApproval={
-                  // TODO: NEED TO SET `docState`
                   <RequestChanges.Container
                     docId={itemId}
                     taskId={taskId}
                     docState={docState}
                     docDialectPath={itemDialectPath}
                     key={itemId}
-                    refreshData={refreshData}
                     requestChangesText="Reject"
+                    processedWasSuccessful={itemProcessedWasSuccessful}
+                    processedMessage={itemProcessedMessage}
                   />
                 }
               />

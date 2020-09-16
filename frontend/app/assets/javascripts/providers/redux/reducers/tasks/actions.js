@@ -89,11 +89,13 @@ export const getSimpleTask = (uid) => {
   }
 }
 
-export const setProcessedTask = (id) => {
+export const setProcessedTask = ({ id, message, isSuccess }) => {
   return (dispatch) => {
     dispatch({
       type: FV_PROCESSED_TASK,
       id,
+      message,
+      isSuccess,
     })
   }
 }
