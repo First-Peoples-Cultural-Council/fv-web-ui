@@ -24,7 +24,6 @@ import { changeSiteTheme } from 'providers/redux/reducers/navigation'
 import selectn from 'selectn'
 
 import AppFrontController from './AppFrontController'
-import FVSnackbar from './components/FVSnackbar'
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
@@ -49,7 +48,6 @@ class AppWrapper extends Component {
     super(props, context)
 
     this.state = {
-      covidAlert: true,
       muiTheme: createMuiTheme(FirstVoices),
       siteTheme: 'default',
     }
@@ -78,30 +76,9 @@ class AppWrapper extends Component {
   }
 
   render() {
-    const covidAlert =
-      new Date('April 30, 2020 12:00:00 PDT') > Date.now() && this.state.covidAlert ? (
-        <>
-          <FVSnackbar
-            message="Join our next Virtual Open House: April 30 11 AM - 12 PM PDT"
-            buttontext="Learn More"
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            onClick={() => {
-              window.open(
-                'https://wiki.firstvoices.com/display/FIR1/2020/04/14/Two+upcoming+FirstVoices+virtual+open+house+sessions',
-                '_blank'
-              )
-              this.setState({ covidAlert: false })
-            }}
-          />
-        </>
-      ) : (
-        ''
-      )
-
     return (
       <ThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
-          {covidAlert}
           <AppFrontController warnings={{}} />
         </div>
       </ThemeProvider>
