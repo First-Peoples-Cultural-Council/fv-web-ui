@@ -24,18 +24,16 @@
 
 package ca.firstvoices.publisher.listeners;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
@@ -47,8 +45,6 @@ import org.nuxeo.runtime.api.Framework;
  * @author loopingz
  */
 public class ProxyPublisherListener implements EventListener {
-
-  private static final Log log = LogFactory.getLog(ProxyPublisherListener.class);
 
   protected FirstVoicesPublisherService service = Framework
       .getService(FirstVoicesPublisherService.class);
@@ -70,7 +66,7 @@ public class ProxyPublisherListener implements EventListener {
     // the service filter depending on the document
     if (PUBLISH_TRANSITION.equals(transition)) {
       if (REPUBLISH_TRANSITION.equals(transitionFrom)) {
-        service.republish(doc);
+        service.doRepublish(doc);
       } else {
         service.publish(doc);
       }

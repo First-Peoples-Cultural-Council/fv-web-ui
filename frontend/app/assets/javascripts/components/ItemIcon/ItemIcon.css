@@ -1,0 +1,13 @@
+.ItemIcon {
+  display: flex;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  justify-content: center;
+  align-items: center;
+}
+.ItemIcon__new {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

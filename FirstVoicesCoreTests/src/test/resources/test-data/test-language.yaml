@@ -4,9 +4,11 @@ path: /FV/Workspaces/Data
 name: "Test Language Family"
 publish: true
 publishPath: /FV/sections/Data
+key: testLanguageFamily
 children:
   - type: FVLanguage
     name: "Test Language"
+    key: testLanguage
     children:
       - type: FVDialect
         name: "Test Dialect 1"

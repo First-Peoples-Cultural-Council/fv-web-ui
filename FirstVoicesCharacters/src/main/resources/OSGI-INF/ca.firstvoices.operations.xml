@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.operations-contrib"
+  version="1.0">
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.characters.operations.CleanConfusables"/>
+    <operation class="ca.firstvoices.characters.operations.AddConfusables"/>
+    <operation class="ca.firstvoices.characters.operations.ConfusablesStatus"/>
+    <operation class="ca.firstvoices.characters.operations.ComputeCustomOrder"/>
+  </extension>
+
+  <!-- Block Operation from being visible to non admins -->
+  <extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
+    <binding name="Alphabet.CleanConfusables">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Alphabet.AddConfusables">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Alphabet.ConfusablesStatus">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Alphabet.ComputeCustomOrder">
+      <administrator>true</administrator>
+    </binding>
+  </extension>
+
+</component>

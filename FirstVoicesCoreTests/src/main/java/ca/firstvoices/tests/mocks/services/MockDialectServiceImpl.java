@@ -1,15 +1,15 @@
 package ca.firstvoices.tests.mocks.services;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -296,7 +296,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     return join.toString();
   }
 
-  private DocumentModelList generateFVWords(CoreSession session, String path,
+  public DocumentModelList generateFVWords(CoreSession session, String path,
       String[] words, DocumentModelList categories) {
     //Generate word documents and set appropriate properties
     String[] samplePartsOfSpeech = {"noun", "pronoun", "adjective", "verb", "adverb"};
@@ -308,10 +308,13 @@ public class MockDialectServiceImpl implements MockDialectService {
       wordDoc.setPropertyValue("fv-word:part_of_speech",
           samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
       wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
-      String randomCategory = categories
-          .get(ThreadLocalRandom.current().nextInt(0, categories.size())).getId();
-      String[] categoryArr = {randomCategory};
-      wordDoc.setPropertyValue("fv-word:categories", categoryArr);
+
+      if (categories != null && !categories.isEmpty()) {
+        String randomCategory = categories
+            .get(ThreadLocalRandom.current().nextInt(0, categories.size())).getId();
+        String[] categoryArr = {randomCategory};
+        wordDoc.setPropertyValue("fv-word:categories", categoryArr);
+      }
 
       fvWords.add(createDocument(session, wordDoc));
     }

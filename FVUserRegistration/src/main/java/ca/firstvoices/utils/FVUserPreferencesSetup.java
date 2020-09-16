@@ -20,7 +20,7 @@
 
 package ca.firstvoices.utils;
 
-import ca.firstvoices.models.CustomPreferencesObject;
+import ca.firstvoices.data.models.CustomPreferencesObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
@@ -59,8 +59,7 @@ public class FVUserPreferencesSetup {
     }
   }
 
-  public String createDefaultUserPreferencesWithRegistration(DocumentModel registration)
-      throws Exception {
+  public String createDefaultUserPreferencesWithRegistration(DocumentModel registration) {
     String dialectID = (String) registration.getPropertyValue("fvuserinfo:requestedSpace");
 
     return createDefaultUserPreferencesWithDialectID(dialectID);
@@ -72,7 +71,7 @@ public class FVUserPreferencesSetup {
    * @throws Exception
    */
   public DocumentModel updateUserPreferencesWithRegistration(DocumentModel existingUserObject,
-      DocumentModel registration) throws Exception {
+      DocumentModel registration) {
     String modifiedPreferencesString = createDefaultUserPreferencesWithRegistration(registration);
     existingUserObject.setPropertyValue("user:preferences", modifiedPreferencesString);
 

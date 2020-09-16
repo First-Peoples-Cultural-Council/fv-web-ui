@@ -122,9 +122,9 @@ export class MetadataPanel extends Component {
     const dialectName = routeParams.dialect_name
 
     const mapDocumentStateToVisibility = {
-      New: `${dialectName} Team Only`,
-      Disabled: `${dialectName} Team Only`,
-      Enabled: `${dialectName} Members Only`,
+      New: `${dialectName ? dialectName : ''} Team Only`,
+      Disabled: `${dialectName ? dialectName : ''} Team Only`,
+      Enabled: `${dialectName ? dialectName : ''} Members Only`,
       Published: 'Public',
     }
 

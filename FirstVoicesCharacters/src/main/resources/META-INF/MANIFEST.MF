@@ -1,0 +1,16 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Require-Bundle: org.nuxeo.runtime
+Bundle-Vendor: ca.firstvoices
+Bundle-Version: 1.0.0
+Bundle-Name: FirstVoicesCharacters
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: FirstVoicesCharacters
+Nuxeo-Component: OSGI-INF/ca.firstvoices.listeners.xml,
+ OSGI-INF/services/addConfusables-contrib.xml,
+ OSGI-INF/services/cleanupCharacters-contrib.xml,
+ OSGI-INF/services/customOrderCompute-contrib.xml,
+ OSGI-INF/services/sanitizeDocument-contrib.xml,
+ OSGI-INF/ca.firstvoices.workers.xml,
+ OSGI-INF/ca.firstvoices.operations.xml

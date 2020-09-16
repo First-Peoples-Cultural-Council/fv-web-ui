@@ -20,27 +20,29 @@
 
 package ca.firstvoices.publisher.services;
 
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_AUDIO;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_GALLERY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LABEL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_LINK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PICTURE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PORTAL;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_VIDEO;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_GALLERY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LABEL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_VIDEO;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.publisher.utils.PublisherUtils;
-import ca.firstvoices.services.AbstractService;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -63,8 +65,9 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author loopingz
  */
-public class FirstVoicesPublisherServiceImpl extends AbstractService implements
-    FirstVoicesPublisherService {
+public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherService {
+
+  private static final String MEDIA_ORIGIN_FIELD = "fvmedia:origin";
 
   private CoreSession session;
 
@@ -210,7 +213,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel publishAsset(DocumentModel asset) {
     session = asset.getCoreSession();
 
-    DocumentModel dialect = getDialect(asset);
+    DocumentModel dialect = DialectUtils.getDialect(session, asset);
     if (dialect == null) {
       throw new InvalidParameterException("Asset should be inside a dialect");
     }
@@ -236,13 +239,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         continue;
       }
 
-      // Publish dependency
-      // String documentPath = input.getPathAsString();
-
       String[] dependencyPropertyValue;
 
       // Handle exception property value as string
-      if (dependency.equals("fvmedia:origin")) {
+      if (MEDIA_ORIGIN_FIELD.equals(dependency)) {
         dependencyPropertyValue = PublisherUtils
             .extractDependencyPropertyValueAsString(input, dependency);
 
@@ -266,7 +266,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         if (publishedDep == null) {
 
           // Origin shouldn't be automatically published
-          if (dependencyEntry.getKey().equals("fvmedia:origin")) {
+          if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
             continue;
           }
 
@@ -286,7 +286,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         }
 
         // Handle exception property values as string
-        if (dependencyEntry.getKey().equals("fvmedia:origin")) {
+        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
           input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
 
         } else {
@@ -305,7 +305,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel republishAsset(DocumentModel asset) {
     session = asset.getCoreSession();
 
-    DocumentModel dialect = getDialect(asset);
+    DocumentModel dialect = DialectUtils.getDialect(asset);
     if (dialect == null) {
       throw new InvalidParameterException("Asset should be inside a dialect");
     }
@@ -328,13 +328,10 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         continue;
       }
 
-      // Publish dependency
-      // String documentPath = input.getPathAsString();
-
       String[] dependencyPropertyValue;
 
       // Handle exception property value as string
-      if (dependency.equals("fvmedia:origin")) {
+      if (MEDIA_ORIGIN_FIELD.equals(dependency)) {
         dependencyPropertyValue = PublisherUtils
             .extractDependencyPropertyValueAsString(input, dependency);
       } else {
@@ -355,7 +352,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         IdRef dependencyRef = new IdRef(relatedDocUUID);
 
         // Origin shouldn't be automatically published
-        if (dependencyEntry.getKey().equals("fvmedia:origin")) {
+        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
           continue;
         }
 
@@ -388,7 +385,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
         }
 
         // Handle exception property values as string
-        if (dependencyEntry.getKey().equals("fvmedia:origin")) {
+        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
           input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
         } else {
           // Handle as array
@@ -458,7 +455,21 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   }
 
   @Override
-  public DocumentModel republish(DocumentModel doc) {
+  public DocumentModel queueRepublish(DocumentModel doc) {
+    // On republish juggle states from so publish listener is activated
+    if (PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())) {
+      doc.followTransition(REPUBLISH_TRANSITION);
+      doc.followTransition(PUBLISH_TRANSITION);
+    } else {
+      // When publishing for the first time, follow formal transition
+      doc.followTransition(PUBLISH_TRANSITION);
+    }
+
+    return doc;
+  }
+
+  @Override
+  public DocumentModel doRepublish(DocumentModel doc) {
     if (doc == null) {
       return null;
     }
@@ -560,7 +571,6 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   @Override
   public void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
       DocumentModel doc) {
-    DocumentModel dialect = getDialect(session, doc);
     String wordQuery = "SELECT * FROM FVWord WHERE fv-word:categories IN ('" + doc.getId()
         + "') AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
     DocumentModelList documentModels = session.query(wordQuery);
@@ -600,11 +610,11 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel publishDocumentIfDialectPublished(CoreSession session, DocumentModel doc) {
     //  Will only publish document if the parent dialect is published
 
-    DocumentModel dialect = getDialect(session, doc);
+    DocumentModel dialect = DialectUtils.getDialect(session, doc);
 
-    if (isPublished(dialect)) {
-      if (isPublished(doc)) {
-        republish(doc);
+    if (StateUtils.isPublished(dialect)) {
+      if (StateUtils.isPublished(doc)) {
+        doRepublish(doc);
       } else {
         publish(doc);
       }
@@ -616,7 +626,7 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
   public DocumentModel publishPortalAssets(DocumentModel portal) {
     session = portal.getCoreSession();
 
-    DocumentModel dialect = getDialect(portal);
+    DocumentModel dialect = DialectUtils.getDialect(portal);
     if (dialect == null) {
       throw new InvalidParameterException("Asset should be inside a dialect");
     }
@@ -625,13 +635,6 @@ public class FirstVoicesPublisherServiceImpl extends AbstractService implements
       throw new InvalidParameterException("Dialect should be published");
     }
     DocumentModel dialectSection = proxies.get(0);
-    // DocumentModel input = getPublication(session, portal.getRef());
-
-    // Portal should always be published at this point, skip if not
-    // if (input == null) {
-    // Already published
-    // return input;
-    // }
 
     // Publish changes
     DocumentModel input = session.publishDocument(portal, dialectSection, true);

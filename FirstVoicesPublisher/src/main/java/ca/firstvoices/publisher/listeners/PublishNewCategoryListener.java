@@ -20,7 +20,7 @@
 
 package ca.firstvoices.publisher.listeners;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -33,7 +33,7 @@ import org.nuxeo.runtime.api.Framework;
 
 //  TODO: MOVE THIS LOGIC TO OPERATIONS MODULE AND REMOVE RELIANCE ON LISTENER
 public class PublishNewCategoryListener implements EventListener {
-  
+
   @Override
   public void handleEvent(Event event) {
     EventContext ctx = event.getContext();

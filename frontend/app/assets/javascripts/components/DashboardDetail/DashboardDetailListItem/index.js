@@ -1,4 +1,0 @@
-import DashboardDetailListItemPresentation from 'components/DashboardDetail/DashboardDetailListItem/DashboardDetailListItemPresentation'
-export default {
-  Presentation: DashboardDetailListItemPresentation,
-}

@@ -10,14 +10,8 @@ Export-Package: FirstVoicesNuxeoPublisher
 Bundle-Vendor: Nuxeo
 Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.templates.factories.xml,
  OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml,
- OSGI-INF/extensions/ca.firstvoices.nativeorder.operations.xml,
  OSGI-INF/extensions/ca.firstvoices.publisher.services.xml,
  OSGI-INF/extensions/ca.firstvoices.publisher.listeners.ProxyPublisherListener.xml,
  OSGI-INF/extensions/ca.firstvoices.publisher.listeners.PublishNewCategoryListener.xml,
- OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml,
- OSGI-INF/extensions/ca.firstvoices.nativeorder.listeners.xml,
- OSGI-INF/extensions/ca.firstvoices.nativeorder.actions.xml,
  OSGI-INF/extensions/ca.firstvoices.services.xml,
- OSGI-INF/extensions/ca.firstvoices.operations.xml,
- OSGI-INF/extensions/ca.firstvoices.computealphabetschedule.xml,
- OSGI-INF/extensions/ca.firstvoices.workers.workmanagers.xml
+ OSGI-INF/extensions/ca.firstvoices.operations.xml

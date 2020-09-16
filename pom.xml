@@ -8,7 +8,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
-    <it.failsafe.argLine></it.failsafe.argLine>
+    <it.failsafe.argLine />
   </properties>
 
   <parent>
@@ -21,34 +21,28 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.4.9-SNAPSHOT</version>
+  <version>3.4.8-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoices-marketplace</module>
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
-    <module>FirstVoicesHealthMonitor</module>
     <module>FirstVoicesREST</module>
     <module>FirstVoicesRESTPageProviders</module>
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
-    <module>FirstVoicesCognitoAuth</module>
-    <module>FirstVoicesSimplifiedAPI</module>
     <module>FirstVoicesMaintenance</module>
+    <module>FirstVoicesMaintenanceCommon</module>
     <module>FirstVoicesCoreTests</module>
-    <module>migration-contributions</module>
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
+    <module>FirstVoicesCharacters</module>
+    <module>FirstVoicesCoreIO</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCognitoAuth</artifactId>
-        <version>${project.version}</version>
-      </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesPublisher</artifactId>
@@ -61,17 +55,17 @@
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesMaintenanceCommon</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesEnrichers</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesSecurity</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesHealthMonitor</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -139,11 +133,6 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesSimplifiedAPI</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
         <artifactId>FirstVoicesOperations</artifactId>
         <groupId>ca.firstvoices</groupId>
         <version>${project.version}</version>
@@ -158,28 +147,20 @@
         <artifactId>FirstVoicesRESTPageProviders</artifactId>
         <version>${project.version}</version>
       </dependency>
-
       <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-cognitoidp</artifactId>
-        <version>${aws.sdk.version}</version>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCharacters</artifactId>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-core</artifactId>
-        <version>${aws.sdk.version}</version>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCoreIO</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>com.allogy.maven.wagon</groupId>
-        <artifactId>maven-s3-wagon</artifactId>
-        <version>1.1.0</version>
-      </extension>
-    </extensions>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -230,15 +211,50 @@
   </repositories>
 
   <profiles>
+
     <profile>
-      <id>release</id>
-      <distributionManagement>
-        <repository>
-          <id>external-releases</id>
-          <name>External Releases</name>
-          <url>${external.releases.url}</url>
-        </repository>
-      </distributionManagement>
+      <id>full</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <modules>
+        <module>FirstVoicesHealthMonitor</module>
+        <module>FirstVoicesCognitoAuth</module>
+        <module>FirstVoicesSimplifiedAPI</module>
+      </modules>
+
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesCognitoAuth</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesHealthMonitor</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ca.firstvoices</groupId>
+            <artifactId>FirstVoicesSimplifiedAPI</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-cognitoidp</artifactId>
+            <version>${aws.sdk.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws.sdk.version}</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+
     </profile>
     <profile>
       <id>sonar</id>
@@ -256,11 +272,14 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+                           <forkCount>10</forkCount>
+                            <reuseForks>false</reuseForks>
               <argLine>-Xmx1g -Dfile.encoding=UTF-8 -XX:-OmitStackTraceInFastThrow @{it.failsafe.argLine}</argLine>
             </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
+
   </profiles>
 </project>

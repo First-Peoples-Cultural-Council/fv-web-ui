@@ -1,0 +1,16 @@
+.DashboardDetailSelectedItemTask {
+  display: flex;
+}
+.DashboardDetailSelectedItemTask__icon {
+  padding: 0 10px;
+}
+.DashboardDetailSelectedItemTask--li {
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(224, 224, 224);
+}
+.DashboardDetailSelectedItemTask--isActive {
+  background-color: rgba(0, 200, 0, 0.5) !important;
+}
+.DashboardDetailSelectedItemTask--hasOnClick {
+  cursor: pointer;
+}

@@ -1,0 +1,20 @@
+# The structure of this file is defined by the TestDataYAML type
+type: FVLanguageFamily
+path: /FV/Workspaces/Data
+name: "Test Language Family"
+key: testLanguageFamily
+children:
+  - type: FVLanguage
+    name: "Test Language"
+    key: testLanguage
+    children:
+      - type: FVDialect
+        name: "Test Dialect 1"
+        key: testDialect
+        children:
+          - type: FVDictionary
+            name: "Dictionary"
+            key: testDictionary
+          - type: FVAlphabet
+            name: "Alphabet"
+            key: testAlphabet

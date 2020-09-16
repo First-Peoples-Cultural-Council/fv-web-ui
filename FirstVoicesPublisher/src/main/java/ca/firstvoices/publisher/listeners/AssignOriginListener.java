@@ -20,8 +20,8 @@
 
 package ca.firstvoices.publisher.listeners;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

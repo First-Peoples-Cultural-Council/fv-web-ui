@@ -77,7 +77,7 @@ export default class DirectoryOperations {
 
   static getFromAPI(path) {
     return new Promise((resolve, reject) => {
-      request.get(path, function handleResponse(error, response, body) {
+      request.get({ url: path, json: true }, function handleResponse(error, response, body) {
         if (error) {
           if (error.hasOwnProperty('response')) {
             error.response.json().then((jsonError) => {

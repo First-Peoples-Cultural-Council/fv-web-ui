@@ -1,6 +1,7 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
 import static org.junit.Assert.assertEquals;
+
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -46,8 +46,6 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Deploy("org.nuxeo.ecm.platform.types.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 @Deploy("org.nuxeo.ecm.platform.publisher.core")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
 @Deploy({"FirstVoicesREST", "FirstVoicesRESTPageProviders", "FirstVoicesNuxeoPublisher"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class CategoriesObjectTest extends BaseTest {

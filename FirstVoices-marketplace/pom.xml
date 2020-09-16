@@ -4,7 +4,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.4.9-SNAPSHOT</version>
+    <version>3.4.8-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -20,19 +20,11 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesCognitoAuth</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesSecurity</artifactId>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesEnrichers</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesHealthMonitor</artifactId>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
@@ -51,8 +43,12 @@
       <artifactId>FirstVoicesMaintenance</artifactId>
     </dependency>
     <dependency>
-      <artifactId>FirstVoicesOperations</artifactId>
       <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesMaintenanceCommon</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesOperations</artifactId>
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
@@ -68,9 +64,14 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesSimplifiedAPI</artifactId>
+      <artifactId>FirstVoicesCharacters</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCoreIO</artifactId>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -84,5 +85,34 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <!-- Full install includes Cognito, SimpleAPI and Health Monitor; locally we usually do not need them -->
+      <id>full-marketplace</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesCognitoAuth</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesHealthMonitor</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>ca.firstvoices</groupId>
+          <artifactId>FirstVoicesSimplifiedAPI</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>

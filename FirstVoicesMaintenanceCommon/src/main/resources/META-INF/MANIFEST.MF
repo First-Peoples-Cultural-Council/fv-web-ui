@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesMaintenanceCommon;singleton=true
+Bundle-Name: FirstVoicesMaintenanceCommon
+Bundle-Version: 1.0.qualifier
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ManifestVersion: 2

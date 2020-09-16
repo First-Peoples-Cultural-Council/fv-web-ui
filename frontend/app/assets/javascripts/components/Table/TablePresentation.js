@@ -4,7 +4,7 @@ import MaterialTable from 'material-table'
 import FVButton from 'views/components/FVButton'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
-import { CONTENT_FULL_WIDTH } from 'common/Constants'
+import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE } from 'common/Constants'
 import TableHeader from './TableHeader'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
@@ -35,9 +35,10 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
  *
  * @returns {node} jsx markup
  */
-function TablePresentation({
+const TablePresentation = ({
   actions,
   columns,
+  componentsPagination,
   data,
   detailPanel,
   localization,
@@ -52,20 +53,35 @@ function TablePresentation({
   onSelectionChange,
   onTreeExpandChange,
   options,
+  sortDirection,
   style,
   title,
   variant,
-  sortDirection,
-}) {
+}) => {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
-  const { tableHeader, row, rowAlternate } = themeTable
 
   let styleVariant
-  let headerStyle = tableHeader
-  if (variant === CONTENT_FULL_WIDTH) {
-    styleVariant = themeTable.ContentFullWidth
-    headerStyle = styleVariant.tableHeader
+
+  let headerStyle = themeTable.tableHeader
+  let row = themeTable.row
+  let rowAlternate = themeTable.rowAlternate
+
+  switch (variant) {
+    case TABLE_FULL_WIDTH:
+      styleVariant = themeTable.fullWidth
+      headerStyle = styleVariant.tableHeader
+      break
+    case WIDGET_WORKSPACE:
+      styleVariant = selectn('widget', theme)
+      row = styleVariant.row
+      rowAlternate = styleVariant.rowAlternate
+      headerStyle = styleVariant.tableHeader
+      break
+
+    default: {
+      break
+    }
   }
   const icons = {
     SortArrow: sortDirection === 'desc' ? ArrowUpwardIcon : ArrowDownwardIcon,
@@ -94,8 +110,38 @@ function TablePresentation({
     toolbar: false,
     toolbarButtonAlignment: 'left',
   }
+  const _options = Object.assign({}, defaultOptions, options)
+  const componentsOverride = {
+    Actions: ({ data: _data, actions: _actions }) => {
+      return (
+        <div className="Tasks__approveRejectContainer">
+          {_actions.map(({ text, tooltip, onClick, disabled }, i) => {
+            return (
+              <FVButton
+                key={`action${i}`}
+                onClick={(event) => {
+                  onClick(event, _data)
+                }}
+                color="secondary"
+                variant="contained"
+                className="Tasks__approve"
+                disabled={disabled}
+              >
+                {text ? text : tooltip}
+              </FVButton>
+            )
+          })}
+        </div>
+      )
+    },
+    Header: TableHeader,
+  }
+  if (componentsPagination) {
+    componentsOverride.Pagination = componentsPagination
+  }
   return (
     <MaterialTable
+      key={`materialTable-${_options.pageSize}`}
       style={Object.assign({}, style, styleVariant)}
       actions={actions}
       columns={columns}
@@ -110,44 +156,21 @@ function TablePresentation({
       onSearchChange={onSearchChange}
       onSelectionChange={onSelectionChange}
       onTreeExpandChange={onTreeExpandChange}
-      options={Object.assign({}, defaultOptions, options)}
+      options={_options}
       title={title}
       detailPanel={detailPanel}
       icons={icons}
-      components={{
-        Actions: ({ data: _data, actions: _actions }) => {
-          return (
-            <div className="Tasks__approveRejectContainer">
-              {_actions.map(({ text, tooltip, onClick, disabled }, i) => {
-                return (
-                  <FVButton
-                    key={`action${i}`}
-                    onClick={(event) => {
-                      onClick(event, _data)
-                    }}
-                    color="secondary"
-                    variant="contained"
-                    className="Tasks__approve"
-                    disabled={disabled}
-                  >
-                    {text ? text : tooltip}
-                  </FVButton>
-                )
-              })}
-            </div>
-          )
-        },
-        Header: TableHeader,
-      }}
+      components={componentsOverride}
       localization={localization}
     />
   )
 }
 // PROPTYPES
-const { array, func, string, object, oneOf, oneOfType } = PropTypes
+const { array, elementType, func, string, object, oneOf, oneOfType } = PropTypes
 TablePresentation.propTypes = {
   actions: array,
   columns: array,
+  componentsPagination: elementType,
   data: oneOfType([array, func]),
   detailPanel: oneOfType([array, func]),
   localization: object,
@@ -162,10 +185,10 @@ TablePresentation.propTypes = {
   onSelectionChange: func,
   onTreeExpandChange: func,
   options: object,
-  title: string,
-  style: object,
-  variant: oneOf([CONTENT_FULL_WIDTH]),
   sortDirection: string,
+  style: object,
+  title: string,
+  variant: oneOf([TABLE_FULL_WIDTH, WIDGET_WORKSPACE]),
 }
 
 TablePresentation.defaultProps = {

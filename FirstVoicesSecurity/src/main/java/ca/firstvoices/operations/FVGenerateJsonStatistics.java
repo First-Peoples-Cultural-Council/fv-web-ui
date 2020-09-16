@@ -24,18 +24,19 @@
 
 package ca.firstvoices.operations;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_BOOK;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_PHRASE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -45,7 +46,7 @@ import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
+import org.nuxeo.ecm.core.api.impl.blob.JSONBlob;
 
 /**
  * @author cstuart
@@ -71,17 +72,17 @@ public class FVGenerateJsonStatistics {
   protected ObjectMapper mapper = new ObjectMapper();
 
   @OperationMethod
-  public Blob run() {
+  public Blob run() throws JSONException {
 
     // JSON object to be returned
-    ObjectNode rootJsonObj = mapper.createObjectNode();
+    JSONObject response = new JSONObject();
 
-    rootJsonObj.put("dialectPath", dialectPath);
+    response.put("dialectPath", dialectPath);
 
     // Get current user
     Principal principal = session.getPrincipal();
     principalName = principal.getName();
-    rootJsonObj.put("user", principalName);
+    response.put("user", principalName);
 
     // Generate statistics for each specified docType, and add them to the root JSON object
     for (String docType : docTypes) {
@@ -89,17 +90,13 @@ public class FVGenerateJsonStatistics {
       if (allowedDocTypes.contains(docType) && (dialectPath.startsWith("/FV/Workspaces/")
           || dialectPath.startsWith("/FV/sections/"))) {
         ObjectNode jsonObj = generateDocumentStatsJson(docType);
-        rootJsonObj.put(docType, jsonObj);
+        response.put(docType, jsonObj);
       }
     }
-    return new StringBlob(rootJsonObj.toString(), "application/json");
+    return new JSONBlob(response.toString());
   }
 
   private ObjectNode generateDocumentStatsJson(String docType) {
-
-    ArrayNode recentlyModifiedJsonArray = mapper.createArrayNode();
-    ArrayNode recentlyCreatedJsonArray = mapper.createArrayNode();
-    ArrayNode userRecentlyModifiedJsonArray = mapper.createArrayNode();
 
     ObjectNode documentJsonObj = mapper.createObjectNode();
 
@@ -170,65 +167,6 @@ public class FVGenerateJsonStatistics {
       DocumentModelList childrensArchiveDocs = session
           .query(query + " AND fv:available_in_childrens_archive=1", null, 1, 0, true);
       documentJsonObj.put("available_in_childrens_archive", childrensArchiveDocs.totalSize());
-      // List of most recently created docs
-      //  DocumentModelList recentlyCreatedDocs = session.query(query + " ORDER BY
-      //  dc:created
-      //  DESC", null, maxQueryResults, 0, true);
-      //  for (DocumentModel doc : recentlyCreatedDocs) {
-      //      ObjectNode recentlyCreatedJsonObj = mapper.createObjectNode();
-      //      recentlyCreatedJsonObj.put("ecm:uuid", doc.getId());
-      //      recentlyCreatedJsonObj.put("dc:title", doc.getTitle());
-      //      recentlyCreatedJsonObj.put("ecm:path", doc.getPathAsString());
-      //      GregorianCalendar dateCreated = (GregorianCalendar)doc.getPropertyValue
-      //      ("dc:created");
-      //      recentlyCreatedJsonObj.put("dc:created", dateCreated.getTime().toString
-      //      ());
-      //      recentlyCreatedJsonObj.put("dc:lastContributor", (String)doc
-      //      .getPropertyValue
-      //      ("dc:lastContributor"));
-      //      recentlyCreatedJsonArray.add(recentlyCreatedJsonObj);
-      //  }
-      //    documentJsonObj.put("most_recently_created", recentlyCreatedJsonArray);
-      //
-      //  // List of most recently modified docs
-      //  DocumentModelList recentlyModifiedDocs = session.query(query + " ORDER BY
-      //  dc:modified DESC", null, maxQueryResults, 0, true);
-      //  for (DocumentModel doc : recentlyModifiedDocs) {
-      //      ObjectNode recentlyModifiedJsonObj = mapper.createObjectNode();
-      //      recentlyModifiedJsonObj.put("ecm:uuid", doc.getId());
-      //      recentlyModifiedJsonObj.put("dc:title", doc.getTitle());
-      //      recentlyModifiedJsonObj.put("ecm:path", doc.getPathAsString());
-      //      GregorianCalendar dateModified = (GregorianCalendar)doc.getPropertyValue
-      //      ("dc:modified");
-      //      recentlyModifiedJsonObj.put("dc:modified", dateModified.getTime()
-      //      .toString());
-      //      recentlyModifiedJsonObj.put("dc:lastContributor", (String)doc
-      //      .getPropertyValue
-      //      ("dc:lastContributor"));
-      //      recentlyModifiedJsonArray.add(recentlyModifiedJsonObj);
-      //  }
-      //    documentJsonObj.put("most_recently_modified", recentlyModifiedJsonArray);
-      //
-      //  // List of user most recently modified docs
-      //  DocumentModelList userMostRecentlyModifiedDocs = session.query(query + " AND
-      //  dc:lastContributor='" + principalName + "' ORDER BY dc:modified DESC", null,
-      //  maxQueryResults, 0, true);
-      //  for (DocumentModel doc : userMostRecentlyModifiedDocs) {
-      //      ObjectNode userRecentlyModifiedJsonObj = mapper.createObjectNode();
-      //      userRecentlyModifiedJsonObj.put("ecm:uuid", doc.getId());
-      //      userRecentlyModifiedJsonObj.put("dc:title", doc.getTitle());
-      //      userRecentlyModifiedJsonObj.put("ecm:path", doc.getPathAsString());
-      //      GregorianCalendar dateModified = (GregorianCalendar)doc.getPropertyValue
-      //      ("dc:modified");
-      //      userRecentlyModifiedJsonObj.put("dc:modified", dateModified.getTime()
-      //      .toString
-      //      ());
-      //      userRecentlyModifiedJsonObj.put("dc:lastContributor", (String)doc
-      //      .getPropertyValue("dc:lastContributor"));
-      //      userRecentlyModifiedJsonArray.add(userRecentlyModifiedJsonObj);
-      //  }
-      //    documentJsonObj.put("user_most_recently_modified",
-      //    userRecentlyModifiedJsonArray);
     }
     return documentJsonObj;
   }

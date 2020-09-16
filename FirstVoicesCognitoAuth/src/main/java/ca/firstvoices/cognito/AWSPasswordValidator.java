@@ -4,12 +4,6 @@ import com.amazonaws.services.cognitoidp.model.PasswordPolicyType;
 
 public class AWSPasswordValidator {
 
-  private PasswordPolicyType ppt;
-
-  public AWSPasswordValidator(PasswordPolicyType ppt) {
-    this.ppt = ppt;
-  }
-
   // these definitions taken from
   // https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-policies.html
   private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
@@ -17,6 +11,11 @@ public class AWSPasswordValidator {
   private static final String NUMBERS = "0123456789";
   private static final String SYMBOLS = "^$*.[]{}()?\"!@#%&/\\,><':;|_~`";
   private static final String VALID_CHARS = LOWERCASE + UPPERCASE + NUMBERS + SYMBOLS + "+=";
+  private PasswordPolicyType ppt;
+
+  public AWSPasswordValidator(PasswordPolicyType ppt) {
+    this.ppt = ppt;
+  }
 
   public boolean validatePassword(String password) {
     if (password == null) {
@@ -30,7 +29,8 @@ public class AWSPasswordValidator {
     }
 
     //validate all chars are in valid set
-    if (!password.codePoints().mapToObj(ch -> String.valueOf(((char) ch)))
+    if (!password.codePoints()
+        .mapToObj(ch -> String.valueOf(((char) ch)))
         .allMatch(VALID_CHARS::contains)) {
       return false;
     }
@@ -44,19 +44,22 @@ public class AWSPasswordValidator {
 
     //validate uppercase
     if (ppt.isRequireUppercase().booleanValue() && password.codePoints()
-        .mapToObj(ch -> String.valueOf(((char) ch))).noneMatch(UPPERCASE::contains)) {
+        .mapToObj(ch -> String.valueOf(((char) ch)))
+        .noneMatch(UPPERCASE::contains)) {
       return false;
     }
 
     //validate numbers
     if (ppt.isRequireNumbers().booleanValue() && password.codePoints()
-        .mapToObj(ch -> String.valueOf(((char) ch))).noneMatch(NUMBERS::contains)) {
+        .mapToObj(ch -> String.valueOf(((char) ch)))
+        .noneMatch(NUMBERS::contains)) {
       return false;
     }
 
     //validate symbols
     return !ppt.isRequireSymbols().booleanValue() || password.codePoints()
-        .mapToObj(ch -> String.valueOf(((char) ch))).anyMatch(SYMBOLS::contains);
+        .mapToObj(ch -> String.valueOf(((char) ch)))
+        .anyMatch(SYMBOLS::contains);
   }
 
 }

@@ -1,0 +1,16 @@
+.DashboardDetailSidebarItem {
+  display: flex;
+}
+.DashboardDetailSidebarItem__icon {
+  padding: 0 10px;
+}
+.DashboardDetailSidebarItem--li {
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(224, 224, 224);
+}
+.DashboardDetailSidebarItem--isActive {
+  background-color: rgba(0, 200, 0, 0.5) !important;
+}
+.DashboardDetailSidebarItem--hasOnClick {
+  cursor: pointer;
+}

@@ -20,14 +20,14 @@
 
 package testUtil;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_ALPHABET;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORIES;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static ca.firstvoices.utils.CustomSecurityConstants.LANGUAGE_ADMINS_GROUP;
 import static ca.firstvoices.utils.CustomSecurityConstants.RECORDERS_APPROVERS_GROUP;
 import static ca.firstvoices.utils.CustomSecurityConstants.RECORDERS_GROUP;

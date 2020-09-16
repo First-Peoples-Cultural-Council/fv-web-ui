@@ -1,13 +1,13 @@
 package ca.firstvoices.visibility.operations;
 
 
-import static ca.firstvoices.lifecycle.Constants.DISABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.ENABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
-import org.nuxeo.ecm.automation.core.util.DocumentHelper;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import testUtil.AbstractFirstVoicesOperationsTest;
@@ -205,32 +204,6 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
     Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
   }
-
-  @Test
-  public void testPublicToPublicWithDialectIdFallback() throws OperationException {
-    dialect.followTransition(PUBLISH_TRANSITION);
-
-    // Remove fva:dialect
-    DocumentHelper.removeProperty(word, "fva:dialect");
-    session.saveDocument(word);
-
-    firstVoicesPublisherService.publish(word);
-    Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
-    ctx = new OperationContext(session);
-    ctx.setInput(word);
-    Map<String, String> params = new HashMap<>();
-    params.put(VISIBILITY, PUBLIC);
-    DocumentModel returnDoc = (DocumentModel) service
-        .run(ctx, UpdateVisibilityOperation.ID, params);
-
-    Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
-
-    // Restore fva:dialect
-    word.setPropertyValue("fva:dialect", dialect.getId());
-    session.saveDocument(word);
-  }
-
-
 
   @Test
   public void testPrivateToPublic() throws OperationException {

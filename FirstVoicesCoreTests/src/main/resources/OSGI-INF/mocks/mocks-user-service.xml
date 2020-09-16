@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="fv-core-tests-mocks-user-service-contrib" version="1.0">
+
+  <implementation class="ca.firstvoices.tests.mocks.services.MockUserServiceImpl"/>
+
+  <service>
+    <provide interface="ca.firstvoices.tests.mocks.services.MockUserService"/>
+  </service>
+
+</component>
+
+

@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>FirstVoicesPublisher</artifactId>
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>firstvoices-modules-parent</artifactId>
-    <version>3.4.9-SNAPSHOT</version>
+    <version>3.4.8-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>FirstVoicesPublisher</name>
@@ -151,7 +153,7 @@
       <artifactId>nuxeo-invite</artifactId>
       <scope>test</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
       <scope>test</scope>
@@ -160,10 +162,9 @@
       <groupId>ca.firstvoices</groupId>
       <artifactId>FirstVoicesData</artifactId>
     </dependency>
-
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCoreIO</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sun.faces</groupId>

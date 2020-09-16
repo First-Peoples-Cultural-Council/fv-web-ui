@@ -1,21 +1,43 @@
 /* Block */
 .Widget {
-  border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 35px;
   padding-bottom: 10px;
+  box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.26);
+  background-color: #fff;
 }
 /* Element */
 .Widget__body {
   padding: 0 10px;
+  overflow: auto;
+}
+.Widget__body .MuiTableRow-footer {
+  display: flex;
+}
+.Widget .Widget__body .MuiTableCell-footer {
+  border: none;
+  padding: 0 30px;
 }
 .Widget__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 35px;
+}
+.Widget__headerLink {
+  background-color: #c4503c;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 25px;
+  color: #fff;
+  font-size: 1.2rem;
+}
+.Widget__headerLink:visited {
+  background-color: #c4503c;
+  color: #fff;
 }
 
 /* Modifiers */
-.Widget--ContentFullWidth .Widget__body {
+.Widget--fullWidth .Widget__body {
   padding: 0;
 }

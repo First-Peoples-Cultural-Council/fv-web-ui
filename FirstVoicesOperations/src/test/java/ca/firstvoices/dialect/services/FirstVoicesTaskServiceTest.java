@@ -1,6 +1,6 @@
 package ca.firstvoices.dialect.services;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.utils.CustomSecurityConstants.LANGUAGE_ADMINS_GROUP;
 
 import java.util.ArrayList;
