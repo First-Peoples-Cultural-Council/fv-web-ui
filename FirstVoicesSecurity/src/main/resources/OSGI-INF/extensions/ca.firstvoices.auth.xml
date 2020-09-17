@@ -33,12 +33,10 @@
     </specificAuthenticationChain>
     
 	</extension>
-  	
+
 	<extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
-	  <!-- <binding name="UserGroup.Suggestion" disabled="true"/> -->
 	  <binding name="UserGroup.Suggestion">
 	    <administrator>true</administrator>
-	    <!--<secure>true</secure>-->
 	    <groups>language_administrators,administrators</groups>
 	  </binding>
 	</extension>

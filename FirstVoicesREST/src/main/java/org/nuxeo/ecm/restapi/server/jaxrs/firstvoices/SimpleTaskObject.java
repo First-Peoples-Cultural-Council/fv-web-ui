@@ -51,7 +51,6 @@ import org.nuxeo.ecm.platform.query.api.PageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderDefinition;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.query.nxql.CoreQueryDocumentPageProvider;
-import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.routing.core.impl.GraphNode;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskEventNames;
@@ -153,7 +152,7 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
       if (taskService.canEndTask(session.getPrincipal(), coreTask)) {
         taskService
             .endTask(session, session.getPrincipal(), coreTask, approvedCommentText,
-                TaskEventNames.WORKFLOW_TASK_REJECTED, true);
+                TaskEventNames.WORKFLOW_TASK_COMPLETED, true);
       }
     } else {
       // Document has been removed or trashed
@@ -196,22 +195,23 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
       }
 
       task.setPropertyValue("nt:directive", approvedVisibility);
+      session.saveDocument(task);
     }
 
     // Delegate task to recorder
     SimpleTaskAdapter taskObject = task.getAdapter(SimpleTaskAdapter.class);
     IdRef targetDoc = new IdRef(taskObject.getTargetDocId());
 
-    if (session.exists(targetDoc) && !session.isTrashed(targetDoc)) {
+    if (!session.exists(targetDoc) || session.isTrashed(targetDoc)) {
       return Response.status(Status.GONE).build();
     }
 
     DocumentModel doc = session.getDocument(targetDoc);
     Set<String> recorders = getActors(doc, CustomSecurityConstants.RECORD);
 
-    Framework.getService(DocumentRoutingService.class)
-        .delegateTask(getContext().getCoreSession(), taskId,
-            new ArrayList<>(), comment);
+    // Delegate task
+    taskService.delegateTask(getContext().getCoreSession(), taskId,
+        new ArrayList<>(recorders), comment);
 
     session.save();
 
@@ -338,9 +338,9 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
     }
 
     taskService.createTask(session, session.getPrincipal(), doc, "RoutingTask",
+        "RoutingTask", null,
         new ArrayList<>(getActors(doc, CustomSecurityConstants.APPROVE)), false,
-        requestedVisibility, comment, null, taskVariables,
-        null);
+        requestedVisibility, comment, null, null, null);
 
     session.save();
 
