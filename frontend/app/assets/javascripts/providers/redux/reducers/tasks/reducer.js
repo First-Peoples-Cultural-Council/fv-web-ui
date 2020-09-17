@@ -76,13 +76,11 @@ export const tasksReducer = combineReducers({
     }
   },
   processedTasks(state = [], { type, id, message, isSuccess }) {
-    switch (type) {
-      case FV_PROCESSED_TASK:
-        return [...state, { id, message, isSuccess }]
-
-      default:
-        return state
+    // Sonarcloud concession
+    if (type === FV_PROCESSED_TASK) {
+      return [...state, { id, message, isSuccess }]
     }
+    return state
   },
   computeTasks: computeTasksOperation.computeTasks,
   computeUserTasks: computeUserTasksOperation.computeUserTasks,
