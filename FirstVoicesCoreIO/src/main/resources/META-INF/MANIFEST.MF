@@ -1,0 +1,11 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: ca.firstvoices
+Bundle-Version: 1.0.0
+Bundle-Name: FirstVoicesCoreIO
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: FirstVoicesCoreIO;singleton=true
+Nuxeo-Component: OSGI-INF/ca.firstvoices.listeners.xml,
+ OSGI-INF/services/assignAncestors-contrib.xml,
+ OSGI-INF/ca.firstvoices.io.xml

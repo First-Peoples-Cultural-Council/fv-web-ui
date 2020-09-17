@@ -1,10 +1,10 @@
 package ca.firstvoices.dialect.categories.services;
 
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import ca.firstvoices.services.AbstractFirstVoicesOperationsService;
 import java.util.Map;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -15,8 +15,7 @@ import org.nuxeo.runtime.api.Framework;
 /**
  * @author david
  */
-public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService implements
-    CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
   private FirstVoicesPublisherService publisherService;
 
@@ -87,11 +86,11 @@ public class CategoryServiceImpl extends AbstractFirstVoicesOperationsService im
     }
 
     // If the document is published, move the sections doc
-    if (isPublished(categoryDoc)) {
+    if (StateUtils.isPublished(categoryDoc)) {
       DocumentModel categorySectionDoc = publisherService
           .getPublication(session, categoryDoc.getRef());
 
-      if (!isPublished(newParentDoc)) {
+      if (!StateUtils.isPublished(newParentDoc)) {
         publisherService.publishDocumentIfDialectPublished(session, newParentDoc);
       }
 

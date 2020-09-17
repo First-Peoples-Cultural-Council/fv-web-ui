@@ -8,16 +8,17 @@
       <event>lifecycle_transition_event</event>
       <event>documentProxyPublished</event>
     </listener>
-    
+
     <listener name="DocumentDeletedUnpublishListener" async="false" postCommit="false"
       class="ca.firstvoices.publisher.listeners.DocumentDeletedUnpublishListener" priority="150">
       <event>documentTrashed</event>
     </listener>
-    
-    <listener name="AssignOriginListener" class="ca.firstvoices.publisher.listeners.AssignOriginListener" priority="250">
+
+    <listener name="AssignOriginListener"
+      class="ca.firstvoices.publisher.listeners.AssignOriginListener" priority="250">
       <event>documentCreated</event>
     </listener>
-    
+
   </extension>
 
 </component>

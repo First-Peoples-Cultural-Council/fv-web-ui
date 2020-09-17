@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.test.nuxeo.conf.override-contrib" version="1.0.0">
+
+  <extension point="configuration" target="org.nuxeo.runtime.ConfigurationService">
+    <!-- No need to run picture migration during tests -->
+    <property name="nuxeo.picture.migration.enabled" override="true">false</property>
+  </extension>
+
+</component>

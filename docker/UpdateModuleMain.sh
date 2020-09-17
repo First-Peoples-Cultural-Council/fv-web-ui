@@ -43,7 +43,9 @@ echo ''
 
 # Copy the new/updated module into the docker container and restart the nuxeo backend
 echo 'Copying new module into docker container and restarting nuxeo backend.'
-docker cp target/$MODULE-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/ && docker exec nuxeo-dev nuxeoctl restart
+docker cp target/$MODULE-*.jar nuxeo-dev:/opt/nuxeo/server/nxserver/bundles/
+docker exec nuxeo-dev sh -c "chown root:root /opt/nuxeo/server/nxserver/bundles/$MODULE-*.jar" > /dev/null 2>&1
+docker exec nuxeo-dev nuxeoctl restart
 if [[ "$?" -ne 0 ]]; then
     echo
     echo -e "${RED}Copy new bundle build into docker failed. \n${ENDCOLOR}"; exit 1

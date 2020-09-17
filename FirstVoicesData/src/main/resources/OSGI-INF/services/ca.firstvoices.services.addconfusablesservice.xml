@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="ca.firstvoices.services.AddConfusablesService" version="1.0">
-    <implementation class="ca.firstvoices.services.AddConfusablesServiceImpl"/>
-    <service>
-        <provide interface="ca.firstvoices.services.AddConfusablesService"/>
-    </service>
-</component>

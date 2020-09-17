@@ -23,7 +23,6 @@ package ca.firstvoices.operations;
 import ca.firstvoices.services.UnpublishedChangesService;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
-import org.json.JSONObject;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
@@ -50,8 +49,6 @@ public class GetUnpublishedChanges {
 
   @OperationMethod
   public Blob run(DocumentModel input) {
-
-    JSONObject response = new JSONObject();
 
     session = input.getCoreSession();
     Diff diff = service.getUnpublishedChanges(session, input);

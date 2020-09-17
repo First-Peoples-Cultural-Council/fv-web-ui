@@ -20,8 +20,8 @@
 
 package ca.firstvoices.services;
 
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -61,7 +61,6 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
         + ".ProxyPublisherListener.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.nativeorder.services.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 

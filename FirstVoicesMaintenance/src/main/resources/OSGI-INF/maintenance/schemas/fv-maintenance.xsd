@@ -29,6 +29,7 @@
   </xs:simpleType>
 
   <!-- TODO: Externalize this as a Directory so that it is less prone to misnaming -->
+  <!-- This is currently unused; so any job is possible -->
   <!-- List of available jobs to set -->
   <xs:simpleType name="job_ids">
     <xs:restriction base="xs:string">

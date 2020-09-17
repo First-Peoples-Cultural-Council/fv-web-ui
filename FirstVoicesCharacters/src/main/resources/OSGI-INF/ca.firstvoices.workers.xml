@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.workers-contrib">
+  <extension point="queues" target="org.nuxeo.ecm.core.work.service">
+    <queue id="CharactersWorkerQueue">
+      <category>charactersWorkerQueue</category>
+      <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
+      <maxThreads>1</maxThreads>
+      <capacity>20</capacity>
+      <name>Queue for character operations</name>
+    </queue>
+  </extension>
+</component>

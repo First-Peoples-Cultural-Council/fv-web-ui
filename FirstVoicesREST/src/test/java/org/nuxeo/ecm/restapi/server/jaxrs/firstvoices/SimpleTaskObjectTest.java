@@ -60,11 +60,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 @Deploy("org.nuxeo.ecm.platform.publisher.core")
 @Deploy("org.nuxeo.ecm.platform.task.core")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
-@Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.io.xml")
 @Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml")
-@Deploy({"FirstVoicesREST", "FirstVoicesRESTPageProviders", "FirstVoicesNuxeoPublisher"})
+@Deploy({"FirstVoicesCoreIO","FirstVoicesREST", "FirstVoicesRESTPageProviders", "FirstVoicesNuxeoPublisher"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class SimpleTaskObjectTest extends BaseTest {
 

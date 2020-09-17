@@ -10,7 +10,7 @@
         <schema name="fv-maintenance" prefix="fv-maintenance" src="OSGI-INF/maintenance/schemas/fv-maintenance.xsd"/>
     </extension>
 
-    <!-- Add maintenance schema to types -->
+    <!-- Add maintenance schema to FV Dialect type -->
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
         <doctype name="FVDialect" append="true">
             <schema name="fv-maintenance"/>
@@ -23,15 +23,24 @@
         <schedule id="queueRequiredJobs">
             <eventId>executeRequiredJobs</eventId>
             <eventCategory>maintenance</eventCategory>
-            <!-- every 5 minutes between 5pm and 23pm -->
-            <cronExpression>0 0/5 17-23 ? * *</cronExpression>
+            <!-- every 10 minutes between 01am and 06am-->
+            <cronExpression>0 0/10 1-6 ? * *</cronExpression>
+            <timezone>PST</timezone>
         </schedule>
     </extension>
 
-    <!-- A listener specific for dialect jobs -->
+    <!-- Listener will execute required jobs -->
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener name="queueRequiredJobsListener" class="ca.firstvoices.maintenance.dialect.RequiredJobsListener">
+        <listener name="executeRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ExecuteRequiredJobsListener">
             <event>executeRequiredJobs</event>
+        </listener>
+    </extension>
+
+    <!-- Listener will manage required jobs: adding, removing -->
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener name="manageRequiredJobsListener" class="ca.firstvoices.maintenance.listeners.ManageRequiredJobsListener">
+            <event>addToRequiredJobs</event>
+            <event>removeFromRequiredJobs</event>
         </listener>
     </extension>
 
@@ -46,16 +55,21 @@
         </queue>
     </extension>
 
-    <!-- Log these events in the audit log -->
     <!-- To do: add more details to the log -->
     <!-- See: https://doc.nuxeo.com/nxdoc/audit/#extended-info -->
     <extension target="org.nuxeo.ecm.platform.audit.service.NXAuditEventsService" point="event">
+        <documentation>Log required jobs events</documentation>
         <event name="executeRequiredJobs_queued">
             <extendedInfos>
                 <extendedInfo expression="${status}" key="status" />
             </extendedInfos>
         </event>
         <event name="executeRequiredJobs_completed">
+            <extendedInfos>
+                <extendedInfo expression="${status}" key="status" />
+            </extendedInfos>
+        </event>
+        <event name="executeRequiredJobs_failed">
             <extendedInfos>
                 <extendedInfo expression="${status}" key="status" />
             </extendedInfos>

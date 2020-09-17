@@ -8,7 +8,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
-    <it.failsafe.argLine></it.failsafe.argLine>
+    <it.failsafe.argLine />
   </properties>
 
   <parent>
@@ -21,7 +21,7 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.4.9-SNAPSHOT</version>
+  <version>3.4.8-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoices-marketplace</module>
@@ -33,10 +33,12 @@
     <module>FirstVoicesExport</module>
     <module>FVUserRegistration</module>
     <module>FirstVoicesMaintenance</module>
+    <module>FirstVoicesMaintenanceCommon</module>
     <module>FirstVoicesCoreTests</module>
-    <module>migration-contributions</module>
     <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
+    <module>FirstVoicesCharacters</module>
+    <module>FirstVoicesCoreIO</module>
   </modules>
 
   <dependencyManagement>
@@ -49,6 +51,11 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesMaintenance</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesMaintenanceCommon</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -138,6 +145,16 @@
       <dependency>
         <groupId>ca.firstvoices</groupId>
         <artifactId>FirstVoicesRESTPageProviders</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCharacters</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.firstvoices</groupId>
+        <artifactId>FirstVoicesCoreIO</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

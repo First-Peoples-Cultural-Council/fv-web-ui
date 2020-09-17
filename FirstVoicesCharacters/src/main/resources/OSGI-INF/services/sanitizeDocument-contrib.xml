@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.services.sanitizeDocument.contrib" version="1.0">
+    <implementation class="ca.firstvoices.characters.services.SanitizeDocumentServiceImpl"/>
+
+    <service>
+        <provide interface="ca.firstvoices.characters.services.SanitizeDocumentService"/>
+    </service>
+</component>

@@ -15,26 +15,21 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Deploys;
 import org.nuxeo.runtime.test.runner.PartialDeploy;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 @Deploys({
-    @Deploy("FirstVoicesNuxeoPublisher"),
     @Deploy("org.nuxeo.binary.metadata"),
     @Deploy("org.nuxeo.ecm.platform.url.core"),
     @Deploy("org.nuxeo.ecm.platform.types.api"),
     @Deploy("org.nuxeo.ecm.platform.types.core"),
     @Deploy("org.nuxeo.ecm.platform.webapp.types"),
-    @Deploy("org.nuxeo.ecm.platform.publisher.core"),
     @Deploy("org.nuxeo.ecm.platform.video.core"),
     @Deploy("org.nuxeo.ecm.platform.picture.core"),
-    @Deploy("FirstVoicesCoreTests"),
-    @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.listeners.xml"),
-    @Deploy("FirstVoicesData:OSGI-INF/ca.firstvoices.operations.xml")
+    @Deploy("FirstVoicesCoreTests")
 })
-
-
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public abstract class AbstractTestDataCreatorTest {
 
@@ -86,6 +81,10 @@ public abstract class AbstractTestDataCreatorTest {
 
     }
 
+    // Always start a transaction if one isn't available for the test
+    if (!TransactionHelper.isTransactionActive()) {
+      TransactionHelper.startTransaction();
+    }
   }
 
 }

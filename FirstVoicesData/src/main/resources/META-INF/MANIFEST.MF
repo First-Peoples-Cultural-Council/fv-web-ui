@@ -8,15 +8,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ManifestVersion: 2
 Bundle-Vendor: Nuxeo
-Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,
- OSGI-INF/ca.firstvoices.studio.extensions.xml,
- OSGI-INF/ca.firstvoices.listeners.xml,
+Nuxeo-Component: OSGI-INF/ca.firstvoices.studio.extensions.xml,
  OSGI-INF/dialect/dialect-contrib.xml,
- OSGI-INF/services/ca.firstvoices.services.assignancestorsservice.xml,
- OSGI-INF/services/ca.firstvoices.services.cleanupcharacterservice.xml,
- OSGI-INF/services/ca.firstvoices.services.sanitize.xml,
- OSGI-INF/services/ca.firstvoices.services.addconfusablesservice.xml,
- OSGI-INF/ca.firstvoices.workers.fvdataworkmanagers.xml,
  OSGI-INF/features/fv-features-contrib.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-alt1-lifecycle.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-alt2-lifecycle.xml,
@@ -24,5 +17,4 @@ Nuxeo-Component: OSGI-INF/ca.firstvoices.operations.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-kanban-lifecycle.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-lifecycle.xml,
  OSGI-INF/lifecycle/ca.firstvoices.lifecycle.fv-request-lifecycle.xml,
- OSGI-INF/lifecycle/ca.firstvoices.lifecycle.types.xml,
- OSGI-INF/ca.firstvoices.io.xml
+ OSGI-INF/lifecycle/ca.firstvoices.lifecycle.types.xml
