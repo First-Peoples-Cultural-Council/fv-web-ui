@@ -54,23 +54,21 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
   private static final Log log = LogFactory.getLog(LanguageRecorders.class);
 
   // A list of document types with ReadWrite Permissions
-  private static ArrayList<String> allowedDocumentTypes = new ArrayList<String>();
+  private static ArrayList<String> allowedDocumentTypes = new ArrayList<>();
 
   /**
-   * Check if user has permission on current document, to avoid using groups for filtering.
+   * Check if recorder has permission on current document, to avoid using groups for filtering.
    *
    * @param mergedAcp
    * @param additionalPrincipalsList
-   * @param permission
    * @return
    */
-  private Boolean hasPermissionInACP(ACP mergedAcp, List<String> additionalPrincipalsList,
-      String permission) {
+  private boolean hasRecordPermissionInACP(ACP mergedAcp, List<String> additionalPrincipalsList) {
 
     for (ACL acl : mergedAcp.getACLs()) {
-      for (ACE ace : acl.getACEs()) {
-        if (ace.isGranted() && additionalPrincipalsList.contains(ace.getUsername()) && ace
-            .getPermission().equals(permission)) {
+      for (ACE ace : acl.getACEs()) { // get permission CAN be null
+        if (ace.isGranted() && additionalPrincipalsList.contains(ace.getUsername())
+            && CustomSecurityConstants.RECORD.equals(ace.getPermission())) {
           return true;
         }
       }
@@ -90,8 +88,7 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
 
   @Override
   public Access checkPermission(Document doc, ACP mergedAcp, NuxeoPrincipal principal,
-      String permission, String[] resolvedPermissions, String[] additionalPrincipals)
-      throws SecurityException {
+      String permission, String[] resolvedPermissions, String[] additionalPrincipals) {
 
     List<String> resolvedPermissionsList = Arrays.asList(resolvedPermissions);
     List<String> additionalPrincipalsList = Arrays.asList(additionalPrincipals);
@@ -118,10 +115,8 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
       docTypeParent = doc.getParent().getType().getName();
     }
 
-    // mergedAcp.getAccess(principal.getName(), CustomSecurityConstants.RECORD);
-
     // Permissions apply to recorders only
-    if (hasPermissionInACP(mergedAcp, additionalPrincipalsList, CustomSecurityConstants.RECORD)) {
+    if (hasRecordPermissionInACP(mergedAcp, additionalPrincipalsList)) {
 
       if (allowedDocumentTypes.isEmpty()) {
         allowedDocumentTypes.add(FV_CATEGORIES);
@@ -153,14 +148,14 @@ public class LanguageRecorders extends AbstractSecurityPolicy {
 
     // Recorders can only publish to their allowed types (OK to use groups as this is globally
     // applicable)
-    if (additionalPrincipalsList.contains(CustomSecurityConstants.RECORDERS_GROUP)
-        || additionalPrincipalsList.contains(CustomSecurityConstants.RECORDERS_APPROVERS_GROUP)) {
-      if (!allowedDocumentTypes.contains(docType) && (resolvedPermissionsList
-          .contains(CustomSecurityConstants.CAN_ASK_FOR_PUBLISH))) {
-        log.debug("Access denied on Resolvers: ");
+    if ((additionalPrincipalsList.contains(CustomSecurityConstants.RECORDERS_GROUP)
+        || additionalPrincipalsList.contains(CustomSecurityConstants.RECORDERS_APPROVERS_GROUP))
+        && !allowedDocumentTypes.contains(docType) && (resolvedPermissionsList
+        .contains(CustomSecurityConstants.CAN_ASK_FOR_PUBLISH))
+    ) {
+      log.debug("Access denied on Resolvers: ");
+      return Access.DENY;
 
-        return Access.DENY;
-      }
     }
 
     return Access.UNKNOWN;
