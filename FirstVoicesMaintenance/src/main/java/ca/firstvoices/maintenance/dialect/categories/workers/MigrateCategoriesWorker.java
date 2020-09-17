@@ -11,18 +11,20 @@ import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
+@SuppressWarnings("java:S2160") // Nuxeo does not override equals in workers
 public class MigrateCategoriesWorker extends AbstractWork {
 
   private final String job;
   private final DocumentRef jobContainerRef;
   private final int batchSize;
 
-  private final MigrateCategoriesService service = Framework
+  private final transient MigrateCategoriesService service = Framework
       .getService(MigrateCategoriesService.class);
 
-  private final MaintenanceLogger maintenanceLogger = Framework.getService(MaintenanceLogger.class);
+  private final transient MaintenanceLogger maintenanceLogger = Framework
+      .getService(MaintenanceLogger.class);
 
-  private final RepositoryManager rpm = Framework.getService(RepositoryManager.class);
+  private final transient RepositoryManager rpm = Framework.getService(RepositoryManager.class);
 
   public MigrateCategoriesWorker(DocumentRef jobContainerRef, String job, int batchSize) {
     super(Constants.MIGRATE_CATEGORIES_JOB_ID);

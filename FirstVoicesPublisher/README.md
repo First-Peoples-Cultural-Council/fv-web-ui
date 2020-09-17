@@ -6,7 +6,8 @@ This module handles the publishing logic in FirstVoices. As part of publishing, 
 These `sections` follow a similar structure to `Workspaces`, which contain the working copies, however `sections` content is immutable and intended to be accessed by Guests.
 
 ## ToDo
-* Move Custom Order logic/operations from this module
+* Ensure that the only purpose of publisher is to handle Workspace->Sections syncing, other operations (e.g. UpdateVisibility) should be done in Operations.
+* Move assign origin to the FirstVoicesCoreIO package.
 
 ## Notes
 * FirstVoices publishing logic expands on the existing Nuxeo publishing logic. 

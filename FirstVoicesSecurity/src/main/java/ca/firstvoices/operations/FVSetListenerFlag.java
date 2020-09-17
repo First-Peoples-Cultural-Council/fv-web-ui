@@ -20,10 +20,8 @@
 
 package ca.firstvoices.operations;
 
-import static ca.firstvoices.lifecycle.Constants.ENABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -41,7 +39,7 @@ import org.nuxeo.runtime.api.Framework;
 public class FVSetListenerFlag {
 
   public static final String ID = "FVSetListenerFlag";
-  private static Log log = LogFactory.getLog(FVSetListenerFlag.class);
+
   @Context
   protected CoreSession session;
 

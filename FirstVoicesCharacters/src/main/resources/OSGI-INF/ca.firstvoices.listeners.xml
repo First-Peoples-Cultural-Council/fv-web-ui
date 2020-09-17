@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.listeners.contrib" version="1.0">
+
+  <require>ca.firstvoices.characters.services.addConfusables.contrib</require>
+  <require>ca.firstvoices.characters.services.cleanupCharacters.contrib</require>
+
+  <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+
+    <listener class="ca.firstvoices.characters.listeners.CharacterListener"
+      name="character_listener" priority="150">
+      <event>documentCreated</event>
+      <event>beforeDocumentModification</event>
+      <event>documentTrashed</event>
+      <event>documentUntrashed</event>
+    </listener>
+
+    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.AssetListener"
+      name="asset_listener" priority="50">
+      <event>aboutToCreate</event>
+      <event>beforeDocumentModification</event>
+    </listener>
+
+    <listener async="false" postCommit="false" class="ca.firstvoices.characters.listeners.AlphabetListener"
+      name="alphabet_listener" priority="200">
+      <event>beforeDocumentModification</event>
+    </listener>
+
+  </extension>
+
+</component>

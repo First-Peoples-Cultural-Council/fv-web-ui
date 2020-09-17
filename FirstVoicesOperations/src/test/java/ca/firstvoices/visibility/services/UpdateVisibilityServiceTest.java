@@ -1,12 +1,12 @@
 package ca.firstvoices.visibility.services;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.ENABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;

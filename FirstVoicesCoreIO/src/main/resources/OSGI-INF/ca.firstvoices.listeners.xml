@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.listeners.contrib" version="1.0">
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener name="ancestryAssignmentListener" async="false" postCommit="false"
+          class="ca.firstvoices.core.io.listeners.AncestryAssignmentListener" priority="65">
+            <event>aboutToCreate</event>
+        </listener>
+    </extension>
+</component>

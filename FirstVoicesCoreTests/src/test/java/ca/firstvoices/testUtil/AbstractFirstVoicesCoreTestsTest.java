@@ -1,7 +1,7 @@
 package ca.firstvoices.testUtil;
 
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static ca.firstvoices.utils.CustomSecurityConstants.LANGUAGE_ADMINS_GROUP;
 import static ca.firstvoices.utils.CustomSecurityConstants.RECORDERS_APPROVERS_GROUP;
 import static ca.firstvoices.utils.CustomSecurityConstants.RECORDERS_GROUP;

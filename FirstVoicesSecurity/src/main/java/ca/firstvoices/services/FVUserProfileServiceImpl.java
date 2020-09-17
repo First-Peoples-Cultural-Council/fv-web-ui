@@ -20,7 +20,7 @@
 
 package ca.firstvoices.services;
 
-import ca.firstvoices.models.CustomPreferencesObject;
+import ca.firstvoices.data.models.CustomPreferencesObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +35,6 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.query.sql.NXQL;
@@ -53,19 +52,21 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
     DocumentModelList dialects = null;
     List<String> groups = currentUser.getGroups();
 
-    if (groups != null && groups.size() >= 1) {
-      Iterator it = groups.iterator();
-      String inClause = "(\"" + groups.get(0) + "\"";
+    if (groups != null && !groups.isEmpty()) {
+      Iterator<String> it = groups.iterator();
+
+      StringBuilder inClauseBuilder = new StringBuilder("(\"" + groups.get(0) + "\"");
+
       it.next();
       while (it.hasNext()) {
-        inClause += ",\"" + it.next() + "\"";
+        inClauseBuilder.append(",\"").append(it.next()).append("\"");
       }
-      inClause += ")";
+      inClauseBuilder.append(")");
 
       String query = "SELECT * FROM FVDialect WHERE " + NXQL.ECM_MIXINTYPE + " <> '"
-          + FacetNames.HIDDEN_IN_NAVIGATION + "' AND " + NXQL.ECM_LIFECYCLESTATE + " <> '"
-          + LifeCycleConstants.DELETED_STATE + "'" + " AND ecm:isCheckedInVersion = 0 "
-          + " AND ecm:acl/*/principal IN " + inClause + " " + " AND ecm:isProxy = 0 ";
+          + FacetNames.HIDDEN_IN_NAVIGATION + "' AND " + NXQL.ECM_ISTRASHED + " != 1"
+          + " AND ecm:isVersion = 0 AND ecm:acl/*/principal IN "
+          + inClauseBuilder.toString() + " " + " AND ecm:isProxy = 0 ";
 
       dialects = session.query(query);
     }
@@ -122,7 +123,7 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
 
       DocumentModelList dialects = getUserDialects(currentUser, documentManager);
       // MC-Nuxeo: fvdialect:short_url is always null; where is this set?
-      if (dialects.size() > 0) {
+      if (dialects != null && !dialects.isEmpty()) {
         primaryDialeprimaryDialectShortUrltShortUrl = (String) dialects.get(0)
             .getPropertyValue("fvdialect:short_url");
         primaryDialectPath = dialects.get(0).getPathAsString();
@@ -150,8 +151,8 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
     }
 
     return Arrays.asList(baseURL, finalPath == null ? fvContextPath : finalPath).stream()
-        .map(s -> ((s != null && s.endsWith("/"))) ? s.substring(0, s.length() - 1) : s)
-        .map(s -> ((s != null && s.startsWith("/"))) ? s.substring(1) : s)
+        .map(s -> (s != null && s.endsWith("/")) ? s.substring(0, s.length() - 1) : s)
+        .map(s -> (s != null && s.startsWith("/")) ? s.substring(1) : s)
         .collect(Collectors.joining("/"));
   }
 }

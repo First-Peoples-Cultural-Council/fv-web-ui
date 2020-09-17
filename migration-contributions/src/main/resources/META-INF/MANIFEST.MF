@@ -1,9 +1,0 @@
-Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
-Manifest-Version: 1.0
-Bundle-Vendor: ca.firstvoices
-Bundle-Version: 1.0.0
-Bundle-Name: migration-contributions
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: ca.firstvoices.migration-contributions;singleton=true
-Nuxeo-Component: OSGI-INF/trash-contrib.xml

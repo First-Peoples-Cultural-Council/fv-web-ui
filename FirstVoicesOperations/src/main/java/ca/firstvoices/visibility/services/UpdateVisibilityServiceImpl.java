@@ -1,23 +1,22 @@
 package ca.firstvoices.visibility.services;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLED_STATE;
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.NEW_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.UNPUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
 import static ca.firstvoices.visibility.Constants.TEAM;
 
-import ca.firstvoices.services.AssignAncestorsService;
+import ca.firstvoices.core.io.utils.DialectUtils;
 import java.util.Objects;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author david
@@ -32,6 +31,10 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
 
     if (doc.isProxy() || doc.isVersion()) {
       throw new NuxeoException("Document Must not be a version or proxy'");
+    }
+
+    if (visibility == null) {
+      throw new NuxeoException("You must provide a visibility value to update to.");
     }
 
     String currentLifeCycleState = doc.getCurrentLifeCycleState();
@@ -68,10 +71,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
 
           if (dialectId == null) {
             // Try to get dialect via parent, in case fva:dialect is not present for some reason
-            AssignAncestorsService ancestorsService = Framework
-                .getService(AssignAncestorsService.class);
-
-            DocumentModel dialect = ancestorsService.getDialect(session, doc);
+            DocumentModel dialect = DialectUtils.getDialect(session, doc);
             if (Objects.nonNull(dialect)) {
               dialectId = dialect.getId();
             }
@@ -104,5 +104,10 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
     }
 
     return doc;
+  }
+
+  @Override
+  public boolean isValidVisibility(String visibility) {
+    return MEMBERS.equals(visibility) || PUBLIC.equals(visibility) || TEAM.equals(visibility);
   }
 }

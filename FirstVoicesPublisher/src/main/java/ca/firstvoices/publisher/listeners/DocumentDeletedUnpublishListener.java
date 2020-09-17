@@ -24,12 +24,10 @@
 
 package ca.firstvoices.publisher.listeners;
 
-import static ca.firstvoices.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -46,8 +44,6 @@ import org.nuxeo.runtime.api.Framework;
  * @author dyona
  */
 public class DocumentDeletedUnpublishListener implements EventListener {
-
-  private static final Log log = LogFactory.getLog(DocumentDeletedUnpublishListener.class);
 
   protected FirstVoicesPublisherService service = Framework
       .getService(FirstVoicesPublisherService.class);

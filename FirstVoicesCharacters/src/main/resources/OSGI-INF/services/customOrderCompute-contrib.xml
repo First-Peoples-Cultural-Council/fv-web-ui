@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<component
+  name="ca.firstvoices.characters.services.customOrderComputeServiceImpl">
+
+  <implementation
+    class="ca.firstvoices.characters.services.CustomOrderComputeServiceImpl"/>
+
+  <service>
+    <provide
+      interface="ca.firstvoices.characters.services.CustomOrderComputeService"/>
+  </service>
+
+</component>

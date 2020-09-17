@@ -73,7 +73,7 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   @Test
   public void testGetArchiveOK() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive")
+        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy")
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -97,7 +97,7 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   @Test
   public void testGetArchiveWords() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive") + "/words"
+        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/words"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -115,7 +115,7 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   @Test
   public void testGetArchivePhrases() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive") + "/phrases"
+        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/phrases"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -133,7 +133,7 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   @Test
   public void testGetArchiveSongs() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive") + "/songs"
+        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/songs"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(

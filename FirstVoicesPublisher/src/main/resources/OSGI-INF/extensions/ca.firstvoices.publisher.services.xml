@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <component
-    name="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl">
+  name="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl">
   <implementation
-      class="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl"/>
+    class="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl"/>
 
   <documentation>
     @author Remi Cattiau (rcattiau@nuxeo.com)
@@ -11,7 +11,7 @@
 
   <service>
     <provide
-        interface="ca.firstvoices.publisher.services.FirstVoicesPublisherService"/>
+      interface="ca.firstvoices.publisher.services.FirstVoicesPublisherService"/>
   </service>
 
 </component>

@@ -20,13 +20,13 @@
 
 package ca.firstvoices.security.tests;
 
-import static ca.firstvoices.lifecycle.Constants.DISABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.schemas.DialectTypesConstants.FV_DICTIONARY;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
+import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -61,12 +61,12 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class, AutomationFeature.class})
 @Deploy({"FirstVoicesSecurity.tests:userservice-config.xml",
-    "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.auth.xml",
     "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml",
     "org.nuxeo.ecm.user.registration",
     "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml",
     "org.nuxeo.ecm.user.invite",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.auth.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})

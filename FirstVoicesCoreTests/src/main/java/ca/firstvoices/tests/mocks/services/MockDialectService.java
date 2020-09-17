@@ -2,6 +2,7 @@ package ca.firstvoices.tests.mocks.services;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 
 public interface MockDialectService {
@@ -36,4 +37,15 @@ public interface MockDialectService {
    * only from Test areas
    */
   void removeMockDialects(CoreSession session);
+
+  /**
+   * Method to generate words within a dictionary in a dialect
+   * @param session to use for creation
+   * @param path the path of the dialect
+   * @param words array of words to generate
+   * @param categories an optional list of categories
+   * @return
+   */
+  DocumentModelList generateFVWords(CoreSession session, String path,
+      String[] words, DocumentModelList categories);
 }
