@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Preview from 'views/components/Editor/Preview'
-import { SongStoryCoverStyles } from '../SongStoryCover/SongStoryCoverStyles'
-import '!style-loader!css-loader!./DetailSongStory.css'
+import { DetailSongStoryStyles } from './DetailSongStoryStyles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import DOMPurify from 'dompurify'
@@ -25,40 +24,30 @@ function DetailSongStoryPresentation({
   pictures,
   videos,
 }) {
-  const classes = SongStoryCoverStyles()
+  const classes = DetailSongStoryStyles()
   // Audio
   const audioMapped = audio.map((audioDoc) => {
     return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
   })
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
-  let mediaPanels = null
-  if (pictures.length > 0) {
-    mediaPanels = (
-      <Grid key={'media-' + book.uid} item xs={2}>
+  const mediaPanels =
+    videos.length > 0 || pictures.length > 0 ? (
+      <Grid key={'media-' + book.uid} item xs={4}>
         <div className={classes.media}>
-          <MediaPanels.Presentation pictures={pictures} videos={[]} />
+          <MediaPanels.Presentation pictures={pictures} videos={videos} />
         </div>
       </Grid>
-    )
-  } else if (videos.length > 0) {
-    mediaPanels = (
-      <Grid key={'media-' + book.uid} item xs={2}>
-        <div className={classes.media}>
-          <MediaPanels.Presentation pictures={[]} videos={videos} />
-        </div>
-      </Grid>
-    )
-  }
+    ) : null
 
   // Main component
   return (
-    <div className="DetailSongStory">
+    <div className={classes.base}>
       <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
-        <Grid container justify="center" spacing={2}>
+        <Grid container spacing={2}>
           {mediaPanels}
-          <Grid key={'text-' + book.uid} item xs={5}>
-            <div className="DetailSongStory__header">
+          <Grid key={'text-' + book.uid} item xs={8}>
+            <div className={classes.title}>
               <Typography variant="h4" component="h3">
                 <div>{book.title}</div>
               </Typography>
@@ -74,8 +63,8 @@ function DetailSongStoryPresentation({
                   )
                 })}
               </div>
+              <div className={classes.media}>{audioElements}</div>
             </div>
-            <div className="DetailSongStory__audioPlayer">{audioElements}</div>
             <div>{_getIntroduction(book.introduction, book.introductionTranslation)}</div>
           </Grid>
         </Grid>
@@ -85,8 +74,9 @@ function DetailSongStoryPresentation({
 }
 
 function _getIntroduction(introduction, introductionTranslation) {
+  const classes = DetailSongStoryStyles()
   const introductionDiv = (
-    <div className="DetailSongStory__introduction">
+    <div className={classes.introduction}>
       <Typography variant="h6">
         <div>
           <b>Introduction</b>
@@ -101,7 +91,7 @@ function _getIntroduction(introduction, introductionTranslation) {
   )
 
   const translationDiv = introductionTranslation.content ? (
-    <div className="DetailSongStory__translation">
+    <div className={classes.introduction}>
       <Typography variant="h6">
         <div>
           <b>Translation</b>
