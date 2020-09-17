@@ -2,6 +2,7 @@ package ca.firstvoices.core.io.marshallers.tasks;
 
 import ca.firstvoices.core.io.marshallers.tasks.models.SimpleTaskAdapter;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.model.impl.ListProperty;
@@ -16,12 +17,13 @@ public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
   private GregorianCalendar dateCreated;
   private String requestedVisibility;
   private String requestedBy;
-  private List<String> taskComments;
+  private List<HashMap<String, String>> taskComments;
 
   /**
    * Convert a document model to a simple task model
-   * @param doc
+   * @param doc standard nuxeo document model
    */
+  @SuppressWarnings("unchecked")
   public SimpleTaskAdapterImpl(DocumentModel doc) {
 
     this.setId(doc.getId());
@@ -45,7 +47,7 @@ public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
     this.setRequestedBy(String.valueOf(doc.getPropertyValue("nt:initiator")));
 
     // Any comments that may exist on the task, provided by the initiator
-    this.setTaskComments((List<String>) doc.getPropertyValue("nt:taskComments"));
+    this.setTaskComments((List<HashMap<String, String>>) doc.getPropertyValue("nt:taskComments"));
   }
 
   @Override
@@ -99,12 +101,12 @@ public class SimpleTaskAdapterImpl implements SimpleTaskAdapter {
   }
 
   @Override
-  public List<String> getTaskComments() {
+  public List<HashMap<String, String>> getTaskComments() {
     return taskComments;
   }
 
   @Override
-  public void setTaskComments(List<String> taskComments) {
+  public void setTaskComments(List<HashMap<String, String>> taskComments) {
     this.taskComments = taskComments;
   }
 }
