@@ -14,15 +14,17 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  *
  * @returns {node} jsx markup
  */
-function RequestChangesContainer({ docId, docState, docDialectPath, refreshData, taskId, requestChangesText }) {
+function RequestChangesContainer({
+  docId,
+  docState,
+  docDialectPath,
+  taskId,
+  requestChangesText,
+  processedWasSuccessful,
+  processedMessage,
+}) {
   return (
-    <RequestChangesData
-      docDialectPath={docDialectPath}
-      docId={docId}
-      docState={docState}
-      refreshData={refreshData}
-      taskId={taskId}
-    >
+    <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState} taskId={taskId}>
       {({
         computeEntities,
         disableApproveButton,
@@ -58,6 +60,8 @@ function RequestChangesContainer({ docId, docState, docDialectPath, refreshData,
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
             submitMethod={submitMethod}
+            processedWasSuccessful={processedWasSuccessful}
+            processedMessage={processedMessage}
           />
         )
       }}
@@ -65,14 +69,15 @@ function RequestChangesContainer({ docId, docState, docDialectPath, refreshData,
   )
 }
 
-const { func, string, oneOf } = PropTypes
+const { bool, string, oneOf } = PropTypes
 RequestChangesContainer.propTypes = {
   docDialectPath: string,
   docId: string,
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
-  refreshData: func,
   taskId: string,
   requestChangesText: string,
+  processedWasSuccessful: bool,
+  processedMessage: string,
 }
 
 export default RequestChangesContainer

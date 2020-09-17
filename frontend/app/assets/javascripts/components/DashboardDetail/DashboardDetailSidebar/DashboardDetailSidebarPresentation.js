@@ -23,7 +23,7 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
       {childrenHeader && <div className="DashboardDetailSidebar__headerContainer">{childrenHeader}</div>}
       <div className="DashboardDetailSidebar__listContainer">
         <ul className="DashboardDetailSidebar__list">
-          {listItems.map(({ id, itemType, isNew, titleItem, titleTask, initiator, date }, index) => {
+          {listItems.map(({ id, itemType, isNew, titleItem, titleTask, initiator, date, isProcessed }, index) => {
             const variant = index % 2 ? ODD : EVEN
             return (
               <DashboardDetailSidebarItem.Presentation
@@ -32,6 +32,7 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
                 icon={<ItemIcon.Presentation itemType={itemType} isNew={isNew} />}
                 initiator={initiator}
                 isActive={selectedId === id}
+                isProcessed={isProcessed}
                 onClick={() => {
                   onClick(id)
                 }}

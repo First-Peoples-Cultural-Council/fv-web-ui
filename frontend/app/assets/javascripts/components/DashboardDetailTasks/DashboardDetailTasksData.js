@@ -31,7 +31,15 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const baseUrl = getBaseURL()
 
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
-  const { count: tasksCount = 0, fetchTasksRemoteData, fetchTask, tasks = [], userId, resetTasks } = useDashboard()
+  const {
+    count: tasksCount = 0,
+    fetchTasksRemoteData,
+    fetchTask,
+    tasks = [],
+    userId,
+    resetTasks,
+    processedTasks,
+  } = useDashboard()
 
   const {
     item: queryItem,
@@ -70,13 +78,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
     fetchTasksUsingQueries()
   }, [queryPage, queryPageSize, querySortBy, querySortOrder])
 
-  const refreshData = () => {
-    // TODO: if single item is displayed, need to move to back a page
-    // TODO: if reject, close open panel
-    // TODO: Refresh list in the sidebar
-    fetchTasksUsingQueries()
-  }
-
   // Redirect when http://...?task=[ID] and we have tasks + userId
   useEffect(() => {
     if (queryTask && tasks.length > 0) {
@@ -106,7 +107,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     }
   }, [queryItem, queryTask, tasks, userId])
 
-  // Get Item Details
+  // XHR #1: Get details of selected item
   useEffect(() => {
     if (queryItem) {
       fetchDocumentSingleArg({
@@ -119,18 +120,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
   useEffect(() => {
     const extractComputeDocumentItem = ProviderHelpers.getEntry(computeDocument, queryItem)
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
-
-    // TODO: Should we be getting dialectClassName? Perhaps a different location?
-    // const dialectClassName = getDialectClassname(computeDialect2)
-
-    // TODO: Handle metadata
-    // const metadata = selectn('response', _selectedItemData) ? (
-    //   <MetadataPanel properties={this.props.properties} computeEntity={_selectedItemData} />
-    // ) : null
-
-    // type
-    // properties["fv-phrase:acknowledgement"]
-    // properties["fv-phrase:phrase_books"][0]
     const type = selectn('type', _selectedItemData)
     const uid = selectn(['uid'], _selectedItemData)
     const title = DOMPurify.sanitize(selectn('title', _selectedItemData))
@@ -197,7 +186,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     setSelectedItemData({ ...commonData, ...itemTypeSpecificData })
   }, [computeDocument, queryItem])
 
-  // Get Task Details
+  // XHR #2: Get details of selected task
   useEffect(() => {
     if (queryTask && queryTask !== URL_QUERY_PLACEHOLDER) {
       fetchTask(queryTask).then((taskData) => {
@@ -313,16 +302,38 @@ function DashboardDetailTasksData({ children, columnRender }) {
       })
     )
   }
-
+  const setProcessedTasks = (taskData) => {
+    return taskData.map((task) => {
+      const isProcessed = processedTasks.find((processedTask) => {
+        return processedTask.id === task.targetDocumentsIds
+      })
+      return {
+        ...task,
+        isProcessed: isProcessed !== undefined,
+        processedWasSuccessful: selectn('isSuccess', isProcessed),
+        processedMessage: selectn('message', isProcessed),
+      }
+    })
+  }
+  const setProcessedItem = (taskData) => {
+    const isProcessed = processedTasks.find((processedTask) => {
+      return processedTask.id === taskData.id
+    })
+    return {
+      ...taskData,
+      isProcessed: isProcessed !== undefined,
+      processedWasSuccessful: selectn('isSuccess', isProcessed),
+      processedMessage: selectn('message', isProcessed),
+    }
+  }
   const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: columns,
     // data: userId === 'Guest' ? [] : remoteData,
-    data: tasks,
+    data: setProcessedTasks(tasks),
     idSelectedItem: queryItem,
     idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
-    listItems: tasks,
-    refreshData,
+    listItems: setProcessedTasks(tasks),
     onClose,
     onOpen,
     onOpenNoId,
@@ -342,8 +353,8 @@ function DashboardDetailTasksData({ children, columnRender }) {
       sortBy: querySortBy,
       sortOrder: querySortOrder,
     },
-    selectedItemData,
-    selectedTaskData,
+    selectedItemData: setProcessedItem(selectedItemData),
+    selectedTaskData: selectedTaskData,
     sortDirection: querySortOrder,
   }
   return (

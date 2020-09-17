@@ -1,7 +1,7 @@
+import { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 import * as yup from 'yup'
-import { useRef, useState, useEffect } from 'react'
 import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
@@ -21,24 +21,22 @@ import useIntl from 'DataSource/useIntl'
  * @param {function} props.children
  *
  */
-function RequestChangesData({ refreshData, children, docDialectPath, docId, docState, taskId }) {
+function RequestChangesData({ children, docDialectPath, docId, docState, taskId }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRef = useRef(null)
   const [errors, setErrors] = useState()
-  const [snackbarStatus, setSnackbarStatus] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState(null)
   const [docVisibility, setDocVisibility] = useState('')
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
-  const { rejectTask } = useTasks()
-
+  const { rejectTask, extractComputeUserTasksReject = {}, setProcessedTask } = useTasks()
   const {
     updateVisibilityToTeam,
     updateVisibilityToMembers,
     updateVisibilityToPublic,
     extractComputeUpdateVisibility,
   } = useVisibility()
+
   const computeEntities = Immutable.fromJS([
     {
       id: routeParams.dialect_path,
@@ -61,31 +59,6 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
       ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
     }
   }, [docDialectPath])
-
-  // Approval flow:
-  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
-  const updateSnackbar = ({ message }) => {
-    setSnackbarMessage(message)
-    setSnackbarStatus(true)
-  }
-  useEffect(() => {
-    if (selectn('action', extractComputeUpdateVisibility) !== prevAction) {
-      if (selectn('isFetching', extractComputeUpdateVisibility) === false) {
-        const success = selectn('success', extractComputeUpdateVisibility)
-        updateSnackbar({
-          message:
-            success === false
-              ? selectn('message', extractComputeUpdateVisibility) ||
-                'Sorry, we encounterd a temporary problem. Please try again later.'
-              : 'Document approved',
-        })
-
-        if (success) {
-          refreshData()
-        }
-      }
-    }
-  }, [extractComputeUpdateVisibility])
 
   const updateVisibility = (newVisibility) => {
     // Send request to the server to set visibility on the document
@@ -144,6 +117,26 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
     })
   }
 
+  // USER FEEDBACK: Approval
+  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
+  useEffect(() => {
+    if (selectn('action', extractComputeUpdateVisibility) !== prevAction) {
+      if (selectn('isFetching', extractComputeUpdateVisibility) === false) {
+        const success = selectn('success', extractComputeUpdateVisibility)
+        const message =
+          success === false
+            ? selectn('message', extractComputeUpdateVisibility) ||
+              'Sorry, we encountered a problem. Please try again later.'
+            : 'Document approved'
+
+        const id = selectn('id', extractComputeUpdateVisibility)
+        if (id) {
+          setProcessedTask({ id, message, isSuccess: success })
+        }
+      }
+    }
+  }, [extractComputeUpdateVisibility])
+
   const onReject = ({ id, comment }) => {
     rejectTask(
       id,
@@ -154,11 +147,6 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
       null,
       intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
     )
-
-    setSnackbarMessage('Changes requested')
-    setSnackbarStatus(true)
-
-    refreshData()
   }
   const handleRequestChanges = (event) => {
     // Validates the form data and updates the visibility
@@ -184,6 +172,26 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
       },
     })
   }
+  // USER FEEDBACK: Reject
+  const prevRejectAction = usePrevious(selectn('action', extractComputeUserTasksReject))
+  useEffect(() => {
+    if (selectn('action', extractComputeUserTasksReject) !== prevRejectAction) {
+      const { isError, isFetching, message, success } = extractComputeUserTasksReject
+      const id = selectn(['response', 'properties', 'nt:targetDocumentsIds', 0], extractComputeUserTasksReject)
+
+      if (id && isFetching === false) {
+        let _message
+        if (isError === true && success === false) {
+          _message = message || 'We encountered a problem rejecting this task'
+        }
+
+        if (isError !== true && success === true) {
+          _message = message || 'Rejected the request'
+        }
+        setProcessedTask({ id, message: _message, isSuccess: success })
+      }
+    }
+  }, [extractComputeUserTasksReject])
 
   const disableApproveButton = () => {
     // The approve button is greyed out if a visibility is not selected
@@ -203,7 +211,6 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
     if (reason === 'clickaway') {
       return
     }
-    setSnackbarStatus(false)
   }
 
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, docDialectPath)
@@ -216,24 +223,18 @@ function RequestChangesData({ refreshData, children, docDialectPath, docId, docS
     formRef,
     handleApprove,
     handleRequestChanges,
-    handleVisibilityChange,
     handleSnackbarClose,
-    snackbarMessage,
-    snackbarStatus,
+    handleVisibilityChange,
     isPublicDialect: selectn('response.state', extractComputeDialect) === 'Published',
   })
 }
 
 const { func, string } = PropTypes
 RequestChangesData.propTypes = {
-  refreshData: func,
   children: func,
   docId: string,
   docState: string,
   taskId: string,
-}
-RequestChangesData.defaultProps = {
-  refreshData: () => {},
 }
 
 export default RequestChangesData

@@ -27,7 +27,7 @@ function useDashboard() {
 
   // Custom Hooks
   const { computeLogin } = useLogin()
-  const { getSimpleTasks, getSimpleTask } = useTasks()
+  const { getSimpleTasks, getSimpleTask, processedTasks } = useTasks()
 
   const _userId = selectn('response.id', computeLogin)
   useEffect(() => {
@@ -56,7 +56,7 @@ function useDashboard() {
           return UNKNOWN
       }
     }
-    return _tasks.map(({ uid: id, dateCreated, requestedBy, targetDoc, requestedVisibility }) => {
+    return _tasks.map(({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility }) => {
       return {
         date: formatDate(dateCreated),
         id,
@@ -75,11 +75,6 @@ function useDashboard() {
   }
 
   const fetchTasksRemoteData = ({ pageIndex = 0, pageSize = 100, sortBy = 'date', sortOrder = 'desc' }) => {
-    /* TODO: how to sort by...
-      - Requested By? = entries[0].requestedBy.firstName + entries[0].requestedBy.lastName
-      - Entry title? = entries[0].targetDoc.title
-    */
-
     // NOTE: The component consumes data that isn't a 1:1 match of the server's output
     // It is meant to limit coupling between the server & FE and make working with the
     // data easier in the FE. The following `friendlyNamePropertyNameLookup` converts
@@ -130,6 +125,7 @@ function useDashboard() {
     userId,
     count,
     resetTasks,
+    processedTasks,
   }
 }
 

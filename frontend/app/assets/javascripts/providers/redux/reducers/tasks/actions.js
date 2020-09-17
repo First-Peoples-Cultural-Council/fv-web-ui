@@ -10,6 +10,7 @@ import {
   FV_SIMPLE_TASK_GET_START,
   FV_SIMPLE_TASK_GET_SUCCESS,
   FV_SIMPLE_TASK_GET_ERROR,
+  FV_PROCESSED_TASK,
 } from './actionTypes'
 
 export const approveTask = execute('FV_USER_TASKS_APPROVE', 'WorkflowTask.Complete', {
@@ -85,5 +86,16 @@ export const getSimpleTask = (uid) => {
         dispatch({ type: FV_SIMPLE_TASK_GET_ERROR, error: error })
         return error
       })
+  }
+}
+
+export const setProcessedTask = ({ id, message, isSuccess }) => {
+  return (dispatch) => {
+    dispatch({
+      type: FV_PROCESSED_TASK,
+      id,
+      message,
+      isSuccess,
+    })
   }
 }
