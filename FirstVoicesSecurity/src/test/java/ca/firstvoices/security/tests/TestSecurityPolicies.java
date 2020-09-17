@@ -61,12 +61,12 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class, AutomationFeature.class})
 @Deploy({"FirstVoicesSecurity.tests:userservice-config.xml",
-    "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.auth.xml",
     "FVUserRegistration:OSGI-INF/extensions/ca.firstvoices.user.xml",
     "org.nuxeo.ecm.user.registration",
     "org.nuxeo.ecm.user.registration.web:OSGI-INF/user-registration-contrib.xml",
     "org.nuxeo.ecm.user.invite",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.auth.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.groups.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.securitypolicies.lifecycle.xml"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
