@@ -65,7 +65,8 @@ function DetailSongStoryPresentation({
               </div>
               <div className={classes.media}>{audioElements}</div>
             </div>
-            <div>{_getIntroduction(book.introduction, book.introductionTranslation)}</div>
+            {_getIntroduction(book.introduction)}
+            {_getIntroductionTranslation(book.introductionTranslation)}
           </Grid>
         </Grid>
       </Grid>
@@ -73,9 +74,9 @@ function DetailSongStoryPresentation({
   )
 }
 
-function _getIntroduction(introduction, introductionTranslation) {
+function _getIntroduction(introduction) {
   const classes = DetailSongStoryStyles()
-  const introductionDiv = (
+  return introduction.content ? (
     <div className={classes.introduction}>
       <Typography variant="h6">
         <div>
@@ -88,38 +89,28 @@ function _getIntroduction(introduction, introductionTranslation) {
         }}
       />
     </div>
-  )
+  ) : null
+}
 
-  const translationDiv = introductionTranslation.content ? (
-    <div className={classes.introduction}>
-      <Typography variant="h6">
-        <div>
-          <b>Translation</b>
-        </div>
-      </Typography>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(introductionTranslation.content),
-        }}
-      />
+function _getIntroductionTranslation(introductionTranslation) {
+  const classes = DetailSongStoryStyles()
+  return introductionTranslation.content ? (
+    <div>
+      <Divider variant="middle" />
+      <div className={classes.introduction}>
+        <Typography variant="h6">
+          <div>
+            <b>Introduction Translation</b>
+          </div>
+        </Typography>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(introductionTranslation.content),
+          }}
+        />
+      </div>
     </div>
   ) : null
-
-  const displayDivider = introductionTranslation.content ? <Divider variant="middle" /> : null
-
-  if (!introductionTranslation.content) {
-    if (!introduction.content) {
-      return null
-    }
-  }
-
-  return (
-    <div>
-      {introductionDiv}
-      {displayDivider}
-      {translationDiv}
-    </div>
-  )
 }
 
 // PROPTYPES
