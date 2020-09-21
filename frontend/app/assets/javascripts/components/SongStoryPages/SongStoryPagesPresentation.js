@@ -53,18 +53,22 @@ function SongStoryPagesPresentation({ bookPages, closeBookAction }) {
     })
     const audioElements = audio && audio.length !== 0 ? audio : null
 
-    const literalTranslation =
+    const literalTranslation = page.literalTranslation ? (
+      <div className={classes.literalTranslation}>
+        {page.literalTranslation !== ''}{' '}
+        <em>
+          <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
+        </em>{' '}
+        : <span>{page.literalTranslation}</span>
+      </div>
+    ) : null
+
+    const translationPanel =
       page.literalTranslation || page.dominantLanguageText ? (
         <Grid key={page.uid + 3} item xs={4} className={classes.translation}>
           <div className={classes.dominantTranslation}>
             <div>{page.dominantLanguageText}</div>
-            <div className={classes.literalTranslation}>
-              {page.literalTranslation !== ''}{' '}
-              <em>
-                <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
-              </em>{' '}
-              : <span>{page.literalTranslation}</span>
-            </div>
+            {literalTranslation}
           </div>
         </Grid>
       ) : null
@@ -93,7 +97,7 @@ function SongStoryPagesPresentation({ bookPages, closeBookAction }) {
                 {audioElements}
               </div>
             </Grid>
-            {literalTranslation}
+            {translationPanel}
           </Grid>
         </Grid>
       </Paper>
