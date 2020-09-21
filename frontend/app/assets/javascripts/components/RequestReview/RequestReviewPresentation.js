@@ -96,7 +96,7 @@ function RequestReviewPresentation({
         message={
           'Your request for review of this ' +
           docTypeName +
-          'has been submitted to the Administrator for ' +
+          ' has been submitted to the Administrator for ' +
           dialectName
         }
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
