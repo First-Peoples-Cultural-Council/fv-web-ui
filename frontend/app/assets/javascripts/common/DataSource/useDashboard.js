@@ -35,7 +35,7 @@ function useDashboard() {
   }, [_userId])
 
   const formatTasksData = (_tasks) => {
-    const formatDate = (date) => StringHelpers.formatUTCDateString(date)
+    const formatDate = (date) => StringHelpers.formatLocalDateString(date)
     const formatInitator = ({ email, firstName, lastName }) => {
       const fullName = `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
       return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
