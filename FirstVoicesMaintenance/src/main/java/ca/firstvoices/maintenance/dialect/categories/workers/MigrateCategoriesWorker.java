@@ -3,6 +3,8 @@ package ca.firstvoices.maintenance.dialect.categories.workers;
 import ca.firstvoices.maintenance.dialect.categories.Constants;
 import ca.firstvoices.maintenance.dialect.categories.services.MigrateCategoriesService;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
@@ -13,6 +15,9 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @SuppressWarnings("java:S2160") // Nuxeo does not override equals in workers
 public class MigrateCategoriesWorker extends AbstractWork {
+
+  private static final Logger log = Logger
+      .getLogger(MigrateCategoriesWorker.class.getCanonicalName());
 
   private final String job;
   private final DocumentRef jobContainerRef;
@@ -85,10 +90,17 @@ public class MigrateCategoriesWorker extends AbstractWork {
         setProgress(new Progress(((float) wordsRemaining / totalWords) * 100));
       }
     } catch (Exception e) {
-      setStatus("Failed");
       maintenanceLogger.removeFromRequiredJobs(jobContainer, job, false);
-      workFailed(new NuxeoException(
-          "worker migration failed on " + jobContainer.getTitle() + ": " + e.getMessage()));
+
+      String workerFailedMessage =
+          "worker migration failed on " + jobContainer.getTitle() + ": " + e.getMessage();
+
+      // Log stack trace
+      log.log(Level.SEVERE, workerFailedMessage, e);
+
+      // Send work failed events/set correct status
+      workFailed(new NuxeoException(workerFailedMessage));
+      setStatus("Failed");
     }
 
     maintenanceLogger.removeFromRequiredJobs(jobContainer, job, true);

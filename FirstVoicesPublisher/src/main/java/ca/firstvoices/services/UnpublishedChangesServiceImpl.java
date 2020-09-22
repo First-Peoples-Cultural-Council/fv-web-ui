@@ -21,7 +21,6 @@
 package ca.firstvoices.services;
 
 
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
@@ -46,11 +45,14 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
@@ -81,8 +83,9 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
       return null;
     }
 
-    // Check that the document is currently published
-    if (!document.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
+    // Check that the document and the document's dialect are currently published
+    if (!StateUtils.isPublished(document) || !StateUtils
+        .isPublished(DialectUtils.getDialect(document))) {
       return null;
     }
 
@@ -104,7 +107,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
 
   // Note: This is unrelated to publisher - will diff any two objects.
   // Could potentially move to another package.
-  public Diff getChanges(CoreSession session, DocumentModel leftDocument,
+  public Diff getChanges(DocumentModel leftDocument,
       DocumentModel rightDocument) {
     // Check that the document is a specific type using the helper method
     if (!(checkType(leftDocument)) || !(checkType(rightDocument))) {
@@ -157,7 +160,7 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     // Filter out excluded properties and process conversions
     return (HashMap<String, Object>) relevantProperties.entrySet().stream()
         .filter(e -> !excludedPropertiesList.contains(e.getKey())) // Filter out excluded properties
-        .collect(Collectors.toMap(t -> t.getKey(), t -> convertDiffFields(t.getValue())));
+        .collect(Collectors.toMap(Entry::getKey, t -> convertDiffFields(t.getValue())));
   }
 
   // Helper method to convert certain types that are hard to compare
