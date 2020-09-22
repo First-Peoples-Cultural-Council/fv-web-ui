@@ -156,4 +156,16 @@ export default {
 
     return params
   },
+  visibilityCategories: ({ visibility, dialectName = 'Community' }) => {
+    switch (visibility) {
+      case 'public':
+        return 'Public'
+      case 'team':
+        return 'Language Team'
+      case 'members':
+        return `${dialectName} Members`
+      default:
+        return visibility
+    }
+  },
 }
