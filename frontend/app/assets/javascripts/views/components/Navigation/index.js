@@ -202,12 +202,7 @@ export class Navigation extends Component {
           </Link>
 
           <div className="Navigation__toolbarMainInner">
-            <Link
-              href={`/explore/FV/${
-                this.props.computeLogin.success && this.props.computeLogin.isConnected ? 'Workspaces' : 'sections'
-              }/Data`}
-              className={`${appBar} Navigation__link hideSmall`}
-            >
+            <Link href="/explore/FV/sections/Data" className={`${appBar} Navigation__link hideSmall`}>
               <FVLabel transKey="general.explore" defaultStr="Explore Languages" transform="upper" />
             </Link>
 
