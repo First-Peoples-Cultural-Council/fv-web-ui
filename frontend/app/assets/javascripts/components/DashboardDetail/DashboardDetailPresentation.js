@@ -67,9 +67,6 @@ function DashboardDetailPresentation({
           {/* Selected item details/admin
           ------------------------------------------ */}
           <div className="DashboardDetail__selectedItem">
-            <button className="DashboardDetail__selectedItemClose" onClick={onClose}>
-              <IconClose className="DashboardDetail__selectedItemCloseIcon" fontSize="small" />
-            </button>
             {childrenSelectedDetail}
           </div>
         </>
