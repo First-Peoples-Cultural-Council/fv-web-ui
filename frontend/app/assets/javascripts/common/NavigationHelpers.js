@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import selectn from 'selectn'
-import ConfRoutes, { paramMatch } from 'conf/routes'
 import Immutable, { is } from 'immutable'
-import { SECTIONS } from 'common/Constants'
 import URLHelpers from 'common/URLHelpers'
 
 const arrayPopImmutable = (array, sizeToPop = 1) => {
@@ -35,14 +33,6 @@ const AddForwardSlash = (path) => {
   }
 
   return addForwardSlash + path
-}
-
-/**
- * Stores some default route parameters
- */
-const DefaultRouteParams = {
-  siteTheme: 'explore',
-  area: SECTIONS,
 }
 
 export default {
@@ -100,30 +90,6 @@ export default {
   // Method will append given path (/path/to/) to context path
   generateStaticURL: (path) => {
     return URLHelpers.getContextPath() + AddForwardSlash(path)
-  },
-  // Method will lookup a path, based on id, in routes, and generate the correct path
-  generateDynamicURL: (routeId, routeParams, moreParams) => {
-    const matchedRoute = ConfRoutes.find((route) => route && route.id && route.id === routeId)
-
-    const _params = Object.assign({}, DefaultRouteParams, routeParams, moreParams)
-
-    if (matchedRoute && matchedRoute.path) {
-      const outputPath = matchedRoute.path
-
-      matchedRoute.path.forEach((value, key) => {
-        if (value instanceof paramMatch) {
-          // If dynamic path value exists in parameters - use it
-          if (value.id in _params) {
-            outputPath[key] = _params[value.id]
-          }
-        } else if (value instanceof RegExp) {
-          // When is regexp an option?
-        }
-      })
-
-      return URLHelpers.getContextPath() + '/' + matchedRoute.path.join('/')
-    }
-    // TODO: How do we fall back gracefully when no path is found?
   },
   // Generate a UID link from a Nuxeo document path
   generateUIDPath: (siteTheme, item, pluralPathId) => {
