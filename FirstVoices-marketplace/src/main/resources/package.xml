@@ -22,10 +22,10 @@
   <!-- Dependencies on other packages -->
    <dependencies> 
     <package>nuxeo-jsf-ui</package>
-    <package>nuxeo-dam</package>
-    <package>nuxeo-platform-user-registration</package>
+    <package>nuxeo-dam:6.4.3:6.4.3</package>
+    <package>nuxeo-platform-user-registration:1.9.4:1.9.4</package>
     <package>nuxeo-diff</package>
-    <package>saml2-authentication</package>
+    <package>saml2-authentication:1.4.3:1.4.3</package>
   </dependencies> 
   <!-- Conflicts with other packages -->
   <!-- <conflicts> -->
