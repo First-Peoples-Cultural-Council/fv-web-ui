@@ -101,7 +101,7 @@ jobs:
       if: steps.changed-frontend.outputs.frontend_files
       run: |
         cd frontend
-        npm cache clean
+        npm cache verify
         npm ci
         npm run build:production
 
