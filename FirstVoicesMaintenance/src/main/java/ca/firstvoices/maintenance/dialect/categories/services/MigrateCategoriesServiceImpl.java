@@ -71,8 +71,13 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
       DocumentModel category = session.getDocument(categoryRef);
 
-      copyCategory(session, category);
-      ++copiedCategories;
+      // FW-1873: Some words may reference phrase books
+      if (category.getPathAsString().contains("Phrase Books")) {
+        copyPhraseBookToCategory(session, category);
+      } else {
+        copyCategory(session, category);
+        ++copiedCategories;
+      }
     }
 
     return copiedCategories > 0;
@@ -217,6 +222,46 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     return newCategory;
   }
+
+  private void copyPhraseBookToCategory(CoreSession session, DocumentModel category) {
+    String localCategoryDirPath = localCategoriesDirectory.getPathAsString();
+
+    // Create new category from phrase book
+    // Replace `.trashed` in name if the shared category is trashed
+    String newCategoryName = category.getName().replace(".trashed", "");
+
+    DocumentModel newLocalCategory = session
+        .createDocumentModel(localCategoryDirPath, newCategoryName, FV_CATEGORY);
+    newLocalCategory.setPropertyValue("dc:title", category.getTitle());
+    DocumentModel newCategory = session.createDocument(newLocalCategory);
+
+    // Add to local cache
+    localCategories.add(newCategory);
+
+    // Update references immediately
+    DocumentModelList wordsReferencingPhraseBooks = session
+        .query("SELECT * FROM FVWord WHERE fv-word:categories/* IN ('" + category.getId()
+            + "') AND ecm:isVersion = 0 AND ecm:isProxy = 0");
+
+    for (DocumentModel word : wordsReferencingPhraseBooks) {
+
+      // Update category Ids
+      List<String> categoryIds = Arrays
+          .asList((String[]) word.getPropertyValue("fv-word:categories"));
+      categoryIds = categoryIds.stream()
+          .map(id -> category.getId().equals(id) ? newCategory.getId() : id)
+          .filter(Objects::nonNull)
+          .collect(Collectors.toList());
+      word.setProperty("fv-word", "categories", categoryIds);
+
+      // Save document
+      session.saveDocument(word);
+
+      log.warn("Word " + word.getId() + " was referencing phrase book as a category " + category
+          .getId());
+    }
+  }
+
 
   private ArrayList<String> getUniqueCategories(CoreSession session, String dictionaryId) {
 
