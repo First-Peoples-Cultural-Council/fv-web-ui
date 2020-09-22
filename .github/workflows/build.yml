@@ -10,118 +10,125 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the current working code base
-    - name: Checkout working branch
-      uses: actions/checkout@v2
+      # Checkout the current working code base
+      - name: Checkout working branch
+        uses: actions/checkout@v2
 
-    # Checks if any changes are made in the frontend paths listed
-    - name: Check for frontend changes
-      uses: softprops/diffset@v0.1.0
-      id: changed-frontend
-      with:
-        frontend_files: |
-          frontend/app/**
-          frontend/build/**
-          frontend/gulpfile.js/**
-          frontend/nuxeo/**
-          frontend/index.html
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Checks if any changes are made in the frontend paths listed
+      - name: Check for frontend changes
+        uses: softprops/diffset@v0.1.0
+        id: changed-frontend
+        with:
+          frontend_files: |
+            frontend/app/**
+            frontend/build/**
+            frontend/gulpfile.js/**
+            frontend/nuxeo/**
+            frontend/index.html
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Checks if any changes are made to the Node package files
-    - name: Check for Node changes
-      uses: softprops/diffset@v0.1.0
-      id: changed-package
-      with:
-        package_files: |
-          frontend/package.json
-          frontend/package-lock.json
-          package-lock.json
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Checks if any changes are made to the Node package files
+      - name: Check for Node changes
+        uses: softprops/diffset@v0.1.0
+        id: changed-package
+        with:
+          package_files: |
+            frontend/package.json
+            frontend/package-lock.json
+            package-lock.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Checks if any changes are made in the backend paths listed
-    - name: Check for backend changes
-      uses: softprops/diffset@v0.1.0
-      id: changed-backend
-      with:
-        backend_files: |
-          FirstVoices*/**
-          FV*/**
-          pom.xml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Checks if any changes are made in the backend paths listed
+      - name: Check for backend changes
+        uses: softprops/diffset@v0.1.0
+        id: changed-backend
+        with:
+          backend_files: |
+            FirstVoices*/**
+            FV*/**
+            pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Installs the correct version of java for the project
-    - name: Set up JDK 1.8
-      if: steps.changed-backend.outputs.backend_files
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
+      # Installs the correct version of java for the project
+      - name: Set up JDK 1.8
+        if: steps.changed-backend.outputs.backend_files
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
 
-    # Installs the correct Node version for the project
-    - name: Setup Node.js for use with actions
-      if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
-      uses: actions/setup-node@v1.1.0
-      with:
-        node-version: '12.18.3'
+      # Installs the correct Node version for the project
+      - name: Setup Node.js for use with actions
+        if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
+        uses: actions/setup-node@v1.1.0
+        with:
+          node-version: "12.18.3"
 
-    # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
-    - name: Cache project build
-      if: steps.changed-backend.outputs.backend_files
-      id: cache-build
-      uses: actions/cache@v1.1.2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
+      - name: Cache project build
+        if: steps.changed-backend.outputs.backend_files
+        id: cache-build
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-      # Build only the backend if changes are made to the backend and not frontend
-    - name: Build backend with Maven
-      if: steps.changed-backend.outputs.backend_files
-      run: mvn clean install
 
-      # Setup the Node modules caching (~/.npm directory) to restore from or save to
-      #    - name: Cache node modules
-      #      if: steps.changed-backend.outputs.backend_files
-      #      uses: actions/cache@v1.1.2
-      #      env:
-      #        cache-name: cache-node-modules
-      #      with:
-      #        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-      #        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      #        restore-keys: |
-      #          ${{ runner.os }}-build-${{ env.cache-name }}-
-      #          ${{ runner.os }}-build-
-      #          ${{ runner.os }}-
+        # Build only the backend if changes are made to the backend and not frontend
+      - name: Build backend with Maven
+        if: steps.changed-backend.outputs.backend_files
+        run: mvn clean install
 
-      # Build only the frontend if changes are made to the frontend(this includes installing the Node packages)
-    - name: Build frontend (includes Node package install)
-      if: steps.changed-frontend.outputs.frontend_files
-      run: |
-        cd frontend
-        npm cache verify
-        npm ci
-        npm run build:production
 
-      # Run Sonar Analysis on Frontend (If Frontend Changes)
-    - name: Setup Sonar Analysis For Frontend
-      if: steps.changed-frontend.outputs.frontend_files
-      uses: warchant/setup-sonar-scanner@v1
+        # Setup the Node modules caching (~/.npm directory) to restore from or save to
+        #    - name: Cache node modules
+        #      if: steps.changed-backend.outputs.backend_files
+        #      uses: actions/cache@v1.1.2
+        #      env:
+        #        cache-name: cache-node-modules
+        #      with:
+        #        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        #        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        #        restore-keys: |
+        #          ${{ runner.os }}-build-${{ env.cache-name }}-
+        #          ${{ runner.os }}-build-
+        #          ${{ runner.os }}-
 
-      # Run Sonar Analysis on Frontend (If Frontend Changes)
-    - name: Sonar Analysis on Frontend
-      if: steps.changed-frontend.outputs.frontend_files
-      run: cd frontend && sonar-scanner
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
 
-      # Run Sonar Analysis on Backend (If Backend Changes)
-    - name: Sonar Analysis on Backend
-      if: steps.changed-backend.outputs.backend_files
-      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+        # Build only the frontend if changes are made to the frontend(this includes installing the Node packages)
+      - name: Build frontend (includes Node package install)
+        if: steps.changed-frontend.outputs.frontend_files
+        run: |
+          cd frontend
+          npm i --no-optional
+          npm cache verify
+          npm ci
+          npm run build:production
+
+
+        # Run Sonar Analysis on Frontend (If Frontend Changes)
+      - name: Setup Sonar Analysis For Frontend
+        if: steps.changed-frontend.outputs.frontend_files
+        uses: warchant/setup-sonar-scanner@v1
+
+
+        # Run Sonar Analysis on Frontend (If Frontend Changes)
+      - name: Sonar Analysis on Frontend
+        if: steps.changed-frontend.outputs.frontend_files
+        run: cd frontend && sonar-scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+
+
+        # Run Sonar Analysis on Backend (If Backend Changes)
+      - name: Sonar Analysis on Backend
+        if: steps.changed-backend.outputs.backend_files
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
