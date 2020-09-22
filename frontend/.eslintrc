@@ -17,7 +17,6 @@
     "es6": true,
     "browser": true,
     "node": true,
-    "jest": true,
     "cypress/globals": true
   },
   "rules": {
