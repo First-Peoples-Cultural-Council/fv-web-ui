@@ -113,7 +113,7 @@ jobs:
       # Run Sonar Analysis on Frontend (If Frontend Changes)
     - name: Sonar Analysis on Frontend
       if: steps.changed-frontend.outputs.frontend_files
-      run: cd frontend && npm run test:nofail && sonar-scanner
+      run: cd frontend && sonar-scanner
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
