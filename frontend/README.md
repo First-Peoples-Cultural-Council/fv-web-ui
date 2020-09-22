@@ -232,28 +232,6 @@ If your tests are failing randomly, a wait command usually fixes things:
 Some tests will pass locally with no problems, but will fail on slower CI machines.
 The best way to fix this is by adding more `cy.wait()` commands to the tests (especially after loading a new page).
 
-### Frontend: Unit testing
-
-Via [Jest](https://jestjs.io/)
-
-Run tests once:
-
-```
-$ npm run test
-```
-
-Watch mode, tests rerun after save:
-
-```
-$ npm run test:watch
-```
-
-Runs tests and generates a test coverage report
-
-```
-$ npm run test:coverage
-```
-
 ## Switching Targets for test purposes
 
 If you need to point your UI at a different NUXEO instance for whatever reason, modify the return value for `getBaseURL` in `NavigationHelpers`.

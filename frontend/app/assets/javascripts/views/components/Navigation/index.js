@@ -14,8 +14,6 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-// import ConfGlobal from 'conf/local.js'
-
 // REDUX
 import { connect } from 'react-redux'
 import { loadNavigation, toggleMenuAction } from 'providers/redux/reducers/navigation'
@@ -166,11 +164,6 @@ export class Navigation extends Component {
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
-
-    // NOTE: TBD, looks like work in progress. There's related jsx
-    // const computeCountTotalTasks = ProviderHelpers.getEntry(this.props.computeCountTotalTasks, "count_total_tasks")
-    // const userTaskCount = selectn("response.entries[0].COUNT(ecm:uuid)", computeCountTotalTasks) || 0
-
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computePortal)
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 
@@ -183,8 +176,6 @@ export class Navigation extends Component {
     // const portalTitle = this.props.routeParams.dialect_name || ''
 
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
-    const hrefPath = NavigationHelpers.generateDynamicURL('page_explore_dialects', this.props.routeParams)
-
     const { classes } = this.props
     const { appBarIcon = {}, appBar = {}, dialectContainer = {}, localePicker = {}, immersionSwitch = {} } = classes
 
@@ -211,7 +202,7 @@ export class Navigation extends Component {
           </Link>
 
           <div className="Navigation__toolbarMainInner">
-            <Link href={hrefPath} className={`${appBar} Navigation__link hideSmall`}>
+            <Link href="/explore/FV/sections/Data" className={`${appBar} Navigation__link hideSmall`}>
               <FVLabel transKey="general.explore" defaultStr="Explore Languages" transform="upper" />
             </Link>
 
