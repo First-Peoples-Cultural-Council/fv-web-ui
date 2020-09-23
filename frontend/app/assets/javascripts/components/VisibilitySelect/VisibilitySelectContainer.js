@@ -19,6 +19,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
  */
 function VisibilitySelectContainer({
   computeEntities,
+  dialectName,
   docVisibility,
   handleVisibilityChange,
   hideLabel,
@@ -37,6 +38,7 @@ function VisibilitySelectContainer({
               hideLabel={hideLabel}
               publicDialect={publicDialect}
               selectNameAndId={selectNameAndId}
+              dialectName={dialectName}
             />
           )
         }}
@@ -47,10 +49,11 @@ function VisibilitySelectContainer({
 // PROPTYPES
 const { string, object, func, bool } = PropTypes
 VisibilitySelectContainer.propTypes = {
+  computeEntities: object.isRequired,
+  dialectName: string,
   docVisibility: string.isRequired,
   handleVisibilityChange: func.isRequired,
   hideLabel: bool,
-  computeEntities: object.isRequired,
   selectNameAndId: string,
 }
 
