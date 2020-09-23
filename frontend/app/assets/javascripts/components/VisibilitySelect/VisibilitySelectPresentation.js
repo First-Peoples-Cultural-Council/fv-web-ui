@@ -7,6 +7,8 @@ import Select from '@material-ui/core/Select'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
+import StringHelpers from 'common/StringHelpers'
+
 // FPCC
 import '!style-loader!css-loader!./VisibilitySelect.css'
 
@@ -29,6 +31,7 @@ function VisibilitySelectPresentation({
   hideLabel,
   publicDialect,
   selectNameAndId,
+  dialectName,
 }) {
   return (
     <div className={`VisibilitySelect ${classes.root}`}>
@@ -42,27 +45,28 @@ function VisibilitySelectPresentation({
           className="VisibilitySelect__select"
           labelId="select-outlined-label"
           id={selectNameAndId}
-          value={docVisibility}
+          // NOTE: prevents a mat-ui warning about setting a list without a related value
+          value={publicDialect ? docVisibility : 'team'}
           onChange={handleVisibilityChange}
           inputProps={{ name: selectNameAndId }}
         >
           <MenuItem value={'team'}>
             <span className="VisibilitySelect__menuItemGroup">
               <VisibilityOffIcon className="VisibilitySelect__icon" />
-              Language Team
+              {StringHelpers.visibilityText({ visibility: 'team', dialectName })}
             </span>
           </MenuItem>
           <MenuItem value={'members'}>
             <span className="VisibilitySelect__menuItemGroup">
               <GroupIcon className="VisibilitySelect__icon" />
-              Members
+              {StringHelpers.visibilityText({ visibility: 'members', dialectName })}
             </span>
           </MenuItem>
           {publicDialect ? (
             <MenuItem value={'public'}>
               <span className="VisibilitySelect__menuItemGroup">
                 <PublicIcon className="VisibilitySelect__icon" />
-                Everyone
+                {StringHelpers.visibilityText({ visibility: 'public', dialectName })}
               </span>
             </MenuItem>
           ) : null}
@@ -75,6 +79,7 @@ function VisibilitySelectPresentation({
 const { func, string, object, bool } = PropTypes
 VisibilitySelectPresentation.propTypes = {
   classes: object,
+  dialectName: string,
   docVisibility: string,
   handleVisibilityChange: func,
   hideLabel: bool,
@@ -83,14 +88,14 @@ VisibilitySelectPresentation.propTypes = {
 }
 
 VisibilitySelectPresentation.defaultProps = {
+  classes: {
+    root: '',
+  },
   docVisibility: '',
   handleVisibilityChange: () => {},
   hideLabel: false,
   publicDialect: false,
   selectNameAndId: 'select',
-  classes: {
-    root: '',
-  },
 }
 
 export default VisibilitySelectPresentation

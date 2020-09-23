@@ -3,6 +3,7 @@ import selectn from 'selectn'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import useRoute from 'DataSource/useRoute'
+import StringHelpers from 'common/StringHelpers'
 
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
@@ -99,17 +100,12 @@ const DictionaryListLargeScreen = (props) => {
               className={`DictionaryList__row ${i % 2 ? 'DictionaryList__row--b' : 'DictionaryList__row--a'}`}
             >
               {props.columns.map((column, j) => {
-                const dialectName = routeParams.dialect_name
-                const mapDocumentStateToVisibility = {
-                  New: `${dialectName} Team Only`,
-                  Disabled: `${dialectName} Team Only`,
-                  Enabled: `${dialectName} Members Only`,
-                  Published: 'Public',
-                }
-
                 let cellValue = selectn(column.name, item)
                 if (column.name === 'state') {
-                  cellValue = mapDocumentStateToVisibility[cellValue]
+                  cellValue = StringHelpers.visibilityText({
+                    visibility: cellValue,
+                    dialectName: routeParams.dialect_name,
+                  })
                 }
                 const cellRender =
                   typeof column.render === 'function' ? column.render(cellValue, item, column) : cellValue

@@ -227,7 +227,7 @@ export class PhrasesListView extends DataListView {
     if (this.props.routeParams.area === WORKSPACES) {
       this.state.columns.push({
         name: 'state',
-        title: this.props.intl.trans('state', 'State', 'first'),
+        title: 'Visibility',
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
         columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
       })

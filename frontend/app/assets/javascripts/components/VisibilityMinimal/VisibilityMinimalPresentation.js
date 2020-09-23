@@ -67,6 +67,7 @@ function VisibilityMinimalPresentation({
         docVisibility={docVisibility}
         handleVisibilityChange={handleVisibilityChange}
         computeEntities={computeEntities}
+        dialectName={dialectName}
       />
 
       <Dialog

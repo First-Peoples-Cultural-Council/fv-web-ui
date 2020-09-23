@@ -77,6 +77,7 @@ function RequestReviewPresentation({
             handleVisibilityChange={handleVisibilityChange}
             computeEntities={computeEntities}
             hideLabel
+            dialectName={dialectName}
           />
         </DialogContent>
         <DialogActions>
