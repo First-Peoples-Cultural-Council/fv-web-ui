@@ -68,9 +68,10 @@ function WidgetTasksData({ children, columnRender }) {
         sorting: false,
       },
       {
-        title: 'Change requested',
+        title: 'Visibility change requested',
         field: 'titleTask',
         cellStyle,
+        render: columnRender.titleTask,
       },
       {
         title: 'Requested by',

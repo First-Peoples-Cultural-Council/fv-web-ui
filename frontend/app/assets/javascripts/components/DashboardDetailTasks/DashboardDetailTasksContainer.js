@@ -25,6 +25,9 @@ function DashboardDetailTasksContainer() {
     <DashboardDetailTasksData
       columnRender={{
         itemType: ItemIcon.Presentation,
+        titleTask: ({ titleTask, visibilityChanged }) => {
+          return visibilityChanged ? titleTask : ''
+        },
       }}
     >
       {({

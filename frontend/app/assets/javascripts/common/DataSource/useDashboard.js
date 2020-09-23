@@ -58,22 +58,25 @@ function useDashboard() {
           return UNKNOWN
       }
     }
-    return _tasks.map(({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility }) => {
-      return {
-        date: formatDate(dateCreated),
-        id,
-        initiator: formatInitator({
-          email: requestedBy.email,
-          firstName: requestedBy.firstName,
-          lastName: requestedBy.lastName,
-        }),
-        targetDocumentsIds: targetDoc.uid,
-        itemType: formatItemType(targetDoc.type),
-        isNew: targetDoc.isNew,
-        titleTask: formatTitleTask({ visibility: requestedVisibility }),
-        titleItem: formatTitleItem(targetDoc.title),
+    return _tasks.map(
+      ({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility, visibilityChanged }) => {
+        return {
+          date: formatDate(dateCreated),
+          id,
+          initiator: formatInitator({
+            email: requestedBy.email,
+            firstName: requestedBy.firstName,
+            lastName: requestedBy.lastName,
+          }),
+          isNew: targetDoc.isNew,
+          itemType: formatItemType(targetDoc.type),
+          targetDocumentsIds: targetDoc.uid,
+          titleItem: formatTitleItem(targetDoc.title),
+          titleTask: formatTitleTask({ visibility: requestedVisibility }),
+          visibilityChanged,
+        }
       }
-    })
+    )
   }
 
   const fetchTasksRemoteData = ({ pageIndex = 0, pageSize = 100, sortBy = 'date', sortOrder = 'desc' }) => {
