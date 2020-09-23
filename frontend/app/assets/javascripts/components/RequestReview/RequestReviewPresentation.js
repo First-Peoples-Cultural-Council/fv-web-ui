@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
@@ -34,6 +35,7 @@ function RequestReviewPresentation({
   isDialogOpen,
   handleDialogCancel,
   handleDialogOk,
+  handleTextFieldChange,
   requestVisibilityType,
   /* Props for Snackbar */
   handleSnackbarClose,
@@ -62,15 +64,21 @@ function RequestReviewPresentation({
 
       <Dialog
         fullWidth
-        maxWidth="xs"
+        maxWidth="sm"
         open={isDialogOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogTitle>Is the {docTypeName} ready to be reviewed by the Language Administrator?</DialogTitle>
+          <DialogTitle className={classes.dialogTitle}>
+            Is the {docTypeName} ready for review by your Language Administrator?
+          </DialogTitle>
           <DialogContentText id="alert-dialog-description" className={classes.dialogDescription}>
-            If you would also like to request a change to the visibility of this {docTypeName}, select below.
+            To request a change to the visibility of this {docTypeName} select below{' '}
+            <span className={classes.helperText}>
+              <sup>*</sup>Optional
+            </span>
+            :
           </DialogContentText>
           <VisibilitySelect.Container
             docVisibility={requestVisibilityType}
@@ -78,6 +86,16 @@ function RequestReviewPresentation({
             computeEntities={computeEntities}
             hideLabel
             dialectName={dialectName}
+          />
+          <TextField
+            id="comment"
+            label="Add comment"
+            className={classes.dialogTextField}
+            multiline
+            rowsMax={4}
+            fullWidth
+            variant="outlined"
+            onChange={handleTextFieldChange}
           />
         </DialogContent>
         <DialogActions>

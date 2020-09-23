@@ -10,14 +10,21 @@ export const RequestReviewStyles = makeStyles({
     display: 'inline',
     alignItems: 'center',
   },
-  label: {
-    fontSize: '1.5rem',
-    display: 'inline',
+  dialogTitle: {
+    fontSize: 'large',
   },
   dialogDescription: {
     textAlign: 'left',
   },
   dialogContent: {
     textAlign: 'left',
+  },
+  dialogTextField: {
+    marginBottom: '15px',
+    marginTop: '15px',
+  },
+  helperText: {
+    fontSize: 'small',
+    opacity: '0.6',
   },
 })
