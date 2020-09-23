@@ -41,7 +41,9 @@ function useDashboard() {
       return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
     }
 
-    const formatTitleTask = (requestedVisibility) => `Requests visibility set to "${requestedVisibility}"`
+    const formatTitleTask = ({ visibility }) => {
+      return StringHelpers.visibilityText({ visibility })
+    }
     const formatTitleItem = (title = '-') => title
 
     const formatItemType = (type) => {
@@ -68,7 +70,7 @@ function useDashboard() {
         targetDocumentsIds: targetDoc.uid,
         itemType: formatItemType(targetDoc.type),
         isNew: targetDoc.isNew,
-        titleTask: formatTitleTask(requestedVisibility),
+        titleTask: formatTitleTask({ visibility: requestedVisibility }),
         titleItem: formatTitleItem(targetDoc.title),
       }
     })

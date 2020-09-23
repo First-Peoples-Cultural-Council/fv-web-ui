@@ -19,6 +19,7 @@ import selectn from 'selectn'
 import useRoute from 'DataSource/useRoute'
 
 import Typography from '@material-ui/core/Typography'
+import StringHelpers from 'common/StringHelpers'
 import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
 
 const DictionaryListSmallScreen = (props) => {
@@ -302,16 +303,10 @@ export const dictionaryListSmallScreenColumnDataTemplateCustomAudio = ({ cellRen
 export const dictionaryListSmallScreenColumnDataTemplateCustomState = ({ cellRender, className = '' }) => {
   const { routeParams } = useRoute()
   const dialectName = routeParams.dialect_name
-  const mapDocumentStateToVisibility = {
-    New: `${dialectName} Team Only`,
-    Disabled: `${dialectName} Team Only`,
-    Enabled: `${dialectName} Members Only`,
-    Published: 'Public',
-  }
-  const stateVisibilityText = mapDocumentStateToVisibility[cellRender]
+  const stateVisibilityText = StringHelpers.visibilityText({ visibility: cellRender, dialectName })
   return cellRender ? (
     <div className={`DictionaryListSmallScreen__stateGroup ${className}`}>
-      <strong>State: </strong>
+      <strong>Visibility: </strong>
       {stateVisibilityText ? stateVisibilityText : ''}
     </div>
   ) : null

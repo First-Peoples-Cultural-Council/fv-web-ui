@@ -334,7 +334,7 @@ function WordsListData({ children }) {
       })
       columnsArray.push({
         name: 'state',
-        title: intl.trans('state', 'State', 'first'),
+        title: 'Visibility',
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
         columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
       })

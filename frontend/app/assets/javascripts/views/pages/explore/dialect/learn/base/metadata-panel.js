@@ -121,16 +121,9 @@ export class MetadataPanel extends Component {
      */
     const dialectName = routeParams.dialect_name
 
-    const mapDocumentStateToVisibility = {
-      New: `${dialectName ? dialectName : ''} Team Only`,
-      Disabled: `${dialectName ? dialectName : ''} Team Only`,
-      Enabled: `${dialectName ? dialectName : ''} Members Only`,
-      Published: 'Public',
-    }
-
     metadata.push({
       label: this.props.intl.trans('status', 'Status', 'first'),
-      value: mapDocumentStateToVisibility[selectn('response.state', computeEntity)],
+      value: StringHelpers.visibilityText({ visibility: selectn('response.state', computeEntity), dialectName }),
     })
 
     /**

@@ -156,14 +156,29 @@ export default {
 
     return params
   },
-  visibilityCategories: ({ visibility, dialectName = 'Community' }) => {
-    switch (visibility) {
+  visibilityText: ({ visibility = '', dialectName = 'Community' }) => {
+    switch (visibility.toLowerCase()) {
       case 'public':
         return 'Public'
+
+      case 'published':
+        return 'Public'
+
       case 'team':
         return 'Language Team'
+
+      case 'new':
+        return 'Language Team'
+
+      case 'disabled':
+        return 'Language Team'
+
+      case 'enabled':
+        return `${dialectName} Members`
+
       case 'members':
         return `${dialectName} Members`
+
       default:
         return visibility
     }

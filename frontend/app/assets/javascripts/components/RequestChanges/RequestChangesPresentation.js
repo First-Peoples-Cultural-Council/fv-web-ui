@@ -20,6 +20,7 @@ import CloseIcon from '@material-ui/icons/Close'
 function RequestChangesPresentation({
   disableApproveButton,
   disableRequestChangesButton,
+  dialectName,
   docVisibility,
   errors,
   formRef,
@@ -56,6 +57,7 @@ function RequestChangesPresentation({
               handleVisibilityChange={handleVisibilityChange}
               publicDialect={isPublicDialect}
               selectNameAndId="visibilitySelect"
+              dialectName={dialectName}
             />
           </div>
           {getErrorFeedback({ errors })}
@@ -105,6 +107,7 @@ const { any, string, object, bool, func } = PropTypes
 RequestChangesPresentation.propTypes = {
   computeEntities: object,
   disableApproveButton: func,
+  dialectName: string,
   disableRequestChangesButton: func,
   handleApprove: func,
   handleRequestChanges: func,
