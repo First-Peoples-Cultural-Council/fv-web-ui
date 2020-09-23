@@ -137,6 +137,19 @@ export default {
       ('0' + d.getUTCMinutes()).slice(-2)
     )
   },
+  formatLocalDateString: (dateString) => {
+    const d = new Date(dateString)
+    const m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    let hours = d.getHours()
+    let minutes = d.getMinutes()
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12
+    hours = hours ? hours : 12 // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes
+    const strTime = hours + ':' + minutes + ' ' + ampm
+
+    return m[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + strTime
+  },
   isUUID: (str) => {
     if (!str) {
       return false

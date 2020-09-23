@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./DashboardDetail.css'
 
-import IconClose from '@material-ui/icons/ArrowForwardIos'
 import IconWidget from '@material-ui/icons/Apps'
 import Link from 'views/components/Link'
 
@@ -28,7 +27,6 @@ function DashboardDetailPresentation({
   childrenSelectedDetail,
   childrenSelectedSidebar,
   childrenUnselected,
-  onClose,
   selectedId,
 }) {
   const { theme } = useTheme()
@@ -67,9 +65,6 @@ function DashboardDetailPresentation({
           {/* Selected item details/admin
           ------------------------------------------ */}
           <div className="DashboardDetail__selectedItem">
-            <button className="DashboardDetail__selectedItemClose" onClick={onClose}>
-              <IconClose className="DashboardDetail__selectedItemCloseIcon" fontSize="small" />
-            </button>
             {childrenSelectedDetail}
           </div>
         </>
