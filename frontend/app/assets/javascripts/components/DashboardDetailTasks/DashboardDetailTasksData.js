@@ -278,8 +278,9 @@ function DashboardDetailTasksData({ children, columnRender }) {
       cellStyle,
     },
     {
-      title: 'Change requested',
+      title: 'Visibility change requested',
       field: 'titleTask',
+      render: columnRender.titleTask,
       cellStyle,
     },
     {

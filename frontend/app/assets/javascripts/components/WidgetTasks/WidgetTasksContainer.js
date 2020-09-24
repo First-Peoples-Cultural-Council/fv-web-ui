@@ -17,6 +17,9 @@ function WidgetTasksContainer() {
     <WidgetTasksData
       columnRender={{
         itemType: ItemIcon.Presentation,
+        titleTask: ({ titleTask, visibilityChanged }) => {
+          return visibilityChanged ? titleTask : ''
+        },
       }}
     >
       {({
