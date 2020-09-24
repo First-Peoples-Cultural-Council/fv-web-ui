@@ -44,6 +44,23 @@ function useDashboard() {
     const formatTitleTask = ({ visibility }) => {
       return StringHelpers.visibilityText({ visibility })
     }
+    const formatTitleTaskDetail = ({ firstName, lastName, type }) => {
+      let item
+      switch (type) {
+        case 'FVWord':
+          item = 'Word'
+          break
+        case 'FVPhrase':
+          item = 'Phrase'
+          break
+        case 'FVBook':
+          item = 'Song/story'
+          break
+        default:
+          item = 'A'
+      }
+      return `${item} review requested by ${firstName} ${lastName}`
+    }
     const formatTitleItem = (title = '-') => title
 
     const formatItemType = (type) => {
@@ -72,6 +89,11 @@ function useDashboard() {
           itemType: formatItemType(targetDoc.type),
           targetDocumentsIds: targetDoc.uid,
           titleItem: formatTitleItem(targetDoc.title),
+          titleTaskDetail: formatTitleTaskDetail({
+            type: targetDoc.type,
+            firstName: requestedBy.firstName,
+            lastName: requestedBy.lastName,
+          }),
           titleTask: formatTitleTask({ visibility: requestedVisibility }),
           visibilityChanged,
         }

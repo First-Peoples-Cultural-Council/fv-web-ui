@@ -49,8 +49,7 @@ function DashboardDetailTasksContainer() {
       }) => {
         const { page, pageSize, count } = pagination
         const {
-          titleTask: taskTitle,
-          initiator: taskInitiator,
+          titleTaskDetail: taskTitle,
           date: taskDate,
           itemType: taskItemType,
           isNew: taskIsNew,
@@ -154,7 +153,6 @@ function DashboardDetailTasksContainer() {
                 childrenTaskSummary={
                   <DashboardDetailSelectedItemTask.Presentation
                     title={taskTitle}
-                    initiator={taskInitiator}
                     date={taskDate}
                     icon={<ItemIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
