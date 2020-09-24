@@ -4,6 +4,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.data.schemas.DialectTypesConstants;
 import java.util.List;
 import java.util.logging.Logger;
 import org.json.JSONObject;
@@ -41,11 +42,14 @@ public class ConfusablesStatus {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               try {
+                String dictionaryId = session
+                    .getChild(dialect.getRef(), DialectTypesConstants.FV_DICTIONARY_NAME).getId();
+
                 List<String> allConfusables = cleanupCharactersService.getAllConfusables(dialect);
 
                 for (String confusable : allConfusables) {
                   DocumentModelList dictionaryItems = cleanupCharactersService
-                      .getAllWordsPhrasesForConfusable(session, confusable, 100);
+                      .getAllWordsPhrasesForConfusable(session, dictionaryId, confusable, 100);
                   json.put(confusable, "Words/Phrases: " + dictionaryItems.size());
                 }
               } catch (Exception e) {

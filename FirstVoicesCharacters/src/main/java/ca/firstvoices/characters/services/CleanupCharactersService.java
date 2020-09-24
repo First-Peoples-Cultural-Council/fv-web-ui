@@ -61,7 +61,7 @@ public interface CleanupCharactersService {
   /**
    * Ensures that confusables set on the current character are valid
    *
-   * @param character the character to validate
+   * @param character       the character to validate
    * @param characterValues a list of other characters in the alphabet
    * @return map of the valid confusables
    */
@@ -110,13 +110,16 @@ public interface CleanupCharactersService {
   List<String> getAllConfusables(DocumentModel doc);
 
   /**
-   * Returns all the words and phrases that contain the confusable string
+   * Returns all the words and phrases that contain the confusable string within the dialect
    *
    * @param session
+   * @param dictionaryId
    * @param confusableChar
+   * @param batchSize      the maximum amount of words to return
    * @return
    */
-  DocumentModelList getAllWordsPhrasesForConfusable(CoreSession session, String confusableChar,
+  DocumentModelList getAllWordsPhrasesForConfusable(CoreSession session, String dictionaryId,
+      String confusableChar,
       int batchSize);
 
   /**
