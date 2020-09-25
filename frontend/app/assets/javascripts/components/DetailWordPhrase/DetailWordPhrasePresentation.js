@@ -353,9 +353,14 @@ function DetailWordPhrasePresentation({
   const _getButtons = () => {
     const documentType = (docType == 'FVWord') ? 'word' : 'phrase'
     return (
-      <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
-        {'View full '} {documentType}
-      </FVButton>
+      <div>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+          {'Edit'}
+        </FVButton>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+          {'View full '} {documentType}
+        </FVButton>
+      </div>
     )
   }
 

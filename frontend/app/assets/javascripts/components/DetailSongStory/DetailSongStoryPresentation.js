@@ -35,9 +35,15 @@ function DetailSongStoryPresentation({
 
   const _getButtons = () => {
     return (
-      <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
-        {'View full '} {book.type}
-      </FVButton>
+      <div>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+          {'Edit'}
+        </FVButton>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+          {'View full '} {book.type}
+        </FVButton>
+      </div>
+
     )
   }
 
@@ -83,7 +89,6 @@ function DetailSongStoryPresentation({
       <div className="text-right">
         {_getButtons()}
       </div>
-
     </div>
   )
 }
