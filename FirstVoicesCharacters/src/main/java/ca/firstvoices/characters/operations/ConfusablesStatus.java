@@ -5,8 +5,10 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.json.JSONObject;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -49,8 +51,15 @@ public class ConfusablesStatus {
 
                 for (String confusable : allConfusables) {
                   DocumentModelList dictionaryItems = cleanupCharactersService
-                      .getAllWordsPhrasesForConfusable(session, dictionaryId, confusable, 100);
-                  json.put(confusable, "Words/Phrases: " + dictionaryItems.size());
+                      .getAllWordsPhrasesForConfusable(session, dictionaryId, confusable, 20);
+
+                  JSONObject confusablesJson = new JSONObject();
+                  confusablesJson.put("Words/Phrases", dictionaryItems.totalSize());
+                  confusablesJson.put("Top 20 Matches", dictionaryItems.stream()
+                      .map(doc -> Collections.singletonMap(doc.getId(), doc.getTitle()))
+                      .collect(Collectors.toList()));
+
+                  json.put(confusable, confusablesJson);
                 }
               } catch (Exception e) {
                 log.severe(
