@@ -357,7 +357,6 @@ function DetailWordPhrasePresentation({
         {'View full '} {documentType}
       </FVButton>
     )
-    return null
   }
 
   return (

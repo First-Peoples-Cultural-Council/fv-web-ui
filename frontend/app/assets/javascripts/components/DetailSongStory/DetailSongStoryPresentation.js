@@ -33,6 +33,14 @@ function DetailSongStoryPresentation({
   })
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
+  const _getButtons = () => {
+    return (
+      <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+        {'View full '} {book.type}
+      </FVButton>
+    )
+  }
+
   const mediaPanels =
     videos.length > 0 || pictures.length > 0 ? (
       <Grid key={'media-' + book.uid} item xs={4}>
@@ -73,10 +81,7 @@ function DetailSongStoryPresentation({
         </Grid>
       </Grid>
       <div className="text-right">
-        <FVButton variant="contained" style={{marginRight: '10px'}}
-          color="primary">
-          {'View full '} {book.type}
-        </FVButton>
+        {_getButtons()}
       </div>
 
     </div>
@@ -121,6 +126,7 @@ function _getIntroductionTranslation(introductionTranslation) {
     </div>
   ) : null
 }
+
 
 // PROPTYPES
 const { array, string, object, number } = PropTypes
