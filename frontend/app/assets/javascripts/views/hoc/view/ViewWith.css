@@ -1,0 +1,19 @@
+.ViewWithActions__button {
+  display: inline-block;
+  margin: 5px;
+}
+
+.ViewWithActions__warning {
+  padding-top: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.ViewWithForm__button {
+  padding: 4px;
+  margin-left: 5px;
+  border: 1px solid gray;
+}
+.ViewWithForm__warning {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

@@ -147,12 +147,11 @@ export class MetadataPanel extends Component {
               open: !this.state.open,
             })
           }}
-          className="card-header-custom"
           title={
             <Typography
               variant="subtitle1"
               style={{
-                color: themePalette.secondary.contrastText,
+                color: '#585858',
               }}
             >
               <FVLabel transKey="metadata" defaultStr="METADATA" transform="upper" />
@@ -168,7 +167,7 @@ export class MetadataPanel extends Component {
             </Typography>
           }
           style={{
-            backgroundColor: themePalette.primary2Color,
+            backgroundColor: '#efefef',
             borderBottom: '4px solid ' + themePalette.primary.light,
             padding: '0 16px',
           }}

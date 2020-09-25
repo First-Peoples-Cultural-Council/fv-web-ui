@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { List } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -12,7 +13,9 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import { Popover } from '@material-ui/core'
 import FVButton from 'views/components/FVButton'
 import FVLabel from '../../components/FVLabel/index'
-import { connect } from 'react-redux'
+import WarningBanner from 'components/WarningBanner'
+import RequestReview from 'components/RequestReview'
+import '!style-loader!css-loader!./ViewWith.css'
 
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
@@ -105,6 +108,24 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       })
     }
 
+    _hasPendingReview = (item) => {
+      return (
+        <div className="ViewWithForm__warning">
+          <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
+            {({ hasRelatedTasks, docTypeName }) => {
+              return hasRelatedTasks && docTypeName ? (
+                <WarningBanner.Presentation
+                  message={
+                    'An active review request exists for this ' + docTypeName + ' any changes will clear that request.'
+                  }
+                />
+              ) : null
+            }}
+          </RequestReview.Data>
+        </div>
+      )
+    }
+
     componentWillReceiveProps(nextProps) {
       if (this.state.saved) {
         const currentWord = this._getComputeItem(this.props)
@@ -148,15 +169,17 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
-                    <button
-                      type="submit"
+                    <FVButton
+                      data-testid="withForm__saveBtn"
+                      variant="contained"
+                      color="primary"
                       onClick={(e) => {
                         this._onRequestSaveForm(e, computeItem)
                       }}
-                      className="RaisedButton RaisedButton--primary"
                     >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
-                    </button>
+                    </FVButton>
+                    {this._hasPendingReview(selectn('response', computeItem), type)}
                   </div>
 
                   <hr />
@@ -175,17 +198,18 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+                      {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
-                    <button
-                      type="submit"
+                    <FVButton
+                      data-testid="withForm__saveBtn"
+                      variant="contained"
+                      color="primary"
                       onClick={(e) => {
                         this._onRequestSaveForm(e, computeItem)
                       }}
-                      className="RaisedButton RaisedButton--primary"
                     >
-                      <FVLabel transKey="save" defaultStr="Save" transform="first" />
-                    </button>
+                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+                    </FVButton>
 
                     <Popover
                       open={this.state.showCancelWarning}
