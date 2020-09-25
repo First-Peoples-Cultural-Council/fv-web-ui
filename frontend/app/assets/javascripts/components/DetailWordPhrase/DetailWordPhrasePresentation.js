@@ -6,6 +6,7 @@ import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
+import FVButton from 'views/components/FVButton'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
@@ -349,6 +350,16 @@ function DetailWordPhrasePresentation({
     ) : null
   }
 
+  const _getButtons = () => {
+    const documentType = (docType == 'FVWord') ? 'word' : 'phrase'
+    return (
+      <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+        {'View full '} {documentType}
+      </FVButton>
+    )
+    return null
+  }
+
   return (
     <div className="DialectViewWordPhrase" id="contentMain">
       <div className="DialectViewWordPhraseGroup">
@@ -378,6 +389,7 @@ function DetailWordPhrasePresentation({
           {_getMetadata(metadata)}
         </aside>
       </div>
+      {_getButtons()}
     </div>
   )
 }

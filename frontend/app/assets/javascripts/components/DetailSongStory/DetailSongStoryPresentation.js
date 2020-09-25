@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography'
 import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
+import FVButton from 'views/components/FVButton'
+
 
 /**
  * @summary DetailSongStoryPresentation
@@ -70,6 +72,13 @@ function DetailSongStoryPresentation({
           </Grid>
         </Grid>
       </Grid>
+      <div className="text-right">
+        <FVButton variant="contained" style={{marginRight: '10px'}}
+          color="primary">
+          {'View full '} {book.type}
+        </FVButton>
+      </div>
+
     </div>
   )
 }
