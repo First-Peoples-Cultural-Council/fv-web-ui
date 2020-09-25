@@ -30,6 +30,8 @@ import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,16 +66,26 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   public void setUp() {
     assertNotNull("Should have a valid session", session);
     createSetup(session);
+
+    setupCharacters();
   }
 
   @After
   public void tearDown() {
     alphabetAndConfusableCharacters.clear();
+
+    // Clean up characters after run
+    for (DocumentModel character : session.getChildren(alphabet.getRef(), FV_CHARACTER)) {
+      session.removeDocument(character.getRef());
+    }
+
+    // Remove properties from alphabet
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters", null);
+    session.save();
   }
 
   @Test
   public void cleanConfusablesTest() {
-    setupCharacters();
     String[] words = {"∀ᗄꓯ", "Ҍᑳɓ", "ｃⅽℭ", "Ŷŷ γΥ"};
     String[] correctWords = {"aaa", "bbb", "ccc", "Yy yY"};
     List<DocumentModel> documentModels = createWords(words);
@@ -104,7 +116,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   @Test(expected = FVCharacterInvalidException.class)
   public void validateConfusableCharactersThrowsExceptionWhenMappedConfusableToAlphabetCharacterTest() {
-    setupCharacters();
     alphabetAndConfusableCharacters.clear();
     alphabetAndConfusableCharacters.put("e", new String[]{"f"});
     alphabetAndConfusableCharacters.put("f", new String[]{"e"});
@@ -118,7 +129,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   @Test(expected = FVCharacterInvalidException.class)
   public void validateConfusableCharactersThrowsExceptionWhenUppercaseConfusablesExistWithoutUppercaseCharacter() {
-    setupCharacters();
     createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "", new String[]{"ŷ", "γ"},
         new String[]{"Ŷ", "Υ"});
     DocumentModelList characters = session.getChildren(alphabet.getRef());
@@ -140,7 +150,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   @Test(expected = FVCharacterInvalidException.class)
   public void validateIgnoredCharacters() {
-    setupCharacters();
 
     List<String> testList = new ArrayList<>();
     testList.add("a");
@@ -156,9 +165,14 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   @Test
   public void getCharactersToSkip() {
-    setupCharacters();
+    alphabet.setPropertyValue("fv-alphabet:ignored_characters",
+        Collections.singletonList("ח").toArray());
+    session.saveDocument(alphabet);
+
     Set<String> collectedMap = cleanupCharactersService.getCharactersToSkipForDialect(dialect);
-    assertEquals(18, collectedMap.size());
+
+    // Should match characters created + confusables + ignored characters
+    assertEquals(24, collectedMap.size());
   }
 
   private void setupCharacters() {
@@ -166,9 +180,24 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     alphabetAndConfusableCharacters.put("a", new String[]{"∀", "ᗄ", "ꓯ"});
     alphabetAndConfusableCharacters.put("b", new String[]{"Ҍ", "ᑳ", "ɓ"});
     alphabetAndConfusableCharacters.put("c", new String[]{"ｃ", "ⅽ", "ℭ"});
+    alphabetAndConfusableCharacters.put("\u1E48",
+        new String[]{"\u004E\u0332", "\u004E\u0320", "\u004E\u005F", "\u004E\u0331"});
     createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
-    createLetterWithLowerCaseUppercaseConfusableCharacters("y", 4, "Y", new String[]{"ŷ", "γ"},
-        new String[]{"Ŷ", "Υ"});
+
+    // Add lowercase/uppercase confusables to map
+    String lowerCaseCharacter = "y";
+    String upperCaseCharacter = "Y";
+
+    alphabetAndConfusableCharacters.put(lowerCaseCharacter, new String[]{"ŷ", "γ"});
+    alphabetAndConfusableCharacters.put(upperCaseCharacter, new String[]{"Ŷ", "Υ"});
+
+    createLetterWithLowerCaseUppercaseConfusableCharacters(lowerCaseCharacter, 4,
+        upperCaseCharacter,
+        alphabetAndConfusableCharacters.get(lowerCaseCharacter),
+        alphabetAndConfusableCharacters.get(upperCaseCharacter));
+
+    assertEquals(5, cleanupCharactersService.getCharacters(alphabet).size());
+    assertEquals(17, cleanupCharactersService.getAllConfusables(alphabet).size());
   }
 
   private void setupUnicodeCharacters() {
@@ -185,11 +214,16 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     createAlphabetWithConfusableCharacters(alphabetAndConfusableCharacters);
   }
 
-  private void createAlphabetWithConfusableCharacters(Map<String, String[]> alphabet) {
-    Iterator<Map.Entry<String, String[]>> it = alphabet.entrySet().iterator();
+  private void createAlphabetWithConfusableCharacters(Map<String, String[]> alphabetSet) {
+    Iterator<Map.Entry<String, String[]>> it = alphabetSet.entrySet().iterator();
     int i = 0;
     while (it.hasNext()) {
       Map.Entry<String, String[]> pair = it.next();
+
+      if (session.hasChild(alphabet.getRef(), pair.getKey())) {
+        continue;
+      }
+
       DocumentModel letterDoc = session
           .createDocumentModel(dialect.getPathAsString() + "/Alphabet", pair.getKey(),
               FV_CHARACTER);
@@ -202,6 +236,11 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
 
   private void createLetterWithLowerCaseUppercaseConfusableCharacters(String title, int order,
       String uChar, String[] confusableChars, String[] uConfusableChars) {
+
+    if (session.hasChild(alphabet.getRef(), title)) {
+      return;
+    }
+
     DocumentModel letterDoc = session
         .createDocumentModel(dialect.getPathAsString() + "/Alphabet", title, FV_CHARACTER);
     letterDoc.setPropertyValue("fvcharacter:alphabet_order", order);
@@ -216,7 +255,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     List<DocumentModel> documentModels = new ArrayList<>();
     for (String word : words) {
       DocumentModel document = session
-          .createDocumentModel(dialect.getPathAsString() + "/Dictionary", word, FV_WORD);
+          .createDocumentModel(dictionary.getPathAsString(), word, FV_WORD);
       document.setPropertyValue("fv:reference", word);
       document = createDocument(session, document);
       documentModels.add(document);
@@ -224,4 +263,25 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
     return documentModels;
   }
 
+  @Test
+  public void getAllWordsPhrasesForConfusable() {
+    ArrayList<String> wordsToCreate = new ArrayList<>();
+
+    wordsToCreate.add("WordWithNoConfusables");
+    wordsToCreate.add("JustPartOf\u004EAConfusable");
+
+    for (String[] confusable : alphabetAndConfusableCharacters.values()) {
+      wordsToCreate.add(String.format("word%sword", Arrays.toString(confusable)));
+    }
+
+    createWords(wordsToCreate.toArray(new String[0]));
+
+    session.save();
+
+    for (String confusable : cleanupCharactersService.getAllConfusables(alphabet)) {
+      DocumentModelList words = cleanupCharactersService
+          .getAllWordsPhrasesForConfusable(session, dictionary.getId(), confusable, 100);
+      assertEquals("Confusable `" + confusable + "` not  found.", 1, words.size());
+    }
+  }
 }
