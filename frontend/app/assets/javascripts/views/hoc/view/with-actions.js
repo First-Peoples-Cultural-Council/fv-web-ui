@@ -55,7 +55,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                     >
                       &nbsp;
                     </PageToolbar>
-                    {this._hasPendingReview(selectn('response', this.props.computeItem), this.props.labels.single)}
+                    {this._hasPendingReview(selectn('response', this.props.computeItem))}
                   </div>
                 )
               }
@@ -304,15 +304,26 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
       )
     }
 
-    _hasPendingReview = (item, label) => {
-      const message = 'An active review request exists for this ' + label + ' any changes will clear that request.'
+    _hasPendingReview = (item) => {
       return (
-        <div className="ViewWithActions__warning">
-          <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
-            {({ hasRelatedTasks }) => {
-              return hasRelatedTasks && message ? <WarningBanner.Presentation message={message} /> : null
-            }}
-          </RequestReview.Data>
+        <div className="col-xs-12">
+          <div className="ViewWithActions__warning ">
+            <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
+              {({ hasRelatedTasks, docTypeName }) => {
+                return hasRelatedTasks && docTypeName ? (
+                  <WarningBanner.Presentation
+                    message={
+                      'A review task exists for this ' +
+                      docTypeName +
+                      ', any saved changes to this ' +
+                      docTypeName +
+                      ' will clear that task.'
+                    }
+                  />
+                ) : null
+              }}
+            </RequestReview.Data>
+          </div>
         </div>
       )
     }

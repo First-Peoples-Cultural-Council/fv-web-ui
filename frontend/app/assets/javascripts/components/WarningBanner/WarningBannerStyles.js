@@ -6,13 +6,12 @@ export const WarningBannerStyles = makeStyles(() => ({
     backgroundColor: 'rgb(255, 244, 229)',
     padding: '15px 30px',
     borderRadius: '4px',
-    fontWeight: '300',
-    lineHeight: '1.43',
-    letterSpacing: '0.01071em',
+    alignItems: 'center',
   },
   icon: {
+    fontSize: '1.8em',
     color: '#ff9800',
     opacity: '0.9',
-    marginRight: '12px',
+    marginRight: '20px',
   },
 }))

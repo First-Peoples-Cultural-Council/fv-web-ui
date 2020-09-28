@@ -22,16 +22,11 @@ function WarningBannerPresentation({ message }) {
   const classes = WarningBannerStyles()
 
   return message ? (
-    <div className="col-xs-12">
-      <div className={classes.root}>
-        <Paper elevation={0} className={classes.customPaper}>
-          <ReportProblemOutlinedIcon className={classes.icon} />
-          <div>
-            <strong>Warning: </strong>
-            {message}
-          </div>
-        </Paper>
-      </div>
+    <div className={classes.root}>
+      <Paper elevation={0} className={classes.customPaper}>
+        <ReportProblemOutlinedIcon className={classes.icon} fontSizeLarge />
+        <div>{message}</div>
+      </Paper>
     </div>
   ) : null
 }

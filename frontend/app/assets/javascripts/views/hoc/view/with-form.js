@@ -9,6 +9,7 @@ import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
+import StringHelpers from 'common/StringHelpers'
 
 import { Popover } from '@material-ui/core'
 import FVButton from 'views/components/FVButton'
@@ -116,7 +117,11 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
               return hasRelatedTasks && docTypeName ? (
                 <WarningBanner.Presentation
                   message={
-                    'An active review request exists for this ' + docTypeName + ' any changes will clear that request.'
+                    'A review task exists for this ' +
+                    docTypeName +
+                    ', any saved changes to this ' +
+                    docTypeName +
+                    ' will clear that task.'
                   }
                 />
               ) : null
@@ -182,8 +187,6 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     {this._hasPendingReview(selectn('response', computeItem), type)}
                   </div>
 
-                  <hr />
-
                   <t.form.Form
                     ref={(element) => {
                       this['form_' + type] = element
@@ -194,9 +197,8 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     options={selectn(type, options)}
                   />
 
-                  <hr />
-
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
+                    {this._hasPendingReview(selectn('response', computeItem), type)}
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
@@ -255,49 +257,56 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
           </div>
 
           <div className={classNames('col-xs-12', 'col-md-3')}>
-            <div style={{ marginTop: '25px' }} className={classNames('panel', 'panel-primary')}>
-              <div className="panel-heading">Metadata</div>
+            <div style={{ marginTop: '60px', marginRight: '15px' }}>
+              <div className="ViewWithForm__panelHeading">
+                <FVLabel transKey="metadata" defaultStr="METADATA" transform="upper" />
+              </div>
 
               <ul className="list-group">
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="last_modified" defaultStr="Last Modified" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.lastModified', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {StringHelpers.formatLocalDateString(selectn('response.lastModified', computeItem))}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="last_contributor" defaultStr="Last Contributor" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.properties.dc:lastContributor', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {selectn('response.properties.dc:lastContributor', computeItem)}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" transform="first" />
+                    <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" />
                   </span>
-                  <br />
-                  {selectn('response.properties.dc:created', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {StringHelpers.formatLocalDateString(selectn('response.properties.dc:created', computeItem))}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="contributors" defaultStr="Contributors" transform="first" />
                   </span>
-                  <br />
-                  {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                  <div className="ViewWithForm__listGroupItem">
+                    {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="version" defaultStr="Version" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.properties.uid:major_version', computeItem)}.
-                  {selectn('response.properties.uid:minor_version', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {selectn('response.properties.uid:major_version', computeItem)}.
+                    {selectn('response.properties.uid:minor_version', computeItem)}
+                  </div>
                 </li>
               </ul>
             </div>

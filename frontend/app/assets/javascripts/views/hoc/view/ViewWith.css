@@ -17,3 +17,13 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+.ViewWithForm__panelHeading {
+  background-color: #efefef;
+  border-bottom: 4px solid #64d8cb;
+  padding: 16px;
+}
+
+.ViewWithForm__listGroupItem {
+  margin: 10px;
+}
