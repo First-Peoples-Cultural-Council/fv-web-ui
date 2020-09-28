@@ -29,6 +29,8 @@ function DetailWordPhrasePresentation({
   docType,
   literalTranslations,
   metadata,
+  onViewClick,
+  onEditClick,
   partOfSpeech,
   photos,
   phrases,
@@ -40,6 +42,7 @@ function DetailWordPhrasePresentation({
   siteTheme,
   title,
   videos,
+  uid,
 }) {
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
@@ -352,12 +355,13 @@ function DetailWordPhrasePresentation({
 
   const _getButtons = () => {
     const documentType = (docType == 'FVWord') ? 'word' : 'phrase'
+    const itemTypePlural = documentType + 's'
     return (
       <div>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick({uid}, itemTypePlural)}>
           {'Edit'}
         </FVButton>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onViewClick({uid}, itemTypePlural)}>
           {'View full '} {documentType}
         </FVButton>
       </div>

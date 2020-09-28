@@ -37,15 +37,18 @@ function DashboardDetailTasksContainer() {
         listItems,
         onChangeRowsPerPage,
         onClose,
+        onEditClick,
         onOpen,
         onOpenNoId,
         onOrderChange,
         onRowClick,
+        onViewClick,
         options,
         pagination = {},
         selectedItemData,
         selectedTaskData,
         sortDirection,
+        uid,
       }) => {
         const { page, pageSize, count } = pagination
         const {
@@ -86,10 +89,12 @@ function DashboardDetailTasksContainer() {
         if (itemType === 'FVBook') {
           childrenItemDetail = (
             <DetailSongStoryPresentation
-              book={book}
               // openBookAction={openBookAction}
               // pageCount={pageCount}
               audio={audio}
+              book={book}
+              onEditClick={onEditClick}
+              onViewClick={onViewClick}
               pictures={pictures}
               videos={videos}
             />
@@ -105,6 +110,8 @@ function DashboardDetailTasksContainer() {
               definitions={definitions}
               title={itemTitle}
               literalTranslations={literalTranslations}
+              onEditClick={onEditClick}
+              onViewClick={onViewClick}
               partOfSpeech={partOfSpeech}
               photos={photos}
               phrases={phrases}
@@ -114,6 +121,7 @@ function DashboardDetailTasksContainer() {
               metadata={metadata}
               videos={videos}
               docType={itemType}
+              uid = {uid}
             />
           )
         }

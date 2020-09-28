@@ -12,6 +12,9 @@ import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
+import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import NavigationHelpers from 'common/NavigationHelpers'
+import DocumentOperations from 'operations/DocumentOperations'
 
 /**
  * @summary DashboardDetailTasksData
@@ -303,6 +306,28 @@ function DashboardDetailTasksData({ children, columnRender }) {
       })
     )
   }
+  const onEditClick = (UID, itemTypePlural) => {
+    DocumentOperations.getDocument(UID).then((response) => {
+      pushWindowPath(
+        NavigationHelpers.generateUIDEditPath(
+          'Workspaces',
+          response,
+          itemTypePlural
+        )
+      )
+    })
+  }
+  const onViewClick = (UID, itemTypePlural) => {
+    DocumentOperations.getDocument(UID).then((response) => {
+      pushWindowPath(
+        NavigationHelpers.generateUIDPath(
+          'Workspaces',
+          response,
+          itemTypePlural
+        )
+      )
+    })
+  }
   const setProcessedTasks = (taskData) => {
     return taskData.map((task) => {
       const isProcessed = processedTasks.find((processedTask) => {
@@ -336,10 +361,12 @@ function DashboardDetailTasksData({ children, columnRender }) {
     idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
     listItems: setProcessedTasks(tasks),
     onClose,
+    onEditClick,
     onOpen,
     onOpenNoId,
     onOrderChange,
     onRowClick,
+    onViewClick,
     options: {
       pageSize: Number(queryPageSize),
       pageSizeOptions: [5, 10, 20],
@@ -357,6 +384,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     selectedItemData: setProcessedItem(selectedItemData),
     selectedTaskData: selectedTaskData,
     sortDirection: querySortOrder,
+    uid: uid,
   }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>

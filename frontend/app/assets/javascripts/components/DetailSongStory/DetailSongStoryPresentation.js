@@ -20,9 +20,10 @@ import FVButton from 'views/components/FVButton'
  * @returns {node} jsx markup
  */
 function DetailSongStoryPresentation({
-  book,
-  // Media
   audio,
+  book,
+  onViewClick,
+  onEditClick,
   pictures,
   videos,
 }) {
@@ -34,13 +35,14 @@ function DetailSongStoryPresentation({
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
   const _getButtons = () => {
+    const itemTypePlural = book.type + 's'
     return (
       <div>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
           {'Edit'}
         </FVButton>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary">
-          {'View full '} {book.type}
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onViewClick(book.uid, itemTypePlural)}>
+          {'View full '} book.type
         </FVButton>
       </div>
 
