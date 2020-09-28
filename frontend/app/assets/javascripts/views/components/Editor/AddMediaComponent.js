@@ -267,9 +267,24 @@ export class AddMediaComponent extends Component {
           onChange={this._change}
         />
         {uploadText}
-        <button type="button" onClick={this._save} className={classNames('btn', 'btn-primary')}>
+        <FVButton
+          data-testid="Dialog__AddMediaComponentUpload"
+          variant="contained"
+          color="primary"
+          style={{ margin: '10px', float: 'right' }}
+          onClick={this._save}
+        >
           <FVLabel transKey="views.components.editor.upload_media" defaultStr="Upload Media" transform="words" />
-        </button>
+        </FVButton>
+        <FVButton
+          data-testid="Dialog__AddMediaComponentCancel"
+          variant="contained"
+          color="secondary"
+          style={{ margin: '10px', float: 'right' }}
+          onClick={this.handleClose}
+        >
+          <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+        </FVButton>
       </form>
     )
     //}
@@ -281,26 +296,20 @@ export class AddMediaComponent extends Component {
             Upload successful!
           </div>
 
-          <button
-            className="FlatButton FlatButton--primary"
-            type="button"
+          <FVButton
+            data-testid="Dialog__AddMediaComponentInsert"
+            variant="contained"
+            color="primary"
+            style={{ margin: '10px', float: 'right' }}
             onClick={(e) => {
               e.preventDefault()
               this._handleSelectElement(computeCreate.response)
             }}
           >
             <FVLabel transKey="insert_into_entry" defaultStr="Insert into Entry" transform="first" />
-          </button>
+          </FVButton>
         </div>
       )
-      // actions.push(
-      //   <FlatButton
-      //     label={this.props.intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
-      //     primary
-      //     onClick={this._handleSelectElement.bind(this, computeCreate.response)}
-      //   />
-      // )
-      // form = ''
     }
 
     return (
@@ -329,16 +338,7 @@ export class AddMediaComponent extends Component {
               {form}
             </div>
           </DialogContent>
-          <DialogActions>
-            <FVButton
-              data-testid="Dialog__AddMediaComponentCancel"
-              variant="contained"
-              color="secondary"
-              onClick={this.handleClose}
-            >
-              <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
-            </FVButton>
-          </DialogActions>
+          <DialogActions></DialogActions>
         </Dialog>
       </div>
     )

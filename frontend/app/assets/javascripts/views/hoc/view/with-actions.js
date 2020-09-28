@@ -37,6 +37,10 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
         return <ComposedFilter {...this.props} {...this.state} />
       }
 
+      const permissionEntity = selectn('response', this.props.permissionEntry)
+        ? this.props.permissionEntry
+        : this.props.computeItem
+
       return (
         <div className="ViewWithActions row">
           <div>
@@ -157,7 +161,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </DialogActions>
             </Dialog>
           </AuthorizationFilter>
-          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
+          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
             <div>
               <AppBar position="static" className="PageToolbar__secondary">
                 <Toolbar style={{ justifyContent: 'flex-end' }}>

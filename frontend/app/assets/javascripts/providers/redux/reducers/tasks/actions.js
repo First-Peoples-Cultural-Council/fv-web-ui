@@ -10,6 +10,9 @@ import {
   FV_SIMPLE_TASK_GET_START,
   FV_SIMPLE_TASK_GET_SUCCESS,
   FV_SIMPLE_TASK_GET_ERROR,
+  FV_REQUEST_REVIEW_POST_START,
+  FV_REQUEST_REVIEW_POST_SUCCESS,
+  FV_REQUEST_REVIEW_POST_ERROR,
   FV_PROCESSED_TASK,
 } from './actionTypes'
 
@@ -19,10 +22,6 @@ export const approveTask = execute('FV_USER_TASKS_APPROVE', 'WorkflowTask.Comple
 
 export const rejectTask = execute('FV_USER_TASKS_REJECT', 'WorkflowTask.Complete', {
   headers: { 'enrichers.document': 'ancestry' },
-})
-
-export const createTask = execute('FV_CREATE_TASK', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
 })
 
 export const approveRegistration = execute('FV_USER_REGISTRATION_APPROVE', 'User.ApproveInvite', {})
@@ -84,6 +83,35 @@ export const getSimpleTask = (uid) => {
       })
       .catch((error) => {
         dispatch({ type: FV_SIMPLE_TASK_GET_ERROR, error: error })
+        return error
+      })
+  }
+}
+
+export const postRequestReview = (docId, requestedVisibility, comment) => {
+  return (dispatch) => {
+    dispatch({
+      type: FV_REQUEST_REVIEW_POST_START,
+      pathOrId: 'api/v1/simpleTask/requestReview',
+      message:
+        IntlService.instance.translate({
+          key: 'providers.fetch_started',
+          default: 'Fetch Started',
+          case: 'task',
+        }) + '...',
+    })
+
+    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, {
+      docId: docId,
+      requestedVisibility: requestedVisibility,
+      comment: comment,
+    })
+      .then((response) => {
+        dispatch({ type: FV_REQUEST_REVIEW_POST_SUCCESS, document: response })
+        return response
+      })
+      .catch((error) => {
+        dispatch({ type: FV_REQUEST_REVIEW_POST_ERROR, error: error })
         return error
       })
   }
