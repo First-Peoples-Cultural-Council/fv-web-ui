@@ -47,7 +47,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             {(() => {
               if (selectn('response', this.props.computeItem)) {
                 return (
-                  <div>
+                  <>
                     <PageToolbar
                       label={StringHelpers.toTitleCase(this.props.labels.single)}
                       handleNavigateRequest={this.props.onNavigateRequest}
@@ -60,7 +60,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                       &nbsp;
                     </PageToolbar>
                     {this._hasPendingReview(selectn('response', this.props.computeItem))}
-                  </div>
+                  </>
                 )
               }
             })()}
