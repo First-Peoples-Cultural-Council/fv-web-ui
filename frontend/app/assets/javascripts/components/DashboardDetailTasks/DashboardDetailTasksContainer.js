@@ -48,7 +48,7 @@ function DashboardDetailTasksContainer() {
         selectedItemData,
         selectedTaskData,
         sortDirection,
-        uid,
+        idSelectedItem,
       }) => {
         const { page, pageSize, count } = pagination
         const {
@@ -121,7 +121,7 @@ function DashboardDetailTasksContainer() {
               metadata={metadata}
               videos={videos}
               docType={itemType}
-              uid = {uid}
+              idSelectedItem={idSelectedItem}
             />
           )
         }

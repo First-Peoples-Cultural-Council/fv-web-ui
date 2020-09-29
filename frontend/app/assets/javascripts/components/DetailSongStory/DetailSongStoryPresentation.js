@@ -36,13 +36,14 @@ function DetailSongStoryPresentation({
 
   const _getButtons = () => {
     const itemTypePlural = book.type + 's'
+    const bookType = book.type
     return (
       <div>
         <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
           {'Edit'}
         </FVButton>
         <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onViewClick(book.uid, itemTypePlural)}>
-          {'View full '} book.type
+          {'View full '} {bookType}
         </FVButton>
       </div>
 

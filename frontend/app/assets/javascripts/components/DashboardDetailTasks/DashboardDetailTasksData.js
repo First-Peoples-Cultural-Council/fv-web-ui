@@ -384,7 +384,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
     selectedItemData: setProcessedItem(selectedItemData),
     selectedTaskData: selectedTaskData,
     sortDirection: querySortOrder,
-    uid: uid,
   }
   return (
     <TableContextCount.Provider value={Number(tasksCount)}>
