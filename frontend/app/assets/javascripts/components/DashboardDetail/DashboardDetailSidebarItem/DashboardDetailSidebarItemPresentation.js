@@ -11,20 +11,31 @@ import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
  * @component
  *
  * @param {object} props
- * @param {string} props.date
+ *
+ * @param {string} props.date String for task creation date
  * @param {node} props.icon JSX for the icon
- * @param {boolean} props.isActive
- * @param {boolean} props.isProcessed Session level flag set after admin acts on a task
- * @param {function} props.onClick
- * @param {string} props.titleItem
- * @param {number} props.variant
+ * @param {string} props.initiator String for user that initiated the request
+ * @param {boolean} props.isActive Toggles css class for selected item
+ * @param {boolean} props.isProcessed Toggles styling for finished task (NOTE: is a temporary state)
+ * @param {function} props.onClick <li> click handler
+ * @param {string} props.titleItem Title of the associated item (word, phrase, etc)
+ * @param {number} props.variant Toggles zebra striping styling [using 0 or 1]
  *
  * @returns {node} jsx markup
  */
 
 import { EVEN, ODD } from 'common/Constants'
 
-function DashboardDetailSidebarItemPresentation({ date, icon, isActive, isProcessed, onClick, titleItem, variant }) {
+function DashboardDetailSidebarItemPresentation({
+  date,
+  icon,
+  initiator,
+  isActive,
+  isProcessed,
+  onClick,
+  titleItem,
+  variant,
+}) {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
   const { row, rowAlternate } = themeTable
@@ -35,11 +46,9 @@ function DashboardDetailSidebarItemPresentation({ date, icon, isActive, isProces
 
   return (
     <li
-      className={`DashboardDetailSidebarItem  DashboardDetailSidebarItem--li ${
-        icon ? 'DashboardDetailSidebarItem--hasIcon' : ''
-      } ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
-        onClick !== undefined ? 'DashboardDetailSidebarItem--hasOnClick' : ''
-      }`}
+      className={`DashboardDetailSidebarItem ${icon ? 'DashboardDetailSidebarItem--hasIcon' : ''} ${
+        isActive ? 'DashboardDetailSidebarItem--isActive' : ''
+      } ${onClick !== undefined ? 'DashboardDetailSidebarItem--hasOnClick' : ''}`}
       onClick={onClick}
       style={ItemStyle[variant]}
     >
@@ -50,12 +59,23 @@ function DashboardDetailSidebarItemPresentation({ date, icon, isActive, isProces
             Done!
           </Typography>
         )}
-        <Typography variant="body1" component="h3">
+        <Typography variant="body1" component="h3" noWrap>
           {titleItem}
         </Typography>
-        <Typography variant="caption" component="div">
-          {date}
-        </Typography>
+        <div
+          className={`DashboardDetailSidebarItem__meta ${
+            initiator ? 'DashboardDetailSidebarItem__meta--hasInitiator' : ''
+          }`}
+        >
+          {initiator && (
+            <Typography variant="caption" className="DashboardDetailSidebarItem__metaInitiator" component="div" noWrap>
+              {initiator}
+            </Typography>
+          )}
+          <Typography className="DashboardDetailSidebarItem__metaDate" variant="caption" component="div" noWrap>
+            {date}
+          </Typography>
+        </div>
       </div>
     </li>
   )
@@ -65,6 +85,7 @@ const { func, node, oneOf, string, bool } = PropTypes
 DashboardDetailSidebarItemPresentation.propTypes = {
   date: string,
   icon: node,
+  initiator: string,
   isActive: bool,
   isProcessed: bool,
   onClick: func,

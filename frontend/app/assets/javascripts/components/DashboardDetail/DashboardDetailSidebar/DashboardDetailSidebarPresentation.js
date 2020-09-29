@@ -10,10 +10,12 @@ import { EVEN, ODD } from 'common/Constants'
  * @component
  *
  * @param {object} props
- * @param {array} props.listItems
- * @param {function} props.onClick
- * @param {integer} props.selectedId
- * @param {node} props.childrenHeader
+ *
+ * @param {node} props.childrenHeader Child slot for list header
+ * @param {node} props.childrenPagination Child slot for pagination
+ * @param {array} props.listItems Data to generate list items: [{date, id, initiator, isNew, isProcessed, itemType, titleItem, titleTask}]
+ * @param {function} props.onClick li click handler
+ * @param {integer} props.selectedId Used to set style on selected item
  *
  * @returns {node} jsx markup
  */
@@ -23,7 +25,7 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
       {childrenHeader && <div className="DashboardDetailSidebar__headerContainer">{childrenHeader}</div>}
       <div className="DashboardDetailSidebar__listContainer">
         <ul className="DashboardDetailSidebar__list">
-          {listItems.map(({ id, itemType, isNew, titleItem, titleTask, initiator, date, isProcessed }, index) => {
+          {listItems.map(({ date, id, initiator, isNew, isProcessed, itemType, titleItem, titleTask }, index) => {
             const variant = index % 2 ? ODD : EVEN
             return (
               <DashboardDetailSidebarItem.Presentation

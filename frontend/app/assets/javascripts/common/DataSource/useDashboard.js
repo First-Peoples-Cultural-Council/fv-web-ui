@@ -37,8 +37,11 @@ function useDashboard() {
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatLocalDateString(date)
     const formatInitator = ({ email, firstName, lastName }) => {
-      const fullName = `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
-      return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
+      const fullName = formatInitatorFullName({ firstName, lastName })
+      return `${email}${fullName !== '' ? ` ${fullName}` : ''}`
+    }
+    const formatInitatorFullName = ({ firstName, lastName }) => {
+      return `${firstName ? firstName : ''} ${lastName ? lastName : ''}`.trim()
     }
 
     const formatTitleTask = ({ visibility }) => {
@@ -75,18 +78,36 @@ function useDashboard() {
           return UNKNOWN
       }
     }
+    const formatItemTypeForUI = (type) => {
+      switch (type) {
+        case 'FVWord':
+          return 'Word'
+        case 'FVPhrase':
+          return 'Phrase'
+        case 'FVBook':
+          return 'Book'
+        default:
+          return 'Item'
+      }
+    }
     return _tasks.map(
       ({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility, visibilityChanged }) => {
+        const { email, firstName, lastName } = requestedBy
         return {
           date: formatDate(dateCreated),
           id,
           initiator: formatInitator({
-            email: requestedBy.email,
-            firstName: requestedBy.firstName,
-            lastName: requestedBy.lastName,
+            email,
+            firstName,
+            lastName,
+          }),
+          initiatorFullName: formatInitatorFullName({
+            firstName,
+            lastName,
           }),
           isNew: targetDoc.isNew,
           itemType: formatItemType(targetDoc.type),
+          itemTypeForUI: formatItemTypeForUI(targetDoc.type),
           targetDocumentsIds: targetDoc.uid,
           titleItem: formatTitleItem(targetDoc.title),
           titleTaskDetail: formatTitleTaskDetail({
@@ -96,6 +117,8 @@ function useDashboard() {
           }),
           titleTask: formatTitleTask({ visibility: requestedVisibility }),
           visibilityChanged,
+          visibilityText: StringHelpers.visibilityText({ visibility: requestedVisibility }),
+          requestedVisibility,
         }
       }
     )

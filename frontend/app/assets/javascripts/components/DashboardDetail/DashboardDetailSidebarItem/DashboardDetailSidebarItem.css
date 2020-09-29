@@ -1,13 +1,39 @@
+/* Block */
 .DashboardDetailSidebarItem {
   display: flex;
-}
-.DashboardDetailSidebarItem__icon {
-  padding: 0 10px;
-}
-.DashboardDetailSidebarItem--li {
+
   padding: 5px 0;
   border-bottom: 1px solid rgb(224, 224, 224);
+  min-height: 90px;
 }
+/* Element */
+.DashboardDetailSidebarItem__icon {
+  min-width: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.DashboardDetailSidebarItem__main {
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  overflow: auto;
+}
+.DashboardDetailSidebarItem__meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.DashboardDetailSidebarItem__metaInitiator {
+  padding-right: 5px;
+  flex-grow: 2;
+}
+
+.DashboardDetailSidebarItem__meta--hasInitiator .DashboardDetailSidebarItem__metaDate {
+  width: 25%;
+}
+/* Modifier */
 .DashboardDetailSidebarItem--isActive {
   background-color: rgba(0, 200, 0, 0.5) !important;
 }

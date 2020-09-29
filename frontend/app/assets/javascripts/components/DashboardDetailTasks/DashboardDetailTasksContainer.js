@@ -49,11 +49,15 @@ function DashboardDetailTasksContainer() {
       }) => {
         const { page, pageSize, count } = pagination
         const {
-          titleTaskDetail: taskTitle,
           date: taskDate,
-          itemType: taskItemType,
-          isNew: taskIsNew,
           id: taskId,
+          isNew: taskIsNew,
+          itemType: taskItemType,
+          requestChangesSelectLabelText,
+          requestChangesSubTitle,
+          requestedVisibility,
+          titleTaskDetail: taskTitle,
+          visibilityChanged,
         } = selectedTaskData
         const {
           acknowledgement,
@@ -84,14 +88,7 @@ function DashboardDetailTasksContainer() {
         let childrenItemDetail = null
         if (itemType === 'FVBook') {
           childrenItemDetail = (
-            <DetailSongStoryPresentation
-              book={book}
-              // openBookAction={openBookAction}
-              // pageCount={pageCount}
-              audio={audio}
-              pictures={pictures}
-              videos={videos}
-            />
+            <DetailSongStoryPresentation book={book} audio={audio} pictures={pictures} videos={videos} />
           )
         }
         if (itemType === 'FVPhrase' || itemType === 'FVWord') {
@@ -122,11 +119,6 @@ function DashboardDetailTasksContainer() {
               <Table.Presentation
                 columns={columns}
                 data={data}
-                // localization={{
-                //   body: {
-                //     emptyDataSourceMessage: isFetching ? fetchMessage : 'No tasks pending',
-                //   },
-                // }}
                 onOrderChange={onOrderChange}
                 onRowClick={onRowClick}
                 options={options}
@@ -157,35 +149,21 @@ function DashboardDetailTasksContainer() {
                     icon={<ItemIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
                 }
-                // TODO: future feature
-                /*
-                childrenActivityStream={(
-                  <ActivityStream.Presentation
-                    className="DashboardDetailSelectedItem__ActivityStream"
-                    id={idSelectedTask}
-                  />
-                )}
-                */
-                // TODO: future feature
-                /*
-                childrenApprovalNotes={(
-                  <ApprovalNotes.Presentation
-                    className="DashboardDetailSelectedItem__Notes"
-                    id={idSelectedTask}
-                  />
-                )}
-                */
                 childrenItemDetail={childrenItemDetail}
                 childrenTaskApproval={
                   <RequestChanges.Container
-                    docId={itemId}
-                    taskId={taskId}
-                    docState={docState}
                     docDialectPath={itemDialectPath}
+                    docId={itemId}
+                    docState={docState}
                     key={itemId}
-                    requestChangesText="Reject"
-                    processedWasSuccessful={itemProcessedWasSuccessful}
                     processedMessage={itemProcessedMessage}
+                    processedWasSuccessful={itemProcessedWasSuccessful}
+                    requestChangesText="Reject"
+                    requestedVisibility={requestedVisibility}
+                    selectLabelText={requestChangesSelectLabelText}
+                    subTitle={requestChangesSubTitle}
+                    taskId={taskId}
+                    visibilityChanged={visibilityChanged}
                   />
                 }
               />

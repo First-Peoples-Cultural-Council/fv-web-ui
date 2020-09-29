@@ -31,7 +31,7 @@ function useRegistrations() {
   // TODO: Drop this fake stub when endpoint is live
   const _fetchRegistrations = (id, params) => {
     /* eslint-disable */
-    console.log('Fake _fetchRegistrations', { id, params })
+    // console.log('Fake _fetchRegistrations', { id, params })
     /* eslint-enable */
 
     // TODO/NOTE: the real method may need to handle a sortOrder === ''
