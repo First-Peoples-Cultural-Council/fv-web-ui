@@ -24,7 +24,7 @@ function WarningBannerPresentation({ message }) {
   return message ? (
     <div className={classes.root}>
       <Paper elevation={0} className={classes.customPaper}>
-        <ReportProblemOutlinedIcon className={classes.icon} fontSizeLarge />
+        <ReportProblemOutlinedIcon className={classes.icon} />
         <div>{message}</div>
       </Paper>
     </div>
