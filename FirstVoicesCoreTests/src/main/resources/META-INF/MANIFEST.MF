@@ -11,5 +11,4 @@ Bundle-Vendor: Nuxeo
 Nuxeo-Component: OSGI-INF/mocks/mocks-services.xml,
  OSGI-INF/mocks/mocks-operations.xml,
  OSGI-INF/dbinit/dbinit-operations.xml,
- OSGI-INF/mocks/mocks-user-service.xml,
- OSGI-INF/mocks/mocks-operations.xml
+ OSGI-INF/mocks/mocks-user-service.xml
