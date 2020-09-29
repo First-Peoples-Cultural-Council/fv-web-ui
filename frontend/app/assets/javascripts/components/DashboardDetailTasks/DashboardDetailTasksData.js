@@ -310,7 +310,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     DocumentOperations.getDocument(UID).then((response) => {
       pushWindowPath(
         NavigationHelpers.generateUIDEditPath(
-          'Workspaces',
+          'Explore',
           response,
           itemTypePlural
         )
@@ -321,7 +321,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     DocumentOperations.getDocument(UID).then((response) => {
       pushWindowPath(
         NavigationHelpers.generateUIDPath(
-          'Workspaces',
+          'Explore',
           response,
           itemTypePlural
         )
