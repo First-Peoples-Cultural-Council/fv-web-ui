@@ -60,38 +60,40 @@ function DashboardDetailSidebarItemPresentation({
     </Typography>
   )
   return (
-    <li
-      className={`DashboardDetailSidebarItem ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
-        isProcessed ? 'DashboardDetailSidebarItem--isProcessed' : ''
-      } ${onClick ? 'DashboardDetailSidebarItem--hasOnClick' : ''}`}
-      onClick={onClick}
-      style={ItemStyle[variant]}
-    >
-      {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
+    <li>
+      <button
+        className={`DashboardDetailSidebarItem ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
+          isProcessed ? 'DashboardDetailSidebarItem--isProcessed' : ''
+        } ${onClick ? 'DashboardDetailSidebarItem--hasOnClick' : ''}`}
+        style={ItemStyle[variant]}
+        onClick={onClick}
+      >
+        {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
 
-      <div className="DashboardDetailSidebarItem__main">
-        {isProcessed !== true && (
-          <>
-            <div className="DashboardDetailSidebarItem__groupA">{jsxTitle}</div>
-            <div className="DashboardDetailSidebarItem__groupB">
-              {jsxInitiator}
-              {jsxDate}
-            </div>
-          </>
-        )}
-        {isProcessed === true && (
-          <>
-            <div className="DashboardDetailSidebarItem__groupA">
-              {jsxTitle}
-              {jsxInitiator}
-            </div>
-            <div className="DashboardDetailSidebarItem__groupB">
-              <IconProcessed style={{ alignSelf: 'center', fill: '#76ce0e' }} />
-              {jsxDate}
-            </div>
-          </>
-        )}
-      </div>
+        <div className="DashboardDetailSidebarItem__main">
+          {isProcessed !== true && (
+            <>
+              <div className="DashboardDetailSidebarItem__groupA">{jsxTitle}</div>
+              <div className="DashboardDetailSidebarItem__groupB">
+                {jsxInitiator}
+                {jsxDate}
+              </div>
+            </>
+          )}
+          {isProcessed === true && (
+            <>
+              <div className="DashboardDetailSidebarItem__groupA">
+                {jsxTitle}
+                {jsxInitiator}
+              </div>
+              <div className="DashboardDetailSidebarItem__groupB">
+                <IconProcessed style={{ alignSelf: 'center', fill: '#76ce0e' }} />
+                {jsxDate}
+              </div>
+            </>
+          )}
+        </div>
+      </button>
     </li>
   )
 }
