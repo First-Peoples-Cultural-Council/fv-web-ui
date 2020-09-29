@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
+import IconProcessed from '@material-ui/icons/Check'
 import useTheme from 'DataSource/useTheme'
 import selectn from 'selectn'
 import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
@@ -43,39 +44,53 @@ function DashboardDetailSidebarItemPresentation({
   const ItemStyle = []
   ItemStyle[EVEN] = row
   ItemStyle[ODD] = rowAlternate
-
+  const jsxTitle = (
+    <Typography variant="body1" component="h3" noWrap>
+      {titleItem}
+    </Typography>
+  )
+  const jsxInitiator = (
+    <Typography variant="caption" className="DashboardDetailSidebarItem__metaInitiator" component="div" noWrap>
+      Requested by {initiator}
+    </Typography>
+  )
+  const jsxDate = (
+    <Typography className="DashboardDetailSidebarItem__metaDate" variant="caption" component="div" noWrap>
+      {date}
+    </Typography>
+  )
   return (
     <li
-      className={`DashboardDetailSidebarItem ${icon ? 'DashboardDetailSidebarItem--hasIcon' : ''} ${
-        isActive ? 'DashboardDetailSidebarItem--isActive' : ''
-      } ${onClick !== undefined ? 'DashboardDetailSidebarItem--hasOnClick' : ''}`}
+      className={`DashboardDetailSidebarItem ${isActive ? 'DashboardDetailSidebarItem--isActive' : ''} ${
+        isProcessed ? 'DashboardDetailSidebarItem--isProcessed' : ''
+      } ${onClick ? 'DashboardDetailSidebarItem--hasOnClick' : ''}`}
       onClick={onClick}
       style={ItemStyle[variant]}
     >
       {icon && <div className="DashboardDetailSidebarItem__icon">{icon}</div>}
+
       <div className="DashboardDetailSidebarItem__main">
-        {isProcessed === true && (
-          <Typography variant="caption" component="div">
-            Done!
-          </Typography>
+        {isProcessed !== true && (
+          <>
+            <div className="DashboardDetailSidebarItem__groupA">{jsxTitle}</div>
+            <div className="DashboardDetailSidebarItem__groupB">
+              {jsxInitiator}
+              {jsxDate}
+            </div>
+          </>
         )}
-        <Typography variant="body1" component="h3" noWrap>
-          {titleItem}
-        </Typography>
-        <div
-          className={`DashboardDetailSidebarItem__meta ${
-            initiator ? 'DashboardDetailSidebarItem__meta--hasInitiator' : ''
-          }`}
-        >
-          {initiator && (
-            <Typography variant="caption" className="DashboardDetailSidebarItem__metaInitiator" component="div" noWrap>
-              {initiator}
-            </Typography>
-          )}
-          <Typography className="DashboardDetailSidebarItem__metaDate" variant="caption" component="div" noWrap>
-            {date}
-          </Typography>
-        </div>
+        {isProcessed === true && (
+          <>
+            <div className="DashboardDetailSidebarItem__groupA">
+              {jsxTitle}
+              {jsxInitiator}
+            </div>
+            <div className="DashboardDetailSidebarItem__groupB">
+              <IconProcessed style={{ alignSelf: 'center', fill: '#76ce0e' }} />
+              {jsxDate}
+            </div>
+          </>
+        )}
       </div>
     </li>
   )

@@ -36,6 +36,7 @@ function useDashboard() {
 
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatLocalDateString(date)
+    const formatDateMDY = (date) => StringHelpers.formatLocalDateStringMDY(date)
     const formatInitator = ({ email, firstName, lastName }) => {
       const fullName = formatInitatorFullName({ firstName, lastName })
       return `${email}${fullName !== '' ? ` ${fullName}` : ''}`
@@ -95,12 +96,14 @@ function useDashboard() {
         const { email, firstName, lastName } = requestedBy
         return {
           date: formatDate(dateCreated),
+          dateMDY: formatDateMDY(dateCreated),
           id,
           initiator: formatInitator({
             email,
             firstName,
             lastName,
           }),
+          initiatorEmail: email,
           initiatorFullName: formatInitatorFullName({
             firstName,
             lastName,
@@ -132,7 +135,9 @@ function useDashboard() {
     const friendlyNamePropertyNameLookup = {
       date: 'dc:created',
       id: 'uid',
+      initiatorFullName: 'nt:initiator',
       initiator: 'nt:initiator', // aka requested by person's email
+      initiatorEmail: 'nt:initiator',
       titleTask: 'nt:directive', // aka requested visibility
     }
 

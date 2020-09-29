@@ -46,7 +46,7 @@ function DashboardDetailSelectedItemTaskPresentation({ date, icon, isActive, onC
           {title ? title : '···'}
         </Typography>
         <Typography variant="caption" component="div">
-          Date added: {date ? date : '...'}
+          {date ? date : '...'}
         </Typography>
       </div>
     </div>

@@ -25,25 +25,27 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
       {childrenHeader && <div className="DashboardDetailSidebar__headerContainer">{childrenHeader}</div>}
       <div className="DashboardDetailSidebar__listContainer">
         <ul className="DashboardDetailSidebar__list">
-          {listItems.map(({ date, id, initiator, isNew, isProcessed, itemType, titleItem, titleTask }, index) => {
-            const variant = index % 2 ? ODD : EVEN
-            return (
-              <DashboardDetailSidebarItem.Presentation
-                key={`DashboardDetailSidebar__listItem--${index}`}
-                date={date}
-                icon={<ItemIcon.Presentation itemType={itemType} isNew={isNew} />}
-                initiator={initiator}
-                isActive={selectedId === id}
-                isProcessed={isProcessed}
-                onClick={() => {
-                  onClick(id)
-                }}
-                titleItem={titleItem}
-                titleTask={titleTask}
-                variant={variant}
-              />
-            )
-          })}
+          {listItems.map(
+            ({ dateMDY, id, initiatorFullName, isNew, isProcessed, itemType, titleItem, titleTask }, index) => {
+              const variant = index % 2 ? ODD : EVEN
+              return (
+                <DashboardDetailSidebarItem.Presentation
+                  key={`DashboardDetailSidebar__listItem--${index}`}
+                  date={dateMDY}
+                  icon={<ItemIcon.Presentation itemType={itemType} isNew={isNew} />}
+                  initiator={initiatorFullName}
+                  isActive={selectedId === id}
+                  isProcessed={isProcessed}
+                  onClick={() => {
+                    onClick(id)
+                  }}
+                  titleItem={titleItem}
+                  titleTask={titleTask}
+                  variant={variant}
+                />
+              )
+            }
+          )}
         </ul>
       </div>
       {childrenPagination && <div className="DashboardDetailSidebar__pagination">{childrenPagination}</div>}

@@ -49,7 +49,7 @@ function DashboardDetailTasksContainer() {
       }) => {
         const { page, pageSize, count } = pagination
         const {
-          date: taskDate,
+          dateMDY: taskDate,
           id: taskId,
           isNew: taskIsNew,
           itemType: taskItemType,
