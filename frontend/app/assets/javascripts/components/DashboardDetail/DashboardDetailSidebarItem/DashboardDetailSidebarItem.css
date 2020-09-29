@@ -36,7 +36,7 @@
   background-color: rgba(0, 200, 0, 0.5) !important;
 }
 .DashboardDetailSidebarItem--isActive.DashboardDetailSidebarItem--isProcessed {
-  background-color: rgb(190 255 190 / 50%) !important;
+  background-color: rgba(190, 255, 190, 0.5) !important;
 }
 
 .DashboardDetailSidebarItem--isProcessed {
