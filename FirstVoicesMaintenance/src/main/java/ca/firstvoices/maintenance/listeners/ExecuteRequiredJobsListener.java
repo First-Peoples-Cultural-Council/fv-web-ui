@@ -23,6 +23,7 @@ package ca.firstvoices.maintenance.listeners;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.maintenance.services.MaintenanceLogger;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -96,9 +97,11 @@ public class ExecuteRequiredJobsListener implements EventListener {
 
                     int jobsExecuted = 0;
 
+                    Iterator<String> iterator = requiredJobs.iterator();
+
                     // Execute `work` phases for required jobs, up to maximum
-                    while (requiredJobs.iterator().hasNext() && jobsExecuted < REQUIRED_JOB_LIMIT) {
-                      String nextRequiredJob = requiredJobs.iterator().next();
+                    while (iterator.hasNext() && jobsExecuted < REQUIRED_JOB_LIMIT) {
+                      String nextRequiredJob = iterator.next();
                       automation.run(operation, nextRequiredJob, params);
 
                       ++jobsExecuted;
