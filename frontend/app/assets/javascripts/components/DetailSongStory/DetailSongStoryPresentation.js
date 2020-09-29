@@ -35,8 +35,8 @@ function DetailSongStoryPresentation({
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
 
   const _getButtons = () => {
-    const itemTypePlural = book.type + 's'
     const bookType = book.type
+    const itemTypePlural = (bookType === 'song') ? 'songs' : 'stories'
     return (
       <div>
         <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
@@ -46,7 +46,6 @@ function DetailSongStoryPresentation({
           {'View full '} {bookType}
         </FVButton>
       </div>
-
     )
   }
 

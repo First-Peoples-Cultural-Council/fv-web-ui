@@ -33,6 +33,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const { getSearchObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
   const baseUrl = getBaseURL()
 
+
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
   const {
     count: tasksCount = 0,
@@ -308,24 +309,22 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }
   const onEditClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      pushWindowPath(
-        NavigationHelpers.generateUIDEditPath(
-          'Explore',
-          response,
-          itemTypePlural
-        )
+      const path = NavigationHelpers.generateUIDEditPath(
+        'explore',
+        response,
+        itemTypePlural
       )
+      navigate(path)
     })
   }
   const onViewClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      pushWindowPath(
-        NavigationHelpers.generateUIDPath(
-          'Explore',
-          response,
-          itemTypePlural
-        )
+      const path = NavigationHelpers.generateUIDPath(
+        'explore',
+        response,
+        itemTypePlural
       )
+      navigate(path)
     })
   }
   const setProcessedTasks = (taskData) => {
