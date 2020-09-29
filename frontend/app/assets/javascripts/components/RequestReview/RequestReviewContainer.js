@@ -27,6 +27,7 @@ function RequestReviewContainer({ docId, docState, docType, computeEntities }) {
         handleDialogOk,
         handleRequestReview,
         handleSnackbarClose,
+        handleTextFieldChange,
         handleVisibilityChange,
         hasRelatedTasks,
         hideButton,
@@ -45,6 +46,7 @@ function RequestReviewContainer({ docId, docState, docType, computeEntities }) {
             handleDialogOk={handleDialogOk}
             handleRequestReview={handleRequestReview}
             handleSnackbarClose={handleSnackbarClose}
+            handleTextFieldChange={handleTextFieldChange}
             handleVisibilityChange={handleVisibilityChange}
             hasRelatedTasks={hasRelatedTasks}
             isDialogOpen={isDialogOpen}

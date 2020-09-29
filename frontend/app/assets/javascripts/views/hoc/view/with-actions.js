@@ -15,8 +15,10 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES } from 'common/Constants'
-import '!style-loader!css-loader!./ViewWithActions.css'
+import '!style-loader!css-loader!./ViewWith.css'
 import FVLabel from '../../components/FVLabel/index'
+import WarningBanner from 'components/WarningBanner'
+import RequestReview from 'components/RequestReview'
 
 import PublishDialog from 'components/PublishDialog'
 
@@ -35,23 +37,30 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
         return <ComposedFilter {...this.props} {...this.state} />
       }
 
+      const permissionEntity = selectn('response', this.props.permissionEntry)
+        ? this.props.permissionEntry
+        : this.props.computeItem
+
       return (
         <div className="ViewWithActions row">
           <div>
             {(() => {
               if (selectn('response', this.props.computeItem)) {
                 return (
-                  <PageToolbar
-                    label={StringHelpers.toTitleCase(this.props.labels.single)}
-                    handleNavigateRequest={this.props.onNavigateRequest}
-                    computeEntity={this.props.computeItem}
-                    computePermissionEntity={this.props.permissionEntry}
-                    computeLogin={this.props.computeLogin}
-                    publishChangesAction={this._publishChangesAction}
-                    {...this.props}
-                  >
-                    &nbsp;
-                  </PageToolbar>
+                  <>
+                    <PageToolbar
+                      label={StringHelpers.toTitleCase(this.props.labels.single)}
+                      handleNavigateRequest={this.props.onNavigateRequest}
+                      computeEntity={this.props.computeItem}
+                      computePermissionEntity={this.props.permissionEntry}
+                      computeLogin={this.props.computeLogin}
+                      publishChangesAction={this._publishChangesAction}
+                      {...this.props}
+                    >
+                      &nbsp;
+                    </PageToolbar>
+                    {this._hasPendingReview(selectn('response', this.props.computeItem))}
+                  </>
                 )
               }
             })()}
@@ -125,7 +134,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               <DialogActions>
                 <FVButton
                   data-testid="ViewWithActions__buttonCancel"
-                  // className="FlatButton FlatButton--secondary ViewWithActions__button"
                   variant="contained"
                   color="secondary"
                   onClick={(e) => {
@@ -153,7 +161,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </DialogActions>
             </Dialog>
           </AuthorizationFilter>
-          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', this.props.computeItem) }}>
+          <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
             <div>
               <AppBar position="static" className="PageToolbar__secondary">
                 <Toolbar style={{ justifyContent: 'flex-end' }}>
@@ -213,7 +221,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 <DialogActions>
                   <FVButton
                     data-testid="ViewWithActions__buttonCancel"
-                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
                     variant="contained"
                     color="secondary"
                     onClick={(e) => {
@@ -225,7 +232,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   </FVButton>
                   <FVButton
                     data-testid="ViewWithActions__buttonDelete"
-                    // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="contained"
                     color="primary"
                     onClick={(e) => {
@@ -269,7 +275,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                 <DialogActions>
                   <FVButton
                     data-testid="ViewWithActions__buttonReturn"
-                    // className="FlatButton FlatButton--secondary ViewWithActions__button"
                     variant="text"
                     color="secondary"
                     onClick={() => window.history.back()}
@@ -282,7 +287,6 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
                   </FVButton>
                   <FVButton
                     data-testid="ViewWithActions__buttonHome"
-                    // className="FlatButton FlatButton--primary ViewWithActions__button"
                     variant="text"
                     color="primary"
                     onClick={this.props.onNavigateRequest.bind(
@@ -300,6 +304,30 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
               </Dialog>
             </div>
           </AuthorizationFilter>
+        </div>
+      )
+    }
+
+    _hasPendingReview = (item) => {
+      return (
+        <div className="col-xs-12">
+          <div className="ViewWithActions__warning ">
+            <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
+              {({ hasRelatedTasks, docTypeName }) => {
+                return hasRelatedTasks && docTypeName ? (
+                  <WarningBanner.Presentation
+                    message={
+                      'A review task exists for this ' +
+                      docTypeName +
+                      ', any saved changes to this ' +
+                      docTypeName +
+                      ' will clear that task.'
+                    }
+                  />
+                ) : null
+              }}
+            </RequestReview.Data>
+          </div>
         </div>
       )
     }

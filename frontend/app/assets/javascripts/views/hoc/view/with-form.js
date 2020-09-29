@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { List } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
@@ -8,11 +9,14 @@ import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
+import StringHelpers from 'common/StringHelpers'
 
 import { Popover } from '@material-ui/core'
 import FVButton from 'views/components/FVButton'
 import FVLabel from '../../components/FVLabel/index'
-import { connect } from 'react-redux'
+import WarningBanner from 'components/WarningBanner'
+import RequestReview from 'components/RequestReview'
+import '!style-loader!css-loader!./ViewWith.css'
 
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
@@ -105,6 +109,28 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       })
     }
 
+    _hasPendingReview = (item) => {
+      return (
+        <div className="ViewWithForm__warning">
+          <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
+            {({ hasRelatedTasks, docTypeName }) => {
+              return hasRelatedTasks && docTypeName ? (
+                <WarningBanner.Presentation
+                  message={
+                    'A review task exists for this ' +
+                    docTypeName +
+                    ', any saved changes to this ' +
+                    docTypeName +
+                    ' will clear that task.'
+                  }
+                />
+              ) : null
+            }}
+          </RequestReview.Data>
+        </div>
+      )
+    }
+
     componentWillReceiveProps(nextProps) {
       if (this.state.saved) {
         const currentWord = this._getComputeItem(this.props)
@@ -148,18 +174,18 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
-                    <button
-                      type="submit"
+                    <FVButton
+                      data-testid="withForm__saveBtn"
+                      variant="contained"
+                      color="primary"
                       onClick={(e) => {
                         this._onRequestSaveForm(e, computeItem)
                       }}
-                      className="RaisedButton RaisedButton--primary"
                     >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
-                    </button>
+                    </FVButton>
+                    {this._hasPendingReview(selectn('response', computeItem), type)}
                   </div>
-
-                  <hr />
 
                   <t.form.Form
                     ref={(element) => {
@@ -171,21 +197,21 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     options={selectn(type, options)}
                   />
 
-                  <hr />
-
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
+                    {this._hasPendingReview(selectn('response', computeItem), type)}
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+                      {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>
-                    <button
-                      type="submit"
+                    <FVButton
+                      data-testid="withForm__saveBtn"
+                      variant="contained"
+                      color="primary"
                       onClick={(e) => {
                         this._onRequestSaveForm(e, computeItem)
                       }}
-                      className="RaisedButton RaisedButton--primary"
                     >
-                      <FVLabel transKey="save" defaultStr="Save" transform="first" />
-                    </button>
+                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+                    </FVButton>
 
                     <Popover
                       open={this.state.showCancelWarning}
@@ -231,49 +257,56 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
           </div>
 
           <div className={classNames('col-xs-12', 'col-md-3')}>
-            <div style={{ marginTop: '25px' }} className={classNames('panel', 'panel-primary')}>
-              <div className="panel-heading">Metadata</div>
+            <div style={{ marginTop: '60px', marginRight: '15px' }}>
+              <div className="ViewWithForm__panelHeading">
+                <FVLabel transKey="metadata" defaultStr="METADATA" transform="upper" />
+              </div>
 
               <ul className="list-group">
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="last_modified" defaultStr="Last Modified" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.lastModified', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {StringHelpers.formatLocalDateString(selectn('response.lastModified', computeItem))}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="last_contributor" defaultStr="Last Contributor" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.properties.dc:lastContributor', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {selectn('response.properties.dc:lastContributor', computeItem)}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
-                    <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" transform="first" />
+                    <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" />
                   </span>
-                  <br />
-                  {selectn('response.properties.dc:created', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {StringHelpers.formatLocalDateString(selectn('response.properties.dc:created', computeItem))}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="contributors" defaultStr="Contributors" transform="first" />
                   </span>
-                  <br />
-                  {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                  <div className="ViewWithForm__listGroupItem">
+                    {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                  </div>
                 </li>
 
                 <li className="list-group-item">
                   <span className={classNames('label', 'label-default')}>
                     <FVLabel transKey="version" defaultStr="Version" transform="first" />
                   </span>
-                  <br />
-                  {selectn('response.properties.uid:major_version', computeItem)}.
-                  {selectn('response.properties.uid:minor_version', computeItem)}
+                  <div className="ViewWithForm__listGroupItem">
+                    {selectn('response.properties.uid:major_version', computeItem)}.
+                    {selectn('response.properties.uid:minor_version', computeItem)}
+                  </div>
                 </li>
               </ul>
             </div>
