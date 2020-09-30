@@ -24,6 +24,16 @@
       <artifactId>nuxeo-runtime-jtajca</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-notification-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.nuxeo.ecm.routing</groupId>
+      <artifactId>nuxeo-routing-core</artifactId>
+    </dependency>
+
     <!-- Test Dependencies -->
 
     <dependency>
