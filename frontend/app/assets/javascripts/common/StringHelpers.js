@@ -150,6 +150,12 @@ export default {
 
     return m[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + strTime
   },
+  formatLocalDateStringMDY: (dateString) => {
+    const d = new Date(dateString)
+    const month = d.getMonth()
+    const day = d.getDate()
+    return `${month < 10 ? '0' : ''}${month}/${day < 10 ? '0' : ''}${day}/${d.getFullYear()}`
+  },
   isUUID: (str) => {
     if (!str) {
       return false

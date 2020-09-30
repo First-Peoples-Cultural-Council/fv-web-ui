@@ -60,6 +60,10 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
 
+  CustomOrderComputeService customOrderComputeService = Framework
+      .getService(CustomOrderComputeService.class);
+
+
   private Map<String, String[]> alphabetAndConfusableCharacters;
 
   @Before
@@ -95,6 +99,20 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
       String title = (String) documentModel.getPropertyValue("dc:title");
       assertEquals(correctWords[i], title);
     }
+  }
+
+  @Test
+  public void cleanConfusablesShouldRecalculateOrder() {
+    String[] words = {"∀ᗄꓯ", "aaa"};
+    List<DocumentModel> documentModels = createWords(words);
+
+    String customOrder1 = String.valueOf(
+        cleanupCharactersService.cleanConfusables(session, documentModels.get(0), false)
+            .getPropertyValue("fv:custom_order"));
+    String customOrder2 = String.valueOf(customOrderComputeService
+        .computeAssetNativeOrderTranslation(session, documentModels.get(1), false, false)
+        .getPropertyValue("fv:custom_order"));
+    assertEquals(customOrder2, customOrder1);
   }
 
   @Test

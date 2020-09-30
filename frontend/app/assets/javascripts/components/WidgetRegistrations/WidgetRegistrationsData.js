@@ -12,8 +12,11 @@ import useTheme from 'DataSource/useTheme'
  * @component
  *
  * @param {object} props
- * @param {function} props.children Render prop technique
  *
+ * @param {function} props.children Render prop
+ * @param {object} props.columnRender Object of functions to render cell data. Concession to maintain separation of concerns.
+ *
+ * @returns {object} Data for WidgetRegistrationsPresentation
  */
 function WidgetRegistrationsData({ children, columnRender }) {
   const { theme } = useTheme()
@@ -37,12 +40,12 @@ function WidgetRegistrationsData({ children, columnRender }) {
     const { field: _sortBy = 'date' } = orderBy
 
     /* eslint-disable */
-    console.log('remoteData', {
-      sortOrder,
-      sortBy: _sortBy,
-      pageIndex,
-      pageSize: _pageSize,
-    })
+    // console.log('remoteData', {
+    //   sortOrder,
+    //   sortBy: _sortBy,
+    //   pageIndex,
+    //   pageSize: _pageSize,
+    // })
     /* eslint-enable */
 
     return fetchRegistrations({

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import FVSnackbar from '../../views/components/FVSnackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
 
 /**
  * @summary RequestChangesPresentation
@@ -15,12 +16,31 @@ import CloseIcon from '@material-ui/icons/Close'
  *
  * @param {object} props
  *
+ * @param {string} props.dialectName See: VisibilitySelectPresentation
+ * @param {func} props.disableApproveButton Func called to determine & set disabled state for Approve button
+ * @param {func} props.disableRequestChangesButton Func called to determine & set disabled state for Request Changes button
+ * @param {any} props.docVisibility See: VisibilitySelectPresentation
+ * @param {any} props.errors Array of form errors, refer to FormHelpers > getErrorFeedback
+ * @param {any} props.formRef React ref for form
+ * @param {func} props.handleApprove Func called on approve button click
+ * @param {func} props.handleRequestChanges Func called on reject button click
+ * @param {func} props.handleSnackbarClose See: FVSnackbar
+ * @param {func} props.handleVisibilityChange See: VisibilitySelectPresentation
+ * @param {bool} props.isPublicDialect See: VisibilitySelectPresentation
+ * @param {string} props.processedMessage Temporary var to hold response from server after a task has been processed. Note: the processed item disappears after refersh/pagination.
+ * @param {bool} props.processedWasSuccessful Toggle related to processedMessage. When true RequestChangesPresentation only displays the message, when false the message is within the form
+ * @param {string} props.requestChangesText Text for button
+ * @param {string} props.selectLabelText See: VisibilitySelectPresentation
+ * @param {string} props.snackbarMessage See: FVSnackbar > props.message
+ * @param {bool} props.snackbarStatus See: FVSnackbar > props.open
+ * @param {string} props.subTitle Text displayed in form just above VisibilitySelectPresentation
+ *
  * @returns {node} jsx markup
  */
 function RequestChangesPresentation({
+  dialectName,
   disableApproveButton,
   disableRequestChangesButton,
-  dialectName,
   docVisibility,
   errors,
   formRef,
@@ -29,11 +49,13 @@ function RequestChangesPresentation({
   handleSnackbarClose,
   handleVisibilityChange,
   isPublicDialect,
+  processedMessage,
+  processedWasSuccessful,
   requestChangesText,
+  selectLabelText,
   snackbarMessage,
   snackbarStatus,
-  processedWasSuccessful,
-  processedMessage,
+  subTitle,
 }) {
   return (
     <>
@@ -45,45 +67,53 @@ function RequestChangesPresentation({
 
       {processedWasSuccessful !== true && (
         <form className="RequestChanges" name="requestChanges" ref={formRef}>
-          {processedMessage && <p>? {processedMessage}</p>}
-          <div className="RequestChanges__visibility">
-            <VisibilitySelect.Presentation
-              classes={{
-                root: 'VisibilitySelect--dashboardDetail',
-              }}
-              // computeEntities={computeEntities}
-              // error={getError({ errors, fieldName: 'commentField' })}
-              docVisibility={docVisibility}
-              handleVisibilityChange={handleVisibilityChange}
-              publicDialect={isPublicDialect}
-              selectNameAndId="visibilitySelect"
-              dialectName={dialectName}
-            />
-          </div>
-          {getErrorFeedback({ errors })}
-          <div className="RequestChanges__actions">
-            <FVButton
-              disabled={disableApproveButton()}
-              variant="contained"
-              type="submit"
-              color="primary"
-              className="FVButton RequestChanges__actionButton"
-              onClick={handleApprove}
-              size="large"
-            >
-              Approve
-            </FVButton>
-            <FVButton
-              disabled={disableRequestChangesButton()}
-              variant="contained"
-              type="submit"
-              color="primary"
-              className="FVButton RequestChanges__actionButton"
-              onClick={handleRequestChanges}
-              size="large"
-            >
-              {requestChangesText ? requestChangesText : 'Request Changes'}
-            </FVButton>
+          {processedMessage && <p>{processedMessage}</p>}
+
+          {subTitle && (
+            <Typography variant="subtitle1" component="h2" classes={{ root: 'RequestChanges__headerText' }}>
+              {subTitle}
+            </Typography>
+          )}
+
+          <div className="RequestChanges__container">
+            <div className="RequestChanges__visibility">
+              <VisibilitySelect.Presentation
+                classes={{
+                  root: 'VisibilitySelect--dashboardDetail',
+                }}
+                dialectName={dialectName}
+                docVisibility={docVisibility}
+                handleVisibilityChange={handleVisibilityChange}
+                publicDialect={isPublicDialect}
+                selectLabelText={selectLabelText}
+                selectNameAndId="visibilitySelect"
+              />
+            </div>
+            {getErrorFeedback({ errors })}
+            <div className="RequestChanges__actions">
+              <FVButton
+                disabled={disableApproveButton()}
+                variant="contained"
+                type="submit"
+                color="primary"
+                className="FVButton RequestChanges__actionButton"
+                onClick={handleApprove}
+                size="large"
+              >
+                Approve
+              </FVButton>
+              <FVButton
+                disabled={disableRequestChangesButton()}
+                variant="contained"
+                type="submit"
+                color="primary"
+                className="FVButton RequestChanges__actionButton"
+                onClick={handleRequestChanges}
+                size="large"
+              >
+                {requestChangesText ? requestChangesText : 'Request Changes'}
+              </FVButton>
+            </div>
           </div>
           <FVSnackbar
             open={snackbarStatus}
@@ -103,26 +133,26 @@ function RequestChangesPresentation({
   )
 }
 
-const { any, string, object, bool, func } = PropTypes
+const { any, string, bool, func } = PropTypes
 RequestChangesPresentation.propTypes = {
-  computeEntities: object,
-  disableApproveButton: func,
   dialectName: string,
+  disableApproveButton: func,
   disableRequestChangesButton: func,
-  handleApprove: func,
-  handleRequestChanges: func,
-  handleSnackbarClose: func,
-  isPublicDialect: bool,
-  requestChangesText: string,
-  snackbarMessage: string,
-  snackbarStatus: bool,
-  submitMethod: string,
   docVisibility: any,
   errors: any,
   formRef: any,
+  handleApprove: func,
+  handleRequestChanges: func,
+  handleSnackbarClose: func,
   handleVisibilityChange: func,
-  processedWasSuccessful: bool,
+  isPublicDialect: bool,
   processedMessage: string,
+  processedWasSuccessful: bool,
+  requestChangesText: string,
+  selectLabelText: string,
+  snackbarMessage: string,
+  snackbarStatus: bool,
+  subTitle: string,
 }
 
 RequestChangesPresentation.defaultProps = {
