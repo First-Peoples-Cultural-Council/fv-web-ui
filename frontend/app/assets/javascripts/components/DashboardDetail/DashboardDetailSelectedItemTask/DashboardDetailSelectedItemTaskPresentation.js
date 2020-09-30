@@ -11,10 +11,8 @@ import '!style-loader!css-loader!./DashboardDetailSelectedItemTask.css'
  * @component
  *
  * @param {object} props
- * @param {string} props.component String to set the html tags used
  * @param {string} props.date
  * @param {node} props.icon JSX for the icon
- * @param {string} props.initiator
  * @param {boolean} props.isActive
  * @param {function} props.onClick
  * @param {string} props.title
@@ -25,7 +23,7 @@ import '!style-loader!css-loader!./DashboardDetailSelectedItemTask.css'
 
 import { EVEN, ODD } from 'common/Constants'
 
-function DashboardDetailSelectedItemTaskPresentation({ date, icon, initiator, isActive, onClick, title, variant }) {
+function DashboardDetailSelectedItemTaskPresentation({ date, icon, isActive, onClick, title, variant }) {
   const { theme } = useTheme()
   const themeTable = selectn('components.Table', theme) || {}
   const { row, rowAlternate } = themeTable
@@ -47,11 +45,8 @@ function DashboardDetailSelectedItemTaskPresentation({ date, icon, initiator, is
         <Typography variant="body1" component="h3">
           {title ? title : '···'}
         </Typography>
-        <Typography variant="body2" component="div">
-          {initiator ? initiator : '···'}
-        </Typography>
         <Typography variant="caption" component="div">
-          Date added: {date ? date : '...'}
+          {date ? date : '...'}
         </Typography>
       </div>
     </div>
@@ -62,7 +57,6 @@ const { func, node, oneOf, string, bool } = PropTypes
 DashboardDetailSelectedItemTaskPresentation.propTypes = {
   date: string,
   icon: node,
-  initiator: string,
   isActive: bool,
   onClick: func,
   title: string,
@@ -70,7 +64,6 @@ DashboardDetailSelectedItemTaskPresentation.propTypes = {
 }
 DashboardDetailSelectedItemTaskPresentation.defaultProps = {
   date: '',
-  initiator: '',
   title: '',
 }
 

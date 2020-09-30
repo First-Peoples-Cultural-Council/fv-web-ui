@@ -75,7 +75,7 @@ function WidgetTasksData({ children, columnRender }) {
       },
       {
         title: 'Requested by',
-        field: 'initiator',
+        field: 'initiatorEmail',
         cellStyle,
       },
       {

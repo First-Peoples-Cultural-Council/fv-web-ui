@@ -19,8 +19,12 @@ import { getBookData, getBookAudioVideo, getBookPictures } from 'components/Song
  * @component
  *
  * @param {object} props
- * @param {function} props.children
  *
+ * @param {function} props.children Render prop
+ *
+ * @param {object} props.columnRender Object of functions to render cell data. Concession to maintain separation of concerns.
+ *
+ * @returns {object} Data for DashboardDetailTasksContainer (NOTE: no dedicated Presentation layer)
  */
 function DashboardDetailTasksData({ children, columnRender }) {
   const { theme } = useTheme()
@@ -327,6 +331,18 @@ function DashboardDetailTasksData({ children, columnRender }) {
       processedMessage: selectn('message', isProcessed),
     }
   }
+  const setRequestChangesData = (taskData = {}) => {
+    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName } = taskData
+    return {
+      ...taskData,
+      requestChangesSubTitle:
+        visibilityText && itemTypeForUI
+          ? `Currently the ${visibilityText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
+          : '',
+      requestChangesSelectLabelText:
+        initiatorFullName && visibilityChanged ? `${initiatorFullName} requested a change to:` : undefined,
+    }
+  }
   const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: columns,
@@ -355,7 +371,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
       sortOrder: querySortOrder,
     },
     selectedItemData: setProcessedItem(selectedItemData),
-    selectedTaskData: selectedTaskData,
+    selectedTaskData: setRequestChangesData(selectedTaskData),
     sortDirection: querySortOrder,
   }
   return (

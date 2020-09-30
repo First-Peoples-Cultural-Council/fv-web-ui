@@ -20,6 +20,8 @@
 
 package ca.firstvoices.characters.services;
 
+import static ca.firstvoices.characters.listeners.CharacterListener.DISABLE_CHARACTER_LISTENER;
+
 import ca.firstvoices.core.io.utils.SessionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -145,7 +147,8 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
       }
     }
 
-    return SessionUtils.saveDocumentWithoutEvents(session, characterDocument, true, null);
+    return SessionUtils.saveDocumentWithoutEvents(session, characterDocument, true,
+        Collections.singletonList(DISABLE_CHARACTER_LISTENER));
   }
 
   // Helper method to check existing confusables and only add new ones if they don't already exist
