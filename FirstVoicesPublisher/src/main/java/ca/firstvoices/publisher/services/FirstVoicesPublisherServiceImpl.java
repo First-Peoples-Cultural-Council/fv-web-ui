@@ -480,6 +480,9 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       return publishPortalAssets(doc);
     }
 
+    // After republish move back to publish state
+    doc.followTransition(PUBLISH_TRANSITION);
+
     return null;
   }
 

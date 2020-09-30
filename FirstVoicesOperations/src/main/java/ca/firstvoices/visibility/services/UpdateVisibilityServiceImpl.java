@@ -6,6 +6,7 @@ import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static ca.firstvoices.visibility.Constants.MEMBERS;
 import static ca.firstvoices.visibility.Constants.PUBLIC;
@@ -97,6 +98,8 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
           // Publish Transition will trigger the ProxyPublisherListener and move documents to
           // published state
           doc.followTransition(PUBLISH_TRANSITION);
+        } else {
+          doc.followTransition(REPUBLISH_TRANSITION);
         }
         break;
       default:

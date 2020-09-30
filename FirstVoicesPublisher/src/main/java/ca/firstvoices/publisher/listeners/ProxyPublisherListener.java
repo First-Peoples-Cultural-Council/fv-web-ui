@@ -64,15 +64,11 @@ public class ProxyPublisherListener implements EventListener {
 
     // Publish or unpublish depending on the transition,
     // the service filter depending on the document
-    if (PUBLISH_TRANSITION.equals(transition)) {
-      if (REPUBLISH_TRANSITION.equals(transitionFrom)) {
-        service.doRepublish(doc);
-      } else {
-        service.publish(doc);
-      }
-
-    } else if (UNPUBLISH_TRANSITION.equals(transition)
-        || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom)) {
+    if (publishing(transition, transitionFrom)) {
+      service.publish(doc);
+    } else if (republishing(transition, transitionFrom)) {
+      service.doRepublish(doc);
+    } else if (unpublishing(transition, transitionFrom)) {
       service.unpublish(doc);
     }
 
@@ -81,5 +77,23 @@ public class ProxyPublisherListener implements EventListener {
         && doc.isProxy()) {
       service.setDialectProxies(doc);
     }
+  }
+
+  /**
+   * @param transition transition event requested
+   * @param transitionFrom state transitioning from
+   * @return
+   */
+  private boolean publishing(String transition, String transitionFrom) {
+    return PUBLISH_TRANSITION.equals(transition) && !REPUBLISH_TRANSITION.equals(transitionFrom);
+  }
+
+  private boolean republishing(String transition, String transitionFrom) {
+    return REPUBLISH_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom);
+  }
+
+  private boolean unpublishing(String transition, String transitionFrom) {
+    return (UNPUBLISH_TRANSITION.equals(transition)
+        || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom));
   }
 }
