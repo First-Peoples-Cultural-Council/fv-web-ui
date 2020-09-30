@@ -21,7 +21,6 @@
 package ca.firstvoices.characters.listeners;
 
 import ca.firstvoices.characters.services.CleanupCharactersService;
-import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.services.SanitizeDocumentService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import java.util.logging.Logger;
@@ -49,9 +48,6 @@ public class AssetListener implements EventListener {
 
   private final CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
-
-  private final CustomOrderComputeService customOrderComputeService = Framework
-      .getService(CustomOrderComputeService.class);
 
   @Override
   public void handleEvent(Event event) {
@@ -82,10 +78,11 @@ public class AssetListener implements EventListener {
         .getProperty("dc:title").isDirty()) || DocumentEventTypes.ABOUT_TO_CREATE
         .equals(event.getName())) {
       try {
+        // Sanitize document
         document = sanitizeDocumentService.sanitizeDocument(session, document);
-        document = cleanupCharactersService.cleanConfusables(session, document, false);
-        customOrderComputeService
-            .computeAssetNativeOrderTranslation(ctx.getCoreSession(), document, false, false);
+
+        // Clean confusables will also recompute the custom order
+        cleanupCharactersService.cleanConfusables(session, document, false);
       } catch (Exception e) {
         // Fail silently so that we can still capture the asset being created
         log.severe("Failed during listener; document with Path " + document.getPathAsString()
