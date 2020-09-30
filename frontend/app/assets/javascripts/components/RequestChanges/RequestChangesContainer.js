@@ -9,19 +9,29 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  * @component
  *
  * @param {object} props
- * @param {string} docId UID of the document that is being reviewed
- * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'
+ *
+ * @param {string} props.docDialectPath See: RequestChangesData
+ * @param {string} props.docId See: RequestChangesData
+ * @param {string} props.docState See: RequestChangesData
+ * @param {string} props.processedMessage See: RequestChangesPresentation
+ * @param {boolean} props.processedWasSuccessful See: RequestChangesPresentation
+ * @param {string} props.requestChangesText See: RequestChangesPresentation
+ * @param {string} props.selectLabelText See: RequestChangesPresentation > VisibilitySelectPresentation
+ * @param {string} props.subTitle See: RequestChangesPresentation
+ * @param {string} props.taskId See: RequestChangesData
  *
  * @returns {node} jsx markup
  */
 function RequestChangesContainer({
+  docDialectPath,
   docId,
   docState,
-  docDialectPath,
-  taskId,
-  requestChangesText,
-  processedWasSuccessful,
   processedMessage,
+  processedWasSuccessful,
+  requestChangesText,
+  selectLabelText,
+  subTitle,
+  taskId,
 }) {
   return (
     <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState} taskId={taskId}>
@@ -54,14 +64,16 @@ function RequestChangesContainer({
             handleRequestChanges={handleRequestChanges}
             handleSnackbarClose={handleSnackbarClose}
             handleVisibilityChange={handleVisibilityChange}
-            requestChangesText={requestChangesText}
             isPublicDialect={isPublicDialect}
             onSubmit={onSubmit}
+            processedMessage={processedMessage}
+            processedWasSuccessful={processedWasSuccessful}
+            requestChangesText={requestChangesText}
+            selectLabelText={selectLabelText}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
             submitMethod={submitMethod}
-            processedWasSuccessful={processedWasSuccessful}
-            processedMessage={processedMessage}
+            subTitle={subTitle}
           />
         )
       }}
@@ -74,10 +86,12 @@ RequestChangesContainer.propTypes = {
   docDialectPath: string,
   docId: string,
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
-  taskId: string,
-  requestChangesText: string,
-  processedWasSuccessful: bool,
   processedMessage: string,
+  processedWasSuccessful: bool,
+  requestChangesText: string,
+  selectLabelText: string,
+  subTitle: string,
+  taskId: string,
 }
 
 export default RequestChangesContainer
