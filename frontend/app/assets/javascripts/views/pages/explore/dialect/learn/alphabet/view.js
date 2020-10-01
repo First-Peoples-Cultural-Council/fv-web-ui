@@ -416,7 +416,7 @@ export class AlphabetView extends Component {
   _publishChangesAction = () => {
     this.props.publishCharacter(
       this._getCharacterPath(),
-      null,
+      { value: 'Republish' },
       null,
       this.props.intl.trans(
         'views.pages.explore.dialect.learn.alphabet.character_published_success',

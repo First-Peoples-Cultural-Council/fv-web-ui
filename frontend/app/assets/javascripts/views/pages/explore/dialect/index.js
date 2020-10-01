@@ -27,7 +27,6 @@ import {
   disableDialect,
   enableDialect,
   fetchDialect2,
-  publishDialect,
   publishDialectOnly,
   unpublishDialect,
   updateDialect2,
@@ -73,7 +72,6 @@ export class ExploreDialect extends Component {
     enableDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
-    publishDialect: func.isRequired,
     publishDialectOnly: func.isRequired,
     publishPortal: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -147,7 +145,7 @@ export class ExploreDialect extends Component {
   _publishChangesAction = () => {
     this.props.publishPortal(
       this.props.routeParams.dialect_path + '/Portal',
-      null,
+      { value: 'Republish' },
       null,
       this.props.intl.trans(
         'views.pages.explore.dialect.portal_published_successfully',
@@ -542,7 +540,6 @@ const mapDispatchToProps = {
   enableDialect,
   fetchDialect2,
   fetchPortal,
-  publishDialect,
   publishDialectOnly,
   publishPortal,
   pushWindowPath,

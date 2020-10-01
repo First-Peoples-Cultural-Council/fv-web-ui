@@ -14,7 +14,8 @@ export const updatePage = update('FV_PAGE', 'FVPage', {
 
 export const deletePage = _delete('FV_PAGE', 'FVPage', {})
 
-export const publishPage = execute('FV_PAGE_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishPage = execute('FV_PAGE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })
 

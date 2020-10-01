@@ -37,7 +37,8 @@ export const fetchDialects = query('FV_DIALECTS', 'FVDialect', {
 
 export const fetchDialectList = execute('FV_DIALECT_LIST', 'Document.ListDialects', {})
 
-export const publishDialect = execute('FV_DIALECT2_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishDialect = execute('FV_DIALECT2_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,dialect,permissions,acls' },
 })
 

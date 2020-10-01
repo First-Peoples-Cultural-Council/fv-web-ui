@@ -24,8 +24,15 @@ function useWord() {
     dispatch(dispatchObj)
   }
 
-  const publishWord = (pathOrId, messageStart, messageSuccess, messageError, propertiesOverride) => {
-    const dispatchObj = _publishWord(pathOrId, messageStart, messageSuccess, messageError, propertiesOverride)
+  const publishWord = (pathOrId, operationParams, messageStart, messageSuccess, messageError, propertiesOverride) => {
+    const dispatchObj = _publishWord(
+      pathOrId,
+      operationParams,
+      messageStart,
+      messageSuccess,
+      messageError,
+      propertiesOverride
+    )
     dispatch(dispatchObj)
   }
 
