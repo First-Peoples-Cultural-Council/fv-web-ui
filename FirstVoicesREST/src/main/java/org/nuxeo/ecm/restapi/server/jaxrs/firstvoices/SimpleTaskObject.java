@@ -1,6 +1,5 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
-import static javax.mail.internet.MimeMessage.RecipientType.TO;
 import static org.nuxeo.ecm.automation.core.operations.services.query.DocumentPaginatedQuery.ASC;
 
 import ca.firstvoices.core.io.marshallers.tasks.models.SimpleTaskAdapter;
@@ -15,13 +14,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -36,8 +30,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
-import org.nuxeo.ecm.automation.core.mail.Composer;
-import org.nuxeo.ecm.automation.core.mail.Mailer;
 import org.nuxeo.ecm.automation.core.util.Paginable;
 import org.nuxeo.ecm.automation.features.PrincipalHelper;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -168,7 +160,6 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
   @Produces(MediaType.TEXT_PLAIN)
   @Path("{taskId}/requestChanges")
   public Response requestChanges(@PathParam("taskId") String taskId,
-      @QueryParam("sendEmail") boolean sendEmail,
       String approvalProperties) throws IOException {
 
     final String approvedVisibilityFieldName = "approvedVisibility";
@@ -210,41 +201,11 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
     Set<String> recorders = getActors(doc, CustomSecurityConstants.RECORD);
 
     // Delegate task
+    // A notification will be sent, configured in FVCoreIO -> notifications
     taskService.delegateTask(getContext().getCoreSession(), taskId,
         new ArrayList<>(recorders), comment);
 
     session.save();
-
-    // Send mail
-    if (sendEmail) {
-      try {
-        Address[] recorderEmails = recorders.stream()
-            .map(recorder -> Framework.getService(UserManager.class).getPrincipal(recorder)
-                .getEmail())
-            .map(email -> {
-              try {
-                return new InternetAddress(email);
-              } catch (AddressException e) {
-                e.printStackTrace();
-              }
-              return null;
-            }).filter(Objects::nonNull).toArray(Address[]::new);
-
-        Composer cp = new Composer();
-        Mailer mailer = cp.getMailer();
-        Mailer.Message msg = mailer.newMessage();
-        msg.setFrom(session.getPrincipal().getEmail());
-        msg.setSubject("FirstVoices: Changes requested on " + doc.getTitle());
-        msg.setRecipients(TO, recorderEmails);
-        msg.setContent(
-            "<p>Comment from <strong>" + session.getPrincipal().getName() + "</strong>:</p>"
-                + "<p>\"" + comment + "\"</p>", "text/html");
-        msg.setText(comment);
-        msg.send();
-      } catch (MessagingException exception) {
-        exception.printStackTrace();
-      }
-    }
 
     return Response.ok().status(Status.OK).build();
   }
@@ -449,10 +410,20 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
     Set<String> usersAndGroups = principalHelper
         .getUserAndGroupIdsForPermission(doc, permission, false, false, true);
 
-    List<String> superAdmins = userManager.getAdministratorsGroups();
+    // Exclude super admins
+    List<String> groupsToExclude = userManager.getAdministratorsGroups().stream()
+        .map((group -> "group:" + group)).collect(
+            Collectors.toList());
+
+    // Exclude current user's groups
+    groupsToExclude.addAll(
+        doc.getCoreSession().getPrincipal().getAllGroups().stream().map((group -> "group:" + group))
+            .collect(
+                Collectors.toList()));
 
     return usersAndGroups.stream()
-        .filter((userOrGroup -> !superAdmins.contains(userOrGroup)))
+        .filter(userOrGroup -> !groupsToExclude.contains(userOrGroup))
+        .filter(userOrGroup -> !userOrGroup.contains("user:"))
         .collect(Collectors.toSet());
   }
 }
