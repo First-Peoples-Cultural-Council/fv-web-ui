@@ -6,12 +6,11 @@ import Immutable from 'immutable'
 import usePortal from 'DataSource/usePortal'
 import useRoute from 'DataSource/useRoute'
 import usePrevious from 'DataSource/usePrevious'
-import useVisibility from 'DataSource/useVisibility'
 import useDialect from 'DataSource/useDialect'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
 import useTasks from 'DataSource/useTasks'
-import useIntl from 'DataSource/useIntl'
+
 /**
  * @summary RequestChangesData
  * @version 1.0.1
@@ -35,15 +34,13 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
   const [errors, setErrors] = useState()
   const [docVisibility, setDocVisibility] = useState('')
   const { fetchDialect2, computeDialect2 } = useDialect()
-  const { intl } = useIntl()
-  const { rejectTask, extractComputeUserTasksReject = {}, setProcessedTask } = useTasks()
   const {
-    updateVisibilityToTeam,
-    updateVisibilityToMembers,
-    updateVisibilityToPublic,
-    extractComputeUpdateVisibility,
-  } = useVisibility()
-
+    setProcessedTask,
+    simpleTaskApprove,
+    computeSimpleTaskApprove,
+    simpleTaskRequestChanges,
+    computeSimpleTaskRequestChanges,
+  } = useTasks()
   const computeEntities = Immutable.fromJS([
     {
       id: routeParams.dialect_path,
@@ -67,20 +64,6 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     }
   }, [docDialectPath])
 
-  const updateVisibility = (newVisibility) => {
-    // Send request to the server to set visibility on the document
-    switch (newVisibility) {
-      case 'team':
-        return updateVisibilityToTeam(docId)
-      case 'members':
-        return updateVisibilityToMembers(docId)
-      case 'public':
-        return updateVisibilityToPublic(docId)
-      default:
-        return null
-    }
-  }
-
   function convertStateToVisibility(state) {
     switch (state) {
       case 'New':
@@ -97,6 +80,8 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
   }
 
   const handleApprove = (event) => {
+    event.preventDefault()
+
     // Validates the form data and updates the visibility
     const validator = yup.object().shape({
       visibilitySelect: yup
@@ -105,8 +90,6 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
         .required('Please specify the audience for this document'),
     })
 
-    event.preventDefault()
-
     const formData = getFormData({
       formReference: formRef,
     })
@@ -116,7 +99,12 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
       formData,
       valid: () => {
         setErrors(undefined)
-        updateVisibility(docVisibility)
+        simpleTaskApprove({
+          id: taskId,
+          idTask: taskId,
+          idItem: docId,
+          visibility: formData.visibilitySelect,
+        })
       },
       invalid: (response) => {
         setErrors(response.errors)
@@ -124,45 +112,38 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     })
   }
 
-  // USER FEEDBACK: Approval
-  const prevAction = usePrevious(selectn('action', extractComputeUpdateVisibility))
+  // USER FEEDBACK: simpleTaskApprove
+  const prevApprove = usePrevious(selectn('isFetching', computeSimpleTaskApprove))
   useEffect(() => {
-    if (selectn('action', extractComputeUpdateVisibility) !== prevAction) {
-      if (selectn('isFetching', extractComputeUpdateVisibility) === false) {
-        const success = selectn('success', extractComputeUpdateVisibility)
+    if (selectn('isFetching', computeSimpleTaskApprove) !== prevApprove) {
+      if (selectn('isFetching', computeSimpleTaskApprove) === false) {
+        const isSuccess = selectn('isSuccess', computeSimpleTaskApprove)
         const message =
-          success === false
-            ? selectn('message', extractComputeUpdateVisibility) ||
-              'Sorry, we encountered a problem. Please try again later.'
+          isSuccess === false
+            ? selectn('message', computeSimpleTaskApprove) || 'Sorry, we encountered a problem. Please try again later.'
             : 'Document approved'
 
-        const id = selectn('id', extractComputeUpdateVisibility)
-        if (id) {
-          setProcessedTask({ id, message, isSuccess: success })
+        const idTask = selectn('idTask', computeSimpleTaskApprove)
+        if (idTask) {
+          setProcessedTask({
+            idTask,
+            idItem: selectn('idItem', computeSimpleTaskApprove),
+            message,
+            isSuccess,
+          })
         }
       }
     }
-  }, [extractComputeUpdateVisibility])
+  }, [computeSimpleTaskApprove])
 
-  const onReject = ({ id, comment }) => {
-    rejectTask(
-      id,
-      {
-        comment,
-        status: 'reject',
-      },
-      null,
-      intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
-    )
-  }
   const handleRequestChanges = (event) => {
+    event.preventDefault()
+
     // Validates the form data and updates the visibility
     const validator = yup.object().shape({
       visibilitySelect: yup.string().label('Document visibility'),
     })
 
-    event.preventDefault()
-
     const formData = getFormData({
       formReference: formRef,
     })
@@ -172,33 +153,44 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
       formData,
       valid: () => {
         setErrors(undefined)
-        onReject({ id: taskId })
+        simpleTaskRequestChanges({
+          id: taskId,
+          idTask: taskId,
+          idItem: docId,
+          visibility: formData.visibilitySelect,
+          comment: formData.comment,
+        })
       },
       invalid: (response) => {
         setErrors(response.errors)
       },
     })
   }
+
   // USER FEEDBACK: Reject
-  const prevRejectAction = usePrevious(selectn('action', extractComputeUserTasksReject))
+  const prevRequestChanges = usePrevious(selectn('isFetching', computeSimpleTaskRequestChanges))
   useEffect(() => {
-    if (selectn('action', extractComputeUserTasksReject) !== prevRejectAction) {
-      const { isError, isFetching, message, success } = extractComputeUserTasksReject
-      const id = selectn(['response', 'properties', 'nt:targetDocumentsIds', 0], extractComputeUserTasksReject)
+    if (selectn('isFetching', computeSimpleTaskRequestChanges) !== prevRequestChanges) {
+      const { idTask, idItem, message, isFetching, isSuccess } = computeSimpleTaskRequestChanges
 
-      if (id && isFetching === false) {
+      if (idTask && isFetching === false) {
         let _message
-        if (isError === true && success === false) {
-          _message = message || 'We encountered a problem rejecting this task'
+        if (isSuccess === false) {
+          _message = message || 'We encountered a problem sharing your feedback'
         }
 
-        if (isError !== true && success === true) {
-          _message = message || 'Rejected the request'
+        if (isSuccess === true) {
+          _message = message || 'We shared your feedback with the member'
         }
-        setProcessedTask({ id, message: _message, isSuccess: success })
+        setProcessedTask({
+          idTask,
+          idItem,
+          message: _message,
+          isSuccess,
+        })
       }
     }
-  }, [extractComputeUserTasksReject])
+  }, [computeSimpleTaskRequestChanges])
 
   const disableApproveButton = () => {
     // The approve button is greyed out if a visibility is not selected
