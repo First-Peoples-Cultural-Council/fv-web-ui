@@ -18,8 +18,15 @@ import useIntl from 'DataSource/useIntl'
  * @component
  *
  * @param {object} props
- * @param {function} props.children
  *
+ * @param {function} props.children Render prop
+ *
+ * @param {string} props.docDialectPath Used to determine if it's a public dialect
+ * @param {string} props.docId Used with request to change visibility.
+ * @param {string} props.docState Nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'
+ * @param {string} props.taskId Used when rejecting a task
+ *
+ * @returns {object} Data for RequestChangesPresentation
  */
 function RequestChangesData({ children, docDialectPath, docId, docState, taskId }) {
   const { computePortal } = usePortal()

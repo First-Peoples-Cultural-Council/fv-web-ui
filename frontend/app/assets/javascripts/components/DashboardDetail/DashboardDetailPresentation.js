@@ -26,7 +26,7 @@ import Typography from '@material-ui/core/Typography'
 function DashboardDetailPresentation({
   childrenSelectedDetail,
   childrenSelectedSidebar,
-  childrenUnselected,
+  // childrenUnselected,
   selectedId,
 }) {
   const { theme } = useTheme()
@@ -53,7 +53,7 @@ function DashboardDetailPresentation({
 
       {/* Full list view (no item selected)
       ------------------------------------------ */}
-      {selectedId === undefined && childrenUnselected}
+      {/* {selectedId === undefined && childrenUnselected} */}
 
       {/* Detail view (item is selected)
       ------------------------------------------ */}
@@ -64,9 +64,7 @@ function DashboardDetailPresentation({
           <div className="DashboardDetail__sidebar">{childrenSelectedSidebar}</div>
           {/* Selected item details/admin
           ------------------------------------------ */}
-          <div className="DashboardDetail__selectedItem">
-            {childrenSelectedDetail}
-          </div>
+          <div className="DashboardDetail__selectedItem">{childrenSelectedDetail}</div>
         </>
       )}
     </div>
