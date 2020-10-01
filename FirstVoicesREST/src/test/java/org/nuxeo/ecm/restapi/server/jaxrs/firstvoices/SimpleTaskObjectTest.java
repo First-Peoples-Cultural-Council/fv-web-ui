@@ -7,6 +7,7 @@ import static ca.firstvoices.visibility.Constants.TEAM;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.ecm.platform.ec.notification.NotificationConstants.GROUP_PREFIX;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.jersey.api.client.ClientResponse;
@@ -15,8 +16,10 @@ import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -71,7 +74,6 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Deploy("org.nuxeo.ecm.platform.userworkspace.api")
 @Deploy("org.nuxeo.ecm.platform.userworkspace.types")
 @Deploy("org.nuxeo.ecm.platform.userworkspace.core")
-@Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.auth.xml")
 @Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-services.xml")
 @Deploy({"FirstVoicesCoreIO", "FirstVoicesREST", "FirstVoicesRESTPageProviders",
@@ -94,7 +96,7 @@ public class SimpleTaskObjectTest extends BaseTest {
   private DocumentModelList words = new DocumentModelListImpl();
   private NuxeoPrincipal recorder_user;
   private NuxeoPrincipal la_1_user;
-  private NuxeoPrincipal la_2_user;
+  private NuxeoPrincipal member_user;
 
   public void createDialectTree(CoreSession session)
       throws OperationException {
@@ -130,10 +132,11 @@ public class SimpleTaskObjectTest extends BaseTest {
     recorder_user = createUser(session, "recorder_user", "dialect_recorders");
     assertNotNull(recorder_user);
 
+    member_user = createUser(session, "member_user", "members");
+    assertNotNull(member_user);
+
     la_1_user = createUser(session, "language_admin_1", "dialect_language_administrators");
-    la_2_user = createUser(session, "language_admin_2", "dialect_language_administrators");
     assertNotNull(la_1_user);
-    assertNotNull(la_2_user);
     session.save();
 
     TransactionHelper.commitOrRollbackTransaction();
@@ -196,14 +199,13 @@ public class SimpleTaskObjectTest extends BaseTest {
       TransactionHelper.startTransaction();
     }
 
-    assertEquals(5, taskService.getAllCurrentTaskInstances(session, null).size());
+    assertEquals(5, getTasksAssignedViaGroups(la_1_user).size());
   }
 
   @Test
   public void testSimpleTaskDetails() {
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    this.service = getServiceFor("Administrator", "Administrator");
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    this.service = doAsUser(la_1_user, null);
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
     try (CloseableClientResponse response = getResponse(RequestType.GET,
@@ -218,23 +220,28 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   @Test
   public void testSimpleTaskList() throws IOException {
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    this.service = getServiceFor("Administrator", "Administrator");
+    this.service = doAsUser(la_1_user, null);
 
     try (CloseableClientResponse response = getResponse(RequestType.GET, "simpleTask")) {
       assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
       JsonNode jsonNode = mapper.readTree(response.getEntityInputStream());
       assertEquals(words.size(), jsonNode.get("entries").size());
+    }
 
+    this.service = doAsUser(member_user, null);
+
+    try (CloseableClientResponse response = getResponse(RequestType.GET, "simpleTask")) {
+      assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+      JsonNode jsonNode = mapper.readTree(response.getEntityInputStream());
+      assertEquals(0, jsonNode.get("entries").size());
     }
   }
 
   @Test
   public void testSimpleTaskListExcludeDelegatedTasks() throws IOException {
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    this.service = getServiceFor("Administrator", "Administrator");
+    this.service = doAsUser(la_1_user, null);
 
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
     // Delegate first task
@@ -262,13 +269,10 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   @Test
   public void testApproval() {
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    WebResource wr = getServiceFor(
-        getRestApiUrl() + String.format("simpleTask/%s/approve", task1.get().getId()),
-        "Administrator", "Administrator");
+    WebResource wr = doAsUser(la_1_user, String.format("%s/approve", task1.get().getId()));
 
     // Attempt unsupported visibility (`birds`)
     try (CloseableClientResponse response = CloseableClientResponse
@@ -307,15 +311,11 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   @Test
   public void testRequestChanges() {
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    WebResource wr = getServiceFor(
-        getRestApiUrl() + String.format("simpleTask/%s/requestChanges", task1.get().getId()),
-        "Administrator", "Administrator");
-
-    Builder builder = wr.queryParam("sendEmail", "1").accept(MediaType.TEXT_PLAIN)
+    Builder builder = doAsUser(la_1_user, String.format("%s/requestChanges", task1.get().getId()))
+        .accept(MediaType.TEXT_PLAIN)
         .type(MediaType.APPLICATION_JSON);
 
     String expectedComment = "Please make these changes.";
@@ -348,11 +348,10 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   @Test
   public void testIgnore() {
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
-    // TODO: Test using language admin accounts. Currently getting a 403 error
-    this.service = getServiceFor("Administrator", "Administrator");
+    this.service = doAsUser(la_1_user, null);
 
     try (CloseableClientResponse response = getResponse(RequestType.PUT,
         String.format("simpleTask/%s/ignore", task1.get().getId()))) {
@@ -371,7 +370,7 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   @Test
   public void testRequestReview() {
-    Optional<Task> task1 = taskService.getAllCurrentTaskInstances(session, null).stream().findAny();
+    Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
     String wordId = task1.get().getTargetDocumentsIds().stream().findFirst().orElse(null);
@@ -402,13 +401,7 @@ public class SimpleTaskObjectTest extends BaseTest {
   }
 
   private CloseableClientResponse requestReview(String wordId) {
-
-    // TODO: Create tasks using the recorder accounts
-    WebResource wr = getServiceFor(
-        getRestApiUrl() + "simpleTask/requestReview",
-        "Administrator", "Administrator");
-
-    Builder builder = wr.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_JSON);
+    Builder builder = doAsUser(recorder_user,"requestReview").accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_JSON);
 
     String comment = "Recorder says hello. Please review.";
 
@@ -426,7 +419,9 @@ public class SimpleTaskObjectTest extends BaseTest {
 
   protected NuxeoPrincipal createUser(CoreSession session, String username, String group) {
     DocumentModel user = userManager.getBareUserModel();
+    user.setPropertyValue("user:email", username + "@email.com");
     user.setPropertyValue("user:username", username);
+    user.setPropertyValue("user:password", username);
     user.setPropertyValue("user:groups", new String[]{group});
     try {
       userManager.createUser(user);
@@ -438,4 +433,16 @@ public class SimpleTaskObjectTest extends BaseTest {
     return userManager.getPrincipal(username);
   }
 
+  private List<Task> getTasksAssignedViaGroups(NuxeoPrincipal user) {
+    List<String> prefixedGroups = user.getAllGroups().stream().map(group -> GROUP_PREFIX + group).collect(Collectors.toList());
+    return taskService.getCurrentTaskInstances(prefixedGroups, session);
+  }
+
+  private WebResource doAsUser(NuxeoPrincipal user, String endpoint) {
+    if (endpoint == null) {
+      return getServiceFor(user.getName(), user.getName());
+    } else {
+      return getServiceFor(getRestApiUrl() + "simpleTask/" + endpoint, user.getName(), user.getName());
+    }
+  }
 }
