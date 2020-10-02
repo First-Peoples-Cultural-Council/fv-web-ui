@@ -309,7 +309,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
     }
 
     _hasPendingReview = (item) => {
-      return (
+      return item ? (
         <div className="col-xs-12">
           <div className="ViewWithActions__warning ">
             <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
@@ -329,7 +329,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
             </RequestReview.Data>
           </div>
         </div>
-      )
+      ) : null
     }
 
     _delete = (item) => {
