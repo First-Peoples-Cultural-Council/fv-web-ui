@@ -567,6 +567,9 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       }
     }
 
+    // After republish move back to publish state
+    dialectProxy.followTransition(PUBLISH_TRANSITION);
+
     // Save changes to property values
     return session.saveDocument(dialectProxy);
   }

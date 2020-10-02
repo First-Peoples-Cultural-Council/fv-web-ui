@@ -85,7 +85,7 @@ public class ProxyPublisherListener implements EventListener {
    * @return
    */
   private boolean publishing(String transition, String transitionFrom) {
-    return PUBLISH_TRANSITION.equals(transition) && !REPUBLISH_TRANSITION.equals(transitionFrom);
+    return PUBLISH_TRANSITION.equals(transition) && !PUBLISHED_STATE.equals(transitionFrom);
   }
 
   private boolean republishing(String transition, String transitionFrom) {
