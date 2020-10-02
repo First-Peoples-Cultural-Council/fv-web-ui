@@ -158,7 +158,6 @@ function DashboardDetailTasksContainer() {
                     key={itemId}
                     processedMessage={itemProcessedMessage}
                     processedWasSuccessful={itemProcessedWasSuccessful}
-                    requestChangesText="Reject"
                     requestedVisibility={requestedVisibility}
                     selectLabelText={requestChangesSelectLabelText}
                     subTitle={requestChangesSubTitle}

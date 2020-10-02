@@ -49,7 +49,7 @@ function VisibilitySelectPresentation({
           {selectLabelText}
         </div>
       )}
-      <FormControl variant="outlined" size="small">
+      <FormControl variant="outlined" size="small" className={classes.formControl}>
         <Select
           className="VisibilitySelect__select"
           labelId="select-outlined-label"

@@ -30,8 +30,10 @@ import useTasks from 'DataSource/useTasks'
 function RequestChangesData({ children, docDialectPath, docId, docState, taskId }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
-  const formRef = useRef(null)
+  const formRefDrawer = useRef(null)
+  const formRefModal = useRef(null)
   const [errors, setErrors] = useState()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [docVisibility, setDocVisibility] = useState('')
   const { fetchDialect2, computeDialect2 } = useDialect()
   const {
@@ -40,6 +42,8 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     computeSimpleTaskApprove,
     simpleTaskRequestChanges,
     computeSimpleTaskRequestChanges,
+    simpleTaskIgnore,
+    computeSimpleTaskIgnore,
   } = useTasks()
   const computeEntities = Immutable.fromJS([
     {
@@ -91,7 +95,7 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     })
 
     const formData = getFormData({
-      formReference: formRef,
+      formReference: formRefDrawer,
     })
 
     handleSubmit({
@@ -145,7 +149,7 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     })
 
     const formData = getFormData({
-      formReference: formRef,
+      formReference: formRefModal,
     })
 
     handleSubmit({
@@ -154,15 +158,15 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
       valid: () => {
         setErrors(undefined)
         simpleTaskRequestChanges({
-          id: taskId,
-          idTask: taskId,
-          idItem: docId,
-          visibility: formData.visibilitySelect,
           comment: formData.comment,
+          idItem: docId,
+          idTask: taskId,
         })
+        toggleModal()
       },
       invalid: (response) => {
         setErrors(response.errors)
+        toggleModal()
       },
     })
   }
@@ -192,6 +196,36 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     }
   }, [computeSimpleTaskRequestChanges])
 
+  const handleIgnore = () => {
+    simpleTaskIgnore({
+      idTask: taskId,
+      idItem: docId,
+    })
+  }
+  // USER FEEDBACK: Ignore
+  const prevIgnore = usePrevious(selectn('isFetching', computeSimpleTaskIgnore))
+  useEffect(() => {
+    if (selectn('isFetching', computeSimpleTaskIgnore) !== prevIgnore) {
+      const { idTask, idItem, message, isFetching, isSuccess } = computeSimpleTaskIgnore
+      if (idTask && isFetching === false) {
+        let _message
+        if (isSuccess === false) {
+          _message = message || 'We encountered a problem, please try again later'
+        }
+
+        if (isSuccess === true) {
+          _message = message || 'Task has been ignored'
+        }
+        setProcessedTask({
+          idTask,
+          idItem,
+          message: _message,
+          isSuccess,
+        })
+      }
+    }
+  }, [computeSimpleTaskIgnore])
+
   const disableApproveButton = () => {
     // The approve button is greyed out if a visibility is not selected
     if (docVisibility === '') {
@@ -212,6 +246,10 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     }
   }
 
+  const toggleModal = () => {
+    setIsDialogOpen(!isDialogOpen)
+  }
+
   const extractComputeDialect = ProviderHelpers.getEntry(computeDialect2, docDialectPath)
   return children({
     computeEntities,
@@ -219,12 +257,16 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
     disableRequestChangesButton,
     docVisibility,
     errors,
-    formRef,
+    formRefDrawer,
+    formRefModal,
     handleApprove,
     handleRequestChanges,
+    handleIgnore,
     handleSnackbarClose,
     handleVisibilityChange,
     isPublicDialect: selectn('response.state', extractComputeDialect) === 'Published',
+    isDialogOpen,
+    toggleModal,
   })
 }
 

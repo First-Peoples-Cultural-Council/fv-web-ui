@@ -12,7 +12,12 @@
 
 .VisibilitySelect--dashboardDetail {
   padding-bottom: 0;
-  float: none;
+
+  display: flex;
+  align-items: center;
+}
+.VisibilitySelect__label {
+  padding: 0 10px 0 0;
 }
 .VisibilitySelect--dashboardDetail .VisibilitySelect__select {
   background-color: #fff;

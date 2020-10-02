@@ -20,6 +20,9 @@ import {
   FV_SIMPLE_TASKS_REQUEST_CHANGES_START,
   FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS,
   FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+  FV_SIMPLE_TASKS_IGNORE_START,
+  FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+  FV_SIMPLE_TASKS_IGNORE_ERROR,
 } from './actionTypes'
 
 export const approveTask = execute('FV_USER_TASKS_APPROVE', 'WorkflowTask.Complete', {
@@ -165,7 +168,46 @@ export const simpleTaskApprove = ({ idTask, idItem, visibility }) => {
   }
 }
 
-// TODO
+export const simpleTaskIgnore = ({ idTask, idItem }) => {
+  return (dispatch) => {
+    if (!idTask) {
+      dispatch({
+        type: FV_SIMPLE_TASKS_IGNORE_ERROR,
+        message: `Missing request parameters: idTask=${idTask}`,
+        idTask: undefined,
+        idItem: undefined,
+      })
+      return
+    }
+
+    dispatch({
+      type: FV_SIMPLE_TASKS_IGNORE_START,
+      idTask,
+      idItem,
+    })
+
+    return DirectoryOperations.putToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${idTask}/ignore`)
+      .then((response) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+          idTask,
+          idItem,
+          message: response,
+        })
+        return response
+      })
+      .catch((error) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_IGNORE_ERROR,
+          message: error,
+          idTask,
+          idItem,
+        })
+        return error
+      })
+  }
+}
+
 export const simpleTaskRequestChanges = ({ idTask, idItem, visibility, comment }) => {
   return (dispatch) => {
     if (!idTask) {

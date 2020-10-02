@@ -36,7 +36,9 @@
   background-color: #c4503c;
   color: #fff;
 }
-
+.Widget__cellTitle {
+  max-width: 150px;
+}
 /* Modifiers */
 .Widget--fullWidth .Widget__body {
   padding: 0;

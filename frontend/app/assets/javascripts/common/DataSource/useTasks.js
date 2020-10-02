@@ -15,6 +15,7 @@ import {
   setProcessedTask as _setProcessedTask,
   simpleTaskApprove as _simpleTaskApprove,
   simpleTaskRequestChanges as _simpleTaskRequestChanges,
+  simpleTaskIgnore as _simpleTaskIgnore,
 } from 'providers/redux/reducers/tasks'
 
 function useTasks() {
@@ -89,6 +90,10 @@ function useTasks() {
       dispatch(_simpleTaskRequestChanges({ idTask, idItem, visibility, comment }))
     },
     computeSimpleTaskRequestChanges: useSelector((state) => state.tasks.computeSimpleTaskRequestChanges),
+    simpleTaskIgnore: ({ idTask, idItem } = {}) => {
+      dispatch(_simpleTaskIgnore({ idTask, idItem }))
+    },
+    computeSimpleTaskIgnore: useSelector((state) => state.tasks.computeSimpleTaskIgnore),
   }
 }
 export default useTasks

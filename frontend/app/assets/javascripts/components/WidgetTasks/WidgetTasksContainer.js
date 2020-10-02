@@ -2,6 +2,7 @@ import React from 'react'
 import WidgetTasksPresentation from 'components/WidgetTasks/WidgetTasksPresentation'
 import WidgetTasksData from 'components/WidgetTasks/WidgetTasksData'
 import ItemIcon from 'components/ItemIcon'
+import Typography from '@material-ui/core/Typography'
 
 /**
  * @summary WidgetTasksContainer
@@ -17,6 +18,13 @@ function WidgetTasksContainer() {
     <WidgetTasksData
       columnRender={{
         itemType: ItemIcon.Presentation,
+        titleItem: ({ titleItem }) => {
+          return (
+            <Typography variant="body1" className="Widget__cellTitle" component="div" noWrap>
+              {titleItem}
+            </Typography>
+          )
+        },
         titleTask: ({ titleTask, visibilityChanged }) => {
           return visibilityChanged ? titleTask : ''
         },

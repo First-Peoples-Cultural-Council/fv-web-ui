@@ -15,6 +15,9 @@ import {
   FV_SIMPLE_TASKS_REQUEST_CHANGES_START,
   FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS,
   FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+  FV_SIMPLE_TASKS_IGNORE_START,
+  FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+  FV_SIMPLE_TASKS_IGNORE_ERROR,
 } from './actionTypes'
 
 const initialState = {
@@ -145,6 +148,39 @@ export const tasksReducer = combineReducers({
           idTask: action.idTask,
           idItem: action.idItem,
           message: action.message,
+          isFetching: false,
+          isSuccess: false,
+        }
+
+      default:
+        return state ? state : {}
+    }
+  },
+  computeSimpleTaskIgnore(state, action) {
+    switch (action.type) {
+      case FV_SIMPLE_TASKS_IGNORE_START:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          isFetching: true,
+          isSuccess: undefined,
+        }
+
+      case FV_SIMPLE_TASKS_IGNORE_SUCCESS:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          isFetching: false,
+          isSuccess: true,
+        }
+
+      case FV_SIMPLE_TASKS_IGNORE_ERROR:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
           isFetching: false,
           isSuccess: false,
         }
