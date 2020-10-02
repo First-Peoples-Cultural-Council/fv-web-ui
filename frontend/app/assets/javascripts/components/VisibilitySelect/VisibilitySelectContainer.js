@@ -24,6 +24,7 @@ function VisibilitySelectContainer({
   handleVisibilityChange,
   hideLabel,
   selectNameAndId,
+  selectLabelText,
 }) {
   return (
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -38,6 +39,7 @@ function VisibilitySelectContainer({
               hideLabel={hideLabel}
               publicDialect={publicDialect}
               selectNameAndId={selectNameAndId}
+              selectLabelText={selectLabelText}
               dialectName={dialectName}
             />
           )
@@ -55,6 +57,7 @@ VisibilitySelectContainer.propTypes = {
   handleVisibilityChange: func.isRequired,
   hideLabel: bool,
   selectNameAndId: string,
+  selectLabelText: string,
 }
 
 VisibilitySelectContainer.defaultProps = {
