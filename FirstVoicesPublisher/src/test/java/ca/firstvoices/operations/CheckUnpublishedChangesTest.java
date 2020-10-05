@@ -21,6 +21,7 @@
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
@@ -87,8 +88,10 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
     dialect.followTransition(ENABLE_TRANSITION);
     session.saveDocument(dialect);
 
-    dialect.followTransition(PUBLISH_TRANSITION);
-    session.saveDocument(dialect);
+    if (!PUBLISHED_STATE.equals(dialect.getCurrentLifeCycleState())) {
+      dialect.followTransition(PUBLISH_TRANSITION);
+      session.saveDocument(dialect);
+    }
 
     // Create one word
     word = session.createDocument(
