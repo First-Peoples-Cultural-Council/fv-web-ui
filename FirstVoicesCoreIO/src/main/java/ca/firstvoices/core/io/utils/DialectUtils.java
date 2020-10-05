@@ -3,6 +3,7 @@ package ca.firstvoices.core.io.utils;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import ca.firstvoices.data.exceptions.FVDocumentHierarchyException;
+import ca.firstvoices.data.schemas.DialectTypesConstants;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -49,6 +50,14 @@ public final class DialectUtils {
       }
       return dialect;
     }
+  }
+
+  /**
+   * Core
+   * @return true if the type is a core type
+   */
+  public static boolean isCoreType(String type) {
+    return DialectTypesConstants.getCoreTypes().contains(type);
   }
 
 }

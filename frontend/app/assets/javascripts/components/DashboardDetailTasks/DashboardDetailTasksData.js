@@ -12,6 +12,8 @@ import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
+import NavigationHelpers from 'common/NavigationHelpers'
+import DocumentOperations from 'operations/DocumentOperations'
 
 /**
  * @summary DashboardDetailTasksData
@@ -307,6 +309,18 @@ function DashboardDetailTasksData({ children, columnRender }) {
       })
     )
   }
+  const onEditClick = (UID, itemTypePlural) => {
+    DocumentOperations.getDocument(UID).then((response) => {
+      const path = NavigationHelpers.generateUIDEditPath('explore', response, itemTypePlural)
+      navigate(path)
+    })
+  }
+  const onViewClick = (UID, itemTypePlural) => {
+    DocumentOperations.getDocument(UID).then((response) => {
+      const path = NavigationHelpers.generateUIDPath('explore', response, itemTypePlural)
+      navigate(path)
+    })
+  }
   // updates task data to set 'processed' related flags
   const setProcessedTasks = (taskData) => {
     return taskData.map((task) => {
@@ -354,10 +368,12 @@ function DashboardDetailTasksData({ children, columnRender }) {
     idSelectedTask: queryTask !== URL_QUERY_PLACEHOLDER ? queryTask : undefined,
     listItems: setProcessedTasks(tasks),
     onClose,
+    onEditClick,
     onOpen,
     onOpenNoId,
     onOrderChange,
     onRowClick,
+    onViewClick,
     options: {
       pageSize: Number(queryPageSize),
       pageSizeOptions: [5, 10, 20],

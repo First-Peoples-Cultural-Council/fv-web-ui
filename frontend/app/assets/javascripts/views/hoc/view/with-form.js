@@ -110,7 +110,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     }
 
     _hasPendingReview = (item) => {
-      return (
+      return item ? (
         <div className="ViewWithForm__warning">
           <RequestReview.Data docId={item.uid} docState={item.state} docType={item.type}>
             {({ hasRelatedTasks, docTypeName }) => {
@@ -128,7 +128,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             }}
           </RequestReview.Data>
         </div>
-      )
+      ) : null
     }
 
     componentWillReceiveProps(nextProps) {
@@ -184,7 +184,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                     >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                     </FVButton>
-                    {this._hasPendingReview(selectn('response', computeItem), type)}
+                    {this._hasPendingReview(selectn('response', computeItem))}
                   </div>
 
                   <t.form.Form
@@ -198,7 +198,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   />
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
-                    {this._hasPendingReview(selectn('response', computeItem), type)}
+                    {this._hasPendingReview(selectn('response', computeItem))}
                     <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
                       {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
                     </FVButton>

@@ -1,5 +1,6 @@
 package ca.firstvoices.core.io.utils;
 
+import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
 import ca.firstvoices.tests.mocks.services.MockDialectService;
@@ -79,5 +80,12 @@ public class DialectUtilsTest extends AbstractTestDataCreatorTest {
   @Test
   public void getDialectWithSession() {
     Assert.assertEquals(dialect.getId(), DialectUtils.getDialect(session, dialect).getId());
+  }
+
+  @Test
+  public void isCoreType() {
+    Assert.assertTrue(DialectUtils.isCoreType(DialectTypesConstants.FV_WORD));
+    Assert.assertTrue(DialectUtils.isCoreType(DialectTypesConstants.FV_PHRASE));
+    Assert.assertTrue(DialectUtils.isCoreType(DialectTypesConstants.FV_BOOK));
   }
 }

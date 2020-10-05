@@ -30,6 +30,7 @@ children:
             name: "Word"
             properties:
               part_of_speech: "noun"
+            key: testWord1
           - type: FVWord
             name: "Another Word"
             properties:
