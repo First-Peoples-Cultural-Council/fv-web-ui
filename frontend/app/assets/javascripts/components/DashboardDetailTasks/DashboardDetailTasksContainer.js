@@ -92,14 +92,14 @@ function DashboardDetailTasksContainer() {
         const childrenDisplayButtons = true
         if (itemType === 'FVBook') {
           childrenItemDetail = (
-            <DetailSongStoryPresentation 
-              book={book} 
-              audio={audio} 
-              childrenDisplayButtons={childrenDisplayButtons} 
+            <DetailSongStoryPresentation
+              book={book}
+              audio={audio}
+              childrenDisplayButtons={childrenDisplayButtons}
               onEditClick={onEditClick}
-              onViewClick={onViewClick} 
-              pictures={pictures} 
-              videos={videos} 
+              onViewClick={onViewClick}
+              pictures={pictures}
+              videos={videos}
             />
           )
         }

@@ -9,7 +9,6 @@ import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
 import FVButton from 'views/components/FVButton'
 
-
 /**
  * @summary DetailSongStoryPresentation
  * @version 1.0.1

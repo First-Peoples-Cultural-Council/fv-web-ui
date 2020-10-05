@@ -12,7 +12,6 @@ import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
 import useTheme from 'DataSource/useTheme'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentOperations from 'operations/DocumentOperations'
 
@@ -36,7 +35,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const [selectedTaskData, setSelectedTaskData] = useState({})
   const { getSearchObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
   const baseUrl = getBaseURL()
-
 
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
   const {
