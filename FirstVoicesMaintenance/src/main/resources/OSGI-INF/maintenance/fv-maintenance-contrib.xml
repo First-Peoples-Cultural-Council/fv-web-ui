@@ -44,6 +44,17 @@
         </listener>
     </extension>
 
+    <!-- Listener will handle post commit, async cleanup events -->
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+      <listener name="postCommitCleanupListener"
+        class="ca.firstvoices.maintenance.listeners.PostCommitCleanupListener"
+        async="true" postCommit="true" priority="350">
+        <event>documentModified</event>
+        <event>documentTrashed</event>
+        <event>lifecycle_transition_event</event>
+      </listener>
+    </extension>
+
     <!-- A work queue for handling maintenance tasks -->
     <extension point="queues" target="org.nuxeo.ecm.core.work.service">
         <queue id="fv-maintenance-requiredJobs">

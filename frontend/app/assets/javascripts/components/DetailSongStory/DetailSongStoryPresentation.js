@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
+import FVButton from 'views/components/FVButton'
 
 /**
  * @summary DetailSongStoryPresentation
@@ -18,9 +19,11 @@ import Divider from '@material-ui/core/Divider'
  * @returns {node} jsx markup
  */
 function DetailSongStoryPresentation({
-  book,
-  // Media
   audio,
+  book,
+  childrenDisplayButtons,
+  onViewClick,
+  onEditClick,
   pictures,
   videos,
 }) {
@@ -30,6 +33,21 @@ function DetailSongStoryPresentation({
     return <Preview minimal key={audioDoc.uid} expandedValue={audioDoc.object} type="FVAudio" />
   })
   const audioElements = audioMapped && audioMapped.length !== 0 ? audioMapped : null
+
+  const _getButtons = () => {
+    const bookType = book.type
+    const itemTypePlural = (bookType === 'song') ? 'songs' : 'stories'
+    return (
+      <div className = "DetailSongStory__ViewEditButtons">
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
+          {'Edit'}
+        </FVButton>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onViewClick(book.uid, itemTypePlural)}>
+          {'View full '} {bookType}
+        </FVButton>
+      </div>
+    )
+  }
 
   const mediaPanels =
     videos.length > 0 || pictures.length > 0 ? (
@@ -43,6 +61,9 @@ function DetailSongStoryPresentation({
   // Main component
   return (
     <div className={classes.base}>
+      <div className="text-right">
+        {childrenDisplayButtons && _getButtons()}
+      </div>
       <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
         <Grid container spacing={2}>
           {mediaPanels}
@@ -113,10 +134,12 @@ function _getIntroductionTranslation(introductionTranslation) {
   ) : null
 }
 
+
 // PROPTYPES
-const { array, string, object, number } = PropTypes
+const { array, string, object, number, boolean } = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
+  childrenDisplayButtons: boolean,
   defaultLanguage: string,
   intl: object,
   pageCount: number,

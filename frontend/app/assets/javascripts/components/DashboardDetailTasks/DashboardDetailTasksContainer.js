@@ -37,15 +37,18 @@ function DashboardDetailTasksContainer() {
         listItems,
         onChangeRowsPerPage,
         onClose,
+        onEditClick,
         onOpen,
         onOpenNoId,
         onOrderChange,
         onRowClick,
+        onViewClick,
         options,
         pagination = {},
         selectedItemData,
         selectedTaskData,
         sortDirection,
+        idSelectedItem,
       }) => {
         const { page, pageSize, count } = pagination
         const {
@@ -86,9 +89,18 @@ function DashboardDetailTasksContainer() {
         } = selectedItemData
 
         let childrenItemDetail = null
+        const childrenDisplayButtons = true
         if (itemType === 'FVBook') {
           childrenItemDetail = (
-            <DetailSongStoryPresentation book={book} audio={audio} pictures={pictures} videos={videos} />
+            <DetailSongStoryPresentation
+              book={book}
+              audio={audio}
+              childrenDisplayButtons={childrenDisplayButtons}
+              onEditClick={onEditClick}
+              onViewClick={onViewClick}
+              pictures={pictures}
+              videos={videos}
+            />
           )
         }
         if (itemType === 'FVPhrase' || itemType === 'FVWord') {
@@ -97,10 +109,13 @@ function DashboardDetailTasksContainer() {
               acknowledgement={acknowledgement}
               audio={audio}
               categories={categories} // NOTE: also handles phrase books
+              childrenDisplayButtons={childrenDisplayButtons}
               culturalNotes={culturalNotes}
               definitions={definitions}
               title={itemTitle}
               literalTranslations={literalTranslations}
+              onEditClick={onEditClick}
+              onViewClick={onViewClick}
               partOfSpeech={partOfSpeech}
               photos={photos}
               phrases={phrases}
@@ -110,6 +125,7 @@ function DashboardDetailTasksContainer() {
               metadata={metadata}
               videos={videos}
               docType={itemType}
+              idSelectedItem={idSelectedItem}
             />
           )
         }
