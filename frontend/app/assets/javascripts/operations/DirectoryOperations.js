@@ -123,6 +123,33 @@ export default class DirectoryOperations {
     })
   }
 
+  static putToAPI(path, bodyObject = {}) {
+    return new Promise((resolve, reject) => {
+      request.put(
+        {
+          url: path,
+          body: JSON.stringify(bodyObject),
+          headers: { 'content-type': 'application/json' },
+        },
+        function handleResponse(error, response, body) {
+          if (error) {
+            if (error.hasOwnProperty('response')) {
+              error.response.json().then((jsonError) => {
+                return reject(StringHelpers.extractErrorMessage(jsonError))
+              })
+            } else {
+              return reject(error)
+            }
+          }
+          return resolve(body)
+        }
+      )
+      setTimeout(() => {
+        reject('Server timeout while attempting to send request.')
+      }, TIMEOUT)
+    })
+  }
+
   /**
    * Gets one or more documents based on a path or id.
    * Allows for additional complex queries to be executed.

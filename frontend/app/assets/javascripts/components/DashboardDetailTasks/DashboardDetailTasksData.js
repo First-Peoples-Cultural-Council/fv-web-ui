@@ -311,28 +311,21 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }
   const onEditClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      const path = NavigationHelpers.generateUIDEditPath(
-        'explore',
-        response,
-        itemTypePlural
-      )
+      const path = NavigationHelpers.generateUIDEditPath('explore', response, itemTypePlural)
       navigate(path)
     })
   }
   const onViewClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      const path = NavigationHelpers.generateUIDPath(
-        'explore',
-        response,
-        itemTypePlural
-      )
+      const path = NavigationHelpers.generateUIDPath('explore', response, itemTypePlural)
       navigate(path)
     })
   }
+  // updates task data to set 'processed' related flags
   const setProcessedTasks = (taskData) => {
     return taskData.map((task) => {
       const isProcessed = processedTasks.find((processedTask) => {
-        return processedTask.id === task.targetDocumentsIds
+        return processedTask.idTask === task.id
       })
       return {
         ...task,
@@ -342,12 +335,13 @@ function DashboardDetailTasksData({ children, columnRender }) {
       }
     })
   }
-  const setProcessedItem = (taskData) => {
+  // updates selected item data to set 'processed' related flags
+  const setProcessedItem = (itemData) => {
     const isProcessed = processedTasks.find((processedTask) => {
-      return processedTask.id === taskData.id
+      return processedTask.idItem === itemData.id
     })
     return {
-      ...taskData,
+      ...itemData,
       isProcessed: isProcessed !== undefined,
       processedWasSuccessful: selectn('isSuccess', isProcessed),
       processedMessage: selectn('message', isProcessed),

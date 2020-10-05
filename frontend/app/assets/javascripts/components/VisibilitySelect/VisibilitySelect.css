@@ -7,12 +7,15 @@
 }
 .VisibilitySelect__label {
   float: left;
-  padding: 10px;
+  padding: 0 10px 0 0;
+  min-width: 95px;
 }
 
 .VisibilitySelect--dashboardDetail {
   padding-bottom: 0;
-  float: none;
+
+  display: flex;
+  align-items: center;
 }
 .VisibilitySelect--dashboardDetail .VisibilitySelect__select {
   background-color: #fff;

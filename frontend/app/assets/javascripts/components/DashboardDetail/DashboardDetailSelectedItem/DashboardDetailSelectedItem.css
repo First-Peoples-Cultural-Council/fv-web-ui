@@ -6,7 +6,9 @@
 }
 
 .DashboardDetailSelectedItem__TaskSummary {
-  padding: 10px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #d7d7d7;
+  margin-bottom: 50px;
 }
 .DashboardDetailSelectedItem__ActivityStream {
   padding: 10px;
@@ -17,6 +19,7 @@
 }
 .DashboardDetailSelectedItem__ItemDetail {
   padding: 10px;
+  background-color: #51a49a;
 }
 .DashboardDetailSelectedItem__TaskActions {
   background-color: rgb(239, 239, 239);
@@ -26,6 +29,7 @@
 .DashboardDetailSelectedItem__ItemOverview {
   flex-grow: 2;
   overflow: auto;
+  padding: 30px 4vw;
 }
 .DashboardDetailSelectedItem__Actions {
   position: absolute;
