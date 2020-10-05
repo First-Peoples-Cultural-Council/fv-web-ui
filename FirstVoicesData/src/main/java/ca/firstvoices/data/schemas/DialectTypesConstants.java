@@ -1,5 +1,9 @@
 package ca.firstvoices.data.schemas;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author david
  */
@@ -47,6 +51,15 @@ public class DialectTypesConstants {
   public static final String FV_PORTAL = "FVPortal";
   public static final String FV_GALLERY = "FVGallery";
 
+  /**
+   * Core types make up most of the language data created by communities
+   * These are songs, story (FVBook), word or phrase
+   * @return the core types in FirstVoices
+   */
+  public static List<String> getCoreTypes() {
+    return new ArrayList<>(
+        Arrays.asList(FV_WORD, FV_PHRASE, FV_BOOK));
+  }
 
   private DialectTypesConstants() {
     throw new IllegalStateException("Utility class");
