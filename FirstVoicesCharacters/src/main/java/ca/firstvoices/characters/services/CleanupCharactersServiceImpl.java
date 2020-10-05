@@ -390,9 +390,16 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
   @Override
   public DocumentModelList getAllWordsPhrasesForConfusable(CoreSession session,
-      String confusableChar, int batchSize) {
+      String dictionaryId, String confusableChar, int batchSize) {
+
+    // Escape character
+    String escapedCharacter = NXQL.escapeStringInner(confusableChar);
+    // _ is ignored in NXQL queries unless escaped
+    escapedCharacter = escapedCharacter.replace("_", "\\_");
+
     String query = "SELECT * FROM FVWord, FVPhrase WHERE "
-        + "dc:title LIKE '%" + NXQL.escapeStringInner(confusableChar) + "%'"
+        + "dc:title LIKE '%" + escapedCharacter + "%'"
+        + " AND ecm:parentId = '" + dictionaryId + "'"
         + " AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
 
     DocumentModelList docs = session.query(query, null, batchSize, 0, true);

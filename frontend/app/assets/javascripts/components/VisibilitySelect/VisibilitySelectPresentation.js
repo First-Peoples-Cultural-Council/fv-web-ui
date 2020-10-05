@@ -18,26 +18,35 @@ import '!style-loader!css-loader!./VisibilitySelect.css'
  * @component
  *
  * @param {object} props
- * @param {string} docVisibility A string with the value of 'teams', 'members', or, 'public
- * @param {function} handleVisibilityChange A function to handle the onChange of the select component
+ *
+ * @param {object} props.classes
+ *
+ * @param {string} props.dialectName If provided, enhances the select > option text
+ * @param {string} props.docVisibility Sets value of select list
+ * @param {function} props.handleVisibilityChange A function to handle the onChange of the select component
+ * @param {boolean} props.hideLabel Toggle to display text near select list
+ * @param {boolean} props.publicDialect Toggles the public option in the select list. TODO: rename to `isPublicDialect`
+ * @param {string} props.selectLabelText Override the select label text
+ * @param {string} props.selectNameAndId For Mat-UI: associates styled list with html select & inputs
  *
  * @returns {node} jsx markup
  */
 
 function VisibilitySelectPresentation({
   classes,
+  dialectName,
   docVisibility,
   handleVisibilityChange,
   hideLabel,
   publicDialect,
+  selectLabelText,
   selectNameAndId,
-  dialectName,
 }) {
   return (
     <div className={`VisibilitySelect ${classes.root}`}>
       {!hideLabel && (
         <div id="select-label" className="VisibilitySelect__label">
-          Who can see this?
+          {selectLabelText}
         </div>
       )}
       <FormControl variant="outlined" size="small">
@@ -84,6 +93,7 @@ VisibilitySelectPresentation.propTypes = {
   handleVisibilityChange: func,
   hideLabel: bool,
   publicDialect: bool,
+  selectLabelText: string,
   selectNameAndId: string,
 }
 
@@ -95,6 +105,7 @@ VisibilitySelectPresentation.defaultProps = {
   handleVisibilityChange: () => {},
   hideLabel: false,
   publicDialect: false,
+  selectLabelText: 'Change to:',
   selectNameAndId: 'select',
 }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.notifications.contrib" version="1.0">
+
+  <require>org.nuxeo.ecm.platform.notification.service.NotificationContrib</require>
+  <require>org.nuxeo.ecm.platform.notification.document.routing.NotificationContrib</require>
+
+  <extension target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService" point="templates">
+    <template name="changesRequested" src="data/templates/changesRequested.ftl"/>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService"
+    point="notifications">
+    <!-- Disable existing notifications -->
+    <!-- Note: You can also contribute a Veto via the `notificationListenerVeto` point for more controlled handling -->
+    <notification enabled="false" name="Task assigned"/>
+    <notification enabled="false" name="Task delegated"/>
+    <notification enabled="false" name="Workflow Change"/>
+
+    <notification autoSubscribed="true" availableIn="Workspace" channel="email" enabled="true"
+      label="test" name="Task delegated" subject="${author} requested changes for ${docTitle}"
+      template="changesRequested">
+      <event name="workflowTaskDelegated"/>
+    </notification>
+
+  </extension>
+
+</component>

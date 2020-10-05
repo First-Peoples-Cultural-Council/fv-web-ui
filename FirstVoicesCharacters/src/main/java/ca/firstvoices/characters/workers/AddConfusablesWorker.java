@@ -39,9 +39,6 @@ public class AddConfusablesWorker extends AbstractWork {
 
               // Remove job from required jobs
               RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
-
-              // Add job to clean confusables to be picked up later
-              RequiredJobsUtils.addToRequiredJobs(dialect, Constants.CLEAN_CONFUSABLES_JOB_ID);
             });
   }
 

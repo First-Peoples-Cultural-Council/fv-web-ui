@@ -15,16 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { TABLEPAGINATION_DIV } from 'common/Constants'
 import { TableContextCount } from 'components/Table/TableContext'
 
-function TablePagination({
-  // page: pageZeroIndex,
-  // rowsPerPage,
-  // onChangeRowsPerPage,
-  rowsPerPageOptions,
-  showFirstLastPageButtons,
-  style,
-  localization,
-  variant,
-}) {
+function TablePagination({ localization, rowsPerPageOptions, showFirstLastPageButtons, style, variant }) {
   const { getSearchObject, navigate } = useNavigationHelpers()
   const {
     item: queryItem,
@@ -196,10 +187,8 @@ function TablePagination({
 }
 const { array, number, object, oneOf, bool } = PropTypes
 TablePagination.propTypes = {
-  // count: number,
   localization: object,
   page: number,
-  // rowsPerPage: number,
   rowsPerPageOptions: array,
   showFirstLastPageButtons: bool,
   style: object,

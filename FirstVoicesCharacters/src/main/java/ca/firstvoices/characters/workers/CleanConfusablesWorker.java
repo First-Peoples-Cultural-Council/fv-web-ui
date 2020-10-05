@@ -4,6 +4,7 @@ import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
@@ -64,6 +65,9 @@ public class CleanConfusablesWorker extends AbstractWork {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               DocumentModel dialect = session.getDocument(jobContainerRef);
+              String dictionaryId = session
+                  .getChild(dialect.getRef(), DialectTypesConstants.FV_DICTIONARY_NAME).getId();
+
               setStatus("Cleaning confusables `" + dialect.getTitle() + "`");
 
               try {
@@ -82,7 +86,7 @@ public class CleanConfusablesWorker extends AbstractWork {
 
                   if (ArrayUtils.isNotEmpty(confusables)) {
                     for (String confusableChar : confusables) {
-                      processWordsForConfusable(session, confusableChar);
+                      processWordsForConfusable(session, dictionaryId, confusableChar);
                     }
                   }
 
@@ -113,10 +117,11 @@ public class CleanConfusablesWorker extends AbstractWork {
    * @param session
    * @param confusableChar
    */
-  private void processWordsForConfusable(CoreSession session, String confusableChar) {
+  private void processWordsForConfusable(CoreSession session, String dictionaryId,
+      String confusableChar) {
 
     for (DocumentModel dictionaryItem : cleanupCharactersService
-        .getAllWordsPhrasesForConfusable(session, confusableChar, batchSize)) {
+        .getAllWordsPhrasesForConfusable(session, dictionaryId, confusableChar, batchSize)) {
 
       // Check for unpublished changes (before we clean)
       FirstVoicesPublisherService firstVoicesPublisherService = Framework

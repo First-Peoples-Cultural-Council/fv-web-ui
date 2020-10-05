@@ -25,6 +25,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMIL
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
@@ -168,7 +169,7 @@ public class OperationsTests {
     Mockito.when(cleanupCharactersService.getAllConfusables(dialectDoc)).thenReturn(chars);
 
     // Mock data to return 1 words that has "&"
-    Mockito.when(cleanupCharactersService.getAllWordsPhrasesForConfusable(any(), eq(chars.get(0)), anyInt()))
+    Mockito.when(cleanupCharactersService.getAllWordsPhrasesForConfusable(any(), anyString(), eq(chars.get(0)), anyInt()))
         .thenAnswer(
             method -> {
                 DocumentModelList docs = new DocumentModelListImpl();
@@ -178,7 +179,7 @@ public class OperationsTests {
         );
 
     // Mock data to return 0 words that have "^"
-    Mockito.when(cleanupCharactersService.getAllWordsPhrasesForConfusable(any(), eq(chars.get(1)), anyInt()))
+    Mockito.when(cleanupCharactersService.getAllWordsPhrasesForConfusable(any(), anyString(), eq(chars.get(1)), anyInt()))
         .thenAnswer(method -> new DocumentModelListImpl());
 
     // Call operation and get response

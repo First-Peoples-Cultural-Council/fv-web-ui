@@ -36,13 +36,34 @@ function useDashboard() {
 
   const formatTasksData = (_tasks) => {
     const formatDate = (date) => StringHelpers.formatLocalDateString(date)
+    const formatDateMDY = (date) => StringHelpers.formatLocalDateStringMDY(date)
     const formatInitator = ({ email, firstName, lastName }) => {
-      const fullName = `${firstName ? firstName : ''} ${lastName ? lastName : ''}`
-      return `${email}${fullName.trim() !== '' ? ` - ${fullName}` : ''}`
+      const fullName = formatInitatorFullName({ firstName, lastName })
+      return `${email}${fullName !== '' ? ` ${fullName}` : ''}`
+    }
+    const formatInitatorFullName = ({ firstName, lastName }) => {
+      return `${firstName ? firstName : ''} ${lastName ? lastName : ''}`.trim()
     }
 
     const formatTitleTask = ({ visibility }) => {
       return StringHelpers.visibilityText({ visibility })
+    }
+    const formatTitleTaskDetail = ({ firstName, lastName, type }) => {
+      let item
+      switch (type) {
+        case 'FVWord':
+          item = 'Word'
+          break
+        case 'FVPhrase':
+          item = 'Phrase'
+          break
+        case 'FVBook':
+          item = 'Song/story'
+          break
+        default:
+          item = 'A'
+      }
+      return `${item} review requested by ${firstName} ${lastName}`
     }
     const formatTitleItem = (title = '-') => title
 
@@ -58,22 +79,49 @@ function useDashboard() {
           return UNKNOWN
       }
     }
+    const formatItemTypeForUI = (type) => {
+      switch (type) {
+        case 'FVWord':
+          return 'Word'
+        case 'FVPhrase':
+          return 'Phrase'
+        case 'FVBook':
+          return 'Book'
+        default:
+          return 'Item'
+      }
+    }
     return _tasks.map(
       ({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility, visibilityChanged }) => {
+        const { email, firstName, lastName } = requestedBy
         return {
           date: formatDate(dateCreated),
+          dateMDY: formatDateMDY(dateCreated),
           id,
           initiator: formatInitator({
-            email: requestedBy.email,
-            firstName: requestedBy.firstName,
-            lastName: requestedBy.lastName,
+            email,
+            firstName,
+            lastName,
+          }),
+          initiatorEmail: email,
+          initiatorFullName: formatInitatorFullName({
+            firstName,
+            lastName,
           }),
           isNew: targetDoc.isNew,
           itemType: formatItemType(targetDoc.type),
+          itemTypeForUI: formatItemTypeForUI(targetDoc.type),
           targetDocumentsIds: targetDoc.uid,
           titleItem: formatTitleItem(targetDoc.title),
+          titleTaskDetail: formatTitleTaskDetail({
+            type: targetDoc.type,
+            firstName: requestedBy.firstName,
+            lastName: requestedBy.lastName,
+          }),
           titleTask: formatTitleTask({ visibility: requestedVisibility }),
           visibilityChanged,
+          visibilityText: StringHelpers.visibilityText({ visibility: requestedVisibility }),
+          requestedVisibility,
         }
       }
     )
@@ -87,7 +135,9 @@ function useDashboard() {
     const friendlyNamePropertyNameLookup = {
       date: 'dc:created',
       id: 'uid',
+      initiatorFullName: 'nt:initiator',
       initiator: 'nt:initiator', // aka requested by person's email
+      initiatorEmail: 'nt:initiator',
       titleTask: 'nt:directive', // aka requested visibility
     }
 

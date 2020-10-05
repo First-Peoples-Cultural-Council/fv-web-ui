@@ -12,24 +12,23 @@ import { TABLEPAGINATION_DIV } from 'common/Constants'
  * @component
  *
  * @param {object} props
- * @param {array} props.listItems
- * @param {function} props.onClick
- * @param {string} props.selectedId
- * @param {string} props.title
+ *
+ * @param {array} props.listItems See: DashboardDetailSidebarPresentation
+ * @param {func} props.onClick See: DashboardDetailSidebarPresentation
+ * @param {string} props.selectedId See: DashboardDetailSidebarPresentation
+ * @param {string} props.title Used to set text in DashboardDetailSidebarPresentation > childrenHeader
  *
  * @returns {node} jsx markup
  */
-function DashboardDetailSidebarContainer({ listItems, onClick, selectedId, title, page, pageSize, count }) {
+function DashboardDetailSidebarContainer({ listItems, onClick, selectedId, title }) {
   return (
     <DashboardDetailSidebarPresentation
       childrenHeader={
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           {title}
         </Typography>
       }
-      childrenPagination={
-        <TablePagination variant={TABLEPAGINATION_DIV} count={count} page={page - 1} rowsPerPage={pageSize} />
-      }
+      childrenPagination={<TablePagination variant={TABLEPAGINATION_DIV} />}
       listItems={listItems}
       onClick={onClick}
       selectedId={selectedId}
@@ -39,13 +38,13 @@ function DashboardDetailSidebarContainer({ listItems, onClick, selectedId, title
 // PROPTYPES
 const { array, func, number, string } = PropTypes
 DashboardDetailSidebarContainer.propTypes = {
+  count: number,
   listItems: array,
   onClick: func,
-  selectedId: string,
-  title: string,
   page: number,
   pageSize: number,
-  count: number,
+  selectedId: string,
+  title: string,
 }
 DashboardDetailSidebarContainer.defaultProps = {
   listItems: [],

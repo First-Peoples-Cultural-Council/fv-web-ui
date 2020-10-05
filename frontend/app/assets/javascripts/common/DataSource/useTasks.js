@@ -5,11 +5,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import {
   approveRegistration as _approveRegistration,
   approveTask as _approveTask,
-  createTask as _createTask,
   fetchTasks as _fetchTasks,
   fetchUserTasks as _fetchUserTasks,
   getSimpleTasks as _getSimpleTasks,
   getSimpleTask as _getSimpleTask,
+  postRequestReview as _postRequestReview,
   rejectRegistration as _rejectRegistration,
   rejectTask as _rejectTask,
   setProcessedTask as _setProcessedTask,
@@ -39,10 +39,6 @@ function useTasks() {
       const dispatchObj = _approveTask(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
     },
-    createTask: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
-      const dispatchObj = _createTask(pathOrId, operationParams, messageStart, messageSuccess, messageError)
-      dispatch(dispatchObj)
-    },
     fetchTasks: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _fetchTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
@@ -57,6 +53,10 @@ function useTasks() {
     },
     getSimpleTasks: (queryParams) => {
       const dispatchObj = _getSimpleTasks(queryParams)
+      return dispatch(dispatchObj)
+    },
+    postRequestReview: (docId, requestedVisibility, comment) => {
+      const dispatchObj = _postRequestReview(docId, requestedVisibility, comment)
       return dispatch(dispatchObj)
     },
     rejectRegistration: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
