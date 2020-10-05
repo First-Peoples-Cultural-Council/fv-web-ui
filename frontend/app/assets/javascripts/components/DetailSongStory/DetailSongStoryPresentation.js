@@ -40,10 +40,10 @@ function DetailSongStoryPresentation({
     const itemTypePlural = (bookType === 'song') ? 'songs' : 'stories'
     return (
       <div className = "DetailSongStory__ViewEditButtons">
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
           {'Edit'}
         </FVButton>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onViewClick(book.uid, itemTypePlural)}>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onViewClick(book.uid, itemTypePlural)}>
           {'View full '} {bookType}
         </FVButton>
       </div>
@@ -62,6 +62,9 @@ function DetailSongStoryPresentation({
   // Main component
   return (
     <div className={classes.base}>
+      <div className="text-right">
+        {childrenDisplayButtons && _getButtons()}
+      </div>
       <Grid key={book.uid} container className={classes.gridRoot} spacing={2}>
         <Grid container spacing={2}>
           {mediaPanels}
@@ -89,9 +92,6 @@ function DetailSongStoryPresentation({
           </Grid>
         </Grid>
       </Grid>
-      <div className="text-right">
-        {childrenDisplayButtons && _getButtons()}
-      </div>
     </div>
   )
 }
