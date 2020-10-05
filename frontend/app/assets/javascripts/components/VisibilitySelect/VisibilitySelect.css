@@ -8,6 +8,7 @@
 .VisibilitySelect__label {
   float: left;
   padding: 10px;
+  min-width: 95px;
 }
 
 .VisibilitySelect--dashboardDetail {

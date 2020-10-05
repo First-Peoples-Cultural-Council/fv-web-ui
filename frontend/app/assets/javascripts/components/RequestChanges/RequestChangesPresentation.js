@@ -79,7 +79,7 @@ function RequestChangesPresentation({
           {processedMessage && <p>{processedMessage}</p>}
 
           {subTitle && (
-            <Typography variant="subtitle1" component="h2" classes={{ root: 'RequestChanges__headerText' }}>
+            <Typography variant="h6" component="h2" classes={{ root: 'RequestChanges__headerText' }}>
               {subTitle}
             </Typography>
           )}

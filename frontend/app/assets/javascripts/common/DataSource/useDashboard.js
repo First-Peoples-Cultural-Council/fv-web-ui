@@ -92,9 +92,10 @@ function useDashboard() {
       }
     }
     return _tasks.map(
-      ({ uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility, visibilityChanged }) => {
+      ({ comments, uid: id, dateCreated, requestedBy = {}, targetDoc, requestedVisibility, visibilityChanged }) => {
         const { email, firstName, lastName } = requestedBy
         return {
+          comments: comments && comments.length > 0 ? comments : undefined,
           date: formatDate(dateCreated),
           dateMDY: formatDateMDY(dateCreated),
           id,
