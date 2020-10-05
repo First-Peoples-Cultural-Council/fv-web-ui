@@ -1,4 +1,4 @@
-package ca.firstvoices.data.models;
+package ca.firstvoices.core.io.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;

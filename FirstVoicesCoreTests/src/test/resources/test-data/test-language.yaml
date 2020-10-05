@@ -18,29 +18,33 @@ children:
           "region": "Javaland"
           "country": "CA"
         children:
+          - type: FVDictionary
+            name: "Dictionary"
+            key: testDictionary
+            children:
+              - type: FVWord
+                name: "Word"
+                properties:
+                  part_of_speech: "noun"
+                key: testWord1
+              - type: FVWord
+                name: "Another Word"
+                properties:
+                  part_of_speech: "noun"
+              - type: FVPhrase
+                name: "A phrase in dialect 1"
           - type: FVSong
             name: "A test song"
           - type: FVSong
             name: "Another test song"
-          - type: FVPicture
-            name: "Picture!"
-            properties:
-#              description: "A picture is worth a thousand words"
-          - type: FVWord
-            name: "Word"
-            properties:
-              part_of_speech: "noun"
-            key: testWord1
-          - type: FVWord
-            name: "Another Word"
-            properties:
-              part_of_speech: "noun"
-          - type: FVPhrase
-            name: "A phrase in dialect 1"
           - type: FVLink
             name: "A test link"
             properties:
               url: https://firstvoices.io
+          - type: FVPicture
+            name: "Picture!"
+            properties:
+#           description: "A picture is worth a thousand words"
       - type: FVDialect
         name: "Test Dialect 2"
       - type: FVDialect
