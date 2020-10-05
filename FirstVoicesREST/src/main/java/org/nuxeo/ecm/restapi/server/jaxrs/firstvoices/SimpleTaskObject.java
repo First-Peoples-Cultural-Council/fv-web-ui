@@ -34,6 +34,7 @@ import org.nuxeo.ecm.automation.core.util.Paginable;
 import org.nuxeo.ecm.automation.features.PrincipalHelper;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentSecurityException;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -108,48 +109,57 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
       @QueryParam("requestedVisibility") String requestedVisibility) {
     CoreSession session = getContext().getCoreSession();
 
-    DocumentModel task = session.getDocument(new IdRef(taskId));
-    SimpleTaskAdapter taskObject = task.getAdapter(SimpleTaskAdapter.class);
+    try {
 
-    IdRef targetDoc = new IdRef(taskObject.getTargetDocId());
-    if (session.exists(targetDoc) && !session.isTrashed(targetDoc)) {
+      DocumentModel task = session.getDocument(new IdRef(taskId));
+      SimpleTaskAdapter taskObject = task.getAdapter(SimpleTaskAdapter.class);
 
-      if (requestedVisibility == null || StringUtils.isEmpty(requestedVisibility)) {
-        requestedVisibility = taskObject.getRequestedVisibility();
+      IdRef targetDoc = new IdRef(taskObject.getTargetDocId());
+      if (session.exists(targetDoc) && !session.isTrashed(targetDoc)) {
+
+        if (requestedVisibility == null || StringUtils.isEmpty(requestedVisibility)) {
+          requestedVisibility = taskObject.getRequestedVisibility();
+        }
+
+        // Validate visibility
+        if (!updateVisibilityService.isValidVisibility(requestedVisibility)) {
+          return Response.status(Status.BAD_REQUEST)
+              .entity("Requested visibility " + requestedVisibility + " is not a valid option.")
+              .build();
+        }
+
+        // Optional data
+        HashMap<String, Object> data = new HashMap<>();
+        String approvedCommentText = "Approved with no change.";
+
+        if (!taskObject.getRequestedVisibility().equals(requestedVisibility)) {
+          approvedCommentText = "Approved with a visibility change from '"
+              + taskObject.getRequestedVisibility() + "' to '" + requestedVisibility + "'";
+        }
+        data.put(GraphNode.NODE_VARIABLE_COMMENT, approvedCommentText);
+
+        // Update visibility (if necessary)
+        updateVisibilityService
+            .updateVisibility(session.getDocument(targetDoc), requestedVisibility);
+
+        Task coreTask = taskService.getTask(session, taskId);
+
+        if (taskService.canEndTask(session.getPrincipal(), coreTask)) {
+          taskService
+              .endTask(session, session.getPrincipal(), coreTask, approvedCommentText,
+                  TaskEventNames.WORKFLOW_TASK_COMPLETED, true);
+        } else {
+          throw new DocumentSecurityException();
+        }
+      } else {
+        // Document has been removed or trashed
+        // Should be handled by reject as a manual operation by the user
+        return Response.status(Status.GONE).build();
       }
-
-      // Validate visibility
-      if (!updateVisibilityService.isValidVisibility(requestedVisibility)) {
-        return Response.status(Status.BAD_REQUEST)
-            .entity("Requested visibility " + requestedVisibility + " is not a valid option.")
-            .build();
-      }
-
-      // Optional data
-      HashMap<String, Object> data = new HashMap<>();
-      String approvedCommentText = "Approved with no change.";
-
-      if (!taskObject.getRequestedVisibility().equals(requestedVisibility)) {
-        approvedCommentText = "Approved with a visibility change from '"
-            + taskObject.getRequestedVisibility() + "' to '" + requestedVisibility + "'";
-      }
-      data.put(GraphNode.NODE_VARIABLE_COMMENT, approvedCommentText);
-
-      // Update visibility (if necessary)
-      updateVisibilityService
-          .updateVisibility(session.getDocument(targetDoc), requestedVisibility);
-
-      Task coreTask = taskService.getTask(session, taskId);
-
-      if (taskService.canEndTask(session.getPrincipal(), coreTask)) {
-        taskService
-            .endTask(session, session.getPrincipal(), coreTask, approvedCommentText,
-                TaskEventNames.WORKFLOW_TASK_COMPLETED, true);
-      }
-    } else {
-      // Document has been removed or trashed
-      // Should be handled by reject as a manual operation by the user
-      return Response.status(Status.GONE).build();
+    } catch (DocumentSecurityException exception) {
+      return Response.status(Status.FORBIDDEN)
+          .entity("You do not have permission to approve this task.")
+          .build();
     }
 
     return Response.ok("Task approved.").status(Status.OK).build();
@@ -167,45 +177,53 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
 
     JsonNode json = new ObjectMapper().readTree(approvalProperties);
 
-    // Get task
-    CoreSession session = getContext().getCoreSession();
-    DocumentModel task = session.getDocument(new IdRef(taskId));
+    try {
 
-    // Get comment
-    String comment = json.has(commentFieldName) ? json.get(commentFieldName).textValue() : null;
+      // Get task
+      CoreSession session = getContext().getCoreSession();
+      DocumentModel task = session.getDocument(new IdRef(taskId));
 
-    // Approved visibility property
-    if (json.has(approvedVisibilityFieldName)) {
-      String approvedVisibility = json.get(approvedVisibilityFieldName).textValue();
+      // Get comment
+      String comment = json.has(commentFieldName) ? json.get(commentFieldName).textValue() : null;
 
-      // Validate visibility
-      if (!updateVisibilityService.isValidVisibility(approvedVisibility)) {
-        return Response.status(Status.BAD_REQUEST)
-            .entity("Requested visibility state is not a valid option.")
-            .build();
+      // Approved visibility property
+      if (json.has(approvedVisibilityFieldName)) {
+        String approvedVisibility = json.get(approvedVisibilityFieldName).textValue();
+
+        // Validate visibility
+        if (!updateVisibilityService.isValidVisibility(approvedVisibility)) {
+          return Response.status(Status.BAD_REQUEST)
+              .entity("Requested visibility state is not a valid option.")
+              .build();
+        }
+
+        task.setPropertyValue("nt:directive", approvedVisibility);
+        session.saveDocument(task);
       }
 
-      task.setPropertyValue("nt:directive", approvedVisibility);
-      session.saveDocument(task);
+      // Delegate task to recorder
+      SimpleTaskAdapter taskObject = task.getAdapter(SimpleTaskAdapter.class);
+      IdRef targetDoc = new IdRef(taskObject.getTargetDocId());
+
+      if (!session.exists(targetDoc) || session.isTrashed(targetDoc)) {
+        return Response.status(Status.GONE).build();
+      }
+
+      DocumentModel doc = session.getDocument(targetDoc);
+      Set<String> recorders = getActors(doc, CustomSecurityConstants.RECORD);
+
+      // Delegate task
+      // A notification will be sent, configured in FVCoreIO -> notifications
+      taskService.delegateTask(getContext().getCoreSession(), taskId,
+          new ArrayList<>(recorders), comment);
+
+      session.save();
+
+    } catch (DocumentSecurityException exception) {
+      return Response.status(Status.FORBIDDEN)
+          .entity("You do not have permission to approve this task.")
+          .build();
     }
-
-    // Delegate task to recorder
-    SimpleTaskAdapter taskObject = task.getAdapter(SimpleTaskAdapter.class);
-    IdRef targetDoc = new IdRef(taskObject.getTargetDocId());
-
-    if (!session.exists(targetDoc) || session.isTrashed(targetDoc)) {
-      return Response.status(Status.GONE).build();
-    }
-
-    DocumentModel doc = session.getDocument(targetDoc);
-    Set<String> recorders = getActors(doc, CustomSecurityConstants.RECORD);
-
-    // Delegate task
-    // A notification will be sent, configured in FVCoreIO -> notifications
-    taskService.delegateTask(getContext().getCoreSession(), taskId,
-        new ArrayList<>(recorders), comment);
-
-    session.save();
 
     return Response.ok().status(Status.OK).build();
   }
@@ -215,12 +233,18 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
   public Response ignore(@PathParam("taskId") String taskId) {
     CoreSession session = getContext().getCoreSession();
 
-    Task task = taskService.getTask(session, taskId);
+    try {
+      Task task = taskService.getTask(session, taskId);
 
-    if (taskService.canEndTask(session.getPrincipal(), task)) {
-      taskService
-          .endTask(session, session.getPrincipal(), task, "Task ignored.",
-              TaskEventNames.WORKFLOW_TASK_REJECTED, false);
+      if (taskService.canEndTask(session.getPrincipal(), task)) {
+        taskService
+            .endTask(session, session.getPrincipal(), task, "Task ignored.",
+                TaskEventNames.WORKFLOW_TASK_REJECTED, false);
+      }
+    } catch (DocumentSecurityException exception) {
+      return Response.status(Status.FORBIDDEN)
+          .entity("You do not have permission to ignore this task.")
+          .build();
     }
 
     return Response.ok().status(Status.OK).build();
@@ -262,7 +286,8 @@ public class SimpleTaskObject extends PaginableObject<SimpleTaskAdapter> {
     }
 
     if (!session
-        .hasPermission(session.getPrincipal(), doc.getRef(), CustomSecurityConstants.RECORD)) {
+        .hasPermission(session.getPrincipal(), doc.getRef(),
+            CustomSecurityConstants.RECORD)) {
       return Response.status(Status.FORBIDDEN)
           .entity("You do not have permission to start a task on this document.")
           .build();
