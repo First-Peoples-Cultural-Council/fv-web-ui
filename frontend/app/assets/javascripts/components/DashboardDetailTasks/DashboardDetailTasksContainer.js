@@ -86,6 +86,7 @@ function DashboardDetailTasksContainer() {
         } = selectedItemData
 
         let childrenItemDetail = null
+        const childrenDisplayButtons = true
         if (itemType === 'FVBook') {
           childrenItemDetail = (
             <DetailSongStoryPresentation
@@ -93,6 +94,7 @@ function DashboardDetailTasksContainer() {
               // pageCount={pageCount}
               audio={audio}
               book={book}
+              childrenDisplayButtons={childrenDisplayButtons}
               onEditClick={onEditClick}
               onViewClick={onViewClick}
               pictures={pictures}
@@ -106,6 +108,7 @@ function DashboardDetailTasksContainer() {
               acknowledgement={acknowledgement}
               audio={audio}
               categories={categories} // NOTE: also handles phrase books
+              childrenDisplayButtons={childrenDisplayButtons}
               culturalNotes={culturalNotes}
               definitions={definitions}
               title={itemTitle}

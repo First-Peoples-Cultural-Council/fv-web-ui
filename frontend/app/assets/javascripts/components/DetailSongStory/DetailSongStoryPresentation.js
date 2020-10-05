@@ -22,6 +22,7 @@ import FVButton from 'views/components/FVButton'
 function DetailSongStoryPresentation({
   audio,
   book,
+  childrenDisplayButtons,
   onViewClick,
   onEditClick,
   pictures,
@@ -38,7 +39,7 @@ function DetailSongStoryPresentation({
     const bookType = book.type
     const itemTypePlural = (bookType === 'song') ? 'songs' : 'stories'
     return (
-      <div>
+      <div className = "DetailSongStory__ViewEditButtons">
         <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(book.uid, itemTypePlural)}>
           {'Edit'}
         </FVButton>
@@ -89,7 +90,7 @@ function DetailSongStoryPresentation({
         </Grid>
       </Grid>
       <div className="text-right">
-        {_getButtons()}
+        {childrenDisplayButtons && _getButtons()}
       </div>
     </div>
   )
@@ -136,9 +137,10 @@ function _getIntroductionTranslation(introductionTranslation) {
 
 
 // PROPTYPES
-const { array, string, object, number } = PropTypes
+const { array, string, object, number, boolean } = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
+  childrenDisplayButtons: boolean,
   defaultLanguage: string,
   intl: object,
   pageCount: number,

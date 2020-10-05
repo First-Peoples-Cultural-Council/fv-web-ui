@@ -23,6 +23,7 @@ function DetailWordPhrasePresentation({
   acknowledgement,
   audio,
   categories,
+  childrenDisplayButtons,
   culturalNotes,
   definitions,
   dialectClassName,
@@ -358,7 +359,7 @@ function DetailWordPhrasePresentation({
     const itemTypePlural = documentType + 's'
     const uid = idSelectedItem
     return (
-      <div>
+      <div className="DetailWordPhrase__ViewEditButtons">
         <FVButton variant="contained" style={{marginRight: '10px'}} color="primary" onClick={() => onEditClick(uid, itemTypePlural)}>
           {'Edit'}
         </FVButton>
@@ -398,16 +399,17 @@ function DetailWordPhrasePresentation({
           {_getMetadata(metadata)}
         </aside>
       </div>
-      {_getButtons()}
+      {childrenDisplayButtons && _getButtons()}
     </div>
   )
 }
 // PROPTYPES
-const { array, func, object, string } = PropTypes
+const { array, func, object, string, boolean } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
   categories: array,
+  childrenDisplayButtons: boolean,
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
