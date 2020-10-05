@@ -6,6 +6,7 @@ import Preview from 'views/components/Editor/Preview'
 import FVLabel from 'views/components/FVLabel/index'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
+import FVButton from 'views/components/FVButton'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
@@ -22,12 +23,15 @@ function DetailWordPhrasePresentation({
   acknowledgement,
   audio,
   categories,
+  childrenDisplayButtons,
   culturalNotes,
   definitions,
   dialectClassName,
   docType,
   literalTranslations,
   metadata,
+  onViewClick,
+  onEditClick,
   partOfSpeech,
   photos,
   phrases,
@@ -39,6 +43,7 @@ function DetailWordPhrasePresentation({
   siteTheme,
   title,
   videos,
+  idSelectedItem,
 }) {
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
@@ -349,10 +354,29 @@ function DetailWordPhrasePresentation({
     ) : null
   }
 
+  const _getButtons = () => {
+    const documentType = (docType == 'FVWord') ? 'word' : 'phrase'
+    const itemTypePlural = documentType + 's'
+    const uid = idSelectedItem
+    return (
+      <div className="DetailWordPhrase__ViewEditButtons">
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onEditClick(uid, itemTypePlural)}>
+          {'Edit'}
+        </FVButton>
+        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onViewClick(uid, itemTypePlural)}>
+          {'View '} {documentType}
+        </FVButton>
+      </div>
+    )
+  }
+
   return (
     <div className="DialectViewWordPhrase" id="contentMain">
       <div className="DialectViewWordPhraseGroup">
         <div className="DialectViewWordPhraseContentPrimary">
+          <div className="text-right">
+            {childrenDisplayButtons && _getButtons()}
+          </div>
           <div className="DialectViewWordPhraseTitleAudio">
             <h2 className={`DialectViewWordPhraseTitle ${dialectClassName}`}>
               {title} {_getAudio(audio)}
@@ -382,11 +406,12 @@ function DetailWordPhrasePresentation({
   )
 }
 // PROPTYPES
-const { array, func, object, string } = PropTypes
+const { array, func, object, string, boolean } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
   categories: array,
+  childrenDisplayButtons: boolean,
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
