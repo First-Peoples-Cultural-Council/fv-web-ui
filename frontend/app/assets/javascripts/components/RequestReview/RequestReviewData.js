@@ -80,8 +80,10 @@ function RequestReviewData({ children, docId, docState, docType }) {
 
   const handleDialogOk = () => {
     setIsDialogOpen(false)
+    // If no change to visibility requested, set requestedVisibility to null
+    const requestedVisibility = requestVisibilityType === docVisibility ? null : requestVisibilityType
     // Send request to the server to set related task for the document
-    postRequestReview(docId, requestVisibilityType, comment)
+    postRequestReview(docId, requestedVisibility, comment)
     setSnackbarOpen(true)
     setHasRelatedTasks(true)
   }
