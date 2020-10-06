@@ -13,4 +13,37 @@ public final class StateUtils {
   public static boolean isPublished(DocumentModel doc) {
     return PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState());
   }
+
+  public static String visibilityToState(String visibility) {
+    switch (visibility) {
+      case "team":
+        return "Disabled";
+
+      case "members":
+        return "Enabled";
+
+      case "public":
+        return "Published";
+
+      default:
+        return "";
+    }
+  }
+
+  public static String stateToVisibility(String state) {
+    switch (state) {
+      case "Disabled":
+      case "New":
+        return "team";
+
+      case "Enabled":
+        return "members";
+
+      case "Published":
+        return "public";
+
+      default:
+        return "";
+    }
+  }
 }

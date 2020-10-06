@@ -1,5 +1,6 @@
-package ca.firstvoices.data.models;
+package ca.firstvoices.core.io.models;
 
+import ca.firstvoices.core.io.utils.StateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -12,7 +13,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
  * It should reference fields that are relevant to all types
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"uid", "title", "type", "isNew" })
+@JsonPropertyOrder({"uid", "title", "type", "isNew", "visibility" })
 public class SimpleCoreEntity implements Serializable {
 
   @JsonProperty("uid")
@@ -27,11 +28,15 @@ public class SimpleCoreEntity implements Serializable {
   @JsonProperty("isNew")
   private final Boolean isNew;
 
+  @JsonProperty("visibility")
+  private final String visibility;
+
   public SimpleCoreEntity(DocumentModel doc) {
     this.title = String.valueOf(doc.getPropertyValue("dc:title"));
     this.type = doc.getType();
     this.isNew = ("New".equals(doc.getCurrentLifeCycleState()));
     this.uid = doc.getId();
+    this.visibility = StateUtils.stateToVisibility(doc.getCurrentLifeCycleState());
   }
 
   public String getTitle() {
@@ -48,5 +53,9 @@ public class SimpleCoreEntity implements Serializable {
 
   public String getUid() {
     return uid;
+  }
+
+  public String getVisibility() {
+    return visibility;
   }
 }
