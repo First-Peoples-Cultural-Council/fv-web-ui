@@ -1,9 +1,9 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
 import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
-import static ca.firstvoices.visibility.Constants.MEMBERS;
-import static ca.firstvoices.visibility.Constants.PUBLIC;
-import static ca.firstvoices.visibility.Constants.TEAM;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -208,11 +208,16 @@ public class SimpleTaskObjectTest extends BaseTest {
     Optional<Task> task1 = getTasksAssignedViaGroups(la_1_user).stream().findAny();
     assertTrue(task1.isPresent());
 
+    // Get word related to task1
+    DocumentModel word1 = session
+        .getDocument(new IdRef(task1.get().getTargetDocumentsIds().get(0)));
+
     try (CloseableClientResponse response = getResponse(RequestType.GET,
         String.format("simpleTask/%s", task1.get().getId()))) {
       assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
       JsonNode jsonNode = mapper.readTree(response.getEntityInputStream());
       assertEquals(task1.get().getId(), jsonNode.get("uid").asText());
+      assertEquals(word1.getId(), jsonNode.get("targetDoc").get("uid").asText());
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -13,6 +13,4 @@ Nuxeo-component: OSGI-INF/dialect/categories/categories-operations.xml,
  OSGI-INF/dialect/assets/assets-services.xml,
  OSGI-INF/dialect/assets/assets-operations.xml,
  OSGI-INF/dialect/visibility/visibility-operations.xml,
- OSGI-INF/dialect/visibility/visibility-services.xml,
- OSGI-INF/dialect/tasks/tasks-operations.xml,
- OSGI-INF/dialect/tasks/tasks-services.xml
+ OSGI-INF/dialect/visibility/visibility-services.xml

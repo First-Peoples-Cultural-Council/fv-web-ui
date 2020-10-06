@@ -2,11 +2,7 @@
   <require>org.nuxeo.ecm.platform.audit.service.NXAuditEventsService</require>
   
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
-    
-    <listener name="restrictfvdialectpublishing" async="false" postCommit="true"
-      class="ca.firstvoices.listeners.RestrictFVDialectPublishing" priority="50">
-      <event>workflowTaskStart</event>
-    </listener>
+
     <!--
       DY: This listener is disabled since communities require the ability to add duplicates.
       Better validation needs to be developed.

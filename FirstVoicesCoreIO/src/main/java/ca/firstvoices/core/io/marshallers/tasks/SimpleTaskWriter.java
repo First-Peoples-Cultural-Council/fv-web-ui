@@ -5,8 +5,9 @@ import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 
 import ca.firstvoices.core.io.marshallers.tasks.models.SimpleTaskAdapter;
-import ca.firstvoices.data.models.SimpleCoreEntity;
-import ca.firstvoices.data.models.SimplePrincipalEntity;
+import ca.firstvoices.core.io.models.SimpleCoreEntity;
+import ca.firstvoices.core.io.models.SimplePrincipalEntity;
+import ca.firstvoices.core.io.utils.StateUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import java.io.IOException;
 import java.util.Calendar;
@@ -67,7 +68,7 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
             jg.writeStringField("requestedVisibility", requestedVisibility);
 
             boolean visibilityChanged = !targetDoc.getCurrentLifeCycleState()
-                .equals(convertToState(requestedVisibility));
+                .equals(StateUtils.visibilityToState(requestedVisibility));
             jg.writeBooleanField("visibilityChanged", visibilityChanged);
           }
         }
@@ -90,6 +91,13 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
     jg.writeEndObject();
   }
 
+  /**
+   * Will convert legacy directives (e.g. "Approval to X required") to a visibility string. Can be
+   * removed when no more old tasks exist.
+   *
+   * @param directive visibility string (new), or a sentence in the above format (legacy)
+   * @return the correct visibility string for the task
+   */
   private String convertToVisibilityString(String directive) {
     switch (directive) {
       case "Approval to Disable required":
@@ -104,22 +112,6 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
       case "Approval to Publish required":
       case "public":
         return "public";
-
-      default:
-        return "";
-    }
-  }
-
-  private String convertToState(String directive) {
-    switch (directive) {
-      case "team":
-        return "Disabled";
-
-      case "members":
-        return "Enabled";
-
-      case "public":
-        return "Published";
 
       default:
         return "";

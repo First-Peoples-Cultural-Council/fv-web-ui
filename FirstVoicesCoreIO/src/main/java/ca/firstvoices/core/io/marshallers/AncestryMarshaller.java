@@ -1,6 +1,6 @@
 package ca.firstvoices.core.io.marshallers;
 
-import ca.firstvoices.data.models.SimpleCoreEntity;
+import ca.firstvoices.core.io.models.SimpleCoreEntity;
 import com.fasterxml.jackson.core.JsonGenerator;
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,12 +18,12 @@ import org.nuxeo.ecm.core.io.registry.reflect.Setup;
 
 /**
  * This class will convert ancestry information to human readable output appended to JSON responses
- * It is currently disabled in `ca.firstvoices.io.xml` and provided as an example only
- * Enrichment of `fvancestry` is active in FirstVoicesEnrichers -> AncestryEnricher.java
+ * It is currently disabled in `ca.firstvoices.io.xml` and provided as an example only Enrichment of
+ * `fvancestry` is active in FirstVoicesEnrichers -> AncestryEnricher.java
  *
  * <p>
- * IMPORTANT! Extending this should be handled with care since it will affect the output of
- * most document types. Pay careful attention to `null` values and checking for types.
+ * IMPORTANT! Extending this should be handled with care since it will affect the output of most
+ * document types. Pay careful attention to `null` values and checking for types.
  * </p>
  *
  * <p>
