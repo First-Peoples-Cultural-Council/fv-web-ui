@@ -26,14 +26,17 @@ function DashboardDetailSidebarPresentation({ childrenHeader, childrenPagination
       <div className="DashboardDetailSidebar__listContainer">
         <ul className="DashboardDetailSidebar__list">
           {listItems.map(
-            ({ dateMDY, id, initiatorFullName, isNew, isProcessed, itemType, titleItem, titleTask }, index) => {
+            (
+              { dateMDY, id, initiatorFullName, initiatorEmail, isNew, isProcessed, itemType, titleItem, titleTask },
+              index
+            ) => {
               const variant = index % 2 ? ODD : EVEN
               return (
                 <DashboardDetailSidebarItem.Presentation
                   key={`DashboardDetailSidebar__listItem--${index}`}
                   date={dateMDY}
                   icon={<ItemIcon.Presentation itemType={itemType} isNew={isNew} />}
-                  initiator={initiatorFullName}
+                  initiator={initiatorFullName !== '' ? initiatorFullName : initiatorEmail}
                   isActive={selectedId === id}
                   isProcessed={isProcessed}
                   onClick={() => {

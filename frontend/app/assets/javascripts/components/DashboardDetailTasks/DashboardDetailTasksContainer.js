@@ -3,6 +3,7 @@ import DashboardDetail from 'components/DashboardDetail'
 import DashboardDetailSidebar from 'components/DashboardDetail/DashboardDetailSidebar'
 import DashboardDetailSelectedItem from 'components/DashboardDetail/DashboardDetailSelectedItem'
 import DashboardDetailSelectedItemTask from 'components/DashboardDetail/DashboardDetailSelectedItemTask'
+import DashboardDetailNotes from 'components/DashboardDetail/DashboardDetailNotes'
 import DashboardDetailTasksData from 'components/DashboardDetailTasks/DashboardDetailTasksData'
 import DetailSongStoryPresentation from 'components/DetailSongStory/DetailSongStoryPresentation'
 import Table from 'components/Table'
@@ -52,6 +53,7 @@ function DashboardDetailTasksContainer() {
       }) => {
         const { page, pageSize, count } = pagination
         const {
+          comments: taskComments,
           dateMDY: taskDate,
           id: taskId,
           isNew: taskIsNew,
@@ -165,6 +167,7 @@ function DashboardDetailTasksContainer() {
                     icon={<ItemIcon.Presentation itemType={taskItemType} isNew={taskIsNew} />}
                   />
                 }
+                childrenApprovalNotes={taskComments && <DashboardDetailNotes.Presentation comments={taskComments} />}
                 childrenItemDetail={childrenItemDetail}
                 childrenTaskApproval={
                   <RequestChanges.Container
@@ -174,7 +177,6 @@ function DashboardDetailTasksContainer() {
                     key={itemId}
                     processedMessage={itemProcessedMessage}
                     processedWasSuccessful={itemProcessedWasSuccessful}
-                    requestChangesText="Reject"
                     requestedVisibility={requestedVisibility}
                     selectLabelText={requestChangesSelectLabelText}
                     subTitle={requestChangesSubTitle}

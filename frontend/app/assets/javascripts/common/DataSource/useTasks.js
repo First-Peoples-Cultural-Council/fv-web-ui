@@ -13,6 +13,9 @@ import {
   rejectRegistration as _rejectRegistration,
   rejectTask as _rejectTask,
   setProcessedTask as _setProcessedTask,
+  simpleTaskApprove as _simpleTaskApprove,
+  simpleTaskRequestChanges as _simpleTaskRequestChanges,
+  simpleTaskIgnore as _simpleTaskIgnore,
 } from 'providers/redux/reducers/tasks'
 
 function useTasks() {
@@ -69,9 +72,28 @@ function useTasks() {
       return dispatch(dispatchObj)
     },
     processedTasks: useSelector((state) => state.tasks.processedTasks),
-    setProcessedTask: ({ id, message, isSuccess }) => {
-      dispatch(_setProcessedTask({ id, message, isSuccess }))
+    setProcessedTask: ({ idTask, idItem, message, isSuccess }) => {
+      dispatch(
+        _setProcessedTask({
+          idTask,
+          idItem,
+          message,
+          isSuccess,
+        })
+      )
     },
+    simpleTaskApprove: ({ idTask, idItem, visibility } = {}) => {
+      dispatch(_simpleTaskApprove({ idTask, idItem, visibility }))
+    },
+    computeSimpleTaskApprove: useSelector((state) => state.tasks.computeSimpleTaskApprove),
+    simpleTaskRequestChanges: ({ idTask, idItem, visibility, comment } = {}) => {
+      dispatch(_simpleTaskRequestChanges({ idTask, idItem, visibility, comment }))
+    },
+    computeSimpleTaskRequestChanges: useSelector((state) => state.tasks.computeSimpleTaskRequestChanges),
+    simpleTaskIgnore: ({ idTask, idItem } = {}) => {
+      dispatch(_simpleTaskIgnore({ idTask, idItem }))
+    },
+    computeSimpleTaskIgnore: useSelector((state) => state.tasks.computeSimpleTaskIgnore),
   }
 }
 export default useTasks

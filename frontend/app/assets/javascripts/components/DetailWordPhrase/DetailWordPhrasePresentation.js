@@ -355,15 +355,25 @@ function DetailWordPhrasePresentation({
   }
 
   const _getButtons = () => {
-    const documentType = (docType == 'FVWord') ? 'word' : 'phrase'
+    const documentType = docType == 'FVWord' ? 'word' : 'phrase'
     const itemTypePlural = documentType + 's'
     const uid = idSelectedItem
     return (
       <div className="DetailWordPhrase__ViewEditButtons">
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onEditClick(uid, itemTypePlural)}>
+        <FVButton
+          variant="contained"
+          style={{ marginRight: '10px' }}
+          color="secondary"
+          onClick={() => onEditClick(uid, itemTypePlural)}
+        >
           {'Edit'}
         </FVButton>
-        <FVButton variant="contained" style={{marginRight: '10px'}} color="secondary" onClick={() => onViewClick(uid, itemTypePlural)}>
+        <FVButton
+          variant="contained"
+          style={{ marginRight: '10px' }}
+          color="secondary"
+          onClick={() => onViewClick(uid, itemTypePlural)}
+        >
           {'View '} {documentType}
         </FVButton>
       </div>
@@ -374,9 +384,7 @@ function DetailWordPhrasePresentation({
     <div className="DialectViewWordPhrase" id="contentMain">
       <div className="DialectViewWordPhraseGroup">
         <div className="DialectViewWordPhraseContentPrimary">
-          <div className="text-right">
-            {childrenDisplayButtons && _getButtons()}
-          </div>
+          <div className="text-right">{childrenDisplayButtons && _getButtons()}</div>
           <div className="DialectViewWordPhraseTitleAudio">
             <h2 className={`DialectViewWordPhraseTitle ${dialectClassName}`}>
               {title} {_getAudio(audio)}

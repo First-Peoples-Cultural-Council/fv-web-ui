@@ -86,29 +86,6 @@
         <schema name="fvmedia" prefix="fvm" override="true" src="data/schemas/fvmedia.xsd"/>
         <schema name="fvprivate" prefix="fvp" override="true" src="data/schemas/fvprivate.xsd"/>
         <schema name="first_as" prefix="first_as" override="true" src="data/schemas/first_as.xsd"/>
-        <schema name="var_Task2979" prefix="var_Task2979" override="true" src="data/schemas/var_Task2979.xsd"/>
-        <schema name="var_Task297a" prefix="var_Task297a" override="true" src="data/schemas/var_Task297a.xsd"/>
-        <schema name="var_Task297b" prefix="var_Task297b" override="true" src="data/schemas/var_Task297b.xsd"/>
-        <schema name="var_Task297c" prefix="var_Task297c" override="true" src="data/schemas/var_Task297c.xsd"/>
-        <schema name="var_FVDisableLanguageAsset" prefix="var_FVDisableLanguageAsset" override="true"
-                src="data/schemas/var_FVDisableLanguageAsset.xsd"/>
-        <schema name="var_Task1164" prefix="var_Task1164" override="true" src="data/schemas/var_Task1164.xsd"/>
-        <schema name="var_Task2274" prefix="var_Task2274" override="true" src="data/schemas/var_Task2274.xsd"/>
-        <schema name="var_Task2300" prefix="var_Task2300" override="true" src="data/schemas/var_Task2300.xsd"/>
-        <schema name="var_Task2537" prefix="var_Task2537" override="true" src="data/schemas/var_Task2537.xsd"/>
-        <schema name="var_FVEnableLanguageAsset" prefix="var_FVEnableLanguageAsset" override="true"
-                src="data/schemas/var_FVEnableLanguageAsset.xsd"/>
-        <schema name="var_Task6b6" prefix="var_Task6b6" override="true" src="data/schemas/var_Task6b6.xsd"/>
-        <schema name="var_Task6b7" prefix="var_Task6b7" override="true" src="data/schemas/var_Task6b7.xsd"/>
-        <schema name="var_Task6b8" prefix="var_Task6b8" override="true" src="data/schemas/var_Task6b8.xsd"/>
-        <schema name="var_Task6b9" prefix="var_Task6b9" override="true" src="data/schemas/var_Task6b9.xsd"/>
-        <schema name="var_FVPublishLanguageAsset" prefix="var_FVPublishLanguageAsset" override="true"
-                src="data/schemas/var_FVPublishLanguageAsset.xsd"/>
-        <schema name="var_Task11af" prefix="var_Task11af" override="true" src="data/schemas/var_Task11af.xsd"/>
-        <schema name="var_Task11b0" prefix="var_Task11b0" override="true" src="data/schemas/var_Task11b0.xsd"/>
-        <schema name="var_Task11b1" prefix="var_Task11b1" override="true" src="data/schemas/var_Task11b1.xsd"/>
-        <schema name="var_Task11b2" prefix="var_Task11b2" override="true" src="data/schemas/var_Task11b2.xsd"/>
-        <schema name="var_FVUnpublishLanguageAsset" prefix="var_FVUnpublishLanguageAsset" override="true" src="data/schemas/var_FVUnpublishLanguageAsset.xsd"/>
         <schema name="fv_label_vocabulary" prefix="fv_label_vocabulary" override="true" src="data/schemas/fv_label_vocabulary.xsd"/>
         <schema name="parent_languages" prefix="parent_languages" override="false" src="data/schemas/parent_languages.xsd"/>
         <schema name="confusable_characters" prefix="confusable_characters" override="false" src="data/schemas/confusable_characters.xsd"/>
@@ -767,66 +744,6 @@
                 <type>FVLabelCategory</type>
             </subtypes>
         </doctype>
-        <facet name="facet-var_Task2979">
-            <schema name="var_Task2979"/>
-        </facet>
-        <facet name="facet-var_Task297a">
-            <schema name="var_Task297a"/>
-        </facet>
-        <facet name="facet-var_Task297b">
-            <schema name="var_Task297b"/>
-        </facet>
-        <facet name="facet-var_Task297c">
-            <schema name="var_Task297c"/>
-        </facet>
-        <facet name="facet-var_FVDisableLanguageAsset">
-            <schema name="var_FVDisableLanguageAsset"/>
-        </facet>
-        <facet name="facet-var_Task1164">
-            <schema name="var_Task1164"/>
-        </facet>
-        <facet name="facet-var_Task2274">
-            <schema name="var_Task2274"/>
-        </facet>
-        <facet name="facet-var_Task2300">
-            <schema name="var_Task2300"/>
-        </facet>
-        <facet name="facet-var_Task2537">
-            <schema name="var_Task2537"/>
-        </facet>
-        <facet name="facet-var_FVEnableLanguageAsset">
-            <schema name="var_FVEnableLanguageAsset"/>
-        </facet>
-        <facet name="facet-var_Task6b6">
-            <schema name="var_Task6b6"/>
-        </facet>
-        <facet name="facet-var_Task6b7">
-            <schema name="var_Task6b7"/>
-        </facet>
-        <facet name="facet-var_Task6b8">
-            <schema name="var_Task6b8"/>
-        </facet>
-        <facet name="facet-var_Task6b9">
-            <schema name="var_Task6b9"/>
-        </facet>
-        <facet name="facet-var_FVPublishLanguageAsset">
-            <schema name="var_FVPublishLanguageAsset"/>
-        </facet>
-        <facet name="facet-var_Task11af">
-            <schema name="var_Task11af"/>
-        </facet>
-        <facet name="facet-var_Task11b0">
-            <schema name="var_Task11b0"/>
-        </facet>
-        <facet name="facet-var_Task11b1">
-            <schema name="var_Task11b1"/>
-        </facet>
-        <facet name="facet-var_Task11b2">
-            <schema name="var_Task11b2"/>
-        </facet>
-        <facet name="facet-var_FVUnpublishLanguageAsset">
-            <schema name="var_FVUnpublishLanguageAsset"/>
-        </facet>
     </extension>
     <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
         <type id="Folder">
@@ -834,7 +751,7 @@
             <category>Collaborative</category>
             <icon>/img/folder_orange.png</icon>
             <bigIcon>/img/folder_orange_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Folder-create</layout>
@@ -855,7 +772,7 @@
         <type id="Domain">
             <label>Domain</label>
             <category>SuperDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Domain-create</layout>
@@ -899,7 +816,7 @@
         <type id="FVAudio">
             <label>Audio</label>
             <category>SimpleDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -914,7 +831,7 @@
         <type id="FVBook">
             <label>Book</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBook-create</layout>
@@ -935,7 +852,7 @@
         <type id="FVBookEntry">
             <label>BookEntry</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBookEntry-create</layout>
@@ -950,7 +867,7 @@
         <type id="FVBooks">
             <label>Books</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBooks-create</layout>
@@ -971,7 +888,7 @@
         <type id="FVCategories">
             <label>Categories</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategories-create</layout>
@@ -992,7 +909,7 @@
         <type id="FVCategory">
             <label>Category</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategory-create</layout>
@@ -1013,7 +930,7 @@
         <type id="FVLabelCategory">
             <label>Label Category</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategory-create</layout>
@@ -1034,7 +951,7 @@
         <type id="FVCharacter">
             <label>Character</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCharacter-create</layout>
@@ -1049,7 +966,7 @@
         <type id="FVContributor">
             <label>Contributor</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVContributor-create</layout>
@@ -1066,7 +983,7 @@
             <category>LanguageAssets</category>
             <icon>/img/folder_violet.png</icon>
             <bigIcon>/img/folder_violet_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVContributors-create</layout>
@@ -1108,7 +1025,7 @@
         <type id="FVDraftFolder">
             <label>Draft Documents</label>
             <icon>/img/folder_red.png</icon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVDraftFolder-create</layout>
@@ -1190,7 +1107,7 @@
             <category>LanguageAssets</category>
             <icon>/img/folder_green.png</icon>
             <bigIcon>/img/folder_green_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLanguageFamily-create</layout>
@@ -1211,7 +1128,7 @@
         <type id="FVLink">
             <label>Link</label>
             <category>SimpleDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLink-create</layout>
@@ -1226,7 +1143,7 @@
         <type id="FVLinks">
             <label>Links</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLinks-create</layout>
@@ -1249,7 +1166,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@File-create</layout>
@@ -1279,7 +1196,7 @@
         <type id="FVPhrase">
             <label>Phrase</label>
             <category>SimpleDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVPhrase-create</layout>
@@ -1298,7 +1215,7 @@
         <type id="FVPicture">
             <label>Picture</label>
             <category>SimpleDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -1315,7 +1232,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVWord-create</layout>
@@ -1335,7 +1252,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVPlaceName-create</layout>
@@ -1404,7 +1321,7 @@
         <type id="FVSong">
             <label>Song</label>
             <category>LanguageAssets</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVSong-create</layout>
@@ -1420,7 +1337,7 @@
         <type id="FVVideo">
             <label>Video</label>
             <category>SimpleDocument</category>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -1448,7 +1365,7 @@
         </type>
         <type id="INDemonstrative">
             <label>Demonstrative</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1468,7 +1385,7 @@
         </type>
         <type id="INDialect">
             <label>Inuktut</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@INDialect-create</layout>
@@ -1488,7 +1405,7 @@
         </type>
         <type id="INDictionary">
             <label>Inuktut Dictionary</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@INDictionary-create</layout>
@@ -1508,7 +1425,7 @@
         </type>
         <type id="INInfix">
             <label>Infix</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1528,7 +1445,7 @@
         </type>
         <type id="INNounEnding">
             <label>Noun Ending</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1548,7 +1465,7 @@
         </type>
         <type id="INPersonalPronounce">
             <label>Personal Pronounce</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1568,7 +1485,7 @@
         </type>
         <type id="INPhrase">
             <label>Word or Phrase</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@INPhrase-create</layout>
@@ -1582,7 +1499,7 @@
         </type>
         <type id="INPlaceLocation">
             <label>PlaceLocation</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1602,7 +1519,7 @@
         </type>
         <type id="INRoot">
             <label>Root</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1622,7 +1539,7 @@
         </type>
         <type id="INVerbEnding">
             <label>Verb Ending</label>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>inmorpheme@create</layout>
@@ -1646,7 +1563,7 @@
             <category>Collaborative</category>
             <icon>/img/folder_green.png</icon>
             <bigIcon>/img/folder_green_100.png</bigIcon>
-            <description></description>
+            
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Workspace-create</layout>
@@ -22534,94 +22451,6 @@
                 </properties>
             </widget>
         </layout>
-        <layout name="Task297b@taskLayout">
-            <templates>
-                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
-            </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>comment</widget>
-                </row>
-            </rows>
-            <widget name="comment" type="textarea">
-                <labels>
-                    <label mode="any">Comment</label>
-                </labels>
-                <translated>false</translated>
-                <fields>
-                    <field>['comment']</field>
-                </fields>
-            </widget>
-        </layout>
-        <layout name="Task2300@taskLayout">
-            <templates>
-                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
-            </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>comment</widget>
-                </row>
-            </rows>
-            <widget name="comment" type="textarea">
-                <labels>
-                    <label mode="any">Comment</label>
-                </labels>
-                <translated>false</translated>
-                <fields>
-                    <field>['comment']</field>
-                </fields>
-            </widget>
-        </layout>
-        <layout name="Task6b8@taskLayout">
-            <templates>
-                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
-            </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>comment</widget>
-                </row>
-            </rows>
-            <widget name="comment" type="textarea">
-                <labels>
-                    <label mode="any">Comment</label>
-                </labels>
-                <translated>false</translated>
-                <fields>
-                    <field>['comment']</field>
-                </fields>
-            </widget>
-        </layout>
-        <layout name="Task11b1@taskLayout">
-            <templates>
-                <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
-            </templates>
-            <rows>
-                <row>
-                    <properties mode="any">
-                        <property name="nxl_colspan_0">1</property>
-                    </properties>
-                    <widget>comment</widget>
-                </row>
-            </rows>
-            <widget name="comment" type="textarea">
-                <labels>
-                    <label mode="any">Comment</label>
-                </labels>
-                <translated>false</translated>
-                <fields>
-                    <field>['comment']</field>
-                </fields>
-            </widget>
-        </layout>
         <layout name="layout@FVLabel-create">
             <templates>
                 <template mode="any">/layouts/First-Voices_layout_template.xhtml</template>
@@ -23570,9 +23399,6 @@
 
         </contentView>
     </extension>
-    <extension target="org.nuxeo.runtime.services.resource.ResourceService" point="resources">
-        <resource name="NRD-PR-TasksInfo">data/templates/NRD-PR-TasksInfo</resource>
-    </extension>
     <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="event-handlers">
         <handler chainId="FVCreateDefaultDialectGroups">
             <event>documentCreated</event>
@@ -23646,15 +23472,11 @@
         </handler>
     </extension>
     <extension target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService" point="templates">
-        <template name="appReviewStarted" src="data/templates/appReviewStarted.ftl"/>
         <template name="defaultNotifTemplate" src="data/templates/defaultNotifTemplate.ftl"/>
         <template name="emailDocument" src="data/templates/emailDocument.ftl"/>
         <template name="modif" src="data/templates/modif.ftl"/>
         <template name="publish" src="data/templates/publish.ftl"/>
-        <template name="routingTaskAssigned" src="data/templates/routingTaskAssigned.ftl"/>
         <template name="subscriptionsUpdated" src="data/templates/subscriptionsUpdated.ftl"/>
-        <template name="workflow" src="data/templates/workflow.ftl"/>
-        <template name="workflowTaskAssigned" src="data/templates/workflowTaskAssigned.ftl"/>
     </extension>
     <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="chains">
         <chain id="EH_FVPartOfSpeechFillTitle">
@@ -23709,23 +23531,6 @@
             <operation id="Audit.LogEvent">
                 <param type="string" name="event">expr:Request to enable from @{CurrentUser.name}</param>
                 <param type="string" name="category">Automation</param>
-            </operation>
-        </chain>
-        <chain id="FVGetApproverGroups">
-            <operation id="Context.FetchDocument"/>
-            <operation id="Context.RestoreDocumentInputFromScript">
-                <param type="string" name="script">This[0]</param>
-            </operation>
-            <operation id="Context.GetUsersGroupIdsWithPermissionOnDoc">
-                <param type="string" name="permission">Approve</param>
-                <param type="string" name="variable name">groups_with_approval_for_document</param>
-                <param type="boolean" name="ignore groups">false</param>
-                <param type="boolean" name="prefix identifiers">true</param>
-                <param type="boolean" name="resolve groups">false</param>
-            </operation>
-            <operation id="Workflow.SetNodeVariable">
-                <param type="string" name="name">assignees</param>
-                <param type="object" name="value">expr:groups_with_approval_for_document</param>
             </operation>
         </chain>
         <chain id="FVPublish">
@@ -23846,7 +23651,7 @@ function run(input, params) {
             <inputType>document</inputType>
             <outputType>document</outputType>
             <category>javascript</category>
-            <description></description>
+            
             <script><![CDATA[function run(input, params) {
 
   /* Needs additional code to handle:
@@ -23970,7 +23775,7 @@ function run(input, params) {
             <inputType>document</inputType>
             <outputType>document</outputType>
             <category>javascript</category>
-            <description></description>
+            
             <script><![CDATA[function run(input, params) {
   /**
   Will duplicate the document property
@@ -23987,7 +23792,7 @@ function run(input, params) {
             <inputType>void</inputType>
             <outputType>void</outputType>
             <category>javascript</category>
-            <description></description>
+            
             <script><![CDATA[function run(input, params) {
   /**
   Will link phrase to morpheme
@@ -24007,7 +23812,7 @@ function run(input, params) {
             <inputType>void</inputType>
             <outputType>void</outputType>
             <category>javascript</category>
-            <description></description>
+            
             <script><![CDATA[function run(input, params) {
   /**
   Will link phrase to morpheme
@@ -24024,7 +23829,7 @@ function run(input, params) {
             <inputType>void</inputType>
             <outputType>void</outputType>
             <category>javascript</category>
-            <description></description>
+            
             <script><![CDATA[function run(input, params) {
   /**
   Will link phrase to morpheme
@@ -24111,15 +23916,6 @@ function run(input, params) {
         </factoryBinding>
     </extension>
     <extension target="org.nuxeo.ecm.directory.GenericDirectory" point="directories">
-        <directory name="WorkflowType" extends="template-vocabulary">
-            <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>on_missing_columns</createTablePolicy>
-            <table>studio_vocabulary_WorkflowType</table>
-            <dataFile>data/vocabularies/WorkflowType.csv</dataFile>
-            <cacheEntryName>vocab-WorkflowType-cache</cacheEntryName>
-            <cacheEntryWithoutReferencesName>vocab-WorkflowType-cache-without-references
-            </cacheEntryWithoutReferencesName>
-        </directory>
         <directory name="categories" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
             <createTablePolicy>on_missing_columns</createTablePolicy>
@@ -24313,16 +24109,6 @@ function run(input, params) {
         </directory>
     </extension>
     <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
-        <cache name="vocab-WorkflowType-cache">
-            <option name="maxSize">1000</option>
-            <option name="concurrencyLevel">500</option>
-            <ttl>60</ttl>
-        </cache>
-        <cache name="vocab-WorkflowType-cache-without-references">
-            <option name="maxSize">1000</option>
-            <option name="concurrencyLevel">500</option>
-            <ttl>60</ttl>
-        </cache>
         <cache name="vocab-categories-cache">
             <option name="maxSize">1000</option>
             <option name="concurrencyLevel">500</option>
@@ -24535,7 +24321,6 @@ function run(input, params) {
         </cache>
     </extension>
     <extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager" point="directories">
-        <directory name="WorkflowType" layout="vocabulary" sortField="label"/>
         <directory name="categories" layout="vocabulary-categories" sortField="label">
             <deleteConstraint class="org.nuxeo.ecm.directory.HierarchicalDirectoryDeleteConstraint">
                 <property name="targetDirectory">categories</property>
@@ -24577,12 +24362,6 @@ function run(input, params) {
         <directory name="reference" layout="vocabulary" sortField="label"/>
         <directory name="parent_languages" layout="vocabulary-parent_languages" sortField="label"/>
         <directory name="confusable_characters" layout="vocabulary-confusable_characters" sortField="ordering"/>
-    </extension>
-    <extension target="org.nuxeo.ecm.platform.routing.service" point="routeModelImporter">
-        <template-resource id="FVDisableLanguageAsset" path="data/FVDisableLanguageAsset.zip"/>
-        <template-resource id="FVEnableLanguageAsset" path="data/FVEnableLanguageAsset.zip"/>
-        <template-resource id="FVPublishLanguageAsset" path="data/FVPublishLanguageAsset.zip"/>
-        <template-resource id="FVUnpublishLanguageAsset" path="data/FVUnpublishLanguageAsset.zip"/>
     </extension>
     <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
         <filter id="filter@wf@FVDisableLanguageAsset">
@@ -24873,8 +24652,6 @@ function run(input, params) {
             <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/?/' AND ecm:isTrashed
                 =0 AND ecm:isVersion = 0
             </pattern>
-
-            <!--<sort column="dc:title" ascending="true" />-->
 
         </genericPageProvider>
 
