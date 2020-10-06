@@ -9,6 +9,15 @@ import {
   FV_SIMPLE_TASK_GET_SUCCESS,
   FV_SIMPLE_TASK_GET_ERROR,
   FV_PROCESSED_TASK,
+  FV_SIMPLE_TASKS_APPROVE_PUT_START,
+  FV_SIMPLE_TASKS_APPROVE_PUT_SUCCESS,
+  FV_SIMPLE_TASKS_APPROVE_PUT_ERROR,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_START,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+  FV_SIMPLE_TASKS_IGNORE_START,
+  FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+  FV_SIMPLE_TASKS_IGNORE_ERROR,
 } from './actionTypes'
 
 const initialState = {
@@ -75,12 +84,116 @@ export const tasksReducer = combineReducers({
         return { ...state, isFetching: false }
     }
   },
-  processedTasks(state = [], { type, id, message, isSuccess }) {
-    // Sonarcloud concession
-    if (type === FV_PROCESSED_TASK) {
-      return [...state, { id, message, isSuccess }]
+  computeSimpleTaskApprove(state, action) {
+    switch (action.type) {
+      case FV_SIMPLE_TASKS_APPROVE_PUT_START:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: undefined,
+          isFetching: true,
+          isSuccess: undefined,
+        }
+
+      case FV_SIMPLE_TASKS_APPROVE_PUT_SUCCESS:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: action.message,
+          isFetching: false,
+          isSuccess: true,
+        }
+
+      case FV_SIMPLE_TASKS_APPROVE_PUT_ERROR:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: action.message,
+          isFetching: false,
+          isSuccess: false,
+        }
+
+      default:
+        return state ? state : {}
     }
-    return state
+  },
+  computeSimpleTaskRequestChanges(state, action) {
+    switch (action.type) {
+      case FV_SIMPLE_TASKS_REQUEST_CHANGES_START:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: undefined,
+          isFetching: true,
+          isSuccess: undefined,
+        }
+
+      case FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: action.message,
+          isFetching: false,
+          isSuccess: true,
+        }
+
+      case FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          message: action.message,
+          isFetching: false,
+          isSuccess: false,
+        }
+
+      default:
+        return state ? state : {}
+    }
+  },
+  computeSimpleTaskIgnore(state, action) {
+    switch (action.type) {
+      case FV_SIMPLE_TASKS_IGNORE_START:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          isFetching: true,
+          isSuccess: undefined,
+        }
+
+      case FV_SIMPLE_TASKS_IGNORE_SUCCESS:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          isFetching: false,
+          isSuccess: true,
+        }
+
+      case FV_SIMPLE_TASKS_IGNORE_ERROR:
+        return {
+          ...state,
+          idTask: action.idTask,
+          idItem: action.idItem,
+          isFetching: false,
+          isSuccess: false,
+        }
+
+      default:
+        return state ? state : {}
+    }
+  },
+  processedTasks(state, { type, idTask, idItem, message, isSuccess }) {
+    if (type === FV_PROCESSED_TASK) {
+      return [...state, { idTask, idItem, message, isSuccess }]
+    }
+    return state ? state : []
   },
   computeTasks: computeTasksOperation.computeTasks,
   computeUserTasks: computeUserTasksOperation.computeUserTasks,

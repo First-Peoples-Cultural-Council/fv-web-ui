@@ -2,11 +2,17 @@ import React from 'react'
 import '!style-loader!css-loader!./RequestChanges.css'
 import FVButton from 'views/components/FVButton'
 import { /*getError,*/ getErrorFeedback } from 'common/FormHelpers'
+
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import FVLabel from 'views/components/FVLabel'
+import TextField from '@material-ui/core/TextField'
+
 import VisibilitySelect from 'components/VisibilitySelect'
 import PropTypes from 'prop-types'
-import FVSnackbar from '../../views/components/FVSnackbar'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 
 /**
@@ -17,46 +23,49 @@ import Typography from '@material-ui/core/Typography'
  * @param {object} props
  *
  * @param {string} props.dialectName See: VisibilitySelectPresentation
- * @param {func} props.disableApproveButton Func called to determine & set disabled state for Approve button
- * @param {func} props.disableRequestChangesButton Func called to determine & set disabled state for Request Changes button
+ * @param {func} props.disableApproveButton Func called to determine & set disabled state for 'Approve' button
+ * @param {func} props.disableDeclineButton Func called to determine & set disabled state for 'Decline' button
+ * @param {func} props.disableRequestChangesButton Func called to determine & set disabled state for 'Request Changes' button
  * @param {any} props.docVisibility See: VisibilitySelectPresentation
  * @param {any} props.errors Array of form errors, refer to FormHelpers > getErrorFeedback
- * @param {any} props.formRef React ref for form
- * @param {func} props.handleApprove Func called on approve button click
- * @param {func} props.handleRequestChanges Func called on reject button click
- * @param {func} props.handleSnackbarClose See: FVSnackbar
+ * @param {any} props.formRefDrawer React ref for form in the drawer (visibility)
+ * @param {any} props.formRefModal React ref for form in modal (request changes / comment)
+ * @param {func} props.handleApprove Func called on 'approve' button click
+ * @param {func} props.handleIgnore Func called on 'decline' button click
+ * @param {func} props.handleRequestChanges Func called on 'request changes' button click
  * @param {func} props.handleVisibilityChange See: VisibilitySelectPresentation
+ * @param {bool} props.isDialogOpen Bool that toggles a dialog
  * @param {bool} props.isPublicDialect See: VisibilitySelectPresentation
  * @param {string} props.processedMessage Temporary var to hold response from server after a task has been processed. Note: the processed item disappears after refersh/pagination.
  * @param {bool} props.processedWasSuccessful Toggle related to processedMessage. When true RequestChangesPresentation only displays the message, when false the message is within the form
- * @param {string} props.requestChangesText Text for button
  * @param {string} props.selectLabelText See: VisibilitySelectPresentation
- * @param {string} props.snackbarMessage See: FVSnackbar > props.message
- * @param {bool} props.snackbarStatus See: FVSnackbar > props.open
  * @param {string} props.subTitle Text displayed in form just above VisibilitySelectPresentation
+ * @param {func} props.toggleModal Func that'll toggle the modal (ie: isDialogOpen)
  *
  * @returns {node} jsx markup
  */
 function RequestChangesPresentation({
   dialectName,
   disableApproveButton,
+  disableDeclineButton,
   disableRequestChangesButton,
   docVisibility,
   errors,
-  formRef,
+  formRefDrawer,
+  formRefModal,
   handleApprove,
+  handleIgnore,
   handleRequestChanges,
-  handleSnackbarClose,
   handleVisibilityChange,
+  isDialogOpen,
   isPublicDialect,
   processedMessage,
   processedWasSuccessful,
-  requestChangesText,
   selectLabelText,
-  snackbarMessage,
-  snackbarStatus,
   subTitle,
+  toggleModal,
 }) {
+  const classes = {}
   return (
     <>
       {processedWasSuccessful === true && (
@@ -66,11 +75,11 @@ function RequestChangesPresentation({
       )}
 
       {processedWasSuccessful !== true && (
-        <form className="RequestChanges" name="requestChanges" ref={formRef}>
+        <form className="RequestChanges" name="requestChanges" ref={formRefDrawer}>
           {processedMessage && <p>{processedMessage}</p>}
 
           {subTitle && (
-            <Typography variant="subtitle1" component="h2" classes={{ root: 'RequestChanges__headerText' }}>
+            <Typography variant="h6" component="h2" classes={{ root: 'RequestChanges__headerText' }}>
               {subTitle}
             </Typography>
           )}
@@ -80,6 +89,7 @@ function RequestChangesPresentation({
               <VisibilitySelect.Presentation
                 classes={{
                   root: 'VisibilitySelect--dashboardDetail',
+                  formControl: 'RequestChanges__visibilitySelect',
                 }}
                 dialectName={dialectName}
                 docVisibility={docVisibility}
@@ -96,70 +106,112 @@ function RequestChangesPresentation({
                 variant="contained"
                 type="submit"
                 color="primary"
-                className="FVButton RequestChanges__actionButton"
+                className="FVButton RequestChanges__actionButton RequestChanges__actionButton--approve"
                 onClick={handleApprove}
                 size="large"
               >
                 Approve
               </FVButton>
               <FVButton
-                disabled={disableRequestChangesButton()}
+                disabled={disableDeclineButton()}
                 variant="contained"
-                type="submit"
+                type="button"
                 color="primary"
                 className="FVButton RequestChanges__actionButton"
-                onClick={handleRequestChanges}
+                onClick={handleIgnore}
                 size="large"
               >
-                {requestChangesText ? requestChangesText : 'Request Changes'}
+                Ignore
+              </FVButton>
+              <FVButton
+                disabled={disableRequestChangesButton()}
+                variant="contained"
+                type="button"
+                color="primary"
+                className="FVButton RequestChanges__actionButton"
+                onClick={toggleModal}
+                size="large"
+              >
+                Request Changes
               </FVButton>
             </div>
           </div>
-          <FVSnackbar
-            open={snackbarStatus}
-            autoHideDuration={3000}
-            onClose={handleSnackbarClose}
-            message={snackbarMessage}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            action={
-              <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            }
-          />
+          <Dialog
+            fullWidth
+            maxWidth="sm"
+            open={isDialogOpen}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogTitle className={classes.dialogTitle}>Request Changes</DialogTitle>
+              <DialogContentText id="alert-dialog-description" className={classes.dialogDescription}>
+                Please provide some feedback to the member on what needs to be changed
+              </DialogContentText>
+              <form ref={formRefModal}>
+                <TextField
+                  id="comment"
+                  name="comment"
+                  label="Add comment"
+                  // className={classes.dialogTextField}
+                  multiline
+                  rowsMax={4}
+                  fullWidth
+                  variant="outlined"
+                />
+              </form>
+            </DialogContent>
+            <DialogActions>
+              <FVButton onClick={toggleModal} variant="text" color="secondary">
+                <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+              </FVButton>
+              <FVButton onClick={handleRequestChanges} variant="contained" color="primary" autoFocus>
+                <FVLabel transKey="submit" defaultStr="Submit" transform="first" />
+              </FVButton>
+            </DialogActions>
+          </Dialog>
         </form>
       )}
     </>
   )
 }
 
-const { any, string, bool, func } = PropTypes
+const { any, string, bool, func, object } = PropTypes
 RequestChangesPresentation.propTypes = {
   dialectName: string,
   disableApproveButton: func,
+  disableDeclineButton: func,
   disableRequestChangesButton: func,
   docVisibility: any,
   errors: any,
   formRef: any,
+  formRefDrawer: object,
+  formRefModal: object,
   handleApprove: func,
+  handleIgnore: func,
   handleRequestChanges: func,
-  handleSnackbarClose: func,
   handleVisibilityChange: func,
+  isDialogOpen: bool,
   isPublicDialect: bool,
   processedMessage: string,
   processedWasSuccessful: bool,
-  requestChangesText: string,
   selectLabelText: string,
-  snackbarMessage: string,
   snackbarStatus: bool,
   subTitle: string,
+  toggleModal: func,
 }
 
 RequestChangesPresentation.defaultProps = {
-  disableApproveButton: true,
-  disableRequestChangesButton: true,
+  disableApproveButton: () => {},
+  disableDeclineButton: () => {
+    return false
+  },
+  disableRequestChangesButton: () => {},
+  handleApprove: () => {},
+  handleIgnore: () => {},
+  handleRequestChanges: () => {},
   isPublicDialect: false,
-  snackbarStatus: false,
+  toggleModal: () => {},
 }
 
 export default RequestChangesPresentation

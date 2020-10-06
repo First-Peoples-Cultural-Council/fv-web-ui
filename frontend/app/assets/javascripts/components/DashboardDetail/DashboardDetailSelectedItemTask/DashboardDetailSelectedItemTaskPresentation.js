@@ -42,10 +42,10 @@ function DashboardDetailSelectedItemTaskPresentation({ date, icon, isActive, onC
     >
       {icon && <div className="DashboardDetailSelectedItemTask__icon">{icon}</div>}
       <div className="DashboardDetailSelectedItemTask__main">
-        <Typography variant="body1" component="h3">
+        <Typography variant="h5" component="h3">
           {title ? title : '···'}
         </Typography>
-        <Typography variant="caption" component="div">
+        <Typography variant="body1" component="div">
           {date ? date : '...'}
         </Typography>
       </div>

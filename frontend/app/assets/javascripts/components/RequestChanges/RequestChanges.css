@@ -5,12 +5,17 @@
 /* Element */
 .RequestChanges__actions {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 5px;
+  width: 100%;
+  flex-shrink: 2;
 }
 
 .RequestChanges .RequestChanges__actionButton {
   margin-left: 25px;
+}
+.RequestChanges .RequestChanges__actionButton--approve {
+  margin-right: auto;
 }
 
 .RequestChanges__container {
@@ -19,5 +24,18 @@
 }
 
 .RequestChanges__headerText {
-  padding: 0 10px 10px 10px;
+  padding: 0 0 10px 0;
+}
+
+.RequestChanges .Textarea__label {
+  font-weight: 100;
+}
+.RequestChanges__textArea {
+  margin-bottom: 10px;
+}
+.RequestChanges__visibility {
+  flex-shrink: 1;
+}
+.RequestChanges__visibilitySelect {
+  flex-shrink: 0;
 }
