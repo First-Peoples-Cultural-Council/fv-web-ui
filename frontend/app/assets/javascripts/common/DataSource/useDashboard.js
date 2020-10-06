@@ -48,7 +48,7 @@ function useDashboard() {
     const formatTitleTask = ({ visibility }) => {
       return StringHelpers.visibilityText({ visibility })
     }
-    const formatTitleTaskDetail = ({ firstName, lastName, type }) => {
+    const formatTitleTaskDetail = ({ firstName, lastName, type, email }) => {
       let item
       switch (type) {
         case 'FVWord':
@@ -63,7 +63,8 @@ function useDashboard() {
         default:
           item = 'A'
       }
-      return `${item} review requested by ${firstName} ${lastName}`
+      const fullName = formatInitatorFullName({ firstName, lastName })
+      return `${item} review requested by ${fullName !== '' ? fullName : email}`
     }
     const formatTitleItem = (title = '-') => title
 
@@ -118,6 +119,7 @@ function useDashboard() {
             type: targetDoc.type,
             firstName: requestedBy.firstName,
             lastName: requestedBy.lastName,
+            email: requestedBy.email,
           }),
           titleTask: formatTitleTask({ visibility: requestedVisibility }),
           visibilityChanged,

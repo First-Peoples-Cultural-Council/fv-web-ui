@@ -269,6 +269,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const onRowClick = (event, { id }) => {
     onOpen(id)
   }
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const columns = [
     {
       title: '',
@@ -359,7 +360,6 @@ function DashboardDetailTasksData({ children, columnRender }) {
         initiatorFullName && visibilityChanged ? `${initiatorFullName} requested a change to:` : undefined,
     }
   }
-  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: columns,
     // data: userId === 'Guest' ? [] : remoteData,
