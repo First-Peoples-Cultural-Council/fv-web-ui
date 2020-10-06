@@ -97,7 +97,7 @@ export const getSimpleTask = (uid) => {
   }
 }
 
-export const postRequestReview = (docId, requestedVisibility, comment) => {
+export const postRequestReview = ({ docId, requestedVisibility, comment }) => {
   return (dispatch) => {
     dispatch({
       type: FV_REQUEST_REVIEW_POST_START,
