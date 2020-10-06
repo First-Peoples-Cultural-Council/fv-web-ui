@@ -14,6 +14,15 @@ import {
   FV_REQUEST_REVIEW_POST_SUCCESS,
   FV_REQUEST_REVIEW_POST_ERROR,
   FV_PROCESSED_TASK,
+  FV_SIMPLE_TASKS_APPROVE_PUT_START,
+  FV_SIMPLE_TASKS_APPROVE_PUT_SUCCESS,
+  FV_SIMPLE_TASKS_APPROVE_PUT_ERROR,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_START,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS,
+  FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+  FV_SIMPLE_TASKS_IGNORE_START,
+  FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+  FV_SIMPLE_TASKS_IGNORE_ERROR,
 } from './actionTypes'
 
 export const approveTask = execute('FV_USER_TASKS_APPROVE', 'WorkflowTask.Complete', {
@@ -117,11 +126,136 @@ export const postRequestReview = (docId, requestedVisibility, comment) => {
   }
 }
 
-export const setProcessedTask = ({ id, message, isSuccess }) => {
+export const simpleTaskApprove = ({ idTask, idItem, visibility }) => {
+  return (dispatch) => {
+    if (!idTask || !visibility) {
+      dispatch({
+        type: FV_SIMPLE_TASKS_APPROVE_PUT_ERROR,
+        message: `Missing request parameters: idTask=${idTask}, visibility=${visibility}`,
+        idTask: undefined,
+        idItem: undefined,
+      })
+      return
+    }
+
+    dispatch({
+      type: FV_SIMPLE_TASKS_APPROVE_PUT_START,
+      idTask,
+      idItem,
+    })
+
+    return DirectoryOperations.putToAPI(
+      `${URLHelpers.getBaseURL()}api/v1/simpleTask/${idTask}/approve?requestedVisibility=${visibility}`
+    )
+      .then((response) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_APPROVE_PUT_SUCCESS,
+          idTask,
+          idItem,
+          message: response,
+        })
+        return response
+      })
+      .catch((error) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_APPROVE_PUT_ERROR,
+          message: error,
+          idTask,
+          idItem,
+        })
+        return error
+      })
+  }
+}
+
+export const simpleTaskIgnore = ({ idTask, idItem }) => {
+  return (dispatch) => {
+    if (!idTask) {
+      dispatch({
+        type: FV_SIMPLE_TASKS_IGNORE_ERROR,
+        message: `Missing request parameters: idTask=${idTask}`,
+        idTask: undefined,
+        idItem: undefined,
+      })
+      return
+    }
+
+    dispatch({
+      type: FV_SIMPLE_TASKS_IGNORE_START,
+      idTask,
+      idItem,
+    })
+
+    return DirectoryOperations.putToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${idTask}/ignore`)
+      .then((response) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_IGNORE_SUCCESS,
+          idTask,
+          idItem,
+          message: response,
+        })
+        return response
+      })
+      .catch((error) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_IGNORE_ERROR,
+          message: error,
+          idTask,
+          idItem,
+        })
+        return error
+      })
+  }
+}
+
+export const simpleTaskRequestChanges = ({ idTask, idItem, visibility, comment }) => {
+  return (dispatch) => {
+    if (!idTask) {
+      dispatch({
+        type: FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+        message: `Missing request parameter: idTask=${idTask}`,
+        idTask: undefined,
+        idItem: undefined,
+      })
+      return
+    }
+
+    dispatch({
+      type: FV_SIMPLE_TASKS_REQUEST_CHANGES_START,
+      idTask,
+      idItem,
+    })
+    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/${idTask}/requestChanges`, {
+      approvedVisibility: visibility,
+      comment,
+    })
+      .then((response) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_REQUEST_CHANGES_SUCCESS,
+          idTask,
+          idItem,
+          message: response,
+        })
+        return response
+      })
+      .catch((error) => {
+        dispatch({
+          type: FV_SIMPLE_TASKS_REQUEST_CHANGES_ERROR,
+          message: error,
+          idTask,
+          idItem,
+        })
+        return error
+      })
+  }
+}
+
+export const setProcessedTask = ({ idTask, idItem, message, isSuccess }) => {
   return (dispatch) => {
     dispatch({
       type: FV_PROCESSED_TASK,
-      id,
+      idTask,
+      idItem,
       message,
       isSuccess,
     })
