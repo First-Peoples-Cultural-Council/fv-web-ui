@@ -110,26 +110,12 @@ export const postRequestReview = (docId, requestedVisibility, comment) => {
         }) + '...',
     })
 
-    if (!requestedVisibility) {
-      return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, {
-        docId: docId,
-        comment: comment,
-      })
-        .then((response) => {
-          dispatch({ type: FV_REQUEST_REVIEW_POST_SUCCESS, document: response })
-          return response
-        })
-        .catch((error) => {
-          dispatch({ type: FV_REQUEST_REVIEW_POST_ERROR, error: error })
-          return error
-        })
+    const params = { docId, comment }
+    if (requestedVisibility) {
+      params.requestedVisibility = requestedVisibility
     }
 
-    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, {
-      docId: docId,
-      requestedVisibility: requestedVisibility,
-      comment: comment,
-    })
+    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, params)
       .then((response) => {
         dispatch({ type: FV_REQUEST_REVIEW_POST_SUCCESS, document: response })
         return response
