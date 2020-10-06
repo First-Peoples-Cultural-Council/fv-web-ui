@@ -19,7 +19,8 @@
 }
 .DashboardDetailSelectedItem__ItemDetail {
   padding: 10px;
-  background-color: #51a49a;
+  background-color: #f9f9f9;
+  border: 1px solid #f3f0f0;
 }
 .DashboardDetailSelectedItem__TaskActions {
   background-color: rgb(239, 239, 239);
