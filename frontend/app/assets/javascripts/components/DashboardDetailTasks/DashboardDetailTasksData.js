@@ -14,6 +14,7 @@ import useTheme from 'DataSource/useTheme'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentOperations from 'operations/DocumentOperations'
+import StringHelpers from 'common/StringHelpers'
 
 /**
  * @summary DashboardDetailTasksData
@@ -348,16 +349,17 @@ function DashboardDetailTasksData({ children, columnRender }) {
       processedMessage: selectn('message', isProcessed),
     }
   }
-  const setRequestChangesData = (taskData = {}) => {
-    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName } = taskData
+  const setRequestChangesData = ({ task, itemState } = {}) => {
+    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName, initiatorEmail } = task
+    const initiator = initiatorFullName !== '' ? initiatorFullName : initiatorEmail
+    const visText = StringHelpers.visibilityText({ visibility: itemState })
     return {
-      ...taskData,
+      ...task,
       requestChangesSubTitle:
         visibilityText && itemTypeForUI
-          ? `Currently the ${visibilityText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
+          ? `Currently the ${visText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
           : '',
-      requestChangesSelectLabelText:
-        initiatorFullName && visibilityChanged ? `${initiatorFullName} requested a change to:` : undefined,
+      requestChangesSelectLabelText: visibilityChanged ? `${initiator} requested a change to:` : undefined,
     }
   }
   const childrenData = {
@@ -389,7 +391,10 @@ function DashboardDetailTasksData({ children, columnRender }) {
       sortOrder: querySortOrder,
     },
     selectedItemData: setProcessedItem(selectedItemData),
-    selectedTaskData: setRequestChangesData(selectedTaskData),
+    selectedTaskData: setRequestChangesData({
+      task: selectedTaskData,
+      itemState: selectedItemData.state,
+    }),
     sortDirection: querySortOrder,
   }
   return (
