@@ -97,7 +97,7 @@ export const getSimpleTask = (uid) => {
   }
 }
 
-export const postRequestReview = (docId, requestedVisibility, comment) => {
+export const postRequestReview = ({ docId, requestedVisibility, comment }) => {
   return (dispatch) => {
     dispatch({
       type: FV_REQUEST_REVIEW_POST_START,
@@ -110,11 +110,12 @@ export const postRequestReview = (docId, requestedVisibility, comment) => {
         }) + '...',
     })
 
-    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, {
-      docId: docId,
-      requestedVisibility: requestedVisibility,
-      comment: comment,
-    })
+    const params = { docId, comment }
+    if (requestedVisibility) {
+      params.requestedVisibility = requestedVisibility
+    }
+
+    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/simpleTask/requestReview`, params)
       .then((response) => {
         dispatch({ type: FV_REQUEST_REVIEW_POST_SUCCESS, document: response })
         return response

@@ -34,7 +34,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
   const docTypeName = convertToFriendlyType(docType)
 
   // Set local state for visibility, comment, and related tasks
-  const [requestVisibilityType, setRequestVisibilityType] = useState(convertStateToVisibility(docState))
+  const [requestedVisibility, setRequestedVisibility] = useState(convertStateToVisibility(docState))
   const [hasRelatedTasks, setHasRelatedTasks] = useState(false)
   const [comment, setComment] = useState(false)
 
@@ -65,7 +65,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
   // triggered by OnChange from VisibilitySelect
   const handleVisibilityChange = (event) => {
     // Set requested visibility in local state
-    setRequestVisibilityType(event.target.value)
+    setRequestedVisibility(event.target.value)
   }
 
   const handleTextFieldChange = (event) => {
@@ -74,14 +74,17 @@ function RequestReviewData({ children, docId, docState, docType }) {
 
   const handleDialogCancel = () => {
     setIsDialogOpen(false)
-    setRequestVisibilityType(convertStateToVisibility(docState))
+    setRequestedVisibility(convertStateToVisibility(docState))
     setComment('')
   }
 
   const handleDialogOk = () => {
     setIsDialogOpen(false)
-    // Send request to the server to set related task for the document
-    postRequestReview(docId, requestVisibilityType, comment)
+    if (requestedVisibility === docVisibility) {
+      postRequestReview({ docId, comment })
+    } else {
+      postRequestReview({ docId, requestedVisibility, comment })
+    }
     setSnackbarOpen(true)
     setHasRelatedTasks(true)
   }
@@ -136,7 +139,7 @@ function RequestReviewData({ children, docId, docState, docType }) {
     handleDialogCancel,
     handleDialogOk,
     handleTextFieldChange,
-    requestVisibilityType,
+    requestVisibilityType: requestedVisibility,
     // Snackbar
     handleSnackbarClose,
     snackbarOpen,
