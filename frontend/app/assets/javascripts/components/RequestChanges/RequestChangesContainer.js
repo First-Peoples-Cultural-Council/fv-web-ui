@@ -27,6 +27,7 @@ function RequestChangesContainer({
   docState,
   processedMessage,
   processedWasSuccessful,
+  requestedVisibility,
   selectLabelText,
   subTitle,
   taskId,
@@ -42,8 +43,8 @@ function RequestChangesContainer({
         formRefDrawer,
         formRefModal,
         handleApprove,
-        handleRequestChanges,
         handleIgnore,
+        handleRequestChanges,
         handleSnackbarClose,
         handleVisibilityChange,
         isDialogOpen,
@@ -59,7 +60,7 @@ function RequestChangesContainer({
             computeEntities={computeEntities}
             disableApproveButton={disableApproveButton}
             disableRequestChangesButton={disableRequestChangesButton}
-            docVisibility={docVisibility}
+            docVisibility={requestedVisibility ? requestedVisibility : docVisibility}
             errors={errors}
             formRefDrawer={formRefDrawer}
             formRefModal={formRefModal}
@@ -93,6 +94,7 @@ RequestChangesContainer.propTypes = {
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   processedMessage: string,
   processedWasSuccessful: bool,
+  requestedVisibility: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   selectLabelText: string,
   subTitle: string,
   taskId: string,

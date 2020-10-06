@@ -123,7 +123,6 @@ function useDashboard() {
           }),
           titleTask: formatTitleTask({ visibility: requestedVisibility }),
           visibilityChanged,
-          visibilityText: StringHelpers.visibilityText({ visibility: requestedVisibility }),
           requestedVisibility,
         }
       }
