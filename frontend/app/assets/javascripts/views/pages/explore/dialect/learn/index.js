@@ -22,12 +22,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  fetchDialect2,
-  updateDialect2,
-  fetchDialectStats,
-  publishDialectOnly,
-} from 'providers/redux/reducers/fvDialect'
+import { fetchDialect2, updateDialect2, fetchDialectStats, republishDialect } from 'providers/redux/reducers/fvDialect'
 import {
   queryModifiedWords,
   queryCreatedWords,
@@ -136,7 +131,7 @@ export class DialectLearn extends Component {
     fetchPortal: func.isRequired,
     updateDialect2: func.isRequired,
     fetchDialectStats: func.isRequired,
-    publishDialectOnly: func.isRequired,
+    republishDialect: func.isRequired,
     queryModifiedWords: func.isRequired,
     queryCreatedWords: func.isRequired,
     queryCreatedPhrases: func.isRequired,
@@ -222,11 +217,18 @@ export class DialectLearn extends Component {
    * Toggle published dialect
    */
   _publishChangesAction() {
-    this.props.publishDialectOnly(
+    this.props.republishDialect(
       this.props.routeParams.dialect_path,
-      { target: this.props.routeParams.language_path.replace(WORKSPACES, SECTIONS) },
+      { value: 'Republish' },
       null,
-      'Portal published successfully!'
+      this.props.intl.trans(
+        'views.pages.explore.dialect.portal_published_successfully',
+        'Portal published successfully!',
+        'first',
+        [],
+        null,
+        '!'
+      )
     )
   }
 
@@ -890,7 +892,7 @@ const mapDispatchToProps = {
   fetchPortal,
   updateDialect2,
   fetchDialectStats,
-  publishDialectOnly,
+  republishDialect,
   queryModifiedWords,
   queryCreatedWords,
   queryCreatedPhrases,

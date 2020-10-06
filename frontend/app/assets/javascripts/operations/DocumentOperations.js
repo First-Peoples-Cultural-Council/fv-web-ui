@@ -385,29 +385,6 @@ export default class DocumentOperations {
   }
 
   /*
-   * publishDialect
-   * --------------------------------------
-   */
-  static publishDialect(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVPublishDialect')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
-
-  /*
    * publishDocument
    * --------------------------------------
    */

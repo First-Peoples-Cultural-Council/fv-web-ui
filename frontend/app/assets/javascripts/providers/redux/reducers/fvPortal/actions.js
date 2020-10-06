@@ -6,10 +6,6 @@ import { FV_FETCH_PORTALS_START, FV_FETCH_PORTALS_FETCH_SUCCESS, FV_FETCH_PORTAL
 export const updatePortal = update('FV_PORTAL', 'FVPortal', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })
-// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
-export const publishPortal = execute('FV_PORTAL_PUBLISH', 'Document.FollowLifecycleTransition', {
-  headers: { 'enrichers.document': 'ancestry,portal' },
-})
 export const unpublishPortal = execute('FV_PORTAL_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })
