@@ -220,8 +220,7 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
   public DocumentModel publishDocument(CoreSession session, DocumentModel doc,
       DocumentModel section) {
     DocumentModel proxy = session.publishDocument(doc, section, true);
-    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !PUBLISHED_STATE
-        .equals(doc.getCurrentLifeCycleState())) {
+    if (doc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
       doc.followTransition(PUBLISH_TRANSITION);
     }
     return proxy;
