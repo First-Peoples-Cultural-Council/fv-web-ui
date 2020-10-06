@@ -24,7 +24,8 @@
   <version>3.5.1-SNAPSHOT</version>
 
   <modules>
-    <module>FirstVoices-marketplace</module>
+    <module>FirstVoicesData</module>
+    <module>FirstVoicesCoreTests</module>
     <module>FirstVoicesPublisher</module>
     <module>FirstVoicesEnrichers</module>
     <module>FirstVoicesSecurity</module>
@@ -34,11 +35,10 @@
     <module>FVUserRegistration</module>
     <module>FirstVoicesMaintenance</module>
     <module>FirstVoicesMaintenanceCommon</module>
-    <module>FirstVoicesCoreTests</module>
-    <module>FirstVoicesData</module>
     <module>FirstVoicesOperations</module>
     <module>FirstVoicesCharacters</module>
     <module>FirstVoicesCoreIO</module>
+    <module>FirstVoices-marketplace</module>
   </modules>
 
   <dependencyManagement>
