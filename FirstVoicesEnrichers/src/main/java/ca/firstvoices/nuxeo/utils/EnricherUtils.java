@@ -20,6 +20,7 @@
 
 package ca.firstvoices.nuxeo.utils;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -50,6 +51,10 @@ import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.runtime.api.Framework;
 
 public class EnricherUtils {
+
+  private EnricherUtils() {
+    throw new IllegalStateException("Utility class");
+  }
 
   private static final Log log = LogFactory.getLog(EnricherUtils.class);
 
@@ -248,28 +253,29 @@ public class EnricherUtils {
   public static ArrayNode getRolesAssociatedWithDialect(DocumentModel doc, CoreSession session) {
     ArrayNode roles = mapper.createArrayNode();
 
+    DocumentModel dialect = DialectUtils.getDialect(doc);
+
     // Show has permission
-    if (session.hasPermission(doc.getRef(), "Record")) {
+    if (session.hasPermission(dialect.getRef(), "Record")) {
       roles.add("Record");
     }
 
-    if (session.hasPermission(doc.getRef(), "Approve")) {
+    if (session.hasPermission(dialect.getRef(), "Approve")) {
       roles.add("Approve");
     }
 
-    if (session.hasPermission(doc.getRef(), SecurityConstants.EVERYTHING)) {
+    if (session.hasPermission(dialect.getRef(), SecurityConstants.EVERYTHING)) {
       roles.add("Manage");
     }
 
     // Test explicitly for members
     NuxeoPrincipal principal = session.getPrincipal();
 
-    for (ACE ace : doc.getACP().getACL("local").getACEs()) {
-      if (SecurityConstants.READ.equals(ace.getPermission())) {
-        if (principal.isMemberOf(ace.getUsername())) {
-          roles.add("Member");
-          break;
-        }
+    for (ACE ace : dialect.getACP().getACL("local").getACEs()) {
+      if (SecurityConstants.READ.equals(ace.getPermission()) && principal
+          .isMemberOf(ace.getUsername())) {
+        roles.add("Member");
+        break;
       }
     }
 
@@ -291,14 +297,14 @@ public class EnricherUtils {
 
         Iterator<DocumentModel> it = session.getChildren(new IdRef(categoryID)).iterator();
 
-        String inClause = "(\"" + categoryID + "\"";
+        StringBuilder inClause = new StringBuilder().append("(\"").append(categoryID).append("\"");
 
         while (it.hasNext()) {
           DocumentModel doc = it.next();
-          inClause += ",\"" + doc.getId() + "\"";
+          inClause.append(",\"").append(doc.getId()).append("\"");
         }
 
-        inClause += ")";
+        inClause.append(")");
 
         query = query.replaceFirst(regex, categoryProperty + "/* IN " + inClause);
       }

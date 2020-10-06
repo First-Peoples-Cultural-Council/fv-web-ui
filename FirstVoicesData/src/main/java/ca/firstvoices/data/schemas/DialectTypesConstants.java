@@ -49,6 +49,7 @@ public class DialectTypesConstants {
 
   // Portal & Gallery
   public static final String FV_PORTAL = "FVPortal";
+  public static final String FV_PORTAL_NAME = "Portal";
   public static final String FV_GALLERY = "FVGallery";
 
   /**

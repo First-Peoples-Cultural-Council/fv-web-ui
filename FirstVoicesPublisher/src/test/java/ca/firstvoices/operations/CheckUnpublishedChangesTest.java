@@ -61,8 +61,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
-        + ".ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
@@ -79,7 +78,7 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
   private DocumentModel dialect;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     assertNotNull("Should have a valid session", session);
     session.removeChildren(session.getRootDocument().getRef());
     session.save();

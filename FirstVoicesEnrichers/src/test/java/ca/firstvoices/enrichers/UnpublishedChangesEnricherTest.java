@@ -63,8 +63,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
-        + ".ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
     "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml", "org.nuxeo.ecm.platform",
@@ -88,7 +87,7 @@ public class UnpublishedChangesEnricherTest extends
   }
 
   @Before
-  public void setUpTest() throws Exception {
+  public void setUpTest() {
         /*
             Ensure a session exists, remove any existing docs, and create a fresh dialect tree.
          */
