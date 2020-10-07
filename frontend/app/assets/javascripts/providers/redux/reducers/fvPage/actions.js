@@ -19,15 +19,7 @@ export const publishPage = execute('FV_PAGE_PUBLISH', 'Document.FollowLifecycleT
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })
 
-export const askToPublishPage = execute('FV_PAGE_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
-})
-
 export const unpublishPage = execute('FV_PAGE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
-})
-
-export const askToUnpublishPage = execute('FV_PAGE_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })
 
@@ -35,14 +27,6 @@ export const enablePage = execute('FV_PAGE_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })
 
-export const askToEnablePage = execute('FV_PAGE_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
-})
-
 export const disablePage = execute('FV_PAGE_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
-})
-
-export const askToDisablePage = execute('FV_PAGE_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })

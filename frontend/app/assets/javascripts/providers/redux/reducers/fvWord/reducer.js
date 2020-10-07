@@ -1,4 +1,4 @@
-import { computeFetch, computeDelete, computeOperation, computeQuery } from 'providers/redux/reducers/rest'
+import { computeFetch, computeDelete, computeQuery } from 'providers/redux/reducers/rest'
 import { combineReducers } from 'redux'
 
 import {
@@ -26,8 +26,6 @@ const initialState = {
 }
 const computeWordFetchFactory = computeFetch('word')
 const computeWordDeleteFactory = computeDelete('delete_word')
-const computeWordEnableOperationFactory = computeOperation('word_enable_workflow')
-const computeWordDisableOperationFactory = computeOperation('word_disable_workflow')
 
 const computeWordsQueryFactory = computeQuery('words')
 const computeRecentlyModifiedWordsQuery = computeQuery('modified_words')
@@ -60,8 +58,6 @@ export const fvWordReducer = combineReducers({
   computeWord: computeWordFetchFactory.computeWord,
   computeWords: computeWordsQueryFactory.computeWords,
   computeDeleteWord: computeWordDeleteFactory.computeDeleteWord,
-  computeWordEnableWorkflow: computeWordEnableOperationFactory.computeWordEnableWorkflow,
-  computeWordDisableWorkflow: computeWordDisableOperationFactory.computeWordDisableWorkflow,
   computeWordsAll(state = initialState, action) {
     switch (action.type) {
       case FV_WORD_FETCH_ALL_START:

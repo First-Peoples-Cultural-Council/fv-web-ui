@@ -47,15 +47,7 @@ export const publishLabel = execute('FV_LABEL_PUBLISH', 'Document.FollowLifecycl
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 
-export const askToPublishLabel = execute('FV_LABEL_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
 export const unpublishLabel = execute('FV_LABEL_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
-export const askToUnpublishLabel = execute('FV_LABEL_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 
@@ -63,15 +55,7 @@ export const enableLabel = execute('FV_LABEL_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 
-export const askToEnableLabel = execute('FV_LABEL_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
 export const disableLabel = execute('FV_LABEL_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
-export const askToDisableLabel = execute('FV_LABEL_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 

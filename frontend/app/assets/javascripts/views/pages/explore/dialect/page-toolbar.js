@@ -66,7 +66,6 @@ export class PageToolbar extends Component {
     handleNavigateRequest: null,
     showPublish: true,
     actions: [],
-    // actions: ['workflow', 'edit', 'add-child', 'visibility', 'publish', 'more-options'],
   }
 
   constructor(props, context) {

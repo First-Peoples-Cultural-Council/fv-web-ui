@@ -17,24 +17,12 @@ export const updateResource = update(
 export const publishResource = execute('FV_RESOURCE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
-export const askToPublishResource = execute('FV_RESOURCE_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})
 export const unpublishResource = execute('FV_RESOURCE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})
-export const askToUnpublishResource = execute('FV_RESOURCE_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
 export const enableResource = execute('FV_RESOURCE_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
-export const askToEnableResource = execute('FV_RESOURCE_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})
 export const disableResource = execute('FV_RESOURCE_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})
-export const askToDisableResource = execute('FV_RESOURCE_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })

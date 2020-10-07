@@ -1,4 +1,4 @@
-import { computeFetch, computeDelete, computeOperation, computeQuery } from 'providers/redux/reducers/rest'
+import { computeFetch, computeDelete, computeQuery } from 'providers/redux/reducers/rest'
 import { combineReducers } from 'redux'
 
 import {
@@ -28,8 +28,6 @@ const initialState = {
 }
 const computePhraseFactory = computeFetch('phrase')
 const computePhraseDeleteFactory = computeDelete('delete_phrase')
-const computePhraseEnableOperationFactory = computeOperation('phrase_enable_workflow')
-const computePhraseDisableOperationFactory = computeOperation('phrase_disable_workflow')
 
 const computePhrasesQueryFactory = computeQuery('phrases')
 const computeRecentlyModifiedPhrasesQuery = computeQuery('modified_phrases')
@@ -62,8 +60,6 @@ export const fvPhraseReducer = combineReducers({
   computePhrase: computePhraseFactory.computePhrase,
   computePhrases: computePhrasesQueryFactory.computePhrases,
   computeDeletePhrase: computePhraseDeleteFactory.computeDeletePhrase,
-  computePhraseEnableWorkflow: computePhraseEnableOperationFactory.computePhraseEnableWorkflow,
-  computePhraseDisableWorkflow: computePhraseDisableOperationFactory.computePhraseDisableWorkflow,
   computePhrasesAll(state = initialState, action) {
     switch (action.type) {
       case FV_PHRASE_FETCH_ALL_START:

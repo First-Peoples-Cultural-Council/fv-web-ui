@@ -77,15 +77,7 @@ export const publishBook = execute('FV_BOOK_PUBLISH', 'Document.FollowLifecycleT
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const askToPublishBook = execute('FV_BOOK_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
 export const unpublishBook = execute('FV_BOOK_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const askToUnpublishBook = execute('FV_BOOK_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
@@ -93,15 +85,7 @@ export const enableBook = execute('FV_BOOK_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const askToEnableBook = execute('FV_BOOK_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
 export const disableBook = execute('FV_BOOK_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const askToDisableBook = execute('FV_BOOK_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
@@ -124,15 +108,7 @@ export const publishBookEntry = execute('FV_BOOK_ENTRY_PUBLISH', 'Document.Follo
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const askToPublishBookEntry = execute('FV_BOOK_ENTRY_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
 export const unpublishBookEntry = execute('FV_BOOK_ENTRY_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const askToUnpublishBookEntry = execute('FV_BOOK_ENTRY_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
@@ -140,15 +116,7 @@ export const enableBookEntry = execute('FV_BOOK_ENTRY_ENABLE', 'FVEnableDocument
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const askToEnableBookEntry = execute('FV_BOOK_ENTRY_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
 export const disableBookEntry = execute('FV_BOOK_ENTRY_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const askToDisableBookEntry = execute('FV_BOOK_ENTRY_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 

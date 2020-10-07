@@ -69,32 +69,16 @@ export const publishPhrase = execute('FV_PHRASE_PUBLISH', 'Document.FollowLifecy
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 
-export const askToPublishPhrase = execute('FV_PHRASE_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const unpublishPhrase = execute('FV_PHRASE_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const askToUnpublishPhrase = execute('FV_PHRASE_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
 export const enablePhrase = execute('FV_PHRASE_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 
-export const askToEnablePhrase = execute('FV_PHRASE_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const disablePhrase = execute('FV_PHRASE_DISABLE', 'FVDisableDocument', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const askToDisablePhrase = execute('FV_PHRASE_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
 export const queryModifiedPhrases = query('FV_MODIFIED_PHRASES', 'FVPhrase', {

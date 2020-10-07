@@ -1,4 +1,4 @@
-import { computeFetch, computeDelete, computeOperation, computeQuery } from 'providers/redux/reducers/rest'
+import { computeFetch, computeDelete, computeQuery } from 'providers/redux/reducers/rest'
 import { combineReducers } from 'redux'
 
 import {
@@ -26,8 +26,6 @@ const initialState = {
 }
 const computeLabelFetchFactory = computeFetch('label')
 const computeLabelDeleteFactory = computeDelete('delete_label')
-const computeLabelEnableOperationFactory = computeOperation('label_enable_workflow')
-const computeLabelDisableOperationFactory = computeOperation('label_disable_workflow')
 
 const computeLabelsQueryFactory = computeQuery('labels')
 const computeRecentlyModifiedLabelsQuery = computeQuery('modified_labels')
@@ -60,8 +58,6 @@ export const fvLabelReducer = combineReducers({
   computeLabel: computeLabelFetchFactory.computeLabel,
   computeLabels: computeLabelsQueryFactory.computeLabels,
   computeDeleteLabel: computeLabelDeleteFactory.computeDeleteLabel,
-  computeLabelEnableWorkflow: computeLabelEnableOperationFactory.computeLabelEnableWorkflow,
-  computeLabelDisableWorkflow: computeLabelDisableOperationFactory.computeLabelDisableWorkflow,
   computeLabelsAll(state = initialState, action) {
     switch (action.type) {
       case FV_LABEL_FETCH_ALL_START:

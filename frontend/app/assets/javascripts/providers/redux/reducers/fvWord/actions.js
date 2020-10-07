@@ -47,15 +47,7 @@ export const publishWord = execute('FV_WORD_PUBLISH', 'Document.FollowLifecycleT
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
-export const askToPublishWord = execute('FV_WORD_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const unpublishWord = execute('FV_WORD_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
-export const askToUnpublishWord = execute('FV_WORD_UNPUBLISH_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
@@ -63,15 +55,7 @@ export const enableWord = execute('FV_WORD_ENABLE', 'FVEnableDocument', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
-export const askToEnableWord = execute('FV_WORD_ENABLE_WORKFLOW', 'Context.StartWorkflow', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const disableWord = execute('FV_WORD_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
-export const askToDisableWord = execute('FV_WORD_DISABLE_WORKFLOW', 'Context.StartWorkflow', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
