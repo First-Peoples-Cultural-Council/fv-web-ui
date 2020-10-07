@@ -152,7 +152,7 @@ export default {
   },
   formatLocalDateStringMDY: (dateString) => {
     const d = new Date(dateString)
-    const month = d.getMonth()
+    const month = d.getMonth() + 1
     const day = d.getDate()
     return `${month < 10 ? '0' : ''}${month}/${day < 10 ? '0' : ''}${day}/${d.getFullYear()}`
   },
