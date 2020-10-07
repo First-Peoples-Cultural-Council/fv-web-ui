@@ -8,6 +8,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GroupIcon from '@material-ui/icons/Group'
 import PublicIcon from '@material-ui/icons/Public'
 import StringHelpers from 'common/StringHelpers'
+import Typography from '@material-ui/core/Typography'
 
 // FPCC
 import '!style-loader!css-loader!./VisibilitySelect.css'
@@ -45,11 +46,11 @@ function VisibilitySelectPresentation({
   return (
     <div className={`VisibilitySelect ${classes.root}`}>
       {!hideLabel && (
-        <div id="select-label" className="VisibilitySelect__label">
+        <Typography id="select-label" className="VisibilitySelect__label" variant="body1" component="div">
           {selectLabelText}
-        </div>
+        </Typography>
       )}
-      <FormControl variant="outlined" size="small">
+      <FormControl variant="outlined" size="small" className={classes.formControl}>
         <Select
           className="VisibilitySelect__select"
           labelId="select-outlined-label"

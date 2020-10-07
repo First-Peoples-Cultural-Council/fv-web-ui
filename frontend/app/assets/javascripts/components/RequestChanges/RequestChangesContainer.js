@@ -15,7 +15,6 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  * @param {string} props.docState See: RequestChangesData
  * @param {string} props.processedMessage See: RequestChangesPresentation
  * @param {boolean} props.processedWasSuccessful See: RequestChangesPresentation
- * @param {string} props.requestChangesText See: RequestChangesPresentation
  * @param {string} props.selectLabelText See: RequestChangesPresentation > VisibilitySelectPresentation
  * @param {string} props.subTitle See: RequestChangesPresentation
  * @param {string} props.taskId See: RequestChangesData
@@ -28,7 +27,7 @@ function RequestChangesContainer({
   docState,
   processedMessage,
   processedWasSuccessful,
-  requestChangesText,
+  requestedVisibility,
   selectLabelText,
   subTitle,
   taskId,
@@ -41,39 +40,46 @@ function RequestChangesContainer({
         disableRequestChangesButton,
         docVisibility,
         errors,
-        formRef,
+        formRefDrawer,
+        formRefModal,
         handleApprove,
+        handleIgnore,
         handleRequestChanges,
         handleSnackbarClose,
         handleVisibilityChange,
+        isDialogOpen,
         isPublicDialect,
         onSubmit,
         snackbarMessage,
         snackbarStatus,
         submitMethod,
+        toggleModal,
       }) => {
         return (
           <RequestChangesPresentation
             computeEntities={computeEntities}
             disableApproveButton={disableApproveButton}
             disableRequestChangesButton={disableRequestChangesButton}
-            docVisibility={docVisibility}
+            docVisibility={requestedVisibility ? requestedVisibility : docVisibility}
             errors={errors}
-            formRef={formRef}
+            formRefDrawer={formRefDrawer}
+            formRefModal={formRefModal}
             handleApprove={handleApprove}
+            handleIgnore={handleIgnore}
             handleRequestChanges={handleRequestChanges}
             handleSnackbarClose={handleSnackbarClose}
             handleVisibilityChange={handleVisibilityChange}
+            isDialogOpen={isDialogOpen}
             isPublicDialect={isPublicDialect}
             onSubmit={onSubmit}
             processedMessage={processedMessage}
             processedWasSuccessful={processedWasSuccessful}
-            requestChangesText={requestChangesText}
             selectLabelText={selectLabelText}
             snackbarMessage={snackbarMessage}
             snackbarStatus={snackbarStatus}
             submitMethod={submitMethod}
             subTitle={subTitle}
+            toggleModal={toggleModal}
           />
         )
       }}
@@ -88,7 +94,7 @@ RequestChangesContainer.propTypes = {
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   processedMessage: string,
   processedWasSuccessful: bool,
-  requestChangesText: string,
+  requestedVisibility: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   selectLabelText: string,
   subTitle: string,
   taskId: string,

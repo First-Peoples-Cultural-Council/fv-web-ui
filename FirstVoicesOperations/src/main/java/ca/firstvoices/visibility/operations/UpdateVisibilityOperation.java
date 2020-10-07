@@ -1,8 +1,8 @@
 package ca.firstvoices.visibility.operations;
 
-import static ca.firstvoices.visibility.Constants.MEMBERS;
-import static ca.firstvoices.visibility.Constants.PUBLIC;
-import static ca.firstvoices.visibility.Constants.TEAM;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 
 import ca.firstvoices.visibility.services.UpdateVisibilityService;
 import org.nuxeo.ecm.automation.core.Constants;

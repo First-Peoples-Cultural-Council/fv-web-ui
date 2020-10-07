@@ -8,9 +8,9 @@ import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.visibility.Constants.MEMBERS;
-import static ca.firstvoices.visibility.Constants.PUBLIC;
-import static ca.firstvoices.visibility.Constants.TEAM;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.HashMap;

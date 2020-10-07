@@ -14,6 +14,7 @@ import useTheme from 'DataSource/useTheme'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
 import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentOperations from 'operations/DocumentOperations'
+import StringHelpers from 'common/StringHelpers'
 
 /**
  * @summary DashboardDetailTasksData
@@ -269,6 +270,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const onRowClick = (event, { id }) => {
     onOpen(id)
   }
+  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const columns = [
     {
       title: '',
@@ -311,28 +313,21 @@ function DashboardDetailTasksData({ children, columnRender }) {
   }
   const onEditClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      const path = NavigationHelpers.generateUIDEditPath(
-        'explore',
-        response,
-        itemTypePlural
-      )
+      const path = NavigationHelpers.generateUIDEditPath('explore', response, itemTypePlural)
       navigate(path)
     })
   }
   const onViewClick = (UID, itemTypePlural) => {
     DocumentOperations.getDocument(UID).then((response) => {
-      const path = NavigationHelpers.generateUIDPath(
-        'explore',
-        response,
-        itemTypePlural
-      )
+      const path = NavigationHelpers.generateUIDPath('explore', response, itemTypePlural)
       navigate(path)
     })
   }
+  // updates task data to set 'processed' related flags
   const setProcessedTasks = (taskData) => {
     return taskData.map((task) => {
       const isProcessed = processedTasks.find((processedTask) => {
-        return processedTask.id === task.targetDocumentsIds
+        return processedTask.idTask === task.id
       })
       return {
         ...task,
@@ -342,30 +337,31 @@ function DashboardDetailTasksData({ children, columnRender }) {
       }
     })
   }
-  const setProcessedItem = (taskData) => {
+  // updates selected item data to set 'processed' related flags
+  const setProcessedItem = (itemData) => {
     const isProcessed = processedTasks.find((processedTask) => {
-      return processedTask.id === taskData.id
+      return processedTask.idItem === itemData.id
     })
     return {
-      ...taskData,
+      ...itemData,
       isProcessed: isProcessed !== undefined,
       processedWasSuccessful: selectn('isSuccess', isProcessed),
       processedMessage: selectn('message', isProcessed),
     }
   }
-  const setRequestChangesData = (taskData = {}) => {
-    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName } = taskData
+  const setRequestChangesData = ({ task, itemState } = {}) => {
+    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName, initiatorEmail } = task
+    const initiator = initiatorFullName !== '' ? initiatorFullName : initiatorEmail
+    const visText = StringHelpers.visibilityText({ visibility: itemState })
     return {
-      ...taskData,
+      ...task,
       requestChangesSubTitle:
         visibilityText && itemTypeForUI
-          ? `Currently the ${visibilityText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
+          ? `Currently the ${visText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
           : '',
-      requestChangesSelectLabelText:
-        initiatorFullName && visibilityChanged ? `${initiatorFullName} requested a change to:` : undefined,
+      requestChangesSelectLabelText: visibilityChanged ? `${initiator} requested a change to:` : undefined,
     }
   }
-  const cellStyle = selectn(['widget', 'cellStyle'], theme) || {}
   const childrenData = {
     columns: columns,
     // data: userId === 'Guest' ? [] : remoteData,
@@ -395,7 +391,10 @@ function DashboardDetailTasksData({ children, columnRender }) {
       sortOrder: querySortOrder,
     },
     selectedItemData: setProcessedItem(selectedItemData),
-    selectedTaskData: setRequestChangesData(selectedTaskData),
+    selectedTaskData: setRequestChangesData({
+      task: selectedTaskData,
+      itemState: selectedItemData.state,
+    }),
     sortDirection: querySortOrder,
   }
   return (

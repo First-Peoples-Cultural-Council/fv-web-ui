@@ -7,9 +7,9 @@ import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.visibility.Constants.MEMBERS;
-import static ca.firstvoices.visibility.Constants.PUBLIC;
-import static ca.firstvoices.visibility.Constants.TEAM;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import javax.inject.Inject;
@@ -84,11 +84,15 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
     Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
   }
 
-  @Test(expected = NuxeoException.class)
+  @Test
   public void testToPublicOnUnpublishedDialect() {
-    word.followTransition(ENABLE_TRANSITION);
-    Assert.assertEquals(ENABLED_STATE, word.getCurrentLifeCycleState());
-    updateVisibilityService.updateVisibility(word, PUBLIC);
+    try {
+      word.followTransition(ENABLE_TRANSITION);
+      Assert.assertEquals(ENABLED_STATE, word.getCurrentLifeCycleState());
+      updateVisibilityService.updateVisibility(word, PUBLIC);
+    } catch (NuxeoException exception) {
+      Assert.assertNotNull(exception);
+    }
   }
 
   @Test
