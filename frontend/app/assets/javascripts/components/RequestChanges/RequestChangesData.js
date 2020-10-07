@@ -24,10 +24,11 @@ import useTasks from 'DataSource/useTasks'
  * @param {string} props.docId Used with request to change visibility.
  * @param {string} props.docState Nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'
  * @param {string} props.taskId Used when rejecting a task
+ * @param {string} props.taskInitiator Initiator full name or email. Used for feedback after an admin takes an action.
  *
  * @returns {object} Data for RequestChangesPresentation
  */
-function RequestChangesData({ children, docDialectPath, docId, docState, taskId }) {
+function RequestChangesData({ children, docDialectPath, docId, docState, taskId, taskInitiator }) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRefDrawer = useRef(null)
@@ -184,7 +185,7 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId 
         }
 
         if (isSuccess === true) {
-          _message = message || 'We shared your feedback with the member'
+          _message = message || `Changes have been requested from ${taskInitiator}`
         }
         setProcessedTask({
           idTask,
@@ -276,6 +277,10 @@ RequestChangesData.propTypes = {
   docId: string,
   docState: string,
   taskId: string,
+  taskInitiator: string,
+}
+RequestChangesData.defaultProps = {
+  taskInitiator: 'the user',
 }
 
 export default RequestChangesData
