@@ -68,6 +68,7 @@ function VisibilityMinimalPresentation({
         handleVisibilityChange={handleVisibilityChange}
         computeEntities={computeEntities}
         dialectName={dialectName}
+        selectLabelText={'Who can see this?'}
       />
 
       <Dialog

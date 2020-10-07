@@ -21,6 +21,7 @@
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
@@ -60,8 +61,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
-        + ".ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
@@ -73,17 +73,34 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
   @Inject
   private AutomationService automationService;
 
-  private DocumentModel dialectDoc;
+  private DocumentModel word;
+
+  private DocumentModel dialect;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     assertNotNull("Should have a valid session", session);
     session.removeChildren(session.getRootDocument().getRef());
     session.save();
 
-    dialectDoc = createDialectTree(session);
-    dialectDoc.followTransition(ENABLE_TRANSITION);
-    session.saveDocument(dialectDoc);
+    dialect = createDialectTree(session);
+    dialect.followTransition(ENABLE_TRANSITION);
+    session.saveDocument(dialect);
+
+    if (!PUBLISHED_STATE.equals(dialect.getCurrentLifeCycleState())) {
+      dialect.followTransition(PUBLISH_TRANSITION);
+      session.saveDocument(dialect);
+    }
+
+    // Create one word
+    word = session.createDocument(
+        session.createDocumentModel(
+            "/FV/Workspaces/Family/Language/Dialect/Dictionary",
+            "TestWord",
+            "FVWord"));
+
+    word.followTransition(ENABLE_TRANSITION);
+    session.saveDocument(word);
   }
 
   @After
@@ -99,39 +116,39 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
     /*
             Should return false as doc is not published yet.
          */
-    ctx.setInput(dialectDoc);
+    ctx.setInput(word);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
 
         /*
             Should still return false because the doc is not published.
          */
-    dialectDoc.setPropertyValue("dc:title", "WordOneTest");
-    dialectDoc = session.saveDocument(dialectDoc);
-    ctx.setInput(dialectDoc);
+    word.setPropertyValue("dc:title", "WordOneTest");
+    word = session.saveDocument(word);
+    ctx.setInput(word);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
 
         /*
             Should return false because there are no changes since the publish.
          */
-    dialectDoc.followTransition(PUBLISH_TRANSITION);
-    dialectDoc = session.saveDocument(dialectDoc);
-    ctx.setInput(dialectDoc);
+    word.followTransition(PUBLISH_TRANSITION);
+    word = session.saveDocument(word);
+    ctx.setInput(word);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
 
         /*
             Should return true because there are changes that have not been published.
          */
-    dialectDoc.setPropertyValue("dc:title", "WordOneTestTwo");
-    dialectDoc = session.saveDocument(dialectDoc);
-    ctx.setInput(dialectDoc);
+    word.setPropertyValue("dc:title", "WordOneTestTwo");
+    word = session.saveDocument(word);
+    ctx.setInput(word);
     assertTrue((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
 
         /*
             Should now return false because the changes have been published.
          */
-    dialectDoc.followTransition(REPUBLISH_TRANSITION);
-    dialectDoc = session.saveDocument(dialectDoc);
-    ctx.setInput(dialectDoc);
+    word.followTransition(REPUBLISH_TRANSITION);
+    word = session.saveDocument(word);
+    ctx.setInput(word);
     assertFalse((Boolean) automationService.run(ctx, CheckUnpublishedChanges.ID));
   }
 

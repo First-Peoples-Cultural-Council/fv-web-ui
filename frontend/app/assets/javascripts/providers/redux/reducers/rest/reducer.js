@@ -81,6 +81,7 @@ export const computeFetch = (key = defaultKey) => {
         case `${uck}_UPDATE_SUCCESS`: // NOTE: intentional fallthrough
         case `${uck}_CREATE_SUCCESS`: // NOTE: intentional fallthrough
         case `${uck}_PUBLISH_EXECUTE_SUCCESS`: // NOTE: intentional fallthrough
+        case `${uck}_REPUBLISH_EXECUTE_SUCCESS`: // NOTE: intentional fallthrough
         case `${uck}_PUBLISH_WORKFLOW_EXECUTE_SUCCESS`: // NOTE: intentional fallthrough
         case `${uck}_UNPUBLISH_EXECUTE_SUCCESS`: // NOTE: intentional fallthrough
         case `${uck}_UNPUBLISH_WORKFLOW_EXECUTE_SUCCESS`: // NOTE: intentional fallthrough

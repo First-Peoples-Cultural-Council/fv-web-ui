@@ -342,7 +342,7 @@ export default function withActions(ComposedFilter, publishWarningEnabled = fals
       const publishChangesAction = () => {
         this.props.publishAction(
           this.props.itemPath,
-          null,
+          { value: 'Republish' },
           null,
           this.props.intl.trans(
             'views.hoc.view.x_published_successfully',

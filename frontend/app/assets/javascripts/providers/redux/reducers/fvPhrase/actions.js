@@ -64,7 +64,8 @@ export const updatePhrase = update(
 
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})
 
-export const publishPhrase = execute('FV_PHRASE_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishPhrase = execute('FV_PHRASE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 

@@ -23,7 +23,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class})
-@RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.CLASS)
+@RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-language.yaml"})
 public class StateUtilsTest extends AbstractTestDataCreatorTest {
 
@@ -47,7 +47,7 @@ public class StateUtilsTest extends AbstractTestDataCreatorTest {
 
   @After
   public void tearDown() {
-    DocumentModelList docs = session.query("SELECT * FROM Document");
+    DocumentModelList docs = session.query("SELECT * FROM Document WHERE ecm:isProxy = 0 AND ecm:isVersion = 0");
 
     for (DocumentModel doc : docs) {
       if (session.exists(doc.getRef())) {

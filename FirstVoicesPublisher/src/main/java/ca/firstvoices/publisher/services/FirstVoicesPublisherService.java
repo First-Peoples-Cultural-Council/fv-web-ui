@@ -37,6 +37,14 @@ public interface FirstVoicesPublisherService {
   DocumentModel publishDialect(DocumentModel dialect);
 
   /**
+   * Publish a dialect, optionally publishing children
+   *
+   * @param dialect
+   */
+  DocumentModel publishDialect(DocumentModel dialect, boolean publishChildren);
+
+
+  /**
    * Publish or republish a portal's assets (arrays or strings)
    *
    * @param portal
@@ -79,15 +87,14 @@ public interface FirstVoicesPublisherService {
   DocumentModel publish(DocumentModel doc);
 
   /**
-   * Method to transition lifecycle states to be picked up by ProxyPublisherListener
-   * To replace scriptedOperation -> javascript.FVPublishOrRepublish in extensions.xml
-   * @param doc
-   * @return
+   * Method to queue a republish
+   * Transitions lifecycle state to Republish, to be picked up by listener
+   * @param doc document to republish
    */
-  DocumentModel queueRepublish(DocumentModel doc);
+  void queueRepublish(DocumentModel doc);
 
   /**
-   * Performs the publishing operation. Called via a listener.
+   * Performs the republishing operation. Called via a listener.
    * It is preferred to not call this directly to give documents an opportunity
    * to save properly. Call queueRepublish instead.
    * @param doc

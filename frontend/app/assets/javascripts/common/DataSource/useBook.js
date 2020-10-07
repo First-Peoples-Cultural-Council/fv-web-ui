@@ -36,8 +36,15 @@ function useBook() {
     dispatch(dispatchObj)
   }
 
-  const publishBook = (pathOrId, messageStart, messageSuccess, messageError, propertiesOverride) => {
-    const dispatchObj = _publishBook(pathOrId, messageStart, messageSuccess, messageError, propertiesOverride)
+  const publishBook = (pathOrId, operationParams, messageStart, messageSuccess, messageError, propertiesOverride) => {
+    const dispatchObj = _publishBook(
+      pathOrId,
+      operationParams,
+      messageStart,
+      messageSuccess,
+      messageError,
+      propertiesOverride
+    )
     dispatch(dispatchObj)
   }
 

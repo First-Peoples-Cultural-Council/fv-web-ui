@@ -34,6 +34,7 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PICTURE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL_NAME;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_VIDEO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
@@ -41,6 +42,7 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
 import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import java.io.Serializable;
@@ -51,6 +53,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -66,6 +70,8 @@ import org.nuxeo.runtime.api.Framework;
  * @author loopingz
  */
 public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherService {
+
+  private static final Log log = LogFactory.getLog(FirstVoicesPublisherServiceImpl.class);
 
   private static final String MEDIA_ORIGIN_FIELD = "fvmedia:origin";
 
@@ -93,6 +99,11 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
   @Override
   public DocumentModel publishDialect(DocumentModel dialect) {
+    return publishDialect(dialect, true);
+  }
+
+  @Override
+  public DocumentModel publishDialect(DocumentModel dialect, boolean publishChildren) {
     // Arguments checks : need to be a FVDialect in a normal tree
     // (LanguageFamily/Language/Dialect)
     Map<String, DocumentModel> ancestors = getAncestors(dialect);
@@ -101,46 +112,53 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     session = dialect.getCoreSession();
 
     DocumentModel section = getRootSection(dialect);
+
     // Publish grand parent
-    if (Boolean.FALSE.equals(isPublished(languageFamily, section))) {
+    if (!isPublished(languageFamily, section)) {
       session.publishDocument(languageFamily, section);
     }
-    // Publish parent
 
+    // Publish parent
     DocumentModel language = ancestors.get("Language");
     section = session.getChild(section.getRef(), languageFamily.getName());
-    if (Boolean.FALSE.equals(isPublished(language, section))) {
+    if (!isPublished(language, section)) {
       session.publishDocument(language, section);
     }
-    // Publish dialect
+
+    // Publish dialect, or republish (overwrite)
     section = session.getChild(section.getRef(), language.getName());
-    if (Boolean.FALSE.equals(isPublished(dialect, section))) {
-      session.publishDocument(dialect, section);
-    }
-    // Now publish all the children
-    section = session.getChild(section.getRef(), dialect.getName());
-    DocumentModelList children = session.getChildren(dialect.getRef());
-    for (DocumentModel child : children) {
-      if (!child.hasFacet(FacetNames.PUBLISHABLE)) {
-        continue;
+
+    DocumentModel dialectProxy = session.publishDocument(dialect, section);
+    setDialectProxies(dialectProxy);
+
+    if (publishChildren) {
+      // Now publish all the children
+      section = session.getChild(section.getRef(), dialect.getName());
+      DocumentModelList children = session.getChildren(dialect.getRef());
+      for (DocumentModel child : children) {
+        if (!child.hasFacet(FacetNames.PUBLISHABLE)) {
+          continue;
+        }
+        if (!isPublished(child, section)) {
+          session.publishDocument(child, section);
+        }
       }
-      if (Boolean.FALSE.equals(isPublished(child, section))) {
-        session.publishDocument(child, section);
+      // Need to republish all assets that were published
+      // Note: Can we avoid what could be a very long operation?
+      for (DocumentModel child : session.query(
+          "SELECT * FROM Document WHERE ecm:ancestorId = '" + dialect.getId()
+              + "' AND ecm:currentLifeCycleState='Published'")) {
+        publishAsset(child);
       }
     }
-    // Need to republish all assets that were published
-    // Note: Can we avoid what could be a very long operation?
-    for (DocumentModel child : session.query(
-        "SELECT * FROM Document WHERE ecm:ancestorId = '" + dialect.getId()
-            + "' AND ecm:currentLifeCycleState='Published'")) {
-      publishAsset(child);
-    }
+
     return section;
   }
 
-  private Boolean isPublished(DocumentModel doc, DocumentModel section) {
-    return Boolean.FALSE
-        .equals(doc.getCoreSession().getProxies(doc.getRef(), section.getRef()).isEmpty());
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+  private boolean isPublished(DocumentModel doc, DocumentModel section) {
+    DocumentModelList proxies = doc.getCoreSession().getProxies(doc.getRef(), section.getRef());
+    return proxies != null && !proxies.isEmpty();
   }
 
   private DocumentModel getRootSection(DocumentModel doc) {
@@ -202,8 +220,7 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
   public DocumentModel publishDocument(CoreSession session, DocumentModel doc,
       DocumentModel section) {
     DocumentModel proxy = session.publishDocument(doc, section, true);
-    if ("fv-lifecycle".equals(doc.getLifeCyclePolicy()) && !PUBLISHED_STATE
-        .equals(doc.getCurrentLifeCycleState())) {
+    if (doc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
       doc.followTransition(PUBLISH_TRANSITION);
     }
     return proxy;
@@ -455,17 +472,10 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
   }
 
   @Override
-  public DocumentModel queueRepublish(DocumentModel doc) {
-    // On republish juggle states from so publish listener is activated
-    if (PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())) {
+  public void queueRepublish(DocumentModel doc) {
+    if (doc.getAllowedStateTransitions().contains(REPUBLISH_TRANSITION)) {
       doc.followTransition(REPUBLISH_TRANSITION);
-      doc.followTransition(PUBLISH_TRANSITION);
-    } else {
-      // When publishing for the first time, follow formal transition
-      doc.followTransition(PUBLISH_TRANSITION);
     }
-
-    return doc;
   }
 
   @Override
@@ -474,13 +484,38 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       return null;
     }
 
+    DocumentModel publishedDoc = null;
+
     if (isAssetType(doc.getType())) {
-      return republishAsset(doc);
-    } else if (FV_PORTAL.equals(doc.getType())) {
-      return publishPortalAssets(doc);
+      publishedDoc = republishAsset(doc);
+    } else if (FV_DIALECT.equals(doc.getType())) {
+      // Set session
+      session = doc.getCoreSession();
+
+      // Publish Portal
+      publishPortalAssets(session.getChild(doc.getRef(), FV_PORTAL_NAME));
+
+      // Publish dialect without children
+      publishedDoc = publishDialect(doc, false);
     }
 
-    return null;
+    // After republish move back to publish state if applicable
+    // If doRepublish is called directly, no transition is required
+    if (doc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
+      doc.followTransition(PUBLISH_TRANSITION);
+    } else {
+      log.error(String.format(
+          "Tried to follow transition `Publish` on Document %s (%s). Not allowed from state %s",
+          doc.getTitle(), doc.getId(), doc.getCurrentLifeCycleState()));
+    }
+
+    if (publishedDoc == null) {
+      log.error(String.format(
+          "Published document was not successful on Document %s (%s)",
+          doc.getTitle(), doc.getId()));
+    }
+
+    return publishedDoc;
   }
 
   /**
@@ -494,6 +529,12 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     session = dialectProxy.getCoreSession();
 
     Map<String, String> dependencies = new HashMap<>();
+
+    if (!dialectProxy.hasSchema("fvproxy")) {
+      log.warn(
+          String.format("Proxy with ID %s does not have `fvproxy` schema.", dialectProxy.getId()));
+      return dialectProxy;
+    }
 
     dependencies.put("fvdialect:keyboards", "fvproxy:proxied_keyboards");
     dependencies.put("fvdialect:language_resources", "fvproxy:proxied_language_resources");
@@ -565,7 +606,7 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     }
 
     // Save changes to property values
-    return session.saveDocument(dialectProxy);
+    return SessionUtils.saveDocumentWithoutEvents(session, dialectProxy, true, null);
   }
 
   @Override
@@ -624,7 +665,10 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
   @Override
   public DocumentModel publishPortalAssets(DocumentModel portal) {
-    session = portal.getCoreSession();
+
+    if (portal.getCoreSession() != null) {
+      session = portal.getCoreSession();
+    }
 
     DocumentModel dialect = DialectUtils.getDialect(portal);
     if (dialect == null) {

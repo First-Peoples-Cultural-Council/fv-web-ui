@@ -6,9 +6,6 @@ import { FV_FETCH_PORTALS_START, FV_FETCH_PORTALS_FETCH_SUCCESS, FV_FETCH_PORTAL
 export const updatePortal = update('FV_PORTAL', 'FVPortal', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })
-export const publishPortal = execute('FV_PORTAL_PUBLISH', 'FVPublish', {
-  headers: { 'enrichers.document': 'ancestry,portal' },
-})
 export const unpublishPortal = execute('FV_PORTAL_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })

@@ -75,10 +75,7 @@ function RequestReviewPresentation({
           </DialogTitle>
           <DialogContentText id="alert-dialog-description" className={classes.dialogDescription}>
             To request a change to the visibility of this {docTypeName} select below{' '}
-            <span className={classes.helperText}>
-              <sup>*</sup>Optional
-            </span>
-            :
+            <span className={classes.helperText}>(Optional)</span>
           </DialogContentText>
           <VisibilitySelect.Container
             docVisibility={requestVisibilityType}
@@ -102,7 +99,7 @@ function RequestReviewPresentation({
           <FVButton onClick={handleDialogCancel} variant="text" color="secondary">
             <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
           </FVButton>
-          <FVButton onClick={handleDialogOk} variant="contained" color="secondary" autoFocus>
+          <FVButton onClick={handleDialogOk} variant="contained" color="primary" autoFocus>
             <FVLabel transKey="yes" defaultStr="Yes" transform="first" />
           </FVButton>
         </DialogActions>
@@ -138,6 +135,7 @@ RequestReviewPresentation.propTypes = {
   handleDialogCancel: func,
   handleDialogOk: func,
   handleRequestReview: func,
+  handleTextFieldChange: func,
   handleVisibilityChange: func,
   hasRelatedTasks: bool,
   isDialogOpen: bool,
@@ -153,6 +151,7 @@ RequestReviewPresentation.defaultProps = {
   handleDialogCancel: () => {},
   handleDialogOk: () => {},
   handleRequestReview: () => {},
+  handleTextFieldChange: () => {},
   handleVisibilityChange: () => {},
   isDialogOpen: false,
   snackbarOpen: false,
