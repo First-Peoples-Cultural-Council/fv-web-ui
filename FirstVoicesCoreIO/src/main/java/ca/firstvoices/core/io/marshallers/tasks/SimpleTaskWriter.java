@@ -49,8 +49,17 @@ public class SimpleTaskWriter extends AbstractJsonWriter<SimpleTaskAdapter> {
       try (CloseableCoreSession session = CoreInstance.openCoreSession(
           Framework.getService(RepositoryManager.class).getDefaultRepositoryName())) {
 
+        IdRef targetDocRef = new IdRef(targetDocId);
+
+        if (!session.exists(targetDocRef)) {
+          // If target document does not exist, no need to proceed
+          // This should not happen but could be a side-effect of old tasks
+          jg.writeEndObject();
+          return;
+        }
+
         // `targetDoc` property
-        DocumentModel targetDoc = session.getDocument(new IdRef(targetDocId));
+        DocumentModel targetDoc = session.getDocument(targetDocRef);
         SimpleCoreEntity simpleTargetDoc = new SimpleCoreEntity(targetDoc);
         jg.writeObjectField("targetDoc", simpleTargetDoc);
 
