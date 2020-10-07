@@ -72,7 +72,8 @@ export const updateBook = update(
 )
 export const deleteBook = _delete('FV_BOOK', 'FVBook', {})
 
-export const publishBook = execute('FV_BOOK_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishBook = execute('FV_BOOK_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
@@ -118,7 +119,8 @@ export const updateBookEntry = update('FV_BOOK_ENTRY', 'FVBookEntry', {
 
 export const deleteBookEntry = _delete('FV_BOOK_ENTRY', 'FVBookEntry', {})
 
-export const publishBookEntry = execute('FV_BOOK_ENTRY_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishBookEntry = execute('FV_BOOK_ENTRY_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 

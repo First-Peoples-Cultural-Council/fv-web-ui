@@ -62,7 +62,6 @@ function DashboardDetailTasksContainer() {
           requestChangesSubTitle,
           requestedVisibility,
           titleTaskDetail: taskTitle,
-          visibilityChanged,
         } = selectedTaskData
         const {
           acknowledgement,
@@ -181,7 +180,6 @@ function DashboardDetailTasksContainer() {
                     selectLabelText={requestChangesSelectLabelText}
                     subTitle={requestChangesSubTitle}
                     taskId={taskId}
-                    visibilityChanged={visibilityChanged}
                   />
                 }
               />

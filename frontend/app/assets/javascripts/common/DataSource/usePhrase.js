@@ -24,8 +24,15 @@ function usePhrase() {
     dispatch(dispatchObj)
   }
 
-  const publishPhrase = (pathOrId, messageStart, messageSuccess, messageError, propertiesOverride) => {
-    const dispatchObj = _publishPhrase(pathOrId, messageStart, messageSuccess, messageError, propertiesOverride)
+  const publishPhrase = (pathOrId, operationParams, messageStart, messageSuccess, messageError, propertiesOverride) => {
+    const dispatchObj = _publishPhrase(
+      pathOrId,
+      operationParams,
+      messageStart,
+      messageSuccess,
+      messageError,
+      propertiesOverride
+    )
     dispatch(dispatchObj)
   }
 

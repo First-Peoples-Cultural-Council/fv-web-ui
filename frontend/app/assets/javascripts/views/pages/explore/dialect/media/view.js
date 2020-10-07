@@ -364,7 +364,7 @@ export class MediaView extends Component {
   publishChangesAction = () => {
     this.props.publishResource(
       this._getMediaPath(),
-      null,
+      { value: 'Republish' },
       null,
       this.props.intl.trans(
         'views.pages.explore.dialect.media.resource_published_success',

@@ -27,12 +27,11 @@ import {
   disableDialect,
   enableDialect,
   fetchDialect2,
-  publishDialect,
-  publishDialectOnly,
+  republishDialect,
   unpublishDialect,
   updateDialect2,
 } from 'providers/redux/reducers/fvDialect'
-import { fetchPortal, publishPortal, unpublishPortal, updatePortal } from 'providers/redux/reducers/fvPortal'
+import { fetchPortal, unpublishPortal, updatePortal } from 'providers/redux/reducers/fvPortal'
 import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
 import selectn from 'selectn'
 
@@ -73,9 +72,7 @@ export class ExploreDialect extends Component {
     enableDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
-    publishDialect: func.isRequired,
-    publishDialectOnly: func.isRequired,
-    publishPortal: func.isRequired,
+    republishDialect: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
     unpublishDialect: func.isRequired,
@@ -145,9 +142,9 @@ export class ExploreDialect extends Component {
    * Publish changes
    */
   _publishChangesAction = () => {
-    this.props.publishPortal(
-      this.props.routeParams.dialect_path + '/Portal',
-      null,
+    this.props.republishDialect(
+      this.props.routeParams.dialect_path,
+      { value: 'Republish' },
       null,
       this.props.intl.trans(
         'views.pages.explore.dialect.portal_published_successfully',
@@ -157,12 +154,6 @@ export class ExploreDialect extends Component {
         null,
         '!'
       )
-    )
-    this.props.publishDialectOnly(
-      this.props.routeParams.dialect_path,
-      { target: this.props.routeParams.language_path.replace(WORKSPACES, SECTIONS) },
-      null,
-      null
     )
   }
 
@@ -542,9 +533,7 @@ const mapDispatchToProps = {
   enableDialect,
   fetchDialect2,
   fetchPortal,
-  publishDialect,
-  publishDialectOnly,
-  publishPortal,
+  republishDialect,
   pushWindowPath,
   replaceWindowPath,
   unpublishDialect,

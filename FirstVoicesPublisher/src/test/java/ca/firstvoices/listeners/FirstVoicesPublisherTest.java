@@ -24,6 +24,10 @@
 
 package ca.firstvoices.listeners;
 
+import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOKS;
@@ -43,14 +47,11 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
-import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -87,8 +88,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners"
-        + ".ProxyPublisherListener.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml"})
 public class FirstVoicesPublisherTest {
 
@@ -143,7 +143,7 @@ public class FirstVoicesPublisherTest {
   }
 
   @Test
-  public void testDialectFactory() throws Exception {
+  public void testDialectFactory() {
     DocumentModel dialect = dialectDoc;
     // Check the factory is doing its job - check template
     DocumentModel child = session.getChild(dialect.getRef(), "Contributors");
@@ -178,7 +178,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(FV_CATEGORIES, child.getDocumentType().getName());
   }
 
-  protected void createDialectTree() throws Exception {
+  protected void createDialectTree() {
     familyDoc = session
         .createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
     languageDoc = session
@@ -197,7 +197,7 @@ public class FirstVoicesPublisherTest {
   }
 
   @Test
-  public void testDialectPublishing() throws Exception {
+  public void testDialectPublishing() {
     // Publishing dialect
     session.followTransition(dialectDoc, PUBLISH_TRANSITION);
     DocumentModel section = sectionRoot;
@@ -211,7 +211,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(1, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), dialectDoc.getName());
     assertNotNull(section);
-    assertEquals(session.getChildren(section.getRef()).size(), 10);
+    assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Check that none is duplicated if we publish again
     dialectPublisherService.publishDialect(dialectDoc);
@@ -222,7 +222,7 @@ public class FirstVoicesPublisherTest {
     section = session.getChild(section.getRef(), languageDoc.getName());
     assertEquals(1, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), dialectDoc.getName());
-    assertEquals(session.getChildren(section.getRef()).size(), 10);
+    assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Check that none is duplicated if we publish again
     session.followTransition(dialect2Doc, PUBLISH_TRANSITION);
@@ -233,7 +233,7 @@ public class FirstVoicesPublisherTest {
     section = session.getChild(section.getRef(), languageDoc.getName());
     assertEquals(2, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), dialect2Doc.getName());
-    assertEquals(session.getChildren(section.getRef()).size(), 10);
+    assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Check that none is duplicated if we publish again
     session.followTransition(dialect3Doc, PUBLISH_TRANSITION);
@@ -244,7 +244,7 @@ public class FirstVoicesPublisherTest {
     section = session.getChild(section.getRef(), language2Doc.getName());
     assertEquals(1, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), dialect3Doc.getName());
-    assertEquals(session.getChildren(section.getRef()).size(), 10);
+    assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Test unpublish
     session.followTransition(dialect2Doc, UNPUBLISH_TRANSITION);
@@ -255,7 +255,7 @@ public class FirstVoicesPublisherTest {
     section = session.getChild(section.getRef(), languageDoc.getName());
     assertEquals(1, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), dialectDoc.getName());
-    assertEquals(session.getChildren(section.getRef()).size(), 10);
+    assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Test unpublish
     session.followTransition(dialectDoc, UNPUBLISH_TRANSITION);
@@ -285,12 +285,12 @@ public class FirstVoicesPublisherTest {
   }
 
   @Test(expected = InvalidParameterException.class)
-  public void testDialectPublishingWrongDocumentType() throws Exception {
+  public void testDialectPublishingWrongDocumentType() {
     dialectPublisherService.publishDialect(familyDoc);
   }
 
   @Test(expected = InvalidParameterException.class)
-  public void testDialectPublishingNullDocument() throws Exception {
+  public void testDialectPublishingNullDocument() {
     dialectPublisherService.publishDialect(null);
   }
 
@@ -359,7 +359,7 @@ public class FirstVoicesPublisherTest {
   }
 
   @Test
-  public void testDocumentPublishing() throws Exception {
+  public void testDocumentPublishing() {
     // Create a word
     createWord();
     session.followTransition(dialectDoc, PUBLISH_TRANSITION);
@@ -368,17 +368,27 @@ public class FirstVoicesPublisherTest {
     verifyProxy(getProxy(word));
   }
 
-  @Ignore
   @Test
-  public void testDocumentRepublishing() throws Exception {
+  @Ignore("Works in practice. Would benefit from a simpler, isolated test.")
+  public void testDocumentRepublishing() {
     createWord();
-    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
+
+    if (dialectDoc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
+      session.followTransition(dialectDoc, PUBLISH_TRANSITION);
+    }
+
+    // Publish word
     session.followTransition(word, PUBLISH_TRANSITION);
     verifyProxy(getProxy(word));
-    session.followTransition(dialectDoc, UNPUBLISH_TRANSITION);
-    assertEquals(0, session.getProxies(word.getRef(), null).size());
-    session.followTransition(dialectDoc, PUBLISH_TRANSITION);
-    verifyProxy(getProxy(word));
+    assertNull(getProxy(word).getPropertyValue("fv-word:pronunciation"));
+
+    // Make a change to word
+    word.setPropertyValue("fv-word:pronunciation", "test");
+
+    // Republish word
+    firstVoicesPublisherService.doRepublish(word);
+
+    assertNotNull(getProxy(word).getPropertyValue("fv-word:pronunciation"));
   }
 
   private void createPhrase() {
@@ -397,7 +407,7 @@ public class FirstVoicesPublisherTest {
   }
 
   @Test
-  public void testPortalPublishing() throws Exception {
+  public void testPortalPublishing() {
 
     DocumentModel dialect = dialectDoc;
     DocumentModel portal = session.getChild(dialect.getRef(), "Portal");
@@ -580,7 +590,7 @@ public class FirstVoicesPublisherTest {
     session.saveDocument(word);
 
     String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
-    Assert.assertTrue(categoriesProperty.length == 3);
+    Assert.assertEquals(3, categoriesProperty.length);
 
     firstVoicesPublisherService
         .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, subcategory);
@@ -588,7 +598,7 @@ public class FirstVoicesPublisherTest {
     String wordQuery = "SELECT * FROM FVWord WHERE ecm:uuid = '" + word.getId() + "'";
     DocumentModelList words = session.query(wordQuery);
     String[] categoriesProp = (String[]) words.get(0).getPropertyValue("categories");
-    Assert.assertTrue(categoriesProp.length == 2);
+    Assert.assertEquals(2, categoriesProp.length);
   }
 
   @Test
@@ -611,7 +621,7 @@ public class FirstVoicesPublisherTest {
     session.saveDocument(word);
 
     String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
-    Assert.assertTrue(categoriesProperty.length == 3);
+    Assert.assertEquals(3, categoriesProperty.length);
     Framework.getService(TrashService.class).trashDocument(subcategory2);
     session.save();
 
@@ -624,7 +634,7 @@ public class FirstVoicesPublisherTest {
     DocumentModel qWord = words.get(0);
     String[] qCategoriesProp = (String[]) qWord.getPropertyValue("categories");
 
-    Assert.assertTrue(qCategoriesProp[0].equals(subcategory3.getId()));
+    Assert.assertEquals(subcategory3.getId(), qCategoriesProp[0]);
   }
 
 }

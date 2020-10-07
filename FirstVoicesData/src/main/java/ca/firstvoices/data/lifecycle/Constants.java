@@ -13,6 +13,7 @@ public class Constants {
   public static final String ENABLED_STATE = "Enabled";
   public static final String DISABLED_STATE = "Disabled";
   public static final String PUBLISHED_STATE = "Published";
+  public static final String REPUBLISH_STATE = "Republish";
 
   public static final String PUBLISH_TRANSITION = "Publish";
   public static final String ENABLE_TRANSITION = "Enable";

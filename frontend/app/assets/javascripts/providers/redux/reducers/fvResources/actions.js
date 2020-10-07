@@ -13,7 +13,8 @@ export const updateResource = update(
   false
 )
 
-export const publishResource = execute('FV_RESOURCE_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishResource = execute('FV_RESOURCE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
 export const askToPublishResource = execute('FV_RESOURCE_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {

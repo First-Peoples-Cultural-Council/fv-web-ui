@@ -42,7 +42,8 @@ export const updateLabel = update(
 
 export const deleteLabel = _delete('FV_LABEL', 'FVLabel', {})
 
-export const publishLabel = execute('FV_LABEL_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishLabel = execute('FV_LABEL_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 

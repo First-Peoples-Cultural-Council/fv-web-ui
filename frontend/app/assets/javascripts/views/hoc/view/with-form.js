@@ -70,7 +70,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             // NOTE: we can encounter checkboxes that have formValue[key] === false.
             // If we just used `if (formValue[key])` in the following conditional,
             // we'd toss out unselected checkboxes
-            if (formValue[key] !== null && formValue[key] !== undefined && formValue[key] !== '') {
+            if (formValue[key] !== undefined && formValue[key] !== '') {
               // Filter out null values in an array
               if (formValue[key] instanceof Array) {
                 const formValueKey = formValue[key].filter((item) => item !== null)

@@ -124,7 +124,7 @@ class LabelModal extends Component {
       now
     ).then((output) => {
       if (isPublishing) {
-        this.handlePublish(output)
+        this.handlePublish(output, 'Publish')
       } else {
         updateIntl(
           selectn('response.properties.dc:title', output),
@@ -162,7 +162,7 @@ class LabelModal extends Component {
 
     _updateLabel(newDocument, null, null).then((output) => {
       if (isPublishing) {
-        this.handlePublish(output)
+        this.handlePublish(output, 'Republish')
       } else {
         this.setState({ loading: false })
         updateIntl(
@@ -175,12 +175,12 @@ class LabelModal extends Component {
     })
   }
 
-  handlePublish = (output) => {
+  handlePublish = (output, value) => {
     const { addNewLabelToIntl: updateIntl, handleClose, publishLabel: _publishLabel, label, intl } = this.props
 
     _publishLabel(
       label.uid,
-      null,
+      { value: value },
       null,
       intl.trans('views.hoc.view.x_published_successfully', 'Label Published Successfully!', 'first', ['Label'])
     ).then(() => {

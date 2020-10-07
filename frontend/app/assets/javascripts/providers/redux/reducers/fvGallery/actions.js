@@ -17,7 +17,8 @@ export const updateGallery = update(
 )
 export const deleteGallery = _delete('FV_GALLERY', 'FVGallery', {})
 
-export const publishGallery = execute('FV_GALLERY_PUBLISH', 'FVPublish', {
+// Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
+export const publishGallery = execute('FV_GALLERY_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,permissions,gallery' },
 })
 export const askToPublishGallery = execute('FV_GALLERY_PUBLISH_WORKFLOW', 'Context.StartWorkflow', {
