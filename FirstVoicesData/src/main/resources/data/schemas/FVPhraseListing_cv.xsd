@@ -34,10 +34,6 @@
   </xs:complexType>  
   <xs:element name="system_fulltext" type="xs:string"/>
   <xs:element name="dublincore_title" type="xs:string"/>
-  <xs:element name="fvcore_literal_translation" type="nxs:FVPhraseListing_cv_fvcore_literal_translationType"/>
-  <xs:complexType name="FVPhraseListing_cv_fvcore_literal_translationType">
-    <xs:sequence/>
-  </xs:complexType>
   <xs:element name="fv-phrase_phrase_books" type="nxs:stringList"/>
   <xs:element name="system_primaryType" type="xs:string"/>
   <xs:element name="fvcore_cultural_note" type="nxs:stringList"/>
