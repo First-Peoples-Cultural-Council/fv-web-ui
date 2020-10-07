@@ -2,7 +2,7 @@ import React from 'react'
 import DashboardData from './DashboardData'
 import DashboardPresentation from './DashboardPresentation'
 import WidgetTasks from 'components/WidgetTasks'
-import WidgetRegistrations from 'components/WidgetRegistrations'
+import WidgetLinks from 'components/WidgetLinks'
 
 /**
  * @summary DashboardContainer
@@ -19,7 +19,7 @@ function DashboardContainer() {
       {() => {
         return (
           <DashboardPresentation
-            widgets={[<WidgetTasks.Container key="widget1" />, <WidgetRegistrations.Container key="widget2" />]}
+            widgets={[<WidgetTasks.Container key="widget1" />, <WidgetLinks.Container key="widget2" />]}
           />
         )
       }}
