@@ -350,13 +350,13 @@ function DashboardDetailTasksData({ children, columnRender }) {
     }
   }
   const setRequestChangesData = ({ task, itemState } = {}) => {
-    const { visibilityText, visibilityChanged, itemTypeForUI, initiatorFullName, initiatorEmail } = task
+    const { visibilityChanged, itemTypeForUI, initiatorFullName, initiatorEmail } = task
     const initiator = initiatorFullName !== '' ? initiatorFullName : initiatorEmail
     const visText = StringHelpers.visibilityText({ visibility: itemState })
     return {
       ...task,
       requestChangesSubTitle:
-        visibilityText && itemTypeForUI
+        visText && itemTypeForUI
           ? `Currently the ${visText.toLowerCase()} can see this ${itemTypeForUI.toLowerCase()}.`
           : '',
       requestChangesSelectLabelText: visibilityChanged ? `${initiator} requested a change to:` : undefined,
