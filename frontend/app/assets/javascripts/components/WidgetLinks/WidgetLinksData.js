@@ -15,38 +15,43 @@ import useRegistrations from 'DataSource/useRegistrations'
  */
 function WidgetLinksData({ children }) {
   const { dialectId, dialectTitle, dialectPath } = useRegistrations()
-  // /explore/FV/Workspaces/Data/Test/Test/ǎiǓǏi/media
-  const childrenData = {
-    links: [
+  let links = [
+    {
+      url: `/explore${dialectPath}/reports`,
+      text: 'Reports',
+      transKey: 'reports',
+      transform: 'first',
+    },
+    {
+      url: `/explore${dialectPath}/media`,
+      text: 'Media browser',
+      transKey: 'views.pages.explore.dialect.media_browser',
+      transform: 'words',
+    },
+    {
+      url: `/explore${dialectPath}/phrasebooks`,
+      text: 'Phrase books',
+      transKey: 'views.pages.explore.dialect.nav_phrase_books',
+      transform: 'words',
+    },
+    {
+      url: `/explore${dialectPath}/categories`,
+      text: 'Categories',
+      transKey: 'views.pages.explore.dialect.nav_categories',
+      transform: 'words',
+    },
+  ]
+  if (dialectId) {
+    links = [
       {
         url: `/tasks/users/${dialectId}`,
         text: `View registration requests to join ${dialectTitle}`,
       },
-      {
-        url: `/explore${dialectPath}/reports`,
-        text: 'Reports',
-        transKey: 'reports',
-        transform: 'first',
-      },
-      {
-        url: `/explore${dialectPath}/media`,
-        text: 'Media browser',
-        transKey: 'views.pages.explore.dialect.media_browser',
-        transform: 'words',
-      },
-      {
-        url: `/explore${dialectPath}/phrasebooks`,
-        text: 'Phrase books',
-        transKey: 'views.pages.explore.dialect.nav_phrase_books',
-        transform: 'words',
-      },
-      {
-        url: `/explore${dialectPath}/categories`,
-        text: 'Categories',
-        transKey: 'views.pages.explore.dialect.nav_categories',
-        transform: 'words',
-      },
-    ],
+      ...links,
+    ]
+  }
+  const childrenData = {
+    links,
   }
   return children(childrenData)
 }
