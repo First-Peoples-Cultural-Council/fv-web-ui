@@ -9,7 +9,7 @@
     -->
 
     <p>
-      <strong>${author}</strong>
+      <strong>${comment?keep_after("Task delegated by '")?keep_before("' to")}</strong>
       has requested changes for
       <#if document.type == "FVWord">
       the word
