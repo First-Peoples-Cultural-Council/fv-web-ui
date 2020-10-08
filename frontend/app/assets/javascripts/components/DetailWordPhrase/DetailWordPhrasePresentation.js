@@ -16,6 +16,30 @@ import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.cs
  * @component
  *
  * @param {object} props
+ * @param {string} props.acknowledgement Text content for Acknowledgement section
+ * @param {array} props.audio Array.map to output <Preview /> components for Audio section: [{uid, ...?}, ...]
+ * @param {array} props.categories Array.map to generate Category list: [{'dc:title'}]
+ * @param {boolean} props.childrenDisplayButtons Flag that toggles the edit/detail buttons. TODO: Refactor; either change name to indicate it's a boolean or use a children slot
+ * @param {array} props.culturalNotes Array.map to generate Cultural Notes section, eg: ['cultNoteHere', ...]
+ * @param {array} props.definitions Array.map to generate Definitions section, eg: [{language, translation}, ...]
+ * @param {string} props.dialectClassName TODO
+ * @param {string} props.docType Used in Categories & Get Buttons sections, eg: 'FVPhrase' || 'FVWord'
+ * @param {string} props.idSelectedItem Id of selected item, used in Get Buttons section
+ * @param {array} props.literalTranslations Array.map to generate Translations section, eg: [{language, translation}, ...]
+ * @param {object} props.metadata Black box object passed to <MetadataPanel /> used in it's `computeEntity` prop. TODO: reduce stamp coupling
+ * @param {function} props.onEditClick Click handler for Edit button
+ * @param {function} props.onViewClick Click handler for Detail button
+ * @param {string} props.partOfSpeech Text content for Parts Of Speech section
+ * @param {array} props.photos Array.map to generate Photos section, eg: [{views, 'dc:description', uid, ...?}] TODO: reduce stamp coupling
+ * @param {array} props.phrases Array.map to generate Phrases section, eg: [{'fv:definitions', uid, 'dc:title', path, ...?}, ...]
+ * @param {string} props.pronunciation Text content for Pronunciation section
+ * @param {object} props.properties Black box object passed to <MetadataPanel /> used in it's `properties` prop. TODO: reduce stamp coupling
+ * @param {function} props.pushWindowPath Used in onClick handler of Phrases section. TODO: there's an easier way with `useNavigationHelpers > navigate(url)`
+ * @param {array} props.relatedAssets Array.map to generate Related Assets section, eg: [{'dc:title', uid, path, ...?}, ...]
+ * @param {array} props.relatedToAssets Array.map to generate Related TO Assets section, eg: [{'dc:title', uid, path, ...?}, ...]
+ * @param {string} props.siteTheme Used with click handlers
+ * @param {string} props.title Text content for Title
+ * @param {array} props.videos Array.map to generate Videos section, eg: [{path, views, 'dc:description', uid, ...?}, ...]
  *
  * @returns {node} jsx markup
  */
@@ -28,10 +52,11 @@ function DetailWordPhrasePresentation({
   definitions,
   dialectClassName,
   docType,
+  idSelectedItem,
   literalTranslations,
   metadata,
-  onViewClick,
   onEditClick,
+  onViewClick,
   partOfSpeech,
   photos,
   phrases,
@@ -43,7 +68,6 @@ function DetailWordPhrasePresentation({
   siteTheme,
   title,
   videos,
-  idSelectedItem,
 }) {
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
@@ -355,7 +379,7 @@ function DetailWordPhrasePresentation({
   }
 
   const _getButtons = () => {
-    const documentType = docType == 'FVWord' ? 'word' : 'phrase'
+    const documentType = docType === 'FVWord' ? 'word' : 'phrase'
     const itemTypePlural = documentType + 's'
     const uid = idSelectedItem
     return (
@@ -424,8 +448,11 @@ DetailWordPhrasePresentation.propTypes = {
   definitions: array,
   dialectClassName: string,
   docType: string,
+  idSelectedItem: string,
   literalTranslations: array,
   metadata: object,
+  onEditClick: func,
+  onViewClick: func,
   partOfSpeech: string,
   photos: array,
   phrases: array,
