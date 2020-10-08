@@ -62,6 +62,8 @@ function DashboardDetailTasksContainer() {
           requestChangesSubTitle,
           requestedVisibility,
           titleTaskDetail: taskTitle,
+          initiatorEmail: taskInitiatorEmail,
+          initiatorFullName: taskInitiatorFullName,
         } = selectedTaskData
         const {
           acknowledgement,
@@ -180,6 +182,7 @@ function DashboardDetailTasksContainer() {
                     selectLabelText={requestChangesSelectLabelText}
                     subTitle={requestChangesSubTitle}
                     taskId={taskId}
+                    taskInitiator={taskInitiatorFullName || taskInitiatorEmail}
                   />
                 }
               />

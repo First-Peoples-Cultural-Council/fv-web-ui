@@ -31,9 +31,16 @@ function RequestChangesContainer({
   selectLabelText,
   subTitle,
   taskId,
+  taskInitiator,
 }) {
   return (
-    <RequestChangesData docDialectPath={docDialectPath} docId={docId} docState={docState} taskId={taskId}>
+    <RequestChangesData
+      docDialectPath={docDialectPath}
+      docId={docId}
+      docState={docState}
+      taskId={taskId}
+      taskInitiator={taskInitiator}
+    >
       {({
         computeEntities,
         disableApproveButton,
@@ -98,6 +105,7 @@ RequestChangesContainer.propTypes = {
   selectLabelText: string,
   subTitle: string,
   taskId: string,
+  taskInitiator: string,
 }
 
 export default RequestChangesContainer
