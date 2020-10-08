@@ -16,14 +16,22 @@ import FVButton from 'views/components/FVButton'
  *
  * @param {object} props
  *
+ * @param {array} props.audio Array.map to output <Preview /> components for Audio section: [{uid, object}, ...]
+ * @param {object} props.book { authors, introduction, introductionTranslation, title, titleTranslation, type, uid }
+ * @param {boolean} props.childrenDisplayButtons Flag that toggles the edit/detail buttons. TODO: Refactor; either change name to indicate it's a boolean or use a children slot
+ * @param {function} props.onEditClick Click hanlder
+ * @param {function} props.onViewClick Click hanlder
+ * @param {array} props.pictures Black box object passed to <MediaPanels.Presentation /> used in it's `pictures` prop. TODO: reduce stamp coupling?
+ * @param {array} props.videos Black box object passed to <MediaPanels.Presentation /> used in it's `videos` prop. TODO: reduce stamp coupling?
+ *
  * @returns {node} jsx markup
  */
 function DetailSongStoryPresentation({
   audio,
   book,
   childrenDisplayButtons,
-  onViewClick,
   onEditClick,
+  onViewClick,
   pictures,
   videos,
 }) {
@@ -143,13 +151,12 @@ function _getIntroductionTranslation(introductionTranslation) {
 }
 
 // PROPTYPES
-const { array, string, object, number, boolean } = PropTypes
+const { array, func, object, boolean } = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
   childrenDisplayButtons: boolean,
-  defaultLanguage: string,
-  intl: object,
-  pageCount: number,
+  onEditClick: func,
+  onViewClick: func,
   // Media
   audio: array.isRequired,
   pictures: array.isRequired,
