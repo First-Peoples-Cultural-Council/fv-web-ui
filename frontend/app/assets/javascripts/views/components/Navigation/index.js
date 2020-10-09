@@ -216,8 +216,8 @@ export class Navigation extends Component {
               routeParams={this.props.routeParams}
               containerStyle={{ display: 'inline' }}
             >
-              <Link href={NavigationHelpers.generateStaticURL('/tasks')} className={`${appBar} Navigation__link`}>
-                View My Tasks
+              <Link href={NavigationHelpers.generateStaticURL('/dashboard')} className={`${appBar} Navigation__link`}>
+                Dashboard
               </Link>
             </AuthenticationFilter>
             <div className="Navigation__separator" />
