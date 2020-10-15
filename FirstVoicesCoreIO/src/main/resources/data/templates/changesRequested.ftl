@@ -1,3 +1,6 @@
+<#assign extractedComment = comment?keep_after("with the following comment:")>
+<#assign siteUrl = Runtime.getProperty('nuxeo.url')?keep_before(Runtime.getProperty('org.nuxeo.ecm.contextPath'))>
+
 <html>
   <body>
     <#--
@@ -9,13 +12,13 @@
     -->
 
     <p>
-      <strong>${author}</strong>
+      <strong>${comment?keep_after("Task delegated by '")?keep_before("' to")}</strong>
       has requested changes for
       <#if document.type == "FVWord">
       the word
       <strong>
         <a
-          href="${Runtime.getProperty('nuxeo.url')}/explore${document.path?keep_before('Dictionary')}/learn/words/${docId}">
+          href="${siteUrl}/explore${document.path?keep_before('/Dictionary')}/learn/words/${docId}">
           ${htmlEscape(docTitle)}
         </a>
       </strong>
@@ -23,7 +26,7 @@
       the phrase
       <strong>
         <a
-          href="${Runtime.getProperty('nuxeo.url')}/explore${document.path?keep_before('Dictionary')}/learn/phrases/${docId}">
+          href="${siteUrl}/explore${document.path?keep_before('/Dictionary')}/learn/phrases/${docId}">
           ${htmlEscape(docTitle)}
         </a>
       </strong>
@@ -32,7 +35,7 @@
       <#assign pluralType = (document.fvbook.type == "song")?then("songs","stories")>
       <strong>
         <a
-          href="${Runtime.getProperty('nuxeo.url')}/explore${document.path?keep_before('Songs')}/learn/phrases/${docId}">
+          href="${siteUrl}/explore${document.path?keep_before('/Songs')}/learn/{pluralType}/${docId}">
           ${htmlEscape(docTitle)}
         </a>
       </strong>
@@ -46,7 +49,6 @@
     <br/>
   </p>
 
-  <#assign extractedComment = comment?keep_after("with the following comment:")>
   <blockquote>${htmlEscape(extractedComment)}</blockquote>
 
   <p>
