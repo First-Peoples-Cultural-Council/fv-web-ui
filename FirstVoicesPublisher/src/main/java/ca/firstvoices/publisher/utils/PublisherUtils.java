@@ -26,11 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
-import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.runtime.api.Framework;
 
 public class PublisherUtils {
@@ -128,35 +124,4 @@ public class PublisherUtils {
     }
     return updatedProperty;
   }
-
-  public static DocumentModel publishAncestors(CoreSession session, String docType,
-      DocumentModel dependencyDocModel, PublisherService publisherService) {
-    DocumentModel parentDependencySection;
-    DocumentModel publishedDep = null;
-
-    DocumentModelList parents = new DocumentModelListImpl();
-    parents.add(dependencyDocModel);
-    DocumentModel parent = session.getDocument(dependencyDocModel.getParentRef());
-    while (parent != null && docType.equals(parent.getType())) {
-      parents.add(parent);
-      parent = session.getDocument(parent.getParentRef());
-    }
-    Object[] docs = parents.toArray();
-    for (int i = docs.length - 1; i >= 0; i--) {
-      parentDependencySection = FVPublisherService
-          .getPublication(session, ((DocumentModel) docs[i]).getRef());
-      if (parentDependencySection == null) {
-        parentDependencySection = FVPublisherService
-            .getPublication(session, ((DocumentModel) docs[i]).getParentRef());
-        parentDependencySection = FVPublisherService
-            .publishDocument(session, ((DocumentModel) docs[i]), parentDependencySection);
-      }
-      if (i == 0) {
-        publishedDep = parentDependencySection;
-      }
-    }
-
-    return publishedDep;
-  }
-
 }

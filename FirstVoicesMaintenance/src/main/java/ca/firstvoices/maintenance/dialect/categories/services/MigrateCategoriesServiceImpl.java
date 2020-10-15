@@ -1,6 +1,7 @@
 package ca.firstvoices.maintenance.dialect.categories.services;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -138,7 +139,7 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
         if (word.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
           // Check for unpublished changes
           if (!unpublishedChangesExist) {
-            publisherService.queueRepublish(word);
+            word.followTransition(REPUBLISH_TRANSITION);
           } else {
             log.info(word.getPathAsString() + "has unpublished changes yet the category has been "
                 + "migrated. Republish manually.");

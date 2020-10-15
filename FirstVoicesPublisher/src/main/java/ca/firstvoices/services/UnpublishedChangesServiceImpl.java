@@ -102,6 +102,12 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
     // Get the sections document and versions
     DocumentModel sectionsDoc = service.getPublication(session, workspacesDoc.getRef());
 
+    // If the sections doc does not exist, return null
+    // This may be in case the sections Doc is pending publication
+    if (sectionsDoc == null) {
+      return null;
+    }
+
     return compareDocs(sectionsDoc, workspacesDoc);
   }
 

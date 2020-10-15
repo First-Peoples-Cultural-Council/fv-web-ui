@@ -1,10 +1,13 @@
 <component name="ca.bc.gov.nuxeo.listeners.listener.contrib.ProxyPublisherListener">
+
   <require>ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl</require>
+  <require>ca.firstvoices.core.io.services.transitionChildrenState.contrib</require>
+
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
     point="listener">
 
-    <listener name="ProxyPublishedListener" async="false" postCommit="false"
-      class="ca.firstvoices.publisher.listeners.ProxyPublisherListener" priority="100">
+    <listener name="ProxyPublishedListener" async="true" postCommit="true"
+      class="ca.firstvoices.publisher.listeners.ProxyPublisherListener" priority="50">
       <event>lifecycle_transition_event</event>
     </listener>
 

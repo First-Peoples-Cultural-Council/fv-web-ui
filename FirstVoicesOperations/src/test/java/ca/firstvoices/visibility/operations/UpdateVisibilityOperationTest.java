@@ -135,8 +135,8 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testPublicToTeam() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
     ctx.setInput(word);
@@ -150,8 +150,8 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testPublicToMembers() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
     ctx.setInput(word);
@@ -193,7 +193,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
   @Test
   public void testPublicToPublic() throws OperationException {
     dialect.followTransition(PUBLISH_TRANSITION);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     ctx = new OperationContext(session);
     ctx.setInput(word);

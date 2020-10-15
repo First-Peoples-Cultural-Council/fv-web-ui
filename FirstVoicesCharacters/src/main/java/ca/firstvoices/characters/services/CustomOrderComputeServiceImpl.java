@@ -20,11 +20,12 @@
 
 package ca.firstvoices.characters.services;
 
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 
 import ca.firstvoices.characters.listeners.AssetListener;
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
@@ -154,8 +155,8 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     boolean unpublishedChangesExist = unpublishedChangesService
         .checkUnpublishedChanges(session, element);
 
-    if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
-      firstVoicesPublisherService.queueRepublish(element);
+    if (!unpublishedChangesExist && StateUtils.isPublished(element)) {
+      element.followTransition(REPUBLISH_TRANSITION);
     }
   }
 

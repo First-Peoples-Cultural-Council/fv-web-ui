@@ -20,16 +20,16 @@
 
 package ca.firstvoices.publisher.listeners;
 
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import org.nuxeo.ecm.core.api.CoreSession;
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.runtime.api.Framework;
 
 //  TODO: MOVE THIS LOGIC TO OPERATIONS MODULE AND REMOVE RELIANCE ON LISTENER
 public class PublishNewCategoryListener implements EventListener {
@@ -52,11 +52,13 @@ public class PublishNewCategoryListener implements EventListener {
         return;
       }
 
-      CoreSession session = ctx.getCoreSession();
+      DocumentModel dialect = DialectUtils.getDialect(doc);
 
-      FirstVoicesPublisherService service = Framework
-          .getService(FirstVoicesPublisherService.class);
-      service.publishDocumentIfDialectPublished(session, doc);
+      if (!StateUtils.isPublished(dialect)) {
+        return;
+      }
+
+      StateUtils.followTransitionIfAllowed(doc, PUBLISH_TRANSITION);
     }
   }
 }

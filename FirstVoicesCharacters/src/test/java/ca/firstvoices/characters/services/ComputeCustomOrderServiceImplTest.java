@@ -442,7 +442,7 @@ public class ComputeCustomOrderServiceImplTest {
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
-    firstVoicesPublisherService.publishDialect(dialect);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
 
     session.save();
 

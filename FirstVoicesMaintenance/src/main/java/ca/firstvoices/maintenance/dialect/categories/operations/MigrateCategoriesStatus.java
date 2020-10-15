@@ -1,5 +1,6 @@
 package ca.firstvoices.maintenance.dialect.categories.operations;
 
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 
 import ca.firstvoices.maintenance.dialect.categories.Constants;
@@ -179,7 +180,7 @@ public class MigrateCategoriesStatus {
               wordsFailedPublishingDueToDeleted.put(workingCopy.getId(), sharedCategoryTitle);
             } else {
               // Try to republish
-              publisherService.queueRepublish(workingCopy);
+              workingCopy.followTransition(REPUBLISH_TRANSITION);
 
               // Document under words that failed to publish for other reasons
               wordsFailedPublishing.put(workingCopy.getId(), sharedCategoryTitle);

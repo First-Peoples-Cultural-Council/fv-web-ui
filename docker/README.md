@@ -15,7 +15,7 @@ This environment is setup for localhost work. It includes:
 If you are planning on building the back-end from source, you will also need the following dependencies:
 
    - Java 8 JDK (jdk 1.8.0_xxx [openjdk recommended](https://openjdk.java.net/install/))
-     - Don't forget to set JAVA_HOME to the path to the JDK install
+     - Don't forget to set JAVAs_HOME to the path to the JDK install
    - [Apache Maven v3.6.3](https://maven.apache.org/)
    - NodeJS v10.19.0 ([node version manager recommended](https://github.com/nvm-sh/nvm))
    - NPM v6.13.4 ([node version manager recommended](https://github.com/nvm-sh/nvm))

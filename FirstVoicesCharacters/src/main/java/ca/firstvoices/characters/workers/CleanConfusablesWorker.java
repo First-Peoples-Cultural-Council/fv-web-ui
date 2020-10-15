@@ -1,9 +1,11 @@
 package ca.firstvoices.characters.workers;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -136,9 +138,8 @@ public class CleanConfusablesWorker extends AbstractWork {
       // Clean confusables for document
       cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
 
-      if (!unpublishedChangesExist && dictionaryItem.getCurrentLifeCycleState()
-          .equals(PUBLISHED_STATE)) {
-        firstVoicesPublisherService.queueRepublish(dictionaryItem);
+      if (!unpublishedChangesExist && StateUtils.isPublished(dictionaryItem)) {
+        dictionaryItem.followTransition(REPUBLISH_TRANSITION);
       }
     }
   }

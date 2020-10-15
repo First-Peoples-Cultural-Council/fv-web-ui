@@ -214,7 +214,7 @@ public class FirstVoicesPublisherTest {
     assertEquals(10, session.getChildren(section.getRef()).size());
 
     // Check that none is duplicated if we publish again
-    dialectPublisherService.publishDialect(dialectDoc);
+    dialectPublisherService.transitionDialectToPublished(session, dialectDoc);
     section = sectionRoot;
     assertEquals(3, session.getChildren(section.getRef()).size());
     section = session.getChild(section.getRef(), familyDoc.getName());
@@ -286,12 +286,12 @@ public class FirstVoicesPublisherTest {
 
   @Test(expected = InvalidParameterException.class)
   public void testDialectPublishingWrongDocumentType() {
-    dialectPublisherService.publishDialect(familyDoc);
+    dialectPublisherService.transitionDialectToPublished(session, familyDoc);
   }
 
   @Test(expected = InvalidParameterException.class)
   public void testDialectPublishingNullDocument() {
-    dialectPublisherService.publishDialect(null);
+    dialectPublisherService.transitionDialectToPublished(session, null);
   }
 
   @Before
@@ -350,7 +350,7 @@ public class FirstVoicesPublisherTest {
 
   @Test(expected = InvalidParameterException.class)
   public void testDialectPublishingWrongPlace() throws Exception {
-    dialectPublisherService.publishDialect(
+    dialectPublisherService.transitionDialectToPublished(session,
         session.createDocument(session.createDocumentModel("/", "Dialect", FV_DIALECT)));
   }
 
@@ -386,7 +386,7 @@ public class FirstVoicesPublisherTest {
     word.setPropertyValue("fv-word:pronunciation", "test");
 
     // Republish word
-    firstVoicesPublisherService.doRepublish(word);
+    firstVoicesPublisherService.republish(word);
 
     assertNotNull(getProxy(word).getPropertyValue("fv-word:pronunciation"));
   }
@@ -403,7 +403,7 @@ public class FirstVoicesPublisherTest {
   @Test(expected = InvalidParameterException.class)
   public void testDocumentPublishingOnUnpublishedDialect() {
     createWord();
-    dialectPublisherService.publish(word);
+    dialectPublisherService.publish(session, word);
   }
 
   @Test

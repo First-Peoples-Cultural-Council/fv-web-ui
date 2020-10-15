@@ -87,13 +87,13 @@ public class RelationsServiceTest extends AbstractFirstVoicesOperationsTest {
 
     String[] propertyValue = new String[]{testWord.getId()};
 
-    publisherService.publishDialect(dialect);
-    DocumentModel publishedTestWord = publisherService.publishAsset(testWord);
+    publisherService.transitionDialectToPublished(session, dialect);
+    DocumentModel publishedTestWord = publisherService.publish(session, testWord);
 
     for (DocumentModel wordDoc : wordDocs) {
       wordDoc.setPropertyValue("fv:related_assets", propertyValue);
       session.saveDocument(wordDoc);
-      DocumentModel publishedWord = publisherService.publishAsset(wordDoc);
+      DocumentModel publishedWord = publisherService.publish(session, wordDoc);
       String[] wordProp = (String[]) publishedWord
           .getPropertyValue("fvproxy:proxied_related_assets");
       Assert.assertTrue(Arrays.stream(wordProp).anyMatch(w -> w.equals(publishedTestWord.getId())));

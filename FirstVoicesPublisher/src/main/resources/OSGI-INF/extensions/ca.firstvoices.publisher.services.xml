@@ -2,6 +2,9 @@
 
 <component
   name="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl">
+
+  <require>ca.firstvoices.core.io.services.transitionChildrenState.contrib</require>
+
   <implementation
     class="ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl"/>
 

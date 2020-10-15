@@ -32,7 +32,7 @@
       <#assign pluralType = (document.fvbook.type == "song")?then("songs","stories")>
       <strong>
         <a
-          href="${Runtime.getProperty('nuxeo.url')}/explore${document.path?keep_before('Songs')}/learn/phrases/${docId}">
+          href="${Runtime.getProperty('nuxeo.url')}/explore${document.path?keep_before('Stories')}/learn/phrases/${docId}">
           ${htmlEscape(docTitle)}
         </a>
       </strong>

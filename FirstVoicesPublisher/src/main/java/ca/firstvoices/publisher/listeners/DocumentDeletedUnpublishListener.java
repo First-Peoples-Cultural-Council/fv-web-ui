@@ -39,7 +39,7 @@ import org.nuxeo.runtime.api.Framework;
 
 /**
  * Listener to unpublish documents that have been deleted and to remove categories from words or
- * phrases if trashed.
+ * phrases if trashed. TODO: Handle in PostCommitCleanupListener
  *
  * @author dyona
  */

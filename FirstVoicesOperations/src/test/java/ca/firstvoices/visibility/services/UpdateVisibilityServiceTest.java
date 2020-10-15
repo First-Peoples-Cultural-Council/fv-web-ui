@@ -97,8 +97,8 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
 
   @Test
   public void testPublicToTeam() {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, TEAM);
     Assert.assertEquals(DISABLED_STATE, returnDoc.getCurrentLifeCycleState());
@@ -106,8 +106,8 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
 
   @Test
   public void testPublicToMembers() {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, MEMBERS);
     Assert.assertEquals(ENABLED_STATE, returnDoc.getCurrentLifeCycleState());
@@ -131,7 +131,7 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
   @Test
   public void testPublicToPublic() {
     dialect.followTransition(PUBLISH_TRANSITION);
-    firstVoicesPublisherService.publish(word);
+    firstVoicesPublisherService.publish(session, word);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, PUBLIC);
     Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());

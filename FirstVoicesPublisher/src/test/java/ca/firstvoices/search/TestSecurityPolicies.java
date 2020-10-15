@@ -168,8 +168,8 @@ public class TestSecurityPolicies extends AbstractFVTest {
       loginCtx.logout();
     }
 
-    publisherService.publish(dialectDoc);
-    publisherService.publish(wordDoc);
+    publisherService.publish(session, dialectDoc);
+    publisherService.publish(session, wordDoc);
     session.save();
     DocumentModel proxyWord = session.getProxies(wordDoc.getRef(), null).get(0);
     assertNotNull(proxyWord);

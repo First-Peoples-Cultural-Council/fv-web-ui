@@ -22,7 +22,7 @@ package ca.firstvoices.publisher.services;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
@@ -41,9 +41,11 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import ca.firstvoices.core.io.services.TransitionChildrenStateService;
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
+import ca.firstvoices.publisher.listeners.ProxyPublisherListener;
 import ca.firstvoices.publisher.utils.PublisherUtils;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -58,11 +60,9 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.DocumentNotFoundException;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -75,7 +75,43 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
   private static final String MEDIA_ORIGIN_FIELD = "fvmedia:origin";
 
+  private final TransitionChildrenStateService transitionChildrenService = Framework
+      .getService(TransitionChildrenStateService.class);
+
   private CoreSession session;
+
+  @Override
+  public void transitionDialectToPublished(CoreSession session, DocumentModel dialect) {
+    this.session = session;
+
+    // Transition the dialect to the PUBLISHED state
+    // This event will not be handled by publisher listener
+    if (dialect.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
+      dialect.followTransition(PUBLISH_TRANSITION);
+    } else {
+      log.warn(
+          String.format("Tried to publish document that is in an unpublishable state (%s)",
+              dialect.getCurrentLifeCycleState()));
+      return;
+    }
+
+    // This code may not be needed?
+    //    for (DocumentModel child : session.getChildren(dialect.getRef())) {
+    //      if (StateUtils.followTransitionIfAllowed(child, PUBLISH_TRANSITION)) {
+    //        List<String> nonRecursiveTransitions = Framework
+    //            .getService(LifeCycleService.class)
+    //            .getNonRecursiveTransitionForDocType(child.getType());
+    //
+    //        if (nonRecursiveTransitions.contains(PUBLISH_TRANSITION)) {
+    //          // Handle publishing children if type is not configured to do that automatically
+    //          // as defined by `noRecursionForTransitions` on the type.
+    //          transitionChildrenService.transitionChildren(PUBLISH_TRANSITION,
+    //          ENABLED_STATE, child);
+    //        }
+    //      }
+    //    }
+  }
+
 
   protected Map<String, DocumentModel> getAncestors(DocumentModel model) {
     if (model == null || !model.getDocumentType().getName().equals(FV_DIALECT)) {
@@ -95,64 +131,6 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     }
     map.put("LanguageFamily", languageFamily);
     return map;
-  }
-
-  @Override
-  public DocumentModel publishDialect(DocumentModel dialect) {
-    return publishDialect(dialect, true);
-  }
-
-  @Override
-  public DocumentModel publishDialect(DocumentModel dialect, boolean publishChildren) {
-    // Arguments checks : need to be a FVDialect in a normal tree
-    // (LanguageFamily/Language/Dialect)
-    Map<String, DocumentModel> ancestors = getAncestors(dialect);
-
-    DocumentModel languageFamily = ancestors.get("LanguageFamily");
-    session = dialect.getCoreSession();
-
-    DocumentModel section = getRootSection(dialect);
-
-    // Publish grand parent
-    if (!isPublished(languageFamily, section)) {
-      session.publishDocument(languageFamily, section);
-    }
-
-    // Publish parent
-    DocumentModel language = ancestors.get("Language");
-    section = session.getChild(section.getRef(), languageFamily.getName());
-    if (!isPublished(language, section)) {
-      session.publishDocument(language, section);
-    }
-
-    // Publish dialect, or republish (overwrite)
-    section = session.getChild(section.getRef(), language.getName());
-
-    DocumentModel dialectProxy = session.publishDocument(dialect, section);
-    setDialectProxies(dialectProxy);
-
-    if (publishChildren) {
-      // Now publish all the children
-      section = session.getChild(section.getRef(), dialect.getName());
-      DocumentModelList children = session.getChildren(dialect.getRef());
-      for (DocumentModel child : children) {
-        if (!child.hasFacet(FacetNames.PUBLISHABLE)) {
-          continue;
-        }
-        if (!isPublished(child, section)) {
-          session.publishDocument(child, section);
-        }
-      }
-      // Need to republish all assets that were published
-      // Note: Can we avoid what could be a very long operation?
-      for (DocumentModel child : session.query(
-          "SELECT * FROM Document WHERE ecm:ancestorId = '" + dialect.getId()
-              + "' AND ecm:currentLifeCycleState='Published'")) {
-        publishAsset(child);
-      }
-    }
-
-    return section;
   }
 
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -182,248 +160,31 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     return roots.get(0);
   }
 
-  @Override
-  public void unpublishDialect(DocumentModel dialect) {
-    // Arguments checks : need to be a FVDialect in a normal tree
-    // (LanguageFamily/Language/Dialect)
-    session = dialect.getCoreSession();
-    Map<String, DocumentModel> ancestors = getAncestors(dialect);
-    DocumentModel languageFamily = ancestors.get("LanguageFamily");
-    DocumentModel language = ancestors.get("Language");
-    DocumentModel section = session
-        .getChild(getRootSection(dialect).getRef(), languageFamily.getName());
-    if (section == null) {
-      throw new InvalidParameterException("Dialect is not published");
+  private DocumentModel transitionAndCreateProxy(CoreSession session, DocumentModel doc) {
+    // Ensure a listener does not fire for this event
+    doc.putContextData(ProxyPublisherListener.DISABLE_PUBLISHER_LISTENER, true);
+    StateUtils.followTransitionIfAllowed(doc, PUBLISH_TRANSITION);
+
+    // Get parent and publish
+    // Stop at dialect. If dialect is not published, we shouldn't proceed
+    DocumentModel parent = session.getParentDocument(doc.getRef());
+    if (!StateUtils.isPublished(parent) && !DialectUtils.isDialect(parent)) {
+      transitionAndCreateProxy(session, parent);
     }
-    DocumentModel languageFamilySection;
-    languageFamilySection = section;
-    section = session.getChild(section.getRef(), language.getName());
-    if (section == null) {
-      throw new InvalidParameterException("Dialect is not published");
-    }
-    DocumentModel languageSection;
-    languageSection = section;
-    section = session.getChild(section.getRef(), dialect.getName());
-    if (section == null) {
-      throw new InvalidParameterException("Dialect is not published");
-    }
-    session.removeDocument(section.getRef());
-    if (session.getChildren(languageSection.getRef()).isEmpty()) {
-      session.removeDocument(languageSection.getRef());
-    }
-    if (session.getChildren(languageFamilySection.getRef()).isEmpty()) {
-      session.removeDocument(languageFamilySection.getRef());
-    }
+
+    return publish(session, doc);
   }
 
-  @Override
-  public DocumentModel publishDocument(CoreSession session, DocumentModel doc,
-      DocumentModel section) {
-    DocumentModel proxy = session.publishDocument(doc, section, true);
-    if (doc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
-      doc.followTransition(PUBLISH_TRANSITION);
-    }
-    return proxy;
-  }
+  private DocumentModel getOrCreateParentProxy(DocumentModel doc) {
+    DocumentModel parent = session.getDocument(doc.getParentRef());
+    DocumentModel parentSection = getPublication(session, parent.getRef());
 
-  @Override
-  public DocumentModel publishAsset(DocumentModel asset) {
-    session = asset.getCoreSession();
-
-    DocumentModel dialect = DialectUtils.getDialect(session, asset);
-    if (dialect == null) {
-      throw new InvalidParameterException("Asset should be inside a dialect");
-    }
-    DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-    if (proxies.isEmpty()) {
-      throw new InvalidParameterException("Dialect should be published");
-    }
-    DocumentModel input = getPublication(session, asset.getRef());
-    if (input != null && input.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
-      // Already published
-      return input;
+    if (parentSection == null) {
+      // Parent does not have proxy, create proxy for parent first
+      parentSection = publish(session, parent);
     }
 
-    input = publishDocument(session, asset, getPublication(session, asset.getParentRef()));
-
-    Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
-
-    for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
-
-      String dependency = dependencyEntry.getKey();
-      // Check if input has schema
-      if (!input.hasSchema(dependency.split(":")[0])) {
-        continue;
-      }
-
-      String[] dependencyPropertyValue;
-
-      // Handle exception property value as string
-      if (MEDIA_ORIGIN_FIELD.equals(dependency)) {
-        dependencyPropertyValue = PublisherUtils
-            .extractDependencyPropertyValueAsString(input, dependency);
-
-      } else {
-        // Handle as array
-
-        dependencyPropertyValue = (String[]) input.getPropertyValue(dependency);
-      }
-
-      if (PublisherUtils.dependencyIsEmpty(dependencyPropertyValue)) {
-        input.setPropertyValue(dependencyEntry.getValue(), null);
-        continue;
-      }
-
-      // input is the document in the section
-      for (String relatedDocUUID : dependencyPropertyValue) {
-        IdRef dependencyRef = new IdRef(relatedDocUUID);
-        DocumentModel publishedDep = getPublication(session, dependencyRef);
-
-        // If dependency isn't published, need to publish
-        if (publishedDep == null) {
-
-          // Origin shouldn't be automatically published
-          if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
-            continue;
-          }
-
-          DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
-          DocumentModel parentDependencySection;
-          if (FV_CATEGORY.equals(dependencyDocModel.getType())) {
-            PublisherService publisherService = Framework.getService(PublisherService.class);
-            publishedDep = PublisherUtils
-                .publishAncestors(session, FV_CATEGORY, dependencyDocModel, publisherService);
-          } else {
-            parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
-            publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
-          }
-        }
-        if (publishedDep == null) {
-          continue;
-        }
-
-        // Handle exception property values as string
-        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
-          input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
-
-        } else {
-          // Handle as array
-
-          String[] updatedProperty = PublisherUtils.constructDependencyPropertyValueAsArray(
-              (String[]) input.getPropertyValue(dependencyEntry.getValue()), publishedDep);
-          input.setPropertyValue(dependencyEntry.getValue(), updatedProperty);
-        }
-      }
-    }
-    session.saveDocument(input);
-    return input;
-  }
-
-  public DocumentModel republishAsset(DocumentModel asset) {
-    session = asset.getCoreSession();
-
-    DocumentModel dialect = DialectUtils.getDialect(asset);
-    if (dialect == null) {
-      throw new InvalidParameterException("Asset should be inside a dialect");
-    }
-    DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-    if (proxies.isEmpty()) {
-      throw new InvalidParameterException("Dialect should be published");
-    }
-
-    // Always publish changes
-    DocumentModel input = publishDocument(session, asset,
-        getPublication(session, asset.getParentRef()));
-
-    Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
-
-    for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
-
-      String dependency = dependencyEntry.getKey();
-      // Check if input has schema
-      if (!asset.hasSchema(dependency.split(":")[0])) {
-        continue;
-      }
-
-      String[] dependencyPropertyValue;
-
-      // Handle exception property value as string
-      if (MEDIA_ORIGIN_FIELD.equals(dependency)) {
-        dependencyPropertyValue = PublisherUtils
-            .extractDependencyPropertyValueAsString(input, dependency);
-      } else {
-        // Handle as array
-
-        dependencyPropertyValue = (String[]) input.getPropertyValue(dependency);
-      }
-
-      if (PublisherUtils.dependencyIsEmpty(dependencyPropertyValue)) {
-        input.setPropertyValue(dependencyEntry.getValue(), null);
-        continue;
-      }
-
-      input.setPropertyValue(dependencyEntry.getValue(), null);
-
-      // input is the document in the section
-      for (String relatedDocUUID : dependencyPropertyValue) {
-        IdRef dependencyRef = new IdRef(relatedDocUUID);
-
-        // Origin shouldn't be automatically published
-        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
-          continue;
-        }
-
-        // If dependency does not exist (e.g. deleted), skip
-        if (!session.exists(dependencyRef)) {
-          continue;
-        }
-
-        DocumentModel publishedDep = null;
-
-        try {
-          publishedDep = getPublication(session, dependencyRef);
-        } catch (DocumentNotFoundException e) {
-          // Continue. Considered null.
-        }
-
-        // If dependency isn't published, need to publish
-        if (publishedDep == null) {
-
-          DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
-          DocumentModel parentDependencySection;
-          if (FV_CATEGORY.equals(dependencyDocModel.getType())) {
-            PublisherService publisherService = Framework.getService(PublisherService.class);
-            publishedDep = PublisherUtils
-                .publishAncestors(session, FV_CATEGORY, dependencyDocModel, publisherService);
-          } else {
-            parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
-            publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
-          }
-        }
-
-        // Handle exception property values as string
-        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
-          input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
-        } else {
-          // Handle as array
-
-          String[] updatedProperty = PublisherUtils.constructDependencyPropertyValueAsArray(
-              (String[]) input.getPropertyValue(dependencyEntry.getValue()), publishedDep);
-          input.setPropertyValue(dependencyEntry.getValue(), updatedProperty);
-        }
-      }
-    }
-    session.saveDocument(input);
-    return input;
-  }
-
-  @Override
-  public void unpublishAsset(DocumentModel asset) {
-    DocumentModel proxy = getPublication(asset.getCoreSession(), asset.getRef());
-    if (proxy == null) {
-      return;
-    }
-    asset.getCoreSession().removeDocument(proxy.getRef());
+    return parentSection;
   }
 
   @Override
@@ -431,22 +192,15 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     DocumentModelList sections = session.getProxies(docRef, null);
 
     if (!sections.isEmpty()) {
-      return sections.get(0);
+      DocumentModel publishedSection = sections.get(0);
+      if (session.exists(publishedSection.getRef())) {
+        // in the past getProxies very rarely would return a non-existent document
+        // ensure document exists before returning
+        return publishedSection;
+      }
     }
 
     return null;
-  }
-
-  @Override
-  public void unpublish(DocumentModel doc) {
-    if (doc == null) {
-      return;
-    }
-    if (FV_DIALECT.equals(doc.getType())) {
-      unpublishDialect(doc);
-    } else if (isAssetType(doc.getType())) {
-      unpublishAsset(doc);
-    }
   }
 
   private boolean isAssetType(String type) {
@@ -456,157 +210,41 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
         .equals(type) || FV_GALLERY.equals(type) || FV_LINK.equals(type);
   }
 
-  @Override
-  public DocumentModel publish(DocumentModel doc) {
-    if (doc == null) {
-      return null;
-    }
-    if (FV_DIALECT.equals(doc.getType())) {
-      return publishDialect(doc);
-    } else if (FV_PORTAL.equals(doc.getType())) {
-      return publishPortalAssets(doc);
-    } else if (isAssetType(doc.getType())) {
-      return publishAsset(doc);
-    }
-    return null;
+  private boolean isDialectChild(DocumentModel child) {
+    return child.getParentRef().equals(DialectUtils.getDialect(child).getRef());
   }
 
   @Override
-  public void queueRepublish(DocumentModel doc) {
-    if (doc.getAllowedStateTransitions().contains(REPUBLISH_TRANSITION)) {
-      doc.followTransition(REPUBLISH_TRANSITION);
-    }
-  }
-
-  @Override
-  public DocumentModel doRepublish(DocumentModel doc) {
+  public void republish(DocumentModel doc) {
     if (doc == null) {
-      return null;
+      return;
+    }
+
+    if (doc.getCoreSession() != null) {
+      this.session = doc.getCoreSession();
     }
 
     DocumentModel publishedDoc = null;
 
     if (isAssetType(doc.getType())) {
-      publishedDoc = republishAsset(doc);
-    } else if (FV_DIALECT.equals(doc.getType())) {
-      // Set session
-      session = doc.getCoreSession();
+      publishedDoc = createProxyForAsset(doc);
+    } else if (DialectUtils.isDialect(doc)) {
+      // Create proxy for portal
+      createProxyForPortal(session.getChild(doc.getRef(), FV_PORTAL_NAME));
 
-      // Publish Portal
-      publishPortalAssets(session.getChild(doc.getRef(), FV_PORTAL_NAME));
-
-      // Publish dialect without children
-      publishedDoc = publishDialect(doc, false);
+      // Create proxy for dialect
+      publishedDoc = createProxyForDialect(doc);
     }
 
     // After republish move back to publish state if applicable
     // If doRepublish is called directly, no transition is required
-    if (doc.getAllowedStateTransitions().contains(PUBLISH_TRANSITION)) {
-      doc.followTransition(PUBLISH_TRANSITION);
-    } else {
-      log.error(String.format(
-          "Tried to follow transition `Publish` on Document %s (%s). Not allowed from state %s",
-          doc.getTitle(), doc.getId(), doc.getCurrentLifeCycleState()));
-    }
+    StateUtils.followTransitionIfAllowed(doc, PUBLISH_TRANSITION);
 
     if (publishedDoc == null) {
       log.error(String.format(
-          "Published document was not successful on Document %s (%s)",
+          "Republishing (overwriting proxy) not successful on doc %s (%s)",
           doc.getTitle(), doc.getId()));
     }
-
-    return publishedDoc;
-  }
-
-  /**
-   * Sets relevant related proxies on published dialect proxy
-   *
-   * @param dialectProxy
-   * @return
-   */
-  @Override
-  public DocumentModel setDialectProxies(DocumentModel dialectProxy) {
-    session = dialectProxy.getCoreSession();
-
-    Map<String, String> dependencies = new HashMap<>();
-
-    if (!dialectProxy.hasSchema("fvproxy")) {
-      log.warn(
-          String.format("Proxy with ID %s does not have `fvproxy` schema.", dialectProxy.getId()));
-      return dialectProxy;
-    }
-
-    dependencies.put("fvdialect:keyboards", "fvproxy:proxied_keyboards");
-    dependencies.put("fvdialect:language_resources", "fvproxy:proxied_language_resources");
-
-    for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
-
-      String dependency = dependencyEntry.getKey();
-      String[] dependencyPropertyValue;
-      ArrayList<String> dependencyPublishedPropertyValues = new ArrayList<>();
-
-      // Handle values as arrays
-      if (dependencyEntry.getKey().equals("fvdialect:keyboards") || dependencyEntry.getKey()
-          .equals("fvdialect:language_resources")) {
-        dependencyPropertyValue = (String[]) dialectProxy.getPropertyValue(dependency);
-      } else {
-        // Handle as string
-
-        dependencyPropertyValue = PublisherUtils
-            .extractDependencyPropertyValueAsString(dialectProxy, dependency);
-      }
-
-      if (PublisherUtils.dependencyIsEmpty(dependencyPropertyValue)) {
-        dialectProxy.setPropertyValue(dependencyEntry.getValue(), null);
-        continue;
-      }
-
-      // input is the document in the section
-      for (String relatedDocUUID : dependencyPropertyValue) {
-        IdRef dependencyRef = new IdRef(relatedDocUUID);
-        DocumentModel publishedDep = getPublication(session, dependencyRef);
-
-        try {
-          session.getDocument(publishedDep.getRef());
-        } catch (NullPointerException | DocumentNotFoundException e) {
-          publishedDep = null;
-        }
-
-        // If dependency isn't published, needs publishing
-        if (publishedDep == null) {
-          DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
-          DocumentModel parentDependencySection;
-
-          parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
-
-          // Publish parent if not yet published
-          if (parentDependencySection == null) {
-            DocumentModel parent = session.getDocument(dependencyDocModel.getParentRef());
-            parentDependencySection = publishDocument(session, parent,
-                getPublication(session, parent.getParentRef()));
-          }
-
-          publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
-        }
-
-        dependencyPublishedPropertyValues.add(publishedDep.getRef().toString());
-      }
-
-      // Handle property values as arrays
-      if (dependencyEntry.getKey().equals("fvdialect:keyboards") || dependencyEntry.getKey()
-          .equals("fvdialect:language_resources")) {
-        dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues
-            .toArray(new String[dependencyPublishedPropertyValues.size()]));
-      } else {
-        // Handle as string
-
-        dialectProxy
-            .setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.get(0));
-      }
-    }
-
-    // Save changes to property values
-    return SessionUtils.saveDocumentWithoutEvents(session, dialectProxy, true, null);
   }
 
   @Override
@@ -647,38 +285,150 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
   }
 
+  //================================================================================
+  // PUBLISH METHODS
+  // These will handle creating proxies.
+  // Generally, triggered by a lifecycle state change
+  //================================================================================
+
   @Override
-  public DocumentModel publishDocumentIfDialectPublished(CoreSession session, DocumentModel doc) {
-    //  Will only publish document if the parent dialect is published
+  public DocumentModel publish(CoreSession session, DocumentModel doc) {
+    this.session = session;
 
-    DocumentModel dialect = DialectUtils.getDialect(session, doc);
-
-    if (StateUtils.isPublished(dialect)) {
-      if (StateUtils.isPublished(doc)) {
-        doRepublish(doc);
-      } else {
-        publish(doc);
-      }
+    if (FV_DIALECT.equals(doc.getType())) {
+      return createProxyForDialect(doc);
+    } else if (FV_PORTAL.equals(doc.getType())) {
+      return createProxyForPortal(doc);
+    } else if (isAssetType(doc.getType())) {
+      return createProxyForAsset(doc);
+    } else {
+      return createProxy(doc);
     }
-    return doc;
   }
 
-  @Override
-  public DocumentModel publishPortalAssets(DocumentModel portal) {
+  //================================================================================
+  // PROXY METHODS
+  // Proxies are copies of Workspace documents that are stored in `sections`
+  //================================================================================
 
-    if (portal.getCoreSession() != null) {
-      session = portal.getCoreSession();
+  /**
+   * Create a proxy for a basic document. Does not require any special field mapping.
+   *
+   * @param doc the document to create a proxy for
+   * @return the created proxy
+   */
+  private DocumentModel createProxy(DocumentModel doc) {
+    if (!PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState())
+        || !PUBLISHED_STATE.equals(DialectUtils.getDialect(doc).getCurrentLifeCycleState())) {
+      return null;
     }
 
-    DocumentModel dialect = DialectUtils.getDialect(portal);
-    if (dialect == null) {
-      throw new InvalidParameterException("Asset should be inside a dialect");
+    return session.publishDocument(doc, getOrCreateParentProxy(doc), true);
+  }
+
+  /**
+   * Create a proxy for a dialect, creating proxies for the parents (language family/language) if
+   * needed. Will also publish dependencies within the dialect and map ID fields to the correct
+   * proxy field (e.g. "fvdialect:keyboards" -> "fvproxy:proxied_keyboards")
+   *
+   * @param dialect Workspace dialect to create a proxy for
+   * @return the proxy that was created
+   */
+  private DocumentModel createProxyForDialect(DocumentModel dialect) {
+    // (LanguageFamily/Language/Dialect)
+    Map<String, DocumentModel> ancestors = getAncestors(dialect);
+
+    DocumentModel languageFamily = ancestors.get("LanguageFamily");
+
+    DocumentModel section = getRootSection(dialect);
+
+    // Create proxy for grand parent
+    if (!isPublished(languageFamily, section)) {
+      session.publishDocument(languageFamily, section);
     }
-    DocumentModelList proxies = session.getProxies(dialect.getRef(), null);
-    if (proxies.isEmpty()) {
-      throw new InvalidParameterException("Dialect should be published");
+
+    // assign Language Family to section
+    section = getPublication(session, languageFamily.getRef());
+
+    // Create proxy for parent
+    DocumentModel language = ancestors.get("Language");
+
+    if (!isPublished(language, section)) {
+      session.publishDocument(language, section);
     }
-    DocumentModel dialectSection = proxies.get(0);
+
+    // assign Language to section
+    section = getPublication(session, language.getRef());
+
+    // Create proxy for dialect
+    DocumentModel dialectProxy = session.publishDocument(dialect, section);
+
+    // Set properties on proxy
+    Map<String, String> dependencies = new HashMap<>();
+
+    dependencies.put("fvdialect:keyboards", "fvproxy:proxied_keyboards");
+    dependencies.put("fvdialect:language_resources", "fvproxy:proxied_language_resources");
+
+    for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
+
+      String dependency = dependencyEntry.getKey();
+      String[] dependencyPropertyValue;
+      ArrayList<String> dependencyPublishedPropertyValues = new ArrayList<>();
+
+      // Handle values as arrays
+      if (dependencyEntry.getKey().equals("fvdialect:keyboards") || dependencyEntry.getKey()
+          .equals("fvdialect:language_resources")) {
+        dependencyPropertyValue = (String[]) dialectProxy.getPropertyValue(dependency);
+      } else {
+        // Handle as string
+        dependencyPropertyValue = PublisherUtils
+            .extractDependencyPropertyValueAsString(dialectProxy, dependency);
+      }
+
+      if (PublisherUtils.dependencyIsEmpty(dependencyPropertyValue)) {
+        dialectProxy.setPropertyValue(dependencyEntry.getValue(), null);
+        continue;
+      }
+
+      // input is the document in the section
+      for (String relatedDocUUID : dependencyPropertyValue) {
+        IdRef dependencyRef = new IdRef(relatedDocUUID);
+
+        if (session.exists(dependencyRef) && !session.isTrashed(dependencyRef)) {
+          // Publish dependency (overwriting if needed)
+          DocumentModel publishedDep = transitionAndCreateProxy(session,
+              session.getDocument(dependencyRef));
+          dependencyPublishedPropertyValues.add(publishedDep.getRef().toString());
+        }
+      }
+
+      // Handle property values as arrays
+      if (dependencyEntry.getKey().equals("fvdialect:keyboards") || dependencyEntry.getKey()
+          .equals("fvdialect:language_resources")) {
+        dialectProxy.setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues
+            .toArray(new String[dependencyPublishedPropertyValues.size()]));
+      } else {
+        // Handle as string
+
+        dialectProxy
+            .setPropertyValue(dependencyEntry.getValue(), dependencyPublishedPropertyValues.get(0));
+      }
+    }
+
+    // Save changes to property values
+    return SessionUtils.saveDocumentWithoutEvents(session, dialectProxy, true, null);
+  }
+
+  /**
+   * Create a proxy for a portal object. Similar to dialect for most functionality, however maps
+   * different fields.
+   *
+   * @param portal to create a proxy for
+   * @return proxy that was created
+   */
+  private DocumentModel createProxyForPortal(DocumentModel portal) {
+    // Get dialect section
+    DocumentModel dialectSection = getOrCreateParentProxy(portal);
 
     // Publish changes
     DocumentModel input = session.publishDocument(portal, dialectSection, true);
@@ -720,47 +470,209 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       // input is the document in the section
       for (String relatedDocUUID : dependencyPropertyValue) {
         IdRef dependencyRef = new IdRef(relatedDocUUID);
-        DocumentModel publishedDep = getPublication(session, dependencyRef);
 
-        try {
-          // TODO: Bug? getProxies seems to return documents that don't exist anymore.
-          // Force check to see if
-          // doc exists.
-          session.getDocument(publishedDep.getRef());
-        } catch (NullPointerException | DocumentNotFoundException e) {
-          publishedDep = null;
-        }
+        if (session.exists(dependencyRef) && !session.isTrashed(dependencyRef)) {
+          // Publish dependency (overwriting if needed)
+          DocumentModel publishedDep =
+              transitionAndCreateProxy(session, session.getDocument(dependencyRef));
 
-        // If dependency isn't published, needs publishing
-        if (publishedDep == null) {
-          DocumentModel dependencyDocModel = session.getDocument(dependencyRef);
-          DocumentModel parentDependencySection;
+          // Handle exception property values as arrays
+          if (dependencyEntry.getKey().equals("fv-portal:featured_words") || dependencyEntry
+              .getKey()
+              .equals("fv-portal:related_links")) {
+            String[] property = (String[]) input.getPropertyValue(dependencyEntry.getValue());
 
-          parentDependencySection = getPublication(session, dependencyDocModel.getParentRef());
-          publishedDep = publishDocument(session, dependencyDocModel, parentDependencySection);
-        }
+            if (property == null) {
+              property = new String[0];
+            }
+            if (!Arrays.asList(property).contains(publishedDep.getRef().toString())) {
+              String[] updatedProperty = Arrays.copyOf(property, property.length + 1);
+              updatedProperty[updatedProperty.length - 1] = publishedDep.getRef().toString();
+              input.setPropertyValue(dependencyEntry.getValue(), updatedProperty);
+            }
+          } else {
+            // Handle as string
 
-        // Handle exception property values as arrays
-        if (dependencyEntry.getKey().equals("fv-portal:featured_words") || dependencyEntry.getKey()
-            .equals("fv-portal:related_links")) {
-          String[] property = (String[]) input.getPropertyValue(dependencyEntry.getValue());
-
-          if (property == null) {
-            property = new String[0];
+            input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
           }
-          if (!Arrays.asList(property).contains(publishedDep.getRef().toString())) {
-            String[] updatedProperty = Arrays.copyOf(property, property.length + 1);
-            updatedProperty[updatedProperty.length - 1] = publishedDep.getRef().toString();
-            input.setPropertyValue(dependencyEntry.getValue(), updatedProperty);
-          }
-        } else {
-          // Handle as string
-
-          input.setPropertyValue(dependencyEntry.getValue(), publishedDep.getRef().toString());
         }
       }
     }
-    session.saveDocument(input);
-    return input;
+
+    return SessionUtils.saveDocumentWithoutEvents(session, input, true, null);
+  }
+
+  /**
+   * Creates a proxy for an asset type (as defined by isAssetType). This will map fields for words,
+   * phrases, publish categories (and parent categories), and publish other dependencies.
+   *
+   * @param asset to create a proxy for
+   * @return proxy that was created for asset
+   */
+  private DocumentModel createProxyForAsset(DocumentModel asset) {
+    // Get parent section
+    DocumentModel parentSection = getOrCreateParentProxy(asset);
+
+    // Create proxy (overwriting existing one if applicable)
+    DocumentModel input = session.publishDocument(asset, parentSection, true);
+
+    if (input == null) {
+      log.error("Create proxy failed for " + asset.getId());
+      return null;
+    }
+    // TODO: Extract common pieces of dependencies into common method
+    Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
+
+    for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
+
+      String dependency = dependencyEntry.getKey();
+      // Check if input has schema
+      if (!input.hasSchema(dependency.split(":")[0])) {
+        continue;
+      }
+
+      String[] dependencyPropertyValue;
+
+      // Handle exception property value as string
+      if (MEDIA_ORIGIN_FIELD.equals(dependency)) {
+        dependencyPropertyValue = PublisherUtils
+            .extractDependencyPropertyValueAsString(input, dependency);
+
+      } else {
+        // Handle as array
+
+        dependencyPropertyValue = (String[]) input.getPropertyValue(dependency);
+      }
+
+      if (PublisherUtils.dependencyIsEmpty(dependencyPropertyValue)) {
+        input.setPropertyValue(dependencyEntry.getValue(), null);
+        continue;
+      }
+
+      // input is the document in the section
+      for (String relatedDocUUID : dependencyPropertyValue) {
+        IdRef dependencyRef = new IdRef(relatedDocUUID);
+
+        if (MEDIA_ORIGIN_FIELD.equals(dependencyEntry.getKey())) {
+          // Origin should be grabbed if it is published
+          // Shouldn't be automatically published
+          DocumentModel originPublication = getPublication(session, dependencyRef);
+
+          if (originPublication != null) {
+            input.setPropertyValue(dependencyEntry.getValue(), String.valueOf(originPublication));
+          }
+
+        } else {
+          if (session.exists(dependencyRef) && !session.isTrashed(dependencyRef)) {
+            // Publish dependency (overwriting if needed)
+            DocumentModel publishedDep =
+                transitionAndCreateProxy(session, session.getDocument(dependencyRef));
+
+            // Handle as array
+            String[] updatedProperty = PublisherUtils.constructDependencyPropertyValueAsArray(
+                (String[]) input.getPropertyValue(dependencyEntry.getValue()), publishedDep);
+            input.setPropertyValue(dependencyEntry.getValue(), updatedProperty);
+          }
+        }
+      }
+    }
+
+    return SessionUtils.saveDocumentWithoutEvents(session, input, true, null);
+  }
+
+  //================================================================================
+  // UNPUBLISH METHODS
+  // These will handle a mixture of transitions and removing proxies
+  //================================================================================
+
+  @Override
+  public void unpublish(DocumentModel doc) {
+    if (doc == null) {
+      return;
+    }
+
+    if (doc.getCoreSession() != null) {
+      this.session = doc.getCoreSession();
+    }
+
+    if (FV_DIALECT.equals(doc.getType())) {
+      unpublishDialect(doc);
+    } else if (isAssetType(doc.getType())) {
+      unpublishAsset(doc);
+    } else if (isDialectChild(doc)) {
+      unpublishDialectChild(doc);
+    }
+  }
+
+  /**
+   * Will remove all proxies for a dialect, including the parent language and family if empty. Will
+   * also transition all children from the `Published` state Intended to trigger after a lifecycle
+   * transition event of `Unpublish` on the dialect.
+   */
+  public void unpublishDialect(DocumentModel dialect) {
+    session = dialect.getCoreSession();
+    Map<String, DocumentModel> ancestors = getAncestors(dialect);
+    DocumentModel languageFamily = ancestors.get("LanguageFamily");
+    DocumentModel language = ancestors.get("Language");
+
+    if (session.hasChild(getRootSection(dialect).getRef(), languageFamily.getName())) {
+      // If language family exists in `sections`
+      DocumentModel languageFamilySection = session
+          .getChild(getRootSection(dialect).getRef(), languageFamily.getName());
+
+      if (session.hasChild(languageFamilySection.getRef(), language.getName())) {
+        // If language exists in `sections`
+        DocumentModel languageSection = session
+            .getChild(languageFamilySection.getRef(), language.getName());
+
+        if (session.hasChild(languageSection.getRef(), dialect.getName())) {
+          // If dialect exists in `sections`
+          DocumentModel dialectSection =
+              session.getChild(languageSection.getRef(), dialect.getName());
+
+          // Remove dialect from `sections`
+          session.removeDocument(dialectSection.getRef());
+        }
+
+        if (session.getChildren(languageSection.getRef()).isEmpty()) {
+          // Language section is empty, remove language
+          session.removeDocument(languageSection.getRef());
+        }
+      }
+
+      if (session.getChildren(languageFamilySection.getRef()).isEmpty()) {
+        // Language family section is empty, remove language
+        session.removeDocument(languageFamilySection.getRef());
+      }
+    }
+
+    // Transition the state of the children
+    transitionChildrenService.transitionChildren(UNPUBLISH_TRANSITION, PUBLISHED_STATE, dialect);
+  }
+
+
+  /**
+   * Remove an asset proxy; won't clear proxies for related assets since they may be used by other
+   * assets.
+   */
+  public void unpublishAsset(DocumentModel asset) {
+    DocumentModel proxy = getPublication(asset.getCoreSession(), asset.getRef());
+    if (proxy != null && session.exists(proxy.getRef())) {
+      asset.getCoreSession().removeDocument(proxy.getRef());
+    }
+  }
+
+  /**
+   * Remove a direct child of a dialect (container) and transition relevant children
+   */
+  public void unpublishDialectChild(DocumentModel dialectChild) {
+    DocumentModel proxy = getPublication(dialectChild.getCoreSession(), dialectChild.getRef());
+    if (proxy != null && session.exists(proxy.getRef())) {
+      dialectChild.getCoreSession().removeDocument(proxy.getRef());
+    }
+
+    // Transition all children that are in the published state
+    transitionChildrenService.transitionChildren(UNPUBLISH_TRANSITION,
+        PUBLISHED_STATE, dialectChild);
   }
 }

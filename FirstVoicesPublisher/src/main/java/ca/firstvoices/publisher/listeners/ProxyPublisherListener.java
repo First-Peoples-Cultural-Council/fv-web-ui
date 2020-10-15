@@ -31,24 +31,40 @@ import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_T
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.EventListener;
+import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
 
 /**
- * Listener handles publishing, un-publishing and republishing of Workspace documents
- * After a workflow transition is made, proxies will be created for Workspace
- * documents in sections, via the publisher service.
+ * Listener handles publishing, un-publishing and republishing of Workspace documents After a
+ * workflow transition is made, proxies will be created for Workspace documents in sections, via the
+ * publisher service.
  */
-public class ProxyPublisherListener implements EventListener {
+public class ProxyPublisherListener implements PostCommitEventListener {
+
+  public static final String DISABLE_PUBLISHER_LISTENER = "disablePublisherListener";
 
   protected FirstVoicesPublisherService service = Framework
       .getService(FirstVoicesPublisherService.class);
 
   @Override
+  public void handleEvent(EventBundle events) {
+    if (!events.containsEventName(LifeCycleConstants.TRANSITION_EVENT)) {
+      return;
+    }
+    for (Event event : events) {
+      String name = event.getName();
+      if (LifeCycleConstants.TRANSITION_EVENT.equals(name)) {
+        handleEvent(event);
+      }
+    }
+  }
+
   public void handleEvent(Event event) {
     EventContext ctx = event.getContext();
     if (!(ctx instanceof DocumentEventContext)) {
@@ -58,13 +74,19 @@ public class ProxyPublisherListener implements EventListener {
     if (doc == null) {
       return;
     }
+
+    if (Boolean.TRUE.equals(doc.getContextData(DISABLE_PUBLISHER_LISTENER))) {
+      // Skip publisher event for certain documents
+      return;
+    }
+
     String transition = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_TRANSITION);
     String transitionFrom = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_FROM);
 
     if (isPublishing(transition, transitionFrom)) {
-      service.publish(doc);
+      service.publish(doc.getCoreSession(), doc);
     } else if (isRepublishing(transition, transitionFrom)) {
-      service.doRepublish(doc);
+      service.republish(doc);
     } else if (isUnpublishing(transition, transitionFrom)) {
       service.unpublish(doc);
     }
@@ -72,7 +94,8 @@ public class ProxyPublisherListener implements EventListener {
 
   /**
    * Document is moving from a state other than REPUBLISHED, to public. Proxies need to be created
-   * @param transition transition event requested
+   *
+   * @param transition     transition event requested
    * @param transitionFrom state that the document is transitioning from (i.e. current state)
    */
   private boolean isPublishing(String transition, String transitionFrom) {
