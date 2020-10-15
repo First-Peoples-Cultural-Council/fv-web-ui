@@ -44,7 +44,7 @@ function RequestChangesData({
   const formRefModal = useRef(null)
   const [errors, setErrors] = useState()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [docVisibility, setDocVisibility] = useState(initialDocVisibility ?? '')
+  const [docVisibility, setDocVisibility] = useState(initialDocVisibility !== undefined ? initialDocVisibility : '')
   const { fetchDialect2, computeDialect2 } = useDialect()
   const {
     setProcessedTask,
