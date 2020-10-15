@@ -20,14 +20,20 @@ function WidgetLinksData({ children }) {
       {
         url: `/explore${path}/categories`,
         text: 'Categories',
+        transKey: 'views.pages.explore.dialect.nav_categories',
+        transform: 'words',
       },
       {
         url: `/explore${path}/media`,
         text: 'Media browser',
+        transKey: 'views.pages.explore.dialect.media_browser',
+        transform: 'words',
       },
       {
         url: `/explore${path}/phrasebooks`,
         text: 'Phrase books',
+        transKey: 'views.pages.explore.dialect.nav_phrase_books',
+        transform: 'words',
       },
     ]
     if (id) {
@@ -40,6 +46,8 @@ function WidgetLinksData({ children }) {
     _links.push({
       url: `/explore${path}/reports`,
       text: 'Reports',
+      transKey: 'reports',
+      transform: 'first',
     })
 
     return {
