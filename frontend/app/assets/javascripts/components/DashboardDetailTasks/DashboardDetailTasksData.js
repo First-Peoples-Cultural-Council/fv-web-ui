@@ -117,7 +117,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     if (queryItem) {
       fetchDocumentSingleArg({
         pathOrId: queryItem,
-        headers: { 'enrichers.document': 'ancestry,phrase,book,permissions' },
+        headers: { 'enrichers.document': 'ancestry,word,phrase,book,permissions' },
       })
     }
   }, [queryItem])

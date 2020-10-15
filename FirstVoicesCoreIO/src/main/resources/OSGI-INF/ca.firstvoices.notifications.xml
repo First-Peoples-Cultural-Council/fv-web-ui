@@ -17,7 +17,7 @@
     <notification enabled="false" name="Workflow Change"/>
 
     <notification autoSubscribed="true" availableIn="Workspace" channel="email" enabled="true"
-      label="test" name="Task delegated" subject="${author} requested changes for ${docTitle}"
+      label="test" name="Task delegated" subject="Changes requested for ${docTitle}"
       template="changesRequested">
       <event name="workflowTaskDelegated"/>
     </notification>
