@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Widget from 'components/Widget'
 import Link from 'views/components/Link'
 import FVLabel from 'views/components/FVLabel'
+import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./WidgetLinks.css'
 /**
  * @summary WidgetLinksPresentation
@@ -16,20 +17,31 @@ import '!style-loader!css-loader!./WidgetLinks.css'
  * @returns {node} jsx markup
  */
 
-function WidgetLinksPresentation({ links }) {
+function WidgetLinksPresentation({ links: linkSets }) {
   return (
-    <Widget.Presentation className="WidgetLinks" title="Admin Links">
-      <ul className="WidgetLinks__list">
-        {links.map(({ url, text, transKey, transform }, index) => {
+    <Widget.Presentation title="Admin Links">
+      <div className="WidgetLinks">
+        {linkSets.map(({ title, links }, linkSetIndex) => {
           return (
-            <li className="WidgetLinks__listItem" key={index}>
-              <Link className="Widget__link" href={url}>
-                {transKey ? <FVLabel transKey={transKey} defaultStr={text} transform={transform} /> : text}
-              </Link>
-            </li>
+            <div key={`linkSet${linkSetIndex}`}>
+              <Typography className="WidgetLinks__subtitle" variant="h6" component="h3">
+                {title}
+              </Typography>
+              <ul className="WidgetLinks__list">
+                {links.map(({ url, text, transKey, transform }, index) => {
+                  return (
+                    <li className="WidgetLinks__listItem" key={index}>
+                      <Link className="Widget__link" href={url}>
+                        {transKey ? <FVLabel transKey={transKey} defaultStr={text} transform={transform} /> : text}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
           )
         })}
-      </ul>
+      </div>
     </Widget.Presentation>
   )
 }

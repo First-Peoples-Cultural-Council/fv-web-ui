@@ -1,6 +1,9 @@
-.WidgetLinks .Widget__body {
+.WidgetLinks {
+  padding: 0 30px;
   min-height: 100px;
-  display: block;
+}
+.WidgetLinks .WidgetLinks__subtitle {
+  margin-bottom: 10px;
 }
 .WidgetLinks__list {
   list-style-type: none;
