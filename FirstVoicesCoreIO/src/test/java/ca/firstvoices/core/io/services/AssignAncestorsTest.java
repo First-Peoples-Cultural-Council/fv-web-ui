@@ -18,13 +18,12 @@
  *
  */
 
-package ca.firstvoices.core.io.ancestry;
+package ca.firstvoices.core.io.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import ca.firstvoices.core.io.services.AssignAncestorsService;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
 import ca.firstvoices.tests.mocks.services.MockDialectService;

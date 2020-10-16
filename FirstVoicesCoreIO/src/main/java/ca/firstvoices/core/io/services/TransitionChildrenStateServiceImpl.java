@@ -37,7 +37,7 @@ public class TransitionChildrenStateServiceImpl implements TransitionChildrenSta
 
     // execute a first query to know total size
     query.append(String.format(
-        "SELECT * FROM Document WHERE ecm:parentId ='%s' " // consider transitioning based on ancestorid?
+        "SELECT * FROM Document WHERE ecm:parentId ='%s' "
             + "AND ecm:isProxy = 0 "
             + "AND ecm:isTrashed = 0 "
             + "AND ecm:isVersion = 0",
