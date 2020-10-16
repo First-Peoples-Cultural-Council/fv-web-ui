@@ -3,27 +3,27 @@
     <types>
       <type name="Folder">default</type>
       <type name="Domain">default</type>
-      <type name="FVAlphabet">fv-lifecycle</type>
+      <type name="FVAlphabet" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVAudio">fv-lifecycle</type>
       <type name="FVBook">fv-lifecycle</type>
       <type name="FVBookEntry">fv-lifecycle</type>
       <type name="FVBooks" noRecursionForTransitions="Enable,Disable,Publish,Republish,RevertToNew,Unpublish">fv-lifecycle</type>
-      <type name="FVCategories">fv-lifecycle</type>
+      <type name="FVCategories" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVCategory">fv-lifecycle</type>
       <type name="FVLabelCategory">fv-lifecycle</type>
       <type name="FVCharacter">fv-lifecycle</type>
       <type name="FVContributor">fv-lifecycle</type>
-      <type name="FVContributors">fv-lifecycle</type>
+      <type name="FVContributors" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVDictionary" noRecursionForTransitions="Enable,Disable,Publish,Republish,RevertToNew,Unpublish">fv-lifecycle</type>
       <type name="FVLabel">fv-lifecycle</type>
-      <type name="FVLabelDictionary">fv-lifecycle</type>
+      <type name="FVLabelDictionary" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVDraftFolder">default</type>
       <type name="FVGallery">fv-lifecycle</type>
       <type name="FVGuide">default</type>
       <type name="FVLanguage">fv-lifecycle</type>
       <type name="FVLanguageFamily">fv-lifecycle</type>
       <type name="FVLink">fv-lifecycle</type>
-      <type name="FVLinks">fv-lifecycle</type>i
+      <type name="FVLinks" noRecursionForTransitions="Publish">fv-lifecycle</type>i
       <type name="File">default</type>
       <type name="FVPage">fv-lifecycle</type>
       <type name="FVPhrase">fv-lifecycle</type>

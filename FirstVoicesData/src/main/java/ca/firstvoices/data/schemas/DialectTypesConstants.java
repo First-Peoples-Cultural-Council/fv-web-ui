@@ -22,6 +22,8 @@ public class DialectTypesConstants {
 
   // Categories Container, and sub-types
   public static final String FV_CATEGORIES = "FVCategories";
+  public static final String FV_CATEGORIES_NAME = "Categories";
+  public static final String FV_PHRASE_BOOKS_NAME = "Phrase Books";
   public static final String FV_CATEGORY = "FVCategory";
 
   // Books (Songs and Stories), and sub-types
