@@ -1,13 +1,23 @@
 package ca.firstvoices.maintenance.listeners;
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.maintenance.dialect.categories.Constants.CLEAN_CATEGORY_REFERENCES_JOB_ID;
+
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.trash.TrashService;
@@ -23,14 +33,18 @@ import org.nuxeo.runtime.api.Framework;
 
 
 /**
- * This is a general listener for post commit, async cleanup operations
- * Currently handled clearing tasks, but could be expanded to other uses or made abstract
+ * This is a general listener for post commit, async cleanup operations Currently handled clearing
+ * tasks, but could be expanded to other uses or made abstract
  */
 public class PostCommitCleanupListener implements PostCommitEventListener {
 
   public static final String GET_ALL_OPEN_TASKS_FOR_DOCUMENT = "GET_ALL_OPEN_TASKS_FOR_DOCUMENT";
 
   private ArrayList<String> endTaskEvents = new ArrayList<>();
+
+  private ArrayList<String> unpublishEvents = new ArrayList<>();
+
+  private ArrayList<String> cleanReferencesEvents = new ArrayList<>();
 
   @Override
   public void handleEvent(EventBundle events) {
@@ -51,17 +65,13 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
       // Operations to execute for core types
       EventContext ctx = event.getContext();
 
-      if (!ctx.getPrincipal().isAdministrator()
-          && ctx instanceof DocumentEventContext) {
-        // Only execute on non-admin events (system/FV), and when documents involved
+      if (ctx instanceof DocumentEventContext) {
         DocumentEventContext docCtx = (DocumentEventContext) ctx;
         DocumentModel doc = docCtx.getSourceDocument();
 
-        if (DocumentUtils.isMutable(doc)
-            && DialectUtils.isCoreType(doc.getType())) {
-          // For core types, end tasks if present
-          endRelatedTask(event, doc);
-        }
+        endRelatedTask(event, doc);
+        unpublishTrashedDocs(event, doc);
+        cleanReferences(event, doc);
       }
     }
   }
@@ -71,7 +81,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
    *
    * @return list of all events to handle; modify to handle more events.
    */
-  private ArrayList<String> getEventsToHandle() {
+  private Set<String> getEventsToHandle() {
 
     // Events that trigger ending a task
     endTaskEvents = new ArrayList<>();
@@ -80,7 +90,18 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
     endTaskEvents.add(LifeCycleConstants.TRANSITION_EVENT);
     endTaskEvents.add(TrashService.DOCUMENT_TRASHED);
 
-    return endTaskEvents;
+    // Events that trigger un-publishing
+    unpublishEvents = new ArrayList<>();
+    unpublishEvents.add(TrashService.DOCUMENT_TRASHED);
+
+    // Events that trigger cleaning references
+    cleanReferencesEvents = new ArrayList<>();
+    cleanReferencesEvents.add(TrashService.DOCUMENT_TRASHED);
+
+    // Return combined set of all events
+    return Stream.of(endTaskEvents, unpublishEvents)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -94,12 +115,49 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
   }
 
   /**
-   * Will "cancel" tasks that are related to the current document
+   * Will remove the proxies for documents that are trashed. Only applies to non system admin
+   * operations, and mutable core documents
+   *
    * @param event the current event handled in the bundle
+   * @param doc   the document to remove proxies for
+   */
+  private void unpublishTrashedDocs(Event event, DocumentModel doc) {
+    if (unpublishEvents.contains(event.getName()) && DocumentUtils.isMutable(doc)) {
+      CoreSession session = event.getContext().getCoreSession();
+      DocumentModelList proxies = session.getProxies(doc.getRef(), null);
+
+      for (DocumentModel proxy : proxies) {
+        session.removeDocument(proxy.getRef());
+      }
+    }
+  }
+
+  /**
+   * Will setup a job to clean references to categories/phrase books that have been trashed
+   * Only applies to documents of type FV_CATEGORY
+   * @param event the current event handled in the bundle
+   * @param doc   the document, a category, to clear references for
+   */
+  private void cleanReferences(Event event, DocumentModel doc) {
+    if (cleanReferencesEvents.contains(event.getName()) && DocumentUtils.isMutable(doc)
+        && FV_CATEGORY.equals(doc.getType())) {
+      RequiredJobsUtils
+          .addToRequiredJobs(DialectUtils.getDialect(doc), CLEAN_CATEGORY_REFERENCES_JOB_ID);
+    }
+  }
+
+  /**
+   * Will "cancel" tasks that are related to the current document Only applies to non system admin
+   * operations, and mutable core documents
+   *
+   * @param event       the current event handled in the bundle
    * @param coreTypeDoc the document to clear related tasks for
    */
   private void endRelatedTask(Event event, DocumentModel coreTypeDoc) {
-    if (endTaskEvents.contains(event.getName())) {
+    if (endTaskEvents.contains(event.getName()) && !event.getContext().getPrincipal()
+        .isAdministrator() && DocumentUtils.isMutable(coreTypeDoc)
+        && DialectUtils.isCoreType(coreTypeDoc.getType())) {
+
       Map<String, Serializable> pageProviderProps = new HashMap<>();
 
       // Core session to use with page provider
