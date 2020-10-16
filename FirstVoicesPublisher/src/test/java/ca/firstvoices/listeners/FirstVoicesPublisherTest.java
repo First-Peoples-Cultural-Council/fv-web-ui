@@ -80,6 +80,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Deploy({"org.nuxeo.ecm.platform.types.core", "org.nuxeo.ecm.platform.publisher.core",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.video.core",
     "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting", "FirstVoicesData",
+    "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
@@ -93,8 +94,10 @@ public class FirstVoicesPublisherTest {
 
   @Inject
   protected PublisherService publisherService;
+
   @Inject
   protected FirstVoicesPublisherService dialectPublisherService;
+
   private DocumentModel domain;
   private DocumentModel sectionRoot;
   private DocumentModel languageDoc;
@@ -129,8 +132,6 @@ public class FirstVoicesPublisherTest {
 
   private DocumentModel phraseBook;
   private DocumentModel phrase;
-  @Inject
-  private FirstVoicesPublisherService firstVoicesPublisherService;
 
   @After
   public void cleanup() {
@@ -382,7 +383,7 @@ public class FirstVoicesPublisherTest {
     word.setPropertyValue("fv-word:pronunciation", "test");
 
     // Republish word
-    firstVoicesPublisherService.republish(word);
+    dialectPublisherService.republish(word);
 
     assertNotNull(getProxy(word).getPropertyValue("fv-word:pronunciation"));
   }
