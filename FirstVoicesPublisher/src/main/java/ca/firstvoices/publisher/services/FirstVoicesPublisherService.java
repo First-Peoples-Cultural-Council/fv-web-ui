@@ -71,12 +71,4 @@ public interface FirstVoicesPublisherService {
    * @return proxy (i.e. document in sections) or null if not proxy exists
    */
   DocumentModel getPublication(CoreSession session, DocumentRef docRef);
-
-  /**
-   * TODO: Handle in PostCommitCleanupListener and remove from service
-   * @param session
-   * @param doc
-   */
-  void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
-      DocumentModel doc);
 }

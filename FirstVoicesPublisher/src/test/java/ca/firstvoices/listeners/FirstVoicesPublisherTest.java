@@ -58,20 +58,16 @@ import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.security.InvalidParameterException;
 import javax.inject.Inject;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentNotFoundException;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.trash.TrashService;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -542,99 +538,4 @@ public class FirstVoicesPublisherTest {
         doc.getPathAsString().matches("/Family/Language/Dialect/Resources/" + original.getName()));
     assertEquals(original.getRef().toString(), doc.getSourceId());
   }
-
-  @Test
-  public void removeCategoryFromWordsTest() {
-    createWord();
-    String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
-    Assert.assertEquals(1, categoriesProperty.length);
-    firstVoicesPublisherService
-        .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, subcategory);
-
-    String wordQuery = "SELECT * FROM FVWord WHERE ecm:uuid = '" + word.getId() + "'";
-    DocumentModelList words = session.query(wordQuery);
-
-    Assert.assertNull(words.get(0).getPropertyValue("categories"));
-  }
-
-  @Test
-  public void removePhraseBookFromPhraseTest() {
-    createPhrase();
-    String[] phraseBookProperty = (String[]) phrase.getPropertyValue("phrase_books");
-    Assert.assertEquals(1, phraseBookProperty.length);
-    firstVoicesPublisherService
-        .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, phraseBook);
-
-    String phraseQuery = "SELECT * FROM FVPhrase WHERE ecm:uuid = '" + phrase.getId() + "'";
-    DocumentModelList phrases = session.query(phraseQuery);
-    Assert.assertNull(phrases.get(0).getPropertyValue("phrase_books"));
-  }
-
-  @Test
-  public void removeOnlyCategoryTrashedCategoriesFromWordsTest() {
-    createWord();
-
-    DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory2", FV_CATEGORY));
-    DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory3", FV_CATEGORY));
-
-    session.saveDocument(subcategory2);
-    session.saveDocument(subcategory3);
-
-    String[] values = new String[3];
-    values[0] = subcategory.getId();
-    values[1] = subcategory2.getId();
-    values[2] = subcategory3.getId();
-    word.setPropertyValue("categories", values);
-    session.saveDocument(word);
-
-    String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
-    Assert.assertEquals(3, categoriesProperty.length);
-
-    firstVoicesPublisherService
-        .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, subcategory);
-
-    String wordQuery = "SELECT * FROM FVWord WHERE ecm:uuid = '" + word.getId() + "'";
-    DocumentModelList words = session.query(wordQuery);
-    String[] categoriesProp = (String[]) words.get(0).getPropertyValue("categories");
-    Assert.assertEquals(2, categoriesProp.length);
-  }
-
-  @Test
-  public void removeCategoryAndTrashedCategoriesFromWordsTest() {
-    createWord();
-
-    DocumentModel subcategory2 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory2", FV_CATEGORY));
-    DocumentModel subcategory3 = session.createDocument(
-        session.createDocumentModel(category.getPathAsString(), "SubCategory3", FV_CATEGORY));
-
-    session.saveDocument(subcategory2);
-    session.saveDocument(subcategory3);
-
-    String[] values = new String[3];
-    values[0] = subcategory.getId();
-    values[1] = subcategory2.getId();
-    values[2] = subcategory3.getId();
-    word.setPropertyValue("categories", values);
-    session.saveDocument(word);
-
-    String[] categoriesProperty = (String[]) word.getPropertyValue("categories");
-    Assert.assertEquals(3, categoriesProperty.length);
-    Framework.getService(TrashService.class).trashDocument(subcategory2);
-    session.save();
-
-    firstVoicesPublisherService
-        .removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(session, subcategory);
-
-    String wordQuery = "SELECT * FROM FVWord WHERE ecm:uuid = '" + word.getId() + "'";
-
-    DocumentModelList words = session.query(wordQuery);
-    DocumentModel qWord = words.get(0);
-    String[] qCategoriesProp = (String[]) qWord.getPropertyValue("categories");
-
-    Assert.assertEquals(subcategory3.getId(), qCategoriesProp[0]);
-  }
-
 }

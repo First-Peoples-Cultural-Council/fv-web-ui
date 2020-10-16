@@ -29,7 +29,11 @@ import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
+import ca.firstvoices.publisher.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.event.Event;
@@ -46,8 +50,6 @@ import org.nuxeo.runtime.api.Framework;
  * publisher service.
  */
 public class ProxyPublisherListener implements PostCommitEventListener {
-
-  public static final String DISABLE_PUBLISHER_LISTENER = "disablePublisherListener";
 
   protected FirstVoicesPublisherService service = Framework
       .getService(FirstVoicesPublisherService.class);
@@ -75,13 +77,14 @@ public class ProxyPublisherListener implements PostCommitEventListener {
       return;
     }
 
-    if (Boolean.TRUE.equals(doc.getContextData(DISABLE_PUBLISHER_LISTENER))) {
-      // Skip publisher event for certain documents
-      return;
-    }
-
     String transition = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_TRANSITION);
     String transitionFrom = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_FROM);
+
+    if (isDialectPublishingPending(doc)) {
+      // Do not trigger listeners while dialect publishing is pending
+      // since the creation of proxies is done via `CreateProxiesWorker`
+      return;
+    }
 
     if (isPublishing(transition, transitionFrom)) {
       service.publish(doc.getCoreSession(), doc);
@@ -116,4 +119,18 @@ public class ProxyPublisherListener implements PostCommitEventListener {
     return (UNPUBLISH_TRANSITION.equals(transition)
         || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom));
   }
+
+  /**
+   * @param doc current document fired to the listener
+   * @return true is the dialect is in the process of publishing, false otherwise
+   */
+  private boolean isDialectPublishingPending(DocumentModel doc) {
+    CoreSession session = doc.getCoreSession();
+    DocumentModel dialect = session.getDocument(DialectUtils.getDialect(doc).getRef());
+
+    return RequiredJobsUtils
+        .hasRequiredJobs(dialect,
+            Constants.PUBLISH_DIALECT_JOB_ID);
+  }
+
 }

@@ -20,12 +20,12 @@
 
 package ca.firstvoices.operations;
 
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import ca.firstvoices.workers.PublishDialectWorker;
-import java.util.logging.Logger;
+import ca.firstvoices.workers.CreateProxiesWorker;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -43,9 +43,7 @@ import org.picocontainer.annotations.Inject;
 public class PublishDialect extends AbstractMaintenanceOperation {
 
   public static final String ID = Constants.PUBLISH_DIALECT_ACTION_ID;
-  private static final Logger log = Logger.getLogger(
-      PublishDialect.class.getCanonicalName()
-  );
+
   @Context
   protected CoreSession session;
 
@@ -77,9 +75,14 @@ public class PublishDialect extends AbstractMaintenanceOperation {
 
   @Override
   protected void executeWorkPhase(DocumentModel dialect) {
-    // Initiate worker to create proxy for everything relevant inside a dialect
-    PublishDialectWorker worker = new PublishDialectWorker(dialect.getRef(),
+    // Transition dialect to publish if it is not already
+    if (!StateUtils.isPublished(dialect)) {
+      fvPublisherService.transitionDialectToPublished(session, dialect);
+    }
+
+    // Initiate worker to create proxies for everything relevant inside a dialect
+    CreateProxiesWorker proxyWorker = new CreateProxiesWorker(dialect.getRef(),
         Constants.PUBLISH_DIALECT_JOB_ID, batchSize);
-    workManager.schedule(worker, true);
+    workManager.schedule(proxyWorker, true);
   }
 }

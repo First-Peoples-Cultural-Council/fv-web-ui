@@ -31,9 +31,6 @@ public class Constants {
   public static final String PUBLISH_DIALECT_JOB_ID = GROUP_NAME + ".PublishDialect";
   public static final String PUBLISH_DIALECT_ACTION_ID = PUBLISH_DIALECT_JOB_ID;
 
-  // Confusables Status Operation
-  public static final String CONFUSABLES_STATUS_ACTION_ID = GROUP_NAME + ".PublishDialectStatus";
-
   private Constants() {
     throw new IllegalStateException("Utility class");
   }
