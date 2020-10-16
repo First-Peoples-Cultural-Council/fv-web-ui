@@ -44,8 +44,11 @@ public interface MockDialectService {
    * @param path the path of the dialect
    * @param words array of words to generate
    * @param categories an optional list of categories
-   * @return
+   * @return list of generated words
    */
   DocumentModelList generateFVWords(CoreSession session, String path,
       String[] words, DocumentModelList categories);
+
+  DocumentModelList generateFVPhrases(CoreSession session, String path,
+      int phraseEntries, String[] wordsToUse, DocumentModelList phraseBooks);
 }

@@ -322,7 +322,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     return fvWords;
   }
 
-  private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
+  public DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
       String[] wordsToUse, DocumentModelList phraseBooks) {
     //Generate phrase documents
     DocumentModelList fvPhrases = new DocumentModelListImpl();

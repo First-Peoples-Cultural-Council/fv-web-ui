@@ -41,10 +41,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 
-@Operation(id = CleanCategoryReferences.ID, category = Constants.GROUP_NAME, label =
+@Operation(id = CleanReferences.ID, category = Constants.GROUP_NAME, label =
     Constants.CLEAN_CATEGORY_REFERENCES_ACTION_ID, description =
     "Operation to clean category/phrasebook references from words/phrases")
-public class CleanCategoryReferences extends AbstractMaintenanceOperation {
+public class CleanReferences extends AbstractMaintenanceOperation {
 
   public static final String ID = Constants.CLEAN_CATEGORY_REFERENCES_ACTION_ID;
 
@@ -107,7 +107,7 @@ public class CleanCategoryReferences extends AbstractMaintenanceOperation {
     String query = String.format(
         "SELECT * FROM %s WHERE %s IN ('%s') "
             + "AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0",
-        typeToHandle, category.getId(), fieldToUpdate);
+        typeToHandle, fieldToUpdate, category.getId());
 
     DocumentModelList docsToUpdate = session.query(query);
 

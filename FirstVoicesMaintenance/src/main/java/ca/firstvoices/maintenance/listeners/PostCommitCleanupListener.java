@@ -70,7 +70,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
         DocumentModel doc = docCtx.getSourceDocument();
 
         endRelatedTask(event, doc);
-        unpublishTrashedDocs(event, doc);
+        //unpublishTrashedDocs(event, doc);
         cleanReferences(event, doc);
       }
     }
@@ -99,7 +99,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
     cleanReferencesEvents.add(TrashService.DOCUMENT_TRASHED);
 
     // Return combined set of all events
-    return Stream.of(endTaskEvents, unpublishEvents)
+    return Stream.of(endTaskEvents, unpublishEvents, cleanReferencesEvents)
         .flatMap(Collection::stream)
         .collect(Collectors.toSet());
   }

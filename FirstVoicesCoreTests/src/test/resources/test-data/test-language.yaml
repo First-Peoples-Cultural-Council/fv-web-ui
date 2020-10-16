@@ -32,6 +32,7 @@ children:
                 properties:
                   part_of_speech: "noun"
               - type: FVPhrase
+                key: testPhrase1
                 name: "A phrase in dialect 1"
           - type: FVSong
             name: "A test song"
