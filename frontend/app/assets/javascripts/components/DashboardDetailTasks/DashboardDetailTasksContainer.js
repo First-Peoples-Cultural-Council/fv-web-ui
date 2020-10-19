@@ -73,6 +73,7 @@ function DashboardDetailTasksContainer() {
           culturalNotes,
           definitions,
           dialectPath: itemDialectPath,
+          generalNote,
           id: itemId,
           itemType,
           literalTranslations,
@@ -115,8 +116,11 @@ function DashboardDetailTasksContainer() {
               childrenDisplayButtons={childrenDisplayButtons}
               culturalNotes={culturalNotes}
               definitions={definitions}
-              title={itemTitle}
+              docType={itemType}
+              generalNote={generalNote}
+              idSelectedItem={idSelectedItem}
               literalTranslations={literalTranslations}
+              metadata={metadata}
               onEditClick={onEditClick}
               onViewClick={onViewClick}
               partOfSpeech={partOfSpeech}
@@ -125,10 +129,8 @@ function DashboardDetailTasksContainer() {
               pronunciation={pronunciation}
               relatedAssets={relatedAssets}
               relatedToAssets={relatedToAssets}
-              metadata={metadata}
+              title={itemTitle}
               videos={videos}
-              docType={itemType}
-              idSelectedItem={idSelectedItem}
             />
           )
         }

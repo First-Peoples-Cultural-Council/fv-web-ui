@@ -320,6 +320,7 @@ const options = {
       'fv:reference',
       'fv-word:acknowledgement',
       'fv:source',
+      'fv:general_note',
       'fv:available_in_childrens_archive',
       'fv-word:available_in_games',
     ],
@@ -327,6 +328,15 @@ const options = {
       'dc:title': {
         label: intl.trans('word', 'Word', 'first'),
         factory: VirtualKeyboardFactory,
+      },
+      'fv:general_note': {
+        label: 'General Note', // intl.trans('word', 'Word', 'first'),
+        type: 'textarea',
+        factory: WysiwygFactory,
+        attrs: {
+          placeholder: 'placeholder here', // intl.trans('models.enter_book_introduction', 'Enter Book Introduction Here', 'first'),
+          dataTestId: 'wysiwyg-general_note',
+        },
       },
       'fv:definitions': {
         label: intl.trans('definitions', 'Definitions', 'first'),
@@ -582,9 +592,19 @@ const options = {
       'fv:reference',
       'fv-phrase:acknowledgement',
       'fv:source',
+      'fv:general_note',
       'fv:available_in_childrens_archive',
     ],
     fields: {
+      'fv:general_note': {
+        label: 'General Note', // intl.trans('word', 'Word', 'first'),
+        type: 'textarea',
+        factory: WysiwygFactory,
+        attrs: {
+          placeholder: 'placeholder here', // intl.trans('models.enter_book_introduction', 'Enter Book Introduction Here', 'first'),
+          dataTestId: 'wysiwyg-general_note',
+        },
+      },
       'dc:title': {
         label: intl.trans('phrase', 'Phrase', 'first'),
       },

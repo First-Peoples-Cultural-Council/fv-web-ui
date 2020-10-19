@@ -51,6 +51,7 @@ function PhraseData({ children }) {
   const culturalNotes = selectn('properties.fv:cultural_note', phraseRawData) || []
   const definitions = selectn('properties.fv:definitions', phraseRawData)
   const docType = selectn('type', phraseRawData)
+  const generalNote = selectn('properties.fv:general_note', phraseRawData)
   const literalTranslations = selectn('properties.fv:literal_translation', phraseRawData)
   const photos = selectn('contextParameters.phrase.related_pictures', phraseRawData) || []
   const phrasebooks = selectn('contextParameters.phrase.phrase_books', phraseRawData) || []
@@ -107,6 +108,7 @@ function PhraseData({ children }) {
     culturalNotes,
     definitions,
     dialectClassName,
+    generalNote,
     literalTranslations,
     photos,
     properties,
