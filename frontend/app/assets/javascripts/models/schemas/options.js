@@ -330,11 +330,10 @@ const options = {
         factory: VirtualKeyboardFactory,
       },
       'fv:general_note': {
-        label: 'General Note', // intl.trans('word', 'Word', 'first'),
+        label: intl.trans('generalNote', 'General Notes', 'word'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
-          placeholder: 'placeholder here', // intl.trans('models.enter_book_introduction', 'Enter Book Introduction Here', 'first'),
           dataTestId: 'wysiwyg-general_note',
         },
       },
@@ -597,11 +596,10 @@ const options = {
     ],
     fields: {
       'fv:general_note': {
-        label: 'General Note', // intl.trans('word', 'Word', 'first'),
+        label: intl.trans('generalNote', 'General Notes', 'word'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
-          placeholder: 'placeholder here', // intl.trans('models.enter_book_introduction', 'Enter Book Introduction Here', 'first'),
           dataTestId: 'wysiwyg-general_note',
         },
       },
