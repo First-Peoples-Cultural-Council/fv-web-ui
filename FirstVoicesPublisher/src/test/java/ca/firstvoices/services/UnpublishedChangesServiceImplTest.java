@@ -20,12 +20,11 @@
 
 package ca.firstvoices.services;
 
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.testUtil.MockStructureTestUtil;
 import javax.inject.Inject;
 import org.junit.After;
@@ -50,7 +49,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @RunWith(FeaturesRunner.class)
 @Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, CoreFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({"FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
+@Deploy({"FirstVoicesCoreIO", "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.types.core",
     "org.nuxeo.ecm.platform.publisher.core", "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.rendition.core", "org.nuxeo.ecm.platform.video.core",
@@ -60,13 +59,17 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
+    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-disable-listeners.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 
 public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
 
   @Inject
-  private CoreSession session;
+  protected CoreSession session;
+
+  @Inject
+  protected FirstVoicesPublisherService fvPublisherService;
 
   @Inject
   private UnpublishedChangesService unpublishedChangesServiceInstance;
@@ -86,7 +89,6 @@ public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
 
     dialectDoc = createDialectTree(session);
     session.saveDocument(dialectDoc);
-
   }
 
   @After
@@ -113,7 +115,9 @@ public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
         /*
             Should return false because there are no changes since the publish.
          */
-    dialectDoc.followTransition(PUBLISH_TRANSITION);
+    fvPublisherService.transitionDialectToPublished(session, dialectDoc);
+    fvPublisherService.publish(session, dialectDoc);
+
     dialectDoc = session.saveDocument(dialectDoc);
     assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
 
@@ -127,7 +131,7 @@ public class UnpublishedChangesServiceImplTest extends MockStructureTestUtil {
         /*
             Should now return false because the changes have been published.
          */
-    dialectDoc.followTransition(REPUBLISH_TRANSITION);
+    fvPublisherService.publish(session, dialectDoc);
     dialectDoc = session.saveDocument(dialectDoc);
     assertFalse(unpublishedChangesServiceInstance.checkUnpublishedChanges(session, dialectDoc));
 

@@ -50,6 +50,7 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
+    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-disable-listeners.xml",
     "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"
 })
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})

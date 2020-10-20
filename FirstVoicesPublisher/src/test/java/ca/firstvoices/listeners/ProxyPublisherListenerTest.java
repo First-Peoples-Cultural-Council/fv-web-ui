@@ -50,7 +50,8 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "org.nuxeo.ecm.platform.publisher.core",
     "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml"
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
+    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-disable-listeners.xml"
 })
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})
 public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
