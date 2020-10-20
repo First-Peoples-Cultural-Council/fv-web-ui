@@ -4,13 +4,13 @@
     "baseUrl": "./",
     "paths": {
       "styles": ["./app/assets/stylesheets"],
-      "models": ["./app/assets/javascripts/models"],
-      "views": ["./app/assets/javascripts/views"],
-      "conf": ["./app/assets/javascripts/conf"],
-      "operations": ["./app/assets/javascripts/operations"],
-      "providers": ["./app/assets/javascripts/providers"],
-      "components": ["./app/assets/javascripts/components"],
-      "common": ["./app/assets/javascripts/common"],
+      "models": ["./app/javascripts/models"],
+      "views": ["./app/javascripts/views"],
+      "conf": ["./app/javascripts/conf"],
+      "operations": ["./app/javascripts/operations"],
+      "providers": ["./app/javascripts/providers"],
+      "components": ["./app/javascripts/components"],
+      "common": ["./app/javascripts/common"],
       "games": ["./app/assets/games"],
       "images": ["./app/assets/images"]
     }

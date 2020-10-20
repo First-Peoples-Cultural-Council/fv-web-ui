@@ -11,7 +11,8 @@ const rootDirectory = path.resolve(frontEndRootDirectory, '..')
 // Source Directories
 const sourceDirectory = path.resolve(frontEndRootDirectory, 'app')
 const sourceAssetsDirectory = path.resolve(sourceDirectory, 'assets')
-const sourceScriptsDirectory = path.resolve(sourceAssetsDirectory, 'javascripts')
+const sourceScriptsDirectory = path.resolve(sourceDirectory, 'javascripts')
+const sourceStateDirectory = path.resolve(sourceDirectory, 'state')
 const sourceStylesDirectory = path.resolve(sourceAssetsDirectory, 'stylesheets')
 const sourceImagesDirectory = path.resolve(sourceAssetsDirectory, 'images')
 const sourceFontsDirectory = path.resolve(sourceAssetsDirectory, 'fonts')
@@ -126,8 +127,8 @@ module.exports = (env) => ({
       operations: path.resolve(sourceScriptsDirectory, 'operations'),
       providers: path.resolve(sourceScriptsDirectory, 'providers'),
       components: path.resolve(sourceScriptsDirectory, 'components'),
-      common: path.resolve(sourceScriptsDirectory, 'common'),
-      DataSource: path.resolve(sourceScriptsDirectory, 'common', 'DataSource'),
+      common: path.resolve(sourceDirectory, 'common'),
+      DataSources: path.resolve(sourceStateDirectory, 'DataSources'),
       games: path.resolve(sourceAssetsDirectory, 'games'),
       images: path.resolve(sourceAssetsDirectory, 'images'),
       phaser: phaser,
