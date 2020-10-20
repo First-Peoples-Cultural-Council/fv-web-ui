@@ -1,7 +1,7 @@
 // import selectn from 'selectn'
-import en from 'views/../locale/locale.en.json'
-import fr from 'views/../locale/locale.fr.json'
-import sp from 'views/../locale/locale.sp.json'
+import en from 'common/locale/locale.en.json'
+import fr from 'common/locale/locale.fr.json'
+import sp from 'common/locale/locale.sp.json'
 // import { sprintf, vsprintf } from 'sprintf-js'
 import IntlService from 'views/services/intl'
 /* eslint-disable */

@@ -60,7 +60,7 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import ToolbarNavigation from 'views/pages/explore/dialect/learn/base/toolbar-navigation'
 import LearningSidebar from 'views/pages/explore/dialect/learn/base/learning-sidebar'

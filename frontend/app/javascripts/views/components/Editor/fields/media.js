@@ -8,7 +8,7 @@ import FVButton from 'views/components/FVButton'
 import AddMediaComponent from 'views/components/Editor/AddMediaComponent'
 import SelectMediaComponent from 'views/components/Editor/SelectMediaComponent'
 import Preview from 'views/components/Editor/Preview'
-import FVLabel from '../../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const expandedValues = []
 

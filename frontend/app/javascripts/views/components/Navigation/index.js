@@ -61,7 +61,7 @@ import Link from 'views/components/Link'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import '!style-loader!css-loader!./styles.css'
 

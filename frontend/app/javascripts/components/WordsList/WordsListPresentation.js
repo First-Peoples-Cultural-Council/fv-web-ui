@@ -25,7 +25,7 @@ import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'views/services/intl'
 import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,

@@ -40,7 +40,7 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import FVButton from 'views/components/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'

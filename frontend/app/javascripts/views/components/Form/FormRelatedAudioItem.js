@@ -20,7 +20,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createAudio } from 'providers/redux/reducers/fvAudio'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedAudioItem extends React.Component {
@@ -405,7 +405,4 @@ const mapDispatchToProps = {
   createAudio,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRelatedAudioItem)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRelatedAudioItem)

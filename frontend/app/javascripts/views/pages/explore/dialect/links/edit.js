@@ -37,7 +37,7 @@ import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
@@ -243,7 +243,4 @@ const mapDispatchToProps = {
   updateLink,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Edit)
+export default connect(mapStateToProps, mapDispatchToProps)(Edit)

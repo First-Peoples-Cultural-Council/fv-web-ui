@@ -38,7 +38,7 @@ import { connect } from 'react-redux'
 import { fetchWords } from 'providers/redux/reducers/fvWord'
 
 import selectn from 'selectn'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const containerStyle = {
   background: 'url(/assets/games/fv-games-wordscramble/images/background.png)',
@@ -297,7 +297,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    (selectn('response.entries', computeWords) || []).forEach(
+    ;(selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -363,38 +363,33 @@ export class Quiz extends Component {
     let skillLevel = ''
 
     if (this.state.attempts == this.state.totalQuestions) {
-      skillLevel = <FVLabel
-        transKey="views.pages.explore.dialect.play.quiz.looks_like_your_an_expert"
-        defaultStr="Looks like you're an expert!"
-      />
+      skillLevel = (
+        <FVLabel
+          transKey="views.pages.explore.dialect.play.quiz.looks_like_your_an_expert"
+          defaultStr="Looks like you're an expert!"
+        />
+      )
     } else if (this.state.attempts > this.state.totalQuestions && this.state.attempts < this.state.totalQuestions * 2) {
-      skillLevel = <FVLabel
-        transKey="views.pages.explore.dialect.play.quiz.on_your_way_to_becoming_an_expert"
-        defaultStr="On your way to becoming an expert!"
-      />
+      skillLevel = (
+        <FVLabel
+          transKey="views.pages.explore.dialect.play.quiz.on_your_way_to_becoming_an_expert"
+          defaultStr="On your way to becoming an expert!"
+        />
+      )
     }
     let feedback = ''
     if (isSelected) {
       feedback = isCorrect ? (
         <div>
-          <FVLabel
-            transKey="good_job"
-            defaultStr="Good Job"
-            transform="words"
-          />! <strong>{selectn('word', selectedAnswer)}</strong>{' '}
-          <FVLabel
-            transKey="translates_to"
-            defaultStr="translates to"
-          />
+          <FVLabel transKey="good_job" defaultStr="Good Job" transform="words" />!{' '}
+          <strong>{selectn('word', selectedAnswer)}</strong>{' '}
+          <FVLabel transKey="translates_to" defaultStr="translates to" />
           &nbsp; <strong>{selectn('translation', selectedAnswer)}</strong>
         </div>
       ) : (
         <>
-          <FVLabel
-            transKey="try_again"
-            defaultStr="Try again"
-            transform="first"
-          />...
+          <FVLabel transKey="try_again" defaultStr="Try again" transform="first" />
+          ...
         </>
       )
     }
@@ -460,9 +455,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                  disabled: true,
-                  key: i,
-                })
+                    disabled: true,
+                    key: i,
+                  })
                 : answer
             })}
           </div>
@@ -506,7 +501,11 @@ export class Quiz extends Component {
 
             <div className={classNames('col-xs-2', 'text-right')}>
               <Tooltip
-                title={this.props.intl.trans('views.pages.explore.dialect.play.quiz.next_question', 'Next Question', 'words')}
+                title={this.props.intl.trans(
+                  'views.pages.explore.dialect.play.quiz.next_question',
+                  'Next Question',
+                  'words'
+                )}
               >
                 <IconButton style={{ backgroundColor: '#ffffff' }} onClick={this._handleNavigate.bind(this, 'next')}>
                   <ChevronRight
@@ -530,13 +529,8 @@ export class Quiz extends Component {
                 backgroundColor: 'rgba(0,0,0,0.5)',
               }}
             >
-              <FVLabel
-                transKey="questions"
-                defaultStr="Questions"
-                transform="first"
-              />
-              : {this.state.currentAnswerIndex + 1} /{' '}
-              <strong>{this.state.totalQuestions}</strong>
+              <FVLabel transKey="questions" defaultStr="Questions" transform="first" />:{' '}
+              {this.state.currentAnswerIndex + 1} / <strong>{this.state.totalQuestions}</strong>
             </span>
           </div>
         </div>
@@ -554,7 +548,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeWords,
-    intl: intlService
+    intl: intlService,
   }
 }
 
@@ -563,7 +557,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Quiz)
+export default connect(mapStateToProps, mapDispatchToProps)(Quiz)

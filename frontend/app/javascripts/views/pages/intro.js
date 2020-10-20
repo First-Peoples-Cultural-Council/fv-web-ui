@@ -23,7 +23,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 
 import classNames from 'classnames'
 import FVButton from 'views/components/FVButton'
-import FVLabel from '../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Explore Archive page shows all the families in the archive
@@ -88,10 +88,7 @@ export class PageHome extends Component {
               </FVButton>
             </a>
             <FVButton variant="contained" onClick={() => this._onNavigateRequest('/')} style={{ textAlign: 'center' }}>
-              <FVLabel
-                transKey="enter_firstvoices"
-                defaultStr="Enter FirstVoices"
-              />
+              <FVLabel transKey="enter_firstvoices" defaultStr="Enter FirstVoices" />
             </FVButton>
             <p>
               <img
@@ -214,7 +211,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageHome)
+export default connect(mapStateToProps, mapDispatchToProps)(PageHome)

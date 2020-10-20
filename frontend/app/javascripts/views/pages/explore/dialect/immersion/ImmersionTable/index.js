@@ -23,7 +23,7 @@ import TablePaginationActions from './tablepagination'
 import SortingHeader from './sortingheader'
 
 import Preview from 'views/components/Editor/Preview'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { windowLocationPathnameWithoutPagination } from 'common/NavigationHelpers'
 import { withStyles } from '@material-ui/core/styles'
 import '!style-loader!css-loader!./immersiontable.css'

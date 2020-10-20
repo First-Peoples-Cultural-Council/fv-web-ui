@@ -13,7 +13,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import { Popover } from '@material-ui/core'
 import FVButton from 'views/components/FVButton'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
 import '!style-loader!css-loader!./ViewWith.css'

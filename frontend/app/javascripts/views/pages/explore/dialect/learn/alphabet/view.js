@@ -39,7 +39,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import SubViewTranslation from 'views/pages/explore/dialect/learn/base/subview-translation'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'

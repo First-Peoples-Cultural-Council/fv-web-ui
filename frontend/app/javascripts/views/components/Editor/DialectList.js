@@ -30,7 +30,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { bool, func, object, string } = PropTypes
 export class DialectList extends Component {
@@ -79,11 +79,7 @@ export class DialectList extends Component {
         {this.props.fancy ? (
           <Select autoWidth value={this.props.value} onChange={this._handleChange}>
             <MenuItem value>
-              <FVLabel
-                transKey="select"
-                defaultStr="Select"
-                transform="first"
-              />
+              <FVLabel transKey="select" defaultStr="Select" transform="first" />
               {' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}
             </MenuItem>
             {entries.map((entry) => (
@@ -94,9 +90,7 @@ export class DialectList extends Component {
           </Select>
         ) : (
           <select className="form-control" value={this.props.value} onChange={this._handleChange}>
-            <option value>
-              {' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}
-            </option>
+            <option value>{' ' + this.props.intl.searchAndReplace(this.props.label) + ':'}</option>
             {entries.map((entry) => (
               <option key={selectn('ecm:uuid', entry)} value={selectn('ecm:uuid', entry)}>
                 {selectn('dc:title', entry)}
@@ -131,7 +125,4 @@ const mapDispatchToProps = {
   fetchDialectList,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DialectList)
+export default connect(mapStateToProps, mapDispatchToProps)(DialectList)

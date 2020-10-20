@@ -38,7 +38,7 @@ import FVTab from 'views/components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import { Cover } from 'components/svg/cover'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
 
 class _Introduction extends Component {

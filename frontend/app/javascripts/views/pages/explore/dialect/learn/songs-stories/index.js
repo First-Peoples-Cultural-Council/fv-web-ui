@@ -38,7 +38,7 @@ import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import GeneralList from 'views/components/Browsing/general-list'
 import { SongsStoriesCardView } from './list-view'

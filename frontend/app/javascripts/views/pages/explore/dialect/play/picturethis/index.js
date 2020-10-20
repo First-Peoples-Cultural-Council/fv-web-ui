@@ -27,7 +27,7 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -301,10 +301,10 @@ export class Picturethis extends Component {
         //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +'/* IS NOT NULL' +
         //' AND fv-word:available_in_games = 1' +
         " AND fv:literal_translation/*/translation IN ('" +
-        translationsJoin +
-        "')" +
-        '&sortBy=dc:title' +
-        '&sortOrder=ASC'
+          translationsJoin +
+          "')" +
+          '&sortBy=dc:title' +
+          '&sortOrder=ASC'
       )
     }
   }
@@ -399,8 +399,8 @@ export class Picturethis extends Component {
     let warning = ''
     let remoteWords = new Map()
 
-      // Merge remote words with state words
-      ; (selectn('response.entries', words) || []).map(
+    // Merge remote words with state words
+    ;(selectn('response.entries', words) || []).map(
       function wordsData(word /*, wordKey*/) {
         const literal_translation = selectn('properties.fv:literal_translation', word)
 
@@ -549,29 +549,17 @@ export class Picturethis extends Component {
         <div style={tableStyle}>
           <div style={tableHeader}>
             <div style={tableCellStyle}>
-              <FVLabel
-                transKey="location"
-                defaultStr="Location"
-                transform="first"
-              /></div>
+              <FVLabel transKey="location" defaultStr="Location" transform="first" />
+            </div>
             <div style={tableCellStyle}>
-              <FVLabel
-                transKey="word"
-                defaultStr="Word"
-                transform="first"
-              /></div>
+              <FVLabel transKey="word" defaultStr="Word" transform="first" />
+            </div>
             <div style={tableCellStyle}>
-              <FVLabel
-                transKey="translation"
-                defaultStr="Translation"
-                transform="first"
-              /></div>
+              <FVLabel transKey="translation" defaultStr="Translation" transform="first" />
+            </div>
             <div style={tableCellStyle}>
-              <FVLabel
-                transKey="audio"
-                defaultStr="Audio"
-                transform="first"
-              /></div>
+              <FVLabel transKey="audio" defaultStr="Audio" transform="first" />
+            </div>
           </div>
           {remoteWords.map((word, key) => {
             let dotStyle = locationNumberStyle
@@ -663,7 +651,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeWords,
-    intl: intlService
+    intl: intlService,
   }
 }
 
@@ -672,7 +660,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Picturethis)
+export default connect(mapStateToProps, mapDispatchToProps)(Picturethis)

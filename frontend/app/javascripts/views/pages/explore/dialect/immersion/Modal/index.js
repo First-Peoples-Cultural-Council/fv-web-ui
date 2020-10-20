@@ -25,7 +25,7 @@ import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } fr
 import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
 import { addNewLabelToIntl } from 'providers/redux/reducers/locale'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { Document } from 'nuxeo'
 import ProviderHelpers from 'common/ProviderHelpers'
 

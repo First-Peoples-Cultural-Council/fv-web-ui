@@ -21,7 +21,7 @@ import classNames from 'classnames'
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
 import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
@@ -101,11 +101,7 @@ export default class SongsStoriesEntryListView extends Component {
               transform="first"
             />
             <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
-              <FVLabel
-                transKey="reset_order"
-                defaultStr="Reset Order"
-                transform="words"
-              />
+              <FVLabel transKey="reset_order" defaultStr="Reset Order" transform="words" />
             </FVButton>
           </div>
         ) : (
@@ -118,11 +114,7 @@ export default class SongsStoriesEntryListView extends Component {
             if (this.props.reorder) {
               entryControls.push(
                 <FVButton variant="contained" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
-                  <FVLabel
-                    transKey="move_up"
-                    defaultStr="move up"
-                    transform="words"
-                  />
+                  <FVLabel transKey="move_up" defaultStr="move up" transform="words" />
                 </FVButton>
               )
               entryControls.push(
@@ -132,11 +124,7 @@ export default class SongsStoriesEntryListView extends Component {
                   disabled={i == this.state.items.size - 1}
                   onClick={this._moveDown.bind(this, entry)}
                 >
-                  <FVLabel
-                    transKey="move_down"
-                    defaultStr="move down"
-                    transform="words"
-                  />
+                  <FVLabel transKey="move_down" defaultStr="move down" transform="words" />
                 </FVButton>
               )
             }

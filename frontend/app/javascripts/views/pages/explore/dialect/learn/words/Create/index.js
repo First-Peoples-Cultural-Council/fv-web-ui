@@ -39,7 +39,7 @@ import '!style-loader!css-loader!./WordsCreate.css'
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Create word entry
@@ -287,11 +287,7 @@ export class PageDialectWordsCreate extends Component {
                   />
                   <div className="form-group">
                     <button type="submit" className="btn btn-primary">
-                      <FVLabel
-                        transKey="save"
-                        defaultStr="Save"
-                        transform="first"
-                      />
+                      <FVLabel transKey="save" defaultStr="Save" transform="first" />
                     </button>
                   </div>
                 </form>

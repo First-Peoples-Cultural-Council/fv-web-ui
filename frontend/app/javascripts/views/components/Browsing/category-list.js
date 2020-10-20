@@ -23,7 +23,7 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 
 import UIHelpers from 'common/UIHelpers'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
 
 const defaultStyle = { width: '100%', overflowY: 'auto', marginBottom: 24 }
@@ -45,7 +45,6 @@ class CategoryList extends Component {
     style: null,
   }
 
-
   constructor(props, context) {
     super(props, context)
   }
@@ -56,11 +55,7 @@ class CategoryList extends Component {
     if (!items || selectn('length', items) === 0) {
       return (
         <div style={{ margin: '20px 0' }}>
-          <FVLabel
-            transKey="no_results_found"
-            defaultStr="No Results Found"
-            append="."
-          />
+          <FVLabel transKey="no_results_found" defaultStr="No Results Found" append="." />
         </div>
       )
     }

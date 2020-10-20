@@ -26,7 +26,7 @@ import Typography from '@material-ui/core/Typography'
 
 import ClearIcon from '@material-ui/icons/Clear'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
 
 const defaultStyle = { marginBottom: '20px' }

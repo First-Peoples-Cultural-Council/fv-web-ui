@@ -9,10 +9,10 @@ import {
   SET_EDITING_LABEL,
   ADD_NEW_LABEL,
 } from './actionTypes'
-import IntlService from '../../../../views/services/intl'
-import en from 'views/../locale/locale.en.json'
-import fr from 'views/../locale/locale.fr.json'
-import sp from 'views/../locale/locale.sp.json'
+import IntlService from 'views/services/intl'
+import en from 'common/locale/locale.en.json'
+import fr from 'common/locale/locale.fr.json'
+import sp from 'common/locale/locale.sp.json'
 
 const startingLocaleLists = {
   en,
@@ -139,7 +139,6 @@ export const localeReducer = (state = initialState, action) => {
         editingLabel: action.payload,
       }
     case ADD_NEW_LABEL:
-
       return {
         ...state,
         localeLists: action.payload.locales,
@@ -155,4 +154,3 @@ export const localeReducer = (state = initialState, action) => {
       return state
   }
 }
-

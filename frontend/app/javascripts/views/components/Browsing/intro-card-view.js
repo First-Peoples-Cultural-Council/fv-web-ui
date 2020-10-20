@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import classNames from 'classnames'
 
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
 /*
 IntroCardView uses the following data from the `block` prop:

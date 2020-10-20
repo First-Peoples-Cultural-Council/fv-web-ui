@@ -26,7 +26,7 @@ import { fetchWords } from 'providers/redux/reducers/fvWord'
 import selectn from 'selectn'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -216,7 +216,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Jigsaw)
+export default connect(mapStateToProps, mapDispatchToProps)(Jigsaw)

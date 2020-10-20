@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import FVButton from 'views/components/FVButton'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 export default function withToggle() {
   class ViewwithToggle extends Component {

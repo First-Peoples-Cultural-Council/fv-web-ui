@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import '!style-loader!css-loader!./AlphabetCharacters.css'
 
 export class AlphabetCharactersPresentation extends Component {

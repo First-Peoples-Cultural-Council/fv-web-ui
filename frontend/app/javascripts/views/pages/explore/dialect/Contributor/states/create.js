@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import FVButton from 'views/components/FVButton'
 
-// import copy from '../internationalization'
 import File from 'views/components/Form/Common/File'
 import Text from 'views/components/Form/Common/Text'
 import Textarea from 'views/components/Form/Common/Textarea'

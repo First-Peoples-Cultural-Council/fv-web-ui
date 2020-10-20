@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
 // import ReactDOM from 'react-dom'
 import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const borderStyle = {
   border: '1px solid #CCC',

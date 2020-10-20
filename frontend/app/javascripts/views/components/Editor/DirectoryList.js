@@ -28,7 +28,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import StringHelpers, { CLEAN_ID } from 'common/StringHelpers'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { bool, func, object, string } = PropTypes
 

@@ -29,7 +29,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'
@@ -245,7 +245,4 @@ const mapDispatchToProps = {
   updateContributor,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditContributors)
+export default connect(mapStateToProps, mapDispatchToProps)(EditContributors)

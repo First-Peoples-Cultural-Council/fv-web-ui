@@ -24,7 +24,7 @@ import selectn from 'selectn'
 import options from 'models/schemas/options'
 import fields from 'models/schemas/fields'
 import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter/index'
 
 import { DialogActions, DialogContent, DialogTitle, TextField, IconButton } from '@material-ui/core'

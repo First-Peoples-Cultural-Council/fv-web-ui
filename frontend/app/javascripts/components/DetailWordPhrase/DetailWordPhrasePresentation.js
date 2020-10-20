@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import Preview from 'views/components/Editor/Preview'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'views/components/FVButton'

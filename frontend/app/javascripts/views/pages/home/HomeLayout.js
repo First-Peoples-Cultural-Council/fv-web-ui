@@ -23,7 +23,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import FVButton from 'views/components/FVButton'
 import IntroCardView from 'views/components/Browsing/intro-card-view'
 import TextHeader from 'views/components/Document/Typography/text-header'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import HomeData from 'views/pages/home/HomeData'
 
 /**

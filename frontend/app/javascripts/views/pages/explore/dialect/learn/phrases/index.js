@@ -45,7 +45,7 @@ import DialectFilterListPresentation from 'views/components/DialectFilterList/Di
 import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
 import CategoriesData from 'components/Categories/CategoriesData'
 
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'

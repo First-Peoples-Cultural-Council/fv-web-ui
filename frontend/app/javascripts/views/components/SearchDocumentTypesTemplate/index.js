@@ -3,7 +3,7 @@ import '!style-loader!css-loader!./SearchDocumentTypesTemplate.css'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import Tooltip from '@material-ui/core/Tooltip'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 export const SearchDocumentTypesTemplate = (locals) => {
   return (
     <div className="SearchDocumentTypesTemplate row">
@@ -25,12 +25,7 @@ export const SearchDocumentTypesTemplate = (locals) => {
                   return (
                     <Tooltip
                       key={`Tooltip__${j}`}
-                      title={
-                        <FVLabel
-                          transKey="remove_item"
-                          defaultStr="Remote Item"
-                          transform="words"
-                        />}
+                      title={<FVLabel transKey="remove_item" defaultStr="Remote Item" transform="words" />}
                     >
                       <IconButton key={`IconButton__${j}`} onClick={button.click}>
                         <Clear />

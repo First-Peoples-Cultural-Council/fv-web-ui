@@ -24,7 +24,7 @@ import { pushWindowPath } from 'providers/redux/reducers/windowPath'
 import classNames from 'classnames'
 import FVButton from 'views/components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Explore Archive page shows all the families in the archive

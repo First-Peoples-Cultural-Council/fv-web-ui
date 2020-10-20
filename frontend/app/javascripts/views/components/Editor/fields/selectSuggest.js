@@ -6,7 +6,7 @@ import AutoSuggestComponent from 'views/components/Editor/AutoSuggestComponent'
 import BrowseComponent from 'views/components/Editor/BrowseComponent'
 import Preview from 'views/components/Editor/Preview'
 import DialogCreateForm from 'views/components/DialogCreateForm'
-import FVLabel from '../../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Define auto-suggest factory

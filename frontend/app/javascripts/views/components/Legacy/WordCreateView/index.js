@@ -23,7 +23,7 @@ const classNames = require('classnames')
 
 const Word = require('models/Word')
 
-const DirectoryOperations = require('../../../operations/DirectoryOperations')
+const DirectoryOperations = require('operations/DirectoryOperations')
 
 class CreateForm extends React.Component {
   constructor(props) {

@@ -47,7 +47,7 @@ import TextHeader from 'views/components/Document/Typography/text-header'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { routeHasChanged } from 'common/NavigationHelpers'
 import Kids from './kids'
-import FVLabel from '../../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Dialect portal page showing all the various components of this dialect.

@@ -29,7 +29,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import PortalList from 'views/components/Browsing/portal-list'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import withFilter from 'views/hoc/grid-list/with-filter'
 
@@ -125,11 +125,7 @@ export class ExploreFamily extends Component {
           <div className="col-xs-12">
             <h1>
               {selectn('response.properties.dc:title', computeLanguageFamily)} &raquo;{' '}
-              <FVLabel
-                transKey="languages"
-                defaultStr="Languages"
-                transform="words"
-              />
+              <FVLabel transKey="languages" defaultStr="Languages" transform="words" />
             </h1>
             <FilteredPortalList {...portalListProps} />
           </div>
@@ -164,7 +160,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExploreFamily)
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreFamily)

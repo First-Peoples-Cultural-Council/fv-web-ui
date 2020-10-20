@@ -42,7 +42,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { func, object } = PropTypes
 export class UserTasks extends React.Component {
@@ -122,7 +122,10 @@ export class UserTasks extends React.Component {
   }
 
   _getRoleLabel(role) {
-    const roleLabel = selectn('text', ProviderHelpers.userRegistrationRoles.find((rolesVal) => rolesVal.value == role))
+    const roleLabel = selectn(
+      'text',
+      ProviderHelpers.userRegistrationRoles.find((rolesVal) => rolesVal.value == role)
+    )
     if (roleLabel && roleLabel != 'undefined') return roleLabel.replace('I am', '')
   }
 
@@ -222,7 +225,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 
@@ -252,11 +255,7 @@ export class UserTasks extends React.Component {
                 color="secondary"
                 onClick={this._handlePreApprovalOpen.bind(this, task, 'approve')}
               >
-                <FVLabel
-                  transKey="add_to_group"
-                  defaultStr="Add to Group"
-                  transform="first"
-                />
+                <FVLabel transKey="add_to_group" defaultStr="Add to Group" transform="first" />
               </FVButton>
             </td>
           </tr>
@@ -291,53 +290,25 @@ export class UserTasks extends React.Component {
                 <thead>
                   <tr style={{ borderBottom: '1px solid #000' }}>
                     <th style={{ minWidth: '100px' }}>
-                      <FVLabel
-                        transKey="last_name"
-                        defaultStr="Last Name"
-                        transform="words"
-                      />
+                      <FVLabel transKey="last_name" defaultStr="Last Name" transform="words" />
                     </th>
                     <th style={{ minWidth: '100px' }}>
-                      <FVLabel
-                        transKey="first_name"
-                        defaultStr="First Name"
-                        transform="words"
-                      />
+                      <FVLabel transKey="first_name" defaultStr="First Name" transform="words" />
                     </th>
                     <th>
-                      <FVLabel
-                        transKey="email"
-                        defaultStr="Email"
-                        transform="words"
-                      />
+                      <FVLabel transKey="email" defaultStr="Email" transform="words" />
                     </th>
                     <th style={{ minWidth: '100px' }}>
-                      <FVLabel
-                        transKey="role"
-                        defaultStr="Role"
-                        transform="words"
-                      />
+                      <FVLabel transKey="role" defaultStr="Role" transform="words" />
                     </th>
                     <th style={{ minWidth: '120px' }}>
-                      <FVLabel
-                        transKey="comments"
-                        defaultStr="Comments"
-                        transform="words"
-                      />
+                      <FVLabel transKey="comments" defaultStr="Comments" transform="words" />
                     </th>
                     <th>
-                      <FVLabel
-                        transKey="date_created"
-                        defaultStr="Date Added to FirstVoices"
-                        transform="words"
-                      />
+                      <FVLabel transKey="date_created" defaultStr="Date Added to FirstVoices" transform="words" />
                     </th>
                     <th style={{ minWidth: '150px' }}>
-                      <FVLabel
-                        transKey="actions"
-                        defaultStr="Actions"
-                        transform="words"
-                      />
+                      <FVLabel transKey="actions" defaultStr="Actions" transform="words" />
                     </th>
                   </tr>
                 </thead>
@@ -349,12 +320,11 @@ export class UserTasks extends React.Component {
               </table>
 
               <p>
-                {userTasks.length === 0 && userRegistrationTasks.length === 0
-                  ? <FVLabel
-                    transKey="views.pages.tasks.no_tasks"
-                    defaultStr="There are currently No tasks."
-                  />
-                  : ''}
+                {userTasks.length === 0 && userRegistrationTasks.length === 0 ? (
+                  <FVLabel transKey="views.pages.tasks.no_tasks" defaultStr="There are currently No tasks." />
+                ) : (
+                  ''
+                )}
               </p>
             </div>
           </AuthorizationFilter>
@@ -418,7 +388,4 @@ const mapDispatchToProps = {
   userUpgrade,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserTasks)
+export default connect(mapStateToProps, mapDispatchToProps)(UserTasks)

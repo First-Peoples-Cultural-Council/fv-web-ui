@@ -51,7 +51,7 @@ import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry
 
 import withActions from 'views/hoc/view/with-actions'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

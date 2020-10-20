@@ -19,7 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Edit from '@material-ui/icons/Edit'
 
 import '!style-loader!css-loader!./EditableComponent.css'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
 
 const RenderRegular = (currentValue, preview, previewType, returnWrapper = 'span') => {

@@ -9,7 +9,7 @@ import Pagination from 'views/components/Navigation/Pagination'
 import { MenuItem, Select, TextField } from '@material-ui/core'
 
 import UIHelpers from 'common/UIHelpers'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * HOC: Adds pagination to a grid list

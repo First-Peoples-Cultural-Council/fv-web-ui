@@ -36,7 +36,7 @@ import { Document } from 'nuxeo'
 
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
@@ -141,11 +141,7 @@ export class PageDialectBookEdit extends Component {
     return (
       <div>
         <h1>
-          <FVLabel
-            transKey="edit_page"
-            defaultStr="Edit Page"
-            transform="words"
-          />
+          <FVLabel transKey="edit_page" defaultStr="Edit Page" transform="words" />
         </h1>
 
         <div className="row" style={{ marginTop: '15px' }}>
@@ -160,12 +156,7 @@ export class PageDialectBookEdit extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  <FVLabel
-                    transKey="save"
-                    defaultStr="Save"
-                    transform="first"
-                  />
-
+                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
                 </button>
               </div>
             </form>
@@ -199,7 +190,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectBookEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit)

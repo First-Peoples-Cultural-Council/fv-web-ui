@@ -40,7 +40,7 @@ import options from 'models/schemas/options'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import '!style-loader!css-loader!./PhrasesCreate.css'
 
 /**
@@ -281,9 +281,7 @@ export class PhrasesCreate extends Component {
             <FVLabel
               transKey=""
               defaultStr={'Add New Phrase to ' + selectn('response.title', computeDialect2)}
-              params={[
-                selectn('response.title', computeDialect2),
-              ]}
+              params={[selectn('response.title', computeDialect2)]}
             />
           </h1>
 
@@ -299,11 +297,7 @@ export class PhrasesCreate extends Component {
                 />
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
-                    <FVLabel
-                      transKey="save"
-                      defaultStr="Save"
-                      transform="first"
-                    />
+                    <FVLabel transKey="save" defaultStr="Save" transform="first" />
                   </button>
                 </div>
               </form>

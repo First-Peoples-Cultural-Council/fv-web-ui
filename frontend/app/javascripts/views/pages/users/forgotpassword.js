@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Reset your password page
@@ -34,11 +34,7 @@ export default class ForgotPassword extends Component {
     return (
       <div>
         <h1>
-          <FVLabel
-            transKey="forgot_password"
-            defaultStr="Forgot your password"
-            transform="first"
-          />
+          <FVLabel transKey="forgot_password" defaultStr="Forgot your password" transform="first" />
         </h1>
 
         <p>

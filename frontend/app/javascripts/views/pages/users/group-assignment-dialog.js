@@ -27,9 +27,8 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import { connect } from 'react-redux'
-
 
 /**
  * Custom select form field
@@ -163,7 +162,8 @@ class GroupAssignmentDialog extends Component {
         },
         group: {
           label: this.isUserRegistration
-            ? this.props.intl.trans('views.pages.users.group.group_to_add_user_to', 'Group to add user to', 'first') + ':'
+            ? this.props.intl.trans('views.pages.users.group.group_to_add_user_to', 'Group to add user to', 'first') +
+              ':'
             : this.props.intl.trans('groups', 'Groups', 'first') + ':',
           // help: (this.isUserRegistration) ? this.props.intl.trans('views.pages.users.group.only_one_per_user', 'Note: Only one group per user (for each dialect) is required due to permission inheritance.', 'first')
           //     : this.props.intl.trans('views.pages.users.group.group_permissions', 'Note: Groups with more permissions will inherit permissions from groups with less permissions. Example: \'Recorders with Approval\' get permissions that both \'Recorders\' and a \'Members\' have.)'),
@@ -207,18 +207,10 @@ class GroupAssignmentDialog extends Component {
         </DialogContent>
         <DialogActions>
           <FVButton variant="contained" color="secondary" onClick={this.props.closeMethod}>
-            <FVLabel
-              transKey="cancel"
-              defaultStr="Cancel"
-              transform="first"
-            />
+            <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
           </FVButton>
           <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
-            <FVLabel
-              transKey="submit"
-              defaultStr="Submit"
-              transform="first"
-            />
+            <FVLabel transKey="submit" defaultStr="Submit" transform="first" />
           </FVButton>
         </DialogActions>
       </Dialog>
@@ -228,7 +220,7 @@ class GroupAssignmentDialog extends Component {
 
 const mapStateToProps = (state) => {
   const { locale } = state
-  const { intlService} = locale
+  const { intlService } = locale
 
   return {
     intl: intlService,

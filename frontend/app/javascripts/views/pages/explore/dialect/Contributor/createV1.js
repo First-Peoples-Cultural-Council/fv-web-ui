@@ -32,7 +32,7 @@ import FVButton from 'views/components/FVButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'views/components/StatusBar'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -200,11 +200,7 @@ export class PageDialectContributorsCreate extends Component {
               />
               <div className="form-group" style={{ marginTop: '20px' }}>
                 <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
-                  <FVLabel
-                    transKey="save"
-                    defaultStr="Save"
-                    transform="first"
-                  />
+                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
                 </FVButton>
               </div>
             </form>

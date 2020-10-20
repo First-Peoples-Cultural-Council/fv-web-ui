@@ -36,7 +36,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import NavigationClose from '@material-ui/icons/Close'
 
 import '!style-loader!css-loader!./AppLeftNav.css'
-import FVLabel from '../../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {
   static propTypes = {
@@ -68,7 +68,11 @@ export class AppLeftNav extends Component {
       },
       {
         id: 'explore',
-        label: this.props.intlService.translate({ key: 'general.explore', default: 'Explore Languages', case: 'first' }),
+        label: this.props.intlService.translate({
+          key: 'general.explore',
+          default: 'Explore Languages',
+          case: 'first',
+        }),
         path: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data'),
       },
       {
@@ -111,7 +115,10 @@ export class AppLeftNav extends Component {
             })}
             secondary={
               <p>
-                <FVLabel transKey="views.components.navigation.view_work_in_progress" defaultStr="View work in progress or unpublished content" />
+                <FVLabel
+                  transKey="views.components.navigation.view_work_in_progress"
+                  defaultStr="View work in progress or unpublished content"
+                />
                 .
               </p>
             }
@@ -133,7 +140,10 @@ export class AppLeftNav extends Component {
             })}
             secondary={
               <p>
-                <FVLabel transKey="views.components.navigation.view_dialects_as_end_user" defaultStr="View dialects as an end user would view them" />
+                <FVLabel
+                  transKey="views.components.navigation.view_dialects_as_end_user"
+                  defaultStr="View dialects as an end user would view them"
+                />
                 .
               </p>
             }
@@ -193,19 +203,19 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-        <ListItem
-          button
-          onClick={this._onListItemClick(
-            NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
-          )}
-          key={selectn('uid', d)}
-        >
-          <ListItemText
-            primary={selectn('properties.dc:title', d)}
-            primaryTypographyProps={{ style: { fontSize: '16px' } }}
-          />
-        </ListItem>
-      ))
+          <ListItem
+            button
+            onClick={this._onListItemClick(
+              NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
+            )}
+            key={selectn('uid', d)}
+          >
+            <ListItemText
+              primary={selectn('properties.dc:title', d)}
+              primaryTypographyProps={{ style: { fontSize: '16px' } }}
+            />
+          </ListItem>
+        ))
       : null
 
     return (
@@ -322,7 +332,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppLeftNav)
+export default connect(mapStateToProps, mapDispatchToProps)(AppLeftNav)

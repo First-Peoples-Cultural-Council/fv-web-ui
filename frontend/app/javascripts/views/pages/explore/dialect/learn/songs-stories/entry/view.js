@@ -30,7 +30,7 @@ import { Introduction } from 'views/pages/explore/dialect/learn/songs-stories/li
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'views/components/Editor/Preview'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }

@@ -1,19 +1,19 @@
 // TODO: remove eslint-disable
 /* eslint-disable */
 import selectn from 'selectn'
-import en from 'views/../locale/locale.en.json'
-import fr from 'views/../locale/locale.fr.json'
-import sp from 'views/../locale/locale.sp.json'
+import en from 'common/locale/locale.en.json'
+import fr from 'common/locale/locale.fr.json'
+import sp from 'common/locale/locale.sp.json'
 import { sprintf, vsprintf } from 'sprintf-js'
 import DirectoryOperations from 'operations/DirectoryOperations'
 
-String.prototype.toUpperCaseWords = function () {
-  return this.replace(/\w+/g, function (a) {
+String.prototype.toUpperCaseWords = function() {
+  return this.replace(/\w+/g, function(a) {
     return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()
   })
 }
 
-String.prototype.toUpperCaseFirst = function () {
+String.prototype.toUpperCaseFirst = function() {
   return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
 }
 export default class IntlService {
@@ -86,15 +86,18 @@ export default class IntlService {
   }
 
   fvLabelTrans(key, defaultStr, strCase, params, prepend, append, locale) {
-    return this.translate({
-      key: key,
-      default: defaultStr || '',
-      params: params || [],
-      case: strCase || null,
-      locale: locale || this.localeString,
-      prepend: prepend || '',
-      append: append || ''
-    }, true)
+    return this.translate(
+      {
+        key: key,
+        default: defaultStr || '',
+        params: params || [],
+        case: strCase || null,
+        locale: locale || this.localeString,
+        prepend: prepend || '',
+        append: append || '',
+      },
+      true
+    )
   }
 
   trans(key, defaultStr, strCase, params, prepend, append, locale) {
@@ -138,12 +141,12 @@ export default class IntlService {
       key = key.join('.')
     }
 
-    let usedFallback = false;
-    let actualUsedKey = key;
+    let usedFallback = false
+    let actualUsedKey = key
 
     const self = this
 
-    const postProcessResult = function (result, translateData) {
+    const postProcessResult = function(result, translateData) {
       if (result !== null) {
         const charCase = translateData.case || null
         const params = translateData.params || []
@@ -169,7 +172,7 @@ export default class IntlService {
         result = (result + '').replace('&amp;', '&')
         result = (result + '').replace('&AMP;', '&')
 
-        const postProcessSwaps = function (result) {
+        const postProcessSwaps = function(result) {
           const swapMatches = (result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
           if (swapMatches !== null && swapMatches.length > 0) {
             for (const idx in swapMatches) {
@@ -201,13 +204,9 @@ export default class IntlService {
 
     const processReturn = (result) => {
       if (returnTranslationInfo) {
-        return [
-          result,
-          usedFallback,
-          actualUsedKey
-        ]
+        return [result, usedFallback, actualUsedKey]
       } else {
-        return result;
+        return result
       }
     }
 
@@ -217,7 +216,7 @@ export default class IntlService {
       if (((key + '').match(/\./g) || []).length === 0) {
         // single entry, let's check general first
         res = selectn((translateData.locale || this.localeString) + '.general.' + key, this._localeLists)
-        actualUsedKey = 'general.' + key;
+        actualUsedKey = 'general.' + key
       }
 
       if (res === null || res === undefined) {
@@ -231,12 +230,12 @@ export default class IntlService {
 
     if (this._fallbackLocale && (translateData.locale || this.localeString) !== this._fallbackLocale) {
       translateData.locale = this._fallbackLocale
-      usedFallback = true;
+      usedFallback = true
       return processReturn(this.fallbackPrefix + this.translate(translateData) + this.fallbackSuffix)
     }
 
     //console.warn('INTL>>Translation not found', translateData);
-    return processReturn(postProcessResult(translateData.default || null, translateData));
+    return processReturn(postProcessResult(translateData.default || null, translateData))
   }
 
   getLocale(locale) {

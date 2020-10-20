@@ -61,7 +61,7 @@ import Typography from '@material-ui/core/Typography'
 import FVTab from 'views/components/FVTab'
 import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import { WORKSPACES } from 'common/Constants'
 

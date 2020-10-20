@@ -17,7 +17,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createPicture } from 'providers/redux/reducers/fvPicture'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedPicture extends React.Component {
@@ -386,7 +386,4 @@ const mapDispatchToProps = {
   createPicture,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRelatedPicture)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRelatedPicture)

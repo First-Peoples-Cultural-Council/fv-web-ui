@@ -22,7 +22,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import Preview from 'views/components/Editor/Preview'
 import MetadataList from 'views/components/Browsing/metadata-list'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'

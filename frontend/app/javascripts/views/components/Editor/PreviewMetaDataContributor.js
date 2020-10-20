@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 import '!style-loader!css-loader!./PreviewMetaDataContributor.css'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const { object } = PropTypes
 
@@ -70,11 +70,8 @@ export default class PreviewMetaDataContributor extends Component {
     } else if (contributor && contributor.isError) {
       body = (
         <li className="PreviewMetaDataContributor__entry PreviewMetaDataContributor__entry--error">
-          <FVLabel
-            transKey="error"
-            defaultStr="Error"
-            transform="first"
-          />: {`${selectn('message', contributor)}`}</li>
+          <FVLabel transKey="error" defaultStr="Error" transform="first" />: {`${selectn('message', contributor)}`}
+        </li>
       )
     }
 

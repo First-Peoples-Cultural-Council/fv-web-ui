@@ -36,7 +36,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import FVButton from 'views/components/FVButton'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Browse users

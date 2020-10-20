@@ -15,7 +15,7 @@ import PageDialectPhraseBooksCreate from 'views/pages/explore/dialect/Phrasebook
 import PageDialectLinksEdit from 'views/pages/explore/dialect/links/edit'
 import PageDialectContributorEdit from 'views/pages/explore/dialect/Contributor/editV1'
 import PageDialectPhraseBooksEdit from 'views/pages/explore/dialect/Phrasebook/editV1'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 export default class DialogCreateForm extends React.Component {
   constructor(props) {

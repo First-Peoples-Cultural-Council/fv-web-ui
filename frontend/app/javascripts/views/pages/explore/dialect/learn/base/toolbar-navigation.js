@@ -32,7 +32,7 @@ import Link from 'views/components/Link'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
 import FVButton from 'views/components/FVButton'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Navigation for learning page

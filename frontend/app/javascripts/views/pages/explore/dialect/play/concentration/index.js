@@ -32,7 +32,7 @@ import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import Game from './wrapper'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Play games
@@ -188,7 +188,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Concentration)
+export default connect(mapStateToProps, mapDispatchToProps)(Concentration)

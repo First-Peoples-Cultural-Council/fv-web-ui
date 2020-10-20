@@ -32,14 +32,13 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 // Views
 import fields from 'models/schemas/fields'
 import options from 'models/schemas/options'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Create user entry
  */
 const { array, func, object, string } = PropTypes
 class Profile extends Component {
-
   static propTypes = {
     routeParams: object.isRequired,
     updateUser: func.isRequired,
@@ -196,11 +195,7 @@ class Profile extends Component {
               />
               <div className="form-group">
                 <button type="submit" className="btn btn-primary">
-                  <FVLabel
-                    transKey="save"
-                    defaultStr="Save"
-                    transform="first"
-                  />
+                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
                 </button>
               </div>
             </form>
@@ -227,7 +222,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 
@@ -238,7 +233,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

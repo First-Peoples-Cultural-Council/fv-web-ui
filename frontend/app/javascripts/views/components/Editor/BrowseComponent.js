@@ -41,7 +41,7 @@ import ContributorsListView from 'views/pages/explore/dialect/learn/base/contrib
 import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
-import FVLabel from '../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 const DefaultFetcherParams = {
   currentPageIndex: 1,
   pageSize: 10,

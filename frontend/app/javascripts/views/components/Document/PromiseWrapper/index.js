@@ -23,7 +23,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import Error403 from 'views/components/Error403'
 
 import '!style-loader!css-loader!./PromiseWrapper.css'
-import FVLabel from '../../FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 /**
  * Simple component to handle loading of promises.
@@ -72,16 +72,22 @@ export default class PromiseWrapper extends Component {
             render = (
               <div>
                 <h1 className="PromiseWrapper__heading">
-                  404 -{' '}
-                  <FVLabel transKey="errors.page_not_found" defaultStr="Page Not Found" transform="first" />
+                  404 - <FVLabel transKey="errors.page_not_found" defaultStr="Page Not Found" transform="first" />
                 </h1>
                 <p>
-                  <FVLabel transKey="errors.report_via_feedback" defaultStr="Please report this error by emailing support@fpcc.ca so that we can fix it" transform="first" />
+                  <FVLabel
+                    transKey="errors.report_via_feedback"
+                    defaultStr="Please report this error by emailing support@fpcc.ca so that we can fix it"
+                    transform="first"
+                  />
                   .
                 </p>
                 <p>
-                  <FVLabel transKey="errors.feedback_include_link" defaultStr="Include the link or action you took to get to this page" />)
-                  .
+                  <FVLabel
+                    transKey="errors.feedback_include_link"
+                    defaultStr="Include the link or action you took to get to this page"
+                  />
+                  ) .
                 </p>
                 {ErrorMessageMarkup}
                 <p>

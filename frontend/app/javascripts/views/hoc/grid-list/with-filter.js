@@ -14,7 +14,7 @@ import withToggle from 'views/hoc/view/with-toggle'
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
 import '!style-loader!css-loader!./FilteredGridList.css'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 const FiltersWithToggle = withToggle()
 
@@ -119,11 +119,9 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
             >
               <form>
                 <FiltersWithToggle
-                  label={<FVLabel
-                    transKey="views.pages.search.filter_items"
-                    defaultStr="Filter items"
-                    transform="first"
-                  />}
+                  label={
+                    <FVLabel transKey="views.pages.search.filter_items" defaultStr="Filter items" transform="first" />
+                  }
                   mobileOnly
                 >
                   <t.form.Form
@@ -141,22 +139,14 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                         this._onReset(e, this.props)
                       }}
                     >
-                      <FVLabel
-                        transKey="reset"
-                        defaultStr="Reset"
-                        transform="first"
-                      />
+                      <FVLabel transKey="reset" defaultStr="Reset" transform="first" />
                     </button>
                     <button
                       type="button"
                       onClick={this._onFilterSaveForm}
                       className="FilteredGridList__btn RaisedButton RaisedButton--primary"
                     >
-                      <FVLabel
-                        transKey="filter"
-                        defaultStr="Filter"
-                        transform="first"
-                      />
+                      <FVLabel transKey="filter" defaultStr="Filter" transform="first" />
                     </button>
                   </div>
                 </FiltersWithToggle>

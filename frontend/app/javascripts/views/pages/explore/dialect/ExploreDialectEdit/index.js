@@ -33,7 +33,7 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 
 import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'

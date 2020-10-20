@@ -12,7 +12,7 @@ import { fetchDirectory } from 'providers/redux/reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'views/pages/explore/dialect/immersion/Modal'
-import FVButton from './../FVButton/index'
+import FVButton from 'views/components/FVButton/index'
 import '!style-loader!css-loader!./HelperModeToggle.css'
 
 const HelperModeToggle = ({

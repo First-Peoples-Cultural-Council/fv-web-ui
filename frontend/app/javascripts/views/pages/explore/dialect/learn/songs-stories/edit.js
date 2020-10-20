@@ -36,7 +36,7 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import FVTab from 'views/components/FVTab'
-import FVLabel from 'views/components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'

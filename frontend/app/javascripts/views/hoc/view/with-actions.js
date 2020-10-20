@@ -16,7 +16,7 @@ import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./ViewWith.css'
-import FVLabel from '../../components/FVLabel/index'
+import FVLabel from 'views/components/FVLabel'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
 
