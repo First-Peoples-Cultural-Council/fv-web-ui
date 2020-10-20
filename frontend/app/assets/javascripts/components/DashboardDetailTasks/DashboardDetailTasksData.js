@@ -130,6 +130,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     const title = DOMPurify.sanitize(selectn('title', _selectedItemData))
     const commonData = {
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
+      generalNote: selectn('properties.fv:general_note', _selectedItemData),
       definitions: selectn('properties.fv:definitions', _selectedItemData),
       dialectPath: selectn('contextParameters.ancestry.dialect.path', _selectedItemData),
       id: uid,

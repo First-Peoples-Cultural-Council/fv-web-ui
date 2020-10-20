@@ -36,6 +36,7 @@ function WordContainer() {
         definitions,
         dialectClassName,
         docType,
+        generalNote,
         literalTranslations,
         partOfSpeech,
         photos,
@@ -74,6 +75,7 @@ function WordContainer() {
               definitions={definitions}
               dialectClassName={dialectClassName}
               docType={docType}
+              generalNote={generalNote}
               literalTranslations={literalTranslations}
               metadata={computeWord}
               partOfSpeech={partOfSpeech}

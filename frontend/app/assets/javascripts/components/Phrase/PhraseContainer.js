@@ -35,6 +35,7 @@ function PhraseContainer() {
         definitions,
         docType,
         dialectClassName,
+        generalNote,
         literalTranslations,
         photos,
         phrasebooks,
@@ -71,6 +72,7 @@ function PhraseContainer() {
               definitions={definitions}
               dialectClassName={dialectClassName}
               docType={docType}
+              generalNote={generalNote}
               literalTranslations={literalTranslations}
               metadata={computePhrase}
               photos={photos}

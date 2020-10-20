@@ -7,6 +7,7 @@ import FVLabel from 'views/components/FVLabel/index'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'views/components/FVButton'
+import DOMPurify from 'dompurify'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
@@ -24,6 +25,7 @@ import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.cs
  * @param {array} props.definitions Array.map to generate Definitions section, eg: [{language, translation}, ...]
  * @param {string} props.dialectClassName TODO
  * @param {string} props.docType Used in Categories & Get Buttons sections, eg: 'FVPhrase' || 'FVWord'
+ * @param {string} props.generalNote Text content for General Notes section
  * @param {string} props.idSelectedItem Id of selected item, used in Get Buttons section
  * @param {array} props.literalTranslations Array.map to generate Translations section, eg: [{language, translation}, ...]
  * @param {object} props.metadata Black box object passed to <MetadataPanel /> used in it's `computeEntity` prop. TODO: reduce stamp coupling
@@ -52,6 +54,7 @@ function DetailWordPhrasePresentation({
   definitions,
   dialectClassName,
   docType,
+  generalNote,
   idSelectedItem,
   literalTranslations,
   metadata,
@@ -84,6 +87,21 @@ function DetailWordPhrasePresentation({
           </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
             <div>{_acknowledgement}</div>
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
+  const _getGeneralNote = (_generalNote) => {
+    if (_generalNote) {
+      return (
+        <div className="DialectViewWordPhraseContentItem">
+          <h4 className="DialectViewWordPhraseContentItemTitle">
+            <FVLabel transKey="generalNote" defaultStr="General Notes" transform="word" />
+          </h4>
+          <div className="DialectViewWordPhraseContentItemGroup">
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(_generalNote) }} />
           </div>
         </div>
       )
@@ -421,6 +439,7 @@ function DetailWordPhrasePresentation({
           {_getPronounciation(pronunciation)}
           {_getRelatedAssets(relatedAssets)}
           {_getRelatedToAssets(relatedToAssets)}
+          {_getGeneralNote(generalNote)}
         </div>
 
         <aside className="DialectViewWordPhraseContentSecondary">
@@ -448,6 +467,7 @@ DetailWordPhrasePresentation.propTypes = {
   definitions: array,
   dialectClassName: string,
   docType: string,
+  generalNote: string,
   idSelectedItem: string,
   literalTranslations: array,
   metadata: object,
