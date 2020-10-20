@@ -45,7 +45,6 @@ import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
-import ca.firstvoices.publisher.utils.PublisherUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -130,7 +130,18 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
   public DocumentModel publish(CoreSession session, DocumentModel doc) {
     this.session = session;
 
-    if (FV_DIALECT.equals(doc.getType())) {
+    boolean isDialect = DialectUtils.isDialect(doc);
+
+    // Skip if dialect is not published, and trying to publish within
+    if (!isDialect && !StateUtils.isPublished(DialectUtils.getDialect(doc))) {
+      log.warn(String
+          .format("Tried to publish a `%s` type in a non-published dialect, doc id: %s",
+              doc.getType(),
+              doc.getId()));
+      return null;
+    }
+
+    if (isDialect) {
       return createProxyForDialect(doc);
     } else if (FV_PORTAL.equals(doc.getType())) {
       return createProxyForPortal(doc);
@@ -152,11 +163,22 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       this.session = doc.getCoreSession();
     }
 
+    boolean isDialect = DialectUtils.isDialect(doc);
+
+    // Skip if dialect is not published, and trying to republish within
+    if (!isDialect && !StateUtils.isPublished(DialectUtils.getDialect(doc))) {
+      log.warn(String
+          .format("Tried to republish a `%s` type in a non-published dialect, doc id: %s",
+              doc.getType(),
+              doc.getId()));
+      return;
+    }
+
     DocumentModelList publishedDocs = new DocumentModelListImpl();
 
     if (isPublishableAsset(doc.getType())) {
       publishedDocs.add(createProxyForAsset(doc));
-    } else if (DialectUtils.isDialect(doc)) {
+    } else if (isDialect) {
       // Create proxy for portal
       publishedDocs.add(createProxyForPortal(session.getChild(doc.getRef(), FV_PORTAL_NAME)));
 
@@ -224,7 +246,7 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     }
 
     if (languageProxy == null) {
-      languageProxy = session.publishDocument(languageFamily, languageFamilyProxy);
+      languageProxy = session.publishDocument(language, languageFamilyProxy);
     }
 
     // Create proxy for dialect
@@ -299,7 +321,38 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       return null;
     }
 
-    Map<String, String> dependencies = PublisherUtils.addAssetDependencies(asset);
+    // Add asset dependencies
+    Map<String, String> dependencies = new HashMap<>();
+
+    dependencies.put("fvcore:related_audio", "fvproxy:proxied_audio");
+    dependencies.put("fvcore:related_pictures", "fvproxy:proxied_pictures");
+    dependencies.put("fvcore:related_videos", "fvproxy:proxied_videos");
+    dependencies.put("fvcore:source", "fvproxy:proxied_source");
+    dependencies.put("fvcore:related_assets", "fvproxy:proxied_related_assets");
+
+    if (asset.hasSchema("fvmedia")) {
+      dependencies.put("fvmedia:source", "fvproxy:proxied_source");
+      dependencies.put("fvmedia:recorder", "fvproxy:proxied_recorder");
+      dependencies.put(MEDIA_ORIGIN_FIELD, "fvproxy:proxied_origin");
+    }
+
+    if (asset.hasSchema("fv-word")) {
+      dependencies.put("fv-word:categories", "fvproxy:proxied_categories");
+      dependencies.put("fv-word:related_phrases", "fvproxy:proxied_phrases");
+    }
+
+    if (asset.hasSchema("fvbook")) {
+      dependencies.put("fvbook:author", "fvproxy:proxied_author");
+    }
+
+    if (asset.hasSchema("fv-phrase")) {
+      dependencies.put("fv-phrase:phrase_books", "fvproxy:proxied_categories");
+    }
+
+    if (asset.hasSchema("fvcharacter")) {
+      dependencies.put("fvcharacter:related_words", "fvproxy:proxied_words");
+    }
+
     handleProxyDependencies(proxy, dependencies, Collections.singletonList(MEDIA_ORIGIN_FIELD));
 
     return SessionUtils.saveDocumentWithoutEvents(session, proxy, true, null);
@@ -307,12 +360,13 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
 
   /**
-   * Iterates over dependencies (IDs referenced in fields such as `related_audio`) and
-   * publishes those dependencies. The resulting ID of the proxy is assigned to the correct
-   * proxy field based on the dependencies map. Can handle both single references and arrays.
-   * @param proxy the proxy to create values on (a proxy is a copy of a Workspace document
-   *              in a sections)
-   * @param dependencies a map of fields (workspace field : proxy field)
+   * Iterates over dependencies (IDs referenced in fields such as `related_audio`) and publishes
+   * those dependencies. The resulting ID of the proxy is assigned to the correct proxy field based
+   * on the dependencies map. Can handle both single references and arrays.
+   *
+   * @param proxy                        the proxy to create values on (a proxy is a copy of a
+   *                                     Workspace document in a sections)
+   * @param dependencies                 a map of fields (workspace field : proxy field)
    * @param dependenciesToSkipPublishing optionally dependencies that should not be published
    */
   private void handleProxyDependencies(DocumentModel proxy, Map<String, String> dependencies,
@@ -326,6 +380,12 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     // These will either be single UUID, or arrays of UUIDs
     for (Entry<String, String> dependencyEntry : dependencies.entrySet()) {
       try {
+        // Only proceed if the schema is present on the document
+        String[] field = StringUtils.split(dependencyEntry.getKey(), ":");
+        if (field == null || !proxy.hasSchema(field[0])) {
+          continue;
+        }
+
         String workspaceFieldName = dependencyEntry.getKey();
         String proxyFieldName = dependencyEntry.getValue();
 
@@ -348,6 +408,8 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
           }
 
           // Iterate over each workspace id
+          ArrayList<String> newProxyValues = new ArrayList<>();
+
           for (String workspaceDependencyId : workspacePropertyValues) {
             DocumentModel newProxy;
             IdRef dependencyRef = new IdRef(workspaceDependencyId);
@@ -367,29 +429,30 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
                   transitionAndCreateProxy(session, session.getDocument(dependencyRef));
             }
 
-            if (newProxy != null) {
-              String newProxyId = newProxy.getId();
-
-              if (proxyProperty.isList()) {
-                ArrayList<String> proxyValues = (ArrayList<String>) PropertyUtils
-                    .getValuesAsList(proxy, proxyFieldName);
-
-                if (!proxyValues.contains(newProxyId)) {
-                  // Only add to proxy field if the value does not exist
-                  proxyValues.add(newProxyId);
-                }
-
-                proxyProperty.setValue(proxyValues);
-              } else {
-                proxyProperty.setValue(newProxyId);
-              }
+            if (newProxy != null && !newProxyValues.contains(newProxy.getId())) {
+              // Add to list of values if it is not already there
+              newProxyValues.add(newProxy.getId());
             }
+          }
+
+          // Set proxy values
+          if (!newProxyValues.isEmpty()) {
+            if (proxyProperty.isList()) {
+              // Set as list
+              proxyProperty.setValue(newProxyValues);
+            } else {
+              // Set as single value
+              proxyProperty.setValue(newProxyValues.get(0));
+            }
+          } else {
+            log.warn(String.format("Tried to create or retrieve proxy "
+                + "for field %s on document %s but could not", workspaceFieldName, proxy.getId()));
           }
         }
       } catch (PropertyException e) {
         log.warn(
-            String.format("Could not handle property %s while writing proxy for %s",
-                dependencyEntry.getKey(), proxy.getId()));
+            String.format("Could not handle property %s while writing proxy for %s of type %s",
+                dependencyEntry.getKey(), proxy.getId(), proxy.getType()));
       }
     }
   }

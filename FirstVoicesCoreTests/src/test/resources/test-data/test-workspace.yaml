@@ -18,3 +18,14 @@ children:
           - type: FVAlphabet
             name: "Alphabet"
             key: testAlphabet
+          - type: FVLinks
+            name: "Links"
+          - type: FVPortal
+            name: "Portal"
+            key: testPortal
+          - type: FVResources
+            name: "Resources"
+          - type: FVContributors
+            name: "Contributors"
+          - type: FVCategories
+            name: "Categories"

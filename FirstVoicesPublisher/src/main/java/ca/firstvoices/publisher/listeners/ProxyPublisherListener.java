@@ -128,6 +128,10 @@ public class ProxyPublisherListener implements PostCommitEventListener {
     CoreSession session = doc.getCoreSession();
     DocumentModel dialect = session.getDocument(DialectUtils.getDialect(doc).getRef());
 
+    if (!dialect.hasSchema("fv-maintenance")) {
+      return false;
+    }
+
     return RequiredJobsUtils
         .hasRequiredJobs(dialect,
             Constants.PUBLISH_DIALECT_JOB_ID);

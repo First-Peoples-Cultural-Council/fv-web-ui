@@ -7,13 +7,15 @@ children:
     children:
       - type: Workspace
         name: Data
+        key: workspaceData
       - type: Section
         name: SharedData
-  - type: WorkspaceRoot
+  - type: SectionRoot
     name: sections
     children:
       - type: Workspace
         name: Data
+        key: sectionsData
       - type: Section
         name: SharedData
         key: sectionsSharedData
