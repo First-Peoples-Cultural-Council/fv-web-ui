@@ -391,7 +391,12 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
   @Test
   public void shouldUnpublishDialect() {
-    shouldCreateProxiesForDialect();
+    shouldTransitionDialectToPublish();
+    fvPublisherService.publish(session, dialect);
+
+    // Direct children have published
+    assertEquals(PUBLISHED_STATE, dictionary.getCurrentLifeCycleState());
+
     fvPublisherService.unpublish(dialect);
 
     session.save();
@@ -416,12 +421,10 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
     session.save();
 
-    // Children of dialect + 2 links created in shouldCreateProxiesForDialect()
-    int enabledCount = session.getChildren(dialect.getRef()).size() + 2;
-
     // 1 word (handled via subsequent listener than fires after Dictionary transitions)
     assertEquals(1, getDocsInStateInDialect(dialect.getId(), PUBLISHED_STATE).totalSize());
-    assertEquals(enabledCount, getDocsInStateInDialect(dialect.getId(), ENABLED_STATE).totalSize());
+    assertEquals(session.getChildren(dialect.getRef()).size(),
+        getDocsInStateInDialect(dialect.getId(), ENABLED_STATE).totalSize());
     assertEquals(1, getDocsInStateInDialect(dialect.getId(), DISABLED_STATE).totalSize());
 
     // Proxies should be gone
