@@ -51,8 +51,8 @@ const HelperModeToggle = ({
       })
       const category = mappedLabel
         ? allCategories.find((c) => {
-            return c.id === mappedLabel.category
-          })
+          return c.id === mappedLabel.category
+        })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {

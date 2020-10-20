@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-            DEFAULT_PAGE_SIZE: 8,
-            disablePageSize: true,
-            filter: kidsFilter,
-            gridCols: 2,
-            gridListView: true,
-          })
+          DEFAULT_PAGE_SIZE: 8,
+          disablePageSize: true,
+          filter: kidsFilter,
+          gridCols: 2,
+          gridListView: true,
+        })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

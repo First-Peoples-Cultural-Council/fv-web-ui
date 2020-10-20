@@ -225,7 +225,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 

@@ -203,19 +203,19 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-          <ListItem
-            button
-            onClick={this._onListItemClick(
-              NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
-            )}
-            key={selectn('uid', d)}
-          >
-            <ListItemText
-              primary={selectn('properties.dc:title', d)}
-              primaryTypographyProps={{ style: { fontSize: '16px' } }}
-            />
-          </ListItem>
-        ))
+        <ListItem
+          button
+          onClick={this._onListItemClick(
+            NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
+          )}
+          key={selectn('uid', d)}
+        >
+          <ListItemText
+            primary={selectn('properties.dc:title', d)}
+            primaryTypographyProps={{ style: { fontSize: '16px' } }}
+          />
+        </ListItem>
+      ))
       : null
 
     return (

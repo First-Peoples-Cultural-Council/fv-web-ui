@@ -63,7 +63,7 @@ class TablePaginationActions extends React.Component {
               name: 'page',
               id: 'page',
             }}
-            disableUnderline={true}
+            disableUnderline
           >
             {pageNumbers.map((m, i) => {
               return (

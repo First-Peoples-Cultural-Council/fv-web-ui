@@ -77,13 +77,13 @@ export default class RecentActivityList extends Component {
               {this._formatDate(document.properties['dc:modified'])}{' '}
               {document.properties['dc:lastContributor'].indexOf('Administrator') != -1 ||
               document.properties['dc:lastContributor'].indexOf('dyona') != -1 ? (
-                ''
-              ) : (
-                <span>
-                  <FVLabel transKey="by" defaultStr="by" transform="lower" />{' '}
-                  <strong>{document.properties['dc:lastContributor']}</strong>
-                </span>
-              )}
+                  ''
+                ) : (
+                  <span>
+                    <FVLabel transKey="by" defaultStr="by" transform="lower" />{' '}
+                    <strong>{document.properties['dc:lastContributor']}</strong>
+                  </span>
+                )}
             </li>
           ))}
         </ul>

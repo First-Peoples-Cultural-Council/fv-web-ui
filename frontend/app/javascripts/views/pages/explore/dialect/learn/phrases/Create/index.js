@@ -148,7 +148,7 @@ export class PhrasesCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     // Call fetchDialect2 if not already called:

@@ -232,15 +232,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-          {
-            id: label.uid,
-            entity: computeLabel,
-          },
-          {
-            id: dialectPath,
-            entity: computeDialect2,
-          },
-        ])
+        {
+          id: label.uid,
+          entity: computeLabel,
+        },
+        {
+          id: dialectPath,
+          entity: computeDialect2,
+        },
+      ])
       : null
     return (
       <div>
