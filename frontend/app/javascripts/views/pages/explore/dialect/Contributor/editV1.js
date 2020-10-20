@@ -35,8 +35,8 @@ import FVLabel from 'views/components/FVLabel'
 import { Document } from 'nuxeo'
 
 // Views
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 

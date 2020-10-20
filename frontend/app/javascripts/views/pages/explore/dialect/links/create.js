@@ -34,8 +34,8 @@ import StatusBar from 'views/components/StatusBar'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 import FVLabel from 'views/components/FVLabel'
 
 /**

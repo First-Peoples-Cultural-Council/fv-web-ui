@@ -34,11 +34,11 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import { Document } from 'nuxeo'
 
 // Views
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)

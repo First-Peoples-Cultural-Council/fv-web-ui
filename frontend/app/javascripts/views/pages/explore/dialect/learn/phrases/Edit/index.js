@@ -37,8 +37,8 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import { Document } from 'nuxeo'
 
 // Views
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 
@@ -149,7 +149,7 @@ export class PhrasesEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

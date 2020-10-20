@@ -6,7 +6,7 @@ import RangeSelector from 'views/components/Editor/fields/range'
 // import SelectFactory from 'views/components/Editor/fields/select'
 import dataTestId from 'views/components/Editor/fields/dataTestId'
 import ProviderHelpers from 'common/ProviderHelpers'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 const intl = IntlService.instance
 

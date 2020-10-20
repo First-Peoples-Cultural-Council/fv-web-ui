@@ -1,11 +1,11 @@
 import t from 'tcomb-form'
 
-import Dublincore from 'models/schemas/Dublincore'
-import FVCore from 'models/schemas/FVCore'
-import FVMedia from 'models/schemas/FVMedia'
+import Dublincore from 'common/schemas/Dublincore'
+import FVCore from 'common/schemas/FVCore'
+import FVMedia from 'common/schemas/FVMedia'
 
 import ConfGlobal from 'conf/local.js'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 const intl = IntlService.instance
 

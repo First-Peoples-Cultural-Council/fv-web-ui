@@ -23,7 +23,7 @@ import Media from 'react-media'
 // Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 import FVButton from 'views/components/FVButton'
 import FVLabel from 'views/components/FVLabel'
 import {

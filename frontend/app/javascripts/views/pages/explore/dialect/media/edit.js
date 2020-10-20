@@ -36,8 +36,8 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import { Document } from 'nuxeo'
 
 // Views
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 
@@ -254,7 +254,4 @@ const mapDispatchToProps = {
   updateResource,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDialectMediaEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDialectMediaEdit)

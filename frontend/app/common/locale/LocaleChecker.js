@@ -3,7 +3,7 @@ import en from 'common/locale/locale.en.json'
 import fr from 'common/locale/locale.fr.json'
 import sp from 'common/locale/locale.sp.json'
 // import { sprintf, vsprintf } from 'sprintf-js'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 /* eslint-disable */
 String.prototype.toUpperCaseWords = function() {
   return this.replace(/\w+/g, function(a) {

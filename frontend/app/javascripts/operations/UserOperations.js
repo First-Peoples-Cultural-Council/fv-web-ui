@@ -17,7 +17,7 @@ limitations under the License.
 
 // import StringHelpers from 'common/StringHelpers'
 import BaseOperations from 'operations/BaseOperations'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 export default class UserOperations {
   static getUser(username = '' /*, headers = {}, params = {}*/) {
@@ -164,10 +164,13 @@ export default class UserOperations {
   static fvUpdateUser(username = '', languagePreference) {
     const properties = BaseOperations.getProperties()
 
-    return properties.client.operation('FVUpdateUser').params({
-      username,
-      languagePreference,
-      groupsAction: 'update',
-    }).execute()
+    return properties.client
+      .operation('FVUpdateUser')
+      .params({
+        username,
+        languagePreference,
+        groupsAction: 'update',
+      })
+      .execute()
   }
 }

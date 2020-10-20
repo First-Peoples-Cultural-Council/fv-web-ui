@@ -1,5 +1,5 @@
 import Nuxeo from 'nuxeo'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 import URLHelpers from 'common/URLHelpers'
 export default class BaseOperations {
   static properties = {

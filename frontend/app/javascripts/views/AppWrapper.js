@@ -27,9 +27,9 @@ import AppFrontController from './AppFrontController'
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-import FirstVoices from 'views/themes/FirstVoices.js'
-import FirstVoicesKids from 'views/themes/FirstVoicesKids.js'
-import FirstVoicesWorkspace from 'views/themes/FirstVoicesWorkspace.js'
+import FirstVoices from 'common/themes/FirstVoices.js'
+import FirstVoicesKids from 'common/themes/FirstVoicesKids.js'
+import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js'
 
 const { func, object, string } = PropTypes
 class AppWrapper extends Component {

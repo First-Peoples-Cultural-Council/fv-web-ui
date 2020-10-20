@@ -1,6 +1,6 @@
 import { execute } from 'providers/redux/reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 import URLHelpers from 'common/URLHelpers'
 import { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
 import {

@@ -6,8 +6,8 @@ import selectn from 'selectn'
 
 import t from 'tcomb-form'
 
-import fields from 'models/schemas/filter-fields'
-import options from 'models/schemas/filter-options'
+import fields from 'common/schemas/filter-fields'
+import options from 'common/schemas/filter-options'
 
 import withToggle from 'views/hoc/view/with-toggle'
 

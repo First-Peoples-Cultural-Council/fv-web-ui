@@ -215,7 +215,7 @@ import {
   getUidsThatAreNotDeleted,
 } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 import FVButton from 'views/components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'

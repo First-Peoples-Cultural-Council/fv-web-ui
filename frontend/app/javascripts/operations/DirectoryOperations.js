@@ -21,7 +21,7 @@ import request from 'request'
 // import Nuxeo from 'nuxeo'
 
 import BaseOperations from 'operations/BaseOperations'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 const TIMEOUT = 60000
 

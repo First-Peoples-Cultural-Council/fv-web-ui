@@ -35,8 +35,8 @@ import FVLabel from 'views/components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 /**
  * Create category
  */

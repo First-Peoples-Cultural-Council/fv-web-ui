@@ -1,6 +1,6 @@
 import { execute } from 'providers/redux/reducers/rest'
 import UserOperations from 'operations/UserOperations'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 const key = 'FV_USER'
 const intl = IntlService.instance

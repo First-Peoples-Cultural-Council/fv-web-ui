@@ -48,8 +48,8 @@ import { Document } from 'nuxeo'
 import BookEntryEdit from 'views/pages/explore/dialect/learn/songs-stories/entry/edit'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
 
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
 import { string } from 'prop-types'
@@ -151,7 +151,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

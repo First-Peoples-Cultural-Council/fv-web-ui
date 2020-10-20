@@ -34,8 +34,8 @@ import { Document } from 'nuxeo'
 
 // Views
 
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object } = PropTypes

@@ -38,8 +38,8 @@ import StateLoading from 'views/components/Loading'
 import StateErrorBoundary from 'views/components/ErrorBoundary'
 import FVLabel from 'views/components/FVLabel'
 
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 /**
  * Create book entry
@@ -122,7 +122,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

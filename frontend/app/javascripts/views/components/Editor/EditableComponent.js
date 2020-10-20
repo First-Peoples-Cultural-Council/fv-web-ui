@@ -12,8 +12,8 @@ import StatusBar from 'views/components/StatusBar'
 import { Document } from 'nuxeo'
 
 // Schemas
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Edit from '@material-ui/icons/Edit'

@@ -2,7 +2,7 @@
 import * as yup from 'yup'
 
 // V1 using t.comb:
-// import Dublincore from 'models/schemas/Dublincore'
+// import Dublincore from 'common/schemas/Dublincore'
 // FVContributor: Object.assign({}, Dublincore),
 /*
   'dc:title': t.String,

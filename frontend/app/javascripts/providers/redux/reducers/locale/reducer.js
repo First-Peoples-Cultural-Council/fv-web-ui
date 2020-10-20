@@ -9,7 +9,7 @@ import {
   SET_EDITING_LABEL,
   ADD_NEW_LABEL,
 } from './actionTypes'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 import en from 'common/locale/locale.en.json'
 import fr from 'common/locale/locale.fr.json'
 import sp from 'common/locale/locale.sp.json'

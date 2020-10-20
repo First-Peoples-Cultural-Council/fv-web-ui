@@ -3,10 +3,10 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'views/services/intl'
+import IntlService from 'common/services/intl'
 
 import * as Pages from 'views/pages'
-import { ServiceShortURL } from 'views/services'
+import { ServiceShortURL } from 'common/services'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 const intl = IntlService.instance
 

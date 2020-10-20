@@ -2,9 +2,9 @@
 import * as yup from 'yup'
 
 // V1 using t.comb:
-// import Dublincore from 'models/schemas/Dublincore'
+// import Dublincore from 'common/schemas/Dublincore'
 // FVAudio: Object.assign({}, Dublincore, FVMedia),
-// import FVMedia from 'models/schemas/FVMedia'
+// import FVMedia from 'common/schemas/FVMedia'
 /*
   'dc:title': t.String,
   'dc:description': t.maybe(t.String),

@@ -34,8 +34,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 // Views
-import fields from 'models/schemas/fields'
-import options from 'models/schemas/options'
+import fields from 'common/schemas/fields'
+import options from 'common/schemas/options'
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import StateLoading from 'views/components/Loading'
@@ -148,7 +148,7 @@ export class PhrasesCreate extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     // Call fetchDialect2 if not already called:
