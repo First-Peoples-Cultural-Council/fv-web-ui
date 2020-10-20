@@ -10,8 +10,8 @@ import Preview from 'views/components/Editor/Preview'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
+import { createContributor, fetchContributors } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 const { array, func, object, number, string } = PropTypes

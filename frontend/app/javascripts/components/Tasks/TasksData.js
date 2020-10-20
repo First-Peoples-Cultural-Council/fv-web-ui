@@ -2,9 +2,9 @@ import { useState } from 'react'
 import Immutable from 'immutable'
 
 // import PropTypes from 'prop-types'
-import useLogin from 'DataSources/useLogin'
-import useIntl from 'DataSources/useIntl'
-import useUser from 'DataSources/useUser'
+import useLogin from 'dataSources/useLogin'
+import useIntl from 'dataSources/useIntl'
+import useUser from 'dataSources/useUser'
 
 import selectn from 'selectn'
 

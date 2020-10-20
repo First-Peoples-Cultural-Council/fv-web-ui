@@ -5,7 +5,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategory, fetchCategories } from 'providers/redux/reducers/fvCategory'
+import { fetchCategory, fetchCategories } from 'reducers/fvCategory'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 

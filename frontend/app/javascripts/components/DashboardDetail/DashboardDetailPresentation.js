@@ -5,7 +5,7 @@ import '!style-loader!css-loader!./DashboardDetail.css'
 import IconWidget from '@material-ui/icons/Apps'
 import Link from 'views/components/Link'
 
-import useTheme from 'DataSources/useTheme'
+import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'
 import Typography from '@material-ui/core/Typography'
 /**

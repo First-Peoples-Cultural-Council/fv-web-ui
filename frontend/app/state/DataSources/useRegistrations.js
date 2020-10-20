@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import selectn from 'selectn'
 
-import useLogin from 'DataSources/useLogin'
-import useUser from 'DataSources/useUser'
+import useLogin from 'dataSources/useLogin'
+import useUser from 'dataSources/useUser'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 // TODO: Update useTasks.js when Guy is done editing
-// import useTasks from 'DataSources/useTasks'
+// import useTasks from 'dataSources/useTasks'
 
 import StringHelpers from 'common/StringHelpers'
 /**

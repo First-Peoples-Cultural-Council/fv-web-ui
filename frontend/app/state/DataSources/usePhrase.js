@@ -4,7 +4,7 @@ import {
   fetchPhrase as _fetchPhrase,
   fetchPhrases as _fetchPhrases,
   publishPhrase as _publishPhrase,
-} from 'providers/redux/reducers/fvPhrase'
+} from 'reducers/fvPhrase'
 
 function usePhrase() {
   const dispatch = useDispatch()

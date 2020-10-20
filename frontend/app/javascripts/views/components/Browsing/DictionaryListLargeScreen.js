@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import selectn from 'selectn'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
-import useRoute from 'DataSources/useRoute'
+import useRoute from 'dataSources/useRoute'
 import StringHelpers from 'common/StringHelpers'
 
 const DictionaryListLargeScreen = (props) => {

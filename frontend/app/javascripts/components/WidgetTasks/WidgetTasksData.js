@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import useDashboard from 'DataSources/useDashboard'
+import useDashboard from 'dataSources/useDashboard'
 import { TableContextSort, TableContextCount } from 'components/Table/TableContext'
-import useTheme from 'DataSources/useTheme'
+import useTheme from 'dataSources/useTheme'
 /**
  * @summary WidgetTasksData
  * @version 1.0.1

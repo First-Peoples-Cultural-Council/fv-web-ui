@@ -5,7 +5,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { pushWindowPath } from 'reducers/windowPath'
 
 const { string, object, func } = PropTypes
 export class CategoryStateSuccessDelete extends React.Component {

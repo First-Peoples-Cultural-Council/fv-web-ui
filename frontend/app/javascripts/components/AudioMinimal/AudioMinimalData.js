@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import useAudio from 'DataSources/useAudio'
+import useAudio from 'dataSources/useAudio'
 import { useEffect, useState } from 'react'
 /**
  * @summary AudioMinimalData

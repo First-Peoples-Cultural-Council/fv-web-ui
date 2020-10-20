@@ -8,8 +8,8 @@ import {
   exportDialectFVGenerateDocumentWithFormat,
   exportDialectGenericError,
   exportDialectResetData,
-} from 'providers/redux/reducers/exportDialect'
-import { fetchDocument } from 'providers/redux/reducers/document'
+} from 'reducers/exportDialect'
+import { fetchDocument } from 'reducers/document'
 
 import Typography from '@material-ui/core/Typography'
 

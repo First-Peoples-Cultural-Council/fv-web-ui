@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
 
-// DataSourcess
-import useIntl from 'DataSources/useIntl'
-import useWindowPath from 'DataSources/useWindowPath'
+import useIntl from 'dataSources/useIntl'
+import useWindowPath from 'dataSources/useWindowPath'
 
 /**
  * @summary AdminMenuData

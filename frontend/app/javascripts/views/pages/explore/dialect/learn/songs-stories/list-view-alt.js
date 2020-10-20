@@ -20,9 +20,9 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchBooks } from 'providers/redux/reducers/fvBook'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchBooks } from 'reducers/fvBook'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
@@ -106,9 +106,9 @@ export class SongsStoriesListViewAlt extends DataListView {
             const clickHandler = props.disableClickItem
               ? NavigationHelpers.disable
               : (/*e*/) => {
-                // e.preventDefault()
-                // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-              }
+                  // e.preventDefault()
+                  // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+                }
             return (
               <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}

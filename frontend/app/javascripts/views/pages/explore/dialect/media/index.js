@@ -20,10 +20,10 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchResources } from 'providers/redux/reducers/fvResources'
-import { navigateTo } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
+import { fetchResources } from 'reducers/fvResources'
+import { navigateTo } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
+import { fetchPortal } from 'reducers/fvPortal'
 
 import selectn from 'selectn'
 

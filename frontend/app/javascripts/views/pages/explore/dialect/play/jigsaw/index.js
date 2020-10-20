@@ -20,8 +20,8 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchResources } from 'providers/redux/reducers/fvResources'
-import { fetchWords } from 'providers/redux/reducers/fvWord'
+import { fetchResources } from 'reducers/fvResources'
+import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 

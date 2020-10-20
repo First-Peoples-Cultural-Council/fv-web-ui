@@ -16,7 +16,7 @@ limitations under the License.
 import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import useRoute from 'DataSources/useRoute'
+import useRoute from 'dataSources/useRoute'
 
 import Typography from '@material-ui/core/Typography'
 import StringHelpers from 'common/StringHelpers'

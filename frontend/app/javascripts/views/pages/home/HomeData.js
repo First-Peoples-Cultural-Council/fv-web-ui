@@ -23,11 +23,11 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import selectn from 'selectn'
 
-import useIntl from 'DataSources/useIntl'
-import usePage from 'DataSources/usePage'
-import useProperties from 'DataSources/useProperties'
-import useUserStartpage from 'DataSources/useUserStartpage'
-import useWindowPath from 'DataSources/useWindowPath'
+import useIntl from 'dataSources/useIntl'
+import usePage from 'dataSources/usePage'
+import useProperties from 'dataSources/useProperties'
+import useUserStartpage from 'dataSources/useUserStartpage'
+import useWindowPath from 'dataSources/useWindowPath'
 
 function HomeData(props) {
   const [isUnmounting, setIsUnmounting] = useState(false)

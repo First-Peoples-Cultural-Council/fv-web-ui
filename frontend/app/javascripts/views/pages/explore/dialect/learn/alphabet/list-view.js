@@ -20,9 +20,9 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchCharacters } from 'reducers/fvCharacter'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'

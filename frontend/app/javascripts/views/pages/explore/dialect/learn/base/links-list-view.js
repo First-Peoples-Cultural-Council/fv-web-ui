@@ -20,9 +20,9 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { fetchLinks } from 'providers/redux/reducers/fvLink'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { fetchLinks } from 'reducers/fvLink'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
@@ -240,7 +240,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     properties,
     splitWindowPath,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 

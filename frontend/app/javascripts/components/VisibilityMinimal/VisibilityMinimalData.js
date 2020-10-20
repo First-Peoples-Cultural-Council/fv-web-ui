@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 //FPCC
-import useLogin from 'DataSources/useLogin'
-import useRoute from 'DataSources/useRoute'
-import useVisibility from 'DataSources/useVisibility'
+import useLogin from 'dataSources/useLogin'
+import useRoute from 'dataSources/useRoute'
+import useVisibility from 'dataSources/useVisibility'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 

@@ -18,11 +18,11 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { updatePageProperties } from 'providers/redux/reducers/navigation'
+import { fetchCategories } from 'reducers/fvCategory'
+import { fetchDocument } from 'reducers/document'
+import { fetchPortal } from 'reducers/fvPortal'
+import { pushWindowPath } from 'reducers/windowPath'
+import { updatePageProperties } from 'reducers/navigation'
 
 import selectn from 'selectn'
 

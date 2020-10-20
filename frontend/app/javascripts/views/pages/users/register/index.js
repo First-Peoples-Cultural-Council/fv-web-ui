@@ -20,9 +20,9 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { selfregisterUser } from 'providers/redux/reducers/fvUser'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { selfregisterUser } from 'reducers/fvUser'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

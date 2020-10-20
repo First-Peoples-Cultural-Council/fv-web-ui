@@ -20,8 +20,8 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchLabels } from 'providers/redux/reducers/fvLabel'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchLabels } from 'reducers/fvLabel'
+import { fetchDialect2 } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
 import FVButton from 'views/components/FVButton'

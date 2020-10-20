@@ -20,9 +20,9 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchBookEntry, updateBookEntry } from 'providers/redux/reducers/fvBook'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchBookEntry, updateBookEntry } from 'reducers/fvBook'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

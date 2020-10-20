@@ -20,9 +20,9 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createLink } from 'providers/redux/reducers/fvLink'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { createLink } from 'reducers/fvLink'
+import { fetchDialect } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

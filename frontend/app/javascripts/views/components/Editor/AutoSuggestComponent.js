@@ -5,11 +5,11 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchSharedAudios } from 'providers/redux/reducers/fvAudio'
-import { fetchSharedContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchSharedLinks } from 'providers/redux/reducers/fvLink'
-import { fetchSharedPhrases } from 'providers/redux/reducers/fvPhrase'
-import { fetchSharedWords } from 'providers/redux/reducers/fvWord'
+import { fetchSharedAudios } from 'reducers/fvAudio'
+import { fetchSharedContributors } from 'reducers/fvContributor'
+import { fetchSharedLinks } from 'reducers/fvLink'
+import { fetchSharedPhrases } from 'reducers/fvPhrase'
+import { fetchSharedWords } from 'reducers/fvWord'
 
 import Autosuggest from 'react-autosuggest'
 

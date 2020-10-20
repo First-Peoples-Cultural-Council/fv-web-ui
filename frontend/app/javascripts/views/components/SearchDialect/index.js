@@ -21,8 +21,8 @@ import {
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDirectory } from 'providers/redux/reducers/directory'
-import useSearchDialect from 'DataSources/useSearchDialect'
+import { fetchDirectory } from 'reducers/directory'
+import useSearchDialect from 'dataSources/useSearchDialect'
 
 import selectn from 'selectn'
 import classNames from 'classnames'

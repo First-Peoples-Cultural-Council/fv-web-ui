@@ -19,9 +19,9 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { deleteContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
+import { deleteContributor, fetchContributors } from 'reducers/fvContributor'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setRouteParams } from 'reducers/navigation'
 
 import NavigationClose from '@material-ui/icons/Close'
 import NavigationCheck from '@material-ui/icons/Check'

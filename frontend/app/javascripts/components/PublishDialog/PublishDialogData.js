@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 
 // FPCC
-import useIntl from 'DataSources/useIntl'
-import useRoute from 'DataSources/useRoute'
-import useWindowPath from 'DataSources/useWindowPath'
+import useIntl from 'dataSources/useIntl'
+import useRoute from 'dataSources/useRoute'
+import useWindowPath from 'dataSources/useWindowPath'
 
 /**
  * @summary PublishDialogData

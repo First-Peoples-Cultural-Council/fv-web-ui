@@ -19,10 +19,10 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { fetchSharedPictures } from 'providers/redux/reducers/fvPicture'
-import { fetchWord } from 'providers/redux/reducers/fvWord'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchPortal } from 'reducers/fvPortal'
+import { fetchSharedPictures } from 'reducers/fvPicture'
+import { fetchWord } from 'reducers/fvWord'
+import { pushWindowPath } from 'reducers/windowPath'
 
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '78086057-9c34-48f7-995f-9dc3b313231b' } }
 
@@ -328,7 +328,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageDebugAPI)
+export default connect(mapStateToProps, mapDispatchToProps)(PageDebugAPI)

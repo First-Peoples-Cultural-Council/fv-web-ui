@@ -11,7 +11,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createAudio } from 'providers/redux/reducers/fvAudio'
+import { createAudio } from 'reducers/fvAudio'
 
 const { func, object, number, string } = PropTypes
 export class FormPhraseBookCreateNew extends React.Component {
@@ -171,7 +171,7 @@ export class FormPhraseBookCreateNew extends React.Component {
     'FormPhraseBookCreateNew.dc:description': yup.string(),
   })
 
-  _handleCreateItemSubmit = async() => {
+  _handleCreateItemSubmit = async () => {
     // Note: using state instead of FormData since can't nest forms
     const formData = this._getFormData()
     const formValidation = await this._validateForm(formData)
@@ -208,7 +208,7 @@ export class FormPhraseBookCreateNew extends React.Component {
       'FormPhraseBookCreateNew.dc:description': this.state['FormPhraseBookCreateNew.dc:description'],
     }
   }
-  _validateForm = async(formData) => {
+  _validateForm = async (formData) => {
     // Note: When `abortEarly === true` then `{ path, type } = invalid` is defined.
     // When `abortEarly === false` then `{ path, type } = invalid` is not defined! Data is found in `invalid.errors[]`.
     const validation = await this.schemaCreateForm.validate(formData, { abortEarly: false }).then(
@@ -236,7 +236,7 @@ export class FormPhraseBookCreateNew extends React.Component {
     )
     return validation
   }
-  _validateField = async({ name, data }) => {
+  _validateField = async ({ name, data }) => {
     // const formDataFormatted = this._getFormData()
     const results = await this._validateForm(data)
     const { valid, errors } = results
@@ -282,7 +282,4 @@ const mapDispatchToProps = {
   createAudio,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormPhraseBookCreateNew)
+export default connect(mapStateToProps, mapDispatchToProps)(FormPhraseBookCreateNew)

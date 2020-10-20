@@ -12,9 +12,9 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
+import { createContributor, fetchContributors } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
 
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 
@@ -94,10 +94,10 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     // USING this.DIALECT_PATH instead of setting state
     // this.setState({ dialectPath: dialectPath })
@@ -121,8 +121,8 @@ export class Contributor extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -231,7 +231,7 @@ export class Contributor extends React.Component {
     )
   }
 
-  _handleCreateItemSubmit = async(formData) => {
+  _handleCreateItemSubmit = async (formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -292,7 +292,7 @@ export class Contributor extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })
@@ -350,7 +350,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Contributor)
+export default connect(mapStateToProps, mapDispatchToProps)(Contributor)

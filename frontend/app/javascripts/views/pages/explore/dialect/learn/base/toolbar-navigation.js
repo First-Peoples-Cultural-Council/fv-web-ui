@@ -21,9 +21,9 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchResultSet } from 'providers/redux/reducers/document'
-import { navigateTo } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchResultSet } from 'reducers/document'
+import { navigateTo } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
 
 // import selectn from 'selectn'
 // import ProviderHelpers from 'common/ProviderHelpers'

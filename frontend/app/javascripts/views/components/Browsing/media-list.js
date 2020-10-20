@@ -27,7 +27,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 // REDUX
 import { connect } from 'react-redux'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { pushWindowPath } from 'reducers/windowPath'
 
 const defaultStyle = { width: '100%', overflowY: 'auto', marginBottom: 24 }
 

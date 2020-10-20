@@ -4,7 +4,7 @@ import {
   fetchWord as _fetchWord,
   fetchWords as _fetchWords,
   publishWord as _publishWord,
-} from 'providers/redux/reducers/fvWord'
+} from 'reducers/fvWord'
 
 function useWord() {
   const dispatch = useDispatch()

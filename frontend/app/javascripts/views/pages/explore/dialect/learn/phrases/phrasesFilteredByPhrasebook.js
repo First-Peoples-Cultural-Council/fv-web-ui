@@ -22,13 +22,13 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPhrases } from 'providers/redux/reducers/fvPhrase'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setListViewMode } from 'providers/redux/reducers/listView'
-import { setRouteParams, updatePageProperties } from 'providers/redux/reducers/navigation'
-import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
+import { fetchDocument } from 'reducers/document'
+import { fetchPhrases } from 'reducers/fvPhrase'
+import { fetchPortal } from 'reducers/fvPortal'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setListViewMode } from 'reducers/listView'
+import { setRouteParams, updatePageProperties } from 'reducers/navigation'
+import { searchDialectReset } from 'reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------

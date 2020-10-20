@@ -10,9 +10,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
-import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { createContributor, fetchContributors } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
+import { fetchResources } from 'reducers/fvResources'
 
 import selectn from 'selectn'
 
@@ -213,7 +213,7 @@ export class FormRelatedPhrases extends React.Component {
     return <input type="hidden" name="fv-word:related_phrases" value={JSON.stringify(selectedItems)} />
   }
 
-  handleClickCreateItem = async() => {
+  handleClickCreateItem = async () => {
     const _FormRelatedPhraseCreateNew = await import('views/components/Form/FormRelatedPhraseCreateNew')
     this.setState(
       {
@@ -303,7 +303,4 @@ const mapDispatchToProps = {
   fetchResources,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRelatedPhrases)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRelatedPhrases)

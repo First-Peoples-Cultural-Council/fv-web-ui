@@ -20,8 +20,8 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchPortal } from 'reducers/fvPortal'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 

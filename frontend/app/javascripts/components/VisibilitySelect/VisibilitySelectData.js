@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // FPCC
-import useDialect from 'DataSources/useDialect'
-import useRoute from 'DataSources/useRoute'
+import useDialect from 'dataSources/useDialect'
+import useRoute from 'dataSources/useRoute'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 

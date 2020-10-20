@@ -7,17 +7,16 @@ import Immutable from 'immutable'
 
 // FPCC
 
-//DataSourcess
-import useDialect from 'DataSources/useDialect'
-import useDocument from 'DataSources/useDocument'
-import useIntl from 'DataSources/useIntl'
-import useListView from 'DataSources/useListView'
-import useLogin from 'DataSources/useLogin'
-import useRoute from 'DataSources/useRoute'
-import usePortal from 'DataSources/usePortal'
-import useSearchDialect from 'DataSources/useSearchDialect'
-import useWindowPath from 'DataSources/useWindowPath'
-import useWord from 'DataSources/useWord'
+import useDialect from 'dataSources/useDialect'
+import useDocument from 'dataSources/useDocument'
+import useIntl from 'dataSources/useIntl'
+import useListView from 'dataSources/useListView'
+import useLogin from 'dataSources/useLogin'
+import useRoute from 'dataSources/useRoute'
+import usePortal from 'dataSources/usePortal'
+import useSearchDialect from 'dataSources/useSearchDialect'
+import useWindowPath from 'dataSources/useWindowPath'
+import useWord from 'dataSources/useWord'
 
 // Helpers
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'

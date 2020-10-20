@@ -33,10 +33,10 @@ import {
   enableBook,
   publishBook,
   unpublishBook,
-} from 'providers/redux/reducers/fvBook'
-import { changeTitleParams, overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+} from 'reducers/fvBook'
+import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 

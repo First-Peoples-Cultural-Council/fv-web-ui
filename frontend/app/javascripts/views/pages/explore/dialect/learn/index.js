@@ -22,13 +22,8 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2, updateDialect2, fetchDialectStats, republishDialect } from 'providers/redux/reducers/fvDialect'
-import {
-  queryModifiedWords,
-  queryCreatedWords,
-  queryUserCreatedWords,
-  queryUserModifiedWords,
-} from 'providers/redux/reducers/fvWord'
+import { fetchDialect2, updateDialect2, fetchDialectStats, republishDialect } from 'reducers/fvDialect'
+import { queryModifiedWords, queryCreatedWords, queryUserCreatedWords, queryUserModifiedWords } from 'reducers/fvWord'
 import {
   queryCreatedSongs,
   queryCreatedStories,
@@ -38,14 +33,14 @@ import {
   queryUserCreatedStories,
   queryUserModifiedSongs,
   queryUserModifiedStories,
-} from 'providers/redux/reducers/fvBook'
+} from 'reducers/fvBook'
 import {
   queryCreatedPhrases,
   queryModifiedPhrases,
   queryUserModifiedPhrases,
   queryUserCreatedPhrases,
-} from 'providers/redux/reducers/fvPhrase'
-import { fetchPortal, updatePortal } from 'providers/redux/reducers/fvPortal'
+} from 'reducers/fvPhrase'
+import { fetchPortal, updatePortal } from 'reducers/fvPortal'
 
 import selectn from 'selectn'
 import { routeHasChanged } from 'common/NavigationHelpers'

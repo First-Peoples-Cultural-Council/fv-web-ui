@@ -21,9 +21,9 @@ import { connect } from 'react-redux'
 import Immutable from 'immutable'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } from 'providers/redux/reducers/fvLabel'
-import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { addNewLabelToIntl } from 'providers/redux/reducers/locale'
+import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } from 'reducers/fvLabel'
+import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
+import { addNewLabelToIntl } from 'reducers/locale'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 import FVLabel from 'views/components/FVLabel'
 import { Document } from 'nuxeo'
@@ -232,15 +232,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-        {
-          id: label.uid,
-          entity: computeLabel,
-        },
-        {
-          id: dialectPath,
-          entity: computeDialect2,
-        },
-      ])
+          {
+            id: label.uid,
+            entity: computeLabel,
+          },
+          {
+            id: dialectPath,
+            entity: computeDialect2,
+          },
+        ])
       : null
     return (
       <div>

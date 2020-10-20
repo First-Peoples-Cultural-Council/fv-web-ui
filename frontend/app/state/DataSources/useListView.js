@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { setListViewMode as _setListViewMode } from 'providers/redux/reducers/listView'
+import { setListViewMode as _setListViewMode } from 'reducers/listView'
 
 function useListView() {
   const dispatch = useDispatch()

@@ -200,8 +200,8 @@ import Media from 'react-media'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setRouteParams } from 'reducers/navigation'
 // Components
 import {
   batchTitle,

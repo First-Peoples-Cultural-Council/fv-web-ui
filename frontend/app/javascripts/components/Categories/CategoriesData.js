@@ -18,13 +18,13 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories, fetchSharedCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { setListViewMode } from 'providers/redux/reducers/listView'
+import { fetchCategories, fetchSharedCategories } from 'reducers/fvCategory'
+import { fetchCharacters } from 'reducers/fvCharacter'
+import { fetchDocument } from 'reducers/document'
+import { fetchPortal } from 'reducers/fvPortal'
+import { overrideBreadcrumbs } from 'reducers/navigation'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { setListViewMode } from 'reducers/listView'
 
 import selectn from 'selectn'
 

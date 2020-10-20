@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Menu from '@material-ui/core/Menu'
 import ListItem from '@material-ui/core/ListItem'
 import Typography from '@material-ui/core/Typography'
-import { setEditingLabel } from 'providers/redux/reducers/locale'
+import { setEditingLabel } from 'reducers/locale'
 
 import DocumentOperations from 'operations/DocumentOperations'
 import Preview from 'views/components/Editor/Preview'

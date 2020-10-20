@@ -19,8 +19,8 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { queryDialect2ByShortURL } from 'providers/redux/reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { queryDialect2ByShortURL } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
 
@@ -115,7 +115,4 @@ const mapDispatchToProps = {
   queryDialect2ByShortURL,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ServiceShortURL)
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceShortURL)

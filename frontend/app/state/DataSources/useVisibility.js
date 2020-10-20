@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { updateVisibility as _updateVisibility } from 'providers/redux/reducers/visibility'
+import { updateVisibility as _updateVisibility } from 'reducers/visibility'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 function useVisibility() {

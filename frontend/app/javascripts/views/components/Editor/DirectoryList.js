@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDirectory } from 'providers/redux/reducers/directory'
+import { fetchDirectory } from 'reducers/directory'
 
 import selectn from 'selectn'
 

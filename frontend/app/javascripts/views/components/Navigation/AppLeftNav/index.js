@@ -19,8 +19,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { toggleMenuAction } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { toggleMenuAction } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
@@ -203,19 +203,19 @@ export class AppLeftNav extends Component {
     const entries = selectn('response.entries', this.props.computeLoadNavigation)
     this.additionalEntries = entries
       ? entries.map((d) => (
-        <ListItem
-          button
-          onClick={this._onListItemClick(
-            NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
-          )}
-          key={selectn('uid', d)}
-        >
-          <ListItemText
-            primary={selectn('properties.dc:title', d)}
-            primaryTypographyProps={{ style: { fontSize: '16px' } }}
-          />
-        </ListItem>
-      ))
+          <ListItem
+            button
+            onClick={this._onListItemClick(
+              NavigationHelpers.generateStaticURL('/content/' + selectn('properties.fvpage:url', d))
+            )}
+            key={selectn('uid', d)}
+          >
+            <ListItemText
+              primary={selectn('properties.dc:title', d)}
+              primaryTypographyProps={{ style: { fontSize: '16px' } }}
+            />
+          </ListItem>
+        ))
       : null
 
     return (

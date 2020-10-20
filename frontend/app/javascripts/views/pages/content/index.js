@@ -20,9 +20,9 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { changeTitleParams } from 'providers/redux/reducers/navigation'
-import { queryPage } from 'providers/redux/reducers/fvPage'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { changeTitleParams } from 'reducers/navigation'
+import { queryPage } from 'reducers/fvPage'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import classNames from 'classnames'

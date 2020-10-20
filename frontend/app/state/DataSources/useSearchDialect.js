@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   searchDialectReset as _searchDialectReset,
   searchDialectUpdate as _searchDialectUpdate,
-} from 'providers/redux/reducers/searchDialect'
+} from 'reducers/searchDialect'
 
 function useSearchDialect() {
   const dispatch = useDispatch()

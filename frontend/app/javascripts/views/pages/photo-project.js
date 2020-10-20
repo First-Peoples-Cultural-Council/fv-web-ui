@@ -23,7 +23,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 
 // REDUX: actions/dispatch/func
-import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { fetchResources } from 'reducers/fvResources'
 
 import UIHelpers from 'common/UIHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'

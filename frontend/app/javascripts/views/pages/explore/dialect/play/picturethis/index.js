@@ -22,7 +22,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchWords } from 'providers/redux/reducers/fvWord'
+import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 

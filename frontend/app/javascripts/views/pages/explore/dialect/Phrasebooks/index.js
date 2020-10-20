@@ -19,9 +19,9 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { deleteCategory, fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
+import { deleteCategory, fetchCategories } from 'reducers/fvCategory'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setRouteParams } from 'reducers/navigation'
 
 // CUSTOM
 // ----------------------------------------

@@ -16,7 +16,7 @@ import {
   simpleTaskApprove as _simpleTaskApprove,
   simpleTaskRequestChanges as _simpleTaskRequestChanges,
   simpleTaskIgnore as _simpleTaskIgnore,
-} from 'providers/redux/reducers/tasks'
+} from 'reducers/tasks'
 
 function useTasks() {
   const dispatch = useDispatch()

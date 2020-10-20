@@ -21,10 +21,10 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createGallery } from 'providers/redux/reducers/fvGallery'
+import { createGallery } from 'reducers/fvGallery'
 
-import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

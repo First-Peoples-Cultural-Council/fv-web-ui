@@ -26,8 +26,8 @@ import {
   fetchReportStoriesAll,
   fetchReportPhrasesAll,
   fetchReportWordsAll,
-} from 'providers/redux/reducers/reports'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+} from 'reducers/reports'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'

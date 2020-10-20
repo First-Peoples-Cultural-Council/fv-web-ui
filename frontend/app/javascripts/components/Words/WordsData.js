@@ -15,13 +15,13 @@ limitations under the License.
 import { useEffect } from 'react'
 import Immutable from 'immutable'
 
-import useDialect from 'DataSources/useDialect'
-import useDocument from 'DataSources/useDocument'
-import useIntl from 'DataSources/useIntl'
-import usePortal from 'DataSources/usePortal'
-import useRoute from 'DataSources/useRoute'
-import useSearchDialect from 'DataSources/useSearchDialect'
-import useWindowPath from 'DataSources/useWindowPath'
+import useDialect from 'dataSources/useDialect'
+import useDocument from 'dataSources/useDocument'
+import useIntl from 'dataSources/useIntl'
+import usePortal from 'dataSources/usePortal'
+import useRoute from 'dataSources/useRoute'
+import useSearchDialect from 'dataSources/useSearchDialect'
+import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import {

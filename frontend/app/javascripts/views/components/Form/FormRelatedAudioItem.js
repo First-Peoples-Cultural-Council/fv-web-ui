@@ -19,7 +19,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createAudio } from 'providers/redux/reducers/fvAudio'
+import { createAudio } from 'reducers/fvAudio'
 import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes

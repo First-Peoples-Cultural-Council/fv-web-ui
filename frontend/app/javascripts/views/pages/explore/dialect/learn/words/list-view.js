@@ -20,10 +20,10 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchWords } from 'providers/redux/reducers/fvWord'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setRouteParams } from 'providers/redux/reducers/navigation'
+import { fetchWords } from 'reducers/fvWord'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setRouteParams } from 'reducers/navigation'
 
 import selectn from 'selectn'
 

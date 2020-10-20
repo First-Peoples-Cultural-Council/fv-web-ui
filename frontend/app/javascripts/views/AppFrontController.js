@@ -4,10 +4,10 @@ import Immutable, { is, List } from 'immutable'
 
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath, replaceWindowPath, updateWindowPath } from 'providers/redux/reducers/windowPath'
-import { changeSiteTheme, setRouteParams } from 'providers/redux/reducers/navigation'
-import { setIntlWorkspace } from 'providers/redux/reducers/locale'
-import { nuxeoConnect, getCurrentUser } from 'providers/redux/reducers/nuxeo'
+import { pushWindowPath, replaceWindowPath, updateWindowPath } from 'reducers/windowPath'
+import { changeSiteTheme, setRouteParams } from 'reducers/navigation'
+import { setIntlWorkspace } from 'reducers/locale'
+import { nuxeoConnect, getCurrentUser } from 'reducers/nuxeo'
 
 import selectn from 'selectn'
 

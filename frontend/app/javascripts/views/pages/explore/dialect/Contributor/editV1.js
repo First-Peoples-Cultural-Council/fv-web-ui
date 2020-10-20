@@ -20,10 +20,10 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchContributor } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { updateContributor } from 'providers/redux/reducers/fvContributor'
+import { fetchContributor } from 'reducers/fvContributor'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { updateContributor } from 'reducers/fvContributor'
 
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'

@@ -20,7 +20,7 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchResultSet } from 'providers/redux/reducers/document'
+import { fetchResultSet } from 'reducers/document'
 
 import selectn from 'selectn'
 
@@ -95,7 +95,10 @@ export class QueryList extends Component {
             value={this.props.value}
             onChange={this._handleChange}
             floatingLabelText={
-              this.props.intl.trans('select', 'Select', 'first') + ' ' + this.props.intl.searchAndReplace(this.props.label) + ':'
+              this.props.intl.trans('select', 'Select', 'first') +
+              ' ' +
+              this.props.intl.searchAndReplace(this.props.label) +
+              ':'
             }
           >
             {entries.map((entry) => (
@@ -137,7 +140,4 @@ const mapDispatchToProps = {
   fetchResultSet,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QueryList)
+export default connect(mapStateToProps, mapDispatchToProps)(QueryList)

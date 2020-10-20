@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { useEffect } from 'react'
-import usePortal from 'DataSources/usePortal'
-import useRoute from 'DataSources/useRoute'
+import usePortal from 'dataSources/usePortal'
+import useRoute from 'dataSources/useRoute'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import Typography from '@material-ui/core/Typography'

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 //FPCC
-import useLogin from 'DataSources/useLogin'
-import useRoute from 'DataSources/useRoute'
-import useTasks from 'DataSources/useTasks'
+import useLogin from 'dataSources/useLogin'
+import useRoute from 'dataSources/useRoute'
+import useTasks from 'dataSources/useTasks'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 

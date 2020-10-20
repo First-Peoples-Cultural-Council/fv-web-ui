@@ -20,7 +20,7 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialectList } from 'providers/redux/reducers/fvDialect'
+import { fetchDialectList } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
 

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDocument as _fetchDocument } from 'providers/redux/reducers/document'
-import { fetch } from 'providers/redux/reducers/rest'
+import { fetchDocument as _fetchDocument } from 'reducers/document'
+import { fetch } from 'reducers/rest'
 function useDocument() {
   const dispatch = useDispatch()
 

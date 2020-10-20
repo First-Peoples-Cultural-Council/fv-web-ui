@@ -20,10 +20,10 @@ import Immutable, { List } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { changeTitleParams, overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
-import { fetchBook, fetchBookEntries, updateBook, updateBookEntry } from 'providers/redux/reducers/fvBook'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
+import { fetchBook, fetchBookEntries, updateBook, updateBookEntry } from 'reducers/fvBook'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'

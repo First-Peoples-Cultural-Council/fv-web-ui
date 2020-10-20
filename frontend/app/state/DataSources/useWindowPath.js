@@ -1,8 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  pushWindowPath as _pushWindowPath,
-  replaceWindowPath as _replaceWindowPath,
-} from 'providers/redux/reducers/windowPath'
+import { pushWindowPath as _pushWindowPath, replaceWindowPath as _replaceWindowPath } from 'reducers/windowPath'
 
 function useWindowPath() {
   const dispatch = useDispatch()

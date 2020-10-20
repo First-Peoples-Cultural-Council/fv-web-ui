@@ -19,9 +19,9 @@ import {
   fetchContributor,
   fetchContributors,
   updateContributor,
-} from 'providers/redux/reducers/fvContributor'
-import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+} from 'reducers/fvContributor'
+import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
@@ -111,16 +111,16 @@ export class EditContributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
   render() {
@@ -153,7 +153,7 @@ export class EditContributor extends React.Component {
     }
     return content
   }
-  _getData = async(addToState = {}) => {
+  _getData = async (addToState = {}) => {
     const { routeParams } = this.props
     const { itemId } = routeParams
 
@@ -301,7 +301,7 @@ export class EditContributor extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })
@@ -329,7 +329,7 @@ export class EditContributor extends React.Component {
       invalid,
     })
   }
-  _getItem = async() => {
+  _getItem = async () => {
     const { computeContributor, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:
@@ -397,7 +397,4 @@ const mapDispatchToProps = {
   updateContributor,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditContributor)
+export default connect(mapStateToProps, mapDispatchToProps)(EditContributor)

@@ -22,9 +22,9 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createAudio } from 'providers/redux/reducers/fvAudio'
-import { createPicture } from 'providers/redux/reducers/fvPicture'
-import { createVideo } from 'providers/redux/reducers/fvVideo'
+import { createAudio } from 'reducers/fvAudio'
+import { createPicture } from 'reducers/fvPicture'
+import { createVideo } from 'reducers/fvVideo'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

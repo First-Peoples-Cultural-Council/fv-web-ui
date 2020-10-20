@@ -305,7 +305,7 @@ import React, { Component, PropTypes } from 'react'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { someActionForRedux } from 'providers/redux/reducers/someExample'
+import { someActionForRedux } from 'reducers/someExample'
 
 // 2) Then extract anything from imports
 

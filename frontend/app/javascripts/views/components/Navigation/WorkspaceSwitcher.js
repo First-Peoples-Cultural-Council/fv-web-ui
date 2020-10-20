@@ -21,8 +21,8 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { fetchSourceDocument, fetchResultSet } from 'providers/redux/reducers/document'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { fetchSourceDocument, fetchResultSet } from 'reducers/document'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -59,7 +59,7 @@ export class WorkspaceSwitcher extends Component {
     return this.props.splitWindowPath[this.props.splitWindowPath.length - 1]
   }
 
-  _getSourceDocument = async() => {
+  _getSourceDocument = async () => {
     const potentialUUID = this._getPotentialUUID()
     if (StringHelpers.isUUID(potentialUUID)) {
       await this.props.fetchSourceDocument(potentialUUID)
@@ -68,7 +68,7 @@ export class WorkspaceSwitcher extends Component {
     }
   }
 
-  _getPublishedDocument = async() => {
+  _getPublishedDocument = async () => {
     const potentialUUID = this._getPotentialUUID()
     if (StringHelpers.isUUID(potentialUUID)) {
       await this.props.fetchResultSet('published_for_' + potentialUUID, {

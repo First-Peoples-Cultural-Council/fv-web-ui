@@ -35,7 +35,7 @@ import UIHelpers from 'common/UIHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchWords } from 'providers/redux/reducers/fvWord'
+import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 import FVLabel from 'views/components/FVLabel'
@@ -297,7 +297,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    (selectn('response.entries', computeWords) || []).forEach(
+    ;(selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -455,9 +455,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                  disabled: true,
-                  key: i,
-                })
+                    disabled: true,
+                    key: i,
+                  })
                 : answer
             })}
           </div>

@@ -20,8 +20,8 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchUser } from 'providers/redux/reducers/fvUser'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchUser } from 'reducers/fvUser'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

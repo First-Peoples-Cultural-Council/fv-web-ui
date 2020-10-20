@@ -9,7 +9,7 @@ import Preview from 'views/components/Editor/Preview'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createCategory } from 'providers/redux/reducers/fvCategory'
+import { createCategory } from 'reducers/fvCategory'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -168,7 +168,4 @@ const mapDispatchToProps = {
   createCategory,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormPhraseBook)
+export default connect(mapStateToProps, mapDispatchToProps)(FormPhraseBook)

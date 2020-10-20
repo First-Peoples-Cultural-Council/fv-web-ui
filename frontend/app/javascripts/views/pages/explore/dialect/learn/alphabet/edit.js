@@ -20,9 +20,9 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacter, updateCharacter } from 'providers/redux/reducers/fvCharacter'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchCharacter, updateCharacter } from 'reducers/fvCharacter'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { fetchDialect2 } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
 import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'

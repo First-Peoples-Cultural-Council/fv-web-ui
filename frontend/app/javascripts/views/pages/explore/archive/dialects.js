@@ -20,9 +20,9 @@ import ConfGlobal from 'conf/local.js'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPortals } from 'providers/redux/reducers/fvPortal'
-import { fetchDirectory } from 'providers/redux/reducers/directory'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchPortals } from 'reducers/fvPortal'
+import { fetchDirectory } from 'reducers/directory'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import classNames from 'classnames'

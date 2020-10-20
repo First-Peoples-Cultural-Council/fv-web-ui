@@ -16,7 +16,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createPicture } from 'providers/redux/reducers/fvPicture'
+import { createPicture } from 'reducers/fvPicture'
 import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes

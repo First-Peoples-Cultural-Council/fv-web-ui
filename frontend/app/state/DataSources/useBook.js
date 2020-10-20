@@ -6,7 +6,7 @@ import {
   fetchBookEntries as _fetchBookEntries,
   deleteBook as _deleteBook,
   publishBook as _publishBook,
-} from 'providers/redux/reducers/fvBook'
+} from 'reducers/fvBook'
 
 function useBook() {
   const dispatch = useDispatch()

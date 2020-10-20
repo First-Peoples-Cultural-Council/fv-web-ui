@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import ReportsJson from './reports.json'
 import GeneralList from 'views/components/Browsing/general-list'
@@ -109,7 +109,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ReportBrowser)
+export default connect(mapStateToProps, mapDispatchToProps)(ReportBrowser)

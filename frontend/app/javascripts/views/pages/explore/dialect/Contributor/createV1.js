@@ -21,9 +21,9 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 
 // REDUX: actions/dispatch/func
-import { createContributor } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { createContributor } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

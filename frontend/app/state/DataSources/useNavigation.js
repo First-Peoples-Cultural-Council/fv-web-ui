@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   changeTitleParams as _changeTitleParams,
   overrideBreadcrumbs as _overrideBreadcrumbs,
-} from 'providers/redux/reducers/navigation'
+} from 'reducers/navigation'
 
 function useNavigation() {
   const dispatch = useDispatch()

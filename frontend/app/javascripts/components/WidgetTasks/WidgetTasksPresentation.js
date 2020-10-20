@@ -51,7 +51,7 @@ function WidgetTasksPresentation({
         data={data}
         localization={{
           body: {
-            emptyDataSourcesMessage: isFetching ? fetchMessage : 'No tasks pending',
+            emptydataSourcesMessage: isFetching ? fetchMessage : 'No tasks pending',
           },
         }}
         onChangePage={onChangePage}

@@ -10,9 +10,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
-import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { fetchCategories } from 'reducers/fvCategory'
+import { fetchDialect } from 'reducers/fvDialect'
+import { fetchResources } from 'reducers/fvResources'
 
 import selectn from 'selectn'
 import BrowseComponent from 'views/components/Editor/BrowseComponent'

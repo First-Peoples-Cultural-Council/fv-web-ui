@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import IconProcessed from '@material-ui/icons/Check'
-import useTheme from 'DataSources/useTheme'
+import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'
 import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
 

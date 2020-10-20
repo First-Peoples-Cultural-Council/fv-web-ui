@@ -19,8 +19,8 @@ import Immutable from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { fetchDocument } from 'providers/redux/reducers/document'
+import { pushWindowPath } from 'reducers/windowPath'
+import { fetchDocument } from 'reducers/document'
 
 import Typography from '@material-ui/core/Typography'
 

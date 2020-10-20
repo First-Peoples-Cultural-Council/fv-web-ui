@@ -21,12 +21,12 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { fetchDialect2, updateDialect2 } from 'providers/redux/reducers/fvDialect'
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPortal, updatePortal } from 'providers/redux/reducers/fvPortal'
-import { navigateTo } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchCharacters } from 'reducers/fvCharacter'
+import { fetchDialect2, updateDialect2 } from 'reducers/fvDialect'
+import { fetchDocument } from 'reducers/document'
+import { fetchPortal, updatePortal } from 'reducers/fvPortal'
+import { navigateTo } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 

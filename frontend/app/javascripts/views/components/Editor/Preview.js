@@ -18,14 +18,14 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchAudio } from 'providers/redux/reducers/fvAudio'
-import { fetchCategory } from 'providers/redux/reducers/fvCategory'
-import { fetchContributor } from 'providers/redux/reducers/fvContributor'
-import { fetchPhrase } from 'providers/redux/reducers/fvPhrase'
-import { fetchPicture } from 'providers/redux/reducers/fvPicture'
-import { fetchLink } from 'providers/redux/reducers/fvLink'
-import { fetchVideo } from 'providers/redux/reducers/fvVideo'
-import { fetchWord } from 'providers/redux/reducers/fvWord'
+import { fetchAudio } from 'reducers/fvAudio'
+import { fetchCategory } from 'reducers/fvCategory'
+import { fetchContributor } from 'reducers/fvContributor'
+import { fetchPhrase } from 'reducers/fvPhrase'
+import { fetchPicture } from 'reducers/fvPicture'
+import { fetchLink } from 'reducers/fvLink'
+import { fetchVideo } from 'reducers/fvVideo'
+import { fetchWord } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 

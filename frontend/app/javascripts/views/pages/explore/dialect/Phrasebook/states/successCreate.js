@@ -4,7 +4,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import Link from 'views/components/Link'
 // REDUX
 import { connect } from 'react-redux'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { pushWindowPath } from 'reducers/windowPath'
 
 const { string, object, func } = PropTypes
 export class PhrasebookStateSuccessCreate extends React.Component {

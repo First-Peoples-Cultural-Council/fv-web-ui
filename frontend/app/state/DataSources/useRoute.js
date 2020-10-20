@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { setRouteParams as _setRouteParams } from 'providers/redux/reducers/navigation'
+import { setRouteParams as _setRouteParams } from 'reducers/navigation'
 
 function useRoute() {
   const dispatch = useDispatch()

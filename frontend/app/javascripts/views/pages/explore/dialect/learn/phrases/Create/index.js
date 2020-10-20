@@ -23,9 +23,9 @@ import PromiseWrapper from 'views/components/Document/PromiseWrapper'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createPhrase } from 'providers/redux/reducers/fvPhrase'
-import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { createPhrase } from 'reducers/fvPhrase'
+import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'

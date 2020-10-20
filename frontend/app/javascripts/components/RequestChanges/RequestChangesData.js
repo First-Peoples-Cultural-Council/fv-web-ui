@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 import * as yup from 'yup'
 import Immutable from 'immutable'
-import usePortal from 'DataSources/usePortal'
-import useRoute from 'DataSources/useRoute'
-import usePrevious from 'DataSources/usePrevious'
-import useDialect from 'DataSources/useDialect'
+import usePortal from 'dataSources/usePortal'
+import useRoute from 'dataSources/useRoute'
+import usePrevious from 'dataSources/usePrevious'
+import useDialect from 'dataSources/useDialect'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
-import useTasks from 'DataSources/useTasks'
+import useTasks from 'dataSources/useTasks'
 
 /**
  * @summary RequestChangesData

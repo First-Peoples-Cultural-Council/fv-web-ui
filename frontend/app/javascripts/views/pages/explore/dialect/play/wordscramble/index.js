@@ -36,7 +36,7 @@ import UIHelpers from 'common/UIHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPhrases } from 'providers/redux/reducers/fvPhrase'
+import { fetchPhrases } from 'reducers/fvPhrase'
 
 import selectn from 'selectn'
 import FVLabel from 'views/components/FVLabel'

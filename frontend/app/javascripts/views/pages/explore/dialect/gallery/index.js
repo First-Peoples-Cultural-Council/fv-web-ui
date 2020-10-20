@@ -22,10 +22,10 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { fetchGalleries } from 'providers/redux/reducers/fvGallery'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { fetchGalleries } from 'reducers/fvGallery'
+import { fetchPortal } from 'reducers/fvPortal'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 

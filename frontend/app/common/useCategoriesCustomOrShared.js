@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import useCategories from 'DataSources/useCategories'
-import useRoute from 'DataSources/useRoute'
+import useCategories from 'dataSources/useCategories'
+import useRoute from 'dataSources/useRoute'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import Immutable from 'immutable'

@@ -20,9 +20,9 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { fetchUser, userSuggestion, updateUser } from 'providers/redux/reducers/fvUser'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
+import { fetchUser, userSuggestion, updateUser } from 'reducers/fvUser'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
 import selectn from 'selectn'
 import PromiseWrapper from 'views/components/Document/PromiseWrapper'

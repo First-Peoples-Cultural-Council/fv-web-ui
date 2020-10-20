@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDialect as _fetchDialect, fetchDialect2 as _fetchDialect2 } from 'providers/redux/reducers/fvDialect'
+import { fetchDialect as _fetchDialect, fetchDialect2 as _fetchDialect2 } from 'reducers/fvDialect'
 
 function useDialect() {
   const dispatch = useDispatch()

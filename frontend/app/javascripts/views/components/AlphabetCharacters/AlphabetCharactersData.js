@@ -5,9 +5,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 // REDUX: actions/dispatch/func
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchDocument } from 'reducers/document'
+import { fetchCharacters } from 'reducers/fvCharacter'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 

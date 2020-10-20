@@ -20,9 +20,9 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories } from 'providers/redux/reducers/fvCategory'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
+import { fetchCategories } from 'reducers/fvCategory'
+import { fetchPortal } from 'reducers/fvPortal'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 

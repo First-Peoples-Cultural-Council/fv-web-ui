@@ -20,9 +20,9 @@ import Immutable, { Map } from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath, replaceWindowPath } from 'providers/redux/reducers/windowPath'
-import { searchDocuments } from 'providers/redux/reducers/search'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
+import { searchDocuments } from 'reducers/search'
 
 import classNames from 'classnames'
 import Edit from '@material-ui/icons/Edit'

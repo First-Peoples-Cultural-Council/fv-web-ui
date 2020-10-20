@@ -23,7 +23,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchTasks } from 'providers/redux/reducers/tasks'
+import { fetchTasks } from 'reducers/tasks'
 
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'

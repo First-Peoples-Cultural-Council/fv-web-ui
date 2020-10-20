@@ -18,9 +18,9 @@ import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import Immutable from 'immutable'
 
-import useCategories from 'DataSources/useCategories'
-import useRoute from 'DataSources/useRoute'
-import useWindowPath from 'DataSources/useWindowPath'
+import useCategories from 'dataSources/useCategories'
+import useRoute from 'dataSources/useRoute'
+import useWindowPath from 'dataSources/useWindowPath'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 

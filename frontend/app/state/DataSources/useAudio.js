@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { setPlaying as _setPlaying, stopPlaying as _stopPlaying } from 'providers/redux/reducers/audio'
+import { setPlaying as _setPlaying, stopPlaying as _stopPlaying } from 'reducers/audio'
 function useAudio() {
   const dispatch = useDispatch()
   return {

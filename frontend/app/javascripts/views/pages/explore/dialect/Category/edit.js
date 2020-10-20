@@ -14,15 +14,9 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  createCategory,
-  deleteCategory,
-  fetchCategory,
-  fetchCategories,
-  updateCategory,
-} from 'providers/redux/reducers/fvCategory'
-import { fetchDialect, fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { createCategory, deleteCategory, fetchCategory, fetchCategories, updateCategory } from 'reducers/fvCategory'
+import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import { getFormData, handleSubmit } from 'common/FormHelpers'

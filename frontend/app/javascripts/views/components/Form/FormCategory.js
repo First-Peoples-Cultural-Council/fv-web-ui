@@ -6,7 +6,7 @@ import FormRemoveButton from 'views/components/Form/FormRemoveButton'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createCategory } from 'providers/redux/reducers/fvCategory'
+import { createCategory } from 'reducers/fvCategory'
 
 // import ProviderHelpers from 'common/ProviderHelpers'
 import Preview from 'views/components/Editor/Preview'
@@ -168,7 +168,4 @@ const mapDispatchToProps = {
   createCategory,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(FormCategory)

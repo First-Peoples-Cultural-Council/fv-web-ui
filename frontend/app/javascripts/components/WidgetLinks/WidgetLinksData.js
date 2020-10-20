@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import useRegistrations from 'DataSources/useRegistrations'
+import useRegistrations from 'dataSources/useRegistrations'
 /**
  * @summary WidgetLinksData
  * @version 1.0.1

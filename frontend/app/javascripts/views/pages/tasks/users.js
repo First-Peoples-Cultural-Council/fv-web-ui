@@ -28,9 +28,9 @@ import {
   fetchUserRegistrationTasks,
   rejectRegistration,
   rejectTask,
-} from 'providers/redux/reducers/tasks'
-import { fetchDialect2 } from 'providers/redux/reducers/fvDialect'
-import { userUpgrade } from 'providers/redux/reducers/fvUser'
+} from 'reducers/tasks'
+import { fetchDialect2 } from 'reducers/fvDialect'
+import { userUpgrade } from 'reducers/fvUser'
 
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -225,7 +225,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 

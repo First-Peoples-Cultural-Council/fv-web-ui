@@ -10,9 +10,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
-import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { createContributor, fetchContributors } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
+import { fetchResources } from 'reducers/fvResources'
 
 import selectn from 'selectn'
 
@@ -329,7 +329,4 @@ const mapDispatchToProps = {
   fetchResources,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRelatedVideos)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRelatedVideos)

@@ -1,4 +1,4 @@
-import useWindowPath from 'DataSources/useWindowPath'
+import useWindowPath from 'dataSources/useWindowPath'
 import NavigationHelpers, { getNewPaginationUrl } from 'common/NavigationHelpers'
 import URLHelpers from 'common/URLHelpers'
 /**

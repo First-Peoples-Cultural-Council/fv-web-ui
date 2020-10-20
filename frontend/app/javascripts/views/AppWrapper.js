@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 
 // REDUX
 import { connect } from 'react-redux'
-import { changeSiteTheme } from 'providers/redux/reducers/navigation'
+import { changeSiteTheme } from 'reducers/navigation'
 
 import selectn from 'selectn'
 

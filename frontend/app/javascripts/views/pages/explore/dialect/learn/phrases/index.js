@@ -21,12 +21,12 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDocument } from 'providers/redux/reducers/document'
-import { fetchPortal } from 'providers/redux/reducers/fvPortal'
-import { overrideBreadcrumbs } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
-import { setListViewMode } from 'providers/redux/reducers/listView'
-import { searchDialectReset } from 'providers/redux/reducers/searchDialect'
+import { fetchDocument } from 'reducers/document'
+import { fetchPortal } from 'reducers/fvPortal'
+import { overrideBreadcrumbs } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
+import { setListViewMode } from 'reducers/listView'
+import { searchDialectReset } from 'reducers/searchDialect'
 
 import selectn from 'selectn'
 
@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-          DEFAULT_PAGE_SIZE: 8,
-          disablePageSize: true,
-          filter: kidsFilter,
-          gridCols: 2,
-          gridListView: true,
-        })
+            DEFAULT_PAGE_SIZE: 8,
+            disablePageSize: true,
+            filter: kidsFilter,
+            gridCols: 2,
+            gridListView: true,
+          })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

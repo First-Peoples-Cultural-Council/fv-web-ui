@@ -23,7 +23,7 @@ import ConfGlobal from 'conf/local.js'
 
 // REDUX
 import { Provider } from 'react-redux'
-import store from 'providers/redux/store'
+import store from 'state/store'
 
 // Views
 import AppWrapper from 'views/AppWrapper'

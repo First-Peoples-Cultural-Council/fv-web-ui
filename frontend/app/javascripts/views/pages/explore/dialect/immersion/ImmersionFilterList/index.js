@@ -5,7 +5,7 @@ import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { pushWindowPath } from 'reducers/windowPath'
 import { FormControl, FormGroup } from '@material-ui/core'
 
 const { any, array, func, string, object } = PropTypes

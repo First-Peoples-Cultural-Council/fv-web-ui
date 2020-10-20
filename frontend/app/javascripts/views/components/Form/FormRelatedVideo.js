@@ -18,7 +18,7 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createVideo } from 'providers/redux/reducers/fvVideo'
+import { createVideo } from 'reducers/fvVideo'
 import FVLabel from 'views/components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes

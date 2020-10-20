@@ -20,11 +20,11 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchResources } from 'providers/redux/reducers/fvResources'
+import { fetchResources } from 'reducers/fvResources'
 
-import { fetchSharedAudios } from 'providers/redux/reducers/fvAudio'
-import { fetchSharedPictures } from 'providers/redux/reducers/fvPicture'
-import { fetchSharedVideos } from 'providers/redux/reducers/fvVideo'
+import { fetchSharedAudios } from 'reducers/fvAudio'
+import { fetchSharedPictures } from 'reducers/fvPicture'
+import { fetchSharedVideos } from 'reducers/fvVideo'
 
 import selectn from 'selectn'
 
@@ -80,8 +80,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {

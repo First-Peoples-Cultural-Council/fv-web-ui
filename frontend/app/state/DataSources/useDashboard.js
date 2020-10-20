@@ -8,8 +8,8 @@ import {
   // SONG,
   // STORY,
 } from 'common/Constants'
-import useLogin from 'DataSources/useLogin'
-import useTasks from 'DataSources/useTasks'
+import useLogin from 'dataSources/useLogin'
+import useTasks from 'dataSources/useTasks'
 
 import StringHelpers from 'common/StringHelpers'
 /**

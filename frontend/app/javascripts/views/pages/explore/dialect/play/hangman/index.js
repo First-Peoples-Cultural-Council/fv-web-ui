@@ -22,8 +22,8 @@ import HangManGame from './hangman'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacters } from 'providers/redux/reducers/fvCharacter'
-import { fetchWords } from 'providers/redux/reducers/fvWord'
+import { fetchCharacters } from 'reducers/fvCharacter'
+import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 

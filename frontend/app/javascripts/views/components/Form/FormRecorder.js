@@ -9,8 +9,8 @@ import FormRemoveButton from 'views/components/Form/FormRemoveButton'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createContributor, fetchContributors } from 'providers/redux/reducers/fvContributor'
-import { fetchDialect } from 'providers/redux/reducers/fvDialect'
+import { createContributor, fetchContributors } from 'reducers/fvContributor'
+import { fetchDialect } from 'reducers/fvDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import Preview from 'views/components/Editor/Preview'
@@ -430,7 +430,4 @@ const mapDispatchToProps = {
   fetchDialect,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormRecorder)
+export default connect(mapStateToProps, mapDispatchToProps)(FormRecorder)

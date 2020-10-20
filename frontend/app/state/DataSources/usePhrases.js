@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchPhrases as _fetchPhrases } from 'providers/redux/reducers/fvPhrase'
+import { fetchPhrases as _fetchPhrases } from 'reducers/fvPhrase'
 function usePhrases() {
   const dispatch = useDispatch()
   const fetchPhrases = (pathOrId, nql) => {

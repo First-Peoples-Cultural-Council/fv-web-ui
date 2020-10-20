@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchCategories as _fetchCategories,
   fetchSharedCategories as _fetchSharedCategories,
-} from 'providers/redux/reducers/fvCategory'
+} from 'reducers/fvCategory'
 function useCategories() {
   const dispatch = useDispatch()
 

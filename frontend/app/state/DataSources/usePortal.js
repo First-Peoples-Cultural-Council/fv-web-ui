@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchPortal as _fetchPortal } from 'providers/redux/reducers/fvPortal'
+import { fetchPortal as _fetchPortal } from 'reducers/fvPortal'
 
 function usePortal() {
   const dispatch = useDispatch()

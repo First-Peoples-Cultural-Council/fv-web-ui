@@ -7,8 +7,8 @@ import { Tooltip, Snackbar, IconButton } from '@material-ui/core'
 import LiveHelpIcon from '@material-ui/icons/LiveHelp'
 import CloseIcon from '@material-ui/icons/Close'
 
-import { toggleHelpMode, setEditingLabel } from 'providers/redux/reducers/locale'
-import { fetchDirectory } from 'providers/redux/reducers/directory'
+import { toggleHelpMode, setEditingLabel } from 'reducers/locale'
+import { fetchDirectory } from 'reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'views/pages/explore/dialect/immersion/Modal'
@@ -51,8 +51,8 @@ const HelperModeToggle = ({
       })
       const category = mappedLabel
         ? allCategories.find((c) => {
-          return c.id === mappedLabel.category
-        })
+            return c.id === mappedLabel.category
+          })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {

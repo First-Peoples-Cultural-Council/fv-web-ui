@@ -16,8 +16,8 @@ limitations under the License.
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import useRoute from 'DataSources/useRoute'
-import useWindowPath from 'DataSources/useWindowPath'
+import useRoute from 'dataSources/useRoute'
+import useWindowPath from 'dataSources/useWindowPath'
 import useCategoriesCustomOrShared from 'common/useCategoriesCustomOrShared'
 import NavigationHelpers from 'common/NavigationHelpers'
 

@@ -19,8 +19,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { toggleMenuAction } from 'providers/redux/reducers/navigation'
-import { pushWindowPath } from 'providers/redux/reducers/windowPath'
+import { toggleMenuAction } from 'reducers/navigation'
+import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
