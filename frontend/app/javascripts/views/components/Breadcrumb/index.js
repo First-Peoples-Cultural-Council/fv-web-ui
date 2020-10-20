@@ -14,7 +14,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import Immutable from 'immutable'
-import { matchPath } from 'conf/routes'
+import { matchPath } from 'common/conf/routes'
 import { SECTIONS } from 'common/Constants'
 import '!style-loader!css-loader!./styles.css'
 

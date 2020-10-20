@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 import { SECTIONS } from 'common/Constants'
 import {
   TOGGLE_MENU,

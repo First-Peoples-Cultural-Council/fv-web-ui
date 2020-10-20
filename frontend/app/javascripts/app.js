@@ -19,7 +19,7 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom' // import ReactDOM from "react-dom"
 
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
 import { Provider } from 'react-redux'

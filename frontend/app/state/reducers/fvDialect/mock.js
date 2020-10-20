@@ -1,4 +1,4 @@
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 export const mock = {
   fetchDialect2: {
     // args PathOrId + type of document

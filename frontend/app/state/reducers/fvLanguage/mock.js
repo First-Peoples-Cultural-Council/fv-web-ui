@@ -1,4 +1,4 @@
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 
 export const mockRequest = {
   fetchLanguage: {

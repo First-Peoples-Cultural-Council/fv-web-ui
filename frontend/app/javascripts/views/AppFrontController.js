@@ -13,8 +13,8 @@ import selectn from 'selectn'
 
 import classNames from 'classnames'
 
-import ConfGlobal from 'conf/local.js'
-import ConfRoutes, { matchPath } from 'conf/routes'
+import ConfGlobal from 'common/conf/local.js'
+import ConfRoutes, { matchPath } from 'common/conf/routes'
 import { WORKSPACES } from 'common/Constants'
 
 import { withTheme } from '@material-ui/core/styles'

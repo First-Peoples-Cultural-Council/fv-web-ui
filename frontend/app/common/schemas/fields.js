@@ -4,7 +4,7 @@ import Dublincore from 'common/schemas/Dublincore'
 import FVCore from 'common/schemas/FVCore'
 import FVMedia from 'common/schemas/FVMedia'
 
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 import IntlService from 'common/services/intl'
 
 const intl = IntlService.instance

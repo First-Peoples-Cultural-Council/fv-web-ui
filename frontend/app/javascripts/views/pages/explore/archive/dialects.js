@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
 import { connect } from 'react-redux'

@@ -1,7 +1,7 @@
 import DocumentOperations from 'operations/DocumentOperations'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import IntlService from 'common/services/intl'
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 
 /*
  * create

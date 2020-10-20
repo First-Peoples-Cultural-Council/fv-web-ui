@@ -6,11 +6,10 @@
       "styles": ["./app/assets/stylesheets"],
       "models": ["./app/javascripts/models"],
       "views": ["./app/javascripts/views"],
-      "conf": ["./app/javascripts/conf"],
-      "operations": ["./app/javascripts/operations"],
-      "providers": ["./app/javascripts/providers"],
+      "operations": ["./app/state/operations"],
+      "reducers": ["./app/state/reducers"],
       "components": ["./app/javascripts/components"],
-      "common": ["./app/javascripts/common"],
+      "common": ["./app/common"],
       "games": ["./app/assets/games"],
       "images": ["./app/assets/images"]
     }

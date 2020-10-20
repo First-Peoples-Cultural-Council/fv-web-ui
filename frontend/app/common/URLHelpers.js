@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import ConfGlobal from 'conf/local.js'
+import ConfGlobal from 'common/conf/local.js'
 
 /**
  * Returns the context path (as an array) from local.js, or empty array.
