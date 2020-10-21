@@ -30,13 +30,13 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import FVTab from 'views/components/FVTab'
-import FVLabel from 'views/components/FVLabel'
+import FVTab from 'components/FVTab'
+import FVLabel from 'components/FVLabel'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -151,7 +151,7 @@ export class PageDialectBookEdit extends Component {
     }
     return content
   }
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
 
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

@@ -31,17 +31,17 @@ import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
 
 // Components
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import FVButton from 'views/components/FVButton'
-import Link from 'views/components/Link'
-import Preview from 'views/components/Editor/Preview'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import FVButton from 'components/FVButton'
+import Link from 'components/Link'
+import Preview from 'components/Editor/Preview'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
-} from 'views/components/Browsing/DictionaryListSmallScreen'
+} from 'components/Browsing/DictionaryListSmallScreen'
 
 /**
  * @summary WordsListData
@@ -122,7 +122,7 @@ function WordsListData({ children }) {
     },
   ])
 
-  const fetchData = async () => {
+  const fetchData = async() => {
     // Dialect
     await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
     // Document
@@ -367,7 +367,7 @@ function WordsListData({ children }) {
     }
   }
 
-  const sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+  const sortHandler = async({ page, pageSize, sortBy, sortOrder } = {}) => {
     await setRouteParams({
       search: {
         pageSize,
@@ -424,7 +424,7 @@ function WordsListData({ children }) {
     }
   }
 
-  const handleSearch = async ({ href, updateUrl = true } = {}) => {
+  const handleSearch = async({ href, updateUrl = true } = {}) => {
     if (href && updateUrl) {
       NavigationHelpers.navigate(href, pushWindowPath, false)
     } else {

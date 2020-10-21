@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 export default function withToggle() {
   class ViewwithToggle extends Component {

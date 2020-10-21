@@ -16,7 +16,7 @@ limitations under the License.
 import React from 'react'
 import WordsCategoriesGridData from './WordsCategoriesGridData'
 import WordsCategoriesGridPresentation from './WordsCategoriesGridPresentation'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 /**
  * @summary WordsCategoriesGridContainer
  * @version 1.0.1

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Widget from 'components/Widget'
-import Link from 'views/components/Link'
-import FVLabel from 'views/components/FVLabel'
+import Link from 'components/Link'
+import FVLabel from 'components/FVLabel'
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./WidgetLinks.css'
 /**

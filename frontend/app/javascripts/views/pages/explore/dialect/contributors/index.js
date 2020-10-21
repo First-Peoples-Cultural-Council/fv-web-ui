@@ -30,15 +30,15 @@ import NavigationCheck from '@material-ui/icons/Check'
 // ----------------------------------------
 import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
-import ConfirmationDelete from 'views/components/Confirmation'
-import FVButton from 'views/components/FVButton'
+import ConfirmationDelete from 'components/Confirmation'
+import FVButton from 'components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 
 import '!style-loader!css-loader!./Contributors.css'
 
-const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
+const DictionaryList = React.lazy(() => import('components/Browsing/DictionaryList'))
 
 // Contributors
 // ----------------------------------------
@@ -59,7 +59,7 @@ function Contributors(props) {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async () => {
+  const copy = useGetCopy(async() => {
     const success = await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization')
     return success.default
   })
@@ -68,7 +68,7 @@ function Contributors(props) {
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
     deletedUids,
-    getData: async () => {
+    getData: async() => {
       // const { pageSize, page } = routeParams
       // const { sortBy, sortOrder } = search
 
@@ -208,7 +208,7 @@ function Contributors(props) {
           }}
           // Listview: computed data
           computedData={computedData}
-          sortHandler={async (sortData) => {
+          sortHandler={async(sortData) => {
             await props.setRouteParams({
               search: {
                 page: sortData.page,

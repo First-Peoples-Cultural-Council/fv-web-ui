@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Widget from 'components/Widget'
 import Table from 'components/Table'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 
 import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE, URL_QUERY_PLACEHOLDER } from 'common/Constants'
 /**

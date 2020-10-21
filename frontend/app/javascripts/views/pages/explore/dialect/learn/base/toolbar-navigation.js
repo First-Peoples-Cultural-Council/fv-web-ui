@@ -28,11 +28,11 @@ import { pushWindowPath } from 'reducers/windowPath'
 // import selectn from 'selectn'
 // import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
-import FVButton from 'views/components/FVButton'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import FVLabel from 'views/components/FVLabel'
+import FVButton from 'components/FVButton'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Navigation for learning page

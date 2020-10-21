@@ -24,19 +24,19 @@ import Media from 'react-media'
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import IntlService from 'common/services/intl'
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,
-} from 'views/components/Browsing/DictionaryListSmallScreen'
+} from 'components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-const SearchDialect = React.lazy(() => import('views/components/SearchDialect'))
-const FlashcardList = React.lazy(() => import('views/components/Browsing/flashcard-list'))
-const DictionaryListSmallScreen = React.lazy(() => import('views/components/Browsing/DictionaryListSmallScreen'))
-const DictionaryListLargeScreen = React.lazy(() => import('views/components/Browsing/DictionaryListLargeScreen'))
-const ExportDialect = React.lazy(() => import('views/components/ExportDialect'))
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+const SearchDialect = React.lazy(() => import('components/SearchDialect'))
+const FlashcardList = React.lazy(() => import('components/Browsing/flashcard-list'))
+const DictionaryListSmallScreen = React.lazy(() => import('components/Browsing/DictionaryListSmallScreen'))
+const DictionaryListLargeScreen = React.lazy(() => import('components/Browsing/DictionaryListLargeScreen'))
+const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import '!style-loader!css-loader!./WordsList.css'
 
 // ===============================================================

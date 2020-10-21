@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 
-import File from 'views/components/Form/Common/File'
-import Text from 'views/components/Form/Common/Text'
-import Textarea from 'views/components/Form/Common/Textarea'
+import File from 'components/Form/Common/File'
+import Text from 'components/Form/Common/Text'
+import Textarea from 'components/Form/Common/Textarea'
 import StringHelpers from 'common/StringHelpers'
-import ContributorDelete from 'views/components/Confirmation'
+import ContributorDelete from 'components/Confirmation'
 import { getError, getErrorFeedback } from 'common/FormHelpers'
 const { string, element, array, bool, func, object } = PropTypes
 export class ContributorStateCreate extends React.Component {

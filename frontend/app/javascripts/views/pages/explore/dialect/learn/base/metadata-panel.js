@@ -20,9 +20,9 @@ import selectn from 'selectn'
 
 import StringHelpers from 'common/StringHelpers'
 
-import Preview from 'views/components/Editor/Preview'
-import MetadataList from 'views/components/Browsing/metadata-list'
-import FVLabel from 'views/components/FVLabel'
+import Preview from 'components/Editor/Preview'
+import MetadataList from 'components/Browsing/metadata-list'
+import FVLabel from 'components/FVLabel'
 
 import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'

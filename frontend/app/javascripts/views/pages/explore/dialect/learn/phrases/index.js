@@ -30,27 +30,27 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
-import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
 
-import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
-import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
+import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 import CategoriesData from 'components/Categories/CategoriesData'
 
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'components/SearchDialect/constants'
 
 const { array, bool, func, object, string } = PropTypes
 /**
@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-            DEFAULT_PAGE_SIZE: 8,
-            disablePageSize: true,
-            filter: kidsFilter,
-            gridCols: 2,
-            gridListView: true,
-          })
+          DEFAULT_PAGE_SIZE: 8,
+          disablePageSize: true,
+          filter: kidsFilter,
+          gridCols: 2,
+          gridListView: true,
+        })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

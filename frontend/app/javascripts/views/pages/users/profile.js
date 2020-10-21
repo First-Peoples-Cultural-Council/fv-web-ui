@@ -27,12 +27,12 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 // Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Create user entry

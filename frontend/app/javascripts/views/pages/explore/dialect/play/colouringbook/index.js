@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 import PromiseHelpers from 'common/PromiseHelpers'
 /**
  * Play games

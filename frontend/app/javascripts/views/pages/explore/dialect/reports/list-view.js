@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 import PropTypes from 'prop-types'
 const { bool, object, string } = PropTypes
 class ReportsCardView extends Component {

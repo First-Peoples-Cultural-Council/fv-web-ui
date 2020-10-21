@@ -30,8 +30,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -43,9 +43,9 @@ import options from 'common/schemas/options'
 import withForm from 'views/hoc/view/with-form'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./PhrasesEdit.css'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
@@ -149,7 +149,7 @@ export class PhrasesEdit extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

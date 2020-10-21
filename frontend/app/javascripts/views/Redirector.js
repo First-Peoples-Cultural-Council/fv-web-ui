@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import FVLabel from './components/FVLabel/index'
+import FVLabel from 'components/FVLabel'
 const { func } = PropTypes
 export class Redirector extends Component {
   static propTypes = {
@@ -20,11 +20,7 @@ export class Redirector extends Component {
   render() {
     return (
       <div style={{ backgroundColor: '#fff', height: '100vh' }}>
-        <FVLabel
-          transKey="redirecting"
-          defaultStr="Redirecting"
-          transform="first"
-        />
+        <FVLabel transKey="redirecting" defaultStr="Redirecting" transform="first" />
         ...
       </div>
     )

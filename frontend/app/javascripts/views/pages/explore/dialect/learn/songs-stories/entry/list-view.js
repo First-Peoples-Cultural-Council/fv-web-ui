@@ -20,8 +20,8 @@ import classNames from 'classnames'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {

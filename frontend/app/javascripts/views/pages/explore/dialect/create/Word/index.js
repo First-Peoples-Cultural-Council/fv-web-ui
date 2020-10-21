@@ -29,23 +29,23 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 // import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 // import fields from 'common/schemas/fields'
 // import options from 'common/schemas/options'
 // import IntlService from 'common/services/intl'
 
-import Select from 'views/components/Form/Common/Select'
-import Text from 'views/components/Form/Common/Text'
-import Checkbox from 'views/components/Form/Common/Checkbox'
-import FormContributors from 'views/components/Form/FormContributors'
-import FormCulturalNotes from 'views/components/Form/FormCulturalNotes'
-import FormDefinitions from 'views/components/Form/FormDefinitions'
-import FormLiteralTranslations from 'views/components/Form/FormLiteralTranslations'
-import FormRelatedAudio from 'views/components/Form/FormRelatedAudio'
-import FormRelatedPictures from 'views/components/Form/FormRelatedPictures'
-import FormRelatedVideos from 'views/components/Form/FormRelatedVideos'
-import FormCategories from 'views/components/Form/FormCategories'
-import FormRelatedPhrases from 'views/components/Form/FormRelatedPhrases'
+import Select from 'components/Form/Common/Select'
+import Text from 'components/Form/Common/Text'
+import Checkbox from 'components/Form/Common/Checkbox'
+import FormContributors from 'components/Form/FormContributors'
+import FormCulturalNotes from 'components/Form/FormCulturalNotes'
+import FormDefinitions from 'components/Form/FormDefinitions'
+import FormLiteralTranslations from 'components/Form/FormLiteralTranslations'
+import FormRelatedAudio from 'components/Form/FormRelatedAudio'
+import FormRelatedPictures from 'components/Form/FormRelatedPictures'
+import FormRelatedVideos from 'components/Form/FormRelatedVideos'
+import FormCategories from 'components/Form/FormCategories'
+import FormRelatedPhrases from 'components/Form/FormRelatedPhrases'
 import StringHelpers from 'common/StringHelpers'
 
 import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/FormHelpers'
@@ -349,7 +349,7 @@ the 'Move Category up' and 'Move Category down' buttons`}
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
   }
 
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
       toParse,

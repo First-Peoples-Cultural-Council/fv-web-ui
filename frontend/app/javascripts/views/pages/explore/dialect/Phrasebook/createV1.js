@@ -30,13 +30,13 @@ import t from 'tcomb-form'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import StatusBar from 'views/components/StatusBar'
+import StatusBar from 'components/StatusBar'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Create phrasebook

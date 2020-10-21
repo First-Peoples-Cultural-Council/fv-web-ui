@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
 
@@ -18,8 +18,8 @@ import { fetchDialect } from 'reducers/fvDialect'
 
 import { getFormData, handleSubmit } from 'common/FormHelpers'
 
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 import {
   STATE_LOADING,
@@ -100,10 +100,10 @@ export class Phrasebook extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -136,8 +136,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
 
     // Flip to ready state...
     this.setState({
@@ -243,7 +243,7 @@ export class Phrasebook extends React.Component {
     )
   }
 
-  _handleCreateItemSubmit = async (formData) => {
+  _handleCreateItemSubmit = async(formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -286,7 +286,7 @@ export class Phrasebook extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
     })

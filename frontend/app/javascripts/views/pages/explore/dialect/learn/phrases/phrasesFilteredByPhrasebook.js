@@ -32,38 +32,38 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 
-import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
 
-import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
-import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
+import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
+import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 
 import CategoriesData from 'components/Categories/CategoriesData'
 
 import Edit from '@material-ui/icons/Edit'
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import IntlService from 'common/services/intl'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 import NavigationHelpers, {
   appendPathArrayAfterLandmark,
   getSearchObject,
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'common/NavigationHelpers'
-import Preview from 'views/components/Editor/Preview'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import Preview from 'components/Editor/Preview'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import { SEARCH_DATA_TYPE_PHRASE } from 'views/components/SearchDialect/constants'
+import { SEARCH_DATA_TYPE_PHRASE } from 'components/SearchDialect/constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
-} from 'views/components/Browsing/DictionaryListSmallScreen'
+} from 'components/Browsing/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
   sortHandler,
@@ -73,7 +73,7 @@ import {
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
 
-const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
+const DictionaryList = React.lazy(() => import('components/Browsing/DictionaryList'))
 const intl = IntlService.instance
 
 // phrasesFilteredByPhrasebook
@@ -587,7 +587,7 @@ export class phrasesFilteredByPhrasebook extends Component {
       }
     )
   }
-  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
+  _sortHandler = async({ page, pageSize, sortBy, sortOrder } = {}) => {
     sortHandler({
       page,
       pageSize,

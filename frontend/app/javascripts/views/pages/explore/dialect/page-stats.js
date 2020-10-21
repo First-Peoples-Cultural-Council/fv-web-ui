@@ -27,8 +27,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Close from '@material-ui/icons/Close'
 
-import FVTab from 'views/components/FVTab'
-import Statistics from 'views/components/Dashboard/Statistics'
+import FVTab from 'components/FVTab'
+import Statistics from 'components/Dashboard/Statistics'
 import '!style-loader!css-loader!./PageStats.css'
 
 const { func, object, string } = PropTypes
@@ -142,7 +142,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
   return {
     computeDialectStats,
     windowPath: _windowPath,
-    intl: intlService
+    intl: intlService,
   }
 }
 

@@ -16,7 +16,7 @@ limitations under the License.
 import React from 'react'
 import PhraseBooksGridData from './PhraseBooksGridData'
 import PhraseBooksGridPresentation from './PhraseBooksGridPresentation'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 /**
  * @summary PhraseBooksGridContainer
  * @version 1.0.1

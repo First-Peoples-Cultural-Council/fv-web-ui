@@ -21,9 +21,9 @@ import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
-import TextHeader from 'views/components/Document/Typography/text-header'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import { EditableComponentHelper } from 'views/components/Editor/EditableComponent'
+import TextHeader from 'components/Document/Typography/text-header'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import { EditableComponentHelper } from 'components/Editor/EditableComponent'
 
 /**
  * Sidebar for learning page
@@ -156,11 +156,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     properties,
-    intl: intlService
+    intl: intlService,
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(LearningSidebar)
+export default connect(mapStateToProps, null)(LearningSidebar)

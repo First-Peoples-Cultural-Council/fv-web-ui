@@ -42,7 +42,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 import withActions from 'views/hoc/view/with-actions'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)

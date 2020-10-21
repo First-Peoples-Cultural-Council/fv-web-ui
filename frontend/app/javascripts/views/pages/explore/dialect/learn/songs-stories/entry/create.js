@@ -31,10 +31,10 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import FVLabel from 'components/FVLabel'
 
 import Paper from '@material-ui/core/Paper'
 import fields from 'common/schemas/fields'
@@ -81,7 +81,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     ;['_onNavigateRequest', '_onRequestSaveForm'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
-  fetchData = async (newProps) => {
+  fetchData = async(newProps) => {
     const parentBookPath = newProps.routeParams.parentBookName
 
     await newProps.fetchDialect2(newProps.routeParams.dialect_path)

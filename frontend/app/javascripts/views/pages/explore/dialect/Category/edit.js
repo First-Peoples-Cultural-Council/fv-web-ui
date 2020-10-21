@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessEdit from './states/successEdit'
 import StateSuccessDelete from './states/successDelete'
 import StateEdit from './states/create'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 // Immutable
 import Immutable from 'immutable'
@@ -111,14 +111,14 @@ export class CategoryEdit extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryInternationalization" */ './internationalization').then((_copy) => {
-          return _copy.default
-        })
+        return _copy.default
+      })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
     await this._getData({ copy, validator })
   }
   render() {
@@ -151,7 +151,7 @@ export class CategoryEdit extends React.Component {
     }
     return content
   }
-  _getData = async (addToState = {}) => {
+  _getData = async(addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -312,7 +312,7 @@ export class CategoryEdit extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async () => {
+  _onRequestSaveForm = async() => {
     const formData = getFormData({
       formReference: this.form,
     })
@@ -340,7 +340,7 @@ export class CategoryEdit extends React.Component {
       invalid,
     })
   }
-  _getItem = async () => {
+  _getItem = async() => {
     const { computeCategory, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:
@@ -365,7 +365,7 @@ export class CategoryEdit extends React.Component {
     return { isError: _computeCategory.isError, message: _computeCategory.message }
   }
 
-  _getCategories = async ({ parent, data }) => {
+  _getCategories = async({ parent, data }) => {
     const { computeCategories, routeParams } = this.props
     const categoriesPath = `/api/v1/path/${routeParams.dialect_path}/${categoryType.title.plural}/@children`
     // Set-up array for data extraction and allow for selecting no parent category - set Categories directory as value:

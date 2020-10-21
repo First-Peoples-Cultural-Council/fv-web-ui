@@ -12,7 +12,7 @@ import Box from '@material-ui/core/Box'
 // FPCC
 import { PublishDialogStyles } from './PublishDialogStyles'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Preview from 'views/components/Editor/Preview'
+import Preview from 'components/Editor/Preview'
 /**
  * @summary PublishDialogPresentation - ScrollableTabsButtonAuto MUI component with additions/modifications
  * @version 1.0.1
@@ -84,22 +84,22 @@ function PublishDialogPresentation({ intl, data, siteTheme, pushWindowPath }) {
     // Phrases
     const _phrases = phrasesData
       ? phrasesData.map((phrase, key) => {
-          const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
-          return (
-            <p key={key}>
-              <a
-                key={selectn('uid', phrase)}
-                href={hrefPath}
-                onClick={(e) => {
-                  e.preventDefault()
-                  NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
-                }}
-              >
-                {selectn('dc:title', phrase)}
-              </a>
-            </p>
-          )
-        })
+        const hrefPath = NavigationHelpers.generateUIDPath(siteTheme, phrase, 'phrases')
+        return (
+          <p key={key}>
+            <a
+              key={selectn('uid', phrase)}
+              href={hrefPath}
+              onClick={(e) => {
+                e.preventDefault()
+                NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
+              }}
+            >
+              {selectn('dc:title', phrase)}
+            </a>
+          </p>
+        )
+      })
       : []
     if (_phrases.length > 0) {
       elementArray.push({ key: 'phrases', label: intl.trans('phrases', 'Phrases', 'first'), content: _phrases })

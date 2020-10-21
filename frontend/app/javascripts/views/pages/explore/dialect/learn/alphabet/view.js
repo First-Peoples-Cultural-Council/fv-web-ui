@@ -33,13 +33,13 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 
-import FVTab from 'views/components/FVTab'
-import Preview from 'views/components/Editor/Preview'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVTab from 'components/FVTab'
+import Preview from 'components/Editor/Preview'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 import SubViewTranslation from 'views/pages/explore/dialect/learn/base/subview-translation'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -228,11 +228,11 @@ export class AlphabetView extends Component {
                       label: UIHelpers.isViewSize('xs')
                         ? this.props.intl.trans('words', 'Words', 'first')
                         : this.props.intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
-                            'Words Starting with ' + character,
-                            'words',
-                            [character]
-                          ),
+                          'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
+                          'Words Starting with ' + character,
+                          'words',
+                          [character]
+                        ),
                       id: 'find_words',
                       className: 'fontBCSans',
                     },
@@ -240,11 +240,11 @@ export class AlphabetView extends Component {
                       label: UIHelpers.isViewSize('xs')
                         ? this.props.intl.trans('phrases', 'Phrases', 'first')
                         : this.props.intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
-                            'Phrases Starting with ' + character,
-                            'words',
-                            [character]
-                          ),
+                          'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
+                          'Phrases Starting with ' + character,
+                          'words',
+                          [character]
+                        ),
                       id: 'find_phrases',
                       className: 'fontBCSans',
                     },
@@ -359,7 +359,7 @@ export class AlphabetView extends Component {
     )
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchCharacter(this._getCharacterPath(this.props))
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
   }

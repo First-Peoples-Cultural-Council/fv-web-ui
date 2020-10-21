@@ -32,11 +32,11 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVButton from 'views/components/FVButton'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import FVButton from 'components/FVButton'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Browse users

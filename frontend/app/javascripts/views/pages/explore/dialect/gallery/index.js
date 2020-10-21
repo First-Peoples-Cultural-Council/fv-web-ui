@@ -31,12 +31,12 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import FVButton from 'views/components/FVButton'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import GeneralList from 'views/components/Browsing/general-list'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import FVButton from 'components/FVButton'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import GeneralList from 'components/Browsing/general-list'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const DEFAULT_LANGUAGE = 'english'
 

@@ -30,16 +30,16 @@ import { setRouteParams } from 'reducers/navigation'
 // ----------------------------------------
 import { useGetCopy } from 'common'
 import { useGetData, usePaginationRequest } from 'common/ListView'
-import ConfirmationDelete from 'views/components/Confirmation'
-import FVButton from 'views/components/FVButton'
+import ConfirmationDelete from 'components/Confirmation'
+import FVButton from 'components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 
 import '!style-loader!css-loader!./styles.css'
 
-const DictionaryList = React.lazy(() => import('views/components/Browsing/DictionaryList'))
+const DictionaryList = React.lazy(() => import('components/Browsing/DictionaryList'))
 
 const categoryType = {
   title: { plural: 'Categories', singular: 'Category' },
@@ -66,7 +66,7 @@ export const Categories = (props) => {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async () => {
+  const copy = useGetCopy(async() => {
     const success = await import(
       /* webpackChunkName: "CategoryInternationalization" */ 'views/pages/explore/dialect/Category/internationalization.js'
     )
@@ -77,7 +77,7 @@ export const Categories = (props) => {
     computeData: computeCategories,
     dataPath,
     deletedUids,
-    getData: async () => {
+    getData: async() => {
       let currentAppliedFilter = '' // eslint-disable-line
       // TODO: ASK DANIEL ABOUT `filter` & `filter.currentAppliedFilter`
       // if (filter.has('currentAppliedFilter')) {
@@ -240,7 +240,7 @@ export const Categories = (props) => {
           navigationRouteSearch={props.search}
           routeParams={props.routeParams}
           setRouteParams={setRouteParams}
-          sortHandler={async (sortData) => {
+          sortHandler={async(sortData) => {
             await setRouteParams({
               search: {
                 page: sortData.page,

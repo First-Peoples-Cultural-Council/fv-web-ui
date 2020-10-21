@@ -25,12 +25,12 @@ import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import { fetchDialect2 } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import FVLabel from 'components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'
@@ -157,7 +157,7 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     )
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     if (_computeDialect2.isError) {

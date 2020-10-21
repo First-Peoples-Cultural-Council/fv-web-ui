@@ -30,13 +30,13 @@ import t from 'tcomb-form'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Typography from '@material-ui/core/Typography'
 
-import StatusBar from 'views/components/StatusBar'
+import StatusBar from 'components/StatusBar'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Create links

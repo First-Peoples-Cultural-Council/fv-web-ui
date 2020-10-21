@@ -5,8 +5,8 @@ import NavigationHelpers, {
   getSearchObject,
   getSearchObjectAsUrlQuery,
 } from 'common/NavigationHelpers'
-import Checkbox from 'views/components/Form/Common/Checkbox'
-import ConfirmationDelete from 'views/components/Confirmation'
+import Checkbox from 'components/Form/Common/Checkbox'
+import ConfirmationDelete from 'components/Confirmation'
 
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'

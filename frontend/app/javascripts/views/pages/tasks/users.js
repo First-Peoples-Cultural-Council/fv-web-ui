@@ -36,13 +36,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import FVButton from 'views/components/FVButton'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import FVButton from 'components/FVButton'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
-import FVLabel from 'views/components/FVLabel'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import FVLabel from 'components/FVLabel'
 
 const { func, object } = PropTypes
 export class UserTasks extends React.Component {
@@ -225,7 +225,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 

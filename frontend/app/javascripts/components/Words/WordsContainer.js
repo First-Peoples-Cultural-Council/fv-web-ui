@@ -18,15 +18,15 @@ import React from 'react'
 
 // FPCC
 // -------------------------------------------
-import AlphabetCharactersPresentation from 'views/components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'views/components/AlphabetCharacters/AlphabetCharactersData'
+import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
+import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
 import CategoriesData from 'components/Categories/CategoriesData'
-import DialectFilterListData from 'views/components/DialectFilterList/DialectFilterListData'
-import DialectFilterListPresentation from 'views/components/DialectFilterList/DialectFilterListPresentation'
+import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
+import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
 import WordsList from 'components/WordsList'
 import WordsData from './WordsData'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 function WordsContainer() {
   return (

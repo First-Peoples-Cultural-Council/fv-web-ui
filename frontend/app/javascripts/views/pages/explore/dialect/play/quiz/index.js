@@ -26,7 +26,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -38,7 +38,7 @@ import { connect } from 'react-redux'
 import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const containerStyle = {
   background: 'url(/assets/games/fv-games-wordscramble/images/background.png)',
@@ -297,7 +297,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    ;(selectn('response.entries', computeWords) || []).forEach(
+    (selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -455,9 +455,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                    disabled: true,
-                    key: i,
-                  })
+                  disabled: true,
+                  key: i,
+                })
                 : answer
             })}
           </div>

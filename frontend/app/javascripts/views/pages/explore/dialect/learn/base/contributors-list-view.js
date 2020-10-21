@@ -26,13 +26,13 @@ import { pushWindowPath } from 'reducers/windowPath'
 import { setRouteParams } from 'reducers/navigation'
 
 import selectn from 'selectn'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import DocumentListView from 'views/components/Document/DocumentListView'
+import DocumentListView from 'components/Document/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'views/components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 /**
  * List view for contributors
  */

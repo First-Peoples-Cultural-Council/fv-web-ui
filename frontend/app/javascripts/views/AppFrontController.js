@@ -24,18 +24,18 @@ import { routeHasChanged /*, getSearchObject*/ } from 'common/NavigationHelpers'
 import { Redirector } from './Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
-import FVButton from 'views/components/FVButton'
-import Navigation from 'views/components/Navigation'
-import WorkspaceSwitcher from 'views/components/Navigation/WorkspaceSwitcher'
-import KidsNavigation from 'views/components/Kids/navigation'
-import Footer from 'views/components/Navigation/Footer'
-import Breadcrumb from 'views/components/Breadcrumb'
+import FVButton from 'components/FVButton'
+import Navigation from 'components/Navigation'
+import WorkspaceSwitcher from 'components/Navigation/WorkspaceSwitcher'
+import KidsNavigation from 'components/Kids/navigation'
+import Footer from 'components/Navigation/Footer'
+import Breadcrumb from 'components/Breadcrumb'
 
 import { PageError } from 'views/pages'
 
 import '!style-loader!css-loader!./AppFrontController.css'
-import FVLabel from './components/FVLabel/index'
-import HelperModeToggle from 'views/components/HelperModeToggle/index'
+import FVLabel from 'components/FVLabel'
+import HelperModeToggle from 'components/HelperModeToggle/index'
 
 export class AppFrontController extends Component {
   PAGE_NOT_FOUND_TITLE =

@@ -26,8 +26,8 @@ import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import FVLabel from 'components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'

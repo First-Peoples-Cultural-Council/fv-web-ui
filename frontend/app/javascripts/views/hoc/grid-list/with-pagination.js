@@ -4,12 +4,12 @@ import selectn from 'selectn'
 
 import classNames from 'classnames'
 
-import Pagination from 'views/components/Navigation/Pagination'
+import Pagination from 'components/Navigation/Pagination'
 
 import { MenuItem, Select, TextField } from '@material-ui/core'
 
 import UIHelpers from 'common/UIHelpers'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * HOC: Adds pagination to a grid list

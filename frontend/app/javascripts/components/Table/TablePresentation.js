@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MaterialTable from 'material-table'
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'
 import { TABLE_FULL_WIDTH, WIDGET_WORKSPACE } from 'common/Constants'

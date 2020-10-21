@@ -9,10 +9,10 @@ import Paper from '@material-ui/core/Paper'
 
 import { SongStoryCoverStyles } from './SongStoryCoverStyles'
 import MediaPanels from 'components/MediaPanels'
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
-import FVTab from 'views/components/FVTab'
-import Preview from 'views/components/Editor/Preview'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
+import FVTab from 'components/FVTab'
+import Preview from 'components/Editor/Preview'
 /**
  * @summary SongStoryCoverPresentation
  * @version 1.0.1

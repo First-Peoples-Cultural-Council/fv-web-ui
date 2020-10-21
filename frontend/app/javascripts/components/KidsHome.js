@@ -22,9 +22,9 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import classNames from 'classnames'
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Explore Archive page shows all the families in the archive

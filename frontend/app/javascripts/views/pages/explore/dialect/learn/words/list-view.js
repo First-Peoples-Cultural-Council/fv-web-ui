@@ -30,14 +30,14 @@ import selectn from 'selectn'
 import Edit from '@material-ui/icons/Edit'
 
 import { WORKSPACES } from 'common/Constants'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import DocumentListView from 'views/components/Document/DocumentListView'
-import FVButton from 'views/components/FVButton'
+import DocumentListView from 'components/Document/DocumentListView'
+import FVButton from 'components/FVButton'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
-import Preview from 'views/components/Editor/Preview'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import Link from 'views/components/Link'
+import Preview from 'components/Editor/Preview'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import Link from 'components/Link'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
@@ -46,7 +46,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplateWords,
-} from 'views/components/Browsing/DictionaryListSmallScreen'
+} from 'components/Browsing/DictionaryListSmallScreen'
 
 /**
  * List view for words
@@ -228,7 +228,7 @@ class WordsListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
+    [
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView

@@ -2,7 +2,7 @@ import React from 'react'
 import PhraseData from 'components/Phrase/PhraseData'
 
 import DetailWordPhrase from 'components/DetailWordPhrase'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 import withActions from 'views/hoc/view/with-actions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 
 const { array, func } = PropTypes
 
@@ -71,7 +71,7 @@ class SearchFields extends React.Component {
       <div className="SearchDialectForm">
         <div className="SearchDialectFormPrimary">
           <input
-            className={`SearchDialectFormPrimaryInput`}
+            className={'SearchDialectFormPrimaryInput'}
             type="text"
             onChange={this.handleChange('inputValue')}
             onKeyPress={this.checkKey}

@@ -42,16 +42,16 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 
 import BookEntry from 'views/pages/explore/dialect/learn/songs-stories/entry/view'
 import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry/list-view'
 
 import withActions from 'views/hoc/view/with-actions'
 import withPagination from 'views/hoc/grid-list/with-pagination'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

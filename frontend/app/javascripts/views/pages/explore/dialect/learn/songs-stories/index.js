@@ -27,7 +27,7 @@ import { fetchDialect2 } from 'reducers/fvDialect'
 import { fetchPortal } from 'reducers/fvPortal'
 import { pushWindowPath } from 'reducers/windowPath'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 
 import selectn from 'selectn'
 
@@ -35,12 +35,12 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from 'common/NavigationHelpers'
 
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import FVLabel from 'components/FVLabel'
 
-import GeneralList from 'views/components/Browsing/general-list'
+import GeneralList from 'components/Browsing/general-list'
 import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import withFilter from 'views/hoc/grid-list/with-filter'

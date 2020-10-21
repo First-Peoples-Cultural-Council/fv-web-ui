@@ -30,12 +30,12 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
-import MediaList from 'views/components/Browsing/media-list'
+import MediaList from 'components/Browsing/media-list'
 import withPagination from 'views/hoc/grid-list/with-pagination'
 import withFilter from 'views/hoc/grid-list/with-filter'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 20, filters: { 'properties.dc:title': '', dialect: '' } }
 
@@ -143,7 +143,7 @@ export class DialectMedia extends Component {
               fetcher={this.fetchData}
               fetcherParams={this.state.fetcherParams}
               metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
-              // Note: initialValues becomes locals.context in .../views/components/Editor/fields/valued-checkbox.js
+              // Note: initialValues becomes locals.context in .../components/Editor/fields/valued-checkbox.js
               // via withFilter: <t.form.Form context={this.props.initialValues}
               initialValues={{
                 'dc:contributors': selectn('response.properties.username', this.props.computeLogin),

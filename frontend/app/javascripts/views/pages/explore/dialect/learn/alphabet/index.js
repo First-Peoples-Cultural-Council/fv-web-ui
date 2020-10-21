@@ -30,9 +30,9 @@ import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
-import TextHeader from 'views/components/Document/Typography/text-header'
+import TextHeader from 'components/Document/Typography/text-header'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -40,9 +40,9 @@ import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 
 import AlphabetListView from 'views/pages/explore/dialect/learn/alphabet/list-view'
 
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 

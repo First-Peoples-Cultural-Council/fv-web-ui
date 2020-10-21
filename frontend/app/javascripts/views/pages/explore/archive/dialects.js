@@ -29,9 +29,9 @@ import classNames from 'classnames'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PortalListDialects from 'views/components/Browsing/portal-list-dialects'
+import PortalListDialects from 'components/Browsing/portal-list-dialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Explore Archive page shows all the families in the archive

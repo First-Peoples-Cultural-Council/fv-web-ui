@@ -13,7 +13,7 @@ import {
   SEARCH_TYPE_STARTS_WITH_SEARCH,
   SEARCH_TYPE_ENDS_WITH_SEARCH,
   SEARCH_TYPE_WILDCARD_SEARCH,
-} from 'views/components/SearchDialect/constants'
+} from 'components/SearchDialect/constants'
 
 export const initialState = {
   searchByAlphabet: '',

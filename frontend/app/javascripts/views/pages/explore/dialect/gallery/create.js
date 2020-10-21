@@ -32,11 +32,11 @@ import Paper from '@material-ui/core/Paper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import URLHelpers from 'common/URLHelpers'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import FVLabel from 'components/FVLabel'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
@@ -122,7 +122,7 @@ export class PageDialectGalleryCreate extends Component {
     return content
   }
 
-  fetchData = async () => {
+  fetchData = async() => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

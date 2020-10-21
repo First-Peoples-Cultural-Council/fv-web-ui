@@ -27,7 +27,7 @@ import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -37,7 +37,7 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import withForm from 'views/hoc/view/with-form'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

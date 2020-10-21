@@ -11,8 +11,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
 import StateDetail from './states/detail'
 
 import '!style-loader!css-loader!./Phrasebook.css'
@@ -50,10 +50,10 @@ export class PhrasebookDetail extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookDetailInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     await this._getData({ copy })
   }
@@ -78,7 +78,7 @@ export class PhrasebookDetail extends React.Component {
     }
     return content
   }
-  _getData = async (addToState = {}) => {
+  _getData = async(addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -124,7 +124,7 @@ export class PhrasebookDetail extends React.Component {
       />
     )
   }
-  _getItem = async () => {
+  _getItem = async() => {
     const { computeCategory, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:

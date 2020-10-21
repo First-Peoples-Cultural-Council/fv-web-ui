@@ -30,8 +30,8 @@ import t from 'tcomb-form'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-import StatusBar from 'views/components/StatusBar'
-import FVLabel from 'views/components/FVLabel'
+import StatusBar from 'components/StatusBar'
+import FVLabel from 'components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 

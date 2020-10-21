@@ -28,8 +28,8 @@ import { updateContributor } from 'reducers/fvContributor'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
-import FVLabel from 'views/components/FVLabel'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
+import FVLabel from 'components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'

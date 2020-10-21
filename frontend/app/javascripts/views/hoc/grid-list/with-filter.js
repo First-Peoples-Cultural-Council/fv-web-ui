@@ -14,7 +14,7 @@ import withToggle from 'views/hoc/view/with-toggle'
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
 import '!style-loader!css-loader!./FilteredGridList.css'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const FiltersWithToggle = withToggle()
 

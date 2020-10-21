@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 // REDUX
 import { connect } from 'react-redux'
 import { pushWindowPath } from 'reducers/windowPath'

@@ -17,7 +17,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'views/components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'components/SearchDialect/constants'
 
 /**
  * Learn Base Page
@@ -574,7 +574,7 @@ export const updateUrlIfPageOrPageSizeIsDifferent = ({
 }
 
 // sortHandler
-export const sortHandler = async ({
+export const sortHandler = async({
   page,
   pageSize,
   sortBy,

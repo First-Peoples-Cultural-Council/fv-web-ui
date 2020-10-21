@@ -17,8 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
-import AuthenticationFilter from 'views/components/Document/AuthenticationFilter'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -38,9 +38,9 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import StateLoading from 'views/components/Loading'
-import StateErrorBoundary from 'views/components/ErrorBoundary'
-import FVLabel from 'views/components/FVLabel'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./PhrasesCreate.css'
 
 /**
@@ -88,7 +88,7 @@ export class PhrasesCreate extends Component {
     ).then((_module) => {
       return _module.default
     })
-    // const ErrorBoundary = await import(/* webpackChunkName: "ErrorBoundary" */ 'views/components/ErrorBoundary').then(
+    // const ErrorBoundary = await import(/* webpackChunkName: "ErrorBoundary" */ 'components/ErrorBoundary').then(
     //   (_module) => {
     //     return _module.default
     //   }
@@ -148,7 +148,7 @@ export class PhrasesCreate extends Component {
     return content
   }
 
-  fetchData = async (addToState = {}) => {
+  fetchData = async(addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     // Call fetchDialect2 if not already called:

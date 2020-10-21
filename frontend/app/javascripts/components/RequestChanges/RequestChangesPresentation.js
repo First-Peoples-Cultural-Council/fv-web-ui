@@ -1,6 +1,6 @@
 import React from 'react'
 import '!style-loader!css-loader!./RequestChanges.css'
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import { /*getError,*/ getErrorFeedback } from 'common/FormHelpers'
 
 import Dialog from '@material-ui/core/Dialog'
@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import FVLabel from 'views/components/FVLabel'
+import FVLabel from 'components/FVLabel'
 import TextField from '@material-ui/core/TextField'
 
 import VisibilitySelect from 'components/VisibilitySelect'

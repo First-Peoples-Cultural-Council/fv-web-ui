@@ -5,10 +5,10 @@ import DOMPurify from 'dompurify'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 import MediaPanels from 'components/MediaPanels'
-import Preview from 'views/components/Editor/Preview'
+import Preview from 'components/Editor/Preview'
 
 import { SongStoryPagesStyles } from './SongStoryPagesStyles'
 

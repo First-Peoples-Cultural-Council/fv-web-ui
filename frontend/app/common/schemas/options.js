@@ -3,19 +3,19 @@ import t from 'tcomb-form'
 
 import classNames from 'classnames'
 
-import VirtualKeyboardFactory from 'views/components/Editor/fields/virtualKeyboard'
-import dataTestId from 'views/components/Editor/fields/dataTestId'
+import VirtualKeyboardFactory from 'components/Editor/fields/virtualKeyboard'
+import dataTestId from 'components/Editor/fields/dataTestId'
 
-import WysiwygFactory from 'views/components/Editor/fields/wysiwyg'
-import SelectSuggestFactory from 'views/components/Editor/fields/selectSuggest'
-import SelectFactory from 'views/components/Editor/fields/select'
-import MediaFactory from 'views/components/Editor/fields/media'
+import WysiwygFactory from 'components/Editor/fields/wysiwyg'
+import SelectSuggestFactory from 'components/Editor/fields/selectSuggest'
+import SelectFactory from 'components/Editor/fields/select'
+import MediaFactory from 'components/Editor/fields/media'
 
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import FVButton from 'views/components/FVButton'
+import FVButton from 'components/FVButton'
 import IntlService from 'common/services/intl'
 import ProviderHelpers from 'common/ProviderHelpers'
 

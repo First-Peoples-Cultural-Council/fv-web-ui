@@ -29,24 +29,24 @@ import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
 
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
-import AuthorizationFilter from 'views/components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import FVButton from 'views/components/FVButton'
-import FVLabel from 'views/components/FVLabel'
-import Link from 'views/components/Link'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
+import Link from 'components/Link'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Preview from 'views/components/Editor/Preview'
-import PromiseWrapper from 'views/components/Document/PromiseWrapper'
+import Preview from 'components/Editor/Preview'
+import PromiseWrapper from 'components/Document/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import URLHelpers from 'common/URLHelpers'
-import { getListSmallScreen } from 'views/components/Browsing/DictionaryList'
+import { getListSmallScreen } from 'components/Browsing/DictionaryList'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
-} from 'views/components/Browsing/DictionaryListSmallScreen'
+} from 'components/Browsing/DictionaryListSmallScreen'
 import { SECTIONS, WORKSPACES } from 'common/Constants'
 
 import '!style-loader!css-loader!./Search.css'

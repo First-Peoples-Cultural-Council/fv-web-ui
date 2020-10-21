@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import '!style-loader!css-loader!./DashboardDetail.css'
 
 import IconWidget from '@material-ui/icons/Apps'
-import Link from 'views/components/Link'
+import Link from 'components/Link'
 
 import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'

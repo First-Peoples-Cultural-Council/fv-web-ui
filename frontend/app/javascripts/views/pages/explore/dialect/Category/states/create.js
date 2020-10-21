@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FVButton from 'views/components/FVButton'
-import Select from 'views/components/Form/Common/Select'
-import Text from 'views/components/Form/Common/Text'
-import Textarea from 'views/components/Form/Common/Textarea'
+import FVButton from 'components/FVButton'
+import Select from 'components/Form/Common/Select'
+import Text from 'components/Form/Common/Text'
+import Textarea from 'components/Form/Common/Textarea'
 import StringHelpers from 'common/StringHelpers'
 import { getError, getErrorFeedback } from 'common/FormHelpers'
-import CategoryDelete from 'views/components/Confirmation'
+import CategoryDelete from 'components/Confirmation'
 
 const { string, element, array, bool, func, object } = PropTypes
 export class CategoryStateCreate extends React.Component {
