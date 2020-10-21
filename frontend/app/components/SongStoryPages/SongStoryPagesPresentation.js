@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import MediaPanels from 'components/MediaPanels'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 
 import { SongStoryPagesStyles } from './SongStoryPagesStyles'
 

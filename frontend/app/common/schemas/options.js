@@ -3,13 +3,13 @@ import t from 'tcomb-form'
 
 import classNames from 'classnames'
 
-import VirtualKeyboardFactory from 'components/Editor/fields/virtualKeyboard'
-import dataTestId from 'components/Editor/fields/dataTestId'
+import VirtualKeyboardFactory from 'common/schemas/customFields/virtualKeyboard'
+import dataTestId from 'common/schemas/customFields/dataTestId'
 
-import WysiwygFactory from 'components/Editor/fields/wysiwyg'
-import SelectSuggestFactory from 'components/Editor/fields/selectSuggest'
-import SelectFactory from 'components/Editor/fields/select'
-import MediaFactory from 'components/Editor/fields/media'
+import WysiwygFactory from 'common/schemas/customFields/wysiwyg'
+import SelectSuggestFactory from 'common/schemas/customFields/selectSuggest'
+import SelectFactory from 'common/schemas/customFields/select'
+import MediaFactory from 'common/schemas/customFields/media'
 
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'

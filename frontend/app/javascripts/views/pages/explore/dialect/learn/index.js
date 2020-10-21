@@ -48,7 +48,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import Header from 'views/pages/explore/dialect/header'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
-import { EditableComponentHelper } from 'components/Editor/EditableComponent'
+import EditableComponentHelper from 'componentsShared/EditableComponentHelper'
 
 import RecentActivityList from 'components/Dashboard/RecentActivityList'
 import TextHeader from 'componentsShared/Typography/text-header'

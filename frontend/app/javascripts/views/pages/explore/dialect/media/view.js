@@ -42,7 +42,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 

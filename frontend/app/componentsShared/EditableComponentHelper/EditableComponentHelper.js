@@ -5,7 +5,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 import DOMPurify from 'dompurify'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import StatusBar from 'components/StatusBar'
 
 // Models
@@ -18,7 +18,7 @@ import options from 'common/schemas/options'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Edit from '@material-ui/icons/Edit'
 
-import '!style-loader!css-loader!./EditableComponent.css'
+import '!style-loader!css-loader!./EditableComponentHelper.css'
 import FVLabel from 'components/FVLabel'
 import { connect } from 'react-redux'
 
@@ -305,4 +305,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 const EditableComponent = connect(mapStateToProps)(EditableComponentUnwrapped)
 
-export default EditableComponent
+export default EditableComponentHelper

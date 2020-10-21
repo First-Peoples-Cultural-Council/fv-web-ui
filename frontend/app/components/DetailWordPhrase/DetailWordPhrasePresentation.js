@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import FVLabel from 'components/FVLabel'
 import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'

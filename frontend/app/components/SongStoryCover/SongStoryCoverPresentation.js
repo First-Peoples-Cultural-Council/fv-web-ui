@@ -12,7 +12,7 @@ import MediaPanels from 'components/MediaPanels'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import FVTab from 'components/FVTab'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 /**
  * @summary SongStoryCoverPresentation
  * @version 1.0.1

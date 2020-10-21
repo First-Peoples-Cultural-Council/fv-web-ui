@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { createCategory } from 'reducers/fvCategory'
 
 // import ProviderHelpers from 'common/ProviderHelpers'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 

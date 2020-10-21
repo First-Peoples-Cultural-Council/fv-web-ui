@@ -13,7 +13,7 @@ import { createContributor, fetchContributors } from 'reducers/fvContributor'
 import { fetchDialect } from 'reducers/fvDialect'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 const { array, func, object, number, string } = PropTypes
 
 export class FormRecorder extends React.Component {

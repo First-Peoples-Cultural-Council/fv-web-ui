@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { setEditingLabel } from 'reducers/locale'
 
 import DocumentOperations from 'operations/DocumentOperations'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter/index'

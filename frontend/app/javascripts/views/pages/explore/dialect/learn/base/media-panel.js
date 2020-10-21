@@ -20,7 +20,7 @@ import classNames from 'classnames'
 import selectn from 'selectn'
 
 import ImageGallery from 'react-image-gallery'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 
 /**
  * Media panel for word or phrase views.

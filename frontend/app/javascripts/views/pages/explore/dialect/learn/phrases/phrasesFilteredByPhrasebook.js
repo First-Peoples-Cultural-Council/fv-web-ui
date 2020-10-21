@@ -51,7 +51,7 @@ import NavigationHelpers, {
   getSearchObject,
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'common/NavigationHelpers'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'

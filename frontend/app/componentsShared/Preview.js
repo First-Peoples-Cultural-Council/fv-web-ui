@@ -50,7 +50,7 @@ import Typography from '@material-ui/core/Typography'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
-import PreviewMetaDataContributor from 'components/Editor/PreviewMetaDataContributor'
+import PreviewMetaDataContributor from 'componentsShared/PreviewMetaDataContributor'
 import FVLabel from 'components/FVLabel'
 
 const { bool, func, object, string } = PropTypes

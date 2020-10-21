@@ -34,7 +34,7 @@ import UIHelpers from 'common/UIHelpers'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 
 import FVTab from 'components/FVTab'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'

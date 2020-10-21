@@ -23,7 +23,7 @@ import classNames from 'classnames'
 import selectn from 'selectn'
 import TextHeader from 'componentsShared/Typography/text-header'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import { EditableComponentHelper } from 'components/Editor/EditableComponent'
+import EditableComponentHelper from 'componentsShared/EditableComponentHelper'
 
 /**
  * Sidebar for learning page

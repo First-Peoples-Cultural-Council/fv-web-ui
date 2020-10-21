@@ -126,7 +126,7 @@ export class FormRelatedPhrases extends React.Component {
       }/Resources/')&currentPageIndex=${0}&pageSize=${1000}`
     )
 
-    const _BrowseComponent = await import('components/Editor/BrowseComponent')
+    const _BrowseComponent = await import('componentsShared/BrowseComponent')
     BrowseComponent = _BrowseComponent.default
 
     this.setState({ componentState: this.STATE_DEFAULT })
@@ -213,7 +213,7 @@ export class FormRelatedPhrases extends React.Component {
     return <input type="hidden" name="fv-word:related_phrases" value={JSON.stringify(selectedItems)} />
   }
 
-  handleClickCreateItem = async() => {
+  handleClickCreateItem = async () => {
     const _FormRelatedPhraseCreateNew = await import('components/Form/FormRelatedPhraseCreateNew')
     this.setState(
       {

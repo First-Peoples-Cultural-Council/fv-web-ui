@@ -143,7 +143,7 @@ export class DialectMedia extends Component {
               fetcher={this.fetchData}
               fetcherParams={this.state.fetcherParams}
               metadata={selectn('response', computeResources) || selectn('response_prev', computeResources)}
-              // Note: initialValues becomes locals.context in .../components/Editor/fields/valued-checkbox.js
+              // Note: initialValues becomes locals.context in .../common/schemas/customFields/valued-checkbox.js
               // via withFilter: <t.form.Form context={this.props.initialValues}
               initialValues={{
                 'dc:contributors': selectn('response.properties.username', this.props.computeLogin),

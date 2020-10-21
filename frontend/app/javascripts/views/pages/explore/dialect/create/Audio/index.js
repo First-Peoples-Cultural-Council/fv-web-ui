@@ -11,7 +11,7 @@ import FormRecorders from 'components/Form/FormRecorders'
 // import FormRemoveButton from 'components/Form/FormRemoveButton'
 
 // import ProviderHelpers from 'common/ProviderHelpers'
-// import Preview from 'components/Editor/Preview'
+// import Preview from 'componentsShared/Preview'
 
 // import selectn from 'selectn'
 
@@ -280,7 +280,7 @@ export class CreateAudio extends React.Component {
     // const pathOrId = `${DIALECT_PATH}/Resources/${createItemName}.${timestamp}`
     // this.setState({ pathOrId })
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
       toParse,

@@ -22,7 +22,7 @@ import { Error } from '@material-ui/icons'
 import TablePaginationActions from './tablepagination'
 import SortingHeader from './sortingheader'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import FVLabel from 'components/FVLabel'
 import { windowLocationPathnameWithoutPagination } from 'common/NavigationHelpers'
 import { withStyles } from '@material-ui/core/styles'

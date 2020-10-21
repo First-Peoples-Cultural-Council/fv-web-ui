@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 
 /**
  * Define auto-suggest factory

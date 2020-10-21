@@ -34,7 +34,7 @@ import DocumentListView from 'componentsShared/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 
 /**
  * List view for alphabet

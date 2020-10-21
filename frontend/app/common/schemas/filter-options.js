@@ -1,10 +1,10 @@
 import t from 'tcomb-form'
-import ValuedCheckboxFactory from 'components/Editor/fields/valued-checkbox'
+import ValuedCheckboxFactory from 'common/schemas/customFields/valued-checkbox'
 import SearchDocumentTypesTemplate from 'components/SearchDocumentTypesTemplate'
 
-import RangeSelector from 'components/Editor/fields/range'
-// import SelectFactory from 'components/Editor/fields/select'
-import dataTestId from 'components/Editor/fields/dataTestId'
+import RangeSelector from 'common/schemas/customFields/range'
+// import SelectFactory from 'common/schemas/customFields/select'
+import dataTestId from 'common/schemas/customFields/dataTestId'
 import ProviderHelpers from 'common/ProviderHelpers'
 import IntlService from 'common/services/intl'
 

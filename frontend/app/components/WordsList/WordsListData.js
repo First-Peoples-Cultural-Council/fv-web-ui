@@ -34,7 +34,7 @@ import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import FVButton from 'components/FVButton'
 import Link from 'components/Link'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,

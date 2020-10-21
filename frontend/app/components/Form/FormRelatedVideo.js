@@ -11,7 +11,7 @@ import FormMoveButtons from 'components/Form/FormMoveButtons'
 import FormRemoveButton from 'components/Form/FormRemoveButton'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 // see about dropping:
 import selectn from 'selectn'
 

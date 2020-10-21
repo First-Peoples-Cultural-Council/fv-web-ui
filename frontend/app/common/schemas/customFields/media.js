@@ -5,9 +5,9 @@ import selectn from 'selectn'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import FVButton from 'components/FVButton'
 
-import AddMediaComponent from 'components/Editor/AddMediaComponent'
-import SelectMediaComponent from 'components/Editor/SelectMediaComponent'
-import Preview from 'components/Editor/Preview'
+import AddMediaComponent from 'componentsShared/AddMediaComponent'
+import SelectMediaComponent from 'componentsShared/SelectMediaComponent'
+import Preview from 'componentsShared/Preview'
 import FVLabel from 'components/FVLabel'
 
 const expandedValues = []

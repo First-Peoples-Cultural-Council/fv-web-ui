@@ -2,9 +2,9 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
-import AutoSuggestComponent from 'components/Editor/AutoSuggestComponent'
-import BrowseComponent from 'components/Editor/BrowseComponent'
-import Preview from 'components/Editor/Preview'
+import AutoSuggestComponent from 'componentsShared/AutoSuggestComponent'
+import BrowseComponent from 'componentsShared/BrowseComponent'
+import Preview from 'componentsShared/Preview'
 import DialogCreateForm from 'components/DialogCreateForm'
 import FVLabel from 'components/FVLabel'
 

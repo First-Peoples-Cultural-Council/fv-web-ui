@@ -20,7 +20,7 @@ import selectn from 'selectn'
 
 import StringHelpers from 'common/StringHelpers'
 
-import Preview from 'components/Editor/Preview'
+import Preview from 'componentsShared/Preview'
 import MetadataList from 'components/Browsing/metadata-list'
 import FVLabel from 'components/FVLabel'
 
